@@ -1,0 +1,675 @@
+TWEXonline
+v6
+r1
+cCheck dependencies
+cProcessInfoPlistFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Info.plist /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Info.plist
+cPhaseScriptExecution Copy\ www\ directory /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Script-304B58A110DAC018002A0835.sh
+cCpResource WEXonline/config.xml build/emulator/WEXonline.app/config.xml
+cCpResource WEXonline/Resources/icons/icon-72.png build/emulator/WEXonline.app/icon-72.png
+cCpResource WEXonline/Resources/icons/icon.png build/emulator/WEXonline.app/icon.png
+cCpResource WEXonline/Resources/icons/icon@2x.png build/emulator/WEXonline.app/icon@2x.png
+cCopyStringsFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/en.lproj/Localizable.strings WEXonline/Resources/en.lproj/Localizable.strings
+cCompileXIB /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.xib
+cCopyStringsFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/de.lproj/Localizable.strings WEXonline/Resources/de.lproj/Localizable.strings
+cCopyStringsFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/se.lproj/Localizable.strings WEXonline/Resources/se.lproj/Localizable.strings
+cCopyStringsFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/es.lproj/Localizable.strings WEXonline/Resources/es.lproj/Localizable.strings
+cCpResource WEXonline/Resources/splash/Default-Landscape@2x~ipad.png build/emulator/WEXonline.app/Default-Landscape@2x~ipad.png
+cCpResource WEXonline/Resources/splash/Default-Landscape~ipad.png build/emulator/WEXonline.app/Default-Landscape~ipad.png
+cCpResource WEXonline/Resources/splash/Default-Portrait@2x~ipad.png build/emulator/WEXonline.app/Default-Portrait@2x~ipad.png
+cCpResource WEXonline/Resources/splash/Default-Portrait~ipad.png build/emulator/WEXonline.app/Default-Portrait~ipad.png
+cCpResource WEXonline/Resources/splash/Default@2x~iphone.png build/emulator/WEXonline.app/Default@2x~iphone.png
+cCpResource WEXonline/Resources/splash/Default~iphone.png build/emulator/WEXonline.app/Default~iphone.png
+cCpResource WEXonline/Resources/splash/Default-568h@2x~iphone.png build/emulator/WEXonline.app/Default-568h@2x~iphone.png
+cCpResource WEXonline/Resources/icons/icon-72@2x.png build/emulator/WEXonline.app/icon-72@2x.png
+cProcessPCH /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch.pch WEXonline/WEXonline-Prefix.pch normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/main.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/main.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/AppDelegate.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/AppDelegate.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/MainViewController.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cLd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/WEXonline normal i386
+cGenerateDSYMFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app.dSYM /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/WEXonline
+cTouch /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk
+c00000000521BCCE50000000000000176
+t1377553637
+s374
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/SDKSettings.plist
+c00000000522ACC8F00000000000003B5
+t1378536591
+s949
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/CoreServices/SystemVersion.plist
+c00000000522ACCD2000000000000019E
+t1378536658
+s414
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/AssetsLibrary.framework/AssetsLibrary
+c00000000522ACCE60000000000057080
+t1378536678
+s356480
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c00000000522ACCEE0000000000445830
+t1378536686
+s4479024
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/CoreLocation.framework/CoreLocation
+c00000000522ACCEF00000000000EC820
+t1378536687
+s968736
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/MobileCoreServices.framework/MobileCoreServices
+c00000000522ACD0F00000000001BA500
+t1378536719
+s1811712
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/AppDelegate.m
+c0000000052F3E6B900000000000013A9
+t1391716025
+s5033
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.m
+c0000000052F3E6B9000000000000126A
+t1391716025
+s4714
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.xib
+c0000000052F3E6B90000000000001759
+t1391716025
+s5977
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/de.lproj/Localizable.strings
+c0000000052F3E6B900000000000004BF
+t1391716025
+s1215
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/en.lproj/Localizable.strings
+c0000000052F3E6B900000000000004AA
+t1391716025
+s1194
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/es.lproj/Localizable.strings
+c0000000052F3E6B900000000000004B7
+t1391716025
+s1207
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/icons/icon-72.png
+c0000000052F3E6B90000000000001350
+t1391716025
+s4944
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/icons/icon-72@2x.png
+c0000000052F3E6B90000000000002DBA
+t1391716025
+s11706
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/icons/icon.png
+c0000000052F3E6B90000000000000F3E
+t1391716025
+s3902
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/icons/icon@2x.png
+c0000000052F3E6B90000000000001EBD
+t1391716025
+s7869
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/se.lproj/Localizable.strings
+c0000000052F3E6B900000000000004AB
+t1391716025
+s1195
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default-568h@2x~iphone.png
+c0000000052F3E6B900000000000085B1
+t1391716025
+s34225
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default-Landscape@2x~ipad.png
+c0000000052F3E6B90000000000012DF4
+t1391716025
+s77300
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default-Landscape~ipad.png
+c0000000052F3E6B90000000000008877
+t1391716025
+s34935
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default-Portrait@2x~ipad.png
+c0000000052F3E6B90000000000012B02
+t1391716025
+s76546
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default-Portrait~ipad.png
+c0000000052F3E6B900000000000085E6
+t1391716025
+s34278
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default@2x~iphone.png
+c0000000052F3E6B90000000000007323
+t1391716025
+s29475
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default~iphone.png
+c0000000052F3E6B9000000000000289A
+t1391716025
+s10394
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Info.plist
+c0000000052F3EEC3000000000000074D
+t1391718083
+s1869
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Prefix.pch
+c0000000052F3E6B900000000000003C3
+t1391716025
+s963
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/config.xml
+c0000000052F3EEC3000000000000134C
+t1391718083
+s4940
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/main.m
+c0000000052F3E6B9000000000000045B
+t1391716025
+s1115
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/AppDelegate.o
+t1391718094
+s77696
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/MainViewController.o
+t1391718094
+s53660
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/WEXonline.LinkFileList
+c0000000052F3EECD0000000000000213
+t1391718093
+s531
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/main.o
+t1391718094
+s3180
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Script-304B58A110DAC018002A0835.sh
+c0000000052F3EECD000000000000002D
+t1391718093
+s45
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app
+t1391718094
+s748
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app.dSYM
+t2
+s0
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default-568h@2x~iphone.png
+t1391718093
+s34225
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default-Landscape@2x~ipad.png
+t1391718093
+s77300
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default-Landscape~ipad.png
+t1391718093
+s34935
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default-Portrait@2x~ipad.png
+t1391718093
+s76546
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default-Portrait~ipad.png
+t1391718093
+s34278
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default@2x~iphone.png
+t1391718093
+s29475
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default~iphone.png
+t1391718093
+s10394
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Info.plist
+t1391718093
+s1084
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/MainViewController.nib
+t1391718094
+s1332
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/PkgInfo
+t2
+s0
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/WEXonline
+t1391718094
+s300468
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/config.xml
+t1391718093
+s4940
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/de.lproj/Localizable.strings
+t1391718093
+s280
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/en.lproj/Localizable.strings
+t1391718093
+s166
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/es.lproj/Localizable.strings
+t1391718093
+s334
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/icon-72.png
+t1391718093
+s4944
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/icon-72@2x.png
+t1391718093
+s11706
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/icon.png
+t1391718093
+s3902
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/icon@2x.png
+t1391718093
+s7869
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/se.lproj/Localizable.strings
+t1391718093
+s283
+
+N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a
+c0000000052F3EECC00000000000DE928
+t1391718092
+s911656
+
+N/var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch.pch
+t1391718094
+s5344200
+
+CCheck dependencies
+r0
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependencies554efb4c26a4b841^910d044d26a4b841^---0#1#1#--18"Check dependencies36"32568EB9-2256-40B9-86D9-EDFB391D5324-
+
+CCompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/AppDelegate.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/AppDelegate.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s413410894.486206
+e413410894.571745
+r1
+xCompileC
+xbuild/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/AppDelegate.o
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/AppDelegate.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/AppDelegate.m
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/AppDelegate.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVViewController.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVAvailability.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVInvokedUrlCommand.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegate.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandQueue.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWhitelist.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVScreenOrientationDelegate.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPlugin.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPluginResult.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSMutableArray+QueueAdditions.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegateImpl.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection122"Compile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/AppDelegate.m202"CompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/AppDelegate.o WEXonline/Classes/AppDelegate.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler139e7c4e26a4b841^ab5e924e26a4b841^---0#0#1#-19%DVTDocumentLocation2@121"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/AppDelegate.m0000000000000000^4529"CompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/AppDelegate.o WEXonline/Classes/AppDelegate.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c99 -fobjc-arc -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-implicit-atomic-properties -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-shorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -fvisibility=hidden -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=5.0 -iquote /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-generated-files.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-own-target-headers.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-all-target-headers.hmap -iquote /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-project-headers.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/usr/local/lib/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/UninstalledProducts/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/DerivedSources/i386 -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/DerivedSources -F/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator -include /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch -MMD -MT dependencies -MF /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/AppDelegate.d --serialize-diagnostics /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/AppDelegate.dia -c /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/AppDelegate.m -o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/AppDelegate.o36"73674672-F65D-4F17-8B55-21C2F20FE26B-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/MainViewController.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s413410894.486560
+e413410894.555264
+r1
+xCompileC
+xbuild/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/MainViewController.o
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.m
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVViewController.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVAvailability.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVInvokedUrlCommand.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegate.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandQueue.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWhitelist.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVScreenOrientationDelegate.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPlugin.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPluginResult.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSMutableArray+QueueAdditions.h
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegateImpl.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection129"Compile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.m216"CompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/MainViewController.o WEXonline/Classes/MainViewController.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler2db37c4e26a4b841^d9258e4e26a4b841^---0#0#1#-19%DVTDocumentLocation2@128"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.m0000000000000000^4571"CompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/MainViewController.o WEXonline/Classes/MainViewController.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c99 -fobjc-arc -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-implicit-atomic-properties -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-shorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -fvisibility=hidden -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=5.0 -iquote /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-generated-files.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-own-target-headers.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-all-target-headers.hmap -iquote /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-project-headers.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/usr/local/lib/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/UninstalledProducts/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/DerivedSources/i386 -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/DerivedSources -F/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator -include /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch -MMD -MT dependencies -MF /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/MainViewController.d --serialize-diagnostics /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/MainViewController.dia -c /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.m -o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/MainViewController.o36"C66386B9-6615-486C-9311-2525A22751B0-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/main.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/main.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s413410894.485822
+e413410894.532155
+r1
+xCompileC
+xbuild/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/main.o
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/main.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/main.m
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection107"Compile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/main.m180"CompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/main.o WEXonline/main.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compilerdb8b7c4e26a4b841^e63b884e26a4b841^---0#0#1#-19%DVTDocumentLocation2@106"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/main.m0000000000000000^4471"CompileC build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/main.o WEXonline/main.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c99 -fobjc-arc -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-implicit-atomic-properties -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-shorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -fvisibility=hidden -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=5.0 -iquote /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-generated-files.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-own-target-headers.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-all-target-headers.hmap -iquote /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-project-headers.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/usr/local/lib/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/UninstalledProducts/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/DerivedSources/i386 -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/DerivedSources -F/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator -include /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch -MMD -MT dependencies -MF /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/main.d --serialize-diagnostics /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/main.dia -c /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/main.m -o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/main.o36"12ADD66F-CCE3-4CE8-8F50-85A01022F7E1-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCompileXIB /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.xib
+s413410893.987830
+e413410894.092115
+r1
+xCompileXIB
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.xib
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection133"Compiling /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.xib51"CompileXIB WEXonline/Classes/MainViewController.xibba2dfd4d26a4b841^ab97174e26a4b841^---0#0#1#-19%DVTDocumentLocation2@130"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.xib0000000000000000^1204"CompileXIB WEXonline/Classes/MainViewController.xib    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    setenv XCODE_DEVELOPER_USR_PATH /Applications/Xcode.app/Contents/Developer/usr/bin/..    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/ibtool --errors --warnings --notices --minimum-deployment-target 5.0 --output-format human-readable-text --compile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/MainViewController.nib /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Classes/MainViewController.xib36"F6458111-F063-40E8-8726-468F92AFE259-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCopyStringsFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/de.lproj/Localizable.strings WEXonline/Resources/de.lproj/Localizable.strings
+s413410893.988023
+e413410894.005499
+r1
+xCopyStringsFile
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/de.lproj/Localizable.strings
+xWEXonline/Resources/de.lproj/Localizable.strings
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection53"Copy WEXonline/Resources/de.lproj/Localizable.strings122"CopyStringsFile build/emulator/WEXonline.app/de.lproj/Localizable.strings WEXonline/Resources/de.lproj/Localizable.stringsd333fd4d26a4b841^f987014e26a4b841^---0#0#1#-19%DVTDocumentLocation2@138"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/de.lproj/Localizable.strings0000000000000000^974"CopyStringsFile build/emulator/WEXonline.app/de.lproj/Localizable.strings WEXonline/Resources/de.lproj/Localizable.strings    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copyStrings --validate --inputencoding utf-8 --outputencoding binary --outdir /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/de.lproj -- WEXonline/Resources/de.lproj/Localizable.strings36"D07C5255-B33F-4C83-AAFE-1383F12815C4-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCopyStringsFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/en.lproj/Localizable.strings WEXonline/Resources/en.lproj/Localizable.strings
+s413410893.824306
+e413410894.004817
+r1
+xCopyStringsFile
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/en.lproj/Localizable.strings
+xWEXonline/Resources/en.lproj/Localizable.strings
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection53"Copy WEXonline/Resources/en.lproj/Localizable.strings122"CopyStringsFile build/emulator/WEXonline.app/en.lproj/Localizable.strings WEXonline/Resources/en.lproj/Localizable.stringsb01ed34d26a4b841^6840014e26a4b841^---0#0#1#-19%DVTDocumentLocation2@138"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/en.lproj/Localizable.strings0000000000000000^974"CopyStringsFile build/emulator/WEXonline.app/en.lproj/Localizable.strings WEXonline/Resources/en.lproj/Localizable.strings    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copyStrings --validate --inputencoding utf-8 --outputencoding binary --outdir /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/en.lproj -- WEXonline/Resources/en.lproj/Localizable.strings36"6E861193-E64F-4AE3-A5F4-A94DD7F3B859-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCopyStringsFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/es.lproj/Localizable.strings WEXonline/Resources/es.lproj/Localizable.strings
+s413410893.988078
+e413410894.005765
+r1
+xCopyStringsFile
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/es.lproj/Localizable.strings
+xWEXonline/Resources/es.lproj/Localizable.strings
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection53"Copy WEXonline/Resources/es.lproj/Localizable.strings122"CopyStringsFile build/emulator/WEXonline.app/es.lproj/Localizable.strings WEXonline/Resources/es.lproj/Localizable.stringsd542fd4d26a4b841^d597014e26a4b841^---0#0#1#-19%DVTDocumentLocation2@138"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/es.lproj/Localizable.strings0000000000000000^974"CopyStringsFile build/emulator/WEXonline.app/es.lproj/Localizable.strings WEXonline/Resources/es.lproj/Localizable.strings    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copyStrings --validate --inputencoding utf-8 --outputencoding binary --outdir /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/es.lproj -- WEXonline/Resources/es.lproj/Localizable.strings36"39D89007-E2A8-4600-9C5E-124207E2DF50-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCopyStringsFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/se.lproj/Localizable.strings WEXonline/Resources/se.lproj/Localizable.strings
+s413410893.988282
+e413410894.005202
+r1
+xCopyStringsFile
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/se.lproj/Localizable.strings
+xWEXonline/Resources/se.lproj/Localizable.strings
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection53"Copy WEXonline/Resources/se.lproj/Localizable.strings122"CopyStringsFile build/emulator/WEXonline.app/se.lproj/Localizable.strings WEXonline/Resources/se.lproj/Localizable.stringsa12ffd4d26a4b841^e78f014e26a4b841^---0#0#1#-19%DVTDocumentLocation2@138"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/se.lproj/Localizable.strings0000000000000000^974"CopyStringsFile build/emulator/WEXonline.app/se.lproj/Localizable.strings WEXonline/Resources/se.lproj/Localizable.strings    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copyStrings --validate --inputencoding utf-8 --outputencoding binary --outdir /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/se.lproj -- WEXonline/Resources/se.lproj/Localizable.strings36"55D57D91-F0F0-4C63-B59B-2592D6C5A84F-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/Resources/icons/icon-72.png build/emulator/WEXonline.app/icon-72.png
+s413410893.823399
+e413410893.987180
+r1
+xCpResource
+xWEXonline/Resources/icons/icon-72.png
+xbuild/emulator/WEXonline.app/icon-72.png
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection45"Copy build/emulator/WEXonline.app/icon-72.png89"CpResource WEXonline/Resources/icons/icon-72.png build/emulator/WEXonline.app/icon-72.png15e1d24d26a4b841^6b0dfd4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@130"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/icon-72.png003400e6ddffdf42^1023"CpResource WEXonline/Resources/icons/icon-72.png build/emulator/WEXonline.app/icon-72.png    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/icons/icon-72.png /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"D7EDAFF7-BAC7-417C-9147-2A40B1BD2D9E-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/Resources/icons/icon-72@2x.png build/emulator/WEXonline.app/icon-72@2x.png
+s413410893.993070
+e413410893.993897
+r1
+xCpResource
+xWEXonline/Resources/icons/icon-72@2x.png
+xbuild/emulator/WEXonline.app/icon-72@2x.png
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection48"Copy build/emulator/WEXonline.app/icon-72@2x.png95"CpResource WEXonline/Resources/icons/icon-72@2x.png build/emulator/WEXonline.app/icon-72@2x.png3c4dfe4d26a4b841^d270fe4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@133"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/icon-72@2x.png003400e6ddffdf42^1032"CpResource WEXonline/Resources/icons/icon-72@2x.png build/emulator/WEXonline.app/icon-72@2x.png    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/icons/icon-72@2x.png /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"51151AAD-FCB8-4507-98FD-A8D635132A55-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/Resources/icons/icon.png build/emulator/WEXonline.app/icon.png
+s413410893.823762
+e413410893.988174
+r1
+xCpResource
+xWEXonline/Resources/icons/icon.png
+xbuild/emulator/WEXonline.app/icon.png
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection42"Copy build/emulator/WEXonline.app/icon.png83"CpResource WEXonline/Resources/icons/icon.png build/emulator/WEXonline.app/icon.pnga515d34d26a4b841^4e42fd4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@127"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/icon.png003400e6ddffdf42^1014"CpResource WEXonline/Resources/icons/icon.png build/emulator/WEXonline.app/icon.png    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/icons/icon.png /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"00F47B4C-7BC5-4295-BF27-2F5C5D2B618A-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/Resources/icons/icon@2x.png build/emulator/WEXonline.app/icon@2x.png
+s413410893.823845
+e413410893.988364
+r1
+xCpResource
+xWEXonline/Resources/icons/icon@2x.png
+xbuild/emulator/WEXonline.app/icon@2x.png
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection45"Copy build/emulator/WEXonline.app/icon@2x.png89"CpResource WEXonline/Resources/icons/icon@2x.png build/emulator/WEXonline.app/icon@2x.png3f19d34d26a4b841^8d62fd4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@130"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/icon@2x.png003400e6ddffdf42^1023"CpResource WEXonline/Resources/icons/icon@2x.png build/emulator/WEXonline.app/icon@2x.png    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/icons/icon@2x.png /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"D170A5AC-FE44-499E-BCF9-8DFCBAF7B871-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/Resources/splash/Default-568h@2x~iphone.png build/emulator/WEXonline.app/Default-568h@2x~iphone.png
+s413410893.992758
+e413410893.993760
+r1
+xCpResource
+xWEXonline/Resources/splash/Default-568h@2x~iphone.png
+xbuild/emulator/WEXonline.app/Default-568h@2x~iphone.png
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection60"Copy build/emulator/WEXonline.app/Default-568h@2x~iphone.png120"CpResource WEXonline/Resources/splash/Default-568h@2x~iphone.png build/emulator/WEXonline.app/Default-568h@2x~iphone.png3e3dfe4d26a4b841^b667fe4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@145"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default-568h@2x~iphone.png003400e6ddffdf42^1070"CpResource WEXonline/Resources/splash/Default-568h@2x~iphone.png build/emulator/WEXonline.app/Default-568h@2x~iphone.png    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default-568h@2x~iphone.png /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"9D4E5974-8980-4F6D-BEB8-105AC6EA3944-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/Resources/splash/Default-Landscape@2x~ipad.png build/emulator/WEXonline.app/Default-Landscape@2x~ipad.png
+s413410893.989397
+e413410893.990809
+r1
+xCpResource
+xWEXonline/Resources/splash/Default-Landscape@2x~ipad.png
+xbuild/emulator/WEXonline.app/Default-Landscape@2x~ipad.png
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection63"Copy build/emulator/WEXonline.app/Default-Landscape@2x~ipad.png126"CpResource WEXonline/Resources/splash/Default-Landscape@2x~ipad.png build/emulator/WEXonline.app/Default-Landscape@2x~ipad.pngf569fd4d26a4b841^3ba7fd4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@148"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default-Landscape@2x~ipad.png003400e6ddffdf42^1079"CpResource WEXonline/Resources/splash/Default-Landscape@2x~ipad.png build/emulator/WEXonline.app/Default-Landscape@2x~ipad.png    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default-Landscape@2x~ipad.png /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"0FA2C34B-6ADE-447F-8504-6150EC94AB96-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/Resources/splash/Default-Landscape~ipad.png build/emulator/WEXonline.app/Default-Landscape~ipad.png
+s413410893.989804
+e413410893.991361
+r1
+xCpResource
+xWEXonline/Resources/splash/Default-Landscape~ipad.png
+xbuild/emulator/WEXonline.app/Default-Landscape~ipad.png
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection60"Copy build/emulator/WEXonline.app/Default-Landscape~ipad.png120"CpResource WEXonline/Resources/splash/Default-Landscape~ipad.png build/emulator/WEXonline.app/Default-Landscape~ipad.png2c80fd4d26a4b841^3acafd4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@145"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default-Landscape~ipad.png003400e6ddffdf42^1070"CpResource WEXonline/Resources/splash/Default-Landscape~ipad.png build/emulator/WEXonline.app/Default-Landscape~ipad.png    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default-Landscape~ipad.png /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"98081C1E-86A0-4C69-A07F-828EA901F929-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/Resources/splash/Default-Portrait@2x~ipad.png build/emulator/WEXonline.app/Default-Portrait@2x~ipad.png
+s413410893.990131
+e413410893.992224
+r1
+xCpResource
+xWEXonline/Resources/splash/Default-Portrait@2x~ipad.png
+xbuild/emulator/WEXonline.app/Default-Portrait@2x~ipad.png
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection62"Copy build/emulator/WEXonline.app/Default-Portrait@2x~ipad.png124"CpResource WEXonline/Resources/splash/Default-Portrait@2x~ipad.png build/emulator/WEXonline.app/Default-Portrait@2x~ipad.png6bd2fd4d26a4b841^1d03fe4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@147"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default-Portrait@2x~ipad.png003400e6ddffdf42^1076"CpResource WEXonline/Resources/splash/Default-Portrait@2x~ipad.png build/emulator/WEXonline.app/Default-Portrait@2x~ipad.png    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default-Portrait@2x~ipad.png /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"12F9DA3C-9155-453F-8076-B2B6FEB6AABB-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/Resources/splash/Default-Portrait~ipad.png build/emulator/WEXonline.app/Default-Portrait~ipad.png
+s413410893.991194
+e413410893.992315
+r1
+xCpResource
+xWEXonline/Resources/splash/Default-Portrait~ipad.png
+xbuild/emulator/WEXonline.app/Default-Portrait~ipad.png
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection59"Copy build/emulator/WEXonline.app/Default-Portrait~ipad.png118"CpResource WEXonline/Resources/splash/Default-Portrait~ipad.png build/emulator/WEXonline.app/Default-Portrait~ipad.png6eddfd4d26a4b841^cf10fe4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@144"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default-Portrait~ipad.png003400e6ddffdf42^1067"CpResource WEXonline/Resources/splash/Default-Portrait~ipad.png build/emulator/WEXonline.app/Default-Portrait~ipad.png    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default-Portrait~ipad.png /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"11D54088-0095-4B73-A04B-11F8D58C8A2F-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/Resources/splash/Default@2x~iphone.png build/emulator/WEXonline.app/Default@2x~iphone.png
+s413410893.991544
+e413410893.992728
+r1
+xCpResource
+xWEXonline/Resources/splash/Default@2x~iphone.png
+xbuild/emulator/WEXonline.app/Default@2x~iphone.png
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection55"Copy build/emulator/WEXonline.app/Default@2x~iphone.png110"CpResource WEXonline/Resources/splash/Default@2x~iphone.png build/emulator/WEXonline.app/Default@2x~iphone.pngf6f0fd4d26a4b841^3524fe4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@140"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default@2x~iphone.png003400e6ddffdf42^1055"CpResource WEXonline/Resources/splash/Default@2x~iphone.png build/emulator/WEXonline.app/Default@2x~iphone.png    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default@2x~iphone.png /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"D0010C76-F211-41FD-BF19-0C415124562C-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/Resources/splash/Default~iphone.png build/emulator/WEXonline.app/Default~iphone.png
+s413410893.992384
+e413410893.993391
+r1
+xCpResource
+xWEXonline/Resources/splash/Default~iphone.png
+xbuild/emulator/WEXonline.app/Default~iphone.png
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection52"Copy build/emulator/WEXonline.app/Default~iphone.png104"CpResource WEXonline/Resources/splash/Default~iphone.png build/emulator/WEXonline.app/Default~iphone.pngff24fe4d26a4b841^5050fe4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@137"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Default~iphone.png003400e6ddffdf42^1046"CpResource WEXonline/Resources/splash/Default~iphone.png build/emulator/WEXonline.app/Default~iphone.png    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/Resources/splash/Default~iphone.png /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"8A066BAC-8C4D-42E8-AC57-D48D6C755A30-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CCpResource WEXonline/config.xml build/emulator/WEXonline.app/config.xml
+s413410893.823215
+e413410893.988127
+r1
+xCpResource
+xWEXonline/config.xml
+xbuild/emulator/WEXonline.app/config.xml
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection44"Copy build/emulator/WEXonline.app/config.xml71"CpResource WEXonline/config.xml build/emulator/WEXonline.app/config.xml45dad24d26a4b841^a835fd4d26a4b841^---0#0#1#-19%DVTDocumentLocation2@129"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/config.xml003400e6ddffdf42^988"CpResource WEXonline/config.xml build/emulator/WEXonline.app/config.xml    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/config.xml /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"F1690EE1-A92F-470A-860B-4E7356C48571-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CGenerateDSYMFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app.dSYM /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/WEXonline
+s413410894.775335
+e413410894.826689
+r1
+xGenerateDSYMFile
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app.dSYM
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/WEXonline
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection125"Generate /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app.dSYM89"GenerateDSYMFile build/emulator/WEXonline.app.dSYM build/emulator/WEXonline.app/WEXonline588cc64e26a4b841^ada2d34e26a4b841^---0#0#1#-19%DVTDocumentLocation2@123"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app.dSYM003400e6ddffdf42^1020"GenerateDSYMFile build/emulator/WEXonline.app.dSYM build/emulator/WEXonline.app/WEXonline    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/WEXonline -o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app.dSYM36"6C9EEA53-B64E-43D7-B2CC-5ABB1F8D736D-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CLd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/WEXonline normal i386
+s413410894.572491
+e413410894.774585
+r1
+xLd
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/WEXonline
+xnormal
+xi386
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/WEXonline.LinkFileList
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/crt1.o
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/main.o
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/AppDelegate.o
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/MainViewController.o
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/AVFoundation.framework/AVFoundation
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/CoreMedia.framework/CoreMedia
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/libSystem.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/AssetsLibrary.framework/AssetsLibrary
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/MobileCoreServices.framework/MobileCoreServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/CoreLocation.framework/CoreLocation
+d/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/arc/libarclite_iphonesimulator.a
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/libobjc.dylib
+d/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.0/lib/darwin/libclang_rt.ios.a
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/Frameworks/AVFoundation.framework/libAVFAudio.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/PrivateFrameworks/UIFoundation.framework/UIFoundation
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libsystem_override.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libcache_sim.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libcommonCrypto_sim.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libcompiler_rt_sim.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libcopyfile_sim.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libdispatch.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libdyld_sim.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libmacho_sim.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libnotify_sim.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libremovefile_sim.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libsystem_sim_blocks.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libsystem_sim_c.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libsystem_sim_dnssd.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libsystem_sim_info.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libsystem_sim_m.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libsystem_network.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libunwind_sim.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libxpc.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libsystem_sim_configuration.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/libsystem_sim_asl.dylib
+d/usr/lib/libSystem.B.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/usr/lib/system/host/libdyld.dylib
+d/usr/lib/system/libcache.dylib
+d/usr/lib/system/libcommonCrypto.dylib
+d/usr/lib/system/libcompiler_rt.dylib
+d/usr/lib/system/libcopyfile.dylib
+d/usr/lib/system/libcorecrypto.dylib
+d/usr/lib/system/libkeymgr.dylib
+d/usr/lib/system/liblaunch.dylib
+d/usr/lib/system/libmacho.dylib
+d/usr/lib/system/libquarantine.dylib
+d/usr/lib/system/libremovefile.dylib
+d/usr/lib/system/libsystem_asl.dylib
+d/usr/lib/system/libsystem_blocks.dylib
+d/usr/lib/system/libsystem_c.dylib
+d/usr/lib/system/libsystem_configuration.dylib
+d/usr/lib/system/libsystem_dnssd.dylib
+d/usr/lib/system/libsystem_info.dylib
+d/usr/lib/system/libsystem_kernel.dylib
+d/usr/lib/system/libsystem_m.dylib
+d/usr/lib/system/libsystem_malloc.dylib
+d/usr/lib/system/libsystem_notify.dylib
+d/usr/lib/system/libsystem_platform.dylib
+d/usr/lib/system/libsystem_pthread.dylib
+d/usr/lib/system/libsystem_sandbox.dylib
+d/usr/lib/system/libunc.dylib
+d/usr/lib/system/libunwind.dylib
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection126"Link /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/WEXonline53"Ld build/emulator/WEXonline.app/WEXonline normal i3861aa2924e26a4b841^554bc64e26a4b841^---0#0#1#--2262"Ld build/emulator/WEXonline.app/WEXonline normal i386    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv IPHONEOS_DEPLOYMENT_TARGET 5.0    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -L/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator -F/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator -filelist /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/WEXonline.LinkFileList -Xlinker -objc_abi_version -Xlinker 2 -weak_framework CoreFoundation -weak_framework UIKit -weak_framework AVFoundation -weak_framework CoreMedia -weak-lSystem -force_load /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a -ObjC -fobjc-arc -fobjc-link-runtime -Xlinker -no_implicit_dylibs -mios-simulator-version-min=5.0 -framework AssetsLibrary /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a -framework CoreGraphics -framework MobileCoreServices -framework CoreLocation -Xlinker -dependency_info -Xlinker /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/WEXonline_dependency_info.dat -o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/WEXonline36"DA2ABB0C-85F7-4F8D-A420-C2CE2EC32DC0-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CPhaseScriptExecution Copy\ www\ directory /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Script-304B58A110DAC018002A0835.sh
+s413410893.030482
+e413410893.822726
+r1
+xPhaseScriptExecution
+xCopy www directory
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Script-304B58A110DAC018002A0835.sh
+o
+oreal	0m0.761s
+ouser	0m0.087s
+osys	0m0.147s
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection44"Run custom shell script 'Copy www directory'136"PhaseScriptExecution Copy\ www\ directory build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Script-304B58A110DAC018002A0835.sh00e4084d26a4b841^48a3d24d26a4b841^-42"real	0m0.761suser	0m0.087ssys	0m0.147s3(21%IDEActivityLogMessage2@14"real	0m0.761s-413410893#1#14#-0#-----2@14"user	0m0.087s-413410893#15#14#-0#-----2@13"sys	0m0.147s-413410893#29#13#-0#-----0#0#1#--23969"PhaseScriptExecution Copy\ www\ directory build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Script-304B58A110DAC018002A0835.sh    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv ACTION build    setenv AD_HOC_CODE_SIGNING_ALLOWED NO    setenv ALTERNATE_GROUP staff    setenv ALTERNATE_MODE u+w,go-w,a+rX    setenv ALTERNATE_OWNER erinparrill    setenv ALWAYS_SEARCH_USER_PATHS NO    setenv ALWAYS_USE_SEPARATE_HEADERMAPS YES    setenv APPLE_INTERNAL_DEVELOPER_DIR /AppleInternal/Developer    setenv APPLE_INTERNAL_DIR /AppleInternal    setenv APPLE_INTERNAL_DOCUMENTATION_DIR /AppleInternal/Documentation    setenv APPLE_INTERNAL_LIBRARY_DIR /AppleInternal/Library    setenv APPLE_INTERNAL_TOOLS /AppleInternal/Developer/Tools    setenv APPLY_RULES_IN_COPY_FILES NO    setenv ARCHS i386    setenv ARCHS_STANDARD i386    setenv ARCHS_STANDARD_32_64_BIT i386    setenv ARCHS_STANDARD_32_BIT i386    setenv ARCHS_STANDARD_64_BIT x86_64    setenv ARCHS_STANDARD_INCLUDING_64_BIT "i386 x86_64"    setenv AVAILABLE_PLATFORMS "iphonesimulator macosx iphoneos"    setenv BUILD_COMPONENTS "headers build"    setenv BUILD_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build    setenv BUILD_ROOT /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build    setenv BUILD_STYLE     setenv BUILD_VARIANTS normal    setenv BUILT_PRODUCTS_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator    setenv CACHE_ROOT /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode    setenv CCHROOT /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode    setenv CHMOD /bin/chmod    setenv CHOWN /usr/sbin/chown    setenv CLANG_ENABLE_OBJC_ARC YES    setenv CLANG_WARN_BOOL_CONVERSION YES    setenv CLANG_WARN_CONSTANT_CONVERSION YES    setenv CLANG_WARN_EMPTY_BODY YES    setenv CLANG_WARN_ENUM_CONVERSION YES    setenv CLANG_WARN_INT_CONVERSION YES    setenv CLANG_WARN__DUPLICATE_METHOD_MATCH YES    setenv CLASS_FILE_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/JavaClasses    setenv CLEAN_PRECOMPS YES    setenv CLONE_HEADERS NO    setenv CODESIGNING_FOLDER_PATH /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app    setenv CODE_SIGNING_ALLOWED NO    setenv CODE_SIGN_CONTEXT_CLASS XCiPhoneSimulatorCodeSignContext    setenv COLOR_DIAGNOSTICS NO    setenv COMBINE_HIDPI_IMAGES NO    setenv COMMAND_MODE legacy    setenv COMPOSITE_SDK_DIRS /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/CompositeSDKs    setenv COMPRESS_PNG_FILES YES    setenv CONFIGURATION Debug    setenv CONFIGURATION_BUILD_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator    setenv CONFIGURATION_TEMP_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator    setenv CONTENTS_FOLDER_PATH WEXonline.app    setenv COPYING_PRESERVES_HFS_DATA NO    setenv COPY_PHASE_STRIP NO    setenv COPY_RESOURCES_FROM_STATIC_FRAMEWORKS YES    setenv CP /bin/cp    setenv CREATE_INFOPLIST_SECTION_IN_BINARY NO    setenv CURRENT_ARCH i386    setenv CURRENT_VARIANT normal    setenv DEAD_CODE_STRIPPING NO    setenv DEBUGGING_SYMBOLS YES    setenv DEBUG_INFORMATION_FORMAT dwarf-with-dsym    setenv DEFAULT_COMPILER com.apple.compilers.llvm.clang.1_0    setenv DEFAULT_KEXT_INSTALL_PATH /System/Library/Extensions    setenv DEPLOYMENT_LOCATION NO    setenv DEPLOYMENT_POSTPROCESSING NO    setenv DERIVED_FILES_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/DerivedSources    setenv DERIVED_FILE_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/DerivedSources    setenv DERIVED_SOURCES_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/DerivedSources    setenv DEVELOPER_APPLICATIONS_DIR /Applications/Xcode.app/Contents/Developer/Applications    setenv DEVELOPER_BIN_DIR /Applications/Xcode.app/Contents/Developer/usr/bin    setenv DEVELOPER_DIR /Applications/Xcode.app/Contents/Developer    setenv DEVELOPER_FRAMEWORKS_DIR /Applications/Xcode.app/Contents/Developer/Library/Frameworks    setenv DEVELOPER_FRAMEWORKS_DIR_QUOTED /Applications/Xcode.app/Contents/Developer/Library/Frameworks    setenv DEVELOPER_LIBRARY_DIR /Applications/Xcode.app/Contents/Developer/Library    setenv DEVELOPER_SDK_DIR /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs    setenv DEVELOPER_TOOLS_DIR /Applications/Xcode.app/Contents/Developer/Tools    setenv DEVELOPER_USR_DIR /Applications/Xcode.app/Contents/Developer/usr    setenv DEVELOPMENT_LANGUAGE English    setenv DOCUMENTATION_FOLDER_PATH WEXonline.app/English.lproj/Documentation    setenv DO_HEADER_SCANNING_IN_JAM NO    setenv DSTROOT /tmp/WEXonline.dst    setenv DT_TOOLCHAIN_DIR /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain    setenv DWARF_DSYM_FILE_NAME WEXonline.app.dSYM    setenv DWARF_DSYM_FILE_SHOULD_ACCOMPANY_PRODUCT NO    setenv DWARF_DSYM_FOLDER_PATH /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator    setenv EFFECTIVE_PLATFORM_NAME -iphonesimulator    setenv ENABLE_HEADER_DEPENDENCIES YES    setenv EXCLUDED_INSTALLSRC_SUBDIRECTORY_PATTERNS ".DS_Store .svn .git .hg CVS"    setenv EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES "*.nib *.lproj *.framework *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj"    setenv EXECUTABLES_FOLDER_PATH WEXonline.app/Executables    setenv EXECUTABLE_FOLDER_PATH WEXonline.app    setenv EXECUTABLE_NAME WEXonline    setenv EXECUTABLE_PATH WEXonline.app/WEXonline    setenv FILE_LIST /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects/LinkFileList    setenv FIXED_FILES_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/FixedFiles    setenv FRAMEWORKS_FOLDER_PATH WEXonline.app/Frameworks    setenv FRAMEWORK_FLAG_PREFIX -framework    setenv FRAMEWORK_SEARCH_PATHS "/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator "    setenv FRAMEWORK_VERSION A    setenv FULL_PRODUCT_NAME WEXonline.app    setenv GCC3_VERSION 3.3    setenv GCC_C_LANGUAGE_STANDARD c99    setenv GCC_DYNAMIC_NO_PIC NO    setenv GCC_INLINES_ARE_PRIVATE_EXTERN YES    setenv GCC_OBJC_LEGACY_DISPATCH YES    setenv GCC_OPTIMIZATION_LEVEL 0    setenv GCC_PFE_FILE_C_DIALECTS "c objective-c c++ objective-c++"    setenv GCC_PRECOMPILE_PREFIX_HEADER YES    setenv GCC_PREFIX_HEADER WEXonline/WEXonline-Prefix.pch    setenv GCC_SYMBOLS_PRIVATE_EXTERN YES    setenv GCC_THUMB_SUPPORT NO    setenv GCC_TREAT_WARNINGS_AS_ERRORS NO    setenv GCC_VERSION com.apple.compilers.llvm.clang.1_0    setenv GCC_VERSION_IDENTIFIER com_apple_compilers_llvm_clang_1_0    setenv GCC_WARN_ABOUT_RETURN_TYPE YES    setenv GCC_WARN_UNDECLARED_SELECTOR YES    setenv GCC_WARN_UNINITIALIZED_AUTOS YES    setenv GCC_WARN_UNUSED_FUNCTION YES    setenv GCC_WARN_UNUSED_VARIABLE YES    setenv GENERATE_MASTER_OBJECT_FILE NO    setenv GENERATE_PKGINFO_FILE YES    setenv GENERATE_PROFILING_CODE NO    setenv GID 20    setenv GROUP staff    setenv HEADERMAP_INCLUDES_FLAT_ENTRIES_FOR_TARGET_BEING_BUILT YES    setenv HEADERMAP_INCLUDES_FRAMEWORK_ENTRIES_FOR_ALL_PRODUCT_TYPES YES    setenv HEADERMAP_INCLUDES_NONPUBLIC_NONPRIVATE_HEADERS YES    setenv HEADERMAP_INCLUDES_PROJECT_HEADERS YES    setenv HEADER_SEARCH_PATHS "/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include \"/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/usr/local/lib/include\" \"/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/UninstalledProducts/include\" \"/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator\""    setenv ICONV /usr/bin/iconv    setenv INFOPLIST_EXPAND_BUILD_SETTINGS YES    setenv INFOPLIST_FILE WEXonline/WEXonline-Info.plist    setenv INFOPLIST_OUTPUT_FORMAT binary    setenv INFOPLIST_PATH WEXonline.app/Info.plist    setenv INFOPLIST_PREPROCESS NO    setenv INFOSTRINGS_PATH WEXonline.app/English.lproj/InfoPlist.strings    setenv INSTALL_DIR /tmp/WEXonline.dst/Applications    setenv INSTALL_GROUP staff    setenv INSTALL_MODE_FLAG u+w,go-w,a+rX    setenv INSTALL_OWNER erinparrill    setenv INSTALL_PATH /Applications    setenv INSTALL_ROOT /tmp/WEXonline.dst    setenv IPHONEOS_DEPLOYMENT_TARGET 5.0    setenv JAVAC_DEFAULT_FLAGS "-J-Xms64m -J-XX:NewSize=4M -J-Dfile.encoding=UTF8"    setenv JAVA_APP_STUB /System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub    setenv JAVA_ARCHIVE_CLASSES YES    setenv JAVA_ARCHIVE_TYPE JAR    setenv JAVA_COMPILER /usr/bin/javac    setenv JAVA_FOLDER_PATH WEXonline.app/Java    setenv JAVA_FRAMEWORK_RESOURCES_DIRS Resources    setenv JAVA_JAR_FLAGS cv    setenv JAVA_SOURCE_SUBDIR .    setenv JAVA_USE_DEPENDENCIES YES    setenv JAVA_ZIP_FLAGS -urg    setenv JIKES_DEFAULT_FLAGS "+E +OLDCSO"    setenv KEEP_PRIVATE_EXTERNS NO    setenv LD_DEPENDENCY_INFO_FILE /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/WEXonline_dependency_info.dat    setenv LD_GENERATE_MAP_FILE NO    setenv LD_MAP_FILE_PATH /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-LinkMap-normal-i386.txt    setenv LD_NO_PIE NO    setenv LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER YES    setenv LEGACY_DEVELOPER_DIR /Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer    setenv LEX lex    setenv LIBRARY_FLAG_NOSPACE YES    setenv LIBRARY_FLAG_PREFIX -l    setenv LIBRARY_KEXT_INSTALL_PATH /Library/Extensions    setenv LIBRARY_SEARCH_PATHS "/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator "    setenv LINKER_DISPLAYS_MANGLED_NAMES NO    setenv LINK_FILE_LIST_normal_i386 /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal/i386/WEXonline.LinkFileList    setenv LINK_WITH_STANDARD_LIBRARIES YES    setenv LOCALIZED_RESOURCES_FOLDER_PATH WEXonline.app/English.lproj    setenv LOCAL_ADMIN_APPS_DIR /Applications/Utilities    setenv LOCAL_APPS_DIR /Applications    setenv LOCAL_DEVELOPER_DIR /Library/Developer    setenv LOCAL_LIBRARY_DIR /Library    setenv MACH_O_TYPE mh_execute    setenv MACOSX_DEPLOYMENT_TARGET 10.6    setenv MAC_OS_X_PRODUCT_BUILD_VERSION 13B42    setenv MAC_OS_X_VERSION_ACTUAL 1091    setenv MAC_OS_X_VERSION_MAJOR 1090    setenv MAC_OS_X_VERSION_MINOR 0901    setenv MODULE_CACHE_DIR /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/ModuleCache    setenv NATIVE_ARCH i386    setenv NATIVE_ARCH_32_BIT i386    setenv NATIVE_ARCH_64_BIT x86_64    setenv NATIVE_ARCH_ACTUAL x86_64    setenv NO_COMMON YES    setenv OBJC_ABI_VERSION 2    setenv OBJECT_FILE_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects    setenv OBJECT_FILE_DIR_normal /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Objects-normal    setenv OBJROOT /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build    setenv ONLY_ACTIVE_ARCH YES    setenv OPTIMIZATION_LEVEL 0    setenv OS MACOS    setenv OSAC /usr/bin/osacompile    setenv OTHER_LDFLAGS "-weak_framework CoreFoundation -weak_framework UIKit -weak_framework AVFoundation -weak_framework CoreMedia -weak-lSystem -force_load \"/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a\" -ObjC"    setenv PACKAGE_TYPE com.apple.package-type.wrapper.application    setenv PASCAL_STRINGS YES    setenv PATH "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/libexec:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/local/bin:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/usr/bin:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/usr/local/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/local/bin:/Applications/Xcode.app/Contents/Developer/Tools:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/tools/ant:/usr/local/Cellar/ant/1.9.3/bin"    setenv PATH_PREFIXES_EXCLUDED_FROM_HEADER_DEPENDENCIES "/usr/include /usr/local/include /System/Library/Frameworks /System/Library/PrivateFrameworks /Applications/Xcode.app/Contents/Developer/Headers /Applications/Xcode.app/Contents/Developer/SDKs /Applications/Xcode.app/Contents/Developer/Platforms"    setenv PBDEVELOPMENTPLIST_PATH WEXonline.app/pbdevelopment.plist    setenv PFE_FILE_C_DIALECTS objective-c    setenv PKGINFO_FILE_PATH /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/PkgInfo    setenv PKGINFO_PATH WEXonline.app/PkgInfo    setenv PLATFORM_DEVELOPER_APPLICATIONS_DIR /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications    setenv PLATFORM_DEVELOPER_BIN_DIR /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin    setenv PLATFORM_DEVELOPER_LIBRARY_DIR /Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library    setenv PLATFORM_DEVELOPER_SDK_DIR /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs    setenv PLATFORM_DEVELOPER_TOOLS_DIR /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Tools    setenv PLATFORM_DEVELOPER_USR_DIR /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr    setenv PLATFORM_DIR /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform    setenv PLATFORM_NAME iphonesimulator    setenv PLATFORM_PREFERRED_ARCH i386    setenv PLATFORM_PRODUCT_BUILD_VERSION 11A465    setenv PLATFORM_VERSION_AVAILABILITY_H_FORMAT 70000    setenv PLIST_FILE_OUTPUT_FORMAT binary    setenv PLUGINS_FOLDER_PATH WEXonline.app/PlugIns    setenv PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR YES    setenv PRECOMP_DESTINATION_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/PrefixHeaders    setenv PRESERVE_DEAD_CODE_INITS_AND_TERMS NO    setenv PRIVATE_HEADERS_FOLDER_PATH WEXonline.app/PrivateHeaders    setenv PRODUCT_NAME WEXonline    setenv PRODUCT_SETTINGS_PATH /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Info.plist    setenv PRODUCT_TYPE com.apple.product-type.application    setenv PROFILING_CODE NO    setenv PROJECT WEXonline    setenv PROJECT_DERIVED_FILE_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/DerivedSources    setenv PROJECT_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PROJECT_FILE_PATH /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline.xcodeproj    setenv PROJECT_NAME WEXonline    setenv PROJECT_TEMP_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build    setenv PROJECT_TEMP_ROOT /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build    setenv PUBLIC_HEADERS_FOLDER_PATH WEXonline.app/Headers    setenv RECURSIVE_SEARCH_PATHS_FOLLOW_SYMLINKS YES    setenv REMOVE_CVS_FROM_RESOURCES YES    setenv REMOVE_GIT_FROM_RESOURCES YES    setenv REMOVE_HG_FROM_RESOURCES YES    setenv REMOVE_SVN_FROM_RESOURCES YES    setenv REZ_COLLECTOR_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/ResourceManagerResources    setenv REZ_OBJECTS_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/ResourceManagerResources/Objects    setenv REZ_SEARCH_PATHS "/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator "    setenv SCAN_ALL_SOURCE_FILES_FOR_INCLUDES NO    setenv SCRIPTS_FOLDER_PATH WEXonline.app/Scripts    setenv SCRIPT_INPUT_FILE_COUNT 0    setenv SCRIPT_OUTPUT_FILE_COUNT 0    setenv SDKROOT /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk    setenv SDK_DIR /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk    setenv SDK_NAME iphonesimulator7.0    setenv SDK_PRODUCT_BUILD_VERSION 11A465    setenv SED /usr/bin/sed    setenv SEPARATE_STRIP NO    setenv SEPARATE_SYMBOL_EDIT NO    setenv SET_DIR_MODE_OWNER_GROUP YES    setenv SET_FILE_MODE_OWNER_GROUP NO    setenv SHALLOW_BUNDLE YES    setenv SHARED_DERIVED_FILE_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/DerivedSources    setenv SHARED_FRAMEWORKS_FOLDER_PATH WEXonline.app/SharedFrameworks    setenv SHARED_PRECOMPS_DIR /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders    setenv SHARED_SUPPORT_FOLDER_PATH WEXonline.app/SharedSupport    setenv SKIP_INSTALL NO    setenv SOURCE_ROOT /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv SRCROOT /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv STRINGS_FILE_OUTPUT_ENCODING binary    setenv STRIP_INSTALLED_PRODUCT YES    setenv STRIP_STYLE all    setenv SUPPORTED_DEVICE_FAMILIES "1 2"    setenv SUPPORTED_PLATFORMS "iphonesimulator iphoneos"    setenv SYMROOT /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build    setenv SYSTEM_ADMIN_APPS_DIR /Applications/Utilities    setenv SYSTEM_APPS_DIR /Applications    setenv SYSTEM_CORE_SERVICES_DIR /System/Library/CoreServices    setenv SYSTEM_DEMOS_DIR /Applications/Extras    setenv SYSTEM_DEVELOPER_APPS_DIR /Applications/Xcode.app/Contents/Developer/Applications    setenv SYSTEM_DEVELOPER_BIN_DIR /Applications/Xcode.app/Contents/Developer/usr/bin    setenv SYSTEM_DEVELOPER_DEMOS_DIR "/Applications/Xcode.app/Contents/Developer/Applications/Utilities/Built Examples"    setenv SYSTEM_DEVELOPER_DIR /Applications/Xcode.app/Contents/Developer    setenv SYSTEM_DEVELOPER_DOC_DIR "/Applications/Xcode.app/Contents/Developer/ADC Reference Library"    setenv SYSTEM_DEVELOPER_GRAPHICS_TOOLS_DIR "/Applications/Xcode.app/Contents/Developer/Applications/Graphics Tools"    setenv SYSTEM_DEVELOPER_JAVA_TOOLS_DIR "/Applications/Xcode.app/Contents/Developer/Applications/Java Tools"    setenv SYSTEM_DEVELOPER_PERFORMANCE_TOOLS_DIR "/Applications/Xcode.app/Contents/Developer/Applications/Performance Tools"    setenv SYSTEM_DEVELOPER_RELEASENOTES_DIR "/Applications/Xcode.app/Contents/Developer/ADC Reference Library/releasenotes"    setenv SYSTEM_DEVELOPER_TOOLS /Applications/Xcode.app/Contents/Developer/Tools    setenv SYSTEM_DEVELOPER_TOOLS_DOC_DIR "/Applications/Xcode.app/Contents/Developer/ADC Reference Library/documentation/DeveloperTools"    setenv SYSTEM_DEVELOPER_TOOLS_RELEASENOTES_DIR "/Applications/Xcode.app/Contents/Developer/ADC Reference Library/releasenotes/DeveloperTools"    setenv SYSTEM_DEVELOPER_USR_DIR /Applications/Xcode.app/Contents/Developer/usr    setenv SYSTEM_DEVELOPER_UTILITIES_DIR /Applications/Xcode.app/Contents/Developer/Applications/Utilities    setenv SYSTEM_DOCUMENTATION_DIR /Library/Documentation    setenv SYSTEM_KEXT_INSTALL_PATH /System/Library/Extensions    setenv SYSTEM_LIBRARY_DIR /System/Library    setenv TARGETED_DEVICE_FAMILY 1,2    setenv TARGETNAME WEXonline    setenv TARGET_BUILD_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator    setenv TARGET_NAME WEXonline    setenv TARGET_TEMP_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build    setenv TEMP_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build    setenv TEMP_FILES_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build    setenv TEMP_FILE_DIR /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build    setenv TEMP_ROOT /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build    setenv TOOLCHAINS com.apple.dt.toolchain.XcodeDefault    setenv UID 501    setenv UNLOCALIZED_RESOURCES_FOLDER_PATH WEXonline.app    setenv UNSTRIPPED_PRODUCT NO    setenv USER erinparrill    setenv USER_APPS_DIR /Users/erinparrill/Applications    setenv USER_LIBRARY_DIR /Users/erinparrill/Library    setenv USE_DYNAMIC_NO_PIC YES    setenv USE_HEADERMAP YES    setenv USE_HEADER_SYMLINKS NO    setenv VALIDATE_PRODUCT NO    setenv VALID_ARCHS i386    setenv VERBOSE_PBXCP NO    setenv VERSIONPLIST_PATH WEXonline.app/version.plist    setenv VERSION_INFO_BUILDER erinparrill    setenv VERSION_INFO_FILE WEXonline_vers.c    setenv VERSION_INFO_STRING "\"@(#)PROGRAM:WEXonline  PROJECT:WEXonline-\""    setenv WRAPPER_EXTENSION app    setenv WRAPPER_NAME WEXonline.app    setenv WRAPPER_SUFFIX .app    setenv XCODE_APP_SUPPORT_DIR /Applications/Xcode.app/Contents/Developer/Library/Xcode    setenv XCODE_PRODUCT_BUILD_VERSION 5A1412    setenv XCODE_VERSION_ACTUAL 0500    setenv XCODE_VERSION_MAJOR 0500    setenv XCODE_VERSION_MINOR 0500    setenv XPCSERVICES_FOLDER_PATH WEXonline.app/XPCServices    setenv YACC yacc    setenv arch i386    setenv variant normal    /bin/sh -c /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/Script-304B58A110DAC018002A0835.sh36"7231903C-7168-49CE-8260-72DCE8C6E5C7-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CProcessInfoPlistFile /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Info.plist /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Info.plist
+s413410893.016638
+e413410893.026786
+r1
+xProcessInfoPlistFile
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Info.plist
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Info.plist
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection121"Process /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Info.plist91"ProcessInfoPlistFile build/emulator/WEXonline.app/Info.plist WEXonline/WEXonline-Info.plistee5c044d26a4b841^6edc064d26a4b841^---0#0#1#-19%DVTDocumentLocation2@120"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Info.plist0000000000000000^1143"ProcessInfoPlistFile build/emulator/WEXonline.app/Info.plist WEXonline/WEXonline-Info.plist    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-infoPlistUtility /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Info.plist -genpkginfo /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app/Info.plist36"461FAC4B-8035-46F3-A27E-52A8C8251DEB-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CProcessPCH /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch.pch WEXonline/WEXonline-Prefix.pch normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s413410894.093034
+e413410894.484977
+r1
+xProcessPCH
+x/var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch.pch
+xWEXonline/WEXonline-Prefix.pch
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Prefix.pch
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection41"Precompile WEXonline/WEXonline-Prefix.pch296"ProcessPCH /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch.pch WEXonline/WEXonline-Prefix.pch normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compilere5f2174e26a4b841^57267c4e26a4b841^---0#0#1#-19%DVTDocumentLocation2@120"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Prefix.pch0000000000000000^4463"ProcessPCH /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch.pch WEXonline/WEXonline-Prefix.pch normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c-header -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c99 -fobjc-arc -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-implicit-atomic-properties -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-shorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -fexceptions -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -fvisibility=hidden -Wno-sign-conversion -fobjc-abi-version=2 -fobjc-legacy-dispatch -mios-simulator-version-min=5.0 -iquote /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-generated-files.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-own-target-headers.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-all-target-headers.hmap -iquote /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/WEXonline-project-headers.hmap -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/usr/local/lib/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/UninstalledProducts/include -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/DerivedSources/i386 -I/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/WEXonline.build/Debug-iphonesimulator/WEXonline.build/DerivedSources -F/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator --serialize-diagnostics /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch.dia -MMD -MT dependencies -MF /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch.d -c /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/WEXonline/WEXonline-Prefix.pch -o /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/WEXonline-Prefix-foxtrvhbnhgvoidxhqawjcchfewj/WEXonline-Prefix.pch.pch36"B9FF939D-7DE7-48A4-9B88-91503273AD5D-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+
+CTouch /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app
+s413410894.827856
+e413410894.832846
+r1
+xTouch
+x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection117"Touch /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app34"Touch build/emulator/WEXonline.app09fed34e26a4b841^db35d54e26a4b841^---0#0#1#--757"Touch build/emulator/WEXonline.app    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools::/Users/Shared/android-sdk/tools/ant:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    /usr/bin/touch -c /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/WEXonline.app36"BF6CAB58-2CDB-4B3A-BF3B-A48DCF24D902-
+b69AA0AFB-786D-4935-83BA-6BA4C9D2E0EB
+

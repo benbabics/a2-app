@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>8282FF87-BC6C-4363-AD79-26546A09B09E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>WEXonline</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D7284459-6134-4F97-8992-E2202F964DB2</key>
+		<string>http://svn.wrightexpress.com/stormwind/eCommerce_team/Mobile/AcctMaint/trunk</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>platforms/ios/WEXonline.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D7284459-6134-4F97-8992-E2202F964DB2</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>D7284459-6134-4F97-8992-E2202F964DB2</key>
+		<string>http://svn.wrightexpress.com/stormwind</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://svn.wrightexpress.com/stormwind/eCommerce_team/Mobile/AcctMaint/trunk/platforms/ios/WEXonline.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D7284459-6134-4F97-8992-E2202F964DB2</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D7284459-6134-4F97-8992-E2202F964DB2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>AcctMaint</string>
+		</dict>
+	</array>
+</dict>
+</plist>
