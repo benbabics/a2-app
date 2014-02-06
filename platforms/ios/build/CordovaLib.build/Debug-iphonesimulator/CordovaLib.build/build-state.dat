@@ -1,818 +1,0 @@
-TCordovaLib
-v6
-r1
-cCheck dependencies
-cCpHeader Classes/NSDictionary+Extensions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSDictionary+Extensions.h
-cCpHeader Classes/CDVInvokedUrlCommand.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVInvokedUrlCommand.h
-cCpHeader Classes/NSData+Base64.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSData+Base64.h
-cCpHeader Classes/CDVPluginResult.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPluginResult.h
-cCpHeader Classes/CDVPlugin.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPlugin.h
-cCpHeader Classes/CDVDebug.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVDebug.h
-cCpHeader Classes/NSMutableArray+QueueAdditions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSMutableArray+QueueAdditions.h
-cCpHeader Classes/CDVWhitelist.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWhitelist.h
-cCpHeader Classes/CDVURLProtocol.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVURLProtocol.h
-cCpHeader Classes/CDVViewController.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVViewController.h
-cCpHeader Classes/CDVCommandDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegate.h
-cCpHeader Classes/CDV.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDV.h
-cCpHeader Classes/CDVAvailability.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVAvailability.h
-cCpHeader Classes/CDVLocalStorage.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVLocalStorage.h
-cCpHeader Classes/UIDevice+Extensions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/UIDevice+Extensions.h
-cCpHeader Classes/NSArray+Comparisons.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSArray+Comparisons.h
-cCpHeader Classes/CDVCommandQueue.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandQueue.h
-cCpHeader Classes/CDVCommandDelegateImpl.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegateImpl.h
-cCpHeader Classes/CDVShared.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVShared.h
-cCpHeader Classes/CDVScreenOrientationDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVScreenOrientationDelegate.h
-cCpHeader Classes/CDVConfigParser.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVConfigParser.h
-cCpHeader Classes/CDVJSON.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVJSON.h
-cCpHeader Classes/CDVWebViewDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWebViewDelegate.h
-cCpHeader Classes/CDVUserAgentUtil.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVUserAgentUtil.h
-cCpHeader Classes/CDVTimer.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVTimer.h
-cProcessPCH /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/CordovaLib_Prefix-bjmgoalzcqildrbobflqynfjkmib/CordovaLib_Prefix.pch.pch CordovaLib_Prefix.pch normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSDictionary+Extensions.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSDictionary+Extensions.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVInvokedUrlCommand.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVInvokedUrlCommand.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSData+Base64.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSData+Base64.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVPluginResult.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVPluginResult.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVPlugin.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVPlugin.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSMutableArray+QueueAdditions.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSMutableArray+QueueAdditions.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVWhitelist.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVWhitelist.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVURLProtocol.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVURLProtocol.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVViewController.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVViewController.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVLocalStorage.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVLocalStorage.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/UIDevice+Extensions.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/UIDevice+Extensions.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSArray+Comparisons.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSArray+Comparisons.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVCommandQueue.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandQueue.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVCommandDelegateImpl.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandDelegateImpl.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVConfigParser.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVConfigParser.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVJSON.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVJSON.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVUserAgentUtil.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVUserAgentUtil.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVWebViewDelegate.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVWebViewDelegate.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVTimer.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVTimer.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVShared.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVShared.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-cLibtool /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a normal i386
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk
-c00000000521BCCE50000000000000176
-t1377553637
-s374
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/SDKSettings.plist
-c00000000522ACC8F00000000000003B5
-t1378536591
-s949
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk/System/Library/CoreServices/SystemVersion.plist
-c00000000522ACCD2000000000000019E
-t1378536658
-s414
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDV.h
-c0000000052F403530000000000000516
-t1391723347
-s1302
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVAvailability.h
-c0000000052F403530000000000000CBF
-t1391723347
-s3263
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandDelegate.h
-c0000000052F4035300000000000008BA
-t1391723347
-s2234
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandDelegateImpl.h
-c0000000052F403530000000000000473
-t1391723347
-s1139
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandDelegateImpl.m
-c0000000052F40353000000000000127C
-t1391723347
-s4732
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandQueue.h
-c0000000052F403530000000000000501
-t1391723347
-s1281
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandQueue.m
-c0000000052F4035300000000000017C5
-t1391723347
-s6085
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVConfigParser.h
-c0000000052F4035300000000000004CB
-t1391723347
-s1227
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVConfigParser.m
-c0000000052F403530000000000000EB2
-t1391723347
-s3762
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVDebug.h
-c0000000052F403530000000000000401
-t1391723347
-s1025
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVInvokedUrlCommand.h
-c0000000052F4035300000000000007E6
-t1391723347
-s2022
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVInvokedUrlCommand.m
-c0000000052F403530000000000000DDE
-t1391723347
-s3550
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVJSON.h
-c0000000052F4035300000000000003DA
-t1391723347
-s986
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVJSON.m
-c0000000052F40353000000000000098E
-t1391723347
-s2446
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVLocalStorage.h
-c0000000052F4035300000000000006CF
-t1391723347
-s1743
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVLocalStorage.m
-c0000000052F403530000000000004C7E
-t1391723347
-s19582
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVPlugin.h
-c0000000052F403530000000000000892
-t1391723347
-s2194
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVPlugin.m
-c0000000052F4035300000000000016AE
-t1391723347
-s5806
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVPluginResult.h
-c0000000052F403530000000000000C13
-t1391723347
-s3091
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVPluginResult.m
-c0000000052F403530000000000001B29
-t1391723347
-s6953
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVScreenOrientationDelegate.h
-c0000000052F403530000000000000408
-t1391723347
-s1032
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVShared.h
-c0000000052F4035300000000000003E6
-t1391723347
-s998
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVShared.m
-c0000000052F4035300000000000006B6
-t1391723347
-s1718
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVTimer.h
-c0000000052F40353000000000000038D
-t1391723347
-s909
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVTimer.m
-c0000000052F403530000000000000AA2
-t1391723347
-s2722
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVURLProtocol.h
-c0000000052F40353000000000000041C
-t1391723347
-s1052
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVURLProtocol.m
-c0000000052F403530000000000002514
-t1391723347
-s9492
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVUserAgentUtil.h
-c0000000052F403530000000000000421
-t1391723347
-s1057
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVUserAgentUtil.m
-c0000000052F4035300000000000012A2
-t1391723347
-s4770
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVViewController.h
-c0000000052F403530000000000000ACC
-t1391723347
-s2764
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVViewController.m
-c0000000052F40353000000000000879D
-t1391723347
-s34717
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVWebViewDelegate.h
-c0000000052F4035300000000000005A2
-t1391723347
-s1442
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVWebViewDelegate.m
-c0000000052F403530000000000003804
-t1391723347
-s14340
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVWhitelist.h
-c0000000052F4035300000000000004B4
-t1391723347
-s1204
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVWhitelist.m
-c0000000052F4035300000000000027D3
-t1391723347
-s10195
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSArray+Comparisons.h
-c0000000052F403530000000000000392
-t1391723347
-s914
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSArray+Comparisons.m
-c0000000052F4035300000000000004D8
-t1391723347
-s1240
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSData+Base64.h
-c0000000052F40353000000000000037D
-t1391723347
-s893
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSData+Base64.m
-c0000000052F4035300000000000022CC
-t1391723347
-s8908
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSDictionary+Extensions.h
-c0000000052F4035300000000000005DA
-t1391723347
-s1498
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSDictionary+Extensions.m
-c0000000052F403530000000000001059
-t1391723347
-s4185
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSMutableArray+QueueAdditions.h
-c0000000052F4035300000000000003A0
-t1391723347
-s928
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSMutableArray+QueueAdditions.m
-c0000000052F403530000000000000584
-t1391723347
-s1412
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/UIDevice+Extensions.h
-c0000000052F403530000000000000476
-t1391723347
-s1142
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/UIDevice+Extensions.m
-c0000000052F403530000000000000620
-t1391723347
-s1568
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/CordovaLib_Prefix.pch
-c0000000052F403530000000000000346
-t1391723347
-s838
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVCommandDelegateImpl.o
-t1391724143
-s63268
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVCommandQueue.o
-t1391724143
-s60272
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVConfigParser.o
-t1391724143
-s27884
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVInvokedUrlCommand.o
-t1391724143
-s18812
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVJSON.o
-t1391724143
-s10972
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVLocalStorage.o
-t1391724143
-s109776
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVPlugin.o
-t1391724143
-s59620
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVPluginResult.o
-t1391724143
-s37332
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVShared.o
-t1391724143
-s9496
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVTimer.o
-t1391724143
-s23044
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVURLProtocol.o
-t1391724143
-s71340
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVUserAgentUtil.o
-t1391724143
-s52848
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVViewController.o
-t1391724143
-s162704
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVWebViewDelegate.o
-t1391724143
-s71412
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVWhitelist.o
-t1391724143
-s42456
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/Cordova.LinkFileList
-c0000000052F4066E0000000000000F37
-t1391724142
-s3895
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSArray+Comparisons.o
-t1391724143
-s7576
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSData+Base64.o
-t1391724143
-s11240
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSDictionary+Extensions.o
-t1391724143
-s17948
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSMutableArray+QueueAdditions.o
-t1391724143
-s7088
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/UIDevice+Extensions.o
-t1391724143
-s9708
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDV.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVAvailability.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegate.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegateImpl.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandQueue.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVConfigParser.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVDebug.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVInvokedUrlCommand.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVJSON.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVLocalStorage.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPlugin.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPluginResult.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVScreenOrientationDelegate.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVShared.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVTimer.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVURLProtocol.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVUserAgentUtil.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVViewController.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWebViewDelegate.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWhitelist.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSArray+Comparisons.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSData+Base64.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSDictionary+Extensions.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSMutableArray+QueueAdditions.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/UIDevice+Extensions.h
-t2
-s0
-
-N/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a
-t2
-s0
-
-N/var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/CordovaLib_Prefix-bjmgoalzcqildrbobflqynfjkmib/CordovaLib_Prefix.pch.pch
-t1391724142
-s3202848
-
-CCheck dependencies
-r0
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependencies48dd7a1643a4b841^8aacfd1643a4b841^---0#1#1#--18"Check dependencies36"F9046B03-D4AD-4FBD-B3FB-111734445FB5-
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVCommandDelegateImpl.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandDelegateImpl.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVCommandQueue.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandQueue.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVConfigParser.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVConfigParser.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVInvokedUrlCommand.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVInvokedUrlCommand.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVJSON.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVJSON.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVLocalStorage.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVLocalStorage.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVPlugin.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVPlugin.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVPluginResult.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVPluginResult.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVShared.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVShared.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVTimer.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVTimer.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVURLProtocol.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVURLProtocol.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVUserAgentUtil.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVUserAgentUtil.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVViewController.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVViewController.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVWebViewDelegate.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVWebViewDelegate.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/CDVWhitelist.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVWhitelist.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSArray+Comparisons.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSArray+Comparisons.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSData+Base64.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSData+Base64.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSDictionary+Extensions.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSDictionary+Extensions.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/NSMutableArray+QueueAdditions.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSMutableArray+QueueAdditions.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCompileC build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/UIDevice+Extensions.o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/UIDevice+Extensions.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCpHeader Classes/CDV.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDV.h
-s413418262.999380
-e413418263.000738
-r1
-xCpHeader
-xClasses/CDV.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDV.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection124"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDV.h142"CpHeader Classes/CDV.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDV.h94f9ff1643a4b841^ea42001743a4b841^---0#0#1#-19%DVTDocumentLocation2@126"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDV.h003400e6ddffdf42^893"CpHeader Classes/CDV.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDV.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDV.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"CA11433E-5827-435D-A84A-8E874B3538B9-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVAvailability.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVAvailability.h
-s413418262.999742
-e413418263.000867
-r1
-xCpHeader
-xClasses/CDVAvailability.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVAvailability.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection136"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVAvailability.h166"CpHeader Classes/CDVAvailability.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVAvailability.h240b001743a4b841^1155001743a4b841^---0#0#1#-19%DVTDocumentLocation2@138"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVAvailability.h003400e6ddffdf42^929"CpHeader Classes/CDVAvailability.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVAvailability.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVAvailability.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"6065FAA5-614F-437C-B0BB-76963299D715-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVCommandDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegate.h
-s413418262.999038
-e413418263.000213
-r1
-xCpHeader
-xClasses/CDVCommandDelegate.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegate.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection139"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegate.h172"CpHeader Classes/CDVCommandDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegate.h72deff1643a4b841^fe2a001743a4b841^---0#0#1#-19%DVTDocumentLocation2@141"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegate.h003400e6ddffdf42^938"CpHeader Classes/CDVCommandDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegate.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"5823EC2A-E0A8-45A6-AE1F-0BBB33FC9EBF-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVCommandDelegateImpl.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegateImpl.h
-s413418263.001707
-e413418263.002782
-r1
-xCpHeader
-xClasses/CDVCommandDelegateImpl.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegateImpl.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection143"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegateImpl.h180"CpHeader Classes/CDVCommandDelegateImpl.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegateImpl.h228b001743a4b841^a2b7001743a4b841^---0#0#1#-19%DVTDocumentLocation2@145"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegateImpl.h003400e6ddffdf42^950"CpHeader Classes/CDVCommandDelegateImpl.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegateImpl.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandDelegateImpl.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"65099FF8-DE2C-4B17-AA0B-895E624003AA-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVCommandQueue.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandQueue.h
-s413418263.001212
-e413418263.002234
-r1
-xCpHeader
-xClasses/CDVCommandQueue.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandQueue.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection136"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandQueue.h166"CpHeader Classes/CDVCommandQueue.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandQueue.hcf67001743a4b841^7aa5001743a4b841^---0#0#1#-19%DVTDocumentLocation2@138"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandQueue.h003400e6ddffdf42^929"CpHeader Classes/CDVCommandQueue.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVCommandQueue.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVCommandQueue.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"27203EF7-8499-4678-944D-05EF0E0C2889-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVConfigParser.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVConfigParser.h
-s413418263.002976
-e413418263.004004
-r1
-xCpHeader
-xClasses/CDVConfigParser.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVConfigParser.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection136"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVConfigParser.h166"CpHeader Classes/CDVConfigParser.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVConfigParser.h3cda001743a4b841^4e0c011743a4b841^---0#0#1#-19%DVTDocumentLocation2@138"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVConfigParser.h003400e6ddffdf42^929"CpHeader Classes/CDVConfigParser.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVConfigParser.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVConfigParser.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"A7C58162-EE52-47A9-A61F-0D409D890974-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVDebug.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVDebug.h
-s413418262.996069
-e413418262.998041
-r1
-xCpHeader
-xClasses/CDVDebug.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVDebug.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection129"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVDebug.h152"CpHeader Classes/CDVDebug.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVDebug.hec14ff1643a4b841^63d2ff1643a4b841^---0#0#1#-19%DVTDocumentLocation2@131"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVDebug.h003400e6ddffdf42^908"CpHeader Classes/CDVDebug.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVDebug.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVDebug.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"D28BD2DB-D9D3-416B-B8C8-FE2E3A01F0C0-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVInvokedUrlCommand.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVInvokedUrlCommand.h
-s413418262.995014
-e413418262.997869
-r1
-xCpHeader
-xClasses/CDVInvokedUrlCommand.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVInvokedUrlCommand.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection141"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVInvokedUrlCommand.h176"CpHeader Classes/CDVInvokedUrlCommand.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVInvokedUrlCommand.h76defe1643a4b841^4298ff1643a4b841^---0#0#1#-19%DVTDocumentLocation2@143"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVInvokedUrlCommand.h003400e6ddffdf42^944"CpHeader Classes/CDVInvokedUrlCommand.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVInvokedUrlCommand.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVInvokedUrlCommand.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"DAF469DA-73D4-4F28-BB0E-97E2EA73BA11-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVJSON.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVJSON.h
-s413418263.003244
-e413418263.004299
-r1
-xCpHeader
-xClasses/CDVJSON.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVJSON.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection128"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVJSON.h150"CpHeader Classes/CDVJSON.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVJSON.hfaec001743a4b841^921f011743a4b841^---0#0#1#-19%DVTDocumentLocation2@130"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVJSON.h003400e6ddffdf42^905"CpHeader Classes/CDVJSON.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVJSON.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVJSON.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"8B41241D-31A3-4745-84C6-801078E3EA53-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVLocalStorage.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVLocalStorage.h
-s413418263.000114
-e413418263.001213
-r1
-xCpHeader
-xClasses/CDVLocalStorage.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVLocalStorage.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection136"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVLocalStorage.h166"CpHeader Classes/CDVLocalStorage.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVLocalStorage.hc021001743a4b841^d36a001743a4b841^---0#0#1#-19%DVTDocumentLocation2@138"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVLocalStorage.h003400e6ddffdf42^929"CpHeader Classes/CDVLocalStorage.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVLocalStorage.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVLocalStorage.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"5B2FA99E-59DF-4C1E-9CAE-02422AAF2884-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVPlugin.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPlugin.h
-s413418262.995780
-e413418262.997895
-r1
-xCpHeader
-xClasses/CDVPlugin.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPlugin.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection130"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPlugin.h154"CpHeader Classes/CDVPlugin.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPlugin.hf50eff1643a4b841^a489ff1643a4b841^---0#0#1#-19%DVTDocumentLocation2@132"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPlugin.h003400e6ddffdf42^911"CpHeader Classes/CDVPlugin.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPlugin.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVPlugin.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"984755A7-4528-492E-A363-471D8212B3C9-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVPluginResult.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPluginResult.h
-s413418262.995413
-e413418262.997927
-r1
-xCpHeader
-xClasses/CDVPluginResult.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPluginResult.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection136"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPluginResult.h166"CpHeader Classes/CDVPluginResult.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPluginResult.hd8f2fe1643a4b841^b0adff1643a4b841^---0#0#1#-19%DVTDocumentLocation2@138"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPluginResult.h003400e6ddffdf42^929"CpHeader Classes/CDVPluginResult.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVPluginResult.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVPluginResult.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"0A5BD194-73CB-438A-A827-CF33BA6F2BC9-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVScreenOrientationDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVScreenOrientationDelegate.h
-s413418263.002633
-e413418263.003683
-r1
-xCpHeader
-xClasses/CDVScreenOrientationDelegate.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVScreenOrientationDelegate.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection149"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVScreenOrientationDelegate.h192"CpHeader Classes/CDVScreenOrientationDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVScreenOrientationDelegate.h65c5001743a4b841^95f0001743a4b841^---0#0#1#-19%DVTDocumentLocation2@151"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVScreenOrientationDelegate.h003400e6ddffdf42^968"CpHeader Classes/CDVScreenOrientationDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVScreenOrientationDelegate.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVScreenOrientationDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"A9BCC12C-3E3A-4ADD-8474-7E50B79E98D1-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVShared.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVShared.h
-s413418263.002087
-e413418263.003130
-r1
-xCpHeader
-xClasses/CDVShared.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVShared.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection130"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVShared.h154"CpHeader Classes/CDVShared.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVShared.h7ba1001743a4b841^91d2001743a4b841^---0#0#1#-19%DVTDocumentLocation2@132"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVShared.h003400e6ddffdf42^911"CpHeader Classes/CDVShared.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVShared.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVShared.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"0D6D6667-86EA-43F3-91E1-627BB9DD5EF9-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVTimer.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVTimer.h
-s413418263.004204
-e413418263.005103
-r1
-xCpHeader
-xClasses/CDVTimer.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVTimer.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection129"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVTimer.h152"CpHeader Classes/CDVTimer.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVTimer.h662d011743a4b841^164f011743a4b841^---0#0#1#-19%DVTDocumentLocation2@131"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVTimer.h003400e6ddffdf42^908"CpHeader Classes/CDVTimer.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVTimer.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVTimer.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"1BFAFF75-6844-429B-8970-3CED17F622C1-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVURLProtocol.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVURLProtocol.h
-s413418262.998553
-e413418262.999673
-r1
-xCpHeader
-xClasses/CDVURLProtocol.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVURLProtocol.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection135"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVURLProtocol.h164"CpHeader Classes/CDVURLProtocol.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVURLProtocol.he4bcff1643a4b841^a708001743a4b841^---0#0#1#-19%DVTDocumentLocation2@137"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVURLProtocol.h003400e6ddffdf42^926"CpHeader Classes/CDVURLProtocol.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVURLProtocol.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVURLProtocol.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"30C7949A-BC62-425C-9A51-359855FFF826-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVUserAgentUtil.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVUserAgentUtil.h
-s413418263.003888
-e413418263.004868
-r1
-xCpHeader
-xClasses/CDVUserAgentUtil.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVUserAgentUtil.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection137"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVUserAgentUtil.h168"CpHeader Classes/CDVUserAgentUtil.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVUserAgentUtil.h3b1c011743a4b841^9e3f011743a4b841^---0#0#1#-19%DVTDocumentLocation2@139"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVUserAgentUtil.h003400e6ddffdf42^932"CpHeader Classes/CDVUserAgentUtil.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVUserAgentUtil.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVUserAgentUtil.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"1234F875-8C7F-4528-986D-CFC86C2B2CFD-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVViewController.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVViewController.h
-s413418262.998745
-e413418262.999815
-r1
-xCpHeader
-xClasses/CDVViewController.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVViewController.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection138"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVViewController.h170"CpHeader Classes/CDVViewController.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVViewController.hdacaff1643a4b841^e319001743a4b841^---0#0#1#-19%DVTDocumentLocation2@140"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVViewController.h003400e6ddffdf42^935"CpHeader Classes/CDVViewController.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVViewController.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVViewController.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"F587610E-3344-432D-8D76-A9AAA2C69FD9-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVWebViewDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWebViewDelegate.h
-s413418263.003520
-e413418263.004630
-r1
-xCpHeader
-xClasses/CDVWebViewDelegate.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWebViewDelegate.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection139"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWebViewDelegate.h172"CpHeader Classes/CDVWebViewDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWebViewDelegate.he3fd001743a4b841^c22f011743a4b841^---0#0#1#-19%DVTDocumentLocation2@141"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWebViewDelegate.h003400e6ddffdf42^938"CpHeader Classes/CDVWebViewDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWebViewDelegate.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVWebViewDelegate.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"CE79C2DB-FDCE-4800-9A53-1179E4BEE5E3-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/CDVWhitelist.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWhitelist.h
-s413418262.997572
-e413418262.999133
-r1
-xCpHeader
-xClasses/CDVWhitelist.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWhitelist.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection133"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWhitelist.h160"CpHeader Classes/CDVWhitelist.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWhitelist.hc18eff1643a4b841^6cebff1643a4b841^---0#0#1#-19%DVTDocumentLocation2@135"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWhitelist.h003400e6ddffdf42^920"CpHeader Classes/CDVWhitelist.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/CDVWhitelist.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/CDVWhitelist.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"916614AF-C39C-49D8-BC16-10A429DF9147-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/NSArray+Comparisons.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSArray+Comparisons.h
-s413418263.000798
-e413418263.001969
-r1
-xCpHeader
-xClasses/NSArray+Comparisons.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSArray+Comparisons.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection140"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSArray+Comparisons.h174"CpHeader Classes/NSArray+Comparisons.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSArray+Comparisons.h2a53001743a4b841^f299001743a4b841^---0#0#1#-19%DVTDocumentLocation2@142"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSArray+Comparisons.h003400e6ddffdf42^941"CpHeader Classes/NSArray+Comparisons.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSArray+Comparisons.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSArray+Comparisons.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"6E5B8C7C-CFF8-4D6F-B64F-9F93B96163AB-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/NSData+Base64.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSData+Base64.h
-s413418262.995204
-e413418262.997850
-r1
-xCpHeader
-xClasses/NSData+Base64.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSData+Base64.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection134"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSData+Base64.h162"CpHeader Classes/NSData+Base64.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSData+Base64.hfeedfe1643a4b841^5c73ff1643a4b841^---0#0#1#-19%DVTDocumentLocation2@136"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSData+Base64.h003400e6ddffdf42^923"CpHeader Classes/NSData+Base64.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSData+Base64.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSData+Base64.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"DDA55C92-B1C1-49B3-9357-BABC3B391077-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/NSDictionary+Extensions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSDictionary+Extensions.h
-s413418262.994867
-e413418262.997904
-r1
-xCpHeader
-xClasses/NSDictionary+Extensions.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSDictionary+Extensions.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection144"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSDictionary+Extensions.h182"CpHeader Classes/NSDictionary+Extensions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSDictionary+Extensions.hdbdefe1643a4b841^ed9fff1643a4b841^---0#0#1#-19%DVTDocumentLocation2@146"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSDictionary+Extensions.h0040d274fffedf42^953"CpHeader Classes/NSDictionary+Extensions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSDictionary+Extensions.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSDictionary+Extensions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"9E0BEA23-4FF7-4635-8BB2-3729003F261F-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/NSMutableArray+QueueAdditions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSMutableArray+QueueAdditions.h
-s413418262.996392
-e413418262.997933
-r1
-xCpHeader
-xClasses/NSMutableArray+QueueAdditions.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSMutableArray+QueueAdditions.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection150"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSMutableArray+QueueAdditions.h194"CpHeader Classes/NSMutableArray+QueueAdditions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSMutableArray+QueueAdditions.h022bff1643a4b841^71c7ff1643a4b841^---0#0#1#-19%DVTDocumentLocation2@152"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSMutableArray+QueueAdditions.h003400e6ddffdf42^971"CpHeader Classes/NSMutableArray+QueueAdditions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/NSMutableArray+QueueAdditions.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/NSMutableArray+QueueAdditions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"7AA8C0CA-4DC2-49B0-A0F2-DF6BAB9F45B2-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CCpHeader Classes/UIDevice+Extensions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/UIDevice+Extensions.h
-s413418263.000491
-e413418263.001699
-r1
-xCpHeader
-xClasses/UIDevice+Extensions.h
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/UIDevice+Extensions.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection140"Copy /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/UIDevice+Extensions.h174"CpHeader Classes/UIDevice+Extensions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/UIDevice+Extensions.h643a001743a4b841^8787001743a4b841^---0#0#1#-19%DVTDocumentLocation2@142"file:///Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/UIDevice+Extensions.h003400e6ddffdf42^941"CpHeader Classes/UIDevice+Extensions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova/UIDevice+Extensions.h    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/Classes/UIDevice+Extensions.h /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/include/Cordova36"843BF7BE-3B6E-4000-9BE7-6BC7A55486D2-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CLibtool /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a normal i386
-s413418263.009817
-e413418264.443177
-r1
-xLibtool
-x/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a
-xnormal
-xi386
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection130"Libtool /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a normal i386130"Libtool /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a normal i3864a9b021743a4b841^9274711843a4b841^---0#0#1#--1261"Libtool /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a normal i386    cd /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib    setenv IPHONEOS_DEPLOYMENT_TARGET 5.0    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/Shared/android-sdk/platform-tools:/Users/Shared/android-sdk/tools:/usr/local/Cellar/ant/1.9.3/bin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool -static -arch_only i386 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.0.sdk -L/Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator -filelist /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/CordovaLib/build/CordovaLib.build/Debug-iphonesimulator/CordovaLib.build/Objects-normal/i386/Cordova.LinkFileList -o /Users/erinparrill/Documents/Development/WEXMobile/working/AcctMaint/platforms/ios/build/emulator/libCordova.a36"C210D34C-E7FF-4486-A095-BCE1A781DB89-
-b5DCD96BA-5CED-4045-AD9B-5A3F76F051EB
-
-CProcessPCH /var/folders/7f/75yqnj8n2736d60vx267x2kr0000gn/C/com.apple.DeveloperTools/5.0-5A1412/Xcode/SharedPrecompiledHeaders/CordovaLib_Prefix-bjmgoalzcqildrbobflqynfjkmib/CordovaLib_Prefix.pch.pch CordovaLib_Prefix.pch normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
