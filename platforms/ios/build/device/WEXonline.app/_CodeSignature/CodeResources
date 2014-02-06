@@ -38,7 +38,7 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		xrz5cu0CmioMtQfxRPr3CuHiWuU=
+		9MJpdkBhyzDgXXrlKnw/HcNuHsg=
 		</data>
 		<key>de.lproj/Localizable.strings</key>
 		<data>
@@ -307,6 +307,10 @@
 		<key>www/spec/lib/jasmine-1.2.0/jasmine.js</key>
 		<data>
 		UbuCXRtZstykBBa58lepG51icZw=
+		</data>
+		<key>www/www.iml</key>
+		<data>
+		vWBUDUQRL5qSGyyaHX6K28ExeE4=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -345,7 +349,7 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		xrz5cu0CmioMtQfxRPr3CuHiWuU=
+		9MJpdkBhyzDgXXrlKnw/HcNuHsg=
 		</data>
 		<key>de.lproj/Localizable.strings</key>
 		<data>
@@ -614,6 +618,10 @@
 		<key>www/spec/lib/jasmine-1.2.0/jasmine.js</key>
 		<data>
 		UbuCXRtZstykBBa58lepG51icZw=
+		</data>
+		<key>www/www.iml</key>
+		<data>
+		vWBUDUQRL5qSGyyaHX6K28ExeE4=
 		</data>
 	</dict>
 	<key>rules</key>
