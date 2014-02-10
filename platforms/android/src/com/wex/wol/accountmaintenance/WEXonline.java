@@ -22,13 +22,20 @@ package com.wex.wol.accountmaintenance;
 import android.os.Bundle;
 import org.apache.cordova.*;
 
-public class WEXonline extends CordovaActivity 
-{
+public class WEXonline extends CordovaActivity {
+
+    private static final String USER_AGENT_STRING = "WEXonline";
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         super.init();
+
+        // Set the User Agent to a custom value that can be used by pages loaded in the webview
+        // to identify when the page is being accessed by this app
+        appView.getSettings().setUserAgentString(appView.getSettings().getUserAgentString() + '_' + USER_AGENT_STRING);
+
         // Set by <content src="index.html" /> in config.xml
         super.loadUrl(Config.getStartUrl());
         //super.loadUrl("file:///android_asset/www/index.html")
