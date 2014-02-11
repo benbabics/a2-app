@@ -74,7 +74,6 @@
       <method>
         <option name="Make" enabled="false" />
         <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_Cordova Build" />
-        <option name="AntTarget" enabled="true" antfile="file://$PROJECT_DIR$/platforms/android/build.xml" target="debug" />
       </method>
     </configuration>
   </component>

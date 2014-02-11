@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Process id: 1428" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="86852615-69e9-47c1-981b-ed6c5d4df883" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/plugins/org.apache.cordova.network-information/www/Connection.js" afterPath="$PROJECT_DIR$/platforms/android/assets/www/plugins/org.apache.cordova.network-information/www/Connection.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WEXMobile.ipr" afterPath="$PROJECT_DIR$/WEXMobile.ipr" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WEXMobile.iws" afterPath="$PROJECT_DIR$/WEXMobile.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build-cordova.sh" afterPath="$PROJECT_DIR$/build-cordova.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/res/xml/config.xml" afterPath="$PROJECT_DIR$/platforms/android/res/xml/config.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/cordova.js" afterPath="$PROJECT_DIR$/platforms/android/assets/www/cordova.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/cordova_plugins.js" afterPath="$PROJECT_DIR$/platforms/android/assets/www/cordova_plugins.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/plugins/org.apache.cordova.device/www/device.js" afterPath="$PROJECT_DIR$/platforms/android/assets/www/plugins/org.apache.cordova.device/www/device.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/index.html" afterPath="$PROJECT_DIR$/platforms/android/assets/www/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/index.html" afterPath="$PROJECT_DIR$/www/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/plugins/org.apache.cordova.network-information/www/network.js" afterPath="$PROJECT_DIR$/platforms/android/assets/www/plugins/org.apache.cordova.network-information/www/network.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/plugins/org.apache.cordova.splashscreen/www/splashscreen.js" afterPath="$PROJECT_DIR$/platforms/android/assets/www/plugins/org.apache.cordova.splashscreen/www/splashscreen.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/plugins/org.apache.cordova.statusbar/www/statusbar.js" afterPath="$PROJECT_DIR$/platforms/android/assets/www/plugins/org.apache.cordova.statusbar/www/statusbar.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/config.xml" afterPath="$PROJECT_DIR$/www/config.xml" />
     </list>
     <ignored path="WEXMobile.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -86,10 +81,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/www/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="19" selection-start="1297" selection-end="1297" vertical-scroll-proportion="0.19216646" vertical-offset="263" max-vertical-offset="1485">
+            <state line="28" column="19" selection-start="1297" selection-end="1297" vertical-scroll-proportion="-6.5416665" vertical-offset="263" max-vertical-offset="1485">
               <folding />
             </state>
           </provider>
@@ -104,10 +99,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="config.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="config.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/www/config.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="80" selection-start="538" selection-end="538" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1170">
+            <state line="69" column="46" selection-start="3763" selection-end="3763" vertical-scroll-proportion="0.7227357" vertical-offset="644" max-vertical-offset="1185">
               <folding />
             </state>
           </provider>
@@ -127,8 +122,8 @@
         <option value="$PROJECT_DIR$/platforms/android/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/platforms/android/src/com/wex/wol/accountmaintenance/WEXonline.java" />
         <option value="$PROJECT_DIR$/platforms/android/res/xml/config.xml" />
-        <option value="$PROJECT_DIR$/www/config.xml" />
         <option value="$PROJECT_DIR$/www/index.html" />
+        <option value="$PROJECT_DIR$/www/config.xml" />
       </list>
     </option>
   </component>
@@ -441,16 +436,16 @@
       <workItem from="1391728654707" duration="16298000" />
       <workItem from="1392047781877" duration="2516000" />
       <workItem from="1392061818217" duration="2651000" />
-      <workItem from="1392130164480" duration="2202000" />
+      <workItem from="1392130164480" duration="3205000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27087000" />
+    <option name="totallyTimeSpent" value="28090000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="44" y="22" width="1236" height="1002" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32993197" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -468,7 +463,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879817" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3548753" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3548753" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -783,16 +778,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/www/config.xml">
+    <entry file="file://$PROJECT_DIR$/www/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="80" selection-start="538" selection-end="538" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1170">
+        <state line="28" column="19" selection-start="1297" selection-end="1297" vertical-scroll-proportion="-6.5416665" vertical-offset="263" max-vertical-offset="1485">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/www/index.html">
+    <entry file="file://$PROJECT_DIR$/www/config.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="19" selection-start="1297" selection-end="1297" vertical-scroll-proportion="0.19216646" vertical-offset="263" max-vertical-offset="1485">
+        <state line="69" column="46" selection-start="3763" selection-end="3763" vertical-scroll-proportion="0.7227357" vertical-offset="644" max-vertical-offset="1185">
           <folding />
         </state>
       </provider>

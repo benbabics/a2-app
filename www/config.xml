@@ -67,6 +67,7 @@
     <gap:splash gap:platform="ios" height="1024" width="768" src="res/screen/ios/screen-ipad-portrait.png" />
     <gap:splash gap:platform="ios" height="768" width="1024" src="res/screen/ios/screen-ipad-landscape.png" />
 
-    <access origin="http://127.0.0.1*" />
+    <access origin="*" /><!-- FOR DEV ONLY -->
+    <access origin="*.wexmobile.com"/> <!-- Web Services domain -->
 
 </widget>
