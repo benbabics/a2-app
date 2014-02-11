@@ -21,18 +21,22 @@
 //  AppDelegate.m
 //  WEXonline
 //
-//  Created by ___FULLUSERNAME___ on ___DATE___.
-//  Copyright ___ORGANIZATIONNAME___ ___YEAR___. All rights reserved.
+//  Created by E. Parrill on 8/30/12.
+//  Copyright WEX Inc. 2012. All rights reserved.
 //
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
 
 #import <Cordova/CDVPlugin.h>
+#import <Cordova/CDVURLProtocol.h>
+#import "CDVDevice.h"
 
 @implementation AppDelegate
 
 @synthesize window, viewController;
+
+const NSString* USER_AGENT_SUFFIX = @"WEXonline";
 
 - (id)init
 {
@@ -87,6 +91,23 @@
 
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+    
+    // Rebuild the UserAgent string with a custom value appended that can be used by pages loaded in the webview
+    // to identify when the page is being access by this app
+    NSString* userAgentString = [NSString stringWithFormat: @"%@_%@",
+                                 [self getDerivedUserAgent],
+                                 USER_AGENT_SUFFIX];
+    
+    NSLog(@"UserAgent set to = %@", userAgentString);
+    
+    // Set UserAgent to the custom value
+    // (the only problem is that we can't modify the User-Agent later in the program)
+    NSDictionary* dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:userAgentString, @"UserAgent", nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+    
+#if !__has_feature(objc_arc)
+    [dictionary release];
+#endif
 
     return YES;
 }
@@ -128,6 +149,29 @@
 - (void)applicationDidReceiveMemoryWarning:(UIApplication*)application
 {
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
+}
+
+- (NSString*) getDerivedUserAgent
+{
+    NSString* systemVersionString = [[[UIDevice currentDevice] systemVersion] stringByReplacingOccurrencesOfString: @"." withString: @"_"];
+    
+    NSDictionary* webkitDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      @"533.17.9", @"4_3_2",
+                                      @"534.46", @"5_0",
+                                      @"534.46", @"5_0_1",
+                                      nil, nil];
+    
+    NSString* webkitVersionString = nil;
+    
+    if ((webkitVersionString = [webkitDictionary objectForKey:systemVersionString]) == nil) {
+        webkitVersionString = [webkitDictionary objectForKey: @"4_3_2"];
+    }
+    
+    return [NSString stringWithFormat: @"Mozilla/5.0 (%@; CPU OS %@ like Mac OS X) AppleWebKit/%@ (KHTML, like Gecko) Mobile/9A334 Cordova/%@",
+            [[UIDevice currentDevice] model],
+            systemVersionString,
+            webkitVersionString,
+            [CDVDevice cordovaVersion]];
 }
 
 @end

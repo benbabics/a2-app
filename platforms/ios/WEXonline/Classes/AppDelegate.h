@@ -21,8 +21,8 @@
 //  AppDelegate.h
 //  WEXonline
 //
-//  Created by ___FULLUSERNAME___ on ___DATE___.
-//  Copyright ___ORGANIZATIONNAME___ ___YEAR___. All rights reserved.
+//  Created by E. Parrill on 8/30/12.
+//  Copyright WEX Inc. 2012. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
