@@ -36,5 +36,14 @@ module.exports = [
             "window.StatusBar"
         ]
     }
-]
+];
+module.exports.metadata = 
+// TOP OF METADATA
+{
+    "org.apache.cordova.splashscreen": "0.2.6",
+    "org.apache.cordova.device": "0.2.7",
+    "org.apache.cordova.network-information": "0.2.6",
+    "org.apache.cordova.statusbar": "0.1.3"
+}
+// BOTTOM OF METADATA
 });

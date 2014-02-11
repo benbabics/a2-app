@@ -1,12 +1,26 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.wex.wol.accountmaintenance" version="1.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <preference name="Orientation" value="default" />
+    <feature name="Device">
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+    <feature name="NetworkStatus">
+        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+    </feature>
     <name>WEXonline</name>
     <description>
         Account Maintenance for Classic and WOL NP customers.
     </description>
+    <author email="MobileDevelopment@wexinc.com" href="http://www.wexinc.com">
+        WEX Mobile Development Team
+    </author>
+    <content src="index.html" />
     <feature name="http://api.phonegap.com/1.0/device" />
     <preference name="Fullscreen" value="false" />
-    <preference name="Orientation" value="default" />
+    <preference name="Orientation" value="portrait" />
     <preference name="DisallowOverscroll" value="false" />
     <preference name="android-installLocation" value="auto" />
     <preference name="android-minSdkVersion" value="10" />
@@ -26,6 +40,8 @@
     <preference name="KeepRunning" value="false" />
     <preference name="SplashScreenDelay" value="20000" />
     <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#000000" />
     <icon gap:density="ldpi" gap:platform="android" src="res/icon/android/icon-36-ldpi.png" />
     <icon gap:density="mdpi" gap:platform="android" src="res/icon/android/icon-48-mdpi.png" />
     <icon gap:density="hdpi" gap:platform="android" src="res/icon/android/icon-72-hdpi.png" />
@@ -43,20 +59,4 @@
     <gap:splash gap:platform="ios" height="1024" src="res/screen/ios/screen-ipad-portrait.png" width="768" />
     <gap:splash gap:platform="ios" height="768" src="res/screen/ios/screen-ipad-landscape.png" width="1024" />
     <access origin="http://127.0.0.1*" />
-    <feature name="Device">
-        <param name="android-package" value="org.apache.cordova.device.Device" />
-    </feature>
-    <feature name="NetworkStatus">
-        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
-    </feature>
-    <feature name="SplashScreen">
-        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
-    </feature>
-    <author email="MobileDevelopment@wexinc.com" href="http://www.wexinc.com">
-        WEX Mobile Development Team
-    </author>
-    <content src="index.html" />
-    <preference name="Orientation" value="portrait" />
-    <preference name="StatusBarOverlaysWebView" value="false" />
-    <preference name="StatusBarBackgroundColor" value="#000000" />
 </widget>
