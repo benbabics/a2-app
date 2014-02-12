@@ -26,8 +26,7 @@
         <title>WEXonline</title>
     </head>
     <body>
-        HELLO WORLD
-        <!--<div data-role="page" id="default" data-theme="b">
+        <div data-role="page" id="default" data-theme="b">
             <div data-role="content"></div>
         </div>
 
@@ -40,12 +39,12 @@
                 <button id="reconnect-btn" type="button" data-role="button">Try Again</button>
             </div>
         </div>
-        <script type="text/javascript" src="phonegap.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
         <script type="text/javascript" src="js/jquery.mobile-1.1.0.min.js"></script>
         <script type="text/javascript">
             ;(function() {
-                var APP_URL = "http://www.google.com";//"https://account.wexmobile.com/mobileweb/";
+                var APP_URL = "https://account.wexmobile.com/mobileweb/";
 
                 function hideSplashScreen() {
                     try      { navigator.splashscreen.hide(); }
@@ -88,6 +87,6 @@
                     .delegate('#reconnect-btn', 'click', handleReconnectAction)     // show default
                     .delegate('#reconnect-dialog', 'pagehide', checkConnection)     // check connection
             }());
-        </script>-->
+        </script>
     </body>
 </html>
