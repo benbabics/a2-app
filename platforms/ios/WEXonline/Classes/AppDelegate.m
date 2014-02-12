@@ -30,6 +30,7 @@
 
 #import <Cordova/CDVPlugin.h>
 #import <Cordova/CDVURLProtocol.h>
+#import <Cordova/CDVUserAgentUtil.h>
 #import "CDVDevice.h"
 
 @implementation AppDelegate
@@ -94,20 +95,16 @@ const NSString* USER_AGENT_SUFFIX = @"WEXonline";
     
     // Rebuild the UserAgent string with a custom value appended that can be used by pages loaded in the webview
     // to identify when the page is being access by this app
-    NSString* userAgentString = [NSString stringWithFormat: @"%@_%@",
-                                 [self getDerivedUserAgent],
-                                 USER_AGENT_SUFFIX];
+    NSString* userAgentString = [NSString stringWithFormat: @"%@_%@", [self getDerivedUserAgent], USER_AGENT_SUFFIX];
     
     NSLog(@"UserAgent set to = %@", userAgentString);
-    
+        
     // Set UserAgent to the custom value
     // (the only problem is that we can't modify the User-Agent later in the program)
-    NSDictionary* dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:userAgentString, @"UserAgent", nil];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
-    
-#if !__has_feature(objc_arc)
-    [dictionary release];
-#endif
+    [CDVUserAgentUtil acquireLock:^(NSInteger lockTocken) {
+        [CDVUserAgentUtil setUserAgent:userAgentString lockToken:lockTocken];
+        [CDVUserAgentUtil releaseLock:&lockTocken];
+    }];
 
     return YES;
 }
@@ -153,25 +150,32 @@ const NSString* USER_AGENT_SUFFIX = @"WEXonline";
 
 - (NSString*) getDerivedUserAgent
 {
-    NSString* systemVersionString = [[[UIDevice currentDevice] systemVersion] stringByReplacingOccurrencesOfString: @"." withString: @"_"];
     
-    NSDictionary* webkitDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      @"533.17.9", @"4_3_2",
-                                      @"534.46", @"5_0",
-                                      @"534.46", @"5_0_1",
-                                      nil, nil];
+    NSString *userAgent;
     
-    NSString* webkitVersionString = nil;
+    // Determine if the Cordova User Agent has been defined yet
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *cordovaAgent = [userDefaults stringForKey:@"Cordova-User-Agent"];
     
-    if ((webkitVersionString = [webkitDictionary objectForKey:systemVersionString]) == nil) {
-        webkitVersionString = [webkitDictionary objectForKey: @"4_3_2"];
+    if (cordovaAgent == nil) {
+        // Get the User Agent from a Web View
+        UIWebView* sampleWebView = [[UIWebView alloc] initWithFrame:CGRectZero];
+        userAgent = [sampleWebView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+#if __has_feature(objc_arc)
+        // do nothing when ARC
+#else
+        [sampleWebView release];
+#endif
+        
     }
+    else {
+        // Use the Cordova User Agent
+        userAgent = cordovaAgent;
+    }
+
+    // Return the User Agent with the Cordova Version appended to the end
+    return [NSString stringWithFormat:@"%@ Cordova/%@", userAgent, [CDVDevice cordovaVersion]];
     
-    return [NSString stringWithFormat: @"Mozilla/5.0 (%@; CPU OS %@ like Mac OS X) AppleWebKit/%@ (KHTML, like Gecko) Mobile/9A334 Cordova/%@",
-            [[UIDevice currentDevice] model],
-            systemVersionString,
-            webkitVersionString,
-            [CDVDevice cordovaVersion]];
 }
 
 @end
