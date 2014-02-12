@@ -13,7 +13,6 @@
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
-    <access origin="http://127.0.0.1*" />
     <name>WEXonline</name>
     <description>
         Account Maintenance for Classic and WOL NP customers.
@@ -43,7 +42,7 @@
     <preference name="LoadUrlTimeoutValue" value="18000" />
     <preference name="KeepRunning" value="false" />
     <preference name="SplashScreenDelay" value="20000" />
-    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="AutoHideSplashScreen" value="true" />
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#000000" />
     <icon gap:density="ldpi" gap:platform="android" src="res/icon/android/icon-36-ldpi.png" />

@@ -45,7 +45,7 @@
     <preference name="SplashScreenDelay" value="20000" />
 
     <!-- iOS specific preferences -->
-    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="AutoHideSplashScreen" value="true" />
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#000000" />
 
