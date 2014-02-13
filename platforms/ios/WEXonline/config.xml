@@ -22,7 +22,6 @@
         WEX Mobile Development Team
     </author>
     <content src="index.html" />
-    <feature name="http://api.phonegap.com/1.0/device" />
     <preference name="Fullscreen" value="false" />
     <preference name="Orientation" value="portrait" />
     <preference name="DisallowOverscroll" value="false" />
