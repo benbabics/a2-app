@@ -1,3 +1,4 @@
+// Jasmine JS 1.3.1
 var isCommonJS = typeof window == "undefined" && typeof exports == "object";
 
 /**
@@ -1100,7 +1101,7 @@ jasmine.JsApiReporter.prototype.summarize_ = function(suiteOrSpec) {
     type: isSuite ? 'suite' : 'spec',
     children: []
   };
-  
+
   if (isSuite) {
     var children = suiteOrSpec.children();
     for (var i = 0; i < children.length; i++) {
@@ -1929,7 +1930,7 @@ jasmine.PrettyPrinter.prototype.iterateObject = function(obj, fn) {
   for (var property in obj) {
     if (!obj.hasOwnProperty(property)) continue;
     if (property == '__Jasmine_been_here_before__') continue;
-    fn(property, obj.__lookupGetter__ ? (obj.__lookupGetter__(property) !== jasmine.undefined && 
+    fn(property, obj.__lookupGetter__ ? (obj.__lookupGetter__(property) !== jasmine.undefined &&
                                          obj.__lookupGetter__(property) !== null) : false);
   }
 };
@@ -2061,7 +2062,7 @@ jasmine.Queue.prototype.next_ = function() {
 
   while (goAgain) {
     goAgain = false;
-    
+
     if (self.index < self.blocks.length && !(this.abort && !this.ensured[self.index])) {
       var calledSynchronously = true;
       var completedSynchronously = false;
@@ -2099,7 +2100,7 @@ jasmine.Queue.prototype.next_ = function() {
       if (completedSynchronously) {
         onComplete();
       }
-      
+
     } else {
       self.running = false;
       if (self.onComplete) {
