@@ -36,6 +36,9 @@
         // Backbone
         "Backbone"     : false,
 
+        // Cordova
+        "Connection" : false,
+
         // Jasmine
         "jasmine"      : false,
         "isCommonJS"   : false,
@@ -128,7 +131,7 @@
 
     "camelcase"    : true,     // Whether variables names must be camelCase style or UPPER_CASE with underscores
     "indent"       : 4,        // Specify indentation.
-    "maxparams"    : 3,        // Maximum allowed params.
+    "maxparams"    : 4,        // Maximum allowed params.
 //  "maxdepth"     : 2,        // Maximum allowed depth of nested blocks.
 //  "maxstatements": 4,        // Maximum number of statements allowed per function.
 //  "maxcomplexity": ,         // Maximum allowed Cyclomatic complexity.

@@ -41,6 +41,7 @@
         <option name="myLocal" value="false" />
         <inspection_tool class="JSFieldCanBeLocal" enabled="false" level="WARNING" enabled_by_default="false" />
         <inspection_tool class="JSHint" enabled="true" level="ERROR" enabled_by_default="true" />
+        <inspection_tool class="JSLint" enabled="true" level="ERROR" enabled_by_default="true" />
       </profile>
     </profiles>
     <option name="PROJECT_PROFILE" value="Project Default" />
@@ -112,8 +113,15 @@
     <option maxerr="50" />
   </component>
   <component name="JSLintConfiguration" html="true" css="true" json="true">
+    <option browser="true" />
     <option indent="4" />
-    <option maxerr="50" />
+    <option maxerr="100" />
+    <option maxlen="120" />
+    <option nomen="true" />
+    <option plusplus="true" />
+    <option predef="Backbone, Connection, jasmine, isCommonJS, exports, spyOn, it, xit, expect, runs, waits, waitsFor, beforeEach, afterEach, loadFixtures, AsyncSpec, describe, xdescribe, define, require" />
+    <option todo="true" />
+    <option unparam="true" />
   </component>
   <component name="ProjectCodeStyleSettingsManager">
     <option name="PER_PROJECT_SETTINGS">
