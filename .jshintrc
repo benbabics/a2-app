@@ -34,27 +34,29 @@
 
     "globals"      :  {
         // Backbone
-        "Backbone"   : false,
+        "Backbone"     : false,
 
         // Jasmine
-        "jasmine"    : false,
-        "isCommonJS" : false,
-        "exports"    : false,
-        "spyOn"      : false,
-        "it"         : false,
-        "xit"        : false,
-        "expect"     : false,
-        "runs"       : false,
-        "waits"      : false,
-        "waitsFor"   : false,
-        "beforeEach" : false,
-        "afterEach"  : false,
-        "describe"   : false,
-        "xdescribe"  : false,
+        "jasmine"      : false,
+        "isCommonJS"   : false,
+        "exports"      : false,
+        "spyOn"        : false,
+        "it"           : false,
+        "xit"          : false,
+        "expect"       : false,
+        "runs"         : false,
+        "waits"        : false,
+        "waitsFor"     : false,
+        "beforeEach"   : false,
+        "afterEach"    : false,
+        "describe"     : false,
+        "xdescribe"    : false,
+        "loadFixtures" : false,
+        "AsyncSpec"    : false,
 
         // Require
-        "define"     : false,
-        "require"    : false
+        "define"       : false,
+        "require"      : false
     },
 
 
@@ -130,7 +132,7 @@
 //  "maxdepth"     : 2,        // Maximum allowed depth of nested blocks.
 //  "maxstatements": 4,        // Maximum number of statements allowed per function.
 //  "maxcomplexity": ,         // Maximum allowed Cyclomatic complexity.
-    "maxlen"       : 80,       // Maximum allowed characters in a line.
+    "maxlen"       : 120,      // Maximum allowed characters in a line.
     "multistr"     : false,    // Allow multiline strings.
     "newcap"       : true,     // Whether constructor names must be capitalized.
     "noempty"      : false,    // Whether empty blocks should be forbidden.
