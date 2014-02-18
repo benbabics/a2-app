@@ -1,0 +1,191 @@
+// See http://www.jshint.com/docs/ for all JSHint options
+
+{
+    // Whether the scan should stop on first error.
+    "passfail": false,
+    // Maximum errors before stopping.
+    "maxerr": 100,
+
+
+    /*
+     * Predefined globals
+     */
+
+    // Whether the standard browser globals should be predefined.
+    "browser": true,
+    // Whether CouchDB globals should be predefined.
+    "couch": false,
+    // Whether the Node.js environment globals should be predefined.
+    "node": false,
+    // Whether non-standard (but widely adopted) globals should be predefined.
+    "nonstandard": false,
+    // Whether the Rhino environment globals should be predefined.
+    "rhino": false,
+    // Whether Web Worker globals should be predefined.
+    "worker": false,    
+    // Whether the Windows Scripting Host environment globals should be predefined.
+    "wsh": false,
+
+    // Whether Dojo Toolkit globals should be predefined.
+    "dojo": false,
+    // Whether jQuery globals should be predefined.
+    "jquery": true,
+    // Whether Phantom globals should be predefined.
+    "phantom": true,
+    // Whether Prototype and Scriptaculous globals should be predefined.
+    "prototypejs": false,
+    // Whether MooTools globals should be predefined.
+    "mootools": false,
+    // Whether YUI globals should be predefined.
+    "yui": false,
+
+    
+    /*
+     * Custom predefined globals.
+     *
+     * For value examples, see https://github.com/jshint/jshint/blob/c047ea1b01097fcc220fcd1a55c41f67ae2e6e81/jshint.js#L556
+     */
+     
+    "globals":  {},
+
+
+    /*
+     * Development
+     */
+
+    // Whether debugger statements should be allowed.
+    "debug": false,
+    // Whether logging globals should be predefined (console, alert, etc.).
+    "devel": false,
+
+
+    /*
+     * ECMAScript 5
+     */
+
+    // Whether the "use strict"; pragma should be required.
+    "strict": true,
+    // Whether global "use strict"; should be allowed (also enables strict).
+    "globalstrict": false,
+
+
+    /*
+     * Enforcing Options
+     */
+    // Whether bitwise operators (&, |, ^, etc.) should be forbidden.
+    "bitwise": true,
+    // Whether curly braces around all blocks should be required.
+    "curly": true,
+    // Whether `===` and `!==` should be required (instead of `==` and `!=`).
+    "eqeqeq": true,
+    // Whether the code needs to adhere to ECMAScript 3 specification
+    "es3": false,
+    // Whether `for in` loops must filter with `hasOwnPrototype`.
+    "forin": true,
+    // Whether overwriting prototypes of native objects should be prohibited.
+    "freeze": true,
+    // Whether immediate invocations must be wrapped in parens, e.g.
+    // `( function(){}() );`.
+    "immed": true,
+    // Whether use before define should be forbidden.
+    "latedef": true,
+    // Whether arguments.caller and arguments.callee should be forbidden.
+    "noarg": true,
+    // Whether `.` should be forbidden in regexp literals.
+    "regexp": true,
+    // Whether variables must be declared before used.
+    "undef": true,
+    // Whether variables must be used if defined.
+    "unused": true,
+     
+     
+    /*
+     * Relaxing Options
+     */
+    // Whether automatic semicolon insertion should be allowed.
+    "asi": false,
+    // Whether assignments inside `if`, `for` and `while` should be allowed. Usually
+    // conditions and loops are for comparison, not assignments.
+    "boss": false,
+    // Whether `== null` comparisons should be allowed, even if `eqeqeq` is `true`.
+    "eqnull": true,
+    // Whether es.next specific syntax should be allowed.
+    "esnext": true,
+    // Whether `eval` should be allowed.
+    "evil": false,
+    // Whether ExpressionStatement should be allowed as Programs.
+    "expr": false,
+    // Whether only function scope should be used for scope tests.
+    "funcscope": false,
+    // Whether JSHint should be compatible with Google Closure Compiler.
+    "gcl": true,
+    // Whether the `__iterator__` property should be allowed.
+    "iterator": true,
+    // Whether semicolons may be ommitted for the trailing statements inside of a
+    // one-line blocks.
+    "lastsemic": false,
+    // Whether line breaks should not be checked, e.g. `return [\n] x`.
+    "laxbreak": false,
+    // Whether line breaks should not be checked around commas.
+    "laxcomma": false,
+    // Whether functions should be allowed to be defined within loops.
+    "loopfunc": false,
+    // Whether Mozilla JavaScript extensions should be allowed.
+    "moz": false,
+    // Whether invalid typeof operator values should be allowed.
+    "notypeof": false,
+    // Whether the `__proto__` property should be allowed.
+    "proto": false,
+    // Whether script-targeted URLs should be allowed.
+    "scripturl": true,
+    // Whether smarttabs should be allowed
+    // (http://www.emacswiki.org/emacs/SmartTabs).
+    "smarttabs": false,
+    // Whether variable shadowing should be allowed.
+    "shadow": false,
+    // Whether `new function () { ... };` and `new Object;` should be allowed.
+    "supernew": true,
+    // Whether `this` inside a non-constructor function should be allowed.
+    "validthis": true,
+    // Whether generator functions should be allowed with no yield statement in them.
+    "noyield": false,
+     
+      
+    /*
+     * Style preferences
+     */
+
+    // Whether variables names must be camelCase style or UPPER_CASE with underscores 
+    "camelcase": true,
+    // Specify indentation.
+    "indent": 4,
+    // Maximum allowed params.
+    "maxparams": 3,    
+    // Maximum allowed depth of nested blocks.
+//    "maxdepth": 2,
+    // Maximum number of statements allowed per function.
+//    "maxstatements": 4,
+    // Maximum allowed Cyclomatic complexity.
+//    "maxcomplexity": ,
+    // Maximum allowed characters in a line.
+    "maxlen": 80,
+    // Allow multiline strings.
+    "multistr": false,    
+    // Whether constructor names must be capitalized.
+    "newcap": true,
+    // Whether empty blocks should be forbidden.
+    "noempty": false,
+    // Whether "non-breaking whitespace" characters should be forbidden.
+    "nonbsp": true,
+    // Whether using `new` for side-effects should be forbidden.
+    "nonew": false,
+    // Whether increment and decrement (`++` and `--`) should be forbidden.
+    "plusplus": false,
+    // Whether consistency in quotation marks should be enforced.
+    "quotmark": double,
+    // Whether all forms of subscript notation are allowed.
+    "sub": false,
+    // Whether trailing whitespace rules apply.
+    "trailing": true
+    
+}
