@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.wex.wol.accountmaintenance" version="1.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <feature name="ApplicationInfo">
+        <param name="android-package" value="com.wex.plugins.applicationInfo.ApplicationInfoPlugin" />
+    </feature>
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
     </feature>

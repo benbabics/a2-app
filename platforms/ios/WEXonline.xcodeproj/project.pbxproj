@@ -20,6 +20,7 @@
 		6F809F6A01444A46B43399F5 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 785CEEF0949A41E9B2238F48 /* CDVDevice.m */; };
 		A234F860D0FF49088780872A /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 62EB2119C1214AFFA2B3A15E /* CDVStatusBar.m */; };
 		CC7CC55D84914C32AA430BF9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9465D04902F2427799ADA3DA /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		EDE8BA9E46864868B7CEBE83 /* ApplicationInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 04692A776E754FA6A4270808 /* ApplicationInfo.m */; };
 		F840E1F1165FE0F500CFE078 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = F840E1F0165FE0F500CFE078 /* config.xml */; };
 		F958F83118AC0E6A00E6C757 /* Icon-60.png in Resources */ = {isa = PBXBuildFile; fileRef = F958F7FF18ABFD4200E6C757 /* Icon-60.png */; };
 		F958F83218AC0E6A00E6C757 /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F958F80018ABFD4200E6C757 /* Icon-60@2x.png */; };
@@ -69,6 +70,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04692A776E754FA6A4270808 /* ApplicationInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ApplicationInfo.m; path = com.wex.plugins.applicationInfo/ApplicationInfo.m; sourceTree = "<group>"; };
 		0C16AAF5756D43F5AF310180 /* CDVStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVStatusBar.h; path = org.apache.cordova.statusbar/CDVStatusBar.h; sourceTree = "<group>"; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 		5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		62EB2119C1214AFFA2B3A15E /* CDVStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVStatusBar.m; path = org.apache.cordova.statusbar/CDVStatusBar.m; sourceTree = "<group>"; };
 		6303E92DEEBD41C0820DC1D4 /* CDVReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVReachability.h; path = "org.apache.cordova.network-information/CDVReachability.h"; sourceTree = "<group>"; };
+		637A9E2049A943838ABB0937 /* ApplicationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApplicationInfo.h; path = com.wex.plugins.applicationInfo/ApplicationInfo.h; sourceTree = "<group>"; };
 		785CEEF0949A41E9B2238F48 /* CDVDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVDevice.m; path = org.apache.cordova.device/CDVDevice.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* WEXonline-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "WEXonline-Info.plist"; path = "../WEXonline-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9465D04902F2427799ADA3DA /* SystemConfiguration.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -243,6 +246,8 @@
 				6303E92DEEBD41C0820DC1D4 /* CDVReachability.h */,
 				62EB2119C1214AFFA2B3A15E /* CDVStatusBar.m */,
 				0C16AAF5756D43F5AF310180 /* CDVStatusBar.h */,
+				04692A776E754FA6A4270808 /* ApplicationInfo.m */,
+				637A9E2049A943838ABB0937 /* ApplicationInfo.h */,
 			);
 			name = Plugins;
 			path = WEXonline/Plugins;
@@ -430,6 +435,7 @@
 				FE771D293F774B2E91C00941 /* CDVConnection.m in Sources */,
 				2970E4E0508A44C1BF98E36B /* CDVReachability.m in Sources */,
 				A234F860D0FF49088780872A /* CDVStatusBar.m in Sources */,
+				EDE8BA9E46864868B7CEBE83 /* ApplicationInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
