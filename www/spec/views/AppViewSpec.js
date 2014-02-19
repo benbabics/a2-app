@@ -1,13 +1,15 @@
-define(["models/AppModel", "Squire"],
-    function (AppModel, Squire) {
+define(["backbone", "Squire", "jasmine-jquery"],
+    function (Backbone, Squire) {
         "use strict";
 
         var squire = new Squire(),
             mockAppModel = {
                 "buildVersion": "1.1.1"
             },
-            appModel = AppModel.getInstance(),
+            appModel = new Backbone.Model(),
             appView;
+
+        squire.mock("backbone", Backbone);
 
         describe("An App View", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -56,7 +58,7 @@ define(["models/AppModel", "Squire"],
                     expect(appView.model).toEqual(appModel);
                 });
             });
-            
+
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(appView, "render").andCallThrough();
