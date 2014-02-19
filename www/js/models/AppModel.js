@@ -1,5 +1,5 @@
-define(["backbone", "plugins/ApplicationInfo"],
-    function (Backbone, ApplicationInfo) {
+define(["backbone"],
+    function (Backbone) {
 
         "use strict";
 

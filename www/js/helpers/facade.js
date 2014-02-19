@@ -1,29 +1,27 @@
-define(["utils", "helpers/mediator", "helpers/permissions"],
-    function (utils, mediator, permissions) {
+define(["utils", "helpers/mediator"],
+    function (utils, mediator) {
 
         "use strict";
 
 
-        function subscribe(channel, subscription, controller, action, condition) {
-            if (controller === undefined) {
-                window.console && window.console.error("facade.subscribe is expecting 3rd argument 'controller' to be defined.");
-            }
-            if (action === undefined) {
-                window.console && window.console.error("facade.subscribe is expecting 4th argument 'action' to be defined.");
-            }
-
-            if (permissions.validate(channel, subscription)) {
-                mediator.subscribe(channel, subscription, controller, action, condition);
+        function validateParameterIsDefined(functionName, parameterValue, parameterNumber, parameterName) {
+            if (parameterValue === undefined) {
+                window.console && window.console.error(functionName + " is expecting " + parameterNumber + " argument '" + parameterName + "' to be defined.");
             }
         }
 
+        function subscribe(channel, subscription, controller, action, condition) {
+            validateParameterIsDefined("facade.subscribe", channel, "1st", "channel");
+            validateParameterIsDefined("facade.subscribe", subscription, "2nd", "subscription");
+            validateParameterIsDefined("facade.subscribe", controller, "3rd", "controller");
+            validateParameterIsDefined("facade.subscribe", action, "4th", "action");
+
+            mediator.subscribe(channel, subscription, controller, action, condition);
+        }
+
         function subscribeTo(channel, controller) {
-            if (channel === undefined) {
-                window.console && window.console.error("facade.subscribeTo is expecting 1st argument 'channel' to be defined.");
-            }
-            if (controller === undefined) {
-                window.console && window.console.error("facade.subscribeTo is expecting 2nd argument 'controller' to be defined.");
-            }
+            validateParameterIsDefined("facade.subscribeTo", channel, "1st", "channel");
+            validateParameterIsDefined("facade.subscribeTo", controller, "2nd", "controller");
 
             return function (subscription, action, condition) {
                 if (action && utils.isFn(controller[action])) {

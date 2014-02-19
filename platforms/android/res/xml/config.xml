@@ -41,7 +41,7 @@
     <preference name="KeepRunning" value="false" />
     <preference name="SplashScreen" value="splash" />
     <preference name="SplashScreenDelay" value="20000" />
-    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="AutoHideSplashScreen" value="false" />
     <preference name="StatusBarOverlaysWebView" value="false" />
     <access origin="*" />
     <access origin="*.wexmobile.com" />

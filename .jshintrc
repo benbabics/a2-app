@@ -59,7 +59,10 @@
 
         // Require
         "define"       : false,
-        "require"      : false
+        "require"      : false,
+
+        // Plugins
+        "ApplicationInfo" : false
     },
 
 
