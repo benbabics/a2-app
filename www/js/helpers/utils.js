@@ -1,5 +1,5 @@
-define(["jquery", "underscore", "globals", "backbone", "plugins/GoogleAnalyticsPlugin", "jquery-mobile"],
-    function ($, _, globals, Backbone, GoogleAnalytics) {
+define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
+    function ($, _, globals, Backbone) {
 
         "use strict";
 
@@ -65,11 +65,6 @@ define(["jquery", "underscore", "globals", "backbone", "plugins/GoogleAnalyticsP
          * Deferred When Helper Method
         */
         utils.when = utils.$.when;
-
-        /*
-         * jQuery Timeago Plugin convenience method
-        */
-        utils.timeago = utils.$.timeago;
 
         /*
          * Is Mobile
@@ -173,14 +168,6 @@ define(["jquery", "underscore", "globals", "backbone", "plugins/GoogleAnalyticsP
             Backbone.history.navigate(viewId, true);
         };
 
-       /*
-        * Google Analytics tracker wrapper.
-        */
-
-        utils.trackEvent =  function (category, action, label, value){
-            GoogleAnalytics.trackEventWithCategory(category, action, label, value);
-        };
-
         /*
          * Convenience method for accessing $mobile.changePage(), included in case any other actions are required in the same step.
          *
@@ -190,14 +177,6 @@ define(["jquery", "underscore", "globals", "backbone", "plugins/GoogleAnalyticsP
          * @param - updateHash: (Boolean) Decides if the hash in the location bar should be updated
         */
         utils.changePage = function (viewID, effect, direction, updateHash) {
-           //Send tracking data to google analytics.
-            if (viewID) {
-                var pageId = viewID.attr ? viewID.attr("id") : viewID;
-                var pageName = globals.analytics.constants[pageId];
-                if (pageName !== undefined) {
-                    GoogleAnalytics.trackView(pageName);
-                }
-            }
             if (effect === undefined || effect === null) {
                 effect = globals.DEFAULT.PAGE_TRANSITION;
             }
@@ -210,7 +189,7 @@ define(["jquery", "underscore", "globals", "backbone", "plugins/GoogleAnalyticsP
 
             utils.$(function() {
                 if(updateHash){
-                    window.location.hash = viewID.attr ? viewID.attr("id") : viewID; //messy fix to force viewID hash change in url, since JQM 1.3.1 doesn't seem to
+                    window.location.hash = viewID.attr ? viewID.attr("id") : viewID; // TODO: messy fix to force viewID hash change in url, since JQM 1.3.1 doesn't seem to
                                                                                      //always update hash when asked.
                 }
 

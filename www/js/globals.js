@@ -88,18 +88,5 @@ define(function (require) {
         "PLATFORM"      : "platform="
     };
 
-    /*
-     * Connectivity
-     */
-    globals.CONNECTIVITY = {
-        "NONE"    : "No network",
-        "UNKNOWN" : "Unknown connection",
-        "ETHERNET": "Ethernet connection",
-        "WIFI"    : "WiFi connection",
-        "CELL_2G" : "Cell 2G connection",
-        "CELL_3G" : "Cell 3G connection",
-        "CELL_4G" : "Cell 4G connection"
-    };
-
     return globals;
 });
