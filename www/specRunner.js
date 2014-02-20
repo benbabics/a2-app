@@ -109,6 +109,8 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-async
             specs.push("spec/routers/AppRouterSpec.js");
 
             // Helpers
+            specs.push("spec/helpers/facadeSpec.js");
+            specs.push("spec/helpers/mediatorSpec.js");
             specs.push("spec/helpers/utilsSpec.js");
 
             $(function () {

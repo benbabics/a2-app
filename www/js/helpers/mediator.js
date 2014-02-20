@@ -55,9 +55,14 @@ define([],
             return this;
         }
 
+        function getChannels() {
+            return channels;
+        }
+
         return {
-            publish  : publish,
-            subscribe: subscribe
+            publish    : publish,
+            subscribe  : subscribe,
+            getChannels: getChannels
         };
 
     });

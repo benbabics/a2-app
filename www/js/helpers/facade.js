@@ -7,27 +7,33 @@ define(["utils", "helpers/mediator"],
         function validateParameterIsDefined(functionName, parameterValue, parameterNumber, parameterName) {
             if (parameterValue === undefined) {
                 window.console && window.console.error(functionName + " is expecting " + parameterNumber + " argument '" + parameterName + "' to be defined.");
+                return false;
             }
+            return true;
         }
 
         function subscribe(channel, subscription, controller, action, condition) {
-            validateParameterIsDefined("facade.subscribe", channel, "1st", "channel");
-            validateParameterIsDefined("facade.subscribe", subscription, "2nd", "subscription");
-            validateParameterIsDefined("facade.subscribe", controller, "3rd", "controller");
-            validateParameterIsDefined("facade.subscribe", action, "4th", "action");
+            // only subscribe if the required params are valid
+            if (validateParameterIsDefined("facade.subscribe", channel, "1st", "channel")
+                && validateParameterIsDefined("facade.subscribe", subscription, "2nd", "subscription")
+                && validateParameterIsDefined("facade.subscribe", controller, "3rd", "controller")
+                && validateParameterIsDefined("facade.subscribe", action, "4th", "action")) {
 
-            mediator.subscribe(channel, subscription, controller, action, condition);
+                mediator.subscribe(channel, subscription, controller, action, condition);
+            }
         }
 
         function subscribeTo(channel, controller) {
-            validateParameterIsDefined("facade.subscribeTo", channel, "1st", "channel");
-            validateParameterIsDefined("facade.subscribeTo", controller, "2nd", "controller");
+            // only return the function if the require params are valid
+            if (validateParameterIsDefined("facade.subscribeTo", channel, "1st", "channel")
+                && validateParameterIsDefined("facade.subscribeTo", controller, "2nd", "controller")) {
 
-            return function (subscription, action, condition) {
-                if (action && utils.isFn(controller[action])) {
-                    subscribe(channel, subscription, controller, action, condition);
-                }
-            };
+                return function (subscription, action, condition) {
+                    if (action && utils.isFn(controller[action])) {
+                        subscribe(channel, subscription, controller, action, condition);
+                    }
+                };
+            }
         }
 
         function publish() {
