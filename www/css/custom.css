@@ -1,0 +1,237 @@
+/*********************************************
+ * Application UI
+*********************************************/
+.commonmobilecontainer{width:100%; height:auto; text-align:center;}
+
+/* Removing default page bottom border */
+.ui-field-contain:first-child {
+    border-bottom-width: 0;
+}
+
+.ui-content {
+    padding:10px;
+}
+
+/* loading icon */
+.ui-icon-loading {
+    position:fixed;
+    top:45%;
+    left:45%;
+}
+
+.ui-loader {
+    display: none;
+    position: fixed;
+    opacity: .30;
+    margin:0;
+    padding:0;
+    z-index: 999999999;
+    left: 0 ;
+    top: 0 !important;
+    background: #000 ;
+    width: 100%;
+    height: 100%;
+}
+
+.ui-hidden { visibility: hidden; }
+
+/* Branding */
+.ui-bar-b {
+    border     : none;
+    background : #e51a38;
+    color      : #fff;
+    font-weight: bold;
+    text-shadow: none;
+    background-image: none;
+}
+.ui-bar-c {
+    border    : none;
+    background: #333;
+    color     : #fff;
+}
+.ui-bar-c.ui-navbar li .ui-btn .ui-btn-inner {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top: none;
+}
+.ui-bar-c.ui-navbar li .ui-btn .ui-btn-inner img {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Buttons */
+a.ui-btn-up-b,
+a.ui-btn-hover-b {
+    color      : #fff;
+    font-weight: bold;
+    text-shadow: none;
+    border: 1px solid #e9b5c5;
+
+    background              : #c9132e;
+    -webkit-background-image: none;
+    background-image        : none;
+}
+
+a.ui-btn-up-b,
+a.ui-btn-hover-b,
+a.ui-btn-up-b .ui-btn-inner,
+a.ui-btn-hover-b  .ui-btn-inner {
+    -webkit-border-radius: .4em;
+    border-radius        : .4em;
+}
+
+a.ui-btn-up-b .ui-btn-inner,
+a.ui-btn-hover-b .ui-btn-inner {
+    padding-right: 15px;
+    padding-left : 15px;
+}
+
+a.ui-btn-up-b a.ui-link-inherit,
+a.ui-btn-hover-b a.ui-link-inherit {
+    color: #fff;
+}
+
+/*********************************************
+ * Common
+*********************************************/
+.margin-bottom { margin-bottom: 10px; }
+.margin-bottom-extra { margin-bottom: 20px; }
+.label-for-text-field {
+    display: inline-block;
+    line-height: 35px;
+    margin: 7px 0;
+}
+.text-center { text-align: center; }
+.searchtext {
+    font-size: .9em;
+    border: none;
+    background: #999;
+    padding: 2px 0;
+}
+
+/*********************************************
+ * Images
+*********************************************/
+img.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*********************************************
+ * Update Prompt
+ ********************************************/
+#updatePrompt .page-content {
+    min-height: inherit;
+}
+
+#updatePrompt .page-content .ui-title {
+    font-weight: normal;
+    margin: 0;
+}
+
+.title-bar {
+    border     : #e51a38;
+    font-weight: bold;
+    margin-bottom: 50px;
+    padding: 15px
+}
+
+#updatePrompt .page-content .ui-logo {
+    margin: 2.5em 1em 2.5em 1em;
+    height: 71px;
+    background: url(../img/landing/wex_connect_logo.png) no-repeat center;
+    background-size: contain;
+}
+
+#updatePrompt .page-content p {
+    color: #817f7f;
+    text-align: center;
+    width: 100%;
+}
+
+#updatePrompt .page-content .ui-grid-solo {
+    width: 100%;
+}
+
+.updatePromptPrimary,
+.updatePromptSecondary {
+    border: 0;
+    color: #fff !important;
+    font-weight: normal !important;
+    font-family: Helvetica,Arial,sans-serif;
+    text-decoration: none;
+    text-align: center;
+    padding-top: 1.0em;
+    padding-bottom: 1.0em;
+    display: inline-block;
+    margin-right: auto;
+    margin-left: auto;
+    width: 70%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.updatePromptPrimary {
+    background-color: #6a6868;
+    margin-bottom: 1.0em;
+}
+
+.updatePromptSecondary {
+    background-color: #9b9a9a;
+}
+
+#updatePrompt .page-content .ui-grid-a .ui-block-a {
+    text-align: right;
+}
+
+#updatePrompt .dialog-footer{
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 2.5em;
+    text-align: center;
+}
+
+/********************************************
+ * Feedback - Page
+********************************************/
+#feedback div[data-role="header"]{
+    position: absolute;
+}
+
+@media only screen and (min-width: 6in) {
+    #feedback .ui-corner-feedback {
+        width: 70%;
+        margin-left : auto;
+        margin-right : auto;
+        text-align : center;
+    }
+}
+
+/*********************************************
+ * Alert - Page
+*********************************************/
+#alerts .page-content h1 { font-size: 1.2em; margin: 0 0 20px; padding-bottom: 10px; border-bottom: 1px solid #888; }
+#alerts .text-normal { font-weight: normal; }
+
+/********************************************
+ * Dialog - Component
+********************************************/
+#popupDialog .dialog-footer{
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+
+#popupDialog .ui-header .ui-title, .ui-footer .ui-title{
+    margin: .6em 10% .8em 5%;
+}
+
+#popupDialog [data-theme="c"] .ui-btn-inner {
+    background-color: #ccc;
+}
+
+#popupDialog .ui-btn-active .ui-btn-inner{
+    background: #5393c5;
+}
