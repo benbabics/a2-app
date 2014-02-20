@@ -16,7 +16,7 @@ define([],
             }
 
             if (typeof controller[action] !== "function") {
-                window.console && window.console.error("Error: The argument for 'controller[" + action + "]' is undefined for call to facade.subscribe(" + channel + ", " + subscription + ").");
+                window.console && window.console.error("Error: The argument for 'controller[" + action + "]' is undefined for call to subscribe(" + channel + ", " + subscription + ").");
                 return this;
             }
 
