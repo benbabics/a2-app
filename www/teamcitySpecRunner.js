@@ -31,6 +31,7 @@ require.config({
         "jasmine-async": "../spec/libs/jasmine/jasmine.async",
         "jasmine-jquery": "../spec/libs/jasmine/jasmine-jquery",
         "jasmine-sinon": "../spec/libs/jasmine/jasmine-sinon",
+        "jasmine-teamcity-reporter": "../spec/libs/jasmine/jasmine.teamcity_reporter",
         "sinon": "../spec/libs/sinon",
         "Squire": "../spec/libs/squire",
 
@@ -69,6 +70,10 @@ require.config({
             "deps": ["jasmine"],
             "exports": "jasmine"
         },
+        "jasmine-teamcity-reporter": {
+            "deps": ["jasmine"],
+            "exports": "TeamcityReporter"
+        },
         "sinon": {
             "exports": "sinon"
         }
@@ -78,49 +83,50 @@ require.config({
     waitSeconds: 0
 });
 
-require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-async", "sinon", "cordova"],
+require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamcity-reporter", "jasmine-async", "sinon", "cordova"],
     function (jqueryMobile, _, $, jasmine) {
-        function onAppReady() {
-            var jasmineEnv = jasmine.getEnv(),
-                htmlReporter = new jasmine.HtmlReporter(),
-                specs = [];
+        var jasmineEnv = jasmine.getEnv(),
+            trivialReporter = new jasmine.TrivialReporter(),
+            teamcityReporter = new jasmine.TeamcityReporter(),
+            specs = [],
+            OnCompleteReporter = _.extend(function () {}, jasmine.Reporter);
 
-            jasmineEnv.updateInterval = 1000;
-            jasmineEnv.addReporter(htmlReporter);
 
-            // Push all spec files here
+        OnCompleteReporter.prototype.reportRunnerResults = function () {
+            console.log("##jasmine.reportRunnerResults");
+            phantom.exit();
+        };
 
-            /***********************************************************************************************************
-             * All require.config changes and specs added in this file need to also be applied to teamcitySpecRunner.js
-             **********************************************************************************************************/
+        jasmineEnv.addReporter(new OnCompleteReporter());
+        jasmineEnv.addReporter(teamcityReporter);
+        jasmineEnv.addReporter(trivialReporter);
 
-            // Views
-            specs.push("spec/views/AppViewSpec.js");
+        // Push all spec files here
 
-            // Models
-            specs.push("spec/models/AppModelSpec.js");
+        /***********************************************************************************************************
+         * All require.config changes and specs added in this file need to also be applied to specRunner.js
+         **********************************************************************************************************/
 
-            // Collections
+        // Views
+        specs.push("spec/views/AppViewSpec.js");
 
-            // Controllers
-            specs.push("spec/controllers/AppControllerSpec.js");
+        // Models
+        specs.push("spec/models/AppModelSpec.js");
 
-            // Routers
-            specs.push("spec/routers/AppRouterSpec.js");
+        // Collections
 
-            // Helpers
-            specs.push("spec/helpers/utilsSpec.js");
+        // Controllers
+        specs.push("spec/controllers/AppControllerSpec.js");
 
-            $(function () {
-                require(specs, function () {
-                    jasmineEnv.execute();
-                });
+        // Routers
+        specs.push("spec/routers/AppRouterSpec.js");
+
+        // Helpers
+        specs.push("spec/helpers/utilsSpec.js");
+
+        $(function () {
+            require(specs, function () {
+                jasmineEnv.execute();
             });
-        }
-
-        if (document.location.protocol === "file:") {
-            document.addEventListener("deviceready", onAppReady, false);
-        } else {
-            onAppReady();
-        }
+        });
     });

@@ -114,6 +114,7 @@
   </component>
   <component name="JSLintConfiguration" html="true" css="true" json="true">
     <option browser="true" />
+    <option devel="true" />
     <option indent="4" />
     <option maxerr="100" />
     <option maxlen="120" />

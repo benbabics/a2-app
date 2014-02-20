@@ -62,14 +62,17 @@
         "require"      : false,
 
         // Plugins
-        "ApplicationInfo" : false
+        "ApplicationInfo" : false,
+
+        // Phantom
+        "phantom" : false
     },
 
 
     // == Development  ====================================================
 
     "debug"        : false,    // Whether debugger statements should be allowed.
-    "devel"        : false,    // Whether logging globals should be predefined (console, alert, etc.).
+    "devel"        : true,     // Whether logging globals should be predefined (console, alert, etc.).
 
 
     // == ECMAScript 5  ====================================================
