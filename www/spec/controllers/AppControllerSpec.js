@@ -1,5 +1,5 @@
-define(["Squire", "routers/AppRouter", "views/AppView", "models/AppModel"],
-    function (Squire, AppRouter, AppView, AppModel) {
+define(["backbone", "Squire"],
+    function (Backbone, Squire) {
 
         "use strict";
 
@@ -7,19 +7,24 @@ define(["Squire", "routers/AppRouter", "views/AppView", "models/AppModel"],
             mockAppModel = {
                 "buildVersion": "1.1.1"
             },
-            appModel = AppModel.getInstance(),
+            appModel = new Backbone.Model(),
+            AppModel = {
+                getInstance: function () { }
+            },
             mockRouter = {
                 start: function () { }
             },
             mockAppView = {
                 $el: "",
-                constructor: function () { }
+                constructor: function () { },
+                initialize: function () { },
+                render: function () { }
             },
             appController;
 
         squire.mock("models/AppModel", AppModel);
-        squire.mock("routers/AppRouter", Squire.Helpers.constructs(mockRouter));
-        squire.mock("views/AppView", Squire.Helpers.constructs(mockAppView));
+        squire.mock("routers/AppRouter", Squire.Helpers.returns(mockRouter));
+        squire.mock("views/AppView", Squire.Helpers.returns(mockAppView));
 
         describe("An App Controller", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -134,9 +139,10 @@ define(["Squire", "routers/AppRouter", "views/AppView", "models/AppModel"],
                 });
 
                 describe("calling the window setTimeout callback parameter", function () {
-                    //TODO - Figure out how to test plugins
-                    xit("should call the navigator.splashscreen.hide function", function () {
+                    it("should call the navigator.splashscreen.hide function", function () {
                         var callback = window.setTimeout.mostRecentCall.args[0];
+
+                        spyOn(navigator.splashscreen, "hide").andCallFake(function () {});
 
                         callback.apply();
 

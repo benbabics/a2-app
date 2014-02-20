@@ -7,29 +7,26 @@ define(["globals", "Squire"],
         var MOCK_APPLICATION_INFO = {
                 "version" : "1.1.1"
             },
-            mockApplicationInfoPlugin = {
-                getBuildVersion : function (successCallback) { successCallback(MOCK_APPLICATION_INFO.version); }
-            },
             squire = new Squire(),
             appModel;
 
-        squire.mock("plugins/ApplicationInfo", mockApplicationInfoPlugin);
-
-        describe("An AppModel", function() {
+        describe("An AppModel", function () {
             var jasmineAsync = new AsyncSpec(this);
 
-            jasmineAsync.beforeEach(function(done) {
-                squire.require(["models/AppModel"], function(AppModel) {
+            jasmineAsync.beforeEach(function (done) {
+                squire.require(["models/AppModel"], function (AppModel) {
+                    spyOn(ApplicationInfo, "getBuildVersion").andCallFake(function (successCallback) { successCallback(MOCK_APPLICATION_INFO.version); });
+
                     appModel = AppModel.getInstance();
                     done();
                 });
             });
 
-            it("is defined", function() {
+            it("is defined", function () {
                 expect(appModel).toBeDefined();
             });
 
-            it("looks like a Backbone model", function() {
+            it("looks like a Backbone model", function () {
                 expect(appModel instanceof Backbone.Model).toBeTruthy();
             });
 
@@ -41,8 +38,6 @@ define(["globals", "Squire"],
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(mockApplicationInfoPlugin, "getBuildVersion").andCallThrough();
-
                     appModel.initialize();
                 });
 
@@ -54,10 +49,11 @@ define(["globals", "Squire"],
                     expect(appModel.initialize).toEqual(jasmine.any(Function));
                 });
 
-                it("should call the mockApplicationInfoPlugin getBuildVersion function", function () {
-                    expect(mockApplicationInfoPlugin.getBuildVersion).toHaveBeenCalled();
+                it("should call the ApplicationInfo getBuildVersion function", function () {
+                    expect(ApplicationInfo.getBuildVersion).toHaveBeenCalled();
 
-                    expect(window.setTimeout.mostRecentCall.args.length).toEqual(0);
+                    expect(ApplicationInfo.getBuildVersion.mostRecentCall.args.length).toEqual(1);
+                    expect(ApplicationInfo.getBuildVersion.mostRecentCall.args[0]).toEqual(jasmine.any(Function));
                 });
 
 

@@ -169,6 +169,10 @@
       </method>
     </configuration>
   </component>
+  <component name="RequirejsProjectComponent">
+    <option name="publicPath" value="www" />
+    <option name="configFilePath" value="specRunner.js" />
+  </component>
   <component name="SvnBranchConfigurationManager">
     <option name="myConfigurationMap">
       <map>

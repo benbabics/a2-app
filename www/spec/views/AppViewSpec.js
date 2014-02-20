@@ -18,8 +18,8 @@ define(["backbone", "Squire", "jasmine-jquery"],
             // to instead point to our root where index.html resides
             jasmine.getFixtures().fixturesPath = "";
 
-            jasmineAsync.beforeEach(function(done) {
-                squire.require(["views/AppView"], function(AppView) {
+            jasmineAsync.beforeEach(function (done) {
+                squire.require(["views/AppView"], function (AppView) {
                     loadFixtures("index.html");
 
                     appModel.set(mockAppModel);

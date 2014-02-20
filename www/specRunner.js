@@ -10,7 +10,7 @@ require.config({
         "async": "libs/require/async-min",
 
         // Frameworks
-        "cordova"      : "../cordova",
+        "cordova"      : "../spec/cordova.mock",
         "mustache"     : "libs/mustache/mustache-min",
         "backbone"     : "libs/backbone/backbone-min",
         "underscore"   : "libs/underscore/underscore-min",
@@ -99,13 +99,12 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-async
             specs.push("spec/views/AppViewSpec.js");
 
             // Models
-            // Commented out until we can figure out how to mock plugins
-            //specs.push("spec/models/AppModelSpec.js");
+            specs.push("spec/models/AppModelSpec.js");
 
             // Collections
 
             // Controllers
-            //specs.push("spec/controllers/AppControllerSpec.js");
+            specs.push("spec/controllers/AppControllerSpec.js");
 
             // Routers
             specs.push("spec/routers/AppRouterSpec.js");
