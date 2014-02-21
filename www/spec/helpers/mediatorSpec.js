@@ -41,7 +41,8 @@ define(["Squire", "utils"],
                         spyOn(window.console, "error");
                         mediatorClass.subscribe(channel, subscription, controller, action, condition);
 
-                        expect(window.console.error).toHaveBeenCalledWith("Error: The argument for 'controller[" + action + "]' is undefined for call to facade.subscribe(" + channel + ", " + subscription + ").");
+                        expect(window.console.error).toHaveBeenCalledWith("Error: The argument for 'controller[" +
+                            action + "]' is undefined for call to subscribe(" + channel + ", " + subscription + ").");
                     });
                 });
 
@@ -66,9 +67,8 @@ define(["Squire", "utils"],
                             channelSubscriptions = mediatorClass.getChannels()[channel][subscription];
 
                             recentSubscription = utils._.find(channelSubscriptions, function (nextSubscription) {
-                                    return nextSubscription.action === action && nextSubscription.controller === controller;
-                                }
-                            );
+                                return nextSubscription.action === action && nextSubscription.controller === controller;
+                            });
 
                             expect(recentSubscription).not.toBeNull();
                             expect(recentSubscription.condition).toEqual(jasmine.any(Function));
@@ -95,9 +95,8 @@ define(["Squire", "utils"],
                             channelSubscriptions = mediatorClass.getChannels()[channel][subscription];
 
                             recentSubscription = utils._.find(channelSubscriptions, function (nextSubscription) {
-                                    return nextSubscription.action === action && nextSubscription.controller === controller;
-                                }
-                            );
+                                return nextSubscription.action === action && nextSubscription.controller === controller;
+                            });
 
                             expect(recentSubscription).not.toBeNull();
                             expect(recentSubscription.condition).toEqual(condition);
@@ -160,7 +159,7 @@ define(["Squire", "utils"],
                                         }
                                     },
                                     action = "mockAction",
-                                    condition = function () { return true;},
+                                    condition = function () { return true; },
                                     argument1 = "argument1",
                                     argument2 = "argument2";
 
@@ -187,7 +186,7 @@ define(["Squire", "utils"],
                                         }
                                     },
                                     action = "mockAction",
-                                    condition = function () { return false;},
+                                    condition = function () { return false; },
                                     argument1 = "argument1",
                                     argument2 = "argument2";
 
@@ -215,7 +214,7 @@ define(["Squire", "utils"],
                                         }
                                     },
                                     action = "mockAction",
-                                    condition = function () { return true;};
+                                    condition = function () { return true; };
 
                                 spyOn(controller, "mockAction");
 
@@ -238,7 +237,7 @@ define(["Squire", "utils"],
                                         }
                                     },
                                     action = "mockAction",
-                                    condition = function () { return false;};
+                                    condition = function () { return false; };
 
                                 spyOn(controller, "mockAction");
 

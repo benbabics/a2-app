@@ -72,7 +72,9 @@ define(["Squire", "helpers/mediator"],
 
                     facadeClass.subscribe(channel, subscription, controller, action, condition);
 
-                    expect(window.console.error).toHaveBeenCalledWith("facade.subscribe is expecting 3rd argument 'controller' to be defined.");
+                    expect(window.console.error).toHaveBeenCalledWith(
+                        "facade.subscribe is expecting 3rd argument 'controller' to be defined."
+                    );
                     expect(mediator.subscribe).not.toHaveBeenCalled();
                 });
 
@@ -85,7 +87,9 @@ define(["Squire", "helpers/mediator"],
 
                     facadeClass.subscribe(channel, subscription, controller, action, condition);
 
-                    expect(window.console.error).toHaveBeenCalledWith("facade.subscribe is expecting 4th argument 'action' to be defined.");
+                    expect(window.console.error).toHaveBeenCalledWith(
+                        "facade.subscribe is expecting 4th argument 'action' to be defined."
+                    );
                     expect(mediator.subscribe).not.toHaveBeenCalled();
                 });
 
@@ -129,7 +133,9 @@ define(["Squire", "helpers/mediator"],
 
                     result = facadeClass.subscribeTo(channel, controller);
 
-                    expect(window.console.error).toHaveBeenCalledWith("facade.subscribeTo is expecting 1st argument 'channel' to be defined.");
+                    expect(window.console.error).toHaveBeenCalledWith(
+                        "facade.subscribeTo is expecting 1st argument 'channel' to be defined."
+                    );
                     expect(result).not.toEqual(jasmine.any(Function));
                 });
 
@@ -140,7 +146,9 @@ define(["Squire", "helpers/mediator"],
 
                     result = facadeClass.subscribeTo(channel, controller);
 
-                    expect(window.console.error).toHaveBeenCalledWith("facade.subscribeTo is expecting 2nd argument 'controller' to be defined.");
+                    expect(window.console.error).toHaveBeenCalledWith(
+                        "facade.subscribeTo is expecting 2nd argument 'controller' to be defined."
+                    );
                     expect(result).not.toEqual(jasmine.any(Function));
                 });
 
@@ -164,7 +172,7 @@ define(["Squire", "helpers/mediator"],
                             expect(resultFunction).toEqual(jasmine.any(Function));
                         });
 
-                        xit("should call subscribe() when the returned function is executed", function () {
+                        it("should call subscribe() when the returned function is executed", function () {
                             spyOn(facadeClass, "subscribe").andCallFake(function () { });
 
                             resultFunction = facadeClass.subscribeTo(channel, controller);
@@ -177,8 +185,6 @@ define(["Squire", "helpers/mediator"],
                             expect(facadeClass.subscribe.mostRecentCall.args[2]).toEqual(controller);
                             expect(facadeClass.subscribe.mostRecentCall.args[3]).toEqual(action);
                             expect(facadeClass.subscribe.mostRecentCall.args[4]).toEqual(condition);
-
-                            // TODO: figure out why the facadeClass.subscribe() spy isn't getting called
                         });
                     });
 
@@ -245,33 +251,35 @@ define(["Squire", "helpers/mediator"],
                     expect(facadeClass.publish).toEqual(jasmine.any(Function));
                 });
 
-                it("should call mediator.publish() with additional arguments when there are additional arguments", function () {
-                    var channel = "mockChannel",
-                        subscriber = "mockSubscriber",
-                        argument1 = "argument1",
-                        argument2 = "argument2";
+                it("should call mediator.publish() with additional arguments when there are additional arguments",
+                    function () {
+                        var channel = "mockChannel",
+                            subscriber = "mockSubscriber",
+                            argument1 = "argument1",
+                            argument2 = "argument2";
 
-                    facadeClass.publish(channel, subscriber, argument1, argument2);
+                        facadeClass.publish(channel, subscriber, argument1, argument2);
 
-                    expect(mediator.publish).toHaveBeenCalled();
-                    expect(mediator.publish.mostRecentCall.args.length).toEqual(4);
-                    expect(mediator.publish.mostRecentCall.args[0]).toEqual(channel);
-                    expect(mediator.publish.mostRecentCall.args[1]).toEqual(subscriber);
-                    expect(mediator.publish.mostRecentCall.args[2]).toEqual(argument1);
-                    expect(mediator.publish.mostRecentCall.args[3]).toEqual(argument2);
-                });
+                        expect(mediator.publish).toHaveBeenCalled();
+                        expect(mediator.publish.mostRecentCall.args.length).toEqual(4);
+                        expect(mediator.publish.mostRecentCall.args[0]).toEqual(channel);
+                        expect(mediator.publish.mostRecentCall.args[1]).toEqual(subscriber);
+                        expect(mediator.publish.mostRecentCall.args[2]).toEqual(argument1);
+                        expect(mediator.publish.mostRecentCall.args[3]).toEqual(argument2);
+                    });
 
-                it("should call mediator.publish() without additional arguments when there are not additional arguments", function () {
-                    var channel = "mockChannel",
-                        subscriber = "mockSubscriber";
+                it("should call mediator.publish() without additional arguments when there are no additional arguments",
+                    function () {
+                        var channel = "mockChannel",
+                            subscriber = "mockSubscriber";
 
-                    facadeClass.publish(channel, subscriber);
+                        facadeClass.publish(channel, subscriber);
 
-                    expect(mediator.publish).toHaveBeenCalled();
-                    expect(mediator.publish.mostRecentCall.args.length).toEqual(2);
-                    expect(mediator.publish.mostRecentCall.args[0]).toEqual(channel);
-                    expect(mediator.publish.mostRecentCall.args[1]).toEqual(subscriber);
-                });
+                        expect(mediator.publish).toHaveBeenCalled();
+                        expect(mediator.publish.mostRecentCall.args.length).toEqual(2);
+                        expect(mediator.publish.mostRecentCall.args[0]).toEqual(channel);
+                        expect(mediator.publish.mostRecentCall.args[1]).toEqual(subscriber);
+                    });
             });
 
         });
