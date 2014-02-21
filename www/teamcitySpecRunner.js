@@ -109,14 +109,17 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
 
         // Views
         specs.push("spec/views/AppViewSpec.js");
+        specs.push("spec/views/LoginViewSpec.js");
 
         // Models
         specs.push("spec/models/AppModelSpec.js");
+        specs.push("spec/models/LoginModelSpec.js");
 
         // Collections
 
         // Controllers
         specs.push("spec/controllers/AppControllerSpec.js");
+        specs.push("spec/controllers/LoginControllerSpec.js");
 
         // Routers
         specs.push("spec/routers/AppRouterSpec.js");
