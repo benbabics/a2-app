@@ -33,6 +33,9 @@ define([ "jclass", "routers/AppRouter", "views/AppView", "models/AppModel"],
                 this.appRouter.start();
                 this.appView.render();
 
+                // navigate to the Login page
+                this.appRouter.navigate("login", {trigger: true, replace: true}); // TODO: remove once version update checking is added
+
                 // now that everything is ready, hide the splashscreen
                 setTimeout(function () {
                     if (navigator.splashscreen) {

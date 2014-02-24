@@ -1,5 +1,5 @@
-define(["backbone"],
-    function (Backbone) {
+define(["backbone", "utils", "mustache", "text!tmpl/login/page.html"],
+    function (Backbone, utils, Mustache, template) {
 
         "use strict";
 
@@ -7,9 +7,7 @@ define(["backbone"],
         var LoginView;
         LoginView = Backbone.View.extend({
 
-            el: null,
-
-            template: null,
+            el: utils.$("#login"),
 
             events: {
             },
@@ -23,9 +21,8 @@ define(["backbone"],
             },
 
             pageCreate: function () {
-            },
-
-            render: function () {
+                var $content = this.$el.find(":jqmData(role=content)");
+                $content.html(Mustache.render(template));
             }
         });
 
