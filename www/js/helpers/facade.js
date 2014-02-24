@@ -25,13 +25,15 @@ define(["utils", "helpers/mediator"],
         }
 
         function subscribeTo(channel, controller) {
+            var self = this;
+
             // only return the function if the require params are valid
             if (validateParameterIsDefined("facade.subscribeTo", channel, "1st", "channel") &&
                     validateParameterIsDefined("facade.subscribeTo", controller, "2nd", "controller")) {
 
                 return function (subscription, action, condition) {
                     if (action && utils.isFn(controller[action])) {
-                        this.subscribe(channel, subscription, controller, action, condition);
+                        self.subscribe(channel, subscription, controller, action, condition);
                     }
                 };
             }

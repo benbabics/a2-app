@@ -41,6 +41,12 @@ define(["backbone", "Squire", "jasmine-jquery"],
                 expect(appView instanceof Backbone.View).toBeTruthy();
             });
 
+            describe("has events that", function () {
+                it("should call handlePageBack when a data-rel=back is clicked", function () {
+                    expect(appView.events["click [data-rel=back]"]).toEqual("handlePageBack");
+                });
+            });
+
             describe("has a constructor that", function () {
                 it("is defined", function () {
                     expect(appView.constructor).toBeDefined();
@@ -128,6 +134,35 @@ define(["backbone", "Squire", "jasmine-jquery"],
                         expect(appView.$el.toggleClass.mostRecentCall.args[0]).toEqual("ui-hidden");
                         expect(appView.$el.toggleClass.mostRecentCall.args[1]).toBeTruthy();
                     });
+                });
+            });
+
+            describe("has a handlePageBack function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    spyOn(mockEvent, "preventDefault").andCallThrough();
+                    spyOn(window.history, "back").andCallFake(function () {});
+
+                    appView.handlePageBack(mockEvent);
+                });
+
+                it("is defined", function () {
+                    expect(appView.handlePageBack).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appView.handlePageBack).toEqual(jasmine.any(Function));
+                });
+
+                it("should call event.preventDefault", function () {
+                    expect(mockEvent.preventDefault).toHaveBeenCalled();
+                });
+
+                it("should call window.history.back", function () {
+                    expect(window.history.back).toHaveBeenCalled();
                 });
             });
         });
