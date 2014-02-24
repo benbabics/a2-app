@@ -38,6 +38,33 @@ define(["Squire", "jasmine-jquery"],
                 });
             });
 
+            describe("has an initialize function that", function () {
+                it("is defined", function () {
+                    expect(loginView.initialize).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(loginView.initialize).toEqual(jasmine.any(Function));
+                });
+
+                it("should call pageCreate()", function () {
+                    spyOn(loginView, "pageCreate").andCallFake(function () { });
+                    loginView.initialize();
+
+                    expect(loginView.pageCreate).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a pageCreate function that", function () {
+                it("is defined", function () {
+                    expect(loginView.pageCreate).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(loginView.pageCreate).toEqual(jasmine.any(Function));
+                });
+            });
+
             describe("has a render function that", function () {
                 it("is defined", function () {
                     expect(loginView.render).toBeDefined();

@@ -13,8 +13,8 @@ define(["Squire"],
             },
             loginController;
 
-        squire.mock("views/LoginView", Squire.Helpers.constructs(mockLoginView));
-        squire.mock("models/LoginModel", Squire.Helpers.constructs(mockLoginModel));
+        squire.mock("views/LoginView", Squire.Helpers.returns(mockLoginView));
+        squire.mock("models/LoginModel", Squire.Helpers.returns(mockLoginModel));
 
         describe("A Login Controller", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -22,6 +22,7 @@ define(["Squire"],
             jasmineAsync.beforeEach(function (done) {
                 squire.require(["controllers/LoginController"], function (LoginController) {
                     loginController = LoginController;
+                    loginController.init();
 
                     done();
                 });
@@ -48,6 +49,16 @@ define(["Squire"],
 
                 it("is a function", function () {
                     expect(loginController.init).toEqual(jasmine.any(Function));
+                });
+
+                it("should set the loginModel variable to a new LoginModel object", function () {
+                    expect(loginController.getLoginModel()).not.toBeNull();
+                    expect(loginController.getLoginModel()).toEqual(mockLoginModel);
+                });
+
+                it("should set the loginView variable to a new LoginView object", function () {
+                    expect(loginController.getLoginView()).not.toBeNull();
+                    expect(loginController.getLoginView()).toEqual(mockLoginView);
                 });
             });
         });

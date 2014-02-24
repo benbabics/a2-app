@@ -1,42 +1,18 @@
-define(["backbone", "utils"],
-    function (Backbone, utils) {
+define(["backbone"],
+    function (Backbone) {
 
         "use strict";
 
 
-        var LoginModel;
-        LoginModel = (function (_super) {
+        var LoginModel = Backbone.Model.extend({
 
-            /***********************************************************************
-             * Private Methods
-             ***********************************************************************/
+            defaults: {},
 
+            initialize: function () {
 
-
-            /***********************************************************************
-             * Constructor
-             ***********************************************************************/
-            utils.extend(LoginModel, _super);
-
-            function LoginModel() {
-                LoginModel.__super__.constructor.apply(this, arguments);
             }
 
-            LoginModel.prototype.defaults = {
-            };
-
-            LoginModel.prototype.initialize = function (attrs, options) {
-            };
-
-
-            /***********************************************************************
-             * Public Methods
-             ***********************************************************************/
-
-
-            return LoginModel;
-
-        })(Backbone.Model);
+        });
 
 
         return LoginModel;
