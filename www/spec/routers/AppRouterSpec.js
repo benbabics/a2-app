@@ -5,14 +5,10 @@ define(["utils", "Squire", "backbone"],
 
         var squire = new Squire(),
             appRouter,
-            mockFacade = {
-                publish: function (channel, event) { }
-            },
             mockUtils = utils,
             mockBackbone = Backbone;
 
         squire.mock("backbone", mockBackbone);
-        squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
 
         describe("An AppRouter", function () {

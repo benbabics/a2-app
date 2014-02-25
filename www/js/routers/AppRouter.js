@@ -1,5 +1,5 @@
-define(["backbone", "utils", "facade"],
-    function (Backbone, utils, facade) {
+define(["backbone", "utils"],
+    function (Backbone, utils) {
 
         "use strict";
 
