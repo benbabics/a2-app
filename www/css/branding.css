@@ -2,9 +2,6 @@
 
 /* Branding */
 .ui-page:not(.ui-dialog) .ui-header h1.ui-title {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    line-height: 37px; /* height of logo image */
     text-indent: -9999px;
     background: url("../img/logo.png") center center no-repeat;
 }
