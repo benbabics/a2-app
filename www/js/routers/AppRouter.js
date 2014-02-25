@@ -9,8 +9,6 @@ define(["backbone", "utils", "facade"],
              * Route Definitions
             */
             routes: {
-                "about": "navigateAbout",
-
                 "*page": "changePage",
 
                 ""     : "root"
@@ -19,10 +17,6 @@ define(["backbone", "utils", "facade"],
             /*
              * Route Handlers
             */
-            navigateAbout: function () {
-                facade.publish("about", "navigate");
-            },
-
             changePage: function (page) {
                 utils.changePage("#" + page, null, null, true);
             },

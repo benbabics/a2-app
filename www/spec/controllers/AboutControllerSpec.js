@@ -84,31 +84,5 @@ define(["utils", "backbone", "Squire"],
                     });
                 });
             });
-
-            describe("has a navigate function that", function () {
-                beforeEach(function () {
-                    spyOn(mockUtils, "changePage").andCallFake(function () { });
-
-                    aboutController.navigate();
-                });
-
-                it("is defined", function () {
-                    expect(aboutController.navigate).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(aboutController.navigate).toEqual(jasmine.any(Function));
-                });
-
-                it("should call changePage on utils", function () {
-                    expect(mockUtils.changePage).toHaveBeenCalled();
-
-                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(4);
-                    expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual(mockAboutView.$el);
-                    expect(mockUtils.changePage.mostRecentCall.args[1]).toBeNull();
-                    expect(mockUtils.changePage.mostRecentCall.args[2]).toBeNull();
-                    expect(mockUtils.changePage.mostRecentCall.args[3]).toBeTruthy();
-                });
-            });
         });
     });

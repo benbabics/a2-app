@@ -1,5 +1,5 @@
-define(["jclass", "utils", "views/AboutView", "models/AppModel"],
-    function (JClass, utils, AboutView, AppModel) {
+define(["jclass", "views/AboutView", "models/AppModel"],
+    function (JClass, AboutView, AppModel) {
 
         "use strict";
 
@@ -20,10 +20,6 @@ define(["jclass", "utils", "views/AboutView", "models/AppModel"],
                 this.aboutView = new AboutView({
                     model: AppModel.getInstance()
                 });
-            },
-
-            navigate: function () {
-                utils.changePage(this.aboutView.$el, null, null, true);
             }
         }, classOptions);
 
