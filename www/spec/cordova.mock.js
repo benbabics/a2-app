@@ -26,9 +26,9 @@ navigator.splashscreen = {
 // Device plugin
 device = {
     available: false,
-    platform: null,
-    version : null,
-    uuid    : null,
+    platform: "Mock Platform",
+    version : "Mock Platform Version",
+    uuid    : "Mock Device Id",
     cordova : null,
     model   : null,
     getInfo : function (successCallback, errorCallback) { }

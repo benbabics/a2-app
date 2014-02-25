@@ -1,12 +1,12 @@
-define(["backbone", "Squire"],
-    function (Backbone, Squire) {
+define(["utils", "backbone", "Squire"],
+    function (utils, Backbone, Squire) {
 
         "use strict";
 
         var squire = new Squire(),
+            mockUtils = utils,
             mockAppModel = {
                 "buildVersion"   : "Mock Build Version",
-                "deviceId"       : "Mock Device Id",
                 "platform"       : "Mock Platform",
                 "platformVersion": "Mock Platform Version"
             },
@@ -16,11 +16,11 @@ define(["backbone", "Squire"],
             },
             mockAboutView = {
                 $el: "#about",
-                constructor: function () { },
-                initialize: function () { }
+                constructor: function () { }
             },
             aboutController;
 
+        squire.mock("utils", mockUtils);
         squire.mock("models/AppModel", AppModel);
         squire.mock("views/AboutView", Squire.Helpers.returns(mockAboutView));
 
@@ -65,12 +65,6 @@ define(["backbone", "Squire"],
                     expect(aboutController.init).toEqual(jasmine.any(Function));
                 });
 
-                describe("when initializing the AppModel", function () {
-                    it("should set the appModel variable to the AppModel instance", function () {
-                        expect(aboutController.appModel).toEqual(appModel);
-                    });
-                });
-
                 describe("when initializing the AboutView", function () {
                     beforeEach(function () {
                         spyOn(aboutController, "constructor").andCallThrough();
@@ -79,6 +73,41 @@ define(["backbone", "Squire"],
                     it("should set the aboutView variable to a new AboutView object", function () {
                         expect(aboutController.aboutView).toEqual(mockAboutView);
                     });
+
+                    xit('should send in the AppModel as the model argument', function () {
+                        expect(mockAboutView.constructor).toHaveBeenCalled();
+                        expect(mockAboutView.constructor).toHaveBeenCalledWith({
+                            model: AppModel.getInstance()
+                        });
+
+                        // TODO: this isn't working, need to figure out how to test
+                    });
+                });
+            });
+
+            describe("has a navigate function that", function () {
+                beforeEach(function () {
+                    spyOn(mockUtils, "changePage").andCallFake(function () { });
+
+                    aboutController.navigate();
+                });
+
+                it("is defined", function () {
+                    expect(aboutController.navigate).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(aboutController.navigate).toEqual(jasmine.any(Function));
+                });
+
+                it("should call changePage on utils", function () {
+                    expect(mockUtils.changePage).toHaveBeenCalled();
+
+                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(4);
+                    expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual(mockAboutView.$el);
+                    expect(mockUtils.changePage.mostRecentCall.args[1]).toBeNull();
+                    expect(mockUtils.changePage.mostRecentCall.args[2]).toBeNull();
+                    expect(mockUtils.changePage.mostRecentCall.args[3]).toBeTruthy();
                 });
             });
         });

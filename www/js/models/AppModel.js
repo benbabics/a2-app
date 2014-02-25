@@ -7,13 +7,15 @@ define(["backbone"],
         var AppModel = Backbone.Model.extend({
             defaults: {
                 "buildVersion"   : "Unknown",
-                "deviceId"       : "Unknown",
                 "platform"       : "Unknown",
                 "platformVersion": "Unknown"
             },
 
             initialize: function () {
                 var self = this;
+
+                this.set("platform", device.platform);
+                this.set("platformVersion", device.version);
 
                 // Set the build version
                 ApplicationInfo.getBuildVersion(function (version) {

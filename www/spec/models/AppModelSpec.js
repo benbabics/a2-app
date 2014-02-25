@@ -35,10 +35,6 @@ define(["globals", "Squire"],
                     expect(appModel.defaults.buildVersion).toEqual("Unknown");
                 });
 
-                it("should set deviceId to \"Unknown\"", function () {
-                    expect(appModel.defaults.deviceId).toEqual("Unknown");
-                });
-
                 it("should set platform to \"Unknown\"", function () {
                     expect(appModel.defaults.platform).toEqual("Unknown");
                 });
@@ -61,13 +57,20 @@ define(["globals", "Squire"],
                     expect(appModel.initialize).toEqual(jasmine.any(Function));
                 });
 
+                it("should set platform with the device's platform", function () {
+                    expect(appModel.get("platform")).toEqual(device.platform);
+                });
+
+                it("should set platformVersion with the device's version", function () {
+                    expect(appModel.get("platformVersion")).toEqual(device.version);
+                });
+
                 it("should call the ApplicationInfo getBuildVersion function", function () {
                     expect(ApplicationInfo.getBuildVersion).toHaveBeenCalled();
 
                     expect(ApplicationInfo.getBuildVersion.mostRecentCall.args.length).toEqual(1);
                     expect(ApplicationInfo.getBuildVersion.mostRecentCall.args[0]).toEqual(jasmine.any(Function));
                 });
-
 
                 it("should set application name with the Application Info\"s version", function () {
                     expect(appModel.get("buildVersion")).toEqual(MOCK_APPLICATION_INFO.version);

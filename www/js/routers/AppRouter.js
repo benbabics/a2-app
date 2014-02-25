@@ -1,5 +1,5 @@
-define(["backbone", "utils"],
-    function (Backbone, utils) {
+define(["backbone", "utils", "facade"],
+    function (Backbone, utils, facade) {
 
         "use strict";
 
@@ -9,14 +9,20 @@ define(["backbone", "utils"],
              * Route Definitions
             */
             routes: {
-                "*page"              : "changePage",
+                "about": "navigateAbout",
 
-                ""                   : "root"
+                "*page": "changePage",
+
+                ""     : "root"
             },
 
             /*
              * Route Handlers
             */
+            navigateAbout: function () {
+                facade.publish("about", "navigate");
+            },
+
             changePage: function (page) {
                 utils.changePage("#" + page, null, null, true);
             },

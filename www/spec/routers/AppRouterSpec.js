@@ -5,10 +5,14 @@ define(["utils", "Squire", "backbone"],
 
         var squire = new Squire(),
             appRouter,
+            mockFacade = {
+                publish: function (channel, event) { }
+            },
             mockUtils = utils,
             mockBackbone = Backbone;
 
         squire.mock("backbone", mockBackbone);
+        squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
 
         describe("An AppRouter", function () {
@@ -30,12 +34,44 @@ define(["utils", "Squire", "backbone"],
             });
 
             describe("has property routes that", function () {
+                it("should set 'about' to navigateAbout", function () {
+                    expect(appRouter.routes.about).toEqual("navigateAbout");
+                });
+
                 it("should set '*page' to changePage", function () {
                     expect(appRouter.routes["*page"]).toEqual("changePage");
                 });
 
                 it("should set an empty string to root", function () {
                     expect(appRouter.routes[""]).toEqual("root");
+                });
+            });
+
+            describe("has a navigateAbout function that", function () {
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").andCallFake(function () { });
+
+                    appRouter.navigateAbout();
+                });
+
+                it("is defined", function () {
+                    expect(appRouter.navigateAbout).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appRouter.navigateAbout).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on facade", function () {
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
+
+                    // First parameter is the channel about
+                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("about");
+
+                    // Second parameter is the navigate event
+                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
                 });
             });
 

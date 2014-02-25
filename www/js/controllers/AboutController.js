@@ -1,5 +1,5 @@
-define(["jclass", "views/AboutView", "models/AppModel"],
-    function (JClass, AboutView, AppModel) {
+define(["jclass", "utils", "views/AboutView", "models/AppModel"],
+    function (JClass, utils, AboutView, AppModel) {
 
         "use strict";
 
@@ -11,17 +11,19 @@ define(["jclass", "views/AboutView", "models/AppModel"],
 
         AboutController = JClass.extend({
             aboutView: null,
-            appModel: null,
 
             construct: function () {
             },
 
             init: function () {
-                // create model
-                this.appModel = AppModel.getInstance();
-
                 // create view
-                this.aboutView = new AboutView();
+                this.aboutView = new AboutView({
+                    model: AppModel.getInstance()
+                });
+            },
+
+            navigate: function () {
+                utils.changePage(this.aboutView.$el, null, null, true);
             }
         }, classOptions);
 

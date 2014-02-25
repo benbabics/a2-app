@@ -38,6 +38,7 @@
 
         // Cordova
         "Connection" : false,
+        "device"     : false,
 
         // Jasmine
         "jasmine"      : false,
