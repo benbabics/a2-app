@@ -1,0 +1,101 @@
+@charset "UTF-8";
+@import url("jquery.mobile-min.css");
+
+.layout-inline { display: inline; }
+.layout-block  { display: block;  }
+
+.layout-left  { float: left; }
+.layout-right { float: right; }
+
+.text-left   { text-align: left;   }
+.text-center { text-align: center; }
+.text-right  { text-align: right;  }
+
+.text-bold   { font-weight: bold; }
+.text-normal { font-weight: normal; }
+
+a.format-detection-no { text-decoration: none; font-weight: inherit !important; color: inherit !important; cursor: default; }
+
+.ui-field-contain label .required { color: #990000; font-weight: bold; }
+
+.ui-field-contain input.ui-input-text { white-space: pre; }
+.text-result strong { display: block; }
+.text-result-whitespace strong { display: block; }
+.text-result-whitespace { white-space: pre; }
+.text-instructional { font-size: 0.8em; }
+
+.ui-mobile [data-role="page"],
+.ui-mobile [data-role="dialog"],
+.ui-page {
+    border-color: black transparent transparent black;
+    border-style: solid !important;
+    border-width: 1px;
+}
+
+/* List Styling */
+.ui-li-desc.text-result strong { display: inline-block; margin: 0 5px 5px 0; }
+.ui-li-desc.text-result-whitespace strong { display: inline-block; margin: 0 5px 5px 0; }
+.ui-li-has-thumb .ui-btn-inner a.ui-link-inherit img { margin: 5px 0 0 5px; }
+.ui-li-has-thumb .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-thumb { padding-left: 60px; min-height: inherit; }
+
+
+/* Form Styling */
+.ui-body { border-radius: 10px; }
+.ui-body + .ui-btn { margin-top: 20px; }
+.ui-field-contain { padding: 10px 0; border-bottom-width: 0; }
+
+/* Content - Application Titlebar */
+.ui-header h1.ui-title { margin-left: 0; margin-right: 0; }
+
+/* Content - Section Title */
+[data-role="content"] h2.ui-title {
+    margin: 0 0 10px;
+    padding-left: 40px;
+    font-size: 1.2em;
+    line-height: 40px;
+    background-position: 0px center;
+    background-repeat: no-repeat;
+}
+.ui-card h2.ui-title    { background-image: url("../img/ui-icon_Card.png")     }
+.ui-driver h2.ui-title  { background-image: url("../img/ui-icon_Driver.png")   }
+.ui-invoice h2.ui-title { background-image: url("../img/ui-icon_Invoices.png") }
+
+/* Collapsible Content */
+.ui-collapsible.ui-collapsible-collapsed.ui-body-d {
+	border-color: transparent;
+	background: none;
+}
+
+
+
+/*
+ * jQuery UI Datepicker @VERSION
+ *
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Datepicker#theming
+ */
+div.hasDatepicker{ display: block; padding: 0; overflow: visible;  margin: 8px 0; }
+.ui-datepicker {  overflow: visible; margin: 0 auto; /*max-width: 500px;*/  }
+.ui-datepicker .ui-datepicker-header { position:relative; padding:.4em 0; border-bottom: 0; font-weight: bold; }
+
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { padding: 1px 0 1px 2px; position:absolute; top: .5em; margin-top: 0; text-indent: -9999px; }
+.ui-datepicker .ui-datepicker-prev { left:6px; }
+.ui-datepicker .ui-datepicker-next { right:6px; }
+
+.ui-datepicker .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; }
+.ui-datepicker .ui-datepicker-title select { font-size:1em; margin:1px 0; }
+.ui-datepicker select.ui-datepicker-month-year {width: 100%;}
+.ui-datepicker select.ui-datepicker-month,
+.ui-datepicker select.ui-datepicker-year { width: 49%;}
+.ui-datepicker table {width: 100%; border-collapse: collapse; margin:0; }
+.ui-datepicker td { border-width: 1px; padding: 0; text-align: center; }
+.ui-datepicker td span, .ui-datepicker td a { display: block; padding: .2em 0; font-weight: bold; margin: 0; border-width: 0; text-align: center; text-decoration: none; }
+
+.ui-datepicker-calendar th { padding-top: .3em; padding-bottom: .3em; }
+.ui-datepicker-calendar th span, .ui-datepicker-calendar span.ui-state-default { opacity: .3; }
+.ui-datepicker-calendar td a { padding-top: .5em; padding-bottom: .5em; }
+
+.min-width-480px div.hasDatepicker  { width: 63%; display: inline-block; margin: 0; }
