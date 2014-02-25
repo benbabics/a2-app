@@ -34,6 +34,18 @@ define(["globals", "Squire"],
                 it("should set buildVersion to \"Unknown\"", function () {
                     expect(appModel.defaults.buildVersion).toEqual("Unknown");
                 });
+
+                it("should set deviceId to \"Unknown\"", function () {
+                    expect(appModel.defaults.deviceId).toEqual("Unknown");
+                });
+
+                it("should set platform to \"Unknown\"", function () {
+                    expect(appModel.defaults.platform).toEqual("Unknown");
+                });
+
+                it("should set platformVersion to \"Unknown\"", function () {
+                    expect(appModel.defaults.platformVersion).toEqual("Unknown");
+                });
             });
 
             describe("has an initialize function that", function () {

@@ -108,6 +108,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
          **********************************************************************************************************/
 
         // Views
+        specs.push("spec/views/AboutViewSpec.js");
         specs.push("spec/views/AppViewSpec.js");
         specs.push("spec/views/LoginViewSpec.js");
 
@@ -118,6 +119,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
         // Collections
 
         // Controllers
+        specs.push("spec/controllers/AboutControllerSpec.js");
         specs.push("spec/controllers/AppControllerSpec.js");
         specs.push("spec/controllers/LoginControllerSpec.js");
 

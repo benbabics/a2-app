@@ -12,7 +12,8 @@ define(["backbone", "Squire"],
                 getInstance: function () { }
             },
             mockRouter = {
-                start: function () { }
+                start: function () { },
+                navigate: function () { }
             },
             mockAppView = {
                 $el: "",

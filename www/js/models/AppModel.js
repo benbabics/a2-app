@@ -6,7 +6,10 @@ define(["backbone"],
 
         var AppModel = Backbone.Model.extend({
             defaults: {
-                "buildVersion": "Unknown"
+                "buildVersion"   : "Unknown",
+                "deviceId"       : "Unknown",
+                "platform"       : "Unknown",
+                "platformVersion": "Unknown"
             },
 
             initialize: function () {
