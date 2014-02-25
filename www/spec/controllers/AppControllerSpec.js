@@ -104,6 +104,7 @@ define(["backbone", "Squire"],
             describe("has a ready function that", function () {
                 beforeEach(function () {
                     spyOn(mockRouter, "start").andCallThrough();
+                    spyOn(mockRouter, "navigate").andCallFake(function () { });
                     spyOn(mockAppView, "render").andCallThrough();
                     spyOn(window, "setTimeout").andCallThrough();
 
@@ -129,6 +130,13 @@ define(["backbone", "Squire"],
                     expect(mockAppView.render).toHaveBeenCalled();
 
                     expect(mockAppView.render.mostRecentCall.args.length).toEqual(0);
+                });
+
+                it("should call navigate to the login page", function () {
+                    expect(mockRouter.navigate).toHaveBeenCalled();
+                    expect(mockRouter.navigate.mostRecentCall.args.length).toEqual(2);
+                    expect(mockRouter.navigate.mostRecentCall.args[0]).toEqual("login");
+                    expect(mockRouter.navigate.mostRecentCall.args[1]).toEqual({trigger: true, replace: true});
                 });
 
                 it("should call the window setTimeout function", function () {

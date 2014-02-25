@@ -1,5 +1,5 @@
 define(["backbone", "utils", "mustache", "text!tmpl/login/page.html"],
-    function (Backbone, utils, Mustache, template) {
+    function (Backbone, utils, Mustache, pageTemplate) {
 
         "use strict";
 
@@ -7,7 +7,9 @@ define(["backbone", "utils", "mustache", "text!tmpl/login/page.html"],
         var LoginView;
         LoginView = Backbone.View.extend({
 
-            el: utils.$("#login"),
+            el: "#login",
+
+            template: pageTemplate,
 
             events: {
             },
@@ -16,13 +18,16 @@ define(["backbone", "utils", "mustache", "text!tmpl/login/page.html"],
                 // call super
                 this.constructor.__super__.initialize.apply(this, arguments);
 
+                // cache the template
+                Mustache.parse(this.template);
+
                 // create page
                 this.pageCreate();
             },
 
             pageCreate: function () {
                 var $content = this.$el.find(":jqmData(role=content)");
-                $content.html(Mustache.render(template));
+                $content.html(Mustache.render(this.template));
             }
         });
 
