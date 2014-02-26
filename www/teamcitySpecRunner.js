@@ -10,13 +10,14 @@ require.config({
         "async": "libs/require/async-min",
 
         // Frameworks
-        "cordova"      : "../spec/cordova.mock",
-        "mustache"     : "libs/mustache/mustache-min",
-        "backbone"     : "libs/backbone/backbone-min",
-        "underscore"   : "libs/underscore/underscore-min",
-        "jquery"       : "libs/jquery/jquery-min",
-        "jquery-mobile": "libs/jquery/jquery.mobile-min",
-        "jclass"       : "libs/jclass/jclass-min",
+        "cordova"            : "../spec/cordova.mock",
+        "mustache"           : "libs/mustache/mustache-min",
+        "backbone"           : "libs/backbone/backbone-min",
+        "backbone-validation": "libs/backbone/backbone-validation-amd-min",
+        "underscore"         : "libs/underscore/underscore-min",
+        "jquery"             : "libs/jquery/jquery-min",
+        "jquery-mobile"      : "libs/jquery/jquery.mobile-min",
+        "jclass"             : "libs/jclass/jclass-min",
 
         // Helpers
         "utils"   : "helpers/utils",
