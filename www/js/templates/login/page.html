@@ -1,14 +1,14 @@
 <form id="loginForm" action="#login" method="post" class="ui-body ui-body-d">
     {{#username}}
-    <div data-role="fieldcontain">
+    <div data-role="fieldcontain" {{#required}}data-required{{/required}}>
         <label for="username">{{label}}:</label>
-        <input type="text" name="{{name}}" id="username" {{#required}}data-required{{/required}}>
+        <input type="text" name="{{name}}" id="username" />
     </div>
     {{/username}}
     {{#password}}
-    <div data-role="fieldcontain">
+    <div data-role="fieldcontain" {{#required}}data-required{{/required}}>
         <label for="password">{{label}}:</label>
-        <input type="password" name="{{name}}" id="password" {{#required}}data-required{{/required}}>
+        <input type="password" name="{{name}}" id="password" />
     </div>
     {{/password}}
 </form>
