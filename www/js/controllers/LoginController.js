@@ -1,5 +1,5 @@
-define(["jclass", "views/LoginView", "models/LoginModel"],
-    function (JClass, LoginView, LoginModel) {
+define(["utils", "jclass", "views/LoginView", "models/LoginModel"],
+    function (utils, JClass, LoginView, LoginModel) {
 
         "use strict";
 
@@ -23,6 +23,10 @@ define(["jclass", "views/LoginView", "models/LoginModel"],
 
                 // create view
                 this.__loginView = new LoginView();
+            },
+
+            navigate: function () {
+                utils.changePage(this.__loginView.$el);
             },
 
             getLoginModel: function () {

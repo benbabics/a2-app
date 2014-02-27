@@ -1,5 +1,5 @@
-define(["subscribers/about", "subscribers/app", "subscribers/login"],
-    function (aboutSubscriber, appSubscriber, loginSubscriber) {
+define(["subscribers/about", "subscribers/app", "subscribers/login", "subscribers/updatePrompt"],
+    function (aboutSubscriber, appSubscriber, loginSubscriber, updatePromptSubscriber) {
 
         "use strict";
 
@@ -9,4 +9,5 @@ define(["subscribers/about", "subscribers/app", "subscribers/login"],
         // views
         aboutSubscriber.init();
         loginSubscriber.init();
+        updatePromptSubscriber.init();
     });

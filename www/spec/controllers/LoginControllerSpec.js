@@ -1,9 +1,10 @@
-define(["Squire"],
-    function (Squire) {
+define(["utils", "Squire"],
+    function (utils, Squire) {
 
         "use strict";
 
         var squire = new Squire(),
+            mockUtils = utils,
             mockLoginModel = {},
             mockLoginView = {
                 $el: "",
@@ -13,6 +14,7 @@ define(["Squire"],
             },
             loginController;
 
+        squire.mock("utils", mockUtils);
         squire.mock("views/LoginView", Squire.Helpers.returns(mockLoginView));
         squire.mock("models/LoginModel", Squire.Helpers.returns(mockLoginModel));
 
@@ -59,6 +61,29 @@ define(["Squire"],
                 it("should set the loginView variable to a new LoginView object", function () {
                     expect(loginController.getLoginView()).not.toBeNull();
                     expect(loginController.getLoginView()).toEqual(mockLoginView);
+                });
+            });
+
+            describe("has a navigate function that", function () {
+                beforeEach(function () {
+                    spyOn(mockUtils, "changePage").andCallThrough();
+
+                    loginController.navigate();
+                });
+
+                it("is defined", function () {
+                    expect(loginController.navigate).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(loginController.navigate).toEqual(jasmine.any(Function));
+                });
+
+                it("should change the page to the Login View Page", function () {
+                    expect(mockUtils.changePage).toHaveBeenCalled();
+
+                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(1);
+                    expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual(mockLoginView.$el);
                 });
             });
         });

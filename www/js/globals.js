@@ -10,7 +10,8 @@ define(function (require) {
     * Webservices
     */
     globals.WEBSERVICE = {
-        "ROOT_URL": "https://account.wexmobile.com/mobileweb"
+        "ROOT_URL": "http://10.78.57.14:11080/mobileweb",
+        "APP_PATH": "/app"
     };
 
     /*
@@ -75,15 +76,14 @@ define(function (require) {
         "TITLE"              : "Update Available",
         "FAIL_MESSAGE"       : "A new version of WEXonline is available. Please update to continue using WEXonline.",
         "WARN_MESSAGE"       : "A new version of WEXonline is available. Please update.",
-        "URL_IOS"            : "itms://itunes.apple.com/us/app/wexonline/id568083909?mt=8&uo=4",
-        "URL_ANDROID"        : "market://details?id=com.wex.wol.accountmaintenance",
+        "URL"                : "market://details?id=com.wex.wol.accountmaintenance",
         "PRIMARY_BTN_LABEL"  : "Update",
         "SECONDARY_BTN_LABEL": "Not Now"
     };
 
     // App Version Status
     globals.WEBSERVICE.APP_VERSION_STATUS = {
-        //"URL"           : globals.WEBSERVICE.ROOT_URL + , // TODO: Once this is put in place fill in URL
+        "URL"           : globals.WEBSERVICE.ROOT_URL + globals.WEBSERVICE.APP_PATH + "/accountMaintenanceVersionStatus",
         "VERSION_NUMBER": "versionNumber=",
         "PLATFORM"      : "platform="
     };

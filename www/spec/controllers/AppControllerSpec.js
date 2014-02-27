@@ -132,13 +132,6 @@ define(["backbone", "Squire"],
                     expect(mockAppView.render.mostRecentCall.args.length).toEqual(0);
                 });
 
-                it("should call navigate to the login page", function () {
-                    expect(mockRouter.navigate).toHaveBeenCalled();
-                    expect(mockRouter.navigate.mostRecentCall.args.length).toEqual(2);
-                    expect(mockRouter.navigate.mostRecentCall.args[0]).toEqual("login");
-                    expect(mockRouter.navigate.mostRecentCall.args[1]).toEqual({trigger: true, replace: true});
-                });
-
                 it("should call the window setTimeout function", function () {
                     expect(window.setTimeout).toHaveBeenCalled();
 
