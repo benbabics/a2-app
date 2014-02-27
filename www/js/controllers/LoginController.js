@@ -11,30 +11,25 @@ define(["utils", "jclass", "views/LoginView", "models/LoginModel"],
 
         LoginController = JClass.extend({
 
-            __loginView: null,
-            __loginModel: null,
+            loginView: null,
+            loginModel: null,
 
             construct: function () {
             },
 
             init: function () {
                 // create model
-                this.__loginModel = new LoginModel();
+                this.loginModel = new LoginModel();
 
                 // create view
-                this.__loginView = new LoginView();
+                this.loginView = new LoginView({
+                    model: this.loginModel
+                });
+
             },
 
             navigate: function () {
-                utils.changePage(this.__loginView.$el);
-            },
-
-            getLoginModel: function () {
-                return this.__loginModel;
-            },
-
-            getLoginView: function () {
-                return this.__loginView;
+                utils.changePage(this.loginView.$el);
             }
         }, classOptions);
 

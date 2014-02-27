@@ -88,5 +88,32 @@ define(function (require) {
         "PLATFORM"      : "platform="
     };
 
+    /*
+     * Page :: Login
+     */
+    globals.login = {};
+    globals.login.constants = {
+        //"WEBSERVICE"                   : globals.WEBSERVICE.LOGIN, // TODO: Uncomment once this is filled in
+        "ERROR_USERNAME_REQUIRED_FIELD": "Username must have a value",
+        "ERROR_PASSWORD_REQUIRED_FIELD": "Password must have a value"
+    };
+    globals.login.configuration = {
+        "username": {
+            "label"      : "Username",
+            "name"       : "username",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "password": {
+            "label"      : "Password",
+            "name"       : "password",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "submitButton": {
+            "label": "Login"
+        }
+    };
+
     return globals;
 });

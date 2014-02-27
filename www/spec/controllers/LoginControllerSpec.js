@@ -54,13 +54,13 @@ define(["utils", "Squire"],
                 });
 
                 it("should set the loginModel variable to a new LoginModel object", function () {
-                    expect(loginController.getLoginModel()).not.toBeNull();
-                    expect(loginController.getLoginModel()).toEqual(mockLoginModel);
+                    expect(loginController.loginModel).not.toBeNull();
+                    expect(loginController.loginModel).toEqual(mockLoginModel);
                 });
 
                 it("should set the loginView variable to a new LoginView object", function () {
-                    expect(loginController.getLoginView()).not.toBeNull();
-                    expect(loginController.getLoginView()).toEqual(mockLoginView);
+                    expect(loginController.loginView).not.toBeNull();
+                    expect(loginController.loginView).toEqual(mockLoginView);
                 });
             });
 
