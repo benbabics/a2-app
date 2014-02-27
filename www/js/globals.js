@@ -10,7 +10,7 @@ define(function (require) {
     * Webservices
     */
     globals.WEBSERVICE = {
-        "ROOT_URL": "https://account.wexmobile.com/mobileweb",
+        "ROOT_URL": "@@@STRING_REPLACE_APP_URL@@@",
         "APP_PATH": "/app"
     };
 
@@ -76,7 +76,7 @@ define(function (require) {
         "TITLE"              : "Update Available",
         "FAIL_MESSAGE"       : "A new version of WEXonline is available. Please update to continue using WEXonline.",
         "WARN_MESSAGE"       : "A new version of WEXonline is available. Please update.",
-        "URL"                : "market://details?id=com.wex.wol.accountmaintenance",
+        "URL"                : "@@@STRING_REPLACE_APP_STORE_URL@@@",
         "PRIMARY_BTN_LABEL"  : "Update",
         "SECONDARY_BTN_LABEL": "Not Now"
     };

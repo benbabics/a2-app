@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cordova build
+TARGET=stage cordova build
