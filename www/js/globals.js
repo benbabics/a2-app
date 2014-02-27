@@ -10,7 +10,7 @@ define(function (require) {
     * Webservices
     */
     globals.WEBSERVICE = {
-        "ROOT_URL": "http://10.78.57.14:11080/mobileweb",
+        "ROOT_URL": "https://account.wexmobile.com/mobileweb",
         "APP_PATH": "/app"
     };
 
