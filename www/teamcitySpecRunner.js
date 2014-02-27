@@ -111,6 +111,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
         // Views
         specs.push("spec/views/AboutViewSpec.js");
         specs.push("spec/views/AppViewSpec.js");
+        specs.push("spec/views/FormViewSpec.js");
         specs.push("spec/views/LoginViewSpec.js");
         specs.push("spec/views/UpdatePromptViewSpec.js");
 

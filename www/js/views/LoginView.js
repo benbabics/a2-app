@@ -1,37 +1,24 @@
-define(["backbone", "utils", "mustache", "globals", "text!tmpl/login/page.html", "backbone-validation"],
-    function (Backbone, utils, Mustache, globals, pageTemplate) {
+define(["backbone", "utils", "mustache", "globals", "views/FormView", "text!tmpl/login/page.html", "backbone-validation"],
+    function (Backbone, utils, Mustache, globals, FormView, pageTemplate) {
 
         "use strict";
 
 
         var LoginView;
-        LoginView = Backbone.View.extend({
+        LoginView = FormView.extend({
 
             el: "#login",
 
             template: pageTemplate,
 
             events: {
-                "change :input"         : "handleInputChanged",
-                "click #submitLogin-btn": "submitLogin",
-                "submit #loginForm"     : "submitLogin" // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it
+                "click #submitLogin-btn": "submitForm",
+                "submit #loginForm"     : "submitForm" // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it
             },
 
             initialize: function () {
                 // call super
-                this.constructor.__super__.initialize.apply(this, arguments);
-
-                // Bind the Validation between the View and the Model
-                Backbone.Validation.bind(this);
-
-                // Set handlers for model events
-                this.model.on("invalid", this.handleValidationError);
-
-                // cache the template
-                Mustache.parse(this.template);
-
-                // create page
-                this.pageCreate();
+                LoginView.__super__.initialize.apply(this, arguments);
             },
 
             pageCreate: function () {
@@ -44,18 +31,9 @@ define(["backbone", "utils", "mustache", "globals", "text!tmpl/login/page.html",
                 $content.html(Mustache.render(this.template, configuration));
             },
 
-            updateAttribute: function (attributeName, attributeValue) {
-                this.model.set(attributeName, attributeValue);
-            },
-
             /*
              * Event Handlers
              */
-            handleInputChanged: function (evt) {
-                var target = evt.target;
-                this.updateAttribute(target.name, target.value);
-            },
-
             handleValidationError: function (model, error) {
                 var message = "The following fields are required: \n"; // TODO: put in globals
 
@@ -65,11 +43,6 @@ define(["backbone", "utils", "mustache", "globals", "text!tmpl/login/page.html",
 
                 // TODO: Use the native alert
                 alert(message);
-            },
-
-            submitLogin: function (evt) {
-                evt.preventDefault();
-                this.model.save();
             }
         });
 
