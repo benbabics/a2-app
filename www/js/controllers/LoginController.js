@@ -29,7 +29,7 @@ define(["utils", "jclass", "views/LoginView", "models/LoginModel"],
             },
 
             navigate: function () {
-                utils.changePage(this.loginView.$el);
+                utils.changePage(this.loginView.$el, null, null, true);
             }
         }, classOptions);
 

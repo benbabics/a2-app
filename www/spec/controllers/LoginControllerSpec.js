@@ -82,8 +82,11 @@ define(["utils", "Squire"],
                 it("should change the page to the Login View Page", function () {
                     expect(mockUtils.changePage).toHaveBeenCalled();
 
-                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(1);
+                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(4);
                     expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual(mockLoginView.$el);
+                    expect(mockUtils.changePage.mostRecentCall.args[1]).toBeNull();
+                    expect(mockUtils.changePage.mostRecentCall.args[2]).toBeNull();
+                    expect(mockUtils.changePage.mostRecentCall.args[3]).toBeTruthy();
                 });
             });
         });
