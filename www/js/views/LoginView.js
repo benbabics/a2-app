@@ -11,10 +11,10 @@ define(["backbone", "utils", "mustache", "globals", "views/FormView", "text!tmpl
 
             template: pageTemplate,
 
-            events: {
+            events: utils._.extend({}, FormView.prototype.events, {
                 "click #submitLogin-btn": "submitForm",
                 "submit #loginForm"     : "submitForm" // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it
-            },
+            }),
 
             initialize: function () {
                 // call super

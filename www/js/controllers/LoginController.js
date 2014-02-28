@@ -12,18 +12,14 @@ define(["utils", "jclass", "views/LoginView", "models/LoginModel"],
         LoginController = JClass.extend({
 
             loginView: null,
-            loginModel: null,
 
             construct: function () {
             },
 
             init: function () {
-                // create model
-                this.loginModel = new LoginModel();
-
                 // create view
                 this.loginView = new LoginView({
-                    model: this.loginModel
+                    model: new LoginModel()
                 });
 
             },

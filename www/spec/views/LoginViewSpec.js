@@ -1,5 +1,5 @@
-define(["Squire", "mustache", "globals", "text!tmpl/login/page.html", "jasmine-jquery"],
-    function (Squire, Mustache, globals, pageTemplate) {
+define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html", "jasmine-jquery"],
+    function (Squire, Backbone, Mustache, globals, pageTemplate) {
 
         "use strict";
 
@@ -13,6 +13,7 @@ define(["Squire", "mustache", "globals", "text!tmpl/login/page.html", "jasmine-j
             loginView;
 
         squire.mock("mustache", mockMustache);
+        squire.mock("backbone", Backbone);
 
         describe("A Login View", function () {
             var jasmineAsync = new AsyncSpec(this);

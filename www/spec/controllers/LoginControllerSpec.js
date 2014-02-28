@@ -53,14 +53,24 @@ define(["utils", "Squire"],
                     expect(loginController.init).toEqual(jasmine.any(Function));
                 });
 
-                it("should set the loginModel variable to a new LoginModel object", function () {
-                    expect(loginController.loginModel).not.toBeNull();
-                    expect(loginController.loginModel).toEqual(mockLoginModel);
-                });
+                describe("when initializing the LoginView", function () {
+                    beforeEach(function () {
+                        spyOn(mockLoginView, "constructor").andCallThrough();
+                    });
 
-                it("should set the loginView variable to a new LoginView object", function () {
-                    expect(loginController.loginView).not.toBeNull();
-                    expect(loginController.loginView).toEqual(mockLoginView);
+                    it("should set the loginView variable to a new LoginView object", function () {
+                        expect(loginController.loginView).toEqual(mockLoginView);
+                    });
+
+                    xit("should send in the correct parameters to the constructor", function () {
+                        expect(mockLoginView.constructor).toHaveBeenCalled();
+                        expect(mockLoginView.constructor).toHaveBeenCalledWith({
+                            model: mockLoginModel,
+                            el   : document.body
+                        });
+
+                        // TODO: this is not working, need to figure out how to test
+                    });
                 });
             });
 
