@@ -108,15 +108,17 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
          * All require.config changes and specs added in this file need to also be applied to specRunner.js
          **********************************************************************************************************/
 
-        // Views
+            // Views
         specs.push("spec/views/AboutViewSpec.js");
         specs.push("spec/views/AppViewSpec.js");
+        specs.push("spec/views/ContactUsViewSpec.js");
         specs.push("spec/views/FormViewSpec.js");
         specs.push("spec/views/LoginViewSpec.js");
         specs.push("spec/views/UpdatePromptViewSpec.js");
 
         // Models
         specs.push("spec/models/AppModelSpec.js");
+        specs.push("spec/models/ContactUsModelSpec.js");
         specs.push("spec/models/LoginModelSpec.js");
 
         // Collections
@@ -124,11 +126,15 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
         // Controllers
         specs.push("spec/controllers/AboutControllerSpec.js");
         specs.push("spec/controllers/AppControllerSpec.js");
+        specs.push("spec/controllers/ContactUsControllerSpec.js");
         specs.push("spec/controllers/LoginControllerSpec.js");
         specs.push("spec/controllers/UpdatePromptControllerSpec.js");
 
         // Routers
         specs.push("spec/routers/AppRouterSpec.js");
+
+        // Subscribers
+        specs.push("spec/subscribers/contactUsSpec.js");
 
         // Helpers
         specs.push("spec/helpers/facadeSpec.js");
