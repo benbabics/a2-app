@@ -134,7 +134,12 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
         specs.push("spec/routers/AppRouterSpec.js");
 
         // Subscribers
+        specs.push("spec/subscribers/aboutSpec.js");
+        specs.push("spec/subscribers/appSpec.js");
         specs.push("spec/subscribers/contactUsSpec.js");
+        specs.push("spec/subscribers/loginSpec.js");
+        specs.push("spec/subscribers/mainSpec.js");
+        specs.push("spec/subscribers/updatePromptSpec.js");
 
         // Helpers
         specs.push("spec/helpers/facadeSpec.js");

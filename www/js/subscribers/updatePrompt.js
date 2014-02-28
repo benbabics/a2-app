@@ -7,8 +7,7 @@ define(["facade", "controllers/UpdatePromptController"],
         /*
          * Update Prompt Subscribers
          */
-        var subscribe;
-        subscribe = facade.subscribeTo("updatePrompt", controller);
+        var subscribe = facade.subscribeTo("updatePrompt", controller);
         subscribe("showPromptToUpdateFail", "showPromptToUpdateFail");
         subscribe("showPromptToUpdateWarn", "showPromptToUpdateWarn");
 
