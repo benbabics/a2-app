@@ -36,6 +36,27 @@ define(["backbone", "utils", "mustache", "backbone-validation"],
                 this.model.set(attributeName, attributeValue);
             },
 
+            formatRequiredFields: function () {
+                var $requiredField,
+                    $fieldLabel;
+
+                // Iterate over the model's Validation Rules
+                utils._.each(this.model.validation, function (validationRules, fieldName, list) {
+
+                    // If the field is designated as required
+                    if (validationRules.required) {
+
+                        // Find the label for the required field
+                        $requiredField = this.$el.find("input[name='" + fieldName + "']");
+                        $fieldLabel = $requiredField.prevAll("label[for='" + $requiredField.attr("id") + "']");
+
+                        // Append an asterisk denoting the field is required
+                        $fieldLabel.append("<span class='required'>*</span>");
+                    }
+
+                }, this);
+            },
+
             /*
              * Event Handlers
              */

@@ -1,25 +1,47 @@
-define(["Squire", "mustache", "jasmine-jquery", "backbone-validation"],
-    function (Squire, Mustache) {
+define(["Squire", "mustache", "utils", "jasmine-jquery", "backbone-validation"],
+    function (Squire, Mustache, utils) {
 
         "use strict";
 
         var squire = new Squire(),
             mockMustache = Mustache,
-            formModel = new Backbone.Model(),
+            mockUtils = utils,
+            mockTemplate =
+                "<form>" +
+                    "<div>" +
+                        "<label for='field1'>Field1:</label>" +
+                        "<input type='text' name='field1' id='field1' />" +
+                    "</div>" +
+                    "<div>" +
+                        "<label for='field2'>Field2:</label>" +
+                        "<input type='text' name='field2' id='field2' />" +
+                    "</div>" +
+                    "<div>" +
+                        "<label for='field3'>Field3:</label>" +
+                        "<input type='text' name='field3' id='field3' />" +
+                    "</div>" +
+                "</form>",
+            MockModel = Backbone.Model.extend({
+                validation: {
+                    "field1": {
+                        required: true
+                    },
+                    "field2": {
+                        max: 100
+                    }
+                }
+            }),
+            formModel = new MockModel(),
             formView;
 
         squire.mock("mustache", mockMustache);
+        squire.mock("utils", mockUtils);
 
         describe("A Form View", function () {
             var jasmineAsync = new AsyncSpec(this);
 
-            // Override the default fixture path which is spec/javascripts/fixtures
-            // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "";
-
             jasmineAsync.beforeEach(function (done) {
                 squire.require(["views/FormView"], function (FormView) {
-                    loadFixtures("index.html");
 
                     formView = new FormView({
                         model: formModel
@@ -126,6 +148,51 @@ define(["Squire", "mustache", "jasmine-jquery", "backbone-validation"],
                     expect(formModel.set.mostRecentCall.args[0]).toEqual(key);
                     expect(formModel.set.mostRecentCall.args[1]).toEqual(value);
                 });
+            });
+
+            describe("has a formatRequiredFields function that", function () {
+
+                beforeEach(function () {
+                    spyOn(mockUtils._, "each").andCallThrough();
+
+                    formView.$el.html(mockTemplate);
+                    formView.formatRequiredFields();
+                });
+
+                afterEach(function () {
+                    formView.$el.html("");
+                });
+
+                it("is defined", function () {
+                    expect(formView.formatRequiredFields).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(formView.formatRequiredFields).toEqual(jasmine.any(Function));
+                });
+
+                it("should call utils._.each on the model's validation object", function () {
+                    expect(mockUtils._.each).toHaveBeenCalled();
+                    expect(mockUtils._.each.mostRecentCall.args.length).toEqual(3);
+                    expect(mockUtils._.each.mostRecentCall.args[0]).toEqual(formView.model.validation);
+                    expect(mockUtils._.each.mostRecentCall.args[1]).toEqual(jasmine.any(Function));
+                    expect(mockUtils._.each.mostRecentCall.args[2]).toEqual(formView);
+                });
+
+                it("should add an asterisk to the label of any fields that have a validation rule of required:true",
+                    function () {
+                        expect(formView.$el.find("label[for='field1']")[0]).toContainText("*");
+                    });
+
+                it("should NOT add an asterisk to the label of any fields that have a validation rule of required:true",
+                    function () {
+                        expect(formView.$el.find("label[for='field2']")[0]).not.toContainText("*");
+                    });
+
+                it("should NOT add an asterisk to the label of any fields that do not have any validation rules",
+                    function () {
+                        expect(formView.$el.find("label[for='field3']")[0]).not.toContainText("*");
+                    });
             });
 
             describe("has a handleInputChanged function that", function () {

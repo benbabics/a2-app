@@ -22,13 +22,11 @@ define(["backbone", "utils", "mustache", "globals", "views/FormView", "text!tmpl
             },
 
             pageCreate: function () {
-                var $content = this.$el.find(":jqmData(role=content)"),
-                    configuration;
+                var $content = this.$el.find(":jqmData(role=content)");
 
-                // Merge the Login Form Configuration with the Validation Rules
-                configuration = utils.$.extend(true, globals.login.configuration, this.model.validation);
+                $content.html(Mustache.render(this.template, globals.login.configuration));
 
-                $content.html(Mustache.render(this.template, configuration));
+                this.formatRequiredFields();
             },
 
             /*

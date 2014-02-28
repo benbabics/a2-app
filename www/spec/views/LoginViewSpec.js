@@ -1,5 +1,5 @@
-define(["Squire", "mustache", "globals", "utils", "text!tmpl/login/page.html", "jasmine-jquery"],
-    function (Squire, Mustache, globals, utils, pageTemplate) {
+define(["Squire", "mustache", "globals", "text!tmpl/login/page.html", "jasmine-jquery"],
+    function (Squire, Mustache, globals, pageTemplate) {
 
         "use strict";
 
@@ -84,6 +84,7 @@ define(["Squire", "mustache", "globals", "utils", "text!tmpl/login/page.html", "
             describe("has a pageCreate function that", function () {
                 beforeEach(function () {
                     spyOn(mockMustache, "render").andCallThrough();
+                    spyOn(loginView, "formatRequiredFields").andCallThrough();
                     loginView.initialize();
                 });
 
@@ -102,15 +103,15 @@ define(["Squire", "mustache", "globals", "utils", "text!tmpl/login/page.html", "
                     expect(mockMustache.render.mostRecentCall.args[1]).toEqual(globals.login.configuration);
                 });
 
-                it("sets content", function () {
-                    var expectedContent,
-                        configuration,
-                        $content = loginView.$el.find(":jqmData(role=content)");
-
-                    configuration = utils.$.extend(true, globals.login.configuration, loginView.model.validation);
-                    expectedContent = Mustache.render(pageTemplate, configuration);
+                it("should set the content", function () {
+                    var $content = loginView.$el.find(":jqmData(role=content)"),
+                        expectedContent = Mustache.render(pageTemplate, globals.login.configuration);
 
                     expect($content[0]).toContainHtml(expectedContent);
+                });
+
+                it("should call formatRequiredFields()", function () {
+                    expect(loginView.formatRequiredFields).toHaveBeenCalledWith();
                 });
             });
 

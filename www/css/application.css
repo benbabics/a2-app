@@ -40,7 +40,7 @@ a.format-detection-no { text-decoration: none; font-weight: inherit !important; 
 .ui-body { border-radius: 10px; }
 .ui-body + .ui-btn { margin-top: 20px; }
 .ui-field-contain { padding: 10px 0; border-bottom-width: 0; }
-.ui-field-contain[data-required] label:after { content: " *"; color: #990000; font-weight: bold; }
+.ui-field-contain label .required { color: #990000; font-weight: bold; }
 .ui-field-contain input.ui-input-text { white-space: pre; }
 
 /* Content - Application Titlebar */
