@@ -24,6 +24,7 @@ define([ "utils", "globals", "facade", "jclass", "views/UpdatePromptView", "mode
                 this.updatePromptView = new UpdatePromptView();
 
                 utils.$(function () {
+                    //TODO - Remove this line as it is only here to allow testing in ripple
                     self.appModel.set("buildVersion", "1.1.2");
 
                     // Try to account for the buildVersion being set prior to getting here
