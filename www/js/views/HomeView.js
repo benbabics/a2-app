@@ -1,20 +1,17 @@
-define(["backbone", "utils", "mustache", "globals", "views/FormView", "text!tmpl/contactUs/page.html", "backbone-validation"],
-    function (Backbone, utils, Mustache, globals, FormView, pageTemplate) {
+define(["backbone", "utils", "mustache", "globals", "text!tmpl/home/page.html", "backbone-validation"],
+    function (Backbone, utils, Mustache, globals, pageTemplate) {
 
         "use strict";
 
 
-        var ContactUsView = FormView.extend({
-            el: "#contactUs",
+        var HomeView = Backbone.View.extend({
+            el: "#home",
 
             template: pageTemplate,
 
-            events: {
-            },
-
             initialize: function () {
                 // call super
-                ContactUsView.__super__.initialize.apply(this, arguments);
+                this.constructor.__super__.initialize.apply(this, arguments);
 
                 // parse the template
                 Mustache.parse(this.template);
@@ -27,5 +24,5 @@ define(["backbone", "utils", "mustache", "globals", "views/FormView", "text!tmpl
         });
 
 
-        return ContactUsView;
+        return HomeView;
     });

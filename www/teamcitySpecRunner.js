@@ -113,6 +113,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
         specs.push("spec/views/AppViewSpec.js");
         specs.push("spec/views/ContactUsViewSpec.js");
         specs.push("spec/views/FormViewSpec.js");
+        specs.push("spec/views/HomeViewSpec.js");
         specs.push("spec/views/LoginViewSpec.js");
         specs.push("spec/views/UpdatePromptViewSpec.js");
 
@@ -127,6 +128,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
         specs.push("spec/controllers/AboutControllerSpec.js");
         specs.push("spec/controllers/AppControllerSpec.js");
         specs.push("spec/controllers/ContactUsControllerSpec.js");
+        specs.push("spec/controllers/HomeControllerSpec.js");
         specs.push("spec/controllers/LoginControllerSpec.js");
         specs.push("spec/controllers/UpdatePromptControllerSpec.js");
 
@@ -137,6 +139,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
         specs.push("spec/subscribers/aboutSpec.js");
         specs.push("spec/subscribers/appSpec.js");
         specs.push("spec/subscribers/contactUsSpec.js");
+        specs.push("spec/subscribers/homeSpec.js");
         specs.push("spec/subscribers/loginSpec.js");
         specs.push("spec/subscribers/mainSpec.js");
         specs.push("spec/subscribers/updatePromptSpec.js");

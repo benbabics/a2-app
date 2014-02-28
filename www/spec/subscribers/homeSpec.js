@@ -9,54 +9,54 @@ define(["Squire"],
             mockFacade = {
                 subscribeTo: jasmine.createSpy("subscribeTo() spy").andReturn(mockSubscribe)
             },
-            mockContactUsController = {
+            mockHomeController = {
                 init: function () { }
             },
-            contactUsSubscriber;
+            homeSubscriber;
 
         squire.mock("facade", mockFacade);
-        squire.mock("controllers/ContactUsController", mockContactUsController);
+        squire.mock("controllers/HomeController", mockHomeController);
 
-        describe("A Contact Us Subscriber", function () {
+        describe("A Home Subscriber", function () {
             var jasmineAsync = new AsyncSpec(this);
 
             jasmineAsync.beforeEach(function (done) {
-                squire.require(["subscribers/contactUs"], function (jasmineContactUsSubscriber) {
-                    contactUsSubscriber = jasmineContactUsSubscriber;
+                squire.require(["subscribers/home"], function (jasmineHomeSubscriber) {
+                    homeSubscriber = jasmineHomeSubscriber;
                     done();
                 });
             });
 
             it("is defined", function () {
-                expect(contactUsSubscriber).toBeDefined();
+                expect(homeSubscriber).toBeDefined();
             });
 
             it("should call the subscribeTo function on the facade", function () {
                 expect(mockFacade.subscribeTo).toHaveBeenCalled();
 
                 expect(mockFacade.subscribeTo.mostRecentCall.args.length).toEqual(2);
-                expect(mockFacade.subscribeTo.mostRecentCall.args[0]).toEqual("contactUs");
-                expect(mockFacade.subscribeTo.mostRecentCall.args[1]).toEqual(mockContactUsController);
+                expect(mockFacade.subscribeTo.mostRecentCall.args[0]).toEqual("home");
+                expect(mockFacade.subscribeTo.mostRecentCall.args[1]).toEqual(mockHomeController);
             });
 
             describe("has an init function that", function () {
                 beforeEach(function () {
-                    spyOn(mockContactUsController, "init").andCallThrough();
-                    contactUsSubscriber.init();
+                    spyOn(mockHomeController, "init").andCallThrough();
+                    homeSubscriber.init();
                 });
 
                 it("is defined", function () {
-                    expect(contactUsSubscriber.init).toBeDefined();
+                    expect(homeSubscriber.init).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(contactUsSubscriber.init).toEqual(jasmine.any(Function));
+                    expect(homeSubscriber.init).toEqual(jasmine.any(Function));
                 });
 
                 it("should call the init function on the controller", function () {
-                    expect(mockContactUsController.init).toHaveBeenCalled();
+                    expect(mockHomeController.init).toHaveBeenCalled();
 
-                    expect(mockContactUsController.init.mostRecentCall.args.length).toEqual(0);
+                    expect(mockHomeController.init.mostRecentCall.args.length).toEqual(0);
                 });
             });
         });

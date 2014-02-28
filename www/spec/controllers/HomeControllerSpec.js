@@ -4,41 +4,41 @@ define(["Squire"],
         "use strict";
 
         var squire = new Squire(),
-            contactUsController;
+            homeController;
 
-        describe("A Contact Us Controller", function () {
+        describe("A Home Controller", function () {
             var jasmineAsync = new AsyncSpec(this);
 
             jasmineAsync.beforeEach(function (done) {
-                squire.require(["controllers/ContactUsController"], function (ContactUsController) {
-                    contactUsController = ContactUsController;
-                    contactUsController.init();
+                squire.require(["controllers/HomeController"], function (HomeController) {
+                    homeController = HomeController;
+                    homeController.init();
 
                     done();
                 });
             });
 
             it("is defined", function () {
-                expect(contactUsController).toBeDefined();
+                expect(homeController).toBeDefined();
             });
 
             describe("has constructor that", function () {
                 it("is defined", function () {
-                    expect(contactUsController.construct).toBeDefined();
+                    expect(homeController.construct).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(contactUsController.construct).toEqual(jasmine.any(Function));
+                    expect(homeController.construct).toEqual(jasmine.any(Function));
                 });
             });
 
             describe("has an init function that", function () {
                 it("is defined", function () {
-                    expect(contactUsController.init).toBeDefined();
+                    expect(homeController.init).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(contactUsController.init).toEqual(jasmine.any(Function));
+                    expect(homeController.init).toEqual(jasmine.any(Function));
                 });
             });
         });

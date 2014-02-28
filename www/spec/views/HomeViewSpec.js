@@ -1,22 +1,16 @@
-define(["Squire", "mustache", "globals", "utils", "text!tmpl/contactUs/page.html", "jasmine-jquery"],
+define(["Squire", "mustache", "globals", "utils", "text!tmpl/home/page.html", "jasmine-jquery"],
     function (Squire, Mustache, globals, utils, pageTemplate) {
 
         "use strict";
 
         var squire = new Squire(),
             mockMustache = Mustache,
-            mockContactUsModel = {
-                "email": "JoeUser@gmail.com",
-                "subject": "Other",
-                "message": "This is a message"
-            },
-            contactUsModel = new Backbone.Model(),
-            contactUsView,
-            ContactUsView;
+            homeView,
+            HomeView;
 
         squire.mock("mustache", mockMustache);
 
-        describe("A Contact Us View", function () {
+        describe("A Home View", function () {
             var jasmineAsync = new AsyncSpec(this);
 
             // Override the default fixture path which is spec/javascripts/fixtures
@@ -24,75 +18,63 @@ define(["Squire", "mustache", "globals", "utils", "text!tmpl/contactUs/page.html
             jasmine.getFixtures().fixturesPath = "";
 
             jasmineAsync.beforeEach(function (done) {
-                squire.require(["views/ContactUsView"], function (JasmineContactUsView) {
+                squire.require(["views/HomeView"], function (JasmineHomeView) {
                     loadFixtures("index.html");
 
-                    contactUsModel.set(mockContactUsModel);
-
-                    ContactUsView = JasmineContactUsView;
-                    contactUsView = new ContactUsView({
-                        model: contactUsModel
-                    });
+                    HomeView = JasmineHomeView;
+                    homeView = new HomeView();
 
                     done();
                 });
             });
 
             it("is defined", function () {
-                expect(contactUsView).toBeDefined();
+                expect(homeView).toBeDefined();
             });
 
             it("looks like a Backbone View", function () {
-                expect(contactUsView instanceof Backbone.View).toBeTruthy();
-            });
-
-            describe("has events that", function () {
+                expect(homeView instanceof Backbone.View).toBeTruthy();
             });
 
             describe("has a constructor that", function () {
                 it("is defined", function () {
-                    expect(contactUsView.constructor).toBeDefined();
+                    expect(homeView.constructor).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(contactUsView.constructor).toEqual(jasmine.any(Function));
+                    expect(homeView.constructor).toEqual(jasmine.any(Function));
                 });
 
                 it("should set el", function () {
-                    expect(contactUsView.el).toBe("#contactUs");
+                    expect(homeView.el).toBe("#home");
                 });
 
                 it("should set el nodeName", function () {
-                    expect(contactUsView.el.nodeName).toEqual("DIV");
+                    expect(homeView.el.nodeName).toEqual("DIV");
                 });
 
                 it("should set the template", function () {
-                    expect(contactUsView.template).toEqual(pageTemplate);
+                    expect(homeView.template).toEqual(pageTemplate);
                 });
             });
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(mockMustache, "parse").andCallThrough();
-                    spyOn(ContactUsView.__super__, "initialize").andCallFake(function () {});
 
-                    contactUsView.initialize();
+                    homeView.initialize();
                 });
 
                 it("is defined", function () {
-                    expect(contactUsView.initialize).toBeDefined();
+                    expect(homeView.initialize).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(contactUsView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should call super()", function () {
-                    expect(ContactUsView.__super__.initialize).toHaveBeenCalledWith();
+                    expect(homeView.initialize).toEqual(jasmine.any(Function));
                 });
 
                 it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(contactUsView.template);
+                    expect(mockMustache.parse).toHaveBeenCalledWith(homeView.template);
                 });
             });
 
@@ -100,27 +82,27 @@ define(["Squire", "mustache", "globals", "utils", "text!tmpl/contactUs/page.html
                 beforeEach(function () {
                     spyOn(mockMustache, "render").andCallThrough();
 
-                    contactUsView.initialize();
-                    contactUsView.pageCreate();
+                    homeView.initialize();
+                    homeView.pageCreate();
                 });
 
                 it("is defined", function () {
-                    expect(contactUsView.pageCreate).toBeDefined();
+                    expect(homeView.pageCreate).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(contactUsView.pageCreate).toEqual(jasmine.any(Function));
+                    expect(homeView.pageCreate).toEqual(jasmine.any(Function));
                 });
 
                 it("should call Mustache.render() on the template", function () {
                     expect(mockMustache.render).toHaveBeenCalled();
                     expect(mockMustache.render.mostRecentCall.args.length).toEqual(1);
-                    expect(mockMustache.render.mostRecentCall.args[0]).toEqual(contactUsView.template);
+                    expect(mockMustache.render.mostRecentCall.args[0]).toEqual(homeView.template);
                 });
 
                 it("sets content", function () {
                     var expectedContent,
-                        actualContent = contactUsView.$el.find(":jqmData(role=content)");
+                        actualContent = homeView.$el.find(":jqmData(role=content)");
 
                     expectedContent = Mustache.render(pageTemplate);
 
