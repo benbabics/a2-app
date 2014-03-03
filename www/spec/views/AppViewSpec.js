@@ -137,6 +137,91 @@ define(["backbone", "Squire", "jasmine-jquery"],
                 });
             });
 
+            describe("has a displayDialog function that", function () {
+                it("is defined", function () {
+                    expect(appView.displayDialog).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appView.displayDialog).toEqual(jasmine.any(Function));
+                });
+
+                //TODO - Much more
+            });
+
+            describe("has a highlightButton function that", function () {
+                var mockButton = {
+                    addClass : function () { return this; }
+                };
+
+                beforeEach(function () {
+                    spyOn(mockButton, "addClass").andCallThrough();
+
+                    appView.highlightButton(mockButton);
+                });
+
+                it("is defined", function () {
+                    expect(appView.highlightButton).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appView.highlightButton).toEqual(jasmine.any(Function));
+                });
+
+                it("should call addClass on the button", function () {
+                    expect(mockButton.addClass).toHaveBeenCalled();
+
+                    expect(mockButton.addClass.mostRecentCall.args.length).toEqual(1);
+                    expect(mockButton.addClass.mostRecentCall.args[0]).toEqual("ui-btn-active");
+                });
+            });
+
+            describe("has a unhighlightButton function that", function () {
+                var mockButton = {
+                    addClass : function () { return this; },
+                    attr : function () { return this; },
+                    removeClass : function () { return this; }
+                };
+
+                beforeEach(function () {
+                    spyOn(mockButton, "addClass").andCallThrough();
+                    spyOn(mockButton, "attr").andCallThrough();
+                    spyOn(mockButton, "removeClass").andCallThrough();
+
+                    appView.unhighlightButton(mockButton);
+                });
+
+                it("is defined", function () {
+                    expect(appView.unhighlightButton).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appView.unhighlightButton).toEqual(jasmine.any(Function));
+                });
+
+                it("should call removeClass on the button", function () {
+                    expect(mockButton.removeClass).toHaveBeenCalled();
+
+                    expect(mockButton.removeClass.mostRecentCall.args.length).toEqual(1);
+                    expect(mockButton.removeClass.mostRecentCall.args[0]).toEqual("ui-btn-up-a ui-btn-up-b ui-btn-up-c ui-btn-up-d ui-btn-up-e ui-btn-hover-a ui-btn-hover-b ui-btn-hover-c ui-btn-hover-d ui-btn-hover-e");
+                });
+
+                it("should call addClass on the button", function () {
+                    expect(mockButton.addClass).toHaveBeenCalled();
+
+                    expect(mockButton.addClass.mostRecentCall.args.length).toEqual(1);
+                    expect(mockButton.addClass.mostRecentCall.args[0]).toEqual("ui-btn-up-d");
+                });
+
+                it("should call attr on the button", function () {
+                    expect(mockButton.attr).toHaveBeenCalled();
+
+                    expect(mockButton.attr.mostRecentCall.args.length).toEqual(2);
+                    expect(mockButton.attr.mostRecentCall.args[0]).toEqual("data-theme");
+                    expect(mockButton.attr.mostRecentCall.args[1]).toEqual("d");
+                });
+            });
+
             describe("has a handlePageBack function that", function () {
                 var mockEvent = {
                     preventDefault : function () { }

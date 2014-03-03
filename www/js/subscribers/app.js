@@ -7,6 +7,7 @@ define(["facade", "controllers/AppController"],
         var subscribe = facade.subscribeTo("app", controller);
 
         subscribe("ready", "ready");
+        subscribe("alert", "alert");
 
 
         return {

@@ -39,6 +39,10 @@ define([ "jclass", "routers/AppRouter", "views/AppView", "models/AppModel"],
                         navigator.splashscreen.hide();
                     }
                 }, 2000);
+            },
+
+            alert: function (options) {
+                this.appView.displayDialog(options);
             }
         }, classOptions);
 

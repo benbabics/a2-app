@@ -19,7 +19,8 @@ define(["backbone", "Squire"],
                 $el: "",
                 constructor: function () { },
                 initialize: function () { },
-                render: function () { }
+                render: function () { },
+                displayDialog: function () { }
             },
             appController;
 
@@ -152,6 +153,34 @@ define(["backbone", "Squire"],
 
                         expect(navigator.splashscreen.hide.mostRecentCall.args.length).toEqual(0);
                     });
+                });
+            });
+
+            describe("has an alert function that", function () {
+                var alertOptions = {
+                    message          : "Alert Message Text",
+                    primaryBtnLabel  : "OK"
+                };
+
+                beforeEach(function () {
+                    spyOn(mockAppView, "displayDialog").andCallFake(function () { });
+
+                    appController.alert(alertOptions);
+                });
+
+                it("is defined", function () {
+                    expect(appController.alert).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appController.alert).toEqual(jasmine.any(Function));
+                });
+
+                it("should call the displayDialog function on AppView", function () {
+                    expect(mockAppView.displayDialog).toHaveBeenCalled();
+
+                    expect(mockAppView.displayDialog.mostRecentCall.args.length).toEqual(1);
+                    expect(mockAppView.displayDialog.mostRecentCall.args[0]).toEqual(alertOptions);
                 });
             });
         });

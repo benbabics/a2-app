@@ -11,7 +11,8 @@ define(["Squire"],
             },
             mockAppController = {
                 init: function () { },
-                ready: function () { }
+                ready: function () { },
+                alert: function () { }
             },
             appSubscriber;
 
@@ -40,12 +41,16 @@ define(["Squire"],
                 expect(mockFacade.subscribeTo.mostRecentCall.args[1]).toEqual(mockAppController);
             });
 
-            it("should call subscribe 1 time", function () {
-                expect(mockSubscribe.calls.length).toEqual(1);
+            it("should call subscribe 2 times", function () {
+                expect(mockSubscribe.calls.length).toEqual(2);
             });
 
             it("should subscribe to ready", function () {
                 expect(mockSubscribe).toHaveBeenCalledWith("ready", "ready");
+            });
+
+            it("should subscribe to alert", function () {
+                expect(mockSubscribe).toHaveBeenCalledWith("alert", "alert");
             });
 
             describe("has an init function that", function () {
