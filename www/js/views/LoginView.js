@@ -1,5 +1,5 @@
-define(["backbone", "utils", "mustache", "globals", "views/FormView", "text!tmpl/login/page.html", "backbone-validation"],
-    function (Backbone, utils, Mustache, globals, FormView, pageTemplate) {
+define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView", "text!tmpl/login/page.html", "backbone-validation"],
+    function (Backbone, utils, facade, Mustache, globals, FormView, pageTemplate) {
 
         "use strict";
 
@@ -41,6 +41,15 @@ define(["backbone", "utils", "mustache", "globals", "views/FormView", "text!tmpl
 
                 // TODO: Use the native alert
                 alert(message);
+            },
+
+            submitForm: function (evt) {
+                // call super
+                LoginView.__super__.submitForm.apply(this, arguments);
+
+                // TODO - Need to authenticate the user before navigating to the home page
+
+                facade.publish("home", "navigate");
             }
         });
 

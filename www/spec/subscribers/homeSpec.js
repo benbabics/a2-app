@@ -39,6 +39,14 @@ define(["Squire"],
                 expect(mockFacade.subscribeTo.mostRecentCall.args[1]).toEqual(mockHomeController);
             });
 
+            it("should call subscribe 1 time", function () {
+                expect(mockSubscribe.calls.length).toEqual(1);
+            });
+
+            it("should subscribe to navigate", function () {
+                expect(mockSubscribe).toHaveBeenCalledWith("navigate", "navigate");
+            });
+
             describe("has an init function that", function () {
                 beforeEach(function () {
                     spyOn(mockHomeController, "init").andCallThrough();

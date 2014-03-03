@@ -15,6 +15,8 @@ define(["backbone", "utils", "mustache", "globals", "text!tmpl/home/page.html", 
 
                 // parse the template
                 Mustache.parse(this.template);
+
+                this.pageCreate();
             },
 
             pageCreate: function () {

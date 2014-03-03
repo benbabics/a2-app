@@ -61,6 +61,7 @@ define(["Squire", "mustache", "globals", "utils", "text!tmpl/home/page.html", "j
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(mockMustache, "parse").andCallThrough();
+                    spyOn(homeView, "pageCreate").andCallFake(function () { });
 
                     homeView.initialize();
                 });
@@ -76,14 +77,17 @@ define(["Squire", "mustache", "globals", "utils", "text!tmpl/home/page.html", "j
                 it("should parse the template", function () {
                     expect(mockMustache.parse).toHaveBeenCalledWith(homeView.template);
                 });
+
+                it("should call pageCreate()", function () {
+                    expect(homeView.pageCreate).toHaveBeenCalledWith();
+                });
             });
 
             describe("has a pageCreate function that", function () {
                 beforeEach(function () {
                     spyOn(mockMustache, "render").andCallThrough();
 
-                    homeView.initialize();
-                    homeView.pageCreate();
+                    homeView.initialize(); // initialize calls pageCreate
                 });
 
                 it("is defined", function () {

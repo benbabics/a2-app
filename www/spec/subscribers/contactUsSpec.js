@@ -39,6 +39,10 @@ define(["Squire"],
                 expect(mockFacade.subscribeTo.mostRecentCall.args[1]).toEqual(mockContactUsController);
             });
 
+            it("should call subscribe 0 times", function () {
+                expect(mockSubscribe.calls.length).toEqual(0);
+            });
+
             describe("has an init function that", function () {
                 beforeEach(function () {
                     spyOn(mockContactUsController, "init").andCallThrough();

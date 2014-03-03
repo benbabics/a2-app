@@ -4,16 +4,21 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
         "use strict";
 
         var squire = new Squire(),
+            mockFacade = {
+                publish: function (channel, event) { }
+            },
             mockMustache = Mustache,
             mockLoginModel = {
                 "username": "JoeUser",
                 "password": "p@S$w0rd1"
             },
             loginModel = new Backbone.Model(),
-            loginView;
+            loginView,
+            LoginView;
 
         squire.mock("mustache", mockMustache);
         squire.mock("backbone", Backbone);
+        squire.mock("facade", mockFacade);
 
         describe("A Login View", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -23,11 +28,12 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
             jasmine.getFixtures().fixturesPath = "";
 
             jasmineAsync.beforeEach(function (done) {
-                squire.require(["views/LoginView"], function (LoginView) {
+                squire.require(["views/LoginView"], function (JasmineLoginView) {
                     loadFixtures("index.html");
 
                     loginModel.set(mockLoginModel);
 
+                    LoginView = JasmineLoginView;
                     loginView = new LoginView({
                         model: loginModel
                     });
@@ -77,8 +83,22 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
             });
 
             describe("has an initialize function that", function () {
+                beforeEach(function () {
+                    spyOn(LoginView.__super__, "initialize").andCallFake(function () {});
+
+                    loginView.initialize();
+                });
+
+                it("is defined", function () {
+                    expect(loginView.initialize).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(loginView.initialize).toEqual(jasmine.any(Function));
+                });
+
                 it("should call super()", function () {
-                    // TODO: how do we test this again?
+                    expect(LoginView.__super__.initialize).toHaveBeenCalledWith();
                 });
             });
 
@@ -126,6 +146,39 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                 });
 
                 // TODO: finish once this function has been finalized
+            });
+
+            describe("has a submitForm function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").andCallFake(function () { });
+                    spyOn(LoginView.__super__, "submitForm").andCallFake(function () {});
+
+                    loginView.submitForm(mockEvent);
+                });
+
+                it("is defined", function () {
+                    expect(loginView.submitForm).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(loginView.submitForm).toEqual(jasmine.any(Function));
+                });
+
+                it("should call super()", function () {
+                    expect(LoginView.__super__.submitForm).toHaveBeenCalledWith(mockEvent);
+                });
+
+                it("should call publish on the facade", function () {
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
+                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("home");
+                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
+                });
             });
         });
     });

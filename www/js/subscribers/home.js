@@ -6,6 +6,8 @@ define(["facade", "controllers/HomeController"],
 
         var subscribe = facade.subscribeTo("home", controller);
 
+        subscribe("navigate", "navigate");
+
 
         return {
             init: function () {
