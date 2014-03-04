@@ -1,5 +1,6 @@
-define(["backbone", "utils", "mustache", "globals", "views/FormView", "text!tmpl/contactUs/page.html", "backbone-validation"],
-    function (Backbone, utils, Mustache, globals, FormView, pageTemplate) {
+define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel", "views/FormView",
+        "text!tmpl/contactUs/page.html", "backbone-validation"],
+    function (Backbone, utils, facade, Mustache, globals, UserModel, FormView, pageTemplate) {
 
         "use strict";
 
@@ -9,8 +10,12 @@ define(["backbone", "utils", "mustache", "globals", "views/FormView", "text!tmpl
 
             template: pageTemplate,
 
-            events: {
-            },
+            events: utils._.extend({}, FormView.prototype.events, {
+                "click #submitContactUs-btn": "submitForm",
+
+                // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it
+                "submit #contactUsForm"     : "submitForm"
+            }),
 
             initialize: function () {
                 // call super
@@ -20,9 +25,29 @@ define(["backbone", "utils", "mustache", "globals", "views/FormView", "text!tmpl
                 Mustache.parse(this.template);
             },
 
-            pageCreate: function () {
-                var $content = this.$el.find(":jqmData(role=content)");
-                $content.html(Mustache.render(this.template));
+            render: function () {
+                var $content = this.$el.find(":jqmData(role=content)"),
+                    configuration;
+
+                configuration = utils._.extend({}, utils.deepClone(globals.contactUs.configuration));
+                configuration.sender.value = this.model.get("sender");
+                configuration.authenticated = UserModel.getInstance().get("authenticated");
+
+                $content.html(Mustache.render(this.template, configuration));
+
+                this.formatRequiredFields();
+            },
+
+            /*
+             * Event Handlers
+             */
+            submitForm: function (evt) {
+                //TODO - Need to handle success and error conditions of saving the model - POSTing data
+
+                // call super
+                ContactUsView.__super__.submitForm.apply(this, arguments);
+
+                // TODO - Need to navigate to the contact us confirmation page on success
             }
         });
 

@@ -4,11 +4,15 @@ define(["utils", "Squire", "backbone"],
         "use strict";
 
         var squire = new Squire(),
+            mockFacade = {
+                publish: function () { }
+            },
             appRouter,
             mockUtils = utils,
             mockBackbone = Backbone;
 
         squire.mock("backbone", mockBackbone);
+        squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
 
         describe("An AppRouter", function () {
@@ -30,12 +34,40 @@ define(["utils", "Squire", "backbone"],
             });
 
             describe("has property routes that", function () {
+                it("should set 'contactUs' to showContactUs", function () {
+                    expect(appRouter.routes.contactUs).toEqual("showContactUs");
+                });
+
                 it("should set '*page' to changePage", function () {
                     expect(appRouter.routes["*page"]).toEqual("changePage");
                 });
 
                 it("should set an empty string to root", function () {
                     expect(appRouter.routes[""]).toEqual("root");
+                });
+            });
+
+            describe("has a showContactUs function that", function () {
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").andCallThrough();
+
+                    appRouter.showContactUs();
+                });
+
+                it("is defined", function () {
+                    expect(appRouter.showContactUs).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appRouter.showContactUs).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
+                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("contactUs");
+                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
                 });
             });
 

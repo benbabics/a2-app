@@ -1,5 +1,5 @@
-define(["backbone", "utils", "mustache", "backbone-validation"],
-    function (Backbone, utils, Mustache) {
+define(["backbone", "globals", "facade", "utils", "mustache", "backbone-validation"],
+    function (Backbone, globals, facade, utils, Mustache) {
 
         "use strict";
 
@@ -17,6 +17,9 @@ define(["backbone", "utils", "mustache", "backbone-validation"],
 
                 // Bind the Validation between the View and the Model
                 Backbone.Validation.bind(this);
+
+                // set context
+                utils._.bindAll(this, "handleValidationError", "handleInputChanged", "submitForm");
 
                 // Set handlers for model events
                 this.model.on("invalid", this.handleValidationError);
@@ -47,7 +50,7 @@ define(["backbone", "utils", "mustache", "backbone-validation"],
                     if (validationRules.required) {
 
                         // Find the label for the required field
-                        $requiredField = this.$el.find("input[name='" + fieldName + "']");
+                        $requiredField = this.$el.find("[name='" + fieldName + "']");
                         $fieldLabel = $requiredField.prevAll("label[for='" + $requiredField.attr("id") + "']");
 
                         // Append an asterisk denoting the field is required
@@ -55,6 +58,16 @@ define(["backbone", "utils", "mustache", "backbone-validation"],
                     }
 
                 }, this);
+            },
+
+            convertErrorsToUnorderedList: function (error) {
+                var errorMessages =  "<ul>";
+                utils._.each(error, function (value, key, list) {
+                    errorMessages += "<li>" + value + "</li>";
+                });
+                errorMessages +=  "</ul>";
+
+                return errorMessages;
             },
 
             /*
@@ -66,7 +79,13 @@ define(["backbone", "utils", "mustache", "backbone-validation"],
             },
 
             handleValidationError: function (model, error) {
-                // no-op - should be overridden
+                var message = globals.VALIDATION_ERRORS.HEADER + this.convertErrorsToUnorderedList(error);
+
+                facade.publish("app", "alert", {
+                    title            : globals.VALIDATION_ERRORS.TITLE,
+                    message          : message,
+                    primaryBtnLabel  : globals.DIALOG.DEFAULT_BTN_TEXT
+                });
             },
 
             submitForm: function (evt) {

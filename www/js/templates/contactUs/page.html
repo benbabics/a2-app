@@ -1,0 +1,37 @@
+<h2>Contact Us</h2>
+
+{{^authenticated}}
+<p>We will make every effort to respond to you within 24 hours. If your request is urgent, please contact Customer Service at <a href="tel://1-866-885-2057">1-866-885-2057</a>.</p>
+{{/authenticated}}
+
+{{#authenticated}}
+<p>We will make every effort to respond to you within 24 hours. If your request is urgent, please contact Customer Service at <a href="tel://1-866-885-2057">1-866-885-2057</a>. All fields are required.</p>
+<form id="contactUsForm" action="#contactUs" method="post" class="ui-body ui-body-d">
+    {{#sender}}
+    <div data-role="fieldcontain">
+        <label for="sender">{{label}}:</label>
+        <input type="text" name="{{name}}" maxlength="{{maxLength}}" id="sender" value="{{value}}" />
+    </div>
+    {{/sender}}
+    {{#subject}}
+    <div data-role="fieldcontain">
+        <label for="subject">{{label}}:</label>
+        <select id="subject" name="{{name}}" data-theme="c">
+            <option value="">- - Select - -</option>
+            <option value="Cards & Drivers">Cards &amp; Drivers</option>
+            <option value="Invoice & Payment">Invoice &amp; Payment</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+    {{/subject}}
+    {{#message}}
+    <div data-role="fieldcontain">
+        <label for="message">{{label}}:</label>
+        <textarea name="{{name}}" maxlength="{{maxLength}}" id="message"></textarea>
+    </div>
+    {{/message}}
+</form>
+{{#submitButton}}
+<button id="submitContactUs-btn" data-role="button" data-theme="b">{{label}}</button>
+{{/submitButton}}
+{{/authenticated}}

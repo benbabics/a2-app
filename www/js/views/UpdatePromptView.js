@@ -67,9 +67,6 @@ define(["globals", "utils", "facade", "backbone", "mustache", "models/AppModel",
              */
             handleUpdateClick: function (evt) {
                 evt.preventDefault();
-                // TODO - The correct value need to be set into globals.UPDATE_APP.URL during the build
-                // iOS - "itms://itunes.apple.com/us/app/wexonline/id568083909?mt=8&uo=4",
-                // Android "market://details?id=com.wex.wol.accountmaintenance",
                 window.open(globals.UPDATE_APP.URL, "_self"); //will not work in the simulator
             },
 

@@ -13,6 +13,12 @@ define(function (require) {
         "ROOT_URL": "@@@STRING_REPLACE_APP_URL@@@",
         "APP_PATH": "/app"
     };
+    globals.WEBSERVICE.SECURE = {
+        "ROOT_URL": globals.WEBSERVICE.ROOT_URL + "/secure"
+    };
+    globals.WEBSERVICE.CONTACT_US = {
+        "URL": globals.WEBSERVICE.SECURE.ROOT_URL + "/contactUs"
+    };
 
     /*
      * App
@@ -69,6 +75,11 @@ define(function (require) {
         "DEFAULT_BTN_TEXT": "OK"
     };
 
+    globals.VALIDATION_ERRORS = {
+        "TITLE" : "Cannot complete request",
+        "HEADER": "<div class='ui-body ui-body-e'>The following fields are required:</div>"
+    };
+
     /*
      * Update the App
      */
@@ -83,7 +94,9 @@ define(function (require) {
 
     // App Version Status
     globals.WEBSERVICE.APP_VERSION_STATUS = {
-        "URL"           : globals.WEBSERVICE.ROOT_URL + globals.WEBSERVICE.APP_PATH + "/accountMaintenanceVersionStatus",
+        "URL"           : globals.WEBSERVICE.ROOT_URL +
+                          globals.WEBSERVICE.APP_PATH +
+                          "/accountMaintenanceVersionStatus",
         "VERSION_NUMBER": "versionNumber=",
         "PLATFORM"      : "platform="
     };
@@ -112,6 +125,42 @@ define(function (require) {
         },
         "submitButton": {
             "label": "Login"
+        }
+    };
+
+    /*
+     * Page :: Contact Us
+     */
+    globals.contactUs = {};
+    globals.contactUs.constants = {
+        "WEBSERVICE"                  : globals.WEBSERVICE.CONTACT_US.URL + "/emailRequest",
+        "ERROR_SENDER_REQUIRED_FIELD" : "Email must have a value",
+        "ERROR_SUBJECT_REQUIRED_FIELD": "Subject must have a value",
+        "ERROR_MESSAGE_REQUIRED_FIELD": "Message must have a value"
+    };
+    globals.contactUs.configuration = {
+        "sender": {
+            "label"      : "Email",
+            "name"       : "sender",
+            "maxLength"  : 60,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "subject": {
+            "label"      : "Subject",
+            "name"       : "subject",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "message": {
+            "label"      : "Message",
+            "name"       : "message",
+            "maxLength"  : 1024,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "submitButton": {
+            "label": "Submit"
         }
     };
 

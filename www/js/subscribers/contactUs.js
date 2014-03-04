@@ -6,6 +6,8 @@ define(["facade", "controllers/ContactUsController"],
 
         var subscribe = facade.subscribeTo("contactUs", controller);
 
+        subscribe("navigate", "navigate");
+
 
         return {
             init: function () {

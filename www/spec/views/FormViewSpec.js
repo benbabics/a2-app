@@ -1,11 +1,14 @@
-define(["Squire", "mustache", "utils", "jasmine-jquery", "backbone-validation"],
-    function (Squire, Mustache, utils) {
+define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-validation"],
+    function (Squire, Mustache, globals, utils) {
 
         "use strict";
 
         var squire = new Squire(),
             mockMustache = Mustache,
             mockUtils = utils,
+            mockFacade = {
+                publish: function () { }
+            },
             mockTemplate =
                 "<form>" +
                     "<div>" +
@@ -20,6 +23,16 @@ define(["Squire", "mustache", "utils", "jasmine-jquery", "backbone-validation"],
                         "<label for='field3'>Field3:</label>" +
                         "<input type='text' name='field3' id='field3' />" +
                     "</div>" +
+                    "<div>" +
+                        "<label for='field4'>Field4:</label>" +
+                        "<select name='field4' id='field4' />" +
+                            "<option value=''>- - Select - -</option>" +
+                        "</select>" +
+                    "</div>" +
+                    "<div>" +
+                        "<label for='field5'>Field5:</label>" +
+                        "<textarea name='field5' id='field5' /></textarea>" +
+                    "</div>" +
                 "</form>",
             MockModel = Backbone.Model.extend({
                 validation: {
@@ -28,12 +41,19 @@ define(["Squire", "mustache", "utils", "jasmine-jquery", "backbone-validation"],
                     },
                     "field2": {
                         max: 100
+                    },
+                    "field4": {
+                        required: true
+                    },
+                    "field5": {
+                        required: true
                     }
                 }
             }),
             formModel = new MockModel(),
             formView;
 
+        squire.mock("facade", mockFacade);
         squire.mock("mustache", mockMustache);
         squire.mock("utils", mockUtils);
 
@@ -81,6 +101,8 @@ define(["Squire", "mustache", "utils", "jasmine-jquery", "backbone-validation"],
                     spyOn(formModel, "on").andCallFake(function () { });
                     spyOn(mockMustache, "parse").andCallThrough();
                     spyOn(formView, "pageCreate").andCallFake(function () { });
+                    spyOn(mockUtils._, "bindAll").andCallFake(function () { });
+
                     formView.initialize();
                 });
 
@@ -94,6 +116,16 @@ define(["Squire", "mustache", "utils", "jasmine-jquery", "backbone-validation"],
 
                 it("should bind the Backbone.Validation", function () {
                     expect(Backbone.Validation.bind).toHaveBeenCalledWith(formView);
+                });
+
+                it("should call utils._.bindAll", function () {
+                    expect(mockUtils._.bindAll).toHaveBeenCalled();
+
+                    expect(mockUtils._.bindAll.mostRecentCall.args.length).toEqual(4);
+                    expect(mockUtils._.bindAll.mostRecentCall.args[0]).toEqual(formView);
+                    expect(mockUtils._.bindAll.mostRecentCall.args[1]).toEqual("handleValidationError");
+                    expect(mockUtils._.bindAll.mostRecentCall.args[2]).toEqual("handleInputChanged");
+                    expect(mockUtils._.bindAll.mostRecentCall.args[3]).toEqual("submitForm");
                 });
 
                 it("should register a function as the handler for the invalid event", function () {
@@ -151,7 +183,6 @@ define(["Squire", "mustache", "utils", "jasmine-jquery", "backbone-validation"],
             });
 
             describe("has a formatRequiredFields function that", function () {
-
                 beforeEach(function () {
                     spyOn(mockUtils._, "each").andCallThrough();
 
@@ -182,9 +213,11 @@ define(["Squire", "mustache", "utils", "jasmine-jquery", "backbone-validation"],
                 it("should add an asterisk to the label of any fields that have a validation rule of required:true",
                     function () {
                         expect(formView.$el.find("label[for='field1']")[0]).toContainText("*");
+                        expect(formView.$el.find("label[for='field4']")[0]).toContainText("*");
+                        expect(formView.$el.find("label[for='field5']")[0]).toContainText("*");
                     });
 
-                it("should NOT add an asterisk to the label of any fields that have a validation rule of required:true",
+                it("should NOT add an asterisk to label of fields that do not have a validation rule of required:true",
                     function () {
                         expect(formView.$el.find("label[for='field2']")[0]).not.toContainText("*");
                     });
@@ -193,6 +226,34 @@ define(["Squire", "mustache", "utils", "jasmine-jquery", "backbone-validation"],
                     function () {
                         expect(formView.$el.find("label[for='field3']")[0]).not.toContainText("*");
                     });
+            });
+
+            describe("has a convertErrorsToUnorderedList function that", function () {
+                var mockErrors = {
+                    field1: "Error Message 1",
+                    field2: "Error Message 2",
+                    field5: "Error Message 5"
+                };
+
+                beforeEach(function () {
+                    formView.convertErrorsToUnorderedList(mockErrors);
+                });
+
+                it("is defined", function () {
+                    expect(formView.convertErrorsToUnorderedList).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(formView.convertErrorsToUnorderedList).toEqual(jasmine.any(Function));
+                });
+
+                it("should return expected result", function () {
+                    var expectedValue = "<ul><li>Error Message 1</li>" +
+                                        "<li>Error Message 2</li>" +
+                                        "<li>Error Message 5</li></ul>",
+                        actualValue = formView.convertErrorsToUnorderedList(mockErrors);
+                    expect(actualValue).toEqual(expectedValue);
+                });
             });
 
             describe("has a handleInputChanged function that", function () {
@@ -219,6 +280,53 @@ define(["Squire", "mustache", "utils", "jasmine-jquery", "backbone-validation"],
                     expect(formView.updateAttribute.mostRecentCall.args.length).toEqual(2);
                     expect(formView.updateAttribute.mostRecentCall.args[0]).toEqual(mockEvent.target.name);
                     expect(formView.updateAttribute.mostRecentCall.args[1]).toEqual(mockEvent.target.value);
+                });
+            });
+
+            describe("has a handleValidationError function that", function () {
+                var mockConvertedErrors = "",
+                    mockErrors = {
+                        field1: "Error Message 1",
+                        field2: "Error Message 2",
+                        field5: "Error Message 5"
+                    };
+
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").andCallThrough();
+                    spyOn(formView, "convertErrorsToUnorderedList").andCallFake(
+                        function () {
+                            return mockConvertedErrors;
+                        }
+                    );
+
+                    formView.handleValidationError(formModel, mockErrors);
+                });
+
+                it("is defined", function () {
+                    expect(formView.handleValidationError).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(formView.handleValidationError).toEqual(jasmine.any(Function));
+                });
+
+                it("should call convertErrorsToUnorderedList", function () {
+                    expect(formView.convertErrorsToUnorderedList).toHaveBeenCalledWith(mockErrors);
+                });
+
+                it("should call publish on the facade", function () {
+                    var appALertOptions;
+
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(3);
+                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("app");
+                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("alert");
+
+                    appALertOptions = mockFacade.publish.mostRecentCall.args[2];
+                    expect(appALertOptions.title).toEqual(globals.VALIDATION_ERRORS.TITLE);
+                    expect(appALertOptions.message).toEqual(globals.VALIDATION_ERRORS.HEADER + mockConvertedErrors);
+                    expect(appALertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
                 });
             });
 

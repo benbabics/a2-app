@@ -1,10 +1,21 @@
-define(["Squire", "mustache", "globals", "utils", "text!tmpl/contactUs/page.html", "jasmine-jquery"],
-    function (Squire, Mustache, globals, utils, pageTemplate) {
+define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contactUs/page.html", "jasmine-jquery"],
+    function (Squire, Backbone, Mustache, globals, utils, pageTemplate) {
 
         "use strict";
 
         var squire = new Squire(),
             mockMustache = Mustache,
+            mockFacade = {
+                publish: function () { }
+            },
+            mockUserModel = {
+                "authenticated": "true",
+                "email": "mobiledevelopment@wexinc.com"
+            },
+            userModel = new Backbone.Model(),
+            UserModel = {
+                getInstance: function () { }
+            },
             mockContactUsModel = {
                 "email": "JoeUser@gmail.com",
                 "subject": "Other",
@@ -15,6 +26,9 @@ define(["Squire", "mustache", "globals", "utils", "text!tmpl/contactUs/page.html
             ContactUsView;
 
         squire.mock("mustache", mockMustache);
+        squire.mock("backbone", Backbone);
+        squire.mock("facade", mockFacade);
+        squire.mock("models/UserModel", UserModel);
 
         describe("A Contact Us View", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -28,6 +42,8 @@ define(["Squire", "mustache", "globals", "utils", "text!tmpl/contactUs/page.html
                     loadFixtures("index.html");
 
                     contactUsModel.set(mockContactUsModel);
+                    userModel.set(mockUserModel);
+                    spyOn(UserModel, "getInstance").andCallFake(function () { return userModel; });
 
                     ContactUsView = JasmineContactUsView;
                     contactUsView = new ContactUsView({
@@ -47,6 +63,13 @@ define(["Squire", "mustache", "globals", "utils", "text!tmpl/contactUs/page.html
             });
 
             describe("has events that", function () {
+                it("should call submitForm when submitContactUs-btn is clicked", function () {
+                    expect(contactUsView.events["click #submitContactUs-btn"]).toEqual("submitForm");
+                });
+
+                it("should call submitForm when contactUsForm is submitted", function () {
+                    expect(contactUsView.events["submit #contactUsForm"]).toEqual("submitForm");
+                });
             });
 
             describe("has a constructor that", function () {
@@ -96,35 +119,70 @@ define(["Squire", "mustache", "globals", "utils", "text!tmpl/contactUs/page.html
                 });
             });
 
-            describe("has a pageCreate function that", function () {
+            describe("has a render function that", function () {
+                var expectedConfiguration;
+
                 beforeEach(function () {
+                    expectedConfiguration = utils._.extend({}, utils.deepClone(globals.contactUs.configuration));
+                    expectedConfiguration.sender.value = mockContactUsModel.sender;
+                    expectedConfiguration.authenticated = UserModel.getInstance().get("authenticated");
+
                     spyOn(mockMustache, "render").andCallThrough();
+                    spyOn(contactUsView, "formatRequiredFields").andCallThrough();
 
                     contactUsView.initialize();
-                    contactUsView.pageCreate();
+                    contactUsView.render();
                 });
 
                 it("is defined", function () {
-                    expect(contactUsView.pageCreate).toBeDefined();
+                    expect(contactUsView.render).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(contactUsView.pageCreate).toEqual(jasmine.any(Function));
+                    expect(contactUsView.render).toEqual(jasmine.any(Function));
                 });
 
                 it("should call Mustache.render() on the template", function () {
                     expect(mockMustache.render).toHaveBeenCalled();
-                    expect(mockMustache.render.mostRecentCall.args.length).toEqual(1);
+                    expect(mockMustache.render.mostRecentCall.args.length).toEqual(2);
                     expect(mockMustache.render.mostRecentCall.args[0]).toEqual(contactUsView.template);
+                    expect(mockMustache.render.mostRecentCall.args[1]).toEqual(expectedConfiguration);
                 });
 
-                it("sets content", function () {
-                    var expectedContent,
-                        actualContent = contactUsView.$el.find(":jqmData(role=content)");
+                it("should set the content", function () {
+                    var $content = contactUsView.$el.find(":jqmData(role=content)"),
+                        expectedContent = Mustache.render(pageTemplate, expectedConfiguration);
 
-                    expectedContent = Mustache.render(pageTemplate);
+                    expect($content[0]).toContainHtml(expectedContent);
+                });
 
-                    expect(actualContent[0]).toContainHtml(expectedContent);
+                it("should call formatRequiredFields()", function () {
+                    expect(contactUsView.formatRequiredFields).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a submitForm function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").andCallFake(function () { });
+                    spyOn(ContactUsView.__super__, "submitForm").andCallFake(function () {});
+
+                    contactUsView.submitForm(mockEvent);
+                });
+
+                it("is defined", function () {
+                    expect(contactUsView.submitForm).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(contactUsView.submitForm).toEqual(jasmine.any(Function));
+                });
+
+                it("should call super()", function () {
+                    expect(ContactUsView.__super__.submitForm).toHaveBeenCalledWith(mockEvent);
                 });
             });
         });
