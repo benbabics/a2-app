@@ -1,8 +1,9 @@
-define(["backbone", "Squire", "jasmine-jquery"],
-    function (Backbone, Squire) {
+define(["backbone", "utils", "Squire", "jasmine-jquery"],
+    function (Backbone, utils, Squire) {
         "use strict";
 
         var squire = new Squire(),
+            mockUtils = utils,
             mockAppModel = {
                 "buildVersion": "1.1.1"
             },
@@ -10,6 +11,7 @@ define(["backbone", "Squire", "jasmine-jquery"],
             appView;
 
         squire.mock("backbone", Backbone);
+        squire.mock("utils", mockUtils);
 
         describe("An App View", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -203,7 +205,9 @@ define(["backbone", "Squire", "jasmine-jquery"],
                     expect(mockButton.removeClass).toHaveBeenCalled();
 
                     expect(mockButton.removeClass.mostRecentCall.args.length).toEqual(1);
-                    expect(mockButton.removeClass.mostRecentCall.args[0]).toEqual("ui-btn-up-a ui-btn-up-b ui-btn-up-c ui-btn-up-d ui-btn-up-e ui-btn-hover-a ui-btn-hover-b ui-btn-hover-c ui-btn-hover-d ui-btn-hover-e");
+                    expect(mockButton.removeClass.mostRecentCall.args[0])
+                        .toEqual("ui-btn-up-a ui-btn-up-b ui-btn-up-c ui-btn-up-d ui-btn-up-e ui-btn-hover-a " +
+                                 "ui-btn-hover-b ui-btn-hover-c ui-btn-hover-d ui-btn-hover-e");
                 });
 
                 it("should call addClass on the button", function () {
@@ -219,6 +223,277 @@ define(["backbone", "Squire", "jasmine-jquery"],
                     expect(mockButton.attr.mostRecentCall.args.length).toEqual(2);
                     expect(mockButton.attr.mostRecentCall.args[0]).toEqual("data-theme");
                     expect(mockButton.attr.mostRecentCall.args[1]).toEqual("d");
+                });
+            });
+
+            describe("has a navigateCheckConnection function that", function () {
+                var mockNode = {
+                    on  : function () { },
+                    off : function () { }
+                };
+
+                it("is defined", function () {
+                    expect(appView.navigateCheckConnection).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appView.navigateCheckConnection).toEqual(jasmine.any(Function));
+                });
+
+                describe("when a callback function is passed", function () {
+                    var mockCallback = function () {};
+
+                    beforeEach(function () {
+                        spyOn(mockUtils, "$").andCallFake(function () { return mockNode; });
+                        spyOn(mockUtils, "isFn").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "changePage").andCallFake(function () { });
+                        spyOn(mockNode, "on").andCallThrough();
+                        spyOn(mockNode, "off").andCallThrough();
+                    });
+
+                    it("should call $ on utils twice", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockUtils.$).toHaveBeenCalled();
+
+                        expect(mockUtils.$.calls.length).toEqual(2);
+                    });
+
+                    it("the first call $ on utils should pass the correct parameter", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockUtils.$.calls[0].args.length).toEqual(1);
+                        expect(mockUtils.$.calls[0].args[0]).toEqual("#reconnectButton");
+                    });
+
+                    it("the second call $ on utils should pass the correct parameter", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockUtils.$.calls[1].args.length).toEqual(1);
+                        expect(mockUtils.$.calls[1].args[0]).toEqual("#reconnectButton");
+                    });
+
+                    it("should call off on mockNode", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockNode.off).toHaveBeenCalledWith();
+                    });
+
+                    it("should call isFn on utils", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockUtils.isFn).toHaveBeenCalledWith(mockCallback);
+                    });
+
+                    it("should call on on mockNode", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockNode.on).toHaveBeenCalledWith("click", mockCallback);
+                    });
+
+                    it("should call isActivePage on utils", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockUtils.isActivePage).toHaveBeenCalledWith("networkMsg");
+                    });
+
+                    describe("when networkMsg is not the active page", function () {
+                        it("should call changePage on utils", function () {
+                            spyOn(mockUtils, "isActivePage").andCallFake(function () { return false; });
+
+                            appView.navigateCheckConnection();
+
+                            expect(mockUtils.changePage).toHaveBeenCalledWith("#networkMsg");
+                        });
+                    });
+
+                    describe("when networkMsg is the active page", function () {
+                        it("should not call changePage on utils", function () {
+                            spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                            appView.navigateCheckConnection();
+
+                            expect(mockUtils.changePage).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+
+                describe("when a callback function is not passed", function () {
+                    var mockCallback = "";
+
+                    beforeEach(function () {
+                        spyOn(mockUtils, "$").andCallFake(function () { return mockNode; });
+                        spyOn(mockUtils, "isFn").andCallFake(function () { return false; });
+                        spyOn(mockUtils, "changePage").andCallFake(function () { });
+                        spyOn(mockNode, "on").andCallThrough();
+                        spyOn(mockNode, "off").andCallThrough();
+                    });
+
+                    it("should call $ on utils once", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockUtils.$).toHaveBeenCalled();
+
+                        expect(mockUtils.$.calls.length).toEqual(1);
+                    });
+
+                    it("the first call $ on utils should pass the correct parameter", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockUtils.$.calls[0].args.length).toEqual(1);
+                        expect(mockUtils.$.calls[0].args[0]).toEqual("#reconnectButton");
+                    });
+
+                    it("should call off on mockNode", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockNode.off).toHaveBeenCalled();
+
+                        expect(mockNode.off.mostRecentCall.args.length).toEqual(0);
+                    });
+
+                    it("should call isFn on utils", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockUtils.isFn).toHaveBeenCalled();
+
+                        expect(mockUtils.isFn.mostRecentCall.args.length).toEqual(1);
+                        expect(mockUtils.isFn.mostRecentCall.args[0]).toEqual(mockCallback);
+                    });
+
+                    it("should not call on on mockNode", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockNode.on).not.toHaveBeenCalled();
+                    });
+
+                    it("should call isActivePage on utils", function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                        appView.navigateCheckConnection(mockCallback);
+
+                        expect(mockUtils.isActivePage).toHaveBeenCalled();
+
+                        expect(mockUtils.isActivePage.mostRecentCall.args.length).toEqual(1);
+                        expect(mockUtils.isActivePage.mostRecentCall.args[0]).toEqual("networkMsg");
+                    });
+
+                    describe("when networkMsg is not the active page", function () {
+                        it("should call changePage on utils", function () {
+                            spyOn(mockUtils, "isActivePage").andCallFake(function () { return false; });
+
+                            appView.navigateCheckConnection();
+
+                            expect(mockUtils.changePage).toHaveBeenCalled();
+
+                            expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(1);
+                            expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual("#networkMsg");
+                        });
+                    });
+
+                    describe("when networkMsg is the active page", function () {
+                        it("should call changePage on utils", function () {
+                            spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+
+                            appView.navigateCheckConnection();
+
+                            expect(utils.changePage).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+            });
+
+            describe("has a closeCheckConnection function that", function () {
+                var mockNode = {
+                    dialog : function () { }
+                };
+
+                it("is defined", function () {
+                    expect(appView.closeCheckConnection).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appView.closeCheckConnection).toEqual(jasmine.any(Function));
+                });
+
+                describe("when networkMsg is not the active page", function () {
+                    beforeEach(function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return false; });
+                        spyOn(mockUtils, "$").andCallFake(function () { return mockNode; });
+                        spyOn(mockNode, "dialog").andCallThrough();
+
+                        appView.closeCheckConnection();
+                    });
+
+                    it("should call isActivePage on utils", function () {
+                        expect(mockUtils.isActivePage).toHaveBeenCalled();
+
+                        expect(mockUtils.isActivePage.mostRecentCall.args.length).toEqual(1);
+                        expect(mockUtils.isActivePage.mostRecentCall.args[0]).toEqual("networkMsg");
+                    });
+
+                    it("should not call $ on utils", function () {
+                        expect(mockUtils.$).not.toHaveBeenCalled();
+                    });
+
+                    it("should not call dialog on mockNode", function () {
+                        expect(mockNode.dialog).not.toHaveBeenCalled();
+                    });
+                });
+
+                describe("when networkMsg is the active page", function () {
+                    beforeEach(function () {
+                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "$").andCallFake(function () { return mockNode; });
+                        spyOn(mockNode, "dialog").andCallThrough();
+
+                        appView.closeCheckConnection();
+                    });
+
+                    it("should call isActivePage on utils", function () {
+                        expect(mockUtils.isActivePage).toHaveBeenCalled();
+
+                        expect(mockUtils.isActivePage.mostRecentCall.args.length).toEqual(1);
+                        expect(mockUtils.isActivePage.mostRecentCall.args[0]).toEqual("networkMsg");
+                    });
+
+                    it("should call $ on utils", function () {
+                        expect(mockUtils.$).toHaveBeenCalled();
+
+                        expect(mockUtils.$.mostRecentCall.args.length).toEqual(1);
+                        expect(mockUtils.$.mostRecentCall.args[0]).toEqual("#networkMsg");
+                    });
+
+                    it("should call dialog on mockNode", function () {
+                        expect(mockNode.dialog).toHaveBeenCalled();
+
+                        expect(mockNode.dialog.mostRecentCall.args.length).toEqual(1);
+                        expect(mockNode.dialog.mostRecentCall.args[0]).toEqual("close");
+                    });
                 });
             });
 

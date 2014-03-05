@@ -124,6 +124,25 @@ define(["backbone", "mustache", "utils", "globals", 'text!tmpl/common/jqueryDial
                     .attr("data-theme", "d");
             },
 
+            navigateCheckConnection: function (callback) {
+                // remove any previous event handlers
+                utils.$("#reconnectButton").off();
+
+                if (utils.isFn(callback)) {
+                    utils.$("#reconnectButton").on("click", callback);
+                }
+
+                if (utils.isActivePage("networkMsg") === false) {
+                    utils.changePage("#networkMsg");
+                }
+            },
+
+            closeCheckConnection: function () {
+                if (utils.isActivePage("networkMsg") === true) {
+                    utils.$("#networkMsg").dialog("close");
+                }
+            },
+
             /**
              * Event Handlers
              */

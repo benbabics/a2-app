@@ -1,9 +1,10 @@
-define(["backbone", "Squire"],
-    function (Backbone, Squire) {
+define(["backbone", "utils", "Squire"],
+    function (Backbone, utils, Squire) {
 
         "use strict";
 
         var squire = new Squire(),
+            mockUtils = utils,
             mockAppModel = {
                 "buildVersion": "1.1.1"
             },
@@ -20,10 +21,13 @@ define(["backbone", "Squire"],
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { },
-                displayDialog: function () { }
+                displayDialog: function () { },
+                closeCheckConnection: function () { },
+                navigateCheckConnection: function () { }
             },
             appController;
 
+        squire.mock("utils", mockUtils);
         squire.mock("models/AppModel", AppModel);
         squire.mock("routers/AppRouter", Squire.Helpers.returns(mockRouter));
         squire.mock("views/AppView", Squire.Helpers.returns(mockAppView));
@@ -104,9 +108,11 @@ define(["backbone", "Squire"],
 
             describe("has a ready function that", function () {
                 beforeEach(function () {
+                    spyOn(appController, "onOffline").andCallFake(function () { });
                     spyOn(mockRouter, "start").andCallThrough();
                     spyOn(mockRouter, "navigate").andCallFake(function () { });
                     spyOn(mockAppView, "render").andCallThrough();
+                    spyOn(document, "addEventListener").andCallThrough();
                     spyOn(window, "setTimeout").andCallThrough();
 
                     appController.init();
@@ -133,6 +139,25 @@ define(["backbone", "Squire"],
                     expect(mockAppView.render.mostRecentCall.args.length).toEqual(0);
                 });
 
+                it("should call the document addEventListener function", function () {
+                    expect(document.addEventListener).toHaveBeenCalled();
+
+                    expect(document.addEventListener.mostRecentCall.args.length).toEqual(3);
+                    expect(document.addEventListener.mostRecentCall.args[0]).toEqual("offline");
+                    expect(document.addEventListener.mostRecentCall.args[1]).toEqual(jasmine.any(Function));
+                    expect(document.addEventListener.mostRecentCall.args[2]).toBeFalsy();
+                });
+
+                describe("calling the addEventListener callback parameter", function () {
+                    it("should call the onOffline function", function () {
+                        var callback = document.addEventListener.mostRecentCall.args[1];
+
+                        callback.apply();
+
+                        expect(appController.onOffline).toHaveBeenCalledWith();
+                    });
+                });
+
                 it("should call the window setTimeout function", function () {
                     expect(window.setTimeout).toHaveBeenCalled();
 
@@ -152,6 +177,134 @@ define(["backbone", "Squire"],
                         expect(navigator.splashscreen.hide).toHaveBeenCalled();
 
                         expect(navigator.splashscreen.hide.mostRecentCall.args.length).toEqual(0);
+                    });
+                });
+            });
+
+            describe("has an onOffline function that", function () {
+                beforeEach(function () {
+                    spyOn(appController, "checkConnection").andCallFake(function () { });
+
+                    appController.onOffline();
+                });
+
+                it("is defined", function () {
+                    expect(appController.onOffline).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appController.onOffline).toEqual(jasmine.any(Function));
+                });
+
+                it("should call the checkConnection function", function () {
+                    expect(appController.checkConnection).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a checkConnection function that", function () {
+                var checkConnectionCallback;
+
+                beforeEach(function () {
+                    checkConnectionCallback = jasmine.createSpy("checkConnectionCallback");
+                });
+
+                it("is defined", function () {
+                    expect(appController.checkConnection).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appController.checkConnection).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the utils.hasNetworkConnection function returns true", function () {
+                    beforeEach(function () {
+                        spyOn(mockUtils, "hasNetworkConnection").andCallFake(function () { return true; });
+                        spyOn(mockAppView, "closeCheckConnection").andCallFake(function () { });
+                    });
+
+                    it("should call the closeCheckConnection function on AppView", function () {
+                        appController.checkConnection(checkConnectionCallback);
+
+                        expect(mockAppView.closeCheckConnection).toHaveBeenCalledWith();
+                    });
+
+                    describe("when the utils.isFn function returns true", function () {
+                        it("should call the callback", function () {
+                            spyOn(mockUtils, "isFn").andCallFake(function () { return true; });
+
+                            appController.checkConnection(checkConnectionCallback);
+
+                            expect(checkConnectionCallback).toHaveBeenCalledWith();
+                        });
+                    });
+
+                    describe("when the utils.isFn function returns false", function () {
+                        it("should not call the callback", function () {
+                            spyOn(mockUtils, "isFn").andCallFake(function () { return false; });
+
+                            appController.checkConnection(checkConnectionCallback);
+
+                            expect(checkConnectionCallback).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+
+                describe("when the utils.hasNetworkConnection function returns false", function () {
+                    beforeEach(function () {
+                        spyOn(mockUtils, "hasNetworkConnection").andCallFake(function () { return false; });
+                    });
+
+                    describe("should call the navigateCheckConnection function on AppView", function () {
+                        it("by passing a callback", function () {
+                            spyOn(mockAppView, "navigateCheckConnection").andCallFake(function () { });
+
+                            appController.checkConnection(checkConnectionCallback);
+
+                            expect(mockAppView.navigateCheckConnection).toHaveBeenCalledWith(jasmine.any(Function));
+                        });
+
+                        describe("when the callback is called", function () {
+                            var navigateCheckConnectionCallback;
+
+                            beforeEach(function () {
+                                spyOn(mockAppView, "navigateCheckConnection").andCallFake(function () { });
+
+                                appController.checkConnection(checkConnectionCallback);
+
+                                navigateCheckConnectionCallback =
+                                    mockAppView.navigateCheckConnection.mostRecentCall.args[0];
+
+                                spyOn(window, "setTimeout").andCallThrough();
+                                spyOn(appController, "checkConnection").andCallFake(function () { });
+
+                                navigateCheckConnectionCallback.call();
+                            });
+
+                            describe("should call the setTimeout function on window", function () {
+                                it("by passing a callback", function () {
+                                    expect(window.setTimeout).toHaveBeenCalled();
+
+                                    expect(window.setTimeout.mostRecentCall.args.length).toEqual(2);
+                                    expect(window.setTimeout.mostRecentCall.args[0]).toEqual(jasmine.any(Function));
+                                    expect(window.setTimeout.mostRecentCall.args[1]).toEqual(2000);
+                                });
+
+                                describe("when the callback is called", function () {
+                                    var setTimeoutCallback;
+
+                                    beforeEach(function () {
+                                        setTimeoutCallback = window.setTimeout.mostRecentCall.args[0];
+
+                                        setTimeoutCallback.call();
+                                    });
+
+                                    it("should call the checkConnection function", function () {
+                                        expect(appController.checkConnection)
+                                            .toHaveBeenCalledWith(checkConnectionCallback);
+                                    });
+                                });
+                            });
+                        });
                     });
                 });
             });
