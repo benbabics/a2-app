@@ -52,14 +52,14 @@ define([ "jclass", "utils", "routers/AppRouter", "views/AppView", "models/AppMod
                     if (utils.isFn(callback)) {
                         callback();
                     }
-                } else {
+                }
+                else {
                     var self = this;
                     this.appView.navigateCheckConnection(function () {
                         // Let's act like we have to spend a couple of seconds seeing if there is a connection
-
-                        //TODO - Add displaying of loading indicator
+                        self.appView.showLoadingIndicator.call(self, false);
                         setTimeout(function () {
-                            //TODO - Add hiding of loading indicator
+                            self.appView.hideLoadingIndicator.call(self, false);
                             self.checkConnection.call(self, callback);
                         }, 2000);
                     });

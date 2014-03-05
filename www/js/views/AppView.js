@@ -11,11 +11,46 @@ define(["backbone", "mustache", "utils", "globals", 'text!tmpl/common/jqueryDial
 
             initialize: function () {
                 this.render();
+                this.setupBackboneLoadingIndicators();
             },
 
             render: function (display) {
                 display = display || false;
                 return this.$el.toggleClass("ui-hidden", display);
+            },
+
+            setupBackboneLoadingIndicators: function () {
+                // handle toggling loading indicator
+                function handleLoader(toggle) {
+                    // is this page visible?
+                    if (this.$el.is(utils.$.mobile.activePage)) {
+                        this[(toggle ? "show" : "hide") + "LoadingIndicator"]();
+                    }
+                }
+
+                // Backbone.View convenience methods
+                Backbone.View.prototype.showLoadingIndicator = function (checkView) {
+                    if (checkView === true) {
+                        handleLoader.call(this, true);
+                    }
+                    else {
+                        try {
+                            utils.$.mobile.loading("show");
+                        } catch (e) {}
+                    }
+                };
+
+                Backbone.View.prototype.hideLoadingIndicator = function (checkView) {
+                    if (checkView === true) {
+                        handleLoader.call(this, false);
+                    }
+                    else {
+                        try {
+                            // This call throws an exception if called during startup before mobile.loaderWidget is defined
+                            utils.$.mobile.loading("hide");
+                        } catch (e) {}
+                    }
+                };
             },
 
             /*

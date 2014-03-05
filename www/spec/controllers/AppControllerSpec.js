@@ -22,6 +22,8 @@ define(["backbone", "utils", "Squire"],
                 initialize: function () { },
                 render: function () { },
                 displayDialog: function () { },
+                showLoadingIndicator: function () { },
+                hideLoadingIndicator: function () { },
                 closeCheckConnection: function () { },
                 navigateCheckConnection: function () { }
             },
@@ -274,10 +276,19 @@ define(["backbone", "utils", "Squire"],
                                 navigateCheckConnectionCallback =
                                     mockAppView.navigateCheckConnection.mostRecentCall.args[0];
 
+                                spyOn(mockAppView, "showLoadingIndicator").andCallFake(function (callback) { });
                                 spyOn(window, "setTimeout").andCallThrough();
+                                spyOn(mockAppView, "hideLoadingIndicator").andCallFake(function (callback) { });
                                 spyOn(appController, "checkConnection").andCallFake(function () { });
 
                                 navigateCheckConnectionCallback.call();
+                            });
+
+                            it("should call the showLoadingIndicator function on AppView", function () {
+                                expect(mockAppView.showLoadingIndicator).toHaveBeenCalled();
+
+                                expect(mockAppView.showLoadingIndicator.mostRecentCall.args.length).toEqual(1);
+                                expect(mockAppView.showLoadingIndicator.mostRecentCall.args[0]).toBeFalsy();
                             });
 
                             describe("should call the setTimeout function on window", function () {
@@ -296,6 +307,13 @@ define(["backbone", "utils", "Squire"],
                                         setTimeoutCallback = window.setTimeout.mostRecentCall.args[0];
 
                                         setTimeoutCallback.call();
+                                    });
+
+                                    it("should call the hideLoadingIndicator function on AppView", function () {
+                                        expect(mockAppView.hideLoadingIndicator).toHaveBeenCalled();
+
+                                        expect(mockAppView.hideLoadingIndicator.mostRecentCall.args.length).toEqual(1);
+                                        expect(mockAppView.hideLoadingIndicator.mostRecentCall.args[0]).toBeFalsy();
                                     });
 
                                     it("should call the checkConnection function", function () {

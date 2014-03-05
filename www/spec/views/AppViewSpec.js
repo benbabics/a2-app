@@ -70,6 +70,7 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(appView, "render").andCallThrough();
+                    spyOn(appView, "setupBackboneLoadingIndicators").andCallFake(function () {});
 
                     appView.initialize();
                 });
@@ -83,9 +84,11 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 });
 
                 it("should call render", function () {
-                    expect(appView.render).toHaveBeenCalled();
+                    expect(appView.render).toHaveBeenCalledWith();
+                });
 
-                    expect(appView.render.mostRecentCall.args.length).toEqual(0);
+                it("should call setupBackboneLoadingIndicators", function () {
+                    expect(appView.setupBackboneLoadingIndicators).toHaveBeenCalledWith();
                 });
             });
 
@@ -135,6 +138,130 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                         expect(appView.$el.toggleClass.mostRecentCall.args.length).toEqual(2);
                         expect(appView.$el.toggleClass.mostRecentCall.args[0]).toEqual("ui-hidden");
                         expect(appView.$el.toggleClass.mostRecentCall.args[1]).toBeTruthy();
+                    });
+                });
+            });
+
+            describe("has a setupBackboneLoadingIndicators function that", function () {
+                it("is defined", function () {
+                    expect(appView.setupBackboneLoadingIndicators).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appView.setupBackboneLoadingIndicators).toEqual(jasmine.any(Function));
+                });
+
+                // setupBackboneLoadingIndicators defines showLoadingIndicator and hideLoadingIndicator functions
+                // and those functions are tested below so there's not much else to do here unless we can figure out
+                // how to test that the functions were added to all Backbone views
+            });
+
+            describe("has a showLoadingIndicator function that", function () {
+                it("is defined", function () {
+                    expect(appView.showLoadingIndicator).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appView.showLoadingIndicator).toEqual(jasmine.any(Function));
+                });
+
+                describe("when checking that the view is the active page", function () {
+                    describe("when NOT the active page", function () {
+                        beforeEach(function () {
+                            spyOn(appView.$el, "is").andCallFake(function () { return false; });
+                            spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                            appView.showLoadingIndicator(true);
+                        });
+
+                        it("should call the is function on AppView.$el", function () {
+                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
+                        });
+
+                        it("should NOT call the loading function on utils.$.mobile", function () {
+                            expect(mockUtils.$.mobile.loading).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("when the active page", function () {
+                        beforeEach(function () {
+                            spyOn(appView.$el, "is").andCallFake(function () { return true; });
+                            spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                            appView.showLoadingIndicator(true);
+                        });
+
+                        it("should call the is function on AppView.$el", function () {
+                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
+                        });
+
+                        it("should call the loading function on utils.$.mobile", function () {
+                            expect(mockUtils.$.mobile.loading).toHaveBeenCalledWith("show");
+                        });
+                    });
+                });
+
+                describe("when not checking that the view is the active page", function () {
+                    beforeEach(function () {
+                        spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                        appView.showLoadingIndicator(false);
+                    });
+
+                    it("should call the loading function on utils.$.mobile", function () {
+                        expect(mockUtils.$.mobile.loading).toHaveBeenCalledWith("show");
+                    });
+                });
+            });
+
+            describe("has a hideLoadingIndicator function that", function () {
+                it("is defined", function () {
+                    expect(appView.hideLoadingIndicator).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appView.hideLoadingIndicator).toEqual(jasmine.any(Function));
+                });
+
+                describe("when checking that the view is the active page", function () {
+                    describe("when NOT the active page", function () {
+                        beforeEach(function () {
+                            spyOn(appView.$el, "is").andCallFake(function () { return false; });
+                            spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                            appView.hideLoadingIndicator(true);
+                        });
+
+                        it("should call the is function on AppView.$el", function () {
+                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
+                        });
+
+                        it("should NOT call the loading function on utils.$.mobile", function () {
+                            expect(mockUtils.$.mobile.loading).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("when the active page", function () {
+                        beforeEach(function () {
+                            spyOn(appView.$el, "is").andCallFake(function () { return true; });
+                            spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                            appView.hideLoadingIndicator(true);
+                        });
+
+                        it("should call the is function on AppView.$el", function () {
+                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
+                        });
+
+                        it("should call the loading function on utils.$.mobile", function () {
+                            expect(mockUtils.$.mobile.loading).toHaveBeenCalledWith("hide");
+                        });
+                    });
+                });
+
+                describe("when not checking that the view is the active page", function () {
+                    beforeEach(function () {
+                        spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                        appView.hideLoadingIndicator(false);
+                    });
+
+                    it("should call the loading function on utils.$.mobile", function () {
+                        expect(mockUtils.$.mobile.loading).toHaveBeenCalledWith("hide");
                     });
                 });
             });
