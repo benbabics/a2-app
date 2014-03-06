@@ -9,7 +9,7 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
             },
             mockMustache = Mustache,
             mockLoginModel = {
-                "username": "JoeUser",
+                "userName": "JoeUser",
                 "password": "p@S$w0rd1"
             },
             loginModel = new Backbone.Model(),
@@ -136,27 +136,14 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                 });
             });
 
-            describe("has a handleValidationError function that", function () {
-                it("is defined", function () {
-                    expect(loginView.handleValidationError).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(loginView.handleValidationError).toEqual(jasmine.any(Function));
-                });
-
-                // TODO: finish once this function has been finalized
-            });
-
             describe("has a submitForm function that", function () {
                 var mockEvent = {
                     preventDefault : function () { }
                 };
 
                 beforeEach(function () {
-                    spyOn(mockFacade, "publish").andCallFake(function () { });
-                    spyOn(LoginView.__super__, "submitForm").andCallFake(function () {});
-
+                    spyOn(mockEvent, "preventDefault").andCallThrough();
+                    spyOn(loginModel, "save").andCallFake(function () { });
                     loginView.submitForm(mockEvent);
                 });
 
@@ -168,16 +155,43 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                     expect(loginView.submitForm).toEqual(jasmine.any(Function));
                 });
 
-                it("should call super()", function () {
-                    expect(LoginView.__super__.submitForm).toHaveBeenCalledWith(mockEvent);
+                it("should call event.preventDefault", function () {
+                    expect(mockEvent.preventDefault).toHaveBeenCalledWith();
                 });
 
-                it("should call publish on the facade", function () {
-                    expect(mockFacade.publish).toHaveBeenCalled();
+                describe("when calling save() on the model", function () {
+                    it("should send the model as the first argument", function () {
+                        expect(loginModel.save).toHaveBeenCalled();
+                        expect(loginModel.save.mostRecentCall.args.length).toEqual(2);
+                        expect(loginModel.save.mostRecentCall.args[0]).toEqual(loginModel.toJSON());
+                    });
 
-                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
-                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("home");
-                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
+                    describe("sends as the second argument the options object with a success callback that", function () {
+                        var model = {
+                                clear: jasmine.createSpy("clear() spy")
+                            },
+                            response,
+                            options;
+
+                        beforeEach(function () {
+                            options = loginModel.save.mostRecentCall.args[1];
+
+                            spyOn(mockFacade, "publish").andCallFake(function () { });
+
+                            options.success.call(loginView, model, response, options);
+                        });
+
+                        it ("should clear the model", function () {
+                            expect(model.clear).toHaveBeenCalledWith();
+                        });
+
+                        it("should publish to navigate to home", function () {
+                            expect(mockFacade.publish).toHaveBeenCalled();
+                            expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
+                            expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("home");
+                            expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
+                        });
+                    });
                 });
             });
         });

@@ -32,24 +32,18 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView", 
             /*
              * Event Handlers
              */
-            handleValidationError: function (model, error) {
-                var message = "The following fields are required: \n"; // TODO: put in globals
-
-                utils._.each(error, function (value, key, list) {
-                    message += value + "\n";
-                });
-
-                // TODO: Use the native alert
-                alert(message);
-            },
-
             submitForm: function (evt) {
-                // call super
-                LoginView.__super__.submitForm.apply(this, arguments);
+                evt.preventDefault();
 
-                // TODO - Need to authenticate the user before navigating to the home page
+                this.model.save(this.model.toJSON(), {
+                    success: function (model, response, options) {
+                        // Clear the model so the login credentials are not persisted at all
+                        model.clear();
 
-                facade.publish("home", "navigate");
+                        // once the user successfully logs in navigate to the Home page
+                        facade.publish("home", "navigate");
+                    }
+                });
             }
         });
 

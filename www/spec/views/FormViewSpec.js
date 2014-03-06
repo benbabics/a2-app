@@ -135,6 +135,20 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     expect(formModel.on.calls[0].args[1]).toEqual(formView.handleValidationError);
                 });
 
+                it("should register a function as the handler for the request event", function () {
+                    expect(formModel.on).toHaveBeenCalled();
+                    expect(formModel.on.calls[1].args.length).toEqual(2);
+                    expect(formModel.on.calls[1].args[0]).toEqual("request");
+                    expect(formModel.on.calls[1].args[1]).toEqual(formView.showLoadingIndicator);
+                });
+
+                it("should register a function as the handler for the sync and error events", function () {
+                    expect(formModel.on).toHaveBeenCalled();
+                    expect(formModel.on.calls[2].args.length).toEqual(2);
+                    expect(formModel.on.calls[2].args[0]).toEqual("sync error");
+                    expect(formModel.on.calls[2].args[1]).toEqual(formView.hideLoadingIndicator);
+                });
+
                 it("should parse the template", function () {
                     expect(mockMustache.parse).toHaveBeenCalledWith(formView.template);
                 });

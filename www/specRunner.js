@@ -105,6 +105,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-async
             specs.push("spec/views/UpdatePromptViewSpec.js");
 
             // Models
+            specs.push("spec/models/AjaxModelSpec.js");
             specs.push("spec/models/AppModelSpec.js");
             specs.push("spec/models/ContactUsModelSpec.js");
             specs.push("spec/models/LoginModelSpec.js");

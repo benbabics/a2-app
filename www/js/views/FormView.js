@@ -22,7 +22,10 @@ define(["backbone", "globals", "facade", "utils", "mustache", "backbone-validati
                 utils._.bindAll(this, "handleValidationError", "handleInputChanged", "submitForm");
 
                 // Set handlers for model events
-                this.model.on("invalid", this.handleValidationError);
+                this.model.on("invalid", this.handleValidationError);   // when validation of the model fails
+                this.model.on("request", this.showLoadingIndicator);    // when an ajax request has been sent
+                this.model.on("sync error", this.hideLoadingIndicator); // when an ajax request has been completed with
+                                                                        // either success (sync) or failure (error)
 
                 // cache the template
                 Mustache.parse(this.template);

@@ -6,21 +6,37 @@ define(function (require) {
     var globals;
     globals = {};
 
-   /*
+    /**
     * Webservices
     */
     globals.WEBSERVICE = {
-        "ROOT_URL": "@@@STRING_REPLACE_APP_URL@@@",
-        "APP_PATH": "/app"
-    };
+        "ROOT_URL"                     : "@@@STRING_REPLACE_APP_URL@@@",
+        "APP_PATH"                     : "/app",
+        "USER_AUTH_PATH"               : "/userAuth",
+        "REQUEST_ERROR_TITLE"          : "Cannot complete request",
+        "REQUEST_ERROR_UNKNOWN_MESSAGE": "Please try again"
+    };    
     globals.WEBSERVICE.SECURE = {
         "ROOT_URL": globals.WEBSERVICE.ROOT_URL + "/secure"
     };
+	// App Version Status
+    globals.WEBSERVICE.APP_VERSION_STATUS = {
+        "URL"           : globals.WEBSERVICE.ROOT_URL +
+                          globals.WEBSERVICE.APP_PATH +
+                          "/accountMaintenanceVersionStatus",
+        "VERSION_NUMBER": "versionNumber=",
+        "PLATFORM"      : "platform="
+    };
+    // User Login
+    globals.WEBSERVICE.LOGIN = {
+        "URL": globals.WEBSERVICE.ROOT_URL + globals.WEBSERVICE.USER_AUTH_PATH + "/login"
+    };
+	// Contact Us
     globals.WEBSERVICE.CONTACT_US = {
         "URL": globals.WEBSERVICE.SECURE.ROOT_URL + "/contactUs"
     };
 
-    /*
+    /**
      * App
      */
     globals.APP = {
@@ -34,7 +50,7 @@ define(function (require) {
         "LAST_WARN_VERSION"  : "lastWarnVersion"
     };
 
-    /*
+    /**
      * Database
      */
     globals.DATABASE = {
@@ -45,7 +61,7 @@ define(function (require) {
         "SUCCESS"              : "Database operation successful."
     };
 
-    /*
+    /**
      * Media Queries
      */
     globals.MEDIA_QUERY = {
@@ -53,7 +69,7 @@ define(function (require) {
         "RETINA": "screen and (-webkit-min-device-pixel-ratio: 2)"
     };
 
-    /*
+    /**
      * Defaults
      */
     globals.DEFAULT = {
@@ -75,12 +91,15 @@ define(function (require) {
         "DEFAULT_BTN_TEXT": "OK"
     };
 
+    /**
+     * Validation
+     */
     globals.VALIDATION_ERRORS = {
         "TITLE" : "Cannot complete request",
         "HEADER": "<div class='ui-body ui-body-e'>The following fields are required:</div>"
     };
 
-    /*
+    /**
      * Update the App
      */
     globals.UPDATE_APP = {
@@ -92,28 +111,19 @@ define(function (require) {
         "SECONDARY_BTN_LABEL": "Not Now"
     };
 
-    // App Version Status
-    globals.WEBSERVICE.APP_VERSION_STATUS = {
-        "URL"           : globals.WEBSERVICE.ROOT_URL +
-                          globals.WEBSERVICE.APP_PATH +
-                          "/accountMaintenanceVersionStatus",
-        "VERSION_NUMBER": "versionNumber=",
-        "PLATFORM"      : "platform="
-    };
-
-    /*
+    /**
      * Page :: Login
      */
     globals.login = {};
     globals.login.constants = {
-        //"WEBSERVICE"                   : globals.WEBSERVICE.LOGIN, // TODO: Uncomment once this is filled in
+        "WEBSERVICE"                   : globals.WEBSERVICE.LOGIN.URL,
         "ERROR_USERNAME_REQUIRED_FIELD": "Username must have a value",
         "ERROR_PASSWORD_REQUIRED_FIELD": "Password must have a value"
     };
     globals.login.configuration = {
-        "username": {
+        "userName": {
             "label"      : "Username",
-            "name"       : "username",
+            "name"       : "userName",
             "placeholder": "",
             "value"      : ""
         },

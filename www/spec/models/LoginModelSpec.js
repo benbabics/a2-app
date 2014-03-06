@@ -26,8 +26,8 @@ define(["Squire", "globals"],
             });
 
             describe("has property defaults that", function () {
-                it("should set username to default", function () {
-                    expect(loginModel.defaults.username).toBeNull();
+                it("should set userName to default", function () {
+                    expect(loginModel.defaults.userName).toBeNull();
                 });
 
                 it("should set password to default", function () {
@@ -36,13 +36,13 @@ define(["Squire", "globals"],
             });
 
             describe("has property validation that", function () {
-                describe("has a validation configuration for the username field that", function () {
+                describe("has a validation configuration for the userName field that", function () {
                     it("should set the field as required", function () {
-                        expect(loginModel.validation.username.required).toBeTruthy();
+                        expect(loginModel.validation.userName.required).toBeTruthy();
                     });
 
                     it("should set the error message when the field is not supplied", function () {
-                        expect(loginModel.validation.username.msg).toEqual(globals.login.constants.ERROR_USERNAME_REQUIRED_FIELD);
+                        expect(loginModel.validation.userName.msg).toEqual(globals.login.constants.ERROR_USERNAME_REQUIRED_FIELD);
                     });
                 });
 
@@ -55,6 +55,10 @@ define(["Squire", "globals"],
                         expect(loginModel.validation.password.msg).toEqual(globals.login.constants.ERROR_PASSWORD_REQUIRED_FIELD);
                     });
                 });
+            });
+
+            it("should set the urlRoot", function () {
+                expect(loginModel.urlRoot).toEqual(globals.login.constants.WEBSERVICE);
             });
 
             describe("has an initialize function that", function () {

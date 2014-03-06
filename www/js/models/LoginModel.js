@@ -1,18 +1,20 @@
-define(["backbone", "globals"],
-    function (Backbone, globals) {
+define(["backbone", "globals", "utils", "models/AjaxModel"],
+    function (Backbone, globals, utils, AjaxModel) {
 
         "use strict";
 
 
-        var LoginModel = Backbone.Model.extend({
+        var LoginModel = AjaxModel.extend({
 
-            defaults: {
-                "username": null,
+            defaults: utils._.extend({}, AjaxModel.prototype.defaults, {
+                "userName": null,
                 "password": null
-            },
+            }),
 
-            validation: {
-                "username": {
+            urlRoot: globals.login.constants.WEBSERVICE,
+
+            validation: utils._.extend({}, AjaxModel.prototype.validation, {
+                "userName": {
                     required: true,
                     msg: globals.login.constants.ERROR_USERNAME_REQUIRED_FIELD
                 },
@@ -20,7 +22,7 @@ define(["backbone", "globals"],
                     required: true,
                     msg: globals.login.constants.ERROR_PASSWORD_REQUIRED_FIELD
                 }
-            },
+            }),
 
             initialize: function () {
             }
