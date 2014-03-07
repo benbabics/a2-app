@@ -65,7 +65,40 @@ a.format-detection-no { text-decoration: none; font-weight: inherit !important; 
 	background: none;
 }
 
+#home img {
+    margin: 5px 0 0 5px;
+}
 
+#home .ui-listview>.ui-li-has-thumb>.ui-btn {
+    min-height: 0;
+}
+
+.ui-body-b, .ui-overlay-b {
+    border: 1px solid #999;
+    background: #f3f3f3;
+    color: #222;
+    text-shadow: 0 1px 0 #fff;
+    font-weight: normal;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#ddd),to(#ccc));
+    background-image: -webkit-linear-gradient(#ddd,#ccc);
+    background-image: -moz-linear-gradient(#ddd,#ccc);
+    background-image: -ms-linear-gradient(#ddd,#ccc);
+    background-image: -o-linear-gradient(#ddd,#ccc);
+    background-image: linear-gradient(#ddd,#ccc);
+}
+
+.ui-body-d, .ui-overlay-d {
+    border: 1px solid #bbb;
+    color: #333;
+    text-shadow: 0 1px 0 #fff;
+    background: #fff;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#fff),to(#fff));
+    background-image: -webkit-linear-gradient(#fff,#fff);
+    background-image: -moz-linear-gradient(#fff,#fff);
+    background-image: -ms-linear-gradient(#fff,#fff);
+    background-image: -o-linear-gradient(#fff,#fff);
+    background-image: linear-gradient(#fff,#fff);
+}
 
 /*
  * jQuery UI Datepicker @VERSION

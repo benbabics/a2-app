@@ -1,17 +1,23 @@
-define(["backbone", "utils", "Squire", "jasmine-jquery"],
-    function (Backbone, utils, Squire) {
+define(["backbone", "utils", "models/UserModel", "Squire", "jasmine-jquery"],
+    function (Backbone, utils, UserModel, Squire) {
         "use strict";
 
         var squire = new Squire(),
             mockUtils = utils,
+            mockFacade = {
+                publish: function () { }
+            },
             mockAppModel = {
                 "buildVersion": "1.1.1"
             },
             appModel = new Backbone.Model(),
+            userModel = UserModel.getInstance(),
             appView;
 
         squire.mock("backbone", Backbone);
+        squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
+        squire.mock("models/UserModel", UserModel);
 
         describe("An App View", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -25,6 +31,7 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                     loadFixtures("index.html");
 
                     appModel.set(mockAppModel);
+                    spyOn(UserModel, "getInstance").andCallFake(function () { return userModel; });
 
                     appView = new AppView({
                         model: appModel,
@@ -46,6 +53,10 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
             describe("has events that", function () {
                 it("should call handlePageBack when a data-rel=back is clicked", function () {
                     expect(appView.events["click [data-rel=back]"]).toEqual("handlePageBack");
+                });
+
+                it("should call handleLogout when a data-rel=logout is clicked", function () {
+                    expect(appView.events["click [data-rel=logout]"]).toEqual("handleLogout");
                 });
             });
 
@@ -645,11 +656,49 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 });
 
                 it("should call event.preventDefault", function () {
-                    expect(mockEvent.preventDefault).toHaveBeenCalled();
+                    expect(mockEvent.preventDefault).toHaveBeenCalledWith();
                 });
 
                 it("should call window.history.back", function () {
-                    expect(window.history.back).toHaveBeenCalled();
+                    expect(window.history.back).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a handleLogout function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    spyOn(mockEvent, "preventDefault").andCallThrough();
+                    spyOn(userModel, "reset").andCallThrough();
+                    spyOn(mockFacade, "publish").andCallFake(function () {});
+
+                    appView.handleLogout(mockEvent);
+                });
+
+                it("is defined", function () {
+                    expect(appView.handleLogout).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appView.handleLogout).toEqual(jasmine.any(Function));
+                });
+
+                it("should call event.preventDefault", function () {
+                    expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                });
+
+                it("should call UserModel.reset", function () {
+                    expect(userModel.reset).toHaveBeenCalledWith();
+                });
+
+                it("should call publish on the facade", function () {
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
+                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("login");
+                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
                 });
             });
         });

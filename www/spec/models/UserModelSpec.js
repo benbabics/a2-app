@@ -30,8 +30,16 @@ define(["Squire"],
                     expect(userModel.defaults.authenticated).toBeFalsy();
                 });
 
+                it("should set firstName to default", function () {
+                    expect(userModel.defaults.firstName).toBeNull();
+                });
+
                 it("should set email to default", function () {
                     expect(userModel.defaults.email).toBeNull();
+                });
+
+                it("should set selectedCompany to default", function () {
+                    expect(userModel.defaults.selectedCompany).toBeNull();
                 });
             });
 
@@ -58,7 +66,7 @@ define(["Squire"],
                     });
                 });
 
-                describe("when options are provided but email attribute is not", function () {
+                describe("when options are provided without attributes", function () {
                     var options = {};
 
                     beforeEach(function () {
@@ -72,16 +80,54 @@ define(["Squire"],
 
                 describe("when options are provided", function () {
                     var options = {
-                        email: "mobiledevelopment@wexinc.com"
-                    };
+                            authenticated: true,
+                            firstName: "Beavis",
+                            email: "cornholio@bnbinc.com",
+                            selectedCompany: {
+                                name: "Beavis and Butthead Inc",
+                                wexAccountNumber: "5764309"
+                            }
+                        };
 
                     beforeEach(function () {
                         userModel.initialize(options);
                     });
 
+                    it("should set authenticated", function () {
+                        expect(userModel.set).toHaveBeenCalledWith("authenticated", options.authenticated);
+                    });
+
+                    it("should set firstName", function () {
+                        expect(userModel.set).toHaveBeenCalledWith("firstName", options.firstName);
+                    });
+
                     it("should set email", function () {
                         expect(userModel.set).toHaveBeenCalledWith("email", options.email);
                     });
+
+                    it("should set selectedCompany", function () {
+                        expect(userModel.set).toHaveBeenCalledWith("selectedCompany", options.selectedCompany);
+                    });
+                });
+            });
+
+            describe("has a reset function that", function () {
+                beforeEach(function () {
+                    spyOn(userModel, "set").andCallThrough();
+
+                    userModel.reset();
+                });
+
+                it("is defined", function () {
+                    expect(userModel.reset).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(userModel.reset).toEqual(jasmine.any(Function));
+                });
+
+                it("should call set", function () {
+                    expect(userModel.set).toHaveBeenCalledWith(userModel.defaults);
                 });
             });
         });

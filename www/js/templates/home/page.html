@@ -1,1 +1,34 @@
-HOME
+{{#authenticated}}
+<p class="text-center">Welcome, {{firstName}}</p>
+
+<!-- TODO - Multi-Hierarchy -->
+{{#selectedCompany}}
+<div class="ui-body ui-body-d">
+    <small>{{name}}</small>
+    <br/>
+    <small>{{wexAccountNumber}}</small>
+</div>
+{{/selectedCompany}}
+
+<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="d">
+    <!-- TODO - Limit to users with the MOBILE_PAYMENT_VIEW permission-->
+    <li>
+        <a href="#invoices" data-transition="flip" rel="external">
+            <img src="img/ui-icon_Invoices.png">Invoice
+        </a>
+    </li>
+    <!-- TODO - Limit to users with the MOBILE_CARD_VIEW permission-->
+    <li>
+        <a href="#cards" data-transition="flip" rel="external">
+            <img src="img/ui-icon_Card.png">Card
+        </a>
+    </li>
+    <!-- TODO - Limit to users with the MOBILE_DRIVER_FULL_VIEW permission-->
+    <li>
+        <a href="#drivers" data-transition="flip" rel="external">
+            <img src="img/ui-icon_Driver.png">Driver
+        </a>
+    </li>
+</ul>
+
+{{/authenticated}}

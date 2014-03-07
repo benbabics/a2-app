@@ -1,5 +1,5 @@
-define(["utils", "jclass", "views/HomeView"],
-    function (utils, JClass, HomeView) {
+define(["utils", "jclass", "models/UserModel", "views/HomeView"],
+    function (utils, JClass, UserModel, HomeView) {
 
         "use strict";
 
@@ -17,11 +17,14 @@ define(["utils", "jclass", "views/HomeView"],
 
             init: function () {
                 // create view
-                this.homeView = new HomeView();
+                this.homeView = new HomeView({
+                    model: UserModel.getInstance()
+                });
             },
 
             navigate: function () {
-                utils.changePage(this.homeView.$el);
+                this.homeView.render();
+                utils.changePage(this.homeView.$el, null, null, true);
             }
         }, classOptions);
 

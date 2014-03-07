@@ -6,12 +6,23 @@ define(["backbone"],
 
         var UserModel = Backbone.Model.extend({
             defaults: {
-                "authenticated": false,
-                "email"        : null
+                "authenticated"  : false,
+                "firstName"      : null,
+                "email"          : null,
+                "selectedCompany": null
             },
 
             initialize: function (options) {
-                if (options && options.email) { this.set("email", options.email); }
+                if (options) {
+                    if (options.authenticated) { this.set("authenticated", options.authenticated); }
+                    if (options.firstName) { this.set("firstName", options.firstName); }
+                    if (options.email) { this.set("email", options.email); }
+                    if (options.selectedCompany) { this.set("selectedCompany", options.selectedCompany); }
+                }
+            },
+
+            reset: function () {
+                this.set(this.defaults);
             }
         });
 

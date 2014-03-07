@@ -1,4 +1,4 @@
-define(["backbone", "utils", "mustache", "globals", "text!tmpl/home/page.html", "backbone-validation"],
+define(["backbone", "utils", "mustache", "globals", "text!tmpl/home/page.html"],
     function (Backbone, utils, Mustache, globals, pageTemplate) {
 
         "use strict";
@@ -15,13 +15,11 @@ define(["backbone", "utils", "mustache", "globals", "text!tmpl/home/page.html", 
 
                 // parse the template
                 Mustache.parse(this.template);
-
-                this.pageCreate();
             },
 
-            pageCreate: function () {
+            render: function () {
                 var $content = this.$el.find(":jqmData(role=content)");
-                $content.html(Mustache.render(this.template));
+                $content.html(Mustache.render(this.template, this.model.toJSON()));
             }
         });
 

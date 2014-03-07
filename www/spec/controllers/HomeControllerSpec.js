@@ -1,18 +1,24 @@
-define(["utils", "Squire"],
-    function (utils, Squire) {
+define(["backbone", "utils", "Squire"],
+    function (Backbone, utils, Squire) {
 
         "use strict";
 
         var squire = new Squire(),
             mockUtils = utils,
+            mockUserModel = { },
+            userModel = new Backbone.Model(),
+            UserModel = {
+                getInstance: function () { }
+            },
             mockHomeView = {
                 $el: "",
                 constructor: function () { },
                 initialize: function () { },
-                pageCreate: function () { }
+                render: function () { }
             },
             homeController;
 
+        squire.mock("backbone", Backbone);
         squire.mock("utils", mockUtils);
         squire.mock("views/HomeView", Squire.Helpers.returns(mockHomeView));
 
@@ -21,6 +27,9 @@ define(["utils", "Squire"],
 
             jasmineAsync.beforeEach(function (done) {
                 squire.require(["controllers/HomeController"], function (HomeController) {
+                    userModel.set(mockUserModel);
+                    spyOn(UserModel, "getInstance").andCallFake(function () { return userModel; });
+
                     homeController = HomeController;
                     homeController.init();
 
@@ -62,7 +71,9 @@ define(["utils", "Squire"],
 
                     xit("should send in the correct parameters to the constructor", function () {
                         expect(mockHomeView.constructor).toHaveBeenCalled();
-                        expect(mockHomeView.constructor).toHaveBeenCalledWith();
+                        expect(mockHomeView.constructor).toHaveBeenCalledWith({
+                            model: userModel
+                        });
 
                         // TODO: this is not working, need to figure out how to test
                     });
@@ -71,6 +82,7 @@ define(["utils", "Squire"],
 
             describe("has a navigate function that", function () {
                 beforeEach(function () {
+                    spyOn(mockHomeView, "render").andCallThrough();
                     spyOn(mockUtils, "changePage").andCallThrough();
 
                     homeController.navigate();
@@ -84,11 +96,18 @@ define(["utils", "Squire"],
                     expect(homeController.navigate).toEqual(jasmine.any(Function));
                 });
 
-                it("should change the page to the Login View Page", function () {
+                it("should call render on the Home View", function () {
+                    expect(mockHomeView.render).toHaveBeenCalledWith();
+                });
+
+                it("should change the page to the Home View Page", function () {
                     expect(mockUtils.changePage).toHaveBeenCalled();
 
-                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(1);
+                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(4);
                     expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual(mockHomeView.$el);
+                    expect(mockUtils.changePage.mostRecentCall.args[1]).toBeNull();
+                    expect(mockUtils.changePage.mostRecentCall.args[2]).toBeNull();
+                    expect(mockUtils.changePage.mostRecentCall.args[3]).toBeTruthy();
                 });
             });
         });

@@ -1,5 +1,5 @@
-define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView", "text!tmpl/login/page.html", "backbone-validation"],
-    function (Backbone, utils, facade, Mustache, globals, FormView, pageTemplate) {
+define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel", "views/FormView", "text!tmpl/login/page.html", "backbone-validation"],
+    function (Backbone, utils, facade, Mustache, globals, UserModel, FormView, pageTemplate) {
 
         "use strict";
 
@@ -39,6 +39,18 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView", 
                     success: function (model, response, options) {
                         // Clear the model so the login credentials are not persisted at all
                         model.clear();
+
+                        //TODO - Remove this
+                        var userModel = UserModel.getInstance();
+                        userModel.set({
+                            authenticated: true,
+                            firstName: "First Name",
+                            email: "Emails@wexinc.com",
+                            selectedCompany: {
+                                name: "Company Name",
+                                wexAccountNumber: "WEX Account Number"
+                            }
+                        });
 
                         // once the user successfully logs in navigate to the Home page
                         facade.publish("home", "navigate");
