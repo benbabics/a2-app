@@ -167,22 +167,26 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                     });
 
                     describe("sends as the second argument the options object with a success callback that", function () {
-                        var model = {
-                                clear: jasmine.createSpy("clear() spy")
-                            },
-                            response,
+                        var response = {},
                             options;
 
                         beforeEach(function () {
                             options = loginModel.save.mostRecentCall.args[1];
 
+                            spyOn(loginView, "trigger").andCallFake(function () { });
                             spyOn(mockFacade, "publish").andCallFake(function () { });
+                            spyOn(loginModel, "clear").andCallFake(function () { });
+                            spyOn(loginModel, "set").andCallFake(function () { });
+                            spyOn(loginView, "resetForm").andCallFake(function () { });
 
-                            options.success.call(loginView, model, response, options);
+                            options.success.call(loginView, response);
                         });
 
-                        it ("should clear the model", function () {
-                            expect(model.clear).toHaveBeenCalledWith();
+                        it("should trigger loginSuccess", function () {
+                            expect(loginView.trigger).toHaveBeenCalled();
+                            expect(loginView.trigger.mostRecentCall.args.length).toEqual(2);
+                            expect(loginView.trigger.mostRecentCall.args[0]).toEqual("loginSuccess");
+                            expect(loginView.trigger.mostRecentCall.args[1]).toEqual(response);
                         });
 
                         it("should publish to navigate to home", function () {
@@ -191,6 +195,38 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                             expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("home");
                             expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
                         });
+
+                        it ("should clear the model", function () {
+                            expect(loginModel.clear).toHaveBeenCalledWith();
+                        });
+
+                        it ("should reset the model with defaults", function () {
+                            expect(loginModel.set).toHaveBeenCalledWith(loginModel.defaults);
+                        });
+
+                        it ("should reset the form", function () {
+                            expect(loginView.resetForm).toHaveBeenCalledWith();
+                        });
+
+                    });
+
+                    describe("sends as the second argument the options object with a error callback that", function () {
+                        var options;
+
+                        beforeEach(function () {
+                            options = loginModel.save.mostRecentCall.args[1];
+
+                            spyOn(loginView, "trigger").andCallFake(function () { });
+
+                            options.error.call(loginView);
+                        });
+
+                        it("should trigger loginFailure", function () {
+                            expect(loginView.trigger).toHaveBeenCalled();
+                            expect(loginView.trigger.mostRecentCall.args.length).toEqual(1);
+                            expect(loginView.trigger.mostRecentCall.args[0]).toEqual("loginFailure");
+                        });
+
                     });
                 });
             });

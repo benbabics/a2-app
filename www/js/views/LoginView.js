@@ -33,12 +33,13 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel"
              * Event Handlers
              */
             submitForm: function (evt) {
+                var self = this;
+
                 evt.preventDefault();
 
                 this.model.save(this.model.toJSON(), {
-                    success: function (model, response, options) {
-                        // Clear the model so the login credentials are not persisted at all
-                        model.clear();
+                    success: function (response) {
+                        self.trigger("loginSuccess", response);
 
                         //TODO - Remove this
                         var userModel = UserModel.getInstance();
@@ -54,6 +55,16 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel"
 
                         // once the user successfully logs in navigate to the Home page
                         facade.publish("home", "navigate");
+
+                        // Clear and reset the model so the login credentials and response are not persisted there
+                        self.model.clear();
+                        self.model.set(self.model.defaults);
+
+                        // Reset the form
+                        self.resetForm();
+                    },
+                    error: function () {
+                        self.trigger("loginFailure");
                     }
                 });
             }

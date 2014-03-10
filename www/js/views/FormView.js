@@ -22,10 +22,15 @@ define(["backbone", "globals", "facade", "utils", "mustache", "backbone-validati
                 utils._.bindAll(this, "handleValidationError", "handleInputChanged", "submitForm");
 
                 // Set handlers for model events
-                this.model.on("invalid", this.handleValidationError);   // when validation of the model fails
-                this.model.on("request", this.showLoadingIndicator);    // when an ajax request has been sent
-                this.model.on("sync error", this.hideLoadingIndicator); // when an ajax request has been completed with
-                                                                        // either success (sync) or failure (error)
+                this.model.on("invalid", this.handleValidationError); // when validation of the model fails
+
+                this.model.on("request", function () {                // when an ajax request has been sent
+                    this.showLoadingIndicator(true);
+                }, this);
+
+                this.model.on("sync error", function () {             // when an ajax request has been completed with
+                    this.hideLoadingIndicator(true);                  // either success (sync) or failure (error)
+                }, this);
 
                 // cache the template
                 Mustache.parse(this.template);
@@ -71,6 +76,10 @@ define(["backbone", "globals", "facade", "utils", "mustache", "backbone-validati
                 errorMessages +=  "</ul>";
 
                 return errorMessages;
+            },
+
+            resetForm: function () {
+                this.$el.find("form")[0].reset();
             },
 
             /*

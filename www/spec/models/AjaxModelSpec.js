@@ -102,11 +102,7 @@ define(["Squire", "globals"],
                                 });
 
                                 it("should call the original error callback passed in to options", function () {
-                                    expect(originalErrorCallback).toHaveBeenCalled();
-                                    expect(originalErrorCallback.mostRecentCall.args.length).toEqual(3);
-                                    expect(originalErrorCallback.mostRecentCall.args[0]).toEqual(model);
-                                    expect(originalErrorCallback.mostRecentCall.args[1]).toEqual(jqXHR);
-                                    expect(originalErrorCallback.mostRecentCall.args[2]).toEqual(overriddenOptions);
+                                    expect(originalErrorCallback).toHaveBeenCalledWith();
                                 });
 
                             });
@@ -151,11 +147,7 @@ define(["Squire", "globals"],
                                 });
 
                                 it("should call the original error callback passed in to options", function () {
-                                    expect(originalErrorCallback).toHaveBeenCalled();
-                                    expect(originalErrorCallback.mostRecentCall.args.length).toEqual(3);
-                                    expect(originalErrorCallback.mostRecentCall.args[0]).toEqual(model);
-                                    expect(originalErrorCallback.mostRecentCall.args[1]).toEqual(jqXHR);
-                                    expect(originalErrorCallback.mostRecentCall.args[2]).toEqual(overriddenOptions);
+                                    expect(originalErrorCallback).toHaveBeenCalledWith();
                                 });
 
                             });
@@ -189,10 +181,8 @@ define(["Squire", "globals"],
 
                         it("should call the original success callback passed in to options", function () {
                             expect(originalSuccessCallback).toHaveBeenCalled();
-                            expect(originalSuccessCallback.mostRecentCall.args.length).toEqual(3);
-                            expect(originalSuccessCallback.mostRecentCall.args[0]).toEqual(model);
-                            expect(originalSuccessCallback.mostRecentCall.args[1]).toEqual(mockDataResponse);
-                            expect(originalSuccessCallback.mostRecentCall.args[2]).toEqual(overriddenOptions);
+                            expect(originalSuccessCallback.mostRecentCall.args.length).toEqual(1);
+                            expect(originalSuccessCallback.mostRecentCall.args[0]).toEqual(mockDataResponse);
                         });
 
                     });
@@ -239,11 +229,7 @@ define(["Squire", "globals"],
                     });
 
                     it("should call the original error callback passed in to options", function () {
-                        expect(originalErrorCallback).toHaveBeenCalled();
-                        expect(originalErrorCallback.mostRecentCall.args.length).toEqual(3);
-                        expect(originalErrorCallback.mostRecentCall.args[0]).toEqual(model);
-                        expect(originalErrorCallback.mostRecentCall.args[1]).toEqual(jqXHR);
-                        expect(originalErrorCallback.mostRecentCall.args[2]).toEqual(overriddenOptions);
+                        expect(originalErrorCallback).toHaveBeenCalledWith();
                     });
 
                 });
@@ -296,7 +282,8 @@ define(["Squire", "globals"],
                 it("should call super()", function () {
                     var method = "create",
                         model = {},
-                        options = {};
+                        options = {},
+                        modifiedOptions;
 
                     spyOn(AjaxModel.__super__, "sync").andCallFake(function () {});
 
@@ -306,7 +293,12 @@ define(["Squire", "globals"],
                     expect(AjaxModel.__super__.sync.mostRecentCall.args.length).toEqual(3);
                     expect(AjaxModel.__super__.sync.mostRecentCall.args[0]).toEqual(method);
                     expect(AjaxModel.__super__.sync.mostRecentCall.args[1]).toEqual(model);
-                    expect(AjaxModel.__super__.sync.mostRecentCall.args[2]).toEqual(options);
+
+                    modifiedOptions = AjaxModel.__super__.sync.mostRecentCall.args[2];
+
+                    expect(modifiedOptions.success).toEqual(jasmine.any(Function));
+                    expect(modifiedOptions.error).toEqual(jasmine.any(Function));
+                    expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
                 });
             });
         });
