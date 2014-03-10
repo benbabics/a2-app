@@ -1,7 +1,11 @@
 @charset "UTF-8";
 
 /* Branding */
-.ui-page:not(.ui-dialog) .ui-header h1.ui-title {
+.ui-mobile .ui-popup-active [data-role="popup"] .ui-header h1.ui-title {
+    text-indent: 0;
+    background: none;
+}
+.ui-page .ui-header h1.ui-title {
     text-indent: -9999px;
     background: url("../img/logo.png") center center no-repeat;
 }
