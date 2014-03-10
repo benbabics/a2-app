@@ -10,23 +10,16 @@ define(["utils", "jclass", "models/UserModel", "models/ContactUsModel", "views/C
             };
 
         ContactUsController = JClass.extend({
-            contactUsModel: null,
             contactUsView: null,
 
             construct: function () {
             },
 
             init: function () {
-                var userModel = UserModel.getInstance();
-
-                this.contactUsModel = new ContactUsModel();
-
-                // default the sender's email address to that of the logged in user
-                this.contactUsModel.set("sender", userModel.get("email"));
-
                 // create view
                 this.contactUsView = new ContactUsView({
-                    model: this.contactUsModel
+                    model: new ContactUsModel(),
+                    userModel: UserModel.getInstance()
                 });
             },
 

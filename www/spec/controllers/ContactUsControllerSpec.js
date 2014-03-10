@@ -63,8 +63,6 @@ define(["backbone", "utils", "Squire"],
 
             describe("has an init function that", function () {
                 beforeEach(function () {
-                    spyOn(contactUsController.contactUsModel, "set").andCallThrough();
-
                     contactUsController.init();
                 });
 
@@ -74,26 +72,6 @@ define(["backbone", "utils", "Squire"],
 
                 it("is a function", function () {
                     expect(contactUsController.init).toEqual(jasmine.any(Function));
-                });
-
-                describe("when initializing the ContactUsModel", function () {
-                    beforeEach(function () {
-                        spyOn(contactUsModel, "constructor").andCallThrough();
-                    });
-
-                    it("should set the contactUsModel variable to the ContactUsModel instance", function () {
-                        expect(contactUsController.contactUsModel).toEqual(contactUsModel);
-                    });
-
-                    xit("should send in the correct parameters to the constructor", function () {
-                        expect(contactUsModel.constructor).toHaveBeenCalledWith();
-
-                        // TODO: this is not working, need to figure out how to test
-                    });
-                });
-
-                it("should set the sender in ContactUsModel to the email from the UserModel", function () {
-                    expect(contactUsController.contactUsModel.set).toHaveBeenCalledWith("sender", mockUserModel.email);
                 });
 
                 describe("when initializing the ContactUsView", function () {
@@ -107,7 +85,8 @@ define(["backbone", "utils", "Squire"],
 
                     xit("should send in the correct parameters to the constructor", function () {
                         expect(mockContactUsView.constructor).toHaveBeenCalledWith({
-                            model: contactUsModel
+                            model: contactUsModel,
+                            userModel: userModel
                         });
 
                         // TODO: this is not working, need to figure out how to test

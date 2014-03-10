@@ -28,7 +28,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
         squire.mock("mustache", mockMustache);
         squire.mock("backbone", Backbone);
         squire.mock("facade", mockFacade);
-        squire.mock("models/UserModel", UserModel);
 
         describe("A Contact Us View", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -43,11 +42,11 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
 
                     contactUsModel.set(mockContactUsModel);
                     userModel.set(mockUserModel);
-                    spyOn(UserModel, "getInstance").andCallFake(function () { return userModel; });
 
                     ContactUsView = JasmineContactUsView;
                     contactUsView = new ContactUsView({
-                        model: contactUsModel
+                        model: contactUsModel,
+                        userModel: userModel
                     });
 
                     done();
@@ -117,6 +116,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                 it("should parse the template", function () {
                     expect(mockMustache.parse).toHaveBeenCalledWith(contactUsView.template);
                 });
+
+                it("should set userModel", function () {
+                    expect(contactUsView.userModel).toEqual(userModel);
+                });
             });
 
             describe("has a render function that", function () {
@@ -124,13 +127,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
 
                 beforeEach(function () {
                     expectedConfiguration = utils._.extend({}, utils.deepClone(globals.contactUs.configuration));
-                    expectedConfiguration.sender.value = mockContactUsModel.sender;
-                    expectedConfiguration.authenticated = UserModel.getInstance().get("authenticated");
+                    expectedConfiguration.sender.value = mockUserModel.email;
+                    expectedConfiguration.authenticated = mockUserModel.authenticated;
 
                     spyOn(mockMustache, "render").andCallThrough();
+                    spyOn(contactUsView, "getConfiguration").andCallFake(function() { return expectedConfiguration; });
                     spyOn(contactUsView, "formatRequiredFields").andCallThrough();
 
-                    contactUsView.initialize();
                     contactUsView.render();
                 });
 
@@ -140,6 +143,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
 
                 it("is a function", function () {
                     expect(contactUsView.render).toEqual(jasmine.any(Function));
+                });
+
+                it("should call getConfiguration()", function () {
+                    expect(contactUsView.formatRequiredFields).toHaveBeenCalledWith();
                 });
 
                 it("should call Mustache.render() on the template", function () {
@@ -158,6 +165,29 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
 
                 it("should call formatRequiredFields()", function () {
                     expect(contactUsView.formatRequiredFields).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a getConfiguration function that", function () {
+                it("is defined", function () {
+                    expect(contactUsView.getConfiguration).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(contactUsView.getConfiguration).toEqual(jasmine.any(Function));
+                });
+
+                it("should return the expected result", function () {
+                    var expectedConfiguration,
+                        actualConfiguration;
+
+                    expectedConfiguration = utils._.extend({}, utils.deepClone(globals.contactUs.configuration));
+                    expectedConfiguration.sender.value = mockUserModel.email;
+                    expectedConfiguration.authenticated = mockUserModel.authenticated;
+
+                    actualConfiguration = contactUsView.getConfiguration();
+
+                    expect(actualConfiguration).toEqual(expectedConfiguration);
                 });
             });
 

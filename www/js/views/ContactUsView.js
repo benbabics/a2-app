@@ -1,6 +1,6 @@
-define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel", "views/FormView",
+define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
         "text!tmpl/contactUs/page.html", "backbone-validation"],
-    function (Backbone, utils, facade, Mustache, globals, UserModel, FormView, pageTemplate) {
+    function (Backbone, utils, facade, Mustache, globals, FormView, pageTemplate) {
 
         "use strict";
 
@@ -10,6 +10,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel"
 
             template: pageTemplate,
 
+            userModel: null,
+
             events: utils._.extend({}, FormView.prototype.events, {
                 "click #submitContactUs-btn": "submitForm",
 
@@ -17,25 +19,34 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel"
                 "submit #contactUsForm"     : "submitForm"
             }),
 
-            initialize: function () {
+            initialize: function (options) {
                 // call super
                 ContactUsView.__super__.initialize.apply(this, arguments);
 
                 // parse the template
                 Mustache.parse(this.template);
+
+                if (options && options.userModel) {
+                    this.userModel = options.userModel;
+                }
             },
 
             render: function () {
-                var $content = this.$el.find(":jqmData(role=content)"),
-                    configuration;
+                var $content = this.$el.find(":jqmData(role=content)");
 
-                configuration = utils._.extend({}, utils.deepClone(globals.contactUs.configuration));
-                configuration.sender.value = this.model.get("sender");
-                configuration.authenticated = UserModel.getInstance().get("authenticated");
-
-                $content.html(Mustache.render(this.template, configuration));
+                $content.html(Mustache.render(this.template, this.getConfiguration()));
 
                 this.formatRequiredFields();
+            },
+
+            getConfiguration: function () {
+                var configuration = utils._.extend({}, utils.deepClone(globals.contactUs.configuration));
+
+                // populate configuration details from the logged in user
+                configuration.sender.value = this.userModel.get("email");
+                configuration.authenticated = this.userModel.get("authenticated");
+
+                return configuration;
             },
 
             /*
