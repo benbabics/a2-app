@@ -179,11 +179,6 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
             });
 
             describe("has a pageCreate function that", function () {
-                beforeEach(function () {
-                    spyOn(mockMustache, "render").andCallThrough();
-                    formView.initialize();
-                });
-
                 it("is defined", function () {
                     expect(formView.pageCreate).toBeDefined();
                 });
