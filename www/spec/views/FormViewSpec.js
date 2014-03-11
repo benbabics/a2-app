@@ -61,7 +61,10 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
             var jasmineAsync = new AsyncSpec(this);
 
             jasmineAsync.beforeEach(function (done) {
-                squire.require(["views/FormView"], function (FormView) {
+                squire.require(["views/FormView", "views/AppView"], function (FormView, AppView) {
+
+                    var appView = new AppView();
+                    appView.initialize();
 
                     formView = new FormView({
                         model: formModel
@@ -144,12 +147,12 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     expect(formModel.on.calls[1].args[2]).toEqual(formView);
 
                     // TODO: figure out why it says the showLoadingIndicator method doesn't exist
-                    /*eventHandler = formModel.on.calls[1].args[1];
+                    eventHandler = formModel.on.calls[1].args[1];
                     spyOn(formView, "showLoadingIndicator").andCallFake(function () { });
 
                     eventHandler.apply(formView);
 
-                    expect(formView.showLoadingIndicator).toHaveBeenCalledWith(true);*/
+                    expect(formView.showLoadingIndicator).toHaveBeenCalledWith(true);
                 });
 
                 it("should register a function as the handler for the sync and error events", function () {
@@ -161,12 +164,12 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     expect(formModel.on.calls[2].args[2]).toEqual(formView);
 
                     // TODO: figure out why it says the hideLoadingIndicator method doesn't exist
-                    /*eventHandler = formModel.on.calls[2].args[1];
+                    eventHandler = formModel.on.calls[2].args[1];
                     spyOn(formView, "hideLoadingIndicator").andCallFake(function () { });
 
                     eventHandler.apply(formView);
 
-                    //expect(formView.hideLoadingIndicator).toHaveBeenCalledWith(true);*/
+                    expect(formView.hideLoadingIndicator).toHaveBeenCalledWith(true);
                 });
 
                 it("should parse the template", function () {

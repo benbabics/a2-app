@@ -67,6 +67,12 @@ define(["utils", "Squire", "globals"],
                     expect(loginController.init).toEqual(jasmine.any(Function));
                 });
 
+                it("should set the userModel variable to an instance of the UserModel object", function () {
+                    loginController.init();
+
+                    expect(loginController.userModel).toEqual(mockUserModel);
+                });
+
                 describe("when initializing the LoginView", function () {
                     beforeEach(function () {
                         spyOn(mockLoginView, "constructor").andCallThrough();
