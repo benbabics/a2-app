@@ -1,5 +1,5 @@
-define(["backbone", "facade", "mustache", "utils", "globals", "models/UserModel", 'text!tmpl/common/jqueryDialog.html'],
-    function (Backbone, facade, Mustache, utils, globals, UserModel, dialogTemplate) {
+define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/jqueryDialog.html"],
+    function (Backbone, facade, Mustache, utils, globals, dialogTemplate) {
 
         "use strict";
 
@@ -189,10 +189,11 @@ define(["backbone", "facade", "mustache", "utils", "globals", "models/UserModel"
 
             handleLogout: function (evt) {
                 evt.preventDefault();
-                UserModel.getInstance().reset();
+
+                this.showLoadingIndicator();
 
                 //TODO - Clear out page history so the hardware back button doesn't work?
-                facade.publish("login", "navigate");
+                facade.publish("login", "userLogout");
             }
         });
 

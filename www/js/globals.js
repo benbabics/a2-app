@@ -15,7 +15,7 @@ define(function (require) {
         "USER_AUTH_PATH"               : "/userAuth",
         "REQUEST_ERROR_TITLE"          : "Cannot complete request",
         "REQUEST_ERROR_UNKNOWN_MESSAGE": "Please try again"
-    };    
+    };
     globals.WEBSERVICE.SECURE = {
         "ROOT_URL": globals.WEBSERVICE.ROOT_URL + "/secure"
     };
@@ -30,6 +30,10 @@ define(function (require) {
     // User Login
     globals.WEBSERVICE.LOGIN = {
         "URL": globals.WEBSERVICE.ROOT_URL + globals.WEBSERVICE.USER_AUTH_PATH + "/login"
+    };
+    // User Logout
+    globals.WEBSERVICE.LOGOUT = {
+        "URL": globals.WEBSERVICE.ROOT_URL + globals.WEBSERVICE.USER_AUTH_PATH + "/logout"
     };
 	// Contact Us
     globals.WEBSERVICE.CONTACT_US = {

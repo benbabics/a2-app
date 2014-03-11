@@ -1,5 +1,5 @@
-define(["backbone", "utils", "models/UserModel", "Squire", "jasmine-jquery"],
-    function (Backbone, utils, UserModel, Squire) {
+define(["backbone", "utils", "Squire", "jasmine-jquery"],
+    function (Backbone, utils, Squire) {
         "use strict";
 
         var squire = new Squire(),
@@ -11,13 +11,11 @@ define(["backbone", "utils", "models/UserModel", "Squire", "jasmine-jquery"],
                 "buildVersion": "1.1.1"
             },
             appModel = new Backbone.Model(),
-            userModel = UserModel.getInstance(),
             appView;
 
         squire.mock("backbone", Backbone);
         squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
-        squire.mock("models/UserModel", UserModel);
 
         describe("An App View", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -29,9 +27,6 @@ define(["backbone", "utils", "models/UserModel", "Squire", "jasmine-jquery"],
             jasmineAsync.beforeEach(function (done) {
                 squire.require(["views/AppView"], function (AppView) {
                     loadFixtures("index.html");
-
-                    appModel.set(mockAppModel);
-                    spyOn(UserModel, "getInstance").andCallFake(function () { return userModel; });
 
                     appView = new AppView({
                         model: appModel,
@@ -671,7 +666,7 @@ define(["backbone", "utils", "models/UserModel", "Squire", "jasmine-jquery"],
 
                 beforeEach(function () {
                     spyOn(mockEvent, "preventDefault").andCallThrough();
-                    spyOn(userModel, "reset").andCallThrough();
+                    spyOn(appView, "showLoadingIndicator").andCallFake(function () {});
                     spyOn(mockFacade, "publish").andCallFake(function () {});
 
                     appView.handleLogout(mockEvent);
@@ -689,8 +684,8 @@ define(["backbone", "utils", "models/UserModel", "Squire", "jasmine-jquery"],
                     expect(mockEvent.preventDefault).toHaveBeenCalledWith();
                 });
 
-                it("should call UserModel.reset", function () {
-                    expect(userModel.reset).toHaveBeenCalledWith();
+                it("should show the loading indicator", function () {
+                    expect(appView.showLoadingIndicator).toHaveBeenCalledWith();
                 });
 
                 it("should call publish on the facade", function () {
@@ -698,7 +693,7 @@ define(["backbone", "utils", "models/UserModel", "Squire", "jasmine-jquery"],
 
                     expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
                     expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("login");
-                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
+                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("userLogout");
                 });
             });
         });

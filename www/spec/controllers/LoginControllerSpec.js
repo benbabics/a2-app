@@ -1,5 +1,5 @@
-define(["utils", "Squire"],
-    function (utils, Squire) {
+define(["utils", "Squire", "globals"],
+    function (utils, Squire, globals) {
 
         "use strict";
 
@@ -19,7 +19,9 @@ define(["utils", "Squire"],
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { },
-                on: function () { }
+                on: function () { },
+                showLoadingIndicator: function () { },
+                hideLoadingIndicator: function () { }
             },
             loginController;
 
@@ -85,6 +87,19 @@ define(["utils", "Squire"],
 
                         // TODO: this is not working, need to figure out how to test
                     });
+                });
+
+                it("should call utils._.bindAll", function () {
+                    spyOn(mockUtils._, "bindAll").andCallFake(function () { });
+
+                    loginController.init();
+
+                    expect(mockUtils._.bindAll).toHaveBeenCalled();
+
+                    expect(mockUtils._.bindAll.mostRecentCall.args.length).toEqual(3);
+                    expect(mockUtils._.bindAll.mostRecentCall.args[0]).toEqual(loginController);
+                    expect(mockUtils._.bindAll.mostRecentCall.args[1]).toEqual("navigate");
+                    expect(mockUtils._.bindAll.mostRecentCall.args[2]).toEqual("setAuthentication");
                 });
 
                 it("should register a function as the handler for the view loginSuccess event", function () {
@@ -174,6 +189,79 @@ define(["utils", "Squire"],
                     loginController.clearAuthentication();
 
                     expect(mockUserModel.reset).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a logout function that", function () {
+                it("is defined", function () {
+                    expect(loginController.logout).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(loginController.logout).toEqual(jasmine.any(Function));
+                });
+
+                it("should send the logout URL to post()", function () {
+                    spyOn(mockUtils, "post").andCallFake(function () { });
+                    loginController.logout();
+
+                    expect(mockUtils.post).toHaveBeenCalledWith(globals.WEBSERVICE.LOGOUT.URL);
+                });
+
+                describe("when the call to post() finishes successfully", function () {
+                    beforeEach(function () {
+                        spyOn(mockUtils, "post").andCallFake(function () {
+                            var deferred = utils.Deferred();
+
+                            deferred.resolve();
+                            return deferred.promise();
+                        });
+                        spyOn(loginController, "clearAuthentication").andCallFake(function () { });
+                        spyOn(loginController, "navigate").andCallFake(function () { });
+                        spyOn(mockLoginView, "hideLoadingIndicator").andCallFake(function () { });
+
+                        loginController.logout();
+                    });
+
+                    it("should call clearAuthentication", function () {
+                        expect(loginController.clearAuthentication).toHaveBeenCalledWith();
+                    });
+
+                    it("should call navigate", function () {
+                        expect(loginController.navigate).toHaveBeenCalledWith();
+                    });
+
+                    it("should hide the Loading Indicator", function () {
+                        expect(mockLoginView.hideLoadingIndicator).toHaveBeenCalledWith();
+                    });
+                });
+
+                describe("when the call to post() finishes with a failure", function () {
+                    beforeEach(function () {
+                        spyOn(mockUtils, "post").andCallFake(function () {
+                            var deferred = utils.Deferred();
+
+                            deferred.reject();
+                            return deferred.promise();
+                        });
+                        spyOn(loginController, "clearAuthentication").andCallFake(function () { });
+                        spyOn(loginController, "navigate").andCallFake(function () { });
+                        spyOn(mockLoginView, "hideLoadingIndicator").andCallFake(function () { });
+
+                        loginController.logout();
+                    });
+
+                    it("should call clearAuthentication", function () {
+                        expect(loginController.clearAuthentication).toHaveBeenCalledWith();
+                    });
+
+                    it("should call navigate", function () {
+                        expect(loginController.navigate).toHaveBeenCalledWith();
+                    });
+
+                    it("should hide the Loading Indicator", function () {
+                        expect(mockLoginView.hideLoadingIndicator).toHaveBeenCalledWith();
+                    });
                 });
 
             });

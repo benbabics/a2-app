@@ -40,12 +40,16 @@ define(["Squire"],
                 expect(mockFacade.subscribeTo.mostRecentCall.args[1]).toEqual(mockLoginController);
             });
 
-            it("should call subscribe 1 time", function () {
-                expect(mockSubscribe.calls.length).toEqual(1);
+            it("should call subscribe 2 times", function () {
+                expect(mockSubscribe.calls.length).toEqual(2);
             });
 
             it("should subscribe to navigate", function () {
                 expect(mockSubscribe).toHaveBeenCalledWith("navigate", "navigate");
+            });
+
+            it("should subscribe to userLogout", function () {
+                expect(mockSubscribe).toHaveBeenCalledWith("userLogout", "logout");
             });
 
             describe("has an init function that", function () {

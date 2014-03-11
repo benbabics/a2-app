@@ -38,20 +38,9 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel"
                 evt.preventDefault();
 
                 this.model.save(this.model.toJSON(), {
-                    success: function (response) {
-                        self.trigger("loginSuccess", response);
+                    success: function (model, response, options) {
 
-                        //TODO - Remove this
-                        var userModel = UserModel.getInstance();
-                        userModel.set({
-                            authenticated: true,
-                            firstName: "First Name",
-                            email: "Emails@wexinc.com",
-                            selectedCompany: {
-                                name: "Company Name",
-                                wexAccountNumber: "WEX Account Number"
-                            }
-                        });
+                        self.trigger("loginSuccess", response);
 
                         // once the user successfully logs in navigate to the Home page
                         facade.publish("home", "navigate");

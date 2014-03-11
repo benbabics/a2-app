@@ -57,6 +57,11 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
         utils.getJSON = utils.$.getJSON;
 
         /*
+         * POST Ajax Helper Method
+        */
+        utils.post = utils.$.post;
+
+        /*
          * Deferred Helper Method
         */
         utils.Deferred = utils.$.Deferred;

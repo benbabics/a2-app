@@ -7,6 +7,7 @@ define(["facade", "controllers/LoginController"],
         var subscribe = facade.subscribeTo("login", controller);
 
         subscribe("navigate", "navigate");
+        subscribe("userLogout", "logout");
 
 
         return {

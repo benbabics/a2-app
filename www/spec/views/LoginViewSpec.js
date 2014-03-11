@@ -167,7 +167,8 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                     });
 
                     describe("sends as the second argument the options object with a success callback that", function () {
-                        var response = {},
+                        var model = {},
+                            response = {},
                             options;
 
                         beforeEach(function () {
@@ -179,7 +180,7 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                             spyOn(loginModel, "set").andCallFake(function () { });
                             spyOn(loginView, "resetForm").andCallFake(function () { });
 
-                            options.success.call(loginView, response);
+                            options.success.call(loginView, model, response);
                         });
 
                         it("should trigger loginSuccess", function () {

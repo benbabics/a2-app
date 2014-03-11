@@ -1,5 +1,5 @@
-define(["Squire", "globals"],
-    function (Squire, globals) {
+define(["Squire", "globals", "backbone", "utils"],
+    function (Squire, globals, Backbone, utils) {
 
         "use strict";
 
@@ -7,6 +7,7 @@ define(["Squire", "globals"],
             mockFacade = {
                 publish: function (channel, event) { }
             },
+            mockBackbone = Backbone,
             mockDataResponse = {
                 successFlag: false,
                 message: {
@@ -18,6 +19,7 @@ define(["Squire", "globals"],
             ajaxModel;
 
         squire.mock("facade", mockFacade);
+        squire.mock("backbone", mockBackbone);
 
         describe("An Ajax Model", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -48,7 +50,66 @@ define(["Squire", "globals"],
                     expect(ajaxModel.sync).toEqual(jasmine.any(Function));
                 });
 
-                describe("sets the success callback that", function () {
+                describe("sets the beforeSend callback that", function () {
+
+                    var method = "create",
+                        model = {},
+                        options = {},
+                        overriddenOptions,
+                        jqXHR = {
+                            setRequestHeader: jasmine.createSpy("setRequestHeader() spy")
+                        },
+                        originalBeforeSendCallback = jasmine.createSpy("beforeSend() spy");
+
+                    beforeEach(function () {
+                        options.beforeSend = originalBeforeSendCallback;
+
+                        spyOn(mockBackbone, "sync").andCallFake(function () {
+                            var deferred = utils.Deferred();
+
+                            deferred.reject();
+                            return deferred.promise();
+                        });
+                        spyOn(mockFacade, "publish").andCallFake(function () { });
+
+                        ajaxModel.sync(method, model, options);
+
+                        overriddenOptions = mockBackbone.sync.mostRecentCall.args[2];
+
+                        overriddenOptions.beforeSend.call(ajaxModel, jqXHR);
+                    });
+
+                    it("should call set the AJAX_CLIENT property of the Request Header", function () {
+                        expect(jqXHR.setRequestHeader).toHaveBeenCalled();
+                        expect(jqXHR.setRequestHeader.calls[0].args.length).toEqual(2);
+                        expect(jqXHR.setRequestHeader.calls[0].args[0]).toEqual("AJAX_CLIENT");
+                        expect(jqXHR.setRequestHeader.calls[0].args[1]).toEqual(1);
+                    });
+
+                    it("should call set the Cache-Control property of the Request Header", function () {
+                        expect(jqXHR.setRequestHeader).toHaveBeenCalled();
+                        expect(jqXHR.setRequestHeader.calls[1].args.length).toEqual(2);
+                        expect(jqXHR.setRequestHeader.calls[1].args[0]).toEqual("Cache-Control");
+                        expect(jqXHR.setRequestHeader.calls[1].args[1]).toEqual("no-cache");
+                    });
+
+                    it("should call the original beforeSend callback passed in to options", function () {
+                        expect(originalBeforeSendCallback).toHaveBeenCalled();
+                        expect(originalBeforeSendCallback.mostRecentCall.args.length).toEqual(1);
+                        expect(originalBeforeSendCallback.mostRecentCall.args[0]).toEqual(jqXHR);
+                    });
+
+                });
+
+                describe("when the call to sync() finishes successfully", function () {
+                    beforeEach(function () {
+                        spyOn(mockBackbone, "sync").andCallFake(function () {
+                            var deferred = utils.Deferred();
+
+                            deferred.resolve(mockDataResponse);
+                            return deferred.promise();
+                        });
+                    });
 
                     describe("when the successFlag in the response is false", function () {
 
@@ -67,9 +128,6 @@ define(["Squire", "globals"],
                                 var method = "create",
                                     model = {},
                                     options = {},
-                                    textStatus = "success",
-                                    jqXHR = {},
-                                    overriddenOptions,
                                     originalErrorCallback = jasmine.createSpy("error() spy");
 
                                 beforeEach(function () {
@@ -77,13 +135,23 @@ define(["Squire", "globals"],
                                     options.error = originalErrorCallback;
 
                                     spyOn(mockFacade, "publish").andCallFake(function () { });
-                                    spyOn(AjaxModel.__super__, "sync").andCallFake(function () {});
 
                                     ajaxModel.sync(method, model, options);
+                                });
 
-                                    overriddenOptions = AjaxModel.__super__.sync.mostRecentCall.args[2];
+                                it("should call Backbone.sync()", function () {
+                                    var modifiedOptions;
 
-                                    overriddenOptions.success.call(ajaxModel, mockDataResponse, textStatus, jqXHR);
+                                    expect(mockBackbone.sync).toHaveBeenCalled();
+                                    expect(mockBackbone.sync.mostRecentCall.args.length).toEqual(3);
+                                    expect(mockBackbone.sync.mostRecentCall.args[0]).toEqual(method);
+                                    expect(mockBackbone.sync.mostRecentCall.args[1]).toEqual(model);
+
+                                    modifiedOptions = mockBackbone.sync.mostRecentCall.args[2];
+
+                                    expect(modifiedOptions.success).toBeNull();
+                                    expect(modifiedOptions.error).toBeNull();
+                                    expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
                                 });
 
                                 it("should publish an alert of the message text", function () {
@@ -112,9 +180,6 @@ define(["Squire", "globals"],
                                 var method = "create",
                                     model = {},
                                     options = {},
-                                    textStatus = "success",
-                                    jqXHR = {},
-                                    overriddenOptions,
                                     originalErrorCallback = jasmine.createSpy("error() spy");
 
                                 beforeEach(function () {
@@ -122,13 +187,23 @@ define(["Squire", "globals"],
                                     options.error = originalErrorCallback;
 
                                     spyOn(mockFacade, "publish").andCallFake(function () { });
-                                    spyOn(AjaxModel.__super__, "sync").andCallFake(function () {});
 
                                     ajaxModel.sync(method, model, options);
+                                });
 
-                                    overriddenOptions = AjaxModel.__super__.sync.mostRecentCall.args[2];
+                                it("should call Backbone.sync()", function () {
+                                    var modifiedOptions;
 
-                                    overriddenOptions.success.call(ajaxModel, mockDataResponse, textStatus, jqXHR);
+                                    expect(mockBackbone.sync).toHaveBeenCalled();
+                                    expect(mockBackbone.sync.mostRecentCall.args.length).toEqual(3);
+                                    expect(mockBackbone.sync.mostRecentCall.args[0]).toEqual(method);
+                                    expect(mockBackbone.sync.mostRecentCall.args[1]).toEqual(model);
+
+                                    modifiedOptions = mockBackbone.sync.mostRecentCall.args[2];
+
+                                    expect(modifiedOptions.success).toBeNull();
+                                    expect(modifiedOptions.error).toBeNull();
+                                    expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
                                 });
 
                                 it("should publish an alert with the Unknown Error text", function () {
@@ -161,22 +236,28 @@ define(["Squire", "globals"],
                         var method = "create",
                             model = {},
                             options = {},
-                            textStatus = "success",
-                            jqXHR = {},
-                            overriddenOptions,
                             originalSuccessCallback = jasmine.createSpy("success() spy");
 
                         beforeEach(function () {
                             mockDataResponse.successFlag = true;
                             options.success = originalSuccessCallback;
 
-                            spyOn(AjaxModel.__super__, "sync").andCallFake(function () {});
-
                             ajaxModel.sync(method, model, options);
+                        });
 
-                            overriddenOptions = AjaxModel.__super__.sync.mostRecentCall.args[2];
+                        it("should call Backbone.sync()", function () {
+                            var modifiedOptions;
 
-                            overriddenOptions.success.call(ajaxModel, mockDataResponse, textStatus, jqXHR);
+                            expect(mockBackbone.sync).toHaveBeenCalled();
+                            expect(mockBackbone.sync.mostRecentCall.args.length).toEqual(3);
+                            expect(mockBackbone.sync.mostRecentCall.args[0]).toEqual(method);
+                            expect(mockBackbone.sync.mostRecentCall.args[1]).toEqual(model);
+
+                            modifiedOptions = mockBackbone.sync.mostRecentCall.args[2];
+
+                            expect(modifiedOptions.success).toBeNull();
+                            expect(modifiedOptions.error).toBeNull();
+                            expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
                         });
 
                         it("should call the original success callback passed in to options", function () {
@@ -186,31 +267,41 @@ define(["Squire", "globals"],
                         });
 
                     });
-
                 });
 
-                describe("sets the error callback that", function () {
-
+                describe("when the call to sync() finishes with a failure", function () {
                     var method = "create",
                         model = {},
                         options = {},
-                        textStatus = "error",
-                        errorThrown = "An error occurred.",
-                        jqXHR = {},
-                        overriddenOptions,
                         originalErrorCallback = jasmine.createSpy("error() spy");
 
                     beforeEach(function () {
+                        spyOn(mockBackbone, "sync").andCallFake(function () {
+                            var deferred = utils.Deferred();
+
+                            deferred.reject();
+                            return deferred.promise();
+                        });
+                        spyOn(mockFacade, "publish").andCallFake(function () { });
+
                         options.error = originalErrorCallback;
 
-                        spyOn(mockFacade, "publish").andCallFake(function () { });
-                        spyOn(AjaxModel.__super__, "sync").andCallFake(function () {});
-
                         ajaxModel.sync(method, model, options);
+                    });
 
-                        overriddenOptions = AjaxModel.__super__.sync.mostRecentCall.args[2];
+                    it("should call Backbone.sync()", function () {
+                        var modifiedOptions;
 
-                        overriddenOptions.error.call(ajaxModel, jqXHR, textStatus, errorThrown);
+                        expect(mockBackbone.sync).toHaveBeenCalled();
+                        expect(mockBackbone.sync.mostRecentCall.args.length).toEqual(3);
+                        expect(mockBackbone.sync.mostRecentCall.args[0]).toEqual(method);
+                        expect(mockBackbone.sync.mostRecentCall.args[1]).toEqual(model);
+
+                        modifiedOptions = mockBackbone.sync.mostRecentCall.args[2];
+
+                        expect(modifiedOptions.success).toBeNull();
+                        expect(modifiedOptions.error).toBeNull();
+                        expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
                     });
 
                     it("should publish an alert with the Unknown Error text", function () {
@@ -231,75 +322,8 @@ define(["Squire", "globals"],
                     it("should call the original error callback passed in to options", function () {
                         expect(originalErrorCallback).toHaveBeenCalledWith();
                     });
-
                 });
 
-                describe("sets the beforeSend callback that", function () {
-
-                    var method = "create",
-                        model = {},
-                        options = {},
-                        overriddenOptions,
-                        jqXHR = {
-                            setRequestHeader: jasmine.createSpy("setRequestHeader() spy")
-                        },
-                        originalBeforeSendCallback = jasmine.createSpy("beforeSend() spy");
-
-                    beforeEach(function () {
-                        options.beforeSend = originalBeforeSendCallback;
-
-                        spyOn(AjaxModel.__super__, "sync").andCallFake(function () {});
-
-                        ajaxModel.sync(method, model, options);
-
-                        overriddenOptions = AjaxModel.__super__.sync.mostRecentCall.args[2];
-
-                        overriddenOptions.beforeSend.call(ajaxModel, jqXHR);
-                    });
-
-                    it("should call set the AJAX_CLIENT property of the Request Header", function () {
-                        expect(jqXHR.setRequestHeader).toHaveBeenCalled();
-                        expect(jqXHR.setRequestHeader.calls[0].args.length).toEqual(2);
-                        expect(jqXHR.setRequestHeader.calls[0].args[0]).toEqual("AJAX_CLIENT");
-                        expect(jqXHR.setRequestHeader.calls[0].args[1]).toEqual(1);
-                    });
-
-                    it("should call set the Cache-Control property of the Request Header", function () {
-                        expect(jqXHR.setRequestHeader).toHaveBeenCalled();
-                        expect(jqXHR.setRequestHeader.calls[1].args.length).toEqual(2);
-                        expect(jqXHR.setRequestHeader.calls[1].args[0]).toEqual("Cache-Control");
-                        expect(jqXHR.setRequestHeader.calls[1].args[1]).toEqual("no-cache");
-                    });
-
-                    it("should call the original beforeSend callback passed in to options", function () {
-                        expect(originalBeforeSendCallback).toHaveBeenCalled();
-                        expect(originalBeforeSendCallback.mostRecentCall.args.length).toEqual(1);
-                        expect(originalBeforeSendCallback.mostRecentCall.args[0]).toEqual(jqXHR);
-                    });
-
-                });
-
-                it("should call super()", function () {
-                    var method = "create",
-                        model = {},
-                        options = {},
-                        modifiedOptions;
-
-                    spyOn(AjaxModel.__super__, "sync").andCallFake(function () {});
-
-                    ajaxModel.sync(method, model, options);
-
-                    expect(AjaxModel.__super__.sync).toHaveBeenCalled();
-                    expect(AjaxModel.__super__.sync.mostRecentCall.args.length).toEqual(3);
-                    expect(AjaxModel.__super__.sync.mostRecentCall.args[0]).toEqual(method);
-                    expect(AjaxModel.__super__.sync.mostRecentCall.args[1]).toEqual(model);
-
-                    modifiedOptions = AjaxModel.__super__.sync.mostRecentCall.args[2];
-
-                    expect(modifiedOptions.success).toEqual(jasmine.any(Function));
-                    expect(modifiedOptions.error).toEqual(jasmine.any(Function));
-                    expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
-                });
             });
         });
     });
