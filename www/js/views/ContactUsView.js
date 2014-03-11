@@ -46,6 +46,9 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
                 configuration.sender.value = this.userModel.get("email");
                 configuration.authenticated = this.userModel.get("authenticated");
 
+                // populate the model with the default value
+                this.model.set("sender", configuration.sender.value);
+
                 return configuration;
             },
 
@@ -53,12 +56,18 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
              * Event Handlers
              */
             submitForm: function (evt) {
-                //TODO - Need to handle success and error conditions of saving the model - POSTing data
+                var self = this;
 
-                // call super
-                ContactUsView.__super__.submitForm.apply(this, arguments);
+                evt.preventDefault();
 
-                // TODO - Need to navigate to the contact us confirmation page on success
+                this.model.save(this.model.toJSON(), {
+                    success: function (model, response, options) {
+                        self.trigger("contactUsSuccess", response);
+                    },
+                    error: function () {
+                        self.trigger("contactUsFailure");
+                    }
+                });
             }
         });
 

@@ -1,5 +1,5 @@
-define(["utils", "jclass", "models/UserModel", "models/ContactUsModel", "views/ContactUsView"],
-    function (utils, JClass, UserModel, ContactUsModel, ContactUsView) {
+define(["globals", "utils", "facade", "jclass", "models/UserModel", "models/ContactUsModel", "views/ContactUsView"],
+    function (globals, utils, facade, JClass, UserModel, ContactUsModel, ContactUsView) {
 
         "use strict";
 
@@ -21,11 +21,25 @@ define(["utils", "jclass", "models/UserModel", "models/ContactUsModel", "views/C
                     model: new ContactUsModel(),
                     userModel: UserModel.getInstance()
                 });
+
+                // listen for events
+                this.contactUsView.on("contactUsSuccess", this.showConfirmation, this);
             },
 
             navigate: function () {
                 this.contactUsView.render();
                 utils.changePage(this.contactUsView.$el, null, null, true);
+            },
+
+            showConfirmation: function (sendMessageResponse) {
+                facade.publish("app", "alert", {
+                    title          : globals.contactUs.constants.SUCCESS_TITLE,
+                    message        : sendMessageResponse.message.text,
+                    primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
+                    popupafterclose:   function () {
+                        window.history.back();
+                    }
+                });
             }
         }, classOptions);
 

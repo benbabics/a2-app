@@ -197,9 +197,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                 };
 
                 beforeEach(function () {
-                    spyOn(mockFacade, "publish").andCallFake(function () { });
-                    spyOn(ContactUsView.__super__, "submitForm").andCallFake(function () {});
-
+                    spyOn(mockEvent, "preventDefault").andCallThrough();
+                    spyOn(contactUsModel, "save").andCallFake(function () { });
                     contactUsView.submitForm(mockEvent);
                 });
 
@@ -211,8 +210,52 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                     expect(contactUsView.submitForm).toEqual(jasmine.any(Function));
                 });
 
-                it("should call super()", function () {
-                    expect(ContactUsView.__super__.submitForm).toHaveBeenCalledWith(mockEvent);
+                it("should call event.preventDefault", function () {
+                    expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                });
+
+                describe("when calling save() on the model", function () {
+                    it("should send the model as the first argument", function () {
+                        expect(contactUsModel.save).toHaveBeenCalled();
+                        expect(contactUsModel.save.mostRecentCall.args.length).toEqual(2);
+                        expect(contactUsModel.save.mostRecentCall.args[0]).toEqual(contactUsModel.toJSON());
+                    });
+
+                    describe("sends as the second argument the options object with a success callback that", function () {
+                        var response = {},
+                            model,
+                            options;
+
+                        beforeEach(function () {
+                            spyOn(contactUsView, "trigger").andCallFake(function () { });
+
+                            options = contactUsModel.save.mostRecentCall.args[1];
+                            options.success.call(contactUsView, model, response);
+                        });
+
+                        it("should trigger contactUsSuccess", function () {
+                            expect(contactUsView.trigger).toHaveBeenCalled();
+                            expect(contactUsView.trigger.mostRecentCall.args.length).toEqual(2);
+                            expect(contactUsView.trigger.mostRecentCall.args[0]).toEqual("contactUsSuccess");
+                            expect(contactUsView.trigger.mostRecentCall.args[1]).toEqual(response);
+                        });
+                    });
+
+                    describe("sends as the second argument the options object with a error callback that", function () {
+                        beforeEach(function () {
+                            var options = contactUsModel.save.mostRecentCall.args[1];
+
+                            spyOn(contactUsView, "trigger").andCallFake(function () { });
+
+                            options.error.call(contactUsView);
+                        });
+
+                        it("should trigger contactUsFailure", function () {
+                            expect(contactUsView.trigger).toHaveBeenCalled();
+                            expect(contactUsView.trigger.mostRecentCall.args.length).toEqual(1);
+                            expect(contactUsView.trigger.mostRecentCall.args[0]).toEqual("contactUsFailure");
+                        });
+                    });
                 });
             });
         });

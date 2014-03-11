@@ -150,7 +150,8 @@ define(function (require) {
         "WEBSERVICE"                  : globals.WEBSERVICE.CONTACT_US.URL + "/emailRequest",
         "ERROR_SENDER_REQUIRED_FIELD" : "Email must have a value",
         "ERROR_SUBJECT_REQUIRED_FIELD": "Subject must have a value",
-        "ERROR_MESSAGE_REQUIRED_FIELD": "Message must have a value"
+        "ERROR_MESSAGE_REQUIRED_FIELD": "Message must have a value",
+        "SUCCESS_TITLE": "Message Sent"
     };
     globals.contactUs.configuration = {
         "sender": {
