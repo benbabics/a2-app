@@ -1,5 +1,5 @@
-define(["backbone"],
-    function (Backbone) {
+define(["backbone", "models/CompanyModel"],
+    function (Backbone, CompanyModel) {
 
         "use strict";
 
@@ -17,7 +17,9 @@ define(["backbone"],
                     if (options.authenticated) { this.set("authenticated", options.authenticated); }
                     if (options.firstName) { this.set("firstName", options.firstName); }
                     if (options.email) { this.set("email", options.email); }
-                    if (options.selectedCompany) { this.set("selectedCompany", options.selectedCompany); }
+                    if (options.selectedCompany) {
+                        this.set("selectedCompany", new CompanyModel(options.selectedCompany));
+                    }
                 }
             },
 

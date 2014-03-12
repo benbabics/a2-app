@@ -110,6 +110,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-async
             specs.push("spec/models/AppModelSpec.js");
             specs.push("spec/models/CompanyModelSpec.js");
             specs.push("spec/models/ContactUsModelSpec.js");
+            specs.push("spec/models/DepartmentModelSpec.js");
             specs.push("spec/models/DriverSearchModelSpec.js");
             specs.push("spec/models/LoginModelSpec.js");
             specs.push("spec/models/UserModelSpec.js");

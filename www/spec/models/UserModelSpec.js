@@ -85,12 +85,29 @@ define(["Squire"],
                             email: "cornholio@bnbinc.com",
                             selectedCompany: {
                                 name: "Beavis and Butthead Inc",
-                                wexAccountNumber: "5764309"
+                                wexAccountNumber: "5764309",
+                                driverIdLength: "4",
+                                departments: [
+                                    {
+                                        id: "134613456",
+                                        displayValue: "UNASSIGNED",
+                                        visible: true
+                                    },
+                                    {
+                                        id: "2456724567",
+                                        displayValue: "Dewey, Cheetum and Howe",
+                                        visible: false
+                                    }
+                                ]
                             }
                         };
 
                     beforeEach(function () {
                         userModel.initialize(options);
+                    });
+
+                    it("should call set 4 times", function () {
+                        expect(userModel.set.calls.length).toEqual(4);
                     });
 
                     it("should set authenticated", function () {
@@ -105,8 +122,32 @@ define(["Squire"],
                         expect(userModel.set).toHaveBeenCalledWith("email", options.email);
                     });
 
+                    // TODO - Replace with something that verifies the correct parameter was passed to the CompanyModel
+                    // constructor and then set to "selectedCompany"
                     it("should set selectedCompany", function () {
-                        expect(userModel.set).toHaveBeenCalledWith("selectedCompany", options.selectedCompany);
+                        var actualCompany, actualDepartments;
+
+                        expect(userModel.set.calls[3].args.length).toEqual(2);
+                        expect(userModel.set.calls[3].args[0]).toEqual("selectedCompany");
+
+                        actualCompany = userModel.set.calls[3].args[1];
+
+                        expect(actualCompany.get("name")).toEqual(options.selectedCompany.name);
+                        expect(actualCompany.get("wexAccountNumber")).toEqual(options.selectedCompany.wexAccountNumber);
+                        expect(actualCompany.get("driverIdLength")).toEqual(options.selectedCompany.driverIdLength);
+
+                        actualDepartments = actualCompany.get("departments");
+                        expect(actualDepartments[0].get("id")).toEqual(options.selectedCompany.departments[0].id);
+                        expect(actualDepartments[0].get("name")).toEqual(options.selectedCompany.departments[0].displayValue);
+                        expect(actualDepartments[0].get("visible")).toEqual(options.selectedCompany.departments[0].visible);
+
+                        expect(actualDepartments[1].get("id")).toEqual(options.selectedCompany.departments[1].id);
+                        expect(actualDepartments[1].get("name")).toEqual(options.selectedCompany.departments[1].displayValue);
+                        expect(actualDepartments[1].get("visible")).toEqual(options.selectedCompany.departments[1].visible);
+                    });
+
+                    it("should NOT set bogus", function () {
+                        expect(userModel.set).not.toHaveBeenCalledWith("bogus", options.bogus);
                     });
                 });
             });
