@@ -146,7 +146,6 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     expect(formModel.on.calls[1].args[0]).toEqual("request");
                     expect(formModel.on.calls[1].args[2]).toEqual(formView);
 
-                    // TODO: figure out why it says the showLoadingIndicator method doesn't exist
                     eventHandler = formModel.on.calls[1].args[1];
                     spyOn(formView, "showLoadingIndicator").andCallFake(function () { });
 
@@ -163,7 +162,6 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     expect(formModel.on.calls[2].args[0]).toEqual("sync error");
                     expect(formModel.on.calls[2].args[2]).toEqual(formView);
 
-                    // TODO: figure out why it says the hideLoadingIndicator method doesn't exist
                     eventHandler = formModel.on.calls[2].args[1];
                     spyOn(formView, "hideLoadingIndicator").andCallFake(function () { });
 
