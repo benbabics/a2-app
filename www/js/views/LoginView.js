@@ -42,9 +42,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel"
 
                         self.trigger("loginSuccess", response);
 
-                        // once the user successfully logs in navigate to the Home page
-                        facade.publish("home", "navigate");
-
                         // Clear and reset the model so the login credentials and response are not persisted there
                         self.model.clear();
                         self.model.set(self.model.defaults);

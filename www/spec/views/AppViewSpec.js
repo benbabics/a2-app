@@ -666,7 +666,6 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                 beforeEach(function () {
                     spyOn(mockEvent, "preventDefault").andCallThrough();
-                    spyOn(appView, "showLoadingIndicator").andCallFake(function () {});
                     spyOn(mockFacade, "publish").andCallFake(function () {});
 
                     appView.handleLogout(mockEvent);
@@ -682,10 +681,6 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                 it("should call event.preventDefault", function () {
                     expect(mockEvent.preventDefault).toHaveBeenCalledWith();
-                });
-
-                it("should show the loading indicator", function () {
-                    expect(appView.showLoadingIndicator).toHaveBeenCalledWith();
                 });
 
                 it("should call publish on the facade", function () {

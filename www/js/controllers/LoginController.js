@@ -1,5 +1,5 @@
-define(["utils", "globals", "jclass", "views/LoginView", "models/LoginModel", "models/UserModel"],
-    function (utils, globals, JClass, LoginView, LoginModel, UserModel) {
+define(["facade", "utils", "globals", "jclass", "views/LoginView", "models/LoginModel", "models/UserModel"],
+    function (facade, utils, globals, JClass, LoginView, LoginModel, UserModel) {
 
         "use strict";
 
@@ -29,7 +29,7 @@ define(["utils", "globals", "jclass", "views/LoginView", "models/LoginModel", "m
                 utils._.bindAll(this, "navigate", "setAuthentication");
 
                 // listen for events
-                this.loginView.on("loginSuccess", this.setAuthentication, this);
+                this.loginView.on("loginSuccess", this.handleLoginSuccess, this);
                 this.loginView.on("loginFailure", this.clearAuthentication, this);
             },
 
@@ -50,7 +50,7 @@ define(["utils", "globals", "jclass", "views/LoginView", "models/LoginModel", "m
                     }
                 });
 
-                this.userModel.set("isAuthenticated", true);
+                this.userModel.set("authenticated", true);
             },
 
             clearAuthentication: function () {
@@ -58,8 +58,17 @@ define(["utils", "globals", "jclass", "views/LoginView", "models/LoginModel", "m
                 this.userModel.reset();
             },
 
+            handleLoginSuccess: function (authenticationResponse) {
+                this.setAuthentication(authenticationResponse);
+
+                // once the user successfully logs in navigate to the Home page
+                facade.publish("home", "navigate");
+            },
+
             logout: function () {
                 var self = this;
+
+                this.loginView.showLoadingIndicator();
 
                 utils
                     .when(

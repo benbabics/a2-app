@@ -175,7 +175,6 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                             options = loginModel.save.mostRecentCall.args[1];
 
                             spyOn(loginView, "trigger").andCallFake(function () { });
-                            spyOn(mockFacade, "publish").andCallFake(function () { });
                             spyOn(loginModel, "clear").andCallFake(function () { });
                             spyOn(loginModel, "set").andCallFake(function () { });
                             spyOn(loginView, "resetForm").andCallFake(function () { });
@@ -188,13 +187,6 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                             expect(loginView.trigger.mostRecentCall.args.length).toEqual(2);
                             expect(loginView.trigger.mostRecentCall.args[0]).toEqual("loginSuccess");
                             expect(loginView.trigger.mostRecentCall.args[1]).toEqual(response);
-                        });
-
-                        it("should publish to navigate to home", function () {
-                            expect(mockFacade.publish).toHaveBeenCalled();
-                            expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
-                            expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("home");
-                            expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
                         });
 
                         it ("should clear the model", function () {

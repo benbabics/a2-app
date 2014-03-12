@@ -197,8 +197,6 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
             handleLogout: function (evt) {
                 evt.preventDefault();
 
-                this.showLoadingIndicator();
-
                 //TODO - Clear out page history so the hardware back button doesn't work?
                 facade.publish("login", "userLogout");
             }

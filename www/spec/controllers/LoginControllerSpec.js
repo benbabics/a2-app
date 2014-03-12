@@ -4,6 +4,9 @@ define(["utils", "Squire", "globals"],
         "use strict";
 
         var squire = new Squire(),
+            mockFacade = {
+                publish: function (channel, event) { }
+            },
             mockUtils = utils,
             mockLoginModel = {},
             mockUserModel = {
@@ -25,6 +28,7 @@ define(["utils", "Squire", "globals"],
             },
             loginController;
 
+        squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
         squire.mock("views/LoginView", Squire.Helpers.returns(mockLoginView));
         squire.mock("models/LoginModel", Squire.Helpers.returns(mockLoginModel));
@@ -168,14 +172,14 @@ define(["utils", "Squire", "globals"],
                     expect(loginController.setAuthentication).toEqual(jasmine.any(Function));
                 });
 
-                it("should set isAuthenticated to true", function () {
+                it("should set authenticated to true", function () {
                     spyOn(mockUserModel, "set").andCallFake(function () { });
 
                     loginController.setAuthentication(null);
 
                     expect(mockUserModel.set).toHaveBeenCalled();
                     expect(mockUserModel.set.mostRecentCall.args.length).toEqual(2);
-                    expect(mockUserModel.set.mostRecentCall.args[0]).toEqual("isAuthenticated");
+                    expect(mockUserModel.set.mostRecentCall.args[0]).toEqual("authenticated");
                     expect(mockUserModel.set.mostRecentCall.args[1]).toBeTruthy();
                 });
             });
@@ -198,6 +202,36 @@ define(["utils", "Squire", "globals"],
                 });
             });
 
+            describe("had a handleLoginSuccess function that", function () {
+                var response = {};
+
+                beforeEach(function () {
+                    spyOn(loginController, "setAuthentication").andCallFake(function () { });
+                    spyOn(mockFacade, "publish").andCallFake(function () { });
+
+                    loginController.handleLoginSuccess(response);
+                });
+
+                it("is defined", function () {
+                    expect(loginController.handleLoginSuccess).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(loginController.handleLoginSuccess).toEqual(jasmine.any(Function));
+                });
+
+                it("should call setAuthentication() with the response data", function () {
+                    expect(loginController.setAuthentication).toHaveBeenCalledWith(response);
+                });
+
+                it("should publish to navigate to home", function () {
+                    expect(mockFacade.publish).toHaveBeenCalled();
+                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
+                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("home");
+                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
+                });
+            });
+
             describe("has a logout function that", function () {
                 it("is defined", function () {
                     expect(loginController.logout).toBeDefined();
@@ -205,6 +239,14 @@ define(["utils", "Squire", "globals"],
 
                 it("is a function", function () {
                     expect(loginController.logout).toEqual(jasmine.any(Function));
+                });
+
+                it("should show the loading indicator", function () {
+                    spyOn(mockUtils, "post").andCallFake(function () { });  // stubbing so it doesn't actually post
+                    spyOn(mockLoginView, "showLoadingIndicator").andCallFake(function () {});
+                    loginController.logout();
+
+                    expect(mockLoginView.showLoadingIndicator).toHaveBeenCalledWith();
                 });
 
                 it("should send the logout URL to post()", function () {
