@@ -99,6 +99,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-async
             specs.push("spec/views/AboutViewSpec.js");
             specs.push("spec/views/AppViewSpec.js");
             specs.push("spec/views/ContactUsViewSpec.js");
+            specs.push("spec/views/DriverSearchViewSpec.js");
             specs.push("spec/views/FormViewSpec.js");
             specs.push("spec/views/HomeViewSpec.js");
             specs.push("spec/views/LoginViewSpec.js");
@@ -109,6 +110,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-async
             specs.push("spec/models/AppModelSpec.js");
             specs.push("spec/models/CompanyModelSpec.js");
             specs.push("spec/models/ContactUsModelSpec.js");
+            specs.push("spec/models/DriverSearchModelSpec.js");
             specs.push("spec/models/LoginModelSpec.js");
             specs.push("spec/models/UserModelSpec.js");
 
