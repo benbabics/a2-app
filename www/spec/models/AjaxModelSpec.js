@@ -241,12 +241,12 @@ define(["Squire", "globals", "backbone", "utils"],
                         beforeEach(function () {
                             mockDataResponse.successFlag = true;
                             options.success = originalSuccessCallback;
-
-                            ajaxModel.sync(method, model, options);
                         });
 
                         it("should call Backbone.sync()", function () {
                             var modifiedOptions;
+
+                            ajaxModel.sync(method, model, options);
 
                             expect(mockBackbone.sync).toHaveBeenCalled();
                             expect(mockBackbone.sync.mostRecentCall.args.length).toEqual(3);
@@ -260,12 +260,29 @@ define(["Squire", "globals", "backbone", "utils"],
                             expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
                         });
 
-                        it("should call the original success callback passed in to options", function () {
-                            expect(originalSuccessCallback).toHaveBeenCalled();
-                            expect(originalSuccessCallback.mostRecentCall.args.length).toEqual(1);
-                            expect(originalSuccessCallback.mostRecentCall.args[0]).toEqual(mockDataResponse);
+                        describe("when there is only one object in the data list in the response", function () {
+                            it("should call the original success callback passed in to options", function () {
+                                mockDataResponse.data = [{someField: "someValue"}];
+
+                                ajaxModel.sync(method, model, options);
+
+                                expect(originalSuccessCallback).toHaveBeenCalled();
+                                expect(originalSuccessCallback.mostRecentCall.args.length).toEqual(1);
+                                expect(originalSuccessCallback.mostRecentCall.args[0]).toEqual(mockDataResponse.data[0]);
+                            });
                         });
 
+                        describe("when there is more than one object in the data list in the response", function () {
+                            it("should call the original success callback passed in to options", function () {
+                                mockDataResponse.data = [{someField: "someValue"}, {someField: "someValue"}];
+
+                                ajaxModel.sync(method, model, options);
+
+                                expect(originalSuccessCallback).toHaveBeenCalled();
+                                expect(originalSuccessCallback.mostRecentCall.args.length).toEqual(1);
+                                expect(originalSuccessCallback.mostRecentCall.args[0]).toEqual(mockDataResponse.data);
+                            });
+                        });
                     });
                 });
 

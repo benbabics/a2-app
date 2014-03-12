@@ -120,7 +120,7 @@ define(["utils", "Squire", "globals"],
                     expect(mockLoginView.on).toHaveBeenCalled();
                     expect(mockLoginView.on.calls[0].args.length).toEqual(3);
                     expect(mockLoginView.on.calls[0].args[0]).toEqual("loginSuccess");
-                    expect(mockLoginView.on.calls[0].args[1]).toEqual(loginController.setAuthentication);
+                    expect(mockLoginView.on.calls[0].args[1]).toEqual(loginController.handleLoginSuccess);
                     expect(mockLoginView.on.calls[0].args[2]).toEqual(loginController);
                 });
 
@@ -172,15 +172,31 @@ define(["utils", "Squire", "globals"],
                     expect(loginController.setAuthentication).toEqual(jasmine.any(Function));
                 });
 
-                it("should set authenticated to true", function () {
+                it("should set UserModel with Authenticated Response data", function () {
+                    var mockResponse = {
+                            firstName: "Joe",
+                            email: "joe.schmoe@someplace.com",
+                            selectedCompany: {
+                                name: "The Company",
+                                wexAccountNumber: "123456789"
+                            }
+                        },
+                        objectToSetUserModel;
+
                     spyOn(mockUserModel, "set").andCallFake(function () { });
 
-                    loginController.setAuthentication(null);
+                    loginController.setAuthentication(mockResponse);
 
                     expect(mockUserModel.set).toHaveBeenCalled();
-                    expect(mockUserModel.set.mostRecentCall.args.length).toEqual(2);
-                    expect(mockUserModel.set.mostRecentCall.args[0]).toEqual("authenticated");
-                    expect(mockUserModel.set.mostRecentCall.args[1]).toBeTruthy();
+                    expect(mockUserModel.set.mostRecentCall.args.length).toEqual(1);
+
+                    objectToSetUserModel = mockUserModel.set.mostRecentCall.args[0];
+
+                    expect(objectToSetUserModel.authenticated).toBeTruthy();
+                    expect(objectToSetUserModel.firstName).toEqual(mockResponse.firstName);
+                    expect(objectToSetUserModel.email).toEqual(mockResponse.email);
+                    expect(objectToSetUserModel.selectedCompany.name).toEqual(mockResponse.selectedCompany.name);
+                    expect(objectToSetUserModel.selectedCompany.wexAccountNumber).toEqual(mockResponse.selectedCompany.wexAccountNumber);
                 });
             });
 

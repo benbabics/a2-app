@@ -56,7 +56,12 @@ define(["backbone", "globals", "utils", "facade"],
                         }
                         // the response was successful
                         else {
-                            successCallback(data);
+                            if (utils._.size(data.data) === 1) {
+                                successCallback(data.data[0]);
+                            }
+                            else {
+                                successCallback(data.data);
+                            }
                         }
 
                     })

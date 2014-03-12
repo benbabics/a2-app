@@ -38,19 +38,15 @@ define(["facade", "utils", "globals", "jclass", "views/LoginView", "models/Login
             },
 
             setAuthentication: function (authenticationResponse) {
-
-                //TODO - Replace with setting actual properties on the User
                 this.userModel.set({
                     authenticated: true,
-                    firstName: "First Name",
-                    email: "Emails@wexinc.com",
+                    firstName: authenticationResponse.firstName,
+                    email: authenticationResponse.email,
                     selectedCompany: {
-                        name: "Company Name",
-                        wexAccountNumber: "WEX Account Number"
+                        name: authenticationResponse.selectedCompany.name,
+                        wexAccountNumber: authenticationResponse.selectedCompany.wexAccountNumber
                     }
                 });
-
-                this.userModel.set("authenticated", true);
             },
 
             clearAuthentication: function () {
