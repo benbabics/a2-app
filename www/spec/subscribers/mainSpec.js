@@ -14,6 +14,9 @@ define(["Squire"],
             mockContactUsSubscriber = {
                 init: jasmine.createSpy("init() spy")
             },
+            mockDriverSubscriber = {
+                init: jasmine.createSpy("init() spy")
+            },
             mockHomeSubscriber = {
                 init: jasmine.createSpy("init() spy")
             },
@@ -27,6 +30,7 @@ define(["Squire"],
         squire.mock("subscribers/about", mockAboutSubscriber);
         squire.mock("subscribers/app", mockAppSubscriber);
         squire.mock("subscribers/contactUs", mockContactUsSubscriber);
+        squire.mock("subscribers/driver", mockDriverSubscriber);
         squire.mock("subscribers/home", mockHomeSubscriber);
         squire.mock("subscribers/login", mockLoginSubscriber);
         squire.mock("subscribers/updatePrompt", mockUpdatePromptSubscriber);
@@ -50,6 +54,10 @@ define(["Squire"],
 
             it("should call the init function on the Contact Us Controller", function () {
                 expect(mockContactUsSubscriber.init).toHaveBeenCalledWith();
+            });
+
+            it("should call the init function on the Driver Controller", function () {
+                expect(mockDriverSubscriber.init).toHaveBeenCalledWith();
             });
 
             it("should call the init function on the Home Controller", function () {
