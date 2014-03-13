@@ -262,25 +262,37 @@ define(["Squire", "globals", "backbone", "utils"],
 
                         describe("when there is only one object in the data list in the response", function () {
                             it("should call the original success callback passed in to options", function () {
+                                var responseSentToCallback;
+
                                 mockDataResponse.data = [{someField: "someValue"}];
 
                                 ajaxModel.sync(method, model, options);
 
                                 expect(originalSuccessCallback).toHaveBeenCalled();
                                 expect(originalSuccessCallback.mostRecentCall.args.length).toEqual(1);
-                                expect(originalSuccessCallback.mostRecentCall.args[0]).toEqual(mockDataResponse.data[0]);
+
+                                responseSentToCallback = originalSuccessCallback.mostRecentCall.args[0];
+
+                                expect(responseSentToCallback.data).toEqual(mockDataResponse.data[0]);
+                                expect(responseSentToCallback.message).toEqual(mockDataResponse.message.text);
                             });
                         });
 
                         describe("when there is more than one object in the data list in the response", function () {
                             it("should call the original success callback passed in to options", function () {
+                                var responseSentToCallback;
+
                                 mockDataResponse.data = [{someField: "someValue"}, {someField: "someValue"}];
 
                                 ajaxModel.sync(method, model, options);
 
                                 expect(originalSuccessCallback).toHaveBeenCalled();
                                 expect(originalSuccessCallback.mostRecentCall.args.length).toEqual(1);
-                                expect(originalSuccessCallback.mostRecentCall.args[0]).toEqual(mockDataResponse.data);
+
+                                responseSentToCallback = originalSuccessCallback.mostRecentCall.args[0];
+
+                                expect(responseSentToCallback.data).toEqual(mockDataResponse.data);
+                                expect(responseSentToCallback.message).toEqual(mockDataResponse.message.text);
                             });
                         });
                     });

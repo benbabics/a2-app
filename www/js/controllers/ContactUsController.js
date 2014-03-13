@@ -34,7 +34,7 @@ define(["globals", "utils", "facade", "jclass", "models/UserModel", "models/Cont
             showConfirmation: function (sendMessageResponse) {
                 facade.publish("app", "alert", {
                     title          : globals.contactUs.constants.SUCCESS_TITLE,
-                    message        : sendMessageResponse.message.text,
+                    message        : sendMessageResponse.message,
                     primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
                     popupafterclose:   function () {
                         window.history.back();

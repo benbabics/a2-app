@@ -285,7 +285,6 @@ define(["backbone", "Squire", "globals", "utils"],
                     appVersionStatus = "Mock appVersionStatus";
 
                 beforeEach(function () {
-                    //spyOn(mockUtils, "getJSON").andCallFake(function () { return appVersionStatus; });
                     mockUtils.getJSON.andReturn(appVersionStatus);
                     spyOn(appModel, "set").andCallThrough();
                     spyOn(updatePromptController, "getAppVersionStatusURL").andCallFake(function () { return appVersionStatusURL; });

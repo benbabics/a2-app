@@ -153,10 +153,8 @@ define(["globals", "backbone", "utils", "Squire"],
 
             describe("has a showConfirmation function that", function () {
                 var response = {
-                    message: {
-                        text: "Response message"
-                    }
-                }
+                    message: "Response message"
+                };
                 beforeEach(function () {
                     spyOn(mockFacade, "publish").andCallFake(function () { });
 
@@ -182,7 +180,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
                     appAlertOptions = mockFacade.publish.mostRecentCall.args[2];
                     expect(appAlertOptions.title).toEqual(globals.contactUs.constants.SUCCESS_TITLE);
-                    expect(appAlertOptions.message).toEqual(response.message.text);
+                    expect(appAlertOptions.message).toEqual(response.message);
                     expect(appAlertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
                     expect(appAlertOptions.popupafterclose).toEqual(jasmine.any(Function));
                 });
