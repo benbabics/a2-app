@@ -5,14 +5,15 @@ define(["utils", "Squire", "globals"],
 
         var squire = new Squire(),
             mockFacade = {
-                publish: function (channel, event) { }
+                publish: function () { }
             },
             mockUtils = utils,
             mockLoginModel = {},
             mockUserModel = {
                 reset: function () { },
                 get: function () { },
-                set: function () { }
+                set: function () { },
+                initialize: function () { }
             },
             UserModel = {
                 getInstance: function () { }
@@ -174,29 +175,33 @@ define(["utils", "Squire", "globals"],
 
                 it("should set UserModel with Authenticated Response data", function () {
                     var mockResponse = {
-                            firstName: "Joe",
-                            email: "joe.schmoe@someplace.com",
-                            selectedCompany: {
-                                name: "The Company",
-                                wexAccountNumber: "123456789"
-                            }
+                            data: {
+                                firstName: "Joe",
+                                email: "joe.schmoe@someplace.com",
+                                selectedCompany: {
+                                    name: "The Company",
+                                    wexAccountNumber: "123456789"
+                                }
+                            },
+                            message: "Mock Message"
                         },
-                        objectToSetUserModel;
+                        objectToInitializeUserModel;
 
-                    spyOn(mockUserModel, "set").andCallFake(function () { });
+                    spyOn(mockUserModel, "initialize").andCallFake(function () { });
 
                     loginController.setAuthentication(mockResponse);
 
-                    expect(mockUserModel.set).toHaveBeenCalled();
-                    expect(mockUserModel.set.mostRecentCall.args.length).toEqual(1);
+                    expect(mockUserModel.initialize).toHaveBeenCalled();
+                    expect(mockUserModel.initialize.mostRecentCall.args.length).toEqual(1);
 
-                    objectToSetUserModel = mockUserModel.set.mostRecentCall.args[0];
+                    objectToInitializeUserModel = mockUserModel.initialize.mostRecentCall.args[0];
 
-                    expect(objectToSetUserModel.authenticated).toBeTruthy();
-                    expect(objectToSetUserModel.firstName).toEqual(mockResponse.firstName);
-                    expect(objectToSetUserModel.email).toEqual(mockResponse.email);
-                    expect(objectToSetUserModel.selectedCompany.name).toEqual(mockResponse.selectedCompany.name);
-                    expect(objectToSetUserModel.selectedCompany.wexAccountNumber).toEqual(mockResponse.selectedCompany.wexAccountNumber);
+                    expect(objectToInitializeUserModel.authenticated).toBeTruthy();
+                    expect(objectToInitializeUserModel.firstName).toEqual(mockResponse.data.firstName);
+                    expect(objectToInitializeUserModel.email).toEqual(mockResponse.data.email);
+                    expect(objectToInitializeUserModel.selectedCompany.name).toEqual(mockResponse.data.selectedCompany.name);
+                    expect(objectToInitializeUserModel.selectedCompany.wexAccountNumber)
+                        .toEqual(mockResponse.data.selectedCompany.wexAccountNumber);
                 });
             });
 

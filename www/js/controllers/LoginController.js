@@ -38,15 +38,7 @@ define(["facade", "utils", "globals", "jclass", "views/LoginView", "models/Login
             },
 
             setAuthentication: function (authenticationResponse) {
-                this.userModel.set({
-                    authenticated: true,
-                    firstName: authenticationResponse.firstName,
-                    email: authenticationResponse.email,
-                    selectedCompany: {
-                        name: authenticationResponse.selectedCompany.name,
-                        wexAccountNumber: authenticationResponse.selectedCompany.wexAccountNumber
-                    }
-                });
+                this.userModel.initialize(utils._.extend(authenticationResponse.data, {"authenticated": true}));
             },
 
             clearAuthentication: function () {
