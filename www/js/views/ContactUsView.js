@@ -63,10 +63,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
                 this.model.save(this.model.toJSON(), {
                     success: function (model, response, options) {
                         self.trigger("contactUsSuccess", response);
-                    },
-                    error: function () {
-                        // This event is not currently used anywhere
-                        self.trigger("contactUsFailure");
                     }
                 });
             }

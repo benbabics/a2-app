@@ -240,22 +240,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                             expect(contactUsView.trigger.mostRecentCall.args[1]).toEqual(response);
                         });
                     });
-
-                    describe("sends as the second argument the options object with a error callback that", function () {
-                        beforeEach(function () {
-                            var options = contactUsModel.save.mostRecentCall.args[1];
-
-                            spyOn(contactUsView, "trigger").andCallFake(function () { });
-
-                            options.error.call(contactUsView);
-                        });
-
-                        it("should trigger contactUsFailure", function () {
-                            expect(contactUsView.trigger).toHaveBeenCalled();
-                            expect(contactUsView.trigger.mostRecentCall.args.length).toEqual(1);
-                            expect(contactUsView.trigger.mostRecentCall.args[0]).toEqual("contactUsFailure");
-                        });
-                    });
                 });
             });
         });
