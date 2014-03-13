@@ -65,6 +65,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
                         self.trigger("contactUsSuccess", response);
                     },
                     error: function () {
+                        // This event is not currently used anywhere
                         self.trigger("contactUsFailure");
                     }
                 });
