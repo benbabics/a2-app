@@ -100,6 +100,7 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
 
                     it("should NOT call set", function () {
                         expect(userModel.set).not.toHaveBeenCalled();
+                        expect(userModel.setPermissions).not.toHaveBeenCalled();
                     });
                 });
 
