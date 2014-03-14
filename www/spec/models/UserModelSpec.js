@@ -1,5 +1,5 @@
-define(["Squire"],
-    function (Squire) {
+define(["Squire", "utils", "globals"],
+    function (Squire, utils, globals) {
 
         "use strict";
 
@@ -41,11 +41,16 @@ define(["Squire"],
                 it("should set selectedCompany to default", function () {
                     expect(userModel.defaults.selectedCompany).toBeNull();
                 });
+
+                it("should set permissions to default", function () {
+                    expect(userModel.defaults.permissions).toEqual(globals.userData.permissions);
+                });
             });
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(userModel, "set").andCallThrough();
+                    spyOn(userModel, "setPermissions").andCallFake(function () { });
                 });
 
                 it("is defined", function () {
@@ -63,6 +68,7 @@ define(["Squire"],
 
                     it("should NOT call set", function () {
                         expect(userModel.set).not.toHaveBeenCalled();
+                        expect(userModel.setPermissions).not.toHaveBeenCalled();
                     });
                 });
 
@@ -99,7 +105,12 @@ define(["Squire"],
                                         visible: false
                                     }
                                 ]
-                            }
+                            },
+                            permissions: [
+                                "PERMISSION_1",
+                                "PERMISSION_2",
+                                "PERMISSION_3"
+                            ]
                         };
 
                     beforeEach(function () {
@@ -146,6 +157,10 @@ define(["Squire"],
                         expect(actualDepartments[1].get("visible")).toEqual(options.selectedCompany.departments[1].visible);
                     });
 
+                    it("should set permissions", function () {
+                        expect(userModel.setPermissions).toHaveBeenCalledWith(options.permissions);
+                    });
+
                     it("should NOT set bogus", function () {
                         expect(userModel.set).not.toHaveBeenCalledWith("bogus", options.bogus);
                     });
@@ -170,6 +185,73 @@ define(["Squire"],
                 it("should call set", function () {
                     expect(userModel.set).toHaveBeenCalledWith(userModel.defaults);
                 });
+            });
+
+            describe("has a setPermissions function that", function () {
+                var mockPermissions = [
+                    "PERMISSION_1",
+                    "PERMISSION_2",
+                    "PERMISSION_3"
+                ];
+
+                beforeEach(function () {
+                    spyOn(userModel, "set").andCallThrough();
+
+                    userModel.setPermissions(mockPermissions);
+                });
+
+                it("is defined", function () {
+                    expect(userModel.setPermissions).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(userModel.setPermissions).toEqual(jasmine.any(Function));
+                });
+
+                it("should call set", function () {
+                    expect(userModel.set).toHaveBeenCalled();
+                    expect(userModel.set.mostRecentCall.args.length).toEqual(2);
+                    expect(userModel.set.mostRecentCall.args[0]).toEqual("permissions");
+                });
+
+                describe("when building a new object to set the permissions property with", function () {
+                    var newPermissions;
+
+                    beforeEach(function () {
+                        newPermissions = userModel.set.mostRecentCall.args[1];
+                    });
+
+                    it("should include all the default permissions", function () {
+                        var numOfMatches = 0;
+
+                        // find all elements in the newPermissions that have a matching key with the default permissions
+                        utils._.each(userModel.defaults.permissions, function (value, key, list) {
+                            if (utils._.has(newPermissions, key)) {
+                                numOfMatches += 1;
+                            }
+                        });
+
+                        expect(numOfMatches).toEqual(utils._.size(userModel.defaults.permissions));
+                    });
+
+                    it("should set only the passed in permissions to true", function () {
+                        var truePermissions = {},
+                            matchingPermissions;
+
+                        // find all elements in newPermissions that are set to true
+                        utils._.each(newPermissions, function (value, key, list) {
+                            if (value) {
+                                truePermissions[key] = value;
+                            }
+                        });
+
+                        // get all the truePermissions that match the mockPermissions
+                        matchingPermissions = utils._.pick(truePermissions, mockPermissions);
+
+                        expect(utils._.size(matchingPermissions)).toEqual(utils._.size(mockPermissions));
+                    });
+                });
+
             });
         });
     });

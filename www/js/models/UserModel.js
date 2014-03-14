@@ -1,5 +1,5 @@
-define(["backbone", "models/CompanyModel"],
-    function (Backbone, CompanyModel) {
+define(["backbone", "globals", "models/CompanyModel"],
+    function (Backbone, globals, CompanyModel) {
 
         "use strict";
 
@@ -9,7 +9,8 @@ define(["backbone", "models/CompanyModel"],
                 "authenticated"  : false,
                 "firstName"      : null,
                 "email"          : null,
-                "selectedCompany": null
+                "selectedCompany": null,
+                "permissions"    : globals.userData.permissions
             },
 
             initialize: function (options) {
@@ -20,11 +21,23 @@ define(["backbone", "models/CompanyModel"],
                     if (options.selectedCompany) {
                         this.set("selectedCompany", new CompanyModel(options.selectedCompany));
                     }
+                    if (options.permissions) { this.setPermissions(options.permissions); }
                 }
             },
 
             reset: function () {
                 this.set(this.defaults);
+            },
+
+            setPermissions: function (permsList) {
+                var newPerms = this.defaults.permissions; // start with the permission defaults
+
+                // Set only the permissions from the list to true
+                for (var i = 0; i < permsList.length; i++) {
+                    newPerms[permsList[i]] = true;
+                }
+
+                this.set("permissions", newPerms);
             }
         });
 

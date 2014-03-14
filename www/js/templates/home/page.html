@@ -11,24 +11,27 @@
 {{/selectedCompany}}
 
 <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="d">
-    <!-- TODO - Limit to users with the MOBILE_PAYMENT_VIEW permission-->
+    {{#permissions.MOBILE_PAYMENT_VIEW}}
     <li>
         <a href="#invoices" data-transition="flip" rel="external">
             <img src="img/ui-icon_Invoices.png">Invoice
         </a>
     </li>
-    <!-- TODO - Limit to users with the MOBILE_CARD_VIEW permission-->
+    {{/permissions.MOBILE_PAYMENT_VIEW}}
+    {{#permissions.MOBILE_CARD_VIEW}}
     <li>
         <a href="#cards" data-transition="flip" rel="external">
             <img src="img/ui-icon_Card.png">Card
         </a>
     </li>
-    <!-- TODO - Limit to users with the MOBILE_DRIVER_FULL_VIEW permission-->
+    {{/permissions.MOBILE_CARD_VIEW}}
+    {{#permissions.MOBILE_DRIVER_FULL_VIEW}}
     <li>
         <a href="#driverSearch" data-transition="flip" rel="external">
             <img src="img/ui-icon_Driver.png">Driver
         </a>
     </li>
+    {{/permissions.MOBILE_DRIVER_FULL_VIEW}}
 </ul>
 
 {{/authenticated}}
