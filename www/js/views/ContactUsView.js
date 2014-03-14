@@ -1,18 +1,18 @@
-define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
+define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationFormView",
         "text!tmpl/contactUs/page.html", "backbone-validation"],
-    function (Backbone, utils, facade, Mustache, globals, FormView, pageTemplate) {
+    function (Backbone, utils, facade, Mustache, globals, ValidationFormView, pageTemplate) {
 
         "use strict";
 
 
-        var ContactUsView = FormView.extend({
+        var ContactUsView = ValidationFormView.extend({
             el: "#contactUs",
 
             template: pageTemplate,
 
             userModel: null,
 
-            events: utils._.extend({}, FormView.prototype.events, {
+            events: utils._.extend({}, ValidationFormView.prototype.events, {
                 "click #submitContactUs-btn": "submitForm",
 
                 // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it

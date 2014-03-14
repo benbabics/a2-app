@@ -16,17 +16,19 @@
 	background-image: -webkit-gradient(linear,left top,left bottom, color-stop(0, #444), color-stop(1, #666));
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#444', EndColorStr='#666')";
 }
+.ui-btn-b,
 .ui-btn-up-b,
 .ui-btn-hover-b,
 .ui-btn-down-b {
-	border: 1px solid #840a1d;  /* color 1 (supplied brand color) */
-	background: #e11736;  /* color 2 (slightly brighter than color 1) */
+	border: 1px solid #840a1d !important;  /* color 1 (supplied brand color) */
+	background: #e11736 !important;  /* color 2 (slightly brighter than color 1) */
 }
+.ui-btn-b,
 .ui-btn-up-b,
 .ui-btn-hover-b {
                                                                                /* color 2 */           /* color 1 */
-	background-image: -moz-linear-gradient(top,                                   #e11736,                #840a1d);
-	background-image: -webkit-gradient(linear,left top,left bottom, color-stop(0, #e11736), color-stop(1, #840a1d));
+	background-image: -moz-linear-gradient(top,                                   #e11736,                #840a1d) !important;
+	background-image: -webkit-gradient(linear,left top,left bottom, color-stop(0, #e11736), color-stop(1, #840a1d)) !important;
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#e11736', EndColorStr='#840a1d')";
 }
 .ui-btn-down-b {

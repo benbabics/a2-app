@@ -38,6 +38,10 @@ define(["utils", "Squire", "backbone"],
                     expect(appRouter.routes.contactUs).toEqual("showContactUs");
                 });
 
+                it("should set 'driverSearch' to showDriverSearch", function () {
+                    expect(appRouter.routes.driverSearch).toEqual("showDriverSearch");
+                });
+
                 it("should set '*page' to changePage", function () {
                     expect(appRouter.routes["*page"]).toEqual("changePage");
                 });
@@ -68,6 +72,30 @@ define(["utils", "Squire", "backbone"],
                     expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
                     expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("contactUs");
                     expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
+                });
+            });
+
+            describe("has a showDriverSearch function that", function () {
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").andCallThrough();
+
+                    appRouter.showDriverSearch();
+                });
+
+                it("is defined", function () {
+                    expect(appRouter.showDriverSearch).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appRouter.showDriverSearch).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
+                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("driver");
+                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigateSearch");
                 });
             });
 

@@ -1,10 +1,13 @@
-define(["Squire", "utils", "globals"],
-    function (Squire, utils, globals) {
+define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbone-relational"],
+    function (Squire, utils, globals, CompanyModel, Backbone) {
 
         "use strict";
 
         var squire = new Squire(),
             userModel;
+
+        squire.mock("backbone", Backbone);
+        squire.mock("models/CompanyModel", CompanyModel);
 
         describe("A User Model", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -21,8 +24,8 @@ define(["Squire", "utils", "globals"],
                 expect(userModel).toBeDefined();
             });
 
-            it("looks like a Backbone model", function () {
-                expect(userModel instanceof Backbone.Model).toBeTruthy();
+            it("looks like a Backbone Relational model", function () {
+                expect(userModel instanceof Backbone.RelationalModel).toBeTruthy();
             });
 
             describe("has property defaults that", function () {
@@ -44,6 +47,22 @@ define(["Squire", "utils", "globals"],
 
                 it("should set permissions to default", function () {
                     expect(userModel.defaults.permissions).toEqual(globals.userData.permissions);
+                });
+            });
+
+            describe("has property relations that", function () {
+                describe("has a company relation that", function () {
+                    it("should set type to Backbone.HasOne", function () {
+                        expect(userModel.relations[0].type).toEqual(Backbone.HasOne);
+                    });
+
+                    it("should set key to selectedCompany", function () {
+                        expect(userModel.relations[0].key).toEqual("selectedCompany");
+                    });
+
+                    it("should set relatedModel to DepartmentModel", function () {
+                        expect(userModel.relations[0].relatedModel).toEqual(CompanyModel);
+                    });
                 });
             });
 
@@ -133,8 +152,8 @@ define(["Squire", "utils", "globals"],
                         expect(userModel.set).toHaveBeenCalledWith("email", options.email);
                     });
 
-                    // TODO - Replace with something that verifies the correct parameter was passed to the CompanyModel
-                    // constructor and then set to "selectedCompany"
+                    // TODO - Replace with something that verifies that a new CompanyModel was created, the correct
+                    // parameter was passed to the CompanyModel.initialize function and then set to "selectedCompany"
                     it("should set selectedCompany", function () {
                         var actualCompany, actualDepartments;
 
@@ -148,13 +167,13 @@ define(["Squire", "utils", "globals"],
                         expect(actualCompany.get("driverIdLength")).toEqual(options.selectedCompany.driverIdLength);
 
                         actualDepartments = actualCompany.get("departments");
-                        expect(actualDepartments[0].get("id")).toEqual(options.selectedCompany.departments[0].id);
-                        expect(actualDepartments[0].get("name")).toEqual(options.selectedCompany.departments[0].displayValue);
-                        expect(actualDepartments[0].get("visible")).toEqual(options.selectedCompany.departments[0].visible);
+                        expect(actualDepartments.at(0).get("departmentId")).toEqual(options.selectedCompany.departments[0].id);
+                        expect(actualDepartments.at(0).get("name")).toEqual(options.selectedCompany.departments[0].displayValue);
+                        expect(actualDepartments.at(0).get("visible")).toEqual(options.selectedCompany.departments[0].visible);
 
-                        expect(actualDepartments[1].get("id")).toEqual(options.selectedCompany.departments[1].id);
-                        expect(actualDepartments[1].get("name")).toEqual(options.selectedCompany.departments[1].displayValue);
-                        expect(actualDepartments[1].get("visible")).toEqual(options.selectedCompany.departments[1].visible);
+                        expect(actualDepartments.at(1).get("departmentId")).toEqual(options.selectedCompany.departments[1].id);
+                        expect(actualDepartments.at(1).get("name")).toEqual(options.selectedCompany.departments[1].displayValue);
+                        expect(actualDepartments.at(1).get("visible")).toEqual(options.selectedCompany.departments[1].visible);
                     });
 
                     it("should set permissions", function () {

@@ -13,6 +13,7 @@ require.config({
         "cordova"            : "../spec/cordova.mock",
         "mustache"           : "libs/mustache/mustache-min",
         "backbone"           : "libs/backbone/backbone-min",
+        "backbone-relational": "libs/backbone/backbone-relational-min",
         "backbone-validation": "libs/backbone/backbone-validation-amd-min",
         "underscore"         : "libs/underscore/underscore-min",
         "jquery"             : "libs/jquery/jquery-min",
@@ -53,6 +54,9 @@ require.config({
             "deps"   : ["underscore", "jquery", "mustache"],
             "exports": "Backbone"
         },
+        "backbone-relational": {
+            "deps": ["backbone"]
+        },
         "jquery-mobile": ["jquery", "libs/jquery/jquery.mobile.config-min"],
         "jclass": {
             "exports": "JClass"
@@ -84,7 +88,8 @@ require.config({
     waitSeconds: 0
 });
 
-require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamcity-reporter", "jasmine-async", "sinon", "cordova"],
+require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamcity-reporter", "jasmine-async",
+         "sinon", "cordova"],
     function (jqueryMobile, _, $, jasmine) {
         var jasmineEnv = jasmine.getEnv(),
             trivialReporter = new jasmine.TrivialReporter(),
@@ -117,6 +122,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
         specs.push("spec/views/HomeViewSpec.js");
         specs.push("spec/views/LoginViewSpec.js");
         specs.push("spec/views/UpdatePromptViewSpec.js");
+        specs.push("spec/views/ValidationFormViewSpec.js");
 
         // Models
         specs.push("spec/models/AjaxModelSpec.js");
@@ -129,6 +135,7 @@ require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-teamc
         specs.push("spec/models/UserModelSpec.js");
 
         // Collections
+        specs.push("spec/collections/DepartmentCollectionSpec.js");
 
         // Controllers
         specs.push("spec/controllers/AboutControllerSpec.js");

@@ -1,10 +1,12 @@
-define(["Squire"],
-    function (Squire) {
+define(["Squire", "backbone", "backbone-relational"],
+    function (Squire, Backbone) {
 
         "use strict";
 
         var squire = new Squire(),
             departmentModel;
+
+        squire.mock("backbone", Backbone);
 
         describe("A Department Model", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -21,13 +23,13 @@ define(["Squire"],
                 expect(departmentModel).toBeDefined();
             });
 
-            it("looks like a Backbone model", function () {
-                expect(departmentModel instanceof Backbone.Model).toBeTruthy();
+            it("looks like a Backbone RelationalModel", function () {
+                expect(departmentModel instanceof Backbone.RelationalModel).toBeTruthy();
             });
 
             describe("has property defaults that", function () {
-                it("should set id to default", function () {
-                    expect(departmentModel.defaults.id).toBeNull();
+                it("should set departmentId to default", function () {
+                    expect(departmentModel.defaults.departmentId).toBeNull();
                 });
 
                 it("should set name to default", function () {
@@ -89,8 +91,8 @@ define(["Squire"],
                         expect(departmentModel.set.calls.length).toEqual(3);
                     });
 
-                    it("should set id", function () {
-                        expect(departmentModel.set).toHaveBeenCalledWith("id", options.id);
+                    it("should set departmentId", function () {
+                        expect(departmentModel.set).toHaveBeenCalledWith("departmentId", options.id);
                     });
 
                     it("should set name", function () {

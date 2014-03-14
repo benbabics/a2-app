@@ -6,6 +6,8 @@ define(["facade", "controllers/DriverController"],
 
         var subscribe = facade.subscribeTo("driver", controller);
 
+        subscribe("navigateSearch", "navigateSearch");
+
 
         return {
             init: function () {

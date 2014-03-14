@@ -1,5 +1,5 @@
-define(["Squire", "backbone", "mustache", "text!tmpl/driver/search.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, pageTemplate) {
+define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmpl/driver/search.html", "jasmine-jquery"],
+    function (Squire, utils, Backbone, Mustache, UserModel, pageTemplate) {
 
         "use strict";
 
@@ -14,6 +14,29 @@ define(["Squire", "backbone", "mustache", "text!tmpl/driver/search.html", "jasmi
                 "filterDepartmentId": null
             },
             driverSearchModel = new Backbone.Model(),
+            mockUserModel = {
+                authenticated: true,
+                firstName: "Beavis",
+                email: "cornholio@bnbinc.com",
+                selectedCompany: {
+                    name: "Beavis and Butthead Inc",
+                    wexAccountNumber: "5764309",
+                    driverIdLength: "4",
+                    departments: [
+                        {
+                            id: "134613456",
+                            displayValue: "UNASSIGNED",
+                            visible: true
+                        },
+                        {
+                            id: "2456724567",
+                            displayValue: "Dewey, Cheetum and Howe",
+                            visible: false
+                        }
+                    ]
+                }
+            },
+            userModel = UserModel.getInstance(),
             driverSearchView;
 
         squire.mock("backbone", mockBackbone);
@@ -32,9 +55,11 @@ define(["Squire", "backbone", "mustache", "text!tmpl/driver/search.html", "jasmi
                         loadFixtures("index.html");
 
                         driverSearchModel.set(mockDriverSearchModel);
+                        userModel.initialize(mockUserModel);
 
                         driverSearchView =  new DriverSearchView({
-                            model: driverSearchModel
+                            model: driverSearchModel,
+                            userModel: userModel
                         });
 
                         done();
@@ -47,6 +72,16 @@ define(["Squire", "backbone", "mustache", "text!tmpl/driver/search.html", "jasmi
 
             it("looks like a Backbone View", function () {
                 expect(driverSearchView instanceof Backbone.View).toBeTruthy();
+            });
+
+            describe("has events that", function () {
+                it("should call submitForm when submitDriverSearch-btn is clicked", function () {
+                    expect(driverSearchView.events["click #submitDriverSearch-btn"]).toEqual("submitForm");
+                });
+
+                it("should call submitForm when driverSearchForm is submitted", function () {
+                    expect(driverSearchView.events["submit #driverSearchForm"]).toEqual("submitForm");
+                });
             });
 
             describe("has a constructor that", function () {
@@ -88,6 +123,10 @@ define(["Squire", "backbone", "mustache", "text!tmpl/driver/search.html", "jasmi
                 it("should parse the template", function () {
                     expect(mockMustache.parse).toHaveBeenCalledWith(driverSearchView.template);
                 });
+
+                it("should set userModel", function () {
+                    expect(driverSearchView.userModel).toEqual(userModel);
+                });
             });
 
             describe("has a render function that", function () {
@@ -105,14 +144,47 @@ define(["Squire", "backbone", "mustache", "text!tmpl/driver/search.html", "jasmi
                 });
 
                 it("should call Mustache.render() on the template", function () {
-                    expect(mockMustache.render).toHaveBeenCalledWith(driverSearchView.template, driverSearchView.model.toJSON());
+                    expect(mockMustache.render).toHaveBeenCalledWith(driverSearchView.template,
+                        {
+                            "searchCriteria": driverSearchModel.toJSON(),
+                            "hasMultipleDepartments": utils._.size(mockUserModel.selectedCompany.departments) > 1,
+                            "departments"   : userModel.get("selectedCompany").get("departments").toJSON()
+                        });
                 });
 
                 it("sets content", function () {
-                    var expectedContent = Mustache.render(pageTemplate, driverSearchModel.toJSON()),
+                    var expectedContent = Mustache.render(pageTemplate,
+                        {
+                            "searchCriteria": driverSearchModel.toJSON(),
+                            "hasMultipleDepartments": utils._.size(mockUserModel.selectedCompany.departments) > 1,
+                            "departments"   : userModel.get("selectedCompany").get("departments").toJSON()
+                        }),
                         $content = driverSearchView.$el.find(":jqmData(role=content)");
 
                     expect($content[0]).toContainHtml(expectedContent);
+                });
+            });
+
+            describe("has a submitForm function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    spyOn(mockEvent, "preventDefault").andCallThrough();
+                    driverSearchView.submitForm(mockEvent);
+                });
+
+                it("is defined", function () {
+                    expect(driverSearchView.submitForm).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverSearchView.submitForm).toEqual(jasmine.any(Function));
+                });
+
+                it("should call event.preventDefault", function () {
+                    expect(mockEvent.preventDefault).toHaveBeenCalledWith();
                 });
             });
         });

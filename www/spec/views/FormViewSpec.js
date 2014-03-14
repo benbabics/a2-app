@@ -1,4 +1,4 @@
-define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-validation"],
+define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
     function (Squire, Mustache, globals, utils) {
 
         "use strict";
@@ -34,23 +34,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                         "<textarea name='field5' id='field5' /></textarea>" +
                     "</div>" +
                 "</form>",
-            MockModel = Backbone.Model.extend({
-                validation: {
-                    "field1": {
-                        required: true
-                    },
-                    "field2": {
-                        max: 100
-                    },
-                    "field4": {
-                        required: true
-                    },
-                    "field5": {
-                        required: true
-                    }
-                }
-            }),
-            formModel = new MockModel(),
+            formModel = new Backbone.Model(),
             formView;
 
         squire.mock("facade", mockFacade);
@@ -100,7 +84,6 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(Backbone.Validation, "bind").andCallThrough();
                     spyOn(formModel, "on").andCallFake(function () { });
                     spyOn(mockMustache, "parse").andCallThrough();
                     spyOn(formView, "pageCreate").andCallFake(function () { });
@@ -117,36 +100,24 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     expect(formView.initialize).toEqual(jasmine.any(Function));
                 });
 
-                it("should bind the Backbone.Validation", function () {
-                    expect(Backbone.Validation.bind).toHaveBeenCalledWith(formView);
-                });
-
                 it("should call utils._.bindAll", function () {
                     expect(mockUtils._.bindAll).toHaveBeenCalled();
 
-                    expect(mockUtils._.bindAll.mostRecentCall.args.length).toEqual(4);
+                    expect(mockUtils._.bindAll.mostRecentCall.args.length).toEqual(3);
                     expect(mockUtils._.bindAll.mostRecentCall.args[0]).toEqual(formView);
-                    expect(mockUtils._.bindAll.mostRecentCall.args[1]).toEqual("handleValidationError");
-                    expect(mockUtils._.bindAll.mostRecentCall.args[2]).toEqual("handleInputChanged");
-                    expect(mockUtils._.bindAll.mostRecentCall.args[3]).toEqual("submitForm");
-                });
-
-                it("should register a function as the handler for the invalid event", function () {
-                    expect(formModel.on).toHaveBeenCalled();
-                    expect(formModel.on.calls[0].args.length).toEqual(2);
-                    expect(formModel.on.calls[0].args[0]).toEqual("invalid");
-                    expect(formModel.on.calls[0].args[1]).toEqual(formView.handleValidationError);
+                    expect(mockUtils._.bindAll.mostRecentCall.args[1]).toEqual("handleInputChanged");
+                    expect(mockUtils._.bindAll.mostRecentCall.args[2]).toEqual("submitForm");
                 });
 
                 it("should register a function as the handler for the request event", function () {
                     var eventHandler;
 
                     expect(formModel.on).toHaveBeenCalled();
-                    expect(formModel.on.calls[1].args.length).toEqual(3);
-                    expect(formModel.on.calls[1].args[0]).toEqual("request");
-                    expect(formModel.on.calls[1].args[2]).toEqual(formView);
+                    expect(formModel.on.calls[0].args.length).toEqual(3);
+                    expect(formModel.on.calls[0].args[0]).toEqual("request");
+                    expect(formModel.on.calls[0].args[2]).toEqual(formView);
 
-                    eventHandler = formModel.on.calls[1].args[1];
+                    eventHandler = formModel.on.calls[0].args[1];
                     spyOn(formView, "showLoadingIndicator").andCallFake(function () { });
 
                     eventHandler.apply(formView);
@@ -158,11 +129,11 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     var eventHandler;
 
                     expect(formModel.on).toHaveBeenCalled();
-                    expect(formModel.on.calls[2].args.length).toEqual(3);
-                    expect(formModel.on.calls[2].args[0]).toEqual("sync error");
-                    expect(formModel.on.calls[2].args[2]).toEqual(formView);
+                    expect(formModel.on.calls[1].args.length).toEqual(3);
+                    expect(formModel.on.calls[1].args[0]).toEqual("sync error");
+                    expect(formModel.on.calls[1].args[2]).toEqual(formView);
 
-                    eventHandler = formModel.on.calls[2].args[1];
+                    eventHandler = formModel.on.calls[1].args[1];
                     spyOn(formView, "hideLoadingIndicator").andCallFake(function () { });
 
                     eventHandler.apply(formView);
@@ -189,7 +160,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                 });
             });
 
-            describe("has a updateAttribute function that", function () {
+            describe("has an updateAttribute function that", function () {
                 it("is defined", function () {
                     expect(formView.updateAttribute).toBeDefined();
                 });
@@ -209,80 +180,6 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     expect(formModel.set.mostRecentCall.args.length).toEqual(2);
                     expect(formModel.set.mostRecentCall.args[0]).toEqual(key);
                     expect(formModel.set.mostRecentCall.args[1]).toEqual(value);
-                });
-            });
-
-            describe("has a formatRequiredFields function that", function () {
-                beforeEach(function () {
-                    spyOn(mockUtils._, "each").andCallThrough();
-
-                    formView.$el.html(mockTemplate);
-                    formView.formatRequiredFields();
-                });
-
-                afterEach(function () {
-                    formView.$el.html("");
-                });
-
-                it("is defined", function () {
-                    expect(formView.formatRequiredFields).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(formView.formatRequiredFields).toEqual(jasmine.any(Function));
-                });
-
-                it("should call utils._.each on the model's validation object", function () {
-                    expect(mockUtils._.each).toHaveBeenCalled();
-                    expect(mockUtils._.each.mostRecentCall.args.length).toEqual(3);
-                    expect(mockUtils._.each.mostRecentCall.args[0]).toEqual(formView.model.validation);
-                    expect(mockUtils._.each.mostRecentCall.args[1]).toEqual(jasmine.any(Function));
-                    expect(mockUtils._.each.mostRecentCall.args[2]).toEqual(formView);
-                });
-
-                it("should add an asterisk to the label of any fields that have a validation rule of required:true",
-                    function () {
-                        expect(formView.$el.find("label[for='field1']")[0]).toContainText("*");
-                        expect(formView.$el.find("label[for='field4']")[0]).toContainText("*");
-                        expect(formView.$el.find("label[for='field5']")[0]).toContainText("*");
-                    });
-
-                it("should NOT add an asterisk to label of fields that do not have a validation rule of required:true",
-                    function () {
-                        expect(formView.$el.find("label[for='field2']")[0]).not.toContainText("*");
-                    });
-
-                it("should NOT add an asterisk to the label of any fields that do not have any validation rules",
-                    function () {
-                        expect(formView.$el.find("label[for='field3']")[0]).not.toContainText("*");
-                    });
-            });
-
-            describe("has a convertErrorsToUnorderedList function that", function () {
-                var mockErrors = {
-                    field1: "Error Message 1",
-                    field2: "Error Message 2",
-                    field5: "Error Message 5"
-                };
-
-                beforeEach(function () {
-                    formView.convertErrorsToUnorderedList(mockErrors);
-                });
-
-                it("is defined", function () {
-                    expect(formView.convertErrorsToUnorderedList).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(formView.convertErrorsToUnorderedList).toEqual(jasmine.any(Function));
-                });
-
-                it("should return expected result", function () {
-                    var expectedValue = "<ul><li>Error Message 1</li>" +
-                                        "<li>Error Message 2</li>" +
-                                        "<li>Error Message 5</li></ul>",
-                        actualValue = formView.convertErrorsToUnorderedList(mockErrors);
-                    expect(actualValue).toEqual(expectedValue);
                 });
             });
 
@@ -335,53 +232,6 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     expect(formView.updateAttribute.mostRecentCall.args.length).toEqual(2);
                     expect(formView.updateAttribute.mostRecentCall.args[0]).toEqual(mockEvent.target.name);
                     expect(formView.updateAttribute.mostRecentCall.args[1]).toEqual(mockEvent.target.value);
-                });
-            });
-
-            describe("has a handleValidationError function that", function () {
-                var mockConvertedErrors = "",
-                    mockErrors = {
-                        field1: "Error Message 1",
-                        field2: "Error Message 2",
-                        field5: "Error Message 5"
-                    };
-
-                beforeEach(function () {
-                    spyOn(mockFacade, "publish").andCallThrough();
-                    spyOn(formView, "convertErrorsToUnorderedList").andCallFake(
-                        function () {
-                            return mockConvertedErrors;
-                        }
-                    );
-
-                    formView.handleValidationError(formModel, mockErrors);
-                });
-
-                it("is defined", function () {
-                    expect(formView.handleValidationError).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(formView.handleValidationError).toEqual(jasmine.any(Function));
-                });
-
-                it("should call convertErrorsToUnorderedList", function () {
-                    expect(formView.convertErrorsToUnorderedList).toHaveBeenCalledWith(mockErrors);
-                });
-
-                it("should call publish on the facade", function () {
-                    var appALertOptions;
-
-                    expect(mockFacade.publish).toHaveBeenCalled();
-
-                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(3);
-                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("app");
-                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("alert");
-
-                    appALertOptions = mockFacade.publish.mostRecentCall.args[2];
-                    expect(appALertOptions.title).toEqual(globals.VALIDATION_ERRORS.TITLE);
-                    expect(appALertOptions.message).toEqual(globals.VALIDATION_ERRORS.HEADER + mockConvertedErrors);
-                    expect(appALertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
                 });
             });
 

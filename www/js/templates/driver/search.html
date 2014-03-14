@@ -1,0 +1,38 @@
+<h2 class="ui-title">Driver - Search</h2>
+<form id="driverSearchForm" action="#driverSearch" method="post" class="ui-body ui-body-d">
+    <div data-role="fieldcontain">
+        <label for="filterFirstName">First Name:</label>
+        <input type="text" name="filterFirstName"
+               id="filterFirstName" value="{{searchCriteria.filterFirstName}}">
+    </div>
+    <div data-role="fieldcontain">
+        <label for="filterLastName">Last Name:</label>
+        <input type="text" name="filterLastName"
+               id="filterLastName" value="{{searchCriteria.filterLastName}}">
+    </div>
+    <div data-role="fieldcontain">
+        <label for="filterDriverId">Driver ID:</label>
+        <input type="text" name="filterDriverId"
+               id="filterDriverId" value="{{searchCriteria.filterDriverId}}">
+    </div>
+    <div data-role="fieldcontain">
+        <label for="filterStatus">Status:</label>
+        <select id="filterStatus" name="filterStatus" data-theme="c">
+            <option value="">All</option>
+            <option value="A">Active</option>
+            <option value="T">Terminated</option>
+        </select>
+    </div>
+    <div data-role="fieldcontain">
+        <label for="filterDepartmentId">Department:</label>
+        <select id="filterDepartmentId" name="filterDepartmentId" {{^hasMultipleDepartments}} disabled=disabled {{/hasMultipleDepartments}} data-theme="c">
+            {{#hasMultipleDepartments}}
+                <option value="">All</option>
+            {{/hasMultipleDepartments}}
+            {{#departments}}
+                <option value="{{departmentId}}">{{name}}</option>
+            {{/departments}}
+        </select>
+    </div>
+</form>
+<button id="submitDriverSearch-btn" data-theme="b">Search</button>

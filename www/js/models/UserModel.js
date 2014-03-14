@@ -1,10 +1,10 @@
-define(["backbone", "globals", "models/CompanyModel"],
+define(["backbone", "globals", "models/CompanyModel", "backbone-relational"],
     function (Backbone, globals, CompanyModel) {
 
         "use strict";
 
 
-        var UserModel = Backbone.Model.extend({
+        var UserModel = Backbone.RelationalModel.extend({
             defaults: {
                 "authenticated"  : false,
                 "firstName"      : null,
@@ -13,13 +13,25 @@ define(["backbone", "globals", "models/CompanyModel"],
                 "permissions"    : globals.userData.permissions
             },
 
+            relations: [
+                {
+                    type: Backbone.HasOne,
+                    key: "selectedCompany",
+                    relatedModel: CompanyModel
+                }
+            ],
+
             initialize: function (options) {
+                var selectedCompany;
+
                 if (options) {
                     if (options.authenticated) { this.set("authenticated", options.authenticated); }
                     if (options.firstName) { this.set("firstName", options.firstName); }
                     if (options.email) { this.set("email", options.email); }
                     if (options.selectedCompany) {
-                        this.set("selectedCompany", new CompanyModel(options.selectedCompany));
+                        selectedCompany = new CompanyModel();
+                        selectedCompany.initialize(options.selectedCompany);
+                        this.set("selectedCompany", selectedCompany);
                     }
                     if (options.permissions) { this.setPermissions(options.permissions); }
                 }

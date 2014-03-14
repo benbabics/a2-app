@@ -1,10 +1,14 @@
-define(["Squire"],
-    function (Squire) {
+define(["Squire", "models/DepartmentModel", "collections/DepartmentCollection", "backbone", "backbone-relational"],
+    function (Squire, DepartmentModel, DepartmentCollection, Backbone) {
 
         "use strict";
 
         var squire = new Squire(),
             companyModel;
+
+        squire.mock("backbone", Backbone);
+        squire.mock("collections/DepartmentCollection", DepartmentCollection);
+        squire.mock("models/DepartmentModel", DepartmentModel);
 
         describe("A Company Model", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -21,8 +25,8 @@ define(["Squire"],
                 expect(companyModel).toBeDefined();
             });
 
-            it("looks like a Backbone model", function () {
-                expect(companyModel instanceof Backbone.Model).toBeTruthy();
+            it("looks like a Backbone RelationalModel", function () {
+                expect(companyModel instanceof Backbone.RelationalModel).toBeTruthy();
             });
 
             describe("has property defaults that", function () {
@@ -43,9 +47,30 @@ define(["Squire"],
                 });
             });
 
+            describe("has property relations that", function () {
+                describe("has a department relation that", function () {
+                    it("should set type to Backbone.HasMany", function () {
+                        expect(companyModel.relations[0].type).toEqual(Backbone.HasMany);
+                    });
+
+                    it("should set key to departments", function () {
+                        expect(companyModel.relations[0].key).toEqual("departments");
+                    });
+
+                    it("should set relatedModel to DepartmentModel", function () {
+                        expect(companyModel.relations[0].relatedModel).toEqual(DepartmentModel);
+                    });
+
+                    it("should set collectionType to DepartmentCollection", function () {
+                        expect(companyModel.relations[0].collectionType).toEqual(DepartmentCollection);
+                    });
+                });
+            });
+
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(companyModel, "set").andCallThrough();
+                    spyOn(companyModel, "get").andCallThrough();
                 });
 
                 it("is defined", function () {
@@ -79,7 +104,8 @@ define(["Squire"],
                 });
 
                 describe("when options are provided", function () {
-                    var options = {
+                    var departments,
+                        options = {
                             name: "Beavis and Butthead Inc",
                             wexAccountNumber: "5764309",
                             driverIdLength: "4",
@@ -98,11 +124,14 @@ define(["Squire"],
                         };
 
                     beforeEach(function () {
+                        departments = companyModel.get("departments");
+                        spyOn(departments, "add").andCallThrough();
+
                         companyModel.initialize(options);
                     });
 
-                    it("should call set 4 times", function () {
-                        expect(companyModel.set.calls.length).toEqual(4);
+                    it("should call set 3 times", function () {
+                        expect(companyModel.set.calls.length).toEqual(3);
                     });
 
                     it("should set name", function () {
@@ -117,22 +146,29 @@ define(["Squire"],
                         expect(companyModel.set).toHaveBeenCalledWith("driverIdLength", options.driverIdLength);
                     });
 
-                    // TODO - Replace with something that verifies the correct parameter was passed to the
-                    // DepartmentModel constructor and then set to "departments"
+                    it("should get the departments collection", function () {
+                        expect(companyModel.get).toHaveBeenCalledWith("departments");
+                    });
+
+                    it("should call add on the departments collection 2 times", function () {
+                        expect(departments.add.calls.length).toEqual(2);
+                    });
+
+                    // TODO - Replace with something that verifies that a new DepartmentModel was created, the correct
+                    // parameter was passed to the DepartmentModel.initialize function and then added to the
+                    // DepartmentCollection
                     it("should set departments", function () {
-                        var actualDepartments;
+                        var departmentAdded;
 
-                        expect(companyModel.set.calls[3].args.length).toEqual(2);
-                        expect(companyModel.set.calls[3].args[0]).toEqual("departments");
+                        departmentAdded = departments.add.calls[0].args[0];
+                        expect(departmentAdded.get("departmentId")).toEqual(options.departments[0].id);
+                        expect(departmentAdded.get("name")).toEqual(options.departments[0].displayValue);
+                        expect(departmentAdded.get("visible")).toEqual(options.departments[0].visible);
 
-                        actualDepartments = companyModel.set.calls[3].args[1];
-                        expect(actualDepartments[0].get("id")).toEqual(options.departments[0].id);
-                        expect(actualDepartments[0].get("name")).toEqual(options.departments[0].displayValue);
-                        expect(actualDepartments[0].get("visible")).toEqual(options.departments[0].visible);
-
-                        expect(actualDepartments[1].get("id")).toEqual(options.departments[1].id);
-                        expect(actualDepartments[1].get("name")).toEqual(options.departments[1].displayValue);
-                        expect(actualDepartments[1].get("visible")).toEqual(options.departments[1].visible);
+                        departmentAdded = departments.add.calls[1].args[0];
+                        expect(departmentAdded.get("departmentId")).toEqual(options.departments[1].id);
+                        expect(departmentAdded.get("name")).toEqual(options.departments[1].displayValue);
+                        expect(departmentAdded.get("visible")).toEqual(options.departments[1].visible);
                     });
                 });
             });

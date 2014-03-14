@@ -9,7 +9,8 @@ define(["backbone", "utils", "facade"],
              * Route Definitions
             */
             routes: {
-                "contactUs": "showContactUs",
+                "contactUs"   : "showContactUs",
+                "driverSearch": "showDriverSearch",
 
                 "*page": "changePage",
 
@@ -21,6 +22,10 @@ define(["backbone", "utils", "facade"],
             */
             showContactUs: function () {
                 facade.publish("contactUs", "navigate");
+            },
+
+            showDriverSearch: function () {
+                facade.publish("driver", "navigateSearch");
             },
 
             changePage: function (page) {

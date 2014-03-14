@@ -1,19 +1,20 @@
-define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel", "views/FormView", "text!tmpl/login/page.html", "backbone-validation"],
-    function (Backbone, utils, facade, Mustache, globals, UserModel, FormView, pageTemplate) {
+define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel", "views/ValidationFormView",
+        "text!tmpl/login/page.html", "backbone-validation"],
+    function (Backbone, utils, facade, Mustache, globals, UserModel, ValidationFormView, pageTemplate) {
 
         "use strict";
 
 
-        var LoginView;
-        LoginView = FormView.extend({
-
+        var LoginView = ValidationFormView.extend({
             el: "#login",
 
             template: pageTemplate,
 
-            events: utils._.extend({}, FormView.prototype.events, {
+            events: utils._.extend({}, ValidationFormView.prototype.events, {
                 "click #submitLogin-btn": "submitForm",
-                "submit #loginForm"     : "submitForm" // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it
+
+                // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it
+                "submit #loginForm"     : "submitForm"
             }),
 
             initialize: function () {

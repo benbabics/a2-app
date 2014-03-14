@@ -89,9 +89,10 @@
         <div data-role="page" data-theme="a" id="driverSearch">
             <div data-theme="b" data-role="header" data-position="fixed" data-tap-toggle="false">
                 <h1>WEXonline</h1>
+                <!-- TODO - Limit to users with the MOBILE_DRIVER_ADD permission-->
+                <a href="#driverAdd" data-icon="plus" class="ui-btn-right" data-theme="a">Add</a>
             </div>
-            <div data-role="content" class="page-content" data-theme="b">
-            </div>
+            <div data-role="content" class="page-content"></div>
             <div id="footer" data-role="footer" data-position="fixed" data-tap-toggle="false">
                 <div data-role="navbar">
                     <ul>
@@ -102,6 +103,16 @@
             </div>
         </div>
         <!-- End Driver Search page -->
+
+        <!-- Driver Add page -->
+        <div data-role="page" data-theme="a" id="driverAdd">
+            <div data-theme="b" data-role="header" data-position="fixed" data-tap-toggle="false">
+                <h1>WEXonline</h1>
+            </div>
+            <div data-role="content" class="page-content" data-theme="c">
+            </div>
+        </div>
+        <!-- End Driver Add page -->
 
         <!-- Info page -->
         <div data-role="page" data-theme="a" id="info">

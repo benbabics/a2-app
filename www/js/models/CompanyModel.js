@@ -1,10 +1,10 @@
-define(["backbone", "utils", "models/DepartmentModel"],
-    function (Backbone, utils, DepartmentModel) {
+define(["backbone", "utils", "models/DepartmentModel", "collections/DepartmentCollection", "backbone-relational"],
+    function (Backbone, utils, DepartmentModel, DepartmentCollection) {
 
         "use strict";
 
 
-        var CompanyModel = Backbone.Model.extend({
+        var CompanyModel = Backbone.RelationalModel.extend({
             defaults: {
                 "name"            : null,
                 "wexAccountNumber": null,
@@ -12,19 +12,30 @@ define(["backbone", "utils", "models/DepartmentModel"],
                 "departments"     : null
             },
 
+            relations: [
+                {
+                    type: Backbone.HasMany,
+                    key: "departments",
+                    relatedModel: DepartmentModel,
+                    collectionType: DepartmentCollection
+                }
+            ],
+
             initialize: function (options) {
-                var departments = [];
+                var departments,
+                    department;
 
                 if (options) {
                     if (options.name) { this.set("name", options.name); }
                     if (options.wexAccountNumber) { this.set("wexAccountNumber", options.wexAccountNumber); }
                     if (options.driverIdLength) { this.set("driverIdLength", options.driverIdLength); }
                     if (options.departments) {
-                        utils._.each(options.departments, function (department) {
-                            departments.push(new DepartmentModel(department));
+                        departments = this.get("departments");
+                        utils._.each(options.departments, function (departmentOptions) {
+                            department = new DepartmentModel();
+                            department.initialize(departmentOptions);
+                            departments.add(department);
                         });
-
-                        this.set("departments", departments);
                     }
                 }
             }
