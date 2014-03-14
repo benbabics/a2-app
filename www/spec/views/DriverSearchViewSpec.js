@@ -1,5 +1,6 @@
-define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmpl/driver/search.html", "jasmine-jquery"],
-    function (Squire, utils, Backbone, Mustache, UserModel, pageTemplate) {
+define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmpl/driver/search.html",
+    "text!tmpl/driver/searchHeader.html", "jasmine-jquery"],
+    function (Squire, utils, Backbone, Mustache, UserModel, pageTemplate, searchHeaderTemplate) {
 
         "use strict";
 
@@ -34,7 +35,12 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
                             visible: false
                         }
                     ]
-                }
+                },
+                permissions: [
+                    "PERMISSION_1",
+                    "PERMISSION_2",
+                    "PERMISSION_3"
+                ]
             },
             userModel = UserModel.getInstance(),
             driverSearchView;
@@ -104,6 +110,10 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
                 it("should set the template", function () {
                     expect(driverSearchView.template).toEqual(pageTemplate);
                 });
+
+                it("should set the headerTemplate", function () {
+                    expect(driverSearchView.headerTemplate).toEqual(searchHeaderTemplate);
+                });
             });
 
             describe("has an initialize function that", function () {
@@ -124,6 +134,10 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
                     expect(mockMustache.parse).toHaveBeenCalledWith(driverSearchView.template);
                 });
 
+                it("should parse the headerTemplate", function () {
+                    expect(mockMustache.parse).toHaveBeenCalledWith(driverSearchView.headerTemplate);
+                });
+
                 it("should set userModel", function () {
                     expect(driverSearchView.userModel).toEqual(userModel);
                 });
@@ -141,6 +155,23 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
 
                 it("is a function", function () {
                     expect(driverSearchView.render).toEqual(jasmine.any(Function));
+                });
+
+                it("should call Mustache.render() on the headerTemplate", function () {
+                    expect(mockMustache.render).toHaveBeenCalledWith(driverSearchView.headerTemplate,
+                        {
+                            "permissions"   : userModel.get("permissions")
+                        });
+                });
+
+                it("sets the header content", function () {
+                    var expectedContent = Mustache.render(searchHeaderTemplate,
+                        {
+                            "permissions": userModel.get("permissions")
+                        }),
+                        $header = driverSearchView.$el.find(":jqmData(role=header)");
+
+                    expect($header[0]).toContainHtml(expectedContent);
                 });
 
                 it("should call Mustache.render() on the template", function () {

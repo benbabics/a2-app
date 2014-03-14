@@ -1,5 +1,6 @@
-define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView", "text!tmpl/driver/search.html"],
-    function (Backbone, utils, facade, Mustache, globals, FormView, pageTemplate) {
+define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
+    "text!tmpl/driver/search.html", "text!tmpl/driver/searchHeader.html"],
+    function (Backbone, utils, facade, Mustache, globals, FormView, pageTemplate, searchHeaderTemplate) {
 
         "use strict";
 
@@ -8,6 +9,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView", 
             el: "#driverSearch",
 
             template: pageTemplate,
+            headerTemplate: searchHeaderTemplate,
 
             userModel: null,
 
@@ -22,7 +24,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView", 
                 // call super
                 DriverSearchView.__super__.initialize.apply(this, arguments);
 
-                // parse the template
+                // parse the templates
+                Mustache.parse(this.headerTemplate);
                 Mustache.parse(this.template);
 
                 if (options && options.userModel) {
@@ -31,9 +34,15 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView", 
             },
 
             render: function () {
-                var $content = this.$el.find(":jqmData(role=content)"),
+                var $header = this.$el.find(":jqmData(role=header)"),
+                    $content = this.$el.find(":jqmData(role=content)"),
                     selectedCompany = this.userModel.get("selectedCompany"),
                     departments = selectedCompany.get("departments");
+
+                $header.html(Mustache.render(this.headerTemplate,
+                    {
+                        "permissions": this.userModel.get("permissions")
+                    }));
 
                 $content.html(Mustache.render(this.template,
                     {
