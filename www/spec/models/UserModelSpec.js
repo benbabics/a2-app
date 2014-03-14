@@ -64,7 +64,7 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                         expect(userModel.relations[0].key).toEqual("selectedCompany");
                     });
 
-                    it("should set relatedModel to DepartmentModel", function () {
+                    it("should set relatedModel to CompanyModel", function () {
                         expect(userModel.relations[0].relatedModel).toEqual(CompanyModel);
                     });
                 });
@@ -188,10 +188,6 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
 
                     it("should set permissions", function () {
                         expect(userModel.setPermissions).toHaveBeenCalledWith(options.permissions);
-                    });
-
-                    it("should NOT set bogus", function () {
-                        expect(userModel.set).not.toHaveBeenCalledWith("bogus", options.bogus);
                     });
                 });
             });
