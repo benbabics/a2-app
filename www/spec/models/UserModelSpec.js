@@ -45,6 +45,10 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                     expect(userModel.defaults.selectedCompany).toBeNull();
                 });
 
+                it("should set hasMultipleAccounts to default", function () {
+                    expect(userModel.defaults.hasMultipleAccounts).toBeFalsy();
+                });
+
                 it("should set permissions to default", function () {
                     expect(userModel.defaults.permissions).toEqual(globals.userData.permissions);
                 });
@@ -126,6 +130,7 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                                     }
                                 ]
                             },
+                            hasMultipleAccounts: true,
                             permissions: [
                                 "PERMISSION_1",
                                 "PERMISSION_2",
@@ -175,6 +180,10 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                         expect(actualDepartments.at(1).get("departmentId")).toEqual(options.selectedCompany.departments[1].id);
                         expect(actualDepartments.at(1).get("name")).toEqual(options.selectedCompany.departments[1].displayValue);
                         expect(actualDepartments.at(1).get("visible")).toEqual(options.selectedCompany.departments[1].visible);
+                    });
+
+                    it("should set hasMultipleAccounts", function () {
+                        expect(userModel.set).toHaveBeenCalledWith("hasMultipleAccounts", options.hasMultipleAccounts);
                     });
 
                     it("should set permissions", function () {

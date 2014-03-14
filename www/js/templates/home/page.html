@@ -1,14 +1,35 @@
 {{#authenticated}}
 <p class="text-center">Welcome, {{firstName}}</p>
 
-<!-- TODO - Multi-Hierarchy -->
-{{#selectedCompany}}
-<div class="ui-body ui-body-d">
+{{#hasMultipleAccounts}}
+<a href="#hierarchyManager"
+   class="text-left"
+   data-theme="d"
+   data-ajax="false"
+   data-role="button"
+   data-icon="search"
+   data-iconpos="right">
+
+    {{#selectedCompany}}
     <small>{{name}}</small>
     <br/>
     <small>{{wexAccountNumber}}</small>
+    {{/selectedCompany}}
+
+</a>
+{{/hasMultipleAccounts}}
+
+{{^hasMultipleAccounts}}
+<div class="ui-body ui-body-d">
+
+    {{#selectedCompany}}
+    <small>{{name}}</small>
+    <br/>
+    <small>{{wexAccountNumber}}</small>
+    {{/selectedCompany}}
+
 </div>
-{{/selectedCompany}}
+{{/hasMultipleAccounts}}
 
 <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="d">
     {{#permissions.MOBILE_PAYMENT_VIEW}}

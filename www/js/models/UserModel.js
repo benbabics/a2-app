@@ -6,11 +6,12 @@ define(["backbone", "globals", "models/CompanyModel", "backbone-relational"],
 
         var UserModel = Backbone.RelationalModel.extend({
             defaults: {
-                "authenticated"  : false,
-                "firstName"      : null,
-                "email"          : null,
-                "selectedCompany": null,
-                "permissions"    : globals.userData.permissions
+                "authenticated"      : false,
+                "firstName"          : null,
+                "email"              : null,
+                "selectedCompany"    : null,
+                "hasMultipleAccounts": false,
+                "permissions"        : globals.userData.permissions
             },
 
             relations: [
@@ -33,6 +34,7 @@ define(["backbone", "globals", "models/CompanyModel", "backbone-relational"],
                         selectedCompany.initialize(options.selectedCompany);
                         this.set("selectedCompany", selectedCompany);
                     }
+                    if (options.hasMultipleAccounts) { this.set("hasMultipleAccounts", options.hasMultipleAccounts)};
                     if (options.permissions) { this.setPermissions(options.permissions); }
                 }
             },
