@@ -23,23 +23,27 @@ define(["backbone", "utils", "models/DepartmentModel", "collections/DepartmentCo
             ],
 
             initialize: function (options) {
-                var departments,
-                    department;
-
                 if (options) {
                     if (options.name) { this.set("name", options.name); }
                     if (options.accountId) { this.set("accountId", options.accountId); }
                     if (options.wexAccountNumber) { this.set("wexAccountNumber", options.wexAccountNumber); }
                     if (options.driverIdLength) { this.set("driverIdLength", options.driverIdLength); }
-                    if (options.departments) {
-                        departments = this.get("departments");
-                        utils._.each(options.departments, function (departmentOptions) {
-                            department = new DepartmentModel();
-                            department.initialize(departmentOptions);
-                            departments.add(department);
-                        });
-                    }
+                    if (options.departments) { this.setDepartments(options.departments); }
                 }
+            },
+
+            setDepartments: function (departmentsList) {
+                var departments = new DepartmentCollection(),
+                    department;
+
+                departments.reset([]);
+                utils._.each(departmentsList, function (departmentOptions) {
+                    department = new DepartmentModel();
+                    department.initialize(departmentOptions);
+                    departments.add(department);
+                });
+
+                this.set("departments", departments);
             }
         });
 

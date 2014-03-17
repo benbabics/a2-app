@@ -1,5 +1,5 @@
-define(["Squire", "models/DepartmentModel", "collections/DepartmentCollection", "backbone", "backbone-relational"],
-    function (Squire, DepartmentModel, DepartmentCollection, Backbone) {
+define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentCollection", "backbone", "backbone-relational"],
+    function (Squire, utils, DepartmentModel, DepartmentCollection, Backbone) {
 
         "use strict";
 
@@ -129,8 +129,7 @@ define(["Squire", "models/DepartmentModel", "collections/DepartmentCollection", 
                         };
 
                     beforeEach(function () {
-                        departments = companyModel.get("departments");
-                        spyOn(departments, "add").andCallThrough();
+                        spyOn(companyModel, "setDepartments").andCallFake(function () {});
 
                         companyModel.initialize(options);
                     });
@@ -155,29 +154,69 @@ define(["Squire", "models/DepartmentModel", "collections/DepartmentCollection", 
                         expect(companyModel.set).toHaveBeenCalledWith("driverIdLength", options.driverIdLength);
                     });
 
-                    it("should get the departments collection", function () {
-                        expect(companyModel.get).toHaveBeenCalledWith("departments");
-                    });
-
-                    it("should call add on the departments collection 2 times", function () {
-                        expect(departments.add.calls.length).toEqual(2);
-                    });
-
-                    // TODO - Replace with something that verifies that a new DepartmentModel was created, the correct
-                    // parameter was passed to the DepartmentModel.initialize function and then added to the
-                    // DepartmentCollection
                     it("should set departments", function () {
-                        var departmentAdded;
+                        expect(companyModel.setDepartments).toHaveBeenCalledWith(options.departments);
+                    });
+                });
+            });
 
-                        departmentAdded = departments.add.calls[0].args[0];
-                        expect(departmentAdded.get("departmentId")).toEqual(options.departments[0].id);
-                        expect(departmentAdded.get("name")).toEqual(options.departments[0].name);
-                        expect(departmentAdded.get("visible")).toEqual(options.departments[0].visible);
+            describe("has a setDepartments function that", function () {
+                var mockDepartments = [
+                    {
+                        id: "134613456",
+                        name: "UNASSIGNED",
+                        visible: true
+                    },
+                    {
+                        id: "2456724567",
+                        name: "Dewey, Cheetum and Howe",
+                        visible: false
+                    }
+                ];
 
-                        departmentAdded = departments.add.calls[1].args[0];
-                        expect(departmentAdded.get("departmentId")).toEqual(options.departments[1].id);
-                        expect(departmentAdded.get("name")).toEqual(options.departments[1].name);
-                        expect(departmentAdded.get("visible")).toEqual(options.departments[1].visible);
+                beforeEach(function () {
+                    spyOn(companyModel, "set").andCallThrough();
+
+                    companyModel.setDepartments(mockDepartments);
+                });
+
+                it("is defined", function () {
+                    expect(companyModel.setDepartments).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(companyModel.setDepartments).toEqual(jasmine.any(Function));
+                });
+
+                it("should call set", function () {
+                    expect(companyModel.set).toHaveBeenCalled();
+                    expect(companyModel.set.mostRecentCall.args.length).toEqual(2);
+                    expect(companyModel.set.mostRecentCall.args[0]).toEqual("departments");
+                });
+
+                describe("when building a new object to set the departments property with", function () {
+                    var newDepartments;
+
+                    beforeEach(function () {
+                        newDepartments = companyModel.set.mostRecentCall.args[1];
+                    });
+
+                    it("should be the same size as the parameter passed", function () {
+                        expect(utils._.size(newDepartments)).toEqual(utils._.size(mockDepartments));
+                    });
+
+                    it("should include all the mock departments", function () {
+                        var newDepartment;
+
+                        // find all elements in the newDepartments that have a matching key with the default permissions
+                        utils._.each(mockDepartments, function (mockDepartment, key, list) {
+                            newDepartment = newDepartments.at(key);
+
+                            expect(newDepartment).not.toBeNull();
+                            expect(newDepartment.get("departmentId")).toEqual(mockDepartment.id);
+                            expect(newDepartment.get("name")).toEqual(mockDepartment.name);
+                            expect(newDepartment.get("visible")).toEqual(mockDepartment.visible);
+                        });
                     });
                 });
             });
