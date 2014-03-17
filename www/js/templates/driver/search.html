@@ -1,38 +1,44 @@
 <h2 class="ui-title">Driver - Search</h2>
-<form id="driverSearchForm" action="#driverSearch" method="post" class="ui-body ui-body-d">
+<form id="driverSearchForm" class="ui-body ui-body-d">
+    {{#filterFirstName}}
     <div data-role="fieldcontain">
-        <label for="filterFirstName">First Name:</label>
-        <input type="text" name="filterFirstName"
-               id="filterFirstName" value="{{searchCriteria.filterFirstName}}">
+        <label for="filterFirstName">{{label}}:</label>
+        <input type="text" name="{{name}}" id="filterFirstName" value="{{value}}" />
     </div>
+    {{/filterFirstName}}
+    {{#filterLastName}}
     <div data-role="fieldcontain">
-        <label for="filterLastName">Last Name:</label>
-        <input type="text" name="filterLastName"
-               id="filterLastName" value="{{searchCriteria.filterLastName}}">
+        <label for="filterLastName">{{label}}:</label>
+        <input type="text" name="{{name}}" id="filterLastName" value="{{value}}" />
     </div>
+    {{/filterLastName}}
+    {{#filterDriverId}}
     <div data-role="fieldcontain">
-        <label for="filterDriverId">Driver ID:</label>
-        <input type="text" name="filterDriverId"
-               id="filterDriverId" value="{{searchCriteria.filterDriverId}}">
+        <label for="filterDriverId">{{label}}:</label>
+        <input type="text" name="{{name}}" id="filterDriverId" value="{{value}}" />
     </div>
+    {{/filterDriverId}}
+    {{#filterStatus}}
     <div data-role="fieldcontain">
-        <label for="filterStatus">Status:</label>
-        <select id="filterStatus" name="filterStatus" data-theme="c">
-            <option value="">All</option>
-            <option value="A">Active</option>
-            <option value="T">Terminated</option>
+        <label for="filterStatus">{{label}}:</label>
+        <select id="filterStatus" name="{{name}}" data-theme="c">
+        {{#values}}
+        <option value="{{id}}">{{name}}</option>
+        {{/values}}
         </select>
     </div>
+    {{/filterStatus}}
+    {{#filterDepartmentId}}
     <div data-role="fieldcontain">
-        <label for="filterDepartmentId">Department:</label>
-        <select id="filterDepartmentId" name="filterDepartmentId" {{^hasMultipleDepartments}} disabled=disabled {{/hasMultipleDepartments}} data-theme="c">
-            {{#hasMultipleDepartments}}
-                <option value="">All</option>
-            {{/hasMultipleDepartments}}
-            {{#departments}}
-                <option value="{{departmentId}}">{{name}}</option>
-            {{/departments}}
+        <label for="filterDepartmentId">{{label}}:</label>
+        <select id="filterDepartmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}} data-theme="c">
+            {{#values}}
+            <option value="{{id}}">{{name}}</option>
+            {{/values}}
         </select>
     </div>
+    {{/filterDepartmentId}}
 </form>
-<button id="submitDriverSearch-btn" data-theme="b">Search</button>
+{{#submitButton}}
+<button id="submitDriverSearch-btn" data-role="button" data-theme="b">{{label}}</button>
+{{/submitButton}}

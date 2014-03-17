@@ -35,21 +35,44 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
 
             render: function () {
                 var $header = this.$el.find(":jqmData(role=header)"),
-                    $content = this.$el.find(":jqmData(role=content)"),
-                    selectedCompany = this.userModel.get("selectedCompany"),
-                    departments = selectedCompany.get("departments");
+                    $content = this.$el.find(":jqmData(role=content)");
 
                 $header.html(Mustache.render(this.headerTemplate,
                     {
                         "permissions": this.userModel.get("permissions")
                     }));
 
-                $content.html(Mustache.render(this.template,
-                    {
-                        "searchCriteria": this.model.toJSON(),
-                        "hasMultipleDepartments": utils._.size(departments) > 1,
-                        "departments"   : departments.toJSON()
-                    }));
+                $content.html(Mustache.render(this.template, this.getConfiguration()));
+            },
+
+            getConfiguration: function () {
+                var configuration = utils._.extend({}, utils.deepClone(globals.driverSearch.configuration)),
+                    selectedCompany = this.userModel.get("selectedCompany"),
+                    departments = selectedCompany.get("departments").toJSON(),
+                    departmentListValues = [],
+                    hasMultipleDepartments = utils._.size(departments) > 1;
+
+                if (hasMultipleDepartments) {
+                    departmentListValues.push(globals.driverSearch.constants.ALL);
+                }
+
+                utils._.each(departments, function (department, key, list) {
+                    departmentListValues.push({
+                        "id"  : department.departmentId,
+                        "name": department.name
+                    });
+                });
+
+                configuration.filterFirstName.value = this.model.get("filterFirstName");
+                configuration.filterLastName.value = this.model.get("filterLastName");
+                configuration.filterDriverId.value = this.model.get("filterDriverId");
+                configuration.filterStatus.value = this.model.get("filterStatus");
+                configuration.filterDepartmentId.value = this.model.get("filterDepartmentId");
+                configuration.filterDepartmentId.enabled = hasMultipleDepartments;
+                configuration.filterDepartmentId.values = departmentListValues;
+
+
+                return configuration;
             },
 
             /*

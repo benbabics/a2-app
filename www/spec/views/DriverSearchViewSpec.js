@@ -1,6 +1,6 @@
-define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmpl/driver/search.html",
+define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel", "text!tmpl/driver/search.html",
     "text!tmpl/driver/searchHeader.html", "jasmine-jquery"],
-    function (Squire, utils, Backbone, Mustache, UserModel, pageTemplate, searchHeaderTemplate) {
+    function (Squire, globals, utils, Backbone, Mustache, UserModel, pageTemplate, searchHeaderTemplate) {
 
         "use strict";
 
@@ -47,6 +47,7 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
 
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
+        squire.mock("utils", utils);
 
         describe("A Driver Search View", function () {
             var jasmineAsync = new AsyncSpec(this);
@@ -144,8 +145,11 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
             });
 
             describe("has a render function that", function () {
+                var mockConfiguration;
+
                 beforeEach(function () {
                     spyOn(mockMustache, "render").andCallThrough();
+                    spyOn(driverSearchView, "getConfiguration").andCallFake(function () { return mockConfiguration; });
                     driverSearchView.render();
                 });
 
@@ -175,24 +179,92 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
                 });
 
                 it("should call Mustache.render() on the template", function () {
-                    expect(mockMustache.render).toHaveBeenCalledWith(driverSearchView.template,
-                        {
-                            "searchCriteria": driverSearchModel.toJSON(),
-                            "hasMultipleDepartments": utils._.size(mockUserModel.selectedCompany.departments) > 1,
-                            "departments"   : userModel.get("selectedCompany").get("departments").toJSON()
-                        });
+                    expect(mockMustache.render).toHaveBeenCalledWith(driverSearchView.template, mockConfiguration);
                 });
 
                 it("sets content", function () {
-                    var expectedContent = Mustache.render(pageTemplate,
-                        {
-                            "searchCriteria": driverSearchModel.toJSON(),
-                            "hasMultipleDepartments": utils._.size(mockUserModel.selectedCompany.departments) > 1,
-                            "departments"   : userModel.get("selectedCompany").get("departments").toJSON()
-                        }),
+                    var expectedContent = Mustache.render(pageTemplate, mockConfiguration),
                         $content = driverSearchView.$el.find(":jqmData(role=content)");
 
                     expect($content[0]).toContainHtml(expectedContent);
+                });
+            });
+
+            describe("has a getConfiguration function that", function () {
+                it("is defined", function () {
+                    expect(driverSearchView.getConfiguration).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverSearchView.getConfiguration).toEqual(jasmine.any(Function));
+                });
+
+                describe("when utils.size returns 1", function () {
+                    beforeEach(function () {
+                        spyOn(utils._, "size").andCallFake(function () { return 1; });
+                    });
+
+                    it("should return the expected result", function () {
+                        var expectedConfiguration,
+                            departmentListValues = [],
+                            actualConfiguration;
+
+                        expectedConfiguration = utils._.extend({}, utils.deepClone(globals.driverSearch.configuration));
+
+                        utils._.each(mockUserModel.selectedCompany.departments, function (department, key, list) {
+                            departmentListValues.push({
+                                "id"  : department.id,
+                                "name": department.name
+                            });
+                        });
+
+                        expectedConfiguration.filterFirstName.value = mockDriverSearchModel.filterFirstName;
+                        expectedConfiguration.filterLastName.value = mockDriverSearchModel.filterLastName;
+                        expectedConfiguration.filterDriverId.value = mockDriverSearchModel.filterDriverId;
+                        expectedConfiguration.filterStatus.value = mockDriverSearchModel.filterStatus;
+                        expectedConfiguration.filterDepartmentId.value = mockDriverSearchModel.filterDepartmentId;
+                        expectedConfiguration.filterDepartmentId.enabled = false;
+                        expectedConfiguration.filterDepartmentId.values = departmentListValues;
+
+                        actualConfiguration = driverSearchView.getConfiguration();
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
+                });
+
+                describe("when utils.size returns > 1", function () {
+                    beforeEach(function () {
+                        spyOn(utils._, "size").andCallFake(function () { return 2; });
+                    });
+
+                    it("should return the expected result", function () {
+                        var expectedConfiguration,
+                            departmentListValues = [],
+                            actualConfiguration;
+
+                        expectedConfiguration = utils._.extend({}, utils.deepClone(globals.driverSearch.configuration));
+                        departmentListValues.push(globals.driverSearch.constants.ALL);
+
+                        utils._.each(mockUserModel.selectedCompany.departments, function (department, key, list) {
+                            departmentListValues.push({
+                                "id"  : department.id,
+                                "name": department.name
+                            });
+                        });
+
+                        // populate configuration details from the model
+                        expectedConfiguration.filterFirstName.value = mockDriverSearchModel.filterFirstName;
+                        expectedConfiguration.filterLastName.value = mockDriverSearchModel.filterLastName;
+                        expectedConfiguration.filterDriverId.value = mockDriverSearchModel.filterDriverId;
+                        expectedConfiguration.filterStatus.value = mockDriverSearchModel.filterStatus;
+                        expectedConfiguration.filterDepartmentId.value = mockDriverSearchModel.filterDepartmentId;
+                        expectedConfiguration.filterDepartmentId.enabled = true;
+                        expectedConfiguration.filterDepartmentId.values = departmentListValues;
+
+                        actualConfiguration = driverSearchView.getConfiguration();
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
                 });
             });
 

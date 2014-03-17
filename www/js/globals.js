@@ -194,6 +194,68 @@ define(function (require) {
             "label": "Submit"
         }
     };
+    /**
+     * Page :: Driver Search
+     */
+    globals.driverSearch = {};
+    globals.driverSearch.constants = {
+//        "WEBSERVICE": globals.WEBSERVICE.LOGIN.URL
+        "ALL": {
+            id: "",
+            name: "All"
+        }
+    };
+    globals.driverSearch.configuration = {
+        "filterFirstName": {
+            "label"      : "First Name",
+            "name"       : "filterFirstName",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "filterLastName": {
+            "label"      : "Last Name",
+            "name"       : "filterLastName",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "filterDriverId": {
+            "label"      : "Driver ID",
+            "name"       : "filterDriverId",
+            "value"      : ""
+        },
+        "filterStatus": {
+            "label"      : "Status",
+            "name"       : "filterStatus",
+            "values"     : [
+                {
+                    id: "",
+                    name: "All"
+                },
+                {
+                    id: "A",
+                    name: "Active"
+                },
+                {
+                    id: "T",
+                    name: "Terminated"
+                }
+            ]
+        },
+        "filterDepartmentId": {
+            "label"      : "Department",
+            "name"       : "filterDepartmentId",
+            "enabled"    : true,
+            "values"     : [
+                {
+                    id: "",
+                    name: "All"
+                }
+            ]
+        },
+        "submitButton": {
+            "label": "Search"
+        }
+    };
 
     return globals;
 });
