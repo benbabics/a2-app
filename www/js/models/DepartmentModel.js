@@ -16,7 +16,7 @@ define(["backbone", "backbone-relational"],
             initialize: function (options) {
                 if (options) {
                     if (options.id) { this.set("departmentId", options.id); }
-                    if (options.displayValue) { this.set("name", options.displayValue); }
+                    if (options.name) { this.set("name", options.name); }
                     if (options.visible) { this.set("visible", options.visible); }
                 }
             }

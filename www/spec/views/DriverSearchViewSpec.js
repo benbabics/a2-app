@@ -26,12 +26,12 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
                     departments: [
                         {
                             id: "134613456",
-                            displayValue: "UNASSIGNED",
+                            name: "UNASSIGNED",
                             visible: true
                         },
                         {
                             id: "2456724567",
-                            displayValue: "Dewey, Cheetum and Howe",
+                            name: "Dewey, Cheetum and Howe",
                             visible: false
                         }
                     ]

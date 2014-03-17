@@ -78,9 +78,9 @@ define(["Squire", "backbone", "backbone-relational"],
 
                 describe("when options are provided", function () {
                     var options = {
-                        id          : "2457624567",
-                        displayValue: "Mock Name",
-                        visible     : true
+                        id     : "2457624567",
+                        name   : "Mock Name",
+                        visible: true
                     };
 
                     beforeEach(function () {
@@ -96,7 +96,7 @@ define(["Squire", "backbone", "backbone-relational"],
                     });
 
                     it("should set name", function () {
-                        expect(departmentModel.set).toHaveBeenCalledWith("name", options.displayValue);
+                        expect(departmentModel.set).toHaveBeenCalledWith("name", options.name);
                     });
 
                     it("should set visible", function () {

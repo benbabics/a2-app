@@ -119,7 +119,7 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                             statusDate: "3/14/2015",
                             department: {
                                 id: "134613456",
-                                displayValue: "UNASSIGNED",
+                                name: "UNASSIGNED",
                                 visible: true
                             }
                         };
@@ -167,7 +167,7 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                         actualDepartment = driverModel.set.calls[6].args[1];
 
                         expect(actualDepartment.get("departmentId")).toEqual(options.department.id);
-                        expect(actualDepartment.get("name")).toEqual(options.department.displayValue);
+                        expect(actualDepartment.get("name")).toEqual(options.department.name);
                         expect(actualDepartment.get("visible")).toEqual(options.department.visible);
                     });
                 });

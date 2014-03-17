@@ -14,7 +14,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/driver/
                 "statusDate": null,
                 "department": {
                     id: "134613456",
-                    displayValue: "UNASSIGNED",
+                    name: "UNASSIGNED",
                     visible: true
                 }
             },

@@ -7,6 +7,7 @@ define(["backbone", "utils", "models/DepartmentModel", "collections/DepartmentCo
         var CompanyModel = Backbone.RelationalModel.extend({
             defaults: {
                 "name"            : null,
+                "accountId"       : null,
                 "wexAccountNumber": null,
                 "driverIdLength"  : null,
                 "departments"     : null
@@ -27,6 +28,7 @@ define(["backbone", "utils", "models/DepartmentModel", "collections/DepartmentCo
 
                 if (options) {
                     if (options.name) { this.set("name", options.name); }
+                    if (options.accountId) { this.set("accountId", options.accountId); }
                     if (options.wexAccountNumber) { this.set("wexAccountNumber", options.wexAccountNumber); }
                     if (options.driverIdLength) { this.set("driverIdLength", options.driverIdLength); }
                     if (options.departments) {

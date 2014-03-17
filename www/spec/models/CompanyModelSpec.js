@@ -38,6 +38,10 @@ define(["Squire", "models/DepartmentModel", "collections/DepartmentCollection", 
                     expect(companyModel.defaults.wexAccountNumber).toBeNull();
                 });
 
+                it("should set accountId to default", function () {
+                    expect(companyModel.defaults.accountId).toBeNull();
+                });
+
                 it("should set driverIdLength to default", function () {
                     expect(companyModel.defaults.driverIdLength).toBeNull();
                 });
@@ -107,17 +111,18 @@ define(["Squire", "models/DepartmentModel", "collections/DepartmentCollection", 
                     var departments,
                         options = {
                             name: "Beavis and Butthead Inc",
+                            accountId: "2562456",
                             wexAccountNumber: "5764309",
                             driverIdLength: "4",
                             departments: [
                                 {
                                     id: "134613456",
-                                    displayValue: "UNASSIGNED",
+                                    name: "UNASSIGNED",
                                     visible: true
                                 },
                                 {
                                     id: "2456724567",
-                                    displayValue: "Dewey, Cheetum and Howe",
+                                    name: "Dewey, Cheetum and Howe",
                                     visible: false
                                 }
                             ]
@@ -130,12 +135,16 @@ define(["Squire", "models/DepartmentModel", "collections/DepartmentCollection", 
                         companyModel.initialize(options);
                     });
 
-                    it("should call set 3 times", function () {
-                        expect(companyModel.set.calls.length).toEqual(3);
+                    it("should call set 4 times", function () {
+                        expect(companyModel.set.calls.length).toEqual(4);
                     });
 
                     it("should set name", function () {
                         expect(companyModel.set).toHaveBeenCalledWith("name", options.name);
+                    });
+
+                    it("should set accountId", function () {
+                        expect(companyModel.set).toHaveBeenCalledWith("accountId", options.accountId);
                     });
 
                     it("should set wexAccountNumber", function () {
@@ -162,12 +171,12 @@ define(["Squire", "models/DepartmentModel", "collections/DepartmentCollection", 
 
                         departmentAdded = departments.add.calls[0].args[0];
                         expect(departmentAdded.get("departmentId")).toEqual(options.departments[0].id);
-                        expect(departmentAdded.get("name")).toEqual(options.departments[0].displayValue);
+                        expect(departmentAdded.get("name")).toEqual(options.departments[0].name);
                         expect(departmentAdded.get("visible")).toEqual(options.departments[0].visible);
 
                         departmentAdded = departments.add.calls[1].args[0];
                         expect(departmentAdded.get("departmentId")).toEqual(options.departments[1].id);
-                        expect(departmentAdded.get("name")).toEqual(options.departments[1].displayValue);
+                        expect(departmentAdded.get("name")).toEqual(options.departments[1].name);
                         expect(departmentAdded.get("visible")).toEqual(options.departments[1].visible);
                     });
                 });

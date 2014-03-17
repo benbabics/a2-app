@@ -115,17 +115,18 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                             email: "cornholio@bnbinc.com",
                             selectedCompany: {
                                 name: "Beavis and Butthead Inc",
+                                accountId: "2562456",
                                 wexAccountNumber: "5764309",
                                 driverIdLength: "4",
                                 departments: [
                                     {
                                         id: "134613456",
-                                        displayValue: "UNASSIGNED",
+                                        name: "UNASSIGNED",
                                         visible: true
                                     },
                                     {
                                         id: "2456724567",
-                                        displayValue: "Dewey, Cheetum and Howe",
+                                        name: "Dewey, Cheetum and Howe",
                                         visible: false
                                     }
                                 ]
@@ -142,8 +143,8 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                         userModel.initialize(options);
                     });
 
-                    it("should call set 4 times", function () {
-                        expect(userModel.set.calls.length).toEqual(4);
+                    it("should call set 5 times", function () {
+                        expect(userModel.set.calls.length).toEqual(5);
                     });
 
                     it("should set authenticated", function () {
@@ -169,16 +170,17 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                         actualCompany = userModel.set.calls[3].args[1];
 
                         expect(actualCompany.get("name")).toEqual(options.selectedCompany.name);
+                        expect(actualCompany.get("accountId")).toEqual(options.selectedCompany.accountId);
                         expect(actualCompany.get("wexAccountNumber")).toEqual(options.selectedCompany.wexAccountNumber);
                         expect(actualCompany.get("driverIdLength")).toEqual(options.selectedCompany.driverIdLength);
 
                         actualDepartments = actualCompany.get("departments");
                         expect(actualDepartments.at(0).get("departmentId")).toEqual(options.selectedCompany.departments[0].id);
-                        expect(actualDepartments.at(0).get("name")).toEqual(options.selectedCompany.departments[0].displayValue);
+                        expect(actualDepartments.at(0).get("name")).toEqual(options.selectedCompany.departments[0].name);
                         expect(actualDepartments.at(0).get("visible")).toEqual(options.selectedCompany.departments[0].visible);
 
                         expect(actualDepartments.at(1).get("departmentId")).toEqual(options.selectedCompany.departments[1].id);
-                        expect(actualDepartments.at(1).get("name")).toEqual(options.selectedCompany.departments[1].displayValue);
+                        expect(actualDepartments.at(1).get("name")).toEqual(options.selectedCompany.departments[1].name);
                         expect(actualDepartments.at(1).get("visible")).toEqual(options.selectedCompany.departments[1].visible);
                     });
 
