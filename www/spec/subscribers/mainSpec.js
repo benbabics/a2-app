@@ -36,9 +36,7 @@ define(["Squire"],
         squire.mock("subscribers/updatePrompt", mockUpdatePromptSubscriber);
 
         describe("A Main Subscriber", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["subscribers/main"], function () {
                     done();
                 });

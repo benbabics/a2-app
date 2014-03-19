@@ -36,16 +36,14 @@ define(["backbone", "Squire", "globals", "utils"],
         squire.mock("views/UpdatePromptView", Squire.Helpers.returns(mockUpdatePromptView));
 
         describe("A Update Prompt Controller", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["controllers/UpdatePromptController"], function (UpdatePromptController) {
                     appModel.set(mockAppModel);
-                    spyOn(AppModel, "getInstance").andCallFake(function () { return appModel; });
+                    spyOn(AppModel, "getInstance").and.callFake(function () { return appModel; });
 
                     updatePromptController = UpdatePromptController;
 
-                    spyOn(mockUtils, "getJSON").andReturn("ok"); // Stub so we're not actually making the request to the server
+                    spyOn(mockUtils, "getJSON").and.returnValue("ok"); // Stub so we're not actually making the request to the server
 
                     done();
                 });
@@ -67,7 +65,7 @@ define(["backbone", "Squire", "globals", "utils"],
 
             describe("has an init function that", function () {
                 beforeEach(function () {
-                    spyOn(mockUtils, "$").andCallFake(function () { });
+                    spyOn(mockUtils, "$").and.callFake(function () { });
 
                     updatePromptController.init();
                 });
@@ -95,17 +93,17 @@ define(["backbone", "Squire", "globals", "utils"],
                 it("should call $ on utils", function () {
                     expect(mockUtils.$).toHaveBeenCalled();
 
-                    expect(mockUtils.$.calls[0].args.length).toEqual(1);
-                    expect(mockUtils.$.calls[0].args[0]).toEqual(jasmine.any(Function));
+                    expect(mockUtils.$.calls.argsFor(0).length).toEqual(1);
+                    expect(mockUtils.$.calls.argsFor(0)[0]).toEqual(jasmine.any(Function));
                 });
 
                 describe("when calling the function passed to $ on utils", function () {
                     var callback;
 
                     beforeEach(function () {
-                        callback = mockUtils.$.calls[0].args[0];
+                        callback = mockUtils.$.calls.argsFor(0)[0];
 
-                        spyOn(updatePromptController, "checkAppVersionStatus").andCallFake(function () {});
+                        spyOn(updatePromptController, "checkAppVersionStatus").and.callFake(function () {});
 
                         callback.apply();
                     });
@@ -120,14 +118,14 @@ define(["backbone", "Squire", "globals", "utils"],
                         it("should call checkAppVersionStatus", function () {
                             expect(updatePromptController.checkAppVersionStatus).toHaveBeenCalled();
 
-                            expect(updatePromptController.checkAppVersionStatus.mostRecentCall.args.length).toEqual(0);
+                            expect(updatePromptController.checkAppVersionStatus.calls.mostRecent().args.length).toEqual(0);
                         });
                     });
 
                     describe("when AppModel.buildVersion is set to Unknown", function () {
                         beforeEach(function () {
                             appModel.set("buildVersion", "Unknown");
-                            spyOn(appModel, "once").andCallFake(function () { });
+                            spyOn(appModel, "once").and.callFake(function () { });
 
                             callback.apply();
                         });
@@ -135,23 +133,23 @@ define(["backbone", "Squire", "globals", "utils"],
                         it("should call once on the AppModel", function () {
                             expect(appModel.once).toHaveBeenCalled();
 
-                            expect(appModel.once.mostRecentCall.args.length).toEqual(2);
-                            expect(appModel.once.mostRecentCall.args[0]).toEqual("change:buildVersion");
-                            expect(appModel.once.mostRecentCall.args[1]).toEqual(jasmine.any(Function));
+                            expect(appModel.once.calls.mostRecent().args.length).toEqual(2);
+                            expect(appModel.once.calls.mostRecent().args[0]).toEqual("change:buildVersion");
+                            expect(appModel.once.calls.mostRecent().args[1]).toEqual(jasmine.any(Function));
                         });
 
                         describe("when the handler of the change:buildVersion event is called", function () {
                             var callback;
 
                             beforeEach(function () {
-                                callback = appModel.once.mostRecentCall.args[1];
+                                callback = appModel.once.calls.mostRecent().args[1];
                                 callback.apply(appModel);
                             });
 
                             it("should call checkAppVersionStatus", function () {
                                 expect(updatePromptController.checkAppVersionStatus).toHaveBeenCalled();
 
-                                expect(updatePromptController.checkAppVersionStatus.mostRecentCall.args.length).toEqual(0);
+                                expect(updatePromptController.checkAppVersionStatus.calls.mostRecent().args.length).toEqual(0);
                             });
                         });
                     });
@@ -170,8 +168,8 @@ define(["backbone", "Squire", "globals", "utils"],
                 describe("when the app version status is fail", function () {
                     beforeEach(function () {
                         appModel.set(globals.APP.constants.APP_VERSION_STATUS, "fail");
-                        spyOn(updatePromptController, "fetchAppVersionStatus").andCallFake(function () { });
-                        spyOn(updatePromptController, "showPromptToUpdateFail").andCallFake(function () { });
+                        spyOn(updatePromptController, "fetchAppVersionStatus").and.callFake(function () { });
+                        spyOn(updatePromptController, "showPromptToUpdateFail").and.callFake(function () { });
 
                         updatePromptController.init();
                         updatePromptController.checkAppVersionStatus();
@@ -180,20 +178,20 @@ define(["backbone", "Squire", "globals", "utils"],
                     it("should call the fetchAppVersionStatus function", function () {
                         expect(updatePromptController.fetchAppVersionStatus).toHaveBeenCalled();
 
-                        expect(updatePromptController.fetchAppVersionStatus.mostRecentCall.args.length).toEqual(0);
+                        expect(updatePromptController.fetchAppVersionStatus.calls.mostRecent().args.length).toEqual(0);
                     });
 
                     it("should call the showPromptToUpdateFail function", function () {
                         expect(updatePromptController.showPromptToUpdateFail).toHaveBeenCalled();
 
-                        expect(updatePromptController.showPromptToUpdateFail.mostRecentCall.args.length).toEqual(0);
+                        expect(updatePromptController.showPromptToUpdateFail.calls.mostRecent().args.length).toEqual(0);
                     });
                 });
 
                 describe("when the app version status is warn", function () {
                     beforeEach(function () {
                         appModel.set(globals.APP.constants.APP_VERSION_STATUS, "warn");
-                        spyOn(updatePromptController, "fetchAppVersionStatus").andCallFake(function () { });
+                        spyOn(updatePromptController, "fetchAppVersionStatus").and.callFake(function () { });
 
                         updatePromptController.init();
                     });
@@ -203,7 +201,7 @@ define(["backbone", "Squire", "globals", "utils"],
 
                         expect(updatePromptController.fetchAppVersionStatus).toHaveBeenCalled();
 
-                        expect(updatePromptController.fetchAppVersionStatus.mostRecentCall.args.length).toEqual(0);
+                        expect(updatePromptController.fetchAppVersionStatus.calls.mostRecent().args.length).toEqual(0);
                     });
 
                     describe("when lastWarnVersion is null", function () {
@@ -212,13 +210,13 @@ define(["backbone", "Squire", "globals", "utils"],
                         });
 
                         it("should call the showPromptToUpdateWarn function", function () {
-                            spyOn(updatePromptController, "showPromptToUpdateWarn").andCallFake(function () { });
+                            spyOn(updatePromptController, "showPromptToUpdateWarn").and.callFake(function () { });
 
                             updatePromptController.checkAppVersionStatus();
 
                             expect(updatePromptController.showPromptToUpdateWarn).toHaveBeenCalled();
 
-                            expect(updatePromptController.showPromptToUpdateWarn.mostRecentCall.args.length).toEqual(0);
+                            expect(updatePromptController.showPromptToUpdateWarn.calls.mostRecent().args.length).toEqual(0);
                         });
                     });
 
@@ -229,13 +227,13 @@ define(["backbone", "Squire", "globals", "utils"],
                         });
 
                         it("should call the showPromptToUpdateWarn function", function () {
-                            spyOn(updatePromptController, "showPromptToUpdateWarn").andCallFake(function () { });
+                            spyOn(updatePromptController, "showPromptToUpdateWarn").and.callFake(function () { });
 
                             updatePromptController.checkAppVersionStatus();
 
                             expect(updatePromptController.showPromptToUpdateWarn).toHaveBeenCalled();
 
-                            expect(updatePromptController.showPromptToUpdateWarn.mostRecentCall.args.length).toEqual(0);
+                            expect(updatePromptController.showPromptToUpdateWarn.calls.mostRecent().args.length).toEqual(0);
                         });
                     });
 
@@ -245,7 +243,7 @@ define(["backbone", "Squire", "globals", "utils"],
                         });
 
                         it("should not call the showPromptToUpdateWarn function", function () {
-                            spyOn(updatePromptController, "showPromptToUpdateWarn").andCallFake(function () { });
+                            spyOn(updatePromptController, "showPromptToUpdateWarn").and.callFake(function () { });
 
                             updatePromptController.checkAppVersionStatus();
 
@@ -257,8 +255,8 @@ define(["backbone", "Squire", "globals", "utils"],
                 describe("when the app version status is ok", function () {
                     beforeEach(function () {
                         appModel.set(globals.APP.constants.APP_VERSION_STATUS, "ok");
-                        spyOn(updatePromptController, "fetchAppVersionStatus").andCallFake(function () { });
-                        spyOn(mockFacade, "publish").andCallFake(function () { });
+                        spyOn(updatePromptController, "fetchAppVersionStatus").and.callFake(function () { });
+                        spyOn(mockFacade, "publish").and.callFake(function () { });
 
                         updatePromptController.init();
                         updatePromptController.checkAppVersionStatus();
@@ -267,15 +265,15 @@ define(["backbone", "Squire", "globals", "utils"],
                     it("should call the fetchAppVersionStatus function", function () {
                         expect(updatePromptController.fetchAppVersionStatus).toHaveBeenCalled();
 
-                        expect(updatePromptController.fetchAppVersionStatus.mostRecentCall.args.length).toEqual(0);
+                        expect(updatePromptController.fetchAppVersionStatus.calls.mostRecent().args.length).toEqual(0);
                     });
 
                     it("should call publish on the facade", function () {
                         expect(mockFacade.publish).toHaveBeenCalled();
 
-                        expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
-                        expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("login");
-                        expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
+                        expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
+                        expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("login");
+                        expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigate");
                     });
                 });
             });
@@ -285,9 +283,9 @@ define(["backbone", "Squire", "globals", "utils"],
                     appVersionStatus = "Mock appVersionStatus";
 
                 beforeEach(function () {
-                    mockUtils.getJSON.andReturn(appVersionStatus);
-                    spyOn(appModel, "set").andCallThrough();
-                    spyOn(updatePromptController, "getAppVersionStatusURL").andCallFake(function () { return appVersionStatusURL; });
+                    mockUtils.getJSON.and.returnValue(appVersionStatus);
+                    spyOn(appModel, "set").and.callThrough();
+                    spyOn(updatePromptController, "getAppVersionStatusURL").and.callFake(function () { return appVersionStatusURL; });
 
                     updatePromptController.fetchAppVersionStatus();
                 });
@@ -303,16 +301,16 @@ define(["backbone", "Squire", "globals", "utils"],
                 it("should call the getJSON function on utils", function () {
                     expect(mockUtils.getJSON).toHaveBeenCalled();
 
-                    expect(mockUtils.getJSON.mostRecentCall.args.length).toEqual(1);
-                    expect(mockUtils.getJSON.mostRecentCall.args[0]).toEqual(appVersionStatusURL);
+                    expect(mockUtils.getJSON.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockUtils.getJSON.calls.mostRecent().args[0]).toEqual(appVersionStatusURL);
                 });
 
                 it("should call the set function on AppModel", function () {
                     expect(appModel.set).toHaveBeenCalled();
 
-                    expect(appModel.set.mostRecentCall.args.length).toEqual(2);
-                    expect(appModel.set.mostRecentCall.args[0]).toEqual(globals.APP.constants.APP_VERSION_STATUS);
-                    expect(appModel.set.mostRecentCall.args[1]).toEqual(appVersionStatus);
+                    expect(appModel.set.calls.mostRecent().args.length).toEqual(2);
+                    expect(appModel.set.calls.mostRecent().args[0]).toEqual(globals.APP.constants.APP_VERSION_STATUS);
+                    expect(appModel.set.calls.mostRecent().args[1]).toEqual(appVersionStatus);
                 });
             });
 
@@ -345,8 +343,8 @@ define(["backbone", "Squire", "globals", "utils"],
 
             describe("has a showUpdatePromptToFail function that", function () {
                 beforeEach(function () {
-                    spyOn(mockUpdatePromptView, "renderFail").andCallFake(function () { });
-                    spyOn(mockUtils, "changePage").andCallThrough();
+                    spyOn(mockUpdatePromptView, "renderFail").and.callFake(function () { });
+                    spyOn(mockUtils, "changePage").and.callThrough();
 
                     updatePromptController.init();
                     updatePromptController.showPromptToUpdateFail();
@@ -363,21 +361,21 @@ define(["backbone", "Squire", "globals", "utils"],
                 it("should change the page to the Update Prompt View Page", function () {
                     expect(mockUtils.changePage).toHaveBeenCalled();
 
-                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(1);
-                    expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual(mockUpdatePromptView.$el);
+                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockUpdatePromptView.$el);
                 });
 
                 it("should call the updatePromptView renderFail function", function () {
                     expect(mockUpdatePromptView.renderFail).toHaveBeenCalled();
 
-                    expect(mockUpdatePromptView.renderFail.mostRecentCall.args.length).toEqual(0);
+                    expect(mockUpdatePromptView.renderFail.calls.mostRecent().args.length).toEqual(0);
                 });
             });
 
             describe("has a showUpdatePromptToWarn function that", function () {
                 beforeEach(function () {
-                    spyOn(mockUpdatePromptView, "renderWarn").andCallFake(function () { });
-                    spyOn(mockUtils, "changePage").andCallThrough();
+                    spyOn(mockUpdatePromptView, "renderWarn").and.callFake(function () { });
+                    spyOn(mockUtils, "changePage").and.callThrough();
 
                     updatePromptController.init();
                     updatePromptController.showPromptToUpdateWarn();
@@ -394,14 +392,14 @@ define(["backbone", "Squire", "globals", "utils"],
                 it("should change the page to the Update Prompt View Page", function () {
                     expect(mockUtils.changePage).toHaveBeenCalled();
 
-                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(1);
-                    expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual(mockUpdatePromptView.$el);
+                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockUpdatePromptView.$el);
                 });
 
                 it("should call the updatePromptView renderWarn function", function () {
                     expect(mockUpdatePromptView.renderWarn).toHaveBeenCalled();
 
-                    expect(mockUpdatePromptView.renderWarn.mostRecentCall.args.length).toEqual(0);
+                    expect(mockUpdatePromptView.renderWarn.calls.mostRecent().args.length).toEqual(0);
                 });
             });
         });

@@ -10,9 +10,7 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
         squire.mock("models/CompanyModel", CompanyModel);
 
         describe("A User Model", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["models/UserModel"], function (UserModel) {
                     userModel = UserModel.getInstance();
 
@@ -72,8 +70,8 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(userModel, "set").andCallThrough();
-                    spyOn(userModel, "setPermissions").andCallFake(function () { });
+                    spyOn(userModel, "set").and.callThrough();
+                    spyOn(userModel, "setPermissions").and.callFake(function () { });
                 });
 
                 it("is defined", function () {
@@ -144,7 +142,7 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                     });
 
                     it("should call set 5 times", function () {
-                        expect(userModel.set.calls.length).toEqual(5);
+                        expect(userModel.set.calls.count()).toEqual(5);
                     });
 
                     it("should set authenticated", function () {
@@ -164,10 +162,10 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                     it("should set selectedCompany", function () {
                         var actualCompany, actualDepartments;
 
-                        expect(userModel.set.calls[3].args.length).toEqual(2);
-                        expect(userModel.set.calls[3].args[0]).toEqual("selectedCompany");
+                        expect(userModel.set.calls.argsFor(3).length).toEqual(2);
+                        expect(userModel.set.calls.argsFor(3)[0]).toEqual("selectedCompany");
 
-                        actualCompany = userModel.set.calls[3].args[1];
+                        actualCompany = userModel.set.calls.argsFor(3)[1];
 
                         expect(actualCompany.get("name")).toEqual(options.selectedCompany.name);
                         expect(actualCompany.get("accountId")).toEqual(options.selectedCompany.accountId);
@@ -196,7 +194,7 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
 
             describe("has a reset function that", function () {
                 beforeEach(function () {
-                    spyOn(userModel, "set").andCallThrough();
+                    spyOn(userModel, "set").and.callThrough();
 
                     userModel.reset();
                 });
@@ -222,7 +220,7 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                 ];
 
                 beforeEach(function () {
-                    spyOn(userModel, "set").andCallThrough();
+                    spyOn(userModel, "set").and.callThrough();
 
                     userModel.setPermissions(mockPermissions);
                 });
@@ -237,15 +235,15 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
 
                 it("should call set", function () {
                     expect(userModel.set).toHaveBeenCalled();
-                    expect(userModel.set.mostRecentCall.args.length).toEqual(2);
-                    expect(userModel.set.mostRecentCall.args[0]).toEqual("permissions");
+                    expect(userModel.set.calls.mostRecent().args.length).toEqual(2);
+                    expect(userModel.set.calls.mostRecent().args[0]).toEqual("permissions");
                 });
 
                 describe("when building a new object to set the permissions property with", function () {
                     var newPermissions;
 
                     beforeEach(function () {
-                        newPermissions = userModel.set.mostRecentCall.args[1];
+                        newPermissions = userModel.set.calls.mostRecent().args[1];
                     });
 
                     it("should include all the default permissions", function () {

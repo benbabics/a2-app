@@ -8,9 +8,7 @@ define(["utils", "globals", "Squire", "models/DepartmentModel"],
         squire.mock("models/DepartmentModel", DepartmentModel);
 
         describe("A Department Collection", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function(done) {
+            beforeEach(function(done) {
                 squire.require(["collections/DepartmentCollection"], function(DepartmentCollection) {
                     departmentCollection = new DepartmentCollection();
                     done();

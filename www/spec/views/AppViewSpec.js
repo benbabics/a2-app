@@ -18,13 +18,12 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
         squire.mock("utils", mockUtils);
 
         describe("An App View", function () {
-            var jasmineAsync = new AsyncSpec(this);
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
             jasmine.getFixtures().fixturesPath = "";
 
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["views/AppView"], function (AppView) {
                     loadFixtures("index.html");
 
@@ -75,8 +74,8 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(appView, "render").andCallThrough();
-                    spyOn(appView, "setupBackboneLoadingIndicators").andCallFake(function () {});
+                    spyOn(appView, "render").and.callThrough();
+                    spyOn(appView, "setupBackboneLoadingIndicators").and.callFake(function () {});
 
                     appView.initialize();
                 });
@@ -100,7 +99,7 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
             describe("has an render function that", function () {
                 beforeEach(function () {
-                    spyOn(appView.$el, "toggleClass").andCallFake(function () {});
+                    spyOn(appView.$el, "toggleClass").and.callFake(function () {});
                 });
 
                 it("is defined", function () {
@@ -117,9 +116,9 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                         expect(appView.$el.toggleClass).toHaveBeenCalled();
 
-                        expect(appView.$el.toggleClass.mostRecentCall.args.length).toEqual(2);
-                        expect(appView.$el.toggleClass.mostRecentCall.args[0]).toEqual("ui-hidden");
-                        expect(appView.$el.toggleClass.mostRecentCall.args[1]).toBeFalsy();
+                        expect(appView.$el.toggleClass.calls.mostRecent().args.length).toEqual(2);
+                        expect(appView.$el.toggleClass.calls.mostRecent().args[0]).toEqual("ui-hidden");
+                        expect(appView.$el.toggleClass.calls.mostRecent().args[1]).toBeFalsy();
                     });
                 });
 
@@ -129,9 +128,9 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                         expect(appView.$el.toggleClass).toHaveBeenCalled();
 
-                        expect(appView.$el.toggleClass.mostRecentCall.args.length).toEqual(2);
-                        expect(appView.$el.toggleClass.mostRecentCall.args[0]).toEqual("ui-hidden");
-                        expect(appView.$el.toggleClass.mostRecentCall.args[1]).toBeFalsy();
+                        expect(appView.$el.toggleClass.calls.mostRecent().args.length).toEqual(2);
+                        expect(appView.$el.toggleClass.calls.mostRecent().args[0]).toEqual("ui-hidden");
+                        expect(appView.$el.toggleClass.calls.mostRecent().args[1]).toBeFalsy();
                     });
                 });
 
@@ -141,9 +140,9 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                         expect(appView.$el.toggleClass).toHaveBeenCalled();
 
-                        expect(appView.$el.toggleClass.mostRecentCall.args.length).toEqual(2);
-                        expect(appView.$el.toggleClass.mostRecentCall.args[0]).toEqual("ui-hidden");
-                        expect(appView.$el.toggleClass.mostRecentCall.args[1]).toBeTruthy();
+                        expect(appView.$el.toggleClass.calls.mostRecent().args.length).toEqual(2);
+                        expect(appView.$el.toggleClass.calls.mostRecent().args[0]).toEqual("ui-hidden");
+                        expect(appView.$el.toggleClass.calls.mostRecent().args[1]).toBeTruthy();
                     });
                 });
             });
@@ -174,8 +173,8 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 describe("when checking that the view is the active page", function () {
                     describe("when NOT the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").andCallFake(function () { return false; });
-                            spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                            spyOn(appView.$el, "is").and.callFake(function () { return false; });
+                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
                             appView.showLoadingIndicator(true);
                         });
 
@@ -190,8 +189,8 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                     describe("when the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").andCallFake(function () { return true; });
-                            spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                            spyOn(appView.$el, "is").and.callFake(function () { return true; });
+                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
                             appView.showLoadingIndicator(true);
                         });
 
@@ -207,7 +206,7 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                 describe("when not checking that the view is the active page", function () {
                     beforeEach(function () {
-                        spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                        spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
                         appView.showLoadingIndicator(false);
                     });
 
@@ -229,8 +228,8 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 describe("when checking that the view is the active page", function () {
                     describe("when NOT the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").andCallFake(function () { return false; });
-                            spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                            spyOn(appView.$el, "is").and.callFake(function () { return false; });
+                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
                             appView.hideLoadingIndicator(true);
                         });
 
@@ -245,8 +244,8 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                     describe("when the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").andCallFake(function () { return true; });
-                            spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                            spyOn(appView.$el, "is").and.callFake(function () { return true; });
+                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
                             appView.hideLoadingIndicator(true);
                         });
 
@@ -262,7 +261,7 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                 describe("when not checking that the view is the active page", function () {
                     beforeEach(function () {
-                        spyOn(mockUtils.$.mobile, "loading").andCallFake(function () {});
+                        spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
                         appView.hideLoadingIndicator(false);
                     });
 
@@ -290,7 +289,7 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 };
 
                 beforeEach(function () {
-                    spyOn(mockButton, "addClass").andCallThrough();
+                    spyOn(mockButton, "addClass").and.callThrough();
 
                     appView.highlightButton(mockButton);
                 });
@@ -306,8 +305,8 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 it("should call addClass on the button", function () {
                     expect(mockButton.addClass).toHaveBeenCalled();
 
-                    expect(mockButton.addClass.mostRecentCall.args.length).toEqual(1);
-                    expect(mockButton.addClass.mostRecentCall.args[0]).toEqual("ui-btn-active");
+                    expect(mockButton.addClass.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockButton.addClass.calls.mostRecent().args[0]).toEqual("ui-btn-active");
                 });
             });
 
@@ -319,9 +318,9 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 };
 
                 beforeEach(function () {
-                    spyOn(mockButton, "addClass").andCallThrough();
-                    spyOn(mockButton, "attr").andCallThrough();
-                    spyOn(mockButton, "removeClass").andCallThrough();
+                    spyOn(mockButton, "addClass").and.callThrough();
+                    spyOn(mockButton, "attr").and.callThrough();
+                    spyOn(mockButton, "removeClass").and.callThrough();
 
                     appView.unhighlightButton(mockButton);
                 });
@@ -337,8 +336,8 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 it("should call removeClass on the button", function () {
                     expect(mockButton.removeClass).toHaveBeenCalled();
 
-                    expect(mockButton.removeClass.mostRecentCall.args.length).toEqual(1);
-                    expect(mockButton.removeClass.mostRecentCall.args[0])
+                    expect(mockButton.removeClass.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockButton.removeClass.calls.mostRecent().args[0])
                         .toEqual("ui-btn-up-a ui-btn-up-b ui-btn-up-c ui-btn-up-d ui-btn-up-e ui-btn-hover-a " +
                                  "ui-btn-hover-b ui-btn-hover-c ui-btn-hover-d ui-btn-hover-e");
                 });
@@ -346,16 +345,16 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 it("should call addClass on the button", function () {
                     expect(mockButton.addClass).toHaveBeenCalled();
 
-                    expect(mockButton.addClass.mostRecentCall.args.length).toEqual(1);
-                    expect(mockButton.addClass.mostRecentCall.args[0]).toEqual("ui-btn-up-d");
+                    expect(mockButton.addClass.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockButton.addClass.calls.mostRecent().args[0]).toEqual("ui-btn-up-d");
                 });
 
                 it("should call attr on the button", function () {
                     expect(mockButton.attr).toHaveBeenCalled();
 
-                    expect(mockButton.attr.mostRecentCall.args.length).toEqual(2);
-                    expect(mockButton.attr.mostRecentCall.args[0]).toEqual("data-theme");
-                    expect(mockButton.attr.mostRecentCall.args[1]).toEqual("d");
+                    expect(mockButton.attr.calls.mostRecent().args.length).toEqual(2);
+                    expect(mockButton.attr.calls.mostRecent().args[0]).toEqual("data-theme");
+                    expect(mockButton.attr.calls.mostRecent().args[1]).toEqual("d");
                 });
             });
 
@@ -377,43 +376,43 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                     var mockCallback = function () {};
 
                     beforeEach(function () {
-                        spyOn(mockUtils, "$").andCallFake(function () { return mockNode; });
-                        spyOn(mockUtils, "isFn").andCallFake(function () { return true; });
-                        spyOn(mockUtils, "changePage").andCallFake(function () { });
-                        spyOn(mockNode, "on").andCallThrough();
-                        spyOn(mockNode, "off").andCallThrough();
+                        spyOn(mockUtils, "$").and.callFake(function () { return mockNode; });
+                        spyOn(mockUtils, "isFn").and.callFake(function () { return true; });
+                        spyOn(mockUtils, "changePage").and.callFake(function () { });
+                        spyOn(mockNode, "on").and.callThrough();
+                        spyOn(mockNode, "off").and.callThrough();
                     });
 
                     it("should call $ on utils twice", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
                         expect(mockUtils.$).toHaveBeenCalled();
 
-                        expect(mockUtils.$.calls.length).toEqual(2);
+                        expect(mockUtils.$.calls.count()).toEqual(2);
                     });
 
                     it("the first call $ on utils should pass the correct parameter", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
-                        expect(mockUtils.$.calls[0].args.length).toEqual(1);
-                        expect(mockUtils.$.calls[0].args[0]).toEqual("#reconnectButton");
+                        expect(mockUtils.$.calls.argsFor(0).length).toEqual(1);
+                        expect(mockUtils.$.calls.argsFor(0)[0]).toEqual("#reconnectButton");
                     });
 
                     it("the second call $ on utils should pass the correct parameter", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
-                        expect(mockUtils.$.calls[1].args.length).toEqual(1);
-                        expect(mockUtils.$.calls[1].args[0]).toEqual("#reconnectButton");
+                        expect(mockUtils.$.calls.argsFor(1).length).toEqual(1);
+                        expect(mockUtils.$.calls.argsFor(1)[0]).toEqual("#reconnectButton");
                     });
 
                     it("should call off on mockNode", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
@@ -421,7 +420,7 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                     });
 
                     it("should call isFn on utils", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
@@ -429,7 +428,7 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                     });
 
                     it("should call on on mockNode", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
@@ -437,7 +436,7 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                     });
 
                     it("should call isActivePage on utils", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
@@ -446,7 +445,7 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                     describe("when networkMsg is not the active page", function () {
                         it("should call changePage on utils", function () {
-                            spyOn(mockUtils, "isActivePage").andCallFake(function () { return false; });
+                            spyOn(mockUtils, "isActivePage").and.callFake(function () { return false; });
 
                             appView.navigateCheckConnection();
 
@@ -456,7 +455,7 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                     describe("when networkMsg is the active page", function () {
                         it("should not call changePage on utils", function () {
-                            spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                            spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                             appView.navigateCheckConnection();
 
@@ -469,55 +468,55 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                     var mockCallback = "";
 
                     beforeEach(function () {
-                        spyOn(mockUtils, "$").andCallFake(function () { return mockNode; });
-                        spyOn(mockUtils, "isFn").andCallFake(function () { return false; });
-                        spyOn(mockUtils, "changePage").andCallFake(function () { });
-                        spyOn(mockNode, "on").andCallThrough();
-                        spyOn(mockNode, "off").andCallThrough();
+                        spyOn(mockUtils, "$").and.callFake(function () { return mockNode; });
+                        spyOn(mockUtils, "isFn").and.callFake(function () { return false; });
+                        spyOn(mockUtils, "changePage").and.callFake(function () { });
+                        spyOn(mockNode, "on").and.callThrough();
+                        spyOn(mockNode, "off").and.callThrough();
                     });
 
                     it("should call $ on utils once", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
                         expect(mockUtils.$).toHaveBeenCalled();
 
-                        expect(mockUtils.$.calls.length).toEqual(1);
+                        expect(mockUtils.$.calls.count()).toEqual(1);
                     });
 
                     it("the first call $ on utils should pass the correct parameter", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
-                        expect(mockUtils.$.calls[0].args.length).toEqual(1);
-                        expect(mockUtils.$.calls[0].args[0]).toEqual("#reconnectButton");
+                        expect(mockUtils.$.calls.argsFor(0).length).toEqual(1);
+                        expect(mockUtils.$.calls.argsFor(0)[0]).toEqual("#reconnectButton");
                     });
 
                     it("should call off on mockNode", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
                         expect(mockNode.off).toHaveBeenCalled();
 
-                        expect(mockNode.off.mostRecentCall.args.length).toEqual(0);
+                        expect(mockNode.off.calls.mostRecent().args.length).toEqual(0);
                     });
 
                     it("should call isFn on utils", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
                         expect(mockUtils.isFn).toHaveBeenCalled();
 
-                        expect(mockUtils.isFn.mostRecentCall.args.length).toEqual(1);
-                        expect(mockUtils.isFn.mostRecentCall.args[0]).toEqual(mockCallback);
+                        expect(mockUtils.isFn.calls.mostRecent().args.length).toEqual(1);
+                        expect(mockUtils.isFn.calls.mostRecent().args[0]).toEqual(mockCallback);
                     });
 
                     it("should not call on on mockNode", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
@@ -525,32 +524,32 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                     });
 
                     it("should call isActivePage on utils", function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                         appView.navigateCheckConnection(mockCallback);
 
                         expect(mockUtils.isActivePage).toHaveBeenCalled();
 
-                        expect(mockUtils.isActivePage.mostRecentCall.args.length).toEqual(1);
-                        expect(mockUtils.isActivePage.mostRecentCall.args[0]).toEqual("networkMsg");
+                        expect(mockUtils.isActivePage.calls.mostRecent().args.length).toEqual(1);
+                        expect(mockUtils.isActivePage.calls.mostRecent().args[0]).toEqual("networkMsg");
                     });
 
                     describe("when networkMsg is not the active page", function () {
                         it("should call changePage on utils", function () {
-                            spyOn(mockUtils, "isActivePage").andCallFake(function () { return false; });
+                            spyOn(mockUtils, "isActivePage").and.callFake(function () { return false; });
 
                             appView.navigateCheckConnection();
 
                             expect(mockUtils.changePage).toHaveBeenCalled();
 
-                            expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(1);
-                            expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual("#networkMsg");
+                            expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(1);
+                            expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual("#networkMsg");
                         });
                     });
 
                     describe("when networkMsg is the active page", function () {
                         it("should call changePage on utils", function () {
-                            spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
+                            spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
 
                             appView.navigateCheckConnection();
 
@@ -575,9 +574,9 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                 describe("when networkMsg is not the active page", function () {
                     beforeEach(function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return false; });
-                        spyOn(mockUtils, "$").andCallFake(function () { return mockNode; });
-                        spyOn(mockNode, "dialog").andCallThrough();
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return false; });
+                        spyOn(mockUtils, "$").and.callFake(function () { return mockNode; });
+                        spyOn(mockNode, "dialog").and.callThrough();
 
                         appView.closeCheckConnection();
                     });
@@ -585,8 +584,8 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                     it("should call isActivePage on utils", function () {
                         expect(mockUtils.isActivePage).toHaveBeenCalled();
 
-                        expect(mockUtils.isActivePage.mostRecentCall.args.length).toEqual(1);
-                        expect(mockUtils.isActivePage.mostRecentCall.args[0]).toEqual("networkMsg");
+                        expect(mockUtils.isActivePage.calls.mostRecent().args.length).toEqual(1);
+                        expect(mockUtils.isActivePage.calls.mostRecent().args[0]).toEqual("networkMsg");
                     });
 
                     it("should not call $ on utils", function () {
@@ -600,9 +599,9 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
                 describe("when networkMsg is the active page", function () {
                     beforeEach(function () {
-                        spyOn(mockUtils, "isActivePage").andCallFake(function () { return true; });
-                        spyOn(mockUtils, "$").andCallFake(function () { return mockNode; });
-                        spyOn(mockNode, "dialog").andCallThrough();
+                        spyOn(mockUtils, "isActivePage").and.callFake(function () { return true; });
+                        spyOn(mockUtils, "$").and.callFake(function () { return mockNode; });
+                        spyOn(mockNode, "dialog").and.callThrough();
 
                         appView.closeCheckConnection();
                     });
@@ -610,22 +609,22 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                     it("should call isActivePage on utils", function () {
                         expect(mockUtils.isActivePage).toHaveBeenCalled();
 
-                        expect(mockUtils.isActivePage.mostRecentCall.args.length).toEqual(1);
-                        expect(mockUtils.isActivePage.mostRecentCall.args[0]).toEqual("networkMsg");
+                        expect(mockUtils.isActivePage.calls.mostRecent().args.length).toEqual(1);
+                        expect(mockUtils.isActivePage.calls.mostRecent().args[0]).toEqual("networkMsg");
                     });
 
                     it("should call $ on utils", function () {
                         expect(mockUtils.$).toHaveBeenCalled();
 
-                        expect(mockUtils.$.mostRecentCall.args.length).toEqual(1);
-                        expect(mockUtils.$.mostRecentCall.args[0]).toEqual("#networkMsg");
+                        expect(mockUtils.$.calls.mostRecent().args.length).toEqual(1);
+                        expect(mockUtils.$.calls.mostRecent().args[0]).toEqual("#networkMsg");
                     });
 
                     it("should call dialog on mockNode", function () {
                         expect(mockNode.dialog).toHaveBeenCalled();
 
-                        expect(mockNode.dialog.mostRecentCall.args.length).toEqual(1);
-                        expect(mockNode.dialog.mostRecentCall.args[0]).toEqual("close");
+                        expect(mockNode.dialog.calls.mostRecent().args.length).toEqual(1);
+                        expect(mockNode.dialog.calls.mostRecent().args[0]).toEqual("close");
                     });
                 });
             });
@@ -636,8 +635,8 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 };
 
                 beforeEach(function () {
-                    spyOn(mockEvent, "preventDefault").andCallThrough();
-                    spyOn(window.history, "back").andCallFake(function () {});
+                    spyOn(mockEvent, "preventDefault").and.callThrough();
+                    spyOn(window.history, "back").and.callFake(function () {});
 
                     appView.handlePageBack(mockEvent);
                 });
@@ -665,8 +664,8 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 };
 
                 beforeEach(function () {
-                    spyOn(mockEvent, "preventDefault").andCallThrough();
-                    spyOn(mockFacade, "publish").andCallFake(function () {});
+                    spyOn(mockEvent, "preventDefault").and.callThrough();
+                    spyOn(mockFacade, "publish").and.callFake(function () {});
 
                     appView.handleLogout(mockEvent);
                 });
@@ -686,9 +685,9 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
                 it("should call publish on the facade", function () {
                     expect(mockFacade.publish).toHaveBeenCalled();
 
-                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
-                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("login");
-                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("userLogout");
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("login");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("userLogout");
                 });
             });
         });

@@ -16,9 +16,7 @@ define(["utils", "Squire", "backbone"],
         squire.mock("utils", mockUtils);
 
         describe("An AppRouter", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["routers/AppRouter"], function (AppRouter) {
                     appRouter = new AppRouter();
                     done();
@@ -53,7 +51,7 @@ define(["utils", "Squire", "backbone"],
 
             describe("has a showContactUs function that", function () {
                 beforeEach(function () {
-                    spyOn(mockFacade, "publish").andCallThrough();
+                    spyOn(mockFacade, "publish").and.callThrough();
 
                     appRouter.showContactUs();
                 });
@@ -69,15 +67,15 @@ define(["utils", "Squire", "backbone"],
                 it("should call publish on the facade", function () {
                     expect(mockFacade.publish).toHaveBeenCalled();
 
-                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
-                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("contactUs");
-                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("contactUs");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigate");
                 });
             });
 
             describe("has a showDriverSearch function that", function () {
                 beforeEach(function () {
-                    spyOn(mockFacade, "publish").andCallThrough();
+                    spyOn(mockFacade, "publish").and.callThrough();
 
                     appRouter.showDriverSearch();
                 });
@@ -93,9 +91,9 @@ define(["utils", "Squire", "backbone"],
                 it("should call publish on the facade", function () {
                     expect(mockFacade.publish).toHaveBeenCalled();
 
-                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
-                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("driver");
-                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigateSearch");
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("driver");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigateSearch");
                 });
             });
 
@@ -103,7 +101,7 @@ define(["utils", "Squire", "backbone"],
                 var pageRequested = "pageRequested";
 
                 beforeEach(function () {
-                    spyOn(mockUtils, "changePage").andCallFake(function () { });
+                    spyOn(mockUtils, "changePage").and.callFake(function () { });
 
                     appRouter.changePage(pageRequested);
                 });
@@ -119,11 +117,11 @@ define(["utils", "Squire", "backbone"],
                 it("should call changePage on utils", function () {
                     expect(mockUtils.changePage).toHaveBeenCalled();
 
-                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(4);
-                    expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual("#" + pageRequested);
-                    expect(mockUtils.changePage.mostRecentCall.args[1]).toBeNull();
-                    expect(mockUtils.changePage.mostRecentCall.args[2]).toBeNull();
-                    expect(mockUtils.changePage.mostRecentCall.args[3]).toBeTruthy();
+                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(4);
+                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual("#" + pageRequested);
+                    expect(mockUtils.changePage.calls.mostRecent().args[1]).toBeNull();
+                    expect(mockUtils.changePage.calls.mostRecent().args[2]).toBeNull();
+                    expect(mockUtils.changePage.calls.mostRecent().args[3]).toBeTruthy();
                 });
             });
 
@@ -149,7 +147,7 @@ define(["utils", "Squire", "backbone"],
                 });
 
                 it("should call the Backbone.history start function", function () {
-                    spyOn(mockBackbone.history, "start").andCallFake(function () { });
+                    spyOn(mockBackbone.history, "start").and.callFake(function () { });
                     appRouter.start();
 
                     expect(mockBackbone.history.start).toHaveBeenCalled();

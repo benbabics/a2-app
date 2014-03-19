@@ -41,13 +41,12 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
         squire.mock("mustache", mockMustache);
 
         describe("A Driver List View", function () {
-            var jasmineAsync = new AsyncSpec(this);
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
             jasmine.getFixtures().fixturesPath = "";
 
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["views/DriverListView"],
                     function (DriverListView) {
                         loadFixtures("index.html");
@@ -80,7 +79,7 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
                 });
 
                 it("should set el", function () {
-                    expect(driverListView.el).toBe("#driverSearchResults");
+                    expect(driverListView.el).toEqual("#driverSearchResults");
                 });
 
                 it("should set el nodeName", function () {
@@ -98,7 +97,7 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(mockMustache, "parse").andCallThrough();
+                    spyOn(mockMustache, "parse").and.callThrough();
                     driverListView.initialize();
                 });
 
@@ -125,7 +124,7 @@ define(["Squire", "utils", "backbone", "mustache", "models/UserModel", "text!tmp
 
             describe("has a render function that", function () {
                 beforeEach(function () {
-                    spyOn(mockMustache, "render").andCallThrough();
+                    spyOn(mockMustache, "render").and.callThrough();
                     driverListView.render();
                 });
 

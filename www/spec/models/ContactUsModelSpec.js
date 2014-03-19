@@ -19,12 +19,10 @@ define(["backbone", "Squire", "globals"],
         squire.mock("models/AppModel", AppModel);
 
         describe("A Contact Us Model", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["models/ContactUsModel"], function (ContactUsModel) {
                     appModel.set(mockAppModel);
-                    spyOn(AppModel, "getInstance").andCallFake(function () { return appModel; });
+                    spyOn(AppModel, "getInstance").and.callFake(function () { return appModel; });
 
                     contactUsModel = new ContactUsModel();
 

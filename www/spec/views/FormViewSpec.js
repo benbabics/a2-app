@@ -42,9 +42,8 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
         squire.mock("utils", mockUtils);
 
         describe("A Form View", function () {
-            var jasmineAsync = new AsyncSpec(this);
 
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["views/FormView", "views/AppView"], function (FormView, AppView) {
 
                     var appView = new AppView();
@@ -84,10 +83,10 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(formModel, "on").andCallFake(function () { });
-                    spyOn(mockMustache, "parse").andCallThrough();
-                    spyOn(formView, "pageCreate").andCallFake(function () { });
-                    spyOn(mockUtils._, "bindAll").andCallFake(function () { });
+                    spyOn(formModel, "on").and.callFake(function () { });
+                    spyOn(mockMustache, "parse").and.callThrough();
+                    spyOn(formView, "pageCreate").and.callFake(function () { });
+                    spyOn(mockUtils._, "bindAll").and.callFake(function () { });
 
                     formView.initialize();
                 });
@@ -103,22 +102,22 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                 it("should call utils._.bindAll", function () {
                     expect(mockUtils._.bindAll).toHaveBeenCalled();
 
-                    expect(mockUtils._.bindAll.mostRecentCall.args.length).toEqual(3);
-                    expect(mockUtils._.bindAll.mostRecentCall.args[0]).toEqual(formView);
-                    expect(mockUtils._.bindAll.mostRecentCall.args[1]).toEqual("handleInputChanged");
-                    expect(mockUtils._.bindAll.mostRecentCall.args[2]).toEqual("submitForm");
+                    expect(mockUtils._.bindAll.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockUtils._.bindAll.calls.mostRecent().args[0]).toEqual(formView);
+                    expect(mockUtils._.bindAll.calls.mostRecent().args[1]).toEqual("handleInputChanged");
+                    expect(mockUtils._.bindAll.calls.mostRecent().args[2]).toEqual("submitForm");
                 });
 
                 it("should register a function as the handler for the request event", function () {
                     var eventHandler;
 
                     expect(formModel.on).toHaveBeenCalled();
-                    expect(formModel.on.calls[0].args.length).toEqual(3);
-                    expect(formModel.on.calls[0].args[0]).toEqual("request");
-                    expect(formModel.on.calls[0].args[2]).toEqual(formView);
+                    expect(formModel.on.calls.argsFor(0).length).toEqual(3);
+                    expect(formModel.on.calls.argsFor(0)[0]).toEqual("request");
+                    expect(formModel.on.calls.argsFor(0)[2]).toEqual(formView);
 
-                    eventHandler = formModel.on.calls[0].args[1];
-                    spyOn(formView, "showLoadingIndicator").andCallFake(function () { });
+                    eventHandler = formModel.on.calls.argsFor(0)[1];
+                    spyOn(formView, "showLoadingIndicator").and.callFake(function () { });
 
                     eventHandler.apply(formView);
 
@@ -129,12 +128,12 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                     var eventHandler;
 
                     expect(formModel.on).toHaveBeenCalled();
-                    expect(formModel.on.calls[1].args.length).toEqual(3);
-                    expect(formModel.on.calls[1].args[0]).toEqual("sync error");
-                    expect(formModel.on.calls[1].args[2]).toEqual(formView);
+                    expect(formModel.on.calls.argsFor(1).length).toEqual(3);
+                    expect(formModel.on.calls.argsFor(1)[0]).toEqual("sync error");
+                    expect(formModel.on.calls.argsFor(1)[2]).toEqual(formView);
 
-                    eventHandler = formModel.on.calls[1].args[1];
-                    spyOn(formView, "hideLoadingIndicator").andCallFake(function () { });
+                    eventHandler = formModel.on.calls.argsFor(1)[1];
+                    spyOn(formView, "hideLoadingIndicator").and.callFake(function () { });
 
                     eventHandler.apply(formView);
 
@@ -177,9 +176,9 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                     formView.updateAttribute(key, value);
 
                     expect(formModel.set).toHaveBeenCalled();
-                    expect(formModel.set.mostRecentCall.args.length).toEqual(2);
-                    expect(formModel.set.mostRecentCall.args[0]).toEqual(key);
-                    expect(formModel.set.mostRecentCall.args[1]).toEqual(value);
+                    expect(formModel.set.calls.mostRecent().args.length).toEqual(2);
+                    expect(formModel.set.calls.mostRecent().args[0]).toEqual(key);
+                    expect(formModel.set.calls.mostRecent().args[1]).toEqual(value);
                 });
             });
 
@@ -201,7 +200,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                 });
 
                 it("should call reset on the form", function () {
-                    spyOn(formView.$el.find("form")[0], "reset").andCallFake(function () { });
+                    spyOn(formView.$el.find("form")[0], "reset").and.callFake(function () { });
                     formView.resetForm();
 
                     expect(formView.$el.find("form")[0].reset).toHaveBeenCalledWith();
@@ -225,13 +224,13 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                         }
                     };
 
-                    spyOn(formView, "updateAttribute").andCallThrough();
+                    spyOn(formView, "updateAttribute").and.callThrough();
                     formView.handleInputChanged(mockEvent);
 
                     expect(formView.updateAttribute).toHaveBeenCalled();
-                    expect(formView.updateAttribute.mostRecentCall.args.length).toEqual(2);
-                    expect(formView.updateAttribute.mostRecentCall.args[0]).toEqual(mockEvent.target.name);
-                    expect(formView.updateAttribute.mostRecentCall.args[1]).toEqual(mockEvent.target.value);
+                    expect(formView.updateAttribute.calls.mostRecent().args.length).toEqual(2);
+                    expect(formView.updateAttribute.calls.mostRecent().args[0]).toEqual(mockEvent.target.name);
+                    expect(formView.updateAttribute.calls.mostRecent().args[1]).toEqual(mockEvent.target.value);
                 });
             });
 
@@ -241,8 +240,8 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                 };
 
                 beforeEach(function () {
-                    spyOn(mockEvent, "preventDefault").andCallThrough();
-                    spyOn(formModel, "save").andCallFake(function () { });
+                    spyOn(mockEvent, "preventDefault").and.callThrough();
+                    spyOn(formModel, "save").and.callFake(function () { });
                     formView.submitForm(mockEvent);
                 });
 

@@ -37,13 +37,11 @@ define(["globals", "backbone", "utils", "Squire"],
         squire.mock("models/UserModel", UserModel);
 
         describe("A Contact Us Controller", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["controllers/ContactUsController"], function (ContactUsController) {
                     contactUsModel.set(mockContactUsModel);
                     userModel.set(mockUserModel);
-                    spyOn(UserModel, "getInstance").andCallFake(function () { return userModel; });
+                    spyOn(UserModel, "getInstance").and.callFake(function () { return userModel; });
 
                     contactUsController = ContactUsController;
                     contactUsController.init();
@@ -81,7 +79,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 describe("when initializing the ContactUsView", function () {
                     beforeEach(function () {
-                        spyOn(mockContactUsView, "constructor").andCallThrough();
+                        spyOn(mockContactUsView, "constructor").and.callThrough();
                     });
 
                     it("should set the contactUsView variable to a new ContactUsView object", function () {
@@ -99,31 +97,31 @@ define(["globals", "backbone", "utils", "Squire"],
                 });
 
                 it("should call ContactUsView.on 1 time", function () {
-                    spyOn(mockContactUsView, "on").andCallFake(function () { });
+                    spyOn(mockContactUsView, "on").and.callFake(function () { });
 
                     contactUsController.init();
 
                     expect(mockContactUsView.on).toHaveBeenCalled();
-                    expect(mockContactUsView.on.calls.length).toEqual(1);
+                    expect(mockContactUsView.on.calls.count()).toEqual(1);
                 });
 
                 it("should register a function as the handler for the view contactUsSuccess event", function () {
-                    spyOn(mockContactUsView, "on").andCallFake(function () { });
+                    spyOn(mockContactUsView, "on").and.callFake(function () { });
 
                     contactUsController.init();
 
                     expect(mockContactUsView.on).toHaveBeenCalled();
-                    expect(mockContactUsView.on.calls[0].args.length).toEqual(3);
-                    expect(mockContactUsView.on.calls[0].args[0]).toEqual("contactUsSuccess");
-                    expect(mockContactUsView.on.calls[0].args[1]).toEqual(contactUsController.showConfirmation);
-                    expect(mockContactUsView.on.calls[0].args[2]).toEqual(contactUsController);
+                    expect(mockContactUsView.on.calls.argsFor(0).length).toEqual(3);
+                    expect(mockContactUsView.on.calls.argsFor(0)[0]).toEqual("contactUsSuccess");
+                    expect(mockContactUsView.on.calls.argsFor(0)[1]).toEqual(contactUsController.showConfirmation);
+                    expect(mockContactUsView.on.calls.argsFor(0)[2]).toEqual(contactUsController);
                 });
             });
 
             describe("has a navigate function that", function () {
                 beforeEach(function () {
-                    spyOn(mockContactUsView, "render").andCallThrough();
-                    spyOn(mockUtils, "changePage").andCallThrough();
+                    spyOn(mockContactUsView, "render").and.callThrough();
+                    spyOn(mockUtils, "changePage").and.callThrough();
 
                     contactUsController.navigate();
                 });
@@ -143,11 +141,11 @@ define(["globals", "backbone", "utils", "Squire"],
                 it("should change the page to the Contact Us View Page", function () {
                     expect(mockUtils.changePage).toHaveBeenCalled();
 
-                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(4);
-                    expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual(mockContactUsView.$el);
-                    expect(mockUtils.changePage.mostRecentCall.args[1]).toBeNull();
-                    expect(mockUtils.changePage.mostRecentCall.args[2]).toBeNull();
-                    expect(mockUtils.changePage.mostRecentCall.args[3]).toBeTruthy();
+                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(4);
+                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockContactUsView.$el);
+                    expect(mockUtils.changePage.calls.mostRecent().args[1]).toBeNull();
+                    expect(mockUtils.changePage.calls.mostRecent().args[2]).toBeNull();
+                    expect(mockUtils.changePage.calls.mostRecent().args[3]).toBeTruthy();
                 });
             });
 
@@ -156,7 +154,7 @@ define(["globals", "backbone", "utils", "Squire"],
                     message: "Response message"
                 };
                 beforeEach(function () {
-                    spyOn(mockFacade, "publish").andCallFake(function () { });
+                    spyOn(mockFacade, "publish").and.callFake(function () { });
 
                     contactUsController.showConfirmation(response);
                 });
@@ -174,11 +172,11 @@ define(["globals", "backbone", "utils", "Squire"],
 
                     expect(mockFacade.publish).toHaveBeenCalled();
 
-                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(3);
-                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("app");
-                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("alert");
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
 
-                    appAlertOptions = mockFacade.publish.mostRecentCall.args[2];
+                    appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
                     expect(appAlertOptions.title).toEqual(globals.contactUs.constants.SUCCESS_TITLE);
                     expect(appAlertOptions.message).toEqual(response.message);
                     expect(appAlertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
@@ -189,9 +187,9 @@ define(["globals", "backbone", "utils", "Squire"],
                     var options;
 
                     beforeEach(function () {
-                        options = mockFacade.publish.mostRecentCall.args[2];
+                        options = mockFacade.publish.calls.mostRecent().args[2];
 
-                        spyOn(window.history, "back").andCallFake(function () { });
+                        spyOn(window.history, "back").and.callFake(function () { });
 
                         options.popupafterclose.call(contactUsController);
                     });

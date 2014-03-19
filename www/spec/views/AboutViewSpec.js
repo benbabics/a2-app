@@ -18,13 +18,12 @@ define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-
         squire.mock("mustache", mockMustache);
 
         describe("An About View", function () {
-            var jasmineAsync = new AsyncSpec(this);
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
             jasmine.getFixtures().fixturesPath = "";
 
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["views/AboutView"],
                     function (AboutView) {
                         loadFixtures("index.html");
@@ -57,7 +56,7 @@ define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-
                 });
 
                 it("should set el", function () {
-                    expect(aboutView.el).toBe("#about");
+                    expect(aboutView.el).toEqual("#about");
                 });
 
                 it("should set el nodeName", function () {
@@ -71,8 +70,8 @@ define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(mockMustache, "parse").andCallThrough();
-                    spyOn(aboutView, "pageCreate").andCallFake(function () { });
+                    spyOn(mockMustache, "parse").and.callThrough();
+                    spyOn(aboutView, "pageCreate").and.callFake(function () { });
                     aboutView.initialize();
                 });
 
@@ -95,7 +94,7 @@ define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-
 
             describe("has a pageCreate function that", function () {
                 beforeEach(function () {
-                    spyOn(mockMustache, "render").andCallThrough();
+                    spyOn(mockMustache, "render").and.callThrough();
                     aboutView.initialize();
                 });
 

@@ -8,9 +8,7 @@ define(["Squire"],
 
         describe("The utils class", function () {
 
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["utils"], function (utils) {
                     utilsClass = utils;
                     done();

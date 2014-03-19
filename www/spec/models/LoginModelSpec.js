@@ -7,9 +7,7 @@ define(["Squire", "globals"],
             loginModel;
 
         describe("A Login Model", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["models/LoginModel"], function (LoginModel) {
                     loginModel = new LoginModel();
 

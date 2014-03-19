@@ -10,9 +10,7 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
         squire.mock("models/DepartmentModel", DepartmentModel);
 
         describe("A Driver Model", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["models/DriverModel"], function (DriverModel) {
                     driverModel = new DriverModel();
 
@@ -76,7 +74,7 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(driverModel, "set").andCallThrough();
+                    spyOn(driverModel, "set").and.callThrough();
                 });
 
                 it("is defined", function () {
@@ -129,7 +127,7 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                     });
 
                     it("should call set 7 times", function () {
-                        expect(driverModel.set.calls.length).toEqual(7);
+                        expect(driverModel.set.calls.count()).toEqual(7);
                     });
 
                     it("should set driverId", function () {
@@ -161,10 +159,10 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                     it("should set department", function () {
                         var actualDepartment;
 
-                        expect(driverModel.set.calls[6].args.length).toEqual(2);
-                        expect(driverModel.set.calls[6].args[0]).toEqual("department");
+                        expect(driverModel.set.calls.argsFor(6).length).toEqual(2);
+                        expect(driverModel.set.calls.argsFor(6)[0]).toEqual("department");
 
-                        actualDepartment = driverModel.set.calls[6].args[1];
+                        actualDepartment = driverModel.set.calls.argsFor(6)[1];
 
                         expect(actualDepartment.get("departmentId")).toEqual(options.department.id);
                         expect(actualDepartment.get("name")).toEqual(options.department.name);

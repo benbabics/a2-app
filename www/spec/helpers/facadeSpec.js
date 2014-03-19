@@ -10,9 +10,7 @@ define(["Squire", "helpers/mediator"],
 
         describe("The facade class", function () {
 
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["facade"], function (facade) {
                     facadeClass = facade;
                     done();
@@ -26,7 +24,7 @@ define(["Squire", "helpers/mediator"],
             describe("has a subscribe function that", function () {
                 beforeEach(function () {
                     spyOn(window.console, "error");
-                    spyOn(mediator, "subscribe").andCallFake(function () { });
+                    spyOn(mediator, "subscribe").and.callFake(function () { });
                 });
 
                 it("is defined", function () {
@@ -103,19 +101,19 @@ define(["Squire", "helpers/mediator"],
                     facadeClass.subscribe(channel, subscription, controller, action, condition);
 
                     expect(mediator.subscribe).toHaveBeenCalled();
-                    expect(mediator.subscribe.mostRecentCall.args.length).toEqual(5);
-                    expect(mediator.subscribe.mostRecentCall.args[0]).toEqual(channel);
-                    expect(mediator.subscribe.mostRecentCall.args[1]).toEqual(subscription);
-                    expect(mediator.subscribe.mostRecentCall.args[2]).toEqual(controller);
-                    expect(mediator.subscribe.mostRecentCall.args[3]).toEqual(action);
-                    expect(mediator.subscribe.mostRecentCall.args[4]).toEqual(condition);
+                    expect(mediator.subscribe.calls.mostRecent().args.length).toEqual(5);
+                    expect(mediator.subscribe.calls.mostRecent().args[0]).toEqual(channel);
+                    expect(mediator.subscribe.calls.mostRecent().args[1]).toEqual(subscription);
+                    expect(mediator.subscribe.calls.mostRecent().args[2]).toEqual(controller);
+                    expect(mediator.subscribe.calls.mostRecent().args[3]).toEqual(action);
+                    expect(mediator.subscribe.calls.mostRecent().args[4]).toEqual(condition);
                 });
             });
 
             describe("has a subscribeTo function that", function () {
                 beforeEach(function () {
                     spyOn(window.console, "error");
-                    spyOn(mediator, "subscribe").andCallFake(function () { });
+                    spyOn(mediator, "subscribe").and.callFake(function () { });
                 });
 
                 it("is defined", function () {
@@ -173,18 +171,18 @@ define(["Squire", "helpers/mediator"],
                         });
 
                         it("should call subscribe() when the returned function is executed", function () {
-                            spyOn(facadeClass, "subscribe").andCallFake(function () { });
+                            spyOn(facadeClass, "subscribe").and.callFake(function () { });
 
                             resultFunction = facadeClass.subscribeTo(channel, controller);
                             resultFunction.call(facadeClass, subscription, action, condition);
 
                             expect(facadeClass.subscribe).toHaveBeenCalled();
-                            expect(facadeClass.subscribe.mostRecentCall.args.length).toEqual(5);
-                            expect(facadeClass.subscribe.mostRecentCall.args[0]).toEqual(channel);
-                            expect(facadeClass.subscribe.mostRecentCall.args[1]).toEqual(subscription);
-                            expect(facadeClass.subscribe.mostRecentCall.args[2]).toEqual(controller);
-                            expect(facadeClass.subscribe.mostRecentCall.args[3]).toEqual(action);
-                            expect(facadeClass.subscribe.mostRecentCall.args[4]).toEqual(condition);
+                            expect(facadeClass.subscribe.calls.mostRecent().args.length).toEqual(5);
+                            expect(facadeClass.subscribe.calls.mostRecent().args[0]).toEqual(channel);
+                            expect(facadeClass.subscribe.calls.mostRecent().args[1]).toEqual(subscription);
+                            expect(facadeClass.subscribe.calls.mostRecent().args[2]).toEqual(controller);
+                            expect(facadeClass.subscribe.calls.mostRecent().args[3]).toEqual(action);
+                            expect(facadeClass.subscribe.calls.mostRecent().args[4]).toEqual(condition);
                         });
                     });
 
@@ -202,7 +200,7 @@ define(["Squire", "helpers/mediator"],
                         });
 
                         it("should not call subscribe() when the returned function is executed", function () {
-                            spyOn(facadeClass, "subscribe").andCallFake(function () { });
+                            spyOn(facadeClass, "subscribe").and.callFake(function () { });
 
                             resultFunction = facadeClass.subscribeTo(channel, controller);
                             resultFunction.call(facadeClass, subscription, action, condition);
@@ -225,7 +223,7 @@ define(["Squire", "helpers/mediator"],
                         });
 
                         it("should not call subscribe() when the returned function is executed", function () {
-                            spyOn(facadeClass, "subscribe").andCallFake(function () { });
+                            spyOn(facadeClass, "subscribe").and.callFake(function () { });
 
                             resultFunction = facadeClass.subscribeTo(channel, controller);
                             resultFunction.call(facadeClass, subscription, action, condition);
@@ -240,7 +238,7 @@ define(["Squire", "helpers/mediator"],
             describe("has a publish function that", function () {
 
                 beforeEach(function () {
-                    spyOn(mediator, "publish").andCallFake(function () { });
+                    spyOn(mediator, "publish").and.callFake(function () { });
                 });
 
                 it("is defined", function () {
@@ -261,11 +259,11 @@ define(["Squire", "helpers/mediator"],
                         facadeClass.publish(channel, subscriber, argument1, argument2);
 
                         expect(mediator.publish).toHaveBeenCalled();
-                        expect(mediator.publish.mostRecentCall.args.length).toEqual(4);
-                        expect(mediator.publish.mostRecentCall.args[0]).toEqual(channel);
-                        expect(mediator.publish.mostRecentCall.args[1]).toEqual(subscriber);
-                        expect(mediator.publish.mostRecentCall.args[2]).toEqual(argument1);
-                        expect(mediator.publish.mostRecentCall.args[3]).toEqual(argument2);
+                        expect(mediator.publish.calls.mostRecent().args.length).toEqual(4);
+                        expect(mediator.publish.calls.mostRecent().args[0]).toEqual(channel);
+                        expect(mediator.publish.calls.mostRecent().args[1]).toEqual(subscriber);
+                        expect(mediator.publish.calls.mostRecent().args[2]).toEqual(argument1);
+                        expect(mediator.publish.calls.mostRecent().args[3]).toEqual(argument2);
                     });
 
                 it("should call mediator.publish() without additional arguments when there are no additional arguments",
@@ -276,9 +274,9 @@ define(["Squire", "helpers/mediator"],
                         facadeClass.publish(channel, subscriber);
 
                         expect(mediator.publish).toHaveBeenCalled();
-                        expect(mediator.publish.mostRecentCall.args.length).toEqual(2);
-                        expect(mediator.publish.mostRecentCall.args[0]).toEqual(channel);
-                        expect(mediator.publish.mostRecentCall.args[1]).toEqual(subscriber);
+                        expect(mediator.publish.calls.mostRecent().args.length).toEqual(2);
+                        expect(mediator.publish.calls.mostRecent().args[0]).toEqual(channel);
+                        expect(mediator.publish.calls.mostRecent().args[1]).toEqual(subscriber);
                     });
             });
 

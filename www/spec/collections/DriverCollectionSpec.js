@@ -8,9 +8,7 @@ define(["utils", "globals", "Squire", "models/DriverModel"],
         squire.mock("models/DriverModel", DriverModel);
 
         describe("A Driver Collection", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function(done) {
+            beforeEach(function(done) {
                 squire.require(["collections/DriverCollection"], function(DriverCollection) {
                     driverCollection = new DriverCollection();
                     done();

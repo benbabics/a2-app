@@ -8,9 +8,7 @@ define(["Squire", "utils"],
 
         describe("The mediator class", function () {
 
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["helpers/mediator"], function (mediator) {
                     mediatorClass = mediator;
                     done();
@@ -170,9 +168,9 @@ define(["Squire", "utils"],
                                 mediatorClass.publish(channel, subscription, argument1, argument2);
 
                                 expect(controller.mockAction).toHaveBeenCalled();
-                                expect(controller.mockAction.mostRecentCall.args.length).toEqual(2);
-                                expect(controller.mockAction.mostRecentCall.args[0]).toEqual(argument1);
-                                expect(controller.mockAction.mostRecentCall.args[1]).toEqual(argument2);
+                                expect(controller.mockAction.calls.mostRecent().args.length).toEqual(2);
+                                expect(controller.mockAction.calls.mostRecent().args[0]).toEqual(argument1);
+                                expect(controller.mockAction.calls.mostRecent().args[1]).toEqual(argument2);
                             });
                         });
 
@@ -223,7 +221,7 @@ define(["Squire", "utils"],
                                 mediatorClass.publish(channel, subscription);
 
                                 expect(controller.mockAction).toHaveBeenCalled();
-                                expect(controller.mockAction.mostRecentCall.args.length).toEqual(0);
+                                expect(controller.mockAction.calls.mostRecent().args.length).toEqual(0);
                             });
                         });
 

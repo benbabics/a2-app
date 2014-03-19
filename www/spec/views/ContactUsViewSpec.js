@@ -30,13 +30,12 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
         squire.mock("facade", mockFacade);
 
         describe("A Contact Us View", function () {
-            var jasmineAsync = new AsyncSpec(this);
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
             jasmine.getFixtures().fixturesPath = "";
 
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["views/ContactUsView"], function (JasmineContactUsView) {
                     loadFixtures("index.html");
 
@@ -81,7 +80,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                 });
 
                 it("should set el", function () {
-                    expect(contactUsView.el).toBe("#contactUs");
+                    expect(contactUsView.el).toEqual("#contactUs");
                 });
 
                 it("should set el nodeName", function () {
@@ -95,8 +94,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(mockMustache, "parse").andCallThrough();
-                    spyOn(ContactUsView.__super__, "initialize").andCallFake(function () {});
+                    spyOn(mockMustache, "parse").and.callThrough();
+                    spyOn(ContactUsView.__super__, "initialize").and.callFake(function () {});
 
                     contactUsView.initialize();
                 });
@@ -130,9 +129,9 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                     expectedConfiguration.sender.value = mockUserModel.email;
                     expectedConfiguration.authenticated = mockUserModel.authenticated;
 
-                    spyOn(mockMustache, "render").andCallThrough();
-                    spyOn(contactUsView, "getConfiguration").andCallFake(function() { return expectedConfiguration; });
-                    spyOn(contactUsView, "formatRequiredFields").andCallThrough();
+                    spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(contactUsView, "getConfiguration").and.callFake(function() { return expectedConfiguration; });
+                    spyOn(contactUsView, "formatRequiredFields").and.callThrough();
 
                     contactUsView.render();
                 });
@@ -151,9 +150,9 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
 
                 it("should call Mustache.render() on the template", function () {
                     expect(mockMustache.render).toHaveBeenCalled();
-                    expect(mockMustache.render.mostRecentCall.args.length).toEqual(2);
-                    expect(mockMustache.render.mostRecentCall.args[0]).toEqual(contactUsView.template);
-                    expect(mockMustache.render.mostRecentCall.args[1]).toEqual(expectedConfiguration);
+                    expect(mockMustache.render.calls.mostRecent().args.length).toEqual(2);
+                    expect(mockMustache.render.calls.mostRecent().args[0]).toEqual(contactUsView.template);
+                    expect(mockMustache.render.calls.mostRecent().args[1]).toEqual(expectedConfiguration);
                 });
 
                 it("should set the content", function () {
@@ -197,8 +196,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                 };
 
                 beforeEach(function () {
-                    spyOn(mockEvent, "preventDefault").andCallThrough();
-                    spyOn(contactUsModel, "save").andCallFake(function () { });
+                    spyOn(mockEvent, "preventDefault").and.callThrough();
+                    spyOn(contactUsModel, "save").and.callFake(function () { });
                     contactUsView.submitForm(mockEvent);
                 });
 
@@ -217,29 +216,31 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                 describe("when calling save() on the model", function () {
                     it("should send the model as the first argument", function () {
                         expect(contactUsModel.save).toHaveBeenCalled();
-                        expect(contactUsModel.save.mostRecentCall.args.length).toEqual(2);
-                        expect(contactUsModel.save.mostRecentCall.args[0]).toEqual(contactUsModel.toJSON());
+                        expect(contactUsModel.save.calls.mostRecent().args.length).toEqual(2);
+                        expect(contactUsModel.save.calls.mostRecent().args[0]).toEqual(contactUsModel.toJSON());
                     });
 
-                    describe("sends as the second argument the options object with a success callback that", function () {
-                        var response = {},
-                            model,
-                            options;
+                    describe("sends as the second argument the options object with a success callback that",
+                        function () {
+                            var response = {},
+                                model,
+                                options;
 
-                        beforeEach(function () {
-                            spyOn(contactUsView, "trigger").andCallFake(function () { });
+                            beforeEach(function () {
+                                spyOn(contactUsView, "trigger").and.callFake(function () { });
 
-                            options = contactUsModel.save.mostRecentCall.args[1];
-                            options.success.call(contactUsView, model, response);
-                        });
+                                options = contactUsModel.save.calls.mostRecent().args[1];
+                                options.success.call(contactUsView, model, response);
+                            });
 
-                        it("should trigger contactUsSuccess", function () {
-                            expect(contactUsView.trigger).toHaveBeenCalled();
-                            expect(contactUsView.trigger.mostRecentCall.args.length).toEqual(2);
-                            expect(contactUsView.trigger.mostRecentCall.args[0]).toEqual("contactUsSuccess");
-                            expect(contactUsView.trigger.mostRecentCall.args[1]).toEqual(response);
-                        });
-                    });
+                            it("should trigger contactUsSuccess", function () {
+                                expect(contactUsView.trigger).toHaveBeenCalled();
+                                expect(contactUsView.trigger.calls.mostRecent().args.length).toEqual(2);
+                                expect(contactUsView.trigger.calls.mostRecent().args[0]).toEqual("contactUsSuccess");
+                                expect(contactUsView.trigger.calls.mostRecent().args[1]).toEqual(response);
+                            });
+                        }
+                    );
                 });
             });
         });

@@ -58,9 +58,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
         squire.mock("utils", mockUtils);
 
         describe("A Validation Form View", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["views/ValidationFormView"], function (ValidationFormView) {
                     validationFormView = new ValidationFormView({
                         model: formModel
@@ -90,11 +88,11 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(Backbone.Validation, "bind").andCallThrough();
-                    spyOn(formModel, "on").andCallFake(function () { });
-                    spyOn(mockMustache, "parse").andCallThrough();
-                    spyOn(validationFormView, "pageCreate").andCallFake(function () { });
-                    spyOn(mockUtils._, "bindAll").andCallFake(function () { });
+                    spyOn(Backbone.Validation, "bind").and.callThrough();
+                    spyOn(formModel, "on").and.callFake(function () { });
+                    spyOn(mockMustache, "parse").and.callThrough();
+                    spyOn(validationFormView, "pageCreate").and.callFake(function () { });
+                    spyOn(mockUtils._, "bindAll").and.callFake(function () { });
 
                     validationFormView.initialize();
                 });
@@ -114,22 +112,22 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                 it("should call utils._.bindAll", function () {
                     expect(mockUtils._.bindAll).toHaveBeenCalled();
 
-                    expect(mockUtils._.bindAll.mostRecentCall.args.length).toEqual(2);
-                    expect(mockUtils._.bindAll.mostRecentCall.args[0]).toEqual(validationFormView);
-                    expect(mockUtils._.bindAll.mostRecentCall.args[1]).toEqual("handleValidationError");
+                    expect(mockUtils._.bindAll.calls.mostRecent().args.length).toEqual(2);
+                    expect(mockUtils._.bindAll.calls.mostRecent().args[0]).toEqual(validationFormView);
+                    expect(mockUtils._.bindAll.calls.mostRecent().args[1]).toEqual("handleValidationError");
                 });
 
                 it("should register a function as the handler for the invalid event", function () {
                     expect(formModel.on).toHaveBeenCalled();
-                    expect(formModel.on.mostRecentCall.args.length).toEqual(2);
-                    expect(formModel.on.mostRecentCall.args[0]).toEqual("invalid");
-                    expect(formModel.on.mostRecentCall.args[1]).toEqual(validationFormView.handleValidationError);
+                    expect(formModel.on.calls.mostRecent().args.length).toEqual(2);
+                    expect(formModel.on.calls.mostRecent().args[0]).toEqual("invalid");
+                    expect(formModel.on.calls.mostRecent().args[1]).toEqual(validationFormView.handleValidationError);
                 });
             });
 
             describe("has a formatRequiredFields function that", function () {
                 beforeEach(function () {
-                    spyOn(mockUtils._, "each").andCallThrough();
+                    spyOn(mockUtils._, "each").and.callThrough();
 
                     validationFormView.$el.html(mockTemplate);
                     validationFormView.formatRequiredFields();
@@ -149,10 +147,10 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
 
                 it("should call utils._.each on the model's validation object", function () {
                     expect(mockUtils._.each).toHaveBeenCalled();
-                    expect(mockUtils._.each.mostRecentCall.args.length).toEqual(3);
-                    expect(mockUtils._.each.mostRecentCall.args[0]).toEqual(validationFormView.model.validation);
-                    expect(mockUtils._.each.mostRecentCall.args[1]).toEqual(jasmine.any(Function));
-                    expect(mockUtils._.each.mostRecentCall.args[2]).toEqual(validationFormView);
+                    expect(mockUtils._.each.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockUtils._.each.calls.mostRecent().args[0]).toEqual(validationFormView.model.validation);
+                    expect(mockUtils._.each.calls.mostRecent().args[1]).toEqual(jasmine.any(Function));
+                    expect(mockUtils._.each.calls.mostRecent().args[2]).toEqual(validationFormView);
                 });
 
                 it("should add an asterisk to the label of any fields that have a validation rule of required:true",
@@ -210,8 +208,8 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     };
 
                 beforeEach(function () {
-                    spyOn(mockFacade, "publish").andCallThrough();
-                    spyOn(validationFormView, "convertErrorsToUnorderedList").andCallFake(
+                    spyOn(mockFacade, "publish").and.callThrough();
+                    spyOn(validationFormView, "convertErrorsToUnorderedList").and.callFake(
                         function () {
                             return mockConvertedErrors;
                         }
@@ -237,11 +235,11 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
 
                     expect(mockFacade.publish).toHaveBeenCalled();
 
-                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(3);
-                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("app");
-                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("alert");
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
 
-                    appALertOptions = mockFacade.publish.mostRecentCall.args[2];
+                    appALertOptions = mockFacade.publish.calls.mostRecent().args[2];
                     expect(appALertOptions.title).toEqual(globals.VALIDATION_ERRORS.TITLE);
                     expect(appALertOptions.message).toEqual(globals.VALIDATION_ERRORS.HEADER + mockConvertedErrors);
                     expect(appALertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);

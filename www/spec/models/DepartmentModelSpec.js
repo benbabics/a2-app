@@ -9,9 +9,7 @@ define(["Squire", "backbone", "backbone-relational"],
         squire.mock("backbone", Backbone);
 
         describe("A Department Model", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["models/DepartmentModel"], function (DepartmentModel) {
                     departmentModel = new DepartmentModel();
 
@@ -43,7 +41,7 @@ define(["Squire", "backbone", "backbone-relational"],
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(departmentModel, "set").andCallThrough();
+                    spyOn(departmentModel, "set").and.callThrough();
                 });
 
                 it("is defined", function () {
@@ -88,7 +86,7 @@ define(["Squire", "backbone", "backbone-relational"],
                     });
 
                     it("should call set 3 times", function () {
-                        expect(departmentModel.set.calls.length).toEqual(3);
+                        expect(departmentModel.set.calls.count()).toEqual(3);
                     });
 
                     it("should set departmentId", function () {

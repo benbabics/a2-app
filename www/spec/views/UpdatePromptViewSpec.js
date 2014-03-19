@@ -1,4 +1,4 @@
-define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page.html", "Squire", "jasmine-jquery", "jasmine-sinon", "RequestMatchers"],
+define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page.html", "Squire", "jasmine-jquery"],
     function (Backbone, utils, globals, Mustache, pageTemplate, Squire) {
         "use strict";
 
@@ -27,7 +27,7 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
                 secondaryBtnLabel: globals.UPDATE_APP.SECONDARY_BTN_LABEL
             },
             mockFacade = {
-                publish: function (channel, event) { }
+                publish: function () { }
             },
             updatePromptView;
 
@@ -37,18 +37,17 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
         squire.mock("models/AppModel", AppModel);
 
         describe("A UpdatePrompt View", function () {
-            var jasmineAsync = new AsyncSpec(this);
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
             jasmine.getFixtures().fixturesPath = "";
 
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["views/UpdatePromptView"], function (UpdatePromptView) {
                     loadFixtures("index.html");
 
                     appModel.set(mockAppModel);
-                    spyOn(AppModel, "getInstance").andCallFake(function () { return appModel; });
+                    spyOn(AppModel, "getInstance").and.callFake(function () { return appModel; });
 
                     updatePromptView = new UpdatePromptView();
 
@@ -105,8 +104,8 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
 
                 describe("when rendering", function () {
                     beforeEach(function () {
-                        spyOn(updatePromptView.$content, "trigger").andCallFake(function () { });
-                        spyOn(mockMustache, "render").andCallThrough();
+                        spyOn(updatePromptView.$content, "trigger").and.callFake(function () { });
+                        spyOn(mockMustache, "render").and.callThrough();
 
                         updatePromptView.templateContent = mockFailTemplateContent;
 
@@ -120,7 +119,8 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
                     });
 
                     it("should call Mustache.render() on the template", function () {
-                        expect(mockMustache.render).toHaveBeenCalledWith(updatePromptView.template, updatePromptView.templateContent);
+                        expect(mockMustache.render).toHaveBeenCalledWith(updatePromptView.template,
+                            updatePromptView.templateContent);
                     });
 
                     it("should contain the title", function () {
@@ -137,8 +137,8 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
 
                     it("calls the trigger function on updatePromptView.$content", function () {
                         expect(updatePromptView.$content.trigger).toHaveBeenCalled();
-                        expect(updatePromptView.$content.trigger.mostRecentCall.args.length).toEqual(1);
-                        expect(updatePromptView.$content.trigger.mostRecentCall.args[0]).toEqual("create");
+                        expect(updatePromptView.$content.trigger.calls.mostRecent().args.length).toEqual(1);
+                        expect(updatePromptView.$content.trigger.calls.mostRecent().args[0]).toEqual("create");
                     });
                 });
             });
@@ -163,7 +163,7 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
 
                 it("calls the render function", function () {
                     expect(updatePromptView.render).toHaveBeenCalled();
-                    expect(updatePromptView.render.mostRecentCall.args.length).toEqual(0);
+                    expect(updatePromptView.render.calls.mostRecent().args.length).toEqual(0);
                 });
             });
 
@@ -187,7 +187,7 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
 
                 it("calls the render function", function () {
                     expect(updatePromptView.render).toHaveBeenCalled();
-                    expect(updatePromptView.render.mostRecentCall.args.length).toEqual(0);
+                    expect(updatePromptView.render.calls.mostRecent().args.length).toEqual(0);
                 });
             });
 
@@ -197,8 +197,8 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
                 };
 
                 beforeEach(function () {
-                    spyOn(mockEvent, "preventDefault").andCallThrough();
-                    spyOn(window, "open").andCallFake(function () {});
+                    spyOn(mockEvent, "preventDefault").and.callThrough();
+                    spyOn(window, "open").and.callFake(function () {});
                     updatePromptView.handleUpdateClick(mockEvent);
                 });
 
@@ -217,17 +217,17 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
                 it("should call window.open", function () {
                     expect(window.open).toHaveBeenCalled();
 
-                    expect(window.open.mostRecentCall.args.length).toEqual(2);
-                    expect(window.open.mostRecentCall.args[0]).toEqual(globals.UPDATE_APP.URL);
-                    expect(window.open.mostRecentCall.args[1]).toEqual("_self");
+                    expect(window.open.calls.mostRecent().args.length).toEqual(2);
+                    expect(window.open.calls.mostRecent().args[0]).toEqual(globals.UPDATE_APP.URL);
+                    expect(window.open.calls.mostRecent().args[1]).toEqual("_self");
                 });
             });
 
             describe("has a handleUpdateDismiss function that", function () {
                 beforeEach(function () {
-                    spyOn(appModel, "set").andCallThrough();
-                    spyOn(appModel, "save").andCallFake(function () {});
-                    spyOn(mockFacade, "publish").andCallFake(function () {});
+                    spyOn(appModel, "set").and.callThrough();
+                    spyOn(appModel, "save").and.callFake(function () {});
+                    spyOn(mockFacade, "publish").and.callFake(function () {});
                     updatePromptView.handleUpdateDismiss();
                 });
 
@@ -242,26 +242,26 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
                 it("should call appModel.set", function () {
                     expect(appModel.set).toHaveBeenCalled();
 
-                    expect(appModel.set.mostRecentCall.args.length).toEqual(2);
-                    expect(appModel.set.mostRecentCall.args[0]).toEqual("lastWarnVersion");
-                    expect(appModel.set.mostRecentCall.args[1]).toEqual(mockAppModel.buildVersion);
+                    expect(appModel.set.calls.mostRecent().args.length).toEqual(2);
+                    expect(appModel.set.calls.mostRecent().args[0]).toEqual("lastWarnVersion");
+                    expect(appModel.set.calls.mostRecent().args[1]).toEqual(mockAppModel.buildVersion);
                 });
 
                 it("should call appModel.save", function () {
                     expect(appModel.save).toHaveBeenCalled();
-                    expect(appModel.save.mostRecentCall.args.length).toEqual(0);
+                    expect(appModel.save.calls.mostRecent().args.length).toEqual(0);
                 });
 
                 it("should call the publish function on facade", function () {
                     expect(mockFacade.publish).toHaveBeenCalled();
 
-                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(2);
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
 
                     // First parameter is the channel landing
-                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("login");
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("login");
 
                     // Second parameter is the navigate event
-                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("navigate");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigate");
                 });
             });
         });

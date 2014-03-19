@@ -9,9 +9,7 @@ define(["backbone", "Squire"],
         squire.mock("backbone", Backbone);
 
         describe("A Driver Search Model", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["models/DriverSearchModel"], function (DriverSearchModel) {
                     driverSearchModel = new DriverSearchModel();
 

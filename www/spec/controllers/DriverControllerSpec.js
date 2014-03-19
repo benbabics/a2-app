@@ -36,13 +36,11 @@ define(["backbone", "utils", "Squire"],
         squire.mock("models/UserModel", UserModel);
 
         describe("A Driver Controller", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["controllers/DriverController"], function (DriverController) {
                     driverSearchModel.set(mockDriverSearchModel);
                     userModel.set(mockUserModel);
-                    spyOn(UserModel, "getInstance").andCallFake(function () { return userModel; });
+                    spyOn(UserModel, "getInstance").and.callFake(function () { return userModel; });
 
                     driverController = DriverController;
                     driverController.init();
@@ -76,7 +74,7 @@ define(["backbone", "utils", "Squire"],
 
                 describe("when initializing the DriverSearchView", function () {
                     beforeEach(function () {
-                        spyOn(mockDriverSearchView, "constructor").andCallThrough();
+                        spyOn(mockDriverSearchView, "constructor").and.callThrough();
                     });
 
                     it("should set the driverSearchView variable to a new DriverSearchView object", function () {
@@ -96,8 +94,8 @@ define(["backbone", "utils", "Squire"],
 
             describe("has a navigateSearch function that", function () {
                 beforeEach(function () {
-                    spyOn(mockDriverSearchView, "render").andCallThrough();
-                    spyOn(mockUtils, "changePage").andCallThrough();
+                    spyOn(mockDriverSearchView, "render").and.callThrough();
+                    spyOn(mockUtils, "changePage").and.callThrough();
 
                     driverController.navigateSearch();
                 });
@@ -117,11 +115,11 @@ define(["backbone", "utils", "Squire"],
                 it("should change the page to the Driver Search View Page", function () {
                     expect(mockUtils.changePage).toHaveBeenCalled();
 
-                    expect(mockUtils.changePage.mostRecentCall.args.length).toEqual(4);
-                    expect(mockUtils.changePage.mostRecentCall.args[0]).toEqual(mockDriverSearchView.$el);
-                    expect(mockUtils.changePage.mostRecentCall.args[1]).toBeNull();
-                    expect(mockUtils.changePage.mostRecentCall.args[2]).toBeNull();
-                    expect(mockUtils.changePage.mostRecentCall.args[3]).toBeTruthy();
+                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(4);
+                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockDriverSearchView.$el);
+                    expect(mockUtils.changePage.calls.mostRecent().args[1]).toBeNull();
+                    expect(mockUtils.changePage.calls.mostRecent().args[2]).toBeNull();
+                    expect(mockUtils.changePage.calls.mostRecent().args[3]).toBeTruthy();
                 });
             });
         });

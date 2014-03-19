@@ -6,7 +6,7 @@ define(["Squire"],
         var squire = new Squire(),
             mockSubscribe = jasmine.createSpy("subscribe() spy"),
             mockFacade = {
-                subscribeTo: jasmine.createSpy("subscribeTo() spy").andReturn(mockSubscribe)
+                subscribeTo: jasmine.createSpy("subscribeTo() spy").and.returnValue(mockSubscribe)
             },
             mockDriverController = {
                 init: function () { }
@@ -17,9 +17,7 @@ define(["Squire"],
         squire.mock("controllers/DriverController", mockDriverController);
 
         describe("A Driver Subscriber", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["subscribers/driver"], function (jasmineDriverSubscriber) {
                     driverSubscriber = jasmineDriverSubscriber;
                     done();
@@ -33,13 +31,13 @@ define(["Squire"],
             it("should call the subscribeTo function on the facade", function () {
                 expect(mockFacade.subscribeTo).toHaveBeenCalled();
 
-                expect(mockFacade.subscribeTo.mostRecentCall.args.length).toEqual(2);
-                expect(mockFacade.subscribeTo.mostRecentCall.args[0]).toEqual("driver");
-                expect(mockFacade.subscribeTo.mostRecentCall.args[1]).toEqual(mockDriverController);
+                expect(mockFacade.subscribeTo.calls.mostRecent().args.length).toEqual(2);
+                expect(mockFacade.subscribeTo.calls.mostRecent().args[0]).toEqual("driver");
+                expect(mockFacade.subscribeTo.calls.mostRecent().args[1]).toEqual(mockDriverController);
             });
 
             it("should call subscribe 1 time", function () {
-                expect(mockSubscribe.calls.length).toEqual(1);
+                expect(mockSubscribe.calls.count()).toEqual(1);
             });
 
             it("should subscribe to navigateSearch", function () {
@@ -48,7 +46,7 @@ define(["Squire"],
 
             describe("has an init function that", function () {
                 beforeEach(function () {
-                    spyOn(mockDriverController, "init").andCallThrough();
+                    spyOn(mockDriverController, "init").and.callThrough();
                     driverSubscriber.init();
                 });
 
@@ -63,7 +61,7 @@ define(["Squire"],
                 it("should call the init function on the controller", function () {
                     expect(mockDriverController.init).toHaveBeenCalled();
 
-                    expect(mockDriverController.init.mostRecentCall.args.length).toEqual(0);
+                    expect(mockDriverController.init.calls.mostRecent().args.length).toEqual(0);
                 });
             });
         });

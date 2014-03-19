@@ -11,9 +11,7 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
         squire.mock("models/DepartmentModel", DepartmentModel);
 
         describe("A Company Model", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["models/CompanyModel"], function (CompanyModel) {
                     companyModel = new CompanyModel();
 
@@ -73,8 +71,8 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(companyModel, "set").andCallThrough();
-                    spyOn(companyModel, "get").andCallThrough();
+                    spyOn(companyModel, "set").and.callThrough();
+                    spyOn(companyModel, "get").and.callThrough();
                 });
 
                 it("is defined", function () {
@@ -108,8 +106,7 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
                 });
 
                 describe("when options are provided", function () {
-                    var departments,
-                        options = {
+                    var options = {
                             name: "Beavis and Butthead Inc",
                             accountId: "2562456",
                             wexAccountNumber: "5764309",
@@ -129,13 +126,13 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
                         };
 
                     beforeEach(function () {
-                        spyOn(companyModel, "setDepartments").andCallFake(function () {});
+                        spyOn(companyModel, "setDepartments").and.callFake(function () {});
 
                         companyModel.initialize(options);
                     });
 
                     it("should call set 4 times", function () {
-                        expect(companyModel.set.calls.length).toEqual(4);
+                        expect(companyModel.set.calls.count()).toEqual(4);
                     });
 
                     it("should set name", function () {
@@ -175,7 +172,7 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
                 ];
 
                 beforeEach(function () {
-                    spyOn(companyModel, "set").andCallThrough();
+                    spyOn(companyModel, "set").and.callThrough();
 
                     companyModel.setDepartments(mockDepartments);
                 });
@@ -190,15 +187,15 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
 
                 it("should call set", function () {
                     expect(companyModel.set).toHaveBeenCalled();
-                    expect(companyModel.set.mostRecentCall.args.length).toEqual(2);
-                    expect(companyModel.set.mostRecentCall.args[0]).toEqual("departments");
+                    expect(companyModel.set.calls.mostRecent().args.length).toEqual(2);
+                    expect(companyModel.set.calls.mostRecent().args[0]).toEqual("departments");
                 });
 
                 describe("when building a new object to set the departments property with", function () {
                     var newDepartments;
 
                     beforeEach(function () {
-                        newDepartments = companyModel.set.mostRecentCall.args[1];
+                        newDepartments = companyModel.set.calls.mostRecent().args[1];
                     });
 
                     it("should be the same size as the parameter passed", function () {

@@ -35,12 +35,10 @@ define(["backbone", "utils", "Squire"],
         squire.mock("views/AppView", Squire.Helpers.returns(mockAppView));
 
         describe("An App Controller", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["controllers/AppController"], function (AppController) {
                     appModel.set(mockAppModel);
-                    spyOn(AppModel, "getInstance").andCallFake(function () { return appModel; });
+                    spyOn(AppModel, "getInstance").and.callFake(function () { return appModel; });
 
                     appController = AppController;
 
@@ -89,7 +87,7 @@ define(["backbone", "utils", "Squire"],
 
                 describe("when initializing the AppView", function () {
                     beforeEach(function () {
-                        spyOn(mockAppView, "constructor").andCallThrough();
+                        spyOn(mockAppView, "constructor").and.callThrough();
                     });
 
                     it("should set the appView variable to a new AppView object", function () {
@@ -110,12 +108,12 @@ define(["backbone", "utils", "Squire"],
 
             describe("has a ready function that", function () {
                 beforeEach(function () {
-                    spyOn(appController, "onOffline").andCallFake(function () { });
-                    spyOn(mockRouter, "start").andCallThrough();
-                    spyOn(mockRouter, "navigate").andCallFake(function () { });
-                    spyOn(mockAppView, "render").andCallThrough();
-                    spyOn(document, "addEventListener").andCallThrough();
-                    spyOn(window, "setTimeout").andCallThrough();
+                    spyOn(appController, "onOffline").and.callFake(function () { });
+                    spyOn(mockRouter, "start").and.callThrough();
+                    spyOn(mockRouter, "navigate").and.callFake(function () { });
+                    spyOn(mockAppView, "render").and.callThrough();
+                    spyOn(document, "addEventListener").and.callThrough();
+                    spyOn(window, "setTimeout").and.callThrough();
 
                     appController.init();
                     appController.ready();
@@ -132,27 +130,27 @@ define(["backbone", "utils", "Squire"],
                 it("should call the appRouter start function", function () {
                     expect(mockRouter.start).toHaveBeenCalled();
 
-                    expect(mockRouter.start.mostRecentCall.args.length).toEqual(0);
+                    expect(mockRouter.start.calls.mostRecent().args.length).toEqual(0);
                 });
 
                 it("should call the appView render function", function () {
                     expect(mockAppView.render).toHaveBeenCalled();
 
-                    expect(mockAppView.render.mostRecentCall.args.length).toEqual(0);
+                    expect(mockAppView.render.calls.mostRecent().args.length).toEqual(0);
                 });
 
                 it("should call the document addEventListener function", function () {
                     expect(document.addEventListener).toHaveBeenCalled();
 
-                    expect(document.addEventListener.mostRecentCall.args.length).toEqual(3);
-                    expect(document.addEventListener.mostRecentCall.args[0]).toEqual("offline");
-                    expect(document.addEventListener.mostRecentCall.args[1]).toEqual(jasmine.any(Function));
-                    expect(document.addEventListener.mostRecentCall.args[2]).toBeFalsy();
+                    expect(document.addEventListener.calls.mostRecent().args.length).toEqual(3);
+                    expect(document.addEventListener.calls.mostRecent().args[0]).toEqual("offline");
+                    expect(document.addEventListener.calls.mostRecent().args[1]).toEqual(jasmine.any(Function));
+                    expect(document.addEventListener.calls.mostRecent().args[2]).toBeFalsy();
                 });
 
                 describe("calling the addEventListener callback parameter", function () {
                     it("should call the onOffline function", function () {
-                        var callback = document.addEventListener.mostRecentCall.args[1];
+                        var callback = document.addEventListener.calls.mostRecent().args[1];
 
                         callback.apply();
 
@@ -163,29 +161,29 @@ define(["backbone", "utils", "Squire"],
                 it("should call the window setTimeout function", function () {
                     expect(window.setTimeout).toHaveBeenCalled();
 
-                    expect(window.setTimeout.mostRecentCall.args.length).toEqual(2);
-                    expect(window.setTimeout.mostRecentCall.args[0]).toEqual(jasmine.any(Function));
-                    expect(window.setTimeout.mostRecentCall.args[1]).toEqual(2000);
+                    expect(window.setTimeout.calls.mostRecent().args.length).toEqual(2);
+                    expect(window.setTimeout.calls.mostRecent().args[0]).toEqual(jasmine.any(Function));
+                    expect(window.setTimeout.calls.mostRecent().args[1]).toEqual(2000);
                 });
 
                 describe("calling the window setTimeout callback parameter", function () {
                     it("should call the navigator.splashscreen.hide function", function () {
-                        var callback = window.setTimeout.mostRecentCall.args[0];
+                        var callback = window.setTimeout.calls.mostRecent().args[0];
 
-                        spyOn(navigator.splashscreen, "hide").andCallFake(function () {});
+                        spyOn(navigator.splashscreen, "hide").and.callFake(function () {});
 
                         callback.apply();
 
                         expect(navigator.splashscreen.hide).toHaveBeenCalled();
 
-                        expect(navigator.splashscreen.hide.mostRecentCall.args.length).toEqual(0);
+                        expect(navigator.splashscreen.hide.calls.mostRecent().args.length).toEqual(0);
                     });
                 });
             });
 
             describe("has an onOffline function that", function () {
                 beforeEach(function () {
-                    spyOn(appController, "checkConnection").andCallFake(function () { });
+                    spyOn(appController, "checkConnection").and.callFake(function () { });
 
                     appController.onOffline();
                 });
@@ -220,8 +218,8 @@ define(["backbone", "utils", "Squire"],
 
                 describe("when the utils.hasNetworkConnection function returns true", function () {
                     beforeEach(function () {
-                        spyOn(mockUtils, "hasNetworkConnection").andCallFake(function () { return true; });
-                        spyOn(mockAppView, "closeCheckConnection").andCallFake(function () { });
+                        spyOn(mockUtils, "hasNetworkConnection").and.callFake(function () { return true; });
+                        spyOn(mockAppView, "closeCheckConnection").and.callFake(function () { });
                     });
 
                     it("should call the closeCheckConnection function on AppView", function () {
@@ -232,7 +230,7 @@ define(["backbone", "utils", "Squire"],
 
                     describe("when the utils.isFn function returns true", function () {
                         it("should call the callback", function () {
-                            spyOn(mockUtils, "isFn").andCallFake(function () { return true; });
+                            spyOn(mockUtils, "isFn").and.callFake(function () { return true; });
 
                             appController.checkConnection(checkConnectionCallback);
 
@@ -242,7 +240,7 @@ define(["backbone", "utils", "Squire"],
 
                     describe("when the utils.isFn function returns false", function () {
                         it("should not call the callback", function () {
-                            spyOn(mockUtils, "isFn").andCallFake(function () { return false; });
+                            spyOn(mockUtils, "isFn").and.callFake(function () { return false; });
 
                             appController.checkConnection(checkConnectionCallback);
 
@@ -253,12 +251,12 @@ define(["backbone", "utils", "Squire"],
 
                 describe("when the utils.hasNetworkConnection function returns false", function () {
                     beforeEach(function () {
-                        spyOn(mockUtils, "hasNetworkConnection").andCallFake(function () { return false; });
+                        spyOn(mockUtils, "hasNetworkConnection").and.callFake(function () { return false; });
                     });
 
                     describe("should call the navigateCheckConnection function on AppView", function () {
                         it("by passing a callback", function () {
-                            spyOn(mockAppView, "navigateCheckConnection").andCallFake(function () { });
+                            spyOn(mockAppView, "navigateCheckConnection").and.callFake(function () { });
 
                             appController.checkConnection(checkConnectionCallback);
 
@@ -269,17 +267,17 @@ define(["backbone", "utils", "Squire"],
                             var navigateCheckConnectionCallback;
 
                             beforeEach(function () {
-                                spyOn(mockAppView, "navigateCheckConnection").andCallFake(function () { });
+                                spyOn(mockAppView, "navigateCheckConnection").and.callFake(function () { });
 
                                 appController.checkConnection(checkConnectionCallback);
 
                                 navigateCheckConnectionCallback =
-                                    mockAppView.navigateCheckConnection.mostRecentCall.args[0];
+                                    mockAppView.navigateCheckConnection.calls.mostRecent().args[0];
 
-                                spyOn(mockAppView, "showLoadingIndicator").andCallFake(function (callback) { });
-                                spyOn(window, "setTimeout").andCallThrough();
-                                spyOn(mockAppView, "hideLoadingIndicator").andCallFake(function (callback) { });
-                                spyOn(appController, "checkConnection").andCallFake(function () { });
+                                spyOn(mockAppView, "showLoadingIndicator").and.callFake(function (callback) { });
+                                spyOn(window, "setTimeout").and.callThrough();
+                                spyOn(mockAppView, "hideLoadingIndicator").and.callFake(function (callback) { });
+                                spyOn(appController, "checkConnection").and.callFake(function () { });
 
                                 navigateCheckConnectionCallback.call();
                             });
@@ -287,24 +285,24 @@ define(["backbone", "utils", "Squire"],
                             it("should call the showLoadingIndicator function on AppView", function () {
                                 expect(mockAppView.showLoadingIndicator).toHaveBeenCalled();
 
-                                expect(mockAppView.showLoadingIndicator.mostRecentCall.args.length).toEqual(1);
-                                expect(mockAppView.showLoadingIndicator.mostRecentCall.args[0]).toBeFalsy();
+                                expect(mockAppView.showLoadingIndicator.calls.mostRecent().args.length).toEqual(1);
+                                expect(mockAppView.showLoadingIndicator.calls.mostRecent().args[0]).toBeFalsy();
                             });
 
                             describe("should call the setTimeout function on window", function () {
                                 it("by passing a callback", function () {
                                     expect(window.setTimeout).toHaveBeenCalled();
 
-                                    expect(window.setTimeout.mostRecentCall.args.length).toEqual(2);
-                                    expect(window.setTimeout.mostRecentCall.args[0]).toEqual(jasmine.any(Function));
-                                    expect(window.setTimeout.mostRecentCall.args[1]).toEqual(2000);
+                                    expect(window.setTimeout.calls.mostRecent().args.length).toEqual(2);
+                                    expect(window.setTimeout.calls.mostRecent().args[0]).toEqual(jasmine.any(Function));
+                                    expect(window.setTimeout.calls.mostRecent().args[1]).toEqual(2000);
                                 });
 
                                 describe("when the callback is called", function () {
                                     var setTimeoutCallback;
 
                                     beforeEach(function () {
-                                        setTimeoutCallback = window.setTimeout.mostRecentCall.args[0];
+                                        setTimeoutCallback = window.setTimeout.calls.mostRecent().args[0];
 
                                         setTimeoutCallback.call();
                                     });
@@ -312,8 +310,8 @@ define(["backbone", "utils", "Squire"],
                                     it("should call the hideLoadingIndicator function on AppView", function () {
                                         expect(mockAppView.hideLoadingIndicator).toHaveBeenCalled();
 
-                                        expect(mockAppView.hideLoadingIndicator.mostRecentCall.args.length).toEqual(1);
-                                        expect(mockAppView.hideLoadingIndicator.mostRecentCall.args[0]).toBeFalsy();
+                                        expect(mockAppView.hideLoadingIndicator.calls.mostRecent().args.length).toEqual(1);
+                                        expect(mockAppView.hideLoadingIndicator.calls.mostRecent().args[0]).toBeFalsy();
                                     });
 
                                     it("should call the checkConnection function", function () {
@@ -334,7 +332,7 @@ define(["backbone", "utils", "Squire"],
                 };
 
                 beforeEach(function () {
-                    spyOn(mockAppView, "displayDialog").andCallFake(function () { });
+                    spyOn(mockAppView, "displayDialog").and.callFake(function () { });
 
                     appController.alert(alertOptions);
                 });
@@ -350,8 +348,8 @@ define(["backbone", "utils", "Squire"],
                 it("should call the displayDialog function on AppView", function () {
                     expect(mockAppView.displayDialog).toHaveBeenCalled();
 
-                    expect(mockAppView.displayDialog.mostRecentCall.args.length).toEqual(1);
-                    expect(mockAppView.displayDialog.mostRecentCall.args[0]).toEqual(alertOptions);
+                    expect(mockAppView.displayDialog.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockAppView.displayDialog.calls.mostRecent().args[0]).toEqual(alertOptions);
                 });
             });
         });

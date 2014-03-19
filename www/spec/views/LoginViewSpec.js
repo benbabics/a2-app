@@ -5,7 +5,7 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
 
         var squire = new Squire(),
             mockFacade = {
-                publish: function (channel, event) { }
+                publish: function () { }
             },
             mockMustache = Mustache,
             mockLoginModel = {
@@ -21,13 +21,12 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
         squire.mock("facade", mockFacade);
 
         describe("A Login View", function () {
-            var jasmineAsync = new AsyncSpec(this);
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
             jasmine.getFixtures().fixturesPath = "";
 
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["views/LoginView"], function (JasmineLoginView) {
                     loadFixtures("index.html");
 
@@ -70,7 +69,7 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                 });
 
                 it("should set el", function () {
-                    expect(loginView.el).toBe("#login");
+                    expect(loginView.el).toEqual("#login");
                 });
 
                 it("should set el nodeName", function () {
@@ -84,7 +83,7 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(LoginView.__super__, "initialize").andCallFake(function () {});
+                    spyOn(LoginView.__super__, "initialize").and.callFake(function () {});
 
                     loginView.initialize();
                 });
@@ -104,8 +103,8 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
 
             describe("has a pageCreate function that", function () {
                 beforeEach(function () {
-                    spyOn(mockMustache, "render").andCallThrough();
-                    spyOn(loginView, "formatRequiredFields").andCallThrough();
+                    spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(loginView, "formatRequiredFields").and.callThrough();
                     loginView.initialize();
                 });
 
@@ -119,9 +118,9 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
 
                 it("should call Mustache.render() on the template", function () {
                     expect(mockMustache.render).toHaveBeenCalled();
-                    expect(mockMustache.render.mostRecentCall.args.length).toEqual(2);
-                    expect(mockMustache.render.mostRecentCall.args[0]).toEqual(loginView.template);
-                    expect(mockMustache.render.mostRecentCall.args[1]).toEqual(globals.login.configuration);
+                    expect(mockMustache.render.calls.mostRecent().args.length).toEqual(2);
+                    expect(mockMustache.render.calls.mostRecent().args[0]).toEqual(loginView.template);
+                    expect(mockMustache.render.calls.mostRecent().args[1]).toEqual(globals.login.configuration);
                 });
 
                 it("should set the content", function () {
@@ -142,8 +141,8 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                 };
 
                 beforeEach(function () {
-                    spyOn(mockEvent, "preventDefault").andCallThrough();
-                    spyOn(loginModel, "save").andCallFake(function () { });
+                    spyOn(mockEvent, "preventDefault").and.callThrough();
+                    spyOn(loginModel, "save").and.callFake(function () { });
                     loginView.submitForm(mockEvent);
                 });
 
@@ -162,62 +161,64 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                 describe("when calling save() on the model", function () {
                     it("should send the model as the first argument", function () {
                         expect(loginModel.save).toHaveBeenCalled();
-                        expect(loginModel.save.mostRecentCall.args.length).toEqual(2);
-                        expect(loginModel.save.mostRecentCall.args[0]).toEqual(loginModel.toJSON());
+                        expect(loginModel.save.calls.mostRecent().args.length).toEqual(2);
+                        expect(loginModel.save.calls.mostRecent().args[0]).toEqual(loginModel.toJSON());
                     });
 
-                    describe("sends as the second argument the options object with a success callback that", function () {
-                        var model = {},
-                            response = {},
-                            options;
+                    describe("sends as the second argument the options object with a success callback that",
+                        function () {
+                            var model = {},
+                                response = {},
+                                options;
 
-                        beforeEach(function () {
-                            options = loginModel.save.mostRecentCall.args[1];
+                            beforeEach(function () {
+                                options = loginModel.save.calls.mostRecent().args[1];
 
-                            spyOn(loginView, "trigger").andCallFake(function () { });
-                            spyOn(loginModel, "clear").andCallFake(function () { });
-                            spyOn(loginModel, "set").andCallFake(function () { });
-                            spyOn(loginView, "resetForm").andCallFake(function () { });
+                                spyOn(loginView, "trigger").and.callFake(function () { });
+                                spyOn(loginModel, "clear").and.callFake(function () { });
+                                spyOn(loginModel, "set").and.callFake(function () { });
+                                spyOn(loginView, "resetForm").and.callFake(function () { });
 
-                            options.success.call(loginView, model, response);
-                        });
+                                options.success.call(loginView, model, response);
+                            });
 
-                        it("should trigger loginSuccess", function () {
-                            expect(loginView.trigger).toHaveBeenCalled();
-                            expect(loginView.trigger.mostRecentCall.args.length).toEqual(2);
-                            expect(loginView.trigger.mostRecentCall.args[0]).toEqual("loginSuccess");
-                            expect(loginView.trigger.mostRecentCall.args[1]).toEqual(response);
-                        });
+                            it("should trigger loginSuccess", function () {
+                                expect(loginView.trigger).toHaveBeenCalled();
+                                expect(loginView.trigger.calls.mostRecent().args.length).toEqual(2);
+                                expect(loginView.trigger.calls.mostRecent().args[0]).toEqual("loginSuccess");
+                                expect(loginView.trigger.calls.mostRecent().args[1]).toEqual(response);
+                            });
 
-                        it ("should clear the model", function () {
-                            expect(loginModel.clear).toHaveBeenCalledWith();
-                        });
+                            it ("should clear the model", function () {
+                                expect(loginModel.clear).toHaveBeenCalledWith();
+                            });
 
-                        it ("should reset the model with defaults", function () {
-                            expect(loginModel.set).toHaveBeenCalledWith(loginModel.defaults);
-                        });
+                            it ("should reset the model with defaults", function () {
+                                expect(loginModel.set).toHaveBeenCalledWith(loginModel.defaults);
+                            });
 
-                        it ("should reset the form", function () {
-                            expect(loginView.resetForm).toHaveBeenCalledWith();
-                        });
+                            it ("should reset the form", function () {
+                                expect(loginView.resetForm).toHaveBeenCalledWith();
+                            });
 
-                    });
+                        }
+                    );
 
                     describe("sends as the second argument the options object with a error callback that", function () {
                         var options;
 
                         beforeEach(function () {
-                            options = loginModel.save.mostRecentCall.args[1];
+                            options = loginModel.save.calls.mostRecent().args[1];
 
-                            spyOn(loginView, "trigger").andCallFake(function () { });
+                            spyOn(loginView, "trigger").and.callFake(function () { });
 
                             options.error.call(loginView);
                         });
 
                         it("should trigger loginFailure", function () {
                             expect(loginView.trigger).toHaveBeenCalled();
-                            expect(loginView.trigger.mostRecentCall.args.length).toEqual(1);
-                            expect(loginView.trigger.mostRecentCall.args[0]).toEqual("loginFailure");
+                            expect(loginView.trigger.calls.mostRecent().args.length).toEqual(1);
+                            expect(loginView.trigger.calls.mostRecent().args[0]).toEqual("loginFailure");
                         });
 
                     });

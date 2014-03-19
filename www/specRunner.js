@@ -30,9 +30,9 @@ require.config({
         // Testing
         "jasmine": "../spec/libs/jasmine/jasmine",
         "jasmine-html": "../spec/libs/jasmine/jasmine-html",
-        "jasmine-async": "../spec/libs/jasmine/jasmine.async",
         "jasmine-jquery": "../spec/libs/jasmine/jasmine-jquery",
         "jasmine-sinon": "../spec/libs/jasmine/jasmine-sinon",
+        "jasmine-boot": "../spec/libs/jasmine/boot",
         "sinon": "../spec/libs/sinon",
         "Squire": "../spec/libs/squire",
 
@@ -67,12 +67,13 @@ require.config({
             "deps": ["jasmine"],
             "exports": "jasmine"
         },
-        "jasmine-async": {
-            "exports": "AsyncSpec"
-        },
         "jasmine-jquery": {
             "deps": ["jasmine"],
             "exports": "jasmine"
+        },
+        "jasmine-boot": {
+            deps: ["jasmine", "jasmine-html"],
+            exports: "jasmine"
         },
         "sinon": {
             "exports": "sinon"
@@ -83,81 +84,82 @@ require.config({
     waitSeconds: 0
 });
 
-require(["jquery-mobile", "underscore", "jquery", "jasmine-html", "jasmine-async", "sinon", "cordova"],
-    function (jqueryMobile, _, $, jasmine) {
+// Define all of the specs here.  These are RequireJS modules.
+
+/***********************************************************************************************************
+ * All require.config changes and specs added in this file need to also be applied to teamcitySpecRunner.js
+ **********************************************************************************************************/
+
+var specs = [
+    // Views
+    "spec/views/AboutViewSpec.js",
+    "spec/views/AppViewSpec.js",
+    "spec/views/ContactUsViewSpec.js",
+    "spec/views/DriverListViewSpec.js",
+    "spec/views/DriverSearchViewSpec.js",
+    "spec/views/DriverViewSpec.js",
+    "spec/views/FormViewSpec.js",
+    "spec/views/HomeViewSpec.js",
+    "spec/views/LoginViewSpec.js",
+    "spec/views/UpdatePromptViewSpec.js",
+    "spec/views/ValidationFormViewSpec.js",
+
+    // Models
+    "spec/models/AjaxModelSpec.js",
+    "spec/models/AppModelSpec.js",
+    "spec/models/CompanyModelSpec.js",
+    "spec/models/ContactUsModelSpec.js",
+    "spec/models/DepartmentModelSpec.js",
+    "spec/models/DriverModelSpec.js",
+    "spec/models/DriverSearchModelSpec.js",
+    "spec/models/LoginModelSpec.js",
+    "spec/models/UserModelSpec.js",
+
+    // Collections
+    "spec/collections/DepartmentCollectionSpec.js",
+    "spec/collections/DriverCollectionSpec.js",
+
+    // Controllers
+    "spec/controllers/AboutControllerSpec.js",
+    "spec/controllers/AppControllerSpec.js",
+    "spec/controllers/ContactUsControllerSpec.js",
+    "spec/controllers/DriverControllerSpec.js",
+    "spec/controllers/HomeControllerSpec.js",
+    "spec/controllers/LoginControllerSpec.js",
+    "spec/controllers/UpdatePromptControllerSpec.js",
+
+    // Routers
+    "spec/routers/AppRouterSpec.js",
+
+    // Subscribers
+    "spec/subscribers/aboutSpec.js",
+    "spec/subscribers/appSpec.js",
+    "spec/subscribers/contactUsSpec.js",
+    "spec/subscribers/driverSpec.js",
+    "spec/subscribers/homeSpec.js",
+    "spec/subscribers/loginSpec.js",
+    "spec/subscribers/mainSpec.js",
+    "spec/subscribers/updatePromptSpec.js",
+
+    // Helpers
+    "spec/helpers/facadeSpec.js",
+    "spec/helpers/mediatorSpec.js",
+    "spec/helpers/utilsSpec.js"
+];
+
+// Load Jasmine - This will still create all of the normal Jasmine browser globals unless "boot.js" is re-written to
+// use the AMD or UMD specs. `boot.js` will do a bunch of configuration and attach it's initializers to
+// "window.onload()".  Because we are using RequireJS "window.onload()" has already been triggered so we have to
+// manually call it again. This will initialize the HTML Reporter and execute the environment.
+require(["jquery-mobile", "jasmine-boot", "cordova"],
+    function () {
         function onAppReady() {
-            var jasmineEnv = jasmine.getEnv(),
-                htmlReporter = new jasmine.HtmlReporter(),
-                specs = [];
 
-            jasmineEnv.updateInterval = 1000;
-            jasmineEnv.addReporter(htmlReporter);
+            // Load the specs
+            require(specs, function () {
 
-            // Push all spec files here
-
-            /***********************************************************************************************************
-             * All require.config changes and specs added in this file need to also be applied to teamcitySpecRunner.js
-             **********************************************************************************************************/
-
-            // Views
-            specs.push("spec/views/AboutViewSpec.js");
-            specs.push("spec/views/AppViewSpec.js");
-            specs.push("spec/views/ContactUsViewSpec.js");
-            specs.push("spec/views/DriverListViewSpec.js");
-            specs.push("spec/views/DriverSearchViewSpec.js");
-            specs.push("spec/views/DriverViewSpec.js");
-            specs.push("spec/views/FormViewSpec.js");
-            specs.push("spec/views/HomeViewSpec.js");
-            specs.push("spec/views/LoginViewSpec.js");
-            specs.push("spec/views/UpdatePromptViewSpec.js");
-            specs.push("spec/views/ValidationFormViewSpec.js");
-
-            // Models
-            specs.push("spec/models/AjaxModelSpec.js");
-            specs.push("spec/models/AppModelSpec.js");
-            specs.push("spec/models/CompanyModelSpec.js");
-            specs.push("spec/models/ContactUsModelSpec.js");
-            specs.push("spec/models/DepartmentModelSpec.js");
-            specs.push("spec/models/DriverModelSpec.js");
-            specs.push("spec/models/DriverSearchModelSpec.js");
-            specs.push("spec/models/LoginModelSpec.js");
-            specs.push("spec/models/UserModelSpec.js");
-
-            // Collections
-            specs.push("spec/collections/DepartmentCollectionSpec.js");
-            specs.push("spec/collections/DriverCollectionSpec.js");
-
-            // Controllers
-            specs.push("spec/controllers/AboutControllerSpec.js");
-            specs.push("spec/controllers/AppControllerSpec.js");
-            specs.push("spec/controllers/ContactUsControllerSpec.js");
-            specs.push("spec/controllers/DriverControllerSpec.js");
-            specs.push("spec/controllers/HomeControllerSpec.js");
-            specs.push("spec/controllers/LoginControllerSpec.js");
-            specs.push("spec/controllers/UpdatePromptControllerSpec.js");
-
-            // Routers
-            specs.push("spec/routers/AppRouterSpec.js");
-
-            // Subscribers
-            specs.push("spec/subscribers/aboutSpec.js");
-            specs.push("spec/subscribers/appSpec.js");
-            specs.push("spec/subscribers/contactUsSpec.js");
-            specs.push("spec/subscribers/driverSpec.js");
-            specs.push("spec/subscribers/homeSpec.js");
-            specs.push("spec/subscribers/loginSpec.js");
-            specs.push("spec/subscribers/mainSpec.js");
-            specs.push("spec/subscribers/updatePromptSpec.js");
-
-            // Helpers
-            specs.push("spec/helpers/facadeSpec.js");
-            specs.push("spec/helpers/mediatorSpec.js");
-            specs.push("spec/helpers/utilsSpec.js");
-
-            $(function () {
-                require(specs, function () {
-                    jasmineEnv.execute();
-                });
+                // Initialize the HTML Reporter and execute the environment (setup by "boot.js")
+                window.onload();
             });
         }
 

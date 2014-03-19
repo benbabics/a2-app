@@ -25,12 +25,10 @@ define(["utils", "backbone", "Squire"],
         squire.mock("views/AboutView", Squire.Helpers.returns(mockAboutView));
 
         describe("An About Controller", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["controllers/AboutController"], function (AboutController) {
                     appModel.set(mockAppModel);
-                    spyOn(AppModel, "getInstance").andCallFake(function () { return appModel; });
+                    spyOn(AppModel, "getInstance").and.callFake(function () { return appModel; });
 
                     aboutController = AboutController;
 
@@ -67,7 +65,7 @@ define(["utils", "backbone", "Squire"],
 
                 describe("when initializing the AboutView", function () {
                     beforeEach(function () {
-                        spyOn(aboutController, "constructor").andCallThrough();
+                        spyOn(aboutController, "constructor").and.callThrough();
                     });
 
                     it("should set the aboutView variable to a new AboutView object", function () {

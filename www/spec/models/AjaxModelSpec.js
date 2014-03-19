@@ -22,9 +22,7 @@ define(["Squire", "globals", "backbone", "utils"],
         squire.mock("backbone", mockBackbone);
 
         describe("An Ajax Model", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["models/AjaxModel"], function (JasmineAjaxModel) {
                     AjaxModel = JasmineAjaxModel;
                     ajaxModel = new AjaxModel();
@@ -64,46 +62,46 @@ define(["Squire", "globals", "backbone", "utils"],
                     beforeEach(function () {
                         options.beforeSend = originalBeforeSendCallback;
 
-                        spyOn(mockBackbone, "sync").andCallFake(function () {
+                        spyOn(mockBackbone, "sync").and.callFake(function () {
                             var deferred = utils.Deferred();
 
                             deferred.reject();
                             return deferred.promise();
                         });
-                        spyOn(mockFacade, "publish").andCallFake(function () { });
+                        spyOn(mockFacade, "publish").and.callFake(function () { });
 
                         ajaxModel.sync(method, model, options);
 
-                        overriddenOptions = mockBackbone.sync.mostRecentCall.args[2];
+                        overriddenOptions = mockBackbone.sync.calls.mostRecent().args[2];
 
                         overriddenOptions.beforeSend.call(ajaxModel, jqXHR);
                     });
 
                     it("should call set the AJAX_CLIENT property of the Request Header", function () {
                         expect(jqXHR.setRequestHeader).toHaveBeenCalled();
-                        expect(jqXHR.setRequestHeader.calls[0].args.length).toEqual(2);
-                        expect(jqXHR.setRequestHeader.calls[0].args[0]).toEqual("AJAX_CLIENT");
-                        expect(jqXHR.setRequestHeader.calls[0].args[1]).toEqual(1);
+                        expect(jqXHR.setRequestHeader.calls.argsFor(0).length).toEqual(2);
+                        expect(jqXHR.setRequestHeader.calls.argsFor(0)[0]).toEqual("AJAX_CLIENT");
+                        expect(jqXHR.setRequestHeader.calls.argsFor(0)[1]).toEqual(1);
                     });
 
                     it("should call set the Cache-Control property of the Request Header", function () {
                         expect(jqXHR.setRequestHeader).toHaveBeenCalled();
-                        expect(jqXHR.setRequestHeader.calls[1].args.length).toEqual(2);
-                        expect(jqXHR.setRequestHeader.calls[1].args[0]).toEqual("Cache-Control");
-                        expect(jqXHR.setRequestHeader.calls[1].args[1]).toEqual("no-cache");
+                        expect(jqXHR.setRequestHeader.calls.argsFor(1).length).toEqual(2);
+                        expect(jqXHR.setRequestHeader.calls.argsFor(1)[0]).toEqual("Cache-Control");
+                        expect(jqXHR.setRequestHeader.calls.argsFor(1)[1]).toEqual("no-cache");
                     });
 
                     it("should call the original beforeSend callback passed in to options", function () {
                         expect(originalBeforeSendCallback).toHaveBeenCalled();
-                        expect(originalBeforeSendCallback.mostRecentCall.args.length).toEqual(1);
-                        expect(originalBeforeSendCallback.mostRecentCall.args[0]).toEqual(jqXHR);
+                        expect(originalBeforeSendCallback.calls.mostRecent().args.length).toEqual(1);
+                        expect(originalBeforeSendCallback.calls.mostRecent().args[0]).toEqual(jqXHR);
                     });
 
                 });
 
                 describe("when the call to sync() finishes successfully", function () {
                     beforeEach(function () {
-                        spyOn(mockBackbone, "sync").andCallFake(function () {
+                        spyOn(mockBackbone, "sync").and.callFake(function () {
                             var deferred = utils.Deferred();
 
                             deferred.resolve(mockDataResponse);
@@ -134,7 +132,7 @@ define(["Squire", "globals", "backbone", "utils"],
                                     mockDataResponse.message.text = "An error occurred.";
                                     options.error = originalErrorCallback;
 
-                                    spyOn(mockFacade, "publish").andCallFake(function () { });
+                                    spyOn(mockFacade, "publish").and.callFake(function () { });
 
                                     ajaxModel.sync(method, model, options);
                                 });
@@ -143,11 +141,11 @@ define(["Squire", "globals", "backbone", "utils"],
                                     var modifiedOptions;
 
                                     expect(mockBackbone.sync).toHaveBeenCalled();
-                                    expect(mockBackbone.sync.mostRecentCall.args.length).toEqual(3);
-                                    expect(mockBackbone.sync.mostRecentCall.args[0]).toEqual(method);
-                                    expect(mockBackbone.sync.mostRecentCall.args[1]).toEqual(model);
+                                    expect(mockBackbone.sync.calls.mostRecent().args.length).toEqual(3);
+                                    expect(mockBackbone.sync.calls.mostRecent().args[0]).toEqual(method);
+                                    expect(mockBackbone.sync.calls.mostRecent().args[1]).toEqual(model);
 
-                                    modifiedOptions = mockBackbone.sync.mostRecentCall.args[2];
+                                    modifiedOptions = mockBackbone.sync.calls.mostRecent().args[2];
 
                                     expect(modifiedOptions.success).toBeNull();
                                     expect(modifiedOptions.error).toBeNull();
@@ -158,11 +156,11 @@ define(["Squire", "globals", "backbone", "utils"],
                                     var alertDetails;
 
                                     expect(mockFacade.publish).toHaveBeenCalled();
-                                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(3);
-                                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("app");
-                                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("alert");
+                                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
 
-                                    alertDetails = mockFacade.publish.mostRecentCall.args[2];
+                                    alertDetails = mockFacade.publish.calls.mostRecent().args[2];
 
                                     expect(alertDetails.title).toEqual(globals.WEBSERVICE.REQUEST_ERROR_TITLE);
                                     expect(alertDetails.message).toEqual(mockDataResponse.message.text);
@@ -186,7 +184,7 @@ define(["Squire", "globals", "backbone", "utils"],
                                     mockDataResponse.message.text = null;
                                     options.error = originalErrorCallback;
 
-                                    spyOn(mockFacade, "publish").andCallFake(function () { });
+                                    spyOn(mockFacade, "publish").and.callFake(function () { });
 
                                     ajaxModel.sync(method, model, options);
                                 });
@@ -195,11 +193,11 @@ define(["Squire", "globals", "backbone", "utils"],
                                     var modifiedOptions;
 
                                     expect(mockBackbone.sync).toHaveBeenCalled();
-                                    expect(mockBackbone.sync.mostRecentCall.args.length).toEqual(3);
-                                    expect(mockBackbone.sync.mostRecentCall.args[0]).toEqual(method);
-                                    expect(mockBackbone.sync.mostRecentCall.args[1]).toEqual(model);
+                                    expect(mockBackbone.sync.calls.mostRecent().args.length).toEqual(3);
+                                    expect(mockBackbone.sync.calls.mostRecent().args[0]).toEqual(method);
+                                    expect(mockBackbone.sync.calls.mostRecent().args[1]).toEqual(model);
 
-                                    modifiedOptions = mockBackbone.sync.mostRecentCall.args[2];
+                                    modifiedOptions = mockBackbone.sync.calls.mostRecent().args[2];
 
                                     expect(modifiedOptions.success).toBeNull();
                                     expect(modifiedOptions.error).toBeNull();
@@ -210,11 +208,11 @@ define(["Squire", "globals", "backbone", "utils"],
                                     var alertDetails;
 
                                     expect(mockFacade.publish).toHaveBeenCalled();
-                                    expect(mockFacade.publish.mostRecentCall.args.length).toEqual(3);
-                                    expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("app");
-                                    expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("alert");
+                                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
 
-                                    alertDetails = mockFacade.publish.mostRecentCall.args[2];
+                                    alertDetails = mockFacade.publish.calls.mostRecent().args[2];
 
                                     expect(alertDetails.title).toEqual(globals.WEBSERVICE.REQUEST_ERROR_TITLE);
                                     expect(alertDetails.message).toEqual(globals.WEBSERVICE.REQUEST_ERROR_UNKNOWN_MESSAGE);
@@ -249,11 +247,11 @@ define(["Squire", "globals", "backbone", "utils"],
                             ajaxModel.sync(method, model, options);
 
                             expect(mockBackbone.sync).toHaveBeenCalled();
-                            expect(mockBackbone.sync.mostRecentCall.args.length).toEqual(3);
-                            expect(mockBackbone.sync.mostRecentCall.args[0]).toEqual(method);
-                            expect(mockBackbone.sync.mostRecentCall.args[1]).toEqual(model);
+                            expect(mockBackbone.sync.calls.mostRecent().args.length).toEqual(3);
+                            expect(mockBackbone.sync.calls.mostRecent().args[0]).toEqual(method);
+                            expect(mockBackbone.sync.calls.mostRecent().args[1]).toEqual(model);
 
-                            modifiedOptions = mockBackbone.sync.mostRecentCall.args[2];
+                            modifiedOptions = mockBackbone.sync.calls.mostRecent().args[2];
 
                             expect(modifiedOptions.success).toBeNull();
                             expect(modifiedOptions.error).toBeNull();
@@ -269,9 +267,9 @@ define(["Squire", "globals", "backbone", "utils"],
                                 ajaxModel.sync(method, model, options);
 
                                 expect(originalSuccessCallback).toHaveBeenCalled();
-                                expect(originalSuccessCallback.mostRecentCall.args.length).toEqual(1);
+                                expect(originalSuccessCallback.calls.mostRecent().args.length).toEqual(1);
 
-                                responseSentToCallback = originalSuccessCallback.mostRecentCall.args[0];
+                                responseSentToCallback = originalSuccessCallback.calls.mostRecent().args[0];
 
                                 expect(responseSentToCallback.data).toEqual(mockDataResponse.data[0]);
                                 expect(responseSentToCallback.message).toEqual(mockDataResponse.message.text);
@@ -287,9 +285,9 @@ define(["Squire", "globals", "backbone", "utils"],
                                 ajaxModel.sync(method, model, options);
 
                                 expect(originalSuccessCallback).toHaveBeenCalled();
-                                expect(originalSuccessCallback.mostRecentCall.args.length).toEqual(1);
+                                expect(originalSuccessCallback.calls.mostRecent().args.length).toEqual(1);
 
-                                responseSentToCallback = originalSuccessCallback.mostRecentCall.args[0];
+                                responseSentToCallback = originalSuccessCallback.calls.mostRecent().args[0];
 
                                 expect(responseSentToCallback.data).toEqual(mockDataResponse.data);
                                 expect(responseSentToCallback.message).toEqual(mockDataResponse.message.text);
@@ -305,13 +303,13 @@ define(["Squire", "globals", "backbone", "utils"],
                         originalErrorCallback = jasmine.createSpy("error() spy");
 
                     beforeEach(function () {
-                        spyOn(mockBackbone, "sync").andCallFake(function () {
+                        spyOn(mockBackbone, "sync").and.callFake(function () {
                             var deferred = utils.Deferred();
 
                             deferred.reject();
                             return deferred.promise();
                         });
-                        spyOn(mockFacade, "publish").andCallFake(function () { });
+                        spyOn(mockFacade, "publish").and.callFake(function () { });
 
                         options.error = originalErrorCallback;
 
@@ -322,11 +320,11 @@ define(["Squire", "globals", "backbone", "utils"],
                         var modifiedOptions;
 
                         expect(mockBackbone.sync).toHaveBeenCalled();
-                        expect(mockBackbone.sync.mostRecentCall.args.length).toEqual(3);
-                        expect(mockBackbone.sync.mostRecentCall.args[0]).toEqual(method);
-                        expect(mockBackbone.sync.mostRecentCall.args[1]).toEqual(model);
+                        expect(mockBackbone.sync.calls.mostRecent().args.length).toEqual(3);
+                        expect(mockBackbone.sync.calls.mostRecent().args[0]).toEqual(method);
+                        expect(mockBackbone.sync.calls.mostRecent().args[1]).toEqual(model);
 
-                        modifiedOptions = mockBackbone.sync.mostRecentCall.args[2];
+                        modifiedOptions = mockBackbone.sync.calls.mostRecent().args[2];
 
                         expect(modifiedOptions.success).toBeNull();
                         expect(modifiedOptions.error).toBeNull();
@@ -337,11 +335,11 @@ define(["Squire", "globals", "backbone", "utils"],
                         var alertDetails;
 
                         expect(mockFacade.publish).toHaveBeenCalled();
-                        expect(mockFacade.publish.mostRecentCall.args.length).toEqual(3);
-                        expect(mockFacade.publish.mostRecentCall.args[0]).toEqual("app");
-                        expect(mockFacade.publish.mostRecentCall.args[1]).toEqual("alert");
+                        expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                        expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                        expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
 
-                        alertDetails = mockFacade.publish.mostRecentCall.args[2];
+                        alertDetails = mockFacade.publish.calls.mostRecent().args[2];
 
                         expect(alertDetails.title).toEqual(globals.WEBSERVICE.REQUEST_ERROR_TITLE);
                         expect(alertDetails.message).toEqual(globals.WEBSERVICE.REQUEST_ERROR_UNKNOWN_MESSAGE);

@@ -11,11 +11,9 @@ define(["globals", "Squire"],
             appModel;
 
         describe("An AppModel", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["models/AppModel"], function (AppModel) {
-                    spyOn(ApplicationInfo, "getBuildVersion").andCallFake(function (successCallback) { successCallback(MOCK_APPLICATION_INFO.version); });
+                    spyOn(ApplicationInfo, "getBuildVersion").and.callFake(function (successCallback) { successCallback(MOCK_APPLICATION_INFO.version); });
 
                     appModel = AppModel.getInstance();
                     done();
@@ -54,7 +52,7 @@ define(["globals", "Squire"],
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(appModel, "fetch").andCallFake(function () {});
+                    spyOn(appModel, "fetch").and.callFake(function () {});
                     appModel.initialize();
                 });
 
@@ -77,8 +75,8 @@ define(["globals", "Squire"],
                 it("should call the ApplicationInfo getBuildVersion function", function () {
                     expect(ApplicationInfo.getBuildVersion).toHaveBeenCalled();
 
-                    expect(ApplicationInfo.getBuildVersion.mostRecentCall.args.length).toEqual(1);
-                    expect(ApplicationInfo.getBuildVersion.mostRecentCall.args[0]).toEqual(jasmine.any(Function));
+                    expect(ApplicationInfo.getBuildVersion.calls.mostRecent().args.length).toEqual(1);
+                    expect(ApplicationInfo.getBuildVersion.calls.mostRecent().args[0]).toEqual(jasmine.any(Function));
                 });
 
                 it("should set application name with the Application Info's version", function () {
@@ -88,7 +86,7 @@ define(["globals", "Squire"],
                 it("should call fetch", function () {
                     expect(appModel.fetch).toHaveBeenCalled();
 
-                    expect(appModel.fetch.mostRecentCall.args.length).toEqual(0);
+                    expect(appModel.fetch.calls.mostRecent().args.length).toEqual(0);
                 });
             });
 
@@ -96,10 +94,10 @@ define(["globals", "Squire"],
                 beforeEach(function () {
                     var store = {};
 
-                    spyOn(localStorage, "getItem").andCallFake(function (key) {
+                    spyOn(localStorage, "getItem").and.callFake(function (key) {
                         return store[key];
                     });
-                    spyOn(localStorage, "setItem").andCallFake(function (key, value) {
+                    spyOn(localStorage, "setItem").and.callFake(function (key, value) {
                         store[key] = value;
                     });
                 });
@@ -121,7 +119,7 @@ define(["globals", "Squire"],
                     beforeEach(function () {
                         appModel.set("lastWarnVersion", MOCK_APP_INFO.lastWarnVersion);
 
-                        spyOn(appModel, "get").andCallThrough();
+                        spyOn(appModel, "get").and.callThrough();
                         appModel.sync("update", appModel);
                     });
 
@@ -145,19 +143,19 @@ define(["globals", "Squire"],
                         // Set the storage to have values that should get replaced
                         localStorage.setItem(globals.APP.constants.LAST_WARN_VERSION, MOCK_APP_INFO.lastWarnVersion);
 
-                        spyOn(appModel, "set").andCallThrough();
+                        spyOn(appModel, "set").and.callThrough();
                         appModel.sync("create", appModel);
                     });
 
                     it("should set lastWarnVersion in the AppModel to null", function () {
                         expect(appModel.set).toHaveBeenCalled();
 
-                        expect(appModel.set.mostRecentCall.args[0]).toEqual("lastWarnVersion");
-                        expect(appModel.set.mostRecentCall.args[1]).toBeNull();
+                        expect(appModel.set.calls.mostRecent().args[0]).toEqual("lastWarnVersion");
+                        expect(appModel.set.calls.mostRecent().args[1]).toBeNull();
                     });
 
                     it("should call localStorage.setItem 2 times", function () { // 1 of the calls are in the beforeEach
-                        expect(localStorage.setItem.calls.length).toEqual(2);
+                        expect(localStorage.setItem.calls.count()).toEqual(2);
                     });
 
                     it("should set lastWarnVersion in the local storage to null", function () {
@@ -174,19 +172,19 @@ define(["globals", "Squire"],
                     beforeEach(function () {
                         localStorage.setItem(globals.APP.constants.LAST_WARN_VERSION, MOCK_APP_INFO.lastWarnVersion);
 
-                        spyOn(appModel, "set").andCallThrough();
+                        spyOn(appModel, "set").and.callThrough();
                         appModel.sync("read", appModel);
                     });
 
                     it("should call set", function () {
                         expect(appModel.set).toHaveBeenCalled();
 
-                        expect(appModel.set.mostRecentCall.args[0]).toEqual("lastWarnVersion");
-                        expect(appModel.set.mostRecentCall.args[1]).toEqual(MOCK_APP_INFO.lastWarnVersion);
+                        expect(appModel.set.calls.mostRecent().args[0]).toEqual("lastWarnVersion");
+                        expect(appModel.set.calls.mostRecent().args[1]).toEqual(MOCK_APP_INFO.lastWarnVersion);
                     });
 
                     it("should call localStorage.getItem 1 time", function () {
-                        expect(localStorage.getItem.calls.length).toEqual(1);
+                        expect(localStorage.getItem.calls.count()).toEqual(1);
                     });
 
                     it("should set lastWarnVersion", function () {

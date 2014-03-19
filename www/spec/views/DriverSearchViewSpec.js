@@ -50,13 +50,12 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
         squire.mock("utils", utils);
 
         describe("A Driver Search View", function () {
-            var jasmineAsync = new AsyncSpec(this);
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
             jasmine.getFixtures().fixturesPath = "";
 
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["views/DriverSearchView"],
                     function (DriverSearchView) {
                         loadFixtures("index.html");
@@ -101,7 +100,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 });
 
                 it("should set el", function () {
-                    expect(driverSearchView.el).toBe("#driverSearch");
+                    expect(driverSearchView.el).toEqual("#driverSearch");
                 });
 
                 it("should set el nodeName", function () {
@@ -119,7 +118,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(mockMustache, "parse").andCallThrough();
+                    spyOn(mockMustache, "parse").and.callThrough();
                     driverSearchView.initialize();
                 });
 
@@ -148,8 +147,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 var mockConfiguration;
 
                 beforeEach(function () {
-                    spyOn(mockMustache, "render").andCallThrough();
-                    spyOn(driverSearchView, "getConfiguration").andCallFake(function () { return mockConfiguration; });
+                    spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(driverSearchView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
                     driverSearchView.render();
                 });
 
@@ -201,7 +200,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 describe("when utils.size returns 1", function () {
                     beforeEach(function () {
-                        spyOn(utils._, "size").andCallFake(function () { return 1; });
+                        spyOn(utils._, "size").and.callFake(function () { return 1; });
                     });
 
                     it("should return the expected result", function () {
@@ -234,7 +233,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 describe("when utils.size returns > 1", function () {
                     beforeEach(function () {
-                        spyOn(utils._, "size").andCallFake(function () { return 2; });
+                        spyOn(utils._, "size").and.callFake(function () { return 2; });
                     });
 
                     it("should return the expected result", function () {
@@ -274,7 +273,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 };
 
                 beforeEach(function () {
-                    spyOn(mockEvent, "preventDefault").andCallThrough();
+                    spyOn(mockEvent, "preventDefault").and.callThrough();
                     driverSearchView.submitForm(mockEvent);
                 });
 

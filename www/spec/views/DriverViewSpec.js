@@ -25,13 +25,12 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/driver/
         squire.mock("mustache", mockMustache);
 
         describe("A Driver View", function () {
-            var jasmineAsync = new AsyncSpec(this);
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
             jasmine.getFixtures().fixturesPath = "";
 
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["views/DriverView"], function (DriverView) {
                     loadFixtures("index.html");
 
@@ -73,7 +72,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/driver/
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(mockMustache, "parse").andCallThrough();
+                    spyOn(mockMustache, "parse").and.callThrough();
 
                     driverView.initialize();
                 });
@@ -93,7 +92,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/driver/
 
             describe("has a render function that", function () {
                 beforeEach(function () {
-                    spyOn(mockMustache, "render").andCallThrough();
+                    spyOn(mockMustache, "render").and.callThrough();
 
                     driverView.initialize();
                     driverView.render();
@@ -109,9 +108,9 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/driver/
 
                 it("should call Mustache.render() on the template", function () {
                     expect(mockMustache.render).toHaveBeenCalled();
-                    expect(mockMustache.render.mostRecentCall.args.length).toEqual(2);
-                    expect(mockMustache.render.mostRecentCall.args[0]).toEqual(driverView.template);
-                    expect(mockMustache.render.mostRecentCall.args[1]).toEqual(driverModel.toJSON());
+                    expect(mockMustache.render.calls.mostRecent().args.length).toEqual(2);
+                    expect(mockMustache.render.calls.mostRecent().args[0]).toEqual(driverView.template);
+                    expect(mockMustache.render.calls.mostRecent().args[1]).toEqual(driverModel.toJSON());
                 });
 
                 it("sets content", function () {

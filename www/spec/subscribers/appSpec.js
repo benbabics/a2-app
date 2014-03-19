@@ -7,7 +7,7 @@ define(["Squire"],
         var squire = new Squire(),
             mockSubscribe = jasmine.createSpy("subscribe() spy"),
             mockFacade = {
-                subscribeTo: jasmine.createSpy("subscribeTo() spy").andReturn(mockSubscribe)
+                subscribeTo: jasmine.createSpy("subscribeTo() spy").and.returnValue(mockSubscribe)
             },
             mockAppController = {
                 init: function () { },
@@ -20,9 +20,7 @@ define(["Squire"],
         squire.mock("controllers/AppController", mockAppController);
 
         describe("An App Subscriber", function () {
-            var jasmineAsync = new AsyncSpec(this);
-
-            jasmineAsync.beforeEach(function (done) {
+            beforeEach(function (done) {
                 squire.require(["subscribers/app"], function (jasmineAppSubscriber) {
                     appSubscriber = jasmineAppSubscriber;
                     done();
@@ -36,13 +34,13 @@ define(["Squire"],
             it("should call the subscribeTo function on the facade", function () {
                 expect(mockFacade.subscribeTo).toHaveBeenCalled();
 
-                expect(mockFacade.subscribeTo.mostRecentCall.args.length).toEqual(2);
-                expect(mockFacade.subscribeTo.mostRecentCall.args[0]).toEqual("app");
-                expect(mockFacade.subscribeTo.mostRecentCall.args[1]).toEqual(mockAppController);
+                expect(mockFacade.subscribeTo.calls.mostRecent().args.length).toEqual(2);
+                expect(mockFacade.subscribeTo.calls.mostRecent().args[0]).toEqual("app");
+                expect(mockFacade.subscribeTo.calls.mostRecent().args[1]).toEqual(mockAppController);
             });
 
             it("should call subscribe 2 times", function () {
-                expect(mockSubscribe.calls.length).toEqual(2);
+                expect(mockSubscribe.calls.count()).toEqual(2);
             });
 
             it("should subscribe to ready", function () {
@@ -55,7 +53,7 @@ define(["Squire"],
 
             describe("has an init function that", function () {
                 beforeEach(function () {
-                    spyOn(mockAppController, "init").andCallThrough();
+                    spyOn(mockAppController, "init").and.callThrough();
                     appSubscriber.init();
                 });
 
@@ -70,7 +68,7 @@ define(["Squire"],
                 it("should call the init function on the controller", function () {
                     expect(mockAppController.init).toHaveBeenCalled();
 
-                    expect(mockAppController.init.mostRecentCall.args.length).toEqual(0);
+                    expect(mockAppController.init.calls.mostRecent().args.length).toEqual(0);
                 });
             });
         });
