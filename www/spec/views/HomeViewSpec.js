@@ -137,7 +137,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
                         expect(actualContent[0]).not.toBeEmpty();
                     });
 
-                    it("should NOT contain any content if the user is not authenticated", function () {
+                    it("should NOT contain any content if the user is NOT authenticated", function () {
                         homeView.model.set("authenticated", false);
                         homeView.render();
 
@@ -151,7 +151,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
                         expect(actualContent[0]).toContainElement("a[href='#hierarchyManager']");
                     });
 
-                    it("should NOT include a link to the hierarchyManager if the user has multiple accounts", function () {
+                    it("should NOT include a link to the hierarchyManager if the user does NOT have multiple accounts", function () {
                         homeView.model.set("hasMultipleAccounts", false);
                         homeView.render();
 

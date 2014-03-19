@@ -84,68 +84,6 @@ require.config({
     waitSeconds: 0
 });
 
-// Define all of the specs here.  These are RequireJS modules.
-
-/***********************************************************************************************************
- * All require.config changes and specs added in this file need to also be applied to teamcitySpecRunner.js
- **********************************************************************************************************/
-
-var specs = [
-    // Views
-    "spec/views/AboutViewSpec.js",
-    "spec/views/AppViewSpec.js",
-    "spec/views/ContactUsViewSpec.js",
-    "spec/views/DriverListViewSpec.js",
-    "spec/views/DriverSearchViewSpec.js",
-    "spec/views/DriverViewSpec.js",
-    "spec/views/FormViewSpec.js",
-    "spec/views/HomeViewSpec.js",
-    "spec/views/LoginViewSpec.js",
-    "spec/views/UpdatePromptViewSpec.js",
-    "spec/views/ValidationFormViewSpec.js",
-
-    // Models
-    "spec/models/AjaxModelSpec.js",
-    "spec/models/AppModelSpec.js",
-    "spec/models/CompanyModelSpec.js",
-    "spec/models/ContactUsModelSpec.js",
-    "spec/models/DepartmentModelSpec.js",
-    "spec/models/DriverModelSpec.js",
-    "spec/models/DriverSearchModelSpec.js",
-    "spec/models/LoginModelSpec.js",
-    "spec/models/UserModelSpec.js",
-
-    // Collections
-    "spec/collections/DepartmentCollectionSpec.js",
-    "spec/collections/DriverCollectionSpec.js",
-
-    // Controllers
-    "spec/controllers/AboutControllerSpec.js",
-    "spec/controllers/AppControllerSpec.js",
-    "spec/controllers/ContactUsControllerSpec.js",
-    "spec/controllers/DriverControllerSpec.js",
-    "spec/controllers/HomeControllerSpec.js",
-    "spec/controllers/LoginControllerSpec.js",
-    "spec/controllers/UpdatePromptControllerSpec.js",
-
-    // Routers
-    "spec/routers/AppRouterSpec.js",
-
-    // Subscribers
-    "spec/subscribers/aboutSpec.js",
-    "spec/subscribers/appSpec.js",
-    "spec/subscribers/contactUsSpec.js",
-    "spec/subscribers/driverSpec.js",
-    "spec/subscribers/homeSpec.js",
-    "spec/subscribers/loginSpec.js",
-    "spec/subscribers/mainSpec.js",
-    "spec/subscribers/updatePromptSpec.js",
-
-    // Helpers
-    "spec/helpers/facadeSpec.js",
-    "spec/helpers/mediatorSpec.js",
-    "spec/helpers/utilsSpec.js"
-];
 
 // Load Jasmine - This will still create all of the normal Jasmine browser globals unless "boot.js" is re-written to
 // use the AMD or UMD specs. `boot.js` will do a bunch of configuration and attach it's initializers to
@@ -156,11 +94,13 @@ require(["jquery-mobile", "jasmine-boot", "cordova"],
         function onAppReady() {
 
             // Load the specs
-            require(specs, function () {
+            require(specList, // From specList.js
+                function () {
 
-                // Initialize the HTML Reporter and execute the environment (setup by "boot.js")
-                window.onload();
-            });
+                    // Initialize the HTML Reporter and execute the environment (setup by "boot.js")
+                    window.onload();
+                }
+            );
         }
 
         if (document.location.protocol === "file:") {
