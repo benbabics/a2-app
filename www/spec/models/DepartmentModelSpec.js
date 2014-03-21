@@ -100,6 +100,39 @@ define(["Squire", "backbone", "backbone-relational"],
                     it("should set visible", function () {
                         expect(departmentModel.set).toHaveBeenCalledWith("visible", options.visible);
                     });
+
+                    describe("that includes name and displayValue", function () {
+                        var options = {
+                            name        : "Mock Name",
+                            displayValue: "Mock Display Value"
+                        };
+
+                        beforeEach(function () {
+                            departmentModel.initialize(options);
+                        });
+
+                        it("should set name using name", function () {
+                            expect(departmentModel.set).toHaveBeenCalledWith("name", options.name);
+                        });
+
+                        it("should not set name using displayValue", function () {
+                            expect(departmentModel.set).not.toHaveBeenCalledWith("name", options.displayValue);
+                        });
+                    });
+
+                    describe("that includes displayValue and not name", function () {
+                        var options = {
+                            displayValue: "Mock Display Value"
+                        };
+
+                        beforeEach(function () {
+                            departmentModel.initialize(options);
+                        });
+
+                        it("should set name using displayValue", function () {
+                            expect(departmentModel.set).toHaveBeenCalledWith("name", options.displayValue);
+                        });
+                    });
                 });
             });
         });

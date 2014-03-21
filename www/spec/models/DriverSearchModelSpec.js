@@ -26,6 +26,10 @@ define(["backbone", "Squire"],
             });
 
             describe("has property defaults that", function () {
+                it("should set accountId to default", function () {
+                    expect(driverSearchModel.defaults.accountId).toBeNull();
+                });
+
                 it("should set filterFirstName to default", function () {
                     expect(driverSearchModel.defaults.filterFirstName).toBeNull();
                 });
@@ -44,16 +48,6 @@ define(["backbone", "Squire"],
 
                 it("should set filterDepartmentId to default", function () {
                     expect(driverSearchModel.defaults.filterDepartmentId).toBeNull();
-                });
-            });
-
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    driverSearchModel.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(driverSearchModel.initialize).toBeDefined();
                 });
             });
         });

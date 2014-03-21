@@ -26,6 +26,7 @@ var specList =
         "spec/models/UserModelSpec.js",
 
         // Collections
+        "spec/collections/AjaxCollectionSpec.js",
         "spec/collections/DepartmentCollectionSpec.js",
         "spec/collections/DriverCollectionSpec.js",
 

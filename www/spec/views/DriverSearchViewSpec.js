@@ -21,6 +21,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 email: "cornholio@bnbinc.com",
                 selectedCompany: {
                     name: "Beavis and Butthead Inc",
+                    accountId: "3673683",
                     wexAccountNumber: "5764309",
                     driverIdLength: "4",
                     departments: [
@@ -144,7 +145,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
             });
 
             describe("has a render function that", function () {
-                var mockConfiguration;
+                var mockConfiguration = globals.driverSearch.configuration;
 
                 beforeEach(function () {
                     spyOn(mockMustache, "render").and.callThrough();
@@ -274,6 +275,9 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 beforeEach(function () {
                     spyOn(mockEvent, "preventDefault").and.callThrough();
+                    spyOn(driverSearchModel, "set").and.callFake(function () { });
+                    spyOn(driverSearchView, "trigger").and.callFake(function () { });
+
                     driverSearchView.submitForm(mockEvent);
                 });
 
@@ -287,6 +291,14 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 it("should call event.preventDefault", function () {
                     expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                });
+
+                it("should call set on the model", function () {
+                    expect(driverSearchModel.set).toHaveBeenCalledWith("accountId", mockUserModel.selectedCompany.accountId);
+                });
+
+                it("should trigger searchSubmitted", function () {
+                    expect(driverSearchView.trigger).toHaveBeenCalledWith("searchSubmitted");
                 });
             });
         });

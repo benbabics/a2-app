@@ -1,10 +1,10 @@
-define(["backbone", "globals", "models/AppModel"],
-    function (Backbone, globals, AppModel) {
+define(["globals", "models/AppModel", "models/AjaxModel"],
+    function (globals, AppModel, AjaxModel) {
 
         "use strict";
 
 
-        var ContactUsModel = Backbone.Model.extend({
+        var ContactUsModel = AjaxModel.extend({
             defaults: {
                 "sender"         : null,
                 "subject"        : null,

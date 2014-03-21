@@ -1,18 +1,19 @@
-define(["backbone", "utils", "models/DepartmentModel", "backbone-relational"],
-    function (Backbone, utils, DepartmentModel) {
+define(["backbone", "models/DepartmentModel", "backbone-relational"],
+    function (Backbone, DepartmentModel) {
 
         "use strict";
 
 
         var DriverModel = Backbone.RelationalModel.extend({
             defaults: {
-                "driverId"  : null,
-                "firstName" : null,
-                "middleName": null,
-                "lastName"  : null,
-                "status"    : null,
-                "statusDate": null,
-                "department": null
+                "driverId"     : null,
+                "firstName"    : null,
+                "middleName"   : null,
+                "lastName"     : null,
+                "status"       : null,
+                "statusDate"   : null,
+                "department"   : null,
+                "formattedName": null
             },
 
             relations: [
@@ -39,6 +40,35 @@ define(["backbone", "utils", "models/DepartmentModel", "backbone-relational"],
                         this.set("department", department);
                     }
                 }
+
+                this.formatAttributes();
+            },
+
+            formatAttributes: function () {
+                // set formatted attributes
+                this.set("formattedName", function () {
+                    var formmattedName = "";
+
+                    if (this.lastName) {
+                        formmattedName += this.lastName;
+                    }
+
+                    if (this.firstName) {
+                        if (formmattedName.length > 0) {
+                            formmattedName += ", ";
+                        }
+                        formmattedName += this.firstName;
+
+                        if (this.middleName) {
+                            if (formmattedName.length > 0) {
+                                formmattedName += " ";
+                            }
+                            formmattedName += this.middleName;
+                        }
+                    }
+
+                    return formmattedName;
+                });
             }
         });
 

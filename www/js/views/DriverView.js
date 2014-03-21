@@ -18,7 +18,33 @@ define(["backbone", "utils", "mustache", "globals", "text!tmpl/driver/driver.htm
             },
 
             render: function () {
-                this.$el.html(Mustache.render(this.template, this.model.toJSON()));
+                this.$el.html(Mustache.render(this.template, this.getConfiguration()));
+                return this;
+            },
+
+            getConfiguration: function () {
+                var driverConfiguration = null,
+                    driver;
+
+                if (this.model) {
+                    driver = this.model.toJSON();
+                    driverConfiguration = utils._.extend({},
+                        utils.deepClone(globals.driverSearchResults.configuration));
+
+                    // populate configuration details
+                    driverConfiguration.url.value =
+                        globals.driverSearchResults.constants.DRIVER_DETAILS_BASE_URL + driver.driverId;
+                    driverConfiguration.driverName.value = driver.formattedName();
+                    driverConfiguration.driverId.value = driver.driverId;
+                    driverConfiguration.driverStatus.value = driver.status;
+                    if (driver.department) {
+                        driverConfiguration.driverDepartment.value = driver.department.name;
+                    }
+                }
+
+                return {
+                    "driver" : driverConfiguration
+                };
             }
         });
 

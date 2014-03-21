@@ -12,12 +12,29 @@ define(["backbone", "utils", "Squire"],
                 "filterStatus"      : null,
                 "filterDepartmentId": null
             },
+            mockDriverCollection = {
+                fetch: function () { return mockDriverCollection; },
+                once: function () { return mockDriverCollection; },
+                reset: function () { },
+                resetPage: function () { },
+                showAll: function () { }
+            },
             driverSearchModel = new Backbone.Model(),
+            mockDriverListView = {
+                $el: "",
+                constructor: function () { },
+                initialize: function () { },
+                render: function () { },
+                on: function () { },
+                showLoadingIndicator: function () { },
+                hideLoadingIndicator: function () { }
+            },
             mockDriverSearchView = {
                 $el: "",
                 constructor: function () { },
                 initialize: function () { },
-                render: function () { }
+                render: function () { },
+                on: function () { }
             },
             mockUserModel = {
                 "authenticated": "true",
@@ -31,7 +48,9 @@ define(["backbone", "utils", "Squire"],
 
         squire.mock("backbone", Backbone);
         squire.mock("utils", mockUtils);
+        squire.mock("views/DriverListView", Squire.Helpers.returns(mockDriverListView));
         squire.mock("views/DriverSearchView", Squire.Helpers.returns(mockDriverSearchView));
+        squire.mock("collections/DriverCollection", Squire.Helpers.returns(mockDriverCollection));
         squire.mock("models/DriverSearchModel", Squire.Helpers.returns(driverSearchModel));
         squire.mock("models/UserModel", UserModel);
 
@@ -72,6 +91,14 @@ define(["backbone", "utils", "Squire"],
                     expect(driverController.init).toEqual(jasmine.any(Function));
                 });
 
+                it("should set the mockDriverCollection variable to a new DriverCollection object", function () {
+                    expect(driverController.driverCollection).toEqual(mockDriverCollection);
+                });
+
+                it("should set the driverSearchModel variable to a new DriverSearchModel object", function () {
+                    expect(driverController.driverSearchModel).toEqual(driverSearchModel);
+                });
+
                 describe("when initializing the DriverSearchView", function () {
                     beforeEach(function () {
                         spyOn(mockDriverSearchView, "constructor").and.callThrough();
@@ -89,6 +116,45 @@ define(["backbone", "utils", "Squire"],
 
                         // TODO: this is not working, need to figure out how to test
                     });
+                });
+
+                describe("when initializing the DriverListView", function () {
+                    beforeEach(function () {
+                        spyOn(mockDriverListView, "constructor").and.callThrough();
+                    });
+
+                    it("should set the driverListView variable to a new DriverListView object", function () {
+                        expect(driverController.driverListView).toEqual(mockDriverListView);
+                    });
+
+                    xit("should send in the correct parameters to the constructor", function () {
+                        expect(mockDriverListView.constructor).toHaveBeenCalledWith({
+                            collection: mockDriverCollection,
+                            userModel: userModel
+                        });
+
+                        // TODO: this is not working, need to figure out how to test
+                    });
+                });
+
+                it("should register a function as the handler for the view searchSubmitted event", function () {
+                    spyOn(mockDriverSearchView, "on").and.callFake(function () { });
+
+                    driverController.init();
+
+                    expect(mockDriverSearchView.on).toHaveBeenCalledWith("searchSubmitted",
+                                                                         driverController.showSearchResults,
+                                                                         driverController);
+                });
+
+                it("should register a function as the handler for the view loginFailure event", function () {
+                    spyOn(mockDriverListView, "on").and.callFake(function () { });
+
+                    driverController.init();
+
+                    expect(mockDriverListView.on).toHaveBeenCalledWith("showAllDrivers",
+                                                                       driverController.showAllSearchResults,
+                                                                       driverController);
                 });
             });
 
@@ -120,6 +186,231 @@ define(["backbone", "utils", "Squire"],
                     expect(mockUtils.changePage.calls.mostRecent().args[1]).toBeNull();
                     expect(mockUtils.changePage.calls.mostRecent().args[2]).toBeNull();
                     expect(mockUtils.changePage.calls.mostRecent().args[3]).toBeTruthy();
+                });
+            });
+
+            describe("has a showSearchResults function that", function () {
+                beforeEach(function () {
+                    spyOn(mockDriverCollection, "resetPage").and.callFake(function () {});
+                    spyOn(driverController, "updateCollection").and.callFake(function () {});
+
+                    driverController.showSearchResults();
+                });
+
+                it("is defined", function () {
+                    expect(driverController.showSearchResults).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverController.showSearchResults).toEqual(jasmine.any(Function));
+                });
+
+                it("should call resetPage on the Driver Collection", function () {
+                    expect(mockDriverCollection.resetPage).toHaveBeenCalledWith();
+                });
+
+                it("should call updateCollection", function () {
+                    expect(driverController.updateCollection).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a showAllSearchResults function that", function () {
+                beforeEach(function () {
+                    spyOn(mockDriverCollection, "showAll").and.callFake(function () {});
+                    spyOn(driverController, "updateCollection").and.callFake(function () {});
+
+                    driverController.showAllSearchResults();
+                });
+
+                it("is defined", function () {
+                    expect(driverController.showAllSearchResults).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverController.showAllSearchResults).toEqual(jasmine.any(Function));
+                });
+
+                it("should call showAll on the Driver Collection", function () {
+                    expect(mockDriverCollection.showAll).toHaveBeenCalledWith();
+                });
+
+                it("should call updateCollection", function () {
+                    expect(driverController.updateCollection).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has an updateCollection function that", function () {
+                it("is defined", function () {
+                    expect(driverController.updateCollection).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverController.updateCollection).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the call to fetchCollection finishes successfully", function () {
+                    beforeEach(function () {
+                        spyOn(driverController, "fetchCollection").and.callFake(function () {
+                            var deferred = utils.Deferred();
+
+                            deferred.resolve();
+                            return deferred.promise();
+                        });
+
+                        spyOn(mockDriverListView, "showLoadingIndicator").and.callFake(function () {});
+                        spyOn(mockDriverCollection, "reset").and.callFake(function () {});
+                        spyOn(mockDriverListView, "render").and.callFake(function () {});
+                        spyOn(utils, "changePage").and.callFake(function () {});
+                        spyOn(mockDriverListView, "hideLoadingIndicator").and.callFake(function () {});
+
+                        driverController.updateCollection();
+                    });
+
+                    it("should call the showLoadingIndicator function on the Driver List View", function () {
+                        expect(mockDriverListView.showLoadingIndicator).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the reset function on the Driver Collection", function () {
+                        expect(mockDriverCollection.reset).toHaveBeenCalledWith([], { "silent": true });
+                    });
+
+                    it("should call fetchCollection", function () {
+                        expect(driverController.fetchCollection).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the render function on SiteListView", function () {
+                        expect(mockDriverListView.render).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the changePage function on utils", function () {
+                        expect(utils.changePage).toHaveBeenCalledWith(mockDriverListView.$el, null, null, true);
+                    });
+
+                    it("should call the hideLoadingIndicator function on the Driver List View", function () {
+                        expect(mockDriverListView.hideLoadingIndicator).toHaveBeenCalledWith();
+                    });
+                });
+
+                describe("when the call to fetchCollection finishes with a failure", function () {
+                    beforeEach(function () {
+                        spyOn(driverController, "fetchCollection").and.callFake(function () {
+                            var deferred = utils.Deferred();
+
+                            deferred.reject();
+                            return deferred.promise();
+                        });
+
+                        spyOn(mockDriverListView, "showLoadingIndicator").and.callFake(function () {});
+                        spyOn(mockDriverCollection, "reset").and.callFake(function () {});
+                        spyOn(mockDriverListView, "render").and.callFake(function () {});
+                        spyOn(utils, "changePage").and.callFake(function () {});
+                        spyOn(mockDriverListView, "hideLoadingIndicator").and.callFake(function () {});
+
+                        driverController.updateCollection();
+                    });
+
+                    it("should call the showLoadingIndicator function on the Driver List View", function () {
+                        expect(mockDriverListView.showLoadingIndicator).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the reset function on the Driver Collection", function () {
+                        expect(mockDriverCollection.reset).toHaveBeenCalledWith([], { "silent": true });
+                    });
+
+                    it("should call fetchCollection", function () {
+                        expect(driverController.fetchCollection).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the render function on SiteListView", function () {
+                        expect(mockDriverListView.render).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the changePage function on utils", function () {
+                        expect(utils.changePage).toHaveBeenCalledWith(mockDriverListView.$el, null, null, true);
+                    });
+
+                    it("should call the hideLoadingIndicator function on the Driver List View", function () {
+                        expect(mockDriverListView.hideLoadingIndicator).toHaveBeenCalledWith();
+                    });
+                });
+            });
+
+            describe("has a fetchCollection function that", function () {
+                var mockPromiseReturnValue = "Promise Return Value",
+                    mockDeferred = {
+                        promise: function () { return mockPromiseReturnValue; },
+                        reject: function () {},
+                        resolve: function () {}
+                    },
+                    actualReturnValue;
+
+                beforeEach(function () {
+                    spyOn(utils, "Deferred").and.returnValue(mockDeferred);
+                    spyOn(mockDeferred, "promise").and.callThrough();
+                    spyOn(mockDriverCollection, "once").and.callThrough();
+                    spyOn(mockDriverCollection, "fetch").and.callThrough();
+
+                    actualReturnValue = driverController.fetchCollection();
+                });
+
+                it("is defined", function () {
+                    expect(driverController.fetchCollection).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverController.fetchCollection).toEqual(jasmine.any(Function));
+                });
+
+                it("should call once on the Driver Collection on sync", function () {
+                    expect(mockDriverCollection.once)
+                        .toHaveBeenCalledWith("sync", jasmine.any(Function), driverController);
+                });
+
+                describe("when the handler of the sync event is called", function () {
+                    var callback;
+
+                    beforeEach(function () {
+                        spyOn(mockDeferred, "resolve").and.callThrough();
+
+                        callback = mockDriverCollection.once.calls.argsFor(0)[1];
+                        callback.apply();
+                    });
+
+                    it("should call resolve on the Deferred object", function () {
+                        expect(mockDeferred.resolve).toHaveBeenCalledWith();
+                    });
+                });
+
+                it("should call once on the Driver Collection on error", function () {
+                    expect(mockDriverCollection.once)
+                        .toHaveBeenCalledWith("error", jasmine.any(Function), driverController);
+                });
+
+                describe("when the handler of the error event is called", function () {
+                    var callback;
+
+                    beforeEach(function () {
+                        spyOn(mockDeferred, "reject").and.callThrough();
+
+                        callback = mockDriverCollection.once.calls.argsFor(1)[1];
+                        callback.apply();
+                    });
+
+                    it("should call reject on the Deferred object", function () {
+                        expect(mockDeferred.reject).toHaveBeenCalledWith();
+                    });
+                });
+
+                it("should call fetch on the Driver Collection", function () {
+                    expect(mockDriverCollection.fetch).toHaveBeenCalledWith(driverSearchModel.toJSON());
+                });
+
+                it("should call promise on the Deferred object", function () {
+                    expect(mockDeferred.promise).toHaveBeenCalledWith();
+                });
+
+                it("should return the expected value", function () {
+                    expect(actualReturnValue).toEqual(mockPromiseReturnValue);
                 });
             });
         });

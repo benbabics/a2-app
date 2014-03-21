@@ -12,6 +12,7 @@ define(function (require) {
     globals.WEBSERVICE = {
         "ROOT_URL"                     : "@@@STRING_REPLACE_APP_URL@@@",
         "APP_PATH"                     : "/app",
+        "DRIVER_PATH"                  : "/driverMaintenance",
         "USER_AUTH_PATH"               : "/userAuth",
         "REQUEST_ERROR_TITLE"          : "Cannot complete request",
         "REQUEST_ERROR_UNKNOWN_MESSAGE": "Please try again"
@@ -38,6 +39,13 @@ define(function (require) {
 	// Contact Us
     globals.WEBSERVICE.CONTACT_US = {
         "URL": globals.WEBSERVICE.SECURE.ROOT_URL + "/contactUs"
+    };
+    // Driver
+    globals.WEBSERVICE.DRIVER = {
+    };
+    // Driver Search
+    globals.WEBSERVICE.DRIVER.SEARCH = {
+        "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.DRIVER_PATH + "/search"
     };
 
     /**
@@ -194,12 +202,16 @@ define(function (require) {
             "label": "Submit"
         }
     };
+
     /**
      * Page :: Driver Search
      */
     globals.driverSearch = {};
     globals.driverSearch.constants = {
-//        "WEBSERVICE": globals.WEBSERVICE.LOGIN.URL
+        "WEBSERVICE": globals.WEBSERVICE.DRIVER.SEARCH.URL,
+        "DEFAULT_PAGE_NUMBER": 0,
+        "DEFAULT_PAGE_SIZE": 25,
+        "SHOW_ALL_PAGE_SIZE": 1000,
         "ALL": {
             id: "",
             name: "All"
@@ -254,6 +266,44 @@ define(function (require) {
         },
         "submitButton": {
             "label": "Search"
+        }
+    };
+
+    /**
+     * Page :: Driver Search Results
+     */
+    globals.driverSearchResults = {};
+    globals.driverSearchResults.constants = {
+        "TOTAL_RESULTS_FORMAT"   : "Displaying {{numberDisplayed}} of {{totalResults}} results",
+        "NO_RESULTS_MESSAGE"     : "No results found. Please try again.",
+        "DRIVER_DETAILS_BASE_URL": "#driverDetails/"
+    };
+    globals.driverSearchResults.configuration = {
+        "url": {
+            "value": ""
+        },
+        "driverName": {
+            "label": "Driver Name",
+            "value": ""
+        },
+        "driverId": {
+            "label": "Driver ID",
+            "value": ""
+        },
+        "driverStatus": {
+            "label": "Status",
+            "value": ""
+        },
+        "driverDepartment": {
+            "label": "Department",
+            "value": ""
+        },
+        "totalResults": {
+            "value": ""
+        },
+        "submitButton": {
+            "label"  : "Show All Drivers",
+            "visible": null
         }
     };
 

@@ -72,13 +72,13 @@ define(["utils", "backbone", "Squire"],
                         expect(aboutController.aboutView).toEqual(mockAboutView);
                     });
 
-                    xit('should send in the AppModel as the model argument', function () {
+                    xit("should send in the AppModel as the model argument", function () {
                         expect(mockAboutView.constructor).toHaveBeenCalled();
                         expect(mockAboutView.constructor).toHaveBeenCalledWith({
                             model: AppModel.getInstance()
                         });
 
-                        // TODO: this isn't working, need to figure out how to test
+                        // TODO: this is not working, need to figure out how to test
                     });
                 });
             });

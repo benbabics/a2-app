@@ -54,6 +54,10 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                 it("should set department to default", function () {
                     expect(driverModel.defaults.department).toBeNull();
                 });
+
+                it("should set formattedName to default", function () {
+                    expect(driverModel.defaults.formattedName).toBeNull();
+                });
             });
 
             describe("has property relations that", function () {
@@ -75,6 +79,7 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(driverModel, "set").and.callThrough();
+                    spyOn(driverModel, "formatAttributes").and.callFake(function () {});
                 });
 
                 it("is defined", function () {
@@ -167,6 +172,148 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                         expect(actualDepartment.get("departmentId")).toEqual(options.department.id);
                         expect(actualDepartment.get("name")).toEqual(options.department.name);
                         expect(actualDepartment.get("visible")).toEqual(options.department.visible);
+                    });
+                });
+
+                it("should call formatAttributes", function () {
+                    driverModel.initialize();
+                    expect(driverModel.formatAttributes).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a formatAttributes function that", function () {
+                beforeEach(function () {
+                    // re-initialize the model
+                    driverModel.set(driverModel.defaults);
+
+                    spyOn(driverModel, "set").and.callThrough();
+
+                    driverModel.formatAttributes();
+                });
+
+                it("is defined", function () {
+                    expect(driverModel.formatAttributes).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverModel.formatAttributes).toEqual(jasmine.any(Function));
+                });
+
+                it("should call set 1 time", function () {
+                    expect(driverModel.set.calls.count()).toEqual(1);
+                });
+
+                it("should set name", function () {
+                    expect(driverModel.set).toHaveBeenCalledWith("formattedName", jasmine.any(Function));
+                });
+
+                describe("when calling the callback function", function () {
+                    var callback,
+                        actualResult,
+                        expectedResult,
+                        first = "First",
+                        middle = "Middle",
+                        last = "Last";
+
+                    beforeEach(function () {
+                        driverModel.formatAttributes();
+                        callback = driverModel.set.calls.mostRecent().args[1];
+                    });
+
+                    describe("when first, middle and last names all have values", function () {
+                        it("should match expected result", function () {
+                            driverModel.set("firstName", first);
+                            driverModel.set("middleName", middle);
+                            driverModel.set("lastName", last);
+
+                            expectedResult = last + ", " + first + " " + middle;
+                            actualResult = callback.call(driverModel.toJSON());
+                            expect(actualResult).toEqual(expectedResult);
+                        });
+                    });
+
+                    describe("when first name does not have a value", function () {
+                        it("should match expected result", function () {
+                            driverModel.set("firstName", null);
+                            driverModel.set("middleName", middle);
+                            driverModel.set("lastName", last);
+
+                            expectedResult = last;
+                            actualResult = callback.call(driverModel.toJSON());
+                            expect(actualResult).toEqual(expectedResult);
+                        });
+                    });
+
+                    describe("when middle name does not have a value", function () {
+                        it("should match expected result", function () {
+                            driverModel.set("firstName", first);
+                            driverModel.set("middleName", null);
+                            driverModel.set("lastName", last);
+
+                            expectedResult = last + ", " + first;
+                            actualResult = callback.call(driverModel.toJSON());
+                            expect(actualResult).toEqual(expectedResult);
+                        });
+                    });
+
+                    describe("when last name does not have a value", function () {
+                        it("should match expected result", function () {
+                            driverModel.set("firstName", first);
+                            driverModel.set("middleName", middle);
+                            driverModel.set("lastName", null);
+
+                            expectedResult = first + " " + middle;
+                            actualResult = callback.call(driverModel.toJSON());
+                            expect(actualResult).toEqual(expectedResult);
+                        });
+                    });
+
+                    describe("when first and middle names do not have values", function () {
+                        it("should match expected result", function () {
+                            driverModel.set("firstName", null);
+                            driverModel.set("middleName", null);
+                            driverModel.set("lastName", last);
+
+                            expectedResult = last;
+                            actualResult = callback.call(driverModel.toJSON());
+                            expect(actualResult).toEqual(expectedResult);
+                        });
+                    });
+
+                    describe("when first and last names do not have values", function () {
+                        it("should match expected result", function () {
+                            driverModel.set("firstName", null);
+                            driverModel.set("middleName", middle);
+                            driverModel.set("lastName", null);
+
+                            expectedResult = "";
+                            actualResult = callback.call(driverModel.toJSON());
+                            expect(actualResult).toEqual(expectedResult);
+                        });
+                    });
+
+                    describe("when middle and last names do not have values", function () {
+                        it("should match expected result", function () {
+                            driverModel.set("firstName", first);
+                            driverModel.set("middleName", null);
+                            driverModel.set("lastName", null);
+
+                            expectedResult = first;
+                            actualResult = callback.call(driverModel.toJSON());
+                            expect(actualResult).toEqual(expectedResult);
+                        });
+                    });
+
+                    describe("when first, middle and last names do not have values", function () {
+                        it("should match expected result", function () {
+                            driverModel.set("firstName", null);
+                            driverModel.set("middleName", null);
+                            driverModel.set("lastName", null);
+
+                            expectedResult = "";
+                            actualResult = callback.call(driverModel.toJSON());
+                            expect(actualResult).toEqual(expectedResult);
+                        });
                     });
                 });
             });

@@ -81,7 +81,10 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
             submitForm: function (evt) {
                 evt.preventDefault();
 
-                //TODO - This will get finished as part of the display driver search results task
+                // Set the account Id to the currently selected company
+                this.model.set("accountId", this.userModel.get("selectedCompany").get("accountId"));
+
+                this.trigger("searchSubmitted");
             }
         });
 
