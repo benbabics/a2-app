@@ -129,7 +129,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
                     expect(actualContent[0]).toContainHtml(expectedContent);
                 });
 
-                describe("when dynamically rending the template based on the model data", function () {
+                describe("when dynamically rendering the template based on the model data", function () {
                     it("should contain content if the user is authenticated", function () {
                         homeView.model.set("authenticated", true);
                         homeView.render();

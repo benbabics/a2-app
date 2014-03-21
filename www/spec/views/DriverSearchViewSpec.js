@@ -145,12 +145,18 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
             });
 
             describe("has a render function that", function () {
-                var mockConfiguration = globals.driverSearch.configuration;
+                var actualHeader,
+                    actualContent,
+                    mockConfiguration = globals.driverSearch.configuration;
 
                 beforeEach(function () {
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(driverSearchView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
+
                     driverSearchView.render();
+
+                    actualHeader = driverSearchView.$el.find(":jqmData(role=header)");
+                    actualContent = driverSearchView.$el.find(":jqmData(role=content)");
                 });
 
                 it("is defined", function () {
@@ -172,10 +178,9 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     var expectedContent = Mustache.render(searchHeaderTemplate,
                         {
                             "permissions": userModel.get("permissions")
-                        }),
-                        $header = driverSearchView.$el.find(":jqmData(role=header)");
+                        });
 
-                    expect($header[0]).toContainHtml(expectedContent);
+                    expect(actualHeader[0]).toContainHtml(expectedContent);
                 });
 
                 it("should call Mustache.render() on the template", function () {
@@ -183,10 +188,25 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 });
 
                 it("sets content", function () {
-                    var expectedContent = Mustache.render(pageTemplate, mockConfiguration),
-                        $content = driverSearchView.$el.find(":jqmData(role=content)");
+                    var expectedContent = Mustache.render(pageTemplate, mockConfiguration);
 
-                    expect($content[0]).toContainHtml(expectedContent);
+                    expect(actualContent[0]).toContainHtml(expectedContent);
+                });
+
+                describe("when dynamically rendering the template based on the model data", function () {
+                    it("should include a link to the Driver Add page if the user has the MOBILE_DRIVER_ADD permission", function () {
+                        driverSearchView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": true});
+                        driverSearchView.render();
+
+                        expect(actualHeader[0]).toContainElement("a[href='#driverAdd']");
+                    });
+
+                    it("should NOT include a link to the Driver Add page if the user does NOT have the MOBILE_DRIVER_ADD permission", function () {
+                        driverSearchView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": false});
+                        driverSearchView.render();
+
+                        expect(actualHeader[0]).not.toContainElement("a[href='#driverAdd']");
+                    });
                 });
             });
 
