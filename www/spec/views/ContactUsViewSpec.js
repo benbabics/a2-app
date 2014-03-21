@@ -144,8 +144,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                     expect(contactUsView.render).toEqual(jasmine.any(Function));
                 });
 
-                it("should call getConfiguration()", function () {
-                    expect(contactUsView.formatRequiredFields).toHaveBeenCalledWith();
+                it("should call getConfiguration", function () {
+                    expect(contactUsView.getConfiguration).toHaveBeenCalledWith();
                 });
 
                 it("should call Mustache.render() on the template", function () {

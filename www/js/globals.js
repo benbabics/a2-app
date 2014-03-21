@@ -307,5 +307,41 @@ define(function (require) {
         }
     };
 
+    /**
+     * Page :: Driver Edit
+     */
+    globals.driverEdit = {};
+    globals.driverEdit.constants = {
+        "STATUS_ACTIVE": "ACTIVE",
+        "STATUS_TERMINATED": "TERMINATED",
+        "BUTTON_ACTIVATE": "ACTIVATE",
+        "BUTTON_TERMINATE": "TERMINATE"
+    };
+    globals.driverEdit.configuration = {
+        "driverName": {
+            "label": "Driver Name",
+            "value": ""
+        },
+        "driverId": {
+            "label": "Driver ID",
+            "value": ""
+        },
+        "driverDepartment": {
+            "label": "Department",
+            "value": ""
+        },
+        "driverStatus": {
+            "label": "Status",
+            "value": ""
+        },
+        "driverStatusDate": {
+            "label": "Status Date",
+            "value": ""
+        },
+        "submitButton": {
+            "label": ""
+        }
+    };
+
     return globals;
 });

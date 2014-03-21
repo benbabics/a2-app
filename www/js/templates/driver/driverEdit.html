@@ -1,0 +1,21 @@
+<h2 class="ui-title">Driver - Details</h2>
+
+{{#driverName}}
+    <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+{{/driverName}}
+{{#driverId}}
+    <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+{{/driverId}}
+{{#driverDepartment}}
+    <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+{{/driverDepartment}}
+{{#driverStatus}}
+    <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+{{/driverStatus}}
+{{#driverStatusDate}}
+    <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+{{/driverStatusDate}}
+
+{{#submitButton}}
+    <button id="submitChangeStatus-btn" data-role="button" data-theme="b">{{label}}</button>
+{{/submitButton}}

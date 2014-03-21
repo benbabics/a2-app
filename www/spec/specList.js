@@ -5,6 +5,7 @@ var specList =
         "spec/views/AboutViewSpec.js",
         "spec/views/AppViewSpec.js",
         "spec/views/ContactUsViewSpec.js",
+        "spec/views/DriverEditViewSpec.js",
         "spec/views/DriverListViewSpec.js",
         "spec/views/DriverSearchViewSpec.js",
         "spec/views/DriverViewSpec.js",
