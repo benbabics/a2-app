@@ -145,18 +145,42 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
             });
 
             describe("has a render function that", function () {
-                var actualHeader,
-                    actualContent,
-                    mockConfiguration = globals.driverSearch.configuration;
-
                 beforeEach(function () {
-                    spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(driverSearchView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
+                    spyOn(driverSearchView, "renderHeader").and.callFake(function () { });
+                    spyOn(driverSearchView, "renderContent").and.callFake(function () { });
 
                     driverSearchView.render();
+                });
 
+                it("is defined", function () {
+                    expect(driverSearchView.render).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverSearchView.render).toEqual(jasmine.any(Function));
+                });
+
+                it("should call renderHeader", function () {
+                    expect(driverSearchView.renderHeader).toHaveBeenCalledWith();
+                });
+
+                it("should call renderContent", function () {
+                    expect(driverSearchView.renderContent).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a renderHeader function that", function () {
+                var actualHeader;
+
+                beforeEach(function () {
                     actualHeader = driverSearchView.$el.find(":jqmData(role=header)");
-                    actualContent = driverSearchView.$el.find(":jqmData(role=content)");
+                    spyOn(driverSearchView.$el, "find").and.returnValue(actualHeader);
+                    spyOn(actualHeader, "html").and.callThrough();
+                    spyOn(actualHeader, "trigger").and.callThrough();
+                    spyOn(mockMustache, "render").and.callThrough();
+
+                    driverSearchView.renderHeader();
+
                 });
 
                 it("is defined", function () {
@@ -174,39 +198,70 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                         });
                 });
 
-                it("sets the header content", function () {
+                it("should call the html function on the header", function () {
                     var expectedContent = Mustache.render(searchHeaderTemplate,
                         {
                             "permissions": userModel.get("permissions")
                         });
-
-                    expect(actualHeader[0]).toContainHtml(expectedContent);
+                    expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
                 });
 
-                it("should call Mustache.render() on the template", function () {
-                    expect(mockMustache.render).toHaveBeenCalledWith(driverSearchView.template, mockConfiguration);
-                });
-
-                it("sets content", function () {
-                    var expectedContent = Mustache.render(pageTemplate, mockConfiguration);
-
-                    expect(actualContent[0]).toContainHtml(expectedContent);
+                it("should call the trigger function on the header", function () {
+                    expect(actualHeader.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
                     it("should include a link to the Driver Add page if the user has the MOBILE_DRIVER_ADD permission", function () {
                         driverSearchView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": true});
-                        driverSearchView.render();
+                        driverSearchView.renderHeader();
 
                         expect(actualHeader[0]).toContainElement("a[href='#driverAdd']");
                     });
 
                     it("should NOT include a link to the Driver Add page if the user does NOT have the MOBILE_DRIVER_ADD permission", function () {
                         driverSearchView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": false});
-                        driverSearchView.render();
+                        driverSearchView.renderHeader();
 
                         expect(actualHeader[0]).not.toContainElement("a[href='#driverAdd']");
                     });
+                });
+            });
+
+            describe("has a renderContent function that", function () {
+                var actualContent,
+                    mockConfiguration = globals.driverSearch.configuration;
+
+                beforeEach(function () {
+                    actualContent = driverSearchView.$el.find(":jqmData(role=content)");
+
+                    spyOn(driverSearchView.$el, "find").and.returnValue(actualContent);
+                    spyOn(actualContent, "html").and.callThrough();
+                    spyOn(actualContent, "trigger").and.callThrough();
+                    spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(driverSearchView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
+
+                    driverSearchView.render();
+                });
+
+                it("is defined", function () {
+                    expect(driverSearchView.render).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverSearchView.render).toEqual(jasmine.any(Function));
+                });
+
+                it("should call Mustache.render() on the template", function () {
+                    expect(mockMustache.render).toHaveBeenCalledWith(driverSearchView.template, mockConfiguration);
+                });
+
+                it("should call the html function on the content", function () {
+                    var expectedContent = Mustache.render(pageTemplate, mockConfiguration);
+                    expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
+                });
+
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 
@@ -231,7 +286,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                         expectedConfiguration = utils._.extend({}, utils.deepClone(globals.driverSearch.configuration));
 
-                        utils._.each(mockUserModel.selectedCompany.departments, function (department, key, list) {
+                        utils._.each(mockUserModel.selectedCompany.departments, function (department) {
                             departmentListValues.push({
                                 "id"  : department.id,
                                 "name": department.name
@@ -265,7 +320,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                         expectedConfiguration = utils._.extend({}, utils.deepClone(globals.driverSearch.configuration));
                         departmentListValues.push(globals.driverSearch.constants.ALL);
 
-                        utils._.each(mockUserModel.selectedCompany.departments, function (department, key, list) {
+                        utils._.each(mockUserModel.selectedCompany.departments, function (department) {
                             departmentListValues.push({
                                 "id"  : department.id,
                                 "name": department.name
@@ -314,7 +369,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 });
 
                 it("should call set on the model", function () {
-                    expect(driverSearchModel.set).toHaveBeenCalledWith("accountId", mockUserModel.selectedCompany.accountId);
+                    expect(driverSearchModel.set)
+                        .toHaveBeenCalledWith("accountId", mockUserModel.selectedCompany.accountId);
                 });
 
                 it("should trigger searchSubmitted", function () {

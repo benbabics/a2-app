@@ -103,19 +103,22 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
                 });
 
                 describe("when rendering", function () {
+                    var actualContent;
+
                     beforeEach(function () {
-                        spyOn(updatePromptView.$content, "trigger").and.callFake(function () { });
+                        actualContent = updatePromptView.$el.find(":jqmData(role=content)");
+                        spyOn(updatePromptView.$el, "find").and.returnValue(actualContent);
+                        spyOn(actualContent, "html").and.callThrough();
+                        spyOn(actualContent, "trigger").and.callThrough();
                         spyOn(mockMustache, "render").and.callThrough();
 
                         updatePromptView.templateContent = mockFailTemplateContent;
-
                         updatePromptView.render();
                     });
 
-                    it("sets content", function () {
+                    it("should call the html function on the content", function () {
                         var expectedContent = Mustache.render(pageTemplate, updatePromptView.templateContent);
-
-                        expect(updatePromptView.$content[0]).toContainHtml(expectedContent);
+                        expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                     });
 
                     it("should call Mustache.render() on the template", function () {
@@ -123,22 +126,25 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
                             updatePromptView.templateContent);
                     });
 
+                    it("should call the html function on the content", function () {
+                        var expectedContent = Mustache.render(pageTemplate, updatePromptView.templateContent);
+                        expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
+                    });
+
                     it("should contain the title", function () {
-                        expect(updatePromptView.$content[0]).toContainHtml(mockFailTemplateContent.title);
+                        expect(actualContent[0]).toContainHtml(mockFailTemplateContent.title);
                     });
 
                     it("should contain the message", function () {
-                        expect(updatePromptView.$content[0]).toContainHtml(mockFailTemplateContent.message);
+                        expect(actualContent[0]).toContainHtml(mockFailTemplateContent.message);
                     });
 
                     it("should have a properly labeled primary action button", function () {
-                        expect(updatePromptView.$content[0]).toContainHtml(mockFailTemplateContent.primaryBtnLabel);
+                        expect(actualContent[0]).toContainHtml(mockFailTemplateContent.primaryBtnLabel);
                     });
 
                     it("calls the trigger function on updatePromptView.$content", function () {
-                        expect(updatePromptView.$content.trigger).toHaveBeenCalled();
-                        expect(updatePromptView.$content.trigger.calls.mostRecent().args.length).toEqual(1);
-                        expect(updatePromptView.$content.trigger.calls.mostRecent().args[0]).toEqual("create");
+                        expect(actualContent.trigger).toHaveBeenCalledWith("create");
                     });
                 });
             });

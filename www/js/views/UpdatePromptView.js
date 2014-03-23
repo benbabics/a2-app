@@ -26,8 +26,6 @@ define(["globals", "utils", "facade", "backbone", "mustache", "models/AppModel",
                 // set context
                 utils._.bindAll(this, "handleUpdateDismiss", "handleUpdateClick");
 
-                // cache $content
-                this.$content = this.$el.find(":jqmData(role=content)");
                 this.appModel = AppModel.getInstance();
 
                 // parse the template
@@ -35,9 +33,9 @@ define(["globals", "utils", "facade", "backbone", "mustache", "models/AppModel",
             },
 
             render: function () {
-                this.$content.html(Mustache.render(this.template, this.templateContent));
-
-                this.$content.trigger("create");
+                var $content = this.$el.find(":jqmData(role=content)");
+                $content.html(Mustache.render(this.template, this.templateContent));
+                $content.trigger("create");
             },
 
             renderWarn: function () {

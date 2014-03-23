@@ -159,19 +159,42 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
             });
 
             describe("has a render function that", function () {
-                var actualHeader,
-                    actualContent,
-                    mockConfiguration = globals.driverSearchResults.configuration;
-
                 beforeEach(function () {
-                    spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(driverListView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
-                    spyOn(driverCollection, "each").and.callThrough();
+                    spyOn(driverListView, "renderHeader").and.callFake(function () { });
+                    spyOn(driverListView, "renderContent").and.callFake(function () { });
 
                     driverListView.render();
+                });
 
+                it("is defined", function () {
+                    expect(driverListView.render).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverListView.render).toEqual(jasmine.any(Function));
+                });
+
+                it("should call renderHeader", function () {
+                    expect(driverListView.renderHeader).toHaveBeenCalledWith();
+                });
+
+                it("should call renderContent", function () {
+                    expect(driverListView.renderContent).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a renderHeader function that", function () {
+                var actualHeader;
+
+                beforeEach(function () {
                     actualHeader = driverListView.$el.find(":jqmData(role=header)");
-                    actualContent = driverListView.$el.find(":jqmData(role=content)");
+                    spyOn(driverListView.$el, "find").and.returnValue(actualHeader);
+                    spyOn(actualHeader, "html").and.callThrough();
+                    spyOn(actualHeader, "trigger").and.callThrough();
+                    spyOn(mockMustache, "render").and.callThrough();
+
+                    driverListView.renderHeader();
+
                 });
 
                 it("is defined", function () {
@@ -189,37 +212,67 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                         });
                 });
 
-                it("sets the header content", function () {
-                    var expectedContent =
-                            Mustache.render(searchResultsHeaderTemplate, {"permissions": userModel.get("permissions")});
-
-                    expect(actualHeader[0]).toContainHtml(expectedContent);
+                it("should call the html function on the header", function () {
+                    var expectedContent = Mustache.render(searchResultsHeaderTemplate,
+                        {
+                            "permissions": userModel.get("permissions")
+                        });
+                    expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
                 });
 
-                it("should call Mustache.render() on the template", function () {
-                    expect(mockMustache.render).toHaveBeenCalledWith(driverListView.template, mockConfiguration);
-                });
-
-                it("sets content", function () {
-                    var expectedContent = Mustache.render(pageTemplate, mockConfiguration);
-
-                    expect(actualContent[0]).toContainHtml(expectedContent);
+                it("should call the trigger function on the header", function () {
+                    expect(actualHeader.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
                     it("should include a link to the Driver Add page if the user has the MOBILE_DRIVER_ADD permission", function () {
                         driverListView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": true});
-                        driverListView.render();
+                        driverListView.renderHeader();
 
                         expect(actualHeader[0]).toContainElement("a[href='#driverAdd']");
                     });
 
                     it("should NOT include a link to the Driver Add page if the user does NOT have the MOBILE_DRIVER_ADD permission", function () {
                         driverListView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": false});
-                        driverListView.render();
+                        driverListView.renderHeader();
 
                         expect(actualHeader[0]).not.toContainElement("a[href='#driverAdd']");
                     });
+                });
+            });
+
+            describe("has a renderContent function that", function () {
+                var actualContent,
+                    mockConfiguration = globals.driverSearchResults.configuration;
+
+                beforeEach(function () {
+                    actualContent = driverListView.$el.find(":jqmData(role=content)");
+
+                    spyOn(driverListView.$el, "find").and.returnValue(actualContent);
+                    spyOn(actualContent, "html").and.callThrough();
+                    spyOn(actualContent, "trigger").and.callThrough();
+                    spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(driverListView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
+                    spyOn(driverCollection, "each").and.callThrough();
+
+                    driverListView.renderContent();
+                });
+
+                it("is defined", function () {
+                    expect(driverListView.renderContent).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverListView.renderContent).toEqual(jasmine.any(Function));
+                });
+
+                it("should call Mustache.render() on the template", function () {
+                    expect(mockMustache.render).toHaveBeenCalledWith(driverListView.template, mockConfiguration);
+                });
+
+                it("should call the html function on the content", function () {
+                    var expectedContent = Mustache.render(pageTemplate, mockConfiguration);
+                    expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                 });
 
                 it("should call each on the collection sending a function and scope object", function () {
@@ -227,6 +280,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                     expect(driverCollection.each.calls.mostRecent().args.length).toEqual(2);
                     expect(driverCollection.each.calls.mostRecent().args[0]).toEqual(jasmine.any(Function));
                     expect(driverCollection.each.calls.mostRecent().args[1]).toEqual(driverListView);
+                });
+
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

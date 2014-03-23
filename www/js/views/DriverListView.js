@@ -31,19 +31,28 @@ define(["backbone", "utils", "mustache", "globals", "views/DriverView",
             },
 
             render: function () {
-                var $header = this.$el.find(":jqmData(role=header)"),
-                    $content = this.$el.find(":jqmData(role=content)");
+                this.renderHeader();
+                this.renderContent();
+            },
+
+            renderHeader: function () {
+                var $header = this.$el.find(":jqmData(role=header)");
+
+                $header.html(Mustache.render(this.headerTemplate,
+                    {
+                        "permissions": this.userModel.get("permissions")
+                    }));
+                $header.trigger("create");
+            },
+
+            renderContent: function () {
+                var $content = this.$el.find(":jqmData(role=content)");
 
                 // TODO - Figure out why assigning $content.find("#driverSearchResultList") to a variable and using
                 // the variable rather that calling find each time resulted in no results getting added to the list
 
                 // empty list
                 $content.find("#driverSearchResultList").empty();
-
-                $header.html(Mustache.render(this.headerTemplate,
-                    {
-                        "permissions": this.userModel.get("permissions")
-                    }));
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
 
@@ -59,6 +68,8 @@ define(["backbone", "utils", "mustache", "globals", "views/DriverView",
                     // This call throws an exception if called during startup before the list is ready
                     $content.find("#driverSearchResultList").listview("refresh");
                 } catch (e) {}
+
+                $content.trigger("create");
             },
 
             getConfiguration: function () {

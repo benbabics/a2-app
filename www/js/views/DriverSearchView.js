@@ -34,15 +34,25 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
             },
 
             render: function () {
-                var $header = this.$el.find(":jqmData(role=header)"),
-                    $content = this.$el.find(":jqmData(role=content)");
+                this.renderHeader();
+                this.renderContent();
+            },
+
+            renderHeader: function () {
+                var $header = this.$el.find(":jqmData(role=header)");
 
                 $header.html(Mustache.render(this.headerTemplate,
                     {
                         "permissions": this.userModel.get("permissions")
                     }));
+                $header.trigger("create");
+            },
+
+            renderContent: function () {
+                var $content = this.$el.find(":jqmData(role=content)");
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
+                $content.trigger("create");
             },
 
             getConfiguration: function () {

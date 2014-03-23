@@ -122,13 +122,18 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
             });
 
             describe("has a render function that", function () {
-                var expectedConfiguration;
+                var actualContent,
+                    expectedConfiguration;
 
                 beforeEach(function () {
                     expectedConfiguration = utils._.extend({}, utils.deepClone(globals.contactUs.configuration));
                     expectedConfiguration.sender.value = mockUserModel.email;
                     expectedConfiguration.authenticated = mockUserModel.authenticated;
 
+                    actualContent = contactUsView.$el.find(":jqmData(role=content)");
+                    spyOn(contactUsView.$el, "find").and.returnValue(actualContent);
+                    spyOn(actualContent, "html").and.callThrough();
+                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(contactUsView, "getConfiguration").and.callFake(function() { return expectedConfiguration; });
                     spyOn(contactUsView, "formatRequiredFields").and.callThrough();
@@ -155,15 +160,17 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                     expect(mockMustache.render.calls.mostRecent().args[1]).toEqual(expectedConfiguration);
                 });
 
-                it("should set the content", function () {
-                    var $content = contactUsView.$el.find(":jqmData(role=content)"),
-                        expectedContent = Mustache.render(pageTemplate, expectedConfiguration);
-
-                    expect($content[0]).toContainHtml(expectedContent);
+                it("should call the html function on the content", function () {
+                    var expectedContent = Mustache.render(pageTemplate, expectedConfiguration);
+                    expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                 });
 
                 it("should call formatRequiredFields()", function () {
                     expect(contactUsView.formatRequiredFields).toHaveBeenCalledWith();
+                });
+
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

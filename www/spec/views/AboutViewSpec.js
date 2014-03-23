@@ -93,7 +93,13 @@ define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-
             });
 
             describe("has a pageCreate function that", function () {
+                var actualContent;
+
                 beforeEach(function () {
+                    actualContent = aboutView.$el.find(":jqmData(role=content)");
+                    spyOn(aboutView.$el, "find").and.returnValue(actualContent);
+                    spyOn(actualContent, "html").and.callThrough();
+                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     aboutView.initialize();
                 });
@@ -110,11 +116,13 @@ define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-
                     expect(mockMustache.render).toHaveBeenCalledWith(aboutView.template, aboutView.model.toJSON());
                 });
 
-                it("sets content", function () {
-                    var expectedContent = Mustache.render(pageTemplate, appModel.toJSON()),
-                        $content = aboutView.$el.find(":jqmData(role=content)");
+                it("should call the html function on the content", function () {
+                    var expectedContent = Mustache.render(pageTemplate, appModel.toJSON());
+                    expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
+                });
 
-                    expect($content[0]).toContainHtml(expectedContent);
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
         });
