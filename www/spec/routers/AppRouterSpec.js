@@ -40,6 +40,10 @@ define(["utils", "Squire", "backbone"],
                     expect(appRouter.routes.driverSearch).toEqual("showDriverSearch");
                 });
 
+                it("should set 'driverDetails(/)(:driverId)' to showDriverDetails", function () {
+                    expect(appRouter.routes["driverDetails(/)(:driverId)"]).toEqual("showDriverDetails");
+                });
+
                 it("should set '*page' to changePage", function () {
                     expect(appRouter.routes["*page"]).toEqual("changePage");
                 });
@@ -94,6 +98,31 @@ define(["utils", "Squire", "backbone"],
                     expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
                     expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("driver");
                     expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigateSearch");
+                });
+            });
+
+            describe("has a showDriverDetails function that", function () {
+                var mockDriverId = "123";
+
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callThrough();
+
+                    appRouter.showDriverDetails(mockDriverId);
+                });
+
+                it("is defined", function () {
+                    expect(appRouter.showDriverDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appRouter.showDriverDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("driver");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigateDriverDetails");
+                    expect(mockFacade.publish.calls.mostRecent().args[2]).toEqual(mockDriverId);
                 });
             });
 

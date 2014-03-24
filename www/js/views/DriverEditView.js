@@ -1,5 +1,6 @@
-define(["backbone", "utils", "mustache", "globals", "text!tmpl/driver/driverEdit.html"],
-    function (Backbone, utils, Mustache, globals, pageTemplate) {
+define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverReactivateModel",
+        "models/DriverTerminateModel", "text!tmpl/driver/driverEdit.html"],
+    function (Backbone, utils, facade, Mustache, globals, DriverReactivateModel, DriverTerminateModel, pageTemplate) {
 
         "use strict";
 
@@ -31,6 +32,8 @@ define(["backbone", "utils", "mustache", "globals", "text!tmpl/driver/driverEdit
                 var $content = this.$el.find(":jqmData(role=content)");
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
+
+                $content.trigger("create");
             },
 
             getConfiguration: function () {
@@ -53,7 +56,50 @@ define(["backbone", "utils", "mustache", "globals", "text!tmpl/driver/driverEdit
                     driverConfiguration.submitButton.label = globals.driverEdit.constants.BUTTON_TERMINATE;
                 }
 
-                return driverConfiguration;
+                return {
+                    "driver"     : driverConfiguration,
+                    "permissions": this.userModel.get("permissions")
+                };
+            },
+
+            reactivateDriver: function () {
+                var self = this,
+                    driverReactivateModel = new DriverReactivateModel();
+
+                driverReactivateModel.initialize(this.model.toJSON());
+
+                driverReactivateModel.save(driverReactivateModel.toJSON(), {
+                    success: function (model, response) {
+                        self.trigger("reactivateDriverSuccess", response);
+                    }
+                });
+            },
+
+            terminateDriver: function () {
+                var self = this,
+                    driverTerminateModel = new DriverTerminateModel();
+
+                driverTerminateModel.initialize(this.model.toJSON());
+
+                driverTerminateModel.save(driverTerminateModel.toJSON(), {
+                    success: function (model, response) {
+                        self.trigger("terminateDriverSuccess", response);
+                    }
+                });
+            },
+
+            confirmTerminateDriver: function () {
+                var self = this;
+
+                facade.publish("app", "alert", {
+                    title             : globals.driverTerminate.constants.CONFIRMATION_TITLE,
+                    message           : globals.driverTerminate.constants.CONFIRMATION_MESSAGE,
+                    primaryBtnLabel   : globals.driverTerminate.constants.OK_BTN_TEXT,
+                    primaryBtnHandler : function () {
+                        self.terminateDriver();
+                    },
+                    secondaryBtnLabel : globals.driverTerminate.constants.CANCEL_BTN_TEXT
+                });
             },
 
             /*
@@ -62,7 +108,12 @@ define(["backbone", "utils", "mustache", "globals", "text!tmpl/driver/driverEdit
             changeStatus: function (evt) {
                 evt.preventDefault();
 
-                //TODO - Finish as part of MOBILE-2200
+                if (this.model.get("status") === globals.driverEdit.constants.STATUS_TERMINATED) {
+                    this.reactivateDriver();
+                }
+                else {
+                    this.confirmTerminateDriver();
+                }
             }
         });
 

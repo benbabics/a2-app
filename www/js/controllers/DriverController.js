@@ -1,6 +1,7 @@
-define(["jclass", "utils", "collections/DriverCollection", "models/UserModel", "models/DriverSearchModel",
-        "views/DriverListView", "views/DriverSearchView"],
-    function (JClass, utils, DriverCollection, UserModel, DriverSearchModel, DriverListView, DriverSearchView) {
+define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", "models/UserModel",
+        "models/DriverSearchModel", "views/DriverEditView", "views/DriverListView", "views/DriverSearchView"],
+    function (JClass, globals, utils, facade, DriverCollection, UserModel, DriverSearchModel,
+              DriverEditView, DriverListView, DriverSearchView) {
 
         "use strict";
 
@@ -12,6 +13,7 @@ define(["jclass", "utils", "collections/DriverCollection", "models/UserModel", "
 
         DriverController = JClass.extend({
             driverCollection: null,
+            driverEditView: null,
             driverListView: null,
             driverSearchModel: null,
             driverSearchView: null,
@@ -22,6 +24,11 @@ define(["jclass", "utils", "collections/DriverCollection", "models/UserModel", "
             init: function () {
                 this.driverCollection = new DriverCollection();
                 this.driverSearchModel = new DriverSearchModel();
+
+                // create edit view
+                this.driverEditView = new DriverEditView({
+                    userModel: UserModel.getInstance()
+                });
 
                 // create search view
                 this.driverSearchView = new DriverSearchView({
@@ -36,6 +43,8 @@ define(["jclass", "utils", "collections/DriverCollection", "models/UserModel", "
                 });
 
                 // listen for events
+                this.driverEditView.on("reactivateDriverSuccess terminateDriverSuccess",
+                                       this.showDriverStatusChangeDetails, this);
                 this.driverSearchView.on("searchSubmitted", this.showSearchResults, this);
                 this.driverListView.on("showAllDrivers", this.showAllSearchResults, this);
             },
@@ -43,6 +52,25 @@ define(["jclass", "utils", "collections/DriverCollection", "models/UserModel", "
             navigateSearch: function () {
                 this.driverSearchView.render();
                 utils.changePage(this.driverSearchView.$el, null, null, true);
+            },
+
+            navigateDriverDetails: function (driverId) {
+                this.driverEditView.model = this.driverCollection.findWhere({"driverId": driverId});
+                this.driverEditView.render();
+                utils.changePage(this.driverEditView.$el);
+            },
+
+            showDriverStatusChangeDetails: function (driverChangeStatusResponse) {
+                var self = this;
+
+                facade.publish("app", "alert", {
+                    title          : globals.driverEdit.constants.STATUS_CHANGE_SUCCESS_TITLE,
+                    message        : driverChangeStatusResponse.message,
+                    primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
+                    popupafterclose:   function () {
+                        self.updateCollection();
+                    }
+                });
             },
 
             showSearchResults: function () {

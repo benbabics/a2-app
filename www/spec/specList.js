@@ -22,7 +22,9 @@ var specList =
         "spec/models/ContactUsModelSpec.js",
         "spec/models/DepartmentModelSpec.js",
         "spec/models/DriverModelSpec.js",
+        "spec/models/DriverReactivateModelSpec.js",
         "spec/models/DriverSearchModelSpec.js",
+        "spec/models/DriverTerminateModelSpec.js",
         "spec/models/LoginModelSpec.js",
         "spec/models/UserModelSpec.js",
 

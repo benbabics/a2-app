@@ -43,9 +43,17 @@ define(function (require) {
     // Driver
     globals.WEBSERVICE.DRIVER = {
     };
+    // Driver Reactivate
+    globals.WEBSERVICE.DRIVER.REACTIVATE = {
+        "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.DRIVER_PATH + "/reactivate"
+    };
     // Driver Search
     globals.WEBSERVICE.DRIVER.SEARCH = {
         "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.DRIVER_PATH + "/search"
+    };
+    // Driver Terminate
+    globals.WEBSERVICE.DRIVER.TERMINATE = {
+        "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.DRIVER_PATH + "/terminate"
     };
 
     /**
@@ -312,6 +320,7 @@ define(function (require) {
      */
     globals.driverEdit = {};
     globals.driverEdit.constants = {
+        "STATUS_CHANGE_SUCCESS_TITLE": "Driver Status Confirmation",
         "STATUS_ACTIVE": "ACTIVE",
         "STATUS_TERMINATED": "TERMINATED",
         "BUTTON_ACTIVATE": "ACTIVATE",
@@ -341,6 +350,27 @@ define(function (require) {
         "submitButton": {
             "label": ""
         }
+    };
+
+    /**
+     * Driver Reactivate
+     */
+    globals.driverReactivate = {};
+    globals.driverReactivate.constants = {
+        "WEBSERVICE": globals.WEBSERVICE.DRIVER.REACTIVATE.URL
+    };
+
+    /**
+     * Driver Terminate
+     */
+    globals.driverTerminate = {};
+    globals.driverTerminate.constants = {
+        "WEBSERVICE": globals.WEBSERVICE.DRIVER.TERMINATE.URL,
+        "SUCCESS_TITLE": "Driver Status Confirmation",
+        "CONFIRMATION_TITLE": "Terminate<br/>Driver",
+        "CONFIRMATION_MESSAGE": "Are you sure you want to terminate the driver?",
+        "CANCEL_BTN_TEXT": "Cancel",
+        "OK_BTN_TEXT": "Terminate"
     };
 
     return globals;

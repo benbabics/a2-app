@@ -5,12 +5,25 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
         "use strict";
 
         var squire = new Squire(),
+            mockFacade = {
+                publish: function () { }
+            },
             mockMustache = Mustache,
             mockUserModel = {
                 "authenticated": "true",
                 "email": "mobiledevelopment@wexinc.com"
             },
             userModel = new Backbone.Model(),
+            driverReactivateModel = {
+                initialize: function () {},
+                save: function () {},
+                toJSON: function () {}
+            },
+            driverTerminateModel = {
+                initialize: function () {},
+                save: function () {},
+                toJSON: function () {}
+            },
             mockDriverModel = {
                 "driverId"  : "354t25ty",
                 "firstName" : "Homer",
@@ -30,6 +43,9 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
         squire.mock("mustache", mockMustache);
         squire.mock("backbone", Backbone);
+        squire.mock("facade", mockFacade);
+        squire.mock("models/DriverReactivateModel", Squire.Helpers.returns(driverReactivateModel));
+        squire.mock("models/DriverTerminateModel", Squire.Helpers.returns(driverTerminateModel));
 
         describe("A Driver Edit View", function () {
 
@@ -120,11 +136,17 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
             });
 
             describe("has a render function that", function () {
-                var mockConfiguration;
+                var actualContent,
+                    mockConfiguration;
 
                 beforeEach(function () {
                     mockConfiguration = utils._.extend({}, utils.deepClone(globals.driverEdit.configuration));
 
+                    actualContent = driverEditView.$el.find(":jqmData(role=content)");
+
+                    spyOn(driverEditView.$el, "find").and.returnValue(actualContent);
+                    spyOn(actualContent, "html").and.callThrough();
+                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(driverEditView, "getConfiguration").and.callFake(function() { return mockConfiguration; });
 
@@ -147,11 +169,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     expect(mockMustache.render).toHaveBeenCalledWith(driverEditView.template, mockConfiguration);
                 });
 
-                it("should set the content", function () {
-                    var $content = driverEditView.$el.find(":jqmData(role=content)"),
-                        expectedContent = Mustache.render(pageTemplate, mockConfiguration);
+                it("should call the html function on the content", function () {
+                    var expectedContent = Mustache.render(pageTemplate, mockConfiguration);
+                    expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
+                });
 
-                    expect($content[0]).toContainHtml(expectedContent);
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 
@@ -166,7 +190,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                 describe("when the driver is terminated", function () {
                     it("should return the expected result", function () {
-                        var expectedConfiguration,
+                        var expectedConfiguration = {
+                                "driver": null,
+                                "permissions": null
+                            },
                             actualConfiguration,
                             driverModelJSON;
 
@@ -174,16 +201,18 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                         driverModelJSON = driverModel.toJSON();
 
-                        expectedConfiguration = utils._.extend({}, utils.deepClone(globals.driverEdit.configuration));
-                        expectedConfiguration.driverName.value = driverModelJSON.lastName + ", " +
+                        expectedConfiguration.driver = utils._.extend({},
+                            utils.deepClone(globals.driverEdit.configuration));
+                        expectedConfiguration.driver.driverName.value = driverModelJSON.lastName + ", " +
                             driverModelJSON.firstName + " " + driverModelJSON.middleName;
-                        expectedConfiguration.driverId.value = driverModelJSON.driverId;
-                        expectedConfiguration.driverStatus.value = driverModelJSON.status;
-                        expectedConfiguration.driverStatusDate.value = driverModelJSON.statusDate;
+                        expectedConfiguration.driver.driverId.value = driverModelJSON.driverId;
+                        expectedConfiguration.driver.driverStatus.value = driverModelJSON.status;
+                        expectedConfiguration.driver.driverStatusDate.value = driverModelJSON.statusDate;
                         if (driverModelJSON.department) {
-                            expectedConfiguration.driverDepartment.value = driverModelJSON.department.name;
+                            expectedConfiguration.driver.driverDepartment.value = driverModelJSON.department.name;
                         }
-                        expectedConfiguration.submitButton.label = globals.driverEdit.constants.BUTTON_ACTIVATE;
+                        expectedConfiguration.driver.submitButton.label = globals.driverEdit.constants.BUTTON_ACTIVATE;
+                        expectedConfiguration.permissions = userModel.get("permissions");
 
                         actualConfiguration = driverEditView.getConfiguration();
 
@@ -193,7 +222,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                 describe("when the driver is active", function () {
                     it("should return the expected result", function () {
-                        var expectedConfiguration,
+                        var expectedConfiguration = {
+                                "driver": null,
+                                "permissions": null
+                            },
                             actualConfiguration,
                             driverModelJSON;
 
@@ -201,20 +233,172 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                         driverModelJSON = driverModel.toJSON();
 
-                        expectedConfiguration = utils._.extend({}, utils.deepClone(globals.driverEdit.configuration));
-                        expectedConfiguration.driverName.value = driverModelJSON.lastName + ", " +
+                        expectedConfiguration.driver = utils._.extend({},
+                            utils.deepClone(globals.driverEdit.configuration));
+                        expectedConfiguration.driver.driverName.value = driverModelJSON.lastName + ", " +
                             driverModelJSON.firstName + " " + driverModelJSON.middleName;
-                        expectedConfiguration.driverId.value = driverModelJSON.driverId;
-                        expectedConfiguration.driverStatus.value = driverModelJSON.status;
-                        expectedConfiguration.driverStatusDate.value = driverModelJSON.statusDate;
+                        expectedConfiguration.driver.driverId.value = driverModelJSON.driverId;
+                        expectedConfiguration.driver.driverStatus.value = driverModelJSON.status;
+                        expectedConfiguration.driver.driverStatusDate.value = driverModelJSON.statusDate;
                         if (driverModelJSON.department) {
-                            expectedConfiguration.driverDepartment.value = driverModelJSON.department.name;
+                            expectedConfiguration.driver.driverDepartment.value = driverModelJSON.department.name;
                         }
-                        expectedConfiguration.submitButton.label = globals.driverEdit.constants.BUTTON_TERMINATE;
+                        expectedConfiguration.driver.submitButton.label = globals.driverEdit.constants.BUTTON_TERMINATE;
+                        expectedConfiguration.permissions = userModel.get("permissions");
 
                         actualConfiguration = driverEditView.getConfiguration();
 
                         expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
+                });
+            });
+
+            describe("has a reactivateDriver function that", function () {
+                beforeEach(function () {
+                    spyOn(driverReactivateModel, "initialize").and.callThrough();
+                    spyOn(driverReactivateModel, "save").and.callThrough();
+                    spyOn(driverReactivateModel, "toJSON").and.returnValue({"driverId": "1234"});
+
+                    driverEditView.reactivateDriver();
+                });
+
+                it("is defined", function () {
+                    expect(driverEditView.reactivateDriver).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverEditView.reactivateDriver).toEqual(jasmine.any(Function));
+                });
+
+                describe("when calling save() on the driver activate model", function () {
+                    it("should send the model as the first argument", function () {
+                        expect(driverReactivateModel.save).toHaveBeenCalled();
+                        expect(driverReactivateModel.save.calls.mostRecent().args.length).toEqual(2);
+                        expect(driverReactivateModel.save.calls.mostRecent().args[0])
+                            .toEqual(driverReactivateModel.toJSON());
+                    });
+
+                    describe("sends as the second argument the options object with a success callback that",
+                        function () {
+                            var response = {},
+                                model,
+                                options;
+
+                            beforeEach(function () {
+                                spyOn(driverEditView, "trigger").and.callFake(function () { });
+
+                                options = driverReactivateModel.save.calls.mostRecent().args[1];
+                                options.success.call(driverEditView, model, response);
+                            });
+
+                            it("should trigger contactUsSuccess", function () {
+                                expect(driverEditView.trigger).toHaveBeenCalled();
+                                expect(driverEditView.trigger.calls.mostRecent().args.length).toEqual(2);
+                                expect(driverEditView.trigger.calls.mostRecent().args[0])
+                                    .toEqual("reactivateDriverSuccess");
+                                expect(driverEditView.trigger.calls.mostRecent().args[1]).toEqual(response);
+                            });
+                        }
+                    );
+                });
+            });
+
+            describe("has a terminateDriver function that", function () {
+                beforeEach(function () {
+                    spyOn(driverTerminateModel, "initialize").and.callThrough();
+                    spyOn(driverTerminateModel, "save").and.callThrough();
+                    spyOn(driverTerminateModel, "toJSON").and.returnValue({"driverId": "1234"});
+
+                    driverEditView.terminateDriver();
+                });
+
+                it("is defined", function () {
+                    expect(driverEditView.terminateDriver).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverEditView.terminateDriver).toEqual(jasmine.any(Function));
+                });
+
+                describe("when calling save() on the driver terminate model", function () {
+                    it("should send the model as the first argument", function () {
+                        expect(driverTerminateModel.save).toHaveBeenCalled();
+                        expect(driverTerminateModel.save.calls.mostRecent().args.length).toEqual(2);
+                        expect(driverTerminateModel.save.calls.mostRecent().args[0])
+                            .toEqual(driverTerminateModel.toJSON());
+                    });
+
+                    describe("sends as the second argument the options object with a success callback that",
+                        function () {
+                            var response = {},
+                                model,
+                                options;
+
+                            beforeEach(function () {
+                                spyOn(driverEditView, "trigger").and.callFake(function () { });
+
+                                options = driverTerminateModel.save.calls.mostRecent().args[1];
+                                options.success.call(driverEditView, model, response);
+                            });
+
+                            it("should trigger contactUsSuccess", function () {
+                                expect(driverEditView.trigger).toHaveBeenCalled();
+                                expect(driverEditView.trigger.calls.mostRecent().args.length).toEqual(2);
+                                expect(driverEditView.trigger.calls.mostRecent().args[0])
+                                    .toEqual("terminateDriverSuccess");
+                                expect(driverEditView.trigger.calls.mostRecent().args[1]).toEqual(response);
+                            });
+                        }
+                    );
+                });
+            });
+
+            describe("has a confirmTerminateDriver function that", function () {
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callThrough();
+
+                    driverEditView.confirmTerminateDriver();
+                });
+
+                it("is defined", function () {
+                    expect(driverEditView.confirmTerminateDriver).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverEditView.confirmTerminateDriver).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    var appAlertOptions;
+
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
+
+                    appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
+                    expect(appAlertOptions.title).toEqual(globals.driverTerminate.constants.CONFIRMATION_TITLE);
+                    expect(appAlertOptions.message)
+                        .toEqual(globals.driverTerminate.constants.CONFIRMATION_MESSAGE);
+                    expect(appAlertOptions.primaryBtnLabel).toEqual(globals.driverTerminate.constants.OK_BTN_TEXT);
+                    expect(appAlertOptions.primaryBtnHandler).toEqual(jasmine.any(Function));
+                    expect(appAlertOptions.secondaryBtnLabel).toEqual(globals.driverTerminate.constants.CANCEL_BTN_TEXT);
+                });
+
+                describe("sends as the primaryBtnHandler argument a callback that", function () {
+                    var options;
+
+                    beforeEach(function () {
+                        options = mockFacade.publish.calls.mostRecent().args[2];
+
+                        spyOn(driverEditView, "terminateDriver").and.callFake(function () { });
+
+                        options.primaryBtnHandler.call(driverEditView);
+                    });
+
+                    it("should call terminateDriver", function () {
+                        expect(driverEditView.terminateDriver).toHaveBeenCalledWith();
                     });
                 });
             });
@@ -226,8 +410,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                 beforeEach(function () {
                     spyOn(mockEvent, "preventDefault").and.callThrough();
-
-                    driverEditView.changeStatus(mockEvent);
+                    spyOn(driverEditView, "reactivateDriver").and.callFake(function () {});
+                    spyOn(driverEditView, "confirmTerminateDriver").and.callFake(function () {});
                 });
 
                 it("is defined", function () {
@@ -238,8 +422,60 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     expect(driverEditView.changeStatus).toEqual(jasmine.any(Function));
                 });
 
-                it("should call event.preventDefault", function () {
-                    expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                describe("when driver is terminated", function () {
+                    beforeEach(function () {
+                        driverModel.set("status", globals.driverEdit.constants.STATUS_TERMINATED);
+
+                        driverEditView.changeStatus(mockEvent);
+                    });
+
+                    it("is defined", function () {
+                        expect(driverEditView.changeStatus).toBeDefined();
+                    });
+
+                    it("is a function", function () {
+                        expect(driverEditView.changeStatus).toEqual(jasmine.any(Function));
+                    });
+
+                    it("should call event.preventDefault", function () {
+                        expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                    });
+
+                    it("should call reactivateDriver", function () {
+                        expect(driverEditView.reactivateDriver).toHaveBeenCalledWith();
+                    });
+
+                    it("should NOT call confirmTerminateDriver", function () {
+                        expect(driverEditView.confirmTerminateDriver).not.toHaveBeenCalledWith();
+                    });
+                });
+
+                describe("when driver is active", function () {
+                    beforeEach(function () {
+                        driverModel.set("status", globals.driverEdit.constants.STATUS_ACTIVE);
+
+                        driverEditView.changeStatus(mockEvent);
+                    });
+
+                    it("is defined", function () {
+                        expect(driverEditView.changeStatus).toBeDefined();
+                    });
+
+                    it("is a function", function () {
+                        expect(driverEditView.changeStatus).toEqual(jasmine.any(Function));
+                    });
+
+                    it("should call event.preventDefault", function () {
+                        expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                    });
+
+                    it("should NOT call reactivateDriver", function () {
+                        expect(driverEditView.reactivateDriver).not.toHaveBeenCalledWith();
+                    });
+
+                    it("should call confirmTerminateDriver", function () {
+                        expect(driverEditView.confirmTerminateDriver).toHaveBeenCalledWith();
+                    });
                 });
             });
         });

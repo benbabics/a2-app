@@ -7,10 +7,11 @@ define(["backbone", "utils", "facade"],
         var AppRouter = Backbone.Router.extend({
             /*
              * Route Definitions
-            */
+             */
             routes: {
-                "contactUs"   : "showContactUs",
-                "driverSearch": "showDriverSearch",
+                "contactUs"                  : "showContactUs",
+                "driverSearch"               : "showDriverSearch",
+                "driverDetails(/)(:driverId)": "showDriverDetails",
 
                 "*page": "changePage",
 
@@ -19,13 +20,17 @@ define(["backbone", "utils", "facade"],
 
             /*
              * Route Handlers
-            */
+             */
             showContactUs: function () {
                 facade.publish("contactUs", "navigate");
             },
 
             showDriverSearch: function () {
                 facade.publish("driver", "navigateSearch");
+            },
+
+            showDriverDetails: function (driverId) {
+                facade.publish("driver", "navigateDriverDetails", driverId);
             },
 
             changePage: function (page) {

@@ -5,17 +5,11 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
 
         var squire = new Squire(),
             mockMustache = Mustache,
-            mockFacade = {
-                publish: function () { }
-            },
             mockUserModel = {
                 "authenticated": "true",
                 "email": "mobiledevelopment@wexinc.com"
             },
             userModel = new Backbone.Model(),
-            UserModel = {
-                getInstance: function () { }
-            },
             mockContactUsModel = {
                 "email": "JoeUser@gmail.com",
                 "subject": "Other",
@@ -27,7 +21,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
 
         squire.mock("mustache", mockMustache);
         squire.mock("backbone", Backbone);
-        squire.mock("facade", mockFacade);
 
         describe("A Contact Us View", function () {
 
