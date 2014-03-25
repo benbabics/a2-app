@@ -26,7 +26,7 @@ define(["backbone", "Squire", "globals"],
             });
 
             describe("has a urlRoot property that", function () {
-                it("is set to globals.contactUs.constants.WEBSERVICE", function () {
+                it("is set to globals.driverReactivate.constants.WEBSERVICE", function () {
                     expect(driverReactivateModel.urlRoot).toEqual(globals.driverReactivate.constants.WEBSERVICE);
                 });
             });

@@ -43,6 +43,10 @@ define(function (require) {
     // Driver
     globals.WEBSERVICE.DRIVER = {
     };
+    // Driver Add
+    globals.WEBSERVICE.DRIVER.ADD = {
+        "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.DRIVER_PATH + "/addDriver"
+    };
     // Driver Reactivate
     globals.WEBSERVICE.DRIVER.REACTIVATE = {
         "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.DRIVER_PATH + "/reactivate"
@@ -371,6 +375,56 @@ define(function (require) {
         "CONFIRMATION_MESSAGE": "Are you sure you want to terminate the driver?",
         "CANCEL_BTN_TEXT": "Cancel",
         "OK_BTN_TEXT": "Terminate"
+    };
+
+    /**
+     * Driver Add
+     */
+    globals.driverAdd = {};
+    globals.driverAdd.constants = {
+        "WEBSERVICE": globals.WEBSERVICE.DRIVER.ADD.URL,
+        "ERROR_FIRST_NAME_REQUIRED_FIELD": "First Name must have a value",
+        "ERROR_LAST_NAME_REQUIRED_FIELD" : "Last Name must have a value",
+        "ERROR_DRIVER_ID_REQUIRED_FIELD" : "Driver ID must have a value"
+    };
+    globals.driverAdd.configuration = {
+        "firstName": {
+            "label"      : "First Name",
+            "name"       : "firstName",
+            "maxLength"  : 11,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "middleName": {
+            "label"      : "Middle Initial",
+            "name"       : "middleName",
+            "maxLength"  : 1,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "lastName": {
+            "label"      : "Last Name",
+            "name"       : "lastName",
+            "maxLength"  : 12,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "driverId": {
+            "label"      : "Driver ID",
+            "name"       : "driverId",
+            "maxLength"  : 4,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "driverDepartment": {
+            "label"      : "Department",
+            "name"       : "department",
+            "values"     : [
+            ]
+        },
+        "submitButton": {
+            "label": "Add"
+        }
     };
 
     return globals;
