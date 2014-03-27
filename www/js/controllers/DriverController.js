@@ -1,7 +1,8 @@
 define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", "models/UserModel",
-        "models/DriverSearchModel", "views/DriverEditView", "views/DriverListView", "views/DriverSearchView"],
-    function (JClass, globals, utils, facade, DriverCollection, UserModel, DriverSearchModel,
-              DriverEditView, DriverListView, DriverSearchView) {
+        "models/DriverSearchModel", "models/DriverAddModel", "views/DriverAddView", "views/DriverEditView",
+        "views/DriverListView", "views/DriverSearchView"],
+    function (JClass, globals, utils, facade, DriverCollection, UserModel, DriverSearchModel, DriverAddModel,
+              DriverAddView, DriverEditView, DriverListView, DriverSearchView) {
 
         "use strict";
 
@@ -13,6 +14,7 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
 
         DriverController = JClass.extend({
             driverCollection: null,
+            driverAddView: null,
             driverEditView: null,
             driverListView: null,
             driverSearchModel: null,
@@ -24,6 +26,12 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
             init: function () {
                 this.driverCollection = new DriverCollection();
                 this.driverSearchModel = new DriverSearchModel();
+
+                // create add view
+                this.driverAddView = new DriverAddView({
+                    model    : new DriverAddModel(),
+                    userModel: UserModel.getInstance()
+                });
 
                 // create edit view
                 this.driverEditView = new DriverEditView({
@@ -43,10 +51,16 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
                 });
 
                 // listen for events
+                this.driverAddView.on("driverAddSuccess", this.showDriverAddDetails, this);
                 this.driverEditView.on("reactivateDriverSuccess terminateDriverSuccess",
                                        this.showDriverStatusChangeDetails, this);
                 this.driverSearchView.on("searchSubmitted", this.showSearchResults, this);
                 this.driverListView.on("showAllDrivers", this.showAllSearchResults, this);
+            },
+
+            navigateAdd: function () {
+                this.driverAddView.render();
+                utils.changePage(this.driverAddView.$el);
             },
 
             navigateSearch: function () {
@@ -58,6 +72,14 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
                 this.driverEditView.model = this.driverCollection.findWhere({"driverId": driverId});
                 this.driverEditView.render();
                 utils.changePage(this.driverEditView.$el);
+            },
+
+            showDriverAddDetails: function (driverAddResponse) {
+                facade.publish("app", "alert", {
+                    title          : globals.driverAddedDetails.constants.SUCCESS_TITLE,
+                    message        : driverAddResponse,
+                    primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT
+                });
             },
 
             showDriverStatusChangeDetails: function (driverChangeStatusResponse) {

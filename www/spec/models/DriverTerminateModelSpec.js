@@ -4,13 +4,15 @@ define(["backbone", "Squire", "globals"],
         "use strict";
 
         var squire = new Squire(),
+            DriverTerminateModel,
             driverTerminateModel;
 
         squire.mock("backbone", Backbone);
 
         describe("A Driver Terminate Model", function () {
             beforeEach(function (done) {
-                squire.require(["models/DriverTerminateModel"], function (DriverTerminateModel) {
+                squire.require(["models/DriverTerminateModel"], function (JasmineDriverTerminateModel) {
+                    DriverTerminateModel = JasmineDriverTerminateModel;
                     driverTerminateModel = new DriverTerminateModel();
 
                     done();
@@ -31,14 +33,23 @@ define(["backbone", "Squire", "globals"],
                 });
             });
 
-            describe("has property defaults that", function () {
+            describe("has a defaults function that", function () {
+                it("is defined", function () {
+                    expect(driverTerminateModel.defaults).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverTerminateModel.defaults).toEqual(jasmine.any(Function));
+                });
+
                 it("should set driverId to default", function () {
-                    expect(driverTerminateModel.defaults.driverId).toBeNull();
+                    expect(driverTerminateModel.defaults().driverId).toBeNull();
                 });
             });
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
+                    spyOn(DriverTerminateModel.__super__, "initialize").and.callFake(function () { });
                     spyOn(driverTerminateModel, "set").and.callThrough();
                 });
 
@@ -48,6 +59,12 @@ define(["backbone", "Squire", "globals"],
 
                 it("is a function", function () {
                     expect(driverTerminateModel.initialize).toEqual(jasmine.any(Function));
+                });
+
+                it("should call super", function () {
+                    driverTerminateModel.initialize();
+
+                    expect(DriverTerminateModel.__super__.initialize).toHaveBeenCalledWith();
                 });
 
                 describe("when options are not provided", function () {

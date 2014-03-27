@@ -1,6 +1,6 @@
-define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverModel",
+define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverModel", "models/UserModel",
         "text!tmpl/driver/driverEdit.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, DriverModel, pageTemplate) {
+    function (Squire, Backbone, Mustache, globals, utils, DriverModel, UserModel, pageTemplate) {
 
         "use strict";
 
@@ -10,10 +10,39 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
             },
             mockMustache = Mustache,
             mockUserModel = {
-                "authenticated": "true",
-                "email": "mobiledevelopment@wexinc.com"
+                authenticated: true,
+                firstName: "Beavis",
+                email: "cornholio@bnbinc.com",
+                selectedCompany: {
+                    name: "Beavis and Butthead Inc",
+                    accountId: "254624562",
+                    wexAccountNumber: "5764309",
+                    driverIdLength: "4",
+                    departments: [
+                        {
+                            id: "134613456",
+                            name: "UNASSIGNED",
+                            visible: true
+                        },
+                        {
+                            id: "2456724567",
+                            name: "Dewey, Cheetum and Howe",
+                            visible: false
+                        }
+                    ]
+                },
+                permissions: [
+                    "PERMISSION_1",
+                    "PERMISSION_2",
+                    "PERMISSION_3"
+                ],
+                requiredFields: [
+                    "PERMISSION_1",
+                    "PERMISSION_2",
+                    "PERMISSION_3"
+                ]
             },
-            userModel = new Backbone.Model(),
+            userModel = UserModel.getInstance(),
             driverReactivateModel = {
                 initialize: function () {},
                 save: function () {},
@@ -58,7 +87,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     loadFixtures("index.html");
 
                     driverModel.initialize(mockDriverModel);
-                    userModel.set(mockUserModel);
+                    userModel.initialize(mockUserModel);
 
                     DriverEditView = JasmineDriverEditView;
                     driverEditView = new DriverEditView({
@@ -257,7 +286,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                 beforeEach(function () {
                     spyOn(driverReactivateModel, "initialize").and.callThrough();
                     spyOn(driverReactivateModel, "save").and.callThrough();
-                    spyOn(driverReactivateModel, "toJSON").and.returnValue({"driverId": "1234"});
+                    spyOn(driverReactivateModel, "toJSON").and
+                        .returnValue({"accountId": "2354625", "driverId": "1234"});
 
                     driverEditView.reactivateDriver();
                 });
@@ -268,6 +298,14 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                 it("is a function", function () {
                     expect(driverEditView.reactivateDriver).toEqual(jasmine.any(Function));
+                });
+
+                it("should call initialize on the DriverReactivateModel", function () {
+                    var expectedOptions = utils._.extend({}, driverEditView.model.toJSON(), {
+                        "accountId": driverEditView.userModel.get("selectedCompany").get("accountId")
+                    });
+
+                    expect(driverReactivateModel.initialize).toHaveBeenCalledWith(expectedOptions);
                 });
 
                 describe("when calling save() on the driver activate model", function () {
@@ -307,7 +345,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                 beforeEach(function () {
                     spyOn(driverTerminateModel, "initialize").and.callThrough();
                     spyOn(driverTerminateModel, "save").and.callThrough();
-                    spyOn(driverTerminateModel, "toJSON").and.returnValue({"driverId": "1234"});
+                    spyOn(driverTerminateModel, "toJSON").and
+                        .returnValue({"accountId": "2354625", "driverId": "1234"});
 
                     driverEditView.terminateDriver();
                 });
@@ -318,6 +357,14 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                 it("is a function", function () {
                     expect(driverEditView.terminateDriver).toEqual(jasmine.any(Function));
+                });
+
+                it("should call initialize on the DriverReactivateModel", function () {
+                    var expectedOptions = utils._.extend({}, driverEditView.model.toJSON(), {
+                        "accountId": driverEditView.userModel.get("selectedCompany").get("accountId")
+                    });
+
+                    expect(driverTerminateModel.initialize).toHaveBeenCalledWith(expectedOptions);
                 });
 
                 describe("when calling save() on the driver terminate model", function () {
@@ -383,7 +430,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                         .toEqual(globals.driverTerminate.constants.CONFIRMATION_MESSAGE);
                     expect(appAlertOptions.primaryBtnLabel).toEqual(globals.driverTerminate.constants.OK_BTN_TEXT);
                     expect(appAlertOptions.primaryBtnHandler).toEqual(jasmine.any(Function));
-                    expect(appAlertOptions.secondaryBtnLabel).toEqual(globals.driverTerminate.constants.CANCEL_BTN_TEXT);
+                    expect(appAlertOptions.secondaryBtnLabel)
+                        .toEqual(globals.driverTerminate.constants.CANCEL_BTN_TEXT);
                 });
 
                 describe("sends as the primaryBtnHandler argument a callback that", function () {

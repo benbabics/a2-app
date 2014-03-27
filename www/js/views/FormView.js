@@ -44,6 +44,13 @@ define(["backbone", "globals", "facade", "utils", "mustache"],
 
             resetForm: function () {
                 this.$el.find("form")[0].reset();
+                this.model.clear();
+                if (utils.isFn(this.model.defaults)) {
+                    this.model.set(this.model.defaults());
+                }
+                else {
+                    this.model.set(this.model.defaults);
+                }
             },
 
             /*

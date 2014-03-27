@@ -8,6 +8,14 @@ define(["globals", "backbone", "utils", "Squire"],
                 publish: function (channel, event) { }
             },
             mockUtils = utils,
+            mockDriverAddModel = {
+                "driverId"     : null,
+                "firstName"    : null,
+                "middleInitial": null,
+                "lastName"     : null,
+                "departmentId" : null
+            },
+            driverAddModel = new Backbone.Model(),
             mockDriverSearchModel = {
                 "filterFirstName"   : null,
                 "filterLastName"    : null,
@@ -32,6 +40,13 @@ define(["globals", "backbone", "utils", "Squire"],
                 reset: function () { },
                 resetPage: function () { },
                 showAll: function () { }
+            },
+            mockDriverAddView = {
+                $el: "",
+                constructor: function () { },
+                initialize: function () { },
+                render: function () { },
+                on: function () { }
             },
             mockDriverEditView = {
                 $el: "",
@@ -69,16 +84,19 @@ define(["globals", "backbone", "utils", "Squire"],
         squire.mock("backbone", Backbone);
         squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
+        squire.mock("views/DriverAddView", Squire.Helpers.returns(mockDriverAddView));
         squire.mock("views/DriverEditView", Squire.Helpers.returns(mockDriverEditView));
         squire.mock("views/DriverListView", Squire.Helpers.returns(mockDriverListView));
         squire.mock("views/DriverSearchView", Squire.Helpers.returns(mockDriverSearchView));
         squire.mock("collections/DriverCollection", Squire.Helpers.returns(mockDriverCollection));
+        squire.mock("models/DriverAddModel", Squire.Helpers.returns(driverAddModel));
         squire.mock("models/DriverSearchModel", Squire.Helpers.returns(driverSearchModel));
         squire.mock("models/UserModel", UserModel);
 
         describe("A Driver Controller", function () {
             beforeEach(function (done) {
                 squire.require(["controllers/DriverController"], function (DriverController) {
+                    driverAddModel.set(mockDriverAddModel);
                     driverSearchModel.set(mockDriverSearchModel);
                     driverModel.set(mockDriverModel);
                     userModel.set(mockUserModel);
@@ -120,6 +138,25 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 it("should set the driverSearchModel variable to a new DriverSearchModel object", function () {
                     expect(driverController.driverSearchModel).toEqual(driverSearchModel);
+                });
+
+                describe("when initializing the DriverAddView", function () {
+                    beforeEach(function () {
+                        spyOn(mockDriverAddView, "constructor").and.callThrough();
+                    });
+
+                    it("should set the driverAddView variable to a new DriverAddView object", function () {
+                        expect(driverController.driverAddView).toEqual(mockDriverAddView);
+                    });
+
+                    xit("should send in the correct parameters to the constructor", function () {
+                        expect(mockDriverAddView.constructor).toHaveBeenCalledWith({
+                            model: driverAddModel,
+                            userModel: userModel
+                        });
+
+                        // TODO: this is not working, need to figure out how to test
+                    });
                 });
 
                 describe("when initializing the DriverEditView", function () {
@@ -178,6 +215,16 @@ define(["globals", "backbone", "utils", "Squire"],
                     });
                 });
 
+                it("should register a function as the handler for the add view driverAddSuccess event", function () {
+                    spyOn(mockDriverAddView, "on").and.callFake(function () { });
+
+                    driverController.init();
+
+                    expect(mockDriverAddView.on).toHaveBeenCalledWith("driverAddSuccess",
+                        driverController.showDriverAddDetails,
+                        driverController);
+                });
+
                 it("should register a function as the handler for the edit view status changed events", function () {
                     spyOn(mockDriverEditView, "on").and.callFake(function () { });
 
@@ -206,6 +253,34 @@ define(["globals", "backbone", "utils", "Squire"],
                     expect(mockDriverListView.on).toHaveBeenCalledWith("showAllDrivers",
                                                                        driverController.showAllSearchResults,
                                                                        driverController);
+                });
+            });
+
+            describe("has a navigateAdd function that", function () {
+                beforeEach(function () {
+                    spyOn(mockDriverAddView, "render").and.callThrough();
+                    spyOn(mockUtils, "changePage").and.callThrough();
+
+                    driverController.navigateAdd();
+                });
+
+                it("is defined", function () {
+                    expect(driverController.navigateAdd).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverController.navigateAdd).toEqual(jasmine.any(Function));
+                });
+
+                it("should call render on the Driver Add View Page", function () {
+                    expect(mockDriverAddView.render).toHaveBeenCalledWith();
+                });
+
+                it("should change the page to the Driver Add View Page", function () {
+                    expect(mockUtils.changePage).toHaveBeenCalled();
+
+                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockDriverAddView.$el);
                 });
             });
 
@@ -277,6 +352,39 @@ define(["globals", "backbone", "utils", "Squire"],
 
                     expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(1);
                     expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockDriverEditView.$el);
+                });
+            });
+
+            describe("has a showDriverAddDetails function that", function () {
+                var response = "Response message"
+                    ;
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callFake(function () { });
+
+                    driverController.showDriverAddDetails(response);
+                });
+
+                it("is defined", function () {
+                    expect(driverController.showDriverAddDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverController.showDriverAddDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    var appAlertOptions;
+
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
+
+                    appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
+                    expect(appAlertOptions.title).toEqual(globals.driverAddedDetails.constants.SUCCESS_TITLE);
+                    expect(appAlertOptions.message).toEqual(response);
+                    expect(appAlertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
                 });
             });
 

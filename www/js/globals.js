@@ -15,7 +15,9 @@ define(function (require) {
         "DRIVER_PATH"                  : "/driverMaintenance",
         "USER_AUTH_PATH"               : "/userAuth",
         "REQUEST_ERROR_TITLE"          : "Cannot complete request",
-        "REQUEST_ERROR_UNKNOWN_MESSAGE": "Please try again"
+        "REQUEST_ERROR_UNKNOWN_MESSAGE": "Please try again",
+        "REQUEST_ERROR_MESSAGE_PREFIX" : "<div class='ui-body ui-body-e'>",
+        "REQUEST_ERROR_MESSAGE_SUFFIX" : "</div>"
     };
     globals.WEBSERVICE.SECURE = {
         "ROOT_URL": globals.WEBSERVICE.ROOT_URL + "/secure"
@@ -149,6 +151,18 @@ define(function (require) {
         "MOBILE_DRIVER_ADD"      : false,
         "MOBILE_PAYMENT_VIEW"    : false,
         "MOBILE_PAYMENT_MAKE"    : false
+    };
+
+    /**
+     * Company Data
+     */
+    globals.companyData = {};
+    globals.companyData.requiredFields = {
+        "DRIVER_ID"             : false,
+        "VIN_NUMBER"            : false,
+        "LICENSE_PLATE_NUMBER"  : false,
+        "VEHICLE_DESCRIPTION"   : false,
+        "COMPANY_VEHICLE_NUMBER": false
     };
 
     /**
@@ -382,10 +396,20 @@ define(function (require) {
      */
     globals.driverAdd = {};
     globals.driverAdd.constants = {
-        "WEBSERVICE": globals.WEBSERVICE.DRIVER.ADD.URL,
-        "ERROR_FIRST_NAME_REQUIRED_FIELD": "First Name must have a value",
-        "ERROR_LAST_NAME_REQUIRED_FIELD" : "Last Name must have a value",
-        "ERROR_DRIVER_ID_REQUIRED_FIELD" : "Driver ID must have a value"
+        "WEBSERVICE"                          : globals.WEBSERVICE.DRIVER.ADD.URL,
+        "DEFAULT_DEPARTMENT_NAME"             : "UNASSIGNED",
+        "ERROR_FIRST_NAME_REQUIRED_FIELD"     : "First Name must have a value",
+        "ERROR_FIRST_NAME_INVALID_LENGTH"     : "First Name cannot exceed 11 characters",
+        "ERROR_FIRST_NAME_INVALID_CHARACTERS" : "First Name must contain only alphanumeric characters",
+        "ERROR_LAST_NAME_REQUIRED_FIELD"      : "Last Name must have a value",
+        "ERROR_LAST_NAME_INVALID_LENGTH"      : "Last Name cannot exceed 12 characters",
+        "ERROR_LAST_NAME_INVALID_CHARACTERS"  : "Last Name must contain only alphanumeric characters",
+        "ERROR_MIDDLE_NAME_INVALID_LENGTH"    : "Middle Name cannot exceed 1 character",
+        "ERROR_MIDDLE_NAME_INVALID_CHARACTERS": "Middle Name must contain only alpha characters",
+        "ERROR_DRIVER_ID_REQUIRED_FIELD"      : "Driver ID must have a value",
+        "ERROR_DRIVER_ID_INVALID_FORMAT"      : "Driver ID must be numeric",
+        "ERROR_DRIVER_ID_INVALID_LENGTH"      : "Driver ID must be {{driverIdLength}} digits",
+        "DRIVER_ID_PLACEHOLDER_FORMAT"        : "Must be {{driverIdLength}} digits"
     };
     globals.driverAdd.configuration = {
         "firstName": {
@@ -395,9 +419,9 @@ define(function (require) {
             "placeholder": "",
             "value"      : ""
         },
-        "middleName": {
+        "middleInitial": {
             "label"      : "Middle Initial",
-            "name"       : "middleName",
+            "name"       : "middleInitial",
             "maxLength"  : 1,
             "placeholder": "",
             "value"      : ""
@@ -416,14 +440,45 @@ define(function (require) {
             "placeholder": "",
             "value"      : ""
         },
-        "driverDepartment": {
+        "departmentId": {
             "label"      : "Department",
-            "name"       : "department",
-            "values"     : [
-            ]
+            "name"       : "departmentId",
+            "enabled"    : true,
+            "values"     : []
         },
         "submitButton": {
             "label": "Add"
+        }
+    };
+
+    globals.driverAddedDetails = {};
+    globals.driverAddedDetails.constants = {
+        "SUCCESS_TITLE": "Driver<br/>Confirmation",
+        "STATUS_ACTIVE": "ACTIVE",
+        "STATUS_TERMINATED": "TERMINATED",
+        "BUTTON_ACTIVATE": "ACTIVATE",
+        "BUTTON_TERMINATE": "TERMINATE"
+    };
+    globals.driverAddedDetails.configuration = {
+        "driverName": {
+            "label": "Driver Name",
+            "value": ""
+        },
+        "driverId": {
+            "label": "Driver ID",
+            "value": ""
+        },
+        "driverDepartment": {
+            "label": "Department",
+            "value": ""
+        },
+        "driverStatus": {
+            "label": "Status",
+            "value": ""
+        },
+        "driverStatusDate": {
+            "label": "Status Date",
+            "value": ""
         }
     };
 

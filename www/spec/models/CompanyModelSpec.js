@@ -1,5 +1,6 @@
-define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentCollection", "backbone", "backbone-relational"],
-    function (Squire, utils, DepartmentModel, DepartmentCollection, Backbone) {
+define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/DepartmentCollection",
+        "backbone", "backbone-relational"],
+    function (Squire, utils, globals, DepartmentModel, DepartmentCollection, Backbone) {
 
         "use strict";
 
@@ -47,6 +48,10 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
                 it("should set departments to default", function () {
                     expect(companyModel.defaults.departments).toBeNull();
                 });
+
+                it("should set requiredFields to default", function () {
+                    expect(companyModel.defaults.requiredFields).toEqual(globals.companyData.requiredFields);
+                });
             });
 
             describe("has property relations that", function () {
@@ -73,6 +78,8 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
                 beforeEach(function () {
                     spyOn(companyModel, "set").and.callThrough();
                     spyOn(companyModel, "get").and.callThrough();
+                    spyOn(companyModel, "setDepartments").and.callFake(function () {});
+                    spyOn(companyModel, "setRequiredFields").and.callFake(function () {});
                 });
 
                 it("is defined", function () {
@@ -90,6 +97,8 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
 
                     it("should NOT call set", function () {
                         expect(companyModel.set).not.toHaveBeenCalled();
+                        expect(companyModel.setDepartments).not.toHaveBeenCalled();
+                        expect(companyModel.setRequiredFields).not.toHaveBeenCalled();
                     });
                 });
 
@@ -102,6 +111,8 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
 
                     it("should NOT call set", function () {
                         expect(companyModel.set).not.toHaveBeenCalled();
+                        expect(companyModel.setDepartments).not.toHaveBeenCalled();
+                        expect(companyModel.setRequiredFields).not.toHaveBeenCalled();
                     });
                 });
 
@@ -122,12 +133,15 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
                                     name: "Dewey, Cheetum and Howe",
                                     visible: false
                                 }
+                            ],
+                            requiredFields: [
+                                "REQUIRED_FIELD_1",
+                                "REQUIRED_FIELD_2",
+                                "REQUIRED_FIELD_3"
                             ]
                         };
 
                     beforeEach(function () {
-                        spyOn(companyModel, "setDepartments").and.callFake(function () {});
-
                         companyModel.initialize(options);
                     });
 
@@ -153,6 +167,10 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
 
                     it("should set departments", function () {
                         expect(companyModel.setDepartments).toHaveBeenCalledWith(options.departments);
+                    });
+
+                    it("should set requiredFields", function () {
+                        expect(companyModel.setRequiredFields).toHaveBeenCalledWith(options.requiredFields);
                     });
                 });
             });
@@ -205,8 +223,8 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
                     it("should include all the mock departments", function () {
                         var newDepartment;
 
-                        // find all elements in the newDepartments that have a matching key with the default permissions
-                        utils._.each(mockDepartments, function (mockDepartment, key, list) {
+                        // find all elements in the newDepartments that have a matching key with the default values
+                        utils._.each(mockDepartments, function (mockDepartment, key) {
                             newDepartment = newDepartments.at(key);
 
                             expect(newDepartment).not.toBeNull();
@@ -214,6 +232,72 @@ define(["Squire", "utils", "models/DepartmentModel", "collections/DepartmentColl
                             expect(newDepartment.get("name")).toEqual(mockDepartment.name);
                             expect(newDepartment.get("visible")).toEqual(mockDepartment.visible);
                         });
+                    });
+                });
+            });
+
+            describe("has a setRequiredFields function that", function () {
+                var mockRequiredFields = [
+                        "REQUIRED_FIELD_1",
+                        "REQUIRED_FIELD_2",
+                        "REQUIRED_FIELD_3"
+                    ];
+
+                beforeEach(function () {
+                    spyOn(companyModel, "set").and.callThrough();
+
+                    companyModel.setRequiredFields(mockRequiredFields);
+                });
+
+                it("is defined", function () {
+                    expect(companyModel.setRequiredFields).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(companyModel.setRequiredFields).toEqual(jasmine.any(Function));
+                });
+
+                it("should call set", function () {
+                    expect(companyModel.set).toHaveBeenCalled();
+                    expect(companyModel.set.calls.mostRecent().args.length).toEqual(2);
+                    expect(companyModel.set.calls.mostRecent().args[0]).toEqual("requiredFields");
+                });
+
+                describe("when building a new object to set the requiredFields property with", function () {
+                    var newRequiredFields;
+
+                    beforeEach(function () {
+                        newRequiredFields = companyModel.set.calls.mostRecent().args[1];
+                    });
+
+                    it("should include all the default requiredFields", function () {
+                        var numOfMatches = 0;
+
+                        // find all elements in the newRequiredFields that have a matching key with the default values
+                        utils._.each(companyModel.defaults.requiredFields, function (value, key) {
+                            if (utils._.has(newRequiredFields, key)) {
+                                numOfMatches += 1;
+                            }
+                        });
+
+                        expect(numOfMatches).toEqual(utils._.size(companyModel.defaults.requiredFields));
+                    });
+
+                    it("should set only the passed in requiredFields to true", function () {
+                        var trueRequiredFields = {},
+                            matchingRequiredFields;
+
+                        // find all elements in newRequiredFields that are set to true
+                        utils._.each(newRequiredFields, function (value, key) {
+                            if (value) {
+                                trueRequiredFields[key] = value;
+                            }
+                        });
+
+                        // get all the trueRequiredFields that match the mockRequiredFields
+                        matchingRequiredFields = utils._.pick(trueRequiredFields, mockRequiredFields);
+
+                        expect(utils._.size(matchingRequiredFields)).toEqual(utils._.size(mockRequiredFields));
                     });
                 });
             });

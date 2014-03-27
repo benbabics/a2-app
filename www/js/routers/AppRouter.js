@@ -10,6 +10,7 @@ define(["backbone", "utils", "facade"],
              */
             routes: {
                 "contactUs"                  : "showContactUs",
+                "driverAdd"                  : "showDriverAdd",
                 "driverSearch"               : "showDriverSearch",
                 "driverDetails(/)(:driverId)": "showDriverDetails",
 
@@ -23,6 +24,10 @@ define(["backbone", "utils", "facade"],
              */
             showContactUs: function () {
                 facade.publish("contactUs", "navigate");
+            },
+
+            showDriverAdd: function () {
+                facade.publish("driver", "navigateAdd");
             },
 
             showDriverSearch: function () {

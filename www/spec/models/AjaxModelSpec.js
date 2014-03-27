@@ -126,13 +126,15 @@ define(["Squire", "globals", "backbone", "utils"],
                                 var method = "create",
                                     model = {},
                                     options = {},
-                                    originalErrorCallback = jasmine.createSpy("error() spy");
+                                    originalErrorCallback = jasmine.createSpy("error() spy"),
+                                    mockErrorMessage = "Mock Error Message";
 
                                 beforeEach(function () {
                                     mockDataResponse.message.text = "An error occurred.";
                                     options.error = originalErrorCallback;
 
                                     spyOn(mockFacade, "publish").and.callFake(function () { });
+                                    spyOn(ajaxModel, "getErrorMessage").and.returnValue(mockErrorMessage);
 
                                     ajaxModel.sync(method, model, options);
                                 });
@@ -152,6 +154,10 @@ define(["Squire", "globals", "backbone", "utils"],
                                     expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
                                 });
 
+                                it("should call getErrorMessage", function () {
+                                    expect(ajaxModel.getErrorMessage).toHaveBeenCalledWith(mockDataResponse);
+                                });
+
                                 it("should publish an alert of the message text", function () {
                                     var alertDetails;
 
@@ -163,7 +169,7 @@ define(["Squire", "globals", "backbone", "utils"],
                                     alertDetails = mockFacade.publish.calls.mostRecent().args[2];
 
                                     expect(alertDetails.title).toEqual(globals.WEBSERVICE.REQUEST_ERROR_TITLE);
-                                    expect(alertDetails.message).toEqual(mockDataResponse.message.text);
+                                    expect(alertDetails.message).toEqual(mockErrorMessage);
                                     expect(alertDetails.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
                                 });
 
@@ -215,7 +221,8 @@ define(["Squire", "globals", "backbone", "utils"],
                                     alertDetails = mockFacade.publish.calls.mostRecent().args[2];
 
                                     expect(alertDetails.title).toEqual(globals.WEBSERVICE.REQUEST_ERROR_TITLE);
-                                    expect(alertDetails.message).toEqual(globals.WEBSERVICE.REQUEST_ERROR_UNKNOWN_MESSAGE);
+                                    expect(alertDetails.message)
+                                        .toEqual(globals.WEBSERVICE.REQUEST_ERROR_UNKNOWN_MESSAGE);
                                     expect(alertDetails.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
                                 });
 
@@ -350,7 +357,60 @@ define(["Squire", "globals", "backbone", "utils"],
                         expect(originalErrorCallback).toHaveBeenCalledWith();
                     });
                 });
+            });
 
+            describe("has a getErrorMessage function that", function () {
+                it("is defined", function () {
+                    expect(ajaxModel.getErrorMessage).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(ajaxModel.getErrorMessage).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the response has data", function () {
+                    beforeEach(function () {
+                        mockDataResponse.message.text = "An error occurred.";
+                        mockDataResponse.data =
+                            [
+                                { message: "Error Message 1"},
+                                { message: "Error Message 2"},
+                                { message: "Error Message 3"}
+                            ];
+                    });
+
+                    it("returns the expected value", function () {
+                        var expectedValue,
+                            actualValue;
+
+                        expectedValue = globals.WEBSERVICE.REQUEST_ERROR_MESSAGE_PREFIX +
+                                        mockDataResponse.message.text +
+                                        globals.WEBSERVICE.REQUEST_ERROR_MESSAGE_SUFFIX +
+                                        "<ul><li>Error Message 1</li>" +
+                                        "<li>Error Message 2</li>" +
+                                        "<li>Error Message 3</li></ul>";
+
+                        actualValue = ajaxModel.getErrorMessage(mockDataResponse);
+
+                        expect(actualValue).toEqual(expectedValue);
+                    });
+                });
+
+                describe("when the response does NOT have data", function () {
+                    beforeEach(function () {
+                        mockDataResponse.message.text = "An error occurred.";
+                        mockDataResponse.data = null;
+                    });
+
+                    it("returns the expected value", function () {
+                        var expectedValue = mockDataResponse.message.text,
+                            actualValue;
+
+                        actualValue = ajaxModel.getErrorMessage(mockDataResponse);
+
+                        expect(actualValue).toEqual(expectedValue);
+                    });
+                });
             });
         });
     });

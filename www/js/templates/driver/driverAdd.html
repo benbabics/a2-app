@@ -1,0 +1,70 @@
+<h2 class="ui-title">Driver - Add</h2>
+
+{{#driver}}
+    <form id="driverAddForm" class="ui-body ui-body-d">
+        {{#firstName}}
+            <div data-role="fieldcontain">
+                <label for="firstName">{{label}}:</label>
+                <input type="text"
+                       name="{{name}}"
+                       placeholder="{{placeholder}}"
+                       maxlength="{{maxLength}}"
+                       id="firstName"
+                       value="{{value}}"/>
+            </div>
+        {{/firstName}}
+
+        {{#lastName}}
+            <div data-role="fieldcontain">
+                <label for="lastName">{{label}}:</label>
+                <input type="text"
+                       name="{{name}}"
+                       placeholder="{{placeholder}}"
+                       maxlength="{{maxLength}}"
+                       id="lastName"
+                       value="{{value}}" />
+            </div>
+        {{/lastName}}
+
+        {{#middleInitial}}
+            <div data-role="fieldcontain">
+                <label for="middleInitial">{{label}}:</label>
+                <input type="text"
+                       name="{{name}}"
+                       placeholder="{{placeholder}}"
+                       maxlength="{{maxLength}}"
+                       id="middleInitial"
+                       value="{{value}}" />
+            </div>
+        {{/middleInitial}}
+
+        {{#requiredFields.DRIVER_ID}}
+            {{#driverId}}
+                <div data-role="fieldcontain">
+                    <label for="driverId">{{label}}:</label>
+                    <input type="text"
+                           name="{{name}}"
+                           placeholder="{{placeholder}}"
+                           maxlength="{{maxLength}}"
+                           id="driverId"
+                           value="{{value}}" />
+                </div>
+            {{/driverId}}
+        {{/requiredFields.DRIVER_ID}}
+
+        {{#departmentId}}
+            <div data-role="fieldcontain">
+                <label for="departmentId">{{label}}:</label>
+                <select id="departmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}} data-theme="c">
+                    {{#values}}
+                        <option value="{{id}}" {{#selected}} selected {{/selected}}>{{name}}</option>
+                    {{/values}}
+                </select>
+            </div>
+        {{/departmentId}}
+    </form>
+
+    {{#submitButton}}
+        <button id="submitDriverAdd-btn" data-role="button" data-theme="b">{{label}}</button>
+    {{/submitButton}}
+{{/driver}}

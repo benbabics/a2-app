@@ -4,13 +4,15 @@ define(["backbone", "Squire", "globals"],
         "use strict";
 
         var squire = new Squire(),
+            DriverAddModel,
             driverAddModel;
 
         squire.mock("backbone", Backbone);
 
         describe("A Driver Add Model", function () {
             beforeEach(function (done) {
-                squire.require(["models/DriverAddModel"], function (DriverAddModel) {
+                squire.require(["models/DriverAddModel"], function (JasmineDriverAddModel) {
+                    DriverAddModel = JasmineDriverAddModel;
                     driverAddModel = new DriverAddModel();
 
                     done();
@@ -31,77 +33,192 @@ define(["backbone", "Squire", "globals"],
                 });
             });
 
-            describe("has property defaults that", function () {
+            describe("has a defaults function that", function () {
+                it("is defined", function () {
+                    expect(driverAddModel.defaults).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverAddModel.defaults).toEqual(jasmine.any(Function));
+                });
+
                 it("should set driverId to default", function () {
-                    expect(driverAddModel.defaults.driverId).toBeNull();
+                    expect(driverAddModel.defaults().driverId).toBeNull();
                 });
+
                 it("should set firstName to default", function () {
-                    expect(driverAddModel.defaults.firstName).toBeNull();
+                    expect(driverAddModel.defaults().firstName).toBeNull();
                 });
+
                 it("should set middleInitial to default", function () {
-                    expect(driverAddModel.defaults.middleInitial).toBeNull();
+                    expect(driverAddModel.defaults().middleInitial).toBeNull();
                 });
+
                 it("should set lastName to default", function () {
-                    expect(driverAddModel.defaults.lastName).toBeNull();
+                    expect(driverAddModel.defaults().lastName).toBeNull();
                 });
+
                 it("should set departmentId to default", function () {
-                    expect(driverAddModel.defaults.departmentId).toBeNull();
+                    expect(driverAddModel.defaults().departmentId).toBeNull();
                 });
             });
 
             describe("has property validation that", function () {
                 describe("has a validation configuration for the driverId field that", function () {
-                    it("should set the field as required", function () {
-                        expect(driverAddModel.validation.driverId.required).toBeTruthy();
+                    it("has 3 validation rules", function () {
+                        expect(driverAddModel.validation.driverId.length).toEqual(3);
                     });
 
-                    it("should set the length", function () {
-                        expect(driverAddModel.validation.driverId.length).toEqual(4);
+                    describe("the first validation rule", function () {
+                        it("should set the field as required", function () {
+                            expect(driverAddModel.validation.driverId[0].required).toBeTruthy();
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverAddModel.validation.driverId[0].msg)
+                                .toEqual(globals.driverAdd.constants.ERROR_DRIVER_ID_REQUIRED_FIELD);
+                        });
                     });
 
-                    it("should set the pattern", function () {
-                        expect(driverAddModel.validation.driverId.pattern).toEqual("digits");
+                    describe("the second validation rule", function () {
+                        it("should set the field length", function () {
+                            expect(driverAddModel.validation.driverId[1].length).toEqual(4);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverAddModel.validation.driverId[1].msg)
+                                .toEqual(globals.driverAdd.constants.ERROR_DRIVER_ID_INVALID_LENGTH);
+                        });
                     });
 
-                    it("should set the error message when the field is not supplied", function () {
-                        expect(driverAddModel.validation.driverId.msg)
-                            .toEqual(globals.driverAdd.constants.ERROR_DRIVER_ID_REQUIRED_FIELD);
+                    describe("the third validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(driverAddModel.validation.driverId[2].pattern).toEqual("digits");
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverAddModel.validation.driverId[2].msg)
+                                .toEqual(globals.driverAdd.constants.ERROR_DRIVER_ID_INVALID_FORMAT);
+                        });
                     });
                 });
 
                 describe("has a validation configuration for the firstName field that", function () {
-                    it("should set the field as required", function () {
-                        expect(driverAddModel.validation.firstName.required).toBeTruthy();
+                    it("has 3 validation rules", function () {
+                        expect(driverAddModel.validation.firstName.length).toEqual(3);
                     });
 
-                    it("should set the maxLength", function () {
-                        expect(driverAddModel.validation.firstName.maxLength).toEqual(11);
+                    describe("the first validation rule", function () {
+                        it("should set the field as required", function () {
+                            expect(driverAddModel.validation.firstName[0].required).toBeTruthy();
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverAddModel.validation.firstName[0].msg)
+                                .toEqual(globals.driverAdd.constants.ERROR_FIRST_NAME_REQUIRED_FIELD);
+                        });
                     });
 
-                    it("should set the error message when the field is not supplied", function () {
-                        expect(driverAddModel.validation.firstName.msg)
-                            .toEqual(globals.driverAdd.constants.ERROR_FIRST_NAME_REQUIRED_FIELD);
+                    describe("the second validation rule", function () {
+                        it("should set the maxLength", function () {
+                            expect(driverAddModel.validation.firstName[1].maxLength).toEqual(11);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverAddModel.validation.firstName[1].msg)
+                                .toEqual(globals.driverAdd.constants.ERROR_FIRST_NAME_INVALID_LENGTH);
+                        });
+                    });
+
+                    describe("the third validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(driverAddModel.validation.firstName[2].pattern)
+                                .toEqual(/^[A-Z\d`~&_\-+{}|:',.\/]+$/i);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverAddModel.validation.firstName[2].msg)
+                                .toEqual(globals.driverAdd.constants.ERROR_FIRST_NAME_INVALID_CHARACTERS);
+                        });
+                    });
+                });
+
+                describe("has a validation configuration for the middleInitial field that", function () {
+                    it("has 2 validation rules", function () {
+                        expect(driverAddModel.validation.middleInitial.length).toEqual(2);
+                    });
+
+                    describe("the first validation rule", function () {
+                        it("should set the field as not required", function () {
+                            expect(driverAddModel.validation.middleInitial[0].required).toBeFalsy();
+                        });
+
+                        it("should set the maxLength", function () {
+                            expect(driverAddModel.validation.middleInitial[0].maxLength).toEqual(1);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverAddModel.validation.middleInitial[0].msg)
+                                .toEqual(globals.driverAdd.constants.ERROR_MIDDLE_NAME_INVALID_LENGTH);
+                        });
+                    });
+
+                    describe("the second validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(driverAddModel.validation.middleInitial[1].pattern).toEqual(/^[A-Z]+$/i);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverAddModel.validation.middleInitial[1].msg)
+                                .toEqual(globals.driverAdd.constants.ERROR_MIDDLE_NAME_INVALID_CHARACTERS);
+                        });
                     });
                 });
 
                 describe("has a validation configuration for the lastName field that", function () {
-                    it("should set the field as required", function () {
-                        expect(driverAddModel.validation.lastName.required).toBeTruthy();
+                    it("has 3 validation rules", function () {
+                        expect(driverAddModel.validation.lastName.length).toEqual(3);
                     });
 
-                    it("should set the maxLength", function () {
-                        expect(driverAddModel.validation.lastName.maxLength).toEqual(12);
+                    describe("the first validation rule", function () {
+                        it("should set the field as required", function () {
+                            expect(driverAddModel.validation.lastName[0].required).toBeTruthy();
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverAddModel.validation.lastName[0].msg)
+                                .toEqual(globals.driverAdd.constants.ERROR_LAST_NAME_REQUIRED_FIELD);
+                        });
                     });
 
-                    it("should set the error message when the field is not supplied", function () {
-                        expect(driverAddModel.validation.lastName.msg)
-                            .toEqual(globals.driverAdd.constants.ERROR_LAST_NAME_REQUIRED_FIELD);
+                    describe("the second validation rule", function () {
+                        it("should set the maxLength", function () {
+                            expect(driverAddModel.validation.lastName[1].maxLength).toEqual(12);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverAddModel.validation.lastName[1].msg)
+                                .toEqual(globals.driverAdd.constants.ERROR_LAST_NAME_INVALID_LENGTH);
+                        });
+                    });
+
+                    describe("the third validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(driverAddModel.validation.lastName[2].pattern)
+                                .toEqual(/^[A-Z\d`~&_\-+{}|:',.\/]+$/i);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverAddModel.validation.lastName[2].msg)
+                                .toEqual(globals.driverAdd.constants.ERROR_LAST_NAME_INVALID_CHARACTERS);
+                        });
                     });
                 });
             });
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
+                    spyOn(DriverAddModel.__super__, "initialize").and.callFake(function () { });
                     spyOn(driverAddModel, "set").and.callThrough();
                 });
 
@@ -111,6 +228,12 @@ define(["backbone", "Squire", "globals"],
 
                 it("is a function", function () {
                     expect(driverAddModel.initialize).toEqual(jasmine.any(Function));
+                });
+
+                it("should call super", function () {
+                    driverAddModel.initialize();
+
+                    expect(DriverAddModel.__super__.initialize).toHaveBeenCalledWith();
                 });
 
                 describe("when options are not provided", function () {

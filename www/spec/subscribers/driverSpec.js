@@ -36,16 +36,20 @@ define(["Squire"],
                 expect(mockFacade.subscribeTo.calls.mostRecent().args[1]).toEqual(mockDriverController);
             });
 
-            it("should call subscribe 2 times", function () {
-                expect(mockSubscribe.calls.count()).toEqual(2);
+            it("should call subscribe 3 times", function () {
+                expect(mockSubscribe.calls.count()).toEqual(3);
             });
 
-            it("should subscribe to navigateSearch", function () {
-                expect(mockSubscribe).toHaveBeenCalledWith("navigateSearch", "navigateSearch");
+            it("should subscribe to navigateAdd", function () {
+                expect(mockSubscribe).toHaveBeenCalledWith("navigateAdd", "navigateAdd");
             });
 
             it("should subscribe to navigateDriverDetails", function () {
                 expect(mockSubscribe).toHaveBeenCalledWith("navigateDriverDetails", "navigateDriverDetails");
+            });
+
+            it("should subscribe to navigateSearch", function () {
+                expect(mockSubscribe).toHaveBeenCalledWith("navigateSearch", "navigateSearch");
             });
 
             describe("has an init function that", function () {

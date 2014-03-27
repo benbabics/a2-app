@@ -1,5 +1,6 @@
-define(["backbone", "utils", "models/DepartmentModel", "collections/DepartmentCollection", "backbone-relational"],
-    function (Backbone, utils, DepartmentModel, DepartmentCollection) {
+define(["backbone", "globals", "utils", "models/DepartmentModel", "collections/DepartmentCollection",
+        "backbone-relational"],
+    function (Backbone, globals, utils, DepartmentModel, DepartmentCollection) {
 
         "use strict";
 
@@ -10,7 +11,8 @@ define(["backbone", "utils", "models/DepartmentModel", "collections/DepartmentCo
                 "accountId"       : null,
                 "wexAccountNumber": null,
                 "driverIdLength"  : null,
-                "departments"     : null
+                "departments"     : null,
+                "requiredFields"  : globals.companyData.requiredFields
             },
 
             relations: [
@@ -29,6 +31,7 @@ define(["backbone", "utils", "models/DepartmentModel", "collections/DepartmentCo
                     if (options.wexAccountNumber) { this.set("wexAccountNumber", options.wexAccountNumber); }
                     if (options.driverIdLength) { this.set("driverIdLength", options.driverIdLength); }
                     if (options.departments) { this.setDepartments(options.departments); }
+                    if (options.requiredFields) { this.setRequiredFields(options.requiredFields); }
                 }
             },
 
@@ -44,6 +47,17 @@ define(["backbone", "utils", "models/DepartmentModel", "collections/DepartmentCo
                 });
 
                 this.set("departments", departments);
+            },
+
+            setRequiredFields: function (requiredFieldsList) {
+                var newRequiredFields = this.defaults.requiredFields; // start with the defaults
+
+                // Set only the required fields from the list to true
+                for (var i = 0; i < requiredFieldsList.length; i++) {
+                    newRequiredFields[requiredFieldsList[i]] = true;
+                }
+
+                this.set("requiredFields", newRequiredFields);
             }
         });
 

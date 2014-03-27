@@ -184,7 +184,12 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
 
             describe("has a resetForm function that", function () {
                 beforeEach(function () {
+                    spyOn(formModel, "clear");
+                    spyOn(formModel, "set");
                     formView.$el.html(mockTemplate);
+                    spyOn(formView.$el.find("form")[0], "reset").and.callFake(function () { });
+
+                    formView.resetForm();
                 });
 
                 afterEach(function () {
@@ -200,10 +205,50 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                 });
 
                 it("should call reset on the form", function () {
-                    spyOn(formView.$el.find("form")[0], "reset").and.callFake(function () { });
-                    formView.resetForm();
-
                     expect(formView.$el.find("form")[0].reset).toHaveBeenCalledWith();
+                });
+
+                it("should call clear on the Model", function () {
+                    expect(formModel.clear).toHaveBeenCalledWith();
+                });
+
+                describe("when model.defaults is NOT a function", function () {
+                    it("should call set on the Model", function () {
+                        formModel.defaults = {
+                            "field1": null,
+                            "field2": null
+                        };
+
+                        formView.resetForm();
+
+                        expect(formModel.set).toHaveBeenCalledWith(formModel.defaults);
+                    });
+                });
+
+                describe("when model.defaults is a function", function () {
+                    var mockDefaults = {
+                        "field1": "asdfasdf",
+                        "field2": null,
+                        "field3": null
+                    };
+
+                    beforeEach(function () {
+                        formModel.defaults = function () {
+                            return mockDefaults;
+                        };
+
+                        spyOn(formModel, "defaults").and.callThrough();
+
+                        formView.resetForm();
+                    });
+
+                    it("should call defaults on the model", function () {
+                        expect(formModel.defaults).toHaveBeenCalledWith();
+                    });
+
+                    it("should call set on the Model", function () {
+                        expect(formModel.set).toHaveBeenCalledWith(mockDefaults);
+                    });
                 });
             });
 

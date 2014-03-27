@@ -66,7 +66,9 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverReac
                 var self = this,
                     driverReactivateModel = new DriverReactivateModel();
 
-                driverReactivateModel.initialize(this.model.toJSON());
+                driverReactivateModel.initialize(utils._.extend({}, this.model.toJSON(), {
+                    "accountId": this.userModel.get("selectedCompany").get("accountId")
+                }));
 
                 driverReactivateModel.save(driverReactivateModel.toJSON(), {
                     success: function (model, response) {
@@ -79,7 +81,9 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverReac
                 var self = this,
                     driverTerminateModel = new DriverTerminateModel();
 
-                driverTerminateModel.initialize(this.model.toJSON());
+                driverTerminateModel.initialize(utils._.extend({}, this.model.toJSON(), {
+                    "accountId": this.userModel.get("selectedCompany").get("accountId")
+                }));
 
                 driverTerminateModel.save(driverTerminateModel.toJSON(), {
                     success: function (model, response) {

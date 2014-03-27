@@ -7,7 +7,8 @@ define(["backbone", "globals", "utils", "facade"],
         var AjaxModel = Backbone.Model.extend({
 
             sync: function (method, model, options) {
-                var originalSync = Backbone.sync,
+                var self = this,
+                    originalSync = Backbone.sync,
                     successCallback = options.success || function () { },
                     errorCallback = options.error || function () { },
                     beforeSendCallback = options.beforeSend || function () { },
@@ -39,7 +40,7 @@ define(["backbone", "globals", "utils", "facade"],
                                 if (data.message.text) {
                                     facade.publish("app", "alert", {
                                         title          : globals.WEBSERVICE.REQUEST_ERROR_TITLE,
-                                        message        : data.message.text,
+                                        message        : self.getErrorMessage(data),
                                         primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT
                                     });
                                 }
@@ -81,6 +82,23 @@ define(["backbone", "globals", "utils", "facade"],
 
                         errorCallback();
                     });
+            },
+
+            getErrorMessage: function (data) {
+                if (data.data) {
+                    var errorMessage = globals.WEBSERVICE.REQUEST_ERROR_MESSAGE_PREFIX +
+                                       data.message.text +
+                                       globals.WEBSERVICE.REQUEST_ERROR_MESSAGE_SUFFIX;
+                    errorMessage += "<ul>";
+                    utils._.each(data.data, function (value) {
+                        errorMessage += "<li>" + value.message + "</li>";
+                    });
+                    errorMessage += "</ul>";
+
+                    return errorMessage;
+                }
+
+                return data.message.text;
             }
         });
 

@@ -4,13 +4,15 @@ define(["backbone", "Squire", "globals"],
         "use strict";
 
         var squire = new Squire(),
+            DriverReactivateModel,
             driverReactivateModel;
 
         squire.mock("backbone", Backbone);
 
         describe("A Driver Reactivate Model", function () {
             beforeEach(function (done) {
-                squire.require(["models/DriverReactivateModel"], function (DriverReactivateModel) {
+                squire.require(["models/DriverReactivateModel"], function (JasmineDriverReactivateModel) {
+                    DriverReactivateModel = JasmineDriverReactivateModel;
                     driverReactivateModel = new DriverReactivateModel();
 
                     done();
@@ -31,14 +33,23 @@ define(["backbone", "Squire", "globals"],
                 });
             });
 
-            describe("has property defaults that", function () {
+            describe("has a defaults function that", function () {
+                it("is defined", function () {
+                    expect(driverReactivateModel.defaults).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverReactivateModel.defaults).toEqual(jasmine.any(Function));
+                });
+
                 it("should set driverId to default", function () {
-                    expect(driverReactivateModel.defaults.driverId).toBeNull();
+                    expect(driverReactivateModel.defaults().driverId).toBeNull();
                 });
             });
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
+                    spyOn(DriverReactivateModel.__super__, "initialize").and.callFake(function () { });
                     spyOn(driverReactivateModel, "set").and.callThrough();
                 });
 
@@ -48,6 +59,12 @@ define(["backbone", "Squire", "globals"],
 
                 it("is a function", function () {
                     expect(driverReactivateModel.initialize).toEqual(jasmine.any(Function));
+                });
+
+                it("should call super", function () {
+                    driverReactivateModel.initialize();
+
+                    expect(DriverReactivateModel.__super__.initialize).toHaveBeenCalledWith();
                 });
 
                 describe("when options are not provided", function () {
