@@ -1,7 +1,7 @@
-define(["subscribers/about", "subscribers/app", "subscribers/contactUs", "subscribers/driver", "subscribers/home",
-        "subscribers/login", "subscribers/updatePrompt"],
-    function (aboutSubscriber, appSubscriber, contactUsSubscriber, driverSubscriber, homeSubscriber,
-              loginSubscriber, updatePromptSubscriber) {
+define(["subscribers/about", "subscribers/app", "subscribers/card", "subscribers/contactUs",
+        "subscribers/driver", "subscribers/home", "subscribers/login", "subscribers/updatePrompt"],
+    function (aboutSubscriber, appSubscriber, cardSubscriber, contactUsSubscriber,
+              driverSubscriber, homeSubscriber, loginSubscriber, updatePromptSubscriber) {
 
         "use strict";
 
@@ -10,6 +10,7 @@ define(["subscribers/about", "subscribers/app", "subscribers/contactUs", "subscr
 
         // views
         aboutSubscriber.init();
+        cardSubscriber.init();
         contactUsSubscriber.init();
         driverSubscriber.init();
         homeSubscriber.init();

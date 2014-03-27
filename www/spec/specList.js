@@ -39,6 +39,7 @@ var specList =
         // Controllers
         "spec/controllers/AboutControllerSpec.js",
         "spec/controllers/AppControllerSpec.js",
+        "spec/controllers/CardControllerSpec.js",
         "spec/controllers/ContactUsControllerSpec.js",
         "spec/controllers/DriverControllerSpec.js",
         "spec/controllers/HomeControllerSpec.js",
@@ -51,6 +52,7 @@ var specList =
         // Subscribers
         "spec/subscribers/aboutSpec.js",
         "spec/subscribers/appSpec.js",
+        "spec/subscribers/cardSpec.js",
         "spec/subscribers/contactUsSpec.js",
         "spec/subscribers/driverSpec.js",
         "spec/subscribers/homeSpec.js",

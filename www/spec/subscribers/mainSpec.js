@@ -11,6 +11,9 @@ define(["Squire"],
             mockAppSubscriber = {
                 init: jasmine.createSpy("init() spy")
             },
+            mockCardSubscriber = {
+                init: jasmine.createSpy("init() spy")
+            },
             mockContactUsSubscriber = {
                 init: jasmine.createSpy("init() spy")
             },
@@ -29,6 +32,7 @@ define(["Squire"],
 
         squire.mock("subscribers/about", mockAboutSubscriber);
         squire.mock("subscribers/app", mockAppSubscriber);
+        squire.mock("subscribers/card", mockCardSubscriber);
         squire.mock("subscribers/contactUs", mockContactUsSubscriber);
         squire.mock("subscribers/driver", mockDriverSubscriber);
         squire.mock("subscribers/home", mockHomeSubscriber);
@@ -42,31 +46,35 @@ define(["Squire"],
                 });
             });
 
-            it("should call the init function on the About Controller", function () {
+            it("should call the init function on the About Subscriber", function () {
                 expect(mockAboutSubscriber.init).toHaveBeenCalledWith();
             });
 
-            it("should call the init function on the App Controller", function () {
+            it("should call the init function on the App Subscriber", function () {
                 expect(mockAppSubscriber.init).toHaveBeenCalledWith();
             });
 
-            it("should call the init function on the Contact Us Controller", function () {
+            it("should call the init function on the Card Subscriber", function () {
+                expect(mockCardSubscriber.init).toHaveBeenCalledWith();
+            });
+
+            it("should call the init function on the Contact Us Subscriber", function () {
                 expect(mockContactUsSubscriber.init).toHaveBeenCalledWith();
             });
 
-            it("should call the init function on the Driver Controller", function () {
+            it("should call the init function on the Driver Subscriber", function () {
                 expect(mockDriverSubscriber.init).toHaveBeenCalledWith();
             });
 
-            it("should call the init function on the Home Controller", function () {
+            it("should call the init function on the Home Subscriber", function () {
                 expect(mockHomeSubscriber.init).toHaveBeenCalledWith();
             });
 
-            it("should call the init function on the Login Controller", function () {
+            it("should call the init function on the Login Subscriber", function () {
                 expect(mockLoginSubscriber.init).toHaveBeenCalledWith();
             });
 
-            it("should call the init function on the Update Prompt Controller", function () {
+            it("should call the init function on the Update Prompt Subscriber", function () {
                 expect(mockUpdatePromptSubscriber.init).toHaveBeenCalledWith();
             });
         });
