@@ -9,7 +9,7 @@ phantom.viewportSize = {width: 800, height: 600};
 page.onConsoleMessage = function (msg) {
     console.log(msg);   // Pass all page logs to stdout
 
-    if (msg && msg.indexOf("##jasmine.reportRunnerResults") !== -1) {
+    if (msg && msg.indexOf("##teamcity[progressFinish 'Running Jasmine Tests']") !== -1) {
         page.evaluate(function () {
             jscoverage_report();
         });

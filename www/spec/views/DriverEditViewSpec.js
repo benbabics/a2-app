@@ -84,7 +84,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
             beforeEach(function (done) {
                 squire.require(["views/DriverEditView"], function (JasmineDriverEditView) {
-                    loadFixtures("index.html");
+                    //TODO - Fix - Loading fixtures causes phantomjs to hang
+                    //loadFixtures("index.html");
 
                     driverModel.initialize(mockDriverModel);
                     userModel.initialize(mockUserModel);

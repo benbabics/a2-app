@@ -30,7 +30,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
 
             beforeEach(function (done) {
                 squire.require(["views/ContactUsView"], function (JasmineContactUsView) {
-                    loadFixtures("index.html");
+                    //TODO - Fix - Loading fixtures causes phantomjs to hang
+                    //loadFixtures("index.html");
 
                     contactUsModel.set(mockContactUsModel);
                     userModel.set(mockUserModel);

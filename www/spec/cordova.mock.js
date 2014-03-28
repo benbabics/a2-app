@@ -3,7 +3,8 @@ if (window.navigator === undefined) {
 }
 
 setTimeout(function () {
-    var event = new Event("deviceready");
+    var event = document.createEvent("CustomEvent");  // MUST be 'CustomEvent'
+    event.initCustomEvent("deviceready", false, false, null);
     document.dispatchEvent(event);
 }, 2000);
 

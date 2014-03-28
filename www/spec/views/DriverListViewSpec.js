@@ -73,7 +73,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
             beforeEach(function (done) {
                 squire.require(["views/DriverListView"],
                     function (DriverListView) {
-                        loadFixtures("index.html");
+                        //TODO - Fix - Loading fixtures causes phantomjs to hang
+                        //loadFixtures("index.html");
 
                         userModel.initialize(mockUserModel);
                         driverModel = new DriverModel();
