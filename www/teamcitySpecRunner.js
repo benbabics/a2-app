@@ -13,7 +13,6 @@ require.config({
         "cordova"            : "../spec/cordova.mock",
         "mustache"           : "libs/mustache/mustache-min",
         "backbone"           : "libs/backbone/backbone-min",
-        "backbone-relational": "libs/backbone/backbone-relational-min",
         "backbone-validation": "libs/backbone/backbone-validation-amd-min",
         "underscore"         : "libs/underscore/underscore-min",
         "jquery"             : "libs/jquery/jquery-min",
@@ -53,9 +52,6 @@ require.config({
         "backbone": {
             "deps"   : ["underscore", "jquery", "mustache"],
             "exports": "Backbone"
-        },
-        "backbone-relational": {
-            "deps": ["backbone"]
         },
         "jquery-mobile": ["jquery", "libs/jquery/jquery.mobile.config-min"],
         "jclass": {

@@ -1,43 +1,43 @@
 <h2 class="ui-title">Driver - Search</h2>
 <form id="driverSearchForm" class="ui-body ui-body-d">
-    {{#filterFirstName}}
+    {{#firstName}}
     <div data-role="fieldcontain">
-        <label for="filterFirstName">{{label}}:</label>
-        <input type="text" name="{{name}}" id="filterFirstName" value="{{value}}" />
+        <label for="firstName">{{label}}:</label>
+        <input type="text" name="{{name}}" id="firstName" value="{{value}}" />
     </div>
-    {{/filterFirstName}}
-    {{#filterLastName}}
+    {{/firstName}}
+    {{#lastName}}
     <div data-role="fieldcontain">
-        <label for="filterLastName">{{label}}:</label>
-        <input type="text" name="{{name}}" id="filterLastName" value="{{value}}" />
+        <label for="lastName">{{label}}:</label>
+        <input type="text" name="{{name}}" id="lastName" value="{{value}}" />
     </div>
-    {{/filterLastName}}
-    {{#filterDriverId}}
+    {{/lastName}}
+    {{#id}}
     <div data-role="fieldcontain">
-        <label for="filterDriverId">{{label}}:</label>
-        <input type="text" name="{{name}}" id="filterDriverId" value="{{value}}" />
+        <label for="id">{{label}}:</label>
+        <input type="text" name="{{name}}" id="id" value="{{value}}" />
     </div>
-    {{/filterDriverId}}
-    {{#filterStatus}}
+    {{/id}}
+    {{#status}}
     <div data-role="fieldcontain">
-        <label for="filterStatus">{{label}}:</label>
-        <select id="filterStatus" name="{{name}}" data-theme="c">
+        <label for="status">{{label}}:</label>
+        <select id="status" name="{{name}}" data-theme="c">
         {{#values}}
         <option value="{{id}}">{{name}}</option>
         {{/values}}
         </select>
     </div>
-    {{/filterStatus}}
-    {{#filterDepartmentId}}
+    {{/status}}
+    {{#departmentId}}
     <div data-role="fieldcontain">
-        <label for="filterDepartmentId">{{label}}:</label>
-        <select id="filterDepartmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}} data-theme="c">
+        <label for="departmentId">{{label}}:</label>
+        <select id="departmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}} data-theme="c">
             {{#values}}
             <option value="{{id}}">{{name}}</option>
             {{/values}}
         </select>
     </div>
-    {{/filterDepartmentId}}
+    {{/departmentId}}
 </form>
 {{#submitButton}}
 <button id="submitDriverSearch-btn" data-role="button" data-theme="b">{{label}}</button>

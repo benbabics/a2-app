@@ -29,7 +29,9 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
             beforeEach(function (done) {
                 squire.require(["views/LoginView"], function (JasmineLoginView) {
                     //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    //loadFixtures("index.html");
+                    if (window._phantom === undefined) {
+                        loadFixtures("index.html");
+                    }
 
                     loginModel.set(mockLoginModel);
 

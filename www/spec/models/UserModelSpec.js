@@ -1,9 +1,10 @@
-define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbone-relational"],
+define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
     function (Squire, utils, globals, CompanyModel, Backbone) {
 
         "use strict";
 
         var squire = new Squire(),
+            UserModel,
             userModel;
 
         squire.mock("backbone", Backbone);
@@ -11,7 +12,8 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
 
         describe("A User Model", function () {
             beforeEach(function (done) {
-                squire.require(["models/UserModel"], function (UserModel) {
+                squire.require(["models/UserModel"], function (JasmineUserModel) {
+                    UserModel = JasmineUserModel;
                     userModel = UserModel.getInstance();
 
                     done();
@@ -22,8 +24,8 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                 expect(userModel).toBeDefined();
             });
 
-            it("looks like a Backbone Relational model", function () {
-                expect(userModel instanceof Backbone.RelationalModel).toBeTruthy();
+            it("looks like a Backbone Model", function () {
+                expect(userModel instanceof Backbone.Model).toBeTruthy();
             });
 
             describe("has property defaults that", function () {
@@ -49,22 +51,6 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
 
                 it("should set permissions to default", function () {
                     expect(userModel.defaults.permissions).toEqual(globals.userData.permissions);
-                });
-            });
-
-            describe("has property relations that", function () {
-                describe("has a company relation that", function () {
-                    it("should set type to Backbone.HasOne", function () {
-                        expect(userModel.relations[0].type).toEqual(Backbone.HasOne);
-                    });
-
-                    it("should set key to selectedCompany", function () {
-                        expect(userModel.relations[0].key).toEqual("selectedCompany");
-                    });
-
-                    it("should set relatedModel to CompanyModel", function () {
-                        expect(userModel.relations[0].relatedModel).toEqual(CompanyModel);
-                    });
                 });
             });
 
@@ -173,13 +159,17 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                         expect(actualCompany.get("driverIdLength")).toEqual(options.selectedCompany.driverIdLength);
 
                         actualDepartments = actualCompany.get("departments");
-                        expect(actualDepartments.at(0).get("departmentId")).toEqual(options.selectedCompany.departments[0].id);
-                        expect(actualDepartments.at(0).get("name")).toEqual(options.selectedCompany.departments[0].name);
-                        expect(actualDepartments.at(0).get("visible")).toEqual(options.selectedCompany.departments[0].visible);
+                        expect(actualDepartments.at(0).get("id")).toEqual(options.selectedCompany.departments[0].id);
+                        expect(actualDepartments.at(0).get("name"))
+                            .toEqual(options.selectedCompany.departments[0].name);
+                        expect(actualDepartments.at(0).get("visible"))
+                            .toEqual(options.selectedCompany.departments[0].visible);
 
-                        expect(actualDepartments.at(1).get("departmentId")).toEqual(options.selectedCompany.departments[1].id);
-                        expect(actualDepartments.at(1).get("name")).toEqual(options.selectedCompany.departments[1].name);
-                        expect(actualDepartments.at(1).get("visible")).toEqual(options.selectedCompany.departments[1].visible);
+                        expect(actualDepartments.at(1).get("id")).toEqual(options.selectedCompany.departments[1].id);
+                        expect(actualDepartments.at(1).get("name"))
+                            .toEqual(options.selectedCompany.departments[1].name);
+                        expect(actualDepartments.at(1).get("visible"))
+                            .toEqual(options.selectedCompany.departments[1].visible);
                     });
 
                     it("should set hasMultipleAccounts", function () {
@@ -276,7 +266,98 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone", "backbo
                         expect(utils._.size(matchingPermissions)).toEqual(utils._.size(mockPermissions));
                     });
                 });
+            });
 
+            describe("has a toJSON function that", function () {
+                it("is defined", function () {
+                    expect(userModel.toJSON).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(userModel.toJSON).toEqual(jasmine.any(Function));
+                });
+
+                describe("when selectedCompany does have a value", function () {
+                    var selectedCompany,
+                        mockUserModel,
+                        actualValue;
+
+                    beforeEach(function () {
+                        mockUserModel = {
+                            authenticated: true,
+                            firstName: "Beavis",
+                            email: "cornholio@bnbinc.com",
+                            selectedCompany: {
+                                name: "Beavis and Butthead Inc",
+                                accountId: "3673683",
+                                wexAccountNumber: "5764309",
+                                driverIdLength: "4",
+                                departments: [
+                                    {
+                                        id: "134613456",
+                                        name: "UNASSIGNED",
+                                        visible: true
+                                    },
+                                    {
+                                        id: "2456724567",
+                                        name: "Dewey, Cheetum and Howe",
+                                        visible: false
+                                    }
+                                ],
+                                requiredFields: globals.companyData.requiredFields
+                            },
+                            permissions: userModel.defaults.permissions
+                        };
+                        userModel.clear();
+                        userModel.initialize(mockUserModel);
+                        selectedCompany = userModel.get("selectedCompany");
+
+                        spyOn(selectedCompany, "toJSON").and.callThrough();
+                        spyOn(userModel.__proto__, "toJSON").and.callThrough();
+
+                        actualValue = userModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(userModel.__proto__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should call toJSON on selectedCompany", function () {
+                        expect(selectedCompany.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockUserModel);
+                    });
+                });
+
+                describe("when selectedCompany does NOT have a value", function () {
+                    var mockUserModel,
+                        actualValue;
+
+                    beforeEach(function () {
+                        mockUserModel = {
+                            authenticated : true,
+                            firstName     : "Beavis",
+                            email         : "cornholio@bnbinc.com",
+                            permissions   : userModel.defaults.permissions
+                        };
+                        userModel.clear();
+                        userModel.initialize(mockUserModel);
+
+                        spyOn(userModel.__proto__, "toJSON").and.callThrough();
+
+                        actualValue = userModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(userModel.__proto__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockUserModel);
+                    });
+                });
             });
         });
     });

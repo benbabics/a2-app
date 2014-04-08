@@ -1,6 +1,5 @@
-define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverReactivateModel",
-        "models/DriverTerminateModel", "text!tmpl/driver/driverEdit.html"],
-    function (Backbone, utils, facade, Mustache, globals, DriverReactivateModel, DriverTerminateModel, pageTemplate) {
+define(["backbone", "utils", "facade", "mustache", "globals", "text!tmpl/driver/driverEdit.html"],
+    function (Backbone, utils, facade, Mustache, globals, pageTemplate) {
 
         "use strict";
 
@@ -13,7 +12,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverReac
             userModel: null,
 
             events: {
-                "click #submitChangeStatus-btn": "changeStatus"
+                "click #submitChangeStatus-btn": "handleChangeStatus"
             },
 
             initialize: function (options) {
@@ -42,14 +41,14 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverReac
 
                 // populate configuration details
                 driverConfiguration.driverName.value = driver.formattedName();
-                driverConfiguration.driverId.value = driver.driverId;
+                driverConfiguration.id.value = driver.id;
                 driverConfiguration.driverStatus.value = driver.status;
                 driverConfiguration.driverStatusDate.value = driver.statusDate;
                 if (driver.department) {
                     driverConfiguration.driverDepartment.value = driver.department.name;
                 }
 
-                if (driver.status === globals.driverEdit.constants.STATUS_TERMINATED) {
+                if (driver.status === globals.driver.constants.STATUS_TERMINATED) {
                     driverConfiguration.submitButton.label = globals.driverEdit.constants.BUTTON_ACTIVATE;
                 }
                 else {
@@ -62,32 +61,12 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverReac
                 };
             },
 
-            reactivateDriver: function () {
-                var self = this,
-                    driverReactivateModel = new DriverReactivateModel();
+            changeStatus: function (updatedStatus, eventToTrigger) {
+                var self = this;
 
-                driverReactivateModel.initialize(utils._.extend({}, this.model.toJSON(), {
-                    "accountId": this.userModel.get("selectedCompany").get("accountId")
-                }));
-
-                driverReactivateModel.save(driverReactivateModel.toJSON(), {
+                this.model.changeStatus(updatedStatus, {
                     success: function (model, response) {
-                        self.trigger("reactivateDriverSuccess", response);
-                    }
-                });
-            },
-
-            terminateDriver: function () {
-                var self = this,
-                    driverTerminateModel = new DriverTerminateModel();
-
-                driverTerminateModel.initialize(utils._.extend({}, this.model.toJSON(), {
-                    "accountId": this.userModel.get("selectedCompany").get("accountId")
-                }));
-
-                driverTerminateModel.save(driverTerminateModel.toJSON(), {
-                    success: function (model, response) {
-                        self.trigger("terminateDriverSuccess", response);
+                        self.trigger(eventToTrigger, response);
                     }
                 });
             },
@@ -100,7 +79,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverReac
                     message           : globals.driverTerminate.constants.CONFIRMATION_MESSAGE,
                     primaryBtnLabel   : globals.driverTerminate.constants.OK_BTN_TEXT,
                     primaryBtnHandler : function () {
-                        self.terminateDriver();
+                        self.changeStatus(globals.driver.constants.STATUS_TERMINATED, "terminateDriverSuccess");
                     },
                     secondaryBtnLabel : globals.driverTerminate.constants.CANCEL_BTN_TEXT
                 });
@@ -109,11 +88,11 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverReac
             /*
              * Event Handlers
              */
-            changeStatus: function (evt) {
+            handleChangeStatus: function (evt) {
                 evt.preventDefault();
 
-                if (this.model.get("status") === globals.driverEdit.constants.STATUS_TERMINATED) {
-                    this.reactivateDriver();
+                if (this.model.get("status") === globals.driver.constants.STATUS_TERMINATED) {
+                    this.changeStatus(globals.driver.constants.STATUS_ACTIVE, "reactivateDriverSuccess");
                 }
                 else {
                     this.confirmTerminateDriver();

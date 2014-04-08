@@ -8,24 +8,8 @@ define(["globals", "backbone", "utils", "Squire"],
                 publish: function (channel, event) { }
             },
             mockUtils = utils,
-            mockDriverAddModel = {
-                "driverId"     : null,
-                "firstName"    : null,
-                "middleInitial": null,
-                "lastName"     : null,
-                "departmentId" : null
-            },
-            driverAddModel = new Backbone.Model(),
-            mockDriverSearchModel = {
-                "filterFirstName"   : null,
-                "filterLastName"    : null,
-                "filterDriverId"    : null,
-                "filterStatus"      : null,
-                "filterDepartmentId": null
-            },
-            driverSearchModel = new Backbone.Model(),
             mockDriverModel = {
-                "driverId"  : "354t25ty",
+                "id"        : 35425,
                 "firstName" : "Homer",
                 "middleName": "B",
                 "lastName"  : "Simpson",
@@ -46,6 +30,7 @@ define(["globals", "backbone", "utils", "Squire"],
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { },
+                resetForm: function () { },
                 on: function () { }
             },
             mockDriverEditView = {
@@ -66,9 +51,11 @@ define(["globals", "backbone", "utils", "Squire"],
             },
             mockDriverSearchView = {
                 $el: "",
+                model: driverModel,
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { },
+                resetForm: function () { },
                 on: function () { }
             },
             mockUserModel = {
@@ -89,15 +76,12 @@ define(["globals", "backbone", "utils", "Squire"],
         squire.mock("views/DriverListView", Squire.Helpers.returns(mockDriverListView));
         squire.mock("views/DriverSearchView", Squire.Helpers.returns(mockDriverSearchView));
         squire.mock("collections/DriverCollection", Squire.Helpers.returns(mockDriverCollection));
-        squire.mock("models/DriverAddModel", Squire.Helpers.returns(driverAddModel));
-        squire.mock("models/DriverSearchModel", Squire.Helpers.returns(driverSearchModel));
+        squire.mock("models/DriverModel", Squire.Helpers.returns(driverModel));
         squire.mock("models/UserModel", UserModel);
 
         describe("A Driver Controller", function () {
             beforeEach(function (done) {
                 squire.require(["controllers/DriverController"], function (DriverController) {
-                    driverAddModel.set(mockDriverAddModel);
-                    driverSearchModel.set(mockDriverSearchModel);
                     driverModel.set(mockDriverModel);
                     userModel.set(mockUserModel);
                     spyOn(UserModel, "getInstance").and.callFake(function () { return userModel; });
@@ -136,10 +120,6 @@ define(["globals", "backbone", "utils", "Squire"],
                     expect(driverController.driverCollection).toEqual(mockDriverCollection);
                 });
 
-                it("should set the driverSearchModel variable to a new DriverSearchModel object", function () {
-                    expect(driverController.driverSearchModel).toEqual(driverSearchModel);
-                });
-
                 describe("when initializing the DriverAddView", function () {
                     beforeEach(function () {
                         spyOn(mockDriverAddView, "constructor").and.callThrough();
@@ -151,7 +131,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
                     xit("should send in the correct parameters to the constructor", function () {
                         expect(mockDriverAddView.constructor).toHaveBeenCalledWith({
-                            model: driverAddModel,
+                            model: driverModel,
                             userModel: userModel
                         });
 
@@ -188,7 +168,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
                     xit("should send in the correct parameters to the constructor", function () {
                         expect(mockDriverSearchView.constructor).toHaveBeenCalledWith({
-                            model: driverSearchModel,
+                            model: driverModel,
                             userModel: userModel
                         });
 
@@ -258,6 +238,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
             describe("has a navigateAdd function that", function () {
                 beforeEach(function () {
+                    spyOn(mockDriverAddView, "resetForm").and.callThrough();
                     spyOn(mockDriverAddView, "render").and.callThrough();
                     spyOn(mockUtils, "changePage").and.callThrough();
 
@@ -270,6 +251,10 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 it("is a function", function () {
                     expect(driverController.navigateAdd).toEqual(jasmine.any(Function));
+                });
+
+                it("should call resetForm on the Driver Add View Page", function () {
+                    expect(mockDriverAddView.resetForm).toHaveBeenCalledWith();
                 });
 
                 it("should call render on the Driver Add View Page", function () {
@@ -286,6 +271,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
             describe("has a navigateSearch function that", function () {
                 beforeEach(function () {
+                    spyOn(mockDriverSearchView, "resetForm").and.callThrough();
                     spyOn(mockDriverSearchView, "render").and.callThrough();
                     spyOn(mockUtils, "changePage").and.callThrough();
 
@@ -298,6 +284,10 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 it("is a function", function () {
                     expect(driverController.navigateSearch).toEqual(jasmine.any(Function));
+                });
+
+                it("should call resetForm on the Driver Search View Page", function () {
+                    expect(mockDriverSearchView.resetForm).toHaveBeenCalledWith();
                 });
 
                 it("should call render on the Driver Search View Page", function () {
@@ -316,7 +306,7 @@ define(["globals", "backbone", "utils", "Squire"],
             });
 
             describe("has a navigateDriverDetails function that", function () {
-                var mockDriverId = "1234";
+                var mockDriverId = 1234;
 
                 beforeEach(function () {
                     mockDriverEditView.model = null;
@@ -336,7 +326,7 @@ define(["globals", "backbone", "utils", "Squire"],
                 });
 
                 it("should call findWhere on the Driver Collection", function () {
-                    expect(mockDriverCollection.findWhere).toHaveBeenCalledWith({"driverId": mockDriverId});
+                    expect(mockDriverCollection.findWhere).toHaveBeenCalledWith({"id": mockDriverId});
                 });
 
                 it("should set model on the Driver Edit View Page", function () {
@@ -652,7 +642,7 @@ define(["globals", "backbone", "utils", "Squire"],
                 });
 
                 it("should call fetch on the Driver Collection", function () {
-                    expect(mockDriverCollection.fetch).toHaveBeenCalledWith(driverSearchModel.toJSON());
+                    expect(mockDriverCollection.fetch).toHaveBeenCalledWith(driverModel.toJSON());
                 });
 
                 it("should call promise on the Deferred object", function () {

@@ -47,7 +47,15 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     },
                     "field5": {
                         required: true
-                    }
+                    },
+                    "field6": [
+                        {
+                            required: function () { return true; }
+                        },
+                        {
+                            max: 50
+                        }
+                    ]
                 }
             }),
             formModel = new MockModel(),
@@ -128,6 +136,8 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
             describe("has a formatRequiredFields function that", function () {
                 beforeEach(function () {
                     spyOn(mockUtils._, "each").and.callThrough();
+                    spyOn(validationFormView, "isRequired").and.callThrough();
+                    spyOn(validationFormView, "formatAsRequired").and.callThrough();
 
                     validationFormView.$el.html(mockTemplate);
                     validationFormView.formatRequiredFields();
@@ -147,28 +157,111 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
 
                 it("should call utils._.each on the model's validation object", function () {
                     expect(mockUtils._.each).toHaveBeenCalled();
-                    expect(mockUtils._.each.calls.mostRecent().args.length).toEqual(3);
-                    expect(mockUtils._.each.calls.mostRecent().args[0]).toEqual(validationFormView.model.validation);
-                    expect(mockUtils._.each.calls.mostRecent().args[1]).toEqual(jasmine.any(Function));
-                    expect(mockUtils._.each.calls.mostRecent().args[2]).toEqual(validationFormView);
+                    expect(mockUtils._.each.calls.argsFor(0).length).toEqual(3);
+                    expect(mockUtils._.each.calls.argsFor(0)[0]).toEqual(validationFormView.model.validation);
+                    expect(mockUtils._.each.calls.argsFor(0)[1]).toEqual(jasmine.any(Function));
+                    expect(mockUtils._.each.calls.argsFor(0)[2]).toEqual(validationFormView);
                 });
 
-                it("should add an asterisk to the label of any fields that have a validation rule of required:true",
+                it("should call utils._.each on the field's validation array", function () {
+                    expect(mockUtils._.each).toHaveBeenCalled();
+                    expect(mockUtils._.each.calls.argsFor(1).length).toEqual(3);
+                    expect(mockUtils._.each.calls.argsFor(1)[0]).toEqual(validationFormView.model.validation.field6);
+                    expect(mockUtils._.each.calls.argsFor(1)[1]).toEqual(jasmine.any(Function));
+                    expect(mockUtils._.each.calls.argsFor(1)[2]).toEqual(validationFormView);
+                });
+
+                it("should call formatAsRequired for all fields that have a validation rule of required:true",
                     function () {
-                        expect(validationFormView.$el.find("label[for='field1']")[0]).toContainText("*");
-                        expect(validationFormView.$el.find("label[for='field4']")[0]).toContainText("*");
-                        expect(validationFormView.$el.find("label[for='field5']")[0]).toContainText("*");
+                        expect(validationFormView.formatAsRequired).toHaveBeenCalledWith("field1");
+                        expect(validationFormView.formatAsRequired).toHaveBeenCalledWith("field4");
+                        expect(validationFormView.formatAsRequired).toHaveBeenCalledWith("field5");
+                        expect(validationFormView.formatAsRequired).toHaveBeenCalledWith("field6");
                     });
 
-                it("should NOT add an asterisk to label of fields that do not have a validation rule of required:true",
+                it("should NOT call formatAsRequired for fields that do not have a validation rule of required:true",
                     function () {
-                        expect(validationFormView.$el.find("label[for='field2']")[0]).not.toContainText("*");
+                        expect(validationFormView.formatAsRequired).not.toHaveBeenCalledWith("field2");
                     });
 
-                it("should NOT add an asterisk to the label of any fields that do not have any validation rules",
+                it("should NOT call formatAsRequired for fields that do not have validation rules",
                     function () {
-                        expect(validationFormView.$el.find("label[for='field3']")[0]).not.toContainText("*");
+                        expect(validationFormView.formatAsRequired).not.toHaveBeenCalledWith("field3");
                     });
+            });
+
+            describe("has a isRequired function that", function () {
+                it("is defined", function () {
+                    expect(validationFormView.isRequired).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(validationFormView.isRequired).toEqual(jasmine.any(Function));
+                });
+
+                describe("when required is a function", function () {
+                    var expectedValue = true,
+                        validationRule = {
+                            required: function () { return expectedValue; }
+                        };
+
+                    it("should call the required function", function () {
+                        spyOn(validationRule, "required").and.callThrough();
+
+                        validationFormView.isRequired(validationRule);
+
+                        expect(validationRule.required).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        var actualValue = validationFormView.isRequired(validationRule);
+
+                        expect(actualValue).toEqual(expectedValue);
+                    });
+                });
+
+                describe("when required is NOT a function", function () {
+                    var expectedValue = false,
+                        validationRule = {
+                            required: expectedValue
+                        };
+
+                    it("should return the expected value", function () {
+                        var actualValue = validationFormView.isRequired(validationRule);
+
+                        expect(actualValue).toEqual(expectedValue);
+                    });
+                });
+            });
+
+            describe("has a formatAsRequired function that", function () {
+                beforeEach(function () {
+                    validationFormView.$el.html(mockTemplate);
+                    validationFormView.formatAsRequired("field1");
+                });
+
+                afterEach(function () {
+                    validationFormView.$el.html("");
+                });
+
+                it("is defined", function () {
+                    expect(validationFormView.formatAsRequired).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(validationFormView.formatAsRequired).toEqual(jasmine.any(Function));
+                });
+
+                it("should add an asterisk to the label of field1", function () {
+                    expect(validationFormView.$el.find("label[for='field1']")[0]).toContainText("*");
+                });
+
+                it("should NOT add an asterisk to label of any other field", function () {
+                    expect(validationFormView.$el.find("label[for='field2']")[0]).not.toContainText("*");
+                    expect(validationFormView.$el.find("label[for='field3']")[0]).not.toContainText("*");
+                    expect(validationFormView.$el.find("label[for='field4']")[0]).not.toContainText("*");
+                    expect(validationFormView.$el.find("label[for='field5']")[0]).not.toContainText("*");
+                });
             });
 
             describe("has a convertErrorsToUnorderedList function that", function () {

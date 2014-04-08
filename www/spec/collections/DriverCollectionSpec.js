@@ -1,16 +1,50 @@
-define(["utils", "globals", "Squire", "models/DriverModel"],
-    function (utils, globals, Squire, DriverModel) {
+define(["utils", "globals", "Squire", "models/DriverModel", "models/UserModel"],
+    function (utils, globals, Squire, DriverModel, UserModel) {
         "use strict";
 
         var squire = new Squire(),
+            mockUserModel = {
+                authenticated: true,
+                firstName: "Beavis",
+                email: "cornholio@bnbinc.com",
+                selectedCompany: {
+                    name: "Beavis and Butthead Inc",
+                    accountId: "3673683",
+                    wexAccountNumber: "5764309",
+                    driverIdLength: "4",
+                    departments: [
+                        {
+                            id: "134613456",
+                            name: "UNASSIGNED",
+                            visible: true
+                        },
+                        {
+                            id: "2456724567",
+                            name: "Dewey, Cheetum and Howe",
+                            visible: false
+                        }
+                    ]
+                },
+                permissions: [
+                    "PERMISSION_1",
+                    "PERMISSION_2",
+                    "PERMISSION_3"
+                ]
+            },
+            userModel = UserModel.getInstance(),
             DriverCollection,
             driverCollection;
 
         squire.mock("models/DriverModel", DriverModel);
+        squire.mock("models/UserModel", UserModel);
 
         describe("A Driver Collection", function () {
             beforeEach(function(done) {
                 squire.require(["collections/DriverCollection"], function(JasmineDriverCollection) {
+                    userModel.initialize(mockUserModel);
+
+                    spyOn(UserModel, "getInstance").and.returnValue(userModel);
+
                     DriverCollection = JasmineDriverCollection;
                     driverCollection = new DriverCollection();
                     done();
@@ -49,9 +83,25 @@ define(["utils", "globals", "Squire", "models/DriverModel"],
                 it("should default pageSize", function () {
                     expect(driverCollection.pageSize).toEqual(globals.driverSearch.constants.DEFAULT_PAGE_SIZE);
                 });
+            });
 
-                it("should default url", function () {
-                    expect(driverCollection.url).toEqual(globals.driverSearch.constants.WEBSERVICE);
+            describe("has a url function that", function () {
+                it("is defined", function () {
+                    expect(driverCollection.url).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverCollection.url).toEqual(jasmine.any(Function));
+                });
+
+                it("should return expected result", function () {
+                    var expectedResult = globals.WEBSERVICE.ACCOUNTS.URL +
+                                         "/" +
+                                         mockUserModel.selectedCompany.accountId +
+                                         globals.WEBSERVICE.DRIVER_PATH,
+                        actualResult = driverCollection.url();
+
+                    expect(actualResult).toEqual(expectedResult);
                 });
             });
 
@@ -205,9 +255,13 @@ define(["utils", "globals", "Squire", "models/DriverModel"],
                 var mockOptions = {
                     "firstName"   : "Curly",
                     "lastName"    : "Howard",
-                    "driverId"    : null,
-                    "status"      : null,
-                    "departmentId": null
+                    "id"          : 132456,
+                    "status"      : "ACTIVE",
+                    department : {
+                        id: "2456724567",
+                        name: "Dewey, Cheetum and Howe",
+                        visible: true
+                    }
                 };
 
                 beforeEach(function () {
@@ -233,7 +287,14 @@ define(["utils", "globals", "Squire", "models/DriverModel"],
                 });
 
                 it("should call super", function () {
-                    var expectedOptions = utils._.clone(mockOptions);
+                    var expectedOptions = {};
+                    expectedOptions.firstName = mockOptions.firstName;
+                    expectedOptions.lastName = mockOptions.lastName;
+                    expectedOptions.id = mockOptions.id;
+                    expectedOptions.status = mockOptions.status;
+                    if (mockOptions.department) {
+                        expectedOptions.departmentId = mockOptions.department.id;
+                    }
                     expectedOptions.pageSize = driverCollection.pageSize;
                     expectedOptions.pageNumber = driverCollection.pageNumber;
 

@@ -19,15 +19,10 @@ var specList =
         // Models
         "spec/models/AjaxModelSpec.js",
         "spec/models/AppModelSpec.js",
-        "spec/models/CompanyAjaxModelSpec.js",
         "spec/models/CompanyModelSpec.js",
         "spec/models/ContactUsModelSpec.js",
         "spec/models/DepartmentModelSpec.js",
-        "spec/models/DriverAddModelSpec.js",
         "spec/models/DriverModelSpec.js",
-        "spec/models/DriverReactivateModelSpec.js",
-        "spec/models/DriverSearchModelSpec.js",
-        "spec/models/DriverTerminateModelSpec.js",
         "spec/models/LoginModelSpec.js",
         "spec/models/UserModelSpec.js",
 

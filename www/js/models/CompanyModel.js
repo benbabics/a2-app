@@ -1,11 +1,10 @@
-define(["backbone", "globals", "utils", "models/DepartmentModel", "collections/DepartmentCollection",
-        "backbone-relational"],
+define(["backbone", "globals", "utils", "models/DepartmentModel", "collections/DepartmentCollection"],
     function (Backbone, globals, utils, DepartmentModel, DepartmentCollection) {
 
         "use strict";
 
 
-        var CompanyModel = Backbone.RelationalModel.extend({
+        var CompanyModel = Backbone.Model.extend({
             defaults: {
                 "name"            : null,
                 "accountId"       : null,
@@ -14,15 +13,6 @@ define(["backbone", "globals", "utils", "models/DepartmentModel", "collections/D
                 "departments"     : null,
                 "requiredFields"  : globals.companyData.requiredFields
             },
-
-            relations: [
-                {
-                    type: Backbone.HasMany,
-                    key: "departments",
-                    relatedModel: DepartmentModel,
-                    collectionType: DepartmentCollection
-                }
-            ],
 
             initialize: function (options) {
                 if (options) {
@@ -58,6 +48,16 @@ define(["backbone", "globals", "utils", "models/DepartmentModel", "collections/D
                 }
 
                 this.set("requiredFields", newRequiredFields);
+            },
+
+            toJSON: function () {
+                var json = CompanyModel.__super__.toJSON.apply(this, arguments);
+
+                if (json.departments) {
+                    json.departments = json.departments.toJSON();
+                }
+
+                return json;
             }
         });
 

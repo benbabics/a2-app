@@ -33,9 +33,9 @@ define(["backbone", "utils", "mustache", "globals", "text!tmpl/driver/driver.htm
 
                     // populate configuration details
                     driverConfiguration.url.value =
-                        globals.driverSearchResults.constants.DRIVER_DETAILS_BASE_URL + driver.driverId;
+                        globals.driverSearchResults.constants.DRIVER_DETAILS_BASE_URL + driver.id;
                     driverConfiguration.driverName.value = driver.formattedName();
-                    driverConfiguration.driverId.value = driver.driverId;
+                    driverConfiguration.id.value = driver.id;
                     driverConfiguration.driverStatus.value = driver.status;
                     if (driver.department) {
                         driverConfiguration.driverDepartment.value = driver.department.name;

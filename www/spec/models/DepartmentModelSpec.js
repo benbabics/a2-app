@@ -1,4 +1,4 @@
-define(["Squire", "backbone", "backbone-relational"],
+define(["Squire", "backbone"],
     function (Squire, Backbone) {
 
         "use strict";
@@ -21,13 +21,13 @@ define(["Squire", "backbone", "backbone-relational"],
                 expect(departmentModel).toBeDefined();
             });
 
-            it("looks like a Backbone RelationalModel", function () {
-                expect(departmentModel instanceof Backbone.RelationalModel).toBeTruthy();
+            it("looks like a Backbone Model", function () {
+                expect(departmentModel instanceof Backbone.Model).toBeTruthy();
             });
 
             describe("has property defaults that", function () {
-                it("should set departmentId to default", function () {
-                    expect(departmentModel.defaults.departmentId).toBeNull();
+                it("should set id to default", function () {
+                    expect(departmentModel.defaults.id).toBeNull();
                 });
 
                 it("should set name to default", function () {
@@ -89,8 +89,8 @@ define(["Squire", "backbone", "backbone-relational"],
                         expect(departmentModel.set.calls.count()).toEqual(3);
                     });
 
-                    it("should set departmentId", function () {
-                        expect(departmentModel.set).toHaveBeenCalledWith("departmentId", options.id);
+                    it("should set id", function () {
+                        expect(departmentModel.set).toHaveBeenCalledWith("id", options.id);
                     });
 
                     it("should set name", function () {

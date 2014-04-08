@@ -1,21 +1,19 @@
-define(["backbone", "backbone-relational"],
+define(["backbone"],
     function (Backbone) {
 
         "use strict";
 
 
-        var DepartmentModel = Backbone.RelationalModel.extend({
+        var DepartmentModel = Backbone.Model.extend({
             defaults: {
-                // Using "id" will cause backbone-relational to keep track of the object in a store and throw an error
-                // if there is another model with the same id value
-                "departmentId": null,
-                "name"        : null,
-                "visible"     : false
+                "id"     : null,
+                "name"   : null,
+                "visible": false
             },
 
             initialize: function (options) {
                 if (options) {
-                    if (options.id) { this.set("departmentId", options.id); }
+                    if (options.id) { this.set("id", options.id); }
 
                     // This model gets used by multiple services,
                     // some of which return name and others return displayValue

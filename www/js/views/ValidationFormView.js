@@ -20,23 +20,42 @@ define(["backbone", "globals", "facade", "utils", "mustache",  "views/FormView",
             },
 
             formatRequiredFields: function () {
+                // Iterate over the model's Validation Rules
+                utils._.each(this.model.validation, function (validationRules, fieldName, list) {
+                    if ($.isArray(validationRules)) {
+                        utils._.each(validationRules, function (validationRule) {
+                            if (this.isRequired(validationRule)) {
+                                this.formatAsRequired(fieldName);
+                            }
+                        }, this);
+                    }
+                    else {
+                        // If the field is designated as required
+                        if (this.isRequired(validationRules)) {
+                            this.formatAsRequired(fieldName);
+                        }
+                    }
+                }, this);
+            },
+
+            isRequired: function (validationRule) {
+                if (utils.isFn(validationRule.required)) {
+                    return validationRule.required();
+                }
+
+                return validationRule.required;
+            },
+
+            formatAsRequired: function (fieldName) {
                 var $requiredField,
                     $fieldLabel;
 
-                // Iterate over the model's Validation Rules
-                utils._.each(this.model.validation, function (validationRules, fieldName, list) {
-                    // If the field is designated as required
-                    if (validationRules.required) {
+                // Find the label for the required field
+                $requiredField = this.$el.find("[name='" + fieldName + "']");
+                $fieldLabel = $requiredField.prevAll("label[for='" + $requiredField.attr("id") + "']");
 
-                        // Find the label for the required field
-                        $requiredField = this.$el.find("[name='" + fieldName + "']");
-                        $fieldLabel = $requiredField.prevAll("label[for='" + $requiredField.attr("id") + "']");
-
-                        // Append an asterisk denoting the field is required
-                        $fieldLabel.append("<span class='required'>*</span>");
-                    }
-
-                }, this);
+                // Append an asterisk denoting the field is required
+                $fieldLabel.append("<span class='required'>*</span>");
             },
 
             convertErrorsToUnorderedList: function (error) {

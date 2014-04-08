@@ -38,7 +38,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
             },
             userModel = UserModel.getInstance(),
             mockDriverModel = {
-                "driverId"  : "354t25ty",
+                "id"        : 35425,
                 "firstName" : "Ben",
                 "middleName": "D",
                 "lastName"  : "Over",
@@ -74,7 +74,9 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 squire.require(["views/DriverListView"],
                     function (DriverListView) {
                         //TODO - Fix - Loading fixtures causes phantomjs to hang
-                        //loadFixtures("index.html");
+                        if (window._phantom === undefined) {
+                            loadFixtures("index.html");
+                        }
 
                         userModel.initialize(mockUserModel);
                         driverModel = new DriverModel();

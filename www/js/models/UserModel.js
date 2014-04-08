@@ -1,10 +1,10 @@
-define(["backbone", "globals", "models/CompanyModel", "backbone-relational"],
+define(["backbone", "globals", "models/CompanyModel"],
     function (Backbone, globals, CompanyModel) {
 
         "use strict";
 
 
-        var UserModel = Backbone.RelationalModel.extend({
+        var UserModel = Backbone.Model.extend({
             defaults: {
                 "authenticated"      : false,
                 "firstName"          : null,
@@ -13,14 +13,6 @@ define(["backbone", "globals", "models/CompanyModel", "backbone-relational"],
                 "hasMultipleAccounts": false,
                 "permissions"        : globals.userData.permissions
             },
-
-            relations: [
-                {
-                    type: Backbone.HasOne,
-                    key: "selectedCompany",
-                    relatedModel: CompanyModel
-                }
-            ],
 
             initialize: function (options) {
                 var selectedCompany;
@@ -34,7 +26,7 @@ define(["backbone", "globals", "models/CompanyModel", "backbone-relational"],
                         selectedCompany.initialize(options.selectedCompany);
                         this.set("selectedCompany", selectedCompany);
                     }
-                    if (options.hasMultipleAccounts) { this.set("hasMultipleAccounts", options.hasMultipleAccounts)};
+                    if (options.hasMultipleAccounts) { this.set("hasMultipleAccounts", options.hasMultipleAccounts);}
                     if (options.permissions) { this.setPermissions(options.permissions); }
                 }
             },
@@ -52,6 +44,16 @@ define(["backbone", "globals", "models/CompanyModel", "backbone-relational"],
                 }
 
                 this.set("permissions", newPerms);
+            },
+
+            toJSON: function () {
+                var json = UserModel.__super__.toJSON.apply(this, arguments);
+
+                if (json.selectedCompany) {
+                    json.selectedCompany = json.selectedCompany.toJSON();
+                }
+
+                return json;
             }
         });
 

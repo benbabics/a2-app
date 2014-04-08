@@ -45,7 +45,9 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page
             beforeEach(function (done) {
                 squire.require(["views/UpdatePromptView"], function (UpdatePromptView) {
                     //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    //loadFixtures("index.html");
+                    if (window._phantom === undefined) {
+                        loadFixtures("index.html");
+                    }
 
                     appModel.set(mockAppModel);
                     spyOn(AppModel, "getInstance").and.callFake(function () { return appModel; });

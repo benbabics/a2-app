@@ -1,5 +1,4 @@
-define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/DepartmentCollection",
-        "backbone", "backbone-relational"],
+define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/DepartmentCollection", "backbone"],
     function (Squire, utils, globals, DepartmentModel, DepartmentCollection, Backbone) {
 
         "use strict";
@@ -24,8 +23,8 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
                 expect(companyModel).toBeDefined();
             });
 
-            it("looks like a Backbone RelationalModel", function () {
-                expect(companyModel instanceof Backbone.RelationalModel).toBeTruthy();
+            it("looks like a Backbone Model", function () {
+                expect(companyModel instanceof Backbone.Model).toBeTruthy();
             });
 
             describe("has property defaults that", function () {
@@ -51,26 +50,6 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
 
                 it("should set requiredFields to default", function () {
                     expect(companyModel.defaults.requiredFields).toEqual(globals.companyData.requiredFields);
-                });
-            });
-
-            describe("has property relations that", function () {
-                describe("has a department relation that", function () {
-                    it("should set type to Backbone.HasMany", function () {
-                        expect(companyModel.relations[0].type).toEqual(Backbone.HasMany);
-                    });
-
-                    it("should set key to departments", function () {
-                        expect(companyModel.relations[0].key).toEqual("departments");
-                    });
-
-                    it("should set relatedModel to DepartmentModel", function () {
-                        expect(companyModel.relations[0].relatedModel).toEqual(DepartmentModel);
-                    });
-
-                    it("should set collectionType to DepartmentCollection", function () {
-                        expect(companyModel.relations[0].collectionType).toEqual(DepartmentCollection);
-                    });
                 });
             });
 
@@ -228,7 +207,7 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
                             newDepartment = newDepartments.at(key);
 
                             expect(newDepartment).not.toBeNull();
-                            expect(newDepartment.get("departmentId")).toEqual(mockDepartment.id);
+                            expect(newDepartment.get("id")).toEqual(mockDepartment.id);
                             expect(newDepartment.get("name")).toEqual(mockDepartment.name);
                             expect(newDepartment.get("visible")).toEqual(mockDepartment.visible);
                         });
@@ -298,6 +277,93 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
                         matchingRequiredFields = utils._.pick(trueRequiredFields, mockRequiredFields);
 
                         expect(utils._.size(matchingRequiredFields)).toEqual(utils._.size(mockRequiredFields));
+                    });
+                });
+            });
+
+            describe("has a toJSON function that", function () {
+                it("is defined", function () {
+                    expect(companyModel.toJSON).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(companyModel.toJSON).toEqual(jasmine.any(Function));
+                });
+
+                describe("when departments does have a value", function () {
+                    var departments,
+                        mockCompanyModel,
+                        actualValue;
+
+                    beforeEach(function () {
+                        mockCompanyModel = {
+                            name: "Beavis and Butthead Inc",
+                            accountId: "3673683",
+                            wexAccountNumber: "5764309",
+                            driverIdLength: "4",
+                            departments: [
+                                {
+                                    id: "134613456",
+                                    name: "UNASSIGNED",
+                                    visible: true
+                                },
+                                {
+                                    id: "2456724567",
+                                    name: "Dewey, Cheetum and Howe",
+                                    visible: false
+                                }
+                            ],
+                            requiredFields: companyModel.defaults.requiredFields
+                        };
+                        companyModel.clear();
+                        companyModel.initialize(mockCompanyModel);
+                        departments = companyModel.get("departments");
+
+                        spyOn(departments, "toJSON").and.callThrough();
+                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+
+                        actualValue = companyModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should call toJSON on departments", function () {
+                        expect(departments.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockCompanyModel);
+                    });
+                });
+
+                describe("when departments does NOT have a value", function () {
+                    var mockCompanyModel,
+                        actualValue;
+
+                    beforeEach(function () {
+                        mockCompanyModel = {
+                            name: "Beavis and Butthead Inc",
+                            accountId: "3673683",
+                            wexAccountNumber: "5764309",
+                            driverIdLength: "4",
+                            requiredFields: companyModel.defaults.requiredFields
+                        };
+                        companyModel.clear();
+                        companyModel.initialize(mockCompanyModel);
+
+                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+
+                        actualValue = companyModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockCompanyModel);
                     });
                 });
             });

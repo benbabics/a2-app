@@ -35,7 +35,7 @@ define(["Squire", "globals", "backbone", "utils"],
                 expect(ajaxModel).toBeDefined();
             });
 
-            it("looks like a Backbone model", function () {
+            it("looks like a Backbone Model", function () {
                 expect(ajaxModel instanceof Backbone.Model).toBeTruthy();
             });
 

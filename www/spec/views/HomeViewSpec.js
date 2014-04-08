@@ -32,7 +32,9 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
             beforeEach(function (done) {
                 squire.require(["views/HomeView"], function (JasmineHomeView) {
                     //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    //loadFixtures("index.html");
+                    if (window._phantom === undefined) {
+                        loadFixtures("index.html");
+                    }
 
                     userModel.set(mockUserModel);
 

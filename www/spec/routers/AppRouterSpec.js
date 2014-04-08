@@ -44,8 +44,8 @@ define(["utils", "Squire", "backbone"],
                     expect(appRouter.routes.driverSearch).toEqual("showDriverSearch");
                 });
 
-                it("should set 'driverDetails(/)(:driverId)' to showDriverDetails", function () {
-                    expect(appRouter.routes["driverDetails(/)(:driverId)"]).toEqual("showDriverDetails");
+                it("should set 'driverDetails(/)(:id)' to showDriverDetails", function () {
+                    expect(appRouter.routes["driverDetails(/)(:id)"]).toEqual("showDriverDetails");
                 });
 
                 it("should set '*page' to changePage", function () {

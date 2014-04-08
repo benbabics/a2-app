@@ -12,7 +12,8 @@ define(function (require) {
     globals.WEBSERVICE = {
         "ROOT_URL"                     : "@@@STRING_REPLACE_APP_URL@@@",
         "APP_PATH"                     : "/app",
-        "DRIVER_PATH"                  : "/driverMaintenance",
+        "ACCOUNTS_PATH"                : "/accounts",
+        "DRIVER_PATH"                  : "/drivers",
         "USER_AUTH_PATH"               : "/userAuth",
         "REQUEST_ERROR_TITLE"          : "Cannot complete request",
         "REQUEST_ERROR_UNKNOWN_MESSAGE": "Please try again",
@@ -42,24 +43,9 @@ define(function (require) {
     globals.WEBSERVICE.CONTACT_US = {
         "URL": globals.WEBSERVICE.SECURE.ROOT_URL + "/contactUs"
     };
-    // Driver
-    globals.WEBSERVICE.DRIVER = {
-    };
-    // Driver Add
-    globals.WEBSERVICE.DRIVER.ADD = {
-        "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.DRIVER_PATH + "/addDriver"
-    };
-    // Driver Reactivate
-    globals.WEBSERVICE.DRIVER.REACTIVATE = {
-        "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.DRIVER_PATH + "/reactivate"
-    };
-    // Driver Search
-    globals.WEBSERVICE.DRIVER.SEARCH = {
-        "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.DRIVER_PATH + "/search"
-    };
-    // Driver Terminate
-    globals.WEBSERVICE.DRIVER.TERMINATE = {
-        "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.DRIVER_PATH + "/terminate"
+    // Accounts
+    globals.WEBSERVICE.ACCOUNTS = {
+        "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.ACCOUNTS_PATH
     };
 
     /**
@@ -230,11 +216,31 @@ define(function (require) {
     };
 
     /**
+     * Driver
+     */
+    globals.driver = {};
+    globals.driver.constants = {
+        "STATUS_ACTIVE": "ACTIVE",
+        "STATUS_TERMINATED": "TERMINATED",
+        "ERROR_FIRST_NAME_REQUIRED_FIELD"     : "First Name must have a value",
+        "ERROR_FIRST_NAME_INVALID_LENGTH"     : "First Name cannot exceed 11 characters",
+        "ERROR_FIRST_NAME_INVALID_CHARACTERS" : "First Name must contain only alphanumeric characters",
+        "ERROR_LAST_NAME_REQUIRED_FIELD"      : "Last Name must have a value",
+        "ERROR_LAST_NAME_INVALID_LENGTH"      : "Last Name cannot exceed 12 characters",
+        "ERROR_LAST_NAME_INVALID_CHARACTERS"  : "Last Name must contain only alphanumeric characters",
+        "ERROR_MIDDLE_NAME_INVALID_LENGTH"    : "Middle Name cannot exceed 1 character",
+        "ERROR_MIDDLE_NAME_INVALID_CHARACTERS": "Middle Name must contain only alpha characters",
+        "ERROR_DRIVER_ID_REQUIRED_FIELD"      : "Driver ID must have a value",
+        "ERROR_DRIVER_ID_INVALID_FORMAT"      : "Driver ID must be numeric",
+        "ERROR_DRIVER_ID_INVALID_LENGTH"      : "Driver ID must be {{driverIdLength}} digits",
+        "DRIVER_ID_PLACEHOLDER_FORMAT"        : "Must be {{driverIdLength}} digits"
+    };
+
+    /**
      * Page :: Driver Search
      */
     globals.driverSearch = {};
     globals.driverSearch.constants = {
-        "WEBSERVICE": globals.WEBSERVICE.DRIVER.SEARCH.URL,
         "DEFAULT_PAGE_NUMBER": 0,
         "DEFAULT_PAGE_SIZE": 25,
         "SHOW_ALL_PAGE_SIZE": 1000,
@@ -244,26 +250,27 @@ define(function (require) {
         }
     };
     globals.driverSearch.configuration = {
-        "filterFirstName": {
+        "firstName": {
             "label"      : "First Name",
-            "name"       : "filterFirstName",
+            "name"       : "firstName",
             "placeholder": "",
             "value"      : ""
         },
-        "filterLastName": {
+        "lastName": {
             "label"      : "Last Name",
-            "name"       : "filterLastName",
+            "name"       : "lastName",
             "placeholder": "",
             "value"      : ""
         },
-        "filterDriverId": {
+        "id": {
             "label"      : "Driver ID",
-            "name"       : "filterDriverId",
+            "name"       : "id",
+            "placeholder": "",
             "value"      : ""
         },
-        "filterStatus": {
+        "status": {
             "label"      : "Status",
-            "name"       : "filterStatus",
+            "name"       : "status",
             "values"     : [
                 {
                     id: "",
@@ -279,9 +286,9 @@ define(function (require) {
                 }
             ]
         },
-        "filterDepartmentId": {
+        "departmentId": {
             "label"      : "Department",
-            "name"       : "filterDepartmentId",
+            "name"       : "departmentId",
             "enabled"    : true,
             "values"     : [
                 {
@@ -312,7 +319,7 @@ define(function (require) {
             "label": "Driver Name",
             "value": ""
         },
-        "driverId": {
+        "id": {
             "label": "Driver ID",
             "value": ""
         },
@@ -339,8 +346,6 @@ define(function (require) {
     globals.driverEdit = {};
     globals.driverEdit.constants = {
         "STATUS_CHANGE_SUCCESS_TITLE": "Driver Status Confirmation",
-        "STATUS_ACTIVE": "ACTIVE",
-        "STATUS_TERMINATED": "TERMINATED",
         "BUTTON_ACTIVATE": "ACTIVATE",
         "BUTTON_TERMINATE": "TERMINATE"
     };
@@ -349,7 +354,7 @@ define(function (require) {
             "label": "Driver Name",
             "value": ""
         },
-        "driverId": {
+        "id": {
             "label": "Driver ID",
             "value": ""
         },
@@ -371,20 +376,10 @@ define(function (require) {
     };
 
     /**
-     * Driver Reactivate
-     */
-    globals.driverReactivate = {};
-    globals.driverReactivate.constants = {
-        "WEBSERVICE": globals.WEBSERVICE.DRIVER.REACTIVATE.URL
-    };
-
-    /**
      * Driver Terminate
      */
     globals.driverTerminate = {};
     globals.driverTerminate.constants = {
-        "WEBSERVICE": globals.WEBSERVICE.DRIVER.TERMINATE.URL,
-        "SUCCESS_TITLE": "Driver Status Confirmation",
         "CONFIRMATION_TITLE": "Terminate<br/>Driver",
         "CONFIRMATION_MESSAGE": "Are you sure you want to terminate the driver?",
         "CANCEL_BTN_TEXT": "Cancel",
@@ -396,20 +391,7 @@ define(function (require) {
      */
     globals.driverAdd = {};
     globals.driverAdd.constants = {
-        "WEBSERVICE"                          : globals.WEBSERVICE.DRIVER.ADD.URL,
-        "DEFAULT_DEPARTMENT_NAME"             : "UNASSIGNED",
-        "ERROR_FIRST_NAME_REQUIRED_FIELD"     : "First Name must have a value",
-        "ERROR_FIRST_NAME_INVALID_LENGTH"     : "First Name cannot exceed 11 characters",
-        "ERROR_FIRST_NAME_INVALID_CHARACTERS" : "First Name must contain only alphanumeric characters",
-        "ERROR_LAST_NAME_REQUIRED_FIELD"      : "Last Name must have a value",
-        "ERROR_LAST_NAME_INVALID_LENGTH"      : "Last Name cannot exceed 12 characters",
-        "ERROR_LAST_NAME_INVALID_CHARACTERS"  : "Last Name must contain only alphanumeric characters",
-        "ERROR_MIDDLE_NAME_INVALID_LENGTH"    : "Middle Name cannot exceed 1 character",
-        "ERROR_MIDDLE_NAME_INVALID_CHARACTERS": "Middle Name must contain only alpha characters",
-        "ERROR_DRIVER_ID_REQUIRED_FIELD"      : "Driver ID must have a value",
-        "ERROR_DRIVER_ID_INVALID_FORMAT"      : "Driver ID must be numeric",
-        "ERROR_DRIVER_ID_INVALID_LENGTH"      : "Driver ID must be {{driverIdLength}} digits",
-        "DRIVER_ID_PLACEHOLDER_FORMAT"        : "Must be {{driverIdLength}} digits"
+        "DEFAULT_DEPARTMENT_NAME"             : "UNASSIGNED"
     };
     globals.driverAdd.configuration = {
         "firstName": {
@@ -419,9 +401,9 @@ define(function (require) {
             "placeholder": "",
             "value"      : ""
         },
-        "middleInitial": {
+        "middleName": {
             "label"      : "Middle Initial",
-            "name"       : "middleInitial",
+            "name"       : "middleName",
             "maxLength"  : 1,
             "placeholder": "",
             "value"      : ""
@@ -433,9 +415,9 @@ define(function (require) {
             "placeholder": "",
             "value"      : ""
         },
-        "driverId": {
+        "id": {
             "label"      : "Driver ID",
-            "name"       : "driverId",
+            "name"       : "id",
             "maxLength"  : 4,
             "placeholder": "",
             "value"      : ""
@@ -454,8 +436,6 @@ define(function (require) {
     globals.driverAddedDetails = {};
     globals.driverAddedDetails.constants = {
         "SUCCESS_TITLE": "Driver<br/>Confirmation",
-        "STATUS_ACTIVE": "ACTIVE",
-        "STATUS_TERMINATED": "TERMINATED",
         "BUTTON_ACTIVATE": "ACTIVATE",
         "BUTTON_TERMINATE": "TERMINATE"
     };
@@ -464,19 +444,19 @@ define(function (require) {
             "label": "Driver Name",
             "value": ""
         },
-        "driverId": {
+        "id": {
             "label": "Driver ID",
             "value": ""
         },
-        "driverDepartment": {
+        "department": {
             "label": "Department",
             "value": ""
         },
-        "driverStatus": {
+        "status": {
             "label": "Status",
             "value": ""
         },
-        "driverStatusDate": {
+        "statusDate": {
             "label": "Status Date",
             "value": ""
         }

@@ -66,33 +66,39 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
                     departmentListValues.push(globals.driverSearch.constants.ALL);
                 }
 
-                utils._.each(departments, function (department, key, list) {
+                utils._.each(departments, function (department) {
                     departmentListValues.push({
-                        "id"  : department.departmentId,
+                        "id"  : department.id,
                         "name": department.name
                     });
                 });
 
-                configuration.filterFirstName.value = this.model.get("filterFirstName");
-                configuration.filterLastName.value = this.model.get("filterLastName");
-                configuration.filterDriverId.value = this.model.get("filterDriverId");
-                configuration.filterStatus.value = this.model.get("filterStatus");
-                configuration.filterDepartmentId.value = this.model.get("filterDepartmentId");
-                configuration.filterDepartmentId.enabled = hasMultipleDepartments;
-                configuration.filterDepartmentId.values = departmentListValues;
-
+                configuration.departmentId.enabled = hasMultipleDepartments;
+                configuration.departmentId.values = departmentListValues;
 
                 return configuration;
+            },
+
+            findDepartment: function (id) {
+                var selectedCompany = this.userModel.get("selectedCompany");
+                return selectedCompany.get("departments").findWhere({"id": id});
             },
 
             /*
              * Event Handlers
              */
+            handleInputChanged: function (evt) {
+                var target = evt.target;
+                if (target.name === "departmentId") {
+                    this.updateAttribute("department", this.findDepartment(target.value));
+                }
+                else {
+                    DriverSearchView.__super__.handleInputChanged.apply(this, arguments);
+                }
+            },
+
             submitForm: function (evt) {
                 evt.preventDefault();
-
-                // Set the account Id to the currently selected company
-                this.model.set("accountId", this.userModel.get("selectedCompany").get("accountId"));
 
                 this.trigger("searchSubmitted");
             }

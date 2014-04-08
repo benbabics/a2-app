@@ -83,11 +83,11 @@ define(["Squire", "globals", "backbone", "utils"],
 
             describe("has a fetch function that", function () {
                 var mockOptions = {
-                    "firstName"   : "Curly",
-                    "lastName"    : "Howard",
-                    "driverId"    : null,
-                    "status"      : null,
-                    "departmentId": null
+                    "firstName" : "Curly",
+                    "lastName"  : "Howard",
+                    "id"        : null,
+                    "status"    : null,
+                    "department": null
                 };
 
                 beforeEach(function () {

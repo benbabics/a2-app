@@ -1,17 +1,64 @@
-define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
-    function (Squire, DepartmentModel, Backbone) {
+define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"],
+    function (Squire, Mustache, globals, utils, UserModel, Backbone) {
 
         "use strict";
 
         var squire = new Squire(),
+            mockDataResponse = {
+                successFlag: false,
+                message: {
+                    type: "",
+                    text: ""
+                }
+            },
+            mockUserModel = {
+                authenticated: true,
+                firstName: "Beavis",
+                email: "cornholio@bnbinc.com",
+                selectedCompany: {
+                    name: "Beavis and Butthead Inc",
+                    accountId: "3673683",
+                    wexAccountNumber: "5764309",
+                    driverIdLength: 4,
+                    departments: [
+                        {
+                            id: "134613456",
+                            name: "UNASSIGNED",
+                            visible: true
+                        },
+                        {
+                            id: "2456724567",
+                            name: "Dewey, Cheetum and Howe",
+                            visible: false
+                        }
+                    ]
+                },
+                permissions: [
+                    "PERMISSION_1",
+                    "PERMISSION_2",
+                    "PERMISSION_3"
+                ],
+                requiredFields: [
+                    "REQUIRED_FIELD_1",
+                    "REQUIRED_FIELD_2",
+                    "REQUIRED_FIELD_3"
+                ]
+            },
+            userModel = UserModel.getInstance(),
+            DriverModel,
             driverModel;
 
         squire.mock("backbone", Backbone);
-        squire.mock("models/DepartmentModel", DepartmentModel);
+        squire.mock("models/UserModel", UserModel);
 
         describe("A Driver Model", function () {
             beforeEach(function (done) {
-                squire.require(["models/DriverModel"], function (DriverModel) {
+                squire.require(["models/DriverModel"], function (JasmineDriverModel) {
+                    DriverModel = JasmineDriverModel;
+                    
+                    userModel.initialize(mockUserModel);
+                    spyOn(UserModel, "getInstance").and.returnValue(userModel);
+
                     driverModel = new DriverModel();
 
                     done();
@@ -22,62 +69,268 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                 expect(driverModel).toBeDefined();
             });
 
-            it("looks like a Backbone Relational model", function () {
-                expect(driverModel instanceof Backbone.RelationalModel).toBeTruthy();
+            it("looks like a Backbone Model", function () {
+                expect(driverModel instanceof Backbone.Model).toBeTruthy();
             });
 
-            describe("has property defaults that", function () {
-                it("should set driverId to default", function () {
-                    expect(driverModel.defaults.driverId).toBeNull();
+            describe("has a defaults function that", function () {
+                it("is defined", function () {
+                    expect(driverModel.defaults).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverModel.defaults).toEqual(jasmine.any(Function));
+                });
+
+                it("should set id to default", function () {
+                    expect(driverModel.defaults().id).toBeNull();
                 });
 
                 it("should set firstName to default", function () {
-                    expect(driverModel.defaults.firstName).toBeNull();
+                    expect(driverModel.defaults().firstName).toBeNull();
                 });
 
                 it("should set middleName to default", function () {
-                    expect(driverModel.defaults.middleName).toBeNull();
+                    expect(driverModel.defaults().middleName).toBeNull();
                 });
 
                 it("should set lastName to default", function () {
-                    expect(driverModel.defaults.lastName).toBeNull();
+                    expect(driverModel.defaults().lastName).toBeNull();
                 });
 
                 it("should set status to default", function () {
-                    expect(driverModel.defaults.status).toBeNull();
+                    expect(driverModel.defaults().status).toBeNull();
                 });
 
                 it("should set statusDate to default", function () {
-                    expect(driverModel.defaults.statusDate).toBeNull();
+                    expect(driverModel.defaults().statusDate).toBeNull();
                 });
 
                 it("should set department to default", function () {
-                    expect(driverModel.defaults.department).toBeNull();
+                    expect(driverModel.defaults().department).toBeNull();
                 });
 
                 it("should set formattedName to default", function () {
-                    expect(driverModel.defaults.formattedName).toBeNull();
+                    expect(driverModel.defaults().formattedName).toBeNull();
                 });
             });
 
-            describe("has property relations that", function () {
-                describe("has a department relation that", function () {
-                    it("should set type to Backbone.HasOne", function () {
-                        expect(driverModel.relations[0].type).toEqual(Backbone.HasOne);
+            describe("has a urlRoot function that", function () {
+                it("is defined", function () {
+                    expect(driverModel.urlRoot).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverModel.urlRoot).toEqual(jasmine.any(Function));
+                });
+
+                it("should return expected result", function () {
+                    var expectedResult = globals.WEBSERVICE.ACCOUNTS.URL +
+                            "/" +
+                            mockUserModel.selectedCompany.accountId +
+                            globals.WEBSERVICE.DRIVER_PATH,
+                        actualResult = driverModel.urlRoot();
+
+                    expect(actualResult).toEqual(expectedResult);
+                });
+            });
+
+            describe("has property validation that", function () {
+                describe("has a validation configuration for the id field that", function () {
+                    it("has 3 validation rules", function () {
+                        expect(driverModel.validation.id.length).toEqual(3);
                     });
 
-                    it("should set key to department", function () {
-                        expect(driverModel.relations[0].key).toEqual("department");
+                    describe("the first validation rule", function () {
+                        describe("should have a required function that", function () {
+                            it("is defined", function () {
+                                expect(driverModel.validation.id[0].required).toBeDefined();
+                            });
+
+                            it("is a function", function () {
+                                expect(driverModel.validation.id[0].required).toEqual(jasmine.any(Function));
+                            });
+
+                            it("should return true if the user's company does have the DRIVER_ID required field",
+                                function () {
+                                    userModel.get("selectedCompany").set("requiredFields", {"DRIVER_ID": true});
+
+                                    expect(driverModel.validation.id[0].required()).toBeTruthy();
+                                }
+                            );
+
+                            it("should return false if the user's company does NOT have the DRIVER_ID required field",
+                                function () {
+                                    userModel.get("selectedCompany").set("requiredFields", {"DRIVER_ID": false});
+
+                                    expect(driverModel.validation.id[0].required()).toBeFalsy();
+                                }
+                            );
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverModel.validation.id[0].msg)
+                                .toEqual(globals.driver.constants.ERROR_DRIVER_ID_REQUIRED_FIELD);
+                        });
                     });
 
-                    it("should set relatedModel to DepartmentModel", function () {
-                        expect(driverModel.relations[0].relatedModel).toEqual(DepartmentModel);
+                    describe("the second validation rule", function () {
+                        describe("should have a fn function that", function () {
+                            it("is defined", function () {
+                                expect(driverModel.validation.id[1].fn).toBeDefined();
+                            });
+
+                            it("is a function", function () {
+                                expect(driverModel.validation.id[1].fn).toEqual(jasmine.any(Function));
+                            });
+
+                            describe("when the value is the correct length", function () {
+                                it("should return the expected result", function () {
+                                    expect(driverModel.validation.id[1].fn("1234")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the value is NOT the correct length", function () {
+                                it("should return the expected result", function () {
+                                    var expectedValue =
+                                            Mustache.render(globals.driver.constants.ERROR_DRIVER_ID_INVALID_LENGTH,
+                                                {"driverIdLength": mockUserModel.selectedCompany.driverIdLength}),
+                                        actualValue = driverModel.validation.id[1].fn("123");
+
+                                    expect(actualValue).toEqual(expectedValue);
+                                });
+                            });
+                        });
+                    });
+
+                    describe("the third validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(driverModel.validation.id[2].pattern).toEqual("digits");
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverModel.validation.id[2].msg)
+                                .toEqual(globals.driver.constants.ERROR_DRIVER_ID_INVALID_FORMAT);
+                        });
+                    });
+                });
+
+                describe("has a validation configuration for the firstName field that", function () {
+                    it("has 3 validation rules", function () {
+                        expect(driverModel.validation.firstName.length).toEqual(3);
+                    });
+
+                    describe("the first validation rule", function () {
+                        it("should set the field as required", function () {
+                            expect(driverModel.validation.firstName[0].required).toBeTruthy();
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverModel.validation.firstName[0].msg)
+                                .toEqual(globals.driver.constants.ERROR_FIRST_NAME_REQUIRED_FIELD);
+                        });
+                    });
+
+                    describe("the second validation rule", function () {
+                        it("should set the maxLength", function () {
+                            expect(driverModel.validation.firstName[1].maxLength).toEqual(11);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverModel.validation.firstName[1].msg)
+                                .toEqual(globals.driver.constants.ERROR_FIRST_NAME_INVALID_LENGTH);
+                        });
+                    });
+
+                    describe("the third validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(driverModel.validation.firstName[2].pattern)
+                                .toEqual(/^[A-Z\d`~&_\-+{}|:',.\/]+$/i);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverModel.validation.firstName[2].msg)
+                                .toEqual(globals.driver.constants.ERROR_FIRST_NAME_INVALID_CHARACTERS);
+                        });
+                    });
+                });
+
+                describe("has a validation configuration for the middleName field that", function () {
+                    it("has 2 validation rules", function () {
+                        expect(driverModel.validation.middleName.length).toEqual(2);
+                    });
+
+                    describe("the first validation rule", function () {
+                        it("should set the field as not required", function () {
+                            expect(driverModel.validation.middleName[0].required).toBeFalsy();
+                        });
+
+                        it("should set the maxLength", function () {
+                            expect(driverModel.validation.middleName[0].maxLength).toEqual(1);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverModel.validation.middleName[0].msg)
+                                .toEqual(globals.driver.constants.ERROR_MIDDLE_NAME_INVALID_LENGTH);
+                        });
+                    });
+
+                    describe("the second validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(driverModel.validation.middleName[1].pattern).toEqual(/^[A-Z]+$/i);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverModel.validation.middleName[1].msg)
+                                .toEqual(globals.driver.constants.ERROR_MIDDLE_NAME_INVALID_CHARACTERS);
+                        });
+                    });
+                });
+
+                describe("has a validation configuration for the lastName field that", function () {
+                    it("has 3 validation rules", function () {
+                        expect(driverModel.validation.lastName.length).toEqual(3);
+                    });
+
+                    describe("the first validation rule", function () {
+                        it("should set the field as required", function () {
+                            expect(driverModel.validation.lastName[0].required).toBeTruthy();
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverModel.validation.lastName[0].msg)
+                                .toEqual(globals.driver.constants.ERROR_LAST_NAME_REQUIRED_FIELD);
+                        });
+                    });
+
+                    describe("the second validation rule", function () {
+                        it("should set the maxLength", function () {
+                            expect(driverModel.validation.lastName[1].maxLength).toEqual(12);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverModel.validation.lastName[1].msg)
+                                .toEqual(globals.driver.constants.ERROR_LAST_NAME_INVALID_LENGTH);
+                        });
+                    });
+
+                    describe("the third validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(driverModel.validation.lastName[2].pattern)
+                                .toEqual(/^[A-Z\d`~&_\-+{}|:',.\/]+$/i);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(driverModel.validation.lastName[2].msg)
+                                .toEqual(globals.driver.constants.ERROR_LAST_NAME_INVALID_CHARACTERS);
+                        });
                     });
                 });
             });
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
+                    spyOn(DriverModel.__super__, "initialize").and.callThrough();
                     spyOn(driverModel, "set").and.callThrough();
                     spyOn(driverModel, "formatAttributes").and.callFake(function () {});
                 });
@@ -95,6 +348,10 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                         driverModel.initialize();
                     });
 
+                    it("should call initialize on super", function () {
+                        expect(DriverModel.__super__.initialize).toHaveBeenCalledWith();
+                    });
+
                     it("should NOT call set", function () {
                         expect(driverModel.set).not.toHaveBeenCalled();
                     });
@@ -107,6 +364,10 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                         driverModel.initialize(options);
                     });
 
+                    it("should call initialize on super", function () {
+                        expect(DriverModel.__super__.initialize).toHaveBeenCalledWith(options);
+                    });
+
                     it("should NOT call set", function () {
                         expect(driverModel.set).not.toHaveBeenCalled();
                     });
@@ -114,7 +375,7 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
 
                 describe("when options are provided", function () {
                     var options = {
-                            driverId: "13465134561",
+                            id: 13465134561,
                             firstName: "First Name",
                             middleName: "Middle Name",
                             lastName: "Last Name",
@@ -131,12 +392,16 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                         driverModel.initialize(options);
                     });
 
+                    it("should call initialize on super", function () {
+                        expect(DriverModel.__super__.initialize).toHaveBeenCalledWith(options);
+                    });
+
                     it("should call set 7 times", function () {
                         expect(driverModel.set.calls.count()).toEqual(7);
                     });
 
-                    it("should set driverId", function () {
-                        expect(driverModel.set).toHaveBeenCalledWith("driverId", options.driverId);
+                    it("should set id", function () {
+                        expect(driverModel.set).toHaveBeenCalledWith("id", options.id);
                     });
 
                     it("should set firstName", function () {
@@ -169,7 +434,7 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
 
                         actualDepartment = driverModel.set.calls.argsFor(6)[1];
 
-                        expect(actualDepartment.get("departmentId")).toEqual(options.department.id);
+                        expect(actualDepartment.get("id")).toEqual(options.department.id);
                         expect(actualDepartment.get("name")).toEqual(options.department.name);
                         expect(actualDepartment.get("visible")).toEqual(options.department.visible);
                     });
@@ -203,7 +468,7 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                     expect(driverModel.set.calls.count()).toEqual(1);
                 });
 
-                it("should set name", function () {
+                it("should set formattedName", function () {
                     expect(driverModel.set).toHaveBeenCalledWith("formattedName", jasmine.any(Function));
                 });
 
@@ -314,6 +579,243 @@ define(["Squire", "models/DepartmentModel", "backbone", "backbone-relational"],
                             actualResult = callback.call(driverModel.toJSON());
                             expect(actualResult).toEqual(expectedResult);
                         });
+                    });
+                });
+            });
+
+            describe("has a sync function that", function () {
+                var options = {
+                        success: function () {}
+                    };
+
+                beforeEach(function () {
+                    spyOn(DriverModel.__super__, "sync").and.callFake(function () {
+                        var deferred = utils.Deferred();
+
+                        deferred.resolve(mockDataResponse);
+                        return deferred.promise();
+                    });
+                });
+
+                it("is defined", function () {
+                    expect(driverModel.sync).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverModel.sync).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the method is create", function () {
+                    it("should call sync on super", function () {
+                        driverModel.sync("create", driverModel.toJSON(), options);
+
+                        expect(DriverModel.__super__.sync)
+                            .toHaveBeenCalledWith("create", driverModel.toJSON(), options);
+                    });
+                });
+
+                describe("when the method is read", function () {
+                    it("should call sync on super", function () {
+                        driverModel.sync("read", driverModel.toJSON(), options);
+
+                        expect(DriverModel.__super__.sync).toHaveBeenCalledWith("read", driverModel.toJSON(), options);
+                    });
+                });
+
+                describe("when the method is patch", function () {
+                    it("should call sync on super", function () {
+                        var expectedOptions = utils._.extend({type: "POST"}, utils.deepClone(options));
+
+                        driverModel.sync("patch", driverModel.toJSON(), options);
+
+                        expect(DriverModel.__super__.sync)
+                            .toHaveBeenCalledWith("patch", driverModel.toJSON(), expectedOptions);
+                    });
+                });
+
+                describe("when the method is update", function () {
+                    it("should call sync on super", function () {
+                        driverModel.sync("update", driverModel.toJSON(), options);
+
+                        expect(DriverModel.__super__.sync)
+                            .toHaveBeenCalledWith("update", driverModel.toJSON(), options);
+                    });
+                });
+
+                describe("when the method is delete", function () {
+                    it("should call sync on super", function () {
+                        driverModel.sync("delete", driverModel.toJSON(), options);
+
+                        expect(DriverModel.__super__.sync)
+                            .toHaveBeenCalledWith("delete", driverModel.toJSON(), options);
+                    });
+                });
+            });
+
+            describe("has an add function that", function () {
+                var mockUrlRoot = "mock url root",
+                    mockValues = {
+                        "firstName"   : "Curly",
+                        "middleName"  : "G",
+                        "lastName"    : "Howard",
+                        "id"          : 132456,
+                        "status"      : "ACTIVE",
+                        department : {
+                            id: "2456724567",
+                            name: "Dewey, Cheetum and Howe",
+                            visible: true
+                        }
+                    },
+                    options = {
+                        success: function () {}
+                    };
+
+                beforeEach(function () {
+                    spyOn(driverModel, "save").and.callFake(function () {});
+                    spyOn(driverModel, "urlRoot").and.returnValue(mockUrlRoot);
+
+                    driverModel.initialize(mockValues);
+                    driverModel.url = null;
+                    driverModel.add(options);
+                });
+
+                it("is defined", function () {
+                    expect(driverModel.add).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverModel.add).toEqual(jasmine.any(Function));
+                });
+
+                it("should set url", function () {
+                    expect(driverModel.url).toEqual(mockUrlRoot);
+                });
+
+                it("should call save", function () {
+                    var expectedOptions = utils._.extend({patch: true}, utils.deepClone(options)),
+                        expectedAttributes = {
+                            "id"          : mockValues.id,
+                            "firstName"   : mockValues.firstName,
+                            "middleName"  : mockValues.middleName,
+                            "lastName"    : mockValues.lastName,
+                            "departmentId": mockValues.department.id
+                        };
+
+                    expect(driverModel.save).toHaveBeenCalledWith(expectedAttributes, expectedOptions);
+                });
+            });
+
+            describe("has a changeStatus function that", function () {
+                var mockDriverId = 13456134651,
+                    updatedStatus = "mock status",
+                    options = {
+                        success: function () {}
+                    };
+
+                beforeEach(function () {
+                    spyOn(driverModel, "save").and.callFake(function () {});
+
+                    driverModel.set("id", mockDriverId);
+                    driverModel.changeStatus(updatedStatus, options);
+                });
+
+                it("is defined", function () {
+                    expect(driverModel.changeStatus).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverModel.changeStatus).toEqual(jasmine.any(Function));
+                });
+
+                it("should call save", function () {
+                    var expectedOptions = utils._.extend({patch: true}, utils.deepClone(options));
+
+                    expect(driverModel.save).toHaveBeenCalledWith("status", updatedStatus, expectedOptions);
+                });
+            });
+
+            describe("has a toJSON function that", function () {
+                it("is defined", function () {
+                    expect(driverModel.toJSON).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverModel.toJSON).toEqual(jasmine.any(Function));
+                });
+
+                describe("when department does have a value", function () {
+                    var department,
+                        mockDriver = {
+                            id: 13465134561,
+                            firstName: "First Name",
+                            middleName: "Middle Name",
+                            lastName: "Last Name",
+                            status: "Active",
+                            statusDate: "3/14/2015",
+                            department: {
+                                id: "134613456",
+                                name: "UNASSIGNED",
+                                visible: true
+                            }
+                        };
+
+                    beforeEach(function () {
+                        spyOn(driverModel, "formatAttributes").and.callFake(function () {});
+                        driverModel.clear();
+                        driverModel.initialize(mockDriver);
+                        department = driverModel.get("department");
+
+                        spyOn(department, "toJSON").and.callThrough();
+                        spyOn(DriverModel.__super__, "toJSON").and.callThrough();
+
+                        driverModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(DriverModel.__super__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should call toJSON on department", function () {
+                        expect(department.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        var expectedValue = mockDriver,
+                            actualValue = driverModel.toJSON();
+
+                        expect(actualValue).toEqual(expectedValue);
+                    });
+                });
+
+                describe("when department does NOT have a value", function () {
+                    var mockDriver = {
+                            id: 13465134561,
+                            firstName: "First Name",
+                            middleName: "Middle Name",
+                            lastName: "Last Name",
+                            status: "Active",
+                            statusDate: "3/14/2015"
+                        };
+
+                    beforeEach(function () {
+                        spyOn(driverModel, "formatAttributes").and.callFake(function () {});
+                        driverModel.clear();
+                        driverModel.initialize(mockDriver);
+
+                        spyOn(DriverModel.__super__, "toJSON").and.callThrough();
+
+                        driverModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(DriverModel.__super__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        var expectedValue = mockDriver,
+                            actualValue = driverModel.toJSON();
+
+                        expect(actualValue).toEqual(expectedValue);
                     });
                 });
             });

@@ -1,6 +1,6 @@
-define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddModel", "models/UserModel",
+define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverModel", "models/UserModel",
         "text!tmpl/driver/driverAdd.html", "text!tmpl/driver/driverAddDetails.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, DriverAddModel, UserModel, pageTemplate,
+    function (Squire, Backbone, Mustache, globals, utils, DriverModel, UserModel, pageTemplate,
               driverAddDetailsTemplate) {
 
         "use strict";
@@ -35,14 +35,18 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
                     "PERMISSION_3"
                 ]
             },
-            mockDriverAddModel = {
-                driverId     : "13465134561",
+            mockDriverModel = {
+                id           : "13465134561",
                 firstName    : "First Name",
-                middleInitial: "X",
+                middleName   : "X",
                 lastName     : "Last Name",
-                departmentId : "52v4612345"
+                department   : {
+                    id       : "2456724567",
+                    name     : "Dewey, Cheetum and Howe",
+                    visible  : true
+                }
             },
-            driverAddModel = new DriverAddModel(),
+            driverModel = new DriverModel(),
             userModel = UserModel.getInstance(),
             driverAddView,
             DriverAddView;
@@ -59,14 +63,16 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
             beforeEach(function (done) {
                 squire.require(["views/DriverAddView"], function (JasmineDriverAddView) {
                     //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    //loadFixtures("index.html");
+                    if (window._phantom === undefined) {
+                        loadFixtures("index.html");
+                    }
 
-                    driverAddModel.initialize(mockDriverAddModel);
+                    driverModel.initialize(mockDriverModel);
                     userModel.initialize(mockUserModel);
 
                     DriverAddView = JasmineDriverAddView;
                     driverAddView = new DriverAddView({
-                        model: driverAddModel,
+                        model: driverModel,
                         userModel: userModel
                     });
 
@@ -163,7 +169,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
                     spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(driverAddView, "getConfiguration").and.callFake(function() { return expectedConfiguration; });
-                    spyOn(driverAddView, "updateValidationRules").and.callThrough();
                     spyOn(driverAddView, "formatRequiredFields").and.callThrough();
 
                     driverAddView.render();
@@ -193,10 +198,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                 });
 
-                it("should call updateValidationRules()", function () {
-                    expect(driverAddView.updateValidationRules).toHaveBeenCalledWith();
-                });
-
                 it("should call formatRequiredFields()", function () {
                     expect(driverAddView.formatRequiredFields).toHaveBeenCalledWith();
                 });
@@ -206,63 +207,71 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
-                    it("should include a driverId field if the user's company does have the DRIVER_ID required field", function () {
-                        driverAddView.userModel.get("selectedCompany").set("requiredFields", {"DRIVER_ID": true});
+                    it("should include a driverId field if the user's company does have the DRIVER_ID required field",
+                        function () {
+                            driverAddView.userModel.get("selectedCompany").set("requiredFields", {"DRIVER_ID": true});
 
-                        expectedConfiguration = {
-                            "driver"        : utils._.extend({}, utils.deepClone(globals.driverAdd.configuration)),
-                            "requiredFields": driverAddView.userModel.get("selectedCompany").get("requiredFields")
-                        };
+                            expectedConfiguration = {
+                                "driver"        : utils._.extend({}, utils.deepClone(globals.driverAdd.configuration)),
+                                "requiredFields": driverAddView.userModel.get("selectedCompany").get("requiredFields")
+                            };
 
-                        driverAddView.render();
+                            driverAddView.render();
 
-                        expect(actualContent[0]).toContainElement("input[id='driverId']");
-                    });
+                            expect(actualContent[0]).toContainElement("input[id='id']");
+                        }
+                    );
 
-                    it("should NOT include a driverId field if the user's company does NOT have the DRIVER_ID required field", function () {
-                        driverAddView.userModel.get("selectedCompany").set("requiredFields", {"DRIVER_ID": false});
+                    it("should NOT include a driverId field if the user's company does NOT have the DRIVER_ID required field",
+                        function () {
+                            driverAddView.userModel.get("selectedCompany").set("requiredFields", {"DRIVER_ID": false});
 
-                        expectedConfiguration = {
-                            "driver"        : utils._.extend({}, utils.deepClone(globals.driverAdd.configuration)),
-                            "requiredFields": driverAddView.userModel.get("selectedCompany").get("requiredFields")
-                        };
+                            expectedConfiguration = {
+                                "driver"        : utils._.extend({}, utils.deepClone(globals.driverAdd.configuration)),
+                                "requiredFields": driverAddView.userModel.get("selectedCompany").get("requiredFields")
+                            };
 
-                        driverAddView.render();
+                            driverAddView.render();
 
-                        expect(actualContent[0]).not.toContainElement("input[id='driverId']");
-                    });
+                            expect(actualContent[0]).not.toContainElement("input[id='id']");
+                        }
+                    );
                 });
             });
 
-            describe("has an updateValidationRules function that", function () {
+            describe("has an resetForm function that", function () {
+                var mockDepartment = {
+                        id: "134613456",
+                        name: "UNASSIGNED",
+                        visible: true
+                    };
+
                 beforeEach(function () {
-                    driverAddView.updateValidationRules();
+                    spyOn(DriverAddView.__super__, "resetForm").and.callFake(function () {});
+                    spyOn(driverAddView, "findDefaultDepartment").and.returnValue(mockDepartment);
+                    spyOn(driverAddView.model, "set").and.callFake(function () {});
+
+                    driverAddView.resetForm();
                 });
 
                 it("is defined", function () {
-                    expect(driverAddView.updateValidationRules).toBeDefined();
+                    expect(driverAddView.resetForm).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(driverAddView.updateValidationRules).toEqual(jasmine.any(Function));
+                    expect(driverAddView.resetForm).toEqual(jasmine.any(Function));
                 });
 
-                it("should set the driverId required flag", function () {
-                    expect(driverAddView.model.validation.driverId[0].required)
-                        .toEqual(userModel.get("selectedCompany").get("requiredFields").DRIVER_ID);
+                it("should call resetForm on super", function () {
+                    expect(DriverAddView.__super__.resetForm).toHaveBeenCalledWith();
                 });
 
-                it("should set the valid driverId length", function () {
-                    expect(driverAddView.model.validation.driverId[2].length)
-                        .toEqual(mockUserModel.selectedCompany.driverIdLength);
+                it("should call findDefaultDepartment", function () {
+                    expect(driverAddView.findDefaultDepartment).toHaveBeenCalledWith();
                 });
 
-                it("should set the valid driverId length error message", function () {
-                    var expectedValue = Mustache.render(globals.driverAdd.constants.ERROR_DRIVER_ID_INVALID_LENGTH, {
-                        "driverIdLength": mockUserModel.selectedCompany.driverIdLength
-                    });
-
-                    expect(driverAddView.model.validation.driverId[2].msg).toEqual(expectedValue);
+                it("should call set on the model", function () {
+                    expect(driverAddView.model.set).toHaveBeenCalledWith("department", mockDepartment);
                 });
             });
 
@@ -297,18 +306,17 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
 
                     expectedConfiguration.requiredFields = userModel.get("selectedCompany").get("requiredFields");
 
-                    expectedConfiguration.driver.firstName.value = mockDriverAddModel.firstName;
-                    expectedConfiguration.driver.middleInitial.value = mockDriverAddModel.middleInitial;
-                    expectedConfiguration.driver.lastName.value = mockDriverAddModel.lastName;
-                    expectedConfiguration.driver.driverId.maxLength = mockUserModel.selectedCompany.driverIdLength;
-                    expectedConfiguration.driver.driverId.value = mockDriverAddModel.driverId;
-                    expectedConfiguration.driver.departmentId.enabled = false;
-                    expectedConfiguration.driver.departmentId.values = departmentListValues;
-
-                    expectedConfiguration.driver.driverId.placeholder =
-                        Mustache.render(globals.driverAdd.constants.DRIVER_ID_PLACEHOLDER_FORMAT, {
+                    expectedConfiguration.driver.firstName.value = mockDriverModel.firstName;
+                    expectedConfiguration.driver.middleName.value = mockDriverModel.middleName;
+                    expectedConfiguration.driver.lastName.value = mockDriverModel.lastName;
+                    expectedConfiguration.driver.id.maxLength = mockUserModel.selectedCompany.driverIdLength;
+                    expectedConfiguration.driver.id.value = mockDriverModel.id;
+                    expectedConfiguration.driver.id.placeholder =
+                        Mustache.render(globals.driver.constants.DRIVER_ID_PLACEHOLDER_FORMAT, {
                             "driverIdLength": mockUserModel.selectedCompany.driverIdLength
                         });
+                    expectedConfiguration.driver.departmentId.enabled = false;
+                    expectedConfiguration.driver.departmentId.values = departmentListValues;
 
                     actualConfiguration = driverAddView.getConfiguration();
 
@@ -334,16 +342,16 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
                         addDriverResponse = {
                             "message": "Mock Message",
                             "data": {
-                                "driverId"  : "354t25ty",
+                                "id"        : "354t25ty",
                                 "firstName" : "Homer",
                                 "middleName": "B",
                                 "lastName"  : "Simpson",
                                 "status"    : "Active",
                                 "statusDate": "3/20/2014",
                                 "department": {
-                                    id: "134613456",
-                                    name: "UNASSIGNED",
-                                    visible: true
+                                    id      : "134613456",
+                                    name    : "UNASSIGNED",
+                                    visible : true
                                 }
                             }
                         };
@@ -354,11 +362,11 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
                         utils.deepClone(globals.driverAddedDetails.configuration));
                     expectedConfiguration.driver.driverName.value = addDriverResponse.data.lastName + ", " +
                         addDriverResponse.data.firstName + " " + addDriverResponse.data.middleName;
-                    expectedConfiguration.driver.driverId.value = addDriverResponse.data.driverId;
-                    expectedConfiguration.driver.driverStatus.value = addDriverResponse.data.status;
-                    expectedConfiguration.driver.driverStatusDate.value = addDriverResponse.data.statusDate;
+                    expectedConfiguration.driver.id.value = addDriverResponse.data.id;
+                    expectedConfiguration.driver.status.value = addDriverResponse.data.status;
+                    expectedConfiguration.driver.statusDate.value = addDriverResponse.data.statusDate;
                     if (addDriverResponse.data.department) {
-                        expectedConfiguration.driver.driverDepartment.value = addDriverResponse.data.department.name;
+                        expectedConfiguration.driver.department.value = addDriverResponse.data.department.name;
                     }
 
                     actualConfiguration = driverAddView.getAddDetailsConfiguration(addDriverResponse);
@@ -367,168 +375,136 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
                 });
             });
 
-            describe("has a findDefaultDepartmentId function that", function () {
+            describe("has a findDefaultDepartment function that", function () {
+                var mockDepartment = {
+                        id: "134613456",
+                        name: "UNASSIGNED",
+                        visible: true
+                    },
+                    departments;
+
+                beforeEach(function () {
+                    departments = userModel.get("selectedCompany").get("departments");
+                    spyOn(departments, "findWhere").and.returnValue(mockDepartment);
+                });
+
                 it("is defined", function () {
-                    expect(driverAddView.findDefaultDepartmentId).toBeDefined();
+                    expect(driverAddView.findDefaultDepartment).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(driverAddView.findDefaultDepartmentId).toEqual(jasmine.any(Function));
+                    expect(driverAddView.findDefaultDepartment).toEqual(jasmine.any(Function));
                 });
 
-                describe("when 'UNASSIGNED' is first in the department list", function () {
-                    var mockDepartments = [
+                it("should call findWhere on the departments collection", function () {
+                    driverAddView.findDefaultDepartment();
+
+                    expect(departments.findWhere).toHaveBeenCalledWith(
                         {
+                            "visible": true,
+                            "name"   : globals.driverAdd.constants.DEFAULT_DEPARTMENT_NAME
+                        }
+                    );
+                });
+
+                it("should return the expected value", function () {
+                    var actualValue = driverAddView.findDefaultDepartment();
+
+                    expect(actualValue).toEqual(mockDepartment);
+                });
+            });
+
+            describe("has a findDepartment function that", function () {
+                var mockDepartmentId = "25621354",
+                    mockDepartment = {
+                        id: "134613456",
+                        name: "UNASSIGNED",
+                        visible: true
+                    },
+                    departments;
+
+                beforeEach(function () {
+                    departments = userModel.get("selectedCompany").get("departments");
+                    spyOn(departments, "findWhere").and.returnValue(mockDepartment);
+                });
+
+                it("is defined", function () {
+                    expect(driverAddView.findDepartment).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverAddView.findDepartment).toEqual(jasmine.any(Function));
+                });
+
+                it("should call findWhere on the departments collection", function () {
+                    driverAddView.findDepartment(mockDepartmentId);
+
+                    expect(departments.findWhere).toHaveBeenCalledWith(
+                        {
+                            "visible": true,
+                            "id": mockDepartmentId
+                        }
+                    );
+                });
+
+                it("should return the expected value", function () {
+                    var actualValue = driverAddView.findDepartment(mockDepartmentId);
+
+                    expect(actualValue).toEqual(mockDepartment);
+                });
+            });
+
+            describe("has a handleInputChanged function that", function () {
+                it("is defined", function () {
+                    expect(driverAddView.handleInputChanged).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverAddView.handleInputChanged).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the target name is departmentId", function () {
+                    var mockEvent = {
+                            "target"    : {
+                                "name"  : "departmentId",
+                                "value" : "mock department id"
+                            }
+                        },
+                        mockDepartment = {
                             id: "134613456",
                             name: "UNASSIGNED",
                             visible: true
-                        },
-                        {
-                            id: "245725472",
-                            name: "UNAfdhgsdfhawhSSIGNED",
-                            visible: true
-                        },
-                        {
-                            id: "356836582",
-                            name: "dhadfh",
-                            visible: true
-                        },
-                        {
-                            id: "2456724567",
-                            name: "Dewey, Cheetum and Howe",
-                            visible: false
-                        }
-                    ];
+                        };
 
                     beforeEach(function () {
-                        userModel.get("selectedCompany").setDepartments(mockDepartments);
+                        spyOn(driverAddView, "findDepartment").and.returnValue(mockDepartment);
+                        spyOn(driverAddView, "updateAttribute").and.callFake(function () {});
+
+                        driverAddView.handleInputChanged(mockEvent);
                     });
 
-                    it("should return the expected result", function () {
-                        var expectedValue = mockDepartments[0].id,
-                            actualValue = driverAddView.findDefaultDepartmentId();
+                    it("should call findDepartment", function () {
+                        expect(driverAddView.findDepartment).toHaveBeenCalledWith(mockEvent.target.value);
+                    });
 
-                        expect(actualValue).toEqual(expectedValue);
+                    it("should call updateAttribute", function () {
+                        expect(driverAddView.updateAttribute).toHaveBeenCalledWith("department", mockDepartment);
                     });
                 });
 
-                describe("when 'UNASSIGNED' is last in the department list", function () {
-                    var mockDepartments = [
-                        {
-                            id: "134613456",
-                            name: "afgadfg",
-                            visible: true
-                        },
-                        {
-                            id: "245725472",
-                            name: "UNAfdhgsdfhawhSSIGNED",
-                            visible: true
-                        },
-                        {
-                            id: "356836582",
-                            name: "dhadfh",
-                            visible: true
-                        },
-                        {
-                            id: "2456724567",
-                            name: "UNASSIGNED",
-                            visible: true
-                        }
-                    ];
+                describe("when the target name is NOT departmentId", function () {
+                    it("should call updateAttribute on super", function () {
+                        var mockEvent = {
+                            "target"            : {
+                                "name"  : "target_name",
+                                "value" : "target_value"
+                            }
+                        };
 
-                    beforeEach(function () {
-                        userModel.get("selectedCompany").setDepartments(mockDepartments);
-                    });
+                        spyOn(DriverAddView.__super__, "handleInputChanged").and.callThrough();
+                        driverAddView.handleInputChanged(mockEvent);
 
-                    it("should return the expected result", function () {
-                        var expectedValue = mockDepartments[3].id,
-                            actualValue = driverAddView.findDefaultDepartmentId();
-
-                        expect(actualValue).toEqual(expectedValue);
-                    });
-                });
-
-                describe("when 'UNASSIGNED' is in the department list but not visible", function () {
-                    var mockDepartments = [
-                        {
-                            id: "134613456",
-                            name: "afgadfg",
-                            visible: true
-                        },
-                        {
-                            id: "245725472",
-                            name: "UNAfdhgsdfhawhSSIGNED",
-                            visible: true
-                        },
-                        {
-                            id: "356836582",
-                            name: "UNASSIGNED",
-                            visible: false
-                        },
-                        {
-                            id: "2456724567",
-                            name: "sghsghwsgh",
-                            visible: true
-                        }
-                    ];
-
-                    beforeEach(function () {
-                        userModel.get("selectedCompany").setDepartments(mockDepartments);
-                    });
-
-                    it("should return the expected result", function () {
-                        var actualValue = driverAddView.findDefaultDepartmentId();
-
-                        expect(actualValue).toBeNull();
-                    });
-                });
-
-                describe("when 'UNASSIGNED' is NOT in the department list", function () {
-                    var mockDepartments = [
-                        {
-                            id: "134613456",
-                            name: "afgadfg",
-                            visible: true
-                        },
-                        {
-                            id: "245725472",
-                            name: "UNAfdhgsdfhawhSSIGNED",
-                            visible: true
-                        },
-                        {
-                            id: "356836582",
-                            name: "dhadfh",
-                            visible: true
-                        },
-                        {
-                            id: "2456724567",
-                            name: "sghsghwsgh",
-                            visible: true
-                        }
-                    ];
-
-                    beforeEach(function () {
-                        userModel.get("selectedCompany").setDepartments(mockDepartments);
-                    });
-
-                    it("should return the expected result", function () {
-                        var actualValue = driverAddView.findDefaultDepartmentId();
-
-                        expect(actualValue).toBeNull();
-                    });
-                });
-
-                describe("when 'the department list is empty", function () {
-                    var mockDepartments = [];
-
-                    beforeEach(function () {
-                        userModel.get("selectedCompany").setDepartments(mockDepartments);
-                    });
-
-                    it("should return the expected result", function () {
-                        var actualValue = driverAddView.findDefaultDepartmentId();
-
-                        expect(actualValue).toBeNull();
+                        expect(DriverAddView.__super__.handleInputChanged).toHaveBeenCalledWith(mockEvent);
                     });
                 });
             });
@@ -540,8 +516,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
 
                 beforeEach(function () {
                     spyOn(mockEvent, "preventDefault").and.callThrough();
-                    spyOn(driverAddModel, "set").and.callFake(function () { });
-                    spyOn(driverAddModel, "save").and.callFake(function () { });
+                    spyOn(driverModel, "add").and.callFake(function () { });
                     driverAddView.submitForm(mockEvent);
                 });
 
@@ -557,23 +532,16 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
                     expect(mockEvent.preventDefault).toHaveBeenCalledWith();
                 });
 
-                it("should call set on the model", function () {
-                    expect(driverAddModel.set)
-                        .toHaveBeenCalledWith("accountId", mockUserModel.selectedCompany.accountId);
-                });
-
-                describe("when calling save() on the model", function () {
+                describe("when calling add() on the model", function () {
                     var mockAddDetailsConfiguration = utils._.extend({},
-                            utils.deepClone(globals.driverAddedDetails.configuration)),
-                        mockDefaultDepartmentId = "23546256";
+                            utils.deepClone(globals.driverAddedDetails.configuration));
 
-                    it("should send the model as the first argument", function () {
-                        expect(driverAddModel.save).toHaveBeenCalled();
-                        expect(driverAddModel.save.calls.mostRecent().args.length).toEqual(2);
-                        expect(driverAddModel.save.calls.mostRecent().args[0]).toEqual(driverAddModel.toJSON());
+                    it("should send 1 argument", function () {
+                        expect(driverModel.add).toHaveBeenCalled();
+                        expect(driverModel.add.calls.mostRecent().args.length).toEqual(1);
                     });
 
-                    describe("sends as the second argument the options object with a success callback that",
+                    describe("sends as the first argument the options object with a success callback that",
                         function () {
                             var response = {},
                                 model,
@@ -586,10 +554,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
                                     .returnValue(mockAddDetailsConfiguration);
                                 spyOn(driverAddView, "trigger").and.callFake(function () { });
                                 spyOn(driverAddView, "resetForm").and.callFake(function () { });
-                                spyOn(driverAddView, "findDefaultDepartmentId").and
-                                    .returnValue(mockDefaultDepartmentId);
 
-                                options = driverAddModel.save.calls.mostRecent().args[1];
+                                options = driverModel.add.calls.mostRecent().args[0];
                                 options.success.call(driverAddView, model, response);
                             });
 
@@ -615,15 +581,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverAddM
 
                             it("should call resetForm", function () {
                                 expect(driverAddView.resetForm).toHaveBeenCalledWith();
-                            });
-
-                            it("should call findDefaultDepartmentId", function () {
-                                expect(driverAddView.findDefaultDepartmentId).toHaveBeenCalledWith();
-                            });
-
-                            it("should call set on the Driver Add Model", function () {
-                                expect(driverAddModel.set)
-                                    .toHaveBeenCalledWith("departmentId", mockDefaultDepartmentId);
                             });
                         }
                     );

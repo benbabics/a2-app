@@ -1,7 +1,7 @@
 define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", "models/UserModel",
-        "models/DriverSearchModel", "models/DriverAddModel", "views/DriverAddView", "views/DriverEditView",
+        "models/DriverModel", "views/DriverAddView", "views/DriverEditView",
         "views/DriverListView", "views/DriverSearchView"],
-    function (JClass, globals, utils, facade, DriverCollection, UserModel, DriverSearchModel, DriverAddModel,
+    function (JClass, globals, utils, facade, DriverCollection, UserModel, DriverModel,
               DriverAddView, DriverEditView, DriverListView, DriverSearchView) {
 
         "use strict";
@@ -17,7 +17,6 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
             driverAddView: null,
             driverEditView: null,
             driverListView: null,
-            driverSearchModel: null,
             driverSearchView: null,
 
             construct: function () {
@@ -25,11 +24,10 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
 
             init: function () {
                 this.driverCollection = new DriverCollection();
-                this.driverSearchModel = new DriverSearchModel();
 
                 // create add view
                 this.driverAddView = new DriverAddView({
-                    model    : new DriverAddModel(),
+                    model    : new DriverModel(),
                     userModel: UserModel.getInstance()
                 });
 
@@ -40,7 +38,7 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
 
                 // create search view
                 this.driverSearchView = new DriverSearchView({
-                    model    : this.driverSearchModel,
+                    model    : new DriverModel(),
                     userModel: UserModel.getInstance()
                 });
 
@@ -59,17 +57,19 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
             },
 
             navigateAdd: function () {
+                this.driverAddView.resetForm();
                 this.driverAddView.render();
                 utils.changePage(this.driverAddView.$el);
             },
 
             navigateSearch: function () {
+                this.driverSearchView.resetForm();
                 this.driverSearchView.render();
                 utils.changePage(this.driverSearchView.$el, null, null, true);
             },
 
-            navigateDriverDetails: function (driverId) {
-                this.driverEditView.model = this.driverCollection.findWhere({"driverId": driverId});
+            navigateDriverDetails: function (id) {
+                this.driverEditView.model = this.driverCollection.findWhere({"id": id});
                 this.driverEditView.render();
                 utils.changePage(this.driverEditView.$el);
             },
@@ -124,7 +124,7 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
             fetchCollection: function () {
                 // if params not supplied use the Search Criteria
                 var deferred = utils.Deferred(),
-                    data = this.driverSearchModel.toJSON();
+                    data = this.driverSearchView.model.toJSON();
 
                 this.driverCollection
                     .once("sync",

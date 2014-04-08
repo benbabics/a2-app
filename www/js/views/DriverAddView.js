@@ -1,6 +1,6 @@
-define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverAddModel", "models/DriverModel",
+define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverModel",
         "views/ValidationFormView", "text!tmpl/driver/driverAdd.html", "text!tmpl/driver/driverAddDetails.html"],
-    function (Backbone, utils, facade, Mustache, globals, DriverAddModel, DriverModel, ValidationFormView,
+    function (Backbone, utils, facade, Mustache, globals, DriverModel, ValidationFormView,
               pageTemplate, driverAddDetailsTemplate) {
 
         "use strict";
@@ -38,22 +38,15 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverAddM
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
 
-                this.updateValidationRules();
-
                 this.formatRequiredFields();
 
                 $content.trigger("create");
             },
 
-            updateValidationRules: function () {
-                var selectedCompany = this.userModel.get("selectedCompany");
+            resetForm: function () {
+                DriverAddView.__super__.resetForm.apply(this, arguments);
 
-                this.model.validation.driverId[0].required = selectedCompany.get("requiredFields").DRIVER_ID;
-                this.model.validation.driverId[2].length = selectedCompany.get("driverIdLength");
-                this.model.validation.driverId[2].msg =
-                    Mustache.render(globals.driverAdd.constants.ERROR_DRIVER_ID_INVALID_LENGTH, {
-                        "driverIdLength": selectedCompany.get("driverIdLength")
-                    });
+                this.model.set("department", this.findDefaultDepartment());
             },
 
             getConfiguration: function () {
@@ -65,7 +58,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverAddM
                 utils._.each(departments, function (department) {
                     if (department.visible === true) {
                         departmentListValues.push({
-                            "id": department.departmentId,
+                            "id": department.id,
                             "name": department.name,
                             "selected": department.name === globals.driverAdd.constants.DEFAULT_DEPARTMENT_NAME
                         });
@@ -73,17 +66,16 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverAddM
                 });
 
                 driverConfiguration.firstName.value = this.model.get("firstName");
-                driverConfiguration.middleInitial.value = this.model.get("middleInitial");
+                driverConfiguration.middleName.value = this.model.get("middleName");
                 driverConfiguration.lastName.value = this.model.get("lastName");
-                driverConfiguration.driverId.maxLength = selectedCompany.get("driverIdLength");
-                driverConfiguration.driverId.value = this.model.get("driverId");
-                driverConfiguration.departmentId.enabled = departmentListValues.length > 1;
-                driverConfiguration.departmentId.values = departmentListValues;
-
-                driverConfiguration.driverId.placeholder =
-                    Mustache.render(globals.driverAdd.constants.DRIVER_ID_PLACEHOLDER_FORMAT, {
+                driverConfiguration.id.maxLength = selectedCompany.get("driverIdLength");
+                driverConfiguration.id.value = this.model.get("id");
+                driverConfiguration.id.placeholder =
+                    Mustache.render( globals.driver.constants.DRIVER_ID_PLACEHOLDER_FORMAT, {
                         "driverIdLength": selectedCompany.get("driverIdLength")
                     });
+                driverConfiguration.departmentId.enabled = departmentListValues.length > 1;
+                driverConfiguration.departmentId.values = departmentListValues;
 
                 return {
                     "driver"        : driverConfiguration,
@@ -101,11 +93,11 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverAddM
 
                 // populate configuration details
                 driverConfiguration.driverName.value = driver.formattedName();
-                driverConfiguration.driverId.value = driver.driverId;
-                driverConfiguration.driverStatus.value = driver.status;
-                driverConfiguration.driverStatusDate.value = driver.statusDate;
+                driverConfiguration.id.value = driver.id;
+                driverConfiguration.status.value = driver.status;
+                driverConfiguration.statusDate.value = driver.statusDate;
                 if (driver.department) {
-                    driverConfiguration.driverDepartment.value = driver.department.name;
+                    driverConfiguration.department.value = driver.department.name;
                 }
 
                 return {
@@ -114,34 +106,36 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverAddM
                 };
             },
 
-            findDefaultDepartmentId: function () {
-                var selectedCompany = this.userModel.get("selectedCompany"),
-                    departments = selectedCompany.get("departments").toJSON(),
-                    returnValue = null;
+            findDefaultDepartment: function () {
+                var selectedCompany = this.userModel.get("selectedCompany");
+                return selectedCompany.get("departments")
+                    .findWhere({"visible": true, "name": globals.driverAdd.constants.DEFAULT_DEPARTMENT_NAME});
+            },
 
-                utils._.each(departments, function (department) {
-                    if (department.visible === true) {
-                        if (department.name === globals.driverAdd.constants.DEFAULT_DEPARTMENT_NAME) {
-                            returnValue = department.departmentId;
-                        }
-                    }
-                });
-
-                return returnValue;
+            findDepartment: function (id) {
+                var selectedCompany = this.userModel.get("selectedCompany");
+                return selectedCompany.get("departments").findWhere({"visible": true, "id": id});
             },
 
             /*
              * Event Handlers
              */
+            handleInputChanged: function (evt) {
+                var target = evt.target;
+                if (target.name === "departmentId") {
+                    this.updateAttribute("department", this.findDepartment(target.value));
+                }
+                else {
+                    DriverAddView.__super__.handleInputChanged.apply(this, arguments);
+                }
+            },
+
             submitForm: function (evt) {
                 var self = this;
 
                 evt.preventDefault();
 
-                // Set the account Id to the currently selected company
-                this.model.set("accountId", this.userModel.get("selectedCompany").get("accountId"));
-
-                this.model.save(this.model.toJSON(), {
+                this.model.add({
                     success: function (model, response) {
                         var message =
                             Mustache.render(self.addDetailsTemplate, self.getAddDetailsConfiguration(response));
@@ -149,7 +143,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverAddM
                         self.trigger("driverAddSuccess", message);
 
                         self.resetForm();
-                        self.model.set("departmentId", self.findDefaultDepartmentId());
                     }
                 });
             }

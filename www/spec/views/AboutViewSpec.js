@@ -27,7 +27,9 @@ define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-
                 squire.require(["views/AboutView"],
                     function (AboutView) {
                         //TODO - Fix - Loading fixtures causes phantomjs to hang
-                        //loadFixtures("index.html");
+                        if (window._phantom === undefined) {
+                            loadFixtures("index.html");
+                        }
 
                         appModel.set(mockAppModel);
 

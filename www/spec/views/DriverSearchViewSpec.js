@@ -7,14 +7,14 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
         var squire = new Squire(),
             mockBackbone = Backbone,
             mockMustache = Mustache,
-            mockDriverSearchModel = {
-                "filterFirstName"   : "Curly",
-                "filterLastName"    : "Howard",
-                "filterDriverId"    : null,
-                "filterStatus"      : null,
-                "filterDepartmentId": null
+            mockDriverModel = {
+                "firstName"   : "Curly",
+                "lastName"    : "Howard",
+                "id"          : null,
+                "status"      : null,
+                "department"  : null
             },
-            driverSearchModel = new Backbone.Model(),
+            driverModel = new Backbone.Model(),
             mockUserModel = {
                 authenticated: true,
                 firstName: "Beavis",
@@ -44,11 +44,13 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 ]
             },
             userModel = UserModel.getInstance(),
+            DriverSearchView,
             driverSearchView;
 
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
         squire.mock("utils", utils);
+        squire.mock("models/UserModel", UserModel);
 
         describe("A Driver Search View", function () {
 
@@ -58,15 +60,20 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
             beforeEach(function (done) {
                 squire.require(["views/DriverSearchView"],
-                    function (DriverSearchView) {
+                    function (JasmineDriverSearchView) {
                         //TODO - Fix - Loading fixtures causes phantomjs to hang
-                        //loadFixtures("index.html");
+                        if (window._phantom === undefined) {
+                            loadFixtures("index.html");
+                        }
+                        DriverSearchView = JasmineDriverSearchView;
 
-                        driverSearchModel.set(mockDriverSearchModel);
+                        driverModel.set(mockDriverModel);
                         userModel.initialize(mockUserModel);
 
+                        spyOn(UserModel, "getInstance").and.returnValue(userModel);
+
                         driverSearchView =  new DriverSearchView({
-                            model: driverSearchModel,
+                            model: driverModel,
                             userModel: userModel
                         });
 
@@ -212,19 +219,21 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
-                    it("should include a link to the Driver Add page if the user has the MOBILE_DRIVER_ADD permission", function () {
-                        driverSearchView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": true});
-                        driverSearchView.renderHeader();
+                    it("should include a link to the Driver Add page if the user has the MOBILE_DRIVER_ADD permission",
+                        function () {
+                            driverSearchView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": true});
+                            driverSearchView.renderHeader();
 
-                        expect(actualHeader[0]).toContainElement("a[href='#driverAdd']");
-                    });
+                            expect(actualHeader[0]).toContainElement("a[href='#driverAdd']");
+                        });
 
-                    it("should NOT include a link to the Driver Add page if the user does NOT have the MOBILE_DRIVER_ADD permission", function () {
-                        driverSearchView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": false});
-                        driverSearchView.renderHeader();
+                    it("should NOT include a link to the Driver Add page if the user does NOT have the MOBILE_DRIVER_ADD permission",
+                        function () {
+                            driverSearchView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": false});
+                            driverSearchView.renderHeader();
 
-                        expect(actualHeader[0]).not.toContainElement("a[href='#driverAdd']");
-                    });
+                            expect(actualHeader[0]).not.toContainElement("a[href='#driverAdd']");
+                        });
                 });
             });
 
@@ -294,13 +303,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                             });
                         });
 
-                        expectedConfiguration.filterFirstName.value = mockDriverSearchModel.filterFirstName;
-                        expectedConfiguration.filterLastName.value = mockDriverSearchModel.filterLastName;
-                        expectedConfiguration.filterDriverId.value = mockDriverSearchModel.filterDriverId;
-                        expectedConfiguration.filterStatus.value = mockDriverSearchModel.filterStatus;
-                        expectedConfiguration.filterDepartmentId.value = mockDriverSearchModel.filterDepartmentId;
-                        expectedConfiguration.filterDepartmentId.enabled = false;
-                        expectedConfiguration.filterDepartmentId.values = departmentListValues;
+                        expectedConfiguration.departmentId.enabled = false;
+                        expectedConfiguration.departmentId.values = departmentListValues;
 
                         actualConfiguration = driverSearchView.getConfiguration();
 
@@ -328,18 +332,102 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                             });
                         });
 
-                        // populate configuration details from the model
-                        expectedConfiguration.filterFirstName.value = mockDriverSearchModel.filterFirstName;
-                        expectedConfiguration.filterLastName.value = mockDriverSearchModel.filterLastName;
-                        expectedConfiguration.filterDriverId.value = mockDriverSearchModel.filterDriverId;
-                        expectedConfiguration.filterStatus.value = mockDriverSearchModel.filterStatus;
-                        expectedConfiguration.filterDepartmentId.value = mockDriverSearchModel.filterDepartmentId;
-                        expectedConfiguration.filterDepartmentId.enabled = true;
-                        expectedConfiguration.filterDepartmentId.values = departmentListValues;
+                        expectedConfiguration.departmentId.enabled = true;
+                        expectedConfiguration.departmentId.values = departmentListValues;
 
                         actualConfiguration = driverSearchView.getConfiguration();
 
                         expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
+                });
+            });
+
+            describe("has a findDepartment function that", function () {
+                var mockDepartmentId = "25621354",
+                    mockDepartment = {
+                        id: "134613456",
+                        name: "UNASSIGNED",
+                        visible: true
+                    },
+                    departments;
+
+                beforeEach(function () {
+                    departments = userModel.get("selectedCompany").get("departments");
+                    spyOn(departments, "findWhere").and.returnValue(mockDepartment);
+                });
+
+                it("is defined", function () {
+                    expect(driverSearchView.findDepartment).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverSearchView.findDepartment).toEqual(jasmine.any(Function));
+                });
+
+                it("should call findWhere on the departments collection", function () {
+                    driverSearchView.findDepartment(mockDepartmentId);
+
+                    expect(departments.findWhere).toHaveBeenCalledWith({"id": mockDepartmentId});
+                });
+
+                it("should return the expected value", function () {
+                    var actualValue = driverSearchView.findDepartment(mockDepartmentId);
+
+                    expect(actualValue).toEqual(mockDepartment);
+                });
+            });
+
+            describe("has a handleInputChanged function that", function () {
+                it("is defined", function () {
+                    expect(driverSearchView.handleInputChanged).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverSearchView.handleInputChanged).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the target name is departmentId", function () {
+                    var mockEvent = {
+                            "target"    : {
+                                "name"  : "departmentId",
+                                "value" : "mock department id"
+                            }
+                        },
+                        mockDepartment = {
+                            id: "134613456",
+                            name: "UNASSIGNED",
+                            visible: true
+                        };
+
+                    beforeEach(function () {
+                        spyOn(driverSearchView, "findDepartment").and.returnValue(mockDepartment);
+                        spyOn(driverSearchView, "updateAttribute").and.callFake(function () {});
+
+                        driverSearchView.handleInputChanged(mockEvent);
+                    });
+
+                    it("should call findDepartment", function () {
+                        expect(driverSearchView.findDepartment).toHaveBeenCalledWith(mockEvent.target.value);
+                    });
+
+                    it("should call updateAttribute", function () {
+                        expect(driverSearchView.updateAttribute).toHaveBeenCalledWith("department", mockDepartment);
+                    });
+                });
+
+                describe("when the target name is NOT departmentId", function () {
+                    it("should call updateAttribute on super", function () {
+                        var mockEvent = {
+                            "target"            : {
+                                "name"  : "target_name",
+                                "value" : "target_value"
+                            }
+                        };
+
+                        spyOn(DriverSearchView.__super__, "handleInputChanged").and.callThrough();
+                        driverSearchView.handleInputChanged(mockEvent);
+
+                        expect(DriverSearchView.__super__.handleInputChanged).toHaveBeenCalledWith(mockEvent);
                     });
                 });
             });
@@ -351,7 +439,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 beforeEach(function () {
                     spyOn(mockEvent, "preventDefault").and.callThrough();
-                    spyOn(driverSearchModel, "set").and.callFake(function () { });
                     spyOn(driverSearchView, "trigger").and.callFake(function () { });
 
                     driverSearchView.submitForm(mockEvent);
@@ -367,11 +454,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 it("should call event.preventDefault", function () {
                     expect(mockEvent.preventDefault).toHaveBeenCalledWith();
-                });
-
-                it("should call set on the model", function () {
-                    expect(driverSearchModel.set)
-                        .toHaveBeenCalledWith("accountId", mockUserModel.selectedCompany.accountId);
                 });
 
                 it("should trigger searchSubmitted", function () {

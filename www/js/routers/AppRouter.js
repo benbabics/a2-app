@@ -9,10 +9,10 @@ define(["backbone", "utils", "facade"],
              * Route Definitions
              */
             routes: {
-                "contactUs"                  : "showContactUs",
-                "driverAdd"                  : "showDriverAdd",
-                "driverSearch"               : "showDriverSearch",
-                "driverDetails(/)(:driverId)": "showDriverDetails",
+                "contactUs"            : "showContactUs",
+                "driverAdd"            : "showDriverAdd",
+                "driverSearch"         : "showDriverSearch",
+                "driverDetails(/)(:id)": "showDriverDetails",
 
                 "*page": "changePage",
 
@@ -34,8 +34,8 @@ define(["backbone", "utils", "facade"],
                 facade.publish("driver", "navigateSearch");
             },
 
-            showDriverDetails: function (driverId) {
-                facade.publish("driver", "navigateDriverDetails", driverId);
+            showDriverDetails: function (id) {
+                facade.publish("driver", "navigateDriverDetails", id);
             },
 
             changePage: function (page) {

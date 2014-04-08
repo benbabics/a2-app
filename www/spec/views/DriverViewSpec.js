@@ -7,7 +7,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/DriverMode
         var squire = new Squire(),
             mockMustache = Mustache,
             mockDriverModel = {
-                "driverId"  : "354t25ty",
+                "id"        : 35425,
                 "firstName" : "Ben",
                 "middleName": "D",
                 "lastName"  : "Over",
@@ -34,7 +34,9 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/DriverMode
             beforeEach(function (done) {
                 squire.require(["views/DriverView"], function (DriverView) {
                     //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    //loadFixtures("index.html");
+                    if (window._phantom === undefined) {
+                        loadFixtures("index.html");
+                    }
 
                     driverModel.initialize(mockDriverModel);
 
@@ -166,11 +168,11 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/DriverMode
                             utils.deepClone(globals.driverSearchResults.configuration));
 
                         expectedConfiguration.driver.url.value =
-                            globals.driverSearchResults.constants.DRIVER_DETAILS_BASE_URL + mockDriverModel.driverId;
+                            globals.driverSearchResults.constants.DRIVER_DETAILS_BASE_URL + mockDriverModel.id;
                         expectedConfiguration.driver.driverName.value = mockDriverModel.lastName + ", " +
                                                                         mockDriverModel.firstName + " " +
                                                                         mockDriverModel.middleName;
-                        expectedConfiguration.driver.driverId.value = mockDriverModel.driverId;
+                        expectedConfiguration.driver.id.value = mockDriverModel.id;
                         expectedConfiguration.driver.driverStatus.value = mockDriverModel.status;
                         if (mockDriverModel.department) {
                             expectedConfiguration.driver.driverDepartment.value = mockDriverModel.department.name;

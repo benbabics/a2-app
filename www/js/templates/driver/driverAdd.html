@@ -26,30 +26,30 @@
             </div>
         {{/lastName}}
 
-        {{#middleInitial}}
+        {{#middleName}}
             <div data-role="fieldcontain">
-                <label for="middleInitial">{{label}}:</label>
+                <label for="middleName">{{label}}:</label>
                 <input type="text"
                        name="{{name}}"
                        placeholder="{{placeholder}}"
                        maxlength="{{maxLength}}"
-                       id="middleInitial"
+                       id="middleName"
                        value="{{value}}" />
             </div>
-        {{/middleInitial}}
+        {{/middleName}}
 
         {{#requiredFields.DRIVER_ID}}
-            {{#driverId}}
+            {{#id}}
                 <div data-role="fieldcontain">
-                    <label for="driverId">{{label}}:</label>
+                    <label for="id">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
                            placeholder="{{placeholder}}"
                            maxlength="{{maxLength}}"
-                           id="driverId"
+                           id="id"
                            value="{{value}}" />
                 </div>
-            {{/driverId}}
+            {{/id}}
         {{/requiredFields.DRIVER_ID}}
 
         {{#departmentId}}
