@@ -1,6 +1,6 @@
-<h2 class="ui-title">Driver - Details</h2>
-
 {{#driver}}
+    <h2 class="ui-title">Driver - Details</h2>
+
     <div class="ui-body ui-body-d">
         {{#driverName}}
             <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
@@ -8,15 +8,15 @@
         {{#id}}
             <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
         {{/id}}
-        {{#driverDepartment}}
+        {{#department}}
             <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
-        {{/driverDepartment}}
-        {{#driverStatus}}
+        {{/department}}
+        {{#status}}
             <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
-        {{/driverStatus}}
-        {{#driverStatusDate}}
+        {{/status}}
+        {{#statusDate}}
             <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
-        {{/driverStatusDate}}
+        {{/statusDate}}
     </div>
 
     {{#permissions.MOBILE_DRIVER_EDIT}}

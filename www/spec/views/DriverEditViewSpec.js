@@ -160,7 +160,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     mockConfiguration;
 
                 beforeEach(function () {
-                    mockConfiguration = utils._.extend({}, utils.deepClone(globals.driverEdit.configuration));
+                    mockConfiguration = {
+                        "driver"     : utils._.extend({}, utils.deepClone(globals.driverEdit.configuration)),
+                        "permissions": userModel.get("permissions")
+                    };
 
                     actualContent = driverEditView.$el.find(":jqmData(role=content)");
 
@@ -197,6 +200,55 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                 it("should call the trigger function on the content", function () {
                     expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
+
+                describe("when dynamically rendering the template based on the model data", function () {
+                    if (window._phantom === undefined) {
+                        it("should contain content if the model is set", function () {
+                            driverEditView.render();
+
+                            expect(actualContent[0]).not.toBeEmpty();
+                        });
+
+                        it("should NOT contain any content if the model is not set", function () {
+                            mockConfiguration.driver = null;
+
+                            driverEditView.render();
+
+                            expect(actualContent[0]).toBeEmpty();
+                        });
+
+                        it("should include a button with the correct text", function () {
+                            var button,
+                                mockButtonLabel = "adfbawdfrghw45y62345b612";
+                            userModel.set("permissions", {"MOBILE_DRIVER_EDIT": true});
+                            mockConfiguration.permissions = userModel.get("permissions");
+                            mockConfiguration.driver.submitButton.label = mockButtonLabel;
+
+                            driverEditView.render();
+
+                            button = actualContent.find("button[id='submitChangeStatus-btn']");
+                            expect(button[0]).toHaveText(mockButtonLabel);
+                        });
+
+                        it("should include a button to change status if the user has the MOBILE_DRIVER_EDIT permission", function () {
+                            userModel.set("permissions", {"MOBILE_DRIVER_EDIT": true});
+                            mockConfiguration.permissions = userModel.get("permissions");
+
+                            driverEditView.render();
+
+                            expect(actualContent[0]).toContainElement("button[id='submitChangeStatus-btn']");
+                        });
+
+                        it("should NOT include a button to change status if the user does NOT have the MOBILE_DRIVER_EDIT permission", function () {
+                            userModel.set("permissions", {"MOBILE_DRIVER_EDIT": false});
+                            mockConfiguration.permissions = userModel.get("permissions");
+
+                            driverEditView.render();
+
+                            expect(actualContent[0]).not.toContainElement("button[id='submitChangeStatus-btn']");
+                        });
+                    }
+                });
             });
 
             describe("has a getConfiguration function that", function () {
@@ -206,6 +258,23 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                 it("is a function", function () {
                     expect(driverEditView.getConfiguration).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the driver is not set", function () {
+                    it("should return the expected result", function () {
+                        var expectedConfiguration = {
+                                "driver": null,
+                                "permissions": null
+                            },
+                            actualConfiguration;
+
+                        expectedConfiguration.permissions = userModel.get("permissions");
+                        driverEditView.model = null;
+
+                        actualConfiguration = driverEditView.getConfiguration();
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
                 });
 
                 describe("when the driver is terminated", function () {
@@ -226,10 +295,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                         expectedConfiguration.driver.driverName.value = driverModelJSON.lastName + ", " +
                             driverModelJSON.firstName + " " + driverModelJSON.middleName;
                         expectedConfiguration.driver.id.value = driverModelJSON.id;
-                        expectedConfiguration.driver.driverStatus.value = driverModelJSON.status;
-                        expectedConfiguration.driver.driverStatusDate.value = driverModelJSON.statusDate;
+                        expectedConfiguration.driver.status.value = driverModelJSON.status;
+                        expectedConfiguration.driver.statusDate.value = driverModelJSON.statusDate;
                         if (driverModelJSON.department) {
-                            expectedConfiguration.driver.driverDepartment.value = driverModelJSON.department.name;
+                            expectedConfiguration.driver.department.value = driverModelJSON.department.name;
                         }
                         expectedConfiguration.driver.submitButton.label = globals.driverEdit.constants.BUTTON_ACTIVATE;
                         expectedConfiguration.permissions = userModel.get("permissions");
@@ -258,10 +327,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                         expectedConfiguration.driver.driverName.value = driverModelJSON.lastName + ", " +
                             driverModelJSON.firstName + " " + driverModelJSON.middleName;
                         expectedConfiguration.driver.id.value = driverModelJSON.id;
-                        expectedConfiguration.driver.driverStatus.value = driverModelJSON.status;
-                        expectedConfiguration.driver.driverStatusDate.value = driverModelJSON.statusDate;
+                        expectedConfiguration.driver.status.value = driverModelJSON.status;
+                        expectedConfiguration.driver.statusDate.value = driverModelJSON.statusDate;
                         if (driverModelJSON.department) {
-                            expectedConfiguration.driver.driverDepartment.value = driverModelJSON.department.name;
+                            expectedConfiguration.driver.department.value = driverModelJSON.department.name;
                         }
                         expectedConfiguration.driver.submitButton.label = globals.driverEdit.constants.BUTTON_TERMINATE;
                         expectedConfiguration.permissions = userModel.get("permissions");

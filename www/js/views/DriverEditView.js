@@ -36,23 +36,28 @@ define(["backbone", "utils", "facade", "mustache", "globals", "text!tmpl/driver/
             },
 
             getConfiguration: function () {
-                var driver = this.model.toJSON(),
+                var driver,
+                    driverConfiguration = null;
+
+                if (this.model) {
+                    driver = this.model.toJSON();
                     driverConfiguration = utils._.extend({}, utils.deepClone(globals.driverEdit.configuration));
 
-                // populate configuration details
-                driverConfiguration.driverName.value = driver.formattedName();
-                driverConfiguration.id.value = driver.id;
-                driverConfiguration.driverStatus.value = driver.status;
-                driverConfiguration.driverStatusDate.value = driver.statusDate;
-                if (driver.department) {
-                    driverConfiguration.driverDepartment.value = driver.department.name;
-                }
+                    // populate configuration details
+                    driverConfiguration.driverName.value = driver.formattedName();
+                    driverConfiguration.id.value = driver.id;
+                    driverConfiguration.status.value = driver.status;
+                    driverConfiguration.statusDate.value = driver.statusDate;
+                    if (driver.department) {
+                        driverConfiguration.department.value = driver.department.name;
+                    }
 
-                if (driver.status === globals.driver.constants.STATUS_TERMINATED) {
-                    driverConfiguration.submitButton.label = globals.driverEdit.constants.BUTTON_ACTIVATE;
-                }
-                else {
-                    driverConfiguration.submitButton.label = globals.driverEdit.constants.BUTTON_TERMINATE;
+                    if (driver.status === globals.driver.constants.STATUS_TERMINATED) {
+                        driverConfiguration.submitButton.label = globals.driverEdit.constants.BUTTON_ACTIVATE;
+                    }
+                    else {
+                        driverConfiguration.submitButton.label = globals.driverEdit.constants.BUTTON_TERMINATE;
+                    }
                 }
 
                 return {

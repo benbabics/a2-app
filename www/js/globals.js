@@ -358,15 +358,15 @@ define(function (require) {
             "label": "Driver ID",
             "value": ""
         },
-        "driverDepartment": {
+        "department": {
             "label": "Department",
             "value": ""
         },
-        "driverStatus": {
+        "status": {
             "label": "Status",
             "value": ""
         },
-        "driverStatusDate": {
+        "statusDate": {
             "label": "Status Date",
             "value": ""
         },
