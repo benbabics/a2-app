@@ -68,7 +68,7 @@
         <!-- End Invoices page -->
 
         <!-- Card Search page -->
-        <div data-role="page" data-theme="a" id="cardSearch">
+        <div data-role="page" data-theme="a" id="cardSearch" class="ui-card">
             <div data-theme="b" data-role="header" data-position="fixed" data-tap-toggle="false">
                 <h1>WEXonline</h1>
             </div>
@@ -84,8 +84,23 @@
         </div>
         <!-- End Card Search page -->
 
+        <!-- Card Search Results page -->
+        <div data-role="page" data-theme="a" id="cardSearchResults" class="ui-card">
+            <div data-theme="b" data-role="header" data-position="fixed" data-tap-toggle="false"></div>
+            <div data-role="content" class="page-content"></div>
+            <div id="footer" data-role="footer" data-position="fixed" data-tap-toggle="false">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#home" data-icon="home" data-transition="flip" data-direction="reverse"></a></li>
+                        <li><a href="#info" data-icon="info"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- End Card Search Results page -->
+
         <!-- Card Add page -->
-        <div data-role="page" data-theme="a" id="cardAdd" class="ui-driver">
+        <div data-role="page" data-theme="a" id="cardAdd" class="ui-card">
             <div data-theme="b" data-role="header" data-position="fixed" data-tap-toggle="false">
                 <h1>WEXonline</h1>
                 <a href="#" data-role="button" data-rel="back" data-icon="carat-l" data-theme="a">Back</a>
