@@ -1,6 +1,6 @@
 define(["jclass", "globals", "utils", "collections/CardCollection", "models/UserModel",
-        "models/CardModel", "views/CardSearchView"],
-    function (JClass, globals, utils, CardCollection, UserModel, CardModel, CardSearchView) {
+        "models/CardModel", "views/CardListView", "views/CardSearchView"],
+    function (JClass, globals, utils, CardCollection, UserModel, CardModel, CardListView, CardSearchView) {
 
         "use strict";
 
@@ -12,6 +12,7 @@ define(["jclass", "globals", "utils", "collections/CardCollection", "models/User
 
         CardController = JClass.extend({
             cardCollection: null,
+            cardListView: null,
             cardSearchView: null,
 
             construct: function () {
@@ -26,8 +27,15 @@ define(["jclass", "globals", "utils", "collections/CardCollection", "models/User
                     userModel: UserModel.getInstance()
                 });
 
+                // create list view
+                this.cardListView = new CardListView({
+                    collection: this.cardCollection,
+                    userModel : UserModel.getInstance()
+                });
+
                 // listen for events
                 this.cardSearchView.on("searchSubmitted", this.showSearchResults, this);
+                this.cardListView.on("showAllCards", this.showAllSearchResults, this);
             },
 
             navigateSearch: function () {
@@ -41,19 +49,24 @@ define(["jclass", "globals", "utils", "collections/CardCollection", "models/User
                 this.updateCollection();
             },
 
-            updateCollection: function () {
-//                var self = this;
+            showAllSearchResults: function () {
+                this.cardCollection.showAll();
+                this.updateCollection();
+            },
 
-//                this.cardListView.showLoadingIndicator();
+            updateCollection: function () {
+                var self = this;
+
+                this.cardListView.showLoadingIndicator();
 
                 // silently reset collection to ensure it always is "updated", even if it's the same models again
                 this.cardCollection.reset([], { "silent": true });
 
                 utils.when(this.fetchCollection())
                     .always(function () {
-//                        self.cardListView.render();
-//                        utils.changePage(self.driverListView.$el, null, null, true);
-//                        self.cardListView.hideLoadingIndicator();
+                        self.cardListView.render();
+                        utils.changePage(self.cardListView.$el, null, null, true);
+                        self.cardListView.hideLoadingIndicator();
                     });
             },
 

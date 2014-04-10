@@ -362,11 +362,11 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 });
 
                 it("is defined", function () {
-                    expect(driverListView.initialize).toBeDefined();
+                    expect(driverListView.handleShowAllDrivers).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(driverListView.initialize).toEqual(jasmine.any(Function));
+                    expect(driverListView.handleShowAllDrivers).toEqual(jasmine.any(Function));
                 });
 
                 it("should trigger showAllDrivers", function () {

@@ -105,6 +105,12 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                 expect(cardListView instanceof Backbone.View).toBeTruthy();
             });
 
+            describe("has events that", function () {
+                it("should call handleShowAllCards when showAllResults-btn is clicked", function () {
+                    expect(cardListView.events["click #showAllResults-btn"]).toEqual("handleShowAllCards");
+                });
+            });
+
             describe("has a constructor that", function () {
                 it("is defined", function () {
                     expect(cardListView.constructor).toBeDefined();
@@ -244,7 +250,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
             });
 
             describe("has a renderContent function that", function () {
-                var actualContent;
+                var actualContent,
+                    mockConfiguration = globals.cardSearchResults.configuration;
 
                 beforeEach(function () {
                     actualContent = cardListView.$el.find(":jqmData(role=content)");
@@ -253,6 +260,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(cardListView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
+                    spyOn(cardCollection, "each").and.callThrough();
 
                     cardListView.renderContent();
                 });
@@ -266,16 +275,107 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                 });
 
                 it("should call Mustache.render() on the template", function () {
-                    expect(mockMustache.render).toHaveBeenCalledWith(cardListView.template);
+                    expect(mockMustache.render).toHaveBeenCalledWith(cardListView.template, mockConfiguration);
                 });
 
                 it("should call the html function on the content", function () {
-                    var expectedContent = Mustache.render(pageTemplate);
+                    var expectedContent = Mustache.render(pageTemplate, mockConfiguration);
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
+                });
+
+                it("should call each on the collection sending a function and scope object", function () {
+                    expect(cardCollection.each).toHaveBeenCalled();
+                    expect(cardCollection.each.calls.mostRecent().args.length).toEqual(2);
+                    expect(cardCollection.each.calls.mostRecent().args[0]).toEqual(jasmine.any(Function));
+                    expect(cardCollection.each.calls.mostRecent().args[1]).toEqual(cardListView);
                 });
 
                 it("should call the trigger function on the content", function () {
                     expect(actualContent.trigger).toHaveBeenCalledWith("create");
+                });
+            });
+
+            describe("has a getConfiguration function that", function () {
+                beforeEach(function () {
+                    cardListView.collection.isAllResults = true;
+                    cardListView.collection.pageSize = globals.cardSearchResults.constants.DEFAULT_PAGE_SIZE;
+                    cardListView.collection.totalResults = 136256;
+                });
+
+                it("is defined", function () {
+                    expect(cardListView.getConfiguration).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardListView.getConfiguration).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the collection is empty", function () {
+                    beforeEach(function () {
+                        cardListView.collection.length = 0;
+                    });
+
+                    it("should return the expected result", function () {
+                        var expectedConfiguration,
+                            actualConfiguration;
+
+                        expectedConfiguration = utils._.extend({},
+                            utils.deepClone(globals.cardSearchResults.configuration));
+
+                        expectedConfiguration.totalResults.value =
+                            globals.cardSearchResults.constants.NO_RESULTS_MESSAGE;
+                        expectedConfiguration.submitButton.visible = !cardListView.collection.isAllResults &&
+                            cardListView.collection.pageSize < globals.driverSearch.constants.SHOW_ALL_PAGE_SIZE;
+
+                        actualConfiguration = cardListView.getConfiguration();
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
+                });
+
+                describe("when the collection is not empty", function () {
+                    beforeEach(function () {
+                        cardListView.collection.length = 3;
+                    });
+
+                    it("should return the expected result", function () {
+                        var expectedConfiguration,
+                            actualConfiguration;
+
+                        expectedConfiguration = utils._.extend({},
+                            utils.deepClone(globals.cardSearchResults.configuration));
+
+                        expectedConfiguration.totalResults.value =
+                            Mustache.render(globals.cardSearchResults.constants.TOTAL_RESULTS_FORMAT, {
+                                "numberDisplayed": cardListView.collection.length,
+                                "totalResults"   : cardListView.collection.totalResults
+                            });
+                        expectedConfiguration.submitButton.visible = !cardListView.collection.isAllResults &&
+                            cardListView.collection.pageSize < globals.driverSearch.constants.SHOW_ALL_PAGE_SIZE;
+
+                        actualConfiguration = cardListView.getConfiguration();
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
+                });
+            });
+
+            describe("has a handleShowAllCards function that", function () {
+                beforeEach(function () {
+                    spyOn(cardListView, "trigger").and.callFake(function () { });
+                    cardListView.handleShowAllCards();
+                });
+
+                it("is defined", function () {
+                    expect(cardListView.handleShowAllCards).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardListView.handleShowAllCards).toEqual(jasmine.any(Function));
+                });
+
+                it("should trigger showAllCards", function () {
+                    expect(cardListView.trigger).toHaveBeenCalledWith("showAllCards");
                 });
             });
         });

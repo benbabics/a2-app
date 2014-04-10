@@ -1,0 +1,31 @@
+{{#card}}
+    <a href="{{url.value}}"
+       class="text-left"
+       data-theme="d"
+       data-ajax="false"
+       data-role="button"
+       data-icon="carat-r"
+       data-iconpos="right">
+        {{#number}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/number}}
+        {{#customVehicleId}}
+            <p class="text-result-whitespace ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/customVehicleId}}
+        {{#vehicleDescription}}
+            <p class="text-result-whitespace ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/vehicleDescription}}
+        {{#licensePlateNumber}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/licensePlateNumber}}
+        {{#licensePlateState}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/licensePlateState}}
+        {{#department}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/department}}
+        {{#status}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/status}}
+    </a>
+{{/card}}

@@ -30,6 +30,15 @@ define(["globals", "backbone", "utils", "Squire"],
                 resetPage: function () { },
                 showAll: function () { }
             },
+            mockCardListView = {
+                $el: "",
+                constructor: function () { },
+                initialize: function () { },
+                render: function () { },
+                on: function () { },
+                showLoadingIndicator: function () { },
+                hideLoadingIndicator: function () { }
+            },
             mockCardSearchView = {
                 $el: "",
                 model: cardModel,
@@ -75,6 +84,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
         squire.mock("backbone", Backbone);
         squire.mock("utils", mockUtils);
+        squire.mock("views/CardListView", Squire.Helpers.returns(mockCardListView));
         squire.mock("views/CardSearchView", Squire.Helpers.returns(mockCardSearchView));
         squire.mock("collections/CardCollection", Squire.Helpers.returns(mockCardCollection));
         squire.mock("models/CardModel", Squire.Helpers.returns(cardModel));
@@ -121,6 +131,25 @@ define(["globals", "backbone", "utils", "Squire"],
                     expect(cardController.cardCollection).toEqual(mockCardCollection);
                 });
 
+                describe("when initializing the CardListView", function () {
+                    beforeEach(function () {
+                        spyOn(mockCardListView, "constructor").and.callThrough();
+                    });
+
+                    it("should set the cardListView variable to a new CardListView object", function () {
+                        expect(cardController.cardListView).toEqual(mockCardListView);
+                    });
+
+                    xit("should send in the correct parameters to the constructor", function () {
+                        expect(mockCardListView.constructor).toHaveBeenCalledWith({
+                            collection: mockCardCollection,
+                            userModel: userModel
+                        });
+
+                        // TODO: this is not working, need to figure out how to test
+                    });
+                });
+
                 describe("when initializing the CardSearchView", function () {
                     beforeEach(function () {
                         spyOn(mockCardSearchView, "constructor").and.callThrough();
@@ -147,6 +176,16 @@ define(["globals", "backbone", "utils", "Squire"],
 
                     expect(mockCardSearchView.on).toHaveBeenCalledWith("searchSubmitted",
                         cardController.showSearchResults,
+                        cardController);
+                });
+
+                it("should register a function as the handler for the list view showAllCards event", function () {
+                    spyOn(mockCardListView, "on").and.callFake(function () { });
+
+                    cardController.init();
+
+                    expect(mockCardListView.on).toHaveBeenCalledWith("showAllCards",
+                        cardController.showAllSearchResults,
                         cardController);
                 });
             });
@@ -230,18 +269,18 @@ define(["globals", "backbone", "utils", "Squire"],
                             return deferred.promise();
                         });
 
-//                        spyOn(mockCardListView, "showLoadingIndicator").and.callFake(function () {});
+                        spyOn(mockCardListView, "showLoadingIndicator").and.callFake(function () {});
                         spyOn(mockCardCollection, "reset").and.callFake(function () {});
-//                        spyOn(mockCardListView, "render").and.callFake(function () {});
-//                        spyOn(utils, "changePage").and.callFake(function () {});
-//                        spyOn(mockCardListView, "hideLoadingIndicator").and.callFake(function () {});
+                        spyOn(mockCardListView, "render").and.callFake(function () {});
+                        spyOn(utils, "changePage").and.callFake(function () {});
+                        spyOn(mockCardListView, "hideLoadingIndicator").and.callFake(function () {});
 
                         cardController.updateCollection();
                     });
 
-//                    it("should call the showLoadingIndicator function on the Card List View", function () {
-//                        expect(mockCardListView.showLoadingIndicator).toHaveBeenCalledWith();
-//                    });
+                    it("should call the showLoadingIndicator function on the Card List View", function () {
+                        expect(mockCardListView.showLoadingIndicator).toHaveBeenCalledWith();
+                    });
 
                     it("should call the reset function on the Card Collection", function () {
                         expect(mockCardCollection.reset).toHaveBeenCalledWith([], { "silent": true });
@@ -251,17 +290,17 @@ define(["globals", "backbone", "utils", "Squire"],
                         expect(cardController.fetchCollection).toHaveBeenCalledWith();
                     });
 
-//                    it("should call the render function on SiteListView", function () {
-//                        expect(mockCardListView.render).toHaveBeenCalledWith();
-//                    });
+                    it("should call the render function on SiteListView", function () {
+                        expect(mockCardListView.render).toHaveBeenCalledWith();
+                    });
 
-//                    it("should call the changePage function on utils", function () {
-//                        expect(utils.changePage).toHaveBeenCalledWith(mockCardListView.$el, null, null, true);
-//                    });
+                    it("should call the changePage function on utils", function () {
+                        expect(utils.changePage).toHaveBeenCalledWith(mockCardListView.$el, null, null, true);
+                    });
 
-//                    it("should call the hideLoadingIndicator function on the Card List View", function () {
-//                        expect(mockCardListView.hideLoadingIndicator).toHaveBeenCalledWith();
-//                    });
+                    it("should call the hideLoadingIndicator function on the Card List View", function () {
+                        expect(mockCardListView.hideLoadingIndicator).toHaveBeenCalledWith();
+                    });
                 });
 
                 describe("when the call to fetchCollection finishes with a failure", function () {
@@ -273,18 +312,18 @@ define(["globals", "backbone", "utils", "Squire"],
                             return deferred.promise();
                         });
 
-//                        spyOn(mockCardListView, "showLoadingIndicator").and.callFake(function () {});
+                        spyOn(mockCardListView, "showLoadingIndicator").and.callFake(function () {});
                         spyOn(mockCardCollection, "reset").and.callFake(function () {});
-//                        spyOn(mockCardListView, "render").and.callFake(function () {});
-//                        spyOn(utils, "changePage").and.callFake(function () {});
-//                        spyOn(mockCardListView, "hideLoadingIndicator").and.callFake(function () {});
+                        spyOn(mockCardListView, "render").and.callFake(function () {});
+                        spyOn(utils, "changePage").and.callFake(function () {});
+                        spyOn(mockCardListView, "hideLoadingIndicator").and.callFake(function () {});
 
                         cardController.updateCollection();
                     });
 
-//                    it("should call the showLoadingIndicator function on the Card List View", function () {
-//                        expect(mockCardListView.showLoadingIndicator).toHaveBeenCalledWith();
-//                    });
+                    it("should call the showLoadingIndicator function on the Card List View", function () {
+                        expect(mockCardListView.showLoadingIndicator).toHaveBeenCalledWith();
+                    });
 
                     it("should call the reset function on the Card Collection", function () {
                         expect(mockCardCollection.reset).toHaveBeenCalledWith([], { "silent": true });
@@ -294,17 +333,17 @@ define(["globals", "backbone", "utils", "Squire"],
                         expect(cardController.fetchCollection).toHaveBeenCalledWith();
                     });
 
-//                    it("should call the render function on SiteListView", function () {
-//                        expect(mockCardListView.render).toHaveBeenCalledWith();
-//                    });
+                    it("should call the render function on SiteListView", function () {
+                        expect(mockCardListView.render).toHaveBeenCalledWith();
+                    });
 
-//                    it("should call the changePage function on utils", function () {
-//                        expect(utils.changePage).toHaveBeenCalledWith(mockCardListView.$el, null, null, true);
-//                    });
+                    it("should call the changePage function on utils", function () {
+                        expect(utils.changePage).toHaveBeenCalledWith(mockCardListView.$el, null, null, true);
+                    });
 
-//                    it("should call the hideLoadingIndicator function on the Card List View", function () {
-//                        expect(mockCardListView.hideLoadingIndicator).toHaveBeenCalledWith();
-//                    });
+                    it("should call the hideLoadingIndicator function on the Card List View", function () {
+                        expect(mockCardListView.hideLoadingIndicator).toHaveBeenCalledWith();
+                    });
                 });
             });
 

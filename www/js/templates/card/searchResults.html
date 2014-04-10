@@ -1,0 +1,14 @@
+<h2 class="ui-title">Card - Results</h2>
+
+<div class="content-primary">
+    {{#totalResults}}
+        <p>{{value}}</p>
+    {{/totalResults}}
+    <ul id="cardSearchResultList" data-role="listview" data-inset="true" data-theme="c" data-dividertheme="d">
+    </ul>
+    {{#submitButton}}
+        {{#visible}}
+            <button id="showAllResults-btn" data-role="button" data-theme="b">{{label}}</button>
+        {{/visible}}
+    {{/submitButton}}
+</div>

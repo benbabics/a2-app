@@ -292,6 +292,56 @@ define(function (require) {
     };
 
     /**
+     * Page :: Card Search Results
+     */
+    globals.cardSearchResults = {};
+    globals.cardSearchResults.constants = {
+        "TOTAL_RESULTS_FORMAT"   : "Displaying {{numberDisplayed}} of {{totalResults}} results",
+        "NO_RESULTS_MESSAGE"     : "No results found. Please try again.",
+        "CARD_DETAILS_BASE_URL": "#cardDetails/"
+    };
+    globals.cardSearchResults.configuration = {
+        "url": {
+            "value": ""
+        },
+        "number": {
+            "label": "Card Number",
+            "value": ""
+        },
+        "customVehicleId": {
+            "label": "Customer Vehicle ID",
+            "value": ""
+        },
+        "vehicleDescription": {
+            "label": "Vehicle Description",
+            "value": ""
+        },
+        "licensePlateNumber": {
+            "label": "License Plate Number",
+            "value": ""
+        },
+        "licensePlateState": {
+            "label": "License Plate State",
+            "value": ""
+        },
+        "department": {
+            "label": "Department",
+            "value": ""
+        },
+        "status": {
+            "label": "Status",
+            "value": ""
+        },
+        "totalResults": {
+            "value": ""
+        },
+        "submitButton": {
+            "label"  : "Show All Cards",
+            "visible": null
+        }
+    };
+
+    /**
      * Driver
      */
     globals.driver = {};

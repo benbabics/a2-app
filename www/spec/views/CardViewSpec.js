@@ -98,8 +98,15 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel"
             });
 
             describe("has a render function that", function () {
+                var mockConfiguration;
+
                 beforeEach(function () {
+                    mockConfiguration = {
+                        "card": utils._.extend({}, utils.deepClone(globals.cardSearchResults.configuration))
+                    };
+
                     spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(cardView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
 
                     cardView.initialize();
                     cardView.render();
@@ -115,17 +122,92 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel"
 
                 it("should call Mustache.render() on the template", function () {
                     expect(mockMustache.render).toHaveBeenCalled();
-                    expect(mockMustache.render.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockMustache.render.calls.mostRecent().args.length).toEqual(2);
                     expect(mockMustache.render.calls.mostRecent().args[0]).toEqual(cardView.template);
+                    expect(mockMustache.render.calls.mostRecent().args[1]).toEqual(mockConfiguration);
                 });
 
                 it("sets content", function () {
                     var expectedContent,
                         actualContent = cardView.$el;
 
-                    expectedContent = Mustache.render(pageTemplate);
+                    expectedContent = Mustache.render(pageTemplate, mockConfiguration);
 
                     expect(actualContent[0]).toContainHtml(expectedContent);
+                });
+
+                describe("when dynamically rendering the template based on the model data", function () {
+                    if (window._phantom === undefined) {
+                        it("should contain a card link if the model is set", function () {
+                            cardView.render();
+
+                            expect(cardView.$el[0]).toContainElement("a");
+                        });
+
+                        it("should NOT contain a card link if the model is not set", function () {
+                            mockConfiguration.card = null;
+
+                            cardView.render();
+
+                            expect(cardView.$el[0]).not.toContainElement("a");
+                        });
+                    }
+                });
+            });
+
+            describe("has a getConfiguration function that", function () {
+                it("is defined", function () {
+                    expect(cardView.getConfiguration).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardView.getConfiguration).toEqual(jasmine.any(Function));
+                });
+
+                describe("when model is null", function () {
+                    beforeEach(function () {
+                        cardView.model = null;
+                    });
+
+                    it("should return the expected result", function () {
+                        var expectedConfiguration = {
+                                "card" : null
+                            },
+                            actualConfiguration;
+
+                        actualConfiguration = cardView.getConfiguration();
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
+                });
+
+                describe("when model exists", function () {
+                    it("should return the expected result", function () {
+                        var expectedConfiguration = {
+                                card: {}
+                            },
+                            actualConfiguration;
+
+                        expectedConfiguration.card = utils._.extend({},
+                            utils.deepClone(globals.cardSearchResults.configuration));
+
+                        expectedConfiguration.card.url.value =
+                            globals.cardSearchResults.constants.CARD_DETAILS_BASE_URL + mockCardModel.number;
+                        expectedConfiguration.card.number.value = mockCardModel.number;
+                        expectedConfiguration.card.customVehicleId.value = mockCardModel.customVehicleId;
+                        expectedConfiguration.card.vehicleDescription.value = mockCardModel.vehicleDescription;
+                        expectedConfiguration.card.licensePlateNumber.value = mockCardModel.licensePlateNumber;
+                        expectedConfiguration.card.licensePlateState.value = mockCardModel.licensePlateState;
+                        expectedConfiguration.card.customVehicleId.value = mockCardModel.customVehicleId;
+                        expectedConfiguration.card.status.value = mockCardModel.status;
+                        if (mockCardModel.department) {
+                            expectedConfiguration.card.department.value = mockCardModel.department.name;
+                        }
+
+                        actualConfiguration = cardView.getConfiguration();
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
                 });
             });
         });
