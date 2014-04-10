@@ -38,7 +38,7 @@ define(["utils", "globals", "Squire", "models/CardModel", "models/UserModel"],
         squire.mock("models/CardModel", CardModel);
         squire.mock("models/UserModel", UserModel);
 
-        describe("A Driver Collection", function () {
+        describe("A Card Collection", function () {
             beforeEach(function(done) {
                 squire.require(["collections/CardCollection"], function(JasmineCardCollection) {
                     userModel.initialize(mockUserModel);
