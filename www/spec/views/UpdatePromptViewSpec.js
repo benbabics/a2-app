@@ -1,4 +1,4 @@
-define(["backbone", "utils", "globals", "mustache", "text!tmpl/updateprompt/page.html", "Squire", "jasmine-jquery"],
+define(["backbone", "utils", "globals", "mustache", "text!tmpl/updatePrompt/page.html", "Squire", "jasmine-jquery"],
     function (Backbone, utils, globals, Mustache, pageTemplate, Squire) {
         "use strict";
 
