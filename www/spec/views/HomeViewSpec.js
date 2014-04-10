@@ -181,14 +181,14 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
                         homeView.model.set("permissions", {"MOBILE_CARD_VIEW": true});
                         homeView.render();
 
-                        expect(actualContent[0]).toContainElement("a[href='#cards']");
+                        expect(actualContent[0]).toContainElement("a[href='#cardSearch']");
                     });
 
                     it("should NOT include a link to the Cards page if the user does NOT have the MOBILE_CARD_VIEW permission", function () {
                         homeView.model.set("permissions", {"MOBILE_CARD_VIEW": false});
                         homeView.render();
 
-                        expect(actualContent[0]).not.toContainElement("a[href='#cards']");
+                        expect(actualContent[0]).not.toContainElement("a[href='#cardSearch']");
                     });
 
                     it("should include a link to the Driver Search page if the user has the MOBILE_DRIVER_FULL_VIEW permission", function () {

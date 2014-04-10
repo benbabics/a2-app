@@ -4,6 +4,7 @@ var specList =
         // Views
         "spec/views/AboutViewSpec.js",
         "spec/views/AppViewSpec.js",
+        "spec/views/CardSearchViewSpec.js",
         "spec/views/ContactUsViewSpec.js",
         "spec/views/DriverAddViewSpec.js",
         "spec/views/DriverEditViewSpec.js",
@@ -19,6 +20,7 @@ var specList =
         // Models
         "spec/models/AjaxModelSpec.js",
         "spec/models/AppModelSpec.js",
+        "spec/models/CardModelSpec.js",
         "spec/models/CompanyModelSpec.js",
         "spec/models/ContactUsModelSpec.js",
         "spec/models/DepartmentModelSpec.js",

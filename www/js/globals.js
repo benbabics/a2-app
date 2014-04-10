@@ -13,6 +13,7 @@ define(function (require) {
         "ROOT_URL"                     : "@@@STRING_REPLACE_APP_URL@@@",
         "APP_PATH"                     : "/app",
         "ACCOUNTS_PATH"                : "/accounts",
+        "CARD_PATH"                    : "/cards",
         "DRIVER_PATH"                  : "/drivers",
         "USER_AUTH_PATH"               : "/userAuth",
         "REQUEST_ERROR_TITLE"          : "Cannot complete request",
