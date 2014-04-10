@@ -44,7 +44,7 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
         squire.mock("backbone", Backbone);
         squire.mock("models/UserModel", UserModel);
 
-        describe("A Driver Model", function () {
+        describe("A Card Model", function () {
             beforeEach(function (done) {
                 squire.require(["models/CardModel"], function (JasmineCardModel) {
                     CardModel = JasmineCardModel;

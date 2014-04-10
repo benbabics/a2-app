@@ -47,7 +47,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
         squire.mock("utils", utils);
         squire.mock("models/UserModel", UserModel);
 
-        describe("A Driver Search View", function () {
+        describe("A Card Search View", function () {
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
