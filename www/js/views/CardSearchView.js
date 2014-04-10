@@ -13,6 +13,13 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
 
             userModel: null,
 
+            events: utils._.extend({}, FormView.prototype.events, {
+                "click #submitCardSearch-btn": "submitForm",
+
+                // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it
+                "submit #cardSearchForm"     : "submitForm"
+            }),
+
             initialize: function (options) {
                 // call super
                 CardSearchView.__super__.initialize.apply(this, arguments);
@@ -44,8 +51,32 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
             renderContent: function () {
                 var $content = this.$el.find(":jqmData(role=content)");
 
-                $content.html(Mustache.render(this.template));
+                $content.html(Mustache.render(this.template, this.getConfiguration()));
                 $content.trigger("create");
+            },
+
+            getConfiguration: function () {
+                var configuration = utils._.extend({}, utils.deepClone(globals.cardSearch.configuration)),
+                    selectedCompany = this.userModel.get("selectedCompany"),
+                    departments = selectedCompany.get("departments").toJSON(),
+                    departmentListValues = [],
+                    hasMultipleDepartments = utils._.size(departments) > 1;
+
+                if (hasMultipleDepartments) {
+                    departmentListValues.push(globals.driverSearch.constants.ALL);
+                }
+
+                utils._.each(departments, function (department) {
+                    departmentListValues.push({
+                        "id"  : department.id,
+                        "name": department.name
+                    });
+                });
+
+                configuration.departmentId.enabled = hasMultipleDepartments;
+                configuration.departmentId.values = departmentListValues;
+
+                return configuration;
             },
 
             findDepartment: function (id) {

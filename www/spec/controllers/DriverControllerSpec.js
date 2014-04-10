@@ -116,7 +116,7 @@ define(["globals", "backbone", "utils", "Squire"],
                     expect(driverController.init).toEqual(jasmine.any(Function));
                 });
 
-                it("should set the mockDriverCollection variable to a new DriverCollection object", function () {
+                it("should set the driverCollection variable to a new DriverCollection object", function () {
                     expect(driverController.driverCollection).toEqual(mockDriverCollection);
                 });
 

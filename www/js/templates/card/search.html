@@ -1,1 +1,44 @@
 <h2 class="ui-title">Card - Search</h2>
+<form id="cardSearchForm" class="ui-body ui-body-d">
+    {{#number}}
+        <div data-role="fieldcontain">
+            <label for="number">{{label}}:</label>
+            <input type="text" name="{{name}}" id="number" value="{{value}}" />
+        </div>
+    {{/number}}
+    {{#customVehicleId}}
+        <div data-role="fieldcontain">
+            <label for="customVehicleId">{{label}}:</label>
+            <input type="text" name="{{name}}" id="customVehicleId" value="{{value}}" />
+        </div>
+    {{/customVehicleId}}
+    {{#licensePlateNumber}}
+        <div data-role="fieldcontain">
+            <label for="licensePlateNumber">{{label}}:</label>
+            <input type="text" name="{{name}}" id="licensePlateNumber" value="{{value}}" />
+        </div>
+    {{/licensePlateNumber}}
+    {{#status}}
+        <div data-role="fieldcontain">
+            <label for="status">{{label}}:</label>
+            <select id="status" name="{{name}}" data-theme="c">
+                {{#values}}
+                    <option value="{{id}}">{{name}}</option>
+                {{/values}}
+            </select>
+        </div>
+    {{/status}}
+    {{#departmentId}}
+        <div data-role="fieldcontain">
+            <label for="departmentId">{{label}}:</label>
+            <select id="departmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}} data-theme="c">
+                {{#values}}
+                    <option value="{{id}}">{{name}}</option>
+                {{/values}}
+            </select>
+        </div>
+    {{/departmentId}}
+</form>
+{{#submitButton}}
+    <button id="submitCardSearch-btn" data-role="button" data-theme="b">{{label}}</button>
+{{/submitButton}}

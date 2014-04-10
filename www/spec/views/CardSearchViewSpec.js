@@ -84,6 +84,16 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 expect(cardSearchView instanceof Backbone.View).toBeTruthy();
             });
 
+            describe("has events that", function () {
+                it("should call submitForm when submitCardSearch-btn is clicked", function () {
+                    expect(cardSearchView.events["click #submitCardSearch-btn"]).toEqual("submitForm");
+                });
+
+                it("should call submitForm when cardSearchForm is submitted", function () {
+                    expect(cardSearchView.events["submit #cardSearchForm"]).toEqual("submitForm");
+                });
+            });
+
             describe("has a constructor that", function () {
                 it("is defined", function () {
                     expect(cardSearchView.constructor).toBeDefined();
@@ -222,8 +232,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 });
             });
 
+
             describe("has a renderContent function that", function () {
-                var actualContent;
+                var actualContent,
+                    mockConfiguration = globals.cardSearch.configuration;
 
                 beforeEach(function () {
                     actualContent = cardSearchView.$el.find(":jqmData(role=content)");
@@ -232,6 +244,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(cardSearchView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
 
                     cardSearchView.render();
                 });
@@ -245,16 +258,83 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 });
 
                 it("should call Mustache.render() on the template", function () {
-                    expect(mockMustache.render).toHaveBeenCalledWith(cardSearchView.template);
+                    expect(mockMustache.render).toHaveBeenCalledWith(cardSearchView.template, mockConfiguration);
                 });
 
                 it("should call the html function on the content", function () {
-                    var expectedContent = Mustache.render(pageTemplate);
+                    var expectedContent = Mustache.render(pageTemplate, mockConfiguration);
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                 });
 
                 it("should call the trigger function on the content", function () {
                     expect(actualContent.trigger).toHaveBeenCalledWith("create");
+                });
+            });
+
+            describe("has a getConfiguration function that", function () {
+                it("is defined", function () {
+                    expect(cardSearchView.getConfiguration).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardSearchView.getConfiguration).toEqual(jasmine.any(Function));
+                });
+
+                describe("when utils.size returns 1", function () {
+                    beforeEach(function () {
+                        spyOn(utils._, "size").and.callFake(function () { return 1; });
+                    });
+
+                    it("should return the expected result", function () {
+                        var expectedConfiguration,
+                            departmentListValues = [],
+                            actualConfiguration;
+
+                        expectedConfiguration = utils._.extend({}, utils.deepClone(globals.cardSearch.configuration));
+
+                        utils._.each(mockUserModel.selectedCompany.departments, function (department) {
+                            departmentListValues.push({
+                                "id"  : department.id,
+                                "name": department.name
+                            });
+                        });
+
+                        expectedConfiguration.departmentId.enabled = false;
+                        expectedConfiguration.departmentId.values = departmentListValues;
+
+                        actualConfiguration = cardSearchView.getConfiguration();
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
+                });
+
+                describe("when utils.size returns > 1", function () {
+                    beforeEach(function () {
+                        spyOn(utils._, "size").and.callFake(function () { return 2; });
+                    });
+
+                    it("should return the expected result", function () {
+                        var expectedConfiguration,
+                            departmentListValues = [],
+                            actualConfiguration;
+
+                        expectedConfiguration = utils._.extend({}, utils.deepClone(globals.cardSearch.configuration));
+                        departmentListValues.push(globals.cardSearch.constants.ALL);
+
+                        utils._.each(mockUserModel.selectedCompany.departments, function (department) {
+                            departmentListValues.push({
+                                "id"  : department.id,
+                                "name": department.name
+                            });
+                        });
+
+                        expectedConfiguration.departmentId.enabled = true;
+                        expectedConfiguration.departmentId.values = departmentListValues;
+
+                        actualConfiguration = cardSearchView.getConfiguration();
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
                 });
             });
 

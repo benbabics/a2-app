@@ -32,6 +32,10 @@ define(["utils", "Squire", "backbone"],
             });
 
             describe("has property routes that", function () {
+                it("should set 'cardSearch' to showCardSearch", function () {
+                    expect(appRouter.routes.cardSearch).toEqual("showCardSearch");
+                });
+
                 it("should set 'contactUs' to showContactUs", function () {
                     expect(appRouter.routes.contactUs).toEqual("showContactUs");
                 });
@@ -54,6 +58,30 @@ define(["utils", "Squire", "backbone"],
 
                 it("should set an empty string to root", function () {
                     expect(appRouter.routes[""]).toEqual("root");
+                });
+            });
+
+            describe("has a showCardSearch function that", function () {
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callThrough();
+
+                    appRouter.showCardSearch();
+                });
+
+                it("is defined", function () {
+                    expect(appRouter.showCardSearch).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appRouter.showCardSearch).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("card");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigateSearch");
                 });
             });
 

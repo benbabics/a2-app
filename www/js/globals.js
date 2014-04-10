@@ -217,6 +217,81 @@ define(function (require) {
     };
 
     /**
+     * Card
+     */
+    globals.card = {};
+    globals.card.constants = {
+        "STATUS_ACTIVE": "ACTIVE",
+        "STATUS_TERMINATED": "TERMINATED"
+    };
+
+    /**
+     * Page :: Card Search
+     */
+    globals.cardSearch = {};
+    globals.cardSearch.constants = {
+        "DEFAULT_PAGE_NUMBER": 0,
+        "DEFAULT_PAGE_SIZE": 25,
+        "SHOW_ALL_PAGE_SIZE": 1000,
+        "ALL": {
+            id: "",
+            name: "All"
+        }
+    };
+    globals.cardSearch.configuration = {
+        "number": {
+            "label"      : "Vehicle Card Number",
+            "name"       : "number",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "customVehicleId": {
+            "label"      : "Customer Vehicle ID",
+            "name"       : "customVehicleId",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "licensePlateNumber": {
+            "label"      : "License Plate Number",
+            "name"       : "licensePlateNumber",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "status": {
+            "label"      : "Status",
+            "name"       : "status",
+            "values"     : [
+                {
+                    id: "",
+                    name: "All"
+                },
+                {
+                    id: "A",
+                    name: "Active"
+                },
+                {
+                    id: "T",
+                    name: "Terminated"
+                }
+            ]
+        },
+        "departmentId": {
+            "label"      : "Department",
+            "name"       : "departmentId",
+            "enabled"    : true,
+            "values"     : [
+                {
+                    id: "",
+                    name: "All"
+                }
+            ]
+        },
+        "submitButton": {
+            "label": "Search"
+        }
+    };
+
+    /**
      * Driver
      */
     globals.driver = {};

@@ -30,6 +30,7 @@ var specList =
 
         // Collections
         "spec/collections/AjaxCollectionSpec.js",
+        "spec/collections/CardCollectionSpec.js",
         "spec/collections/DepartmentCollectionSpec.js",
         "spec/collections/DriverCollectionSpec.js",
 
