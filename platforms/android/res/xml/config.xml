@@ -1,7 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.wex.wol.accountmaintenance" version="1.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <feature name="ApplicationInfo">
-        <param name="android-package" value="com.wex.plugins.applicationInfo.ApplicationInfoPlugin" />
+    <preference name="loglevel" value="DEBUG" />
+    <feature name="App">
+        <param name="android-package" value="org.apache.cordova.App" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
     </feature>
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
@@ -9,8 +13,8 @@
     <feature name="NetworkStatus">
         <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
     </feature>
-    <feature name="SplashScreen">
-        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+    <feature name="ApplicationInfo">
+        <param name="android-package" value="com.wex.plugins.applicationInfo.ApplicationInfoPlugin" />
     </feature>
     <name>WEXonline</name>
     <description>
