@@ -24,6 +24,9 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
                 // call super
                 CardSearchView.__super__.initialize.apply(this, arguments);
 
+                // set context
+                utils._.bindAll(this, "handlePageBeforeShow");
+
                 // parse the templates
                 Mustache.parse(this.headerTemplate);
                 Mustache.parse(this.template);
@@ -31,6 +34,9 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
                 if (options && options.userModel) {
                     this.userModel = options.userModel;
                 }
+
+                // jQM Events
+                this.$el.on("pagebeforeshow", this.handlePageBeforeShow);
             },
 
             render: function () {
@@ -84,9 +90,17 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
                 return selectedCompany.get("departments").findWhere({"id": id});
             },
 
+            pageBeforeShow: function () {
+                this.resetForm();
+            },
+
             /*
              * Event Handlers
              */
+            handlePageBeforeShow: function (evt) {
+                this.pageBeforeShow();
+            },
+
             handleInputChanged: function (evt) {
                 var target = evt.target;
                 if (target.name === "departmentId") {

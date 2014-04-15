@@ -30,7 +30,6 @@ define(["globals", "backbone", "utils", "Squire"],
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { },
-                resetForm: function () { },
                 on: function () { }
             },
             mockDriverEditView = {
@@ -55,7 +54,6 @@ define(["globals", "backbone", "utils", "Squire"],
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { },
-                resetForm: function () { },
                 on: function () { }
             },
             mockUserModel = {
@@ -238,7 +236,6 @@ define(["globals", "backbone", "utils", "Squire"],
 
             describe("has a navigateAdd function that", function () {
                 beforeEach(function () {
-                    spyOn(mockDriverAddView, "resetForm").and.callThrough();
                     spyOn(mockDriverAddView, "render").and.callThrough();
                     spyOn(mockUtils, "changePage").and.callThrough();
 
@@ -251,10 +248,6 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 it("is a function", function () {
                     expect(driverController.navigateAdd).toEqual(jasmine.any(Function));
-                });
-
-                it("should call resetForm on the Driver Add View Page", function () {
-                    expect(mockDriverAddView.resetForm).toHaveBeenCalledWith();
                 });
 
                 it("should call render on the Driver Add View Page", function () {
@@ -271,7 +264,6 @@ define(["globals", "backbone", "utils", "Squire"],
 
             describe("has a navigateSearch function that", function () {
                 beforeEach(function () {
-                    spyOn(mockDriverSearchView, "resetForm").and.callThrough();
                     spyOn(mockDriverSearchView, "render").and.callThrough();
                     spyOn(mockUtils, "changePage").and.callThrough();
 
@@ -284,10 +276,6 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 it("is a function", function () {
                     expect(driverController.navigateSearch).toEqual(jasmine.any(Function));
-                });
-
-                it("should call resetForm on the Driver Search View Page", function () {
-                    expect(mockDriverSearchView.resetForm).toHaveBeenCalledWith();
                 });
 
                 it("should call render on the Driver Search View Page", function () {

@@ -7,6 +7,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
         var squire = new Squire(),
             mockBackbone = Backbone,
             mockMustache = Mustache,
+            mockUtils = utils,
             mockDriverModel = {
                 "firstName"   : "Curly",
                 "lastName"    : "Howard",
@@ -49,7 +50,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
-        squire.mock("utils", utils);
+        squire.mock("utils", mockUtils);
         squire.mock("models/UserModel", UserModel);
 
         describe("A Driver Search View", function () {
@@ -128,6 +129,9 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(mockMustache, "parse").and.callThrough();
+                    spyOn(driverSearchView.$el, "on").and.callFake(function () {});
+                    spyOn(mockUtils._, "bindAll").and.callFake(function () { });
+
                     driverSearchView.initialize();
                 });
 
@@ -137,6 +141,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 it("is a function", function () {
                     expect(driverSearchView.initialize).toEqual(jasmine.any(Function));
+                });
+
+                it("should call utils._.bindAll", function () {
+                    expect(mockUtils._.bindAll).toHaveBeenCalledWith(driverSearchView, "handlePageBeforeShow");
                 });
 
                 it("should parse the template", function () {
@@ -149,6 +157,11 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 it("should set userModel", function () {
                     expect(driverSearchView.userModel).toEqual(userModel);
+                });
+
+                it("should call on() on $el", function () {
+                    expect(driverSearchView.$el.on)
+                        .toHaveBeenCalledWith("pagebeforeshow", driverSearchView.handlePageBeforeShow);
                 });
             });
 
@@ -286,7 +299,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 describe("when utils.size returns 1", function () {
                     beforeEach(function () {
-                        spyOn(utils._, "size").and.callFake(function () { return 1; });
+                        spyOn(mockUtils._, "size").and.callFake(function () { return 1; });
                     });
 
                     it("should return the expected result", function () {
@@ -314,7 +327,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 describe("when utils.size returns > 1", function () {
                     beforeEach(function () {
-                        spyOn(utils._, "size").and.callFake(function () { return 2; });
+                        spyOn(mockUtils._, "size").and.callFake(function () { return 2; });
                     });
 
                     it("should return the expected result", function () {
@@ -374,6 +387,50 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     var actualValue = driverSearchView.findDepartment(mockDepartmentId);
 
                     expect(actualValue).toEqual(mockDepartment);
+                });
+            });
+
+            describe("has a pageBeforeShow function that", function () {
+                beforeEach(function () {
+                    spyOn(driverSearchView, "resetForm").and.callFake(function () { });
+
+                    driverSearchView.pageBeforeShow();
+                });
+
+                it("is defined", function () {
+                    expect(driverSearchView.submitForm).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverSearchView.submitForm).toEqual(jasmine.any(Function));
+                });
+
+                it("should call resetForm", function () {
+                    expect(driverSearchView.resetForm).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a handlePageBeforeShow function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    spyOn(driverSearchView, "pageBeforeShow").and.callFake(function () { });
+
+                    driverSearchView.handlePageBeforeShow(mockEvent);
+                });
+
+                it("is defined", function () {
+                    expect(driverSearchView.handlePageBeforeShow).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverSearchView.handlePageBeforeShow).toEqual(jasmine.any(Function));
+                });
+
+                it("should call pageBeforeShow", function () {
+                    expect(driverSearchView.pageBeforeShow).toHaveBeenCalledWith();
                 });
             });
 

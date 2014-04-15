@@ -25,12 +25,18 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
                 // call super
                 this.constructor.__super__.initialize.apply(this, arguments);
 
+                // set context
+                utils._.bindAll(this, "handlePageBeforeShow");
+
                 // parse the add details template
                 Mustache.parse(this.addDetailsTemplate);
 
                 if (options && options.userModel) {
                     this.userModel = options.userModel;
                 }
+
+                // jQM Events
+                this.$el.on("pagebeforeshow", this.handlePageBeforeShow);
             },
 
             render: function () {
@@ -117,9 +123,17 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
                 return selectedCompany.get("departments").findWhere({"visible": true, "id": id});
             },
 
+            pageBeforeShow: function () {
+                this.resetForm();
+            },
+
             /*
              * Event Handlers
              */
+            handlePageBeforeShow: function (evt) {
+                this.pageBeforeShow();
+            },
+
             handleInputChanged: function (evt) {
                 var target = evt.target;
                 if (target.name === "departmentId") {

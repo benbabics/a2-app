@@ -57,13 +57,11 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
             },
 
             navigateAdd: function () {
-                this.driverAddView.resetForm();
                 this.driverAddView.render();
                 utils.changePage(this.driverAddView.$el);
             },
 
             navigateSearch: function () {
-                this.driverSearchView.resetForm();
                 this.driverSearchView.render();
                 utils.changePage(this.driverSearchView.$el, null, null, true);
             },

@@ -7,6 +7,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
         var squire = new Squire(),
             mockMustache = Mustache,
+            mockUtils = utils,
             mockUserModel = {
                 authenticated: true,
                 firstName: "Beavis",
@@ -52,6 +53,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
             DriverAddView;
 
         squire.mock("mustache", mockMustache);
+        squire.mock("utils", mockUtils);
         squire.mock("backbone", Backbone);
 
         describe("A Driver Add View", function () {
@@ -127,7 +129,9 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(mockMustache, "parse").and.callThrough();
+                    spyOn(driverAddView.$el, "on").and.callFake(function () {});
                     spyOn(DriverAddView.__super__, "initialize").and.callFake(function () {});
+                    spyOn(mockUtils._, "bindAll").and.callFake(function () { });
 
                     driverAddView.initialize();
                 });
@@ -144,12 +148,21 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     expect(DriverAddView.__super__.initialize).toHaveBeenCalledWith();
                 });
 
+                it("should call utils._.bindAll", function () {
+                    expect(mockUtils._.bindAll).toHaveBeenCalledWith(driverAddView, "handlePageBeforeShow");
+                });
+
                 it("should parse the addDetailsTemplate", function () {
                     expect(mockMustache.parse).toHaveBeenCalledWith(driverAddView.addDetailsTemplate);
                 });
 
                 it("should set userModel", function () {
                     expect(driverAddView.userModel).toEqual(userModel);
+                });
+
+                it("should call on() on $el", function () {
+                    expect(driverAddView.$el.on)
+                        .toHaveBeenCalledWith("pagebeforeshow", driverAddView.handlePageBeforeShow);
                 });
             });
 
@@ -451,6 +464,50 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     var actualValue = driverAddView.findDepartment(mockDepartmentId);
 
                     expect(actualValue).toEqual(mockDepartment);
+                });
+            });
+
+            describe("has a pageBeforeShow function that", function () {
+                beforeEach(function () {
+                    spyOn(driverAddView, "resetForm").and.callFake(function () { });
+
+                    driverAddView.pageBeforeShow();
+                });
+
+                it("is defined", function () {
+                    expect(driverAddView.submitForm).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverAddView.submitForm).toEqual(jasmine.any(Function));
+                });
+
+                it("should call resetForm", function () {
+                    expect(driverAddView.resetForm).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a handlePageBeforeShow function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    spyOn(driverAddView, "pageBeforeShow").and.callFake(function () { });
+
+                    driverAddView.handlePageBeforeShow(mockEvent);
+                });
+
+                it("is defined", function () {
+                    expect(driverAddView.handlePageBeforeShow).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(driverAddView.handlePageBeforeShow).toEqual(jasmine.any(Function));
+                });
+
+                it("should call pageBeforeShow", function () {
+                    expect(driverAddView.pageBeforeShow).toHaveBeenCalledWith();
                 });
             });
 

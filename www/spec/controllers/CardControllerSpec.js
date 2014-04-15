@@ -48,7 +48,6 @@ define(["globals", "backbone", "utils", "Squire"],
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { },
-                resetForm: function () { },
                 on: function () { }
             },
             mockCardDetailView = {
@@ -272,7 +271,6 @@ define(["globals", "backbone", "utils", "Squire"],
 
             describe("has a navigateSearch function that", function () {
                 beforeEach(function () {
-                    spyOn(mockCardSearchView, "resetForm").and.callThrough();
                     spyOn(mockCardSearchView, "render").and.callThrough();
                     spyOn(mockUtils, "changePage").and.callThrough();
 
@@ -285,10 +283,6 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 it("is a function", function () {
                     expect(cardController.navigateSearch).toEqual(jasmine.any(Function));
-                });
-
-                it("should call resetForm on the Card Search View Page", function () {
-                    expect(mockCardSearchView.resetForm).toHaveBeenCalledWith();
                 });
 
                 it("should call render on the Card Search View Page", function () {

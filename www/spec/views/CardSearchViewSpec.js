@@ -7,8 +7,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
         var squire = new Squire(),
             mockBackbone = Backbone,
             mockMustache = Mustache,
-            mockCardModel = {
-            },
+            mockUtils = utils,
+            mockCardModel = {},
             cardModel = new Backbone.Model(),
             mockUserModel = {
                 authenticated: true,
@@ -44,7 +44,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
-        squire.mock("utils", utils);
+        squire.mock("utils", mockUtils);
         squire.mock("models/UserModel", UserModel);
 
         describe("A Card Search View", function () {
@@ -123,6 +123,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(mockMustache, "parse").and.callThrough();
+                    spyOn(cardSearchView.$el, "on").and.callFake(function () {});
+                    spyOn(mockUtils._, "bindAll").and.callFake(function () { });
                     cardSearchView.initialize();
                 });
 
@@ -132,6 +134,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 it("is a function", function () {
                     expect(cardSearchView.initialize).toEqual(jasmine.any(Function));
+                });
+
+                it("should call utils._.bindAll", function () {
+                    expect(mockUtils._.bindAll).toHaveBeenCalledWith(cardSearchView, "handlePageBeforeShow");
                 });
 
                 it("should parse the template", function () {
@@ -144,6 +150,11 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 it("should set userModel", function () {
                     expect(cardSearchView.userModel).toEqual(userModel);
+                });
+
+                it("should call on() on $el", function () {
+                    expect(cardSearchView.$el.on)
+                        .toHaveBeenCalledWith("pagebeforeshow", cardSearchView.handlePageBeforeShow);
                 });
             });
 
@@ -282,7 +293,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 describe("when utils.size returns 1", function () {
                     beforeEach(function () {
-                        spyOn(utils._, "size").and.callFake(function () { return 1; });
+                        spyOn(mockUtils._, "size").and.callFake(function () { return 1; });
                     });
 
                     it("should return the expected result", function () {
@@ -310,7 +321,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 describe("when utils.size returns > 1", function () {
                     beforeEach(function () {
-                        spyOn(utils._, "size").and.callFake(function () { return 2; });
+                        spyOn(mockUtils._, "size").and.callFake(function () { return 2; });
                     });
 
                     it("should return the expected result", function () {
@@ -370,6 +381,50 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     var actualValue = cardSearchView.findDepartment(mockDepartmentId);
 
                     expect(actualValue).toEqual(mockDepartment);
+                });
+            });
+
+            describe("has a pageBeforeShow function that", function () {
+                beforeEach(function () {
+                    spyOn(cardSearchView, "resetForm").and.callFake(function () { });
+
+                    cardSearchView.pageBeforeShow();
+                });
+
+                it("is defined", function () {
+                    expect(cardSearchView.submitForm).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardSearchView.submitForm).toEqual(jasmine.any(Function));
+                });
+
+                it("should call resetForm", function () {
+                    expect(cardSearchView.resetForm).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a handlePageBeforeShow function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    spyOn(cardSearchView, "pageBeforeShow").and.callFake(function () { });
+
+                    cardSearchView.handlePageBeforeShow(mockEvent);
+                });
+
+                it("is defined", function () {
+                    expect(cardSearchView.handlePageBeforeShow).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardSearchView.handlePageBeforeShow).toEqual(jasmine.any(Function));
+                });
+
+                it("should call pageBeforeShow", function () {
+                    expect(cardSearchView.pageBeforeShow).toHaveBeenCalledWith();
                 });
             });
 

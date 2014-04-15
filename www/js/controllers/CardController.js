@@ -53,7 +53,6 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
             },
 
             navigateSearch: function () {
-                this.cardSearchView.resetForm();
                 this.cardSearchView.render();
                 utils.changePage(this.cardSearchView.$el, null, null, true);
             },
