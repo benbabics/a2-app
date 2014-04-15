@@ -36,8 +36,12 @@ define(["Squire"],
                 expect(mockFacade.subscribeTo.calls.mostRecent().args[1]).toEqual(mockCardController);
             });
 
-            it("should call subscribe 1 time", function () {
-                expect(mockSubscribe.calls.count()).toEqual(1);
+            it("should call subscribe 2 times", function () {
+                expect(mockSubscribe.calls.count()).toEqual(2);
+            });
+
+            it("should subscribe to navigateCardDetails", function () {
+                expect(mockSubscribe).toHaveBeenCalledWith("navigateCardDetails", "navigateCardDetails");
             });
 
             it("should subscribe to navigateSearch", function () {

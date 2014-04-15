@@ -8,7 +8,8 @@ define(["backbone", "mustache", "globals", "utils", "models/UserModel", "models/
         var CardModel = AjaxModel.extend({
             defaults: function () {
                 return utils._.extend({}, utils.deepClone(AjaxModel.prototype.defaults), {
-                    "number"                  : null,
+                    "idAttribute"             : "number",
+                    "id"                      : null,
                     "authorizationProfileName": null,
                     "status"                  : null,
                     "department"              : null,
@@ -32,7 +33,7 @@ define(["backbone", "mustache", "globals", "utils", "models/UserModel", "models/
                 CardModel.__super__.initialize.apply(this, arguments);
 
                 if (options) {
-                    if (options.number) { this.set("number", options.number); }
+                    if (options.number) { this.set("id", options.number); }
                     if (options.authorizationProfileName) {
                         this.set("authorizationProfileName", options.authorizationProfileName);
                     }
@@ -48,6 +49,24 @@ define(["backbone", "mustache", "globals", "utils", "models/UserModel", "models/
                     if (options.licensePlateState) { this.set("licensePlateState", options.licensePlateState); }
                     if (options.vin) { this.set("vin", options.vin); }
                 }
+            },
+
+            sync: function (method, model, options) {
+                if (method === "patch") {
+                    options.type = "POST";
+                }
+
+                CardModel.__super__.sync.call(this, method, model, options);
+            },
+
+            terminate: function (options) {
+                var attributes = {},
+                    originalUrl = this.url();
+
+                options.patch = true;
+                // Override default url as backbone will try to POST to urlRoot()/{{id}} when an id is known
+                this.url = originalUrl + globals.WEBSERVICE.CARDS.TERMINATE_PATH;
+                this.save(attributes, options);
             },
 
             toJSON: function () {

@@ -33,8 +33,8 @@ define(["backbone", "utils", "mustache", "globals", "text!tmpl/card/card.html"],
 
                     // populate configuration details
                     cardConfiguration.url.value =
-                        globals.cardSearchResults.constants.CARD_DETAILS_BASE_URL + card.number;
-                    cardConfiguration.number.value = card.number;
+                        globals.cardSearchResults.constants.CARD_DETAILS_BASE_URL + card.id;
+                    cardConfiguration.id.value = card.id;
                     cardConfiguration.customVehicleId.value = card.customVehicleId;
                     cardConfiguration.vehicleDescription.value = card.vehicleDescription;
                     cardConfiguration.licensePlateNumber.value = card.licensePlateNumber;

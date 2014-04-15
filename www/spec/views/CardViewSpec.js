@@ -10,8 +10,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel"
                 "number"                  : 1234,
                 "authorizationProfileName": "Auth Profile Name",
                 "status"                  : "Status",
-                "department"              :
-                {
+                "department"              : {
                     id: "134613456",
                     name: "UNASSIGNED",
                     visible: true
@@ -193,7 +192,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel"
 
                         expectedConfiguration.card.url.value =
                             globals.cardSearchResults.constants.CARD_DETAILS_BASE_URL + mockCardModel.number;
-                        expectedConfiguration.card.number.value = mockCardModel.number;
+                        expectedConfiguration.card.id.value = mockCardModel.number;
                         expectedConfiguration.card.customVehicleId.value = mockCardModel.customVehicleId;
                         expectedConfiguration.card.vehicleDescription.value = mockCardModel.vehicleDescription;
                         expectedConfiguration.card.licensePlateNumber.value = mockCardModel.licensePlateNumber;

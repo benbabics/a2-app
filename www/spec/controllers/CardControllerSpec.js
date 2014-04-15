@@ -4,9 +4,12 @@ define(["globals", "backbone", "utils", "Squire"],
         "use strict";
 
         var squire = new Squire(),
+            mockFacade = {
+                publish: function (channel, event) { }
+            },
             mockUtils = utils,
             mockCardModel = {
-                "number"                  : 1234,
+                "id"                      : 1234,
                 "authorizationProfileName": "Auth Profile Name",
                 "status"                  : "Status",
                 "department"              :
@@ -48,6 +51,13 @@ define(["globals", "backbone", "utils", "Squire"],
                 resetForm: function () { },
                 on: function () { }
             },
+            mockCardDetailView = {
+                $el: "",
+                constructor: function () { },
+                initialize: function () { },
+                render: function () { },
+                on: function () { }
+            },
             mockUserModel = {
                 authenticated: true,
                 firstName: "Beavis",
@@ -83,7 +93,9 @@ define(["globals", "backbone", "utils", "Squire"],
             cardController;
 
         squire.mock("backbone", Backbone);
+        squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
+        squire.mock("views/CardDetailView", Squire.Helpers.returns(mockCardDetailView));
         squire.mock("views/CardListView", Squire.Helpers.returns(mockCardListView));
         squire.mock("views/CardSearchView", Squire.Helpers.returns(mockCardSearchView));
         squire.mock("collections/CardCollection", Squire.Helpers.returns(mockCardCollection));
@@ -169,6 +181,34 @@ define(["globals", "backbone", "utils", "Squire"],
                     });
                 });
 
+                describe("when initializing the CardDetailView", function () {
+                    beforeEach(function () {
+                        spyOn(mockCardDetailView, "constructor").and.callThrough();
+                    });
+
+                    it("should set the cardDetailView variable to a new CardDetailView object", function () {
+                        expect(cardController.cardDetailView).toEqual(mockCardDetailView);
+                    });
+
+                    xit("should send in the correct parameters to the constructor", function () {
+                        expect(mockCardDetailView.constructor).toHaveBeenCalledWith({
+                            userModel: userModel
+                        });
+
+                        // TODO: this is not working, need to figure out how to test
+                    });
+                });
+
+                it("should register a function as the handler for the search view terminateCardSuccess event", function () {
+                    spyOn(mockCardDetailView, "on").and.callFake(function () { });
+
+                    cardController.init();
+
+                    expect(mockCardDetailView.on).toHaveBeenCalledWith("terminateCardSuccess",
+                        cardController.showCardStatusChangeDetails,
+                        cardController);
+                });
+
                 it("should register a function as the handler for the search view searchSubmitted event", function () {
                     spyOn(mockCardSearchView, "on").and.callFake(function () { });
 
@@ -187,6 +227,46 @@ define(["globals", "backbone", "utils", "Squire"],
                     expect(mockCardListView.on).toHaveBeenCalledWith("showAllCards",
                         cardController.showAllSearchResults,
                         cardController);
+                });
+            });
+
+            describe("has a navigateCardDetails function that", function () {
+                var mockCardNumber = 1234;
+
+                beforeEach(function () {
+                    mockCardDetailView.model = null;
+                    spyOn(mockCardCollection, "findWhere").and.callFake(function () { return cardModel; });
+                    spyOn(mockCardDetailView, "render").and.callThrough();
+                    spyOn(mockUtils, "changePage").and.callThrough();
+
+                    cardController.navigateCardDetails(mockCardNumber);
+                });
+
+                it("is defined", function () {
+                    expect(cardController.navigateCardDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.navigateCardDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should call findWhere on the Card Collection", function () {
+                    expect(mockCardCollection.findWhere).toHaveBeenCalledWith({"id": mockCardNumber});
+                });
+
+                it("should set model on the Card Detail View Page", function () {
+                    expect(mockCardDetailView.model).toEqual(cardModel);
+                });
+
+                it("should call render on the Card Detail View Page", function () {
+                    expect(mockCardDetailView.render).toHaveBeenCalledWith();
+                });
+
+                it("should change the page to the Card Detail View Page", function () {
+                    expect(mockUtils.changePage).toHaveBeenCalled();
+
+                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockCardDetailView.$el);
                 });
             });
 
@@ -248,6 +328,57 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 it("should call updateCollection", function () {
                     expect(cardController.updateCollection).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a showCardStatusChangeDetails function that", function () {
+                var response = {
+                    message: "Response message"
+                };
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callFake(function () { });
+
+                    cardController.showCardStatusChangeDetails(response);
+                });
+
+                it("is defined", function () {
+                    expect(cardController.showCardStatusChangeDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.showCardStatusChangeDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    var appAlertOptions;
+
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
+
+                    appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
+                    expect(appAlertOptions.title).toEqual(globals.cardDetails.constants.STATUS_CHANGE_SUCCESS_TITLE);
+                    expect(appAlertOptions.message).toEqual(response.message);
+                    expect(appAlertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
+                    expect(appAlertOptions.popupafterclose).toEqual(jasmine.any(Function));
+                });
+
+                describe("sends as the popupafterclose argument a callback that", function () {
+                    var options;
+
+                    beforeEach(function () {
+                        options = mockFacade.publish.calls.mostRecent().args[2];
+
+                        spyOn(cardController, "updateCollection").and.callFake(function () { });
+
+                        options.popupafterclose.call(cardController);
+                    });
+
+                    it("should call updateCollection", function () {
+                        expect(cardController.updateCollection).toHaveBeenCalledWith();
+                    });
                 });
             });
 

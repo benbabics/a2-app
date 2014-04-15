@@ -44,7 +44,7 @@ define([ "globals", "backbone", "utils", "facade", "models/UserModel", "models/C
                 var overrodeOptions = {};
 
                 // Copy over the attributes that can be used for searching
-                overrodeOptions.number = options.number;
+                overrodeOptions.number = options.id;
                 overrodeOptions.customVehicleId = options.customVehicleId;
                 overrodeOptions.licensePlateNumber = options.licensePlateNumber;
                 overrodeOptions.status = options.status;

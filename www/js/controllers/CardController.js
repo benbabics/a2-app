@@ -1,6 +1,7 @@
-define(["jclass", "globals", "utils", "collections/CardCollection", "models/UserModel",
-        "models/CardModel", "views/CardListView", "views/CardSearchView"],
-    function (JClass, globals, utils, CardCollection, UserModel, CardModel, CardListView, CardSearchView) {
+define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "models/UserModel", "models/CardModel",
+        "views/CardDetailView", "views/CardListView", "views/CardSearchView"],
+    function (JClass, globals, facade, utils, CardCollection, UserModel, CardModel,
+              CardDetailView, CardListView, CardSearchView) {
 
         "use strict";
 
@@ -12,6 +13,7 @@ define(["jclass", "globals", "utils", "collections/CardCollection", "models/User
 
         CardController = JClass.extend({
             cardCollection: null,
+            cardDetailView: null,
             cardListView: null,
             cardSearchView: null,
 
@@ -33,15 +35,40 @@ define(["jclass", "globals", "utils", "collections/CardCollection", "models/User
                     userModel : UserModel.getInstance()
                 });
 
+                // create detail view
+                this.cardDetailView = new CardDetailView({
+                    userModel: UserModel.getInstance()
+                });
+
                 // listen for events
+                this.cardDetailView.on("terminateCardSuccess", this.showCardStatusChangeDetails, this);
                 this.cardSearchView.on("searchSubmitted", this.showSearchResults, this);
                 this.cardListView.on("showAllCards", this.showAllSearchResults, this);
+            },
+
+            navigateCardDetails: function (id) {
+                this.cardDetailView.model = this.cardCollection.findWhere({"id": id});
+                this.cardDetailView.render();
+                utils.changePage(this.cardDetailView.$el);
             },
 
             navigateSearch: function () {
                 this.cardSearchView.resetForm();
                 this.cardSearchView.render();
                 utils.changePage(this.cardSearchView.$el, null, null, true);
+            },
+
+            showCardStatusChangeDetails: function (cardChangeStatusResponse) {
+                var self = this;
+
+                facade.publish("app", "alert", {
+                    title          : globals.cardDetails.constants.STATUS_CHANGE_SUCCESS_TITLE,
+                    message        : cardChangeStatusResponse.message,
+                    primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
+                    popupafterclose:   function () {
+                        self.updateCollection();
+                    }
+                });
             },
 
             showSearchResults: function () {

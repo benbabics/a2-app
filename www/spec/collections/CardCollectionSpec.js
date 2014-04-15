@@ -253,7 +253,7 @@ define(["utils", "globals", "Squire", "models/CardModel", "models/UserModel"],
 
             describe("has a fetch function that", function () {
                 var mockOptions = {
-                    "number"            : "Curly",
+                    "id"                : 5677,
                     "customVehicleId"   : "Howard",
                     "licensePlateNumber": 132456,
                     "status"            : "ACTIVE",
@@ -288,7 +288,7 @@ define(["utils", "globals", "Squire", "models/CardModel", "models/UserModel"],
 
                 it("should call super", function () {
                     var expectedOptions = {};
-                    expectedOptions.number = mockOptions.number;
+                    expectedOptions.number = mockOptions.id;
                     expectedOptions.customVehicleId = mockOptions.customVehicleId;
                     expectedOptions.licensePlateNumber = mockOptions.licensePlateNumber;
                     expectedOptions.status = mockOptions.status;

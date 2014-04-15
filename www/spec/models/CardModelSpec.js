@@ -4,6 +4,13 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
         "use strict";
 
         var squire = new Squire(),
+            mockDataResponse = {
+                successFlag: false,
+                message: {
+                    type: "",
+                    text: ""
+                }
+            },
             mockUserModel = {
                 authenticated: true,
                 firstName: "Beavis",
@@ -75,8 +82,12 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                     expect(cardModel.defaults).toEqual(jasmine.any(Function));
                 });
 
-                it("should set number to default", function () {
-                    expect(cardModel.defaults().number).toBeNull();
+                it("should set idAttribute to default", function () {
+                    expect(cardModel.defaults().idAttribute).toEqual("number");
+                });
+
+                it("should set id to default", function () {
+                    expect(cardModel.defaults().id).toBeNull();
                 });
 
                 it("should set authorizationProfileName to default", function () {
@@ -205,8 +216,8 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                         expect(cardModel.set.calls.count()).toEqual(9);
                     });
 
-                    it("should set number", function () {
-                        expect(cardModel.set).toHaveBeenCalledWith("number", options.number);
+                    it("should set id", function () {
+                        expect(cardModel.set).toHaveBeenCalledWith("id", options.number);
                     });
 
                     it("should set authorizationProfileName", function () {
@@ -252,6 +263,123 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                     it("should set vin", function () {
                         expect(cardModel.set).toHaveBeenCalledWith("vin", options.vin);
                     });
+                });
+            });
+
+            describe("has a sync function that", function () {
+                var options = {
+                    success: function () {}
+                };
+
+                beforeEach(function () {
+                    spyOn(CardModel.__super__, "sync").and.callFake(function () {
+                        var deferred = utils.Deferred();
+
+                        deferred.resolve(mockDataResponse);
+                        return deferred.promise();
+                    });
+                });
+
+                it("is defined", function () {
+                    expect(cardModel.sync).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardModel.sync).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the method is create", function () {
+                    it("should call sync on super", function () {
+                        cardModel.sync("create", cardModel.toJSON(), options);
+
+                        expect(CardModel.__super__.sync)
+                            .toHaveBeenCalledWith("create", cardModel.toJSON(), options);
+                    });
+                });
+
+                describe("when the method is read", function () {
+                    it("should call sync on super", function () {
+                        cardModel.sync("read", cardModel.toJSON(), options);
+
+                        expect(CardModel.__super__.sync).toHaveBeenCalledWith("read", cardModel.toJSON(), options);
+                    });
+                });
+
+                describe("when the method is patch", function () {
+                    it("should call sync on super", function () {
+                        var expectedOptions = utils._.extend({type: "POST"}, utils.deepClone(options));
+
+                        cardModel.sync("patch", cardModel.toJSON(), options);
+
+                        expect(CardModel.__super__.sync)
+                            .toHaveBeenCalledWith("patch", cardModel.toJSON(), expectedOptions);
+                    });
+                });
+
+                describe("when the method is update", function () {
+                    it("should call sync on super", function () {
+                        cardModel.sync("update", cardModel.toJSON(), options);
+
+                        expect(CardModel.__super__.sync)
+                            .toHaveBeenCalledWith("update", cardModel.toJSON(), options);
+                    });
+                });
+
+                describe("when the method is delete", function () {
+                    it("should call sync on super", function () {
+                        cardModel.sync("delete", cardModel.toJSON(), options);
+
+                        expect(CardModel.__super__.sync)
+                            .toHaveBeenCalledWith("delete", cardModel.toJSON(), options);
+                    });
+                });
+            });
+
+            describe("has a terminate function that", function () {
+                var mockUrlRoot = "mock url root",
+                    mockCardNumber = 5678,
+                    mockValues = {
+                        "firstName"   : "Curly",
+                        "middleName"  : "G",
+                        "lastName"    : "Howard",
+                        "id"          : 132456,
+                        "status"      : "ACTIVE",
+                        department : {
+                            id: "2456724567",
+                            name: "Dewey, Cheetum and Howe",
+                            visible: true
+                        }
+                    },
+                    options = {
+                        success: function () {}
+                    };
+
+                beforeEach(function () {
+                    cardModel.set("id", mockCardNumber);
+                    spyOn(cardModel, "save").and.callFake(function () {});
+                    spyOn(cardModel, "urlRoot").and.returnValue(mockUrlRoot);
+
+                    cardModel.initialize(mockValues);
+                    cardModel.terminate(options);
+                });
+
+                it("is defined", function () {
+                    expect(cardModel.terminate).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardModel.terminate).toEqual(jasmine.any(Function));
+                });
+
+                it("should set url", function () {
+                    var expectedValue = mockUrlRoot + "/" + mockCardNumber + globals.WEBSERVICE.CARDS.TERMINATE_PATH;
+                    expect(cardModel.url).toEqual(expectedValue);
+                });
+
+                it("should call save", function () {
+                    var expectedOptions = utils._.extend({patch: true}, utils.deepClone(options));
+
+                    expect(cardModel.save).toHaveBeenCalledWith({}, expectedOptions);
                 });
             });
 
@@ -302,9 +430,20 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                     });
 
                     it("should return the expected value", function () {
-                        var actualValue = cardModel.toJSON();
+                        var actualValue = cardModel.toJSON(),
+                            expectedValue = {
+                                id: mockCard.number,
+                                authorizationProfileName: mockCard.authorizationProfileName,
+                                status: mockCard.status,
+                                department: mockCard.department,
+                                customVehicleId: mockCard.customVehicleId,
+                                vehicleDescription: mockCard.vehicleDescription,
+                                licensePlateNumber: mockCard.licensePlateNumber,
+                                licensePlateState: mockCard.licensePlateState,
+                                vin: mockCard.vin
+                            };
 
-                        expect(actualValue).toEqual(mockCard);
+                        expect(actualValue).toEqual(expectedValue);
                     });
                 });
 
@@ -334,9 +473,19 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                     });
 
                     it("should return the expected value", function () {
-                        var actualValue = cardModel.toJSON();
+                        var actualValue = cardModel.toJSON(),
+                            expectedValue = {
+                                id: mockCard.number,
+                                authorizationProfileName: mockCard.authorizationProfileName,
+                                status: mockCard.status,
+                                customVehicleId: mockCard.customVehicleId,
+                                vehicleDescription: mockCard.vehicleDescription,
+                                licensePlateNumber: mockCard.licensePlateNumber,
+                                licensePlateState: mockCard.licensePlateState,
+                                vin: mockCard.vin
+                            };
 
-                        expect(actualValue).toEqual(mockCard);
+                        expect(actualValue).toEqual(expectedValue);
                     });
                 });
             });

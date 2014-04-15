@@ -24,7 +24,7 @@ define(function (require) {
     globals.WEBSERVICE.SECURE = {
         "ROOT_URL": globals.WEBSERVICE.ROOT_URL + "/secure"
     };
-	// App Version Status
+    // App Version Status
     globals.WEBSERVICE.APP_VERSION_STATUS = {
         "URL"           : globals.WEBSERVICE.ROOT_URL +
                           globals.WEBSERVICE.APP_PATH +
@@ -40,13 +40,17 @@ define(function (require) {
     globals.WEBSERVICE.LOGOUT = {
         "URL": globals.WEBSERVICE.ROOT_URL + globals.WEBSERVICE.USER_AUTH_PATH + "/logout"
     };
-	// Contact Us
+    // Contact Us
     globals.WEBSERVICE.CONTACT_US = {
         "URL": globals.WEBSERVICE.SECURE.ROOT_URL + "/contactUs"
     };
     // Accounts
     globals.WEBSERVICE.ACCOUNTS = {
         "URL": globals.WEBSERVICE.SECURE.ROOT_URL + globals.WEBSERVICE.ACCOUNTS_PATH
+    };
+    // Cards
+    globals.WEBSERVICE.CARDS = {
+        "TERMINATE_PATH": "/terminate"
     };
 
     /**
@@ -239,9 +243,9 @@ define(function (require) {
         }
     };
     globals.cardSearch.configuration = {
-        "number": {
+        "id": {
             "label"      : "Vehicle Card Number",
-            "name"       : "number",
+            "name"       : "id",
             "placeholder": "",
             "value"      : ""
         },
@@ -304,7 +308,7 @@ define(function (require) {
         "url": {
             "value": ""
         },
-        "number": {
+        "id": {
             "label": "Card Number",
             "value": ""
         },
@@ -339,6 +343,63 @@ define(function (require) {
             "label"  : "Show All Cards",
             "visible": null
         }
+    };
+
+    /**
+     * Page :: Card Details
+     */
+    globals.cardDetails = {};
+    globals.cardDetails.constants = {
+        "STATUS_CHANGE_SUCCESS_TITLE": "Card Status Confirmation"
+    };
+    globals.cardDetails.configuration = {
+        "id": {
+            "label": "Card Number",
+            "value": ""
+        },
+        "customVehicleId": {
+            "label": "Customer Vehicle ID",
+            "value": ""
+        },
+        "vehicleDescription": {
+            "label": "Vehicle Description",
+            "value": ""
+        },
+        "licensePlateNumber": {
+            "label": "License Plate Number",
+            "value": ""
+        },
+        "licensePlateState": {
+            "label": "License Plate State",
+            "value": ""
+        },
+        "department": {
+            "label": "Department",
+            "value": ""
+        },
+        "status": {
+            "label": "Status",
+            "value": ""
+        },
+        "editButton": {
+            "label": "Edit",
+            "visible": null
+        },
+        "terminateButton": {
+            "label": "Terminate",
+            "visible": null
+        }
+    };
+
+    /**
+     * Card Terminate
+     */
+    globals.cardTerminate = {};
+    globals.cardTerminate.constants = {
+        "CONFIRMATION_TITLE": "Terminate<br/>Card",
+        "CONFIRMATION_MESSAGE": "Are you sure you want to terminate this card?<br/>This action cannot be undone.",
+        "CANCEL_BTN_TEXT": "Cancel",
+        "OK_BTN_TEXT": "Terminate"
     };
 
     /**

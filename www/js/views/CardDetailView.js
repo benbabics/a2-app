@@ -11,6 +11,11 @@ define(["backbone", "utils", "facade", "mustache", "globals", "text!tmpl/card/ca
 
             userModel: null,
 
+            events: {
+                "click #submitEditCard-btn"     : "handleEditCardClick",
+                "click #submitTerminateCard-btn": "handleChangeStatus"
+            },
+
             initialize: function (options) {
                 // call super
                 this.constructor.__super__.initialize.apply(this, arguments);
@@ -26,9 +31,76 @@ define(["backbone", "utils", "facade", "mustache", "globals", "text!tmpl/card/ca
             render: function () {
                 var $content = this.$el.find(":jqmData(role=content)");
 
-                $content.html(Mustache.render(this.template));
+                $content.html(Mustache.render(this.template, this.getConfiguration()));
 
                 $content.trigger("create");
+            },
+
+            getConfiguration: function () {
+                var card,
+                    isCardActive,
+                    cardConfiguration = null;
+
+                if (this.model) {
+                    card = this.model.toJSON();
+                    isCardActive = card.status === globals.card.constants.STATUS_ACTIVE;
+
+                    cardConfiguration = utils._.extend({}, utils.deepClone(globals.cardDetails.configuration));
+
+                    // populate configuration details
+                    cardConfiguration.id.value = card.id;
+                    cardConfiguration.customVehicleId.value = card.customVehicleId;
+                    cardConfiguration.vehicleDescription.value = card.vehicleDescription;
+                    cardConfiguration.licensePlateNumber.value = card.licensePlateNumber;
+                    cardConfiguration.licensePlateState.value = card.licensePlateState;
+                    cardConfiguration.customVehicleId.value = card.customVehicleId;
+                    cardConfiguration.status.value = card.status;
+                    if (card.department) {
+                        cardConfiguration.department.value = card.department.name;
+                    }
+
+                    cardConfiguration.editButton.visible = isCardActive;
+                    cardConfiguration.terminateButton.visible = isCardActive;
+                }
+
+                return {
+                    "card"       : cardConfiguration,
+                    "permissions": this.userModel.get("permissions")
+                };
+            },
+
+            terminate: function (eventToTrigger) {
+                var self = this;
+
+                this.model.terminate({
+                    success: function (model, response) {
+                        self.trigger(eventToTrigger, response);
+                    }
+                });
+            },
+
+            /*
+             * Event Handlers
+             */
+            handleChangeStatus: function (evt) {
+                evt.preventDefault();
+
+                var self = this;
+
+                facade.publish("app", "alert", {
+                    title             : globals.cardTerminate.constants.CONFIRMATION_TITLE,
+                    message           : globals.cardTerminate.constants.CONFIRMATION_MESSAGE,
+                    primaryBtnLabel   : globals.cardTerminate.constants.OK_BTN_TEXT,
+                    primaryBtnHandler : function () {
+                        self.terminate("terminateCardSuccess");
+                    },
+                    secondaryBtnLabel : globals.cardTerminate.constants.CANCEL_BTN_TEXT
+                });
+            },
+
+            handleEditCardClick: function (evt) {
+                evt.preventDefault();
+                this.trigger("editCard", this.model.get("id"));
             }
         });
 

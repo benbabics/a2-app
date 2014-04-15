@@ -9,6 +9,7 @@ define(["backbone", "utils", "facade"],
              * Route Definitions
              */
             routes: {
+                "cardDetails(/)(:id)"  : "showCardDetails",
                 "cardSearch"           : "showCardSearch",
                 "contactUs"            : "showContactUs",
                 "driverAdd"            : "showDriverAdd",
@@ -23,6 +24,10 @@ define(["backbone", "utils", "facade"],
             /*
              * Route Handlers
              */
+            showCardDetails: function (id) {
+                facade.publish("card", "navigateCardDetails", id);
+            },
+
             showCardSearch: function () {
                 facade.publish("card", "navigateSearch");
             },
