@@ -61,7 +61,7 @@ define(["backbone", "utils", "mustache", "globals", "views/CardView",
                     var cardView = new CardView({
                         model: card
                     }).render();
-                    $content.find("#cardSearchResultList").append(cardView.$el); // add driver to the list
+                    $content.find("#cardSearchResultList").append(cardView.$el); // add card to the list
                 }, this);
 
                 try {
