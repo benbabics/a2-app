@@ -392,6 +392,16 @@ define(function (require) {
     };
 
     /**
+     * Card Add
+     */
+    globals.cardAdd = {};
+    globals.cardAdd.constants = {
+        "DEFAULT_DEPARTMENT_NAME": "UNASSIGNED"
+    };
+    globals.cardAdd.configuration = {
+    };
+
+    /**
      * Card Terminate
      */
     globals.cardTerminate = {};
