@@ -56,12 +56,11 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
             },
 
             getConfiguration: function () {
-                var driverConfiguration = utils._.extend({}, utils.deepClone(globals.driverAdd.configuration)),
-                    selectedCompany = this.userModel.get("selectedCompany"),
-                    departments = selectedCompany.get("departments").toJSON(),
+                var user = this.userModel.toJSON(),
+                    driverConfiguration = utils._.extend({}, utils.deepClone(globals.driverAdd.configuration)),
                     departmentListValues = [];
 
-                utils._.each(departments, function (department) {
+                utils._.each(user.selectedCompany.departments, function (department) {
                     if (department.visible === true) {
                         departmentListValues.push({
                             "id": department.id,
@@ -72,20 +71,28 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
                 });
 
                 driverConfiguration.firstName.value = this.model.get("firstName");
+                driverConfiguration.firstName.maxLength =
+                    user.selectedCompany.settings.driverSettings.firstNameMaxLength;
+
                 driverConfiguration.middleName.value = this.model.get("middleName");
+                driverConfiguration.middleName.maxLength =
+                    user.selectedCompany.settings.driverSettings.middleNameMaxLength;
+
                 driverConfiguration.lastName.value = this.model.get("lastName");
-                driverConfiguration.id.maxLength = selectedCompany.get("driverIdLength");
+                driverConfiguration.lastName.maxLength = user.selectedCompany.settings.driverSettings.lastNameMaxLength;
+
+                driverConfiguration.id.maxLength = user.selectedCompany.settings.driverSettings.idFixedLength;
                 driverConfiguration.id.value = this.model.get("id");
                 driverConfiguration.id.placeholder =
-                    Mustache.render( globals.driver.constants.DRIVER_ID_PLACEHOLDER_FORMAT, {
-                        "driverIdLength": selectedCompany.get("driverIdLength")
+                    Mustache.render(globals.driver.constants.DRIVER_ID_PLACEHOLDER_FORMAT, {
+                        "idFixedLength": user.selectedCompany.settings.driverSettings.idFixedLength
                     });
                 driverConfiguration.departmentId.enabled = departmentListValues.length > 1;
                 driverConfiguration.departmentId.values = departmentListValues;
 
                 return {
                     "driver"        : driverConfiguration,
-                    "requiredFields": selectedCompany.get("requiredFields")
+                    "requiredFields": user.selectedCompany.requiredFields
                 };
             },
 
@@ -138,8 +145,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
                 var target = evt.target;
                 if (target.name === "departmentId") {
                     this.updateAttribute("department", this.findDepartment(target.value));
-                }
-                else {
+                } else {
                     DriverAddView.__super__.handleInputChanged.apply(this, arguments);
                 }
             },

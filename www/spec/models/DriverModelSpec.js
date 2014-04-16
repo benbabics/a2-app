@@ -15,11 +15,12 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                 authenticated: true,
                 firstName: "Beavis",
                 email: "cornholio@bnbinc.com",
+                hasMultipleAccounts: false,
                 selectedCompany: {
                     name: "Beavis and Butthead Inc",
                     accountId: "3673683",
                     wexAccountNumber: "5764309",
-                    driverIdLength: 4,
+                    driverIdLength: "4",
                     departments: [
                         {
                             id: "134613456",
@@ -31,17 +32,32 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                             name: "Dewey, Cheetum and Howe",
                             visible: false
                         }
-                    ]
+                    ],
+                    requiredFields: [
+                        "REQUIRED_FIELD_1",
+                        "REQUIRED_FIELD_2",
+                        "REQUIRED_FIELD_3"
+                    ],
+                    settings: {
+                        cardSettings: {
+                            customVehicleIdMaxLength: 17,
+                            licensePlateNumberMaxLength: 10,
+                            licensePlateStateFixedLength: 2,
+                            vehicleDescriptionMaxLength: 17,
+                            vinFixedLength: 17
+                        },
+                        driverSettings: {
+                            idFixedLength: 4,
+                            firstNameMaxLength: 11,
+                            middleNameMaxLength: 1,
+                            lastNameMaxLength: 12
+                        }
+                    }
                 },
                 permissions: [
                     "PERMISSION_1",
                     "PERMISSION_2",
                     "PERMISSION_3"
-                ],
-                requiredFields: [
-                    "REQUIRED_FIELD_1",
-                    "REQUIRED_FIELD_2",
-                    "REQUIRED_FIELD_3"
                 ]
             },
             userModel = UserModel.getInstance(),
@@ -55,7 +71,7 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
             beforeEach(function (done) {
                 squire.require(["models/DriverModel"], function (JasmineDriverModel) {
                     DriverModel = JasmineDriverModel;
-                    
+
                     userModel.initialize(mockUserModel);
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 
@@ -156,16 +172,14 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                                     userModel.get("selectedCompany").set("requiredFields", {"DRIVER_ID": true});
 
                                     expect(driverModel.validation.id[0].required()).toBeTruthy();
-                                }
-                            );
+                                });
 
                             it("should return false if the user's company does NOT have the DRIVER_ID required field",
                                 function () {
                                     userModel.get("selectedCompany").set("requiredFields", {"DRIVER_ID": false});
 
                                     expect(driverModel.validation.id[0].required()).toBeFalsy();
-                                }
-                            );
+                                });
                         });
 
                         it("should set the error message", function () {
@@ -194,7 +208,7 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                                 it("should return the expected result", function () {
                                     var expectedValue =
                                             Mustache.render(globals.driver.constants.ERROR_DRIVER_ID_INVALID_LENGTH,
-                                                {"driverIdLength": mockUserModel.selectedCompany.driverIdLength}),
+                                                {"idFixedLength": mockUserModel.selectedCompany.settings.driverSettings.idFixedLength}),
                                         actualValue = driverModel.validation.id[1].fn("123");
 
                                     expect(actualValue).toEqual(expectedValue);
@@ -232,13 +246,37 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                     });
 
                     describe("the second validation rule", function () {
-                        it("should set the maxLength", function () {
-                            expect(driverModel.validation.firstName[1].maxLength).toEqual(11);
-                        });
+                        describe("should have a fn function that", function () {
+                            it("is defined", function () {
+                                expect(driverModel.validation.firstName[1].fn).toBeDefined();
+                            });
 
-                        it("should set the error message", function () {
-                            expect(driverModel.validation.firstName[1].msg)
-                                .toEqual(globals.driver.constants.ERROR_FIRST_NAME_INVALID_LENGTH);
+                            it("is a function", function () {
+                                expect(driverModel.validation.firstName[1].fn).toEqual(jasmine.any(Function));
+                            });
+
+                            describe("when the actual length is less than the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(driverModel.validation.firstName[1].fn("1234")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is equal to the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(driverModel.validation.firstName[1].fn("12345678901")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is greater than to the max length", function () {
+                                it("should return the expected result", function () {
+                                    var expectedValue =
+                                            Mustache.render(globals.driver.constants.ERROR_FIRST_NAME_INVALID_LENGTH,
+                                                {"firstNameMaxLength": mockUserModel.selectedCompany.settings.driverSettings.firstNameMaxLength}),
+                                        actualValue = driverModel.validation.firstName[1].fn("123456789012");
+
+                                    expect(actualValue).toEqual(expectedValue);
+                                });
+                            });
                         });
                     });
 
@@ -261,21 +299,45 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                     });
 
                     describe("the first validation rule", function () {
-                        it("should set the field as not required", function () {
-                            expect(driverModel.validation.middleName[0].required).toBeFalsy();
-                        });
+                        describe("should have a fn function that", function () {
+                            it("is defined", function () {
+                                expect(driverModel.validation.middleName[0].fn).toBeDefined();
+                            });
 
-                        it("should set the maxLength", function () {
-                            expect(driverModel.validation.middleName[0].maxLength).toEqual(1);
-                        });
+                            it("is a function", function () {
+                                expect(driverModel.validation.middleName[0].fn).toEqual(jasmine.any(Function));
+                            });
 
-                        it("should set the error message", function () {
-                            expect(driverModel.validation.middleName[0].msg)
-                                .toEqual(globals.driver.constants.ERROR_MIDDLE_NAME_INVALID_LENGTH);
+                            describe("when the actual length is less than the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(driverModel.validation.middleName[0].fn("")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is equal to the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(driverModel.validation.middleName[0].fn("1")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is greater than to the max length", function () {
+                                it("should return the expected result", function () {
+                                    var expectedValue =
+                                            Mustache.render(globals.driver.constants.ERROR_MIDDLE_NAME_INVALID_LENGTH,
+                                                {"middleNameMaxLength": mockUserModel.selectedCompany.settings.driverSettings.middleNameMaxLength}),
+                                        actualValue = driverModel.validation.middleName[0].fn("12");
+
+                                    expect(actualValue).toEqual(expectedValue);
+                                });
+                            });
                         });
                     });
 
                     describe("the second validation rule", function () {
+                        it("should set the field as NOT required", function () {
+                            expect(driverModel.validation.middleName[1].required).toBeFalsy();
+                        });
+
                         it("should set the pattern", function () {
                             expect(driverModel.validation.middleName[1].pattern).toEqual(/^[A-Z]+$/i);
                         });
@@ -304,13 +366,37 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                     });
 
                     describe("the second validation rule", function () {
-                        it("should set the maxLength", function () {
-                            expect(driverModel.validation.lastName[1].maxLength).toEqual(12);
-                        });
+                        describe("should have a fn function that", function () {
+                            it("is defined", function () {
+                                expect(driverModel.validation.lastName[1].fn).toBeDefined();
+                            });
 
-                        it("should set the error message", function () {
-                            expect(driverModel.validation.lastName[1].msg)
-                                .toEqual(globals.driver.constants.ERROR_LAST_NAME_INVALID_LENGTH);
+                            it("is a function", function () {
+                                expect(driverModel.validation.lastName[1].fn).toEqual(jasmine.any(Function));
+                            });
+
+                            describe("when the actual length is less than the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(driverModel.validation.lastName[1].fn("1234")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is equal to the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(driverModel.validation.lastName[1].fn("123456789012")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is greater than to the max length", function () {
+                                it("should return the expected result", function () {
+                                    var expectedValue =
+                                            Mustache.render(globals.driver.constants.ERROR_LAST_NAME_INVALID_LENGTH,
+                                                {"lastNameMaxLength": mockUserModel.selectedCompany.settings.driverSettings.lastNameMaxLength}),
+                                        actualValue = driverModel.validation.lastName[1].fn("1234567890123");
+
+                                    expect(actualValue).toEqual(expectedValue);
+                                });
+                            });
                         });
                     });
 

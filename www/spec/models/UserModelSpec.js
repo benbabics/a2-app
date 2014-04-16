@@ -97,11 +97,11 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                             authenticated: true,
                             firstName: "Beavis",
                             email: "cornholio@bnbinc.com",
+                            hasMultipleAccounts: true,
                             selectedCompany: {
                                 name: "Beavis and Butthead Inc",
-                                accountId: "2562456",
+                                accountId: "3673683",
                                 wexAccountNumber: "5764309",
-                                driverIdLength: "4",
                                 departments: [
                                     {
                                         id: "134613456",
@@ -113,9 +113,28 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                                         name: "Dewey, Cheetum and Howe",
                                         visible: false
                                     }
-                                ]
+                                ],
+                                requiredFields: [
+                                    "REQUIRED_FIELD_1",
+                                    "REQUIRED_FIELD_2",
+                                    "REQUIRED_FIELD_3"
+                                ],
+                                settings: {
+                                    cardSettings: {
+                                        customVehicleIdMaxLength: 17,
+                                        licensePlateNumberMaxLength: 10,
+                                        licensePlateStateFixedLength: 2,
+                                        vehicleDescriptionMaxLength: 17,
+                                        vinFixedLength: 17
+                                    },
+                                    driverSettings: {
+                                        idFixedLength: 4,
+                                        firstNameMaxLength: 11,
+                                        middleNameMaxLength: 1,
+                                        lastNameMaxLength: 12
+                                    }
+                                }
                             },
-                            hasMultipleAccounts: true,
                             permissions: [
                                 "PERMISSION_1",
                                 "PERMISSION_2",
@@ -156,7 +175,6 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                         expect(actualCompany.get("name")).toEqual(options.selectedCompany.name);
                         expect(actualCompany.get("accountId")).toEqual(options.selectedCompany.accountId);
                         expect(actualCompany.get("wexAccountNumber")).toEqual(options.selectedCompany.wexAccountNumber);
-                        expect(actualCompany.get("driverIdLength")).toEqual(options.selectedCompany.driverIdLength);
 
                         actualDepartments = actualCompany.get("departments");
                         expect(actualDepartments.at(0).get("id")).toEqual(options.selectedCompany.departments[0].id);
@@ -287,11 +305,11 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                             authenticated: true,
                             firstName: "Beavis",
                             email: "cornholio@bnbinc.com",
+                            hasMultipleAccounts: true,
                             selectedCompany: {
                                 name: "Beavis and Butthead Inc",
                                 accountId: "3673683",
                                 wexAccountNumber: "5764309",
-                                driverIdLength: "4",
                                 departments: [
                                     {
                                         id: "134613456",
@@ -304,7 +322,22 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                                         visible: false
                                     }
                                 ],
-                                requiredFields: globals.companyData.requiredFields
+                                requiredFields: globals.companyData.requiredFields,
+                                settings: {
+                                    cardSettings: {
+                                        customVehicleIdMaxLength: 17,
+                                        licensePlateNumberMaxLength: 10,
+                                        licensePlateStateFixedLength: 2,
+                                        vehicleDescriptionMaxLength: 17,
+                                        vinFixedLength: 17
+                                    },
+                                    driverSettings: {
+                                        idFixedLength: 4,
+                                        firstNameMaxLength: 11,
+                                        middleNameMaxLength: 1,
+                                        lastNameMaxLength: 12
+                                    }
+                                }
                             },
                             permissions: userModel.defaults.permissions
                         };

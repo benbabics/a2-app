@@ -12,11 +12,11 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                 authenticated: true,
                 firstName: "Beavis",
                 email: "cornholio@bnbinc.com",
+                hasMultipleAccounts: false,
                 selectedCompany: {
                     name: "Beavis and Butthead Inc",
-                    accountId: "254624562",
+                    accountId: "3673683",
                     wexAccountNumber: "5764309",
-                    driverIdLength: "256",
                     departments: [
                         {
                             id: "134613456",
@@ -28,7 +28,27 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                             name: "Dewey, Cheetum and Howe",
                             visible: false
                         }
-                    ]
+                    ],
+                    requiredFields: [
+                        "REQUIRED_FIELD_1",
+                        "REQUIRED_FIELD_2",
+                        "REQUIRED_FIELD_3"
+                    ],
+                    settings: {
+                        cardSettings: {
+                            customVehicleIdMaxLength: 17,
+                            licensePlateNumberMaxLength: 10,
+                            licensePlateStateFixedLength: 2,
+                            vehicleDescriptionMaxLength: 17,
+                            vinFixedLength: 17
+                        },
+                        driverSettings: {
+                            idFixedLength: 256,
+                            firstNameMaxLength: 11,
+                            middleNameMaxLength: 1,
+                            lastNameMaxLength: 12
+                        }
+                    }
                 },
                 permissions: [
                     "PERMISSION_1",
@@ -181,7 +201,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(driverAddView, "getConfiguration").and.callFake(function() { return expectedConfiguration; });
+                    spyOn(driverAddView, "getConfiguration").and
+                        .callFake(function () { return expectedConfiguration; });
                     spyOn(driverAddView, "formatRequiredFields").and.callThrough();
 
                     driverAddView.render();
@@ -232,8 +253,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                             driverAddView.render();
 
                             expect(actualContent[0]).toContainElement("input[id='id']");
-                        }
-                    );
+                        });
 
                     it("should NOT include a driverId field if the user's company does NOT have the DRIVER_ID required field",
                         function () {
@@ -247,8 +267,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                             driverAddView.render();
 
                             expect(actualContent[0]).not.toContainElement("input[id='id']");
-                        }
-                    );
+                        });
                 });
             });
 
@@ -320,13 +339,23 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     expectedConfiguration.requiredFields = userModel.get("selectedCompany").get("requiredFields");
 
                     expectedConfiguration.driver.firstName.value = mockDriverModel.firstName;
+                    expectedConfiguration.driver.firstName.maxLength =
+                        mockUserModel.selectedCompany.settings.driverSettings.firstNameMaxLength;
+
                     expectedConfiguration.driver.middleName.value = mockDriverModel.middleName;
+                    expectedConfiguration.driver.middleName.maxLength =
+                        mockUserModel.selectedCompany.settings.driverSettings.middleNameMaxLength;
+
                     expectedConfiguration.driver.lastName.value = mockDriverModel.lastName;
-                    expectedConfiguration.driver.id.maxLength = mockUserModel.selectedCompany.driverIdLength;
+                    expectedConfiguration.driver.lastName.maxLength =
+                        mockUserModel.selectedCompany.settings.driverSettings.lastNameMaxLength;
+
+                    expectedConfiguration.driver.id.maxLength =
+                        mockUserModel.selectedCompany.settings.driverSettings.idFixedLength;
                     expectedConfiguration.driver.id.value = mockDriverModel.id;
                     expectedConfiguration.driver.id.placeholder =
                         Mustache.render(globals.driver.constants.DRIVER_ID_PLACEHOLDER_FORMAT, {
-                            "driverIdLength": mockUserModel.selectedCompany.driverIdLength
+                            "idFixedLength": mockUserModel.selectedCompany.settings.driverSettings.idFixedLength
                         });
                     expectedConfiguration.driver.departmentId.enabled = false;
                     expectedConfiguration.driver.departmentId.values = departmentListValues;
@@ -639,8 +668,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                             it("should call resetForm", function () {
                                 expect(driverAddView.resetForm).toHaveBeenCalledWith();
                             });
-                        }
-                    );
+                        });
                 });
             });
         });

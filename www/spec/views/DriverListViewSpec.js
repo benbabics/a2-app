@@ -13,10 +13,11 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 authenticated: true,
                 firstName: "Beavis",
                 email: "cornholio@bnbinc.com",
+                hasMultipleAccounts: false,
                 selectedCompany: {
                     name: "Beavis and Butthead Inc",
+                    accountId: "3673683",
                     wexAccountNumber: "5764309",
-                    driverIdLength: "4",
                     departments: [
                         {
                             id: "134613456",
@@ -28,7 +29,27 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                             name: "Dewey, Cheetum and Howe",
                             visible: false
                         }
-                    ]
+                    ],
+                    requiredFields: [
+                        "REQUIRED_FIELD_1",
+                        "REQUIRED_FIELD_2",
+                        "REQUIRED_FIELD_3"
+                    ],
+                    settings: {
+                        cardSettings: {
+                            customVehicleIdMaxLength: 17,
+                            licensePlateNumberMaxLength: 10,
+                            licensePlateStateFixedLength: 2,
+                            vehicleDescriptionMaxLength: 17,
+                            vinFixedLength: 17
+                        },
+                        driverSettings: {
+                            idFixedLength: 4,
+                            firstNameMaxLength: 11,
+                            middleNameMaxLength: 1,
+                            lastNameMaxLength: 12
+                        }
+                    }
                 },
                 permissions: [
                     "PERMISSION_1",
@@ -228,19 +249,21 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
-                    it("should include a link to the Driver Add page if the user has the MOBILE_DRIVER_ADD permission", function () {
-                        driverListView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": true});
-                        driverListView.renderHeader();
+                    it("should include a link to the Driver Add page if the user has the MOBILE_DRIVER_ADD permission",
+                        function () {
+                            driverListView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": true});
+                            driverListView.renderHeader();
 
-                        expect(actualHeader[0]).toContainElement("a[href='#driverAdd']");
-                    });
+                            expect(actualHeader[0]).toContainElement("a[href='#driverAdd']");
+                        });
 
-                    it("should NOT include a link to the Driver Add page if the user does NOT have the MOBILE_DRIVER_ADD permission", function () {
-                        driverListView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": false});
-                        driverListView.renderHeader();
+                    it("should NOT include a link to the Driver Add page if the user does NOT have the MOBILE_DRIVER_ADD permission",
+                        function () {
+                            driverListView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": false});
+                            driverListView.renderHeader();
 
-                        expect(actualHeader[0]).not.toContainElement("a[href='#driverAdd']");
-                    });
+                            expect(actualHeader[0]).not.toContainElement("a[href='#driverAdd']");
+                        });
                 });
             });
 

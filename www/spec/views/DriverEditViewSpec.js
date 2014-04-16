@@ -13,11 +13,11 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                 authenticated: true,
                 firstName: "Beavis",
                 email: "cornholio@bnbinc.com",
+                hasMultipleAccounts: false,
                 selectedCompany: {
                     name: "Beavis and Butthead Inc",
-                    accountId: "254624562",
+                    accountId: "3673683",
                     wexAccountNumber: "5764309",
-                    driverIdLength: "4",
                     departments: [
                         {
                             id: "134613456",
@@ -29,14 +29,29 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                             name: "Dewey, Cheetum and Howe",
                             visible: false
                         }
-                    ]
+                    ],
+                    requiredFields: [
+                        "REQUIRED_FIELD_1",
+                        "REQUIRED_FIELD_2",
+                        "REQUIRED_FIELD_3"
+                    ],
+                    settings: {
+                        cardSettings: {
+                            customVehicleIdMaxLength: 17,
+                            licensePlateNumberMaxLength: 10,
+                            licensePlateStateFixedLength: 2,
+                            vehicleDescriptionMaxLength: 17,
+                            vinFixedLength: 17
+                        },
+                        driverSettings: {
+                            idFixedLength: 4,
+                            firstNameMaxLength: 11,
+                            middleNameMaxLength: 1,
+                            lastNameMaxLength: 12
+                        }
+                    }
                 },
                 permissions: [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ],
-                requiredFields: [
                     "PERMISSION_1",
                     "PERMISSION_2",
                     "PERMISSION_3"
@@ -171,7 +186,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(driverEditView, "getConfiguration").and.callFake(function() { return mockConfiguration; });
+                    spyOn(driverEditView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
 
                     driverEditView.render();
                 });
@@ -230,23 +245,25 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                             expect(button[0]).toHaveText(mockButtonLabel);
                         });
 
-                        it("should include a button to change status if the user has the MOBILE_DRIVER_EDIT permission", function () {
-                            userModel.set("permissions", {"MOBILE_DRIVER_EDIT": true});
-                            mockConfiguration.permissions = userModel.get("permissions");
+                        it("should include a button to change status if the user has the MOBILE_DRIVER_EDIT permission",
+                            function () {
+                                userModel.set("permissions", {"MOBILE_DRIVER_EDIT": true});
+                                mockConfiguration.permissions = userModel.get("permissions");
 
-                            driverEditView.render();
+                                driverEditView.render();
 
-                            expect(actualContent[0]).toContainElement("button[id='submitChangeStatus-btn']");
-                        });
+                                expect(actualContent[0]).toContainElement("button[id='submitChangeStatus-btn']");
+                            });
 
-                        it("should NOT include a button to change status if the user does NOT have the MOBILE_DRIVER_EDIT permission", function () {
-                            userModel.set("permissions", {"MOBILE_DRIVER_EDIT": false});
-                            mockConfiguration.permissions = userModel.get("permissions");
+                        it("should NOT include a button to change status if the user does NOT have the MOBILE_DRIVER_EDIT permission",
+                            function () {
+                                userModel.set("permissions", {"MOBILE_DRIVER_EDIT": false});
+                                mockConfiguration.permissions = userModel.get("permissions");
 
-                            driverEditView.render();
+                                driverEditView.render();
 
-                            expect(actualContent[0]).not.toContainElement("button[id='submitChangeStatus-btn']");
-                        });
+                                expect(actualContent[0]).not.toContainElement("button[id='submitChangeStatus-btn']");
+                            });
                     }
                 });
             });
@@ -386,8 +403,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                                 expect(driverEditView.trigger.calls.mostRecent().args[0]).toEqual(eventToTrigger);
                                 expect(driverEditView.trigger.calls.mostRecent().args[1]).toEqual(response);
                             });
-                        }
-                    );
+                        });
                 });
             });
 

@@ -25,10 +25,13 @@ var specList =
         "spec/models/AjaxModelSpec.js",
         "spec/models/AppModelSpec.js",
         "spec/models/CardModelSpec.js",
+        "spec/models/CardSettingsModelSpec.js",
         "spec/models/CompanyModelSpec.js",
+        "spec/models/CompanySettingsModelSpec.js",
         "spec/models/ContactUsModelSpec.js",
         "spec/models/DepartmentModelSpec.js",
         "spec/models/DriverModelSpec.js",
+        "spec/models/DriverSettingsModelSpec.js",
         "spec/models/LoginModelSpec.js",
         "spec/models/UserModelSpec.js",
 

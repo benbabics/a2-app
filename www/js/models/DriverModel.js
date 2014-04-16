@@ -36,10 +36,11 @@ define(["backbone", "mustache", "globals", "utils", "models/UserModel", "models/
                     },
                     {
                         fn: function(value, attr, computedState) {
-                            var expectedLength = UserModel.getInstance().get("selectedCompany").get("driverIdLength");
-                            if (!utils._.isString(value) || value.length !== expectedLength) {
+                            var user = UserModel.getInstance().toJSON(),
+                                expectedLength = user.selectedCompany.settings.driverSettings.idFixedLength;
+                            if (utils._.isString(value) && value.length !== expectedLength) {
                                 return Mustache.render(globals.driver.constants.ERROR_DRIVER_ID_INVALID_LENGTH, {
-                                    "driverIdLength": expectedLength
+                                    "idFixedLength": expectedLength
                                 });
                             }
                         }
@@ -55,8 +56,15 @@ define(["backbone", "mustache", "globals", "utils", "models/UserModel", "models/
                         msg: globals.driver.constants.ERROR_FIRST_NAME_REQUIRED_FIELD
                     },
                     {
-                        maxLength: 11, //TODO: Get from current user's online application settings
-                        msg: globals.driver.constants.ERROR_FIRST_NAME_INVALID_LENGTH
+                        fn: function(value, attr, computedState) {
+                            var user = UserModel.getInstance().toJSON(),
+                                expectedLength = user.selectedCompany.settings.driverSettings.firstNameMaxLength;
+                            if (utils._.isString(value) && value.length > expectedLength) {
+                                return Mustache.render(globals.driver.constants.ERROR_FIRST_NAME_INVALID_LENGTH, {
+                                    "firstNameMaxLength": expectedLength
+                                });
+                            }
+                        }
                     },
                     {
                         pattern: /^[A-Z\d`~&_\-+{}|:',.\/]+$/i,
@@ -65,11 +73,18 @@ define(["backbone", "mustache", "globals", "utils", "models/UserModel", "models/
                 ],
                 "middleName": [
                     {
-                        required: false,
-                        maxLength: 1,  //TODO: Get from current user's online application settings
-                        msg: globals.driver.constants.ERROR_MIDDLE_NAME_INVALID_LENGTH
+                        fn: function(value, attr, computedState) {
+                            var user = UserModel.getInstance().toJSON(),
+                                expectedLength = user.selectedCompany.settings.driverSettings.middleNameMaxLength;
+                            if (utils._.isString(value) && value.length > expectedLength) {
+                                return Mustache.render(globals.driver.constants.ERROR_MIDDLE_NAME_INVALID_LENGTH, {
+                                    "middleNameMaxLength": expectedLength
+                                });
+                            }
+                        }
                     },
                     {
+                        required: false,
                         pattern: /^[A-Z]+$/i,
                         msg: globals.driver.constants.ERROR_MIDDLE_NAME_INVALID_CHARACTERS
                     }
@@ -80,8 +95,15 @@ define(["backbone", "mustache", "globals", "utils", "models/UserModel", "models/
                         msg: globals.driver.constants.ERROR_LAST_NAME_REQUIRED_FIELD
                     },
                     {
-                        maxLength: 12, //TODO: Get from current user's online application settings
-                        msg: globals.driver.constants.ERROR_LAST_NAME_INVALID_LENGTH
+                        fn: function(value, attr, computedState) {
+                            var user = UserModel.getInstance().toJSON(),
+                                expectedLength = user.selectedCompany.settings.driverSettings.lastNameMaxLength;
+                            if (utils._.isString(value) && value.length > expectedLength) {
+                                return Mustache.render(globals.driver.constants.ERROR_LAST_NAME_INVALID_LENGTH, {
+                                    "lastNameMaxLength": expectedLength
+                                });
+                            }
+                        }
                     },
                     {
                         pattern: /^[A-Z\d`~&_\-+{}|:',.\/]+$/i,

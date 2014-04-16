@@ -1,5 +1,5 @@
-define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/DepartmentCollection", "backbone"],
-    function (Squire, utils, globals, DepartmentModel, DepartmentCollection, Backbone) {
+define(["Squire", "utils", "globals", "backbone"],
+    function (Squire, utils, globals, Backbone) {
 
         "use strict";
 
@@ -7,8 +7,6 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
             companyModel;
 
         squire.mock("backbone", Backbone);
-        squire.mock("collections/DepartmentCollection", DepartmentCollection);
-        squire.mock("models/DepartmentModel", DepartmentModel);
 
         describe("A Company Model", function () {
             beforeEach(function (done) {
@@ -32,16 +30,12 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
                     expect(companyModel.defaults.name).toBeNull();
                 });
 
-                it("should set wexAccountNumber to default", function () {
-                    expect(companyModel.defaults.wexAccountNumber).toBeNull();
-                });
-
                 it("should set accountId to default", function () {
                     expect(companyModel.defaults.accountId).toBeNull();
                 });
 
-                it("should set driverIdLength to default", function () {
-                    expect(companyModel.defaults.driverIdLength).toBeNull();
+                it("should set wexAccountNumber to default", function () {
+                    expect(companyModel.defaults.wexAccountNumber).toBeNull();
                 });
 
                 it("should set departments to default", function () {
@@ -50,6 +44,10 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
 
                 it("should set requiredFields to default", function () {
                     expect(companyModel.defaults.requiredFields).toEqual(globals.companyData.requiredFields);
+                });
+
+                it("should set settings to default", function () {
+                    expect(companyModel.defaults.settings).toBeNull();
                 });
             });
 
@@ -98,9 +96,8 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
                 describe("when options are provided", function () {
                     var options = {
                             name: "Beavis and Butthead Inc",
-                            accountId: "2562456",
+                            accountId: "3673683",
                             wexAccountNumber: "5764309",
-                            driverIdLength: "4",
                             departments: [
                                 {
                                     id: "134613456",
@@ -117,7 +114,22 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
                                 "REQUIRED_FIELD_1",
                                 "REQUIRED_FIELD_2",
                                 "REQUIRED_FIELD_3"
-                            ]
+                            ],
+                            settings: {
+                                cardSettings: {
+                                    customVehicleIdMaxLength: 17,
+                                    licensePlateNumberMaxLength: 10,
+                                    licensePlateStateFixedLength: 2,
+                                    vehicleDescriptionMaxLength: 17,
+                                    vinFixedLength: 17
+                                },
+                                driverSettings: {
+                                    idFixedLength: 4,
+                                    firstNameMaxLength: 11,
+                                    middleNameMaxLength: 1,
+                                    lastNameMaxLength: 12
+                                }
+                            }
                         };
 
                     beforeEach(function () {
@@ -140,16 +152,44 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
                         expect(companyModel.set).toHaveBeenCalledWith("wexAccountNumber", options.wexAccountNumber);
                     });
 
-                    it("should set driverIdLength", function () {
-                        expect(companyModel.set).toHaveBeenCalledWith("driverIdLength", options.driverIdLength);
-                    });
-
                     it("should set departments", function () {
                         expect(companyModel.setDepartments).toHaveBeenCalledWith(options.departments);
                     });
 
                     it("should set requiredFields", function () {
                         expect(companyModel.setRequiredFields).toHaveBeenCalledWith(options.requiredFields);
+                    });
+
+                    // TODO - Replace with something that verifies that a new CompanySettingsModel was created,
+                    // the correct parameter was passed to the CompanySettingsModel.initialize function and then set
+                    // to "settings"
+                    it("should set settings", function () {
+                        var actualSettings;
+
+                        expect(companyModel.set.calls.argsFor(3).length).toEqual(2);
+                        expect(companyModel.set.calls.argsFor(3)[0]).toEqual("settings");
+
+                        actualSettings = companyModel.set.calls.argsFor(3)[1].toJSON();
+
+                        expect(actualSettings.cardSettings.customVehicleIdMaxLength)
+                            .toEqual(options.settings.cardSettings.customVehicleIdMaxLength);
+                        expect(actualSettings.cardSettings.licensePlateNumberMaxLength)
+                            .toEqual(options.settings.cardSettings.licensePlateNumberMaxLength);
+                        expect(actualSettings.cardSettings.licensePlateStateFixedLength)
+                            .toEqual(options.settings.cardSettings.licensePlateStateFixedLength);
+                        expect(actualSettings.cardSettings.vehicleDescriptionMaxLength)
+                            .toEqual(options.settings.cardSettings.vehicleDescriptionMaxLength);
+                        expect(actualSettings.cardSettings.vinFixedLength)
+                            .toEqual(options.settings.cardSettings.vinFixedLength);
+
+                        expect(actualSettings.driverSettings.idFixedLength)
+                            .toEqual(options.settings.driverSettings.idFixedLength);
+                        expect(actualSettings.driverSettings.firstNameMaxLength)
+                            .toEqual(options.settings.driverSettings.firstNameMaxLength);
+                        expect(actualSettings.driverSettings.middleNameMaxLength)
+                            .toEqual(options.settings.driverSettings.middleNameMaxLength);
+                        expect(actualSettings.driverSettings.lastNameMaxLength)
+                            .toEqual(options.settings.driverSettings.lastNameMaxLength);
                     });
                 });
             });
@@ -300,7 +340,6 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
                             name: "Beavis and Butthead Inc",
                             accountId: "3673683",
                             wexAccountNumber: "5764309",
-                            driverIdLength: "4",
                             departments: [
                                 {
                                     id: "134613456",
@@ -347,7 +386,84 @@ define(["Squire", "utils", "globals", "models/DepartmentModel", "collections/Dep
                             name: "Beavis and Butthead Inc",
                             accountId: "3673683",
                             wexAccountNumber: "5764309",
-                            driverIdLength: "4",
+                            requiredFields: companyModel.defaults.requiredFields
+                        };
+                        companyModel.clear();
+                        companyModel.initialize(mockCompanyModel);
+
+                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+
+                        actualValue = companyModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockCompanyModel);
+                    });
+                });
+
+                describe("when settings does have a value", function () {
+                    var settings,
+                        mockCompanyModel,
+                        actualValue;
+
+                    beforeEach(function () {
+                        mockCompanyModel = {
+                            name: "Beavis and Butthead Inc",
+                            accountId: "3673683",
+                            wexAccountNumber: "5764309",
+                            settings: {
+                                cardSettings: {
+                                    customVehicleIdMaxLength: 17,
+                                    licensePlateNumberMaxLength: 10,
+                                    licensePlateStateFixedLength: 2,
+                                    vehicleDescriptionMaxLength: 17,
+                                    vinFixedLength: 17
+                                },
+                                driverSettings: {
+                                    idFixedLength: 4,
+                                    firstNameMaxLength: 11,
+                                    middleNameMaxLength: 1,
+                                    lastNameMaxLength: 12
+                                }
+                            },
+                            requiredFields: companyModel.defaults.requiredFields
+                        };
+                        companyModel.clear();
+                        companyModel.initialize(mockCompanyModel);
+                        settings = companyModel.get("settings");
+
+                        spyOn(settings, "toJSON").and.callThrough();
+                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+
+                        actualValue = companyModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should call toJSON on settings", function () {
+                        expect(settings.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockCompanyModel);
+                    });
+                });
+
+                describe("when settings does NOT have a value", function () {
+                    var mockCompanyModel,
+                        actualValue;
+
+                    beforeEach(function () {
+                        mockCompanyModel = {
+                            name: "Beavis and Butthead Inc",
+                            accountId: "3673683",
+                            wexAccountNumber: "5764309",
                             requiredFields: companyModel.defaults.requiredFields
                         };
                         companyModel.clear();

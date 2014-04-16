@@ -7,11 +7,11 @@ define(["utils", "globals", "Squire", "models/CardModel", "models/UserModel"],
                 authenticated: true,
                 firstName: "Beavis",
                 email: "cornholio@bnbinc.com",
+                hasMultipleAccounts: false,
                 selectedCompany: {
                     name: "Beavis and Butthead Inc",
                     accountId: "3673683",
                     wexAccountNumber: "5764309",
-                    driverIdLength: "4",
                     departments: [
                         {
                             id: "134613456",
@@ -23,7 +23,27 @@ define(["utils", "globals", "Squire", "models/CardModel", "models/UserModel"],
                             name: "Dewey, Cheetum and Howe",
                             visible: false
                         }
-                    ]
+                    ],
+                    requiredFields: [
+                        "REQUIRED_FIELD_1",
+                        "REQUIRED_FIELD_2",
+                        "REQUIRED_FIELD_3"
+                    ],
+                    settings: {
+                        cardSettings: {
+                            customVehicleIdMaxLength: 17,
+                            licensePlateNumberMaxLength: 10,
+                            licensePlateStateFixedLength: 2,
+                            vehicleDescriptionMaxLength: 17,
+                            vinFixedLength: 17
+                        },
+                        driverSettings: {
+                            idFixedLength: 4,
+                            firstNameMaxLength: 11,
+                            middleNameMaxLength: 1,
+                            lastNameMaxLength: 12
+                        }
+                    }
                 },
                 permissions: [
                     "PERMISSION_1",
@@ -39,8 +59,8 @@ define(["utils", "globals", "Squire", "models/CardModel", "models/UserModel"],
         squire.mock("models/UserModel", UserModel);
 
         describe("A Card Collection", function () {
-            beforeEach(function(done) {
-                squire.require(["collections/CardCollection"], function(JasmineCardCollection) {
+            beforeEach(function (done) {
+                squire.require(["collections/CardCollection"], function (JasmineCardCollection) {
                     userModel.initialize(mockUserModel);
 
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);

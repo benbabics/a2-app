@@ -420,17 +420,17 @@ define(function (require) {
         "STATUS_ACTIVE": "ACTIVE",
         "STATUS_TERMINATED": "TERMINATED",
         "ERROR_FIRST_NAME_REQUIRED_FIELD"     : "First Name must have a value",
-        "ERROR_FIRST_NAME_INVALID_LENGTH"     : "First Name cannot exceed 11 characters",
+        "ERROR_FIRST_NAME_INVALID_LENGTH"     : "First Name cannot exceed {{firstNameMaxLength}} characters",
         "ERROR_FIRST_NAME_INVALID_CHARACTERS" : "First Name must contain only alphanumeric characters",
         "ERROR_LAST_NAME_REQUIRED_FIELD"      : "Last Name must have a value",
-        "ERROR_LAST_NAME_INVALID_LENGTH"      : "Last Name cannot exceed 12 characters",
+        "ERROR_LAST_NAME_INVALID_LENGTH"      : "Last Name cannot exceed {{lastNameMaxLength}} characters",
         "ERROR_LAST_NAME_INVALID_CHARACTERS"  : "Last Name must contain only alphanumeric characters",
-        "ERROR_MIDDLE_NAME_INVALID_LENGTH"    : "Middle Name cannot exceed 1 character",
+        "ERROR_MIDDLE_NAME_INVALID_LENGTH"    : "Middle Name cannot exceed {{middleNameMaxLength}} character(s)",
         "ERROR_MIDDLE_NAME_INVALID_CHARACTERS": "Middle Name must contain only alpha characters",
         "ERROR_DRIVER_ID_REQUIRED_FIELD"      : "Driver ID must have a value",
         "ERROR_DRIVER_ID_INVALID_FORMAT"      : "Driver ID must be numeric",
-        "ERROR_DRIVER_ID_INVALID_LENGTH"      : "Driver ID must be {{driverIdLength}} digits",
-        "DRIVER_ID_PLACEHOLDER_FORMAT"        : "Must be {{driverIdLength}} digits"
+        "ERROR_DRIVER_ID_INVALID_LENGTH"      : "Driver ID must be {{idFixedLength}} digits",
+        "DRIVER_ID_PLACEHOLDER_FORMAT"        : "Must be {{idFixedLength}} digits"
     };
 
     /**
