@@ -24,6 +24,7 @@ var specList =
         // Models
         "spec/models/AjaxModelSpec.js",
         "spec/models/AppModelSpec.js",
+        "spec/models/AuthorizationProfileModelSpec.js",
         "spec/models/CardModelSpec.js",
         "spec/models/CardSettingsModelSpec.js",
         "spec/models/CompanyModelSpec.js",
@@ -37,6 +38,8 @@ var specList =
 
         // Collections
         "spec/collections/AjaxCollectionSpec.js",
+        "spec/collections/AjaxSearchCollectionSpec.js",
+        "spec/collections/AuthorizationProfileCollectionSpec.js",
         "spec/collections/CardCollectionSpec.js",
         "spec/collections/DepartmentCollectionSpec.js",
         "spec/collections/DriverCollectionSpec.js",

@@ -4,22 +4,14 @@ define(["globals", "backbone", "facade", "utils"],
         "use strict";
 
         var AjaxCollection = Backbone.Collection.extend({
-            totalResults: null,
-
             parse: function (response) {
-                var data = response.data;
-
-                this.totalResults = data.totalResults;
-
-                return data.searchResults;
+                return response.data;
             },
 
             fetch: function (options) {
                 var modifiedOptions = {
                     data: options
                 };
-
-                this.totalResults = null;
 
                 AjaxCollection.__super__.fetch.call(this, modifiedOptions);
             },

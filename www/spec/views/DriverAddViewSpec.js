@@ -111,7 +111,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
             });
 
             describe("has events that", function () {
-                it("should call submitForm when ssubmitDriverAdd-btn is clicked", function () {
+                it("should call submitForm when submitDriverAdd-btn is clicked", function () {
                     expect(driverAddView.events["click #submitDriverAdd-btn"]).toEqual("submitForm");
                 });
 

@@ -337,7 +337,8 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                                         middleNameMaxLength: 1,
                                         lastNameMaxLength: 12
                                     }
-                                }
+                                },
+                                authorizationProfiles : null
                             },
                             permissions: userModel.defaults.permissions
                         };

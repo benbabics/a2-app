@@ -4,9 +4,14 @@ define(["Squire", "utils", "globals", "backbone"],
         "use strict";
 
         var squire = new Squire(),
+            mockUtils = utils,
+            mockAuthorizationProfileCollection = new Backbone.Collection(),
             companyModel;
 
         squire.mock("backbone", Backbone);
+        squire.mock("utils", mockUtils);
+        squire.mock("collections/AuthorizationProfileCollection",
+            Squire.Helpers.returns(mockAuthorizationProfileCollection));
 
         describe("A Company Model", function () {
             beforeEach(function (done) {
@@ -48,6 +53,10 @@ define(["Squire", "utils", "globals", "backbone"],
 
                 it("should set settings to default", function () {
                     expect(companyModel.defaults.settings).toBeNull();
+                });
+
+                it("should set authorizationProfiles to default", function () {
+                    expect(companyModel.defaults.authorizationProfiles).toBeNull();
                 });
             });
 
@@ -190,6 +199,28 @@ define(["Squire", "utils", "globals", "backbone"],
                             .toEqual(options.settings.driverSettings.middleNameMaxLength);
                         expect(actualSettings.driverSettings.lastNameMaxLength)
                             .toEqual(options.settings.driverSettings.lastNameMaxLength);
+                    });
+                });
+            });
+
+            describe("has a sync function that", function () {
+                it("is defined", function () {
+                    expect(companyModel.sync).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(companyModel.sync).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the method is read", function () {
+                    beforeEach(function () {
+                        spyOn(companyModel, "trigger").and.callThrough();
+                        spyOn(companyModel, "fetchAuthorizationProfiles").and.callFake(function () {});
+                        companyModel.sync("read", companyModel);
+                    });
+
+                    it("should call fetchAuthorizationProfiles", function () {
+                        expect(companyModel.fetchAuthorizationProfiles).toHaveBeenCalledWith();
                     });
                 });
             });
@@ -481,6 +512,148 @@ define(["Squire", "utils", "globals", "backbone"],
                     it("should return the expected value", function () {
                         expect(actualValue).toEqual(mockCompanyModel);
                     });
+                });
+
+                describe("when authorizationProfiles does have a value", function () {
+                    var authorizationProfiles,
+                        mockCompanyModel,
+                        actualValue;
+
+                    beforeEach(function () {
+                        mockCompanyModel = {
+                            name: "Beavis and Butthead Inc",
+                            accountId: "3673683",
+                            wexAccountNumber: "5764309",
+                            requiredFields: companyModel.defaults.requiredFields
+                        };
+                        companyModel.clear();
+                        companyModel.initialize(mockCompanyModel);
+                        authorizationProfiles = new Backbone.Collection();
+                        mockCompanyModel.authorizationProfiles = authorizationProfiles.toJSON();
+                        companyModel.set("authorizationProfiles", authorizationProfiles);
+
+                        spyOn(authorizationProfiles, "toJSON").and.callThrough();
+                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+
+                        actualValue = companyModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should call toJSON on authorizationProfiles", function () {
+                        expect(authorizationProfiles.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockCompanyModel);
+                    });
+                });
+
+                describe("when authorizationProfiles does NOT have a value", function () {
+                    var mockCompanyModel,
+                        actualValue;
+
+                    beforeEach(function () {
+                        mockCompanyModel = {
+                            name: "Beavis and Butthead Inc",
+                            accountId: "3673683",
+                            wexAccountNumber: "5764309",
+                            requiredFields: companyModel.defaults.requiredFields
+                        };
+                        companyModel.clear();
+                        companyModel.initialize(mockCompanyModel);
+
+                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+
+                        actualValue = companyModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockCompanyModel);
+                    });
+                });
+            });
+            
+            describe("has a fetchAuthorizationProfiles function that", function () {
+                var mockCompanyJSON = {
+                    accountId: "3456256"
+                };
+
+                beforeEach(function () {
+                    spyOn(mockUtils, "fetchCollection").and.callFake(function() {});
+                    spyOn(companyModel, "set").and.callThrough();
+                    spyOn(companyModel, "toJSON").and.callFake(function() { return mockCompanyJSON});
+
+                    companyModel.fetchAuthorizationProfiles();
+                });
+
+                it("is defined", function () {
+                    expect(companyModel.fetchAuthorizationProfiles).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(companyModel.fetchAuthorizationProfiles).toEqual(jasmine.any(Function));
+                });
+
+                it("should call toJSON", function () {
+                    expect(companyModel.toJSON).toHaveBeenCalledWith();
+                });
+
+                it("should call fetchCollection on utils", function () {
+                    expect(mockUtils.fetchCollection)
+                        .toHaveBeenCalledWith(mockAuthorizationProfileCollection, mockCompanyJSON);
+                });
+
+                it("should call set", function () {
+                    expect(companyModel.set)
+                        .toHaveBeenCalledWith("authorizationProfiles", mockAuthorizationProfileCollection);
+                });
+            });
+
+            describe("has an areFetchedPropertiesEmpty function that", function () {
+                it("is defined", function () {
+                    expect(companyModel.areFetchedPropertiesEmpty).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(companyModel.areFetchedPropertiesEmpty).toEqual(jasmine.any(Function));
+                });
+
+                it("returns true when the authorizationProfiles property is null", function () {
+                    companyModel.set("authorizationProfiles", null);
+
+                    expect(companyModel.areFetchedPropertiesEmpty()).toBeTruthy();
+                });
+
+                it("returns true when the authorizationProfiles property is empty", function () {
+                    companyModel.set("authorizationProfiles", []);
+
+                    expect(companyModel.areFetchedPropertiesEmpty()).toBeTruthy();
+                });
+
+                it("returns true when the authorizationProfiles property has a size of 0", function () {
+                    var collection = new Backbone.Collection();
+
+                    companyModel.set("authorizationProfiles", collection);
+
+                    expect(companyModel.areFetchedPropertiesEmpty()).toBeTruthy();
+                });
+
+                it("returns false when the authorizationProfiles property contains a model", function () {
+                    var collection = new Backbone.Collection(),
+                        model = new Backbone.Model();
+
+                    collection.add(model);
+
+                    companyModel.set("authorizationProfiles", collection);
+
+                    expect(companyModel.areFetchedPropertiesEmpty()).toBeFalsy();
                 });
             });
         });

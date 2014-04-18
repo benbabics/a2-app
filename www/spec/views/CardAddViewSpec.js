@@ -99,6 +99,16 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 expect(cardAddView instanceof Backbone.View).toBeTruthy();
             });
 
+            describe("has events that", function () {
+                it("should call submitForm when submitCardAdd-btn is clicked", function () {
+                    expect(cardAddView.events["click #submitCardAdd-btn"]).toEqual("submitForm");
+                });
+
+                it("should call submitForm when cardAddForm is submitted", function () {
+                    expect(cardAddView.events["submit #cardAddForm"]).toEqual("submitForm");
+                });
+            });
+
             describe("has a constructor that", function () {
                 it("is defined", function () {
                     expect(cardAddView.constructor).toBeDefined();
@@ -165,6 +175,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                         "card"          : utils._.extend({}, utils.deepClone(globals.cardAdd.configuration)),
                         "requiredFields": cardAddView.userModel.get("selectedCompany").get("requiredFields")
                     };
+                    expectedConfiguration.card.ableToAddCard = true;
 
                     actualContent = cardAddView.$el.find(":jqmData(role=content)");
                     spyOn(cardAddView.$el, "find").and.returnValue(actualContent);
@@ -207,6 +218,43 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                 it("should call the trigger function on the content", function () {
                     expect(actualContent.trigger).toHaveBeenCalledWith("create");
+                });
+
+                describe("when dynamically rendering the template based on the model data", function () {
+                    describe("when able to add card", function () {
+                        beforeEach(function () {
+                            expectedConfiguration.card.ableToAddCard = true;
+                            expectedConfiguration.card.unableToAddCardMessage = "Should not include this";
+
+                            cardAddView.render();
+                        });
+
+                        it("should NOT include an unable to add card message", function () {
+                            expect(actualContent[0]).not
+                                .toContainText(expectedConfiguration.card.unableToAddCardMessage);
+                        });
+
+                        it("should include a cardAddForm", function () {
+                            expect(actualContent[0]).toContainElement("form[id='cardAddForm']");
+                        });
+                    });
+
+                    describe("when NOT able to add card", function () {
+                        beforeEach(function () {
+                            expectedConfiguration.card.ableToAddCard = false;
+                            expectedConfiguration.card.unableToAddCardMessage = "Unable to add card";
+
+                            cardAddView.render();
+                        });
+
+                        it("should include an unable to add card message", function () {
+                            expect(actualContent[0]).toContainText(expectedConfiguration.card.unableToAddCardMessage);
+                        });
+
+                        it("should NOT include a cardAddForm", function () {
+                            expect(actualContent[0]).not.toContainElement("form[id='cardAddForm']");
+                        });
+                    });
                 });
             });
 
@@ -255,20 +303,116 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(cardAddView.getConfiguration).toEqual(jasmine.any(Function));
                 });
 
-                it("should return the expected result", function () {
-                    var expectedConfiguration = {
-                            card: {},
-                            requiredFields: {}
-                        },
+                describe("when the Company does NOT have any auth profiles", function () {
+                    var emptyCollection = new Backbone.Collection(),
                         actualConfiguration;
 
-                    expectedConfiguration.card = utils._.extend({}, utils.deepClone(globals.cardAdd.configuration));
+                    beforeEach(function () {
+                        userModel.get("selectedCompany").set("authorizationProfiles", emptyCollection);
 
-                    expectedConfiguration.requiredFields = userModel.get("selectedCompany").get("requiredFields");
+                        actualConfiguration = cardAddView.getConfiguration();
+                    });
 
-                    actualConfiguration = cardAddView.getConfiguration();
+                    it("should return the expected result", function () {
+                        var expectedConfiguration = {
+                                card: utils._.extend({}, utils.deepClone(globals.cardAdd.configuration)),
+                                requiredFields: {}
+                            };
 
-                    expect(actualConfiguration).toEqual(expectedConfiguration);
+                        expectedConfiguration.card.ableToAddCard = false;
+                        expectedConfiguration.card.unableToAddCardMessage =
+                            globals.cardAdd.constants.NO_AUTH_PROFILES_MESSAGE;
+
+                        expectedConfiguration.requiredFields = userModel.get("selectedCompany").get("requiredFields");
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
+                });
+
+                describe("when the Company has auth profiles", function () {
+                    var collection = new Backbone.Collection(),
+                        actualConfiguration;
+
+                    beforeEach(function () {
+                        var model = new Backbone.Model();
+                        model.set({
+                            "id": 1435613456,
+                            "name": "Mock Name"
+                        });
+                        collection.add(model);
+                        userModel.get("selectedCompany").set("authorizationProfiles", collection);
+
+                        actualConfiguration = cardAddView.getConfiguration();
+                    });
+
+                    it("should return the expected result", function () {
+                        var expectedConfiguration = {
+                                card: utils._.extend({}, utils.deepClone(globals.cardAdd.configuration)),
+                                requiredFields: {}
+                            },
+                            user = userModel.toJSON(),
+                            authorizationProfileListValues = [],
+                            departmentListValues = [],
+                            stateListValues = [];
+
+                        expectedConfiguration.card.ableToAddCard = true;
+
+                        utils._.each(user.selectedCompany.authorizationProfiles, function (authorizationProfile) {
+                            authorizationProfileListValues.push({
+                                "id": authorizationProfile.id,
+                                "name": authorizationProfile.name
+                            });
+                        });
+
+                        utils._.each(user.selectedCompany.departments, function (department) {
+                            if (department.visible === true) {
+                                departmentListValues.push({
+                                    "id": department.id,
+                                    "name": department.name,
+                                    "selected": department.name === globals.cardAdd.constants.DEFAULT_DEPARTMENT_NAME
+                                });
+                            }
+                        });
+
+                        stateListValues.push(globals.cardAdd.constants.SELECT_STATE);
+                        utils._.each(globals.APP.constants.STATES, function (state) {
+                            stateListValues.push(state);
+                        });
+
+                        expectedConfiguration.card.customVehicleId.value = cardModel.get("customVehicleId");
+                        expectedConfiguration.card.customVehicleId.maxLength =
+                            user.selectedCompany.settings.cardSettings.customVehicleIdMaxLength;
+
+                        expectedConfiguration.card.vehicleDescription.value = cardModel.get("vehicleDescription");
+                        expectedConfiguration.card.vehicleDescription.maxLength =
+                            user.selectedCompany.settings.cardSettings.vehicleDescriptionMaxLength;
+
+                        expectedConfiguration.card.vin.value = cardModel.get("vin");
+                        expectedConfiguration.card.vin.maxLength =
+                            user.selectedCompany.settings.cardSettings.vinFixedLength;
+                        expectedConfiguration.card.vin.placeholder =
+                            Mustache.render(globals.card.constants.VIN_PLACEHOLDER_FORMAT, {
+                                "vinFixedLength": user.selectedCompany.settings.cardSettings.vinFixedLength
+                            });
+
+                        expectedConfiguration.card.licensePlateNumber.value = cardModel.get("licensePlateNumber");
+                        expectedConfiguration.card.licensePlateNumber.maxLength =
+                            user.selectedCompany.settings.cardSettings.licensePlateNumberMaxLength;
+
+                        expectedConfiguration.card.licensePlateState.enabled = stateListValues.length > 1;
+                        expectedConfiguration.card.licensePlateState.values = stateListValues;
+
+                        expectedConfiguration.card.departmentId.enabled = departmentListValues.length > 1;
+                        expectedConfiguration.card.departmentId.values = departmentListValues;
+
+                        expectedConfiguration.card.authorizationProfileName.enabled =
+                            authorizationProfileListValues.length > 1;
+                        expectedConfiguration.card.authorizationProfileName.values = authorizationProfileListValues;
+
+                        expectedConfiguration.requiredFields = user.selectedCompany.requiredFields;
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
                 });
             });
 
@@ -446,6 +590,69 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                         cardAddView.handleInputChanged(mockEvent);
 
                         expect(CardAddView.__super__.handleInputChanged).toHaveBeenCalledWith(mockEvent);
+                    });
+                });
+            });
+
+            describe("has a submitForm function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    spyOn(mockEvent, "preventDefault").and.callThrough();
+
+                    cardAddView.submitForm(mockEvent);
+                });
+
+                it("is defined", function () {
+                    expect(cardAddView.submitForm).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardAddView.submitForm).toEqual(jasmine.any(Function));
+                });
+
+                it("should call event.preventDefault", function () {
+                    expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                });
+
+                describe("when validate returns errors", function () {
+                    var mockErrors = [
+                            {
+                                error: "asdfgasdf"
+                            }
+                        ];
+                    beforeEach(function () {
+                        spyOn(cardModel, "validate").and.returnValue(mockErrors);
+                        spyOn(cardAddView, "handleValidationError").and.callFake(function () {});
+
+                        cardAddView.submitForm(mockEvent);
+                    });
+
+                    it("should call validate on the CardModel", function () {
+                        expect(cardModel.validate).toHaveBeenCalledWith();
+                    });
+
+                    it("should call handleValidationError", function () {
+                        expect(cardAddView.handleValidationError).toHaveBeenCalledWith(cardModel, mockErrors);
+                    });
+                });
+
+                describe("when validate does NOT return errors", function () {
+                    beforeEach(function () {
+                        spyOn(cardModel, "validate").and.returnValue();
+                        spyOn(cardAddView, "handleValidationError").and.callFake(function () {});
+
+                        cardAddView.submitForm(mockEvent);
+                    });
+
+                    it("should call validate on the CardModel", function () {
+                        expect(cardModel.validate).toHaveBeenCalledWith();
+                    });
+
+                    it("should NOT call handleValidationError", function () {
+                        expect(cardAddView.handleValidationError).not.toHaveBeenCalled();
                     });
                 });
             });

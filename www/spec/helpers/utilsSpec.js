@@ -174,6 +174,91 @@ define(["Squire"],
                 // TODO: finish
             });
 
+            describe("has a fetchCollection function that", function () {
+                var mockPromiseReturnValue = "Promise Return Value",
+                    mockDeferred = {
+                        promise: function () { return mockPromiseReturnValue; },
+                        reject: function () {},
+                        resolve: function () {}
+                    },
+                    mockData = {
+                        name: "value"
+                    },
+                    mockCollection = {
+                        fetch: function () { return mockCollection; },
+                        once: function () { return mockCollection; }
+                    },
+                    actualReturnValue;
+
+                beforeEach(function () {
+                    spyOn(utilsClass, "Deferred").and.returnValue(mockDeferred);
+                    spyOn(mockDeferred, "promise").and.callThrough();
+                    spyOn(mockCollection, "once").and.callThrough();
+                    spyOn(mockCollection, "fetch").and.callThrough();
+
+                    actualReturnValue = utilsClass.fetchCollection(mockCollection, mockData);
+                });
+
+                it("is defined", function () {
+                    expect(utilsClass.fetchCollection).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(utilsClass.fetchCollection).toEqual(jasmine.any(Function));
+                });
+
+                it("should call once on the Collection on sync", function () {
+                    expect(mockCollection.once)
+                        .toHaveBeenCalledWith("sync", jasmine.any(Function), utilsClass);
+                });
+
+                describe("when the handler of the sync event is called", function () {
+                    var callback;
+
+                    beforeEach(function () {
+                        spyOn(mockDeferred, "resolve").and.callThrough();
+
+                        callback = mockCollection.once.calls.argsFor(0)[1];
+                        callback.apply();
+                    });
+
+                    it("should call resolve on the Deferred object", function () {
+                        expect(mockDeferred.resolve).toHaveBeenCalledWith();
+                    });
+                });
+
+                it("should call once on the Collection on error", function () {
+                    expect(mockCollection.once)
+                        .toHaveBeenCalledWith("error", jasmine.any(Function), utilsClass);
+                });
+
+                describe("when the handler of the error event is called", function () {
+                    var callback;
+
+                    beforeEach(function () {
+                        spyOn(mockDeferred, "reject").and.callThrough();
+
+                        callback = mockCollection.once.calls.argsFor(1)[1];
+                        callback.apply();
+                    });
+
+                    it("should call reject on the Deferred object", function () {
+                        expect(mockDeferred.reject).toHaveBeenCalledWith();
+                    });
+                });
+
+                it("should call fetch on the Collection", function () {
+                    expect(mockCollection.fetch).toHaveBeenCalledWith(mockData);
+                });
+
+                it("should call promise on the Deferred object", function () {
+                    expect(mockDeferred.promise).toHaveBeenCalledWith();
+                });
+
+                it("should return the expected value", function () {
+                    expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                });
+            });
         });
 
         return "utils";

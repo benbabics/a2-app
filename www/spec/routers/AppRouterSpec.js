@@ -32,6 +32,10 @@ define(["utils", "Squire", "backbone"],
             });
 
             describe("has property routes that", function () {
+                it("should set 'cardAdd' to showCardAdd", function () {
+                    expect(appRouter.routes.cardAdd).toEqual("showCardAdd");
+                });
+
                 it("should set 'cardDetails(/)(:id)' to showCardDetails", function () {
                     expect(appRouter.routes["cardDetails(/)(:id)"]).toEqual("showCardDetails");
                 });
@@ -62,6 +66,30 @@ define(["utils", "Squire", "backbone"],
 
                 it("should set an empty string to root", function () {
                     expect(appRouter.routes[""]).toEqual("root");
+                });
+            });
+
+            describe("has a showCardAdd function that", function () {
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callThrough();
+
+                    appRouter.showCardAdd();
+                });
+
+                it("is defined", function () {
+                    expect(appRouter.showCardAdd).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appRouter.showCardAdd).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("card");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigateAdd");
                 });
             });
 

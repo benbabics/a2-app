@@ -104,40 +104,20 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
             },
 
             updateCollection: function () {
-                var self = this;
+                var self = this,
+                    data = this.driverSearchView.model.toJSON();
 
                 this.driverListView.showLoadingIndicator();
 
                 // silently reset collection to ensure it always is "updated", even if it's the same models again
                 this.driverCollection.reset([], { "silent": true });
 
-                utils.when(this.fetchCollection())
+                utils.when(utils.fetchCollection(this.driverCollection, data))
                     .always(function () {
                         self.driverListView.render();
                         utils.changePage(self.driverListView.$el, null, null, true);
                         self.driverListView.hideLoadingIndicator();
                     });
-            },
-
-            fetchCollection: function () {
-                // if params not supplied use the Search Criteria
-                var deferred = utils.Deferred(),
-                    data = this.driverSearchView.model.toJSON();
-
-                this.driverCollection
-                    .once("sync",
-                        function () {
-                            deferred.resolve();
-                        },
-                        this)
-                    .once("error",
-                        function () {
-                            deferred.reject();
-                        },
-                        this)
-                    .fetch(data); // fetch new data with supplied params
-
-                return deferred.promise();
             }
         }, classOptions);
 

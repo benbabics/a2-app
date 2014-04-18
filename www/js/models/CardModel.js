@@ -27,6 +27,108 @@ define(["backbone", "mustache", "globals", "utils", "models/UserModel", "models/
                     globals.WEBSERVICE.CARD_PATH;
             },
 
+            validation: {
+                "customVehicleId": [
+                    {
+                        required: function (value, attr, computedState) {
+                            return UserModel.getInstance().get("selectedCompany")
+                                .get("requiredFields").COMPANY_VEHICLE_NUMBER;
+                        },
+                        msg: globals.card.constants.ERROR_CUSTOMER_VEHICLE_ID_REQUIRED_FIELD
+                    },
+                    {
+                        fn: function (value, attr, computedState) {
+                            var user = UserModel.getInstance().toJSON(),
+                                maxLength = user.selectedCompany.settings.cardSettings.customVehicleIdMaxLength;
+                            if (utils._.isString(value) && value.length > maxLength) {
+                                return Mustache.render(globals.card.constants.ERROR_CUSTOMER_VEHICLE_ID_INVALID_LENGTH,
+                                    {
+                                        "maxLength": maxLength
+                                    });
+                            }
+                        }
+                    },
+                    {
+                        pattern: globals.APP.ALPHANUMERIC_WITH_SPACE_PATTERN,
+                        msg    : globals.card.constants.ERROR_CUSTOMER_VEHICLE_ID_INVALID_CHARACTERS
+                    }
+                ],
+                "vehicleDescription": [
+                    {
+                        required: function (value, attr, computedState) {
+                            return UserModel.getInstance().get("selectedCompany")
+                                .get("requiredFields").VEHICLE_DESCRIPTION;
+                        },
+                        msg: globals.card.constants.ERROR_VEHICLE_DESCRIPTION_REQUIRED_FIELD
+                    },
+                    {
+                        fn: function (value, attr, computedState) {
+                            var user = UserModel.getInstance().toJSON(),
+                                maxLength = user.selectedCompany.settings.cardSettings.vehicleDescriptionMaxLength;
+                            if (utils._.isString(value) && value.length > maxLength) {
+                                return Mustache.render(globals.card.constants.ERROR_VEHICLE_DESCRIPTION_INVALID_LENGTH,
+                                    {
+                                        "maxLength": maxLength
+                                    });
+                            }
+                        }
+                    },
+                    {
+                        pattern: globals.APP.ALPHANUMERIC_WITH_SPACE_PATTERN,
+                        msg    : globals.card.constants.ERROR_VEHICLE_DESCRIPTION_INVALID_CHARACTERS
+                    }
+                ],
+                "vin": [
+                    {
+                        required: function (value, attr, computedState) {
+                            return UserModel.getInstance().get("selectedCompany").get("requiredFields").VIN_NUMBER;
+                        },
+                        msg: globals.card.constants.ERROR_VIN_REQUIRED_FIELD
+                    },
+                    {
+                        fn: function (value, attr, computedState) {
+                            var user = UserModel.getInstance().toJSON(),
+                                fixedLength = user.selectedCompany.settings.cardSettings.vinFixedLength;
+                            if (utils._.isString(value) && value.length !== fixedLength) {
+                                return Mustache.render(globals.card.constants.ERROR_VIN_INVALID_LENGTH,
+                                    {
+                                        "fixedLength": fixedLength
+                                    });
+                            }
+                        }
+                    },
+                    {
+                        pattern: globals.APP.ALPHANUMERIC_PATTERN,
+                        msg    : globals.card.constants.ERROR_VIN_INVALID_CHARACTERS
+                    }
+                ],
+                "licensePlateNumber": [
+                    {
+                        required: function (value, attr, computedState) {
+                            return UserModel.getInstance().get("selectedCompany")
+                                .get("requiredFields").LICENSE_PLATE_NUMBER;
+                        },
+                        msg: globals.card.constants.ERROR_LICENSE_PLATE_NUMBER_REQUIRED_FIELD
+                    },
+                    {
+                        fn: function (value, attr, computedState) {
+                            var user = UserModel.getInstance().toJSON(),
+                                maxLength = user.selectedCompany.settings.cardSettings.licensePlateNumberMaxLength;
+                            if (utils._.isString(value) && value.length > maxLength) {
+                                return Mustache.render(globals.card.constants.ERROR_LICENSE_PLATE_NUMBER_INVALID_LENGTH,
+                                    {
+                                        "maxLength": maxLength
+                                    });
+                            }
+                        }
+                    },
+                    {
+                        pattern: globals.APP.ALPHANUMERIC_WITH_SPACE_PATTERN,
+                        msg    : globals.card.constants.ERROR_LICENSE_PLATE_NUMBER_INVALID_CHARACTERS
+                    }
+                ]
+            },
+
             initialize: function (options) {
                 var department;
 

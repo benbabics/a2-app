@@ -273,5 +273,31 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
             return copiedDate;
         };
 
+        /**
+         * Function to fetch a collection wrapped up as a promise
+         *
+         * @param collection to fetch
+         * @param data the information to pass to collection.fetch()
+         * @returns a promise
+         */
+        utils.fetchCollection = function (collection, data) {
+            var deferred = utils.Deferred();
+
+            collection
+                .once("sync",
+                    function () {
+                        deferred.resolve();
+                    },
+                    this)
+                .once("error",
+                    function () {
+                        deferred.reject();
+                    },
+                    this)
+                .fetch(data); // fetch new data with supplied params
+
+            return deferred.promise();
+        };
+
         return utils;
     });

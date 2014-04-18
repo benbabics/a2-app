@@ -1,10 +1,10 @@
 define([ "globals", "backbone", "utils", "facade", "models/UserModel", "models/DriverModel",
-         "collections/AjaxCollection" ],
-    function (globals, Backbone, utils, facade, UserModel, DriverModel, AjaxCollection) {
+         "collections/AjaxSearchCollection" ],
+    function (globals, Backbone, utils, facade, UserModel, DriverModel, AjaxSearchCollection) {
 
         "use strict";
 
-        var DriverCollection = AjaxCollection.extend({
+        var DriverCollection = AjaxSearchCollection.extend({
             model: DriverModel,
             isAllResults: true,
             pageNumber: globals.driverSearch.constants.DEFAULT_PAGE_NUMBER,
@@ -12,8 +12,8 @@ define([ "globals", "backbone", "utils", "facade", "models/UserModel", "models/D
 
             url: function () {
                 return globals.WEBSERVICE.ACCOUNTS.URL + "/"  +
-                       UserModel.getInstance().get("selectedCompany").get("accountId") +
-                       globals.WEBSERVICE.DRIVER_PATH;
+                    UserModel.getInstance().get("selectedCompany").get("accountId") +
+                    globals.WEBSERVICE.DRIVER_PATH;
             },
 
             initialize: function () {

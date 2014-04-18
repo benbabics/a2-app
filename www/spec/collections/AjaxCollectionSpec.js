@@ -41,9 +41,7 @@ define(["Squire", "globals", "backbone", "utils"],
 
             describe("has a parse function that", function () {
                 var mockResponse = {
-                    data: {
-                        totalResults: 123454,
-                        searchResults: [
+                        data: [
                             {
                                 id: "134613456",
                                 name: "UNASSIGNED",
@@ -55,8 +53,7 @@ define(["Squire", "globals", "backbone", "utils"],
                                 visible: false
                             }
                         ]
-                    }
-                };
+                    };
 
                 it("is defined", function () {
                     expect(ajaxCollection.parse).toBeDefined();
@@ -66,18 +63,10 @@ define(["Squire", "globals", "backbone", "utils"],
                     expect(ajaxCollection.parse).toEqual(jasmine.any(Function));
                 });
 
-                it("should set totalResults", function () {
-                    ajaxCollection.totalResults = null;
-
-                    ajaxCollection.parse(mockResponse);
-
-                    expect(ajaxCollection.totalResults).toEqual(mockResponse.data.totalResults);
-                });
-
-                it("should return searchResults", function () {
+                it("should return data", function () {
                     var actualReturnValue = ajaxCollection.parse(mockResponse);
 
-                    expect(actualReturnValue).toEqual(mockResponse.data.searchResults);
+                    expect(actualReturnValue).toEqual(mockResponse.data);
                 });
             });
 
@@ -104,10 +93,6 @@ define(["Squire", "globals", "backbone", "utils"],
 
                 it("is a function", function () {
                     expect(ajaxCollection.fetch).toEqual(jasmine.any(Function));
-                });
-
-                it("should set totalResults to null", function () {
-                    expect(ajaxCollection.totalResults).toBeNull();
                 });
 
                 it("should call super", function () {

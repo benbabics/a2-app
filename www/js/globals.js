@@ -13,6 +13,7 @@ define(function (require) {
         "ROOT_URL"                     : "@@@STRING_REPLACE_APP_URL@@@",
         "APP_PATH"                     : "/app",
         "ACCOUNTS_PATH"                : "/accounts",
+        "AUTH_PROFILES_PATH"           : "/authProfiles",
         "CARD_PATH"                    : "/cards",
         "DRIVER_PATH"                  : "/drivers",
         "USER_AUTH_PATH"               : "/userAuth",
@@ -59,12 +60,220 @@ define(function (require) {
     globals.APP = {
         "NAME"                            : "WEXonline",
         "EMAIL_ADDRESS_VALIDATION_PATTERN": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$",
-        "ZIP_CODE_PATTERN"                : "/\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d/"
+        "ZIP_CODE_PATTERN"                : "/\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d/",
+        "ALPHANUMERIC_PATTERN"            : /^[A-Z\d]+$/i,
+        "ALPHANUMERIC_WITH_SPACE_PATTERN" : /^[A-Z\d ]+$/i
     };
 
     globals.APP.constants = {
         "APP_VERSION_STATUS" : "appVersionStatus",
-        "LAST_WARN_VERSION"  : "lastWarnVersion"
+        "LAST_WARN_VERSION"  : "lastWarnVersion",
+        "STATES": [
+            {
+                id: "AL",
+                name: "Alabama"
+            },
+            {
+                id: "AK",
+                name: "Alaska"
+            },
+            {
+                id: "AZ",
+                name: "Arizona"
+            },
+            {
+                id: "AR",
+                name: "Arkansas"
+            },
+            {
+                id: "CA",
+                name: "California"
+            },
+            {
+                id: "CO",
+                name: "Colorado"
+            },
+            {
+                id: "CT",
+                name: "Connecticut"
+            },
+            {
+                id: "DE",
+                name: "Delaware"
+            },
+            {
+                id: "DC",
+                name: "District Of Columbia"
+            },
+            {
+                id: "FL",
+                name: "Florida"
+            },
+            {
+                id: "GA",
+                name: "Georgia"
+            },
+            {
+                id: "HI",
+                name: "Hawaii"
+            },
+            {
+                id: "ID",
+                name: "Idaho"
+            },
+            {
+                id: "IL",
+                name: "Illinois"
+            },
+            {
+                id: "IN",
+                name: "Indiana"
+            },
+            {
+                id: "IA",
+                name: "Iowa"
+            },
+            {
+                id: "KS",
+                name: "Kansas"
+            },
+            {
+                id: "KY",
+                name: "Kentucky"
+            },
+            {
+                id: "LA",
+                name: "Louisiana"
+            },
+            {
+                id: "ME",
+                name: "Maine"
+            },
+            {
+                id: "MD",
+                name: "Maryland"
+            },
+            {
+                id: "MA",
+                name: "Massachusetts"
+            },
+            {
+                id: "MI",
+                name: "Michigan"
+            },
+            {
+                id: "MN",
+                name: "Minnesota"
+            },
+            {
+                id: "MS",
+                name: "Mississippi"
+            },
+            {
+                id: "MO",
+                name: "Missouri"
+            },
+            {
+                id: "MT",
+                name: "Montana"
+            },
+            {
+                id: "NE",
+                name: "Nebraska"
+            },
+            {
+                id: "NV",
+                name: "Nevada"
+            },
+            {
+                id: "NH",
+                name: "New Hampshire"
+            },
+            {
+                id: "NJ",
+                name: "New Jersey"
+            },
+            {
+                id: "NM",
+                name: "New Mexico"
+            },
+            {
+                id: "NY",
+                name: "New York"
+            },
+            {
+                id: "NC",
+                name: "North Carolina"
+            },
+            {
+                id: "ND",
+                name: "North Dakota"
+            },
+            {
+                id: "OH",
+                name: "Ohio"
+            },
+            {
+                id: "OK",
+                name: "Oklahoma"
+            },
+            {
+                id: "OR",
+                name: "Oregon"
+            },
+            {
+                id: "PA",
+                name: "Pennsylvania"
+            },
+            {
+                id: "RI",
+                name: "Rhode Island"
+            },
+            {
+                id: "SC",
+                name: "South Carolina"
+            },
+            {
+                id: "SD",
+                name: "South Dakota"
+            },
+            {
+                id: "TN",
+                name: "Tennessee"
+            },
+            {
+                id: "TX",
+                name: "Texas"
+            },
+            {
+                id: "UT",
+                name: "Utah"
+            },
+            {
+                id: "VT",
+                name: "Vermont"
+            },
+            {
+                id: "VA",
+                name: "Virginia"
+            },
+            {
+                id: "WA",
+                name: "Washington"
+            },
+            {
+                id: "WV",
+                name: "West Virginia"
+            },
+            {
+                id: "WI",
+                name: "Wisconsin"
+            },
+            {
+                id: "WY",
+                name: "Wyoming"
+            }
+        ]
     };
 
     /**
@@ -225,8 +434,21 @@ define(function (require) {
      */
     globals.card = {};
     globals.card.constants = {
-        "STATUS_ACTIVE": "ACTIVE",
-        "STATUS_TERMINATED": "TERMINATED"
+        "STATUS_ACTIVE"         : "ACTIVE",
+        "STATUS_TERMINATED"     : "TERMINATED",
+        "VIN_PLACEHOLDER_FORMAT": "Must be {{vinFixedLength}} characters.",
+        "ERROR_CUSTOMER_VEHICLE_ID_REQUIRED_FIELD"    : "Customer Vehicle ID must have a value",
+        "ERROR_CUSTOMER_VEHICLE_ID_INVALID_LENGTH"    : "Customer Vehicle ID cannot exceed {{maxLength}} characters",
+        "ERROR_CUSTOMER_VEHICLE_ID_INVALID_CHARACTERS": "Customer Vehicle ID must contain only alphanumeric characters",
+        "ERROR_VEHICLE_DESCRIPTION_REQUIRED_FIELD"    : "Vehicle Description must have a value",
+        "ERROR_VEHICLE_DESCRIPTION_INVALID_LENGTH"    : "Vehicle Description cannot exceed {{maxLength}} characters",
+        "ERROR_VEHICLE_DESCRIPTION_INVALID_CHARACTERS": "Vehicle Description must contain only alphanumeric characters",
+        "ERROR_VIN_REQUIRED_FIELD"    : "VIN must have a value",
+        "ERROR_VIN_INVALID_LENGTH"    : "VIN must contain {{fixedLength}} characters",
+        "ERROR_VIN_INVALID_CHARACTERS": "VIN must contain only alphanumeric characters",
+        "ERROR_LICENSE_PLATE_NUMBER_REQUIRED_FIELD"    : "License Plate Number must have a value",
+        "ERROR_LICENSE_PLATE_NUMBER_INVALID_LENGTH"    : "License Plate Number cannot exceed {{maxLength}} characters",
+        "ERROR_LICENSE_PLATE_NUMBER_INVALID_CHARACTERS": "License Plate Number must contain only alphanumeric characters"
     };
 
     /**
@@ -396,9 +618,65 @@ define(function (require) {
      */
     globals.cardAdd = {};
     globals.cardAdd.constants = {
-        "DEFAULT_DEPARTMENT_NAME": "UNASSIGNED"
+        "DEFAULT_DEPARTMENT_NAME": "UNASSIGNED",
+        "NO_AUTH_PROFILES_MESSAGE": "The account must have at least one profile set-up to add a card.",
+        "SELECT_STATE": {
+            id: "",
+            name: "Select State"
+        }
     };
     globals.cardAdd.configuration = {
+        "ableToAddCard"         : null,
+        "unableToAddCardMessage": null,
+        "customVehicleId": {
+            "label"      : "Customer Vehicle ID",
+            "name"       : "customVehicleId",
+            "maxLength"  : null,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "vehicleDescription": {
+            "label"      : "Vehicle Description",
+            "name"       : "vehicleDescription",
+            "maxLength"  : null,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "vin": {
+            "label"      : "VIN",
+            "name"       : "vin",
+            "maxLength"  : null,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "licensePlateNumber": {
+            "label"      : "License Plate Number",
+            "name"       : "licensePlateNumber",
+            "maxLength"  : null,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "licensePlateState": {
+            "label"      : "License Plate State",
+            "name"       : "licensePlateState",
+            "enabled"    : true,
+            "values"     : []
+        },
+        "departmentId": {
+            "label"      : "Department",
+            "name"       : "departmentId",
+            "enabled"    : true,
+            "values"     : []
+        },
+        "authorizationProfileName": {
+            "label"      : "Profile Assignment",
+            "name"       : "authorizationProfileName",
+            "enabled"    : true,
+            "values"     : []
+        },
+        "submitButton": {
+            "label": "Next"
+        }
     };
 
     /**
@@ -594,28 +872,28 @@ define(function (require) {
         "firstName": {
             "label"      : "First Name",
             "name"       : "firstName",
-            "maxLength"  : 11,
+            "maxLength"  : null,
             "placeholder": "",
             "value"      : ""
         },
         "middleName": {
             "label"      : "Middle Initial",
             "name"       : "middleName",
-            "maxLength"  : 1,
+            "maxLength"  : null,
             "placeholder": "",
             "value"      : ""
         },
         "lastName": {
             "label"      : "Last Name",
             "name"       : "lastName",
-            "maxLength"  : 12,
+            "maxLength"  : null,
             "placeholder": "",
             "value"      : ""
         },
         "id": {
             "label"      : "Driver ID",
             "name"       : "id",
-            "maxLength"  : 4,
+            "maxLength"  : null,
             "placeholder": "",
             "value"      : ""
         },

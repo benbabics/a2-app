@@ -9,7 +9,8 @@ define(["Squire"],
                 subscribeTo: jasmine.createSpy("subscribeTo() spy").and.returnValue(mockSubscribe)
             },
             mockCardController = {
-                init: function () { }
+                init: function () { },
+                beforeNavigateAddCondition: function () { }
             },
             cardSubscriber;
 
@@ -36,8 +37,13 @@ define(["Squire"],
                 expect(mockFacade.subscribeTo.calls.mostRecent().args[1]).toEqual(mockCardController);
             });
 
-            it("should call subscribe 2 times", function () {
-                expect(mockSubscribe.calls.count()).toEqual(2);
+            it("should call subscribe 3 times", function () {
+                expect(mockSubscribe.calls.count()).toEqual(3);
+            });
+
+            it("should subscribe to navigateAdd", function () {
+                expect(mockSubscribe)
+                    .toHaveBeenCalledWith("navigateAdd", "navigateAdd", mockCardController.beforeNavigateAddCondition);
             });
 
             it("should subscribe to navigateCardDetails", function () {

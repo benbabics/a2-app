@@ -5,7 +5,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
         var squire = new Squire(),
             mockFacade = {
-                publish: function (channel, event) { }
+                publish: function () { }
             },
             mockUtils = utils,
             mockDriverModel = {
@@ -334,8 +334,7 @@ define(["globals", "backbone", "utils", "Squire"],
             });
 
             describe("has a showDriverAddDetails function that", function () {
-                var response = "Response message"
-                    ;
+                var response = "Response message";
                 beforeEach(function () {
                     spyOn(mockFacade, "publish").and.callFake(function () { });
 
@@ -478,7 +477,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 describe("when the call to fetchCollection finishes successfully", function () {
                     beforeEach(function () {
-                        spyOn(driverController, "fetchCollection").and.callFake(function () {
+                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
                             var deferred = utils.Deferred();
 
                             deferred.resolve();
@@ -503,7 +502,8 @@ define(["globals", "backbone", "utils", "Squire"],
                     });
 
                     it("should call fetchCollection", function () {
-                        expect(driverController.fetchCollection).toHaveBeenCalledWith();
+                        expect(mockUtils.fetchCollection)
+                            .toHaveBeenCalledWith(mockDriverCollection, driverModel.toJSON());
                     });
 
                     it("should call the render function on SiteListView", function () {
@@ -521,7 +521,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 describe("when the call to fetchCollection finishes with a failure", function () {
                     beforeEach(function () {
-                        spyOn(driverController, "fetchCollection").and.callFake(function () {
+                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
                             var deferred = utils.Deferred();
 
                             deferred.reject();
@@ -546,7 +546,8 @@ define(["globals", "backbone", "utils", "Squire"],
                     });
 
                     it("should call fetchCollection", function () {
-                        expect(driverController.fetchCollection).toHaveBeenCalledWith();
+                        expect(mockUtils.fetchCollection)
+                            .toHaveBeenCalledWith(mockDriverCollection, driverModel.toJSON());
                     });
 
                     it("should call the render function on SiteListView", function () {
@@ -560,85 +561,6 @@ define(["globals", "backbone", "utils", "Squire"],
                     it("should call the hideLoadingIndicator function on the Driver List View", function () {
                         expect(mockDriverListView.hideLoadingIndicator).toHaveBeenCalledWith();
                     });
-                });
-            });
-
-            describe("has a fetchCollection function that", function () {
-                var mockPromiseReturnValue = "Promise Return Value",
-                    mockDeferred = {
-                        promise: function () { return mockPromiseReturnValue; },
-                        reject: function () {},
-                        resolve: function () {}
-                    },
-                    actualReturnValue;
-
-                beforeEach(function () {
-                    spyOn(utils, "Deferred").and.returnValue(mockDeferred);
-                    spyOn(mockDeferred, "promise").and.callThrough();
-                    spyOn(mockDriverCollection, "once").and.callThrough();
-                    spyOn(mockDriverCollection, "fetch").and.callThrough();
-
-                    actualReturnValue = driverController.fetchCollection();
-                });
-
-                it("is defined", function () {
-                    expect(driverController.fetchCollection).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(driverController.fetchCollection).toEqual(jasmine.any(Function));
-                });
-
-                it("should call once on the Driver Collection on sync", function () {
-                    expect(mockDriverCollection.once)
-                        .toHaveBeenCalledWith("sync", jasmine.any(Function), driverController);
-                });
-
-                describe("when the handler of the sync event is called", function () {
-                    var callback;
-
-                    beforeEach(function () {
-                        spyOn(mockDeferred, "resolve").and.callThrough();
-
-                        callback = mockDriverCollection.once.calls.argsFor(0)[1];
-                        callback.apply();
-                    });
-
-                    it("should call resolve on the Deferred object", function () {
-                        expect(mockDeferred.resolve).toHaveBeenCalledWith();
-                    });
-                });
-
-                it("should call once on the Driver Collection on error", function () {
-                    expect(mockDriverCollection.once)
-                        .toHaveBeenCalledWith("error", jasmine.any(Function), driverController);
-                });
-
-                describe("when the handler of the error event is called", function () {
-                    var callback;
-
-                    beforeEach(function () {
-                        spyOn(mockDeferred, "reject").and.callThrough();
-
-                        callback = mockDriverCollection.once.calls.argsFor(1)[1];
-                        callback.apply();
-                    });
-
-                    it("should call reject on the Deferred object", function () {
-                        expect(mockDeferred.reject).toHaveBeenCalledWith();
-                    });
-                });
-
-                it("should call fetch on the Driver Collection", function () {
-                    expect(mockDriverCollection.fetch).toHaveBeenCalledWith(driverModel.toJSON());
-                });
-
-                it("should call promise on the Deferred object", function () {
-                    expect(mockDeferred.promise).toHaveBeenCalledWith();
-                });
-
-                it("should return the expected value", function () {
-                    expect(actualReturnValue).toEqual(mockPromiseReturnValue);
                 });
             });
         });

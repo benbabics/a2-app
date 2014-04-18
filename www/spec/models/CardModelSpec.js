@@ -39,10 +39,10 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                     ],
                     settings: {
                         cardSettings: {
-                            customVehicleIdMaxLength: 17,
-                            licensePlateNumberMaxLength: 10,
+                            customVehicleIdMaxLength: 5,
+                            licensePlateNumberMaxLength: 7,
                             licensePlateStateFixedLength: 2,
-                            vehicleDescriptionMaxLength: 17,
+                            vehicleDescriptionMaxLength: 6,
                             vinFixedLength: 17
                         },
                         driverSettings: {
@@ -155,6 +155,349 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                         actualResult = cardModel.urlRoot();
 
                     expect(actualResult).toEqual(expectedResult);
+                });
+            });
+
+            describe("has property validation that", function () {
+                describe("has a validation configuration for the customVehicleId field that", function () {
+                    it("has 3 validation rules", function () {
+                        expect(cardModel.validation.customVehicleId.length).toEqual(3);
+                    });
+
+                    describe("the first validation rule", function () {
+                        describe("should have a required function that", function () {
+                            it("is defined", function () {
+                                expect(cardModel.validation.customVehicleId[0].required).toBeDefined();
+                            });
+
+                            it("is a function", function () {
+                                expect(cardModel.validation.customVehicleId[0].required).toEqual(jasmine.any(Function));
+                            });
+
+                            it("should return true if the user's company does have the COMPANY_VEHICLE_NUMBER required field",
+                                function () {
+                                    userModel.get("selectedCompany")
+                                        .set("requiredFields", {"COMPANY_VEHICLE_NUMBER": true});
+
+                                    expect(cardModel.validation.customVehicleId[0].required()).toBeTruthy();
+                                });
+
+                            it("should return false if the user's company does NOT have the COMPANY_VEHICLE_NUMBER required field",
+                                function () {
+                                    userModel.get("selectedCompany")
+                                        .set("requiredFields", {"COMPANY_VEHICLE_NUMBER": false});
+
+                                    expect(cardModel.validation.customVehicleId[0].required()).toBeFalsy();
+                                });
+                        });
+
+                        it("should set the error message", function () {
+                            expect(cardModel.validation.customVehicleId[0].msg)
+                                .toEqual(globals.card.constants.ERROR_CUSTOMER_VEHICLE_ID_REQUIRED_FIELD);
+                        });
+                    });
+
+                    describe("the second validation rule", function () {
+                        describe("should have a fn function that", function () {
+                            it("is defined", function () {
+                                expect(cardModel.validation.customVehicleId[1].fn).toBeDefined();
+                            });
+
+                            it("is a function", function () {
+                                expect(cardModel.validation.customVehicleId[1].fn).toEqual(jasmine.any(Function));
+                            });
+
+                            describe("when the actual length is less than the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(cardModel.validation.customVehicleId[1].fn("1234")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is equal to the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(cardModel.validation.customVehicleId[1].fn("12345")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is greater than to the max length", function () {
+                                it("should return the expected result", function () {
+                                    var expectedValue =
+                                            Mustache.render(
+                                                globals.card.constants.ERROR_CUSTOMER_VEHICLE_ID_INVALID_LENGTH,
+                                                {"maxLength": mockUserModel.selectedCompany.settings.cardSettings.customVehicleIdMaxLength}
+                                            ),
+                                        actualValue = cardModel.validation.customVehicleId[1].fn("123456");
+
+                                    expect(actualValue).toEqual(expectedValue);
+                                });
+                            });
+                        });
+                    });
+
+                    describe("the third validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(cardModel.validation.customVehicleId[2].pattern)
+                                .toEqual(globals.APP.ALPHANUMERIC_WITH_SPACE_PATTERN);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(cardModel.validation.customVehicleId[2].msg)
+                                .toEqual(globals.card.constants.ERROR_CUSTOMER_VEHICLE_ID_INVALID_CHARACTERS);
+                        });
+                    });
+                });
+
+                describe("has a validation configuration for the vehicleDescription field that", function () {
+                    it("has 3 validation rules", function () {
+                        expect(cardModel.validation.vehicleDescription.length).toEqual(3);
+                    });
+
+                    describe("the first validation rule", function () {
+                        describe("should have a required function that", function () {
+                            it("is defined", function () {
+                                expect(cardModel.validation.vehicleDescription[0].required).toBeDefined();
+                            });
+
+                            it("is a function", function () {
+                                expect(cardModel.validation.vehicleDescription[0].required).toEqual(jasmine.any(Function));
+                            });
+
+                            it("should return true if the user's company does have the VEHICLE_DESCRIPTION required field",
+                                function () {
+                                    userModel.get("selectedCompany")
+                                        .set("requiredFields", {"VEHICLE_DESCRIPTION": true});
+
+                                    expect(cardModel.validation.vehicleDescription[0].required()).toBeTruthy();
+                                });
+
+                            it("should return false if the user's company does NOT have the VEHICLE_DESCRIPTION required field",
+                                function () {
+                                    userModel.get("selectedCompany")
+                                        .set("requiredFields", {"VEHICLE_DESCRIPTION": false});
+
+                                    expect(cardModel.validation.vehicleDescription[0].required()).toBeFalsy();
+                                });
+                        });
+
+                        it("should set the error message", function () {
+                            expect(cardModel.validation.vehicleDescription[0].msg)
+                                .toEqual(globals.card.constants.ERROR_VEHICLE_DESCRIPTION_REQUIRED_FIELD);
+                        });
+                    });
+
+                    describe("the second validation rule", function () {
+                        describe("should have a fn function that", function () {
+                            it("is defined", function () {
+                                expect(cardModel.validation.vehicleDescription[1].fn).toBeDefined();
+                            });
+
+                            it("is a function", function () {
+                                expect(cardModel.validation.vehicleDescription[1].fn).toEqual(jasmine.any(Function));
+                            });
+
+                            describe("when the actual length is less than the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(cardModel.validation.vehicleDescription[1].fn("12345")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is equal to the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(cardModel.validation.vehicleDescription[1].fn("123456")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is greater than to the max length", function () {
+                                it("should return the expected result", function () {
+                                    var expectedValue =
+                                            Mustache.render(
+                                                globals.card.constants.ERROR_VEHICLE_DESCRIPTION_INVALID_LENGTH,
+                                                {"maxLength": mockUserModel.selectedCompany.settings.cardSettings.vehicleDescriptionMaxLength}
+                                            ),
+                                        actualValue = cardModel.validation.vehicleDescription[1].fn("1234567");
+
+                                    expect(actualValue).toEqual(expectedValue);
+                                });
+                            });
+                        });
+                    });
+
+                    describe("the third validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(cardModel.validation.vehicleDescription[2].pattern)
+                                .toEqual(globals.APP.ALPHANUMERIC_WITH_SPACE_PATTERN);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(cardModel.validation.vehicleDescription[2].msg)
+                                .toEqual(globals.card.constants.ERROR_VEHICLE_DESCRIPTION_INVALID_CHARACTERS);
+                        });
+                    });
+                });
+
+                describe("has a validation configuration for the vin field that", function () {
+                    it("has 3 validation rules", function () {
+                        expect(cardModel.validation.vin.length).toEqual(3);
+                    });
+
+                    describe("the first validation rule", function () {
+                        describe("should have a required function that", function () {
+                            it("is defined", function () {
+                                expect(cardModel.validation.vin[0].required).toBeDefined();
+                            });
+
+                            it("is a function", function () {
+                                expect(cardModel.validation.vin[0].required).toEqual(jasmine.any(Function));
+                            });
+
+                            it("should return true if the user's company does have the VIN_NUMBER required field",
+                                function () {
+                                    userModel.get("selectedCompany").set("requiredFields", {"VIN_NUMBER": true});
+
+                                    expect(cardModel.validation.vin[0].required()).toBeTruthy();
+                                });
+
+                            it("should return false if the user's company does NOT have the VIN_NUMBER required field",
+                                function () {
+                                    userModel.get("selectedCompany").set("requiredFields", {"VIN_NUMBER": false});
+
+                                    expect(cardModel.validation.vin[0].required()).toBeFalsy();
+                                });
+                        });
+
+                        it("should set the error message", function () {
+                            expect(cardModel.validation.vin[0].msg)
+                                .toEqual(globals.card.constants.ERROR_VIN_REQUIRED_FIELD);
+                        });
+                    });
+
+                    describe("the second validation rule", function () {
+                        describe("should have a fn function that", function () {
+                            it("is defined", function () {
+                                expect(cardModel.validation.vin[1].fn).toBeDefined();
+                            });
+
+                            it("is a function", function () {
+                                expect(cardModel.validation.vin[1].fn).toEqual(jasmine.any(Function));
+                            });
+
+                            describe("when the value is the correct length", function () {
+                                it("should return the expected result", function () {
+                                    expect(cardModel.validation.vin[1].fn("12345678901234567")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the value is NOT the correct length", function () {
+                                it("should return the expected result", function () {
+                                    var expectedValue =
+                                            Mustache.render(globals.card.constants.ERROR_VIN_INVALID_LENGTH,
+                                                {"fixedLength": mockUserModel.selectedCompany.settings.cardSettings.vinFixedLength}),
+                                        actualValue = cardModel.validation.vin[1].fn("123");
+
+                                    expect(actualValue).toEqual(expectedValue);
+                                });
+                            });
+                        });
+                    });
+
+                    describe("the third validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(cardModel.validation.vin[2].pattern).toEqual(globals.APP.ALPHANUMERIC_PATTERN);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(cardModel.validation.vin[2].msg)
+                                .toEqual(globals.card.constants.ERROR_VIN_INVALID_CHARACTERS);
+                        });
+                    });
+                });
+
+                describe("has a validation configuration for the licensePlateNumber field that", function () {
+                    it("has 3 validation rules", function () {
+                        expect(cardModel.validation.licensePlateNumber.length).toEqual(3);
+                    });
+
+                    describe("the first validation rule", function () {
+                        describe("should have a required function that", function () {
+                            it("is defined", function () {
+                                expect(cardModel.validation.licensePlateNumber[0].required).toBeDefined();
+                            });
+
+                            it("is a function", function () {
+                                expect(cardModel.validation.licensePlateNumber[0].required).toEqual(jasmine.any(Function));
+                            });
+
+                            it("should return true if the user's company does have the LICENSE_PLATE_NUMBER required field",
+                                function () {
+                                    userModel.get("selectedCompany")
+                                        .set("requiredFields", {"LICENSE_PLATE_NUMBER": true});
+
+                                    expect(cardModel.validation.licensePlateNumber[0].required()).toBeTruthy();
+                                });
+
+                            it("should return false if the user's company does NOT have the LICENSE_PLATE_NUMBER required field",
+                                function () {
+                                    userModel.get("selectedCompany")
+                                        .set("requiredFields", {"LICENSE_PLATE_NUMBER": false});
+
+                                    expect(cardModel.validation.licensePlateNumber[0].required()).toBeFalsy();
+                                });
+                        });
+
+                        it("should set the error message", function () {
+                            expect(cardModel.validation.licensePlateNumber[0].msg)
+                                .toEqual(globals.card.constants.ERROR_LICENSE_PLATE_NUMBER_REQUIRED_FIELD);
+                        });
+                    });
+
+                    describe("the second validation rule", function () {
+                        describe("should have a fn function that", function () {
+                            it("is defined", function () {
+                                expect(cardModel.validation.licensePlateNumber[1].fn).toBeDefined();
+                            });
+
+                            it("is a function", function () {
+                                expect(cardModel.validation.licensePlateNumber[1].fn).toEqual(jasmine.any(Function));
+                            });
+
+                            describe("when the actual length is less than the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(cardModel.validation.licensePlateNumber[1].fn("123456")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is equal to the max length", function () {
+                                it("should return the expected result", function () {
+                                    expect(cardModel.validation.licensePlateNumber[1].fn("1234567")).toBeUndefined();
+                                });
+                            });
+
+                            describe("when the actual length is greater than to the max length", function () {
+                                it("should return the expected result", function () {
+                                    var expectedValue =
+                                            Mustache.render(
+                                                globals.card.constants.ERROR_LICENSE_PLATE_NUMBER_INVALID_LENGTH,
+                                                {"maxLength": mockUserModel.selectedCompany.settings.cardSettings.licensePlateNumberMaxLength}
+                                            ),
+                                        actualValue = cardModel.validation.licensePlateNumber[1].fn("12345678");
+
+                                    expect(actualValue).toEqual(expectedValue);
+                                });
+                            });
+                        });
+                    });
+
+                    describe("the third validation rule", function () {
+                        it("should set the pattern", function () {
+                            expect(cardModel.validation.licensePlateNumber[2].pattern)
+                                .toEqual(globals.APP.ALPHANUMERIC_WITH_SPACE_PATTERN);
+                        });
+
+                        it("should set the error message", function () {
+                            expect(cardModel.validation.licensePlateNumber[2].msg)
+                                .toEqual(globals.card.constants.ERROR_LICENSE_PLATE_NUMBER_INVALID_CHARACTERS);
+                        });
+                    });
                 });
             });
 

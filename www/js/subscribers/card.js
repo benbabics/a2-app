@@ -6,8 +6,9 @@ define(["facade", "controllers/CardController"],
 
         var subscribe = facade.subscribeTo("card", controller);
 
+        subscribe("navigateAdd",         "navigateAdd", controller.beforeNavigateAddCondition);
         subscribe("navigateCardDetails", "navigateCardDetails");
-        subscribe("navigateSearch", "navigateSearch");
+        subscribe("navigateSearch",      "navigateSearch");
 
         return {
             init: function () {

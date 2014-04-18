@@ -12,6 +12,13 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
 
             userModel: null,
 
+            events: utils._.extend({}, ValidationFormView.prototype.events, {
+                "click #submitCardAdd-btn": "submitForm",
+
+                // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it
+                "submit #cardAddForm"     : "submitForm"
+            }),
+
             initialize: function (options) {
                 // call super
                 this.constructor.__super__.initialize.apply(this, arguments);
@@ -45,11 +52,69 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
 
             getConfiguration: function () {
                 var cardConfiguration = utils._.extend({}, utils.deepClone(globals.cardAdd.configuration)),
-                    selectedCompany = this.userModel.get("selectedCompany");
+                    user = this.userModel.toJSON(),
+                    authorizationProfileListValues = [],
+                    departmentListValues = [],
+                    stateListValues = [];
+
+                cardConfiguration.ableToAddCard = utils._.size(user.selectedCompany.authorizationProfiles) > 0;
+                if (!cardConfiguration.ableToAddCard) {
+                    cardConfiguration.unableToAddCardMessage = globals.cardAdd.constants.NO_AUTH_PROFILES_MESSAGE;
+                } else {
+                    utils._.each(user.selectedCompany.authorizationProfiles, function (authorizationProfile) {
+                        authorizationProfileListValues.push({
+                            "id": authorizationProfile.id,
+                            "name": authorizationProfile.name
+                        });
+                    });
+
+                    utils._.each(user.selectedCompany.departments, function (department) {
+                        if (department.visible === true) {
+                            departmentListValues.push({
+                                "id": department.id,
+                                "name": department.name,
+                                "selected": department.name === globals.cardAdd.constants.DEFAULT_DEPARTMENT_NAME
+                            });
+                        }
+                    });
+
+                    stateListValues.push(globals.cardAdd.constants.SELECT_STATE);
+                    utils._.each(globals.APP.constants.STATES, function (state) {
+                        stateListValues.push(state);
+                    });
+
+                    cardConfiguration.customVehicleId.value = this.model.get("customVehicleId");
+                    cardConfiguration.customVehicleId.maxLength =
+                        user.selectedCompany.settings.cardSettings.customVehicleIdMaxLength;
+
+                    cardConfiguration.vehicleDescription.value = this.model.get("vehicleDescription");
+                    cardConfiguration.vehicleDescription.maxLength =
+                        user.selectedCompany.settings.cardSettings.vehicleDescriptionMaxLength;
+
+                    cardConfiguration.vin.value = this.model.get("vin");
+                    cardConfiguration.vin.maxLength = user.selectedCompany.settings.cardSettings.vinFixedLength;
+                    cardConfiguration.vin.placeholder =
+                        Mustache.render(globals.card.constants.VIN_PLACEHOLDER_FORMAT, {
+                            "vinFixedLength": user.selectedCompany.settings.cardSettings.vinFixedLength
+                        });
+
+                    cardConfiguration.licensePlateNumber.value = this.model.get("licensePlateNumber");
+                    cardConfiguration.licensePlateNumber.maxLength =
+                        user.selectedCompany.settings.cardSettings.licensePlateNumberMaxLength;
+
+                    cardConfiguration.licensePlateState.enabled = stateListValues.length > 1;
+                    cardConfiguration.licensePlateState.values = stateListValues;
+
+                    cardConfiguration.departmentId.enabled = departmentListValues.length > 1;
+                    cardConfiguration.departmentId.values = departmentListValues;
+
+                    cardConfiguration.authorizationProfileName.enabled = authorizationProfileListValues.length > 1;
+                    cardConfiguration.authorizationProfileName.values = authorizationProfileListValues;
+                }
 
                 return {
                     "card"          : cardConfiguration,
-                    "requiredFields": selectedCompany.get("requiredFields")
+                    "requiredFields": user.selectedCompany.requiredFields
                 };
             },
 
@@ -82,6 +147,18 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 } else {
                     CardAddView.__super__.handleInputChanged.apply(this, arguments);
                 }
+            },
+
+            submitForm: function (evt) {
+                var errors;
+
+                evt.preventDefault();
+
+                errors = this.model.validate();
+                if (errors) {
+                    this.handleValidationError(this.model, errors);
+                }
+                //TODO - Go to the next page as part of MOBILE-2215
             }
         });
 

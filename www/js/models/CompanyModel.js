@@ -1,18 +1,20 @@
-define(["backbone", "globals", "utils", "models/CompanySettingsModel", "models/DepartmentModel",
-        "collections/DepartmentCollection"],
-    function (Backbone, globals, utils, CompanySettingsModel, DepartmentModel, DepartmentCollection) {
+define(["backbone", "globals", "utils", "models/AuthorizationProfileModel", "models/CompanySettingsModel",
+        "models/DepartmentModel", "collections/AuthorizationProfileCollection", "collections/DepartmentCollection"],
+    function (Backbone, globals, utils, AuthorizationProfileModel, CompanySettingsModel, DepartmentModel,
+              AuthorizationProfileCollection, DepartmentCollection) {
 
         "use strict";
 
 
         var CompanyModel = Backbone.Model.extend({
             defaults: {
-                "name"            : null,
-                "accountId"       : null,
-                "wexAccountNumber": null,
-                "departments"     : null,
-                "requiredFields"  : globals.companyData.requiredFields,
-                "settings"        : null
+                "name"                 : null,
+                "accountId"            : null,
+                "wexAccountNumber"     : null,
+                "departments"          : null,
+                "requiredFields"       : globals.companyData.requiredFields,
+                "settings"             : null,
+                "authorizationProfiles": null
             },
 
             initialize: function (options) {
@@ -32,6 +34,34 @@ define(["backbone", "globals", "utils", "models/CompanySettingsModel", "models/D
                 }
             },
 
+            /**
+             * This function is overrode from Backbone and is ONLY used to retrieve a small portion of the companies
+             * properties as many of them are set via the initialize function
+             *
+             * @param method - only a value of read results in properties being fetched
+             * @param model
+             * @param options
+             * @returns {*}
+             */
+            sync: function (method, model, options) {
+                var deferred = utils.Deferred();
+
+                if (method === "read") {
+                    utils
+                        .when(
+                            this.fetchAuthorizationProfiles()
+                        )
+                        .done(function () {
+                            deferred.resolve();
+                        })
+                        .fail(function () {
+                            deferred.reject();
+                        });
+                }
+
+                return deferred.promise();
+            },
+
             setDepartments: function (departmentsList) {
                 var departments = new DepartmentCollection(),
                     department;
@@ -47,10 +77,11 @@ define(["backbone", "globals", "utils", "models/CompanySettingsModel", "models/D
             },
 
             setRequiredFields: function (requiredFieldsList) {
-                var newRequiredFields = this.defaults.requiredFields; // start with the defaults
+                var i,
+                    newRequiredFields = this.defaults.requiredFields; // start with the defaults
 
                 // Set only the required fields from the list to true
-                for (var i = 0; i < requiredFieldsList.length; i++) {
+                for (i = 0; i < requiredFieldsList.length; i++) {
                     newRequiredFields[requiredFieldsList[i]] = true;
                 }
 
@@ -66,8 +97,37 @@ define(["backbone", "globals", "utils", "models/CompanySettingsModel", "models/D
                 if (json.settings) {
                     json.settings = json.settings.toJSON();
                 }
+                if (json.authorizationProfiles) {
+                    json.authorizationProfiles = json.authorizationProfiles.toJSON();
+                }
 
                 return json;
+            },
+
+            fetchAuthorizationProfiles: function () {
+                var deferred   = utils.Deferred(),
+                    authorizationProfiles = new AuthorizationProfileCollection(),
+                    self = this;
+
+                utils
+                    .when(
+                        utils.fetchCollection(authorizationProfiles, this.toJSON())
+                    )
+                    .done(function () {
+                        deferred.resolve(
+                            self.set("authorizationProfiles", authorizationProfiles)
+                        );
+                    });
+
+                return deferred.promise();
+            },
+
+            areFetchedPropertiesEmpty: function () {
+                var authorizationProfiles = this.get("authorizationProfiles");
+
+                return (!authorizationProfiles ||
+                    utils._.isEmpty(authorizationProfiles) ||
+                    utils._.size(authorizationProfiles) === 0);
             }
         });
 

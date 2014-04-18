@@ -1,10 +1,10 @@
 define([ "globals", "backbone", "utils", "facade", "models/UserModel", "models/CardModel",
-        "collections/AjaxCollection" ],
-    function (globals, Backbone, utils, facade, UserModel, CardModel, AjaxCollection) {
+        "collections/AjaxSearchCollection" ],
+    function (globals, Backbone, utils, facade, UserModel, CardModel, AjaxSearchCollection) {
 
         "use strict";
 
-        var CardCollection = AjaxCollection.extend({
+        var CardCollection = AjaxSearchCollection.extend({
             model: CardModel,
             isAllResults: true,
             pageNumber: globals.cardSearch.constants.DEFAULT_PAGE_NUMBER,
