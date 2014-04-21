@@ -1,24 +1,29 @@
-define(["backbone", "globals", "utils", "models/AuthorizationProfileModel", "models/CompanySettingsModel",
-        "models/DepartmentModel", "collections/AuthorizationProfileCollection", "collections/DepartmentCollection"],
-    function (Backbone, globals, utils, AuthorizationProfileModel, CompanySettingsModel, DepartmentModel,
-              AuthorizationProfileCollection, DepartmentCollection) {
+define(["backbone", "globals", "utils", "models/AddressModel", "models/AuthorizationProfileModel",
+        "models/CompanySettingsModel", "models/DepartmentModel", "models/ShippingMethodModel",
+        "collections/AuthorizationProfileCollection", "collections/DepartmentCollection",
+        "collections/ShippingMethodCollection"],
+    function (Backbone, globals, utils, AddressModel, AuthorizationProfileModel, CompanySettingsModel, DepartmentModel,
+              ShippingMethodModel, AuthorizationProfileCollection, DepartmentCollection, ShippingMethodCollection) {
 
         "use strict";
 
 
         var CompanyModel = Backbone.Model.extend({
             defaults: {
-                "name"                 : null,
-                "accountId"            : null,
-                "wexAccountNumber"     : null,
-                "departments"          : null,
-                "requiredFields"       : globals.companyData.requiredFields,
-                "settings"             : null,
-                "authorizationProfiles": null
+                "name"                  : null,
+                "accountId"             : null,
+                "wexAccountNumber"      : null,
+                "departments"           : null,
+                "requiredFields"        : globals.companyData.requiredFields,
+                "settings"              : null,
+                "authorizationProfiles" : null,
+                "defaultShippingAddress": null,
+                "shippingMethods"       : null
             },
 
             initialize: function (options) {
-                var settings;
+                var settings,
+                    defaultShippingAddress;
 
                 if (options) {
                     if (options.name) { this.set("name", options.name); }
@@ -31,6 +36,12 @@ define(["backbone", "globals", "utils", "models/AuthorizationProfileModel", "mod
                         settings.initialize(options.settings);
                         this.set("settings", settings);
                     }
+                    if (options.defaultShippingAddress) {
+                        defaultShippingAddress = new AddressModel();
+                        defaultShippingAddress.initialize(options.defaultShippingAddress);
+                        this.set("defaultShippingAddress", defaultShippingAddress);
+                    }
+                    if (options.shippingMethods) { this.setShippingMethods(options.shippingMethods); }
                 }
             },
 
@@ -88,6 +99,20 @@ define(["backbone", "globals", "utils", "models/AuthorizationProfileModel", "mod
                 this.set("requiredFields", newRequiredFields);
             },
 
+            setShippingMethods: function (shippingMethodsList) {
+                var shippingMethods = new ShippingMethodCollection(),
+                    shippingMethod;
+
+                shippingMethods.reset([]);
+                utils._.each(shippingMethodsList, function (shippingMethodOptions) {
+                    shippingMethod = new ShippingMethodModel();
+                    shippingMethod.initialize(shippingMethodOptions);
+                    shippingMethods.add(shippingMethod);
+                });
+
+                this.set("shippingMethods", shippingMethods);
+            },
+
             toJSON: function () {
                 var json = CompanyModel.__super__.toJSON.apply(this, arguments);
 
@@ -99,6 +124,12 @@ define(["backbone", "globals", "utils", "models/AuthorizationProfileModel", "mod
                 }
                 if (json.authorizationProfiles) {
                     json.authorizationProfiles = json.authorizationProfiles.toJSON();
+                }
+                if (json.defaultShippingAddress) {
+                    json.defaultShippingAddress = json.defaultShippingAddress.toJSON();
+                }
+                if (json.shippingMethods) {
+                    json.shippingMethods = json.shippingMethods.toJSON();
                 }
 
                 return json;

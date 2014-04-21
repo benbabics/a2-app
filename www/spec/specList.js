@@ -23,6 +23,7 @@ var specList =
         "spec/views/ValidationFormViewSpec.js",
 
         // Models
+        "spec/models/AddressModelSpec.js",
         "spec/models/AjaxModelSpec.js",
         "spec/models/AppModelSpec.js",
         "spec/models/AuthorizationProfileModelSpec.js",
@@ -35,6 +36,7 @@ var specList =
         "spec/models/DriverModelSpec.js",
         "spec/models/DriverSettingsModelSpec.js",
         "spec/models/LoginModelSpec.js",
+        "spec/models/ShippingMethodModelSpec.js",
         "spec/models/ShippingModelSpec.js",
         "spec/models/UserModelSpec.js",
 
@@ -45,6 +47,7 @@ var specList =
         "spec/collections/CardCollectionSpec.js",
         "spec/collections/DepartmentCollectionSpec.js",
         "spec/collections/DriverCollectionSpec.js",
+        "spec/collections/ShippingMethodCollectionSpec.js",
 
         // Controllers
         "spec/controllers/AboutControllerSpec.js",

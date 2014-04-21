@@ -4,93 +4,89 @@ define(["Squire", "backbone"],
         "use strict";
 
         var squire = new Squire(),
-            shippingModel;
+            addressModel;
 
         squire.mock("backbone", Backbone);
 
-        describe("A Shipping Model", function () {
+        describe("An Address Model", function () {
             beforeEach(function (done) {
-                squire.require(["models/ShippingModel"], function (ShippingModel) {
-                    shippingModel = new ShippingModel();
+                squire.require(["models/AddressModel"], function (AddressModel) {
+                    addressModel = new AddressModel();
 
                     done();
                 });
             });
 
             it("is defined", function () {
-                expect(shippingModel).toBeDefined();
+                expect(addressModel).toBeDefined();
             });
 
             it("looks like a Backbone Model", function () {
-                expect(shippingModel instanceof Backbone.Model).toBeTruthy();
+                expect(addressModel instanceof Backbone.Model).toBeTruthy();
             });
 
             describe("has property defaults that", function () {
-                it("should set shippingMethod to default", function () {
-                    expect(shippingModel.defaults.shippingMethod).toBeNull();
-                });
-
                 it("should set firstName to default", function () {
-                    expect(shippingModel.defaults.firstName).toBeNull();
+                    expect(addressModel.defaults.firstName).toBeNull();
                 });
 
                 it("should set lastName to default", function () {
-                    expect(shippingModel.defaults.lastName).toBeNull();
+                    expect(addressModel.defaults.lastName).toBeNull();
                 });
 
                 it("should set companyName to default", function () {
-                    expect(shippingModel.defaults.companyName).toBeNull();
+                    expect(addressModel.defaults.companyName).toBeNull();
                 });
 
                 it("should set addressLine1 to default", function () {
-                    expect(shippingModel.defaults.addressLine1).toBeNull();
+                    expect(addressModel.defaults.addressLine1).toBeNull();
                 });
 
                 it("should set addressLine2 to default", function () {
-                    expect(shippingModel.defaults.addressLine2).toBeNull();
+                    expect(addressModel.defaults.addressLine2).toBeNull();
                 });
 
                 it("should set city to default", function () {
-                    expect(shippingModel.defaults.city).toBeNull();
+                    expect(addressModel.defaults.city).toBeNull();
                 });
 
                 it("should set state to default", function () {
-                    expect(shippingModel.defaults.state).toBeNull();
+                    expect(addressModel.defaults.state).toBeNull();
                 });
 
                 it("should set postalCode to default", function () {
-                    expect(shippingModel.defaults.postalCode).toBeNull();
+                    expect(addressModel.defaults.postalCode).toBeNull();
                 });
 
                 it("should set countryCode to default", function () {
-                    expect(shippingModel.defaults.countryCode).toBeNull();
+                    expect(addressModel.defaults.countryCode).toBeNull();
                 });
 
                 it("should set residence to default", function () {
-                    expect(shippingModel.defaults.residence).toBeFalsy();
+                    expect(addressModel.defaults.residence).toBeFalsy();
                 });
             });
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(shippingModel, "set").and.callThrough();
+                    spyOn(addressModel, "set").and.callThrough();
                 });
 
                 it("is defined", function () {
-                    expect(shippingModel.initialize).toBeDefined();
+                    expect(addressModel.initialize).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(shippingModel.initialize).toEqual(jasmine.any(Function));
+                    expect(addressModel.initialize).toEqual(jasmine.any(Function));
                 });
 
                 describe("when options are not provided", function () {
                     beforeEach(function () {
-                        shippingModel.initialize();
+                        addressModel.initialize();
                     });
 
                     it("should NOT call set", function () {
-                        expect(shippingModel.set).not.toHaveBeenCalled();
+                        expect(addressModel.set).not.toHaveBeenCalled();
                     });
                 });
 
@@ -98,17 +94,16 @@ define(["Squire", "backbone"],
                     var options = {};
 
                     beforeEach(function () {
-                        shippingModel.initialize(options);
+                        addressModel.initialize(options);
                     });
 
                     it("should NOT call set", function () {
-                        expect(shippingModel.set).not.toHaveBeenCalled();
+                        expect(addressModel.set).not.toHaveBeenCalled();
                     });
                 });
 
                 describe("when options are provided", function () {
                     var options = {
-                        "shippingMethod": "Shipping Method",
                         "firstName"     : "First Name",
                         "lastName"      : "Last Name",
                         "companyName"   : "Company Name",
@@ -122,55 +117,51 @@ define(["Squire", "backbone"],
                     };
 
                     beforeEach(function () {
-                        shippingModel.initialize(options);
+                        addressModel.initialize(options);
                     });
 
-                    it("should call set 11 times", function () {
-                        expect(shippingModel.set.calls.count()).toEqual(11);
-                    });
-
-                    it("should set shippingMethod", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("shippingMethod", options.shippingMethod);
+                    it("should call set 10 times", function () {
+                        expect(addressModel.set.calls.count()).toEqual(10);
                     });
 
                     it("should set firstName", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("firstName", options.firstName);
+                        expect(addressModel.set).toHaveBeenCalledWith("firstName", options.firstName);
                     });
 
                     it("should set lastName", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("lastName", options.lastName);
+                        expect(addressModel.set).toHaveBeenCalledWith("lastName", options.lastName);
                     });
 
                     it("should set companyName", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("companyName", options.companyName);
+                        expect(addressModel.set).toHaveBeenCalledWith("companyName", options.companyName);
                     });
 
                     it("should set addressLine1", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("addressLine1", options.addressLine1);
+                        expect(addressModel.set).toHaveBeenCalledWith("addressLine1", options.addressLine1);
                     });
 
                     it("should set addressLine2", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("addressLine2", options.addressLine2);
+                        expect(addressModel.set).toHaveBeenCalledWith("addressLine2", options.addressLine2);
                     });
 
                     it("should set city", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("city", options.city);
+                        expect(addressModel.set).toHaveBeenCalledWith("city", options.city);
                     });
 
                     it("should set state", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("state", options.state);
+                        expect(addressModel.set).toHaveBeenCalledWith("state", options.state);
                     });
 
                     it("should set postalCode", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("postalCode", options.postalCode);
+                        expect(addressModel.set).toHaveBeenCalledWith("postalCode", options.postalCode);
                     });
 
                     it("should set countryCode", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("countryCode", options.countryCode);
+                        expect(addressModel.set).toHaveBeenCalledWith("countryCode", options.countryCode);
                     });
 
                     it("should set residence", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("residence", options.residence);
+                        expect(addressModel.set).toHaveBeenCalledWith("residence", options.residence);
                     });
                 });
             });

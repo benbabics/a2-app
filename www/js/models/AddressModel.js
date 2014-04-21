@@ -4,9 +4,8 @@ define(["backbone"],
         "use strict";
 
 
-        var ShippingModel = Backbone.Model.extend({
+        var AddressModel = Backbone.Model.extend({
             defaults: {
-                "shippingMethod": null,
                 "firstName"     : null,
                 "lastName"      : null,
                 "companyName"   : null,
@@ -21,7 +20,6 @@ define(["backbone"],
 
             initialize: function (options) {
                 if (options) {
-                    if (options.shippingMethod) { this.set("shippingMethod", options.shippingMethod); }
                     if (options.firstName) { this.set("firstName", options.firstName); }
                     if (options.lastName) { this.set("lastName", options.lastName); }
                     if (options.companyName) { this.set("companyName", options.companyName); }
@@ -36,5 +34,5 @@ define(["backbone"],
             }
         });
 
-        return ShippingModel;
+        return AddressModel;
     });
