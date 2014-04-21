@@ -8,6 +8,7 @@ var specList =
         "spec/views/CardDetailViewSpec.js",
         "spec/views/CardListViewSpec.js",
         "spec/views/CardSearchViewSpec.js",
+        "spec/views/CardShippingViewSpec.js",
         "spec/views/CardViewSpec.js",
         "spec/views/ContactUsViewSpec.js",
         "spec/views/DriverAddViewSpec.js",
@@ -34,6 +35,7 @@ var specList =
         "spec/models/DriverModelSpec.js",
         "spec/models/DriverSettingsModelSpec.js",
         "spec/models/LoginModelSpec.js",
+        "spec/models/ShippingModelSpec.js",
         "spec/models/UserModelSpec.js",
 
         // Collections
