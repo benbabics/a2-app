@@ -10,13 +10,13 @@
     {{#sender}}
     <div data-role="fieldcontain">
         <label for="sender">{{label}}:</label>
-        <input type="text" name="{{name}}" maxlength="{{maxLength}}" id="sender" value="{{value}}" />
+        <input type="text" name="{{name}}" maxlength="{{maxLength}}" data-theme="a" id="sender" value="{{value}}" />
     </div>
     {{/sender}}
     {{#subject}}
     <div data-role="fieldcontain">
         <label for="subject">{{label}}:</label>
-        <select id="subject" name="{{name}}" data-theme="c">
+        <select id="subject" data-theme="a" name="{{name}}" data-theme="c">
             <option value="">- - Select - -</option>
             <option value="Cards & Drivers">Cards &amp; Drivers</option>
             <option value="Invoice & Payment">Invoice &amp; Payment</option>
@@ -27,11 +27,11 @@
     {{#message}}
     <div data-role="fieldcontain">
         <label for="message">{{label}}:</label>
-        <textarea name="{{name}}" maxlength="{{maxLength}}" id="message"></textarea>
+        <textarea name="{{name}}" maxlength="{{maxLength}}" data-theme="a" id="message"></textarea>
     </div>
     {{/message}}
 </form>
 {{#submitButton}}
-<button id="submitContactUs-btn" data-role="button" data-theme="b">{{label}}</button>
+<button id="submitContactUs-btn" data-role="button" data-theme="c">{{label}}</button>
 {{/submitButton}}
 {{/authenticated}}

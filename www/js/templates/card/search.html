@@ -21,7 +21,7 @@
     {{#status}}
         <div data-role="fieldcontain">
             <label for="status">{{label}}:</label>
-            <select id="status" name="{{name}}" data-theme="c">
+            <select id="status" name="{{name}}">
                 {{#values}}
                     <option value="{{id}}">{{name}}</option>
                 {{/values}}
@@ -31,7 +31,7 @@
     {{#departmentId}}
         <div data-role="fieldcontain">
             <label for="departmentId">{{label}}:</label>
-            <select id="departmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}} data-theme="c">
+            <select id="departmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
                 {{#values}}
                     <option value="{{id}}">{{name}}</option>
                 {{/values}}
@@ -40,5 +40,5 @@
     {{/departmentId}}
 </form>
 {{#submitButton}}
-    <button id="submitCardSearch-btn" data-role="button" data-theme="b">{{label}}</button>
+    <button id="submitCardSearch-btn" data-role="button" data-theme="c">{{label}}</button>
 {{/submitButton}}

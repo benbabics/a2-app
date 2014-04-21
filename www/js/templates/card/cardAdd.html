@@ -60,7 +60,7 @@
             {{#licensePlateState}}
                 <div data-role="fieldcontain">
                     <label for="licensePlateState">{{label}}:</label>
-                    <select id="licensePlateState" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}} data-theme="c">
+                    <select id="licensePlateState" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
                         {{#values}}
                             <option value="{{id}}" {{#selected}} selected {{/selected}}>{{name}}</option>
                         {{/values}}
@@ -71,7 +71,7 @@
             {{#departmentId}}
                 <div data-role="fieldcontain">
                     <label for="departmentId">{{label}}:</label>
-                    <select id="departmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}} data-theme="c">
+                    <select id="departmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
                         {{#values}}
                             <option value="{{id}}" {{#selected}} selected {{/selected}}>{{name}}</option>
                         {{/values}}
@@ -82,7 +82,7 @@
             {{#authorizationProfileName}}
                 <div data-role="fieldcontain">
                     <label for="authorizationProfileName">{{label}}:</label>
-                    <select id="authorizationProfileName" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}} data-theme="c">
+                    <select id="authorizationProfileName" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
                         {{#values}}
                             <option value="{{name}}" {{#selected}} selected {{/selected}}>{{name}}</option>
                         {{/values}}
