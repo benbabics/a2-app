@@ -274,6 +274,17 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
         };
 
         /**
+         * Funciton to format the provided number as currency
+         * @param number the number to format as currency
+         * @returns {string} the number formatted as currency
+         */
+        utils.formatCurrency = function(number) {
+            if (number) {
+                return "$" + number.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+            }
+        };
+
+        /**
          * Function to fetch a collection wrapped up as a promise
          *
          * @param collection to fetch

@@ -37,6 +37,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
             render: function () {
                 var $content = this.$el.find(":jqmData(role=content)");
 
+                this.resetModel();
+
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
 
                 this.formatRequiredFields();
@@ -48,6 +50,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 CardAddView.__super__.resetForm.apply(this, arguments);
 
                 this.model.set("department", this.findDefaultDepartment());
+                this.model.set("authorizationProfileName", this.findDefaultAuthorizationProfile().get("name"));
             },
 
             getConfiguration: function () {
@@ -63,7 +66,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 } else {
                     utils._.each(user.selectedCompany.authorizationProfiles, function (authorizationProfile) {
                         authorizationProfileListValues.push({
-                            "id": authorizationProfile.id,
+                            "id": authorizationProfile.name,
                             "name": authorizationProfile.name
                         });
                     });
@@ -80,6 +83,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
 
                     stateListValues.push(globals.cardAdd.constants.SELECT_STATE);
                     utils._.each(globals.APP.constants.STATES, function (state) {
+                        state.selected = false;
                         stateListValues.push(state);
                     });
 
@@ -116,6 +120,11 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                     "card"          : cardConfiguration,
                     "requiredFields": user.selectedCompany.requiredFields
                 };
+            },
+
+            findDefaultAuthorizationProfile: function () {
+                var selectedCompany = this.userModel.get("selectedCompany");
+                return selectedCompany.get("authorizationProfiles").at(0);
             },
 
             findDefaultDepartment: function () {
@@ -157,8 +166,9 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 errors = this.model.validate();
                 if (errors) {
                     this.handleValidationError(this.model, errors);
+                } else {
+                    this.trigger("cardAddSubmitted");
                 }
-                //TODO - Go to the next page as part of MOBILE-2215
             }
         });
 

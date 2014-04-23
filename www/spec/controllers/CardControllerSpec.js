@@ -24,6 +24,7 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 "vin"                     : "12345678901234567"
             },
             cardModel = new Backbone.Model(),
+            shippingModel = new Backbone.Model(),
             mockCardCollection = {
                 fetch: function () { return mockCardCollection; },
                 findWhere: function () { },
@@ -57,6 +58,15 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 initialize: function () { },
                 render: function () { },
                 on: function () { }
+            },
+            mockCardShippingView = {
+                $el: "",
+                constructor: function () { },
+                initialize: function () { },
+                render: function () { },
+                on: function () { },
+                showLoadingIndicator: function () { },
+                hideLoadingIndicator: function () { }
             },
             mockCardDetailView = {
                 $el: "",
@@ -123,8 +133,10 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
         squire.mock("views/CardDetailView", Squire.Helpers.returns(mockCardDetailView));
         squire.mock("views/CardListView", Squire.Helpers.returns(mockCardListView));
         squire.mock("views/CardSearchView", Squire.Helpers.returns(mockCardSearchView));
+        squire.mock("views/CardShippingView", Squire.Helpers.returns(mockCardShippingView));
         squire.mock("collections/CardCollection", Squire.Helpers.returns(mockCardCollection));
         squire.mock("models/CardModel", Squire.Helpers.returns(cardModel));
+        squire.mock("models/ShippingModel", Squire.Helpers.returns(shippingModel));
         squire.mock("models/UserModel", UserModel);
 
         describe("A Card Controller", function () {
@@ -229,6 +241,25 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                     });
                 });
 
+                describe("when initializing the CardShippingView", function () {
+                    beforeEach(function () {
+                        spyOn(mockCardAddView, "constructor").and.callThrough();
+                    });
+
+                    it("should set the cardShippingView variable to a new CardShippingView object", function () {
+                        expect(cardController.cardShippingView).toEqual(mockCardShippingView);
+                    });
+
+                    xit("should send in the correct parameters to the constructor", function () {
+                        expect(mockCardShippingView.constructor).toHaveBeenCalledWith({
+                            model: shippingModel,
+                            userModel: userModel
+                        });
+
+                        // TODO: this is not working, need to figure out how to test
+                    });
+                });
+
                 describe("when initializing the CardDetailView", function () {
                     beforeEach(function () {
                         spyOn(mockCardDetailView, "constructor").and.callThrough();
@@ -246,6 +277,28 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                         // TODO: this is not working, need to figure out how to test
                     });
                 });
+
+                it("should register a function as the handler for the add view cardAddSubmitted event",
+                    function () {
+                        spyOn(mockCardAddView, "on").and.callFake(function () { });
+
+                        cardController.init();
+
+                        expect(mockCardAddView.on).toHaveBeenCalledWith("cardAddSubmitted",
+                            cardController.showCardAddShippingDetails,
+                            cardController);
+                    });
+
+                it("should register a function as the handler for the shipping view cardAddSuccess event",
+                    function () {
+                        spyOn(mockCardShippingView, "on").and.callFake(function () { });
+
+                        cardController.init();
+
+                        expect(mockCardShippingView.on).toHaveBeenCalledWith("cardAddSuccess",
+                            cardController.showCardAddDetails,
+                            cardController);
+                    });
 
                 it("should register a function as the handler for the search view terminateCardSuccess event",
                     function () {
@@ -480,28 +533,84 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 });
             });
 
-            describe("has a showSearchResults function that", function () {
+            describe("has a showCardAddShippingDetails function that", function () {
                 beforeEach(function () {
-                    spyOn(mockCardCollection, "resetPage").and.callFake(function () {});
-                    spyOn(cardController, "updateCollection").and.callFake(function () {});
+                    mockCardShippingView.model = null;
+                    spyOn(mockCardShippingView, "render").and.callThrough();
+                    spyOn(mockUtils, "changePage").and.callThrough();
 
-                    cardController.showSearchResults();
+                    cardController.showCardAddShippingDetails();
                 });
 
                 it("is defined", function () {
-                    expect(cardController.showSearchResults).toBeDefined();
+                    expect(cardController.showCardAddShippingDetails).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(cardController.showSearchResults).toEqual(jasmine.any(Function));
+                    expect(cardController.showCardAddShippingDetails).toEqual(jasmine.any(Function));
                 });
 
-                it("should call resetPage on the Card Collection", function () {
-                    expect(mockCardCollection.resetPage).toHaveBeenCalledWith();
+                it("should set cardModel on the Card Shipping View Page", function () {
+                    expect(mockCardShippingView.cardModel).toEqual(mockCardAddView.model);
                 });
 
-                it("should call updateCollection", function () {
-                    expect(cardController.updateCollection).toHaveBeenCalledWith();
+                it("should call render on the Card Shipping View Page", function () {
+                    expect(mockCardShippingView.render).toHaveBeenCalledWith();
+                });
+
+                it("should change the page to the Card Detail View Page", function () {
+                    expect(mockUtils.changePage).toHaveBeenCalledWith(mockCardShippingView.$el);
+                });
+            });
+
+            describe("has a showCardAddDetails function that", function () {
+                var response = {
+                    message: "Response message"
+                };
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callFake(function () { });
+
+                    cardController.showCardAddDetails(response);
+                });
+
+                it("is defined", function () {
+                    expect(cardController.showCardAddDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.showCardAddDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    var appAlertOptions;
+
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
+
+                    appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
+                    expect(appAlertOptions.title).toEqual(globals.cardAddedDetails.constants.SUCCESS_TITLE);
+                    expect(appAlertOptions.message).toEqual(response);
+                    expect(appAlertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
+                    expect(appAlertOptions.popupafterclose).toEqual(jasmine.any(Function));
+                });
+
+                describe("sends as the popupafterclose argument a callback that", function () {
+                    var options;
+
+                    beforeEach(function () {
+                        options = mockFacade.publish.calls.mostRecent().args[2];
+
+                        spyOn(cardController, "navigateAdd").and.callFake(function () { });
+
+                        options.popupafterclose.call(cardController);
+                    });
+
+                    it("should call navigateAdd", function () {
+                        expect(cardController.navigateAdd).toHaveBeenCalledWith();
+                    });
                 });
             });
 
@@ -553,6 +662,31 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                     it("should call updateCollection", function () {
                         expect(cardController.updateCollection).toHaveBeenCalledWith();
                     });
+                });
+            });
+
+            describe("has a showSearchResults function that", function () {
+                beforeEach(function () {
+                    spyOn(mockCardCollection, "resetPage").and.callFake(function () {});
+                    spyOn(cardController, "updateCollection").and.callFake(function () {});
+
+                    cardController.showSearchResults();
+                });
+
+                it("is defined", function () {
+                    expect(cardController.showSearchResults).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.showSearchResults).toEqual(jasmine.any(Function));
+                });
+
+                it("should call resetPage on the Card Collection", function () {
+                    expect(mockCardCollection.resetPage).toHaveBeenCalledWith();
+                });
+
+                it("should call updateCollection", function () {
+                    expect(cardController.updateCollection).toHaveBeenCalledWith();
                 });
             });
 

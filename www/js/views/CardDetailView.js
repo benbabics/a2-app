@@ -53,7 +53,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "text!tmpl/card/ca
                     cardConfiguration.vehicleDescription.value = card.vehicleDescription;
                     cardConfiguration.licensePlateNumber.value = card.licensePlateNumber;
                     cardConfiguration.licensePlateState.value = card.licensePlateState;
-                    cardConfiguration.customVehicleId.value = card.customVehicleId;
                     cardConfiguration.status.value = card.status;
                     if (card.department) {
                         cardConfiguration.department.value = card.department.name;

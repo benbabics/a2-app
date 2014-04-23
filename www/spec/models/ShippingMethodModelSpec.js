@@ -1,12 +1,14 @@
-define(["Squire", "backbone"],
-    function (Squire, Backbone) {
+define(["Squire", "backbone", "utils"],
+    function (Squire, Backbone, utils) {
 
         "use strict";
 
         var squire = new Squire(),
+            mockUtils = utils,
             shippingMethodModel;
 
         squire.mock("backbone", Backbone);
+        squire.mock("utils", mockUtils);
 
         describe("A Shipping Method Model", function () {
             beforeEach(function (done) {
@@ -46,6 +48,7 @@ define(["Squire", "backbone"],
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(shippingMethodModel, "set").and.callThrough();
+                    spyOn(shippingMethodModel, "formatAttributes").and.callFake(function () {});
                 });
 
                 it("is defined", function () {
@@ -108,6 +111,96 @@ define(["Squire", "backbone"],
 
                     it("should set poBoxAllowed", function () {
                         expect(shippingMethodModel.set).toHaveBeenCalledWith("poBoxAllowed", options.poBoxAllowed);
+                    });
+                });
+
+                it("should call formatAttributes", function () {
+                    shippingMethodModel.initialize();
+                    expect(shippingMethodModel.formatAttributes).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a formatAttributes function that", function () {
+                beforeEach(function () {
+                    // re-initialize the model
+                    shippingMethodModel.set(shippingMethodModel.defaults);
+
+                    spyOn(shippingMethodModel, "set").and.callThrough();
+
+                    shippingMethodModel.formatAttributes();
+                });
+
+                it("is defined", function () {
+                    expect(shippingMethodModel.formatAttributes).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(shippingMethodModel.formatAttributes).toEqual(jasmine.any(Function));
+                });
+
+                it("should call set 1 time", function () {
+                    expect(shippingMethodModel.set.calls.count()).toEqual(1);
+                });
+
+                it("should set formattedName", function () {
+                    expect(shippingMethodModel.set).toHaveBeenCalledWith("formattedName", jasmine.any(Function));
+                });
+
+                describe("when calling the callback function", function () {
+                    var callback,
+                        actualResult,
+                        expectedResult,
+                        name = "Name",
+                        cost = 76,
+                        formattedCost = "$76.00";
+
+                    beforeEach(function () {
+                        shippingMethodModel.formatAttributes();
+                        callback = shippingMethodModel.set.calls.mostRecent().args[1];
+
+                        spyOn(mockUtils, "formatCurrency").and.returnValue(formattedCost);
+                    });
+
+                    describe("when name and cost both have values", function () {
+                        it("should match expected result", function () {
+                            shippingMethodModel.set("name", name);
+                            shippingMethodModel.set("cost", cost);
+
+                            expectedResult = name + " - " + formattedCost;
+                            actualResult = callback.call();
+                            expect(actualResult).toEqual(expectedResult);
+                        });
+                    });
+
+                    describe("when cost does not have a value", function () {
+                        it("should match expected result", function () {
+                            shippingMethodModel.set("name", name);
+                            shippingMethodModel.set("cost", null);
+
+                            expectedResult = name;
+                            actualResult = callback.call();
+                            expect(actualResult).toEqual(expectedResult);
+                        });
+                    });
+
+                    describe("when name does not have a value", function () {
+                        it("should match expected result", function () {
+                            shippingMethodModel.set("name", null);
+                            shippingMethodModel.set("cost", cost);
+
+                            actualResult = callback.call();
+                            expect(actualResult).toBeNull();
+                        });
+                    });
+
+                    describe("when name and cost do not have values", function () {
+                        it("should match expected result", function () {
+                            shippingMethodModel.set("name", null);
+                            shippingMethodModel.set("cost", null);
+
+                            actualResult = callback.call();
+                            expect(actualResult).toBeNull();
+                        });
                     });
                 });
             });

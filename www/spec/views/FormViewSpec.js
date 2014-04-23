@@ -184,8 +184,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
 
             describe("has a resetForm function that", function () {
                 beforeEach(function () {
-                    spyOn(formModel, "clear");
-                    spyOn(formModel, "set");
+                    spyOn(formView, "resetModel");
                     formView.$el.html(mockTemplate);
                     spyOn(formView.$el.find("form")[0], "reset").and.callFake(function () { });
 
@@ -206,6 +205,27 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
 
                 it("should call reset on the form", function () {
                     expect(formView.$el.find("form")[0].reset).toHaveBeenCalledWith();
+                });
+
+                it("should call resetModel", function () {
+                    expect(formView.resetModel).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a resetModel function that", function () {
+                beforeEach(function () {
+                    spyOn(formModel, "clear");
+                    spyOn(formModel, "set");
+
+                    formView.resetModel();
+                });
+
+                it("is defined", function () {
+                    expect(formView.resetModel).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(formView.resetModel).toEqual(jasmine.any(Function));
                 });
 
                 it("should call clear on the Model", function () {

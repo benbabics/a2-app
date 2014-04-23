@@ -1,7 +1,8 @@
 define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "models/UserModel", "models/CardModel",
-        "views/CardAddView", "views/CardDetailView", "views/CardListView", "views/CardSearchView"],
-    function (JClass, globals, facade, utils, CardCollection, UserModel, CardModel,
-              CardAddView, CardDetailView, CardListView, CardSearchView) {
+        "models/ShippingModel", "views/CardAddView", "views/CardDetailView", "views/CardListView",
+        "views/CardSearchView", "views/CardShippingView"],
+    function (JClass, globals, facade, utils, CardCollection, UserModel, CardModel, ShippingModel,
+              CardAddView, CardDetailView, CardListView, CardSearchView, CardShippingView) {
 
         "use strict";
 
@@ -17,6 +18,7 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
             cardDetailView: null,
             cardListView: null,
             cardSearchView: null,
+            cardShippingView: null,
             userModel: null,
 
             construct: function () {
@@ -38,6 +40,12 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
                     userModel: this.userModel
                 });
 
+                // create shipping view
+                this.cardShippingView = new CardShippingView({
+                    model    : new ShippingModel(),
+                    userModel: this.userModel
+                });
+
                 // create list view
                 this.cardListView = new CardListView({
                     collection: this.cardCollection,
@@ -50,6 +58,8 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
                 });
 
                 // listen for events
+                this.cardAddView.on("cardAddSubmitted", this.showCardAddShippingDetails, this);
+                this.cardShippingView.on("cardAddSuccess", this.showCardAddDetails, this);
                 this.cardDetailView.on("terminateCardSuccess", this.showCardStatusChangeDetails, this);
                 this.cardSearchView.on("searchSubmitted", this.showSearchResults, this);
                 this.cardListView.on("showAllCards", this.showAllSearchResults, this);
@@ -93,6 +103,25 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
             navigateSearch: function () {
                 this.cardSearchView.render();
                 utils.changePage(this.cardSearchView.$el, null, null, true);
+            },
+
+            showCardAddShippingDetails: function () {
+                this.cardShippingView.cardModel = this.cardAddView.model;
+                this.cardShippingView.render();
+                utils.changePage(this.cardShippingView.$el);
+            },
+
+            showCardAddDetails: function (cardAddResponse) {
+                var self = this;
+
+                facade.publish("app", "alert", {
+                    title          : globals.cardAddedDetails.constants.SUCCESS_TITLE,
+                    message        : cardAddResponse,
+                    primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
+                    popupafterclose:   function () {
+                        self.navigateAdd();
+                    }
+                });
             },
 
             showCardStatusChangeDetails: function (cardChangeStatusResponse) {

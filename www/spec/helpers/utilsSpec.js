@@ -174,6 +174,47 @@ define(["Squire"],
                 // TODO: finish
             });
 
+            describe("has a formatCurrency function that", function () {
+                it("is defined", function () {
+                    expect(utilsClass.formatCurrency).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(utilsClass.formatCurrency).toEqual(jasmine.any(Function));
+                });
+
+                it("should return expected value when number is not defined", function () {
+                    var numberToFormat,
+                        actualValue = utilsClass.formatCurrency(numberToFormat);
+
+                    expect(actualValue).toBeUndefined();
+                });
+
+                it("should return expected value when number is an integer", function () {
+                    var numberToFormat = 17,
+                        expectedValue = "$17.00",
+                        actualValue = utilsClass.formatCurrency(numberToFormat);
+
+                    expect(actualValue).toEqual(expectedValue);
+                });
+
+                it("should return expected value when number has more than 2 decimal places", function () {
+                    var numberToFormat = 45.5675,
+                        expectedValue = "$45.57",
+                        actualValue = utilsClass.formatCurrency(numberToFormat);
+
+                    expect(actualValue).toEqual(expectedValue);
+                });
+
+                it("should return expected value when number is greater than 1000", function () {
+                    var numberToFormat = 3445.5,
+                        expectedValue = "$3,445.50",
+                        actualValue = utilsClass.formatCurrency(numberToFormat);
+
+                    expect(actualValue).toEqual(expectedValue);
+                });
+            });
+
             describe("has a fetchCollection function that", function () {
                 var mockPromiseReturnValue = "Promise Return Value",
                     mockDeferred = {

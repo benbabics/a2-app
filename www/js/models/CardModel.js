@@ -161,6 +161,36 @@ define(["backbone", "mustache", "globals", "utils", "models/UserModel", "models/
                 CardModel.__super__.sync.call(this, method, model, options);
             },
 
+            add: function (shippingOptions, options) {
+                var attributes = {
+                    "customVehicleId"         : this.get("customVehicleId"),
+                    "vehicleDescription"      : this.get("vehicleDescription"),
+                    "vin"                     : this.get("vin"),
+                    "licensePlateNumber"      : this.get("licensePlateNumber"),
+                    "licensePlateState"       : this.get("licensePlateState"),
+                    "authorizationProfileName": this.get("authorizationProfileName"),
+                    "departmentId"            : this.get("department").get("id"),
+                    "shippingMethod"          : shippingOptions.shippingMethod.id,
+                    "firstName"               : shippingOptions.firstName,
+                    "lastName"                : shippingOptions.lastName,
+                    "companyName"             : shippingOptions.companyName,
+                    "address1"                : shippingOptions.addressLine1,
+                    "address2"                : shippingOptions.addressLine2,
+                    "city"                    : shippingOptions.city,
+                    "state"                   : shippingOptions.state,
+                    "postalCode"              : shippingOptions.postalCode,
+                    "countryCode"             : shippingOptions.countryCode,
+                    "residence"               : shippingOptions.residence
+                };
+
+                options.patch = true;
+                // Set the ID to fake backbone into thinking the model is NOT new, so it will not try to create it
+                this.set("id", 1);
+                // Override default url as backbone will try to POST to urlRoot()/{{id}} when an id is known
+                this.url = this.urlRoot();
+                this.save(attributes, options);
+            },
+
             terminate: function (options) {
                 var attributes = {},
                     originalUrl = this.url();

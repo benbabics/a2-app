@@ -1,0 +1,39 @@
+<div class="ui-body ui-body-e">{{{message}}}</div>
+
+{{#card}}
+    {{#id}}
+        <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+    {{/id}}
+    {{#requiredFields.COMPANY_VEHICLE_NUMBER}}
+        {{#customVehicleId}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/customVehicleId}}
+    {{/requiredFields.COMPANY_VEHICLE_NUMBER}}
+    {{#requiredFields.VEHICLE_DESCRIPTION}}
+        {{#vehicleDescription}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/vehicleDescription}}
+    {{/requiredFields.VEHICLE_DESCRIPTION}}
+    {{#requiredFields.LICENSE_PLATE_NUMBER}}
+        {{#licensePlateNumber}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/licensePlateNumber}}
+    {{/requiredFields.LICENSE_PLATE_NUMBER}}
+    {{#shipping}}
+        {{#method}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/method}}
+        {{#address}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>
+                {{firstName.value}} {{lastName.value}}<br/>
+                {{companyName.value}}<br/>
+                {{addressLine1.value}}<br/>
+                {{#addressLine2}}{{#value}}{{value}}<br/>{{/value}}{{/addressLine2}}
+                {{city.value}}, {{state.value}} {{postalCode.value}}<br/>
+            </p>
+        {{/address}}
+        {{#residence}}
+            <p class="text-result ui-li-desc"><strong>{{label}}?</strong>{{value}}</p>
+        {{/residence}}
+    {{/shipping}}
+{{/card}}

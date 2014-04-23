@@ -693,6 +693,98 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                 });
             });
 
+            describe("has an add function that", function () {
+                var mockUrlRoot = "mock url root",
+                    mockCardModel = {
+                        number: 13465,
+                        authorizationProfileName: "Auth Profile",
+                        status: "Active",
+                        department: {
+                            id: "134613456",
+                            name: "UNASSIGNED",
+                            visible: true
+                        },
+                        customVehicleId: "Custom Vehicle Id",
+                        vehicleDescription: "Vehicle Description",
+                        licensePlateNumber: "1234567",
+                        licensePlateState: "ME",
+                        vin: "12345678901234567"
+                    },
+                    shippingOptions = {
+                        "shippingMethod": {
+                            "id"          : "ID",
+                            "name"        : "Name",
+                            "cost"        : 6.66,
+                            "poBoxAllowed": true,
+                        },
+                        "firstName"   : "First Name",
+                        "lastName"    : "Last Name",
+                        "companyName" : "Company Name",
+                        "addressLine1": "Address Line 1",
+                        "addressLine2": "Address Line 2",
+                        "city"        : "City",
+                        "state"       : "State",
+                        "postalCode"  : "Postal Code",
+                        "countryCode" : "Country Code",
+                        "residence"   : true
+                    },
+                    options = {
+                        success: function () {}
+                    };
+
+                beforeEach(function () {
+                    spyOn(cardModel, "set").and.callThrough();
+                    spyOn(cardModel, "save").and.callFake(function () {});
+                    spyOn(cardModel, "urlRoot").and.returnValue(mockUrlRoot);
+
+                    cardModel.initialize(mockCardModel);
+                    cardModel.url = null;
+                    cardModel.add(shippingOptions, options);
+                });
+
+                it("is defined", function () {
+                    expect(cardModel.add).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardModel.add).toEqual(jasmine.any(Function));
+                });
+
+                it("should set id", function () {
+                    expect(cardModel.set).toHaveBeenCalledWith("id", 1);
+                });
+
+                it("should set url", function () {
+                    expect(cardModel.url).toEqual(mockUrlRoot);
+                });
+
+                it("should call save", function () {
+                    var expectedOptions = utils._.extend({patch: true}, utils.deepClone(options)),
+                        expectedAttributes = {
+                            "customVehicleId"         : mockCardModel.customVehicleId,
+                            "vehicleDescription"      : mockCardModel.vehicleDescription,
+                            "vin"                     : mockCardModel.vin,
+                            "licensePlateNumber"      : mockCardModel.licensePlateNumber,
+                            "licensePlateState"       : mockCardModel.licensePlateState,
+                            "authorizationProfileName": mockCardModel.authorizationProfileName,
+                            "departmentId"            : mockCardModel.department.id,
+                            "shippingMethod"          : shippingOptions.shippingMethod.id,
+                            "firstName"               : shippingOptions.firstName,
+                            "lastName"                : shippingOptions.lastName,
+                            "companyName"             : shippingOptions.companyName,
+                            "address1"                : shippingOptions.addressLine1,
+                            "address2"                : shippingOptions.addressLine2,
+                            "city"                    : shippingOptions.city,
+                            "state"                   : shippingOptions.state,
+                            "postalCode"              : shippingOptions.postalCode,
+                            "countryCode"             : shippingOptions.countryCode,
+                            "residence"               : shippingOptions.residence
+                        };
+
+                    expect(cardModel.save).toHaveBeenCalledWith(expectedAttributes, expectedOptions);
+                });
+            });
+
             describe("has a terminate function that", function () {
                 var mockUrlRoot = "mock url root",
                     mockCardNumber = 5678,

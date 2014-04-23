@@ -1,16 +1,19 @@
-define(["Squire", "backbone"],
-    function (Squire, Backbone) {
+define(["Squire", "backbone", "globals"],
+    function (Squire, Backbone, globals) {
 
         "use strict";
 
         var squire = new Squire(),
+            ShippingModel,
             shippingModel;
 
         squire.mock("backbone", Backbone);
 
         describe("A Shipping Model", function () {
             beforeEach(function (done) {
-                squire.require(["models/ShippingModel"], function (ShippingModel) {
+                squire.require(["models/ShippingModel"], function (JasmineShippingModel) {
+                    ShippingModel = JasmineShippingModel;
+
                     shippingModel = new ShippingModel();
 
                     done();
@@ -71,6 +74,85 @@ define(["Squire", "backbone"],
                 });
             });
 
+            describe("has property validation that", function () {
+                describe("has a validation configuration for the firstName field that", function () {
+                    it("should set the field as required", function () {
+                        expect(shippingModel.validation.firstName.required).toBeTruthy();
+                    });
+
+                    it("should set the error message when the field is not supplied", function () {
+                        expect(shippingModel.validation.firstName.msg)
+                            .toEqual(globals.cardShipping.constants.ERROR_FIRST_NAME_REQUIRED_FIELD);
+                    });
+                });
+
+                describe("has a validation configuration for the lastName field that", function () {
+                    it("should set the field as required", function () {
+                        expect(shippingModel.validation.lastName.required).toBeTruthy();
+                    });
+
+                    it("should set the error message when the field is not supplied", function () {
+                        expect(shippingModel.validation.lastName.msg)
+                            .toEqual(globals.cardShipping.constants.ERROR_LAST_NAME_REQUIRED_FIELD);
+                    });
+                });
+
+                describe("has a validation configuration for the companyName field that", function () {
+                    it("should set the field as required", function () {
+                        expect(shippingModel.validation.companyName.required).toBeTruthy();
+                    });
+
+                    it("should set the error message when the field is not supplied", function () {
+                        expect(shippingModel.validation.companyName.msg)
+                            .toEqual(globals.cardShipping.constants.ERROR_COMPANY_NAME_REQUIRED_FIELD);
+                    });
+                });
+
+                describe("has a validation configuration for the addressLine1 field that", function () {
+                    it("should set the field as required", function () {
+                        expect(shippingModel.validation.addressLine1.required).toBeTruthy();
+                    });
+
+                    it("should set the error message when the field is not supplied", function () {
+                        expect(shippingModel.validation.addressLine1.msg)
+                            .toEqual(globals.cardShipping.constants.ERROR_ADDRESS1_REQUIRED_FIELD);
+                    });
+                });
+
+                describe("has a validation configuration for the city field that", function () {
+                    it("should set the field as required", function () {
+                        expect(shippingModel.validation.city.required).toBeTruthy();
+                    });
+
+                    it("should set the error message when the field is not supplied", function () {
+                        expect(shippingModel.validation.city.msg)
+                            .toEqual(globals.cardShipping.constants.ERROR_CITY_REQUIRED_FIELD);
+                    });
+                });
+
+                describe("has a validation configuration for the state field that", function () {
+                    it("should set the field as required", function () {
+                        expect(shippingModel.validation.state.required).toBeTruthy();
+                    });
+
+                    it("should set the error message when the field is not supplied", function () {
+                        expect(shippingModel.validation.state.msg)
+                            .toEqual(globals.cardShipping.constants.ERROR_STATE_REQUIRED_FIELD);
+                    });
+                });
+
+                describe("has a validation configuration for the postalCode field that", function () {
+                    it("should set the field as required", function () {
+                        expect(shippingModel.validation.postalCode.required).toBeTruthy();
+                    });
+
+                    it("should set the error message when the field is not supplied", function () {
+                        expect(shippingModel.validation.postalCode.msg)
+                            .toEqual(globals.cardShipping.constants.ERROR_POSTAL_CODE_REQUIRED_FIELD);
+                    });
+                });
+            });
+
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(shippingModel, "set").and.callThrough();
@@ -108,7 +190,12 @@ define(["Squire", "backbone"],
 
                 describe("when options are provided", function () {
                     var options = {
-                        "shippingMethod": "Shipping Method",
+                        "shippingMethod": {
+                            "id"          : "ID",
+                            "name"        : "Name",
+                            "cost"        : 6.66,
+                            "poBoxAllowed": true
+                        },
                         "firstName"     : "First Name",
                         "lastName"      : "Last Name",
                         "companyName"   : "Company Name",
@@ -129,8 +216,21 @@ define(["Squire", "backbone"],
                         expect(shippingModel.set.calls.count()).toEqual(11);
                     });
 
+                    // TODO - Replace with something that verifies that a new ShippingMethodModel was created,
+                    // the correct parameter was passed to the DepartmentModel.initialize function and then set
+                    // to "shippingMethod"
                     it("should set shippingMethod", function () {
-                        expect(shippingModel.set).toHaveBeenCalledWith("shippingMethod", options.shippingMethod);
+                        var actualShippingMethod;
+
+                        expect(shippingModel.set.calls.argsFor(0).length).toEqual(2);
+                        expect(shippingModel.set.calls.argsFor(0)[0]).toEqual("shippingMethod");
+
+                        actualShippingMethod = shippingModel.set.calls.argsFor(0)[1];
+
+                        expect(actualShippingMethod.get("id")).toEqual(options.shippingMethod.id);
+                        expect(actualShippingMethod.get("name")).toEqual(options.shippingMethod.name);
+                        expect(actualShippingMethod.get("cost")).toEqual(options.shippingMethod.cost);
+                        expect(actualShippingMethod.get("poBoxAllowed")).toEqual(options.shippingMethod.poBoxAllowed);
                     });
 
                     it("should set firstName", function () {
@@ -171,6 +271,98 @@ define(["Squire", "backbone"],
 
                     it("should set residence", function () {
                         expect(shippingModel.set).toHaveBeenCalledWith("residence", options.residence);
+                    });
+                });
+            });
+
+            describe("has a toJSON function that", function () {
+                it("is defined", function () {
+                    expect(shippingModel.toJSON).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(shippingModel.toJSON).toEqual(jasmine.any(Function));
+                });
+
+                describe("when shippingMethod does have a value", function () {
+                    var shippingMethod,
+                        mockShippingModel = {
+                            "shippingMethod": {
+                                "id"          : "ID",
+                                "name"        : "Name",
+                                "cost"        : 6.66,
+                                "poBoxAllowed": true,
+                                "formattedName": null
+                            },
+                            "firstName"     : "First Name",
+                            "lastName"      : "Last Name",
+                            "companyName"   : "Company Name",
+                            "addressLine1"  : "Address Line 1",
+                            "addressLine2"  : "Address Line 2",
+                            "city"          : "City",
+                            "state"         : "State",
+                            "postalCode"    : "Postal Code",
+                            "countryCode"   : "Country Code",
+                            "residence"     : true
+                        },
+                        actualValue;
+
+                    beforeEach(function () {
+                        shippingModel.clear();
+                        shippingModel.initialize(mockShippingModel);
+                        shippingMethod = shippingModel.get("shippingMethod");
+
+                        // Wipe out the formattedName attribute that is added in the initialize function
+                        shippingMethod.set("formattedName", null);
+                        spyOn(shippingMethod, "toJSON").and.callThrough();
+                        spyOn(ShippingModel.__super__, "toJSON").and.callThrough();
+
+                        actualValue = shippingModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(ShippingModel.__super__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should call toJSON on shippingMethod", function () {
+                        expect(shippingMethod.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockShippingModel);
+                    });
+                });
+
+                describe("when shippingMethod does NOT have a value", function () {
+                    var mockShippingModel = {
+                            "firstName"     : "First Name",
+                            "lastName"      : "Last Name",
+                            "companyName"   : "Company Name",
+                            "addressLine1"  : "Address Line 1",
+                            "addressLine2"  : "Address Line 2",
+                            "city"          : "City",
+                            "state"         : "State",
+                            "postalCode"    : "Postal Code",
+                            "countryCode"   : "Country Code",
+                            "residence"     : true
+                        },
+                        actualValue;
+
+                    beforeEach(function () {
+                        shippingModel.clear();
+                        shippingModel.initialize(mockShippingModel);
+
+                        spyOn(ShippingModel.__super__, "toJSON").and.callThrough();
+
+                        actualValue = shippingModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(ShippingModel.__super__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockShippingModel);
                     });
                 });
             });

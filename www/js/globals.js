@@ -71,207 +71,258 @@ define(function (require) {
         "STATES": [
             {
                 id: "AL",
-                name: "Alabama"
+                name: "Alabama",
+                selected: false
             },
             {
                 id: "AK",
-                name: "Alaska"
+                name: "Alaska",
+                selected: false
             },
             {
                 id: "AZ",
-                name: "Arizona"
+                name: "Arizona",
+                selected: false
             },
             {
                 id: "AR",
-                name: "Arkansas"
+                name: "Arkansas",
+                selected: false
             },
             {
                 id: "CA",
-                name: "California"
+                name: "California",
+                selected: false
             },
             {
                 id: "CO",
-                name: "Colorado"
+                name: "Colorado",
+                selected: false
             },
             {
                 id: "CT",
-                name: "Connecticut"
+                name: "Connecticut",
+                selected: false
             },
             {
                 id: "DE",
-                name: "Delaware"
+                name: "Delaware",
+                selected: false
             },
             {
                 id: "DC",
-                name: "District Of Columbia"
+                name: "District Of Columbia",
+                selected: false
             },
             {
                 id: "FL",
-                name: "Florida"
+                name: "Florida",
+                selected: false
             },
             {
                 id: "GA",
-                name: "Georgia"
+                name: "Georgia",
+                selected: false
             },
             {
                 id: "HI",
-                name: "Hawaii"
+                name: "Hawaii",
+                selected: false
             },
             {
                 id: "ID",
-                name: "Idaho"
+                name: "Idaho",
+                selected: false
             },
             {
                 id: "IL",
-                name: "Illinois"
+                name: "Illinois",
+                selected: false
             },
             {
                 id: "IN",
-                name: "Indiana"
+                name: "Indiana",
+                selected: false
             },
             {
                 id: "IA",
-                name: "Iowa"
+                name: "Iowa",
+                selected: false
             },
             {
                 id: "KS",
-                name: "Kansas"
+                name: "Kansas",
+                selected: false
             },
             {
                 id: "KY",
-                name: "Kentucky"
+                name: "Kentucky",
+                selected: false
             },
             {
                 id: "LA",
-                name: "Louisiana"
+                name: "Louisiana",
+                selected: false
             },
             {
                 id: "ME",
-                name: "Maine"
+                name: "Maine",
+                selected: false
             },
             {
                 id: "MD",
-                name: "Maryland"
+                name: "Maryland",
+                selected: false
             },
             {
                 id: "MA",
-                name: "Massachusetts"
+                name: "Massachusetts",
+                selected: false
             },
             {
                 id: "MI",
-                name: "Michigan"
+                name: "Michigan",
+                selected: false
             },
             {
                 id: "MN",
-                name: "Minnesota"
+                name: "Minnesota",
+                selected: false
             },
             {
                 id: "MS",
-                name: "Mississippi"
+                name: "Mississippi",
+                selected: false
             },
             {
                 id: "MO",
-                name: "Missouri"
+                name: "Missouri",
+                selected: false
             },
             {
                 id: "MT",
-                name: "Montana"
+                name: "Montana",
+                selected: false
             },
             {
                 id: "NE",
-                name: "Nebraska"
+                name: "Nebraska",
+                selected: false
             },
             {
                 id: "NV",
-                name: "Nevada"
+                name: "Nevada",
+                selected: false
             },
             {
                 id: "NH",
-                name: "New Hampshire"
+                name: "New Hampshire",
+                selected: false
             },
             {
                 id: "NJ",
-                name: "New Jersey"
+                name: "New Jersey",
+                selected: false
             },
             {
                 id: "NM",
-                name: "New Mexico"
+                name: "New Mexico",
+                selected: false
             },
             {
                 id: "NY",
-                name: "New York"
+                name: "New York",
+                selected: false
             },
             {
                 id: "NC",
-                name: "North Carolina"
+                name: "North Carolina",
+                selected: false
             },
             {
                 id: "ND",
-                name: "North Dakota"
+                name: "North Dakota",
+                selected: false
             },
             {
                 id: "OH",
-                name: "Ohio"
+                name: "Ohio",
+                selected: false
             },
             {
                 id: "OK",
-                name: "Oklahoma"
+                name: "Oklahoma",
+                selected: false
             },
             {
                 id: "OR",
-                name: "Oregon"
+                name: "Oregon",
+                selected: false
             },
             {
                 id: "PA",
-                name: "Pennsylvania"
+                name: "Pennsylvania",
+                selected: false
             },
             {
                 id: "RI",
-                name: "Rhode Island"
+                name: "Rhode Island",
+                selected: false
             },
             {
                 id: "SC",
-                name: "South Carolina"
+                name: "South Carolina",
+                selected: false
             },
             {
                 id: "SD",
-                name: "South Dakota"
+                name: "South Dakota",
+                selected: false
             },
             {
                 id: "TN",
-                name: "Tennessee"
+                name: "Tennessee",
+                selected: false
             },
             {
                 id: "TX",
-                name: "Texas"
+                name: "Texas",
+                selected: false
             },
             {
                 id: "UT",
-                name: "Utah"
+                name: "Utah",
+                selected: false
             },
             {
                 id: "VT",
-                name: "Vermont"
+                name: "Vermont",
+                selected: false
             },
             {
                 id: "VA",
-                name: "Virginia"
+                name: "Virginia",
+                selected: false
             },
             {
                 id: "WA",
-                name: "Washington"
+                name: "Washington",
+                selected: false
             },
             {
                 id: "WV",
-                name: "West Virginia"
+                name: "West Virginia",
+                selected: false
             },
             {
                 id: "WI",
-                name: "Wisconsin"
+                name: "Wisconsin",
+                selected: false
             },
             {
                 id: "WY",
-                name: "Wyoming"
+                name: "Wyoming",
+                selected: false
             }
         ]
     };
@@ -622,7 +673,8 @@ define(function (require) {
         "NO_AUTH_PROFILES_MESSAGE": "The account must have at least one profile set-up to add a card.",
         "SELECT_STATE": {
             id: "",
-            name: "Select State"
+            name: "Select State",
+            selected: true
         }
     };
     globals.cardAdd.configuration = {
@@ -676,6 +728,150 @@ define(function (require) {
         },
         "submitButton": {
             "label": "Next"
+        }
+    };
+
+    globals.cardAddedDetails = {};
+    globals.cardAddedDetails.constants = {
+        "SUCCESS_TITLE": "Card Confirmation",
+        "RESIDENCE_YES": "Yes",
+        "RESIDENCE_NO": "No"
+    };
+    globals.cardAddedDetails.configuration = {
+        "id": {
+            "label": "Card Number",
+            "value": ""
+        },
+        "customVehicleId": {
+            "label": "Customer Vehicle ID",
+            "value": ""
+        },
+        "vehicleDescription": {
+            "label": "Vehicle Description",
+            "value": ""
+        },
+        "licensePlateNumber": {
+            "label": "License Plate Number",
+            "value": ""
+        },
+        "shipping": {
+            "method": {
+                "label": "Delivery Method",
+                "value": ""
+            },
+            "address": {
+                "label": "Shipping Address",
+                "firstName": {
+                    "value"      : ""
+                },
+                "lastName": {
+                    "value"      : ""
+                },
+                "companyName": {
+                    "value"      : ""
+                },
+                "addressLine1": {
+                    "value"      : ""
+                },
+                "addressLine2": {
+                    "value"      : ""
+                },
+                "city": {
+                    "value"      : ""
+                },
+                "state": {
+                    "value"      : ""
+                },
+                "postalCode": {
+                    "value"      : ""
+                }
+            },
+            "residence": {
+                "label": "Residence",
+                "value": ""
+            }
+        }
+    };
+
+    /**
+     * Page :: Card Shipping
+     */
+    globals.cardShipping = {};
+    globals.cardShipping.constants = {
+        "DEFAULT_SHIPPING_METHOD_NAME"     : "STANDARD",
+        "ERROR_FIRST_NAME_REQUIRED_FIELD"  : "First Name must have a value",
+        "ERROR_LAST_NAME_REQUIRED_FIELD"   : "Last Name must have a value",
+        "ERROR_COMPANY_NAME_REQUIRED_FIELD": "Company must have a value",
+        "ERROR_ADDRESS1_REQUIRED_FIELD"    : "Address 1 must have a value",
+        "ERROR_CITY_REQUIRED_FIELD"        : "City must have a value",
+        "ERROR_STATE_REQUIRED_FIELD"       : "State must have a value",
+        "ERROR_POSTAL_CODE_REQUIRED_FIELD" : "Postal Code must have a value"
+    };
+    globals.cardShipping.configuration = {
+        "ableToContinue"         : null,
+        "unableToContinueMessage": null,
+        "shippingMethod": {
+            "label"      : "Delivery Method",
+            "name"       : "shippingMethod",
+            "enabled"    : true,
+            "values"     : []
+        },
+        "firstName": {
+            "label"      : "First Name",
+            "name"       : "firstName",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "lastName": {
+            "label"      : "Last Name",
+            "name"       : "lastName",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "companyName": {
+            "label"      : "Company",
+            "name"       : "companyName",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "addressLine1": {
+            "label"      : "Address 1",
+            "name"       : "addressLine1",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "addressLine2": {
+            "label"      : "Address 2",
+            "name"       : "addressLine2",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "city": {
+            "label"      : "City",
+            "name"       : "city",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "state": {
+            "label"      : "State",
+            "name"       : "state",
+            "placeholder": "",
+            "values"     : []
+        },
+        "postalCode": {
+            "label"      : "Postal Code",
+            "name"       : "postalCode",
+            "placeholder": "",
+            "value"      : ""
+        },
+        "residence": {
+            "label"      : "Is this a residence?",
+            "name"       : "residence",
+            "placeholder": "",
+            "values"     : []
+        },
+        "submitButton": {
+            "label": "Submit"
         }
     };
 

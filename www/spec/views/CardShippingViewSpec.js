@@ -1,6 +1,7 @@
-define(["Squire", "backbone", "mustache", "globals", "utils", "models/ShippingModel", "models/UserModel",
-        "text!tmpl/card/shipping.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, ShippingModel, UserModel, pageTemplate) {
+define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel", "models/ShippingModel",
+        "models/UserModel", "text!tmpl/card/shipping.html", "text!tmpl/card/cardAddDetails.html", "jasmine-jquery"],
+    function (Squire, Backbone, Mustache, globals, utils, CardModel, ShippingModel, UserModel,
+              pageTemplate, cardAddDetailsTemplate) {
 
         "use strict";
 
@@ -47,6 +48,32 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/ShippingMo
                             middleNameMaxLength: 1,
                             lastNameMaxLength: 12
                         }
+                    },
+                    shippingMethods: [
+                        {
+                            id: "134613456",
+                            name: "UNASSIGNED",
+                            "cost": 3,
+                            "poBoxAllowed": true
+                        },
+                        {
+                            id: "2456724567",
+                            name: "Dewey, Cheetum and Howe",
+                            "cost": 567,
+                            "poBoxAllowed": false
+                        }
+                    ],
+                    defaultShippingAddress: {
+                        "firstName"     : "First Name",
+                        "lastName"      : "Last Name",
+                        "companyName"   : "Company Name",
+                        "addressLine1"  : "Address Line 1",
+                        "addressLine2"  : "Address Line 2",
+                        "city"          : "City",
+                        "state"         : "State",
+                        "postalCode"    : "Postal Code",
+                        "countryCode"   : "Country Code",
+                        "residence"     : true
                     }
                 },
                 permissions: [
@@ -55,8 +82,41 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/ShippingMo
                     "PERMISSION_3"
                 ]
             },
-            mockShippingModel = {},
+            mockShippingModel = {
+                "shippingMethod": {
+                    "id"          : "ID",
+                    "name"        : "Name",
+                    "cost"        : 6.66,
+                    "poBoxAllowed": true,
+                    "formattedName": null
+                },
+                "firstName"     : "First Name",
+                "lastName"      : "Last Name",
+                "companyName"   : "Company Name",
+                "addressLine1"  : "Address Line 1",
+                "addressLine2"  : "Address Line 2",
+                "city"          : "City",
+                "state"         : "State",
+                "postalCode"    : "Postal Code",
+                "countryCode"   : "Country Code",
+                "residence"     : true
+            },
             shippingModel = new ShippingModel(),
+            mockCardModel = {
+                authorizationProfileName: "Auth Profile",
+                status: "Active",
+                department: {
+                    id: "134613456",
+                    name: "UNASSIGNED",
+                    visible: true
+                },
+                customVehicleId: "Custom Vehicle Id",
+                vehicleDescription: "Vehicle Description",
+                licensePlateNumber: "1234567",
+                licensePlateState: "ME",
+                vin: "12345678901234567"
+            },
+            cardModel = new CardModel(),
             userModel = UserModel.getInstance(),
             cardShippingView,
             CardShippingView;
@@ -78,6 +138,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/ShippingMo
                         loadFixtures("index.html");
                     }
 
+                    cardModel.initialize(mockCardModel);
                     shippingModel.initialize(mockShippingModel);
                     userModel.initialize(mockUserModel);
 
@@ -97,6 +158,16 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/ShippingMo
 
             it("looks like a Backbone View", function () {
                 expect(cardShippingView instanceof Backbone.View).toBeTruthy();
+            });
+
+            describe("has events that", function () {
+                it("should call submitForm when submitCardShipping-btn is clicked", function () {
+                    expect(cardShippingView.events["click #submitCardShipping-btn"]).toEqual("submitForm");
+                });
+
+                it("should call submitForm when cardShippingForm is submitted", function () {
+                    expect(cardShippingView.events["submit #cardShippingForm"]).toEqual("submitForm");
+                });
             });
 
             describe("has a constructor that", function () {
@@ -119,10 +190,15 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/ShippingMo
                 it("should set the template", function () {
                     expect(cardShippingView.template).toEqual(pageTemplate);
                 });
+
+                it("should set the addDetailsTemplate", function () {
+                    expect(cardShippingView.addDetailsTemplate).toEqual(cardAddDetailsTemplate);
+                });
             });
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
+                    spyOn(mockMustache, "parse").and.callThrough();
                     spyOn(CardShippingView.__super__, "initialize").and.callFake(function () {});
 
                     cardShippingView.initialize();
@@ -140,20 +216,32 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/ShippingMo
                     expect(CardShippingView.__super__.initialize).toHaveBeenCalledWith();
                 });
 
+                it("should parse the addDetailsTemplate", function () {
+                    expect(mockMustache.parse).toHaveBeenCalledWith(cardShippingView.addDetailsTemplate);
+                });
+
                 it("should set userModel", function () {
                     expect(cardShippingView.userModel).toEqual(userModel);
                 });
             });
 
             describe("has a render function that", function () {
-                var actualContent;
+                var actualContent,
+                    expectedConfiguration;
 
                 beforeEach(function () {
+                    expectedConfiguration = {
+                        "shipping": utils._.extend({}, utils.deepClone(globals.cardShipping.configuration))
+                    };
+                    expectedConfiguration.shipping.ableToContinue = true;
+
                     actualContent = cardShippingView.$el.find(":jqmData(role=content)");
                     spyOn(cardShippingView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(cardShippingView, "resetModel").and.callThrough();
+                    spyOn(cardShippingView, "getConfiguration").and.returnValue(expectedConfiguration);
                     spyOn(cardShippingView, "formatRequiredFields").and.callThrough();
 
                     cardShippingView.render();
@@ -167,12 +255,16 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/ShippingMo
                     expect(cardShippingView.render).toEqual(jasmine.any(Function));
                 });
 
+                it("should call resetModel", function () {
+                    expect(cardShippingView.resetModel).toHaveBeenCalledWith();
+                });
+
                 it("should call Mustache.render() on the template", function () {
-                    expect(mockMustache.render).toHaveBeenCalledWith(cardShippingView.template);
+                    expect(mockMustache.render).toHaveBeenCalledWith(cardShippingView.template, expectedConfiguration);
                 });
 
                 it("should call the html function on the content", function () {
-                    var expectedContent = Mustache.render(pageTemplate);
+                    var expectedContent = Mustache.render(pageTemplate, expectedConfiguration);
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                 });
 
@@ -182,6 +274,512 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/ShippingMo
 
                 it("should call the trigger function on the content", function () {
                     expect(actualContent.trigger).toHaveBeenCalledWith("create");
+                });
+            });
+
+            describe("has a getConfiguration function that", function () {
+                it("is defined", function () {
+                    expect(cardShippingView.getConfiguration).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardShippingView.getConfiguration).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the Company does NOT have any auth profiles", function () {
+                    var emptyCollection = new Backbone.Collection(),
+                        actualConfiguration;
+
+                    beforeEach(function () {
+                        userModel.get("selectedCompany").set("authorizationProfiles", emptyCollection);
+
+                        actualConfiguration = cardShippingView.getConfiguration();
+                    });
+
+                    it("should return the expected result", function () {
+                        var expectedConfiguration = {
+                            shipping: utils._.extend({}, utils.deepClone(globals.cardShipping.configuration))
+                        };
+
+                        expectedConfiguration.shipping.ableToContinue = false;
+                        expectedConfiguration.shipping.unableToContinueMessage =
+                            globals.cardAdd.constants.NO_AUTH_PROFILES_MESSAGE;
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
+                });
+
+                describe("when the Company has auth profiles", function () {
+                    var collection = new Backbone.Collection(),
+                        actualConfiguration;
+
+                    beforeEach(function () {
+                        var model = new Backbone.Model();
+                        model.set({
+                            "id": 1435613456,
+                            "name": "Mock Name"
+                        });
+                        collection.add(model);
+                        userModel.get("selectedCompany").set("authorizationProfiles", collection);
+
+                        actualConfiguration = cardShippingView.getConfiguration();
+                    });
+
+                    it("should return the expected result", function () {
+                        var expectedConfiguration = {
+                                shipping: utils._.extend({}, utils.deepClone(globals.cardShipping.configuration))
+                            },
+                            user = userModel.toJSON(),
+                            shippingMethodListValues = [],
+                            residenceListValues = [],
+                            stateListValues = [];
+
+                        expectedConfiguration.shipping.ableToContinue = true;
+
+                        utils._.each(user.selectedCompany.shippingMethods, function (shippingMethod) {
+                            shippingMethodListValues.push({
+                                "id": shippingMethod.id,
+                                "name": shippingMethod.formattedName()
+                            });
+                        });
+
+                        utils._.each(globals.APP.constants.STATES, function (state) {
+                            stateListValues.push(state);
+                        });
+
+                        expectedConfiguration.shipping.shippingMethod.enabled = shippingMethodListValues.length > 1;
+                        expectedConfiguration.shipping.shippingMethod.values = shippingMethodListValues;
+
+                        expectedConfiguration.shipping.firstName.value = mockShippingModel.firstName;
+                        expectedConfiguration.shipping.lastName.value = mockShippingModel.lastName;
+                        expectedConfiguration.shipping.companyName.value = mockShippingModel.companyName;
+                        expectedConfiguration.shipping.addressLine1.value = mockShippingModel.addressLine1;
+                        expectedConfiguration.shipping.addressLine2.value = mockShippingModel.addressLine2;
+                        expectedConfiguration.shipping.city.value = mockShippingModel.city;
+
+                        expectedConfiguration.shipping.state.enabled = stateListValues.length > 1;
+                        expectedConfiguration.shipping.state.values = stateListValues;
+
+                        expectedConfiguration.shipping.postalCode.value = mockShippingModel.postalCode;
+
+                        residenceListValues.push({
+                            "id": "residence-yes",
+                            "label": "Yes",
+                            "selected": mockShippingModel.residence === true,
+                            "value": "true"
+                        });
+                        residenceListValues.push({
+                            "id": "residence-no",
+                            "label": "No",
+                            "selected": mockShippingModel.residence !== true,
+                            "value": "false"
+                        });
+                        expectedConfiguration.shipping.residence.values = residenceListValues;
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
+                });
+            });
+
+            describe("has a getAddDetailsConfiguration function that", function () {
+                it("is defined", function () {
+                    expect(cardShippingView.getAddDetailsConfiguration).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardShippingView.getAddDetailsConfiguration).toEqual(jasmine.any(Function));
+                });
+
+                it("should return the expected result", function () {
+                    var expectedConfiguration = {
+                            "message": null,
+                            "card": null,
+                            "requiredFields": null
+                        },
+                        actualConfiguration,
+                        addCardResponse = {
+                            "message": "Mock Message",
+                            "data": {
+                                number: 13465,
+                                authorizationProfileName: "Auth Profile",
+                                status: "Active",
+                                department: {
+                                    id: "134613456",
+                                    name: "UNASSIGNED",
+                                    visible: true
+                                },
+                                customVehicleId: "Custom Vehicle Id",
+                                vehicleDescription: "Vehicle Description",
+                                licensePlateNumber: "1234567",
+                                licensePlateState: "ME",
+                                vin: "12345678901234567"
+                            }
+                        };
+
+                    expectedConfiguration.message = addCardResponse.message;
+
+                    expectedConfiguration.card = utils._.extend({},
+                        utils.deepClone(globals.cardAddedDetails.configuration));
+                    expectedConfiguration.card.id.value = addCardResponse.data.number;
+                    expectedConfiguration.card.customVehicleId.value = addCardResponse.data.customVehicleId;
+                    expectedConfiguration.card.vehicleDescription.value = addCardResponse.data.vehicleDescription;
+                    expectedConfiguration.card.licensePlateNumber.value = addCardResponse.data.licensePlateNumber;
+                    expectedConfiguration.card.shipping.method.value = mockShippingModel.shippingMethod.name;
+                    expectedConfiguration.card.shipping.address.firstName.value = mockShippingModel.firstName;
+                    expectedConfiguration.card.shipping.address.lastName.value = mockShippingModel.lastName;
+                    expectedConfiguration.card.shipping.address.companyName.value = mockShippingModel.companyName;
+                    expectedConfiguration.card.shipping.address.addressLine1.value = mockShippingModel.addressLine1;
+                    expectedConfiguration.card.shipping.address.addressLine2.value = mockShippingModel.addressLine2;
+                    expectedConfiguration.card.shipping.address.city.value = mockShippingModel.city;
+                    expectedConfiguration.card.shipping.address.state.value = mockShippingModel.state;
+                    expectedConfiguration.card.shipping.address.postalCode.value = mockShippingModel.postalCode;
+                    expectedConfiguration.card.shipping.residence.value = (mockShippingModel.residence.name === true) ?
+                        globals.cardAddedDetails.constants.RESIDENCE_YES : globals.cardAddedDetails.constants.RESIDENCE_NO;
+
+                    expectedConfiguration.requiredFields = userModel.get("selectedCompany").get("requiredFields");
+
+                    actualConfiguration = cardShippingView.getAddDetailsConfiguration(addCardResponse);
+
+                    expect(actualConfiguration).toEqual(expectedConfiguration);
+                });
+            });
+
+            describe("has an resetModel function that", function () {
+                var shippingMethod,
+                    defaultShippingAddress;
+
+                beforeEach(function () {
+                    shippingMethod = userModel.get("selectedCompany").get("shippingMethods").at(0);
+                    defaultShippingAddress = userModel.get("selectedCompany").get("defaultShippingAddress").toJSON();
+
+                    spyOn(cardShippingView, "findDefaultShippingMethod").and.returnValue(shippingMethod);
+                    spyOn(cardShippingView.model, "set").and.callFake(function () {});
+
+                    cardShippingView.resetModel();
+                });
+
+                it("is defined", function () {
+                    expect(cardShippingView.resetModel).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardShippingView.resetModel).toEqual(jasmine.any(Function));
+                });
+
+                it("should call findDefaultShippingMethod", function () {
+                    expect(cardShippingView.findDefaultShippingMethod).toHaveBeenCalledWith();
+                });
+
+                it("should set shippingMethod on the model", function () {
+                    expect(cardShippingView.model.set).toHaveBeenCalledWith("shippingMethod", shippingMethod);
+                });
+
+                it("should set firstName on the model", function () {
+                    expect(cardShippingView.model.set)
+                        .toHaveBeenCalledWith("firstName", defaultShippingAddress.firstName);
+                });
+
+                it("should set lastName on the model", function () {
+                    expect(cardShippingView.model.set)
+                        .toHaveBeenCalledWith("lastName", defaultShippingAddress.lastName);
+                });
+
+                it("should set companyName on the model", function () {
+                    expect(cardShippingView.model.set)
+                        .toHaveBeenCalledWith("companyName", defaultShippingAddress.companyName);
+                });
+
+                it("should set addressLine1 on the model", function () {
+                    expect(cardShippingView.model.set)
+                        .toHaveBeenCalledWith("addressLine1", defaultShippingAddress.addressLine1);
+                });
+
+                it("should set addressLine2 on the model", function () {
+                    expect(cardShippingView.model.set)
+                        .toHaveBeenCalledWith("addressLine2", defaultShippingAddress.addressLine2);
+                });
+
+                it("should set city on the model", function () {
+                    expect(cardShippingView.model.set)
+                        .toHaveBeenCalledWith("city", defaultShippingAddress.city);
+                });
+
+                it("should set state on the model", function () {
+                    expect(cardShippingView.model.set)
+                        .toHaveBeenCalledWith("state", defaultShippingAddress.state);
+                });
+
+                it("should set postalCode on the model", function () {
+                    expect(cardShippingView.model.set)
+                        .toHaveBeenCalledWith("postalCode", defaultShippingAddress.postalCode);
+                });
+
+                it("should set countryCode on the model", function () {
+                    expect(cardShippingView.model.set)
+                        .toHaveBeenCalledWith("countryCode", defaultShippingAddress.countryCode);
+                });
+
+                it("should set residence on the model", function () {
+                    expect(cardShippingView.model.set)
+                        .toHaveBeenCalledWith("residence", defaultShippingAddress.residence);
+                });
+            });
+
+            describe("has a findDefaultShippingMethod function that", function () {
+                var mockShippingMethod = {
+                        id: "134613456",
+                        name: "UNASSIGNED",
+                        visible: true
+                    },
+                    shippingMethods;
+
+                beforeEach(function () {
+                    shippingMethods = userModel.get("selectedCompany").get("shippingMethods");
+                    spyOn(shippingMethods, "findWhere").and.returnValue(mockShippingMethod);
+                });
+
+                it("is defined", function () {
+                    expect(cardShippingView.findDefaultShippingMethod).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardShippingView.findDefaultShippingMethod).toEqual(jasmine.any(Function));
+                });
+
+                it("should call findWhere on the shippingMethods collection", function () {
+                    cardShippingView.findDefaultShippingMethod();
+
+                    expect(shippingMethods.findWhere).toHaveBeenCalledWith(
+                        {
+                            "id": globals.cardShipping.constants.DEFAULT_SHIPPING_METHOD_NAME
+                        }
+                    );
+                });
+
+                it("should return the expected value", function () {
+                    var actualValue = cardShippingView.findDefaultShippingMethod();
+
+                    expect(actualValue).toEqual(mockShippingMethod);
+                });
+            });
+
+            describe("has a findShippingMethod function that", function () {
+                var mockShippingMethodId = "25621354",
+                    mockShippingMethod = {
+                        id: "134613456",
+                        name: "UNASSIGNED",
+                        visible: true
+                    },
+                    shippingMethods;
+
+                beforeEach(function () {
+                    shippingMethods = userModel.get("selectedCompany").get("shippingMethods");
+                    spyOn(shippingMethods, "findWhere").and.returnValue(mockShippingMethod);
+                });
+
+                it("is defined", function () {
+                    expect(cardShippingView.findShippingMethod).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardShippingView.findShippingMethod).toEqual(jasmine.any(Function));
+                });
+
+                it("should call findWhere on the shippingMethods collection", function () {
+                    cardShippingView.findShippingMethod(mockShippingMethodId);
+
+                    expect(shippingMethods.findWhere).toHaveBeenCalledWith(
+                        {
+                            "id": mockShippingMethodId
+                        }
+                    );
+                });
+
+                it("should return the expected value", function () {
+                    var actualValue = cardShippingView.findShippingMethod(mockShippingMethodId);
+
+                    expect(actualValue).toEqual(mockShippingMethod);
+                });
+            });
+
+            describe("has a handleInputChanged function that", function () {
+                it("is defined", function () {
+                    expect(cardShippingView.handleInputChanged).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardShippingView.handleInputChanged).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the target name is shippingMethod", function () {
+                    var mockEvent = {
+                            "target"    : {
+                                "name"  : "shippingMethod",
+                                "value" : "mock shipping method id"
+                            }
+                        },
+                        mockShippingMethod = {
+                            id: "134613456",
+                            name: "UNASSIGNED",
+                            visible: true
+                        };
+
+                    beforeEach(function () {
+                        spyOn(cardShippingView, "findShippingMethod").and.returnValue(mockShippingMethod);
+                        spyOn(cardShippingView, "updateAttribute").and.callFake(function () {});
+
+                        cardShippingView.handleInputChanged(mockEvent);
+                    });
+
+                    it("should call findShippingMethod", function () {
+                        expect(cardShippingView.findShippingMethod).toHaveBeenCalledWith(mockEvent.target.value);
+                    });
+
+                    it("should call updateAttribute", function () {
+                        expect(cardShippingView.updateAttribute).toHaveBeenCalledWith("shippingMethod", mockShippingMethod);
+                    });
+                });
+
+                describe("when the target name is NOT shippingMethod", function () {
+                    it("should call updateAttribute on super", function () {
+                        var mockEvent = {
+                            "target"            : {
+                                "name"  : "target_name",
+                                "value" : "target_value"
+                            }
+                        };
+
+                        spyOn(CardShippingView.__super__, "handleInputChanged").and.callThrough();
+                        cardShippingView.handleInputChanged(mockEvent);
+
+                        expect(CardShippingView.__super__.handleInputChanged).toHaveBeenCalledWith(mockEvent);
+                    });
+                });
+            });
+
+            describe("has a submitForm function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    cardShippingView.cardModel = cardModel;
+                });
+
+                it("is defined", function () {
+                    expect(cardShippingView.submitForm).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardShippingView.submitForm).toEqual(jasmine.any(Function));
+                });
+
+                describe("when validate returns errors", function () {
+                    var mockErrors = [
+                        {
+                            error: "asdfgasdf"
+                        }
+                    ];
+                    beforeEach(function () {
+                        spyOn(mockEvent, "preventDefault").and.callThrough();
+                        spyOn(shippingModel, "validate").and.returnValue(mockErrors);
+                        spyOn(cardShippingView, "handleValidationError").and.callFake(function () {});
+                        spyOn(cardModel, "add").and.callFake(function () { });
+                        spyOn(cardShippingView, "trigger").and.callFake(function () {});
+
+                        cardShippingView.submitForm(mockEvent);
+                    });
+
+                    it("should call event.preventDefault", function () {
+                        expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                    });
+
+                    it("should call validate on the ShippingModel", function () {
+                        expect(shippingModel.validate).toHaveBeenCalledWith();
+                    });
+
+                    it("should call handleValidationError", function () {
+                        expect(cardShippingView.handleValidationError).toHaveBeenCalledWith(shippingModel, mockErrors);
+                    });
+
+                    it("should NOT call add on the CardModel", function () {
+                        expect(cardModel.add).not.toHaveBeenCalled();
+                    });
+                });
+
+                describe("when validate does NOT return errors", function () {
+                    beforeEach(function () {
+                        spyOn(mockEvent, "preventDefault").and.callThrough();
+                        spyOn(shippingModel, "validate").and.returnValue();
+                        spyOn(cardShippingView, "handleValidationError").and.callFake(function () {});
+                        spyOn(cardModel, "add").and.callFake(function () { });
+
+                        cardShippingView.submitForm(mockEvent);
+                    });
+
+                    it("should call event.preventDefault", function () {
+                        expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                    });
+
+                    it("should call validate on the ShippingModel", function () {
+                        expect(shippingModel.validate).toHaveBeenCalledWith();
+                    });
+
+                    it("should NOT call handleValidationError", function () {
+                        expect(cardShippingView.handleValidationError).not.toHaveBeenCalled();
+                    });
+
+                    describe("when calling add() on the model", function () {
+                        var mockAddDetailsConfiguration = utils._.extend({},
+                            utils.deepClone(globals.cardAddedDetails.configuration));
+
+                        it("should send 2 arguments", function () {
+                            expect(cardModel.add).toHaveBeenCalled();
+                            expect(cardModel.add.calls.argsFor(0).length).toEqual(2);
+                            expect(cardModel.add.calls.argsFor(0)[0]).toEqual(shippingModel.toJSON());
+                        });
+
+                        describe("sends as the seconds argument the options object with a success callback that",
+                            function () {
+                                var response = {},
+                                    model,
+                                    options,
+                                    mockMustacheRenderReturnValue = "Render return value";
+
+                                beforeEach(function () {
+                                    spyOn(mockMustache, "render").and.returnValue(mockMustacheRenderReturnValue);
+                                    spyOn(cardShippingView, "getAddDetailsConfiguration").and
+                                        .returnValue(mockAddDetailsConfiguration);
+                                    spyOn(cardShippingView, "trigger").and.callFake(function () { });
+                                    spyOn(cardShippingView, "resetForm").and.callFake(function () { });
+
+                                    options = cardModel.add.calls.mostRecent().args[1];
+                                    options.success.call(cardShippingView, model, response);
+                                });
+
+                                it("should call getAddDetailsConfiguration", function () {
+                                    expect(cardShippingView.getAddDetailsConfiguration).toHaveBeenCalledWith(response);
+                                });
+
+                                it("should call Mustache.render() on the addDetailsTemplate", function () {
+                                    expect(mockMustache.render).toHaveBeenCalled();
+                                    expect(mockMustache.render.calls.argsFor(0).length).toEqual(2);
+                                    expect(mockMustache.render.calls.argsFor(0)[0])
+                                        .toEqual(cardShippingView.addDetailsTemplate);
+                                    expect(mockMustache.render.calls.argsFor(0)[1])
+                                        .toEqual(mockAddDetailsConfiguration);
+                                });
+
+                                it("should trigger cardAddSuccess", function () {
+                                    expect(cardShippingView.trigger)
+                                        .toHaveBeenCalledWith("cardAddSuccess", mockMustacheRenderReturnValue);
+                                });
+
+                                it("should call resetForm", function () {
+                                    expect(cardShippingView.resetForm).toHaveBeenCalledWith();
+                                });
+                            });
+                    });
                 });
             });
         });

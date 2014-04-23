@@ -73,6 +73,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
             beforeEach(function (done) {
                 squire.require(["views/CardAddView"], function (JasmineCardAddView) {
+                    var authorizationProfiles;
+
                     //TODO - Fix - Loading fixtures causes phantomjs to hang
                     if (window._phantom === undefined) {
                         loadFixtures("index.html");
@@ -80,6 +82,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                     cardModel.initialize(mockCardModel);
                     userModel.initialize(mockUserModel);
+                    authorizationProfiles = new Backbone.Collection();
+                    userModel.get("selectedCompany").set("authorizationProfiles", authorizationProfiles);
 
                     CardAddView = JasmineCardAddView;
                     cardAddView = new CardAddView({
@@ -181,6 +185,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     spyOn(cardAddView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();
+                    spyOn(cardAddView, "resetModel").and.callFake(function () { });
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(cardAddView, "getConfiguration").and.callFake(function () { return expectedConfiguration; });
                     spyOn(cardAddView, "formatRequiredFields").and.callThrough();
@@ -194,6 +199,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                 it("is a function", function () {
                     expect(cardAddView.render).toEqual(jasmine.any(Function));
+                });
+
+                it("should call resetModel", function () {
+                    expect(cardAddView.resetModel).toHaveBeenCalledWith();
                 });
 
                 it("should call getConfiguration", function () {
@@ -260,14 +269,24 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
             describe("has an resetForm function that", function () {
                 var mockDepartment = {
-                    id: "134613456",
-                    name: "UNASSIGNED",
-                    visible: true
-                };
+                        id: "134613456",
+                        name: "UNASSIGNED",
+                        visible: true
+                    },
+                    mockAuthorizationProfileModel = {
+                        id     : 2457624567,
+                        name   : "Mock Name",
+                        productRestriction: 2134
+                    },
+                    authorizationProfileModel;
 
                 beforeEach(function () {
+                    authorizationProfileModel = new Backbone.Model();
+                    authorizationProfileModel.set(mockAuthorizationProfileModel);
+
                     spyOn(CardAddView.__super__, "resetForm").and.callFake(function () {});
                     spyOn(cardAddView, "findDefaultDepartment").and.returnValue(mockDepartment);
+                    spyOn(cardAddView, "findDefaultAuthorizationProfile").and.returnValue(authorizationProfileModel);
                     spyOn(cardAddView.model, "set").and.callFake(function () {});
 
                     cardAddView.resetForm();
@@ -289,8 +308,17 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(cardAddView.findDefaultDepartment).toHaveBeenCalledWith();
                 });
 
-                it("should call set on the model", function () {
+                it("should set department on the model", function () {
                     expect(cardAddView.model.set).toHaveBeenCalledWith("department", mockDepartment);
+                });
+
+                it("should call findDefaultAuthorizationProfile", function () {
+                    expect(cardAddView.findDefaultAuthorizationProfile).toHaveBeenCalledWith();
+                });
+
+                it("should set authorizationProfileName on the model", function () {
+                    expect(cardAddView.model.set)
+                        .toHaveBeenCalledWith("authorizationProfileName", mockAuthorizationProfileModel.name);
                 });
             });
 
@@ -359,7 +387,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                         utils._.each(user.selectedCompany.authorizationProfiles, function (authorizationProfile) {
                             authorizationProfileListValues.push({
-                                "id": authorizationProfile.id,
+                                "id": authorizationProfile.name,
                                 "name": authorizationProfile.name
                             });
                         });
@@ -413,6 +441,40 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                         expect(actualConfiguration).toEqual(expectedConfiguration);
                     });
+                });
+            });
+
+            describe("has a findDefaultAuthorizationProfile function that", function () {
+                var mockAuthorizationProfileModel = {
+                        id     : 2457624567,
+                        name   : "Mock Name",
+                        productRestriction: 2134
+                    },
+                    authorizationProfiles;
+
+                beforeEach(function () {
+                    authorizationProfiles = userModel.get("selectedCompany").get("authorizationProfiles");
+                    spyOn(authorizationProfiles, "at").and.returnValue(mockAuthorizationProfileModel);
+                });
+
+                it("is defined", function () {
+                    expect(cardAddView.findDefaultAuthorizationProfile).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardAddView.findDefaultAuthorizationProfile).toEqual(jasmine.any(Function));
+                });
+
+                it("should call at on the departments collection", function () {
+                    cardAddView.findDefaultAuthorizationProfile();
+
+                    expect(authorizationProfiles.at).toHaveBeenCalledWith(0);
+                });
+
+                it("should return the expected value", function () {
+                    var actualValue = cardAddView.findDefaultAuthorizationProfile();
+
+                    expect(actualValue).toEqual(mockAuthorizationProfileModel);
                 });
             });
 
@@ -626,6 +688,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     beforeEach(function () {
                         spyOn(cardModel, "validate").and.returnValue(mockErrors);
                         spyOn(cardAddView, "handleValidationError").and.callFake(function () {});
+                        spyOn(cardAddView, "trigger").and.callFake(function () {});
 
                         cardAddView.submitForm(mockEvent);
                     });
@@ -637,12 +700,17 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     it("should call handleValidationError", function () {
                         expect(cardAddView.handleValidationError).toHaveBeenCalledWith(cardModel, mockErrors);
                     });
+
+                    it("should NOT trigger cardAddSubmitted", function () {
+                        expect(cardAddView.trigger).not.toHaveBeenCalled();
+                    });
                 });
 
                 describe("when validate does NOT return errors", function () {
                     beforeEach(function () {
                         spyOn(cardModel, "validate").and.returnValue();
                         spyOn(cardAddView, "handleValidationError").and.callFake(function () {});
+                        spyOn(cardAddView, "trigger").and.callFake(function () {});
 
                         cardAddView.submitForm(mockEvent);
                     });
@@ -653,6 +721,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                     it("should NOT call handleValidationError", function () {
                         expect(cardAddView.handleValidationError).not.toHaveBeenCalled();
+                    });
+
+                    it("should trigger cardAddSubmitted", function () {
+                        expect(cardAddView.trigger).toHaveBeenCalledWith("cardAddSubmitted");
                     });
                 });
             });

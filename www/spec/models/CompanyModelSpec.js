@@ -807,13 +807,15 @@ define(["Squire", "utils", "globals", "backbone"],
                                     id: "134613456",
                                     name: "UNASSIGNED",
                                     cost: 3.14,
-                                    poBoxAllowed: true
+                                    poBoxAllowed: true,
+                                    formattedName: null
                                 },
                                 {
                                     id: "2456724567",
                                     name: "Dewey, Cheetum and Howe",
                                     cost: 6.66,
-                                    poBoxAllowed: false
+                                    poBoxAllowed: false,
+                                    formattedName: null
                                 }
                             ],
                             requiredFields: companyModel.defaults.requiredFields
@@ -821,6 +823,10 @@ define(["Squire", "utils", "globals", "backbone"],
                         companyModel.clear();
                         companyModel.initialize(mockCompanyModel);
                         shippingMethods = companyModel.get("shippingMethods");
+                        // Wipe out the formattedName attribute that is added in the initialize function
+                        shippingMethods.each(function (shippingMethod) {
+                            shippingMethod.set("formattedName", null);
+                        });
 
                         spyOn(shippingMethods, "toJSON").and.callThrough();
                         spyOn(companyModel.__proto__, "toJSON").and.callThrough();
