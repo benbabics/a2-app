@@ -57,6 +57,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
 
             getConfiguration: function () {
                 var user = this.userModel.toJSON(),
+                    driverSettings = user.selectedCompany.settings.driverSettings,
                     driverConfiguration = utils._.extend({}, utils.deepClone(globals.driverAdd.configuration)),
                     departmentListValues = [];
 
@@ -71,21 +72,19 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
                 });
 
                 driverConfiguration.firstName.value = this.model.get("firstName");
-                driverConfiguration.firstName.maxLength =
-                    user.selectedCompany.settings.driverSettings.firstNameMaxLength;
+                driverConfiguration.firstName.maxLength = driverSettings.firstNameMaxLength;
 
                 driverConfiguration.middleName.value = this.model.get("middleName");
-                driverConfiguration.middleName.maxLength =
-                    user.selectedCompany.settings.driverSettings.middleNameMaxLength;
+                driverConfiguration.middleName.maxLength = driverSettings.middleNameMaxLength;
 
                 driverConfiguration.lastName.value = this.model.get("lastName");
-                driverConfiguration.lastName.maxLength = user.selectedCompany.settings.driverSettings.lastNameMaxLength;
+                driverConfiguration.lastName.maxLength = driverSettings.lastNameMaxLength;
 
-                driverConfiguration.id.maxLength = user.selectedCompany.settings.driverSettings.idFixedLength;
+                driverConfiguration.id.maxLength = driverSettings.idFixedLength;
                 driverConfiguration.id.value = this.model.get("id");
                 driverConfiguration.id.placeholder =
                     Mustache.render(globals.driver.constants.DRIVER_ID_PLACEHOLDER_FORMAT, {
-                        "idFixedLength": user.selectedCompany.settings.driverSettings.idFixedLength
+                        "idFixedLength": driverSettings.idFixedLength
                     });
                 driverConfiguration.departmentId.enabled = departmentListValues.length > 1;
                 driverConfiguration.departmentId.values = departmentListValues;
