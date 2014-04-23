@@ -88,12 +88,12 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
             },
 
             setRequiredFields: function (requiredFieldsList) {
-                var i,
+                var index,
                     newRequiredFields = this.defaults.requiredFields; // start with the defaults
 
                 // Set only the required fields from the list to true
-                for (i = 0; i < requiredFieldsList.length; i++) {
-                    newRequiredFields[requiredFieldsList[i]] = true;
+                for (index = 0; index < requiredFieldsList.length; index++) {
+                    newRequiredFields[requiredFieldsList[index]] = true;
                 }
 
                 this.set("requiredFields", newRequiredFields);
