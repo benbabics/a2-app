@@ -56,6 +56,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
             getConfiguration: function () {
                 var cardConfiguration = utils._.extend({}, utils.deepClone(globals.cardAdd.configuration)),
                     user = this.userModel.toJSON(),
+                    cardSettings = user.selectedCompany.settings.cardSettings,
                     authorizationProfileListValues = [],
                     departmentListValues = [],
                     stateListValues = [];
@@ -88,23 +89,20 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                     });
 
                     cardConfiguration.customVehicleId.value = this.model.get("customVehicleId");
-                    cardConfiguration.customVehicleId.maxLength =
-                        user.selectedCompany.settings.cardSettings.customVehicleIdMaxLength;
+                    cardConfiguration.customVehicleId.maxLength = cardSettings.customVehicleIdMaxLength;
 
                     cardConfiguration.vehicleDescription.value = this.model.get("vehicleDescription");
-                    cardConfiguration.vehicleDescription.maxLength =
-                        user.selectedCompany.settings.cardSettings.vehicleDescriptionMaxLength;
+                    cardConfiguration.vehicleDescription.maxLength = cardSettings.vehicleDescriptionMaxLength;
 
                     cardConfiguration.vin.value = this.model.get("vin");
-                    cardConfiguration.vin.maxLength = user.selectedCompany.settings.cardSettings.vinFixedLength;
+                    cardConfiguration.vin.maxLength = cardSettings.vinFixedLength;
                     cardConfiguration.vin.placeholder =
                         Mustache.render(globals.card.constants.VIN_PLACEHOLDER_FORMAT, {
-                            "vinFixedLength": user.selectedCompany.settings.cardSettings.vinFixedLength
+                            "vinFixedLength": cardSettings.vinFixedLength
                         });
 
                     cardConfiguration.licensePlateNumber.value = this.model.get("licensePlateNumber");
-                    cardConfiguration.licensePlateNumber.maxLength =
-                        user.selectedCompany.settings.cardSettings.licensePlateNumberMaxLength;
+                    cardConfiguration.licensePlateNumber.maxLength = cardSettings.licensePlateNumberMaxLength;
 
                     cardConfiguration.licensePlateState.enabled = stateListValues.length > 1;
                     cardConfiguration.licensePlateState.values = stateListValues;
