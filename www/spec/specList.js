@@ -6,6 +6,7 @@ var specList =
         "spec/views/AppViewSpec.js",
         "spec/views/CardAddViewSpec.js",
         "spec/views/CardDetailViewSpec.js",
+        "spec/views/CardEditViewSpec.js",
         "spec/views/CardListViewSpec.js",
         "spec/views/CardSearchViewSpec.js",
         "spec/views/CardShippingViewSpec.js",
