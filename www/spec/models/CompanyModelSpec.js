@@ -6,6 +6,7 @@ define(["Squire", "utils", "globals", "backbone"],
         var squire = new Squire(),
             mockUtils = utils,
             mockAuthorizationProfileCollection = new Backbone.Collection(),
+            CompanyModel,
             companyModel;
 
         squire.mock("backbone", Backbone);
@@ -15,7 +16,8 @@ define(["Squire", "utils", "globals", "backbone"],
 
         describe("A Company Model", function () {
             beforeEach(function (done) {
-                squire.require(["models/CompanyModel"], function (CompanyModel) {
+                squire.require(["models/CompanyModel"], function (JasmineCompanyModel) {
+                    CompanyModel = JasmineCompanyModel;
                     companyModel = new CompanyModel();
 
                     done();
@@ -528,13 +530,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         departments = companyModel.get("departments");
 
                         spyOn(departments, "toJSON").and.callThrough();
-                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companyModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should call toJSON on departments", function () {
@@ -560,13 +562,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         companyModel.clear();
                         companyModel.initialize(mockCompanyModel);
 
-                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companyModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should return the expected value", function () {
@@ -606,13 +608,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         settings = companyModel.get("settings");
 
                         spyOn(settings, "toJSON").and.callThrough();
-                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companyModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should call toJSON on settings", function () {
@@ -638,13 +640,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         companyModel.clear();
                         companyModel.initialize(mockCompanyModel);
 
-                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companyModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should return the expected value", function () {
@@ -671,13 +673,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         companyModel.set("authorizationProfiles", authorizationProfiles);
 
                         spyOn(authorizationProfiles, "toJSON").and.callThrough();
-                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companyModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should call toJSON on authorizationProfiles", function () {
@@ -703,13 +705,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         companyModel.clear();
                         companyModel.initialize(mockCompanyModel);
 
-                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companyModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should return the expected value", function () {
@@ -746,13 +748,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         defaultShippingAddress = companyModel.get("defaultShippingAddress");
 
                         spyOn(defaultShippingAddress, "toJSON").and.callThrough();
-                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companyModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should call toJSON on defaultShippingAddress", function () {
@@ -778,13 +780,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         companyModel.clear();
                         companyModel.initialize(mockCompanyModel);
 
-                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companyModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should return the expected value", function () {
@@ -829,13 +831,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         });
 
                         spyOn(shippingMethods, "toJSON").and.callThrough();
-                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companyModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should call toJSON on shippingMethods", function () {
@@ -861,13 +863,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         companyModel.clear();
                         companyModel.initialize(mockCompanyModel);
 
-                        spyOn(companyModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companyModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companyModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should return the expected value", function () {

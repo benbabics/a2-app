@@ -4,7 +4,6 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
         "use strict";
 
         var squire = new Squire(),
-            UserModel,
             userModel;
 
         squire.mock("backbone", Backbone);
@@ -12,8 +11,7 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
 
         describe("A User Model", function () {
             beforeEach(function (done) {
-                squire.require(["models/UserModel"], function (JasmineUserModel) {
-                    UserModel = JasmineUserModel;
+                squire.require(["models/UserModel"], function (UserModel) {
                     userModel = UserModel.getInstance();
 
                     done();
@@ -349,13 +347,13 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                         selectedCompany = userModel.get("selectedCompany");
 
                         spyOn(selectedCompany, "toJSON").and.callThrough();
-                        spyOn(userModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(userModel.__proto__.constructor.__super__, "toJSON").and.callThrough();
 
                         actualValue = userModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(userModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(userModel.__proto__.constructor.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should call toJSON on selectedCompany", function () {
@@ -381,13 +379,13 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                         userModel.clear();
                         userModel.initialize(mockUserModel);
 
-                        spyOn(userModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(userModel.__proto__.constructor.__super__, "toJSON").and.callThrough();
 
                         actualValue = userModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(userModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(userModel.__proto__.constructor.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should return the expected value", function () {

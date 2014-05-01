@@ -4,13 +4,15 @@ define(["Squire", "utils", "globals", "backbone"],
         "use strict";
 
         var squire = new Squire(),
+            CompanySettingsModel,
             companySettingsModel;
 
         squire.mock("backbone", Backbone);
 
         describe("A Company Settings Model", function () {
             beforeEach(function (done) {
-                squire.require(["models/CompanySettingsModel"], function (CompanySettingsModel) {
+                squire.require(["models/CompanySettingsModel"], function (JasmineCompanySettingsModel) {
+                    CompanySettingsModel = JasmineCompanySettingsModel;
                     companySettingsModel = new CompanySettingsModel();
 
                     done();
@@ -165,13 +167,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         cardSettings = companySettingsModel.get("cardSettings");
 
                         spyOn(cardSettings, "toJSON").and.callThrough();
-                        spyOn(companySettingsModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanySettingsModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companySettingsModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companySettingsModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanySettingsModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should call toJSON on cardSettings", function () {
@@ -192,13 +194,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         companySettingsModel.clear();
                         companySettingsModel.initialize(mockCompanySettingsModel);
 
-                        spyOn(companySettingsModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanySettingsModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companySettingsModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companySettingsModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanySettingsModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should return the expected value", function () {
@@ -232,13 +234,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         driverSettings = companySettingsModel.get("driverSettings");
 
                         spyOn(driverSettings, "toJSON").and.callThrough();
-                        spyOn(companySettingsModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanySettingsModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companySettingsModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companySettingsModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanySettingsModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should call toJSON on driverSettings", function () {
@@ -267,13 +269,13 @@ define(["Squire", "utils", "globals", "backbone"],
                         companySettingsModel.clear();
                         companySettingsModel.initialize(mockCompanySettingsModel);
 
-                        spyOn(companySettingsModel.__proto__, "toJSON").and.callThrough();
+                        spyOn(CompanySettingsModel.__super__, "toJSON").and.callThrough();
 
                         actualValue = companySettingsModel.toJSON();
                     });
 
                     it("should call toJSON on super", function () {
-                        expect(companySettingsModel.__proto__.toJSON).toHaveBeenCalledWith();
+                        expect(CompanySettingsModel.__super__.toJSON).toHaveBeenCalledWith();
                     });
 
                     it("should return the expected value", function () {
