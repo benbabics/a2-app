@@ -59,6 +59,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                 }
             }),
             formModel = new MockModel(),
+            ValidationFormView,
             validationFormView;
 
         squire.mock("facade", mockFacade);
@@ -67,7 +68,8 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
 
         describe("A Validation Form View", function () {
             beforeEach(function (done) {
-                squire.require(["views/ValidationFormView"], function (ValidationFormView) {
+                squire.require(["views/ValidationFormView"], function (JasmineValidationFormView) {
+                    ValidationFormView = JasmineValidationFormView;
                     validationFormView = new ValidationFormView({
                         model: formModel
                     });
@@ -96,6 +98,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
+                    spyOn(ValidationFormView.__super__, "initialize").and.callThrough();
                     spyOn(Backbone.Validation, "bind").and.callThrough();
                     spyOn(formModel, "on").and.callFake(function () { });
                     spyOn(mockMustache, "parse").and.callThrough();
@@ -113,8 +116,8 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     expect(validationFormView.initialize).toEqual(jasmine.any(Function));
                 });
 
-                it("should bind the Backbone.Validation", function () {
-                    expect(Backbone.Validation.bind).toHaveBeenCalledWith(validationFormView);
+                it("should call super()", function () {
+                    expect(ValidationFormView.__super__.initialize).toHaveBeenCalledWith();
                 });
 
                 it("should call utils._.bindAll", function () {
@@ -123,6 +126,35 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                     expect(mockUtils._.bindAll.calls.mostRecent().args.length).toEqual(2);
                     expect(mockUtils._.bindAll.calls.mostRecent().args[0]).toEqual(validationFormView);
                     expect(mockUtils._.bindAll.calls.mostRecent().args[1]).toEqual("handleValidationError");
+                });
+            });
+
+            describe("has a setModel function that", function () {
+                beforeEach(function () {
+                    spyOn(ValidationFormView.__super__, "setModel").and.callThrough();
+                    spyOn(Backbone.Validation, "bind").and.callThrough();
+                    spyOn(formModel, "on").and.callFake(function () { });
+                    spyOn(mockMustache, "parse").and.callThrough();
+                    spyOn(validationFormView, "pageCreate").and.callFake(function () { });
+                    spyOn(mockUtils._, "bindAll").and.callFake(function () { });
+
+                    validationFormView.setModel(formModel);
+                });
+
+                it("is defined", function () {
+                    expect(validationFormView.setModel).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(validationFormView.setModel).toEqual(jasmine.any(Function));
+                });
+
+                it("should call super()", function () {
+                    expect(ValidationFormView.__super__.setModel).toHaveBeenCalledWith(formModel);
+                });
+
+                it("should bind the Backbone.Validation", function () {
+                    expect(Backbone.Validation.bind).toHaveBeenCalledWith(validationFormView);
                 });
 
                 it("should register a function as the handler for the invalid event", function () {

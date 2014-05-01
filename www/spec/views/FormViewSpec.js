@@ -83,7 +83,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(formModel, "on").and.callFake(function () { });
+                    spyOn(formView, "setModel").and.callFake(function () { });
                     spyOn(mockMustache, "parse").and.callThrough();
                     spyOn(formView, "pageCreate").and.callFake(function () { });
                     spyOn(mockUtils._, "bindAll").and.callFake(function () { });
@@ -106,6 +106,34 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                     expect(mockUtils._.bindAll.calls.mostRecent().args[0]).toEqual(formView);
                     expect(mockUtils._.bindAll.calls.mostRecent().args[1]).toEqual("handleInputChanged");
                     expect(mockUtils._.bindAll.calls.mostRecent().args[2]).toEqual("submitForm");
+                });
+
+                it("should call setModel()", function () {
+                    expect(formView.setModel).toHaveBeenCalledWith(formModel);
+                });
+
+                it("should parse the template", function () {
+                    expect(mockMustache.parse).toHaveBeenCalledWith(formView.template);
+                });
+
+                it("should call pageCreate()", function () {
+                    expect(formView.pageCreate).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a setModel function that", function () {
+                beforeEach(function () {
+                    spyOn(formModel, "on").and.callFake(function () { });
+
+                    formView.setModel(formModel);
+                });
+
+                it("is defined", function () {
+                    expect(formView.initialize).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(formView.initialize).toEqual(jasmine.any(Function));
                 });
 
                 it("should register a function as the handler for the request event", function () {
@@ -138,14 +166,6 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                     eventHandler.apply(formView);
 
                     expect(formView.hideLoadingIndicator).toHaveBeenCalledWith(true);
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(formView.template);
-                });
-
-                it("should call pageCreate()", function () {
-                    expect(formView.pageCreate).toHaveBeenCalledWith();
                 });
             });
 

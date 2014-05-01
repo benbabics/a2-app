@@ -499,7 +499,12 @@ define(function (require) {
         "ERROR_VIN_INVALID_CHARACTERS": "VIN must contain only alphanumeric characters",
         "ERROR_LICENSE_PLATE_NUMBER_REQUIRED_FIELD"    : "License Plate Number must have a value",
         "ERROR_LICENSE_PLATE_NUMBER_INVALID_LENGTH"    : "License Plate Number cannot exceed {{maxLength}} characters",
-        "ERROR_LICENSE_PLATE_NUMBER_INVALID_CHARACTERS": "License Plate Number must contain only alphanumeric characters"
+        "ERROR_LICENSE_PLATE_NUMBER_INVALID_CHARACTERS": "License Plate Number must contain only alphanumeric characters",
+        "SELECT_STATE": {
+            id: "",
+            name: "Select State",
+            selected: true
+        }
     };
 
     /**
@@ -670,12 +675,7 @@ define(function (require) {
     globals.cardAdd = {};
     globals.cardAdd.constants = {
         "DEFAULT_DEPARTMENT_NAME": "UNASSIGNED",
-        "NO_AUTH_PROFILES_MESSAGE": "The account must have at least one profile set-up to add a card.",
-        "SELECT_STATE": {
-            id: "",
-            name: "Select State",
-            selected: true
-        }
+        "NO_AUTH_PROFILES_MESSAGE": "The account must have at least one profile set-up to add a card."
     };
     globals.cardAdd.configuration = {
         "ableToAddCard"         : null,
@@ -731,13 +731,13 @@ define(function (require) {
         }
     };
 
-    globals.cardAddedDetails = {};
-    globals.cardAddedDetails.constants = {
+    globals.cardChangedDetails = {};
+    globals.cardChangedDetails.constants = {
         "SUCCESS_TITLE": "Card Confirmation",
         "RESIDENCE_YES": "Yes",
         "RESIDENCE_NO": "No"
     };
-    globals.cardAddedDetails.configuration = {
+    globals.cardChangedDetails.configuration = {
         "id": {
             "label": "Card Number",
             "value": ""
@@ -790,6 +790,72 @@ define(function (require) {
                 "label": "Residence",
                 "value": ""
             }
+        }
+    };
+
+    /**
+     * Card Edit
+     */
+    globals.cardEdit = {};
+    globals.cardEdit.constants = {
+        "DEFAULT_DEPARTMENT_NAME": "UNASSIGNED",
+        "NO_AUTH_PROFILES_MESSAGE": "The account must have at least one profile set-up to edit a card."
+    };
+    globals.cardEdit.configuration = {
+        "ableToEditCard"         : null,
+        "unableToEditCardMessage": null,
+        "id": {
+            "label": "Card Number",
+            "value": ""
+        },
+        "customVehicleId": {
+            "label"      : "Customer Vehicle ID",
+            "name"       : "customVehicleId",
+            "maxLength"  : null,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "vehicleDescription": {
+            "label"      : "Vehicle Description",
+            "name"       : "vehicleDescription",
+            "maxLength"  : null,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "vin": {
+            "label"      : "VIN",
+            "name"       : "vin",
+            "maxLength"  : null,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "licensePlateNumber": {
+            "label"      : "License Plate Number",
+            "name"       : "licensePlateNumber",
+            "maxLength"  : null,
+            "placeholder": "",
+            "value"      : ""
+        },
+        "licensePlateState": {
+            "label"      : "License Plate State",
+            "name"       : "licensePlateState",
+            "enabled"    : true,
+            "values"     : []
+        },
+        "departmentId": {
+            "label"      : "Department",
+            "name"       : "departmentId",
+            "enabled"    : true,
+            "values"     : []
+        },
+        "authorizationProfileName": {
+            "label"      : "Profile Assignment",
+            "name"       : "authorizationProfileName",
+            "enabled"    : true,
+            "values"     : []
+        },
+        "submitButton": {
+            "label": "Next"
         }
     };
 

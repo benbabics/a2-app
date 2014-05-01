@@ -785,6 +785,112 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                 });
             });
 
+            describe("has an edit function that", function () {
+                var mockCardModel = {
+                        number: 13465,
+                        authorizationProfileName: "Auth Profile",
+                        status: "Active",
+                        department: {
+                            id: "134613456",
+                            name: "UNASSIGNED",
+                            visible: true
+                        },
+                        customVehicleId: "Custom Vehicle Id",
+                        vehicleDescription: "Vehicle Description",
+                        licensePlateNumber: "1234567",
+                        licensePlateState: "ME",
+                        vin: "12345678901234567"
+                    },
+                    shippingOptions = {
+                        "shippingMethod": {
+                            "id"          : "ID",
+                            "name"        : "Name",
+                            "cost"        : 6.66,
+                            "poBoxAllowed": true,
+                        },
+                        "firstName"   : "First Name",
+                        "lastName"    : "Last Name",
+                        "companyName" : "Company Name",
+                        "addressLine1": "Address Line 1",
+                        "addressLine2": "Address Line 2",
+                        "city"        : "City",
+                        "state"       : "State",
+                        "postalCode"  : "Postal Code",
+                        "countryCode" : "Country Code",
+                        "residence"   : true
+                    },
+                    options = {
+                        success: function () {}
+                    };
+
+                it("is defined", function () {
+                    expect(cardModel.edit).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardModel.edit).toEqual(jasmine.any(Function));
+                });
+
+                describe("when providing shipping options", function () {
+                    beforeEach(function () {
+                        spyOn(cardModel, "save").and.callFake(function () {});
+
+                        cardModel.initialize(mockCardModel);
+                        cardModel.edit(shippingOptions, options);
+                    });
+
+                    it("should call save", function () {
+                        var expectedOptions = utils._.extend({patch: true}, utils.deepClone(options)),
+                            expectedAttributes = {
+                                "customVehicleId"         : mockCardModel.customVehicleId,
+                                "vehicleDescription"      : mockCardModel.vehicleDescription,
+                                "vin"                     : mockCardModel.vin,
+                                "licensePlateNumber"      : mockCardModel.licensePlateNumber,
+                                "licensePlateState"       : mockCardModel.licensePlateState,
+                                "authorizationProfileName": mockCardModel.authorizationProfileName,
+                                "departmentId"            : mockCardModel.department.id,
+                                "shippingMethod"          : shippingOptions.shippingMethod.id,
+                                "firstName"               : shippingOptions.firstName,
+                                "lastName"                : shippingOptions.lastName,
+                                "companyName"             : shippingOptions.companyName,
+                                "address1"                : shippingOptions.addressLine1,
+                                "address2"                : shippingOptions.addressLine2,
+                                "city"                    : shippingOptions.city,
+                                "state"                   : shippingOptions.state,
+                                "postalCode"              : shippingOptions.postalCode,
+                                "countryCode"             : shippingOptions.countryCode,
+                                "residence"               : shippingOptions.residence
+                            };
+
+                        expect(cardModel.save).toHaveBeenCalledWith(expectedAttributes, expectedOptions);
+                    });
+                });
+
+                describe("when NOT providing shipping options", function () {
+                    beforeEach(function () {
+                        spyOn(cardModel, "save").and.callFake(function () {});
+
+                        cardModel.initialize(mockCardModel);
+                        cardModel.edit(null, options);
+                    });
+
+                    it("should call save", function () {
+                        var expectedOptions = utils._.extend({patch: true}, utils.deepClone(options)),
+                            expectedAttributes = {
+                                "customVehicleId"         : mockCardModel.customVehicleId,
+                                "vehicleDescription"      : mockCardModel.vehicleDescription,
+                                "vin"                     : mockCardModel.vin,
+                                "licensePlateNumber"      : mockCardModel.licensePlateNumber,
+                                "licensePlateState"       : mockCardModel.licensePlateState,
+                                "authorizationProfileName": mockCardModel.authorizationProfileName,
+                                "departmentId"            : mockCardModel.department.id
+                            };
+
+                        expect(cardModel.save).toHaveBeenCalledWith(expectedAttributes, expectedOptions);
+                    });
+                });
+            });
+
             describe("has a terminate function that", function () {
                 var mockUrlRoot = "mock url root",
                     mockCardNumber = 5678,

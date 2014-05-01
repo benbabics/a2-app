@@ -1,8 +1,8 @@
 define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "models/UserModel", "models/CardModel",
-        "models/ShippingModel", "views/CardAddView", "views/CardDetailView", "views/CardListView",
+        "models/ShippingModel", "views/CardAddView", "views/CardDetailView", "views/CardEditView", "views/CardListView",
         "views/CardSearchView", "views/CardShippingView"],
     function (JClass, globals, facade, utils, CardCollection, UserModel, CardModel, ShippingModel,
-              CardAddView, CardDetailView, CardListView, CardSearchView, CardShippingView) {
+              CardAddView, CardDetailView, CardEditView, CardListView, CardSearchView, CardShippingView) {
 
         "use strict";
 
@@ -16,6 +16,7 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
             cardCollection: null,
             cardAddView: null,
             cardDetailView: null,
+            cardEditView: null,
             cardListView: null,
             cardSearchView: null,
             cardShippingView: null,
@@ -57,36 +58,53 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
                     userModel: this.userModel
                 });
 
+                // create edit view
+                this.cardEditView = new CardEditView({
+                    userModel: this.userModel
+                });
+
                 // listen for events
                 this.cardAddView.on("cardAddSubmitted", this.showCardAddShippingDetails, this);
+                this.cardEditView.on("cardEditSuccess", this.showCardEditDetails, this);
+                this.cardEditView.on("cardEditSubmitted", this.showCardEditShippingDetails, this);
                 this.cardShippingView.on("cardAddSuccess", this.showCardAddDetails, this);
+                this.cardShippingView.on("cardEditSuccess", this.showCardEditDetails, this);
                 this.cardDetailView.on("terminateCardSuccess", this.showCardStatusChangeDetails, this);
                 this.cardSearchView.on("searchSubmitted", this.showSearchResults, this);
                 this.cardListView.on("showAllCards", this.showAllSearchResults, this);
             },
 
-            beforeNavigateAddCondition: function () {
-                var self = this,
-                    selectedCompany = this.userModel.get("selectedCompany");
+            fetchProperties: function (view, callback) {
+                var selectedCompany = this.userModel.get("selectedCompany");
 
                 if (!selectedCompany) {
                     return true;
                 }
 
                 if (selectedCompany.areFetchedPropertiesEmpty()) {
-                    this.cardAddView.showLoadingIndicator();
+                    view.showLoadingIndicator();
 
                     utils.when(selectedCompany.fetch())
                         .always(function () {
-                            self.cardAddView.hideLoadingIndicator();
+                            view.hideLoadingIndicator();
                         })
                         .done(function () {
-                            self.navigateAdd.apply(self, arguments);
+                            callback();
                         });
                 }
 
                 // allow navigation if the the fetched properties are available
                 return !selectedCompany.areFetchedPropertiesEmpty();
+            },
+
+            beforeNavigateAddCondition: function () {
+                var self = this;
+                return this.fetchProperties(this.cardAddView, function () { self.navigateAdd(); });
+            },
+
+            beforeNavigateEditCondition: function (id) {
+                var self = this;
+                return this.fetchProperties(this.cardEditView, function () { self.navigateEdit(id); });
             },
 
             navigateAdd: function () {
@@ -100,13 +118,27 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
                 utils.changePage(this.cardDetailView.$el);
             },
 
+            navigateEdit: function (id) {
+                this.cardEditView.setModel(this.cardCollection.findWhere({"id": id}));
+                this.cardEditView.render();
+                utils.changePage(this.cardEditView.$el);
+            },
+
             navigateSearch: function () {
                 this.cardSearchView.render();
                 utils.changePage(this.cardSearchView.$el, null, null, true);
             },
 
             showCardAddShippingDetails: function () {
-                this.cardShippingView.cardModel = this.cardAddView.model;
+                this.showCardShippingDetails(this.cardAddView.model);
+            },
+
+            showCardEditShippingDetails: function () {
+                this.showCardShippingDetails(this.cardEditView.model);
+            },
+
+            showCardShippingDetails: function (cardModel) {
+                this.cardShippingView.cardModel = cardModel;
                 this.cardShippingView.render();
                 utils.changePage(this.cardShippingView.$el);
             },
@@ -115,11 +147,24 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
                 var self = this;
 
                 facade.publish("app", "alert", {
-                    title          : globals.cardAddedDetails.constants.SUCCESS_TITLE,
+                    title          : globals.cardChangedDetails.constants.SUCCESS_TITLE,
                     message        : cardAddResponse,
                     primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
                     popupafterclose:   function () {
                         self.navigateAdd();
+                    }
+                });
+            },
+
+            showCardEditDetails: function (cardEditResponse) {
+                var self = this;
+
+                facade.publish("app", "alert", {
+                    title          : globals.cardChangedDetails.constants.SUCCESS_TITLE,
+                    message        : cardEditResponse,
+                    primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
+                    popupafterclose:   function () {
+                        self.updateCollection();
                     }
                 });
             },

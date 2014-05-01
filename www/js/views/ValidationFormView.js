@@ -9,14 +9,21 @@ define(["backbone", "globals", "facade", "utils", "mustache",  "views/FormView",
                 // call super
                 ValidationFormView.__super__.initialize.apply(this, arguments);
 
-                // Bind the Validation between the View and the Model
-                Backbone.Validation.bind(this);
-
                 // set context
                 utils._.bindAll(this, "handleValidationError");
+            },
 
-                // Set handlers for model events
-                this.model.on("invalid", this.handleValidationError); // when validation of the model fails
+            setModel: function (model) {
+                // call super
+                ValidationFormView.__super__.setModel.apply(this, arguments);
+
+                if (this.model) {
+                    // Bind the Validation between the View and the Model
+                    Backbone.Validation.bind(this);
+
+                    // Set handlers for model events
+                    this.model.on("invalid", this.handleValidationError); // when validation of the model fails
+                }
             },
 
             formatRequiredFields: function () {

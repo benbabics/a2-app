@@ -532,7 +532,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                 beforeEach(function () {
                     spyOn(mockEvent, "preventDefault").and.callThrough();
-                    spyOn(cardDetailView, "trigger").and.callFake(function () {});
+                    spyOn(mockFacade, "publish").and.callFake(function () {});
 
                     cardDetailView.handleEditCardClick(mockEvent);
                 });
@@ -549,8 +549,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(mockEvent.preventDefault).toHaveBeenCalledWith();
                 });
 
-                it("should call trigger", function () {
-                    expect(cardDetailView.trigger).toHaveBeenCalledWith("editCard", mockCardModel.number);
+                it("should call publish on the facade", function () {
+                    expect(mockFacade.publish).toHaveBeenCalledWith("card", "navigateEdit", mockCardModel.number);
                 });
             });
         });

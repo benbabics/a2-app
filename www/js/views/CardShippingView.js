@@ -1,7 +1,7 @@
 define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel", "models/ShippingModel",
-        "views/ValidationFormView", "text!tmpl/card/shipping.html", "text!tmpl/card/cardAddDetails.html"],
+        "views/ValidationFormView", "text!tmpl/card/shipping.html", "text!tmpl/card/cardChangeDetails.html"],
     function (Backbone, utils, facade, Mustache, globals, CardModel, ShippingModel, ValidationFormView,
-              pageTemplate, cardAddDetailsTemplate) {
+              pageTemplate, cardChangeDetailsTemplate) {
 
         "use strict";
 
@@ -10,7 +10,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
             el: "#cardShipping",
 
             template: pageTemplate,
-            addDetailsTemplate: cardAddDetailsTemplate,
+            changeDetailsTemplate: cardChangeDetailsTemplate,
 
             cardModel: null,
             userModel: null,
@@ -26,8 +26,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 // call super
                 this.constructor.__super__.initialize.apply(this, arguments);
 
-                // parse the add details template
-                Mustache.parse(this.addDetailsTemplate);
+                // parse the add/edit details template
+                Mustache.parse(this.changeDetailsTemplate);
 
                 if (options && options.userModel) {
                     this.userModel = options.userModel;
@@ -104,12 +104,12 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 };
             },
 
-            getAddDetailsConfiguration: function (response) {
+            getChangeDetailsConfiguration: function (response) {
                 var user = this.userModel.toJSON(),
                     newCard = new CardModel(),
                     card,
                     shipping = this.model.toJSON(),
-                    cardConfiguration = utils._.extend({}, utils.deepClone(globals.cardAddedDetails.configuration));
+                    cardConfiguration = utils._.extend({}, utils.deepClone(globals.cardChangedDetails.configuration));
 
                 newCard.initialize(response.data);
                 card = newCard.toJSON();
@@ -129,7 +129,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 cardConfiguration.shipping.address.state.value = shipping.state;
                 cardConfiguration.shipping.address.postalCode.value = shipping.postalCode;
                 cardConfiguration.shipping.residence.value = (shipping.residence.name === true) ?
-                    globals.cardAddedDetails.constants.RESIDENCE_YES : globals.cardAddedDetails.constants.RESIDENCE_NO;
+                    globals.cardChangedDetails.constants.RESIDENCE_YES :
+                    globals.cardChangedDetails.constants.RESIDENCE_NO;
 
                 return {
                     "message": response.message,
@@ -177,6 +178,15 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 }
             },
 
+            handleSuccessResponse: function (response, eventToTrigger) {
+                var message =
+                    Mustache.render(this.changeDetailsTemplate, this.getChangeDetailsConfiguration(response));
+
+                this.trigger(eventToTrigger, message);
+
+                this.resetForm();
+            },
+
             submitForm: function (evt) {
                 var self = this,
                     errors;
@@ -187,16 +197,19 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 if (errors) {
                     this.handleValidationError(this.model, errors);
                 } else {
-                    this.cardModel.add(this.model.toJSON(), {
-                        success: function (model, response) {
-                            var message =
-                                Mustache.render(self.addDetailsTemplate, self.getAddDetailsConfiguration(response));
-
-                            self.trigger("cardAddSuccess", message);
-
-                            self.resetForm();
-                        }
-                    });
+                    if (this.cardModel.get("id")) {
+                        this.cardModel.edit(this.model.toJSON(), {
+                            success: function (model, response) {
+                                self.handleSuccessResponse(response, "cardEditSuccess");
+                            }
+                        });
+                    } else {
+                        this.cardModel.add(this.model.toJSON(), {
+                            success: function (model, response) {
+                                self.handleSuccessResponse(response, "cardAddSuccess");
+                            }
+                        });
+                    }
                 }
             }
         });

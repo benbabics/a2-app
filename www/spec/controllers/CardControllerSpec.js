@@ -42,6 +42,16 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 showLoadingIndicator: function () { },
                 hideLoadingIndicator: function () { }
             },
+            mockCardEditView = {
+                $el: "",
+                constructor: function () { },
+                initialize: function () { },
+                render: function () { },
+                on: function () { },
+                showLoadingIndicator: function () { },
+                hideLoadingIndicator: function () { },
+                setModel: function () { }
+            },
             mockCardListView = {
                 $el: "",
                 constructor: function () { },
@@ -131,6 +141,7 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
         squire.mock("utils", mockUtils);
         squire.mock("views/CardAddView", Squire.Helpers.returns(mockCardAddView));
         squire.mock("views/CardDetailView", Squire.Helpers.returns(mockCardDetailView));
+        squire.mock("views/CardEditView", Squire.Helpers.returns(mockCardEditView));
         squire.mock("views/CardListView", Squire.Helpers.returns(mockCardListView));
         squire.mock("views/CardSearchView", Squire.Helpers.returns(mockCardSearchView));
         squire.mock("views/CardShippingView", Squire.Helpers.returns(mockCardShippingView));
@@ -278,6 +289,24 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                     });
                 });
 
+                describe("when initializing the CardEditView", function () {
+                    beforeEach(function () {
+                        spyOn(mockCardEditView, "constructor").and.callThrough();
+                    });
+
+                    it("should set the cardEditView variable to a new CardEditView object", function () {
+                        expect(cardController.cardEditView).toEqual(mockCardEditView);
+                    });
+
+                    xit("should send in the correct parameters to the constructor", function () {
+                        expect(mockCardEditView.constructor).toHaveBeenCalledWith({
+                            userModel: userModel
+                        });
+
+                        // TODO: this is not working, need to figure out how to test
+                    });
+                });
+
                 it("should register a function as the handler for the add view cardAddSubmitted event",
                     function () {
                         spyOn(mockCardAddView, "on").and.callFake(function () { });
@@ -289,6 +318,28 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                             cardController);
                     });
 
+                it("should register a function as the handler for the edit view cardEditSuccess event",
+                    function () {
+                        spyOn(mockCardEditView, "on").and.callFake(function () { });
+
+                        cardController.init();
+
+                        expect(mockCardEditView.on).toHaveBeenCalledWith("cardEditSuccess",
+                            cardController.showCardEditDetails,
+                            cardController);
+                    });
+
+                it("should register a function as the handler for the edit view cardEditSubmitted event",
+                    function () {
+                        spyOn(mockCardEditView, "on").and.callFake(function () { });
+
+                        cardController.init();
+
+                        expect(mockCardEditView.on).toHaveBeenCalledWith("cardEditSubmitted",
+                            cardController.showCardEditShippingDetails,
+                            cardController);
+                    });
+
                 it("should register a function as the handler for the shipping view cardAddSuccess event",
                     function () {
                         spyOn(mockCardShippingView, "on").and.callFake(function () { });
@@ -297,6 +348,17 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
 
                         expect(mockCardShippingView.on).toHaveBeenCalledWith("cardAddSuccess",
                             cardController.showCardAddDetails,
+                            cardController);
+                    });
+
+                it("should register a function as the handler for the shipping view cardEditSuccess event",
+                    function () {
+                        spyOn(mockCardShippingView, "on").and.callFake(function () { });
+
+                        cardController.init();
+
+                        expect(mockCardShippingView.on).toHaveBeenCalledWith("cardEditSuccess",
+                            cardController.showCardEditDetails,
                             cardController);
                     });
 
@@ -332,20 +394,20 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 });
             });
 
-            describe("has a beforeNavigateAddCondition function that", function () {
+            describe("has a fetchProperties function that", function () {
                 it("is defined", function () {
-                    expect(cardController.beforeNavigateAddCondition).toBeDefined();
+                    expect(cardController.fetchProperties).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(cardController.beforeNavigateAddCondition).toEqual(jasmine.any(Function));
+                    expect(cardController.fetchProperties).toEqual(jasmine.any(Function));
                 });
 
                 describe("when the user does not have a selectedCompany", function () {
                     it("should return true", function () {
                         userModel.set("selectedCompany", null);
 
-                        expect(cardController.beforeNavigateAddCondition()).toBeTruthy();
+                        expect(cardController.fetchProperties()).toBeTruthy();
                     });
                 });
 
@@ -354,33 +416,36 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                         var selectedCompany = userModel.get("selectedCompany");
                         spyOn(selectedCompany, "areFetchedPropertiesEmpty").and.returnValue(false);
 
-                        expect(cardController.beforeNavigateAddCondition()).toBeTruthy();
+                        expect(cardController.fetchProperties()).toBeTruthy();
                     });
                 });
 
                 describe("when the fetched attributes are NOT available", function () {
-                    var selectedCompany;
+                    var selectedCompany,
+                        mockView,
+                        callback;
 
                     beforeEach(function () {
+                        mockView = {
+                            showLoadingIndicator: jasmine.createSpy("callback spy"),
+                            hideLoadingIndicator: jasmine.createSpy("callback spy")
+                        };
+                        callback = jasmine.createSpy("callback spy");
                         selectedCompany = userModel.get("selectedCompany");
-
-                        spyOn(mockCardAddView, "showLoadingIndicator").and.callFake(function () {});
-                        spyOn(mockCardAddView, "hideLoadingIndicator").and.callFake(function () {});
-                        spyOn(cardController, "navigateAdd").and.callFake(function () {});
                         spyOn(selectedCompany, "areFetchedPropertiesEmpty").and.returnValue(true);
                     });
 
-                    it("should call showLoadingIndicator on the Card Add View Page", function () {
+                    it("should call showLoadingIndicator on the View", function () {
                         spyOn(selectedCompany, "fetch").and.returnValue(true);
 
-                        cardController.beforeNavigateAddCondition();
-                        expect(mockCardAddView.showLoadingIndicator).toHaveBeenCalledWith();
+                        cardController.fetchProperties(mockView, callback);
+                        expect(mockView.showLoadingIndicator).toHaveBeenCalledWith();
                     });
 
                     it("should call fetch on the Company", function () {
                         spyOn(selectedCompany, "fetch").and.returnValue(true);
 
-                        cardController.beforeNavigateAddCondition();
+                        cardController.fetchProperties(mockView, callback);
                         expect(selectedCompany.fetch).toHaveBeenCalledWith();
                     });
 
@@ -393,15 +458,15 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                                 return deferred.promise();
                             });
 
-                            cardController.beforeNavigateAddCondition();
+                            cardController.fetchProperties(mockView, callback);
                         });
 
-                        it("should call navigateAdd", function () {
-                            expect(cardController.navigateAdd).toHaveBeenCalledWith();
+                        it("should call the callback", function () {
+                            expect(callback).toHaveBeenCalledWith();
                         });
 
-                        it("should call hideLoadingIndicator on the Card Add View Page", function () {
-                            expect(mockCardAddView.hideLoadingIndicator).toHaveBeenCalledWith();
+                        it("should call hideLoadingIndicator on the View", function () {
+                            expect(mockView.hideLoadingIndicator).toHaveBeenCalledWith();
                         });
                     });
 
@@ -414,23 +479,118 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                                 return deferred.promise();
                             });
 
-                            cardController.beforeNavigateAddCondition();
+                            cardController.fetchProperties(mockView, callback);
                         });
 
-                        it("should NOT call navigateAdd", function () {
-                            expect(cardController.navigateAdd).not.toHaveBeenCalledWith();
+                        it("should NOT call the callback", function () {
+                            expect(callback).not.toHaveBeenCalled();
                         });
 
-                        it("should call hideLoadingIndicator on the Card Add View Page", function () {
-                            expect(mockCardAddView.hideLoadingIndicator).toHaveBeenCalledWith();
+                        it("should call hideLoadingIndicator on the View", function () {
+                            expect(mockView.hideLoadingIndicator).toHaveBeenCalledWith();
                         });
                     });
 
                     it("should return false", function () {
                         spyOn(selectedCompany, "fetch").and.returnValue(true);
 
-                        expect(cardController.beforeNavigateAddCondition()).toBeFalsy();
+                        expect(cardController.fetchProperties(mockView, callback)).toBeFalsy();
                     });
+                });
+            });
+
+            describe("has a beforeNavigateAddCondition function that", function () {
+                var mockReturnValue = false,
+                    actualResponse;
+
+                beforeEach(function () {
+                    spyOn(cardController, "fetchProperties").and.returnValue(mockReturnValue);
+
+                    actualResponse = cardController.beforeNavigateAddCondition();
+                });
+
+                it("is defined", function () {
+                    expect(cardController.beforeNavigateAddCondition).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.beforeNavigateAddCondition).toEqual(jasmine.any(Function));
+                });
+
+                it("should call fetchProperties", function () {
+                    expect(cardController.fetchProperties).toHaveBeenCalled();
+
+                    expect(cardController.fetchProperties.calls.mostRecent().args.length).toEqual(2);
+                    expect(cardController.fetchProperties.calls.mostRecent().args[0]).toEqual(mockCardAddView);
+                    expect(cardController.fetchProperties.calls.mostRecent().args[1]).toEqual(jasmine.any(Function));
+                });
+
+                describe("sends to fetchProperties a callback that", function () {
+                    var callback;
+
+                    beforeEach(function () {
+                        callback = cardController.fetchProperties.calls.mostRecent().args[1];
+
+                        spyOn(cardController, "navigateAdd").and.callFake(function () { });
+
+                        callback.call();
+                    });
+
+                    it("should call navigateAdd", function () {
+                        expect(cardController.navigateAdd).toHaveBeenCalledWith();
+                    });
+                });
+
+                it("should return the expected response", function () {
+                    expect(actualResponse).toEqual(mockReturnValue);
+                });
+            });
+
+            describe("has a beforeNavigateEditCondition function that", function () {
+                var mockCardId = 2354,
+                    mockReturnValue = false,
+                    actualResponse;
+
+                beforeEach(function () {
+                    spyOn(cardController, "fetchProperties").and.returnValue(mockReturnValue);
+
+                    actualResponse = cardController.beforeNavigateEditCondition(mockCardId);
+                });
+
+                it("is defined", function () {
+                    expect(cardController.beforeNavigateEditCondition).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.beforeNavigateEditCondition).toEqual(jasmine.any(Function));
+                });
+
+                it("should call fetchProperties", function () {
+                    expect(cardController.fetchProperties).toHaveBeenCalled();
+
+                    expect(cardController.fetchProperties.calls.mostRecent().args.length).toEqual(2);
+                    expect(cardController.fetchProperties.calls.mostRecent().args[0]).toEqual(mockCardEditView);
+                    expect(cardController.fetchProperties.calls.mostRecent().args[1]).toEqual(jasmine.any(Function));
+                });
+
+                describe("sends to fetchProperties a callback that", function () {
+                    var callback;
+
+                    beforeEach(function () {
+                        callback = cardController.fetchProperties.calls.mostRecent().args[1];
+
+                        spyOn(cardController, "navigateEdit").and.callFake(function () { });
+
+                        callback.call();
+                    });
+
+                    it("should call navigateEdit", function () {
+                        expect(cardController.navigateEdit).toHaveBeenCalledWith(mockCardId);
+                    });
+                });
+
+                it("should return the expected response", function () {
+                    expect(actualResponse).toEqual(mockReturnValue);
                 });
             });
 
@@ -502,6 +662,47 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 });
             });
 
+            describe("has a navigateEdit function that", function () {
+                var mockCardNumber = 1234;
+
+                beforeEach(function () {
+                    mockCardDetailView.model = null;
+                    spyOn(mockCardCollection, "findWhere").and.callFake(function () { return cardModel; });
+                    spyOn(mockCardEditView, "setModel").and.callFake(function () { });
+                    spyOn(mockCardEditView, "render").and.callThrough();
+                    spyOn(mockUtils, "changePage").and.callThrough();
+
+                    cardController.navigateEdit(mockCardNumber);
+                });
+
+                it("is defined", function () {
+                    expect(cardController.navigateEdit).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.navigateEdit).toEqual(jasmine.any(Function));
+                });
+
+                it("should call findWhere on the Card Collection", function () {
+                    expect(mockCardCollection.findWhere).toHaveBeenCalledWith({"id": mockCardNumber});
+                });
+
+                it("should call setModel on the Card Edit View Page", function () {
+                    expect(mockCardEditView.setModel).toHaveBeenCalledWith(cardModel);
+                });
+
+                it("should call render on the Card Edit View Page", function () {
+                    expect(mockCardEditView.render).toHaveBeenCalledWith();
+                });
+
+                it("should change the page to the Card Edit View Page", function () {
+                    expect(mockUtils.changePage).toHaveBeenCalled();
+
+                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockCardEditView.$el);
+                });
+            });
+
             describe("has a navigateSearch function that", function () {
                 beforeEach(function () {
                     spyOn(mockCardSearchView, "render").and.callThrough();
@@ -563,6 +764,76 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 });
             });
 
+            describe("has a showCardAddShippingDetails function that", function () {
+                beforeEach(function () {
+                    spyOn(cardController, "showCardShippingDetails").and.callFake(function () { });
+
+                    cardController.showCardAddShippingDetails();
+                });
+
+                it("is defined", function () {
+                    expect(cardController.showCardAddShippingDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.showCardAddShippingDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should call showCardShippingDetails", function () {
+                    expect(cardController.showCardShippingDetails).toHaveBeenCalledWith(mockCardAddView.model);
+                });
+            });
+
+            describe("has a showCardEditShippingDetails function that", function () {
+                beforeEach(function () {
+                    spyOn(cardController, "showCardShippingDetails").and.callFake(function () { });
+
+                    cardController.showCardEditShippingDetails();
+                });
+
+                it("is defined", function () {
+                    expect(cardController.showCardEditShippingDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.showCardEditShippingDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should call showCardShippingDetails", function () {
+                    expect(cardController.showCardShippingDetails).toHaveBeenCalledWith(mockCardEditView.model);
+                });
+            });
+
+            describe("has a showCardShippingDetails function that", function () {
+                beforeEach(function () {
+                    mockCardShippingView.model = null;
+                    spyOn(mockCardShippingView, "render").and.callThrough();
+                    spyOn(mockUtils, "changePage").and.callThrough();
+
+                    cardController.showCardShippingDetails(cardModel);
+                });
+
+                it("is defined", function () {
+                    expect(cardController.showCardShippingDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.showCardShippingDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should set cardModel on the Card Shipping View Page", function () {
+                    expect(mockCardShippingView.cardModel).toEqual(cardModel);
+                });
+
+                it("should call render on the Card Shipping View Page", function () {
+                    expect(mockCardShippingView.render).toHaveBeenCalledWith();
+                });
+
+                it("should change the page to the Card Detail View Page", function () {
+                    expect(mockUtils.changePage).toHaveBeenCalledWith(mockCardShippingView.$el);
+                });
+            });
+
             describe("has a showCardAddDetails function that", function () {
                 var response = {
                     message: "Response message"
@@ -591,7 +862,7 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                     expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
 
                     appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
-                    expect(appAlertOptions.title).toEqual(globals.cardAddedDetails.constants.SUCCESS_TITLE);
+                    expect(appAlertOptions.title).toEqual(globals.cardChangedDetails.constants.SUCCESS_TITLE);
                     expect(appAlertOptions.message).toEqual(response);
                     expect(appAlertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
                     expect(appAlertOptions.popupafterclose).toEqual(jasmine.any(Function));
@@ -610,6 +881,57 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
 
                     it("should call navigateAdd", function () {
                         expect(cardController.navigateAdd).toHaveBeenCalledWith();
+                    });
+                });
+            });
+
+            describe("has a showCardEditDetails function that", function () {
+                var response = {
+                    message: "Response message"
+                };
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callFake(function () { });
+
+                    cardController.showCardEditDetails(response);
+                });
+
+                it("is defined", function () {
+                    expect(cardController.showCardAddDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.showCardAddDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    var appAlertOptions;
+
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
+
+                    appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
+                    expect(appAlertOptions.title).toEqual(globals.cardChangedDetails.constants.SUCCESS_TITLE);
+                    expect(appAlertOptions.message).toEqual(response);
+                    expect(appAlertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
+                    expect(appAlertOptions.popupafterclose).toEqual(jasmine.any(Function));
+                });
+
+                describe("sends as the popupafterclose argument a callback that", function () {
+                    var options;
+
+                    beforeEach(function () {
+                        options = mockFacade.publish.calls.mostRecent().args[2];
+
+                        spyOn(cardController, "updateCollection").and.callFake(function () { });
+
+                        options.popupafterclose.call(cardController);
+                    });
+
+                    it("should call updateCollection", function () {
+                        expect(cardController.updateCollection).toHaveBeenCalledWith();
                     });
                 });
             });

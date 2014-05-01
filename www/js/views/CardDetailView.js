@@ -99,7 +99,9 @@ define(["backbone", "utils", "facade", "mustache", "globals", "text!tmpl/card/ca
 
             handleEditCardClick: function (evt) {
                 evt.preventDefault();
-                this.trigger("editCard", this.model.get("id"));
+
+                // Publish is used rather than trigger to force the before navigate condition
+                facade.publish("card", "navigateEdit", this.model.get("id"));
             }
         });
 

@@ -110,130 +110,112 @@ define(["Squire", "globals", "backbone", "utils"],
                     });
 
                     describe("when the successFlag in the response is false", function () {
+                        var method = "create",
+                            model = {},
+                            options = {},
+                            originalErrorCallback,
+                            mockErrorMessage = "Mock Error Message";
 
                         beforeEach(function () {
                             mockDataResponse.successFlag = false;
+                            originalErrorCallback = jasmine.createSpy("error() spy");
                         });
 
                         describe("when the response indicates an Error", function () {
 
                             beforeEach(function () {
                                 mockDataResponse.message.type = "ERROR";
+                                options.error = originalErrorCallback;
+
+                                spyOn(mockFacade, "publish").and.callFake(function () { });
+                                spyOn(ajaxModel, "getErrorMessage").and.returnValue(mockErrorMessage);
+
+                                ajaxModel.sync(method, model, options);
                             });
 
-                            describe("when the response includes an error message", function () {
+                            it("should call Backbone.sync()", function () {
+                                var modifiedOptions;
 
-                                var method = "create",
-                                    model = {},
-                                    options = {},
-                                    originalErrorCallback = jasmine.createSpy("error() spy"),
-                                    mockErrorMessage = "Mock Error Message";
+                                expect(mockBackbone.sync).toHaveBeenCalled();
+                                expect(mockBackbone.sync.calls.mostRecent().args.length).toEqual(3);
+                                expect(mockBackbone.sync.calls.mostRecent().args[0]).toEqual(method);
+                                expect(mockBackbone.sync.calls.mostRecent().args[1]).toEqual(model);
 
-                                beforeEach(function () {
-                                    mockDataResponse.message.text = "An error occurred.";
-                                    options.error = originalErrorCallback;
+                                modifiedOptions = mockBackbone.sync.calls.mostRecent().args[2];
 
-                                    spyOn(mockFacade, "publish").and.callFake(function () { });
-                                    spyOn(ajaxModel, "getErrorMessage").and.returnValue(mockErrorMessage);
-
-                                    ajaxModel.sync(method, model, options);
-                                });
-
-                                it("should call Backbone.sync()", function () {
-                                    var modifiedOptions;
-
-                                    expect(mockBackbone.sync).toHaveBeenCalled();
-                                    expect(mockBackbone.sync.calls.mostRecent().args.length).toEqual(3);
-                                    expect(mockBackbone.sync.calls.mostRecent().args[0]).toEqual(method);
-                                    expect(mockBackbone.sync.calls.mostRecent().args[1]).toEqual(model);
-
-                                    modifiedOptions = mockBackbone.sync.calls.mostRecent().args[2];
-
-                                    expect(modifiedOptions.success).toBeNull();
-                                    expect(modifiedOptions.error).toBeNull();
-                                    expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
-                                });
-
-                                it("should call getErrorMessage", function () {
-                                    expect(ajaxModel.getErrorMessage).toHaveBeenCalledWith(mockDataResponse);
-                                });
-
-                                it("should publish an alert of the message text", function () {
-                                    var alertDetails;
-
-                                    expect(mockFacade.publish).toHaveBeenCalled();
-                                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
-                                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
-                                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
-
-                                    alertDetails = mockFacade.publish.calls.mostRecent().args[2];
-
-                                    expect(alertDetails.title).toEqual(globals.WEBSERVICE.REQUEST_ERROR_TITLE);
-                                    expect(alertDetails.message).toEqual(mockErrorMessage);
-                                    expect(alertDetails.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
-                                });
-
-                                it("should call the original error callback passed in to options", function () {
-                                    expect(originalErrorCallback).toHaveBeenCalledWith();
-                                });
-
+                                expect(modifiedOptions.success).toBeNull();
+                                expect(modifiedOptions.error).toBeNull();
+                                expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
                             });
 
-                            describe("when the response does NOT include an error message", function () {
-
-                                var method = "create",
-                                    model = {},
-                                    options = {},
-                                    originalErrorCallback = jasmine.createSpy("error() spy");
-
-                                beforeEach(function () {
-                                    mockDataResponse.message.text = null;
-                                    options.error = originalErrorCallback;
-
-                                    spyOn(mockFacade, "publish").and.callFake(function () { });
-
-                                    ajaxModel.sync(method, model, options);
-                                });
-
-                                it("should call Backbone.sync()", function () {
-                                    var modifiedOptions;
-
-                                    expect(mockBackbone.sync).toHaveBeenCalled();
-                                    expect(mockBackbone.sync.calls.mostRecent().args.length).toEqual(3);
-                                    expect(mockBackbone.sync.calls.mostRecent().args[0]).toEqual(method);
-                                    expect(mockBackbone.sync.calls.mostRecent().args[1]).toEqual(model);
-
-                                    modifiedOptions = mockBackbone.sync.calls.mostRecent().args[2];
-
-                                    expect(modifiedOptions.success).toBeNull();
-                                    expect(modifiedOptions.error).toBeNull();
-                                    expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
-                                });
-
-                                it("should publish an alert with the Unknown Error text", function () {
-                                    var alertDetails;
-
-                                    expect(mockFacade.publish).toHaveBeenCalled();
-                                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
-                                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
-                                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
-
-                                    alertDetails = mockFacade.publish.calls.mostRecent().args[2];
-
-                                    expect(alertDetails.title).toEqual(globals.WEBSERVICE.REQUEST_ERROR_TITLE);
-                                    expect(alertDetails.message)
-                                        .toEqual(globals.WEBSERVICE.REQUEST_ERROR_UNKNOWN_MESSAGE);
-                                    expect(alertDetails.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
-                                });
-
-                                it("should call the original error callback passed in to options", function () {
-                                    expect(originalErrorCallback).toHaveBeenCalledWith();
-                                });
-
+                            it("should call getErrorMessage", function () {
+                                expect(ajaxModel.getErrorMessage).toHaveBeenCalledWith(mockDataResponse);
                             });
 
+                            it("should publish an alert of the message text", function () {
+                                var alertDetails;
+
+                                expect(mockFacade.publish).toHaveBeenCalled();
+                                expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                                expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                                expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
+
+                                alertDetails = mockFacade.publish.calls.mostRecent().args[2];
+
+                                expect(alertDetails.title).toEqual(globals.WEBSERVICE.REQUEST_ERROR_TITLE);
+                                expect(alertDetails.message).toEqual(mockErrorMessage);
+                                expect(alertDetails.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
+                            });
+
+                            it("should call the original error callback passed in to options", function () {
+                                expect(originalErrorCallback).toHaveBeenCalledWith({
+                                    type: mockDataResponse.message.type,
+                                    message: mockErrorMessage
+                                });
+                            });
                         });
 
+                        describe("when the response indicates an Info", function () {
+                            beforeEach(function () {
+                                mockDataResponse.message.type = "INFO";
+                                options.error = originalErrorCallback;
+
+                                spyOn(mockFacade, "publish").and.callFake(function () { });
+                                spyOn(ajaxModel, "getErrorMessage").and.returnValue(mockErrorMessage);
+
+                                ajaxModel.sync(method, model, options);
+                            });
+
+                            it("should call Backbone.sync()", function () {
+                                var modifiedOptions;
+
+                                expect(mockBackbone.sync).toHaveBeenCalled();
+                                expect(mockBackbone.sync.calls.mostRecent().args.length).toEqual(3);
+                                expect(mockBackbone.sync.calls.mostRecent().args[0]).toEqual(method);
+                                expect(mockBackbone.sync.calls.mostRecent().args[1]).toEqual(model);
+
+                                modifiedOptions = mockBackbone.sync.calls.mostRecent().args[2];
+
+                                expect(modifiedOptions.success).toBeNull();
+                                expect(modifiedOptions.error).toBeNull();
+                                expect(modifiedOptions.beforeSend).toEqual(jasmine.any(Function));
+                            });
+
+                            it("should call getErrorMessage", function () {
+                                expect(ajaxModel.getErrorMessage).toHaveBeenCalledWith(mockDataResponse);
+                            });
+
+                            it("should NOT publish an alert of the message text", function () {
+                                expect(mockFacade.publish).not.toHaveBeenCalled();
+                            });
+
+                            it("should call the original error callback passed in to options", function () {
+                                expect(originalErrorCallback).toHaveBeenCalledWith({
+                                    type: mockDataResponse.message.type,
+                                    message: mockErrorMessage
+                                });
+                            });
+                        });
                     });
 
                     describe("when the successFlag in the response is true", function () {
@@ -404,6 +386,37 @@ define(["Squire", "globals", "backbone", "utils"],
 
                     it("returns the expected value", function () {
                         var expectedValue = mockDataResponse.message.text,
+                            actualValue;
+
+                        actualValue = ajaxModel.getErrorMessage(mockDataResponse);
+
+                        expect(actualValue).toEqual(expectedValue);
+                    });
+                });
+
+                describe("when the response does NOT have data or message text", function () {
+                    beforeEach(function () {
+                        mockDataResponse.message.text = null;
+                        mockDataResponse.data = null;
+                    });
+
+                    it("returns the expected value", function () {
+                        var expectedValue = globals.WEBSERVICE.REQUEST_ERROR_UNKNOWN_MESSAGE,
+                            actualValue;
+
+                        actualValue = ajaxModel.getErrorMessage(mockDataResponse);
+
+                        expect(actualValue).toEqual(expectedValue);
+                    });
+                });
+
+                describe("when there is NOT a response", function () {
+                    beforeEach(function () {
+                        mockDataResponse = null;
+                    });
+
+                    it("returns the expected value", function () {
+                        var expectedValue = globals.WEBSERVICE.REQUEST_ERROR_UNKNOWN_MESSAGE,
                             actualValue;
 
                         actualValue = ajaxModel.getErrorMessage(mockDataResponse);

@@ -191,6 +191,35 @@ define(["backbone", "mustache", "globals", "utils", "models/UserModel", "models/
                 this.save(attributes, options);
             },
 
+            edit: function (shippingOptions, options) {
+                var attributes = {
+                    "customVehicleId"         : this.get("customVehicleId"),
+                    "vehicleDescription"      : this.get("vehicleDescription"),
+                    "vin"                     : this.get("vin"),
+                    "licensePlateNumber"      : this.get("licensePlateNumber"),
+                    "licensePlateState"       : this.get("licensePlateState"),
+                    "authorizationProfileName": this.get("authorizationProfileName"),
+                    "departmentId"            : this.get("department").get("id")
+                };
+
+                if (shippingOptions) {
+                    attributes.shippingMethod = shippingOptions.shippingMethod.id;
+                    attributes.firstName = shippingOptions.firstName;
+                    attributes.lastName = shippingOptions.lastName;
+                    attributes.companyName = shippingOptions.companyName;
+                    attributes.address1 = shippingOptions.addressLine1;
+                    attributes.address2 = shippingOptions.addressLine2;
+                    attributes.city = shippingOptions.city;
+                    attributes.state = shippingOptions.state;
+                    attributes.postalCode = shippingOptions.postalCode;
+                    attributes.countryCode = shippingOptions.countryCode;
+                    attributes.residence = shippingOptions.residence;
+                }
+
+                options.patch = true;
+                this.save(attributes, options);
+            },
+
             terminate: function (options) {
                 var attributes = {},
                     originalUrl = this.url();

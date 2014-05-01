@@ -12,7 +12,8 @@ define(["backbone", "globals", "utils", "facade"],
                     successCallback = options.success || function () { },
                     errorCallback = options.error || function () { },
                     beforeSendCallback = options.beforeSend || function () { },
-                    modifiedOptions = utils._.clone(options);
+                    modifiedOptions = utils._.clone(options),
+                    errorMessage;
 
                 // Set the beforeSend Callback for setting values in the Header of AJAX requests
                 modifiedOptions.beforeSend = function (xhr) {
@@ -34,26 +35,21 @@ define(["backbone", "globals", "utils", "facade"],
 
                         // the response was 200 OK but still indicates that it was not successful
                         if (!data.successFlag) {
+                            errorMessage = self.getErrorMessage(data);
 
                             // Message the user with the appropriate Error message
                             if (data.message.type === "ERROR") {
-                                if (data.message.text) {
-                                    facade.publish("app", "alert", {
-                                        title          : globals.WEBSERVICE.REQUEST_ERROR_TITLE,
-                                        message        : self.getErrorMessage(data),
-                                        primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT
-                                    });
-                                }
-                                else {
-                                    facade.publish("app", "alert", {
-                                        title          : globals.WEBSERVICE.REQUEST_ERROR_TITLE,
-                                        message        : globals.WEBSERVICE.REQUEST_ERROR_UNKNOWN_MESSAGE,
-                                        primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT
-                                    });
-                                }
+                                facade.publish("app", "alert", {
+                                    title          : globals.WEBSERVICE.REQUEST_ERROR_TITLE,
+                                    message        : errorMessage,
+                                    primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT
+                                });
                             }
 
-                            errorCallback();
+                            errorCallback({
+                                type: data.message.type,
+                                message: errorMessage
+                            });
                         }
                         // the response was successful
                         else {
@@ -85,20 +81,26 @@ define(["backbone", "globals", "utils", "facade"],
             },
 
             getErrorMessage: function (data) {
-                if (data.data) {
-                    var errorMessage = globals.WEBSERVICE.REQUEST_ERROR_MESSAGE_PREFIX +
-                                       data.message.text +
-                                       globals.WEBSERVICE.REQUEST_ERROR_MESSAGE_SUFFIX;
-                    errorMessage += "<ul>";
-                    utils._.each(data.data, function (value) {
-                        errorMessage += "<li>" + value.message + "</li>";
-                    });
-                    errorMessage += "</ul>";
+                if (data) {
+                    if (data.data) {
+                        var errorMessage = globals.WEBSERVICE.REQUEST_ERROR_MESSAGE_PREFIX +
+                            data.message.text +
+                            globals.WEBSERVICE.REQUEST_ERROR_MESSAGE_SUFFIX;
+                        errorMessage += "<ul>";
+                        utils._.each(data.data, function (value) {
+                            errorMessage += "<li>" + value.message + "</li>";
+                        });
+                        errorMessage += "</ul>";
 
-                    return errorMessage;
+                        return errorMessage;
+                    }
+
+                    if (data.message.text) {
+                        return data.message.text;
+                    }
                 }
 
-                return data.message.text;
+                return globals.WEBSERVICE.REQUEST_ERROR_UNKNOWN_MESSAGE;
             }
         });
 

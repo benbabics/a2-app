@@ -82,7 +82,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                         }
                     });
 
-                    stateListValues.push(globals.cardAdd.constants.SELECT_STATE);
+                    stateListValues.push(globals.card.constants.SELECT_STATE);
                     utils._.each(globals.APP.constants.STATES, function (state) {
                         state.selected = false;
                         stateListValues.push(state);

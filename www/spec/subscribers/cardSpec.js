@@ -10,7 +10,8 @@ define(["Squire"],
             },
             mockCardController = {
                 init: function () { },
-                beforeNavigateAddCondition: function () { }
+                beforeNavigateAddCondition: function () { },
+                beforeNavigateEditCondition: function () { }
             },
             cardSubscriber;
 
@@ -37,17 +38,26 @@ define(["Squire"],
                 expect(mockFacade.subscribeTo.calls.mostRecent().args[1]).toEqual(mockCardController);
             });
 
-            it("should call subscribe 3 times", function () {
-                expect(mockSubscribe.calls.count()).toEqual(3);
+            it("should call subscribe 4 times", function () {
+                expect(mockSubscribe.calls.count()).toEqual(4);
             });
 
             it("should subscribe to navigateAdd", function () {
                 expect(mockSubscribe)
-                    .toHaveBeenCalledWith("navigateAdd", "navigateAdd", mockCardController.beforeNavigateAddCondition);
+                    .toHaveBeenCalledWith("navigateAdd",
+                                          "navigateAdd",
+                                          mockCardController.beforeNavigateAddCondition);
             });
 
             it("should subscribe to navigateCardDetails", function () {
                 expect(mockSubscribe).toHaveBeenCalledWith("navigateCardDetails", "navigateCardDetails");
+            });
+
+            it("should subscribe to navigateEdit", function () {
+                expect(mockSubscribe)
+                    .toHaveBeenCalledWith("navigateEdit",
+                                          "navigateEdit",
+                                          mockCardController.beforeNavigateEditCondition);
             });
 
             it("should subscribe to navigateSearch", function () {

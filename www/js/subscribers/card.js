@@ -8,6 +8,7 @@ define(["facade", "controllers/CardController"],
 
         subscribe("navigateAdd",         "navigateAdd", controller.beforeNavigateAddCondition);
         subscribe("navigateCardDetails", "navigateCardDetails");
+        subscribe("navigateEdit",        "navigateEdit", controller.beforeNavigateEditCondition);
         subscribe("navigateSearch",      "navigateSearch");
 
         return {

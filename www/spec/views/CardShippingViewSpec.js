@@ -1,7 +1,7 @@
 define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel", "models/ShippingModel",
-        "models/UserModel", "text!tmpl/card/shipping.html", "text!tmpl/card/cardAddDetails.html", "jasmine-jquery"],
+        "models/UserModel", "text!tmpl/card/shipping.html", "text!tmpl/card/cardChangeDetails.html", "jasmine-jquery"],
     function (Squire, Backbone, Mustache, globals, utils, CardModel, ShippingModel, UserModel,
-              pageTemplate, cardAddDetailsTemplate) {
+              pageTemplate, cardChangeDetailsTemplate) {
 
         "use strict";
 
@@ -191,8 +191,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(cardShippingView.template).toEqual(pageTemplate);
                 });
 
-                it("should set the addDetailsTemplate", function () {
-                    expect(cardShippingView.addDetailsTemplate).toEqual(cardAddDetailsTemplate);
+                it("should set the changeDetailsTemplate", function () {
+                    expect(cardShippingView.changeDetailsTemplate).toEqual(cardChangeDetailsTemplate);
                 });
             });
 
@@ -216,8 +216,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(CardShippingView.__super__.initialize).toHaveBeenCalledWith();
                 });
 
-                it("should parse the addDetailsTemplate", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(cardShippingView.addDetailsTemplate);
+                it("should parse the changeDetailsTemplate", function () {
+                    expect(mockMustache.parse).toHaveBeenCalledWith(cardShippingView.changeDetailsTemplate);
                 });
 
                 it("should set userModel", function () {
@@ -344,6 +344,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                         });
 
                         utils._.each(globals.APP.constants.STATES, function (state) {
+                            state.selected = state.id === user.selectedCompany.defaultShippingAddress.state;
                             stateListValues.push(state);
                         });
 
@@ -381,13 +382,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 });
             });
 
-            describe("has a getAddDetailsConfiguration function that", function () {
+            describe("has a getChangeDetailsConfiguration function that", function () {
                 it("is defined", function () {
-                    expect(cardShippingView.getAddDetailsConfiguration).toBeDefined();
+                    expect(cardShippingView.getChangeDetailsConfiguration).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(cardShippingView.getAddDetailsConfiguration).toEqual(jasmine.any(Function));
+                    expect(cardShippingView.getChangeDetailsConfiguration).toEqual(jasmine.any(Function));
                 });
 
                 it("should return the expected result", function () {
@@ -397,7 +398,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                             "requiredFields": null
                         },
                         actualConfiguration,
-                        addCardResponse = {
+                        changeCardResponse = {
                             "message": "Mock Message",
                             "data": {
                                 number: 13465,
@@ -416,14 +417,14 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                             }
                         };
 
-                    expectedConfiguration.message = addCardResponse.message;
+                    expectedConfiguration.message = changeCardResponse.message;
 
                     expectedConfiguration.card = utils._.extend({},
-                        utils.deepClone(globals.cardAddedDetails.configuration));
-                    expectedConfiguration.card.id.value = addCardResponse.data.number;
-                    expectedConfiguration.card.customVehicleId.value = addCardResponse.data.customVehicleId;
-                    expectedConfiguration.card.vehicleDescription.value = addCardResponse.data.vehicleDescription;
-                    expectedConfiguration.card.licensePlateNumber.value = addCardResponse.data.licensePlateNumber;
+                        utils.deepClone(globals.cardChangedDetails.configuration));
+                    expectedConfiguration.card.id.value = changeCardResponse.data.number;
+                    expectedConfiguration.card.customVehicleId.value = changeCardResponse.data.customVehicleId;
+                    expectedConfiguration.card.vehicleDescription.value = changeCardResponse.data.vehicleDescription;
+                    expectedConfiguration.card.licensePlateNumber.value = changeCardResponse.data.licensePlateNumber;
                     expectedConfiguration.card.shipping.method.value = mockShippingModel.shippingMethod.name;
                     expectedConfiguration.card.shipping.address.firstName.value = mockShippingModel.firstName;
                     expectedConfiguration.card.shipping.address.lastName.value = mockShippingModel.lastName;
@@ -434,11 +435,12 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expectedConfiguration.card.shipping.address.state.value = mockShippingModel.state;
                     expectedConfiguration.card.shipping.address.postalCode.value = mockShippingModel.postalCode;
                     expectedConfiguration.card.shipping.residence.value = (mockShippingModel.residence.name === true) ?
-                        globals.cardAddedDetails.constants.RESIDENCE_YES : globals.cardAddedDetails.constants.RESIDENCE_NO;
+                        globals.cardChangedDetails.constants.RESIDENCE_YES :
+                        globals.cardChangedDetails.constants.RESIDENCE_NO;
 
                     expectedConfiguration.requiredFields = userModel.get("selectedCompany").get("requiredFields");
 
-                    actualConfiguration = cardShippingView.getAddDetailsConfiguration(addCardResponse);
+                    actualConfiguration = cardShippingView.getChangeDetailsConfiguration(changeCardResponse);
 
                     expect(actualConfiguration).toEqual(expectedConfiguration);
                 });
@@ -657,6 +659,61 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 });
             });
 
+            describe("has a handleSuccessResponse function that", function () {
+                var mockMustacheRenderReturnValue = "Render return value",
+                    mockChangeDetailsConfiguration = utils._.extend({},
+                        utils.deepClone(globals.cardChangedDetails.configuration)),
+                    response = {
+                        message: "Mock message",
+                        data: {
+                            id: 2,
+                            details: "..."
+                        }
+                    },
+                    eventToTrigger = "Event to Trigger";
+
+                beforeEach(function () {
+                    cardShippingView.cardModel = cardModel;
+                    spyOn(mockMustache, "render").and.returnValue(mockMustacheRenderReturnValue);
+                    spyOn(cardShippingView, "getChangeDetailsConfiguration").and
+                        .returnValue(mockChangeDetailsConfiguration);
+                    spyOn(cardShippingView, "trigger").and.callFake(function () { });
+                    spyOn(cardShippingView, "resetForm").and.callFake(function () { });
+
+                    cardShippingView.handleSuccessResponse(response, eventToTrigger);
+                });
+
+                it("is defined", function () {
+                    expect(cardShippingView.handleSuccessResponse).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardShippingView.handleSuccessResponse).toEqual(jasmine.any(Function));
+                });
+
+                it("should call getChangeDetailsConfiguration", function () {
+                    expect(cardShippingView.getChangeDetailsConfiguration).toHaveBeenCalledWith(response);
+                });
+
+                it("should call Mustache.render() on the changeDetailsTemplate", function () {
+                    expect(mockMustache.render).toHaveBeenCalled();
+                    expect(mockMustache.render.calls.argsFor(0).length).toEqual(2);
+                    expect(mockMustache.render.calls.argsFor(0)[0])
+                        .toEqual(cardShippingView.changeDetailsTemplate);
+                    expect(mockMustache.render.calls.argsFor(0)[1])
+                        .toEqual(mockChangeDetailsConfiguration);
+                });
+
+                it("should trigger an event", function () {
+                    expect(cardShippingView.trigger)
+                        .toHaveBeenCalledWith(eventToTrigger, mockMustacheRenderReturnValue);
+                });
+
+                it("should call resetForm", function () {
+                    expect(cardShippingView.resetForm).toHaveBeenCalledWith();
+                });
+            });
+
             describe("has a submitForm function that", function () {
                 var mockEvent = {
                     preventDefault : function () { }
@@ -685,6 +742,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                         spyOn(shippingModel, "validate").and.returnValue(mockErrors);
                         spyOn(cardShippingView, "handleValidationError").and.callFake(function () {});
                         spyOn(cardModel, "add").and.callFake(function () { });
+                        spyOn(cardModel, "edit").and.callFake(function () { });
                         spyOn(cardShippingView, "trigger").and.callFake(function () {});
 
                         cardShippingView.submitForm(mockEvent);
@@ -705,80 +763,125 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     it("should NOT call add on the CardModel", function () {
                         expect(cardModel.add).not.toHaveBeenCalled();
                     });
+
+                    it("should NOT call edit on the CardModel", function () {
+                        expect(cardModel.edit).not.toHaveBeenCalled();
+                    });
                 });
 
                 describe("when validate does NOT return errors", function () {
-                    beforeEach(function () {
-                        spyOn(mockEvent, "preventDefault").and.callThrough();
-                        spyOn(shippingModel, "validate").and.returnValue();
-                        spyOn(cardShippingView, "handleValidationError").and.callFake(function () {});
-                        spyOn(cardModel, "add").and.callFake(function () { });
+                    describe("when the cardModel does NOT have an id", function () {
+                        beforeEach(function () {
+                            cardModel.set("id", null);
 
-                        cardShippingView.submitForm(mockEvent);
-                    });
+                            spyOn(mockEvent, "preventDefault").and.callThrough();
+                            spyOn(shippingModel, "validate").and.returnValue();
+                            spyOn(cardShippingView, "handleValidationError").and.callFake(function () {});
+                            spyOn(cardModel, "add").and.callFake(function () { });
+                            spyOn(cardModel, "edit").and.callFake(function () { });
 
-                    it("should call event.preventDefault", function () {
-                        expect(mockEvent.preventDefault).toHaveBeenCalledWith();
-                    });
-
-                    it("should call validate on the ShippingModel", function () {
-                        expect(shippingModel.validate).toHaveBeenCalledWith();
-                    });
-
-                    it("should NOT call handleValidationError", function () {
-                        expect(cardShippingView.handleValidationError).not.toHaveBeenCalled();
-                    });
-
-                    describe("when calling add() on the model", function () {
-                        var mockAddDetailsConfiguration = utils._.extend({},
-                            utils.deepClone(globals.cardAddedDetails.configuration));
-
-                        it("should send 2 arguments", function () {
-                            expect(cardModel.add).toHaveBeenCalled();
-                            expect(cardModel.add.calls.argsFor(0).length).toEqual(2);
-                            expect(cardModel.add.calls.argsFor(0)[0]).toEqual(shippingModel.toJSON());
+                            cardShippingView.submitForm(mockEvent);
                         });
 
-                        describe("sends as the seconds argument the options object with a success callback that",
-                            function () {
-                                var response = {},
-                                    model,
-                                    options,
-                                    mockMustacheRenderReturnValue = "Render return value";
+                        it("should call event.preventDefault", function () {
+                            expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                        });
 
-                                beforeEach(function () {
-                                    spyOn(mockMustache, "render").and.returnValue(mockMustacheRenderReturnValue);
-                                    spyOn(cardShippingView, "getAddDetailsConfiguration").and
-                                        .returnValue(mockAddDetailsConfiguration);
-                                    spyOn(cardShippingView, "trigger").and.callFake(function () { });
-                                    spyOn(cardShippingView, "resetForm").and.callFake(function () { });
+                        it("should call validate on the ShippingModel", function () {
+                            expect(shippingModel.validate).toHaveBeenCalledWith();
+                        });
 
-                                    options = cardModel.add.calls.mostRecent().args[1];
-                                    options.success.call(cardShippingView, model, response);
-                                });
+                        it("should NOT call handleValidationError", function () {
+                            expect(cardShippingView.handleValidationError).not.toHaveBeenCalled();
+                        });
 
-                                it("should call getAddDetailsConfiguration", function () {
-                                    expect(cardShippingView.getAddDetailsConfiguration).toHaveBeenCalledWith(response);
-                                });
-
-                                it("should call Mustache.render() on the addDetailsTemplate", function () {
-                                    expect(mockMustache.render).toHaveBeenCalled();
-                                    expect(mockMustache.render.calls.argsFor(0).length).toEqual(2);
-                                    expect(mockMustache.render.calls.argsFor(0)[0])
-                                        .toEqual(cardShippingView.addDetailsTemplate);
-                                    expect(mockMustache.render.calls.argsFor(0)[1])
-                                        .toEqual(mockAddDetailsConfiguration);
-                                });
-
-                                it("should trigger cardAddSuccess", function () {
-                                    expect(cardShippingView.trigger)
-                                        .toHaveBeenCalledWith("cardAddSuccess", mockMustacheRenderReturnValue);
-                                });
-
-                                it("should call resetForm", function () {
-                                    expect(cardShippingView.resetForm).toHaveBeenCalledWith();
-                                });
+                        describe("when calling add() on the card model", function () {
+                            it("should send 2 arguments", function () {
+                                expect(cardModel.add).toHaveBeenCalled();
+                                expect(cardModel.add.calls.argsFor(0).length).toEqual(2);
+                                expect(cardModel.add.calls.argsFor(0)[0]).toEqual(shippingModel.toJSON());
                             });
+
+                            describe("sends as the seconds argument the options object with a success callback that",
+                                function () {
+                                    var response = {},
+                                        model,
+                                        options;
+
+                                    beforeEach(function () {
+                                        spyOn(cardShippingView, "handleSuccessResponse").and.callFake(function () { });
+
+                                        options = cardModel.add.calls.mostRecent().args[1];
+                                        options.success.call(cardShippingView, model, response);
+                                    });
+
+                                    it("should call handleSuccessResponse", function () {
+                                        expect(cardShippingView.handleSuccessResponse)
+                                            .toHaveBeenCalledWith(response, "cardAddSuccess");
+                                    });
+                                });
+                        });
+
+                        it("should NOT call edit() on the card model", function () {
+                            expect(cardModel.edit).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("when the cardModel does have an id", function () {
+                        beforeEach(function () {
+                            cardModel.set("id", 1234);
+
+                            spyOn(mockEvent, "preventDefault").and.callThrough();
+                            spyOn(shippingModel, "validate").and.returnValue();
+                            spyOn(cardShippingView, "handleValidationError").and.callFake(function () {});
+                            spyOn(cardModel, "add").and.callFake(function () { });
+                            spyOn(cardModel, "edit").and.callFake(function () { });
+
+                            cardShippingView.submitForm(mockEvent);
+                        });
+
+                        it("should call event.preventDefault", function () {
+                            expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                        });
+
+                        it("should call validate on the ShippingModel", function () {
+                            expect(shippingModel.validate).toHaveBeenCalledWith();
+                        });
+
+                        it("should NOT call handleValidationError", function () {
+                            expect(cardShippingView.handleValidationError).not.toHaveBeenCalled();
+                        });
+
+                        describe("when calling edit() on the card model", function () {
+                            it("should send 2 arguments", function () {
+                                expect(cardModel.edit).toHaveBeenCalled();
+                                expect(cardModel.edit.calls.argsFor(0).length).toEqual(2);
+                                expect(cardModel.edit.calls.argsFor(0)[0]).toEqual(shippingModel.toJSON());
+                            });
+
+                            describe("sends as the seconds argument the options object with a success callback that",
+                                function () {
+                                    var response = {},
+                                        model,
+                                        options;
+
+                                    beforeEach(function () {
+                                        spyOn(cardShippingView, "handleSuccessResponse").and.callFake(function () { });
+
+                                        options = cardModel.edit.calls.mostRecent().args[1];
+                                        options.success.call(cardShippingView, model, response);
+                                    });
+
+                                    it("should call handleSuccessResponse", function () {
+                                        expect(cardShippingView.handleSuccessResponse)
+                                            .toHaveBeenCalledWith(response, "cardEditSuccess");
+                                    });
+                                });
+                        });
+
+                        it("should NOT call add() on the card model", function () {
+                            expect(cardModel.add).not.toHaveBeenCalled();
+                        });
                     });
                 });
             });

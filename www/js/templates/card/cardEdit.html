@@ -1,0 +1,104 @@
+<h2 class="ui-title">Card - Edit</h2>
+
+{{#card}}
+    {{^ableToEditCard}}
+        {{#unableToEditCardMessage}}
+            <p>{{unableToEditCardMessage}}</p>
+        {{/unableToEditCardMessage}}
+    {{/ableToEditCard}}
+
+    {{#ableToEditCard}}
+        <form id="cardEditForm" class="ui-body ui-body-d">
+            {{#id}}
+                <div data-role="fieldcontain">
+                    <label>{{label}}:</label>
+                    <span>{{value}}</span>
+            </div>
+            {{/id}}
+            {{#customVehicleId}}
+                <div data-role="fieldcontain">
+                    <label for="customVehicleId">{{label}}:</label>
+                    <input type="text"
+                           name="{{name}}"
+                           placeholder="{{placeholder}}"
+                           maxlength="{{maxLength}}"
+                           id="customVehicleId"
+                           value="{{value}}"/>
+                </div>
+            {{/customVehicleId}}
+
+            {{#vehicleDescription}}
+                <div data-role="fieldcontain">
+                    <label for="vehicleDescription">{{label}}:</label>
+                    <input type="text"
+                           name="{{name}}"
+                           placeholder="{{placeholder}}"
+                           maxlength="{{maxLength}}"
+                           id="vehicleDescription"
+                           value="{{value}}" />
+                </div>
+            {{/vehicleDescription}}
+
+            {{#vin}}
+                <div data-role="fieldcontain">
+                    <label for="vin">{{label}}:</label>
+                    <input type="text"
+                           name="{{name}}"
+                           placeholder="{{placeholder}}"
+                           maxlength="{{maxLength}}"
+                           id="vin"
+                           value="{{value}}" />
+                </div>
+            {{/vin}}
+
+            {{#licensePlateNumber}}
+                <div data-role="fieldcontain">
+                    <label for="licensePlateNumber">{{label}}:</label>
+                    <input type="text"
+                           name="{{name}}"
+                           placeholder="{{placeholder}}"
+                           maxlength="{{maxLength}}"
+                           id="licensePlateNumber"
+                           value="{{value}}" />
+                </div>
+            {{/licensePlateNumber}}
+
+            {{#licensePlateState}}
+                <div data-role="fieldcontain">
+                    <label for="licensePlateState">{{label}}:</label>
+                    <select id="licensePlateState" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
+                        {{#values}}
+                            <option value="{{id}}" {{#selected}} selected {{/selected}}>{{name}}</option>
+                        {{/values}}
+                    </select>
+                </div>
+            {{/licensePlateState}}
+
+            {{#departmentId}}
+                <div data-role="fieldcontain">
+                    <label for="departmentId">{{label}}:</label>
+                    <select id="departmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
+                        {{#values}}
+                            <option value="{{id}}" {{#selected}} selected {{/selected}}>{{name}}</option>
+                        {{/values}}
+                    </select>
+                </div>
+            {{/departmentId}}
+
+            {{#authorizationProfileName}}
+                <div data-role="fieldcontain">
+                    <label for="authorizationProfileName">{{label}}:</label>
+                    <select id="authorizationProfileName" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
+                        {{#values}}
+                            <option value="{{id}}" {{#selected}} selected {{/selected}}>{{name}}</option>
+                        {{/values}}
+                    </select>
+                </div>
+            {{/authorizationProfileName}}
+        </form>
+
+        {{#submitButton}}
+            <button id="submitCardEdit-btn" data-role="button" data-theme="c">{{label}}</button>
+        {{/submitButton}}
+    {{/ableToEditCard}}
+{{/card}}
