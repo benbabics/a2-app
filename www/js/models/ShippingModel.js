@@ -1,5 +1,5 @@
-define(["backbone", "globals", "models/ShippingMethodModel"],
-    function (Backbone, globals, ShippingMethodModel) {
+define(["backbone", "mustache", "globals", "utils", "models/ShippingMethodModel"],
+    function (Backbone, Mustache, globals, utils, ShippingMethodModel) {
 
         "use strict";
 
@@ -32,9 +32,24 @@ define(["backbone", "globals", "models/ShippingMethodModel"],
                     required: true,
                     msg: globals.cardShipping.constants.ERROR_COMPANY_NAME_REQUIRED_FIELD
                 },
-                "addressLine1": {
-                    required: true,
-                    msg: globals.cardShipping.constants.ERROR_ADDRESS1_REQUIRED_FIELD
+                "addressLine1": [
+                    {
+                        required: true,
+                        msg: globals.cardShipping.constants.ERROR_ADDRESS1_REQUIRED_FIELD
+                    },
+                    {
+                        fn: function (value, attr, computedState) {
+                            return this.getPOBoxValidationMessage(value,
+                                globals.cardShipping.constants.ERROR_ADDRESS1_CANNNOT_BE_POBOX);
+                        }
+                    }
+                ],
+                "addressLine2": {
+                    required: false,
+                    fn: function (value, attr, computedState) {
+                        return this.getPOBoxValidationMessage(value,
+                            globals.cardShipping.constants.ERROR_ADDRESS2_CANNNOT_BE_POBOX);
+                    }
                 },
                 "city": {
                     required: true,
@@ -69,6 +84,23 @@ define(["backbone", "globals", "models/ShippingMethodModel"],
                     if (options.postalCode) { this.set("postalCode", options.postalCode); }
                     if (options.countryCode) { this.set("countryCode", options.countryCode); }
                     if (options.residence) { this.set("residence", options.residence); }
+                }
+            },
+
+            getPOBoxValidationMessage: function (address, messageTemplate) {
+                var shippingMethod;
+
+                if (this.get("shippingMethod")) {
+                    shippingMethod = this.get("shippingMethod").toJSON();
+
+                    if (!shippingMethod.poBoxAllowed) {
+                        if (utils.isPOBox(address)) {
+                            return Mustache.render(messageTemplate,
+                                {
+                                    "shippingMethod": shippingMethod.name
+                                });
+                        }
+                    }
                 }
             },
 

@@ -150,6 +150,77 @@ define(["Squire"],
                 // TODO: finish
             });
 
+            describe("has an isPOBox function that", function () {
+                it("is defined", function () {
+                    expect(utilsClass.isPOBox).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(utilsClass.isPOBox).toEqual(jasmine.any(Function));
+                });
+
+                it("should return expected value when address is not defined", function () {
+                    var address,
+                        actualValue = utilsClass.isPOBox(address);
+
+                    expect(actualValue).toBeFalsy();
+                });
+
+                it("should return expected value when address is a P.O.Box", function () {
+                    var addresses = [
+                            "PO Box",
+                            "P O Box",
+                            "POBox",
+                            "P OBox",
+                            "P.O. Box",
+                            "P. O. Box",
+                            "P.O.Box",
+                            "P. O.Box",
+                            "PO. Box",
+                            "P O. Box",
+                            "PO.Box",
+                            "P OBox",
+                            "P.O Box",
+                            "P. O Box",
+                            "P.OBox",
+                            "P. OBox",
+                            "POB",
+                            "P.O.B.",
+                            "POST OFFICE BOX"
+                        ],
+                        index;
+
+                    for (index = 0; index < addresses.length; index++) {
+                        expect(utilsClass.isPOBox(addresses[index])).toBeTruthy();
+                        expect(utilsClass.isPOBox(addresses[index].toLowerCase())).toBeTruthy();
+                        expect(utilsClass.isPOBox(addresses[index].toUpperCase())).toBeTruthy();
+                    }
+                });
+
+                it("should return expected value when address is NOT a P.O.Box", function () {
+                    var addresses = [
+                            "P Box",
+                            "P Box",
+                            "PBox",
+                            "Pb",
+                            "PB",
+                            "pB",
+                            "pb",
+                            "Po",
+                            "PO",
+                            "pO",
+                            "po"
+                        ],
+                        index;
+
+                    for (index = 0; index < addresses.length; index++) {
+                        expect(utilsClass.isPOBox(addresses[index])).toBeFalsy();
+                        expect(utilsClass.isPOBox(addresses[index].toLowerCase())).toBeFalsy();
+                        expect(utilsClass.isPOBox(addresses[index].toUpperCase())).toBeFalsy();
+                    }
+                });
+            });
+
             describe("has an addHours function that", function () {
                 it("is defined", function () {
                     expect(utilsClass.addHours).toBeDefined();

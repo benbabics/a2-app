@@ -247,6 +247,21 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
             return pattern.test(emailAddress);
         };
 
+        /*
+         * Function to determine if an address is a P.O.Box
+         *
+         * @param (String) address The Address to check
+         * @return (Boolean) True or False as to whether the Address is a P.O. Box
+         */
+        utils.isPOBox = function (address) {
+            if (address) {
+                var pattern = new RegExp(globals.APP.POBOX_PATTERN, "i");
+                return pattern.test(address);
+            }
+
+            return false;
+        };
+
         /**
          * Function to add hours to the provided date
          *

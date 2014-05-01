@@ -60,6 +60,7 @@ define(function (require) {
     globals.APP = {
         "NAME"                            : "WEXonline",
         "EMAIL_ADDRESS_VALIDATION_PATTERN": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$",
+        "POBOX_PATTERN"                   : "([\\w\\s*\\W]*(P(OST)?(\\.)?\\s*O(FF(ICE)?)?(\\.)?\\s*B(OX)?))[\\w\\s*\\W]*",
         "ZIP_CODE_PATTERN"                : "/\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d/",
         "ALPHANUMERIC_PATTERN"            : /^[A-Z\d]+$/i,
         "ALPHANUMERIC_WITH_SPACE_PATTERN" : /^[A-Z\d ]+$/i
@@ -869,6 +870,8 @@ define(function (require) {
         "ERROR_LAST_NAME_REQUIRED_FIELD"   : "Last Name must have a value",
         "ERROR_COMPANY_NAME_REQUIRED_FIELD": "Company must have a value",
         "ERROR_ADDRESS1_REQUIRED_FIELD"    : "Address 1 must have a value",
+        "ERROR_ADDRESS1_CANNNOT_BE_POBOX"  : "Address 1 cannot contain PO. Box when the delivery method is {{shippingMethod}}",
+        "ERROR_ADDRESS2_CANNNOT_BE_POBOX"  : "Address 2 cannot contain PO. Box when the delivery method is {{shippingMethod}}",
         "ERROR_CITY_REQUIRED_FIELD"        : "City must have a value",
         "ERROR_STATE_REQUIRED_FIELD"       : "State must have a value",
         "ERROR_POSTAL_CODE_REQUIRED_FIELD" : "Postal Code must have a value"

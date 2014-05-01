@@ -1,13 +1,17 @@
-define(["Squire", "backbone", "globals"],
-    function (Squire, Backbone, globals) {
+define(["Squire", "mustache", "backbone", "globals", "utils"],
+    function (Squire, Mustache, Backbone, globals, utils) {
 
         "use strict";
 
         var squire = new Squire(),
+            mockUtils = utils,
+            mockMustashe = Mustache,
             ShippingModel,
             shippingModel;
 
         squire.mock("backbone", Backbone);
+        squire.mock("utils", mockUtils);
+        squire.mock("mustache", mockMustashe);
 
         describe("A Shipping Model", function () {
             beforeEach(function (done) {
@@ -109,13 +113,108 @@ define(["Squire", "backbone", "globals"],
                 });
 
                 describe("has a validation configuration for the addressLine1 field that", function () {
-                    it("should set the field as required", function () {
-                        expect(shippingModel.validation.addressLine1.required).toBeTruthy();
+                    var addressValue = "Mock Address";
+
+                    it("has 2 validation rules", function () {
+                        expect(shippingModel.validation.addressLine1.length).toEqual(2);
                     });
 
-                    it("should set the error message when the field is not supplied", function () {
-                        expect(shippingModel.validation.addressLine1.msg)
-                            .toEqual(globals.cardShipping.constants.ERROR_ADDRESS1_REQUIRED_FIELD);
+                    describe("the first validation rule", function () {
+                        it("should set the field as required", function () {
+                            expect(shippingModel.validation.addressLine1[0].required).toBeTruthy();
+                        });
+
+                        it("should set the error message when the field is not supplied", function () {
+                            expect(shippingModel.validation.addressLine1[0].msg)
+                                .toEqual(globals.cardShipping.constants.ERROR_ADDRESS1_REQUIRED_FIELD);
+                        });
+                    });
+
+                    describe("the second validation rule", function () {
+                        describe("should have a fn function that", function () {
+                            var shippingMethod = new Backbone.Model(),
+                                mockShippingMethod = {
+                                    "id"          : "ID",
+                                    "name"        : "Name",
+                                    "cost"        : 6.66,
+                                    "poBoxAllowed": true
+                                },
+                                validationMessage = "Mock validation message",
+                                actualResponse;
+
+                            beforeEach(function () {
+                                shippingMethod.set(mockShippingMethod);
+                                shippingModel.set("shippingMethod", shippingMethod);
+
+                                spyOn(shippingModel, "getPOBoxValidationMessage").and.returnValue(validationMessage);
+
+                                actualResponse = shippingModel.validation.addressLine1[1].fn
+                                    .call(shippingModel, addressValue);
+                            });
+
+                            it("is defined", function () {
+                                expect(shippingModel.validation.addressLine1[1].fn).toBeDefined();
+                            });
+
+                            it("is a function", function () {
+                                expect(shippingModel.validation.addressLine1[1].fn).toEqual(jasmine.any(Function));
+                            });
+
+                            it("should call getPOBoxValidationMessage", function () {
+                                expect(shippingModel.getPOBoxValidationMessage).toHaveBeenCalledWith(addressValue,
+                                    globals.cardShipping.constants.ERROR_ADDRESS1_CANNNOT_BE_POBOX);
+                            });
+
+                            it("should return the expected result", function () {
+                                expect(actualResponse).toEqual(validationMessage);
+                            });
+                        });
+                    });
+                });
+
+                describe("has a validation configuration for the addressLine2 field that", function () {
+                    var addressValue = "Mock Address";
+
+                    it("should set the field as NOT required", function () {
+                        expect(shippingModel.validation.addressLine2.required).toBeFalsy();
+                    });
+
+                    describe("should have a fn function that", function () {
+                        var shippingMethod = new Backbone.Model(),
+                            mockShippingMethod = {
+                                "id"          : "ID",
+                                "name"        : "Name",
+                                "cost"        : 6.66,
+                                "poBoxAllowed": true
+                            },
+                            validationMessage = "Mock validation message",
+                            actualResponse;
+
+                        beforeEach(function () {
+                            shippingMethod.set(mockShippingMethod);
+                            shippingModel.set("shippingMethod", shippingMethod);
+
+                            spyOn(shippingModel, "getPOBoxValidationMessage").and.returnValue(validationMessage);
+
+                            actualResponse = shippingModel.validation.addressLine2.fn.call(shippingModel, addressValue);
+                        });
+
+                        it("is defined", function () {
+                            expect(shippingModel.validation.addressLine2.fn).toBeDefined();
+                        });
+
+                        it("is a function", function () {
+                            expect(shippingModel.validation.addressLine2.fn).toEqual(jasmine.any(Function));
+                        });
+
+                        it("should call getPOBoxValidationMessage", function () {
+                            expect(shippingModel.getPOBoxValidationMessage).toHaveBeenCalledWith(addressValue,
+                                globals.cardShipping.constants.ERROR_ADDRESS2_CANNNOT_BE_POBOX);
+                        });
+
+                        it("should return the expected result", function () {
+                            expect(actualResponse).toEqual(validationMessage);
+                        });
                     });
                 });
 
@@ -190,23 +289,23 @@ define(["Squire", "backbone", "globals"],
 
                 describe("when options are provided", function () {
                     var options = {
-                        "shippingMethod": {
-                            "id"          : "ID",
-                            "name"        : "Name",
-                            "cost"        : 6.66,
-                            "poBoxAllowed": true
-                        },
-                        "firstName"     : "First Name",
-                        "lastName"      : "Last Name",
-                        "companyName"   : "Company Name",
-                        "addressLine1"  : "Address Line 1",
-                        "addressLine2"  : "Address Line 2",
-                        "city"          : "City",
-                        "state"         : "State",
-                        "postalCode"    : "Postal Code",
-                        "countryCode"   : "Country Code",
-                        "residence"     : true
-                    };
+                            "shippingMethod": {
+                                "id"          : "ID",
+                                "name"        : "Name",
+                                "cost"        : 6.66,
+                                "poBoxAllowed": true
+                            },
+                            "firstName"     : "First Name",
+                            "lastName"      : "Last Name",
+                            "companyName"   : "Company Name",
+                            "addressLine1"  : "Address Line 1",
+                            "addressLine2"  : "Address Line 2",
+                            "city"          : "City",
+                            "state"         : "State",
+                            "postalCode"    : "Postal Code",
+                            "countryCode"   : "Country Code",
+                            "residence"     : true
+                        };
 
                     beforeEach(function () {
                         shippingModel.initialize(options);
@@ -271,6 +370,136 @@ define(["Squire", "backbone", "globals"],
 
                     it("should set residence", function () {
                         expect(shippingModel.set).toHaveBeenCalledWith("residence", options.residence);
+                    });
+                });
+            });
+
+            describe("has a getPOBoxValidationMessage function that", function () {
+                var shippingMethod = new Backbone.Model(),
+                    mockShippingMethod = {
+                        "id"          : "ID",
+                        "name"        : "Name",
+                        "cost"        : 6.66,
+                        "poBoxAllowed": true
+                    },
+                    addressValue = "Mock Address Value",
+                    validationMessageTemplate = "Mock Validation Message Template",
+                    renderedValidationMessage = "Mock Validation Message",
+                    actualResponse;
+
+                beforeEach(function () {
+                    shippingMethod.set(mockShippingMethod);
+                    shippingModel.set("shippingMethod", shippingMethod);
+                });
+
+                it("is defined", function () {
+                    expect(shippingModel.getPOBoxValidationMessage).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(shippingModel.getPOBoxValidationMessage).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the shipping method allows P.O. Boxes", function () {
+                    beforeEach(function () {
+                        shippingModel.get("shippingMethod").set("poBoxAllowed", true);
+                    });
+
+                    describe("when the isPOBox function on utils returns true", function () {
+                        beforeEach(function () {
+                            spyOn(mockUtils, "isPOBox").and.returnValue(true);
+                            spyOn(mockMustashe, "render").and.returnValue(renderedValidationMessage);
+
+                            actualResponse = shippingModel.getPOBoxValidationMessage(addressValue,
+                                                                                     validationMessageTemplate);
+                        });
+
+                        it("should NOT call isPOBox on utils", function () {
+                            expect(mockUtils.isPOBox).not.toHaveBeenCalled();
+                        });
+
+                        it("should NOT call render on Mustashe", function () {
+                            expect(mockMustashe.render).not.toHaveBeenCalled();
+                        });
+
+                        it("should return the expected result", function () {
+                            expect(actualResponse).toBeUndefined();
+                        });
+                    });
+
+                    describe("when the isPOBox function on utils returns false", function () {
+                        beforeEach(function () {
+                            spyOn(mockUtils, "isPOBox").and.returnValue(false);
+                            spyOn(mockMustashe, "render").and.returnValue(renderedValidationMessage);
+
+                            actualResponse = shippingModel.getPOBoxValidationMessage(addressValue,
+                                                                                     validationMessageTemplate);
+                        });
+
+                        it("should NOT call isPOBox on utils", function () {
+                            expect(mockUtils.isPOBox).not.toHaveBeenCalled();
+                        });
+
+                        it("should NOT call render on Mustashe", function () {
+                            expect(mockMustashe.render).not.toHaveBeenCalled();
+                        });
+
+                        it("should return the expected result", function () {
+                            expect(actualResponse).toBeUndefined();
+                        });
+                    });
+                });
+
+                describe("when the shipping method does NOT allow P.O. Boxes", function () {
+                    beforeEach(function () {
+                        shippingModel.get("shippingMethod").set("poBoxAllowed", false);
+                    });
+
+                    describe("when the isPOBox function on utils returns true", function () {
+                        beforeEach(function () {
+                            spyOn(mockUtils, "isPOBox").and.returnValue(true);
+                            spyOn(mockMustashe, "render").and.returnValue(renderedValidationMessage);
+
+                            actualResponse = shippingModel.getPOBoxValidationMessage(addressValue,
+                                                                                     validationMessageTemplate);
+                        });
+
+                        it("should call isPOBox on utils", function () {
+                            expect(mockUtils.isPOBox).toHaveBeenCalledWith(addressValue);
+                        });
+
+                        it("should call render on Mustashe", function () {
+                            expect(mockMustashe.render).toHaveBeenCalledWith(validationMessageTemplate,
+                                {
+                                    "shippingMethod": mockShippingMethod.name
+                                });
+                        });
+
+                        it("should return the expected result", function () {
+                            expect(actualResponse).toEqual(renderedValidationMessage);
+                        });
+                    });
+
+                    describe("when the isPOBox function on utils returns false", function () {
+                        beforeEach(function () {
+                            spyOn(mockUtils, "isPOBox").and.returnValue(false);
+                            spyOn(mockMustashe, "render").and.returnValue(renderedValidationMessage);
+
+                            actualResponse = shippingModel.getPOBoxValidationMessage(addressValue,
+                                                                                     validationMessageTemplate);
+                        });
+
+                        it("should call isPOBox on utils", function () {
+                            expect(mockUtils.isPOBox).toHaveBeenCalledWith(addressValue);
+                        });
+
+                        it("should NOT call render on Mustashe", function () {
+                            expect(mockMustashe.render).not.toHaveBeenCalled();
+                        });
+
+                        it("should return the expected result", function () {
+                            expect(actualResponse).toBeUndefined();
+                        });
                     });
                 });
             });
