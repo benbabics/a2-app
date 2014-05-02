@@ -87,6 +87,14 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
         utils.fileType = globals.DEFAULT["FILETYPE_" + (utils.isRetina ? "RETINA" : "NORMAL")];
 
         /*
+         * Time constants
+         */
+        utils.millisecondsPerSecond = 1000;
+        utils.millisecondsPerMinute = utils.millisecondsPerSecond * 60;
+        utils.millisecondsPerHour = utils.millisecondsPerMinute * 60;
+        utils.millisecondsPerDay = utils.millisecondsPerHour * 24;
+
+        /*
          * Extend Classes
         */
         utils.extend = function (child, parent) {
@@ -236,10 +244,10 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
             return pageId === utils.$.mobile.activePage.attr("id");
         };
 
-        /*
+        /**
          * Function to validate Email Address format
          *
-         * @param (String) emailAddress The Email Address to validate for formatting
+         * @param emailAddress (String) The Email Address to validate for formatting
          * @return (Boolean) True or False as to whether the Email Address is valid
          */
         utils.isEmailAddressValid = function (emailAddress) {
@@ -247,10 +255,10 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
             return pattern.test(emailAddress);
         };
 
-        /*
+        /**
          * Function to determine if an address is a P.O.Box
          *
-         * @param (String) address The Address to check
+         * @param address (String) address The Address to check
          * @return (Boolean) True or False as to whether the Address is a P.O. Box
          */
         utils.isPOBox = function (address) {
@@ -263,6 +271,19 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
         };
 
         /**
+         * Function to convert a date to a different timezone
+         *
+         * @param startingDate {Date} The date to convert to a different timezone
+         * @param timezoneOffset {int} The timezone offset in number of hours
+         * @returns {Date} The adjusted date
+         */
+        utils.convertDateToTimezone = function(startingDate, timezoneOffset) {
+            var utc = startingDate.getTime() + (startingDate.getTimezoneOffset() * utils.millisecondsPerMinute);
+
+            return new Date(utc + (timezoneOffset * utils.millisecondsPerHour));
+        };
+
+        /**
          * Function to add hours to the provided date
          *
          * @param startingDate the date to add hours to
@@ -271,7 +292,7 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
          */
         utils.addHours = function (startingDate, hoursToAdd) {
             var copiedDate = new Date(startingDate.getTime());
-            copiedDate.setTime(copiedDate.getTime() + (hoursToAdd * 60 * 60 * 1000));
+            copiedDate.setTime(copiedDate.getTime() + (hoursToAdd * utils.millisecondsPerHour));
             return copiedDate;
         };
 
@@ -284,7 +305,7 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
          */
         utils.addMinutes = function (startingDate, minutesToAdd) {
             var copiedDate = new Date(startingDate.getTime());
-            copiedDate.setTime(copiedDate.getTime() + (minutesToAdd * 60 * 1000));
+            copiedDate.setTime(copiedDate.getTime() + (minutesToAdd * utils.millisecondsPerMinute));
             return copiedDate;
         };
 

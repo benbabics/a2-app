@@ -41,6 +41,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
 
+                this.updateShippingWarning();
                 this.formatRequiredFields();
 
                 $content.trigger("create");
@@ -166,6 +167,26 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 return selectedCompany.get("shippingMethods").findWhere({"id": id});
             },
 
+            isAfterShippingCutoff: function () {
+                // Note that this is hard-coded to EST which results in us being an hour off during EDT
+                var timezoneOffset = -5,      // For EST timezone
+                    currentDate = new Date(), // current date in local timezone
+                    shippingCutoffHour = 15;  // 3pm EST in 24 hour time
+
+                return utils.convertDateToTimezone(currentDate, timezoneOffset).getHours() >= shippingCutoffHour;
+            },
+
+            updateShippingWarning: function () {
+                var displayWarning = false,
+                    shippingMethod = this.model.get("shippingMethod");
+
+                if (shippingMethod && shippingMethod.get("id") === "OVERNIGHT") {
+                    displayWarning = this.isAfterShippingCutoff();
+                }
+
+                this.$el.find("#shippingWarning").toggleClass("ui-hidden", !displayWarning);
+            },
+
             /*
              * Event Handlers
              */
@@ -173,6 +194,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 var target = evt.target;
                 if (target.name === "shippingMethod") {
                     this.updateAttribute("shippingMethod", this.findShippingMethod(target.value));
+                    this.updateShippingWarning();
                 } else {
                     CardShippingView.__super__.handleInputChanged.apply(this, arguments);
                 }

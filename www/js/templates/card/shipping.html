@@ -17,6 +17,9 @@
                             <option value="{{id}}" {{#selected}} selected {{/selected}}>{{name}}</option>
                         {{/values}}
                     </select>
+                    <div id="shippingWarning" class="ui-hidden">
+                        <em><small>{{warning}}</small></em>
+                    </div>
                 </div>
             {{/shippingMethod}}
 

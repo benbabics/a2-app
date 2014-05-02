@@ -883,7 +883,8 @@ define(function (require) {
             "label"      : "Delivery Method",
             "name"       : "shippingMethod",
             "enabled"    : true,
-            "values"     : []
+            "values"     : [],
+            "warning"    : "Cards requested prior to 3pm EST will be delivered the next business day."
         },
         "firstName": {
             "label"      : "First Name",

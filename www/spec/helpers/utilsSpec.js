@@ -221,6 +221,33 @@ define(["Squire"],
                 });
             });
 
+            describe("has an convertDateToTimezone function that", function () {
+                it("is defined", function () {
+                    expect(utilsClass.convertDateToTimezone).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(utilsClass.convertDateToTimezone).toEqual(jasmine.any(Function));
+                });
+
+                it("should return the expected result", function () {
+                    var currentDate = new Date(),
+                        utcDate = utilsClass.convertDateToTimezone(currentDate, 0),
+                        utc = currentDate.getTime() +
+                            (currentDate.getTimezoneOffset() * utilsClass.millisecondsPerMinute);
+
+                    expect(utcDate.getTime()).toEqual(utc);
+                });
+
+                it("should add the correct number of milliseconds per timezone offset", function () {
+                    var currentDate = new Date(),
+                        utcDate = utilsClass.convertDateToTimezone(currentDate, 0),
+                        plusOneDate = utilsClass.convertDateToTimezone(currentDate, 1);
+
+                    expect(plusOneDate.getTime() - utcDate.getTime()).toEqual(utilsClass.millisecondsPerHour);
+                });
+            });
+
             describe("has an addHours function that", function () {
                 it("is defined", function () {
                     expect(utilsClass.addHours).toBeDefined();

@@ -242,6 +242,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(cardShippingView, "resetModel").and.callThrough();
                     spyOn(cardShippingView, "getConfiguration").and.returnValue(expectedConfiguration);
+                    spyOn(cardShippingView, "updateShippingWarning").and.callThrough();
                     spyOn(cardShippingView, "formatRequiredFields").and.callThrough();
 
                     cardShippingView.render();
@@ -266,6 +267,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 it("should call the html function on the content", function () {
                     var expectedContent = Mustache.render(pageTemplate, expectedConfiguration);
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
+                });
+
+                it("should call updateShippingWarning()", function () {
+                    expect(cardShippingView.updateShippingWarning).toHaveBeenCalledWith();
                 });
 
                 it("should call formatRequiredFields()", function () {
@@ -604,6 +609,168 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 });
             });
 
+            describe("has an isAfterShippingCutoff function that", function () {
+                it("is defined", function () {
+                    expect(cardShippingView.isAfterShippingCutoff).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardShippingView.isAfterShippingCutoff).toEqual(jasmine.any(Function));
+                });
+
+                describe("when converted date is prior to 3pm", function () {
+                    it("should return the expected value", function () {
+                        var index,
+                            date = new Date();
+
+                        spyOn(mockUtils, "convertDateToTimezone").and.returnValue(date);
+
+                        for (index = 0; index < 15; index++) {
+                            date.setHours(index, 0, 0);
+
+                            expect(cardShippingView.isAfterShippingCutoff()).toBeFalsy();
+                        }
+                    });
+                });
+
+                describe("when converted date is after 3pm", function () {
+                    it("should return the expected value", function () {
+                        var index,
+                            date = new Date();
+
+                        spyOn(mockUtils, "convertDateToTimezone").and.returnValue(date);
+
+                        for (index = 15; index < 24; index++) {
+                            date.setHours(index, 0, 0);
+
+                            expect(cardShippingView.isAfterShippingCutoff()).toBeTruthy();
+                        }
+                    });
+                });
+
+                it("should call updateShippingWarning", function () {
+                    var currentDate = new Date(),
+                        datePassed;
+
+                    spyOn(mockUtils, "convertDateToTimezone").and.callThrough();
+
+                    cardShippingView.isAfterShippingCutoff();
+
+                    expect(mockUtils.convertDateToTimezone).toHaveBeenCalledWith(jasmine.any(Date), -5);
+
+                    datePassed = mockUtils.convertDateToTimezone.calls.mostRecent().args[0];
+                    // This has a chance of failing if it takes longer than 10 seconds for this test to run
+                    expect(datePassed.getTime() - currentDate.getTime()).toBeLessThan(10000);
+                });
+            });
+
+            describe("has an updateShippingWarning function that", function () {
+                var mockElement = {
+                        toggleClass: function () {}
+                    };
+
+                it("is defined", function () {
+                    expect(cardShippingView.updateShippingWarning).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardShippingView.updateShippingWarning).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the shipping method is NOT OVERNIGHT", function () {
+                    var shippingMethod = new Backbone.Model(),
+                        mockShippingMethod = {
+                            "id"          : "ID",
+                            "name"        : "Name",
+                            "cost"        : 6.66,
+                            "poBoxAllowed": true
+                        };
+
+                    beforeEach(function () {
+                        shippingMethod.set(mockShippingMethod);
+                        shippingModel.set("shippingMethod", shippingMethod);
+
+                        spyOn(cardShippingView.$el, "find").and.returnValue(mockElement);
+                        spyOn(mockElement, "toggleClass").and.callThrough();
+
+                        cardShippingView.updateShippingWarning();
+                    });
+
+                    it("should call find on $el", function () {
+                        expect(cardShippingView.$el.find).toHaveBeenCalledWith("#shippingWarning");
+                    });
+
+                    it("should call toggleClass on the element", function () {
+                        expect(cardShippingView.$el.find).toHaveBeenCalledWith("#shippingWarning");
+
+                        expect(mockElement.toggleClass).toHaveBeenCalledWith("ui-hidden", true);
+                    });
+                });
+
+                describe("when the shipping method is OVERNIGHT", function () {
+                    var shippingMethod = new Backbone.Model(),
+                        mockShippingMethod = {
+                            "id"          : "OVERNIGHT",
+                            "name"        : "Name",
+                            "cost"        : 6.66,
+                            "poBoxAllowed": true
+                        };
+
+                    beforeEach(function () {
+                        shippingMethod.set(mockShippingMethod);
+                        shippingModel.set("shippingMethod", shippingMethod);
+                    });
+
+                    describe("when isAfterShippingCutoff returns false", function () {
+                        beforeEach(function () {
+                            spyOn(cardShippingView.$el, "find").and.returnValue(mockElement);
+                            spyOn(mockElement, "toggleClass").and.callThrough();
+                            spyOn(cardShippingView, "isAfterShippingCutoff").and.returnValue(false);
+
+                            cardShippingView.updateShippingWarning();
+                        });
+
+                        it("should call isAfterShippingCutoff", function () {
+                            expect(cardShippingView.isAfterShippingCutoff).toHaveBeenCalledWith();
+                        });
+
+                        it("should call find on $el", function () {
+                            expect(cardShippingView.$el.find).toHaveBeenCalledWith("#shippingWarning");
+                        });
+
+                        it("should call toggleClass on the element", function () {
+                            expect(cardShippingView.$el.find).toHaveBeenCalledWith("#shippingWarning");
+
+                            expect(mockElement.toggleClass).toHaveBeenCalledWith("ui-hidden", true);
+                        });
+                    });
+
+                    describe("when isAfterShippingCutoff returns true", function () {
+                        beforeEach(function () {
+                            spyOn(cardShippingView.$el, "find").and.returnValue(mockElement);
+                            spyOn(mockElement, "toggleClass").and.callThrough();
+                            spyOn(cardShippingView, "isAfterShippingCutoff").and.returnValue(true);
+
+                            cardShippingView.updateShippingWarning();
+                        });
+
+                        it("should call isAfterShippingCutoff", function () {
+                            expect(cardShippingView.isAfterShippingCutoff).toHaveBeenCalledWith();
+                        });
+
+                        it("should call find on $el", function () {
+                            expect(cardShippingView.$el.find).toHaveBeenCalledWith("#shippingWarning");
+                        });
+
+                        it("should call toggleClass on the element", function () {
+                            expect(cardShippingView.$el.find).toHaveBeenCalledWith("#shippingWarning");
+
+                            expect(mockElement.toggleClass).toHaveBeenCalledWith("ui-hidden", false);
+                        });
+                    });
+                });
+            });
+
             describe("has a handleInputChanged function that", function () {
                 it("is defined", function () {
                     expect(cardShippingView.handleInputChanged).toBeDefined();
@@ -629,6 +796,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     beforeEach(function () {
                         spyOn(cardShippingView, "findShippingMethod").and.returnValue(mockShippingMethod);
                         spyOn(cardShippingView, "updateAttribute").and.callFake(function () {});
+                        spyOn(cardShippingView, "updateShippingWarning").and.callThrough();
 
                         cardShippingView.handleInputChanged(mockEvent);
                     });
@@ -638,7 +806,12 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     });
 
                     it("should call updateAttribute", function () {
-                        expect(cardShippingView.updateAttribute).toHaveBeenCalledWith("shippingMethod", mockShippingMethod);
+                        expect(cardShippingView.updateAttribute)
+                            .toHaveBeenCalledWith("shippingMethod", mockShippingMethod);
+                    });
+
+                    it("should call updateShippingWarning", function () {
+                        expect(cardShippingView.updateShippingWarning).toHaveBeenCalledWith();
                     });
                 });
 
