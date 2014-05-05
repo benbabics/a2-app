@@ -46,27 +46,31 @@ define(["backbone", "utils", "mustache", "globals", "views/DriverView",
             },
 
             renderContent: function () {
-                var $content = this.$el.find(":jqmData(role=content)");
-
-                // TODO - Figure out why assigning $content.find("#driverSearchResultList") to a variable and using
-                // the variable rather that calling find each time resulted in no results getting added to the list
+                var $content = this.$el.find(":jqmData(role=content)"),
+                    container = document.createDocumentFragment(),
+                    listContainer;
 
                 // empty list
                 $content.find("#driverSearchResultList").empty();
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
 
+                listContainer = $content.find("#driverSearchResultList");
+
                 // populate $list
                 this.collection.each(function (driver) {
                     var driverView = new DriverView({
                         model: driver
-                    }).render();
-                    $content.find("#driverSearchResultList").append(driverView.$el); // add driver to the list
+                    });
+                    driverView.render();
+                    container.appendChild(driverView.el);  // add driver to the list
                 }, this);
+
+                listContainer.append(container);
 
                 try {
                     // This call throws an exception if called during startup before the list is ready
-                    $content.find("#driverSearchResultList").listview("refresh");
+                    listContainer.listview("refresh");
                 } catch (e) {}
 
                 $content.trigger("create");

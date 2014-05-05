@@ -74,8 +74,9 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                 "vin"                     : "12345678901234567"
             },
             cardModel = new CardModel(),
+            mockNode = document.createElement("li"),
             mockCardView = {
-                $el: "",
+                el: mockNode,
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { return mockCardView; }

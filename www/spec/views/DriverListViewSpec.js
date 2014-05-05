@@ -72,8 +72,9 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 }
             },
             driverModel,
+            mockNode = document.createElement("li"),
             mockDriverView = {
-                $el: "",
+                el: mockNode,
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { return mockDriverView; }

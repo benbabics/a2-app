@@ -46,27 +46,31 @@ define(["backbone", "utils", "mustache", "globals", "views/CardView",
             },
 
             renderContent: function () {
-                var $content = this.$el.find(":jqmData(role=content)");
-
-                // TODO - Figure out why assigning $content.find("#cardSearchResultList") to a variable and using
-                // the variable rather that calling find each time resulted in no results getting added to the list
+                var $content = this.$el.find(":jqmData(role=content)"),
+                    container = document.createDocumentFragment(),
+                    listContainer;
 
                 // empty list
                 $content.find("#cardSearchResultList").empty();
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
 
+                listContainer = $content.find("#cardSearchResultList");
+
                 // populate $list
                 this.collection.each(function (card) {
                     var cardView = new CardView({
                         model: card
-                    }).render();
-                    $content.find("#cardSearchResultList").append(cardView.$el); // add card to the list
+                    });
+                    cardView.render();
+                    container.appendChild(cardView.el);  // add card to the list
                 }, this);
+
+                listContainer.append(container);
 
                 try {
                     // This call throws an exception if called during startup before the list is ready
-                    $content.find("#cardSearchResultList").listview("refresh");
+                    listContainer.listview("refresh");
                 } catch (e) {}
 
                 $content.trigger("create");
