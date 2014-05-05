@@ -29,15 +29,18 @@ define(["backbone", "globals", "facade", "utils", "mustache"],
 
             setModel: function (model) {
                 this.model = model;
+                this.setupLoadingIndicatorOnModel(this.model);
+            },
 
-                if (this.model) {
+            setupLoadingIndicatorOnModel: function (model) {
+                if (model) {
                     // Set handlers for model events
-                    this.listenTo(this.model, "request", function () {   // when an ajax request has been sent
+                    this.listenTo(model, "request", function () {   // when an ajax request has been sent
                         this.showLoadingIndicator(true);
                     });
 
-                    this.listenTo(this.model, "sync error", function () {// when an ajax request has been completed with
-                        this.hideLoadingIndicator(true);                 // either success (sync) or failure (error)
+                    this.listenTo(model, "sync error", function () {// when an ajax request has been completed with
+                        this.hideLoadingIndicator(true);            // either success (sync) or failure (error)
                     });
                 }
             },

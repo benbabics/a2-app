@@ -225,6 +225,32 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 });
             });
 
+            describe("has a setCardModel function that", function () {
+                beforeEach(function () {
+                    cardShippingView.cardModel = null;
+
+                    spyOn(cardShippingView, "setupLoadingIndicatorOnModel").and.callFake(function () { });
+
+                    cardShippingView.setCardModel(cardModel);
+                });
+
+                it("is defined", function () {
+                    expect(cardShippingView.setCardModel).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardShippingView.setCardModel).toEqual(jasmine.any(Function));
+                });
+
+                it("should set cardModel", function () {
+                    expect(cardShippingView.cardModel).toEqual(cardModel);
+                });
+
+                it("should call setupLoadingIndicatorOnModel", function () {
+                    expect(cardShippingView.setupLoadingIndicatorOnModel).toHaveBeenCalledWith(cardModel);
+                });
+            });
+
             describe("has a render function that", function () {
                 var actualContent,
                     expectedConfiguration;

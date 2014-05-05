@@ -138,7 +138,7 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
             },
 
             showCardShippingDetails: function (cardModel) {
-                this.cardShippingView.cardModel = cardModel;
+                this.cardShippingView.setCardModel(cardModel);
                 this.cardShippingView.render();
                 utils.changePage(this.cardShippingView.$el);
             },

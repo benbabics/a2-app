@@ -73,6 +73,7 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 $el: "",
                 constructor: function () { },
                 initialize: function () { },
+                setCardModel: function () { },
                 render: function () { },
                 on: function () { },
                 showLoadingIndicator: function () { },
@@ -806,7 +807,7 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
 
             describe("has a showCardShippingDetails function that", function () {
                 beforeEach(function () {
-                    mockCardShippingView.model = null;
+                    spyOn(mockCardShippingView, "setCardModel").and.callThrough();
                     spyOn(mockCardShippingView, "render").and.callThrough();
                     spyOn(mockUtils, "changePage").and.callThrough();
 
@@ -821,8 +822,8 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                     expect(cardController.showCardShippingDetails).toEqual(jasmine.any(Function));
                 });
 
-                it("should set cardModel on the Card Shipping View Page", function () {
-                    expect(mockCardShippingView.cardModel).toEqual(cardModel);
+                it("should call setCardModel on the Card Shipping View Page", function () {
+                    expect(mockCardShippingView.setCardModel).toHaveBeenCalledWith(cardModel);
                 });
 
                 it("should call render on the Card Shipping View Page", function () {

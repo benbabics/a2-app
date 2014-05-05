@@ -34,6 +34,11 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 }
             },
 
+            setCardModel: function (cardModel) {
+                this.cardModel = cardModel;
+                this.setupLoadingIndicatorOnModel(this.cardModel);
+            },
+
             render: function () {
                 var $content = this.$el.find(":jqmData(role=content)");
 
@@ -130,8 +135,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 cardConfiguration.shipping.address.state.value = shipping.state;
                 cardConfiguration.shipping.address.postalCode.value = shipping.postalCode;
                 cardConfiguration.shipping.residence.value = (shipping.residence.name === true) ?
-                    globals.cardChangedDetails.constants.RESIDENCE_YES :
-                    globals.cardChangedDetails.constants.RESIDENCE_NO;
+                        globals.cardChangedDetails.constants.RESIDENCE_YES :
+                        globals.cardChangedDetails.constants.RESIDENCE_NO;
 
                 return {
                     "message": response.message,

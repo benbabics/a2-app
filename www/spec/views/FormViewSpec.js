@@ -123,7 +123,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
 
             describe("has a setModel function that", function () {
                 beforeEach(function () {
-                    spyOn(formView, "listenTo").and.callFake(function () { });
+                    spyOn(formView, "setupLoadingIndicatorOnModel").and.callFake(function () { });
 
                     formView.setModel(formModel);
                 });
@@ -134,6 +134,26 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
 
                 it("is a function", function () {
                     expect(formView.setModel).toEqual(jasmine.any(Function));
+                });
+
+                it("should call setupLoadingIndicatorOnModel", function () {
+                    expect(formView.setupLoadingIndicatorOnModel).toHaveBeenCalledWith(formModel);
+                });
+            });
+
+            describe("has a setupLoadingIndicatorOnModel function that", function () {
+                beforeEach(function () {
+                    spyOn(formView, "listenTo").and.callFake(function () { });
+
+                    formView.setupLoadingIndicatorOnModel(formModel);
+                });
+
+                it("is defined", function () {
+                    expect(formView.setupLoadingIndicatorOnModel).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(formView.setupLoadingIndicatorOnModel).toEqual(jasmine.any(Function));
                 });
 
                 it("should register a function as the handler for the request event", function () {
