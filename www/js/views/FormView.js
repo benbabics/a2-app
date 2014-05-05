@@ -32,13 +32,13 @@ define(["backbone", "globals", "facade", "utils", "mustache"],
 
                 if (this.model) {
                     // Set handlers for model events
-                    this.model.on("request", function () {                // when an ajax request has been sent
+                    this.listenTo(this.model, "request", function () {   // when an ajax request has been sent
                         this.showLoadingIndicator(true);
-                    }, this);
+                    });
 
-                    this.model.on("sync error", function () {             // when an ajax request has been completed with
-                        this.hideLoadingIndicator(true);                  // either success (sync) or failure (error)
-                    }, this);
+                    this.listenTo(this.model, "sync error", function () {// when an ajax request has been completed with
+                        this.hideLoadingIndicator(true);                 // either success (sync) or failure (error)
+                    });
                 }
             },
 

@@ -99,10 +99,6 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(ValidationFormView.__super__, "initialize").and.callThrough();
-                    spyOn(Backbone.Validation, "bind").and.callThrough();
-                    spyOn(formModel, "on").and.callFake(function () { });
-                    spyOn(mockMustache, "parse").and.callThrough();
-                    spyOn(validationFormView, "pageCreate").and.callFake(function () { });
                     spyOn(mockUtils._, "bindAll").and.callFake(function () { });
 
                     validationFormView.initialize();
@@ -121,11 +117,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                 });
 
                 it("should call utils._.bindAll", function () {
-                    expect(mockUtils._.bindAll).toHaveBeenCalled();
-
-                    expect(mockUtils._.bindAll.calls.mostRecent().args.length).toEqual(2);
-                    expect(mockUtils._.bindAll.calls.mostRecent().args[0]).toEqual(validationFormView);
-                    expect(mockUtils._.bindAll.calls.mostRecent().args[1]).toEqual("handleValidationError");
+                    expect(mockUtils._.bindAll).toHaveBeenCalledWith(validationFormView, "handleValidationError");
                 });
             });
 
@@ -133,7 +125,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                 beforeEach(function () {
                     spyOn(ValidationFormView.__super__, "setModel").and.callThrough();
                     spyOn(Backbone.Validation, "bind").and.callThrough();
-                    spyOn(formModel, "on").and.callFake(function () { });
+                    spyOn(validationFormView, "listenTo").and.callFake(function () { });
                     spyOn(mockMustache, "parse").and.callThrough();
                     spyOn(validationFormView, "pageCreate").and.callFake(function () { });
                     spyOn(mockUtils._, "bindAll").and.callFake(function () { });
@@ -158,10 +150,8 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                 });
 
                 it("should register a function as the handler for the invalid event", function () {
-                    expect(formModel.on).toHaveBeenCalled();
-                    expect(formModel.on.calls.mostRecent().args.length).toEqual(2);
-                    expect(formModel.on.calls.mostRecent().args[0]).toEqual("invalid");
-                    expect(formModel.on.calls.mostRecent().args[1]).toEqual(validationFormView.handleValidationError);
+                    expect(validationFormView.listenTo)
+                        .toHaveBeenCalledWith(formModel, "invalid", validationFormView.handleValidationError);
                 });
             });
 

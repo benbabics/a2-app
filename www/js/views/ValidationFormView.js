@@ -22,7 +22,7 @@ define(["backbone", "globals", "facade", "utils", "mustache",  "views/FormView",
                     Backbone.Validation.bind(this);
 
                     // Set handlers for model events
-                    this.model.on("invalid", this.handleValidationError); // when validation of the model fails
+                    this.listenTo(this.model, "invalid", this.handleValidationError); // handle model validation failure
                 }
             },
 

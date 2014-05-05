@@ -123,28 +123,25 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
 
             describe("has a setModel function that", function () {
                 beforeEach(function () {
-                    spyOn(formModel, "on").and.callFake(function () { });
+                    spyOn(formView, "listenTo").and.callFake(function () { });
 
                     formView.setModel(formModel);
                 });
 
                 it("is defined", function () {
-                    expect(formView.initialize).toBeDefined();
+                    expect(formView.setModel).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(formView.initialize).toEqual(jasmine.any(Function));
+                    expect(formView.setModel).toEqual(jasmine.any(Function));
                 });
 
                 it("should register a function as the handler for the request event", function () {
                     var eventHandler;
 
-                    expect(formModel.on).toHaveBeenCalled();
-                    expect(formModel.on.calls.argsFor(0).length).toEqual(3);
-                    expect(formModel.on.calls.argsFor(0)[0]).toEqual("request");
-                    expect(formModel.on.calls.argsFor(0)[2]).toEqual(formView);
+                    expect(formView.listenTo).toHaveBeenCalledWith(formModel, "request", jasmine.any(Function));
 
-                    eventHandler = formModel.on.calls.argsFor(0)[1];
+                    eventHandler = formView.listenTo.calls.argsFor(0)[2];
                     spyOn(formView, "showLoadingIndicator").and.callFake(function () { });
 
                     eventHandler.apply(formView);
@@ -155,12 +152,9 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                 it("should register a function as the handler for the sync and error events", function () {
                     var eventHandler;
 
-                    expect(formModel.on).toHaveBeenCalled();
-                    expect(formModel.on.calls.argsFor(1).length).toEqual(3);
-                    expect(formModel.on.calls.argsFor(1)[0]).toEqual("sync error");
-                    expect(formModel.on.calls.argsFor(1)[2]).toEqual(formView);
+                    expect(formView.listenTo).toHaveBeenCalledWith(formModel, "sync error", jasmine.any(Function));
 
-                    eventHandler = formModel.on.calls.argsFor(1)[1];
+                    eventHandler = formView.listenTo.calls.argsFor(1)[2];
                     spyOn(formView, "hideLoadingIndicator").and.callFake(function () { });
 
                     eventHandler.apply(formView);
