@@ -1,7 +1,8 @@
 define(["subscribers/about", "subscribers/app", "subscribers/card", "subscribers/contactUs",
-        "subscribers/driver", "subscribers/home", "subscribers/login", "subscribers/updatePrompt"],
+        "subscribers/driver", "subscribers/home", "subscribers/invoice", "subscribers/login",
+        "subscribers/updatePrompt"],
     function (aboutSubscriber, appSubscriber, cardSubscriber, contactUsSubscriber,
-              driverSubscriber, homeSubscriber, loginSubscriber, updatePromptSubscriber) {
+              driverSubscriber, homeSubscriber, invoiceSubscriber, loginSubscriber, updatePromptSubscriber) {
 
         "use strict";
 
@@ -14,6 +15,7 @@ define(["subscribers/about", "subscribers/app", "subscribers/card", "subscribers
         contactUsSubscriber.init();
         driverSubscriber.init();
         homeSubscriber.init();
+        invoiceSubscriber.init();
         loginSubscriber.init();
         updatePromptSubscriber.init();
     });

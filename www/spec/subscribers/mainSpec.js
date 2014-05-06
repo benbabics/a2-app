@@ -23,6 +23,9 @@ define(["Squire"],
             mockHomeSubscriber = {
                 init: jasmine.createSpy("init() spy")
             },
+            mockInvoiceSubscriber = {
+                init: jasmine.createSpy("init() spy")
+            },
             mockLoginSubscriber = {
                 init: jasmine.createSpy("init() spy")
             },
@@ -36,6 +39,7 @@ define(["Squire"],
         squire.mock("subscribers/contactUs", mockContactUsSubscriber);
         squire.mock("subscribers/driver", mockDriverSubscriber);
         squire.mock("subscribers/home", mockHomeSubscriber);
+        squire.mock("subscribers/invoice", mockInvoiceSubscriber);
         squire.mock("subscribers/login", mockLoginSubscriber);
         squire.mock("subscribers/updatePrompt", mockUpdatePromptSubscriber);
 
@@ -68,6 +72,10 @@ define(["Squire"],
 
             it("should call the init function on the Home Subscriber", function () {
                 expect(mockHomeSubscriber.init).toHaveBeenCalledWith();
+            });
+
+            it("should call the init function on the Invoice Subscriber", function () {
+                expect(mockInvoiceSubscriber.init).toHaveBeenCalledWith();
             });
 
             it("should call the init function on the Login Subscriber", function () {

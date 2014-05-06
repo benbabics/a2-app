@@ -57,6 +57,7 @@ var specList =
         "spec/controllers/ContactUsControllerSpec.js",
         "spec/controllers/DriverControllerSpec.js",
         "spec/controllers/HomeControllerSpec.js",
+        "spec/controllers/InvoiceControllerSpec.js",
         "spec/controllers/LoginControllerSpec.js",
         "spec/controllers/UpdatePromptControllerSpec.js",
 
@@ -70,6 +71,7 @@ var specList =
         "spec/subscribers/contactUsSpec.js",
         "spec/subscribers/driverSpec.js",
         "spec/subscribers/homeSpec.js",
+        "spec/subscribers/invoiceSpec.js",
         "spec/subscribers/loginSpec.js",
         "spec/subscribers/mainSpec.js",
         "spec/subscribers/updatePromptSpec.js",
