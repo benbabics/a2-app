@@ -167,14 +167,14 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
                         homeView.model.set("permissions", {"MOBILE_PAYMENT_VIEW": true});
                         homeView.render();
 
-                        expect(actualContent[0]).toContainElement("a[href='#invoices']");
+                        expect(actualContent[0]).toContainElement("a[href='#invoiceSummary']");
                     });
 
                     it("should NOT include a link to the Invoice page if the user does NOT have the MOBILE_PAYMENT_VIEW permission", function () {
                         homeView.model.set("permissions", {"MOBILE_PAYMENT_VIEW": false});
                         homeView.render();
 
-                        expect(actualContent[0]).not.toContainElement("a[href='#invoices']");
+                        expect(actualContent[0]).not.toContainElement("a[href='#invoiceSummary']");
                     });
 
                     it("should include a link to the Cards page if the user has the MOBILE_CARD_VIEW permission", function () {

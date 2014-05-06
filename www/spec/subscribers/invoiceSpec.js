@@ -10,7 +10,7 @@ define(["Squire"],
                 subscribeTo: jasmine.createSpy("subscribeTo() spy").and.returnValue(mockSubscribe)
             },
             mockInvoiceController = {
-                init: null
+                init: function () {}
             },
             invoiceSubscriber;
 
