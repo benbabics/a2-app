@@ -67,7 +67,7 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
             },
 
             navigateDriverDetails: function (id) {
-                this.driverEditView.model = this.driverCollection.findWhere({"id": id});
+                this.driverEditView.setModel(this.driverCollection.findWhere({"id": id}));
                 this.driverEditView.render();
                 utils.changePage(this.driverEditView.$el);
             },

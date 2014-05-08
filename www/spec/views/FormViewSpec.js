@@ -35,6 +35,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                     "</div>" +
                 "</form>",
             formModel = new Backbone.Model(),
+            FormView,
             formView;
 
         squire.mock("facade", mockFacade);
@@ -44,11 +45,12 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
         describe("A Form View", function () {
 
             beforeEach(function (done) {
-                squire.require(["views/FormView", "views/AppView"], function (FormView, AppView) {
+                squire.require(["views/FormView", "views/AppView"], function (JasmineFormView, AppView) {
 
                     var appView = new AppView();
                     appView.initialize();
 
+                    FormView = JasmineFormView;
                     formView = new FormView({
                         model: formModel
                     });
@@ -83,9 +85,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
-                    spyOn(formView, "setModel").and.callFake(function () { });
-                    spyOn(mockMustache, "parse").and.callThrough();
-                    spyOn(formView, "pageCreate").and.callFake(function () { });
+                    spyOn(FormView.__super__, "initialize").and.callFake(function () {});
                     spyOn(mockUtils._, "bindAll").and.callFake(function () { });
 
                     formView.initialize();
@@ -99,6 +99,10 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                     expect(formView.initialize).toEqual(jasmine.any(Function));
                 });
 
+                it("should call super()", function () {
+                    expect(FormView.__super__.initialize).toHaveBeenCalledWith();
+                });
+
                 it("should call utils._.bindAll", function () {
                     expect(mockUtils._.bindAll).toHaveBeenCalled();
 
@@ -106,90 +110,6 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                     expect(mockUtils._.bindAll.calls.mostRecent().args[0]).toEqual(formView);
                     expect(mockUtils._.bindAll.calls.mostRecent().args[1]).toEqual("handleInputChanged");
                     expect(mockUtils._.bindAll.calls.mostRecent().args[2]).toEqual("submitForm");
-                });
-
-                it("should call setModel()", function () {
-                    expect(formView.setModel).toHaveBeenCalledWith(formModel);
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(formView.template);
-                });
-
-                it("should call pageCreate()", function () {
-                    expect(formView.pageCreate).toHaveBeenCalledWith();
-                });
-            });
-
-            describe("has a setModel function that", function () {
-                beforeEach(function () {
-                    spyOn(formView, "setupLoadingIndicatorOnModel").and.callFake(function () { });
-
-                    formView.setModel(formModel);
-                });
-
-                it("is defined", function () {
-                    expect(formView.setModel).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(formView.setModel).toEqual(jasmine.any(Function));
-                });
-
-                it("should call setupLoadingIndicatorOnModel", function () {
-                    expect(formView.setupLoadingIndicatorOnModel).toHaveBeenCalledWith(formModel);
-                });
-            });
-
-            describe("has a setupLoadingIndicatorOnModel function that", function () {
-                beforeEach(function () {
-                    spyOn(formView, "listenTo").and.callFake(function () { });
-
-                    formView.setupLoadingIndicatorOnModel(formModel);
-                });
-
-                it("is defined", function () {
-                    expect(formView.setupLoadingIndicatorOnModel).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(formView.setupLoadingIndicatorOnModel).toEqual(jasmine.any(Function));
-                });
-
-                it("should register a function as the handler for the request event", function () {
-                    var eventHandler;
-
-                    expect(formView.listenTo).toHaveBeenCalledWith(formModel, "request", jasmine.any(Function));
-
-                    eventHandler = formView.listenTo.calls.argsFor(0)[2];
-                    spyOn(formView, "showLoadingIndicator").and.callFake(function () { });
-
-                    eventHandler.apply(formView);
-
-                    expect(formView.showLoadingIndicator).toHaveBeenCalledWith(true);
-                });
-
-                it("should register a function as the handler for the sync and error events", function () {
-                    var eventHandler;
-
-                    expect(formView.listenTo).toHaveBeenCalledWith(formModel, "sync error", jasmine.any(Function));
-
-                    eventHandler = formView.listenTo.calls.argsFor(1)[2];
-                    spyOn(formView, "hideLoadingIndicator").and.callFake(function () { });
-
-                    eventHandler.apply(formView);
-
-                    expect(formView.hideLoadingIndicator).toHaveBeenCalledWith(true);
-                });
-            });
-
-            describe("has a pageCreate function that", function () {
-                it("is defined", function () {
-                    expect(formView.pageCreate).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(formView.pageCreate).toEqual(jasmine.any(Function));
                 });
             });
 
@@ -243,66 +163,6 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
 
                 it("should call resetModel", function () {
                     expect(formView.resetModel).toHaveBeenCalledWith();
-                });
-            });
-
-            describe("has a resetModel function that", function () {
-                beforeEach(function () {
-                    spyOn(formModel, "clear");
-                    spyOn(formModel, "set");
-
-                    formView.resetModel();
-                });
-
-                it("is defined", function () {
-                    expect(formView.resetModel).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(formView.resetModel).toEqual(jasmine.any(Function));
-                });
-
-                it("should call clear on the Model", function () {
-                    expect(formModel.clear).toHaveBeenCalledWith();
-                });
-
-                describe("when model.defaults is NOT a function", function () {
-                    it("should call set on the Model", function () {
-                        formModel.defaults = {
-                            "field1": null,
-                            "field2": null
-                        };
-
-                        formView.resetForm();
-
-                        expect(formModel.set).toHaveBeenCalledWith(formModel.defaults);
-                    });
-                });
-
-                describe("when model.defaults is a function", function () {
-                    var mockDefaults = {
-                        "field1": "asdfasdf",
-                        "field2": null,
-                        "field3": null
-                    };
-
-                    beforeEach(function () {
-                        formModel.defaults = function () {
-                            return mockDefaults;
-                        };
-
-                        spyOn(formModel, "defaults").and.callThrough();
-
-                        formView.resetForm();
-                    });
-
-                    it("should call defaults on the model", function () {
-                        expect(formModel.defaults).toHaveBeenCalledWith();
-                    });
-
-                    it("should call set on the Model", function () {
-                        expect(formModel.set).toHaveBeenCalledWith(mockDefaults);
-                    });
                 });
             });
 

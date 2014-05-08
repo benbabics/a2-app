@@ -84,7 +84,8 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { },
-                on: function () { }
+                on: function () { },
+                setModel: function () { }
             },
             mockUserModel = {
                 authenticated: true,
@@ -629,6 +630,7 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 beforeEach(function () {
                     mockCardDetailView.model = null;
                     spyOn(mockCardCollection, "findWhere").and.callFake(function () { return cardModel; });
+                    spyOn(mockCardDetailView, "setModel").and.callFake(function () { });
                     spyOn(mockCardDetailView, "render").and.callThrough();
                     spyOn(mockUtils, "changePage").and.callThrough();
 
@@ -647,8 +649,8 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                     expect(mockCardCollection.findWhere).toHaveBeenCalledWith({"id": mockCardNumber});
                 });
 
-                it("should set model on the Card Detail View Page", function () {
-                    expect(mockCardDetailView.model).toEqual(cardModel);
+                it("should call setModel on the Card Detail View Page", function () {
+                    expect(mockCardDetailView.setModel).toHaveBeenCalledWith(cardModel);
                 });
 
                 it("should call render on the Card Detail View Page", function () {

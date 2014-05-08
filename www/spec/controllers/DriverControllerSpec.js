@@ -37,7 +37,8 @@ define(["globals", "backbone", "utils", "Squire"],
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { },
-                on: function () { }
+                on: function () { },
+                setModel: function () { }
             },
             mockDriverListView = {
                 $el: "",
@@ -299,6 +300,7 @@ define(["globals", "backbone", "utils", "Squire"],
                 beforeEach(function () {
                     mockDriverEditView.model = null;
                     spyOn(mockDriverCollection, "findWhere").and.callFake(function () { return driverModel; });
+                    spyOn(mockDriverEditView, "setModel").and.callFake(function () { });
                     spyOn(mockDriverEditView, "render").and.callThrough();
                     spyOn(mockUtils, "changePage").and.callThrough();
 
@@ -317,8 +319,8 @@ define(["globals", "backbone", "utils", "Squire"],
                     expect(mockDriverCollection.findWhere).toHaveBeenCalledWith({"id": mockDriverId});
                 });
 
-                it("should set model on the Driver Edit View Page", function () {
-                    expect(mockDriverEditView.model).toEqual(driverModel);
+                it("should call setModel on the Driver Edit View Page", function () {
+                    expect(mockDriverEditView.setModel).toHaveBeenCalledWith(driverModel);
                 });
 
                 it("should call render on the Driver Edit View Page", function () {

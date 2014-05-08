@@ -113,7 +113,7 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
             },
 
             navigateCardDetails: function (id) {
-                this.cardDetailView.model = this.cardCollection.findWhere({"id": id});
+                this.cardDetailView.setModel(this.cardCollection.findWhere({"id": id}));
                 this.cardDetailView.render();
                 utils.changePage(this.cardDetailView.$el);
             },

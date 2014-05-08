@@ -1,10 +1,10 @@
-define(["backbone", "utils", "facade", "mustache", "globals", "text!tmpl/driver/driverEdit.html"],
-    function (Backbone, utils, facade, Mustache, globals, pageTemplate) {
+define(["backbone", "utils", "facade", "mustache", "globals", "views/BaseView", "text!tmpl/driver/driverEdit.html"],
+    function (Backbone, utils, facade, Mustache, globals, BaseView, pageTemplate) {
 
         "use strict";
 
 
-        var DriverEditView = Backbone.View.extend({
+        var DriverEditView = BaseView.extend({
             el: "#driverDetails",
 
             template: pageTemplate,

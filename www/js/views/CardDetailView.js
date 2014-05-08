@@ -1,10 +1,10 @@
-define(["backbone", "utils", "facade", "mustache", "globals", "text!tmpl/card/cardDetail.html"],
-    function (Backbone, utils, facade, Mustache, globals, pageTemplate) {
+define(["backbone", "utils", "facade", "mustache", "globals", "views/BaseView", "text!tmpl/card/cardDetail.html"],
+    function (Backbone, utils, facade, Mustache, globals, BaseView, pageTemplate) {
 
         "use strict";
 
 
-        var CardDetailView = Backbone.View.extend({
+        var CardDetailView = BaseView.extend({
             el: "#cardDetails",
 
             template: pageTemplate,
