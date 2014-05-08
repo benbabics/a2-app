@@ -21,6 +21,8 @@ var specList =
         "spec/views/HomeViewSpec.js",
         "spec/views/InvoiceSummaryViewSpec.js",
         "spec/views/LoginViewSpec.js",
+        "spec/views/PaymentListViewSpec.js",
+        "spec/views/PaymentViewSpec.js",
         "spec/views/UpdatePromptViewSpec.js",
         "spec/views/ValidationFormViewSpec.js",
 
@@ -29,6 +31,7 @@ var specList =
         "spec/models/AjaxModelSpec.js",
         "spec/models/AppModelSpec.js",
         "spec/models/AuthorizationProfileModelSpec.js",
+        "spec/models/BankAccountModelSpec.js",
         "spec/models/CardModelSpec.js",
         "spec/models/CardSettingsModelSpec.js",
         "spec/models/CompanyModelSpec.js",
@@ -40,6 +43,7 @@ var specList =
         "spec/models/InvoiceSummaryModelSpec.js",
         "spec/models/LoginModelSpec.js",
         "spec/models/MakePaymentAvailabilityModelSpec.js",
+        "spec/models/PaymentModelSpec.js",
         "spec/models/ShippingMethodModelSpec.js",
         "spec/models/ShippingModelSpec.js",
         "spec/models/UserModelSpec.js",
@@ -51,6 +55,7 @@ var specList =
         "spec/collections/CardCollectionSpec.js",
         "spec/collections/DepartmentCollectionSpec.js",
         "spec/collections/DriverCollectionSpec.js",
+        "spec/collections/PaymentCollectionSpec.js",
         "spec/collections/ShippingMethodCollectionSpec.js",
 
         // Controllers
