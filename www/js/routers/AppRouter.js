@@ -16,6 +16,7 @@ define(["backbone", "utils", "facade"],
                 "driverAdd"            : "showDriverAdd",
                 "driverSearch"         : "showDriverSearch",
                 "driverDetails(/)(:id)": "showDriverDetails",
+                "invoiceSummary"       : "showInvoiceSummary",
 
                 "*page": "changePage",
 
@@ -51,6 +52,10 @@ define(["backbone", "utils", "facade"],
 
             showDriverDetails: function (id) {
                 facade.publish("driver", "navigateDriverDetails", id);
+            },
+
+            showInvoiceSummary: function () {
+                facade.publish("invoice", "navigateSummary");
             },
 
             changePage: function (page) {

@@ -249,19 +249,18 @@ define(["Squire", "globals", "backbone", "utils"],
 
                         describe("when there is only one object in the data list in the response", function () {
                             it("should call the original success callback passed in to options", function () {
-                                var responseSentToCallback;
+                                var expectedResponseSentToCallback;
 
                                 mockDataResponse.data = [{someField: "someValue"}];
 
+                                expectedResponseSentToCallback =
+                                    utils._.extend({}, utils.deepClone(mockDataResponse.data[0]), {
+                                        message: mockDataResponse.message.text
+                                    });
+
                                 ajaxModel.sync(method, model, options);
 
-                                expect(originalSuccessCallback).toHaveBeenCalled();
-                                expect(originalSuccessCallback.calls.mostRecent().args.length).toEqual(1);
-
-                                responseSentToCallback = originalSuccessCallback.calls.mostRecent().args[0];
-
-                                expect(responseSentToCallback.data).toEqual(mockDataResponse.data[0]);
-                                expect(responseSentToCallback.message).toEqual(mockDataResponse.message.text);
+                                expect(originalSuccessCallback).toHaveBeenCalledWith(expectedResponseSentToCallback);
                             });
                         });
 

@@ -60,6 +60,10 @@ define(["utils", "Squire", "backbone"],
                     expect(appRouter.routes["driverDetails(/)(:id)"]).toEqual("showDriverDetails");
                 });
 
+                it("should set 'invoiceSummary' to showInvoiceSummary", function () {
+                    expect(appRouter.routes.invoiceSummary).toEqual("showInvoiceSummary");
+                });
+
                 it("should set '*page' to changePage", function () {
                     expect(appRouter.routes["*page"]).toEqual("changePage");
                 });
@@ -85,11 +89,7 @@ define(["utils", "Squire", "backbone"],
                 });
 
                 it("should call publish on the facade", function () {
-                    expect(mockFacade.publish).toHaveBeenCalled();
-
-                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
-                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("card");
-                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigateAdd");
+                    expect(mockFacade.publish).toHaveBeenCalledWith("card", "navigateAdd");
                 });
             });
 
@@ -111,10 +111,7 @@ define(["utils", "Squire", "backbone"],
                 });
 
                 it("should call publish on the facade", function () {
-                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
-                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("card");
-                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigateCardDetails");
-                    expect(mockFacade.publish.calls.mostRecent().args[2]).toEqual(mockCardNumber);
+                    expect(mockFacade.publish).toHaveBeenCalledWith("card", "navigateCardDetails", mockCardNumber);
                 });
             });
 
@@ -134,11 +131,7 @@ define(["utils", "Squire", "backbone"],
                 });
 
                 it("should call publish on the facade", function () {
-                    expect(mockFacade.publish).toHaveBeenCalled();
-
-                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
-                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("card");
-                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigateSearch");
+                    expect(mockFacade.publish).toHaveBeenCalledWith("card", "navigateSearch");
                 });
             });
 
@@ -158,11 +151,7 @@ define(["utils", "Squire", "backbone"],
                 });
 
                 it("should call publish on the facade", function () {
-                    expect(mockFacade.publish).toHaveBeenCalled();
-
-                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
-                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("contactUs");
-                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigate");
+                    expect(mockFacade.publish).toHaveBeenCalledWith("contactUs", "navigate");
                 });
             });
 
@@ -182,11 +171,7 @@ define(["utils", "Squire", "backbone"],
                 });
 
                 it("should call publish on the facade", function () {
-                    expect(mockFacade.publish).toHaveBeenCalled();
-
-                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
-                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("driver");
-                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigateAdd");
+                    expect(mockFacade.publish).toHaveBeenCalledWith("driver", "navigateAdd");
                 });
             });
 
@@ -206,11 +191,7 @@ define(["utils", "Squire", "backbone"],
                 });
 
                 it("should call publish on the facade", function () {
-                    expect(mockFacade.publish).toHaveBeenCalled();
-
-                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
-                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("driver");
-                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigateSearch");
+                    expect(mockFacade.publish).toHaveBeenCalledWith("driver", "navigateSearch");
                 });
             });
 
@@ -232,10 +213,27 @@ define(["utils", "Squire", "backbone"],
                 });
 
                 it("should call publish on the facade", function () {
-                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
-                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("driver");
-                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigateDriverDetails");
-                    expect(mockFacade.publish.calls.mostRecent().args[2]).toEqual(mockDriverId);
+                    expect(mockFacade.publish).toHaveBeenCalledWith("driver", "navigateDriverDetails", mockDriverId);
+                });
+            });
+
+            describe("has a showInvoiceSummary function that", function () {
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callThrough();
+
+                    appRouter.showInvoiceSummary();
+                });
+
+                it("is defined", function () {
+                    expect(appRouter.showInvoiceSummary).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appRouter.showInvoiceSummary).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    expect(mockFacade.publish).toHaveBeenCalledWith("invoice", "navigateSummary");
                 });
             });
 

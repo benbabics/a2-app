@@ -1,5 +1,5 @@
-define([ "globals", "backbone", "utils", "facade", "models/AuthorizationProfileModel", "collections/AjaxCollection" ],
-    function (globals, Backbone, utils, facade, AuthorizationProfileModel, AjaxCollection) {
+define([ "globals", "models/AuthorizationProfileModel", "collections/AjaxCollection" ],
+    function (globals, AuthorizationProfileModel, AjaxCollection) {
 
         "use strict";
 

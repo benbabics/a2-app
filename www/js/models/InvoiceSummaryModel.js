@@ -1,20 +1,28 @@
-define(["backbone"],
-    function (Backbone) {
+define(["globals", "utils", "models/AjaxModel", "models/UserModel"],
+    function (globals, utils, AjaxModel, UserModel) {
 
         "use strict";
 
 
-        var InvoiceSummaryModel = Backbone.Model.extend({
-            defaults: {
-                "invoiceId"         : null,
-                "accountNumber"     : null,
-                "availableCredit"   : null,
-                "currentBalance"    : null,
-                "currentBalanceAsOf": null,
-                "paymentDueDate"    : null,
-                "minimumPaymentDue" : null,
-                "invoiceNumber"     : null,
-                "closingDate"       : null
+        var InvoiceSummaryModel = AjaxModel.extend({
+            defaults: function () {
+                return utils._.extend({}, utils.deepClone(AjaxModel.prototype.defaults), {
+                    "invoiceId"         : null,
+                    "accountNumber"     : null,
+                    "availableCredit"   : null,
+                    "currentBalance"    : null,
+                    "currentBalanceAsOf": null,
+                    "paymentDueDate"    : null,
+                    "minimumPaymentDue" : null,
+                    "invoiceNumber"     : null,
+                    "closingDate"       : null
+                });
+            },
+
+            urlRoot: function () {
+                return globals.WEBSERVICE.ACCOUNTS.URL + "/"  +
+                    UserModel.getInstance().get("selectedCompany").get("accountId") +
+                    globals.WEBSERVICE.INVOICE_SUMMARY_PATH;
             },
 
             initialize: function (options) {

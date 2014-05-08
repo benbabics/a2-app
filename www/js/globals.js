@@ -10,17 +10,20 @@ define(function (require) {
     * Webservices
     */
     globals.WEBSERVICE = {
-        "ROOT_URL"                     : "@@@STRING_REPLACE_APP_URL@@@",
-        "APP_PATH"                     : "/app",
-        "ACCOUNTS_PATH"                : "/accounts",
-        "AUTH_PROFILES_PATH"           : "/authProfiles",
-        "CARD_PATH"                    : "/cards",
-        "DRIVER_PATH"                  : "/drivers",
-        "USER_AUTH_PATH"               : "/userAuth",
-        "REQUEST_ERROR_TITLE"          : "Cannot complete request",
-        "REQUEST_ERROR_UNKNOWN_MESSAGE": "Please try again",
-        "REQUEST_ERROR_MESSAGE_PREFIX" : "<div class='ui-body ui-body-e'>",
-        "REQUEST_ERROR_MESSAGE_SUFFIX" : "</div>"
+        "ROOT_URL"                      : "@@@STRING_REPLACE_APP_URL@@@",
+        "APP_PATH"                      : "/app",
+        "ACCOUNTS_PATH"                 : "/accounts",
+        "AUTH_PROFILES_PATH"            : "/authProfiles",
+        "CARD_PATH"                     : "/cards",
+        "DRIVER_PATH"                   : "/drivers",
+        "PAYMENTS_PATH"                 : "/payments",
+        "INVOICE_SUMMARY_PATH"          : "/payments/currentInvoiceSummary",
+        "MAKE_PAYMENT_AVAILABILITY_PATH": "/payments/makePaymentAvailability",
+        "USER_AUTH_PATH"                : "/userAuth",
+        "REQUEST_ERROR_TITLE"           : "Cannot complete request",
+        "REQUEST_ERROR_UNKNOWN_MESSAGE" : "Please try again",
+        "REQUEST_ERROR_MESSAGE_PREFIX"  : "<div class='ui-body ui-body-e'>",
+        "REQUEST_ERROR_MESSAGE_SUFFIX"  : "</div>"
     };
     globals.WEBSERVICE.SECURE = {
         "ROOT_URL": globals.WEBSERVICE.ROOT_URL + "/secure"
@@ -1200,6 +1203,52 @@ define(function (require) {
         "statusDate": {
             "label": "Status Date",
             "value": ""
+        }
+    };
+
+    /**
+     * Invoice Summary
+     */
+    globals.invoiceSummary = {};
+    globals.invoiceSummary.constants = {
+        "DIRECT_DEPOSIT_ENABLED"   : "Your account is set up for automatic direct deposit payment. Your account is not set up to submit payments.",
+        "MUST_SET_UP_BANKS"        : "You must set up your financial institutions payment options online prior to scheduling a payment.",
+        "PAYMENT_ALREADY_SCHEDULED": "This account already has a payment scheduled or pending."
+    };
+    globals.invoiceSummary.configuration = {
+        "unableToMakePaymentMessage": null,
+        "accountNumber": {
+            "label": "Account Number",
+            "value": ""
+        },
+        "availableCredit": {
+            "label": "Available Credit",
+            "value": ""
+        },
+        "currentBalance": {
+            "label": "Current Balance",
+            "value": "",
+            "asOfValue": ""
+        },
+        "paymentDueDate": {
+            "label": "Payment Due Date",
+            "value": ""
+        },
+        "minimumPaymentDue": {
+            "label": "Min. Payment Due",
+            "value": ""
+        },
+        "invoiceNumber": {
+            "label": "Invoice Number",
+            "value": ""
+        },
+        "closingDate": {
+            "label": "Closing Date",
+            "value": ""
+        },
+        "makePaymentButton": {
+            "visible": false,
+            "label": "Make Payment"
         }
     };
 

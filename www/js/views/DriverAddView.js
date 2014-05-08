@@ -100,7 +100,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
                     driver,
                     driverConfiguration = utils._.extend({}, utils.deepClone(globals.driverAddedDetails.configuration));
 
-                newDriver.initialize(response.data);
+                newDriver.initialize(response);
                 driver = newDriver.toJSON();
 
                 // populate configuration details

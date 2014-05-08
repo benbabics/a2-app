@@ -120,7 +120,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                     card,
                     cardConfiguration = utils._.extend({}, utils.deepClone(globals.cardChangedDetails.configuration));
 
-                newCard.initialize(response.data);
+                newCard.initialize(response);
                 card = newCard.toJSON();
 
                 // populate configuration details

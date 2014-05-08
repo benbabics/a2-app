@@ -1,15 +1,105 @@
-define(["utils", "backbone", "Squire"],
-    function (utils, Backbone, Squire) {
+define(["utils", "backbone", "Squire", "models/UserModel"],
+    function (utils, Backbone, Squire, UserModel) {
 
         "use strict";
 
         var squire = new Squire(),
+            mockUtils = utils,
+            mockInvoiceSummaryModel = {
+                "invoiceId"         : "Invoice Id",
+                "accountNumber"     : "Account Number",
+                "availableCredit"   : 3245.56,
+                "currentBalance"    : 357367.56,
+                "currentBalanceAsOf": "Current Balance As Of Date",
+                "paymentDueDate"    : "Payment Due Date",
+                "minimumPaymentDue" : 234.45,
+                "invoiceNumber"     : "Invoice Number",
+                "closingDate"       : "Closing Date"
+            },
+            invoiceSummaryModel = new Backbone.Model(),
+            mockMakePaymentAvailabilityModel = {
+                "shouldDisplayDirectDebitEnabledMessage": false,
+                "shouldDisplayBankAccountSetupMessage"  : false,
+                "shouldDisplayOutstandingPaymentMessage": false,
+                "makePaymentAllowed"                    : false
+            },
+            makePaymentAvailabilityModel = new Backbone.Model(),
+            mockUserModel = {
+                authenticated: true,
+                firstName: "Beavis",
+                email: "cornholio@bnbinc.com",
+                hasMultipleAccounts: false,
+                selectedCompany: {
+                    name: "Beavis and Butthead Inc",
+                    accountId: "3673683",
+                    wexAccountNumber: "5764309",
+                    departments: [
+                        {
+                            id: "134613456",
+                            name: "UNASSIGNED",
+                            visible: true
+                        },
+                        {
+                            id: "2456724567",
+                            name: "Dewey, Cheetum and Howe",
+                            visible: false
+                        }
+                    ],
+                    requiredFields: [
+                        "REQUIRED_FIELD_1",
+                        "REQUIRED_FIELD_2",
+                        "REQUIRED_FIELD_3"
+                    ],
+                    settings: {
+                        cardSettings: {
+                            customVehicleIdMaxLength: 17,
+                            licensePlateNumberMaxLength: 10,
+                            licensePlateStateFixedLength: 2,
+                            vehicleDescriptionMaxLength: 17,
+                            vinFixedLength: 17
+                        },
+                        driverSettings: {
+                            idFixedLength: 4,
+                            firstNameMaxLength: 11,
+                            middleNameMaxLength: 1,
+                            lastNameMaxLength: 12
+                        }
+                    }
+                },
+                permissions: [
+                    "PERMISSION_1",
+                    "PERMISSION_2",
+                    "PERMISSION_3"
+                ]
+            },
+            userModel = UserModel.getInstance(),
+            mockInvoiceSummaryView = {
+                $el: "",
+                model: invoiceSummaryModel,
+                constructor: function () { },
+                initialize: function () { },
+                render: function () { },
+                showLoadingIndicator: function () { },
+                hideLoadingIndicator: function () { }
+            },
             invoiceController;
+
+        squire.mock("utils", mockUtils);
+        squire.mock("models/InvoiceSummaryModel", Squire.Helpers.returns(invoiceSummaryModel));
+        squire.mock("models/MakePaymentAvailabilityModel", Squire.Helpers.returns(makePaymentAvailabilityModel));
+        squire.mock("models/UserModel", UserModel);
+        squire.mock("views/InvoiceSummaryView", Squire.Helpers.returns(mockInvoiceSummaryView));
 
         describe("An Invoice Controller", function () {
             beforeEach(function (done) {
                 squire.require(["controllers/InvoiceController"], function (InvoiceController) {
+                    invoiceSummaryModel.set(mockInvoiceSummaryModel);
+                    makePaymentAvailabilityModel.set(mockMakePaymentAvailabilityModel);
+                    userModel.initialize(mockUserModel);
+                    spyOn(UserModel, "getInstance").and.callThrough();
+
                     invoiceController = InvoiceController;
+                    invoiceController.init();
 
                     done();
                 });
@@ -36,6 +126,336 @@ define(["utils", "backbone", "Squire"],
 
                 it("is a function", function () {
                     expect(invoiceController.init).toEqual(jasmine.any(Function));
+                });
+
+                it("should set the userModel variable to a UserModel object", function () {
+                    expect(invoiceController.userModel).toEqual(userModel);
+                });
+
+                it("should set the makePaymentAvailabilityModel variable to a MakePaymentAvailabilityModel object",
+                    function () {
+                        expect(invoiceController.makePaymentAvailabilityModel).toEqual(makePaymentAvailabilityModel);
+                    });
+
+                describe("when initializing the InvoiceSummaryView", function () {
+                    beforeEach(function () {
+                        spyOn(mockInvoiceSummaryView, "constructor").and.callThrough();
+                    });
+
+                    it("should set the invoiceSummaryView variable to a new InvoiceSummaryView object", function () {
+                        expect(invoiceController.invoiceSummaryView).toEqual(mockInvoiceSummaryView);
+                    });
+
+                    xit("should send in the correct parameters to the constructor", function () {
+                        expect(mockInvoiceSummaryView.constructor).toHaveBeenCalledWith({
+                            model    : invoiceSummaryModel,
+                            userModel: userModel
+                        });
+
+                        // TODO: this is not working, need to figure out how to test
+                    });
+                });
+            });
+
+            describe("has a navigateSummary function that", function () {
+                it("is defined", function () {
+                    expect(invoiceController.navigateSummary).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.navigateSummary).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the call to updateSummaryModels finishes successfully", function () {
+                    beforeEach(function () {
+                        spyOn(invoiceController, "updateSummaryModels").and.callFake(function () {
+                            var deferred = utils.Deferred();
+
+                            deferred.resolve();
+                            return deferred.promise();
+                        });
+
+                        spyOn(mockInvoiceSummaryView, "showLoadingIndicator").and.callFake(function () {});
+                        spyOn(mockInvoiceSummaryView, "render").and.callFake(function () {});
+                        spyOn(mockUtils, "changePage").and.callFake(function () {});
+                        spyOn(mockInvoiceSummaryView, "hideLoadingIndicator").and.callFake(function () {});
+
+                        invoiceController.navigateSummary();
+                    });
+
+                    it("should call the showLoadingIndicator function on the Invoice Summary View", function () {
+                        expect(mockInvoiceSummaryView.showLoadingIndicator).toHaveBeenCalledWith();
+                    });
+
+                    it("should call updateSummaryModels", function () {
+                        expect(invoiceController.updateSummaryModels).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the render function on Invoice Summary View", function () {
+                        expect(mockInvoiceSummaryView.render).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the changePage function on utils", function () {
+                        expect(utils.changePage).toHaveBeenCalledWith(mockInvoiceSummaryView.$el, null, null, true);
+                    });
+
+                    it("should call the hideLoadingIndicator function on the Invoice Summary View", function () {
+                        expect(mockInvoiceSummaryView.hideLoadingIndicator).toHaveBeenCalledWith();
+                    });
+                });
+
+                describe("when the call to updateSummaryModels finishes with a failure", function () {
+                    beforeEach(function () {
+                        spyOn(invoiceController, "updateSummaryModels").and.callFake(function () {
+                            var deferred = utils.Deferred();
+
+                            deferred.reject();
+                            return deferred.promise();
+                        });
+
+                        spyOn(mockInvoiceSummaryView, "showLoadingIndicator").and.callFake(function () {});
+                        spyOn(mockInvoiceSummaryView, "render").and.callFake(function () {});
+                        spyOn(mockUtils, "changePage").and.callFake(function () {});
+                        spyOn(mockInvoiceSummaryView, "hideLoadingIndicator").and.callFake(function () {});
+
+                        invoiceController.navigateSummary();
+                    });
+
+                    it("should call the showLoadingIndicator function on the Invoice Summary View", function () {
+                        expect(mockInvoiceSummaryView.showLoadingIndicator).toHaveBeenCalledWith();
+                    });
+
+                    it("should call updateSummaryModels", function () {
+                        expect(invoiceController.updateSummaryModels).toHaveBeenCalledWith();
+                    });
+
+                    it("should NOT call the render function on Invoice Summary View", function () {
+                        expect(mockInvoiceSummaryView.render).not.toHaveBeenCalledWith();
+                    });
+
+                    it("should NOT call the changePage function on utils", function () {
+                        expect(utils.changePage).not.toHaveBeenCalledWith(mockInvoiceSummaryView.$el, null, null, true);
+                    });
+
+                    it("should call the hideLoadingIndicator function on the Invoice Summary View", function () {
+                        expect(mockInvoiceSummaryView.hideLoadingIndicator).toHaveBeenCalledWith();
+                    });
+                });
+            });
+
+            describe("has an updateSummaryModels function that", function () {
+                it("is defined", function () {
+                    expect(invoiceController.updateSummaryModels).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.updateSummaryModels).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the call to fetchInvoiceSummary finishes successfully", function () {
+                    var mockPromiseReturnValue = "Promise Return Value",
+                        mockDeferred = {
+                            promise: function () { return mockPromiseReturnValue; },
+                            reject: function () {},
+                            resolve: function () {}
+                        },
+                        actualReturnValue,
+                        mockFetchInvoiceSummaryDeferred = utils.Deferred();
+
+                    beforeEach(function () {
+                        spyOn(invoiceController, "fetchInvoiceSummary").and.callFake(function () {
+                            mockFetchInvoiceSummaryDeferred.resolve();
+                            return mockFetchInvoiceSummaryDeferred.promise();
+                        });
+                    });
+
+                    describe("when the call to fetchMakePaymentAvailability finishes successfully", function () {
+                        var mockFetchMakePaymentAvailabilityDeferred = utils.Deferred();
+
+                        beforeEach(function () {
+                            spyOn(invoiceController, "fetchMakePaymentAvailability").and.callFake(function () {
+                                mockFetchMakePaymentAvailabilityDeferred.resolve();
+                                return mockFetchMakePaymentAvailabilityDeferred.promise();
+                            });
+
+                            spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                            spyOn(mockDeferred, "reject").and.callThrough();
+                            spyOn(mockDeferred, "resolve").and.callThrough();
+
+                            actualReturnValue = invoiceController.updateSummaryModels();
+                        });
+
+                        it("should call resolve on the Deferred object", function () {
+                            expect(mockDeferred.resolve).toHaveBeenCalledWith();
+                        });
+
+                        it("should NOT call reject on the Deferred object", function () {
+                            expect(mockDeferred.reject).not.toHaveBeenCalled();
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                        });
+                    });
+
+                    describe("when the call to fetchMakePaymentAvailability finishes with a failure", function () {
+                        var mockFetchMakePaymentAvailabilityDeferred = utils.Deferred();
+
+                        beforeEach(function () {
+                            spyOn(invoiceController, "fetchMakePaymentAvailability").and.callFake(function () {
+                                mockFetchMakePaymentAvailabilityDeferred.reject();
+                                return mockFetchMakePaymentAvailabilityDeferred.promise();
+                            });
+
+                            spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                            spyOn(mockDeferred, "reject").and.callThrough();
+                            spyOn(mockDeferred, "resolve").and.callThrough();
+
+                            actualReturnValue = invoiceController.updateSummaryModels();
+                        });
+
+                        it("should NOT call resolve on the Deferred object", function () {
+                            expect(mockDeferred.resolve).not.toHaveBeenCalled();
+                        });
+
+                        it("should call reject on the Deferred object", function () {
+                            expect(mockDeferred.reject).toHaveBeenCalledWith();
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                        });
+                    });
+                });
+
+                describe("when the call to fetchInvoiceSummary finishes with a failure", function () {
+                    var mockPromiseReturnValue = "Promise Return Value",
+                        mockDeferred = {
+                            promise: function () { return mockPromiseReturnValue; },
+                            reject: function () {},
+                            resolve: function () {}
+                        },
+                        actualReturnValue,
+                        mockFetchInvoiceSummaryDeferred = utils.Deferred();
+
+                    beforeEach(function () {
+                        spyOn(invoiceController, "fetchInvoiceSummary").and.callFake(function () {
+                            mockFetchInvoiceSummaryDeferred.reject();
+                            return mockFetchInvoiceSummaryDeferred.promise();
+                        });
+                    });
+
+                    describe("when the call to fetchMakePaymentAvailability finishes successfully", function () {
+                        var mockFetchMakePaymentAvailabilityDeferred = utils.Deferred();
+
+                        beforeEach(function () {
+                            spyOn(invoiceController, "fetchMakePaymentAvailability").and.callFake(function () {
+                                mockFetchMakePaymentAvailabilityDeferred.resolve();
+                                return mockFetchMakePaymentAvailabilityDeferred.promise();
+                            });
+
+                            spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                            spyOn(mockDeferred, "reject").and.callThrough();
+                            spyOn(mockDeferred, "resolve").and.callThrough();
+
+                            actualReturnValue = invoiceController.updateSummaryModels();
+                        });
+
+                        it("should NOT call resolve on the Deferred object", function () {
+                            expect(mockDeferred.resolve).not.toHaveBeenCalled();
+                        });
+
+                        it("should call reject on the Deferred object", function () {
+                            expect(mockDeferred.reject).toHaveBeenCalledWith();
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                        });
+                    });
+
+                    describe("when the call to fetchMakePaymentAvailability finishes with a failure", function () {
+                        var mockFetchMakePaymentAvailabilityDeferred = utils.Deferred();
+
+                        beforeEach(function () {
+                            spyOn(invoiceController, "fetchMakePaymentAvailability").and.callFake(function () {
+                                mockFetchMakePaymentAvailabilityDeferred.reject();
+                                return mockFetchMakePaymentAvailabilityDeferred.promise();
+                            });
+
+                            spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                            spyOn(mockDeferred, "reject").and.callThrough();
+                            spyOn(mockDeferred, "resolve").and.callThrough();
+
+                            actualReturnValue = invoiceController.updateSummaryModels();
+                        });
+
+                        it("should NOT call resolve on the Deferred object", function () {
+                            expect(mockDeferred.resolve).not.toHaveBeenCalled();
+                        });
+
+                        it("should call reject on the Deferred object", function () {
+                            expect(mockDeferred.reject).toHaveBeenCalledWith();
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                        });
+                    });
+                });
+            });
+
+            describe("has a fetchInvoiceSummary function that", function () {
+                var expectedReturnValue = "Return Value",
+                    actualReturnValue;
+
+                beforeEach(function () {
+                    spyOn(mockUtils, "fetchModel").and.returnValue(expectedReturnValue);
+
+                    actualReturnValue = invoiceController.fetchInvoiceSummary();
+                });
+
+                it("is defined", function () {
+                    expect(invoiceController.fetchInvoiceSummary).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.fetchInvoiceSummary).toEqual(jasmine.any(Function));
+                });
+
+                it("should call fetchModel on utils", function () {
+                    expect(mockUtils.fetchModel).toHaveBeenCalledWith(invoiceSummaryModel);
+                });
+
+                it("should return the expected value", function () {
+                    expect(actualReturnValue).toEqual(expectedReturnValue);
+                });
+            });
+
+            describe("has a fetchMakePaymentAvailability function that", function () {
+                var expectedReturnValue = "Return Value",
+                    actualReturnValue;
+
+                beforeEach(function () {
+                    spyOn(mockUtils, "fetchModel").and.returnValue(expectedReturnValue);
+
+                    actualReturnValue = invoiceController.fetchMakePaymentAvailability();
+                });
+
+                it("is defined", function () {
+                    expect(invoiceController.fetchMakePaymentAvailability).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.fetchMakePaymentAvailability).toEqual(jasmine.any(Function));
+                });
+
+                it("should call fetchModel on utils", function () {
+                    expect(mockUtils.fetchModel).toHaveBeenCalledWith(makePaymentAvailabilityModel);
+                });
+
+                it("should return the expected value", function () {
+                    expect(actualReturnValue).toEqual(expectedReturnValue);
                 });
             });
         });

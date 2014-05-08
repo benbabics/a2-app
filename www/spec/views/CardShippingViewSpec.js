@@ -431,31 +431,29 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                         actualConfiguration,
                         changeCardResponse = {
                             "message": "Mock Message",
-                            "data": {
-                                number: 13465,
-                                authorizationProfileName: "Auth Profile",
-                                status: "Active",
-                                department: {
-                                    id: "134613456",
-                                    name: "UNASSIGNED",
-                                    visible: true
-                                },
-                                customVehicleId: "Custom Vehicle Id",
-                                vehicleDescription: "Vehicle Description",
-                                licensePlateNumber: "1234567",
-                                licensePlateState: "ME",
-                                vin: "12345678901234567"
-                            }
+                            number: 13465,
+                            authorizationProfileName: "Auth Profile",
+                            status: "Active",
+                            department: {
+                                id: "134613456",
+                                name: "UNASSIGNED",
+                                visible: true
+                            },
+                            customVehicleId: "Custom Vehicle Id",
+                            vehicleDescription: "Vehicle Description",
+                            licensePlateNumber: "1234567",
+                            licensePlateState: "ME",
+                            vin: "12345678901234567"
                         };
 
                     expectedConfiguration.message = changeCardResponse.message;
 
                     expectedConfiguration.card = utils._.extend({},
                         utils.deepClone(globals.cardChangedDetails.configuration));
-                    expectedConfiguration.card.id.value = changeCardResponse.data.number;
-                    expectedConfiguration.card.customVehicleId.value = changeCardResponse.data.customVehicleId;
-                    expectedConfiguration.card.vehicleDescription.value = changeCardResponse.data.vehicleDescription;
-                    expectedConfiguration.card.licensePlateNumber.value = changeCardResponse.data.licensePlateNumber;
+                    expectedConfiguration.card.id.value = changeCardResponse.number;
+                    expectedConfiguration.card.customVehicleId.value = changeCardResponse.customVehicleId;
+                    expectedConfiguration.card.vehicleDescription.value = changeCardResponse.vehicleDescription;
+                    expectedConfiguration.card.licensePlateNumber.value = changeCardResponse.licensePlateNumber;
                     expectedConfiguration.card.shipping.method.value = mockShippingModel.shippingMethod.name;
                     expectedConfiguration.card.shipping.address.firstName.value = mockShippingModel.firstName;
                     expectedConfiguration.card.shipping.address.lastName.value = mockShippingModel.lastName;

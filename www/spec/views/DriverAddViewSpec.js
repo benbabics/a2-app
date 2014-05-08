@@ -383,18 +383,16 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                         actualConfiguration,
                         addDriverResponse = {
                             "message": "Mock Message",
-                            "data": {
-                                "id"        : "354t25ty",
-                                "firstName" : "Homer",
-                                "middleName": "B",
-                                "lastName"  : "Simpson",
-                                "status"    : "Active",
-                                "statusDate": "3/20/2014",
-                                "department": {
-                                    id      : "134613456",
-                                    name    : "UNASSIGNED",
-                                    visible : true
-                                }
+                            "id"        : "354t25ty",
+                            "firstName" : "Homer",
+                            "middleName": "B",
+                            "lastName"  : "Simpson",
+                            "status"    : "Active",
+                            "statusDate": "3/20/2014",
+                            "department": {
+                                id      : "134613456",
+                                name    : "UNASSIGNED",
+                                visible : true
                             }
                         };
 
@@ -402,13 +400,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                     expectedConfiguration.driver = utils._.extend({},
                         utils.deepClone(globals.driverAddedDetails.configuration));
-                    expectedConfiguration.driver.driverName.value = addDriverResponse.data.lastName + ", " +
-                        addDriverResponse.data.firstName + " " + addDriverResponse.data.middleName;
-                    expectedConfiguration.driver.id.value = addDriverResponse.data.id;
-                    expectedConfiguration.driver.status.value = addDriverResponse.data.status;
-                    expectedConfiguration.driver.statusDate.value = addDriverResponse.data.statusDate;
-                    if (addDriverResponse.data.department) {
-                        expectedConfiguration.driver.department.value = addDriverResponse.data.department.name;
+                    expectedConfiguration.driver.driverName.value = addDriverResponse.lastName + ", " +
+                        addDriverResponse.firstName + " " + addDriverResponse.middleName;
+                    expectedConfiguration.driver.id.value = addDriverResponse.id;
+                    expectedConfiguration.driver.status.value = addDriverResponse.status;
+                    expectedConfiguration.driver.statusDate.value = addDriverResponse.statusDate;
+                    if (addDriverResponse.department) {
+                        expectedConfiguration.driver.department.value = addDriverResponse.department.name;
                     }
 
                     actualConfiguration = driverAddView.getAddDetailsConfiguration(addDriverResponse);

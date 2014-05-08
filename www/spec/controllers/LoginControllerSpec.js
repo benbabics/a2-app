@@ -173,13 +173,11 @@ define(["utils", "Squire", "globals"],
 
                 it("should set UserModel with Authenticated Response data", function () {
                     var mockResponse = {
-                            data: {
-                                firstName: "Joe",
-                                email: "joe.schmoe@someplace.com",
-                                selectedCompany: {
-                                    name: "The Company",
-                                    wexAccountNumber: "123456789"
-                                }
+                            firstName: "Joe",
+                            email: "joe.schmoe@someplace.com",
+                            selectedCompany: {
+                                name: "The Company",
+                                wexAccountNumber: "123456789"
                             },
                             message: "Mock Message"
                         },
@@ -195,11 +193,11 @@ define(["utils", "Squire", "globals"],
                     objectToInitializeUserModel = mockUserModel.initialize.calls.mostRecent().args[0];
 
                     expect(objectToInitializeUserModel.authenticated).toBeTruthy();
-                    expect(objectToInitializeUserModel.firstName).toEqual(mockResponse.data.firstName);
-                    expect(objectToInitializeUserModel.email).toEqual(mockResponse.data.email);
-                    expect(objectToInitializeUserModel.selectedCompany.name).toEqual(mockResponse.data.selectedCompany.name);
+                    expect(objectToInitializeUserModel.firstName).toEqual(mockResponse.firstName);
+                    expect(objectToInitializeUserModel.email).toEqual(mockResponse.email);
+                    expect(objectToInitializeUserModel.selectedCompany.name).toEqual(mockResponse.selectedCompany.name);
                     expect(objectToInitializeUserModel.selectedCompany.wexAccountNumber)
-                        .toEqual(mockResponse.data.selectedCompany.wexAccountNumber);
+                        .toEqual(mockResponse.selectedCompany.wexAccountNumber);
                 });
             });
 

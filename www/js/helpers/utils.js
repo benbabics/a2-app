@@ -346,5 +346,30 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
             return deferred.promise();
         };
 
+        /**
+         * Function to fetch a model wrapped up as a promise
+         *
+         * @param model to fetch
+         * @returns a promise
+         */
+        utils.fetchModel = function (model) {
+            var deferred = utils.Deferred();
+
+            model
+                .once("sync",
+                    function () {
+                        deferred.resolve();
+                    },
+                    this)
+                .once("error",
+                    function () {
+                        deferred.reject();
+                    },
+                    this)
+                .fetch();
+
+            return deferred.promise();
+        };
+
         return utils;
     });

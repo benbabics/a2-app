@@ -54,10 +54,9 @@ define(["backbone", "globals", "utils", "facade"],
                         // the response was successful
                         else {
                             if (utils._.size(data.data) === 1) {
-                                successCallback({
-                                    data: data.data[0],
+                                successCallback(utils._.extend({}, utils.deepClone(data.data[0]), {
                                     message: data.message.text
-                                });
+                                }));
                             }
                             else {
                                 successCallback({

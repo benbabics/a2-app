@@ -117,7 +117,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                     shipping = this.model.toJSON(),
                     cardConfiguration = utils._.extend({}, utils.deepClone(globals.cardChangedDetails.configuration));
 
-                newCard.initialize(response.data);
+                newCard.initialize(response);
                 card = newCard.toJSON();
 
                 // populate configuration details
