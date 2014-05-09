@@ -1,7 +1,8 @@
-define(["jclass", "utils",
+define(["jclass", "utils", "collections/PaymentCollection",
         "models/InvoiceSummaryModel", "models/MakePaymentAvailabilityModel", "models/UserModel",
-        "views/InvoiceSummaryView"],
-    function (JClass, utils, InvoiceSummaryModel, MakePaymentAvailabilityModel, UserModel, InvoiceSummaryView) {
+        "views/InvoiceSummaryView", "views/PaymentListView"],
+    function (JClass, utils, PaymentCollection, InvoiceSummaryModel, MakePaymentAvailabilityModel, UserModel,
+              InvoiceSummaryView, PaymentListView) {
 
         "use strict";
 
@@ -13,8 +14,10 @@ define(["jclass", "utils",
 
         InvoiceController = JClass.extend({
             invoiceSummaryView: null,
+            paymentListView: null,
             makePaymentAvailabilityModel: null,
             userModel: null,
+            paymentCollection: null,
 
             construct: function () {
             },
@@ -22,11 +25,18 @@ define(["jclass", "utils",
             init: function () {
                 this.userModel = UserModel.getInstance();
                 this.makePaymentAvailabilityModel = new MakePaymentAvailabilityModel();
+                this.paymentCollection = new PaymentCollection();
 
                 // create invoice summary view
                 this.invoiceSummaryView = new InvoiceSummaryView({
                     model   : new InvoiceSummaryModel(),
                     userModel: this.userModel
+                });
+
+                // create payment list view
+                this.paymentListView = new PaymentListView({
+                    collection: this.paymentCollection,
+                    userModel : this.userModel
                 });
             },
 
@@ -43,6 +53,26 @@ define(["jclass", "utils",
                     })
                     .always(function () {
                         self.invoiceSummaryView.hideLoadingIndicator();
+                    });
+            },
+
+            navigatePaymentHistory: function () {
+                this.updatePaymentHistoryCollection();
+            },
+
+            updatePaymentHistoryCollection: function () {
+                var self = this;
+
+                this.paymentListView.showLoadingIndicator();
+
+                // silently reset collection to ensure it always is "updated", even if it's the same models again
+                this.paymentCollection.reset([], { "silent": true });
+
+                utils.when(utils.fetchCollection(this.paymentCollection, null))
+                    .always(function () {
+                        self.paymentListView.render();
+                        utils.changePage(self.paymentListView.$el, null, null, true);
+                        self.paymentListView.hideLoadingIndicator();
                     });
             },
 

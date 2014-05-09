@@ -33,12 +33,16 @@ define(["Squire"],
                 expect(mockFacade.subscribeTo).toHaveBeenCalledWith("invoice", mockInvoiceController);
             });
 
-            it("should call subscribe 1 time", function () {
-                expect(mockSubscribe.calls.count()).toEqual(1);
+            it("should call subscribe 2 time", function () {
+                expect(mockSubscribe.calls.count()).toEqual(2);
             });
 
             it("should subscribe to navigateSummary", function () {
                 expect(mockSubscribe).toHaveBeenCalledWith("navigateSummary", "navigateSummary");
+            });
+
+            it("should subscribe to navigatePaymentHistory", function () {
+                expect(mockSubscribe).toHaveBeenCalledWith("navigatePaymentHistory", "navigatePaymentHistory");
             });
 
             describe("has an init function that", function () {

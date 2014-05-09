@@ -4,6 +4,7 @@ var specList =
         // Views
         "spec/views/AboutViewSpec.js",
         "spec/views/AppViewSpec.js",
+        "spec/views/BaseViewSpec.js",
         "spec/views/CardAddViewSpec.js",
         "spec/views/CardDetailViewSpec.js",
         "spec/views/CardEditViewSpec.js",

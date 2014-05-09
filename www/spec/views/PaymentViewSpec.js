@@ -1,11 +1,24 @@
-define(["backbone", "Squire", "mustache", "globals", "utils",
+define(["backbone", "Squire", "mustache", "globals", "utils", "models/PaymentModel",
         "text!tmpl/payment/payment.html", "jasmine-jquery"],
-    function (Backbone, Squire, Mustache, globals, utils, pageTemplate) {
+    function (Backbone, Squire, Mustache, globals, utils, PaymentModel, pageTemplate) {
 
         "use strict";
 
         var squire = new Squire(),
             mockMustache = Mustache,
+            mockPaymentModel = {
+                "id"                : "13451345",
+                "scheduledDate"     : "5/8/2014",
+                "amount"            : 24356.56,
+                "bankAccount"       : {
+                    "id"            : "3465",
+                    "name"          : "Bank Name",
+                    "defaultBank"   : false
+                },
+                "status"            : "Status",
+                "confirmationNumber": "13451dvfgwdrfg23456"
+            },
+            paymentModel = new PaymentModel(),
             PaymentView,
             paymentView;
 
@@ -25,9 +38,13 @@ define(["backbone", "Squire", "mustache", "globals", "utils",
                         loadFixtures("index.html");
                     }
 
+                    paymentModel.initialize(mockPaymentModel);
+
                     PaymentView = JasminePaymentView;
 
-                    paymentView = new PaymentView();
+                    paymentView = new PaymentView({
+                        model: paymentModel
+                    });
 
                     done();
                 });
@@ -85,8 +102,15 @@ define(["backbone", "Squire", "mustache", "globals", "utils",
             });
 
             describe("has a render function that", function () {
+                var mockConfiguration;
+
                 beforeEach(function () {
+                    mockConfiguration = {
+                        payment: utils._.extend({}, utils.deepClone(globals.paymentSearchResults.configuration))
+                    };
+
                     spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(paymentView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
 
                     paymentView.initialize();
                     paymentView.render();
@@ -101,16 +125,87 @@ define(["backbone", "Squire", "mustache", "globals", "utils",
                 });
 
                 it("should call Mustache.render() on the template", function () {
-                    expect(mockMustache.render).toHaveBeenCalledWith(paymentView.template);
+                    expect(mockMustache.render).toHaveBeenCalledWith(paymentView.template, mockConfiguration);
                 });
 
                 it("sets content", function () {
                     var expectedContent,
                         actualContent = paymentView.$el;
 
-                    expectedContent = Mustache.render(pageTemplate);
+                    expectedContent = Mustache.render(pageTemplate, mockConfiguration);
 
                     expect(actualContent[0]).toContainHtml(expectedContent);
+                });
+
+                describe("when dynamically rendering the template based on the model data", function () {
+                    if (window._phantom === undefined) {
+                        it("should contain a payment link if the model is set", function () {
+                            paymentView.render();
+
+                            expect(paymentView.$el[0]).toContainElement("a");
+                        });
+
+                        it("should NOT contain a payment link if the model is not set", function () {
+                            mockConfiguration.payment = null;
+
+                            paymentView.render();
+
+                            expect(paymentView.$el[0]).not.toContainElement("a");
+                        });
+                    }
+                });
+            });
+
+            describe("has a getConfiguration function that", function () {
+                it("is defined", function () {
+                    expect(paymentView.getConfiguration).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(paymentView.getConfiguration).toEqual(jasmine.any(Function));
+                });
+
+                describe("when model is null", function () {
+                    beforeEach(function () {
+                        paymentView.model = null;
+                    });
+
+                    it("should return the expected result", function () {
+                        var expectedConfiguration = {
+                                payment : null
+                            },
+                            actualConfiguration;
+
+                        actualConfiguration = paymentView.getConfiguration();
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
+                });
+
+                describe("when model exists", function () {
+                    it("should return the expected result", function () {
+                        var expectedConfiguration = {
+                                payment: {}
+                            },
+                            actualConfiguration;
+
+                        expectedConfiguration.payment = utils._.extend({},
+                            utils.deepClone(globals.paymentSearchResults.configuration));
+
+                        expectedConfiguration.payment.url.value =
+                            globals.paymentSearchResults.constants.PAYMENT_DETAILS_BASE_URL + mockPaymentModel.id;
+
+                        expectedConfiguration.payment.scheduledDate.value = mockPaymentModel.scheduledDate;
+                        expectedConfiguration.payment.amount.value = utils.formatCurrency(mockPaymentModel.amount);
+                        expectedConfiguration.payment.status.value = mockPaymentModel.status;
+                        if (mockPaymentModel.bankAccount) {
+                            expectedConfiguration.payment.bankAccountName.value = mockPaymentModel.bankAccount.name;
+                        }
+
+                        actualConfiguration = paymentView.getConfiguration();
+
+                        expect(actualConfiguration).toEqual(expectedConfiguration);
+                    });
                 });
             });
         });

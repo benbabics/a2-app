@@ -1252,5 +1252,43 @@ define(function (require) {
         }
     };
 
+    /**
+     * Page :: Payment Search
+     */
+    globals.paymentSearch = {};
+    globals.paymentSearch.constants = {
+        "DEFAULT_PAGE_NUMBER": 0,
+        "DEFAULT_PAGE_SIZE": 5
+    };
+
+    /**
+     * Page :: Payment Search Results
+     */
+    globals.paymentSearchResults = {};
+    globals.paymentSearchResults.constants = {
+        "PAYMENT_DETAILS_BASE_URL": "#paymentDetails/"
+    };
+    globals.paymentSearchResults.configuration = {
+        "url": {
+            "value": ""
+        },
+        "scheduledDate": {
+            "label": "Date",
+            "value": ""
+        },
+        "amount": {
+            "label": "Amount",
+            "value": ""
+        },
+        "bankAccountName": {
+            "label": "Bank Account",
+            "value": ""
+        },
+        "status": {
+            "label": "Status",
+            "value": ""
+        }
+    };
+
     return globals;
 });

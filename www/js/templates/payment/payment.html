@@ -1,0 +1,23 @@
+{{#payment}}
+    <a href="{{url.value}}"
+       class="text-left"
+       data-theme="d"
+       data-ajax="false"
+       data-role="button"
+       data-icon="carat-r"
+       data-iconpos="right">
+
+        {{#scheduledDate}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/scheduledDate}}
+        {{#amount}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/amount}}
+        {{#bankAccountName}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/bankAccountName}}
+        {{#status}}
+            <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+        {{/status}}
+    </a>
+{{/payment}}

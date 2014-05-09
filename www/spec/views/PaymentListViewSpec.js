@@ -7,6 +7,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
         var squire = new Squire(),
             mockBackbone = Backbone,
             mockMustache = Mustache,
+            paymentModel = new Backbone.Model(),
+            paymentCollection = new Backbone.Collection(),
             mockUserModel = {
                 authenticated: true,
                 firstName: "Beavis",
@@ -83,9 +85,11 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     }
 
                     userModel.initialize(mockUserModel);
+                    paymentCollection.add(paymentModel);
 
                     paymentListView =  new PaymentListView({
-                        userModel: userModel
+                        collection: paymentCollection,
+                        userModel : userModel
                     });
 
                     done();
@@ -146,15 +150,21 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
             });
 
             describe("has a render function that", function () {
-                var actualContent;
+                var actualContent,
+                    actualList;
 
                 beforeEach(function () {
                     actualContent = paymentListView.$el.find(":jqmData(role=content)");
+                    actualList = actualContent.find("#paymentSearchResultList");
 
                     spyOn(paymentListView.$el, "find").and.returnValue(actualContent);
+                    spyOn(actualContent, "find").and.returnValue(actualList);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(paymentCollection, "each").and.callThrough();
+                    spyOn(actualList, "empty").and.callFake(function () { });
+                    spyOn(actualList, "append").and.callFake(function () { });
 
                     paymentListView.render();
                 });
@@ -167,6 +177,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     expect(paymentListView.render).toEqual(jasmine.any(Function));
                 });
 
+                it("should call empty on the list", function () {
+                    expect(actualList.empty).toHaveBeenCalledWith();
+                });
+
                 it("should call Mustache.render() on the template", function () {
                     expect(mockMustache.render).toHaveBeenCalledWith(paymentListView.template);
                 });
@@ -174,6 +188,20 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 it("should call the html function on the content", function () {
                     var expectedContent = Mustache.render(pageTemplate);
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
+                });
+
+                it("should call each on the collection sending a function", function () {
+                    expect(paymentCollection.each).toHaveBeenCalled();
+                    expect(paymentCollection.each.calls.argsFor(0).length).toEqual(1);
+                    expect(paymentCollection.each.calls.argsFor(0)[0]).toEqual(jasmine.any(Function));
+                });
+
+                it("should append a document fragment of all the new PaymentViews to the list", function () {
+                    expect(actualList.append).toHaveBeenCalled();
+                    expect(actualList.append.calls.argsFor(0).length).toEqual(1);
+
+                    // The argument is a document fragment containing the PaymentView elements
+                    expect(actualList.append.calls.argsFor(0)[0].nodeName).toEqual("#document-fragment");
                 });
 
                 it("should call the trigger function on the content", function () {

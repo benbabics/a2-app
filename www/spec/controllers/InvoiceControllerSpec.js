@@ -5,6 +5,9 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
 
         var squire = new Squire(),
             mockUtils = utils,
+            mockPaymentCollection = {
+                reset: function () { }
+            },
             mockInvoiceSummaryModel = {
                 "invoiceId"         : "Invoice Id",
                 "accountNumber"     : "Account Number",
@@ -82,13 +85,24 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                 showLoadingIndicator: function () { },
                 hideLoadingIndicator: function () { }
             },
+            mockPaymentListView = {
+                $el: "",
+                model: invoiceSummaryModel,
+                constructor: function () { },
+                initialize: function () { },
+                render: function () { },
+                showLoadingIndicator: function () { },
+                hideLoadingIndicator: function () { }
+            },
             invoiceController;
 
         squire.mock("utils", mockUtils);
+        squire.mock("collections/PaymentCollection", Squire.Helpers.returns(mockPaymentCollection));
         squire.mock("models/InvoiceSummaryModel", Squire.Helpers.returns(invoiceSummaryModel));
         squire.mock("models/MakePaymentAvailabilityModel", Squire.Helpers.returns(makePaymentAvailabilityModel));
         squire.mock("models/UserModel", UserModel);
         squire.mock("views/InvoiceSummaryView", Squire.Helpers.returns(mockInvoiceSummaryView));
+        squire.mock("views/PaymentListView", Squire.Helpers.returns(mockPaymentListView));
 
         describe("An Invoice Controller", function () {
             beforeEach(function (done) {
@@ -137,6 +151,10 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                         expect(invoiceController.makePaymentAvailabilityModel).toEqual(makePaymentAvailabilityModel);
                     });
 
+                it("should set the paymentCollection variable to a PaymentCollection object", function () {
+                    expect(invoiceController.paymentCollection).toEqual(mockPaymentCollection);
+                });
+
                 describe("when initializing the InvoiceSummaryView", function () {
                     beforeEach(function () {
                         spyOn(mockInvoiceSummaryView, "constructor").and.callThrough();
@@ -149,6 +167,25 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                     xit("should send in the correct parameters to the constructor", function () {
                         expect(mockInvoiceSummaryView.constructor).toHaveBeenCalledWith({
                             model    : invoiceSummaryModel,
+                            userModel: userModel
+                        });
+
+                        // TODO: this is not working, need to figure out how to test
+                    });
+                });
+
+                describe("when initializing the PaymentListView", function () {
+                    beforeEach(function () {
+                        spyOn(mockPaymentListView, "constructor").and.callThrough();
+                    });
+
+                    it("should set the paymentListView variable to a new PaymentListView object", function () {
+                        expect(invoiceController.paymentListView).toEqual(mockPaymentListView);
+                    });
+
+                    xit("should send in the correct parameters to the constructor", function () {
+                        expect(mockPaymentListView.constructor).toHaveBeenCalledWith({
+                            collection: mockPaymentCollection,
                             userModel: userModel
                         });
 
@@ -239,6 +276,122 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
 
                     it("should call the hideLoadingIndicator function on the Invoice Summary View", function () {
                         expect(mockInvoiceSummaryView.hideLoadingIndicator).toHaveBeenCalledWith();
+                    });
+                });
+            });
+
+            describe("has a navigatePaymentHistory function that", function () {
+                beforeEach(function () {
+                    spyOn(invoiceController, "updatePaymentHistoryCollection").and.callFake(function () {});
+
+                    invoiceController.navigatePaymentHistory();
+                });
+
+                it("is defined", function () {
+                    expect(invoiceController.navigatePaymentHistory).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.navigatePaymentHistory).toEqual(jasmine.any(Function));
+                });
+
+                it("should call updatePaymentHistoryCollection", function () {
+                    expect(invoiceController.updatePaymentHistoryCollection).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has an updatePaymentHistoryCollection function that", function () {
+                it("is defined", function () {
+                    expect(invoiceController.updatePaymentHistoryCollection).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.updatePaymentHistoryCollection).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the call to fetchCollection finishes successfully", function () {
+                    beforeEach(function () {
+                        spyOn(utils, "fetchCollection").and.callFake(function () {
+                            var deferred = utils.Deferred();
+
+                            deferred.resolve();
+                            return deferred.promise();
+                        });
+
+                        spyOn(mockPaymentListView, "showLoadingIndicator").and.callFake(function () {});
+                        spyOn(mockPaymentCollection, "reset").and.callFake(function () {});
+                        spyOn(mockPaymentListView, "render").and.callFake(function () {});
+                        spyOn(utils, "changePage").and.callFake(function () {});
+                        spyOn(mockPaymentListView, "hideLoadingIndicator").and.callFake(function () {});
+
+                        invoiceController.updatePaymentHistoryCollection();
+                    });
+
+                    it("should call the showLoadingIndicator function on the Payment List View", function () {
+                        expect(mockPaymentListView.showLoadingIndicator).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the reset function on the Payment Collection", function () {
+                        expect(mockPaymentCollection.reset).toHaveBeenCalledWith([], { "silent": true });
+                    });
+
+                    it("should call fetchCollection on utils", function () {
+                        expect(utils.fetchCollection).toHaveBeenCalledWith(mockPaymentCollection, null);
+                    });
+
+                    it("should call the render function on Payment List View", function () {
+                        expect(mockPaymentListView.render).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the changePage function on utils", function () {
+                        expect(utils.changePage).toHaveBeenCalledWith(mockPaymentListView.$el, null, null, true);
+                    });
+
+                    it("should call the hideLoadingIndicator function on the Payment List View", function () {
+                        expect(mockPaymentListView.hideLoadingIndicator).toHaveBeenCalledWith();
+                    });
+                });
+
+                describe("when the call to fetchCollection finishes with a failure", function () {
+                    beforeEach(function () {
+                        spyOn(utils, "fetchCollection").and.callFake(function () {
+                            var deferred = utils.Deferred();
+
+                            deferred.reject();
+                            return deferred.promise();
+                        });
+
+                        spyOn(mockPaymentListView, "showLoadingIndicator").and.callFake(function () {});
+                        spyOn(mockPaymentCollection, "reset").and.callFake(function () {});
+                        spyOn(mockPaymentListView, "render").and.callFake(function () {});
+                        spyOn(utils, "changePage").and.callFake(function () {});
+                        spyOn(mockPaymentListView, "hideLoadingIndicator").and.callFake(function () {});
+
+                        invoiceController.updatePaymentHistoryCollection();
+                    });
+
+                    it("should call the showLoadingIndicator function on the Payment List View", function () {
+                        expect(mockPaymentListView.showLoadingIndicator).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the reset function on the Payment Collection", function () {
+                        expect(mockPaymentCollection.reset).toHaveBeenCalledWith([], { "silent": true });
+                    });
+
+                    it("should call fetchCollection", function () {
+                        expect(utils.fetchCollection).toHaveBeenCalledWith(mockPaymentCollection, null);
+                    });
+
+                    it("should call the render function on Payment List View", function () {
+                        expect(mockPaymentListView.render).toHaveBeenCalledWith();
+                    });
+
+                    it("should call the changePage function on utils", function () {
+                        expect(utils.changePage).toHaveBeenCalledWith(mockPaymentListView.$el, null, null, true);
+                    });
+
+                    it("should call the hideLoadingIndicator function on the Payment List View", function () {
+                        expect(mockPaymentListView.hideLoadingIndicator).toHaveBeenCalledWith();
                     });
                 });
             });
