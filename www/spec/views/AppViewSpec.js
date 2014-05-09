@@ -21,14 +21,11 @@ define(["backbone", "utils", "Squire", "jasmine-jquery"],
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "";
+            jasmine.getFixtures().fixturesPath = "./";
 
             beforeEach(function (done) {
                 squire.require(["views/AppView"], function (AppView) {
-                    //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    if (window._phantom === undefined) {
-                        loadFixtures("index.html");
-                    }
+                    loadFixtures("index.html");
 
                     appView = new AppView({
                         model: appModel,

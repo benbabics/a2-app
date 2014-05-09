@@ -111,30 +111,26 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "";
+            jasmine.getFixtures().fixturesPath = "./";
 
             beforeEach(function (done) {
-                squire.require(["views/InvoiceSummaryView"],
-                    function (JasmineInvoiceSummaryView) {
-                        //TODO - Fix - Loading fixtures causes phantomjs to hang
-                        if (window._phantom === undefined) {
-                            loadFixtures("index.html");
-                        }
+                squire.require(["views/InvoiceSummaryView"], function (JasmineInvoiceSummaryView) {
+                    loadFixtures("index.html");
 
-                        invoiceSummaryModel.set(mockInvoiceSummaryModel);
-                        makePaymentAvailabilityModel.set(mockMakePaymentAvailabilityModel);
-                        userModel.initialize(mockUserModel);
+                    invoiceSummaryModel.set(mockInvoiceSummaryModel);
+                    makePaymentAvailabilityModel.set(mockMakePaymentAvailabilityModel);
+                    userModel.initialize(mockUserModel);
 
-                        InvoiceSummaryView = JasmineInvoiceSummaryView;
+                    InvoiceSummaryView = JasmineInvoiceSummaryView;
 
-                        invoiceSummaryView =  new InvoiceSummaryView({
-                            model: invoiceSummaryModel,
-                            makePaymentAvailabilityModel: makePaymentAvailabilityModel,
-                            userModel: userModel
-                        });
-
-                        done();
+                    invoiceSummaryView =  new InvoiceSummaryView({
+                        model: invoiceSummaryModel,
+                        makePaymentAvailabilityModel: makePaymentAvailabilityModel,
+                        userModel: userModel
                     });
+
+                    done();
+                });
             });
 
             it("is defined", function () {
@@ -258,7 +254,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                             beforeEach(function () {
                                 expectedConfiguration = {
                                     "invoiceSummary": utils._.extend({}, utils.deepClone(globals.invoiceSummary.configuration)),
-                                    "permissions"   : userModel.get("permissions")
+                                    "permissions": userModel.get("permissions")
                                 };
                                 expectedConfiguration.invoiceSummary.makePaymentButton.visible = true;
                                 expectedConfiguration.invoiceSummary.unableToMakePaymentMessage = unableToMakePaymentMessage;
@@ -283,7 +279,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                             beforeEach(function () {
                                 expectedConfiguration = {
                                     "invoiceSummary": utils._.extend({}, utils.deepClone(globals.invoiceSummary.configuration)),
-                                    "permissions"   : userModel.get("permissions")
+                                    "permissions": userModel.get("permissions")
                                 };
                                 expectedConfiguration.invoiceSummary.makePaymentButton.visible = true;
                                 expectedConfiguration.invoiceSummary.unableToMakePaymentMessage = null;
@@ -306,7 +302,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                             invoiceSummaryView.userModel.set("permissions", {"MOBILE_PAYMENT_MAKE": false});
                             expectedConfiguration = {
                                 "invoiceSummary": utils._.extend({}, utils.deepClone(globals.invoiceSummary.configuration)),
-                                "permissions"   : userModel.get("permissions")
+                                "permissions": userModel.get("permissions")
                             };
                             expectedConfiguration.invoiceSummary.makePaymentButton.visible = true;
 

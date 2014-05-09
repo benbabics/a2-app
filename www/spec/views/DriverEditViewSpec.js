@@ -83,14 +83,11 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "";
+            jasmine.getFixtures().fixturesPath = "./";
 
             beforeEach(function (done) {
                 squire.require(["views/DriverEditView"], function (JasmineDriverEditView) {
-                    //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    if (window._phantom === undefined) {
-                        loadFixtures("index.html");
-                    }
+                    loadFixtures("index.html");
 
                     driverModel.initialize(mockDriverModel);
                     userModel.initialize(mockUserModel);
@@ -217,54 +214,52 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
-                    if (window._phantom === undefined) {
-                        it("should contain content if the model is set", function () {
-                            driverEditView.render();
+                    it("should contain content if the model is set", function () {
+                        driverEditView.render();
 
-                            expect(actualContent[0]).not.toBeEmpty();
-                        });
+                        expect(actualContent[0]).not.toBeEmpty();
+                    });
 
-                        it("should NOT contain any content if the model is not set", function () {
-                            mockConfiguration.driver = null;
+                    it("should NOT contain any content if the model is not set", function () {
+                        mockConfiguration.driver = null;
 
-                            driverEditView.render();
+                        driverEditView.render();
 
-                            expect(actualContent[0]).toBeEmpty();
-                        });
+                        expect(actualContent[0]).toBeEmpty();
+                    });
 
-                        it("should include a button with the correct text", function () {
-                            var button,
-                                mockButtonLabel = "adfbawdfrghw45y62345b612";
+                    it("should include a button with the correct text", function () {
+                        var button,
+                            mockButtonLabel = "adfbawdfrghw45y62345b612";
+                        userModel.set("permissions", {"MOBILE_DRIVER_EDIT": true});
+                        mockConfiguration.permissions = userModel.get("permissions");
+                        mockConfiguration.driver.submitButton.label = mockButtonLabel;
+
+                        driverEditView.render();
+
+                        button = actualContent.find("button[id='submitChangeStatus-btn']");
+                        expect(button[0]).toHaveText(mockButtonLabel);
+                    });
+
+                    it("should include a button to change status if the user has the MOBILE_DRIVER_EDIT permission",
+                        function () {
                             userModel.set("permissions", {"MOBILE_DRIVER_EDIT": true});
                             mockConfiguration.permissions = userModel.get("permissions");
-                            mockConfiguration.driver.submitButton.label = mockButtonLabel;
 
                             driverEditView.render();
 
-                            button = actualContent.find("button[id='submitChangeStatus-btn']");
-                            expect(button[0]).toHaveText(mockButtonLabel);
+                            expect(actualContent[0]).toContainElement("button[id='submitChangeStatus-btn']");
                         });
 
-                        it("should include a button to change status if the user has the MOBILE_DRIVER_EDIT permission",
-                            function () {
-                                userModel.set("permissions", {"MOBILE_DRIVER_EDIT": true});
-                                mockConfiguration.permissions = userModel.get("permissions");
+                    it("should NOT include a button to change status if the user does NOT have the MOBILE_DRIVER_EDIT permission",
+                        function () {
+                            userModel.set("permissions", {"MOBILE_DRIVER_EDIT": false});
+                            mockConfiguration.permissions = userModel.get("permissions");
 
-                                driverEditView.render();
+                            driverEditView.render();
 
-                                expect(actualContent[0]).toContainElement("button[id='submitChangeStatus-btn']");
-                            });
-
-                        it("should NOT include a button to change status if the user does NOT have the MOBILE_DRIVER_EDIT permission",
-                            function () {
-                                userModel.set("permissions", {"MOBILE_DRIVER_EDIT": false});
-                                mockConfiguration.permissions = userModel.get("permissions");
-
-                                driverEditView.render();
-
-                                expect(actualContent[0]).not.toContainElement("button[id='submitChangeStatus-btn']");
-                            });
-                    }
+                            expect(actualContent[0]).not.toContainElement("button[id='submitChangeStatus-btn']");
+                        });
                 });
             });
 

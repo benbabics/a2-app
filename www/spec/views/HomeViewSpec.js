@@ -27,14 +27,11 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "";
+            jasmine.getFixtures().fixturesPath = "./";
 
             beforeEach(function (done) {
                 squire.require(["views/HomeView"], function (JasmineHomeView) {
-                    //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    if (window._phantom === undefined) {
-                        loadFixtures("index.html");
-                    }
+                    loadFixtures("index.html");
 
                     userModel.set(mockUserModel);
 
@@ -133,21 +130,19 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
-                    if (window._phantom === undefined) {
-                        it("should contain content if the user is authenticated", function () {
-                            homeView.model.set("authenticated", true);
-                            homeView.render();
+                    it("should contain content if the user is authenticated", function () {
+                        homeView.model.set("authenticated", true);
+                        homeView.render();
 
-                            expect(actualContent[0]).not.toBeEmpty();
-                        });
+                        expect(actualContent[0]).not.toBeEmpty();
+                    });
 
-                        it("should NOT contain any content if the user is NOT authenticated", function () {
-                            homeView.model.set("authenticated", false);
-                            homeView.render();
+                    it("should NOT contain any content if the user is NOT authenticated", function () {
+                        homeView.model.set("authenticated", false);
+                        homeView.render();
 
-                            expect(actualContent[0]).toBeEmpty();
-                        });
-                    }
+                        expect(actualContent[0]).toBeEmpty();
+                    });
 
                     it("should include a link to the hierarchyManager if the user has multiple accounts", function () {
                         homeView.model.set("hasMultipleAccounts", true);

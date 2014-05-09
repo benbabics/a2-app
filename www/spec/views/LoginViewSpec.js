@@ -24,14 +24,11 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "";
+            jasmine.getFixtures().fixturesPath = "./";
 
             beforeEach(function (done) {
                 squire.require(["views/LoginView"], function (JasmineLoginView) {
-                    //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    if (window._phantom === undefined) {
-                        loadFixtures("index.html");
-                    }
+                    loadFixtures("index.html");
 
                     loginModel.set(mockLoginModel);
 

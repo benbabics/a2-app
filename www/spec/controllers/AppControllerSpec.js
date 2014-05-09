@@ -112,10 +112,8 @@ define(["backbone", "utils", "Squire"],
                     spyOn(mockRouter, "start").and.callThrough();
                     spyOn(mockRouter, "navigate").and.callFake(function () { });
                     spyOn(mockAppView, "render").and.callThrough();
-                    if (window._phantom === undefined) {
-                        spyOn(document, "addEventListener").and.callThrough();
-                        spyOn(window, "setTimeout").and.callThrough();
-                    }
+                    spyOn(document, "addEventListener").and.callThrough();
+                    spyOn(window, "setTimeout").and.callThrough();
                     appController.init();
                     appController.ready();
                 });
@@ -140,49 +138,47 @@ define(["backbone", "utils", "Squire"],
                     expect(mockAppView.render.calls.mostRecent().args.length).toEqual(0);
                 });
 
-                if (window._phantom === undefined) {
-                    it("should call the document addEventListener function", function () {
-                        expect(document.addEventListener).toHaveBeenCalled();
+                it("should call the document addEventListener function", function () {
+                    expect(document.addEventListener).toHaveBeenCalled();
 
-                        expect(document.addEventListener.calls.mostRecent().args.length).toEqual(3);
-                        expect(document.addEventListener.calls.mostRecent().args[0]).toEqual("offline");
-                        expect(document.addEventListener.calls.mostRecent().args[1]).toEqual(jasmine.any(Function));
-                        expect(document.addEventListener.calls.mostRecent().args[2]).toBeFalsy();
+                    expect(document.addEventListener.calls.mostRecent().args.length).toEqual(3);
+                    expect(document.addEventListener.calls.mostRecent().args[0]).toEqual("offline");
+                    expect(document.addEventListener.calls.mostRecent().args[1]).toEqual(jasmine.any(Function));
+                    expect(document.addEventListener.calls.mostRecent().args[2]).toBeFalsy();
+                });
+
+                describe("calling the addEventListener callback parameter", function () {
+                    it("should call the onOffline function", function () {
+                        var callback = document.addEventListener.calls.mostRecent().args[1];
+
+                        callback.apply();
+
+                        expect(appController.onOffline).toHaveBeenCalledWith();
                     });
+                });
 
-                    describe("calling the addEventListener callback parameter", function () {
-                        it("should call the onOffline function", function () {
-                            var callback = document.addEventListener.calls.mostRecent().args[1];
+                it("should call the window setTimeout function", function () {
+                    expect(window.setTimeout).toHaveBeenCalled();
 
-                            callback.apply();
+                    expect(window.setTimeout.calls.mostRecent().args.length).toEqual(2);
+                    expect(window.setTimeout.calls.mostRecent().args[0]).toEqual(jasmine.any(Function));
+                    expect(window.setTimeout.calls.mostRecent().args[1]).toEqual(2000);
+                });
 
-                            expect(appController.onOffline).toHaveBeenCalledWith();
+                describe("calling the window setTimeout callback parameter", function () {
+                    it("should call the navigator.splashscreen.hide function", function () {
+                        var callback = window.setTimeout.calls.mostRecent().args[0];
+
+                        spyOn(navigator.splashscreen, "hide").and.callFake(function () {
                         });
+
+                        callback.apply();
+
+                        expect(navigator.splashscreen.hide).toHaveBeenCalled();
+
+                        expect(navigator.splashscreen.hide.calls.mostRecent().args.length).toEqual(0);
                     });
-
-                    it("should call the window setTimeout function", function () {
-                        expect(window.setTimeout).toHaveBeenCalled();
-
-                        expect(window.setTimeout.calls.mostRecent().args.length).toEqual(2);
-                        expect(window.setTimeout.calls.mostRecent().args[0]).toEqual(jasmine.any(Function));
-                        expect(window.setTimeout.calls.mostRecent().args[1]).toEqual(2000);
-                    });
-
-                    describe("calling the window setTimeout callback parameter", function () {
-                        it("should call the navigator.splashscreen.hide function", function () {
-                            var callback = window.setTimeout.calls.mostRecent().args[0];
-
-                            spyOn(navigator.splashscreen, "hide").and.callFake(function () {
-                            });
-
-                            callback.apply();
-
-                            expect(navigator.splashscreen.hide).toHaveBeenCalled();
-
-                            expect(navigator.splashscreen.hide.calls.mostRecent().args.length).toEqual(0);
-                        });
-                    });
-                }
+                });
             });
 
             describe("has an onOffline function that", function () {
@@ -279,9 +275,7 @@ define(["backbone", "utils", "Squire"],
                                     mockAppView.navigateCheckConnection.calls.mostRecent().args[0];
 
                                 spyOn(mockAppView, "showLoadingIndicator").and.callFake(function (callback) { });
-                                if (window._phantom === undefined) {
-                                    spyOn(window, "setTimeout").and.callThrough();
-                                }
+                                spyOn(window, "setTimeout").and.callThrough();
                                 spyOn(mockAppView, "hideLoadingIndicator").and.callFake(function (callback) { });
                                 spyOn(appController, "checkConnection").and.callFake(function () { });
 
@@ -295,39 +289,37 @@ define(["backbone", "utils", "Squire"],
                                 expect(mockAppView.showLoadingIndicator.calls.mostRecent().args[0]).toBeFalsy();
                             });
 
-                            if (window._phantom === undefined) {
-                                describe("should call the setTimeout function on window", function () {
-                                    it("by passing a callback", function () {
-                                        expect(window.setTimeout).toHaveBeenCalled();
+                            describe("should call the setTimeout function on window", function () {
+                                it("by passing a callback", function () {
+                                    expect(window.setTimeout).toHaveBeenCalled();
 
-                                        expect(window.setTimeout.calls.mostRecent().args.length).toEqual(2);
-                                        expect(window.setTimeout.calls.mostRecent().args[0]).toEqual(jasmine.any(Function));
-                                        expect(window.setTimeout.calls.mostRecent().args[1]).toEqual(2000);
+                                    expect(window.setTimeout.calls.mostRecent().args.length).toEqual(2);
+                                    expect(window.setTimeout.calls.mostRecent().args[0]).toEqual(jasmine.any(Function));
+                                    expect(window.setTimeout.calls.mostRecent().args[1]).toEqual(2000);
+                                });
+
+                                describe("when the callback is called", function () {
+                                    var setTimeoutCallback;
+
+                                    beforeEach(function () {
+                                        setTimeoutCallback = window.setTimeout.calls.mostRecent().args[0];
+
+                                        setTimeoutCallback.call();
                                     });
 
-                                    describe("when the callback is called", function () {
-                                        var setTimeoutCallback;
+                                    it("should call the hideLoadingIndicator function on AppView", function () {
+                                        expect(mockAppView.hideLoadingIndicator).toHaveBeenCalled();
 
-                                        beforeEach(function () {
-                                            setTimeoutCallback = window.setTimeout.calls.mostRecent().args[0];
+                                        expect(mockAppView.hideLoadingIndicator.calls.mostRecent().args.length).toEqual(1);
+                                        expect(mockAppView.hideLoadingIndicator.calls.mostRecent().args[0]).toBeFalsy();
+                                    });
 
-                                            setTimeoutCallback.call();
-                                        });
-
-                                        it("should call the hideLoadingIndicator function on AppView", function () {
-                                            expect(mockAppView.hideLoadingIndicator).toHaveBeenCalled();
-
-                                            expect(mockAppView.hideLoadingIndicator.calls.mostRecent().args.length).toEqual(1);
-                                            expect(mockAppView.hideLoadingIndicator.calls.mostRecent().args[0]).toBeFalsy();
-                                        });
-
-                                        it("should call the checkConnection function", function () {
-                                            expect(appController.checkConnection)
-                                                .toHaveBeenCalledWith(checkConnectionCallback);
-                                        });
+                                    it("should call the checkConnection function", function () {
+                                        expect(appController.checkConnection)
+                                            .toHaveBeenCalledWith(checkConnectionCallback);
                                     });
                                 });
-                            }
+                            });
                         });
                     });
                 });

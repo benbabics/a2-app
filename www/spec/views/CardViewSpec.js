@@ -31,14 +31,11 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel"
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "";
+            jasmine.getFixtures().fixturesPath = "./";
 
             beforeEach(function (done) {
                 squire.require(["views/CardView"], function (CardView) {
-                    //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    if (window._phantom === undefined) {
-                        loadFixtures("index.html");
-                    }
+                    loadFixtures("index.html");
 
                     cardModel.initialize(mockCardModel);
 
@@ -136,21 +133,19 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel"
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
-                    if (window._phantom === undefined) {
-                        it("should contain a card link if the model is set", function () {
-                            cardView.render();
+                    it("should contain a card link if the model is set", function () {
+                        cardView.render();
 
-                            expect(cardView.$el[0]).toContainElement("a");
-                        });
+                        expect(cardView.$el[0]).toContainElement("a");
+                    });
 
-                        it("should NOT contain a card link if the model is not set", function () {
-                            mockConfiguration.card = null;
+                    it("should NOT contain a card link if the model is not set", function () {
+                        mockConfiguration.card = null;
 
-                            cardView.render();
+                        cardView.render();
 
-                            expect(cardView.$el[0]).not.toContainElement("a");
-                        });
-                    }
+                        expect(cardView.$el[0]).not.toContainElement("a");
+                    });
                 });
             });
 

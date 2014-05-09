@@ -29,14 +29,11 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/PaymentMod
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "";
+            jasmine.getFixtures().fixturesPath = "./";
 
             beforeEach(function (done) {
                 squire.require(["views/PaymentView"], function (JasminePaymentView) {
-                    //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    if (window._phantom === undefined) {
-                        loadFixtures("index.html");
-                    }
+                    loadFixtures("index.html");
 
                     paymentModel.initialize(mockPaymentModel);
 
@@ -138,21 +135,19 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/PaymentMod
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
-                    if (window._phantom === undefined) {
-                        it("should contain a payment link if the model is set", function () {
-                            paymentView.render();
+                    it("should contain a payment link if the model is set", function () {
+                        paymentView.render();
 
-                            expect(paymentView.$el[0]).toContainElement("a");
-                        });
+                        expect(paymentView.$el[0]).toContainElement("a");
+                    });
 
-                        it("should NOT contain a payment link if the model is not set", function () {
-                            mockConfiguration.payment = null;
+                    it("should NOT contain a payment link if the model is not set", function () {
+                        mockConfiguration.payment = null;
 
-                            paymentView.render();
+                        paymentView.render();
 
-                            expect(paymentView.$el[0]).not.toContainElement("a");
-                        });
-                    }
+                        expect(paymentView.$el[0]).not.toContainElement("a");
+                    });
                 });
             });
 

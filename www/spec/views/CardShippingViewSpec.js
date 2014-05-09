@@ -129,14 +129,11 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
             // Override the default fixture path which is spec/javascripts/fixtures
             // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "";
+            jasmine.getFixtures().fixturesPath = "./";
 
             beforeEach(function (done) {
                 squire.require(["views/CardShippingView"], function (JasmineCardShippingView) {
-                    //TODO - Fix - Loading fixtures causes phantomjs to hang
-                    if (window._phantom === undefined) {
-                        loadFixtures("index.html");
-                    }
+                    loadFixtures("index.html");
 
                     cardModel.initialize(mockCardModel);
                     shippingModel.initialize(mockShippingModel);
