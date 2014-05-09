@@ -30,9 +30,11 @@ define([ "jclass", "utils", "routers/AppRouter", "views/AppView", "models/AppMod
             },
 
             ready: function () {
+                var self = this;
+
                 this.appRouter.start();
                 this.appView.render();
-                document.addEventListener("offline", this.onOffline.bind(this), false);
+                document.addEventListener("offline", function () { self.onOffline.call(this); }, false);
 
                 // now that everything is ready, hide the splashscreen
                 setTimeout(function () {
