@@ -223,11 +223,11 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 });
 
                 it("is defined", function () {
-                    expect(driverListView.render).toBeDefined();
+                    expect(driverListView.renderHeader).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(driverListView.render).toEqual(jasmine.any(Function));
+                    expect(driverListView.renderHeader).toEqual(jasmine.any(Function));
                 });
 
                 it("should call Mustache.render() on the headerTemplate", function () {

@@ -218,11 +218,11 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 });
 
                 it("is defined", function () {
-                    expect(cardSearchView.render).toBeDefined();
+                    expect(cardSearchView.renderHeader).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(cardSearchView.render).toEqual(jasmine.any(Function));
+                    expect(cardSearchView.renderHeader).toEqual(jasmine.any(Function));
                 });
 
                 it("should call Mustache.render() on the headerTemplate", function () {
@@ -263,7 +263,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 });
             });
 
-
             describe("has a renderContent function that", function () {
                 var actualContent,
                     mockConfiguration = globals.cardSearch.configuration;
@@ -277,15 +276,15 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(cardSearchView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
 
-                    cardSearchView.render();
+                    cardSearchView.renderContent();
                 });
 
                 it("is defined", function () {
-                    expect(cardSearchView.render).toBeDefined();
+                    expect(cardSearchView.renderContent).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(cardSearchView.render).toEqual(jasmine.any(Function));
+                    expect(cardSearchView.renderContent).toEqual(jasmine.any(Function));
                 });
 
                 it("should call Mustache.render() on the template", function () {
@@ -495,7 +494,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                             }
                         };
 
-                        spyOn(CardSearchView.__super__, "handleInputChanged").and.callThrough();
+                        spyOn(CardSearchView.__super__, "handleInputChanged").and.callFake(function () {});
                         cardSearchView.handleInputChanged(mockEvent);
 
                         expect(CardSearchView.__super__.handleInputChanged).toHaveBeenCalledWith(mockEvent);

@@ -225,11 +225,11 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 });
 
                 it("is defined", function () {
-                    expect(driverSearchView.render).toBeDefined();
+                    expect(driverSearchView.renderHeader).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(driverSearchView.render).toEqual(jasmine.any(Function));
+                    expect(driverSearchView.renderHeader).toEqual(jasmine.any(Function));
                 });
 
                 it("should call Mustache.render() on the headerTemplate", function () {
@@ -283,15 +283,15 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(driverSearchView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
 
-                    driverSearchView.render();
+                    driverSearchView.renderContent();
                 });
 
                 it("is defined", function () {
-                    expect(driverSearchView.render).toBeDefined();
+                    expect(driverSearchView.renderContent).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(driverSearchView.render).toEqual(jasmine.any(Function));
+                    expect(driverSearchView.renderContent).toEqual(jasmine.any(Function));
                 });
 
                 it("should call Mustache.render() on the template", function () {

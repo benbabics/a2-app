@@ -225,11 +225,11 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                 });
 
                 it("is defined", function () {
-                    expect(cardListView.render).toBeDefined();
+                    expect(cardListView.renderHeader).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(cardListView.render).toEqual(jasmine.any(Function));
+                    expect(cardListView.renderHeader).toEqual(jasmine.any(Function));
                 });
 
                 it("should call Mustache.render() on the headerTemplate", function () {
