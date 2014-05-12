@@ -9,15 +9,16 @@ define(["backbone", "utils", "facade"],
              * Route Definitions
              */
             routes: {
-                "cardAdd"              : "showCardAdd",
-                "cardDetails(/)(:id)"  : "showCardDetails",
-                "cardSearch"           : "showCardSearch",
-                "contactUs"            : "showContactUs",
-                "driverAdd"            : "showDriverAdd",
-                "driverSearch"         : "showDriverSearch",
-                "driverDetails(/)(:id)": "showDriverDetails",
-                "invoiceSummary"       : "showInvoiceSummary",
-                "paymentHistory"       : "showPaymentHistory",
+                "cardAdd"               : "showCardAdd",
+                "cardDetails(/)(:id)"   : "showCardDetails",
+                "cardSearch"            : "showCardSearch",
+                "contactUs"             : "showContactUs",
+                "driverAdd"             : "showDriverAdd",
+                "driverSearch"          : "showDriverSearch",
+                "driverDetails(/)(:id)" : "showDriverDetails",
+                "invoiceSummary"        : "showInvoiceSummary",
+                "paymentDetails(/)(:id)": "showPaymentDetails",
+                "paymentHistory"        : "showPaymentHistory",
 
                 "*page": "changePage",
 
@@ -57,6 +58,10 @@ define(["backbone", "utils", "facade"],
 
             showInvoiceSummary: function () {
                 facade.publish("invoice", "navigateSummary");
+            },
+
+            showPaymentDetails: function (id) {
+                facade.publish("invoice", "navigatePaymentDetails", id);
             },
 
             showPaymentHistory: function () {

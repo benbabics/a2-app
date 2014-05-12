@@ -1,8 +1,8 @@
 define(["jclass", "utils", "collections/PaymentCollection",
         "models/InvoiceSummaryModel", "models/MakePaymentAvailabilityModel", "models/UserModel",
-        "views/InvoiceSummaryView", "views/PaymentListView"],
+        "views/InvoiceSummaryView", "views/PaymentDetailView", "views/PaymentListView"],
     function (JClass, utils, PaymentCollection, InvoiceSummaryModel, MakePaymentAvailabilityModel, UserModel,
-              InvoiceSummaryView, PaymentListView) {
+              InvoiceSummaryView, PaymentDetailView, PaymentListView) {
 
         "use strict";
 
@@ -14,6 +14,7 @@ define(["jclass", "utils", "collections/PaymentCollection",
 
         InvoiceController = JClass.extend({
             invoiceSummaryView: null,
+            paymentDetailView: null,
             paymentListView: null,
             makePaymentAvailabilityModel: null,
             userModel: null,
@@ -38,6 +39,11 @@ define(["jclass", "utils", "collections/PaymentCollection",
                     collection: this.paymentCollection,
                     userModel : this.userModel
                 });
+
+                // create detail view
+                this.paymentDetailView = new PaymentDetailView({
+                    userModel: this.userModel
+                });
             },
 
             navigateSummary: function () {
@@ -54,6 +60,12 @@ define(["jclass", "utils", "collections/PaymentCollection",
                     .always(function () {
                         self.invoiceSummaryView.hideLoadingIndicator();
                     });
+            },
+
+            navigatePaymentDetails: function (id) {
+                this.paymentDetailView.setModel(this.paymentCollection.findWhere({"id": id}));
+                this.paymentDetailView.render();
+                utils.changePage(this.paymentDetailView.$el);
             },
 
             navigatePaymentHistory: function () {

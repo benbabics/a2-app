@@ -6,8 +6,15 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
         var squire = new Squire(),
             mockUtils = utils,
             mockPaymentCollection = {
-                reset: function () { }
+                reset: function () { },
+                findWhere: function () { }
             },
+            mockBankAccountModel = {
+                "id"            : "3465",
+                "name"          : "Bank Name",
+                "defaultBank"   : false
+            },
+            bankAccountModel = new Backbone.Model(),
             mockInvoiceSummaryModel = {
                 "invoiceId"         : "Invoice Id",
                 "accountNumber"     : "Account Number",
@@ -27,6 +34,14 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                 "makePaymentAllowed"                    : false
             },
             makePaymentAvailabilityModel = new Backbone.Model(),
+            mockPaymentModel = {
+                "id"                : "13451345",
+                "scheduledDate"     : "5/8/2014",
+                "amount"            : 24356.56,
+                "status"            : "Status",
+                "confirmationNumber": "13451dvfgwdrfg23456"
+            },
+            paymentModel = new Backbone.Model(),
             mockUserModel = {
                 authenticated: true,
                 firstName: "Beavis",
@@ -85,9 +100,17 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                 showLoadingIndicator: function () { },
                 hideLoadingIndicator: function () { }
             },
+            mockPaymentDetailView = {
+                $el: "",
+                constructor: function () { },
+                initialize: function () { },
+                render: function () { },
+                showLoadingIndicator: function () { },
+                hideLoadingIndicator: function () { },
+                setModel: function () { }
+            },
             mockPaymentListView = {
                 $el: "",
-                model: invoiceSummaryModel,
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { },
@@ -103,10 +126,14 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
         squire.mock("models/UserModel", UserModel);
         squire.mock("views/InvoiceSummaryView", Squire.Helpers.returns(mockInvoiceSummaryView));
         squire.mock("views/PaymentListView", Squire.Helpers.returns(mockPaymentListView));
+        squire.mock("views/PaymentDetailView", Squire.Helpers.returns(mockPaymentDetailView));
 
         describe("An Invoice Controller", function () {
             beforeEach(function (done) {
                 squire.require(["controllers/InvoiceController"], function (InvoiceController) {
+                    bankAccountModel.set(mockBankAccountModel);
+                    paymentModel.set(mockPaymentModel);
+                    paymentModel.set("bankAccount", bankAccountModel);
                     invoiceSummaryModel.set(mockInvoiceSummaryModel);
                     makePaymentAvailabilityModel.set(mockMakePaymentAvailabilityModel);
                     userModel.initialize(mockUserModel);
@@ -186,6 +213,24 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                     xit("should send in the correct parameters to the constructor", function () {
                         expect(mockPaymentListView.constructor).toHaveBeenCalledWith({
                             collection: mockPaymentCollection,
+                            userModel: userModel
+                        });
+
+                        // TODO: this is not working, need to figure out how to test
+                    });
+                });
+
+                describe("when initializing the PaymentListView", function () {
+                    beforeEach(function () {
+                        spyOn(mockPaymentDetailView, "constructor").and.callThrough();
+                    });
+
+                    it("should set the paymentDetailView variable to a new PaymentDetailView object", function () {
+                        expect(invoiceController.paymentDetailView).toEqual(mockPaymentDetailView);
+                    });
+
+                    xit("should send in the correct parameters to the constructor", function () {
+                        expect(mockPaymentDetailView.constructor).toHaveBeenCalledWith({
                             userModel: userModel
                         });
 
@@ -277,6 +322,47 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                     it("should call the hideLoadingIndicator function on the Invoice Summary View", function () {
                         expect(mockInvoiceSummaryView.hideLoadingIndicator).toHaveBeenCalledWith();
                     });
+                });
+            });
+
+            describe("has a navigatePaymentDetails function that", function () {
+                var mockCardNumber = 1234;
+
+                beforeEach(function () {
+                    mockPaymentDetailView.model = null;
+                    spyOn(mockPaymentCollection, "findWhere").and.callFake(function () { return paymentModel; });
+                    spyOn(mockPaymentDetailView, "setModel").and.callFake(function () { });
+                    spyOn(mockPaymentDetailView, "render").and.callThrough();
+                    spyOn(mockUtils, "changePage").and.callThrough();
+
+                    invoiceController.navigatePaymentDetails(mockCardNumber);
+                });
+
+                it("is defined", function () {
+                    expect(invoiceController.navigatePaymentDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.navigatePaymentDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should call findWhere on the Payment Collection", function () {
+                    expect(mockPaymentCollection.findWhere).toHaveBeenCalledWith({"id": mockCardNumber});
+                });
+
+                it("should call setModel on the Payment Detail View Page", function () {
+                    expect(mockPaymentDetailView.setModel).toHaveBeenCalledWith(paymentModel);
+                });
+
+                it("should call render on the Payment Detail View Page", function () {
+                    expect(mockPaymentDetailView.render).toHaveBeenCalledWith();
+                });
+
+                it("should change the page to the Payment Detail View Page", function () {
+                    expect(mockUtils.changePage).toHaveBeenCalled();
+
+                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockPaymentDetailView.$el);
                 });
             });
 

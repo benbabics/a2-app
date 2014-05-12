@@ -7,6 +7,7 @@ define(["facade", "controllers/InvoiceController"],
         var subscribe = facade.subscribeTo("invoice", controller);
 
         subscribe("navigateSummary", "navigateSummary");
+        subscribe("navigatePaymentDetails", "navigatePaymentDetails");
         subscribe("navigatePaymentHistory", "navigatePaymentHistory");
 
 
