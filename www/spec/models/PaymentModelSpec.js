@@ -1,19 +1,72 @@
-define(["Squire", "utils", "globals", "backbone"],
-    function (Squire, utils, globals, Backbone) {
+define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
+    function (Squire, utils, globals, Backbone, UserModel) {
 
         "use strict";
 
         var squire = new Squire(),
             mockUtils = utils,
+            mockUserModel = {
+                authenticated: true,
+                firstName: "Beavis",
+                email: "cornholio@bnbinc.com",
+                hasMultipleAccounts: false,
+                selectedCompany: {
+                    name: "Beavis and Butthead Inc",
+                    accountId: "3673683",
+                    wexAccountNumber: "5764309",
+                    departments: [
+                        {
+                            id: "134613456",
+                            name: "UNASSIGNED",
+                            visible: true
+                        },
+                        {
+                            id: "2456724567",
+                            name: "Dewey, Cheetum and Howe",
+                            visible: false
+                        }
+                    ],
+                    requiredFields: [
+                        "REQUIRED_FIELD_1",
+                        "REQUIRED_FIELD_2",
+                        "REQUIRED_FIELD_3"
+                    ],
+                    settings: {
+                        cardSettings: {
+                            customVehicleIdMaxLength: 5,
+                            licensePlateNumberMaxLength: 7,
+                            licensePlateStateFixedLength: 2,
+                            vehicleDescriptionMaxLength: 6,
+                            vinFixedLength: 17
+                        },
+                        driverSettings: {
+                            idFixedLength: 4,
+                            firstNameMaxLength: 11,
+                            middleNameMaxLength: 1,
+                            lastNameMaxLength: 12
+                        }
+                    }
+                },
+                permissions: [
+                    "PERMISSION_1",
+                    "PERMISSION_2",
+                    "PERMISSION_3"
+                ]
+            },
+            userModel = UserModel.getInstance(),
             PaymentModel,
             paymentModel;
 
         squire.mock("backbone", Backbone);
         squire.mock("utils", mockUtils);
+        squire.mock("models/UserModel", UserModel);
 
         describe("A Payment Model", function () {
             beforeEach(function (done) {
                 squire.require(["models/PaymentModel"], function (JasmineCompanyModel) {
+                    userModel.initialize(mockUserModel);
+                    spyOn(UserModel, "getInstance").and.returnValue(userModel);
+
                     PaymentModel = JasmineCompanyModel;
                     paymentModel = new PaymentModel();
 
@@ -29,29 +82,57 @@ define(["Squire", "utils", "globals", "backbone"],
                 expect(paymentModel instanceof Backbone.Model).toBeTruthy();
             });
 
-            describe("has property defaults that", function () {
+            describe("has a defaults function that", function () {
+                it("is defined", function () {
+                    expect(paymentModel.defaults).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(paymentModel.defaults).toEqual(jasmine.any(Function));
+                });
+
                 it("should set id to default", function () {
-                    expect(paymentModel.defaults.id).toBeNull();
+                    expect(paymentModel.defaults().id).toBeNull();
                 });
 
                 it("should set scheduledDate to default", function () {
-                    expect(paymentModel.defaults.scheduledDate).toBeNull();
+                    expect(paymentModel.defaults().scheduledDate).toBeNull();
                 });
 
                 it("should set amount to default", function () {
-                    expect(paymentModel.defaults.amount).toBeNull();
+                    expect(paymentModel.defaults().amount).toBeNull();
                 });
 
                 it("should set bankAccount to default", function () {
-                    expect(paymentModel.defaults.bankAccount).toBeNull();
+                    expect(paymentModel.defaults().bankAccount).toBeNull();
                 });
 
                 it("should set status to default", function () {
-                    expect(paymentModel.defaults.status).toBeNull();
+                    expect(paymentModel.defaults().status).toBeNull();
                 });
 
                 it("should set confirmationNumber to default", function () {
-                    expect(paymentModel.defaults.confirmationNumber).toBeNull();
+                    expect(paymentModel.defaults().confirmationNumber).toBeNull();
+                });
+            });
+
+            describe("has a urlRoot function that", function () {
+                it("is defined", function () {
+                    expect(paymentModel.urlRoot).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(paymentModel.urlRoot).toEqual(jasmine.any(Function));
+                });
+
+                it("should return expected result", function () {
+                    var expectedResult = globals.WEBSERVICE.ACCOUNTS.URL +
+                            "/" +
+                            mockUserModel.selectedCompany.accountId +
+                            globals.WEBSERVICE.PAYMENTS_PATH,
+                        actualResult = paymentModel.urlRoot();
+
+                    expect(actualResult).toEqual(expectedResult);
                 });
             });
 

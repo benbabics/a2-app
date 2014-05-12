@@ -1,7 +1,8 @@
-define(["jclass", "utils", "collections/PaymentCollection",
+define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
         "models/InvoiceSummaryModel", "models/MakePaymentAvailabilityModel", "models/UserModel",
         "views/InvoiceSummaryView", "views/PaymentDetailView", "views/PaymentListView"],
-    function (JClass, utils, PaymentCollection, InvoiceSummaryModel, MakePaymentAvailabilityModel, UserModel,
+    function (JClass, facade, globals, utils, PaymentCollection,
+              InvoiceSummaryModel, MakePaymentAvailabilityModel, UserModel,
               InvoiceSummaryView, PaymentDetailView, PaymentListView) {
 
         "use strict";
@@ -44,6 +45,8 @@ define(["jclass", "utils", "collections/PaymentCollection",
                 this.paymentDetailView = new PaymentDetailView({
                     userModel: this.userModel
                 });
+
+                this.paymentDetailView.on("cancelPaymentSuccess", this.showCancelPaymentDetails, this);
             },
 
             navigateSummary: function () {
@@ -70,6 +73,19 @@ define(["jclass", "utils", "collections/PaymentCollection",
 
             navigatePaymentHistory: function () {
                 this.updatePaymentHistoryCollection();
+            },
+
+            showCancelPaymentDetails: function (cancelPaymentResponse) {
+                var self = this;
+
+                facade.publish("app", "alert", {
+                    title          : globals.paymentDetails.constants.CANCEL_PAYMENT_SUCCESS_TITLE,
+                    message        : cancelPaymentResponse,
+                    primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
+                    popupafterclose:   function () {
+                        self.updatePaymentHistoryCollection();
+                    }
+                });
             },
 
             updatePaymentHistoryCollection: function () {

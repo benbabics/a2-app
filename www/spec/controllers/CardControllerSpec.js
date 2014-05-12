@@ -899,11 +899,11 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 });
 
                 it("is defined", function () {
-                    expect(cardController.showCardAddDetails).toBeDefined();
+                    expect(cardController.showCardEditDetails).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(cardController.showCardAddDetails).toEqual(jasmine.any(Function));
+                    expect(cardController.showCardEditDetails).toEqual(jasmine.any(Function));
                 });
 
                 it("should call publish on the facade", function () {

@@ -1,9 +1,12 @@
-define(["utils", "backbone", "Squire", "models/UserModel"],
-    function (utils, Backbone, Squire, UserModel) {
+define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
+    function (utils, Backbone, globals, Squire, UserModel) {
 
         "use strict";
 
         var squire = new Squire(),
+            mockFacade = {
+                publish: function () { }
+            },
             mockUtils = utils,
             mockPaymentCollection = {
                 reset: function () { },
@@ -105,6 +108,7 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                 constructor: function () { },
                 initialize: function () { },
                 render: function () { },
+                on: function () { },
                 showLoadingIndicator: function () { },
                 hideLoadingIndicator: function () { },
                 setModel: function () { }
@@ -119,6 +123,7 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
             },
             invoiceController;
 
+        squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
         squire.mock("collections/PaymentCollection", Squire.Helpers.returns(mockPaymentCollection));
         squire.mock("models/InvoiceSummaryModel", Squire.Helpers.returns(invoiceSummaryModel));
@@ -185,6 +190,8 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                 describe("when initializing the InvoiceSummaryView", function () {
                     beforeEach(function () {
                         spyOn(mockInvoiceSummaryView, "constructor").and.callThrough();
+
+                        invoiceController.init();
                     });
 
                     it("should set the invoiceSummaryView variable to a new InvoiceSummaryView object", function () {
@@ -204,6 +211,8 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                 describe("when initializing the PaymentListView", function () {
                     beforeEach(function () {
                         spyOn(mockPaymentListView, "constructor").and.callThrough();
+
+                        invoiceController.init();
                     });
 
                     it("should set the paymentListView variable to a new PaymentListView object", function () {
@@ -223,6 +232,8 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                 describe("when initializing the PaymentListView", function () {
                     beforeEach(function () {
                         spyOn(mockPaymentDetailView, "constructor").and.callThrough();
+
+                        invoiceController.init();
                     });
 
                     it("should set the paymentDetailView variable to a new PaymentDetailView object", function () {
@@ -237,6 +248,17 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
                         // TODO: this is not working, need to figure out how to test
                     });
                 });
+
+                it("should register a function as the handler for the payment detail view cancelPaymentSuccess event",
+                    function () {
+                        spyOn(mockPaymentDetailView, "on").and.callFake(function () { });
+
+                        invoiceController.init();
+
+                        expect(mockPaymentDetailView.on).toHaveBeenCalledWith("cancelPaymentSuccess",
+                            invoiceController.showCancelPaymentDetails,
+                            invoiceController);
+                    });
             });
 
             describe("has a navigateSummary function that", function () {
@@ -383,6 +405,56 @@ define(["utils", "backbone", "Squire", "models/UserModel"],
 
                 it("should call updatePaymentHistoryCollection", function () {
                     expect(invoiceController.updatePaymentHistoryCollection).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("has a showCancelPaymentDetails function that", function () {
+                var response = "Response message";
+
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callFake(function () { });
+
+                    invoiceController.showCancelPaymentDetails(response);
+                });
+
+                it("is defined", function () {
+                    expect(invoiceController.showCancelPaymentDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.showCancelPaymentDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    var appAlertOptions;
+
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
+
+                    appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
+                    expect(appAlertOptions.title).toEqual(globals.paymentDetails.constants.CANCEL_PAYMENT_SUCCESS_TITLE);
+                    expect(appAlertOptions.message).toEqual(response);
+                    expect(appAlertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
+                    expect(appAlertOptions.popupafterclose).toEqual(jasmine.any(Function));
+                });
+
+                describe("sends as the popupafterclose argument a callback that", function () {
+                    var options;
+
+                    beforeEach(function () {
+                        options = mockFacade.publish.calls.mostRecent().args[2];
+
+                        spyOn(invoiceController, "updatePaymentHistoryCollection").and.callFake(function () { });
+
+                        options.popupafterclose.call(invoiceController);
+                    });
+
+                    it("should call updatePaymentHistoryCollection", function () {
+                        expect(invoiceController.updatePaymentHistoryCollection).toHaveBeenCalledWith();
+                    });
                 });
             });
 

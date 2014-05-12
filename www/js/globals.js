@@ -1253,6 +1253,14 @@ define(function (require) {
     };
 
     /**
+     * Payment
+     */
+    globals.payment = {};
+    globals.payment.constants = {
+        "STATUS_SCHEDULED": "SCHEDULED"
+    };
+
+    /**
      * Page :: Payment Search
      */
     globals.paymentSearch = {};
@@ -1288,6 +1296,55 @@ define(function (require) {
             "label": "Status",
             "value": ""
         }
+    };
+
+    /**
+     * Page :: Payment Details
+     */
+    globals.paymentDetails = {};
+    globals.paymentDetails.constants = {
+        "CANCEL_PAYMENT_SUCCESS_TITLE": "Payment<br/>Cancellation"
+    };
+    globals.paymentDetails.configuration = {
+        "scheduledDate": {
+            "label": "Date",
+            "value": ""
+        },
+        "amount": {
+            "label": "Amount",
+            "value": ""
+        },
+        "bankAccountName": {
+            "label": "Bank Account",
+            "value": ""
+        },
+        "status": {
+            "label": "Status",
+            "value": ""
+        },
+        "confirmationNumber": {
+            "label": "Confirmation Number",
+            "value": ""
+        },
+        "editButton": {
+            "label": "Edit Payment",
+            "visible": null
+        },
+        "cancelButton": {
+            "label": "Cancel Payment",
+            "visible": null
+        }
+    };
+
+    /**
+     * Payment Cancel
+     */
+    globals.paymentCancel = {};
+    globals.paymentCancel.constants = {
+        "CONFIRMATION_TITLE": "Cancel Payment",
+        "CONFIRMATION_MESSAGE": "Are you sure you want to cancel this payment?",
+        "CANCEL_BTN_TEXT": "No",
+        "OK_BTN_TEXT": "Yes"
     };
 
     return globals;

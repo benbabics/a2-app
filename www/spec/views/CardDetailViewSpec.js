@@ -433,7 +433,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(cardDetailView.terminate).toEqual(jasmine.any(Function));
                 });
 
-                describe("when calling terminate() on the driver model", function () {
+                describe("when calling terminate() on the card model", function () {
                     it("should send 1 argument", function () {
                         expect(cardDetailView.model.terminate).toHaveBeenCalled();
                         expect(cardDetailView.model.terminate.calls.mostRecent().args.length).toEqual(1);

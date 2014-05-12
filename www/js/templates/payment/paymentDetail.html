@@ -1,0 +1,34 @@
+{{#payment}}
+    <h2 class="ui-title">Invoice - Payment Details</h2>
+
+    <div class="ui-body ui-body-d">
+        {{#scheduledDate}}
+            <p class="text-result"><strong>{{label}}:</strong>{{value}}</p>
+        {{/scheduledDate}}
+        {{#amount}}
+            <p class="text-result"><strong>{{label}}:</strong>{{value}}</p>
+        {{/amount}}
+        {{#bankAccountName}}
+            <p class="text-result"><strong>{{label}}:</strong>{{value}}</p>
+        {{/bankAccountName}}
+        {{#status}}
+            <p class="text-result"><strong>{{label}}:</strong>{{value}}</p>
+        {{/status}}
+        {{#confirmationNumber}}
+            <p class="text-result"><strong>{{label}}:</strong>{{value}}</p>
+        {{/confirmationNumber}}
+    </div>
+
+    {{#permissions.MOBILE_PAYMENT_MAKE}}
+        {{#editButton}}
+            {{#visible}}
+                <button id="submitEditPayment-btn" data-role="button" data-theme="c">{{label}}</button>
+            {{/visible}}
+        {{/editButton}}
+        {{#cancelButton}}
+            {{#visible}}
+                <button id="submitCancelPayment-btn" data-role="button" data-theme="d">{{label}}</button>
+            {{/visible}}
+        {{/cancelButton}}
+    {{/permissions.MOBILE_PAYMENT_MAKE}}
+{{/payment}}

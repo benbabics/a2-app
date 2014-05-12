@@ -1,17 +1,25 @@
-define(["backbone", "globals", "models/BankAccountModel"],
-    function (Backbone, globals, BankAccountModel) {
+define(["globals", "utils", "models/AjaxModel", "models/BankAccountModel", "models/UserModel"],
+    function (globals, utils, AjaxModel, BankAccountModel, UserModel) {
 
         "use strict";
 
 
-        var PaymentModel = Backbone.Model.extend({
-            defaults: {
-                "id"                : null,
-                "scheduledDate"     : null,
-                "amount"            : null,
-                "bankAccount"       : null,
-                "status"            : null,
-                "confirmationNumber": null
+        var PaymentModel = AjaxModel.extend({
+            defaults: function () {
+                return utils._.extend({}, utils.deepClone(AjaxModel.prototype.defaults), {
+                    "id"                : null,
+                    "scheduledDate"     : null,
+                    "amount"            : null,
+                    "bankAccount"       : null,
+                    "status"            : null,
+                    "confirmationNumber": null
+                });
+            },
+
+            urlRoot: function () {
+                return globals.WEBSERVICE.ACCOUNTS.URL + "/"  +
+                    UserModel.getInstance().get("selectedCompany").get("accountId") +
+                    globals.WEBSERVICE.PAYMENTS_PATH;
             },
 
             initialize: function (options) {
