@@ -471,7 +471,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                             mockInvoiceSummaryModel.closingDate;
 
                         expectedConfiguration.invoiceSummary.unableToMakePaymentMessage =
-                            globals.invoiceSummary.constants.DIRECT_DEPOSIT_ENABLED;
+                            globals.invoiceSummary.constants.PAYMENT_ALREADY_SCHEDULED;
 
                         expectedConfiguration.invoiceSummary.makePaymentButton.visible =
                             mockMakePaymentAvailabilityModel.makePaymentAllowed;

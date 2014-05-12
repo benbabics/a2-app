@@ -59,7 +59,7 @@ define(["backbone", "mustache", "utils", "globals", "text!tmpl/invoice/summary.h
                         globals.invoiceSummary.constants.MUST_SET_UP_BANKS;
                 } else if (makePaymentAvailability.shouldDisplayOutstandingPaymentMessage) {
                     invoiceSummaryConfiguration.unableToMakePaymentMessage =
-                        globals.invoiceSummary.constants.DIRECT_DEPOSIT_ENABLED;
+                        globals.invoiceSummary.constants.PAYMENT_ALREADY_SCHEDULED;
                 }
 
                 invoiceSummaryConfiguration.makePaymentButton.visible = makePaymentAvailability.makePaymentAllowed;
