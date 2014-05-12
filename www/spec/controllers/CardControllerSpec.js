@@ -1015,6 +1015,31 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 });
             });
 
+            describe("has a showAllSearchResults function that", function () {
+                beforeEach(function () {
+                    spyOn(mockCardCollection, "showAll").and.callFake(function () {});
+                    spyOn(cardController, "updateCollection").and.callFake(function () {});
+
+                    cardController.showAllSearchResults();
+                });
+
+                it("is defined", function () {
+                    expect(cardController.showAllSearchResults).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.showAllSearchResults).toEqual(jasmine.any(Function));
+                });
+
+                it("should call showAll on the Card Collection", function () {
+                    expect(mockCardCollection.showAll).toHaveBeenCalledWith();
+                });
+
+                it("should call updateCollection", function () {
+                    expect(cardController.updateCollection).toHaveBeenCalledWith();
+                });
+            });
+
             describe("has an updateCollection function that", function () {
                 it("is defined", function () {
                     expect(cardController.updateCollection).toBeDefined();
