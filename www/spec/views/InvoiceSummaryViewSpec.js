@@ -270,8 +270,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                                 expect(actualContent.find("div[id='unableToMakePaymentMessage']")).toContainText(unableToMakePaymentMessage);
                             });
 
-                            it("should include a link to the Make Payment page", function () {
-                                expect(actualContent[0]).toContainElement("a[href='#makePayment']");
+                            it("should include a link to the Payment Add page", function () {
+                                expect(actualContent[0]).toContainElement("a[href='#paymentAdd']");
                             });
                         });
 
@@ -291,13 +291,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                                 expect(actualContent[0]).not.toContainElement("div[id='unableToMakePaymentMessage']");
                             });
 
-                            it("should include a link to the Make Payment page", function () {
-                                expect(actualContent[0]).toContainElement("a[href='#makePayment']");
+                            it("should include a link to the Payment Add page", function () {
+                                expect(actualContent[0]).toContainElement("a[href='#paymentAdd']");
                             });
                         });
                     });
 
-                    it("should NOT include a link to the Make Payment page if the user does NOT have the MOBILE_PAYMENT_MAKE permission",
+                    it("should NOT include a link to the Payment Add page if the user does NOT have the MOBILE_PAYMENT_MAKE permission",
                         function () {
                             invoiceSummaryView.userModel.set("permissions", {"MOBILE_PAYMENT_MAKE": false});
                             expectedConfiguration = {
@@ -308,7 +308,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
 
                             invoiceSummaryView.render();
 
-                            expect(actualContent[0]).not.toContainElement("a[href='#makePayment']");
+                            expect(actualContent[0]).not.toContainElement("a[href='#paymentAdd']");
                         });
                 });
             });
