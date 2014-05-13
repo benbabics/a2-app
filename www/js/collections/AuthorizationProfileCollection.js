@@ -16,21 +16,6 @@ define([ "globals", "models/AuthorizationProfileModel", "collections/AjaxCollect
                     globals.WEBSERVICE.AUTH_PROFILES_PATH;
 
                 AuthorizationProfileCollection.__super__.fetch.call(this, options);
-            },
-
-            toJSON: function () {
-                var json = null,
-                    index = 0;
-
-                if (this.length > 0) {
-                    json = [];
-                    this.each(function (authorizationProfile) {
-                        json[index] = authorizationProfile.toJSON();
-                        index++;
-                    }, this);
-                }
-
-                return json;
             }
         });
 

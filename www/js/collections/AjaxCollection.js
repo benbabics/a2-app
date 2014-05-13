@@ -1,9 +1,9 @@
-define(["globals", "backbone", "facade", "utils"],
-    function (globals, Backbone, facade, utils) {
+define(["globals", "backbone", "facade", "utils", "collections/BaseCollection"],
+    function (globals, Backbone, facade, utils, BaseCollection) {
 
         "use strict";
 
-        var AjaxCollection = Backbone.Collection.extend({
+        var AjaxCollection = BaseCollection.extend({
             parse: function (response) {
                 return response.data;
             },

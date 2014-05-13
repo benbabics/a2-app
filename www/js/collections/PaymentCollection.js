@@ -1,5 +1,5 @@
-define([ "backbone", "globals", "models/PaymentModel", "models/UserModel", "collections/AjaxSearchCollection" ],
-    function (Backbone, globals, PaymentModel, UserModel, AjaxSearchCollection) {
+define([ "globals", "models/PaymentModel", "models/UserModel", "collections/AjaxSearchCollection" ],
+    function (globals, PaymentModel, UserModel, AjaxSearchCollection) {
 
         "use strict";
 
@@ -24,21 +24,6 @@ define([ "backbone", "globals", "models/PaymentModel", "models/UserModel", "coll
                 overrodeOptions.pageNumber = this.pageNumber;
 
                 PaymentCollection.__super__.fetch.call(this, overrodeOptions);
-            },
-
-            toJSON: function () {
-                var json = null,
-                    index = 0;
-
-                if (this.length > 0) {
-                    json = [];
-                    this.each(function (payment) {
-                        json[index] = payment.toJSON();
-                        index++;
-                    }, this);
-                }
-
-                return json;
             }
         });
 
