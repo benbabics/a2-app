@@ -1,10 +1,12 @@
-define(["Squire"],
-    function (Squire) {
+define(["Squire", "backbone"],
+    function (Squire, Backbone) {
 
         "use strict";
 
         var utilsClass,
             squire = new Squire();
+
+        squire.mock("backbone", Backbone);
 
         describe("The utils class", function () {
 
@@ -66,30 +68,6 @@ define(["Squire"],
                 });
             });
 
-            describe("has an uncapitalize function that", function () {
-                it("is defined", function () {
-                    expect(utilsClass.uncapitalize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(utilsClass.uncapitalize).toEqual(jasmine.any(Function));
-                });
-
-                // TODO: finish
-            });
-
-            describe("has a camelcaseKeys function that", function () {
-                it("is defined", function () {
-                    expect(utilsClass.camelcaseKeys).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(utilsClass.camelcaseKeys).toEqual(jasmine.any(Function));
-                });
-
-                // TODO: finish
-            });
-
             describe("has a navigate function that", function () {
                 it("is defined", function () {
                     expect(utilsClass.navigate).toBeDefined();
@@ -99,7 +77,15 @@ define(["Squire"],
                     expect(utilsClass.navigate).toEqual(jasmine.any(Function));
                 });
 
-                // TODO: finish
+                it("call navigate on Backbone.history", function () {
+                    var mockViewId = "View Id";
+
+                    spyOn(Backbone.history, "navigate").and.callFake(function () {});
+
+                    utilsClass.navigate(mockViewId);
+
+                    expect(Backbone.history.navigate).toHaveBeenCalledWith(mockViewId, true);
+                });
             });
 
             describe("has a changePage function that", function () {
@@ -219,57 +205,6 @@ define(["Squire"],
                         expect(utilsClass.isPOBox(addresses[index].toUpperCase())).toBeFalsy();
                     }
                 });
-            });
-
-            describe("has an convertDateToTimezone function that", function () {
-                it("is defined", function () {
-                    expect(utilsClass.convertDateToTimezone).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(utilsClass.convertDateToTimezone).toEqual(jasmine.any(Function));
-                });
-
-                it("should return the expected result", function () {
-                    var currentDate = new Date(),
-                        utcDate = utilsClass.convertDateToTimezone(currentDate, 0),
-                        utc = currentDate.getTime() +
-                            (currentDate.getTimezoneOffset() * utilsClass.millisecondsPerMinute);
-
-                    expect(utcDate.getTime()).toEqual(utc);
-                });
-
-                it("should add the correct number of milliseconds per timezone offset", function () {
-                    var currentDate = new Date(),
-                        utcDate = utilsClass.convertDateToTimezone(currentDate, 0),
-                        plusOneDate = utilsClass.convertDateToTimezone(currentDate, 1);
-
-                    expect(plusOneDate.getTime() - utcDate.getTime()).toEqual(utilsClass.millisecondsPerHour);
-                });
-            });
-
-            describe("has an addHours function that", function () {
-                it("is defined", function () {
-                    expect(utilsClass.addHours).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(utilsClass.addHours).toEqual(jasmine.any(Function));
-                });
-
-                // TODO: finish
-            });
-
-            describe("has an addMinutes function that", function () {
-                it("is defined", function () {
-                    expect(utilsClass.addMinutes).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(utilsClass.addMinutes).toEqual(jasmine.any(Function));
-                });
-
-                // TODO: finish
             });
 
             describe("has a formatCurrency function that", function () {

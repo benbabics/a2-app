@@ -631,6 +631,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
             });
 
             describe("has an isAfterShippingCutoff function that", function () {
+                var mockTimeZone = {
+                        hour: function () {}
+                    },
+                    mockMoment = {
+                        tz: function () { return mockTimeZone; }
+                    };
+
                 it("is defined", function () {
                     expect(cardShippingView.isAfterShippingCutoff).toBeDefined();
                 });
@@ -639,49 +646,34 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(cardShippingView.isAfterShippingCutoff).toEqual(jasmine.any(Function));
                 });
 
-                describe("when converted date is prior to 3pm", function () {
+                describe("when time is prior to 3pm", function () {
                     it("should return the expected value", function () {
-                        var index,
-                            date = new Date();
+                        var hour,
+                            spy = spyOn(mockTimeZone, "hour");
 
-                        spyOn(mockUtils, "convertDateToTimezone").and.returnValue(date);
+                        spyOn(mockUtils, "moment").and.returnValue(mockMoment);
 
-                        for (index = 0; index < 15; index++) {
-                            date.setHours(index, 0, 0);
+                        for (hour = 0; hour < 15; hour++) {
+                            spy.and.returnValue(hour);
 
                             expect(cardShippingView.isAfterShippingCutoff()).toBeFalsy();
                         }
                     });
                 });
 
-                describe("when converted date is after 3pm", function () {
+                describe("when time is after 3pm", function () {
                     it("should return the expected value", function () {
-                        var index,
-                            date = new Date();
+                        var hour,
+                            spy = spyOn(mockTimeZone, "hour");
 
-                        spyOn(mockUtils, "convertDateToTimezone").and.returnValue(date);
+                        spyOn(mockUtils, "moment").and.returnValue(mockMoment);
 
-                        for (index = 15; index < 24; index++) {
-                            date.setHours(index, 0, 0);
+                        for (hour = 15; hour < 24; hour++) {
+                            spy.and.returnValue(hour);
 
                             expect(cardShippingView.isAfterShippingCutoff()).toBeTruthy();
                         }
                     });
-                });
-
-                it("should call updateShippingWarning", function () {
-                    var currentDate = new Date(),
-                        datePassed;
-
-                    spyOn(mockUtils, "convertDateToTimezone").and.callThrough();
-
-                    cardShippingView.isAfterShippingCutoff();
-
-                    expect(mockUtils.convertDateToTimezone).toHaveBeenCalledWith(jasmine.any(Date), -5);
-
-                    datePassed = mockUtils.convertDateToTimezone.calls.mostRecent().args[0];
-                    // This has a chance of failing if it takes longer than 10 seconds for this test to run
-                    expect(datePassed.getTime() - currentDate.getTime()).toBeLessThan(10000);
                 });
             });
 

@@ -1,5 +1,5 @@
-define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
-    function ($, _, globals, Backbone) {
+define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezone", "moment-timezone-data", "jquery-mobile"],
+    function ($, _, globals, Backbone, moment) {
 
         "use strict";
 
@@ -20,6 +20,11 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
          * Backbone convenience method
         */
         utils.Backbone = Backbone;
+
+        /*
+         * Moment convenience method
+         */
+        utils.moment = moment;
 
         /*
          * Array Slice convenience method
@@ -87,19 +92,13 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
         utils.fileType = globals.DEFAULT["FILETYPE_" + (utils.isRetina ? "RETINA" : "NORMAL")];
 
         /*
-         * Time constants
-         */
-        utils.millisecondsPerSecond = 1000;
-        utils.millisecondsPerMinute = utils.millisecondsPerSecond * 60;
-        utils.millisecondsPerHour = utils.millisecondsPerMinute * 60;
-        utils.millisecondsPerDay = utils.millisecondsPerHour * 24;
-
-        /*
          * Extend Classes
         */
         utils.extend = function (child, parent) {
-            for (var key in parent) {
-                if ( this.__hasProp.call(parent, key) ) {
+            var key;
+
+            for (key in parent) {
+                if (this.__hasProp.call(parent, key)) {
                     child[key] = parent[key];
                 }
             }
@@ -126,9 +125,9 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
         utils.deepClone = function (obj) {
             if (arguments.length > 1) {
                 return $.extend(true, {}, arguments);
-            } else {
-                return $.extend(true, {}, obj);
             }
+
+            return $.extend(true, {}, obj);
         };
 
         /*
@@ -145,33 +144,7 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
                         "label": value,
                         "value": value
                     };
-                }
-            );
-        };
-
-        /*
-         * Lowercase first character of string
-         *
-         * @param : string
-         * @return: string
-        */
-        utils.uncapitalize = function (str) {
-            return str.replace(/^[A-Z]/, function(m) {
-                return m.toLowerCase();
-            });
-        };
-
-        /*
-         * CamelCase object keys
-         *
-         * @param : object
-         * @return: object
-        */
-        utils.camelcaseKeys = function (attributes) {
-            return utils._.object(
-                utils._.map(utils._.keys(attributes), utils.uncapitalize),
-                utils._.values(attributes)
-            );
+                });
         };
 
         /*
@@ -182,7 +155,8 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
         };
 
         /*
-         * Convenience method for accessing $mobile.changePage(), included in case any other actions are required in the same step.
+         * Convenience method for accessing $mobile.changePage(), included in case any other actions are required in
+         * the same step.
          *
          * @param - changeTo  : (String) Absolute or relative URL. In this app references to "#index", "#search" etc.
          * @param - effect    : (String) One of the supported jQuery mobile transition effects
@@ -200,10 +174,11 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
                 updateHash = false;
             }
 
-            utils.$(function() {
-                if(updateHash){
-                    window.location.hash = viewID.attr ? viewID.attr("id") : viewID; // TODO: messy fix to force viewID hash change in url, since JQM 1.3.1 doesn't seem to
-                                                                                     //always update hash when asked.
+            utils.$(function () {
+                if (updateHash) {
+                    // TODO: messy fix to force viewID hash change in url, since JQM 1.3.1 doesn't seem to
+                    // always update hash when asked.
+                    window.location.hash = viewID.attr ? viewID.attr("id") : viewID;
                 }
 
                 utils.$.mobile.changePage(viewID, {
@@ -225,9 +200,8 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
                 var networkState = navigator.connection.type;
                 return Connection.NONE !== networkState;
             }
-            else {
-                return true;
-            }
+
+            return true;
         };
 
         /**
@@ -271,50 +245,11 @@ define(["jquery", "underscore", "globals", "backbone", "jquery-mobile"],
         };
 
         /**
-         * Function to convert a date to a different timezone
-         *
-         * @param startingDate {Date} The date to convert to a different timezone
-         * @param timezoneOffset {int} The timezone offset in number of hours
-         * @returns {Date} The adjusted date
-         */
-        utils.convertDateToTimezone = function(startingDate, timezoneOffset) {
-            var utc = startingDate.getTime() + (startingDate.getTimezoneOffset() * utils.millisecondsPerMinute);
-
-            return new Date(utc + (timezoneOffset * utils.millisecondsPerHour));
-        };
-
-        /**
-         * Function to add hours to the provided date
-         *
-         * @param startingDate the date to add hours to
-         * @param hoursToAdd the number of hours to add
-         * @returns {Date} the date that results from the addition
-         */
-        utils.addHours = function (startingDate, hoursToAdd) {
-            var copiedDate = new Date(startingDate.getTime());
-            copiedDate.setTime(copiedDate.getTime() + (hoursToAdd * utils.millisecondsPerHour));
-            return copiedDate;
-        };
-
-        /**
-         * Function to add minutes to the provided date
-         *
-         * @param startingDate the date to add minutes to
-         * @param minutesToAdd the number of minutes to add
-         * @returns {Date} the date that results from the addition
-         */
-        utils.addMinutes = function (startingDate, minutesToAdd) {
-            var copiedDate = new Date(startingDate.getTime());
-            copiedDate.setTime(copiedDate.getTime() + (minutesToAdd * utils.millisecondsPerMinute));
-            return copiedDate;
-        };
-
-        /**
          * Funciton to format the provided number as currency
          * @param number the number to format as currency
          * @returns {string} the number formatted as currency
          */
-        utils.formatCurrency = function(number) {
+        utils.formatCurrency = function (number) {
             if (number) {
                 return "$" + number.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
             }

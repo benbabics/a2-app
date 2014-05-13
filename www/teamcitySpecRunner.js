@@ -10,14 +10,17 @@ require.config({
         "async": "libs/require/async-min",
 
         // Frameworks
-        "cordova"            : "../spec/cordova.mock",
-        "mustache"           : "libs/mustache/mustache-min",
-        "backbone"           : "libs/backbone/backbone-min",
-        "backbone-validation": "libs/backbone/backbone-validation-amd-min",
-        "underscore"         : "libs/underscore/underscore-min",
-        "jquery"             : "libs/jquery/jquery-min",
-        "jquery-mobile"      : "libs/jquery/jquery.mobile-min",
-        "jclass"             : "libs/jclass/jclass-min",
+        "cordova"             : "../spec/cordova.mock",
+        "mustache"            : "libs/mustache/mustache-min",
+        "backbone"            : "libs/backbone/backbone-min",
+        "backbone-validation" : "libs/backbone/backbone-validation-amd-min",
+        "underscore"          : "libs/underscore/underscore-min",
+        "jquery"              : "libs/jquery/jquery-min",
+        "jquery-mobile"       : "libs/jquery/jquery.mobile-min",
+        "jclass"              : "libs/jclass/jclass-min",
+        "moment"              : "libs/moment/moment-min",
+        "moment-timezone"     : "libs/moment/moment-timezone-min",
+        "moment-timezone-data": "libs/moment/moment-timezone-data",
 
         // Helpers
         "utils"   : "helpers/utils",
@@ -57,6 +60,9 @@ require.config({
         "jclass": {
             "exports": "JClass"
         },
+        "moment": {
+            "exports": "moment"
+        },
         "jasmine": {
             "exports": "jasmine"
         },
@@ -81,7 +87,10 @@ require.config({
     },
 
     // the number of seconds to wait before timing out (0 disables the timeout)
-    waitSeconds: 0
+    waitSeconds: 0,
+
+    // prevents moment from creating a moment global
+    noGlobal: true
 });
 
 // Load Jasmine - This will still create all of the normal Jasmine browser globals unless "boot.js" is re-written to

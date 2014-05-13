@@ -173,12 +173,10 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
             },
 
             isAfterShippingCutoff: function () {
-                // Note that this is hard-coded to EST which results in us being an hour off during EDT
-                var timezoneOffset = -5,      // For EST timezone
-                    currentDate = new Date(), // current date in local timezone
-                    shippingCutoffHour = 15;  // 3pm EST in 24 hour time
+                var currentDate = utils.moment().tz("America/New_York"),// current date/time in New York
+                    shippingCutoffHour = 15;  // 3pm in 24 hour time
 
-                return utils.convertDateToTimezone(currentDate, timezoneOffset).getHours() >= shippingCutoffHour;
+                return currentDate.hour() >= shippingCutoffHour;
             },
 
             updateShippingWarning: function () {
