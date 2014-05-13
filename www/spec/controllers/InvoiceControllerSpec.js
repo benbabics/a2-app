@@ -334,11 +334,11 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                     });
 
                     it("should NOT call the render function on Invoice Summary View", function () {
-                        expect(mockInvoiceSummaryView.render).not.toHaveBeenCalledWith();
+                        expect(mockInvoiceSummaryView.render).not.toHaveBeenCalled();
                     });
 
                     it("should NOT call the changePage function on utils", function () {
-                        expect(utils.changePage).not.toHaveBeenCalledWith(mockInvoiceSummaryView.$el, null, null, true);
+                        expect(utils.changePage).not.toHaveBeenCalled();
                     });
 
                     it("should call the hideLoadingIndicator function on the Invoice Summary View", function () {

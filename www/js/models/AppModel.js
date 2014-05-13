@@ -40,9 +40,6 @@ define(["globals", "backbone"],
                 case "read":
                     model.set("lastWarnVersion", localStorage.getItem(globals.APP.constants.LAST_WARN_VERSION));
                     break;
-
-                case "delete":
-                    break;
                 }
             }
         });

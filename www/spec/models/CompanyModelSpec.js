@@ -289,14 +289,91 @@ define(["Squire", "utils", "globals", "backbone"],
                 });
 
                 describe("when the method is read", function () {
-                    beforeEach(function () {
-                        spyOn(companyModel, "trigger").and.callThrough();
-                        spyOn(companyModel, "fetchAuthorizationProfiles").and.callFake(function () {});
-                        companyModel.sync("read", companyModel);
+                    var mockPromiseReturnValue = "Promise Return Value",
+                        mockDeferred = {
+                            promise: function () { return mockPromiseReturnValue; },
+                            reject: function () {},
+                            resolve: function () {}
+                        },
+                        actualReturnValue;
+
+                    describe("when the call to fetchAuthorizationProfiles() finishes successfully", function () {
+                        var mockFetchAuthorizationProfilesDeferred = utils.Deferred();
+
+                        beforeEach(function () {
+                            spyOn(companyModel, "fetchAuthorizationProfiles").and.callFake(function () {
+                                mockFetchAuthorizationProfilesDeferred.resolve();
+                                return mockFetchAuthorizationProfilesDeferred.promise();
+                            });
+
+                            spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                            spyOn(mockDeferred, "promise").and.callThrough();
+                            spyOn(mockDeferred, "reject").and.callThrough();
+                            spyOn(mockDeferred, "resolve").and.callThrough();
+
+                            actualReturnValue = companyModel.sync("read", companyModel);
+                        });
+
+                        it("should call fetchAuthorizationProfiles", function () {
+                            expect(companyModel.fetchAuthorizationProfiles).toHaveBeenCalledWith();
+                        });
+
+                        it("should call resolve on Deferred", function () {
+                            expect(mockDeferred.resolve).toHaveBeenCalledWith();
+                        });
+
+                        it("should NOT call reject on Deferred", function () {
+                            expect(mockDeferred.reject).not.toHaveBeenCalled();
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                        });
                     });
 
-                    it("should call fetchAuthorizationProfiles", function () {
-                        expect(companyModel.fetchAuthorizationProfiles).toHaveBeenCalledWith();
+                    describe("when the call to fetchAuthorizationProfiles() finishes with a failure", function () {
+                        var mockFetchAuthorizationProfilesDeferred = utils.Deferred();
+
+                        beforeEach(function () {
+                            spyOn(companyModel, "fetchAuthorizationProfiles").and.callFake(function () {
+                                mockFetchAuthorizationProfilesDeferred.reject();
+                                return mockFetchAuthorizationProfilesDeferred.promise();
+                            });
+
+                            spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                            spyOn(mockDeferred, "promise").and.callThrough();
+                            spyOn(mockDeferred, "reject").and.callThrough();
+                            spyOn(mockDeferred, "resolve").and.callThrough();
+
+                            actualReturnValue = companyModel.sync("read", companyModel);
+                        });
+
+                        it("should call fetchAuthorizationProfiles", function () {
+                            expect(companyModel.fetchAuthorizationProfiles).toHaveBeenCalledWith();
+                        });
+
+                        it("should NOT call resolve on Deferred", function () {
+                            expect(mockDeferred.resolve).not.toHaveBeenCalled();
+                        });
+
+                        it("should call reject on Deferred", function () {
+                            expect(mockDeferred.reject).toHaveBeenCalledWith();
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                        });
+                    });
+                });
+
+                describe("when the method is update", function () {
+                    beforeEach(function () {
+                        spyOn(companyModel, "fetchAuthorizationProfiles").and.callFake(function () {});
+                        companyModel.sync("update", companyModel);
+                    });
+
+                    it("should NOT call fetchAuthorizationProfiles", function () {
+                        expect(companyModel.fetchAuthorizationProfiles).not.toHaveBeenCalled();
                     });
                 });
             });
@@ -877,19 +954,18 @@ define(["Squire", "utils", "globals", "backbone"],
                     });
                 });
             });
-            
+
             describe("has a fetchAuthorizationProfiles function that", function () {
                 var mockCompanyJSON = {
-                    accountId: "3456256"
-                };
-
-                beforeEach(function () {
-                    spyOn(mockUtils, "fetchCollection").and.callFake(function() {});
-                    spyOn(companyModel, "set").and.callThrough();
-                    spyOn(companyModel, "toJSON").and.callFake(function() { return mockCompanyJSON});
-
-                    companyModel.fetchAuthorizationProfiles();
-                });
+                        accountId: "3456256"
+                    },
+                    mockPromiseReturnValue = "Promise Return Value",
+                    mockDeferred = {
+                        promise: function () { return mockPromiseReturnValue; },
+                        reject: function () {},
+                        resolve: function () {}
+                    },
+                    actualReturnValue;
 
                 it("is defined", function () {
                     expect(companyModel.fetchAuthorizationProfiles).toBeDefined();
@@ -899,18 +975,91 @@ define(["Squire", "utils", "globals", "backbone"],
                     expect(companyModel.fetchAuthorizationProfiles).toEqual(jasmine.any(Function));
                 });
 
-                it("should call toJSON", function () {
-                    expect(companyModel.toJSON).toHaveBeenCalledWith();
+                describe("when the call to fetchCollection on utils finishes successfully", function () {
+                    var mockFetchCollectionDeferred = utils.Deferred();
+
+                    beforeEach(function () {
+                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
+                            mockFetchCollectionDeferred.resolve();
+                            return mockFetchCollectionDeferred.promise();
+                        });
+
+                        spyOn(companyModel, "set").and.callThrough();
+                        spyOn(companyModel, "toJSON").and.callFake(function () { return mockCompanyJSON; });
+                        spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                        spyOn(mockDeferred, "promise").and.callThrough();
+                        spyOn(mockDeferred, "reject").and.callThrough();
+                        spyOn(mockDeferred, "resolve").and.callThrough();
+
+                        actualReturnValue = companyModel.fetchAuthorizationProfiles();
+                    });
+
+                    it("should call toJSON", function () {
+                        expect(companyModel.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should call fetchCollection on utils", function () {
+                        expect(mockUtils.fetchCollection)
+                            .toHaveBeenCalledWith(mockAuthorizationProfileCollection, mockCompanyJSON);
+                    });
+
+                    it("should call set", function () {
+                        expect(companyModel.set)
+                            .toHaveBeenCalledWith("authorizationProfiles", mockAuthorizationProfileCollection);
+                    });
+
+                    it("should call resolve on Deferred", function () {
+                        expect(mockDeferred.resolve).toHaveBeenCalled();
+                    });
+
+                    it("should NOT call reject on Deferred", function () {
+                        expect(mockDeferred.reject).not.toHaveBeenCalled();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                    });
                 });
 
-                it("should call fetchCollection on utils", function () {
-                    expect(mockUtils.fetchCollection)
-                        .toHaveBeenCalledWith(mockAuthorizationProfileCollection, mockCompanyJSON);
-                });
+                describe("when the call to fetchCollection on utils finishes with a failure", function () {
+                    var mockFetchCollectionDeferred = utils.Deferred();
 
-                it("should call set", function () {
-                    expect(companyModel.set)
-                        .toHaveBeenCalledWith("authorizationProfiles", mockAuthorizationProfileCollection);
+                    beforeEach(function () {
+                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
+                            mockFetchCollectionDeferred.reject();
+                            return mockFetchCollectionDeferred.promise();
+                        });
+
+                        spyOn(companyModel, "set").and.callThrough();
+                        spyOn(companyModel, "toJSON").and.callFake(function () { return mockCompanyJSON; });
+                        spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                        spyOn(mockDeferred, "promise").and.callThrough();
+                        spyOn(mockDeferred, "reject").and.callThrough();
+                        spyOn(mockDeferred, "resolve").and.callThrough();
+
+                        actualReturnValue = companyModel.fetchAuthorizationProfiles();
+                    });
+
+                    it("should call toJSON", function () {
+                        expect(companyModel.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should call fetchCollection on utils", function () {
+                        expect(mockUtils.fetchCollection)
+                            .toHaveBeenCalledWith(mockAuthorizationProfileCollection, mockCompanyJSON);
+                    });
+
+                    it("should NOT call resolve on Deferred", function () {
+                        expect(mockDeferred.resolve).not.toHaveBeenCalled();
+                    });
+
+                    it("should call reject on Deferred", function () {
+                        expect(mockDeferred.reject).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                    });
                 });
             });
 

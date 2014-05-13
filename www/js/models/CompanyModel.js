@@ -148,6 +148,9 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
                         deferred.resolve(
                             self.set("authorizationProfiles", authorizationProfiles)
                         );
+                    })
+                    .fail(function () {
+                        deferred.reject();
                     });
 
                 return deferred.promise();

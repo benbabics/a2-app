@@ -498,7 +498,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     });
 
                     it("should NOT call confirmTerminateDriver", function () {
-                        expect(driverEditView.confirmTerminateDriver).not.toHaveBeenCalledWith();
+                        expect(driverEditView.confirmTerminateDriver).not.toHaveBeenCalled();
                     });
                 });
 
@@ -522,7 +522,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     });
 
                     it("should NOT call changeStatus", function () {
-                        expect(driverEditView.changeStatus).not.toHaveBeenCalledWith();
+                        expect(driverEditView.changeStatus).not.toHaveBeenCalled();
                     });
 
                     it("should call confirmTerminateDriver", function () {
