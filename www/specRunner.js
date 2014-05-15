@@ -106,7 +106,7 @@ require.config({
 // use the AMD or UMD specs. `boot.js` will do a bunch of configuration and attach it's initializers to
 // "window.onload()".  Because we are using RequireJS "window.onload()" has already been triggered so we have to
 // manually call it again. This will initialize the HTML Reporter and execute the environment.
-require(["jquery-mobile", "jasmine-boot", "cordova"],
+require(["jquery-mobile", "jquery-mobile-datepicker", "jasmine-boot", "cordova"],
     function () {
         function onAppReady() {
 

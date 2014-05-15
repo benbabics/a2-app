@@ -117,7 +117,7 @@
         deps: allTestFiles
     });
 
-    require([ "jquery-mobile", "cordova" ], function () {
+    require([ "jquery-mobile", "jquery-mobile-datepicker", "cordova" ], function () {
         function onAppReady() {
 
             // Load the specs
