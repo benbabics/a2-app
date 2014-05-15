@@ -24,6 +24,7 @@ var specList =
         "spec/views/LoginViewSpec.js",
         "spec/views/PaymentAddViewSpec.js",
         "spec/views/PaymentDetailViewSpec.js",
+        "spec/views/PaymentEditViewSpec.js",
         "spec/views/PaymentListViewSpec.js",
         "spec/views/PaymentViewSpec.js",
         "spec/views/UpdatePromptViewSpec.js",
