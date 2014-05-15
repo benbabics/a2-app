@@ -669,7 +669,6 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                 var mockCardNumber = 1234;
 
                 beforeEach(function () {
-                    mockCardDetailView.model = null;
                     spyOn(mockCardCollection, "findWhere").and.callFake(function () { return cardModel; });
                     spyOn(mockCardEditView, "setModel").and.callFake(function () { });
                     spyOn(mockCardEditView, "render").and.callThrough();

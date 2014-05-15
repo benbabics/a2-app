@@ -99,7 +99,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/BaseView", 
                 evt.preventDefault();
 
                 // Publish is used rather than trigger to force the before navigate condition
-                facade.publish("invoice", "navigateEdit", this.model.get("id"));
+                facade.publish("invoice", "navigatePaymentEdit", this.model.get("id"));
             }
         });
 

@@ -543,7 +543,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                 });
 
                 it("should call publish on the facade", function () {
-                    expect(mockFacade.publish).toHaveBeenCalledWith("invoice", "navigateEdit", mockPaymentModel.id);
+                    expect(mockFacade.publish)
+                        .toHaveBeenCalledWith("invoice", "navigatePaymentEdit", mockPaymentModel.id);
                 });
             });
         });

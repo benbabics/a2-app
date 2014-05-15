@@ -214,6 +214,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(paymentAddView, "getConfiguration").and
                         .callFake(function () { return expectedConfiguration; });
+                    spyOn(paymentAddView, "setupDatepicker").and.callFake(function () { });
                     spyOn(paymentAddView, "formatRequiredFields").and.callThrough();
 
                     paymentAddView.render();
@@ -244,12 +245,54 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                 });
 
+                it("should call setupDatepicker()", function () {
+                    expect(paymentAddView.setupDatepicker).toHaveBeenCalledWith();
+                });
+
                 it("should call formatRequiredFields()", function () {
                     expect(paymentAddView.formatRequiredFields).toHaveBeenCalledWith();
                 });
 
                 it("should call the trigger function on the content", function () {
                     expect(actualContent.trigger).toHaveBeenCalledWith("create");
+                });
+            });
+
+            describe("has a setupDatepicker function that", function () {
+                var actualDatepicker,
+                    minimumDate = utils.moment();
+
+                beforeEach(function () {
+                    actualDatepicker = paymentAddView.$el.find("#scheduledDate");
+
+                    spyOn(paymentAddView, "getDefaultPaymentDate").and.returnValue(minimumDate);
+                    spyOn(paymentAddView.$el, "find").and.returnValue(actualDatepicker);
+                    spyOn(actualDatepicker, "date").and.callFake(function () {});
+
+                    paymentAddView.setupDatepicker();
+                });
+
+                it("is defined", function () {
+                    expect(paymentAddView.setupDatepicker).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(paymentAddView.setupDatepicker).toEqual(jasmine.any(Function));
+                });
+
+                it("should call getDefaultPaymentDate", function () {
+                    expect(paymentAddView.getDefaultPaymentDate).toHaveBeenCalledWith();
+                });
+
+                it("should call find of $el", function () {
+                    expect(paymentAddView.$el.find).toHaveBeenCalledWith("#scheduledDate");
+                });
+
+                it("should call date on the datepicker", function () {
+                    expect(actualDatepicker.date).toHaveBeenCalledWith({
+                        minDate: minimumDate.toDate(),
+                        beforeShowDay: utils.$.datepicker.noWeekends
+                    });
                 });
             });
 
@@ -472,12 +515,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                         day: function () { return 0; },
                         add: function () { return mockMomentAfterAdd; }
                     };
-
-                beforeEach(function () {
-                    spyOn(paymentAddView, "resetForm").and.callFake(function () { });
-
-                    paymentAddView.pageBeforeShow();
-                });
 
                 it("is defined", function () {
                     expect(paymentAddView.getDefaultPaymentDate).toBeDefined();

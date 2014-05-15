@@ -52,9 +52,17 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
 
+                this.setupDatepicker();
                 this.formatRequiredFields();
 
                 $content.trigger("create");
+            },
+
+            setupDatepicker: function () {
+                this.$el.find("#scheduledDate").date({
+                    minDate: this.getDefaultPaymentDate().toDate(),
+                    beforeShowDay: utils.$.datepicker.noWeekends
+                });
             },
 
             getConfiguration: function () {
@@ -123,7 +131,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
 
                 if (defaultPaymentDate.day() === 0) {  // Sunday
                     return defaultPaymentDate.add("days", 1);
-                } else if (defaultPaymentDate.day() === 6) { // Saturday
+                }
+                if (defaultPaymentDate.day() === 6) { // Saturday
                     return defaultPaymentDate.add("days", 2);
                 }
 

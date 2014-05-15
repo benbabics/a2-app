@@ -1,9 +1,10 @@
 define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
         "models/InvoiceSummaryModel", "models/MakePaymentAvailabilityModel", "models/PaymentModel", "models/UserModel",
-        "views/InvoiceSummaryView", "views/PaymentAddView", "views/PaymentDetailView", "views/PaymentListView"],
+        "views/InvoiceSummaryView", "views/PaymentAddView", "views/PaymentDetailView", "views/PaymentEditView",
+        "views/PaymentListView"],
     function (JClass, facade, globals, utils, PaymentCollection,
               InvoiceSummaryModel, MakePaymentAvailabilityModel, PaymentModel, UserModel,
-              InvoiceSummaryView, PaymentAddView, PaymentDetailView, PaymentListView) {
+              InvoiceSummaryView, PaymentAddView, PaymentDetailView, PaymentEditView, PaymentListView) {
 
         "use strict";
 
@@ -17,6 +18,7 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
             invoiceSummaryView: null,
             paymentAddView: null,
             paymentDetailView: null,
+            paymentEditView: null,
             paymentListView: null,
             invoiceSummaryModel: null,
             makePaymentAvailabilityModel: null,
@@ -57,11 +59,18 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
                     userModel: this.userModel
                 });
 
+                // create payment edit view
+                this.paymentEditView = new PaymentEditView({
+                    invoiceSummaryModel: this.invoiceSummaryModel,
+                    userModel          : this.userModel
+                });
+
                 this.paymentDetailView.on("cancelPaymentSuccess", this.showCancelPaymentDetails, this);
                 this.paymentAddView.on("paymentAddSuccess", this.showPaymentAddDetails, this);
+                this.paymentEditView.on("paymentEditSuccess", this.showPaymentEditDetails, this);
             },
 
-            fetchPaymentAddProperties: function (view, callback) {
+            fetchPaymentProperties: function (view, callback) {
                 var selectedCompany = this.userModel.get("selectedCompany");
 
                 if (!selectedCompany) {
@@ -86,7 +95,12 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
 
             beforeNavigatePaymentAddCondition: function () {
                 var self = this;
-                return this.fetchPaymentAddProperties(this.paymentAddView, function () { self.navigatePaymentAdd(); });
+                return this.fetchPaymentProperties(this.paymentAddView, function () { self.navigatePaymentAdd(); });
+            },
+
+            beforeNavigatePaymentEditCondition: function (id) {
+                var self = this;
+                return this.fetchPaymentProperties(this.paymentEditView, function () { self.navigatePaymentEdit(id); });
             },
 
             navigateSummary: function () {
@@ -115,8 +129,26 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
                 utils.changePage(this.paymentDetailView.$el);
             },
 
+            navigatePaymentEdit: function (id) {
+                this.paymentEditView.setModel(this.paymentCollection.findWhere({"id": id}));
+                this.paymentEditView.render();
+                utils.changePage(this.paymentEditView.$el);
+            },
+
             navigatePaymentHistory: function () {
-                this.updatePaymentHistoryCollection();
+                var self = this;
+
+                this.paymentListView.showLoadingIndicator();
+
+                // silently reset collection to ensure it always is "updated", even if it's the same models again
+                this.paymentCollection.reset([], { "silent": true });
+
+                utils.when(utils.fetchCollection(this.paymentCollection, null))
+                    .always(function () {
+                        self.paymentListView.render();
+                        utils.changePage(self.paymentListView.$el, null, null, true);
+                        self.paymentListView.hideLoadingIndicator();
+                    });
             },
 
             showCancelPaymentDetails: function (cancelPaymentResponse) {
@@ -127,7 +159,7 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
                     message        : cancelPaymentResponse,
                     primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
                     popupafterclose:   function () {
-                        self.updatePaymentHistoryCollection();
+                        self.navigatePaymentHistory();
                     }
                 });
             },
@@ -145,20 +177,17 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
                 });
             },
 
-            updatePaymentHistoryCollection: function () {
+            showPaymentEditDetails: function (paymentEditResponse) {
                 var self = this;
 
-                this.paymentListView.showLoadingIndicator();
-
-                // silently reset collection to ensure it always is "updated", even if it's the same models again
-                this.paymentCollection.reset([], { "silent": true });
-
-                utils.when(utils.fetchCollection(this.paymentCollection, null))
-                    .always(function () {
-                        self.paymentListView.render();
-                        utils.changePage(self.paymentListView.$el, null, null, true);
-                        self.paymentListView.hideLoadingIndicator();
-                    });
+                facade.publish("app", "alert", {
+                    title          : globals.paymentChangedDetails.constants.SUCCESS_TITLE,
+                    message        : paymentEditResponse,
+                    primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
+                    popupafterclose:   function () {
+                        self.navigatePaymentHistory();
+                    }
+                });
             },
 
             updateSummaryModels: function () {

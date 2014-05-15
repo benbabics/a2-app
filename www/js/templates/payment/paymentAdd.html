@@ -14,13 +14,6 @@
                    id="scheduledDate"
                    readonly="true"
                    value="{{value}}"/>
-            <script>
-                $("#scheduledDate").date({
-                    altField: "#scheduledDate",
-                    minDate: new Date("{{minValue}}"),
-                    beforeShowDay: $.datepicker.noWeekends
-                });
-            </script>
         </div>
     {{/scheduledDate}}
 

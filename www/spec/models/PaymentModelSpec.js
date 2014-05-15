@@ -279,7 +279,7 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
                     describe("the second validation rule", function () {
                         it("should set the pattern", function () {
                             expect(paymentModel.validation.amount[1].pattern)
-                                .toEqual(Backbone.Validation.patterns.number);
+                                .toEqual(globals.APP.NUMBER_PATTERN);
                         });
 
                         it("should set the error message", function () {
@@ -552,6 +552,52 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
 
                 it("should set url", function () {
                     expect(paymentModel.url).toEqual(mockUrlRoot);
+                });
+
+                it("should call save", function () {
+                    var expectedOptions = utils._.extend({patch: true}, utils.deepClone(options)),
+                        expectedAttributes = {
+                            "scheduledDate": mockPaymentModel.scheduledDate,
+                            "amount"       : mockPaymentModel.amount,
+                            "bankAccountId": mockPaymentModel.bankAccount.id
+                        };
+
+                    expect(paymentModel.save).toHaveBeenCalledWith(expectedAttributes, expectedOptions);
+                });
+            });
+
+            describe("has an edit function that", function () {
+                var mockPaymentModel = {
+                        "id"                : "13451345",
+                        "scheduledDate"     : "5/8/2014",
+                        "amount"            : 24356.56,
+                        "bankAccount"       : {
+                            "id"            : "3465",
+                            "name"          : "Bank Name",
+                            "defaultBank"   : false
+                        },
+                        "status"            : "Status",
+                        "confirmationNumber": "13451dvfgwdrfg23456",
+                        "paymentDueDate"    : "5/14/2014",
+                        "minimumPaymentDue" : 234.45
+                    },
+                    options = {
+                        success: function () {}
+                    };
+
+                beforeEach(function () {
+                    spyOn(paymentModel, "save").and.callFake(function () {});
+
+                    paymentModel.initialize(mockPaymentModel);
+                    paymentModel.edit(options);
+                });
+
+                it("is defined", function () {
+                    expect(paymentModel.edit).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(paymentModel.edit).toEqual(jasmine.any(Function));
                 });
 
                 it("should call save", function () {

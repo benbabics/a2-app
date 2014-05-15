@@ -337,6 +337,7 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                                     }
                                 },
                                 authorizationProfiles : null,
+                                bankAccounts : null,
                                 defaultShippingAddress : null,
                                 shippingMethods : null
                             },

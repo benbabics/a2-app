@@ -69,6 +69,7 @@ define(function (require) {
         "ALPHANUMERIC_PATTERN"            : /^[A-Z\d]+$/i,
         "ALPHANUMERIC_WITH_SPACE_PATTERN" : /^[A-Z\d ]+$/i,
         "DATE_PATTERN"                    : /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/,
+        "NUMBER_PATTERN"                  : /^\d+(\.\d{1,2})?$/
     };
 
     globals.APP.constants = {
@@ -1355,8 +1356,35 @@ define(function (require) {
         "scheduledDate": {
             "label"      : "Payment Date",
             "name"       : "scheduledDate",
-            "value"      : "",
-            "minValue"   : null
+            "value"      : ""
+        },
+        "amount": {
+            "label"      : "Amount",
+            "name"       : "amount",
+            "value"      : ""
+        },
+        "bankAccount": {
+            "label"      : "Bank Account",
+            "name"       : "bankAccount",
+            "enabled"    : true,
+            "values"     : []
+        },
+        "submitButton": {
+            "label": "Make Payment"
+        }
+    };
+
+    /**
+     * Payment Edit
+     */
+    globals.paymentEdit = {};
+    globals.paymentEdit.constants = {
+    };
+    globals.paymentEdit.configuration = {
+        "scheduledDate": {
+            "label"      : "Payment Date",
+            "name"       : "scheduledDate",
+            "value"      : ""
         },
         "amount": {
             "label"      : "Amount",

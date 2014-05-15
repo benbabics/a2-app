@@ -1,0 +1,46 @@
+{{#payment}}
+    <h2 class="ui-title">Invoice - Edit Payment</h2>
+
+    <p class="text-instructional">Payments scheduled for after 3:30PM will not be credited to your account until the next business day.</p>
+    <p class="text-instructional">If your payment date falls on a non-business day or holiday your payment must be received and processed on the business day prior to the due date.</p>
+
+    <form id="paymentEditForm" class="ui-body ui-body-d">
+        {{#scheduledDate}}
+            <div data-role="fieldcontain">
+                <label for="scheduledDateEdit">{{label}}:</label>
+                <input type="text"
+                       name="{{name}}"
+                       data-role="date"
+                       data-inline="false"
+                       id="scheduledDateEdit"
+                       readonly="true"
+                       value="{{value}}"/>
+            </div>
+        {{/scheduledDate}}
+
+        {{#amount}}
+            <div data-role="fieldcontain">
+                <label for="amount">{{label}}:</label>
+                <input type="text"
+                       name="{{name}}"
+                       id="amount"
+                       value="{{value}}" />
+            </div>
+        {{/amount}}
+
+        {{#bankAccount}}
+            <div data-role="fieldcontain">
+                <label for="bankAccount">{{label}}:</label>
+                <select id="bankAccount" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
+                    {{#values}}
+                        <option value="{{id}}" {{#selected}} selected {{/selected}}>{{name}}</option>
+                    {{/values}}
+                </select>
+            </div>
+        {{/bankAccount}}
+    </form>
+
+    {{#submitButton}}
+        <button id="submitPaymentEdit-btn" data-role="button" data-theme="c">{{label}}</button>
+    {{/submitButton}}
+{{/payment}}

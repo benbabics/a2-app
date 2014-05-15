@@ -59,7 +59,7 @@ define(["globals", "utils", "models/AjaxModel", "models/BankAccountModel", "mode
                         msg: globals.payment.constants.ERROR_AMOUNT_REQUIRED_FIELD
                     },
                     {
-                        pattern: Backbone.Validation.patterns.number,
+                        pattern: globals.APP.NUMBER_PATTERN,
                         msg    : globals.payment.constants.ERROR_AMOUNT_MUST_BE_NUMERIC
                     },
                     {
@@ -113,6 +113,17 @@ define(["globals", "utils", "models/AjaxModel", "models/BankAccountModel", "mode
                 this.set("id", 1);
                 // Override default url as backbone will try to POST to urlRoot()/{{id}} when an id is known
                 this.url = this.urlRoot();
+                this.save(attributes, options);
+            },
+
+            edit: function (options) {
+                var attributes = {
+                    "scheduledDate": this.get("scheduledDate"),
+                    "amount"       : this.get("amount"),
+                    "bankAccountId": this.get("bankAccount").get("id")
+                };
+
+                options.patch = true;
                 this.save(attributes, options);
             },
 

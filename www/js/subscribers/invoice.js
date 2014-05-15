@@ -9,6 +9,7 @@ define(["facade", "controllers/InvoiceController"],
         subscribe("navigateSummary",        "navigateSummary");
         subscribe("navigatePaymentAdd",     "navigatePaymentAdd", controller.beforeNavigatePaymentAddCondition);
         subscribe("navigatePaymentDetails", "navigatePaymentDetails");
+        subscribe("navigatePaymentEdit",    "navigatePaymentEdit", controller.beforeNavigatePaymentEditCondition);
         subscribe("navigatePaymentHistory", "navigatePaymentHistory");
 
 
