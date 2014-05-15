@@ -710,7 +710,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                                                                                  mockAddDetailsConfiguration);
                             });
 
-                            it("should trigger driverAddSuccess", function () {
+                            it("should trigger paymentAddSuccess", function () {
                                 expect(paymentAddView.trigger)
                                     .toHaveBeenCalledWith("paymentAddSuccess", mockMustacheRenderReturnValue);
                             });

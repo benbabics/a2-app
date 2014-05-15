@@ -1,6 +1,6 @@
-define(["backbone", "utils", "facade", "mustache", "globals", "models/PaymentModel",
-        "views/ValidationFormView", "text!tmpl/payment/paymentAdd.html", "text!tmpl/payment/paymentChangeDetails.html"],
-    function (Backbone, utils, facade, Mustache, globals, PaymentModel, ValidationFormView,
+define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationFormView",
+        "text!tmpl/payment/paymentAdd.html", "text!tmpl/payment/paymentChangeDetails.html"],
+    function (Backbone, utils, facade, Mustache, globals, ValidationFormView,
               pageTemplate, paymentChangeDetailsTemplate) {
 
         "use strict";
