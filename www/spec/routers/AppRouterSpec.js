@@ -64,6 +64,10 @@ define(["utils", "Squire", "backbone"],
                     expect(appRouter.routes.invoiceSummary).toEqual("showInvoiceSummary");
                 });
 
+                it("should set 'paymentAdd' to showPaymentAdd", function () {
+                    expect(appRouter.routes.paymentAdd).toEqual("showPaymentAdd");
+                });
+
                 it("should set 'paymentDetails(/)(:id)' to showPaymentDetails", function () {
                     expect(appRouter.routes["paymentDetails(/)(:id)"]).toEqual("showPaymentDetails");
                 });
@@ -242,6 +246,26 @@ define(["utils", "Squire", "backbone"],
 
                 it("should call publish on the facade", function () {
                     expect(mockFacade.publish).toHaveBeenCalledWith("invoice", "navigateSummary");
+                });
+            });
+
+            describe("has a showPaymentAdd function that", function () {
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callThrough();
+
+                    appRouter.showPaymentAdd();
+                });
+
+                it("is defined", function () {
+                    expect(appRouter.showPaymentAdd).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appRouter.showPaymentAdd).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    expect(mockFacade.publish).toHaveBeenCalledWith("invoice", "navigatePaymentAdd");
                 });
             });
 

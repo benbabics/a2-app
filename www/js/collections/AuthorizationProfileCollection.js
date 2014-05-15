@@ -15,7 +15,7 @@ define([ "globals", "models/AuthorizationProfileModel", "collections/AjaxCollect
                 this.url = globals.WEBSERVICE.ACCOUNTS.URL + "/" + options.accountId +
                     globals.WEBSERVICE.AUTH_PROFILES_PATH;
 
-                AuthorizationProfileCollection.__super__.fetch.call(this, options);
+                AuthorizationProfileCollection.__super__.fetch.call(this, {});
             }
         });
 

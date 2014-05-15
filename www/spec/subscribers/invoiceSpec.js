@@ -10,7 +10,8 @@ define(["Squire"],
                 subscribeTo: jasmine.createSpy("subscribeTo() spy").and.returnValue(mockSubscribe)
             },
             mockInvoiceController = {
-                init: function () {}
+                init: function () {},
+                beforeNavigatePaymentAddCondition: function () { },
             },
             invoiceSubscriber;
 
@@ -33,12 +34,19 @@ define(["Squire"],
                 expect(mockFacade.subscribeTo).toHaveBeenCalledWith("invoice", mockInvoiceController);
             });
 
-            it("should call subscribe 3 time", function () {
-                expect(mockSubscribe.calls.count()).toEqual(3);
+            it("should call subscribe 4 time", function () {
+                expect(mockSubscribe.calls.count()).toEqual(4);
             });
 
             it("should subscribe to navigateSummary", function () {
                 expect(mockSubscribe).toHaveBeenCalledWith("navigateSummary", "navigateSummary");
+            });
+
+            it("should subscribe to navigatePaymentAdd", function () {
+                expect(mockSubscribe)
+                    .toHaveBeenCalledWith("navigatePaymentAdd",
+                                          "navigatePaymentAdd",
+                                          mockInvoiceController.beforeNavigatePaymentAddCondition);
             });
 
             it("should subscribe to navigatePaymentDetails", function () {

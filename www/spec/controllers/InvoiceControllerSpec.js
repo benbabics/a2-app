@@ -121,6 +121,15 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                 showLoadingIndicator: function () { },
                 hideLoadingIndicator: function () { }
             },
+            mockPaymentAddView = {
+                $el: "",
+                constructor: function () { },
+                initialize: function () { },
+                render: function () { },
+                on: function () { },
+                showLoadingIndicator: function () { },
+                hideLoadingIndicator: function () { }
+            },
             invoiceController;
 
         squire.mock("facade", mockFacade);
@@ -131,6 +140,7 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
         squire.mock("models/UserModel", UserModel);
         squire.mock("views/InvoiceSummaryView", Squire.Helpers.returns(mockInvoiceSummaryView));
         squire.mock("views/PaymentListView", Squire.Helpers.returns(mockPaymentListView));
+        squire.mock("views/PaymentAddView", Squire.Helpers.returns(mockPaymentAddView));
         squire.mock("views/PaymentDetailView", Squire.Helpers.returns(mockPaymentDetailView));
 
         describe("An Invoice Controller", function () {
@@ -178,6 +188,10 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                     expect(invoiceController.userModel).toEqual(userModel);
                 });
 
+                it("should set the invoiceSummaryModel variable to a InvoiceSummaryModel object", function () {
+                    expect(invoiceController.invoiceSummaryModel).toEqual(invoiceSummaryModel);
+                });
+
                 it("should set the makePaymentAvailabilityModel variable to a MakePaymentAvailabilityModel object",
                     function () {
                         expect(invoiceController.makePaymentAvailabilityModel).toEqual(makePaymentAvailabilityModel);
@@ -200,8 +214,31 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
 
                     xit("should send in the correct parameters to the constructor", function () {
                         expect(mockInvoiceSummaryView.constructor).toHaveBeenCalledWith({
-                            model    : invoiceSummaryModel,
-                            userModel: userModel
+                            model                       : invoiceSummaryModel,
+                            makePaymentAvailabilityModel: makePaymentAvailabilityModel,
+                            userModel                   : userModel
+                        });
+
+                        // TODO: this is not working, need to figure out how to test
+                    });
+                });
+
+                describe("when initializing the PaymentAddView", function () {
+                    beforeEach(function () {
+                        spyOn(mockPaymentListView, "constructor").and.callThrough();
+
+                        invoiceController.init();
+                    });
+
+                    it("should set the paymentAddView variable to a new PaymentAddView object", function () {
+                        expect(invoiceController.paymentAddView).toEqual(mockPaymentAddView);
+                    });
+
+                    xit("should send in the correct parameters to the constructor", function () {
+                        expect(mockPaymentAddView.constructor).toHaveBeenCalledWith({
+                            model              : paymentModel,
+                            invoiceSummaryModel: invoiceSummaryModel,
+                            userModel          : userModel
                         });
 
                         // TODO: this is not working, need to figure out how to test
@@ -259,6 +296,164 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                             invoiceController.showCancelPaymentDetails,
                             invoiceController);
                     });
+
+                it("should register a function as the handler for the payment add view paymentAddSuccess event",
+                    function () {
+                        spyOn(mockPaymentAddView, "on").and.callFake(function () { });
+
+                        invoiceController.init();
+
+                        expect(mockPaymentAddView.on).toHaveBeenCalledWith("paymentAddSuccess",
+                            invoiceController.showPaymentAddDetails,
+                            invoiceController);
+                    });
+            });
+
+            describe("has a fetchPaymentAddProperties function that", function () {
+                it("is defined", function () {
+                    expect(invoiceController.fetchPaymentAddProperties).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.fetchPaymentAddProperties).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the user does not have a selectedCompany", function () {
+                    it("should return true", function () {
+                        userModel.set("selectedCompany", null);
+
+                        expect(invoiceController.fetchPaymentAddProperties()).toBeTruthy();
+                    });
+                });
+
+                describe("when the fetched attributes are available", function () {
+                    it("should return true", function () {
+                        var selectedCompany = userModel.get("selectedCompany");
+                        spyOn(selectedCompany, "areFetchedPropertiesEmpty").and.returnValue(false);
+
+                        expect(invoiceController.fetchPaymentAddProperties()).toBeTruthy();
+                    });
+                });
+
+                describe("when the fetched attributes are NOT available", function () {
+                    var selectedCompany,
+                        mockView,
+                        callback;
+
+                    beforeEach(function () {
+                        mockView = {
+                            showLoadingIndicator: jasmine.createSpy("callback spy"),
+                            hideLoadingIndicator: jasmine.createSpy("callback spy")
+                        };
+                        callback = jasmine.createSpy("callback spy");
+                        selectedCompany = userModel.get("selectedCompany");
+                        spyOn(selectedCompany, "areFetchedPropertiesEmpty").and.returnValue(true);
+                    });
+
+                    it("should call showLoadingIndicator on the View", function () {
+                        spyOn(selectedCompany, "fetch").and.returnValue(true);
+
+                        invoiceController.fetchPaymentAddProperties(mockView, callback);
+                        expect(mockView.showLoadingIndicator).toHaveBeenCalledWith();
+                    });
+
+                    it("should call fetch on the Company", function () {
+                        spyOn(selectedCompany, "fetch").and.returnValue(true);
+
+                        invoiceController.fetchPaymentAddProperties(mockView, callback);
+                        expect(selectedCompany.fetch).toHaveBeenCalledWith();
+                    });
+
+                    describe("when the call to fetch on the Company finishes successfully", function () {
+                        beforeEach(function () {
+                            spyOn(selectedCompany, "fetch").and.callFake(function () {
+                                var deferred = utils.Deferred();
+
+                                deferred.resolve();
+                                return deferred.promise();
+                            });
+
+                            invoiceController.fetchPaymentAddProperties(mockView, callback);
+                        });
+
+                        it("should call the callback", function () {
+                            expect(callback).toHaveBeenCalledWith();
+                        });
+
+                        it("should call hideLoadingIndicator on the View", function () {
+                            expect(mockView.hideLoadingIndicator).toHaveBeenCalledWith();
+                        });
+                    });
+
+                    describe("when the call to fetch on the Company finishes in failure", function () {
+                        beforeEach(function () {
+                            spyOn(selectedCompany, "fetch").and.callFake(function () {
+                                var deferred = utils.Deferred();
+
+                                deferred.reject();
+                                return deferred.promise();
+                            });
+
+                            invoiceController.fetchPaymentAddProperties(mockView, callback);
+                        });
+
+                        it("should NOT call the callback", function () {
+                            expect(callback).not.toHaveBeenCalled();
+                        });
+
+                        it("should call hideLoadingIndicator on the View", function () {
+                            expect(mockView.hideLoadingIndicator).toHaveBeenCalledWith();
+                        });
+                    });
+
+                    it("should return false", function () {
+                        spyOn(selectedCompany, "fetch").and.returnValue(true);
+
+                        expect(invoiceController.fetchPaymentAddProperties(mockView, callback)).toBeFalsy();
+                    });
+                });
+            });
+
+            describe("has a beforeNavigatePaymentAddCondition function that", function () {
+                var mockReturnValue = false,
+                    actualResponse;
+
+                beforeEach(function () {
+                    spyOn(invoiceController, "fetchPaymentAddProperties").and.returnValue(mockReturnValue);
+
+                    actualResponse = invoiceController.beforeNavigatePaymentAddCondition();
+                });
+
+                it("is defined", function () {
+                    expect(invoiceController.beforeNavigatePaymentAddCondition).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.beforeNavigatePaymentAddCondition).toEqual(jasmine.any(Function));
+                });
+
+                it("should call fetchPaymentAddProperties", function () {
+                    expect(invoiceController.fetchPaymentAddProperties)
+                        .toHaveBeenCalledWith(mockPaymentAddView, jasmine.any(Function));
+                });
+
+                describe("sends to fetchPaymentAddProperties a callback that", function () {
+                    beforeEach(function () {
+                        var callback = invoiceController.fetchPaymentAddProperties.calls.mostRecent().args[1];
+
+                        spyOn(invoiceController, "navigatePaymentAdd").and.callFake(function () { });
+
+                        callback.call();
+                    });
+
+                    it("should call navigatePaymentAdd", function () {
+                        expect(invoiceController.navigatePaymentAdd).toHaveBeenCalledWith();
+                    });
+                });
+
+                it("should return the expected response", function () {
+                    expect(actualResponse).toEqual(mockReturnValue);
+                });
             });
 
             describe("has a navigateSummary function that", function () {
@@ -347,6 +542,31 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                 });
             });
 
+            describe("has a navigatePaymentAdd function that", function () {
+                beforeEach(function () {
+                    spyOn(mockPaymentAddView, "render").and.callThrough();
+                    spyOn(mockUtils, "changePage").and.callThrough();
+
+                    invoiceController.navigatePaymentAdd();
+                });
+
+                it("is defined", function () {
+                    expect(invoiceController.navigatePaymentAdd).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.navigatePaymentAdd).toEqual(jasmine.any(Function));
+                });
+
+                it("should call render on the Payment Add View Page", function () {
+                    expect(mockPaymentAddView.render).toHaveBeenCalledWith();
+                });
+
+                it("should change the page to the Payment Add View Page", function () {
+                    expect(mockUtils.changePage).toHaveBeenCalledWith(mockPaymentAddView.$el);
+                });
+            });
+
             describe("has a navigatePaymentDetails function that", function () {
                 var mockCardNumber = 1234;
 
@@ -381,10 +601,7 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                 });
 
                 it("should change the page to the Payment Detail View Page", function () {
-                    expect(mockUtils.changePage).toHaveBeenCalled();
-
-                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(1);
-                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockPaymentDetailView.$el);
+                    expect(mockUtils.changePage).toHaveBeenCalledWith(mockPaymentDetailView.$el);
                 });
             });
 
@@ -454,6 +671,56 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
 
                     it("should call updatePaymentHistoryCollection", function () {
                         expect(invoiceController.updatePaymentHistoryCollection).toHaveBeenCalledWith();
+                    });
+                });
+            });
+
+            describe("has a showPaymentAddDetails function that", function () {
+                var response = "Response message";
+
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callFake(function () { });
+
+                    invoiceController.showPaymentAddDetails(response);
+                });
+
+                it("is defined", function () {
+                    expect(invoiceController.showPaymentAddDetails).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(invoiceController.showPaymentAddDetails).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    var appAlertOptions;
+
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
+
+                    appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
+                    expect(appAlertOptions.title).toEqual(globals.paymentChangedDetails.constants.SUCCESS_TITLE);
+                    expect(appAlertOptions.message).toEqual(response);
+                    expect(appAlertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
+                    expect(appAlertOptions.popupafterclose).toEqual(jasmine.any(Function));
+                });
+
+                describe("sends as the popupafterclose argument a callback that", function () {
+                    var options;
+
+                    beforeEach(function () {
+                        options = mockFacade.publish.calls.mostRecent().args[2];
+
+                        spyOn(invoiceController, "navigateSummary").and.callFake(function () { });
+
+                        options.popupafterclose.call(invoiceController);
+                    });
+
+                    it("should call navigateSummary", function () {
+                        expect(invoiceController.navigateSummary).toHaveBeenCalledWith();
                     });
                 });
             });

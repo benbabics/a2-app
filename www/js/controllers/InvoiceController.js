@@ -1,9 +1,9 @@
 define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
-        "models/InvoiceSummaryModel", "models/MakePaymentAvailabilityModel", "models/UserModel",
-        "views/InvoiceSummaryView", "views/PaymentDetailView", "views/PaymentListView"],
+        "models/InvoiceSummaryModel", "models/MakePaymentAvailabilityModel", "models/PaymentModel", "models/UserModel",
+        "views/InvoiceSummaryView", "views/PaymentAddView", "views/PaymentDetailView", "views/PaymentListView"],
     function (JClass, facade, globals, utils, PaymentCollection,
-              InvoiceSummaryModel, MakePaymentAvailabilityModel, UserModel,
-              InvoiceSummaryView, PaymentDetailView, PaymentListView) {
+              InvoiceSummaryModel, MakePaymentAvailabilityModel, PaymentModel, UserModel,
+              InvoiceSummaryView, PaymentAddView, PaymentDetailView, PaymentListView) {
 
         "use strict";
 
@@ -15,8 +15,10 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
 
         InvoiceController = JClass.extend({
             invoiceSummaryView: null,
+            paymentAddView: null,
             paymentDetailView: null,
             paymentListView: null,
+            invoiceSummaryModel: null,
             makePaymentAvailabilityModel: null,
             userModel: null,
             paymentCollection: null,
@@ -26,13 +28,22 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
 
             init: function () {
                 this.userModel = UserModel.getInstance();
+                this.invoiceSummaryModel = new InvoiceSummaryModel();
                 this.makePaymentAvailabilityModel = new MakePaymentAvailabilityModel();
                 this.paymentCollection = new PaymentCollection();
 
                 // create invoice summary view
                 this.invoiceSummaryView = new InvoiceSummaryView({
-                    model   : new InvoiceSummaryModel(),
-                    userModel: this.userModel
+                    model                       : this.invoiceSummaryModel,
+                    makePaymentAvailabilityModel: this.makePaymentAvailabilityModel,
+                    userModel                   : this.userModel
+                });
+
+                // create payment add view
+                this.paymentAddView = new PaymentAddView({
+                    model              : new PaymentModel(),
+                    invoiceSummaryModel: this.invoiceSummaryModel,
+                    userModel          : this.userModel
                 });
 
                 // create payment list view
@@ -47,6 +58,35 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
                 });
 
                 this.paymentDetailView.on("cancelPaymentSuccess", this.showCancelPaymentDetails, this);
+                this.paymentAddView.on("paymentAddSuccess", this.showPaymentAddDetails, this);
+            },
+
+            fetchPaymentAddProperties: function (view, callback) {
+                var selectedCompany = this.userModel.get("selectedCompany");
+
+                if (!selectedCompany) {
+                    return true;
+                }
+
+                if (selectedCompany.areFetchedPropertiesEmpty()) {
+                    view.showLoadingIndicator();
+
+                    utils.when(selectedCompany.fetch())
+                        .always(function () {
+                            view.hideLoadingIndicator();
+                        })
+                        .done(function () {
+                            callback();
+                        });
+                }
+
+                // allow navigation if the the fetched properties are available
+                return !selectedCompany.areFetchedPropertiesEmpty();
+            },
+
+            beforeNavigatePaymentAddCondition: function () {
+                var self = this;
+                return this.fetchPaymentAddProperties(this.paymentAddView, function () { self.navigatePaymentAdd(); });
             },
 
             navigateSummary: function () {
@@ -56,13 +96,17 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
 
                 utils.when(this.updateSummaryModels())
                     .done(function () {
-                        self.invoiceSummaryView.makePaymentAvailabilityModel = self.makePaymentAvailabilityModel;
                         self.invoiceSummaryView.render();
                         utils.changePage(self.invoiceSummaryView.$el, null, null, true);
                     })
                     .always(function () {
                         self.invoiceSummaryView.hideLoadingIndicator();
                     });
+            },
+
+            navigatePaymentAdd: function () {
+                this.paymentAddView.render();
+                utils.changePage(this.paymentAddView.$el);
             },
 
             navigatePaymentDetails: function (id) {
@@ -84,6 +128,19 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
                     primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
                     popupafterclose:   function () {
                         self.updatePaymentHistoryCollection();
+                    }
+                });
+            },
+
+            showPaymentAddDetails: function (paymentAddResponse) {
+                var self = this;
+
+                facade.publish("app", "alert", {
+                    title          : globals.paymentChangedDetails.constants.SUCCESS_TITLE,
+                    message        : paymentAddResponse,
+                    primaryBtnLabel: globals.DIALOG.DEFAULT_BTN_TEXT,
+                    popupafterclose:   function () {
+                        self.navigateSummary();
                     }
                 });
             },
@@ -122,7 +179,7 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
             },
 
             fetchInvoiceSummary: function () {
-                return utils.fetchModel(this.invoiceSummaryView.model);
+                return utils.fetchModel(this.invoiceSummaryModel);
             },
 
             fetchMakePaymentAvailability: function () {

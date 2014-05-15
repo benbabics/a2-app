@@ -1,0 +1,51 @@
+<h2 class="ui-title">Invoice - Make Payment</h2>
+
+<p class="text-instructional">Payments scheduled for after 3:30PM will not be credited to your account until the next business day.</p>
+<p class="text-instructional">If your payment date falls on a non-business day or holiday your payment must be received and processed on the business day prior to the due date.</p>
+
+<form id="paymentAddForm" class="ui-body ui-body-d">
+    {{#scheduledDate}}
+        <div data-role="fieldcontain">
+            <label for="scheduledDate">{{label}}:</label>
+            <input type="text"
+                   name="{{name}}"
+                   data-role="date"
+                   data-inline="false"
+                   id="scheduledDate"
+                   readonly="true"
+                   value="{{value}}"/>
+            <script>
+                $("#scheduledDate").date({
+                    altField: "#scheduledDate",
+                    minDate: new Date("{{minValue}}"),
+                    beforeShowDay: $.datepicker.noWeekends
+                });
+            </script>
+        </div>
+    {{/scheduledDate}}
+
+    {{#amount}}
+        <div data-role="fieldcontain">
+            <label for="amount">{{label}}:</label>
+            <input type="text"
+                   name="{{name}}"
+                   id="amount"
+                   value="{{value}}" />
+        </div>
+    {{/amount}}
+
+    {{#bankAccount}}
+        <div data-role="fieldcontain">
+            <label for="bankAccount">{{label}}:</label>
+            <select id="bankAccount" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
+                {{#values}}
+                    <option value="{{id}}" {{#selected}} selected {{/selected}}>{{name}}</option>
+                {{/values}}
+            </select>
+        </div>
+    {{/bankAccount}}
+</form>
+
+{{#submitButton}}
+    <button id="submitPaymentAdd-btn" data-role="button" data-theme="c">{{label}}</button>
+{{/submitButton}}

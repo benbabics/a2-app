@@ -14,6 +14,7 @@ define(function (require) {
         "APP_PATH"                      : "/app",
         "ACCOUNTS_PATH"                 : "/accounts",
         "AUTH_PROFILES_PATH"            : "/authProfiles",
+        "BANK_ACCOUNTS_PATH"            : "/payments/activeBanks",
         "CARD_PATH"                     : "/cards",
         "DRIVER_PATH"                   : "/drivers",
         "PAYMENTS_PATH"                 : "/payments",
@@ -66,7 +67,8 @@ define(function (require) {
         "POBOX_PATTERN"                   : "([\\w\\s*\\W]*(P(OST)?(\\.)?\\s*O(FF(ICE)?)?(\\.)?\\s*B(OX)?))[\\w\\s*\\W]*",
         "ZIP_CODE_PATTERN"                : "/\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d/",
         "ALPHANUMERIC_PATTERN"            : /^[A-Z\d]+$/i,
-        "ALPHANUMERIC_WITH_SPACE_PATTERN" : /^[A-Z\d ]+$/i
+        "ALPHANUMERIC_WITH_SPACE_PATTERN" : /^[A-Z\d ]+$/i,
+        "DATE_PATTERN"                    : /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/,
     };
 
     globals.APP.constants = {
@@ -1257,7 +1259,14 @@ define(function (require) {
      */
     globals.payment = {};
     globals.payment.constants = {
-        "STATUS_SCHEDULED": "SCHEDULED"
+        "STATUS_SCHEDULED": "SCHEDULED",
+        "ERROR_SCHEDULED_DATE_REQUIRED_FIELD": "Payment Date must have a value",
+        "ERROR_SCHEDULED_DATE_MUST_BE_A_DATE": "Payment Date must be a date",
+        "ERROR_SCHEDULED_DATE_AFTER_DUE_DATE": "Payment date entered is after the due date.",
+        "ERROR_SCHEDULED_DATE_BEFORE_TODAY"  : "Payment date entered is before today.",
+        "ERROR_AMOUNT_REQUIRED_FIELD"        : "Amount must have a value",
+        "ERROR_AMOUNT_MUST_BE_NUMERIC"       : "Amount must be numeric.",
+        "ERROR_AMOUNT_LESS_THAN_PAYMENT_DUE" : "Amount entered is less than payment due amount."
     };
 
     /**
@@ -1333,6 +1342,58 @@ define(function (require) {
         "cancelButton": {
             "label": "Cancel Payment",
             "visible": null
+        }
+    };
+
+    /**
+     * Payment Add
+     */
+    globals.paymentAdd = {};
+    globals.paymentAdd.constants = {
+    };
+    globals.paymentAdd.configuration = {
+        "scheduledDate": {
+            "label"      : "Payment Date",
+            "name"       : "scheduledDate",
+            "value"      : "",
+            "minValue"   : null
+        },
+        "amount": {
+            "label"      : "Amount",
+            "name"       : "amount",
+            "value"      : ""
+        },
+        "bankAccount": {
+            "label"      : "Bank Account",
+            "name"       : "bankAccount",
+            "enabled"    : true,
+            "values"     : []
+        },
+        "submitButton": {
+            "label": "Make Payment"
+        }
+    };
+
+    globals.paymentChangedDetails = {};
+    globals.paymentChangedDetails.constants = {
+        "SUCCESS_TITLE": "Payment<br/>Confirmation"
+    };
+    globals.paymentChangedDetails.configuration = {
+        "scheduledDate": {
+            "label": "Payment Date",
+            "value": ""
+        },
+        "amount": {
+            "label": "Amount",
+            "value": ""
+        },
+        "bankAccountName": {
+            "label": "Bank Account",
+            "value": ""
+        },
+        "confirmationNumber": {
+            "label": "Confirmation Number",
+            "value": ""
         }
     };
 

@@ -1,5 +1,5 @@
-define(["utils", "globals", "Squire", "models/AuthorizationProfileModel", "models/UserModel"],
-    function (utils, globals, Squire, AuthorizationProfileModel, UserModel) {
+define(["utils", "globals", "Squire", "models/BankAccountModel", "models/UserModel"],
+    function (utils, globals, Squire, BankAccountModel, UserModel) {
         "use strict";
 
         var squire = new Squire(),
@@ -52,44 +52,44 @@ define(["utils", "globals", "Squire", "models/AuthorizationProfileModel", "model
                 ]
             },
             userModel = UserModel.getInstance(),
-            AuthorizationProfileCollection,
-            authorizationProfileCollection;
+            BankAccountCollection,
+            bankAccountCollection;
 
-        squire.mock("models/AuthorizationProfileModel", AuthorizationProfileModel);
+        squire.mock("models/BankAccountModel", BankAccountModel);
         squire.mock("models/UserModel", UserModel);
 
-        describe("An Authorization Profile Collection", function () {
+        describe("A Bank Account Collection", function () {
             beforeEach(function (done) {
-                squire.require(["collections/AuthorizationProfileCollection"], function (JasmineAuthorizationProfileCollection) {
+                squire.require(["collections/BankAccountCollection"], function (JasmineBankAccountCollection) {
                     userModel.initialize(mockUserModel);
 
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 
-                    AuthorizationProfileCollection = JasmineAuthorizationProfileCollection;
-                    authorizationProfileCollection = new AuthorizationProfileCollection();
+                    BankAccountCollection = JasmineBankAccountCollection;
+                    bankAccountCollection = new BankAccountCollection();
                     done();
                 });
             });
 
             it("is defined", function () {
-                expect(authorizationProfileCollection).toBeDefined();
+                expect(bankAccountCollection).toBeDefined();
             });
 
             it("looks like a Backbone collection", function () {
-                expect(authorizationProfileCollection instanceof Backbone.Collection).toBeTruthy();
+                expect(bankAccountCollection instanceof Backbone.Collection).toBeTruthy();
             });
 
             describe("has a constructor that", function () {
                 it("is defined", function () {
-                    expect(authorizationProfileCollection.constructor).toBeDefined();
+                    expect(bankAccountCollection.constructor).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(authorizationProfileCollection.constructor).toEqual(jasmine.any(Function));
+                    expect(bankAccountCollection.constructor).toEqual(jasmine.any(Function));
                 });
 
-                it("should default model to AuthorizationProfileModel", function () {
-                    expect(authorizationProfileCollection.model).toEqual(AuthorizationProfileModel);
+                it("should default model to BankAccountModel", function () {
+                    expect(bankAccountCollection.model).toEqual(BankAccountModel);
                 });
             });
 
@@ -99,27 +99,27 @@ define(["utils", "globals", "Squire", "models/AuthorizationProfileModel", "model
                 };
 
                 beforeEach(function () {
-                    spyOn(AuthorizationProfileCollection.__super__, "fetch").and.callFake(function () { });
+                    spyOn(BankAccountCollection.__super__, "fetch").and.callFake(function () { });
 
-                    authorizationProfileCollection.fetch(mockOptions);
+                    bankAccountCollection.fetch(mockOptions);
                 });
 
                 it("is defined", function () {
-                    expect(authorizationProfileCollection.fetch).toBeDefined();
+                    expect(bankAccountCollection.fetch).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(authorizationProfileCollection.fetch).toEqual(jasmine.any(Function));
+                    expect(bankAccountCollection.fetch).toEqual(jasmine.any(Function));
                 });
 
                 it("should set url", function () {
                     var expectedResult = globals.WEBSERVICE.ACCOUNTS.URL + "/" + mockOptions.accountId +
-                        globals.WEBSERVICE.AUTH_PROFILES_PATH;
-                    expect(authorizationProfileCollection.url).toEqual(expectedResult);
+                        globals.WEBSERVICE.BANK_ACCOUNTS_PATH;
+                    expect(bankAccountCollection.url).toEqual(expectedResult);
                 });
 
                 it("should call super", function () {
-                    expect(AuthorizationProfileCollection.__super__.fetch).toHaveBeenCalledWith({});
+                    expect(BankAccountCollection.__super__.fetch).toHaveBeenCalledWith({});
                 });
             });
         });

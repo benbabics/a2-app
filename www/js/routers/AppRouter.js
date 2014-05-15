@@ -17,6 +17,7 @@ define(["backbone", "utils", "facade"],
                 "driverSearch"          : "showDriverSearch",
                 "driverDetails(/)(:id)" : "showDriverDetails",
                 "invoiceSummary"        : "showInvoiceSummary",
+                "paymentAdd"            : "showPaymentAdd",
                 "paymentDetails(/)(:id)": "showPaymentDetails",
                 "paymentHistory"        : "showPaymentHistory",
 
@@ -58,6 +59,10 @@ define(["backbone", "utils", "facade"],
 
             showInvoiceSummary: function () {
                 facade.publish("invoice", "navigateSummary");
+            },
+
+            showPaymentAdd: function () {
+                facade.publish("invoice", "navigatePaymentAdd");
             },
 
             showPaymentDetails: function (id) {

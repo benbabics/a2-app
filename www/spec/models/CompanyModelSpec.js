@@ -6,6 +6,7 @@ define(["Squire", "utils", "globals", "backbone"],
         var squire = new Squire(),
             mockUtils = utils,
             mockAuthorizationProfileCollection = new Backbone.Collection(),
+            mockBankAccountCollection = new Backbone.Collection(),
             CompanyModel,
             companyModel;
 
@@ -13,6 +14,7 @@ define(["Squire", "utils", "globals", "backbone"],
         squire.mock("utils", mockUtils);
         squire.mock("collections/AuthorizationProfileCollection",
             Squire.Helpers.returns(mockAuthorizationProfileCollection));
+        squire.mock("collections/BankAccountCollection", Squire.Helpers.returns(mockBankAccountCollection));
 
         describe("A Company Model", function () {
             beforeEach(function (done) {
@@ -59,6 +61,10 @@ define(["Squire", "utils", "globals", "backbone"],
 
                 it("should set authorizationProfiles to default", function () {
                     expect(companyModel.defaults.authorizationProfiles).toBeNull();
+                });
+
+                it("should set bankAccounts to default", function () {
+                    expect(companyModel.defaults.bankAccounts).toBeNull();
                 });
 
                 it("should set defaultShippingAddress to default", function () {
@@ -305,29 +311,82 @@ define(["Squire", "utils", "globals", "backbone"],
                                 mockFetchAuthorizationProfilesDeferred.resolve();
                                 return mockFetchAuthorizationProfilesDeferred.promise();
                             });
-
-                            spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
-                            spyOn(mockDeferred, "promise").and.callThrough();
-                            spyOn(mockDeferred, "reject").and.callThrough();
-                            spyOn(mockDeferred, "resolve").and.callThrough();
-
-                            actualReturnValue = companyModel.sync("read", companyModel);
                         });
 
-                        it("should call fetchAuthorizationProfiles", function () {
-                            expect(companyModel.fetchAuthorizationProfiles).toHaveBeenCalledWith();
+                        describe("when the call to fetchBankAccounts() finishes successfully", function () {
+                            var mockFetchBankAccountsDeferred = utils.Deferred();
+
+                            beforeEach(function () {
+                                spyOn(companyModel, "fetchBankAccounts").and.callFake(function () {
+                                    mockFetchBankAccountsDeferred.resolve();
+                                    return mockFetchBankAccountsDeferred.promise();
+                                });
+
+                                spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                                spyOn(mockDeferred, "promise").and.callThrough();
+                                spyOn(mockDeferred, "reject").and.callThrough();
+                                spyOn(mockDeferred, "resolve").and.callThrough();
+
+                                actualReturnValue = companyModel.sync("read", companyModel);
+                            });
+
+                            it("should call fetchAuthorizationProfiles", function () {
+                                expect(companyModel.fetchAuthorizationProfiles).toHaveBeenCalledWith();
+                            });
+
+                            it("should call fetchBankAccounts", function () {
+                                expect(companyModel.fetchBankAccounts).toHaveBeenCalledWith();
+                            });
+
+                            it("should call resolve on Deferred", function () {
+                                expect(mockDeferred.resolve).toHaveBeenCalledWith();
+                            });
+
+                            it("should NOT call reject on Deferred", function () {
+                                expect(mockDeferred.reject).not.toHaveBeenCalled();
+                            });
+
+                            it("should return the expected value", function () {
+                                expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                            });
                         });
 
-                        it("should call resolve on Deferred", function () {
-                            expect(mockDeferred.resolve).toHaveBeenCalledWith();
-                        });
+                        describe("when the call to fetchBankAccounts() finishes with a failure", function () {
+                            var mockFetchBankAccountsDeferred = utils.Deferred();
 
-                        it("should NOT call reject on Deferred", function () {
-                            expect(mockDeferred.reject).not.toHaveBeenCalled();
-                        });
+                            beforeEach(function () {
+                                spyOn(companyModel, "fetchBankAccounts").and.callFake(function () {
+                                    mockFetchBankAccountsDeferred.reject();
+                                    return mockFetchBankAccountsDeferred.promise();
+                                });
 
-                        it("should return the expected value", function () {
-                            expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                                spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                                spyOn(mockDeferred, "promise").and.callThrough();
+                                spyOn(mockDeferred, "reject").and.callThrough();
+                                spyOn(mockDeferred, "resolve").and.callThrough();
+
+                                actualReturnValue = companyModel.sync("read", companyModel);
+                            });
+
+                            it("should call fetchAuthorizationProfiles", function () {
+                                expect(companyModel.fetchAuthorizationProfiles).toHaveBeenCalledWith();
+                            });
+
+                            it("should call fetchBankAccounts", function () {
+                                expect(companyModel.fetchBankAccounts).toHaveBeenCalledWith();
+                            });
+
+                            it("should NOT call resolve on Deferred", function () {
+                                expect(mockDeferred.resolve).not.toHaveBeenCalled();
+                            });
+
+                            it("should call reject on Deferred", function () {
+                                expect(mockDeferred.reject).toHaveBeenCalledWith();
+                            });
+
+                            it("should return the expected value", function () {
+                                expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                            });
                         });
                     });
 
@@ -339,29 +398,82 @@ define(["Squire", "utils", "globals", "backbone"],
                                 mockFetchAuthorizationProfilesDeferred.reject();
                                 return mockFetchAuthorizationProfilesDeferred.promise();
                             });
-
-                            spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
-                            spyOn(mockDeferred, "promise").and.callThrough();
-                            spyOn(mockDeferred, "reject").and.callThrough();
-                            spyOn(mockDeferred, "resolve").and.callThrough();
-
-                            actualReturnValue = companyModel.sync("read", companyModel);
                         });
 
-                        it("should call fetchAuthorizationProfiles", function () {
-                            expect(companyModel.fetchAuthorizationProfiles).toHaveBeenCalledWith();
+                        describe("when the call to fetchBankAccounts() finishes successfully", function () {
+                            var mockFetchBankAccountsDeferred = utils.Deferred();
+
+                            beforeEach(function () {
+                                spyOn(companyModel, "fetchBankAccounts").and.callFake(function () {
+                                    mockFetchBankAccountsDeferred.resolve();
+                                    return mockFetchBankAccountsDeferred.promise();
+                                });
+
+                                spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                                spyOn(mockDeferred, "promise").and.callThrough();
+                                spyOn(mockDeferred, "reject").and.callThrough();
+                                spyOn(mockDeferred, "resolve").and.callThrough();
+
+                                actualReturnValue = companyModel.sync("read", companyModel);
+                            });
+
+                            it("should call fetchAuthorizationProfiles", function () {
+                                expect(companyModel.fetchAuthorizationProfiles).toHaveBeenCalledWith();
+                            });
+
+                            it("should call fetchBankAccounts", function () {
+                                expect(companyModel.fetchBankAccounts).toHaveBeenCalledWith();
+                            });
+
+                            it("should NOT call resolve on Deferred", function () {
+                                expect(mockDeferred.resolve).not.toHaveBeenCalled();
+                            });
+
+                            it("should call reject on Deferred", function () {
+                                expect(mockDeferred.reject).toHaveBeenCalledWith();
+                            });
+
+                            it("should return the expected value", function () {
+                                expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                            });
                         });
 
-                        it("should NOT call resolve on Deferred", function () {
-                            expect(mockDeferred.resolve).not.toHaveBeenCalled();
-                        });
+                        describe("when the call to fetchBankAccounts() finishes with a failure", function () {
+                            var mockFetchBankAccountsDeferred = utils.Deferred();
 
-                        it("should call reject on Deferred", function () {
-                            expect(mockDeferred.reject).toHaveBeenCalledWith();
-                        });
+                            beforeEach(function () {
+                                spyOn(companyModel, "fetchBankAccounts").and.callFake(function () {
+                                    mockFetchBankAccountsDeferred.reject();
+                                    return mockFetchBankAccountsDeferred.promise();
+                                });
 
-                        it("should return the expected value", function () {
-                            expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                                spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                                spyOn(mockDeferred, "promise").and.callThrough();
+                                spyOn(mockDeferred, "reject").and.callThrough();
+                                spyOn(mockDeferred, "resolve").and.callThrough();
+
+                                actualReturnValue = companyModel.sync("read", companyModel);
+                            });
+
+                            it("should call fetchAuthorizationProfiles", function () {
+                                expect(companyModel.fetchAuthorizationProfiles).toHaveBeenCalledWith();
+                            });
+
+                            it("should call fetchBankAccounts", function () {
+                                expect(companyModel.fetchBankAccounts).toHaveBeenCalledWith();
+                            });
+
+                            it("should NOT call resolve on Deferred", function () {
+                                expect(mockDeferred.resolve).not.toHaveBeenCalled();
+                            });
+
+                            it("should call reject on Deferred", function () {
+                                expect(mockDeferred.reject).toHaveBeenCalledWith();
+                            });
+
+                            it("should return the expected value", function () {
+                                expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                            });
                         });
                     });
                 });
@@ -369,11 +481,16 @@ define(["Squire", "utils", "globals", "backbone"],
                 describe("when the method is update", function () {
                     beforeEach(function () {
                         spyOn(companyModel, "fetchAuthorizationProfiles").and.callFake(function () {});
+                        spyOn(companyModel, "fetchBankAccounts").and.callFake(function () {});
                         companyModel.sync("update", companyModel);
                     });
 
                     it("should NOT call fetchAuthorizationProfiles", function () {
                         expect(companyModel.fetchAuthorizationProfiles).not.toHaveBeenCalled();
+                    });
+
+                    it("should NOT call fetchBankAccounts", function () {
+                        expect(companyModel.fetchBankAccounts).not.toHaveBeenCalled();
                     });
                 });
             });
@@ -796,6 +913,71 @@ define(["Squire", "utils", "globals", "backbone"],
                     });
                 });
 
+                describe("when bankAccounts does have a value", function () {
+                    var bankAccounts,
+                        mockCompanyModel,
+                        actualValue;
+
+                    beforeEach(function () {
+                        mockCompanyModel = {
+                            name: "Beavis and Butthead Inc",
+                            accountId: "3673683",
+                            wexAccountNumber: "5764309",
+                            requiredFields: companyModel.defaults.requiredFields
+                        };
+                        companyModel.clear();
+                        companyModel.initialize(mockCompanyModel);
+                        bankAccounts = new Backbone.Collection();
+                        mockCompanyModel.bankAccounts = bankAccounts.toJSON();
+                        companyModel.set("bankAccounts", bankAccounts);
+
+                        spyOn(bankAccounts, "toJSON").and.callThrough();
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
+
+                        actualValue = companyModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should call toJSON on bankAccounts", function () {
+                        expect(bankAccounts.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockCompanyModel);
+                    });
+                });
+
+                describe("when bankAccounts does NOT have a value", function () {
+                    var mockCompanyModel,
+                        actualValue;
+
+                    beforeEach(function () {
+                        mockCompanyModel = {
+                            name: "Beavis and Butthead Inc",
+                            accountId: "3673683",
+                            wexAccountNumber: "5764309",
+                            requiredFields: companyModel.defaults.requiredFields
+                        };
+                        companyModel.clear();
+                        companyModel.initialize(mockCompanyModel);
+
+                        spyOn(CompanyModel.__super__, "toJSON").and.callThrough();
+
+                        actualValue = companyModel.toJSON();
+                    });
+
+                    it("should call toJSON on super", function () {
+                        expect(CompanyModel.__super__.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockCompanyModel);
+                    });
+                });
+
                 describe("when defaultShippingAddress does have a value", function () {
                     var defaultShippingAddress,
                         mockCompanyModel,
@@ -1063,7 +1245,130 @@ define(["Squire", "utils", "globals", "backbone"],
                 });
             });
 
+            describe("has a fetchBankAccounts function that", function () {
+                var mockCompanyJSON = {
+                        accountId: "3456256"
+                    },
+                    mockPromiseReturnValue = "Promise Return Value",
+                    mockDeferred = {
+                        promise: function () { return mockPromiseReturnValue; },
+                        reject: function () {},
+                        resolve: function () {}
+                    },
+                    actualReturnValue;
+
+                it("is defined", function () {
+                    expect(companyModel.fetchBankAccounts).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(companyModel.fetchBankAccounts).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the call to fetchCollection on utils finishes successfully", function () {
+                    var mockFetchCollectionDeferred = utils.Deferred();
+
+                    beforeEach(function () {
+                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
+                            mockFetchCollectionDeferred.resolve();
+                            return mockFetchCollectionDeferred.promise();
+                        });
+
+                        spyOn(companyModel, "set").and.callThrough();
+                        spyOn(companyModel, "toJSON").and.callFake(function () { return mockCompanyJSON; });
+                        spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                        spyOn(mockDeferred, "promise").and.callThrough();
+                        spyOn(mockDeferred, "reject").and.callThrough();
+                        spyOn(mockDeferred, "resolve").and.callThrough();
+
+                        actualReturnValue = companyModel.fetchBankAccounts();
+                    });
+
+                    it("should call toJSON", function () {
+                        expect(companyModel.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should call fetchCollection on utils", function () {
+                        expect(mockUtils.fetchCollection)
+                            .toHaveBeenCalledWith(mockBankAccountCollection, mockCompanyJSON);
+                    });
+
+                    it("should call set", function () {
+                        expect(companyModel.set)
+                            .toHaveBeenCalledWith("bankAccounts", mockBankAccountCollection);
+                    });
+
+                    it("should call resolve on Deferred", function () {
+                        expect(mockDeferred.resolve).toHaveBeenCalled();
+                    });
+
+                    it("should NOT call reject on Deferred", function () {
+                        expect(mockDeferred.reject).not.toHaveBeenCalled();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                    });
+                });
+
+                describe("when the call to fetchCollection on utils finishes with a failure", function () {
+                    var mockFetchCollectionDeferred = utils.Deferred();
+
+                    beforeEach(function () {
+                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
+                            mockFetchCollectionDeferred.reject();
+                            return mockFetchCollectionDeferred.promise();
+                        });
+
+                        spyOn(companyModel, "set").and.callThrough();
+                        spyOn(companyModel, "toJSON").and.callFake(function () { return mockCompanyJSON; });
+                        spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                        spyOn(mockDeferred, "promise").and.callThrough();
+                        spyOn(mockDeferred, "reject").and.callThrough();
+                        spyOn(mockDeferred, "resolve").and.callThrough();
+
+                        actualReturnValue = companyModel.fetchBankAccounts();
+                    });
+
+                    it("should call toJSON", function () {
+                        expect(companyModel.toJSON).toHaveBeenCalledWith();
+                    });
+
+                    it("should call fetchCollection on utils", function () {
+                        expect(mockUtils.fetchCollection)
+                            .toHaveBeenCalledWith(mockBankAccountCollection, mockCompanyJSON);
+                    });
+
+                    it("should NOT call set", function () {
+                        expect(companyModel.set).not.toHaveBeenCalled();
+                    });
+
+                    it("should NOT call resolve on Deferred", function () {
+                        expect(mockDeferred.resolve).not.toHaveBeenCalled();
+                    });
+
+                    it("should call reject on Deferred", function () {
+                        expect(mockDeferred.reject).toHaveBeenCalledWith();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualReturnValue).toEqual(mockPromiseReturnValue);
+                    });
+                });
+            });
+
             describe("has an areFetchedPropertiesEmpty function that", function () {
+                var emptyCollection = new Backbone.Collection(),
+                    collection = new Backbone.Collection(),
+                    model = new Backbone.Model();
+
+                beforeEach(function () {
+                    collection.add(model);
+
+                    companyModel.set("authorizationProfiles", collection);
+                    companyModel.set("bankAccounts", collection);
+                });
+
                 it("is defined", function () {
                     expect(companyModel.areFetchedPropertiesEmpty).toBeDefined();
                 });
@@ -1085,23 +1390,35 @@ define(["Squire", "utils", "globals", "backbone"],
                 });
 
                 it("returns true when the authorizationProfiles property has a size of 0", function () {
-                    var collection = new Backbone.Collection();
-
-                    companyModel.set("authorizationProfiles", collection);
+                    companyModel.set("authorizationProfiles", emptyCollection);
 
                     expect(companyModel.areFetchedPropertiesEmpty()).toBeTruthy();
                 });
 
-                it("returns false when the authorizationProfiles property contains a model", function () {
-                    var collection = new Backbone.Collection(),
-                        model = new Backbone.Model();
+                it("returns true when the bankAccounts property is null", function () {
+                    companyModel.set("bankAccounts", null);
 
-                    collection.add(model);
-
-                    companyModel.set("authorizationProfiles", collection);
-
-                    expect(companyModel.areFetchedPropertiesEmpty()).toBeFalsy();
+                    expect(companyModel.areFetchedPropertiesEmpty()).toBeTruthy();
                 });
+
+                it("returns true when the bankAccounts property is empty", function () {
+                    companyModel.set("bankAccounts", []);
+
+                    expect(companyModel.areFetchedPropertiesEmpty()).toBeTruthy();
+                });
+
+                it("returns true when the bankAccounts property has a size of 0", function () {
+                    companyModel.set("bankAccounts", emptyCollection);
+
+                    expect(companyModel.areFetchedPropertiesEmpty()).toBeTruthy();
+                });
+
+                it("returns false when the authorizationProfiles and bankAccounts properties contains a model",
+                    function () {
+                        companyModel.set("authorizationProfiles", collection);
+
+                        expect(companyModel.areFetchedPropertiesEmpty()).toBeFalsy();
+                    });
             });
         });
     });

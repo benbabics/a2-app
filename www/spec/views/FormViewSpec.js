@@ -45,11 +45,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
         describe("A Form View", function () {
 
             beforeEach(function (done) {
-                squire.require(["views/FormView", "views/AppView"], function (JasmineFormView, AppView) {
-
-                    var appView = new AppView();
-                    appView.initialize();
-
+                squire.require(["views/FormView"], function (JasmineFormView) {
                     FormView = JasmineFormView;
                     formView = new FormView({
                         model: formModel

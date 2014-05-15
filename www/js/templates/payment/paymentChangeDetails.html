@@ -1,0 +1,16 @@
+<div class="ui-body ui-body-e">{{{message}}}</div>
+
+{{#payment}}
+    {{#scheduledDate}}
+        <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+    {{/scheduledDate}}
+    {{#amount}}
+        <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+    {{/amount}}
+    {{#bankAccountName}}
+        <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+    {{/bankAccountName}}
+    {{#confirmationNumber}}
+        <p class="text-result ui-li-desc"><strong>{{label}}:</strong>{{value}}</p>
+    {{/confirmationNumber}}
+{{/payment}}

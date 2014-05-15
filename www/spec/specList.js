@@ -55,6 +55,7 @@ var specList =
         "spec/collections/AjaxCollectionSpec.js",
         "spec/collections/AjaxSearchCollectionSpec.js",
         "spec/collections/AuthorizationProfileCollectionSpec.js",
+        "spec/collections/BankAccountCollectionSpec.js",
         "spec/collections/BaseCollectionSpec.js",
         "spec/collections/CardCollectionSpec.js",
         "spec/collections/DepartmentCollectionSpec.js",

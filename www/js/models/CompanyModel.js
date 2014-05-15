@@ -1,9 +1,10 @@
 define(["backbone", "globals", "utils", "models/AddressModel", "models/AuthorizationProfileModel",
         "models/CompanySettingsModel", "models/DepartmentModel", "models/ShippingMethodModel",
-        "collections/AuthorizationProfileCollection", "collections/DepartmentCollection",
-        "collections/ShippingMethodCollection"],
+        "collections/AuthorizationProfileCollection", "collections/BankAccountCollection",
+        "collections/DepartmentCollection", "collections/ShippingMethodCollection"],
     function (Backbone, globals, utils, AddressModel, AuthorizationProfileModel, CompanySettingsModel, DepartmentModel,
-              ShippingMethodModel, AuthorizationProfileCollection, DepartmentCollection, ShippingMethodCollection) {
+              ShippingMethodModel, AuthorizationProfileCollection, BankAccountCollection, DepartmentCollection,
+              ShippingMethodCollection) {
 
         "use strict";
 
@@ -17,6 +18,7 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
                 "requiredFields"        : globals.companyData.requiredFields,
                 "settings"              : null,
                 "authorizationProfiles" : null,
+                "bankAccounts"          : null,
                 "defaultShippingAddress": null,
                 "shippingMethods"       : null
             },
@@ -60,7 +62,8 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
                 if (method === "read") {
                     utils
                         .when(
-                            this.fetchAuthorizationProfiles()
+                            this.fetchAuthorizationProfiles(),
+                            this.fetchBankAccounts()
                         )
                         .done(function () {
                             deferred.resolve();
@@ -125,6 +128,9 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
                 if (json.authorizationProfiles) {
                     json.authorizationProfiles = json.authorizationProfiles.toJSON();
                 }
+                if (json.bankAccounts) {
+                    json.bankAccounts = json.bankAccounts.toJSON();
+                }
                 if (json.defaultShippingAddress) {
                     json.defaultShippingAddress = json.defaultShippingAddress.toJSON();
                 }
@@ -156,12 +162,37 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
                 return deferred.promise();
             },
 
+            fetchBankAccounts: function () {
+                var deferred   = utils.Deferred(),
+                    bankAccounts = new BankAccountCollection(),
+                    self = this;
+
+                utils
+                    .when(
+                        utils.fetchCollection(bankAccounts, this.toJSON())
+                    )
+                    .done(function () {
+                        deferred.resolve(
+                            self.set("bankAccounts", bankAccounts)
+                        );
+                    })
+                    .fail(function () {
+                        deferred.reject();
+                    });
+
+                return deferred.promise();
+            },
+
             areFetchedPropertiesEmpty: function () {
-                var authorizationProfiles = this.get("authorizationProfiles");
+                var authorizationProfiles = this.get("authorizationProfiles"),
+                    bankAccounts = this.get("bankAccounts");
 
                 return (!authorizationProfiles ||
                     utils._.isEmpty(authorizationProfiles) ||
-                    utils._.size(authorizationProfiles) === 0);
+                    utils._.size(authorizationProfiles) === 0 ||
+                    !bankAccounts ||
+                    utils._.isEmpty(bankAccounts) ||
+                    utils._.size(bankAccounts) === 0);
             }
         });
 
