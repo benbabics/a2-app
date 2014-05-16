@@ -268,23 +268,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
             });
 
             describe("has a displayDialog function that", function () {
-                //TODO - Figure out a way to return a different object on each call to find so that we can verify that
-                // some calls are actually done on the correct object rather than simply confirming the calls were made
-                var mockPopup = {
-                        bind: function () { },
-                    },
-                    mockPageSection = {
-                        append: function () { },
-                        css: function () { },
-                        find: function () { return mockPageSection; },
-                        on: function () { },
-                        popup: function () { return mockPopup; },
-                        trigger: function () { }
-                    },
-                    mockCurrentPage = {
-                        find : function () { return mockPageSection; }
-                    },
-                    dialogOptions = {
+                var dialogOptions = {
                         title: "Title",
                         message: "Message",
                         primaryBtnLabel: "Primary Button Label",
@@ -298,10 +282,70 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                         popupafterclose: function () {},
                         highlightButton: "highlightButtonId",
                         unhighlightButton: "unhighlightButtonId"
+                    },
+                    mockPopup = {
+                        bind: function () { },
+                    },
+                    mockHeader = {
+                        css: function () { }
+                    },
+                    mockContent = {
+                        append: function () { }
+                    },
+                    mockDialog = {
+                        find : function () { },
+                        popup: function () { return mockPopup; },
+                        trigger : function () { }
+                    },
+                    mockPrimaryButton = {
+                        on: function () { }
+                    },
+                    mockSecondaryButton = {
+                        on: function () { }
+                    },
+                    mockTertiaryButton = {
+                        on: function () { }
+                    },
+                    mockHighlightButton = {},
+                    mockUnhighlightButton = {},
+                    mockCurrentPage = {
+                        find : function () { }
                     };
 
                 beforeEach(function () {
                     utils.$.mobile.activePage = mockCurrentPage;
+
+                    spyOn(mockCurrentPage, "find").and.callFake(
+                        function (findParameter) {
+                            if (findParameter === ":jqmData(role='header')") {
+                                return mockHeader;
+                            }
+                            if (findParameter === ":jqmData(role=content)") {
+                                return mockContent;
+                            }
+                            if (findParameter === "#" + globals.DIALOG.ID) {
+                                return mockDialog;
+                            }
+                        });
+
+                    spyOn(mockDialog, "find").and.callFake(
+                        function (findParameter) {
+                            if (findParameter === "#" + globals.DIALOG.PRIMARY_BTN_ID) {
+                                return mockPrimaryButton;
+                            }
+                            if (findParameter === "#" + globals.DIALOG.SECONDARY_BTN_ID) {
+                                return mockSecondaryButton;
+                            }
+                            if (findParameter === "#" + globals.DIALOG.TERTIARY_BTN_ID) {
+                                return mockTertiaryButton;
+                            }
+                            if (findParameter === "#" + dialogOptions.highlightButton) {
+                                return mockHighlightButton;
+                            }
+                            if (findParameter === "#" +  dialogOptions.unhighlightButton) {
+                                return mockUnhighlightButton;
+                            }
+                        });
                 });
 
                 it("is defined", function () {
@@ -317,15 +361,15 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                         cssSpy;
 
                     beforeEach(function () {
-                        cssSpy = spyOn(mockPageSection, "css");
+                        cssSpy = spyOn(mockHeader, "css");
 
-                        spyOn(mockCurrentPage, "find").and.callThrough();
-                        spyOn(mockPageSection, "append").and.callThrough();
+                        spyOn(mockContent, "append").and.callThrough();
                         cssSpy.and.returnValue("fixed");
-                        spyOn(mockPageSection, "find").and.callThrough();
-                        spyOn(mockPageSection, "on").and.callThrough();
-                        spyOn(mockPageSection, "popup").and.callThrough();
-                        spyOn(mockPageSection, "trigger").and.callThrough();
+                        spyOn(mockPrimaryButton, "on").and.callThrough();
+                        spyOn(mockSecondaryButton, "on").and.callThrough();
+                        spyOn(mockTertiaryButton, "on").and.callThrough();
+                        spyOn(mockDialog, "popup").and.callThrough();
+                        spyOn(mockDialog, "trigger").and.callThrough();
                         spyOn(mockPopup, "bind").and.callThrough();
                         spyOn(mockMustache, "render").and.returnValue(mockMustacheRenderResponse);
                         spyOn(appView, "highlightButton").and.callFake(function () {});
@@ -339,11 +383,11 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     });
 
                     it("should get the css value of position on the header", function () {
-                        expect(mockPageSection.css).toHaveBeenCalledWith("position");
+                        expect(mockHeader.css).toHaveBeenCalledWith("position");
                     });
 
                     it("should set the css value of position on the header", function () {
-                        expect(mockPageSection.css).toHaveBeenCalledWith("position", "absolute");
+                        expect(mockHeader.css).toHaveBeenCalledWith("position", "absolute");
                     });
 
                     it("should call find on the current page to get the content", function () {
@@ -355,7 +399,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     });
 
                     it("should call append on the content", function () {
-                        expect(mockPageSection.append).toHaveBeenCalledWith(mockMustacheRenderResponse);
+                        expect(mockContent.append).toHaveBeenCalledWith(mockMustacheRenderResponse);
                     });
 
                     it("should call find on the current page to get the dialog", function () {
@@ -363,27 +407,23 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     });
 
                     it("should call find on the dialog to get the primary button", function () {
-                        expect(mockPageSection.find).toHaveBeenCalledWith("#" + globals.DIALOG.PRIMARY_BTN_ID);
+                        expect(mockDialog.find).toHaveBeenCalledWith("#" + globals.DIALOG.PRIMARY_BTN_ID);
                     });
 
                     it("should call find on the dialog to get the secondary button", function () {
-                        expect(mockPageSection.find).toHaveBeenCalledWith("#" + globals.DIALOG.SECONDARY_BTN_ID);
+                        expect(mockDialog.find).toHaveBeenCalledWith("#" + globals.DIALOG.SECONDARY_BTN_ID);
                     });
 
                     it("should call find on the dialog to get the tertiary button", function () {
-                        expect(mockPageSection.find).toHaveBeenCalledWith("#" + globals.DIALOG.TERTIARY_BTN_ID);
+                        expect(mockDialog.find).toHaveBeenCalledWith("#" + globals.DIALOG.TERTIARY_BTN_ID);
                     });
 
                     it("should call trigger on the dialog ", function () {
-                        expect(mockPageSection.trigger).toHaveBeenCalledWith("create");
+                        expect(mockDialog.trigger).toHaveBeenCalledWith("create");
                     });
 
-                    it("should call bind on the popup", function () {
-                        expect(mockPopup.bind).toHaveBeenCalledWith({
-                            popupbeforeposition: jasmine.any(Function),
-                            popupafteropen     : jasmine.any(Function),
-                            popupafterclose    : jasmine.any(Function)
-                        });
+                    it("should call popup on the dialog with no arguments", function () {
+                        expect(mockDialog.popup).toHaveBeenCalledWith();
                     });
 
                     describe("the popupbeforeposition callback passed to bind", function () {
@@ -391,7 +431,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                             spyOn(dialogOptions, "popupbeforeposition").and.callThrough();
 
                             var callback = mockPopup.bind.calls.argsFor(0)[0];
-                            callback.popupbeforeposition.call(mockPageSection);
+                            callback.popupbeforeposition.call(mockDialog);
                         });
 
                         it("should call popupbeforeposition on the dialog options", function () {
@@ -404,7 +444,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                             spyOn(dialogOptions, "popupafteropen").and.callThrough();
 
                             var callback = mockPopup.bind.calls.argsFor(0)[0];
-                            callback.popupafteropen.call(mockPageSection);
+                            callback.popupafteropen.call(mockDialog);
                         });
 
                         it("should call popupafteropen on the dialog options", function () {
@@ -425,7 +465,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                                 cssSpy.and.returnValue("absolute");
 
                                 var callback = mockPopup.bind.calls.argsFor(0)[0];
-                                callback.popupafterclose.call(mockPageSection);
+                                callback.popupafterclose.call(mockDialog);
                             });
 
                             it("should call popupafterclose on the dialog options", function () {
@@ -433,15 +473,15 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                             });
 
                             it("should get the css value of position on the header", function () {
-                                expect(mockPageSection.css).toHaveBeenCalledWith("position");
+                                expect(mockHeader.css).toHaveBeenCalledWith("position");
                             });
 
                             it("should set the css value of position on the header", function () {
-                                expect(mockPageSection.css).toHaveBeenCalledWith("position", "fixed");
+                                expect(mockHeader.css).toHaveBeenCalledWith("position", "fixed");
                             });
 
                             it("should call $ on utils", function () {
-                                expect(utils.$).toHaveBeenCalledWith(mockPageSection);
+                                expect(utils.$).toHaveBeenCalledWith(mockDialog);
                             });
 
                             it("should call remove", function () {
@@ -450,17 +490,15 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                         });
                     });
 
-                    it("should call on on the dialog buttons to set the click handlers", function () {
-                        expect(mockPageSection.on).toHaveBeenCalledWith("click", jasmine.any(Function));
-
-                        expect(mockPageSection.on.calls.count()).toEqual(3);
+                    it("should call on on the primary button to set the click handler", function () {
+                        expect(mockPrimaryButton.on).toHaveBeenCalledWith("click", jasmine.any(Function));
                     });
 
-                    describe("the callback from the first call to on", function () {
+                    describe("the callback from the primary button call to on", function () {
                         beforeEach(function () {
                             spyOn(dialogOptions, "primaryBtnHandler").and.callThrough();
 
-                            var callback = mockPageSection.on.calls.argsFor(0)[1];
+                            var callback = mockPrimaryButton.on.calls.argsFor(0)[1];
                             callback.call(appView);
                         });
 
@@ -469,11 +507,15 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                         });
                     });
 
-                    describe("the callback from the second call to on", function () {
+                    it("should call on on the secondary button to set the click handler", function () {
+                        expect(mockSecondaryButton.on).toHaveBeenCalledWith("click", jasmine.any(Function));
+                    });
+
+                    describe("the callback from the secondary button call to on", function () {
                         beforeEach(function () {
                             spyOn(dialogOptions, "secondaryBtnHandler").and.callThrough();
 
-                            var callback = mockPageSection.on.calls.argsFor(1)[1];
+                            var callback = mockSecondaryButton.on.calls.argsFor(0)[1];
                             callback.call(appView);
                         });
 
@@ -482,11 +524,15 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                         });
                     });
 
-                    describe("the callback from the third call to on", function () {
+                    it("should call on on the secondary button to set the click handler", function () {
+                        expect(mockTertiaryButton.on).toHaveBeenCalledWith("click", jasmine.any(Function));
+                    });
+
+                    describe("the callback from the tertiary button call to on", function () {
                         beforeEach(function () {
                             spyOn(dialogOptions, "tertiaryBtnHandler").and.callThrough();
 
-                            var callback = mockPageSection.on.calls.argsFor(2)[1];
+                            var callback = mockTertiaryButton.on.calls.argsFor(0)[1];
                             callback.call(appView);
                         });
 
@@ -496,23 +542,27 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     });
 
                     it("should call find on the dialog to get the highlightButton button", function () {
-                        expect(mockPageSection.find).toHaveBeenCalledWith("#" + dialogOptions.highlightButton);
+                        expect(mockDialog.find).toHaveBeenCalledWith("#" + dialogOptions.highlightButton);
                     });
 
                     it("should call highlightButton ", function () {
-                        expect(appView.highlightButton).toHaveBeenCalledWith(mockPageSection);
+                        expect(appView.highlightButton).toHaveBeenCalledWith(mockHighlightButton);
                     });
 
                     it("should call find on the dialog to get the unhighlight button", function () {
-                        expect(mockPageSection.find).toHaveBeenCalledWith("#" + dialogOptions.unhighlightButton);
+                        expect(mockDialog.find).toHaveBeenCalledWith("#" + dialogOptions.unhighlightButton);
                     });
 
                     it("should call unhighlightButton ", function () {
-                        expect(appView.unhighlightButton).toHaveBeenCalledWith(mockPageSection);
+                        expect(appView.unhighlightButton).toHaveBeenCalledWith(mockUnhighlightButton);
                     });
 
                     it("should call popup on the dialog ", function () {
-                        expect(mockPageSection.popup).toHaveBeenCalledWith("open");
+                        expect(mockDialog.popup).toHaveBeenCalledWith("open");
+                    });
+
+                    it("should call popup on the dialog ", function () {
+                        expect(mockDialog.popup).toHaveBeenCalledWith("open");
                     });
                 });
             });
