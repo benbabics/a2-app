@@ -63,7 +63,7 @@ define(function (require) {
      */
     globals.APP = {
         "NAME"                            : "WEXonline",
-        "EMAIL_ADDRESS_VALIDATION_PATTERN": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$",
+        "EMAIL_ADDRESS_VALIDATION_PATTERN": "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$",
         "POBOX_PATTERN"                   : "([\\w\\s*\\W]*(P(OST)?(\\.)?\\s*O(FF(ICE)?)?(\\.)?\\s*B(OX)?))[\\w\\s*\\W]*",
         "ZIP_CODE_PATTERN"                : "/\\d{5}-\\d{4}|\\d{5}|[A-Z]\\d[A-Z] \\d[A-Z]\\d/",
         "ALPHANUMERIC_PATTERN"            : /^[A-Z\d]+$/i,

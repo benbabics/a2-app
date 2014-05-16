@@ -92,27 +92,9 @@ define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezon
         utils.fileType = globals.DEFAULT["FILETYPE_" + (utils.isRetina ? "RETINA" : "NORMAL")];
 
         /*
-         * Extend Classes
-        */
-        utils.extend = function (child, parent) {
-            var key;
-
-            for (key in parent) {
-                if (this.__hasProp.call(parent, key)) {
-                    child[key] = parent[key];
-                }
-            }
-
-            function Ctor() {
-                this.constructor = child;
-            }
-            Ctor.prototype = parent.prototype;
-
-            child.prototype = new Ctor();
-            child.__super__ = parent.prototype;
-
-            return child;
-        };
+         * Navigator
+         */
+        utils.navigator = navigator;
 
         /*
          * Deep copy an object.  When more than one object is supplied the
@@ -124,7 +106,7 @@ define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezon
          */
         utils.deepClone = function (obj) {
             if (arguments.length > 1) {
-                return $.extend(true, {}, arguments);
+                return $.extend.apply(utils, utils._.union([true, {}], arguments));
             }
 
             return $.extend(true, {}, obj);
@@ -164,19 +146,19 @@ define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezon
          * @param - updateHash: (Boolean) Decides if the hash in the location bar should be updated
         */
         utils.changePage = function (viewID, effect, direction, updateHash) {
-            if (effect === undefined || effect === null) {
+            if (!effect) {
                 effect = globals.DEFAULT.PAGE_TRANSITION;
             }
-            if (direction === undefined || direction === null) {
+            if (!direction) {
                 direction = false;
             }
-            if (updateHash === undefined) {
+            if (!updateHash) {
                 updateHash = false;
             }
 
             utils.$(function () {
                 if (updateHash) {
-                    // TODO: messy fix to force viewID hash change in url, since JQM 1.3.1 doesn't seem to
+                    // TODO: messy fix to force viewID hash change in url, since JQM 1.4.1 doesn't seem to
                     // always update hash when asked.
                     window.location.hash = viewID.attr ? viewID.attr("id") : viewID;
                 }
@@ -186,7 +168,6 @@ define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezon
                     reverse   : direction,
                     changeHash: updateHash
                 });
-
             });
         };
 
@@ -196,8 +177,8 @@ define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezon
          * @returns {boolean} true if there is a connection, false otherwise
          */
         utils.hasNetworkConnection = function () {
-            if (navigator && navigator.connection) {
-                var networkState = navigator.connection.type;
+            if (utils.navigator && utils.navigator.connection) {
+                var networkState = utils.navigator.connection.type;
                 return Connection.NONE !== networkState;
             }
 
@@ -211,7 +192,7 @@ define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezon
          * @returns {boolean} true if the page is active, false otherwise
          */
         utils.isActivePage = function (pageId) {
-            if (utils.$.mobile.activePage === undefined || utils.$.mobile.activePage === null) {
+            if (!utils.$.mobile.activePage) {
                 return false;
             }
 
@@ -225,7 +206,7 @@ define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezon
          * @return (Boolean) True or False as to whether the Email Address is valid
          */
         utils.isEmailAddressValid = function (emailAddress) {
-            var pattern = new RegExp(globals.APP.EMAIL_ADDRESS_VALIDATION_PATTERN);
+            var pattern = new RegExp(globals.APP.EMAIL_ADDRESS_VALIDATION_PATTERN, "i");
             return pattern.test(emailAddress);
         };
 
