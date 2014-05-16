@@ -125,19 +125,22 @@ define(["backbone", "Squire", "globals", "utils"],
                     describe("when AppModel.buildVersion is set to Unknown", function () {
                         beforeEach(function () {
                             appModel.set("buildVersion", "Unknown");
+
+                            // TODO: delete once the line setting the buildVersion in UpdatePromptController.init()
+                            // is removed
+                            spyOn(appModel, "set").and.callFake(function () { });
+
                             spyOn(appModel, "once").and.callFake(function () { });
 
                             callback.apply();
                         });
 
-                        xit("should call once on the AppModel", function () {
+                        it("should call once on the AppModel", function () {
                             expect(appModel.once).toHaveBeenCalled();
 
                             expect(appModel.once.calls.mostRecent().args.length).toEqual(2);
                             expect(appModel.once.calls.mostRecent().args[0]).toEqual("change:buildVersion");
                             expect(appModel.once.calls.mostRecent().args[1]).toEqual(jasmine.any(Function));
-
-                            // TODO: re-enable once the line setting the buildVersion in UpdatePromptController.init() is removed
                         });
 
                         describe("when the handler of the change:buildVersion event is called", function () {
@@ -148,12 +151,10 @@ define(["backbone", "Squire", "globals", "utils"],
                                 callback.apply(appModel);
                             });
 
-                            xit("should call checkAppVersionStatus", function () {
+                            it("should call checkAppVersionStatus", function () {
                                 expect(updatePromptController.checkAppVersionStatus).toHaveBeenCalled();
 
                                 expect(updatePromptController.checkAppVersionStatus.calls.mostRecent().args.length).toEqual(0);
-
-                                // TODO: re-enable once the line setting the buildVersion in UpdatePromptController.init() is removed
                             });
                         });
                     });
