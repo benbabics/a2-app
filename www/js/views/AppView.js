@@ -1,16 +1,21 @@
 define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/jqueryDialog.html"],
-    function (Backbone, facade, Mustache, utils, globals, dialogTemplate) {
+    function (Backbone, facade, Mustache, utils, globals, dialogPageTemplate) {
 
         "use strict";
 
 
         var AppView = Backbone.View.extend({
+            dialogTemplate: dialogPageTemplate,
+
             events: {
                 "click [data-rel=back]"  : "handlePageBack",
                 "click [data-rel=logout]": "handleLogout"
             },
 
             initialize: function () {
+                // parse the template
+                Mustache.parse(this.dialogTemplate);
+
                 this.render();
                 this.setupBackboneLoadingIndicators();
             },
@@ -72,7 +77,7 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
              *    unhighlightButton - the id of a button to unhighlight as inactive
              */
             displayDialog: function (dialogOptions) {
-                var currentPage, header, headerPosition, empty, dialogBox, btnPrimary, btnSecondary, btnTertiary;
+                var currentPage, header, headerPosition, dialogBox, btnPrimary, btnSecondary, btnTertiary;
 
                 currentPage = utils.$.mobile.activePage;
 
@@ -86,11 +91,9 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
                 }
 
                 // append the dialogue box
-                currentPage.find(":jqmData(role=content)").append(Mustache.render(dialogTemplate, dialogOptions));
+                currentPage.find(":jqmData(role=content)").append(Mustache.render(this.dialogTemplate, dialogOptions));
 
                 dialogBox = currentPage.find("#" + globals.DIALOG.ID);
-
-                empty = function () {};
 
                 // get the dialog components
                 btnPrimary = dialogBox.find("#" + globals.DIALOG.PRIMARY_BTN_ID);
@@ -101,10 +104,18 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
 
                 // assign any callbacks
                 dialogBox.popup().bind({
-                    popupbeforeposition: (dialogOptions.popupbeforeposition || empty),
-                    popupafteropen     : (dialogOptions.popupafteropen || empty),
-                    popupafterclose    : function () {
-                        if (dialogOptions.popupafterclose) {
+                    popupbeforeposition: function () {
+                        if (utils.isFn(dialogOptions.popupbeforeposition)) {
+                            dialogOptions.popupbeforeposition();
+                        }
+                    },
+                    popupafteropen: function () {
+                        if (utils.isFn(dialogOptions.popupafteropen)) {
+                            dialogOptions.popupafteropen();
+                        }
+                    },
+                    popupafterclose: function () {
+                        if (utils.isFn(dialogOptions.popupafterclose)) {
                             dialogOptions.popupafterclose();
                         }
                         if (header && header.css("position") === "absolute") {
@@ -116,17 +127,17 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
 
                 // assign button handlers
                 btnPrimary.on("click", function () {
-                    if (dialogOptions.primaryBtnHandler) {
+                    if (utils.isFn(dialogOptions.primaryBtnHandler)) {
                         dialogOptions.primaryBtnHandler();
                     }
                 });
                 btnSecondary.on("click", function () {
-                    if (dialogOptions.secondaryBtnHandler) {
+                    if (utils.isFn(dialogOptions.secondaryBtnHandler)) {
                         dialogOptions.secondaryBtnHandler();
                     }
                 });
                 btnTertiary.on("click", function () {
-                    if (dialogOptions.tertiaryBtnHandler) {
+                    if (utils.isFn(dialogOptions.tertiaryBtnHandler)) {
                         dialogOptions.tertiaryBtnHandler();
                     }
                 });
