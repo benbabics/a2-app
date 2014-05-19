@@ -287,7 +287,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                         bind: function () { },
                     },
                     mockHeader = {
-                        css: function () { }
+                        css: function () { return "Mock Value"; }
                     },
                     mockContent = {
                         append: function () { }
@@ -310,7 +310,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     mockUnhighlightButton = {},
                     mockCurrentPage = {
                         find : function () { }
-                    };
+                    },
+                    mockMustacheRenderResponse = "Render response",
+                    cssSpy;
 
                 beforeEach(function () {
                     utils.$.mobile.activePage = mockCurrentPage;
@@ -326,7 +328,8 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                             if (findParameter === "#" + globals.DIALOG.ID) {
                                 return mockDialog;
                             }
-                        });
+                        }
+                    );
 
                     spyOn(mockDialog, "find").and.callFake(
                         function (findParameter) {
@@ -345,7 +348,22 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                             if (findParameter === "#" +  dialogOptions.unhighlightButton) {
                                 return mockUnhighlightButton;
                             }
-                        });
+                        }
+                    );
+
+                    cssSpy = spyOn(mockHeader, "css").and.callThrough();
+                    spyOn(mockContent, "append").and.callThrough();
+                    spyOn(mockPrimaryButton, "on").and.callThrough();
+                    spyOn(mockSecondaryButton, "on").and.callThrough();
+                    spyOn(mockTertiaryButton, "on").and.callThrough();
+                    spyOn(mockDialog, "popup").and.callThrough();
+                    spyOn(mockDialog, "trigger").and.callThrough();
+                    spyOn(mockPopup, "bind").and.callThrough();
+                    spyOn(mockMustache, "render").and.returnValue(mockMustacheRenderResponse);
+                    spyOn(appView, "highlightButton").and.callFake(function () {});
+                    spyOn(appView, "unhighlightButton").and.callFake(function () {});
+
+                    appView.displayDialog(dialogOptions);
                 });
 
                 it("is defined", function () {
@@ -356,214 +374,235 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     expect(appView.displayDialog).toEqual(jasmine.any(Function));
                 });
 
-                describe("when the header has a fixed position", function () {
-                    var mockMustacheRenderResponse = "Render response",
-                        cssSpy;
+                it("should call find on the current page to get the header", function () {
+                    expect(mockCurrentPage.find).toHaveBeenCalledWith(":jqmData(role='header')");
+                });
 
+                it("should call find on the current page to get the content", function () {
+                    expect(mockCurrentPage.find).toHaveBeenCalledWith(":jqmData(role=content)");
+                });
+
+                it("should call Mustache.render() on the dialog template", function () {
+                    expect(mockMustache.render).toHaveBeenCalledWith(appView.dialogTemplate, dialogOptions);
+                });
+
+                it("should call append on the content", function () {
+                    expect(mockContent.append).toHaveBeenCalledWith(mockMustacheRenderResponse);
+                });
+
+                it("should call find on the current page to get the dialog", function () {
+                    expect(mockCurrentPage.find).toHaveBeenCalledWith("#" + globals.DIALOG.ID);
+                });
+
+                it("should call find on the dialog to get the primary button", function () {
+                    expect(mockDialog.find).toHaveBeenCalledWith("#" + globals.DIALOG.PRIMARY_BTN_ID);
+                });
+
+                it("should call find on the dialog to get the secondary button", function () {
+                    expect(mockDialog.find).toHaveBeenCalledWith("#" + globals.DIALOG.SECONDARY_BTN_ID);
+                });
+
+                it("should call find on the dialog to get the tertiary button", function () {
+                    expect(mockDialog.find).toHaveBeenCalledWith("#" + globals.DIALOG.TERTIARY_BTN_ID);
+                });
+
+                it("should call trigger on the dialog ", function () {
+                    expect(mockDialog.trigger).toHaveBeenCalledWith("create");
+                });
+
+                it("should call popup on the dialog with no arguments", function () {
+                    expect(mockDialog.popup).toHaveBeenCalledWith();
+                });
+
+                describe("the popupbeforeposition callback passed to bind", function () {
                     beforeEach(function () {
-                        cssSpy = spyOn(mockHeader, "css");
+                        spyOn(dialogOptions, "popupbeforeposition").and.callThrough();
 
-                        spyOn(mockContent, "append").and.callThrough();
-                        cssSpy.and.returnValue("fixed");
-                        spyOn(mockPrimaryButton, "on").and.callThrough();
-                        spyOn(mockSecondaryButton, "on").and.callThrough();
-                        spyOn(mockTertiaryButton, "on").and.callThrough();
-                        spyOn(mockDialog, "popup").and.callThrough();
-                        spyOn(mockDialog, "trigger").and.callThrough();
-                        spyOn(mockPopup, "bind").and.callThrough();
-                        spyOn(mockMustache, "render").and.returnValue(mockMustacheRenderResponse);
-                        spyOn(appView, "highlightButton").and.callFake(function () {});
-                        spyOn(appView, "unhighlightButton").and.callFake(function () {});
-
-                        appView.displayDialog(dialogOptions);
+                        var callback = mockPopup.bind.calls.argsFor(0)[0];
+                        callback.popupbeforeposition.call(mockDialog);
                     });
 
-                    it("should call find on the current page to get the header", function () {
-                        expect(mockCurrentPage.find).toHaveBeenCalledWith(":jqmData(role='header')");
+                    it("should call popupbeforeposition on the dialog options", function () {
+                        expect(dialogOptions.popupbeforeposition).toHaveBeenCalledWith();
+                    });
+                });
+
+                describe("the popupafteropen callback passed to bind", function () {
+                    beforeEach(function () {
+                        spyOn(dialogOptions, "popupafteropen").and.callThrough();
+
+                        var callback = mockPopup.bind.calls.argsFor(0)[0];
+                        callback.popupafteropen.call(mockDialog);
                     });
 
-                    it("should get the css value of position on the header", function () {
-                        expect(mockHeader.css).toHaveBeenCalledWith("position");
+                    it("should call popupafteropen on the dialog options", function () {
+                        expect(dialogOptions.popupafteropen).toHaveBeenCalledWith();
                     });
+                });
 
-                    it("should set the css value of position on the header", function () {
-                        expect(mockHeader.css).toHaveBeenCalledWith("position", "absolute");
-                    });
+                describe("the popupafterclose callback passed to bind", function () {
+                    var mockJqueryReturn = {
+                        remove: function () {}
+                    };
 
-                    it("should call find on the current page to get the content", function () {
-                        expect(mockCurrentPage.find).toHaveBeenCalledWith(":jqmData(role=content)");
-                    });
-
-                    it("should call Mustache.render() on the dialog template", function () {
-                        expect(mockMustache.render).toHaveBeenCalledWith(appView.dialogTemplate, dialogOptions);
-                    });
-
-                    it("should call append on the content", function () {
-                        expect(mockContent.append).toHaveBeenCalledWith(mockMustacheRenderResponse);
-                    });
-
-                    it("should call find on the current page to get the dialog", function () {
-                        expect(mockCurrentPage.find).toHaveBeenCalledWith("#" + globals.DIALOG.ID);
-                    });
-
-                    it("should call find on the dialog to get the primary button", function () {
-                        expect(mockDialog.find).toHaveBeenCalledWith("#" + globals.DIALOG.PRIMARY_BTN_ID);
-                    });
-
-                    it("should call find on the dialog to get the secondary button", function () {
-                        expect(mockDialog.find).toHaveBeenCalledWith("#" + globals.DIALOG.SECONDARY_BTN_ID);
-                    });
-
-                    it("should call find on the dialog to get the tertiary button", function () {
-                        expect(mockDialog.find).toHaveBeenCalledWith("#" + globals.DIALOG.TERTIARY_BTN_ID);
-                    });
-
-                    it("should call trigger on the dialog ", function () {
-                        expect(mockDialog.trigger).toHaveBeenCalledWith("create");
-                    });
-
-                    it("should call popup on the dialog with no arguments", function () {
-                        expect(mockDialog.popup).toHaveBeenCalledWith();
-                    });
-
-                    describe("the popupbeforeposition callback passed to bind", function () {
+                    describe("when the header has an absolute position", function () {
                         beforeEach(function () {
-                            spyOn(dialogOptions, "popupbeforeposition").and.callThrough();
+                            cssSpy.and.returnValue("absolute");
+                            appView.displayDialog(dialogOptions);
+
+                            spyOn(dialogOptions, "popupafterclose").and.callThrough();
+                            spyOn(utils, "$").and.returnValue(mockJqueryReturn);
+                            spyOn(mockJqueryReturn, "remove").and.callThrough();
 
                             var callback = mockPopup.bind.calls.argsFor(0)[0];
-                            callback.popupbeforeposition.call(mockDialog);
+                            callback.popupafterclose.call(mockDialog);
                         });
 
-                        it("should call popupbeforeposition on the dialog options", function () {
-                            expect(dialogOptions.popupbeforeposition).toHaveBeenCalledWith();
+                        it("should get the css value of position on the header", function () {
+                            expect(mockHeader.css).toHaveBeenCalledWith("position");
+                        });
+
+                        it("should NOT set the css value of position on the header", function () {
+                            expect(mockHeader.css).not.toHaveBeenCalledWith("position", "absolute");
+                        });
+
+                        it("should call popupafterclose on the dialog options", function () {
+                            expect(dialogOptions.popupafterclose).toHaveBeenCalledWith();
+                        });
+
+                        it("should get the css value of position on the header", function () {
+                            expect(mockHeader.css).toHaveBeenCalledWith("position");
+                        });
+
+                        it("should set the css value of position on the header", function () {
+                            expect(mockHeader.css).toHaveBeenCalledWith("position", "Mock Value");
+                        });
+
+                        it("should call $ on utils", function () {
+                            expect(utils.$).toHaveBeenCalledWith(mockDialog);
+                        });
+
+                        it("should call remove", function () {
+                            expect(mockJqueryReturn.remove).toHaveBeenCalledWith();
                         });
                     });
 
-                    describe("the popupafteropen callback passed to bind", function () {
+                    describe("when the header has a fixed position", function () {
                         beforeEach(function () {
-                            spyOn(dialogOptions, "popupafteropen").and.callThrough();
+                            cssSpy.and.returnValue("fixed");
+                            appView.displayDialog(dialogOptions);
+
+                            spyOn(dialogOptions, "popupafterclose").and.callThrough();
+                            spyOn(utils, "$").and.returnValue(mockJqueryReturn);
+                            spyOn(mockJqueryReturn, "remove").and.callThrough();
 
                             var callback = mockPopup.bind.calls.argsFor(0)[0];
-                            callback.popupafteropen.call(mockDialog);
+                            callback.popupafterclose.call(mockDialog);
                         });
 
-                        it("should call popupafteropen on the dialog options", function () {
-                            expect(dialogOptions.popupafteropen).toHaveBeenCalledWith();
-                        });
-                    });
-
-                    describe("the popupafterclose callback passed to bind", function () {
-                        describe("when the header has an absolute position", function () {
-                            var mockJqueryReturn = {
-                                    remove: function () {}
-                                };
-
-                            beforeEach(function () {
-                                spyOn(dialogOptions, "popupafterclose").and.callThrough();
-                                spyOn(utils, "$").and.returnValue(mockJqueryReturn);
-                                spyOn(mockJqueryReturn, "remove").and.callThrough();
-                                cssSpy.and.returnValue("absolute");
-
-                                var callback = mockPopup.bind.calls.argsFor(0)[0];
-                                callback.popupafterclose.call(mockDialog);
-                            });
-
-                            it("should call popupafterclose on the dialog options", function () {
-                                expect(dialogOptions.popupafterclose).toHaveBeenCalledWith();
-                            });
-
-                            it("should get the css value of position on the header", function () {
-                                expect(mockHeader.css).toHaveBeenCalledWith("position");
-                            });
-
-                            it("should set the css value of position on the header", function () {
-                                expect(mockHeader.css).toHaveBeenCalledWith("position", "fixed");
-                            });
-
-                            it("should call $ on utils", function () {
-                                expect(utils.$).toHaveBeenCalledWith(mockDialog);
-                            });
-
-                            it("should call remove", function () {
-                                expect(mockJqueryReturn.remove).toHaveBeenCalledWith();
-                            });
-                        });
-                    });
-
-                    it("should call on on the primary button to set the click handler", function () {
-                        expect(mockPrimaryButton.on).toHaveBeenCalledWith("click", jasmine.any(Function));
-                    });
-
-                    describe("the callback from the primary button call to on", function () {
-                        beforeEach(function () {
-                            spyOn(dialogOptions, "primaryBtnHandler").and.callThrough();
-
-                            var callback = mockPrimaryButton.on.calls.argsFor(0)[1];
-                            callback.call(appView);
+                        it("should get the css value of position on the header", function () {
+                            expect(mockHeader.css).toHaveBeenCalledWith("position");
                         });
 
-                        it("should call the primary button handler", function () {
-                            expect(dialogOptions.primaryBtnHandler).toHaveBeenCalledWith();
-                        });
-                    });
-
-                    it("should call on on the secondary button to set the click handler", function () {
-                        expect(mockSecondaryButton.on).toHaveBeenCalledWith("click", jasmine.any(Function));
-                    });
-
-                    describe("the callback from the secondary button call to on", function () {
-                        beforeEach(function () {
-                            spyOn(dialogOptions, "secondaryBtnHandler").and.callThrough();
-
-                            var callback = mockSecondaryButton.on.calls.argsFor(0)[1];
-                            callback.call(appView);
+                        it("should set the css value of position on the header", function () {
+                            expect(mockHeader.css).toHaveBeenCalledWith("position", "absolute");
                         });
 
-                        it("should call the secondary button handler", function () {
-                            expect(dialogOptions.secondaryBtnHandler).toHaveBeenCalledWith();
-                        });
-                    });
-
-                    it("should call on on the secondary button to set the click handler", function () {
-                        expect(mockTertiaryButton.on).toHaveBeenCalledWith("click", jasmine.any(Function));
-                    });
-
-                    describe("the callback from the tertiary button call to on", function () {
-                        beforeEach(function () {
-                            spyOn(dialogOptions, "tertiaryBtnHandler").and.callThrough();
-
-                            var callback = mockTertiaryButton.on.calls.argsFor(0)[1];
-                            callback.call(appView);
+                        it("should call popupafterclose on the dialog options", function () {
+                            expect(dialogOptions.popupafterclose).toHaveBeenCalledWith();
                         });
 
-                        it("should call the tertiary button handler", function () {
-                            expect(dialogOptions.tertiaryBtnHandler).toHaveBeenCalledWith();
+                        it("should get the css value of position on the header", function () {
+                            expect(mockHeader.css).toHaveBeenCalledWith("position");
+                        });
+
+                        it("should NOT set the css value of position on the header", function () {
+                            expect(mockHeader.css).not.toHaveBeenCalledWith("position", "Mock Value");
+                        });
+
+                        it("should call $ on utils", function () {
+                            expect(utils.$).toHaveBeenCalledWith(mockDialog);
+                        });
+
+                        it("should call remove", function () {
+                            expect(mockJqueryReturn.remove).toHaveBeenCalledWith();
                         });
                     });
+                });
 
-                    it("should call find on the dialog to get the highlightButton button", function () {
-                        expect(mockDialog.find).toHaveBeenCalledWith("#" + dialogOptions.highlightButton);
+                it("should call on on the primary button to set the click handler", function () {
+                    expect(mockPrimaryButton.on).toHaveBeenCalledWith("click", jasmine.any(Function));
+                });
+
+                describe("the callback from the primary button call to on", function () {
+                    beforeEach(function () {
+                        spyOn(dialogOptions, "primaryBtnHandler").and.callThrough();
+
+                        var callback = mockPrimaryButton.on.calls.argsFor(0)[1];
+                        callback.call(appView);
                     });
 
-                    it("should call highlightButton ", function () {
-                        expect(appView.highlightButton).toHaveBeenCalledWith(mockHighlightButton);
+                    it("should call the primary button handler", function () {
+                        expect(dialogOptions.primaryBtnHandler).toHaveBeenCalledWith();
+                    });
+                });
+
+                it("should call on on the secondary button to set the click handler", function () {
+                    expect(mockSecondaryButton.on).toHaveBeenCalledWith("click", jasmine.any(Function));
+                });
+
+                describe("the callback from the secondary button call to on", function () {
+                    beforeEach(function () {
+                        spyOn(dialogOptions, "secondaryBtnHandler").and.callThrough();
+
+                        var callback = mockSecondaryButton.on.calls.argsFor(0)[1];
+                        callback.call(appView);
                     });
 
-                    it("should call find on the dialog to get the unhighlight button", function () {
-                        expect(mockDialog.find).toHaveBeenCalledWith("#" + dialogOptions.unhighlightButton);
+                    it("should call the secondary button handler", function () {
+                        expect(dialogOptions.secondaryBtnHandler).toHaveBeenCalledWith();
+                    });
+                });
+
+                it("should call on on the secondary button to set the click handler", function () {
+                    expect(mockTertiaryButton.on).toHaveBeenCalledWith("click", jasmine.any(Function));
+                });
+
+                describe("the callback from the tertiary button call to on", function () {
+                    beforeEach(function () {
+                        spyOn(dialogOptions, "tertiaryBtnHandler").and.callThrough();
+
+                        var callback = mockTertiaryButton.on.calls.argsFor(0)[1];
+                        callback.call(appView);
                     });
 
-                    it("should call unhighlightButton ", function () {
-                        expect(appView.unhighlightButton).toHaveBeenCalledWith(mockUnhighlightButton);
+                    it("should call the tertiary button handler", function () {
+                        expect(dialogOptions.tertiaryBtnHandler).toHaveBeenCalledWith();
                     });
+                });
 
-                    it("should call popup on the dialog ", function () {
-                        expect(mockDialog.popup).toHaveBeenCalledWith("open");
-                    });
+                it("should call find on the dialog to get the highlightButton button", function () {
+                    expect(mockDialog.find).toHaveBeenCalledWith("#" + dialogOptions.highlightButton);
+                });
 
-                    it("should call popup on the dialog ", function () {
-                        expect(mockDialog.popup).toHaveBeenCalledWith("open");
-                    });
+                it("should call highlightButton ", function () {
+                    expect(appView.highlightButton).toHaveBeenCalledWith(mockHighlightButton);
+                });
+
+                it("should call find on the dialog to get the unhighlight button", function () {
+                    expect(mockDialog.find).toHaveBeenCalledWith("#" + dialogOptions.unhighlightButton);
+                });
+
+                it("should call unhighlightButton ", function () {
+                    expect(appView.unhighlightButton).toHaveBeenCalledWith(mockUnhighlightButton);
+                });
+
+                it("should call popup on the dialog ", function () {
+                    expect(mockDialog.popup).toHaveBeenCalledWith("open");
+                });
+
+                it("should call popup on the dialog ", function () {
+                    expect(mockDialog.popup).toHaveBeenCalledWith("open");
                 });
             });
 
