@@ -1,5 +1,5 @@
-define(["jclass"],
-    function (JClass) {
+define(["controllers/BaseController"],
+    function (BaseController) {
 
         "use strict";
 
@@ -9,7 +9,7 @@ define(["jclass"],
                 ctorName: "construct" // constructor name
             };
 
-        HierarchyController = JClass.extend({
+        HierarchyController = BaseController.extend({
             construct: function () {
             },
 

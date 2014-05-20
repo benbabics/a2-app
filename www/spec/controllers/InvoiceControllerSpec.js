@@ -1,5 +1,5 @@
-define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
-    function (utils, Backbone, globals, Squire, UserModel) {
+define(["utils", "backbone", "globals", "Squire", "controllers/BaseController", "models/UserModel"],
+    function (utils, Backbone, globals, Squire, BaseController, UserModel) {
 
         "use strict";
 
@@ -144,6 +144,8 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
 
         squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
+        squire.mock("controllers/BaseController", BaseController);
+        squire.mock("models/UserModel", UserModel);
         squire.mock("collections/PaymentCollection", Squire.Helpers.returns(mockPaymentCollection));
         squire.mock("models/InvoiceSummaryModel", Squire.Helpers.returns(invoiceSummaryModel));
         squire.mock("models/MakePaymentAvailabilityModel", Squire.Helpers.returns(makePaymentAvailabilityModel));
@@ -174,6 +176,10 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
 
             it("is defined", function () {
                 expect(invoiceController).toBeDefined();
+            });
+
+            it("looks like a BaseController", function () {
+                expect(invoiceController instanceof BaseController).toBeTruthy();
             });
 
             describe("has constructor that", function () {
@@ -739,7 +745,7 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
 
                 describe("when the call to fetchCollection finishes successfully", function () {
                     beforeEach(function () {
-                        spyOn(utils, "fetchCollection").and.callFake(function () {
+                        spyOn(invoiceController, "fetchCollection").and.callFake(function () {
                             var deferred = utils.Deferred();
 
                             deferred.resolve();
@@ -764,7 +770,7 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                     });
 
                     it("should call fetchCollection on utils", function () {
-                        expect(utils.fetchCollection).toHaveBeenCalledWith(mockPaymentCollection, null);
+                        expect(invoiceController.fetchCollection).toHaveBeenCalledWith(mockPaymentCollection, null);
                     });
 
                     it("should call the render function on Payment List View", function () {
@@ -782,7 +788,7 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
 
                 describe("when the call to fetchCollection finishes with a failure", function () {
                     beforeEach(function () {
-                        spyOn(utils, "fetchCollection").and.callFake(function () {
+                        spyOn(invoiceController, "fetchCollection").and.callFake(function () {
                             var deferred = utils.Deferred();
 
                             deferred.reject();
@@ -807,7 +813,7 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                     });
 
                     it("should call fetchCollection", function () {
-                        expect(utils.fetchCollection).toHaveBeenCalledWith(mockPaymentCollection, null);
+                        expect(invoiceController.fetchCollection).toHaveBeenCalledWith(mockPaymentCollection, null);
                     });
 
                     it("should call the render function on Payment List View", function () {
@@ -1141,7 +1147,7 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                     actualReturnValue;
 
                 beforeEach(function () {
-                    spyOn(mockUtils, "fetchModel").and.returnValue(expectedReturnValue);
+                    spyOn(invoiceController, "fetchModel").and.returnValue(expectedReturnValue);
 
                     actualReturnValue = invoiceController.fetchInvoiceSummary();
                 });
@@ -1154,8 +1160,8 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                     expect(invoiceController.fetchInvoiceSummary).toEqual(jasmine.any(Function));
                 });
 
-                it("should call fetchModel on utils", function () {
-                    expect(mockUtils.fetchModel).toHaveBeenCalledWith(invoiceSummaryModel);
+                it("should call fetchModel", function () {
+                    expect(invoiceController.fetchModel).toHaveBeenCalledWith(invoiceSummaryModel);
                 });
 
                 it("should return the expected value", function () {
@@ -1168,7 +1174,7 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                     actualReturnValue;
 
                 beforeEach(function () {
-                    spyOn(mockUtils, "fetchModel").and.returnValue(expectedReturnValue);
+                    spyOn(invoiceController, "fetchModel").and.returnValue(expectedReturnValue);
 
                     actualReturnValue = invoiceController.fetchMakePaymentAvailability();
                 });
@@ -1181,8 +1187,8 @@ define(["utils", "backbone", "globals", "Squire", "models/UserModel"],
                     expect(invoiceController.fetchMakePaymentAvailability).toEqual(jasmine.any(Function));
                 });
 
-                it("should call fetchModel on utils", function () {
-                    expect(mockUtils.fetchModel).toHaveBeenCalledWith(makePaymentAvailabilityModel);
+                it("should call fetchModel", function () {
+                    expect(invoiceController.fetchModel).toHaveBeenCalledWith(makePaymentAvailabilityModel);
                 });
 
                 it("should return the expected value", function () {

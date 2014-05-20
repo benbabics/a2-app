@@ -1,5 +1,5 @@
-define(["globals", "backbone", "utils", "Squire"],
-    function (globals, Backbone, utils, Squire) {
+define(["globals", "backbone", "utils", "Squire", "controllers/BaseController"],
+    function (globals, Backbone, utils, Squire, BaseController) {
 
         "use strict";
 
@@ -70,6 +70,7 @@ define(["globals", "backbone", "utils", "Squire"],
         squire.mock("backbone", Backbone);
         squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
+        squire.mock("controllers/BaseController", BaseController);
         squire.mock("views/DriverAddView", Squire.Helpers.returns(mockDriverAddView));
         squire.mock("views/DriverEditView", Squire.Helpers.returns(mockDriverEditView));
         squire.mock("views/DriverListView", Squire.Helpers.returns(mockDriverListView));
@@ -94,6 +95,10 @@ define(["globals", "backbone", "utils", "Squire"],
 
             it("is defined", function () {
                 expect(driverController).toBeDefined();
+            });
+
+            it("looks like a BaseController", function () {
+                expect(driverController instanceof BaseController).toBeTruthy();
             });
 
             describe("has constructor that", function () {
@@ -479,7 +484,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 describe("when the call to fetchCollection finishes successfully", function () {
                     beforeEach(function () {
-                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
+                        spyOn(driverController, "fetchCollection").and.callFake(function () {
                             var deferred = utils.Deferred();
 
                             deferred.resolve();
@@ -504,7 +509,7 @@ define(["globals", "backbone", "utils", "Squire"],
                     });
 
                     it("should call fetchCollection", function () {
-                        expect(mockUtils.fetchCollection)
+                        expect(driverController.fetchCollection)
                             .toHaveBeenCalledWith(mockDriverCollection, driverModel.toJSON());
                     });
 
@@ -523,7 +528,7 @@ define(["globals", "backbone", "utils", "Squire"],
 
                 describe("when the call to fetchCollection finishes with a failure", function () {
                     beforeEach(function () {
-                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
+                        spyOn(driverController, "fetchCollection").and.callFake(function () {
                             var deferred = utils.Deferred();
 
                             deferred.reject();
@@ -548,7 +553,7 @@ define(["globals", "backbone", "utils", "Squire"],
                     });
 
                     it("should call fetchCollection", function () {
-                        expect(mockUtils.fetchCollection)
+                        expect(driverController.fetchCollection)
                             .toHaveBeenCalledWith(mockDriverCollection, driverModel.toJSON());
                     });
 

@@ -1,5 +1,6 @@
-define(["globals", "utils", "facade", "jclass", "models/UserModel", "models/ContactUsModel", "views/ContactUsView"],
-    function (globals, utils, facade, JClass, UserModel, ContactUsModel, ContactUsView) {
+define(["globals", "utils", "facade", "controllers/BaseController", "models/UserModel",
+        "models/ContactUsModel", "views/ContactUsView"],
+    function (globals, utils, facade, BaseController, UserModel, ContactUsModel, ContactUsView) {
 
         "use strict";
 
@@ -9,7 +10,7 @@ define(["globals", "utils", "facade", "jclass", "models/UserModel", "models/Cont
                 ctorName: "construct" // constructor name
             };
 
-        ContactUsController = JClass.extend({
+        ContactUsController = BaseController.extend({
             contactUsView: null,
 
             construct: function () {

@@ -1,8 +1,8 @@
-define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
+define(["facade", "globals", "utils", "collections/PaymentCollection", "controllers/BaseController",
         "models/InvoiceSummaryModel", "models/MakePaymentAvailabilityModel", "models/PaymentModel", "models/UserModel",
         "views/InvoiceSummaryView", "views/PaymentAddView", "views/PaymentDetailView", "views/PaymentEditView",
         "views/PaymentListView"],
-    function (JClass, facade, globals, utils, PaymentCollection,
+    function (facade, globals, utils, PaymentCollection, BaseController,
               InvoiceSummaryModel, MakePaymentAvailabilityModel, PaymentModel, UserModel,
               InvoiceSummaryView, PaymentAddView, PaymentDetailView, PaymentEditView, PaymentListView) {
 
@@ -14,7 +14,7 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
                 ctorName: "construct" // constructor name
             };
 
-        InvoiceController = JClass.extend({
+        InvoiceController = BaseController.extend({
             invoiceSummaryView: null,
             paymentAddView: null,
             paymentDetailView: null,
@@ -143,7 +143,7 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
                 // silently reset collection to ensure it always is "updated", even if it's the same models again
                 this.paymentCollection.reset([], { "silent": true });
 
-                utils.when(utils.fetchCollection(this.paymentCollection, null))
+                utils.when(this.fetchCollection(this.paymentCollection, null))
                     .always(function () {
                         self.paymentListView.render();
                         utils.changePage(self.paymentListView.$el, null, null, true);
@@ -208,11 +208,11 @@ define(["jclass", "facade", "globals", "utils", "collections/PaymentCollection",
             },
 
             fetchInvoiceSummary: function () {
-                return utils.fetchModel(this.invoiceSummaryModel);
+                return this.fetchModel(this.invoiceSummaryModel);
             },
 
             fetchMakePaymentAvailability: function () {
-                return utils.fetchModel(this.makePaymentAvailabilityModel);
+                return this.fetchModel(this.makePaymentAvailabilityModel);
             }
         }, classOptions);
 

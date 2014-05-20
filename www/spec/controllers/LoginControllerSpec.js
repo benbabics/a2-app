@@ -1,5 +1,5 @@
-define(["utils", "Squire", "globals"],
-    function (utils, Squire, globals) {
+define(["utils", "Squire", "globals", "controllers/BaseController"],
+    function (utils, Squire, globals, BaseController) {
 
         "use strict";
 
@@ -31,6 +31,7 @@ define(["utils", "Squire", "globals"],
 
         squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
+        squire.mock("controllers/BaseController", BaseController);
         squire.mock("views/LoginView", Squire.Helpers.returns(mockLoginView));
         squire.mock("models/LoginModel", Squire.Helpers.returns(mockLoginModel));
         squire.mock("models/UserModel", UserModel);
@@ -49,6 +50,10 @@ define(["utils", "Squire", "globals"],
 
             it("is defined", function () {
                 expect(loginController).toBeDefined();
+            });
+
+            it("looks like a BaseController", function () {
+                expect(loginController instanceof BaseController).toBeTruthy();
             });
 
             describe("has constructor that", function () {

@@ -1,5 +1,5 @@
-define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
-    function (globals, Backbone, utils, Squire, UserModel) {
+define(["globals", "backbone", "utils", "Squire", "controllers/BaseController", "models/UserModel"],
+    function (globals, Backbone, utils, Squire, BaseController, UserModel) {
 
         "use strict";
 
@@ -141,6 +141,7 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
         squire.mock("backbone", Backbone);
         squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
+        squire.mock("controllers/BaseController", BaseController);
         squire.mock("views/CardAddView", Squire.Helpers.returns(mockCardAddView));
         squire.mock("views/CardDetailView", Squire.Helpers.returns(mockCardDetailView));
         squire.mock("views/CardEditView", Squire.Helpers.returns(mockCardEditView));
@@ -168,6 +169,10 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
 
             it("is defined", function () {
                 expect(cardController).toBeDefined();
+            });
+
+            it("looks like a BaseController", function () {
+                expect(cardController instanceof BaseController).toBeTruthy();
             });
 
             describe("has constructor that", function () {
@@ -1050,7 +1055,7 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
 
                 describe("when the call to fetchCollection finishes successfully", function () {
                     beforeEach(function () {
-                        spyOn(utils, "fetchCollection").and.callFake(function () {
+                        spyOn(cardController, "fetchCollection").and.callFake(function () {
                             var deferred = utils.Deferred();
 
                             deferred.resolve();
@@ -1074,8 +1079,9 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                         expect(mockCardCollection.reset).toHaveBeenCalledWith([], { "silent": true });
                     });
 
-                    it("should call fetchCollection on utils", function () {
-                        expect(utils.fetchCollection).toHaveBeenCalledWith(mockCardCollection, cardModel.toJSON());
+                    it("should call fetchCollection", function () {
+                        expect(cardController.fetchCollection)
+                            .toHaveBeenCalledWith(mockCardCollection, cardModel.toJSON());
                     });
 
                     it("should call the render function on SiteListView", function () {
@@ -1093,7 +1099,7 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
 
                 describe("when the call to fetchCollection finishes with a failure", function () {
                     beforeEach(function () {
-                        spyOn(utils, "fetchCollection").and.callFake(function () {
+                        spyOn(cardController, "fetchCollection").and.callFake(function () {
                             var deferred = utils.Deferred();
 
                             deferred.reject();
@@ -1118,7 +1124,8 @@ define(["globals", "backbone", "utils", "Squire", "models/UserModel"],
                     });
 
                     it("should call fetchCollection", function () {
-                        expect(utils.fetchCollection).toHaveBeenCalledWith(mockCardCollection, cardModel.toJSON());
+                        expect(cardController.fetchCollection)
+                            .toHaveBeenCalledWith(mockCardCollection, cardModel.toJSON());
                     });
 
                     it("should call the render function on SiteListView", function () {

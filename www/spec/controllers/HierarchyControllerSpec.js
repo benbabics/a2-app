@@ -1,10 +1,12 @@
-define(["backbone", "Squire"],
-    function (Backbone, Squire) {
+define(["backbone", "Squire", "controllers/BaseController"],
+    function (Backbone, Squire, BaseController) {
 
         "use strict";
 
         var squire = new Squire(),
             hierarchyController;
+
+        squire.mock("controllers/BaseController", BaseController);
 
         describe("A Hierarchy Controller", function () {
             beforeEach(function (done) {
@@ -17,6 +19,10 @@ define(["backbone", "Squire"],
 
             it("is defined", function () {
                 expect(hierarchyController).toBeDefined();
+            });
+
+            it("looks like a BaseController", function () {
+                expect(hierarchyController instanceof BaseController).toBeTruthy();
             });
 
             describe("has constructor that", function () {

@@ -1,5 +1,5 @@
-define(["utils", "jclass", "models/UserModel", "views/HomeView"],
-    function (utils, JClass, UserModel, HomeView) {
+define(["utils", "controllers/BaseController", "models/UserModel", "views/HomeView"],
+    function (utils, BaseController, UserModel, HomeView) {
 
         "use strict";
 
@@ -9,7 +9,7 @@ define(["utils", "jclass", "models/UserModel", "views/HomeView"],
                 ctorName: "construct" // constructor name
             };
 
-        HomeController = JClass.extend({
+        HomeController = BaseController.extend({
             homeView: null,
 
             construct: function () {

@@ -1,5 +1,5 @@
-define(["utils", "backbone", "Squire"],
-    function (utils, Backbone, Squire) {
+define(["utils", "backbone", "Squire", "controllers/BaseController"],
+    function (utils, Backbone, Squire, BaseController) {
 
         "use strict";
 
@@ -21,6 +21,7 @@ define(["utils", "backbone", "Squire"],
             aboutController;
 
         squire.mock("utils", mockUtils);
+        squire.mock("controllers/BaseController", BaseController);
         squire.mock("models/AppModel", AppModel);
         squire.mock("views/AboutView", Squire.Helpers.returns(mockAboutView));
 
@@ -38,6 +39,10 @@ define(["utils", "backbone", "Squire"],
 
             it("is defined", function () {
                 expect(aboutController).toBeDefined();
+            });
+
+            it("looks like a BaseController", function () {
+                expect(aboutController instanceof BaseController).toBeTruthy();
             });
 
             describe("has constructor that", function () {

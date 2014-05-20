@@ -1,5 +1,5 @@
-define([ "utils", "globals", "facade", "jclass", "views/UpdatePromptView", "models/AppModel"],
-    function (utils, globals, facade, JClass, UpdatePromptView, AppModel) {
+define([ "utils", "globals", "facade", "controllers/BaseController", "views/UpdatePromptView", "models/AppModel"],
+    function (utils, globals, facade, BaseController, UpdatePromptView, AppModel) {
 
         "use strict";
 
@@ -9,7 +9,7 @@ define([ "utils", "globals", "facade", "jclass", "views/UpdatePromptView", "mode
                 ctorName: "construct" // constructor name
             };
 
-        UpdatePromptController = JClass.extend({
+        UpdatePromptController = BaseController.extend({
             appModel: null,
             updatePromptView: null,
 

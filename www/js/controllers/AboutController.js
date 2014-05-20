@@ -1,5 +1,5 @@
-define(["jclass", "views/AboutView", "models/AppModel"],
-    function (JClass, AboutView, AppModel) {
+define(["controllers/BaseController", "views/AboutView", "models/AppModel"],
+    function (BaseController, AboutView, AppModel) {
 
         "use strict";
 
@@ -9,7 +9,7 @@ define(["jclass", "views/AboutView", "models/AppModel"],
                 ctorName: "construct" // constructor name
             };
 
-        AboutController = JClass.extend({
+        AboutController = BaseController.extend({
             aboutView: null,
 
             construct: function () {

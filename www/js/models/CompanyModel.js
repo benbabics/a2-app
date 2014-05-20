@@ -148,7 +148,7 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
 
                 utils
                     .when(
-                        utils.fetchCollection(authorizationProfiles, this.toJSON())
+                        this.fetchCollection(authorizationProfiles, this.toJSON())
                     )
                     .done(function () {
                         deferred.resolve(
@@ -169,7 +169,7 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
 
                 utils
                     .when(
-                        utils.fetchCollection(bankAccounts, this.toJSON())
+                        this.fetchCollection(bankAccounts, this.toJSON())
                     )
                     .done(function () {
                         deferred.resolve(
@@ -179,6 +179,25 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
                     .fail(function () {
                         deferred.reject();
                     });
+
+                return deferred.promise();
+            },
+
+            fetchCollection: function (collection, data) {
+                var deferred = utils.Deferred();
+
+                collection
+                    .once("sync",
+                        function () {
+                            deferred.resolve();
+                        },
+                        this)
+                    .once("error",
+                        function () {
+                            deferred.reject();
+                        },
+                        this)
+                    .fetch(data); // fetch new data with supplied params
 
                 return deferred.promise();
             },

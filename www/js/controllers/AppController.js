@@ -1,5 +1,5 @@
-define([ "jclass", "utils", "routers/AppRouter", "views/AppView", "models/AppModel"],
-    function (JClass, utils, AppRouter, AppView, AppModel) {
+define(["utils", "controllers/BaseController", "routers/AppRouter", "views/AppView", "models/AppModel"],
+    function (utils, BaseController, AppRouter, AppView, AppModel) {
 
         "use strict";
 
@@ -9,7 +9,7 @@ define([ "jclass", "utils", "routers/AppRouter", "views/AppView", "models/AppMod
                 ctorName: "construct" // constructor name
             };
 
-        AppController = JClass.extend({
+        AppController = BaseController.extend({
             appRouter: null,
             appView: null,
             appModel: null,

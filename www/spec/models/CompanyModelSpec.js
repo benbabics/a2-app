@@ -1157,11 +1157,11 @@ define(["Squire", "utils", "globals", "backbone"],
                     expect(companyModel.fetchAuthorizationProfiles).toEqual(jasmine.any(Function));
                 });
 
-                describe("when the call to fetchCollection on utils finishes successfully", function () {
+                describe("when the call to fetchCollection finishes successfully", function () {
                     var mockFetchCollectionDeferred = utils.Deferred();
 
                     beforeEach(function () {
-                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
+                        spyOn(companyModel, "fetchCollection").and.callFake(function () {
                             mockFetchCollectionDeferred.resolve();
                             return mockFetchCollectionDeferred.promise();
                         });
@@ -1180,8 +1180,8 @@ define(["Squire", "utils", "globals", "backbone"],
                         expect(companyModel.toJSON).toHaveBeenCalledWith();
                     });
 
-                    it("should call fetchCollection on utils", function () {
-                        expect(mockUtils.fetchCollection)
+                    it("should call fetchCollection", function () {
+                        expect(companyModel.fetchCollection)
                             .toHaveBeenCalledWith(mockAuthorizationProfileCollection, mockCompanyJSON);
                     });
 
@@ -1203,11 +1203,11 @@ define(["Squire", "utils", "globals", "backbone"],
                     });
                 });
 
-                describe("when the call to fetchCollection on utils finishes with a failure", function () {
+                describe("when the call to fetchCollection finishes with a failure", function () {
                     var mockFetchCollectionDeferred = utils.Deferred();
 
                     beforeEach(function () {
-                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
+                        spyOn(companyModel, "fetchCollection").and.callFake(function () {
                             mockFetchCollectionDeferred.reject();
                             return mockFetchCollectionDeferred.promise();
                         });
@@ -1226,8 +1226,8 @@ define(["Squire", "utils", "globals", "backbone"],
                         expect(companyModel.toJSON).toHaveBeenCalledWith();
                     });
 
-                    it("should call fetchCollection on utils", function () {
-                        expect(mockUtils.fetchCollection)
+                    it("should call fetchCollection", function () {
+                        expect(companyModel.fetchCollection)
                             .toHaveBeenCalledWith(mockAuthorizationProfileCollection, mockCompanyJSON);
                     });
 
@@ -1265,11 +1265,11 @@ define(["Squire", "utils", "globals", "backbone"],
                     expect(companyModel.fetchBankAccounts).toEqual(jasmine.any(Function));
                 });
 
-                describe("when the call to fetchCollection on utils finishes successfully", function () {
+                describe("when the call to fetchCollection finishes successfully", function () {
                     var mockFetchCollectionDeferred = utils.Deferred();
 
                     beforeEach(function () {
-                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
+                        spyOn(companyModel, "fetchCollection").and.callFake(function () {
                             mockFetchCollectionDeferred.resolve();
                             return mockFetchCollectionDeferred.promise();
                         });
@@ -1288,8 +1288,8 @@ define(["Squire", "utils", "globals", "backbone"],
                         expect(companyModel.toJSON).toHaveBeenCalledWith();
                     });
 
-                    it("should call fetchCollection on utils", function () {
-                        expect(mockUtils.fetchCollection)
+                    it("should call fetchCollection", function () {
+                        expect(companyModel.fetchCollection)
                             .toHaveBeenCalledWith(mockBankAccountCollection, mockCompanyJSON);
                     });
 
@@ -1311,11 +1311,11 @@ define(["Squire", "utils", "globals", "backbone"],
                     });
                 });
 
-                describe("when the call to fetchCollection on utils finishes with a failure", function () {
+                describe("when the call to fetchCollection finishes with a failure", function () {
                     var mockFetchCollectionDeferred = utils.Deferred();
 
                     beforeEach(function () {
-                        spyOn(mockUtils, "fetchCollection").and.callFake(function () {
+                        spyOn(companyModel, "fetchCollection").and.callFake(function () {
                             mockFetchCollectionDeferred.reject();
                             return mockFetchCollectionDeferred.promise();
                         });
@@ -1334,8 +1334,8 @@ define(["Squire", "utils", "globals", "backbone"],
                         expect(companyModel.toJSON).toHaveBeenCalledWith();
                     });
 
-                    it("should call fetchCollection on utils", function () {
-                        expect(mockUtils.fetchCollection)
+                    it("should call fetchCollection", function () {
+                        expect(companyModel.fetchCollection)
                             .toHaveBeenCalledWith(mockBankAccountCollection, mockCompanyJSON);
                     });
 
@@ -1354,6 +1354,90 @@ define(["Squire", "utils", "globals", "backbone"],
                     it("should return the expected value", function () {
                         expect(actualReturnValue).toEqual(mockPromiseReturnValue);
                     });
+                });
+            });
+
+            describe("has a fetchCollection function that", function () {
+                var mockPromiseReturnValue = "Promise Return Value",
+                    mockDeferred = {
+                        promise: function () { return mockPromiseReturnValue; },
+                        reject: function () {},
+                        resolve: function () {}
+                    },
+                    mockData = {
+                        name: "value"
+                    },
+                    mockCollection = {
+                        fetch: function () { return mockCollection; },
+                        once: function () { return mockCollection; }
+                    },
+                    actualReturnValue;
+
+                beforeEach(function () {
+                    spyOn(mockUtils, "Deferred").and.returnValue(mockDeferred);
+                    spyOn(mockDeferred, "promise").and.callThrough();
+                    spyOn(mockCollection, "once").and.callThrough();
+                    spyOn(mockCollection, "fetch").and.callThrough();
+
+                    actualReturnValue = companyModel.fetchCollection(mockCollection, mockData);
+                });
+
+                it("is defined", function () {
+                    expect(companyModel.fetchCollection).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(companyModel.fetchCollection).toEqual(jasmine.any(Function));
+                });
+
+                it("should call once on the Collection on sync", function () {
+                    expect(mockCollection.once).toHaveBeenCalledWith("sync", jasmine.any(Function), companyModel);
+                });
+
+                describe("when the handler of the sync event is called", function () {
+                    var callback;
+
+                    beforeEach(function () {
+                        spyOn(mockDeferred, "resolve").and.callThrough();
+
+                        callback = mockCollection.once.calls.argsFor(0)[1];
+                        callback.apply();
+                    });
+
+                    it("should call resolve on the Deferred object", function () {
+                        expect(mockDeferred.resolve).toHaveBeenCalledWith();
+                    });
+                });
+
+                it("should call once on the Collection on error", function () {
+                    expect(mockCollection.once).toHaveBeenCalledWith("error", jasmine.any(Function), companyModel);
+                });
+
+                describe("when the handler of the error event is called", function () {
+                    var callback;
+
+                    beforeEach(function () {
+                        spyOn(mockDeferred, "reject").and.callThrough();
+
+                        callback = mockCollection.once.calls.argsFor(1)[1];
+                        callback.apply();
+                    });
+
+                    it("should call reject on the Deferred object", function () {
+                        expect(mockDeferred.reject).toHaveBeenCalledWith();
+                    });
+                });
+
+                it("should call fetch on the Collection", function () {
+                    expect(mockCollection.fetch).toHaveBeenCalledWith(mockData);
+                });
+
+                it("should call promise on the Deferred object", function () {
+                    expect(mockDeferred.promise).toHaveBeenCalledWith();
+                });
+
+                it("should return the expected value", function () {
+                    expect(actualReturnValue).toEqual(mockPromiseReturnValue);
                 });
             });
 

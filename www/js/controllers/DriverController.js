@@ -1,7 +1,7 @@
-define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", "models/UserModel",
-        "models/DriverModel", "views/DriverAddView", "views/DriverEditView",
+define(["globals", "utils", "facade", "collections/DriverCollection", "controllers/BaseController",
+        "models/UserModel", "models/DriverModel", "views/DriverAddView", "views/DriverEditView",
         "views/DriverListView", "views/DriverSearchView"],
-    function (JClass, globals, utils, facade, DriverCollection, UserModel, DriverModel,
+    function (globals, utils, facade, DriverCollection, BaseController, UserModel, DriverModel,
               DriverAddView, DriverEditView, DriverListView, DriverSearchView) {
 
         "use strict";
@@ -12,7 +12,7 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
                 ctorName: "construct" // constructor name
             };
 
-        DriverController = JClass.extend({
+        DriverController = BaseController.extend({
             driverCollection: null,
             driverAddView: null,
             driverEditView: null,
@@ -112,7 +112,7 @@ define(["jclass", "globals", "utils", "facade", "collections/DriverCollection", 
                 // silently reset collection to ensure it always is "updated", even if it's the same models again
                 this.driverCollection.reset([], { "silent": true });
 
-                utils.when(utils.fetchCollection(this.driverCollection, data))
+                utils.when(this.fetchCollection(this.driverCollection, data))
                     .always(function () {
                         self.driverListView.render();
                         utils.changePage(self.driverListView.$el, null, null, true);

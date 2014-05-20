@@ -1,5 +1,5 @@
-define(["backbone", "Squire", "globals", "utils"],
-    function (Backbone, Squire, globals, utils) {
+define(["backbone", "Squire", "globals", "utils", "controllers/BaseController"],
+    function (Backbone, Squire, globals, utils, BaseController) {
 
         "use strict";
 
@@ -32,6 +32,7 @@ define(["backbone", "Squire", "globals", "utils"],
         squire.mock("backbone", mockBackbone);
         squire.mock("utils", mockUtils);
         squire.mock("facade", mockFacade);
+        squire.mock("controllers/BaseController", BaseController);
         squire.mock("models/AppModel", AppModel);
         squire.mock("views/UpdatePromptView", Squire.Helpers.returns(mockUpdatePromptView));
 
@@ -51,6 +52,10 @@ define(["backbone", "Squire", "globals", "utils"],
 
             it("is defined", function () {
                 expect(updatePromptController).toBeDefined();
+            });
+
+            it("looks like a BaseController", function () {
+                expect(updatePromptController instanceof BaseController).toBeTruthy();
             });
 
             describe("has constructor that", function () {

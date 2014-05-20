@@ -1,5 +1,6 @@
-define(["facade", "utils", "globals", "jclass", "views/LoginView", "models/LoginModel", "models/UserModel"],
-    function (facade, utils, globals, JClass, LoginView, LoginModel, UserModel) {
+define(["facade", "utils", "globals", "controllers/BaseController", "views/LoginView", "models/LoginModel",
+        "models/UserModel"],
+    function (facade, utils, globals, BaseController, LoginView, LoginModel, UserModel) {
 
         "use strict";
 
@@ -9,7 +10,7 @@ define(["facade", "utils", "globals", "jclass", "views/LoginView", "models/Login
                 ctorName: "construct" // constructor name
             };
 
-        LoginController = JClass.extend({
+        LoginController = BaseController.extend({
 
             loginView: null,
             userModel: null,

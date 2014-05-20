@@ -71,6 +71,7 @@ var specList =
         // Controllers
         "spec/controllers/AboutControllerSpec.js",
         "spec/controllers/AppControllerSpec.js",
+        "spec/controllers/BaseControllerSpec.js",
         "spec/controllers/CardControllerSpec.js",
         "spec/controllers/ContactUsControllerSpec.js",
         "spec/controllers/DriverControllerSpec.js",

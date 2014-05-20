@@ -1,7 +1,7 @@
-define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "models/UserModel", "models/CardModel",
-        "models/ShippingModel", "views/CardAddView", "views/CardDetailView", "views/CardEditView", "views/CardListView",
-        "views/CardSearchView", "views/CardShippingView"],
-    function (JClass, globals, facade, utils, CardCollection, UserModel, CardModel, ShippingModel,
+define(["globals", "facade", "utils", "collections/CardCollection", "controllers/BaseController",
+        "models/UserModel", "models/CardModel", "models/ShippingModel", "views/CardAddView", "views/CardDetailView",
+        "views/CardEditView", "views/CardListView", "views/CardSearchView", "views/CardShippingView"],
+    function (globals, facade, utils, CardCollection, BaseController, UserModel, CardModel, ShippingModel,
               CardAddView, CardDetailView, CardEditView, CardListView, CardSearchView, CardShippingView) {
 
         "use strict";
@@ -12,7 +12,7 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
                 ctorName: "construct" // constructor name
             };
 
-        CardController = JClass.extend({
+        CardController = BaseController.extend({
             cardCollection: null,
             cardAddView: null,
             cardDetailView: null,
@@ -201,7 +201,7 @@ define(["jclass", "globals", "facade", "utils", "collections/CardCollection", "m
                 // silently reset collection to ensure it always is "updated", even if it's the same models again
                 this.cardCollection.reset([], { "silent": true });
 
-                utils.when(utils.fetchCollection(this.cardCollection, data))
+                utils.when(this.fetchCollection(this.cardCollection, data))
                     .always(function () {
                         self.cardListView.render();
                         utils.changePage(self.cardListView.$el, null, null, true);
