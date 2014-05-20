@@ -52,7 +52,7 @@ define(["backbone", "utils", "mustache", "globals", "views/PaymentView",
                     listContainer.listview("refresh");
                 } catch (e) {}
 
-                $content.trigger("create");
+                this.$el.trigger("create");
             }
         });
 

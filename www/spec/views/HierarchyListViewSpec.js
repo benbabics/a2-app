@@ -166,6 +166,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 beforeEach(function () {
                     spyOn(hierarchyListView, "renderHeader").and.callFake(function () { });
                     spyOn(hierarchyListView, "renderContent").and.callFake(function () { });
+                    spyOn(hierarchyListView.$el, "trigger").and.callThrough();
 
                     hierarchyListView.render();
                 });
@@ -185,6 +186,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 it("should call renderContent", function () {
                     expect(hierarchyListView.renderContent).toHaveBeenCalledWith();
                 });
+
+                it("should call the trigger function on the $el", function () {
+                    expect(hierarchyListView.$el.trigger).toHaveBeenCalledWith("create");
+                });
             });
 
             describe("has a renderHeader function that", function () {
@@ -194,7 +199,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     actualHeader = hierarchyListView.$el.find(":jqmData(role=header)");
                     spyOn(hierarchyListView.$el, "find").and.returnValue(actualHeader);
                     spyOn(actualHeader, "html").and.callThrough();
-                    spyOn(actualHeader, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
 
                     hierarchyListView.renderHeader();
@@ -217,10 +221,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     var expectedContent = Mustache.render(headerTemplate);
                     expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
                 });
-
-                it("should call the trigger function on the header", function () {
-                    expect(actualHeader.trigger).toHaveBeenCalledWith("create");
-                });
             });
 
             describe("has a renderContent function that", function () {
@@ -231,7 +231,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                     spyOn(hierarchyListView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(hierarchyCollection, "each").and.callThrough();
 
@@ -257,10 +256,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 it("should call each on the collection sending a function", function () {
                     expect(hierarchyCollection.each).toHaveBeenCalledWith(jasmine.any(Function));
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
         });

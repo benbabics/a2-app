@@ -209,7 +209,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                     actualContent = invoiceSummaryView.$el.find(":jqmData(role=content)");
                     spyOn(invoiceSummaryView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
+                    spyOn(invoiceSummaryView.$el, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(invoiceSummaryView, "getConfiguration").and
                         .callFake(function () { return expectedConfiguration; });
@@ -238,8 +238,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                 });
 
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
+                it("should call the trigger function on the $el", function () {
+                    expect(invoiceSummaryView.$el.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {

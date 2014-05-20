@@ -32,7 +32,7 @@ define(["backbone", "mustache", "utils", "globals", "text!tmpl/invoice/summary.h
             render: function () {
                 var $content = this.$el.find(":jqmData(role=content)");
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
-                $content.trigger("create");
+                this.$el.trigger("create");
             },
 
             getConfiguration: function () {

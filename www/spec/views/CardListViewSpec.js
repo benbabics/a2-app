@@ -186,6 +186,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                 beforeEach(function () {
                     spyOn(cardListView, "renderHeader").and.callFake(function () { });
                     spyOn(cardListView, "renderContent").and.callFake(function () { });
+                    spyOn(cardListView.$el, "trigger").and.callThrough();
 
                     cardListView.render();
                 });
@@ -205,6 +206,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                 it("should call renderContent", function () {
                     expect(cardListView.renderContent).toHaveBeenCalledWith();
                 });
+
+                it("should call the trigger function on the $el", function () {
+                    expect(cardListView.$el.trigger).toHaveBeenCalledWith("create");
+                });
             });
 
             describe("has a renderHeader function that", function () {
@@ -214,7 +219,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                     actualHeader = cardListView.$el.find(":jqmData(role=header)");
                     spyOn(cardListView.$el, "find").and.returnValue(actualHeader);
                     spyOn(actualHeader, "html").and.callThrough();
-                    spyOn(actualHeader, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
 
                     cardListView.renderHeader();
@@ -242,10 +246,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                             "permissions": userModel.get("permissions")
                         });
                     expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
-                });
-
-                it("should call the trigger function on the header", function () {
-                    expect(actualHeader.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
@@ -276,7 +276,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
 
                     spyOn(cardListView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(cardListView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
                     spyOn(cardCollection, "each").and.callThrough();
@@ -306,10 +305,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                     expect(cardCollection.each.calls.mostRecent().args.length).toEqual(2);
                     expect(cardCollection.each.calls.mostRecent().args[0]).toEqual(jasmine.any(Function));
                     expect(cardCollection.each.calls.mostRecent().args[1]).toEqual(cardListView);
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

@@ -32,7 +32,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/BaseView", 
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
 
-                $content.trigger("create");
+                this.$el.trigger("create");
             },
 
             getConfiguration: function () {

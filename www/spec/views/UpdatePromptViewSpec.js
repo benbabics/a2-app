@@ -109,7 +109,7 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updatePrompt/page
                         actualContent = updatePromptView.$el.find(":jqmData(role=content)");
                         spyOn(updatePromptView.$el, "find").and.returnValue(actualContent);
                         spyOn(actualContent, "html").and.callThrough();
-                        spyOn(actualContent, "trigger").and.callThrough();
+                        spyOn(updatePromptView.$el, "trigger").and.callThrough();
                         spyOn(mockMustache, "render").and.callThrough();
 
                         updatePromptView.templateContent = mockFailTemplateContent;
@@ -143,8 +143,8 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updatePrompt/page
                         expect(actualContent[0]).toContainHtml(mockFailTemplateContent.primaryBtnLabel);
                     });
 
-                    it("calls the trigger function on updatePromptView.$content", function () {
-                        expect(actualContent.trigger).toHaveBeenCalledWith("create");
+                    it("calls the trigger function on the $el", function () {
+                        expect(updatePromptView.$el.trigger).toHaveBeenCalledWith("create");
                     });
                 });
             });

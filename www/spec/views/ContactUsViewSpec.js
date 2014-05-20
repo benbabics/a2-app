@@ -126,7 +126,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                     actualContent = contactUsView.$el.find(":jqmData(role=content)");
                     spyOn(contactUsView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
+                    spyOn(contactUsView.$el, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(contactUsView, "getConfiguration").and.callFake(function() { return expectedConfiguration; });
                     spyOn(contactUsView, "formatRequiredFields").and.callThrough();
@@ -162,8 +162,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                     expect(contactUsView.formatRequiredFields).toHaveBeenCalledWith();
                 });
 
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
+                it("should call the trigger function on the $el", function () {
+                    expect(contactUsView.$el.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

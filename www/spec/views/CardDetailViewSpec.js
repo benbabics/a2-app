@@ -187,7 +187,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                     spyOn(cardDetailView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
+                    spyOn(cardDetailView.$el, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(cardDetailView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
 
@@ -215,8 +215,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                 });
 
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
+                it("should call the trigger function on the $el", function () {
+                    expect(cardDetailView.$el.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {

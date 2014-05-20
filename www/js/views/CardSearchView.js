@@ -42,6 +42,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
             render: function () {
                 this.renderHeader();
                 this.renderContent();
+                this.$el.trigger("create");
             },
 
             renderHeader: function () {
@@ -51,14 +52,11 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
                     {
                         "permissions": this.userModel.get("permissions")
                     }));
-                $header.trigger("create");
             },
 
             renderContent: function () {
                 var $content = this.$el.find(":jqmData(role=content)");
-
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
-                $content.trigger("create");
             },
 
             getConfiguration: function () {

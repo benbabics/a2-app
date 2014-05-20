@@ -28,6 +28,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel"
                 $content.html(Mustache.render(this.template, globals.login.configuration));
 
                 this.formatRequiredFields();
+
+                this.$el.trigger("create");
             },
 
             /*

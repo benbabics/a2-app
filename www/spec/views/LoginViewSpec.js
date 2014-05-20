@@ -102,7 +102,14 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
             });
 
             describe("has a pageCreate function that", function () {
+                var actualContent;
+
                 beforeEach(function () {
+                    actualContent = loginView.$el.find(":jqmData(role=content)");
+
+                    spyOn(loginView.$el, "find").and.returnValue(actualContent);
+                    spyOn(actualContent, "html").and.callThrough();
+                    spyOn(loginView.$el, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(loginView, "formatRequiredFields").and.callThrough();
                     loginView.initialize();
@@ -123,15 +130,17 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
                     expect(mockMustache.render.calls.mostRecent().args[1]).toEqual(globals.login.configuration);
                 });
 
-                it("should set the content", function () {
-                    var $content = loginView.$el.find(":jqmData(role=content)"),
-                        expectedContent = Mustache.render(pageTemplate, globals.login.configuration);
-
-                    expect($content[0]).toContainHtml(expectedContent);
+                it("should call the html function on the content", function () {
+                    var expectedContent = Mustache.render(pageTemplate, globals.login.configuration);
+                    expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                 });
 
                 it("should call formatRequiredFields()", function () {
                     expect(loginView.formatRequiredFields).toHaveBeenCalledWith();
+                });
+
+                it("should call the trigger function on the $el", function () {
+                    expect(loginView.$el.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

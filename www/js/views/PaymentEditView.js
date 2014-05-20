@@ -48,7 +48,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                 this.setupDatepicker();
                 this.formatRequiredFields();
 
-                $content.trigger("create");
+                this.$el.trigger("create");
             },
 
             setupDatepicker: function () {

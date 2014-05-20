@@ -187,6 +187,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 beforeEach(function () {
                     spyOn(driverSearchView, "renderHeader").and.callFake(function () { });
                     spyOn(driverSearchView, "renderContent").and.callFake(function () { });
+                    spyOn(driverSearchView.$el, "trigger").and.callThrough();
 
                     driverSearchView.render();
                 });
@@ -206,6 +207,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 it("should call renderContent", function () {
                     expect(driverSearchView.renderContent).toHaveBeenCalledWith();
                 });
+
+                it("should call the trigger function on the $el", function () {
+                    expect(driverSearchView.$el.trigger).toHaveBeenCalledWith("create");
+                });
             });
 
             describe("has a renderHeader function that", function () {
@@ -215,7 +220,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     actualHeader = driverSearchView.$el.find(":jqmData(role=header)");
                     spyOn(driverSearchView.$el, "find").and.returnValue(actualHeader);
                     spyOn(actualHeader, "html").and.callThrough();
-                    spyOn(actualHeader, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
 
                     driverSearchView.renderHeader();
@@ -243,10 +247,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                             "permissions": userModel.get("permissions")
                         });
                     expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
-                });
-
-                it("should call the trigger function on the header", function () {
-                    expect(actualHeader.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
@@ -277,7 +277,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                     spyOn(driverSearchView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(driverSearchView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
 
@@ -299,10 +298,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 it("should call the html function on the content", function () {
                     var expectedContent = Mustache.render(pageTemplate, mockConfiguration);
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

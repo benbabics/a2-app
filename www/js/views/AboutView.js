@@ -23,7 +23,7 @@ define(["backbone", "mustache", "text!tmpl/about/page.html"],
             pageCreate: function () {
                 var $content = this.$el.find(":jqmData(role=content)");
                 $content.html(Mustache.render(this.template, this.model.toJSON()));
-                $content.trigger("create");
+                this.$el.trigger("create");
             }
         });
 

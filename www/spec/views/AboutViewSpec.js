@@ -99,7 +99,7 @@ define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-
                     actualContent = aboutView.$el.find(":jqmData(role=content)");
                     spyOn(aboutView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
+                    spyOn(aboutView.$el, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     aboutView.initialize();
                 });
@@ -121,8 +121,8 @@ define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                 });
 
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
+                it("should call the trigger function on the $el", function () {
+                    expect(aboutView.$el.trigger).toHaveBeenCalledWith("create");
                 });
             });
         });

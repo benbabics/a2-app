@@ -29,6 +29,7 @@ define(["backbone", "utils", "mustache", "globals", "views/HierarchyView",
             render: function () {
                 this.renderHeader();
                 this.renderContent();
+                this.$el.trigger("create");
             },
 
             renderHeader: function () {
@@ -37,7 +38,6 @@ define(["backbone", "utils", "mustache", "globals", "views/HierarchyView",
                 // TODO - Only show 'Back' when the user has a selected company
 
                 $header.html(Mustache.render(this.headerTemplate));
-                $header.trigger("create");
             },
 
             renderContent: function () {
@@ -67,8 +67,6 @@ define(["backbone", "utils", "mustache", "globals", "views/HierarchyView",
                     // This call throws an exception if called during startup before the list is ready
                     listContainer.listview("refresh");
                 } catch (e) {}
-
-                $content.trigger("create");
             }
         });
 

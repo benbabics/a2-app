@@ -40,7 +40,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
 
                 this.formatRequiredFields();
 
-                $content.trigger("create");
+                this.$el.trigger("create");
             },
 
             getConfiguration: function () {

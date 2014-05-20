@@ -33,6 +33,7 @@ define(["backbone", "utils", "mustache", "globals", "views/DriverView",
             render: function () {
                 this.renderHeader();
                 this.renderContent();
+                this.$el.trigger("create");
             },
 
             renderHeader: function () {
@@ -42,7 +43,6 @@ define(["backbone", "utils", "mustache", "globals", "views/DriverView",
                     {
                         "permissions": this.userModel.get("permissions")
                     }));
-                $header.trigger("create");
             },
 
             renderContent: function () {
@@ -72,8 +72,6 @@ define(["backbone", "utils", "mustache", "globals", "views/DriverView",
                     // This call throws an exception if called during startup before the list is ready
                     listContainer.listview("refresh");
                 } catch (e) {}
-
-                $content.trigger("create");
             },
 
             getConfiguration: function () {
