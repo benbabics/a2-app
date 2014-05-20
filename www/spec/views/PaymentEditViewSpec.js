@@ -474,8 +474,12 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
 
                     beforeEach(function () {
                         spyOn(mockUtils, "moment").and.returnValue(mockMoment);
-                        spyOn(mockMoment, "day").and.returnValue(0);
                         spyOn(mockMoment, "add").and.callThrough();
+                        spyOn(mockMoment, "day").and.callFake(
+                            function (dayToCheckFor) {
+                                return dayToCheckFor === "Sunday";
+                            }
+                        );
 
                         actualValue = paymentEditView.getEarlistPaymentDate();
                     });
@@ -490,19 +494,22 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                 });
 
                 describe("when the day is Monday - Friday", function () {
-                    it("should return the expected value", function () {
-                        var day,
-                            spy = spyOn(mockMoment, "day");
+                    var actualValue;
 
+                    beforeEach(function () {
                         spyOn(mockUtils, "moment").and.returnValue(mockMoment);
                         spyOn(mockMoment, "add").and.callThrough();
+                        spyOn(mockMoment, "day").and.returnValue(false);
 
-                        for (day = 1; day < 6; day++) {
-                            spy.and.returnValue(day);
+                        actualValue = paymentEditView.getEarlistPaymentDate();
+                    });
 
-                            expect(mockMoment.add).not.toHaveBeenCalledWith();
-                            expect(paymentEditView.getEarlistPaymentDate()).toEqual(mockMoment);
-                        }
+                    it("should NOT call add on moment", function () {
+                        expect(mockMoment.add).not.toHaveBeenCalled();
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(actualValue).toEqual(mockMoment);
                     });
                 });
 
@@ -511,8 +518,12 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
 
                     beforeEach(function () {
                         spyOn(mockUtils, "moment").and.returnValue(mockMoment);
-                        spyOn(mockMoment, "day").and.returnValue(6);
                         spyOn(mockMoment, "add").and.callThrough();
+                        spyOn(mockMoment, "day").and.callFake(
+                            function (dayToCheckFor) {
+                                return dayToCheckFor === "Saturday";
+                            }
+                        );
 
                         actualValue = paymentEditView.getEarlistPaymentDate();
                     });
