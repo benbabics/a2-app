@@ -1,6 +1,6 @@
-define(["backbone", "Squire", "mustache", "globals", "utils",
+define(["backbone", "Squire", "mustache", "globals", "utils", "views/BaseView",
         "text!tmpl/hierarchy/hierarchy.html", "jasmine-jquery"],
-    function (Backbone, Squire, Mustache, globals, utils, pageTemplate) {
+    function (Backbone, Squire, Mustache, globals, utils, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -11,6 +11,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils",
 
         squire.mock("backbone", Backbone);
         squire.mock("mustache", mockMustache);
+        squire.mock("views/BaseView", BaseView);
 
         describe("A Hierarchy View", function () {
 
@@ -34,8 +35,8 @@ define(["backbone", "Squire", "mustache", "globals", "utils",
                 expect(hierarchyView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(hierarchyView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(hierarchyView instanceof BaseView).toBeTruthy();
             });
 
             describe("has a constructor that", function () {

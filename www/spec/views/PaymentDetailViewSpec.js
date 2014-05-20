@@ -1,6 +1,6 @@
-define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel",
+define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel", "views/BaseView",
         "text!tmpl/payment/paymentDetail.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, UserModel, pageTemplate) {
+    function (Squire, Backbone, Mustache, globals, utils, UserModel, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -78,6 +78,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
         squire.mock("mustache", mockMustache);
         squire.mock("backbone", Backbone);
         squire.mock("facade", mockFacade);
+        squire.mock("views/BaseView", BaseView);
 
         describe("A Payment Detail View", function () {
 
@@ -108,8 +109,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                 expect(paymentDetailView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(paymentDetailView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(paymentDetailView instanceof BaseView).toBeTruthy();
             });
 
             describe("has events that", function () {

@@ -1,5 +1,5 @@
-define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
-    function (Squire, Mustache, globals, utils) {
+define(["Squire", "mustache", "globals", "utils", "views/BaseView", "jasmine-jquery"],
+    function (Squire, Mustache, globals, utils, BaseView) {
 
         "use strict";
 
@@ -41,6 +41,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
         squire.mock("facade", mockFacade);
         squire.mock("mustache", mockMustache);
         squire.mock("utils", mockUtils);
+        squire.mock("views/BaseView", BaseView);
 
         describe("A Form View", function () {
 
@@ -59,8 +60,8 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery"],
                 expect(formView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(formView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(formView instanceof BaseView).toBeTruthy();
             });
 
             describe("has events that", function () {

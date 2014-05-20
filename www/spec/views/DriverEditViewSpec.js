@@ -1,6 +1,6 @@
 define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverModel", "models/UserModel",
-        "text!tmpl/driver/driverEdit.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, DriverModel, UserModel, pageTemplate) {
+        "views/BaseView", "text!tmpl/driver/driverEdit.html", "jasmine-jquery"],
+    function (Squire, Backbone, Mustache, globals, utils, DriverModel, UserModel, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -78,6 +78,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
         squire.mock("mustache", mockMustache);
         squire.mock("backbone", Backbone);
         squire.mock("facade", mockFacade);
+        squire.mock("views/BaseView", BaseView);
 
         describe("A Driver Edit View", function () {
 
@@ -106,8 +107,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                 expect(driverEditView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(driverEditView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(driverEditView instanceof BaseView).toBeTruthy();
             });
 
             describe("has events that", function () {

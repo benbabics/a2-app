@@ -1,6 +1,6 @@
-define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel", "models/UserModel",
+define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel", "models/UserModel", "views/BaseView",
         "text!tmpl/card/cardDetail.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, CardModel, UserModel, pageTemplate) {
+    function (Squire, Backbone, Mustache, globals, utils, CardModel, UserModel, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -80,6 +80,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
         squire.mock("mustache", mockMustache);
         squire.mock("backbone", Backbone);
         squire.mock("facade", mockFacade);
+        squire.mock("views/BaseView", BaseView);
 
         describe("A Card Detail View", function () {
 
@@ -108,8 +109,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 expect(cardDetailView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(cardDetailView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(cardDetailView instanceof BaseView).toBeTruthy();
             });
 
             describe("has events that", function () {
