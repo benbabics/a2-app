@@ -26,14 +26,9 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/PaymentMod
         squire.mock("mustache", mockMustache);
 
         describe("A Payment View", function () {
-
-            // Override the default fixture path which is spec/javascripts/fixtures
-            // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "./";
-
             beforeEach(function (done) {
                 squire.require(["views/PaymentView"], function (JasminePaymentView) {
-                    loadFixtures("index.html");
+                    loadFixtures("../../../index.html");
 
                     paymentModel.initialize(mockPaymentModel);
 

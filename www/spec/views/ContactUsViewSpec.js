@@ -23,14 +23,9 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
         squire.mock("backbone", Backbone);
 
         describe("A Contact Us View", function () {
-
-            // Override the default fixture path which is spec/javascripts/fixtures
-            // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "./";
-
             beforeEach(function (done) {
                 squire.require(["views/ContactUsView"], function (JasmineContactUsView) {
-                    loadFixtures("index.html");
+                    loadFixtures("../../../index.html");
 
                     contactUsModel.set(mockContactUsModel);
                     userModel.set(mockUserModel);

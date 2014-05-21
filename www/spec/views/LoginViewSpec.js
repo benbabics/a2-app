@@ -21,14 +21,9 @@ define(["Squire", "backbone", "mustache", "globals", "text!tmpl/login/page.html"
         squire.mock("facade", mockFacade);
 
         describe("A Login View", function () {
-
-            // Override the default fixture path which is spec/javascripts/fixtures
-            // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "./";
-
             beforeEach(function (done) {
                 squire.require(["views/LoginView"], function (JasmineLoginView) {
-                    loadFixtures("index.html");
+                    loadFixtures("../../../index.html");
 
                     loginModel.set(mockLoginModel);
 

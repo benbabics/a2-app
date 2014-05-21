@@ -81,14 +81,9 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
         squire.mock("views/BaseView", BaseView);
 
         describe("A Payment Detail View", function () {
-
-            // Override the default fixture path which is spec/javascripts/fixtures
-            // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "./";
-
             beforeEach(function (done) {
                 squire.require(["views/PaymentDetailView"], function (JasminePaymentDetailView) {
-                    loadFixtures("index.html");
+                    loadFixtures("../../../index.html");
 
                     bankAccountModel.set(mockBankAccountModel);
                     paymentModel.set(mockPaymentModel);

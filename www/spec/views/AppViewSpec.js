@@ -20,14 +20,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
         squire.mock("utils", mockUtils);
 
         describe("An App View", function () {
-
-            // Override the default fixture path which is spec/javascripts/fixtures
-            // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "./";
-
             beforeEach(function (done) {
                 squire.require(["views/AppView"], function (AppView) {
-                    loadFixtures("index.html");
+                    loadFixtures("../../../index.html");
 
                     appModel.set(mockAppModel);
                     appView = new AppView({

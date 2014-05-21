@@ -87,15 +87,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
         squire.mock("views/DriverView", Squire.Helpers.returns(mockDriverView));
 
         describe("A Driver List View", function () {
-
-            // Override the default fixture path which is spec/javascripts/fixtures
-            // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "./";
-
             beforeEach(function (done) {
                 squire.require(["views/DriverListView"],
                     function (DriverListView) {
-                        loadFixtures("index.html");
+                        loadFixtures("../../../index.html");
 
                         userModel.initialize(mockUserModel);
                         driverModel = new DriverModel();

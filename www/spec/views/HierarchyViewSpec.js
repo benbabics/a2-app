@@ -14,14 +14,9 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "views/BaseView",
         squire.mock("views/BaseView", BaseView);
 
         describe("A Hierarchy View", function () {
-
-            // Override the default fixture path which is spec/javascripts/fixtures
-            // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "./";
-
             beforeEach(function (done) {
                 squire.require(["views/HierarchyView"], function (JasmineHierarchyView) {
-                    loadFixtures("index.html");
+                    loadFixtures("../../../index.html");
 
                     HierarchyView = JasmineHierarchyView;
 

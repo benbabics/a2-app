@@ -28,14 +28,9 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel"
         squire.mock("mustache", mockMustache);
 
         describe("A Card View", function () {
-
-            // Override the default fixture path which is spec/javascripts/fixtures
-            // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "./";
-
             beforeEach(function (done) {
                 squire.require(["views/CardView"], function (CardView) {
-                    loadFixtures("index.html");
+                    loadFixtures("../../../index.html");
 
                     cardModel.initialize(mockCardModel);
 

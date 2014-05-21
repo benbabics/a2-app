@@ -81,14 +81,9 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
         squire.mock("views/BaseView", BaseView);
 
         describe("A Driver Edit View", function () {
-
-            // Override the default fixture path which is spec/javascripts/fixtures
-            // to instead point to our root where index.html resides
-            jasmine.getFixtures().fixturesPath = "./";
-
             beforeEach(function (done) {
                 squire.require(["views/DriverEditView"], function (JasmineDriverEditView) {
-                    loadFixtures("index.html");
+                    loadFixtures("../../../index.html");
 
                     driverModel.initialize(mockDriverModel);
                     userModel.initialize(mockUserModel);
