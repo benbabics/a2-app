@@ -74,13 +74,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                         "postalCode"    : "Postal Code",
                         "countryCode"   : "Country Code",
                         "residence"     : true
-                    }
-                },
-                permissions: [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ]
+                    },
+                    permissions: [
+                        "PERMISSION_1",
+                        "PERMISSION_2",
+                        "PERMISSION_3"
+                    ]
+                }
             },
             mockShippingModel = {
                 "shippingMethod": {

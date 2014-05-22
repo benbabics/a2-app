@@ -74,6 +74,10 @@ define(["Squire", "utils", "globals", "backbone"],
                 it("should set shippingMethods to default", function () {
                     expect(companyModel.defaults.shippingMethods).toBeNull();
                 });
+
+                it("should set permissions to default", function () {
+                    expect(companyModel.defaults.permissions).toEqual(globals.companyData.permissions);
+                });
             });
 
             describe("has an initialize function that", function () {
@@ -81,6 +85,7 @@ define(["Squire", "utils", "globals", "backbone"],
                     spyOn(companyModel, "set").and.callThrough();
                     spyOn(companyModel, "get").and.callThrough();
                     spyOn(companyModel, "setDepartments").and.callFake(function () {});
+                    spyOn(companyModel, "setPermissions").and.callFake(function () { });
                     spyOn(companyModel, "setRequiredFields").and.callFake(function () {});
                     spyOn(companyModel, "setShippingMethods").and.callFake(function () {});
                 });
@@ -101,6 +106,7 @@ define(["Squire", "utils", "globals", "backbone"],
                     it("should NOT call set", function () {
                         expect(companyModel.set).not.toHaveBeenCalled();
                         expect(companyModel.setDepartments).not.toHaveBeenCalled();
+                        expect(companyModel.setPermissions).not.toHaveBeenCalled();
                         expect(companyModel.setRequiredFields).not.toHaveBeenCalled();
                         expect(companyModel.setShippingMethods).not.toHaveBeenCalled();
                     });
@@ -116,6 +122,7 @@ define(["Squire", "utils", "globals", "backbone"],
                     it("should NOT call set", function () {
                         expect(companyModel.set).not.toHaveBeenCalled();
                         expect(companyModel.setDepartments).not.toHaveBeenCalled();
+                        expect(companyModel.setPermissions).not.toHaveBeenCalled();
                         expect(companyModel.setRequiredFields).not.toHaveBeenCalled();
                         expect(companyModel.setShippingMethods).not.toHaveBeenCalled();
                     });
@@ -183,6 +190,11 @@ define(["Squire", "utils", "globals", "backbone"],
                                     cost: 6.66,
                                     poBoxAllowed: false
                                 }
+                            ],
+                            permissions: [
+                                "PERMISSION_1",
+                                "PERMISSION_2",
+                                "PERMISSION_3"
                             ]
                         };
 
@@ -281,6 +293,10 @@ define(["Squire", "utils", "globals", "backbone"],
 
                     it("should set shippingMethods", function () {
                         expect(companyModel.setShippingMethods).toHaveBeenCalledWith(options.shippingMethods);
+                    });
+
+                    it("should set permissions", function () {
+                        expect(companyModel.setPermissions).toHaveBeenCalledWith(options.permissions);
                     });
                 });
             });
@@ -552,6 +568,72 @@ define(["Squire", "utils", "globals", "backbone"],
                             expect(newDepartment.get("name")).toEqual(mockDepartment.name);
                             expect(newDepartment.get("visible")).toEqual(mockDepartment.visible);
                         });
+                    });
+                });
+            });
+
+            describe("has a setPermissions function that", function () {
+                var mockPermissions = [
+                    "PERMISSION_1",
+                    "PERMISSION_2",
+                    "PERMISSION_3"
+                ];
+
+                beforeEach(function () {
+                    spyOn(companyModel, "set").and.callThrough();
+
+                    companyModel.setPermissions(mockPermissions);
+                });
+
+                it("is defined", function () {
+                    expect(companyModel.setPermissions).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(companyModel.setPermissions).toEqual(jasmine.any(Function));
+                });
+
+                it("should call set", function () {
+                    expect(companyModel.set).toHaveBeenCalled();
+                    expect(companyModel.set.calls.mostRecent().args.length).toEqual(2);
+                    expect(companyModel.set.calls.mostRecent().args[0]).toEqual("permissions");
+                });
+
+                describe("when building a new object to set the permissions property with", function () {
+                    var newPermissions;
+
+                    beforeEach(function () {
+                        newPermissions = companyModel.set.calls.mostRecent().args[1];
+                    });
+
+                    it("should include all the default permissions", function () {
+                        var numOfMatches = 0;
+
+                        // find all elements in the newPermissions that have a matching key with the default permissions
+                        utils._.each(companyModel.defaults.permissions, function (value, key, list) {
+                            if (utils._.has(newPermissions, key)) {
+                                numOfMatches += 1;
+                            }
+                        });
+
+                        expect(numOfMatches).toEqual(utils._.size(companyModel.defaults.permissions));
+                    });
+
+                    it("should set only the passed in permissions to true", function () {
+                        var truePermissions = {},
+                            matchingPermissions;
+
+                        // find all elements in newPermissions that are set to true
+                        utils._.each(newPermissions, function (value, key, list) {
+                            if (value) {
+                                truePermissions[key] = value;
+                            }
+                        });
+
+                        // get all the truePermissions that match the mockPermissions
+                        matchingPermissions = utils._.pick(truePermissions, mockPermissions);
+
+                        expect(utils._.size(matchingPermissions)).toEqual(utils._.size(mockPermissions));
                     });
                 });
             });

@@ -63,13 +63,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                             middleNameMaxLength: 1,
                             lastNameMaxLength: 12
                         }
-                    }
-                },
-                permissions: [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ]
+                    },
+                    permissions: [
+                        "PERMISSION_1",
+                        "PERMISSION_2",
+                        "PERMISSION_3"
+                    ]
+                }
             },
             userModel = UserModel.getInstance(),
             paymentDetailView,
@@ -177,7 +177,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                 beforeEach(function () {
                     mockConfiguration = {
                         "payment"    : utils._.extend({}, utils.deepClone(globals.paymentDetails.configuration)),
-                        "permissions": userModel.get("permissions")
+                        "permissions": userModel.get("selectedCompany").get("permissions")
                     };
 
                     actualContent = paymentDetailView.$el.find(":jqmData(role=content)");
@@ -234,8 +234,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
 
                     describe("when the user has the MOBILE_PAYMENT_MAKE permission", function () {
                         beforeEach(function () {
-                            userModel.set("permissions", {"MOBILE_PAYMENT_MAKE": true});
-                            mockConfiguration.permissions = userModel.get("permissions");
+                            userModel.get("selectedCompany").set("permissions", {"MOBILE_PAYMENT_MAKE": true});
+                            mockConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
                         });
 
                         it("should include a button to edit payment when it's configured to be visible",
@@ -273,8 +273,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
 
                     describe("when the user does NOT have the MOBILE_PAYMENT_MAKE permission", function () {
                         beforeEach(function () {
-                            userModel.set("permissions", {"MOBILE_PAYMENT_MAKE": false});
-                            mockConfiguration.permissions = userModel.get("permissions");
+                            userModel.get("selectedCompany").set("permissions", {"MOBILE_PAYMENT_MAKE": false});
+                            mockConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
                         });
 
                         it("should NOT include a button to edit payment when it's configured to be visible",
@@ -328,7 +328,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                             },
                             actualConfiguration;
 
-                        expectedConfiguration.permissions = userModel.get("permissions");
+                        expectedConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
                         paymentDetailView.model = null;
 
                         actualConfiguration = paymentDetailView.getConfiguration();
@@ -365,7 +365,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                         expectedConfiguration.payment.editButton.visible = true;
                         expectedConfiguration.payment.cancelButton.visible = true;
 
-                        expectedConfiguration.permissions = userModel.get("permissions");
+                        expectedConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
 
                         actualConfiguration = paymentDetailView.getConfiguration();
 
@@ -401,7 +401,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                         expectedConfiguration.payment.editButton.visible = false;
                         expectedConfiguration.payment.cancelButton.visible = false;
 
-                        expectedConfiguration.permissions = userModel.get("permissions");
+                        expectedConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
 
                         actualConfiguration = paymentDetailView.getConfiguration();
 

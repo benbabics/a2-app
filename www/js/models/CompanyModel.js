@@ -20,7 +20,8 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
                 "authorizationProfiles" : null,
                 "bankAccounts"          : null,
                 "defaultShippingAddress": null,
-                "shippingMethods"       : null
+                "shippingMethods"       : null,
+                "permissions"           : globals.companyData.permissions
             },
 
             initialize: function (options) {
@@ -44,6 +45,7 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
                         this.set("defaultShippingAddress", defaultShippingAddress);
                     }
                     if (options.shippingMethods) { this.setShippingMethods(options.shippingMethods); }
+                    if (options.permissions) { this.setPermissions(options.permissions); }
                 }
             },
 
@@ -88,6 +90,17 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
                 });
 
                 this.set("departments", departments);
+            },
+
+            setPermissions: function (permsList) {
+                var newPerms = this.defaults.permissions; // start with the permission defaults
+
+                // Set only the permissions from the list to true
+                for (var i = 0; i < permsList.length; i++) {
+                    newPerms[permsList[i]] = true;
+                }
+
+                this.set("permissions", newPerms);
             },
 
             setRequiredFields: function (requiredFieldsList) {

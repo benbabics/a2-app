@@ -5,16 +5,17 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
 
         var squire = new Squire(),
             mockMustache = Mustache,
+            mockCompanyModel = {
+                "name"            : "Bob's Company",
+                "wexAccountNumber": "1234567890",
+                "permissions"     : globals.companyData.permissions
+            },
+            companyModel = new Backbone.Model(),
             mockUserModel = {
                 "authenticated"      : true,
                 "firstName"          : "Bob",
                 "email"              : "bobsmith@someplace.com",
-                "hasMultipleAccounts": true,
-                "selectedCompany"    : {
-                    "name"            : "Bob's Company",
-                    "wexAccountNumber": "1234567890"
-                },
-                "permissions"        : { }
+                "hasMultipleAccounts": true
             },
             userModel = new Backbone.Model(),
             homeView,
@@ -28,7 +29,9 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
                 squire.require(["views/HomeView"], function (JasmineHomeView) {
                     loadFixtures("../../../index.html");
 
+                    companyModel.set(mockCompanyModel);
                     userModel.set(mockUserModel);
+                    userModel.set("selectedCompany", companyModel);
 
                     HomeView = JasmineHomeView;
                     homeView = new HomeView({
@@ -111,10 +114,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
                 });
 
                 it("should call Mustache.render() on the template", function () {
-                    expect(mockMustache.render).toHaveBeenCalled();
-                    expect(mockMustache.render.calls.mostRecent().args.length).toEqual(2);
-                    expect(mockMustache.render.calls.mostRecent().args[0]).toEqual(homeView.template);
-                    expect(mockMustache.render.calls.mostRecent().args[1]).toEqual(userModel.toJSON());
+                    expect(mockMustache.render).toHaveBeenCalledWith(homeView.template, userModel.toJSON());
                 });
 
                 it("sets content", function () {
@@ -159,42 +159,180 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
                     });
 
                     it("should include a link to the Invoice page if the user has the MOBILE_PAYMENT_VIEW permission", function () {
-                        homeView.model.set("permissions", {"MOBILE_PAYMENT_VIEW": true});
+                        var mockJSON = {
+                            "authenticated"      : true,
+                            "firstName"          : "Bob",
+                            "email"              : "bobsmith@someplace.com",
+                            "hasMultipleAccounts": true,
+                            "selectedCompany"    : {
+                                "name"            : "Bob's Company",
+                                "wexAccountNumber": "1234567890",
+                                "permissions"     : {
+                                    "USER"                   : false,
+                                    "MOBILE_CARD_VIEW"       : false,
+                                    "MOBILE_CARD_EDIT"       : false,
+                                    "MOBILE_CARD_ADD"        : false,
+                                    "MOBILE_DRIVER_FULL_VIEW": false,
+                                    "MOBILE_DRIVER_EDIT"     : false,
+                                    "MOBILE_DRIVER_ADD"      : false,
+                                    "MOBILE_PAYMENT_VIEW"    : true,
+                                    "MOBILE_PAYMENT_MAKE"    : false
+                                }
+                            }
+                        };
+
+                        spyOn(homeView.model, "toJSON").and.returnValue(mockJSON);
+
                         homeView.render();
 
                         expect(actualContent[0]).toContainElement("a[href='#invoiceSummary']");
                     });
 
                     it("should NOT include a link to the Invoice page if the user does NOT have the MOBILE_PAYMENT_VIEW permission", function () {
-                        homeView.model.set("permissions", {"MOBILE_PAYMENT_VIEW": false});
+                        var mockJSON = {
+                            "authenticated"      : true,
+                            "firstName"          : "Bob",
+                            "email"              : "bobsmith@someplace.com",
+                            "hasMultipleAccounts": true,
+                            "selectedCompany"    : {
+                                "name"            : "Bob's Company",
+                                "wexAccountNumber": "1234567890",
+                                "permissions"     : {
+                                    "USER"                   : false,
+                                    "MOBILE_CARD_VIEW"       : false,
+                                    "MOBILE_CARD_EDIT"       : false,
+                                    "MOBILE_CARD_ADD"        : false,
+                                    "MOBILE_DRIVER_FULL_VIEW": false,
+                                    "MOBILE_DRIVER_EDIT"     : false,
+                                    "MOBILE_DRIVER_ADD"      : false,
+                                    "MOBILE_PAYMENT_VIEW"    : false,
+                                    "MOBILE_PAYMENT_MAKE"    : false
+                                }
+                            }
+                        };
+
+                        spyOn(homeView.model, "toJSON").and.returnValue(mockJSON);
+
                         homeView.render();
 
                         expect(actualContent[0]).not.toContainElement("a[href='#invoiceSummary']");
                     });
 
                     it("should include a link to the Cards page if the user has the MOBILE_CARD_VIEW permission", function () {
-                        homeView.model.set("permissions", {"MOBILE_CARD_VIEW": true});
+                        var mockJSON = {
+                            "authenticated"      : true,
+                            "firstName"          : "Bob",
+                            "email"              : "bobsmith@someplace.com",
+                            "hasMultipleAccounts": true,
+                            "selectedCompany"    : {
+                                "name"            : "Bob's Company",
+                                "wexAccountNumber": "1234567890",
+                                "permissions"     : {
+                                    "USER"                   : false,
+                                    "MOBILE_CARD_VIEW"       : true,
+                                    "MOBILE_CARD_EDIT"       : false,
+                                    "MOBILE_CARD_ADD"        : false,
+                                    "MOBILE_DRIVER_FULL_VIEW": false,
+                                    "MOBILE_DRIVER_EDIT"     : false,
+                                    "MOBILE_DRIVER_ADD"      : false,
+                                    "MOBILE_PAYMENT_VIEW"    : false,
+                                    "MOBILE_PAYMENT_MAKE"    : false
+                                }
+                            }
+                        };
+
+                        spyOn(homeView.model, "toJSON").and.returnValue(mockJSON);
+
                         homeView.render();
 
                         expect(actualContent[0]).toContainElement("a[href='#cardSearch']");
                     });
 
                     it("should NOT include a link to the Cards page if the user does NOT have the MOBILE_CARD_VIEW permission", function () {
-                        homeView.model.set("permissions", {"MOBILE_CARD_VIEW": false});
+                        var mockJSON = {
+                            "authenticated"      : true,
+                            "firstName"          : "Bob",
+                            "email"              : "bobsmith@someplace.com",
+                            "hasMultipleAccounts": true,
+                            "selectedCompany"    : {
+                                "name"            : "Bob's Company",
+                                "wexAccountNumber": "1234567890",
+                                "permissions"     : {
+                                    "USER"                   : false,
+                                    "MOBILE_CARD_VIEW"       : false,
+                                    "MOBILE_CARD_EDIT"       : false,
+                                    "MOBILE_CARD_ADD"        : false,
+                                    "MOBILE_DRIVER_FULL_VIEW": false,
+                                    "MOBILE_DRIVER_EDIT"     : false,
+                                    "MOBILE_DRIVER_ADD"      : false,
+                                    "MOBILE_PAYMENT_VIEW"    : false,
+                                    "MOBILE_PAYMENT_MAKE"    : false
+                                }
+                            }
+                        };
+
+                        spyOn(homeView.model, "toJSON").and.returnValue(mockJSON);
+
                         homeView.render();
 
                         expect(actualContent[0]).not.toContainElement("a[href='#cardSearch']");
                     });
 
                     it("should include a link to the Driver Search page if the user has the MOBILE_DRIVER_FULL_VIEW permission", function () {
-                        homeView.model.set("permissions", {"MOBILE_DRIVER_FULL_VIEW": true});
+                        var mockJSON = {
+                            "authenticated"      : true,
+                            "firstName"          : "Bob",
+                            "email"              : "bobsmith@someplace.com",
+                            "hasMultipleAccounts": true,
+                            "selectedCompany"    : {
+                                "name"            : "Bob's Company",
+                                "wexAccountNumber": "1234567890",
+                                "permissions"     : {
+                                    "USER"                   : false,
+                                    "MOBILE_CARD_VIEW"       : false,
+                                    "MOBILE_CARD_EDIT"       : false,
+                                    "MOBILE_CARD_ADD"        : false,
+                                    "MOBILE_DRIVER_FULL_VIEW": true,
+                                    "MOBILE_DRIVER_EDIT"     : false,
+                                    "MOBILE_DRIVER_ADD"      : false,
+                                    "MOBILE_PAYMENT_VIEW"    : false,
+                                    "MOBILE_PAYMENT_MAKE"    : false
+                                }
+                            }
+                        };
+
+                        spyOn(homeView.model, "toJSON").and.returnValue(mockJSON);
+
                         homeView.render();
 
                         expect(actualContent[0]).toContainElement("a[href='#driverSearch']");
                     });
 
                     it("should NOT include a link to the Driver Search page if the user does NOT have the MOBILE_DRIVER_FULL_VIEW permission", function () {
-                        homeView.model.set("permissions", {"MOBILE_DRIVER_FULL_VIEW": false});
+                        var mockJSON = {
+                            "authenticated"      : true,
+                            "firstName"          : "Bob",
+                            "email"              : "bobsmith@someplace.com",
+                            "hasMultipleAccounts": true,
+                            "selectedCompany"    : {
+                                "name"            : "Bob's Company",
+                                "wexAccountNumber": "1234567890",
+                                "permissions"     : {
+                                    "USER"                   : false,
+                                    "MOBILE_CARD_VIEW"       : false,
+                                    "MOBILE_CARD_EDIT"       : false,
+                                    "MOBILE_CARD_ADD"        : false,
+                                    "MOBILE_DRIVER_FULL_VIEW": false,
+                                    "MOBILE_DRIVER_EDIT"     : false,
+                                    "MOBILE_DRIVER_ADD"      : false,
+                                    "MOBILE_PAYMENT_VIEW"    : false,
+                                    "MOBILE_PAYMENT_MAKE"    : false
+                                }
+                            }
+                        };
+
+                        spyOn(homeView.model, "toJSON").and.returnValue(mockJSON);
+
                         homeView.render();
 
                         expect(actualContent[0]).not.toContainElement("a[href='#driverSearch']");

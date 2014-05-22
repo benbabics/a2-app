@@ -48,13 +48,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                             middleNameMaxLength: 1,
                             lastNameMaxLength: 12
                         }
-                    }
-                },
-                permissions: [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ]
+                    },
+                    permissions: [
+                        "PERMISSION_1",
+                        "PERMISSION_2",
+                        "PERMISSION_3"
+                    ]
+                }
             },
             mockInvoiceSummaryModel = {
                 "invoiceId"         : "14352456",
@@ -507,8 +507,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
             describe("has a getDefaultPaymentDate function that", function () {
                 var mockMomentAfterAdd = {},
                     mockMoment = {
-                        day: function () { return 0; },
-                        add: function () { return mockMomentAfterAdd; }
+                        format: function () { return ""; },
+                        add   : function () { return mockMomentAfterAdd; }
                     };
 
                 it("is defined", function () {
@@ -525,11 +525,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                     beforeEach(function () {
                         spyOn(mockUtils, "moment").and.returnValue(mockMoment);
                         spyOn(mockMoment, "add").and.callThrough();
-                        spyOn(mockMoment, "day").and.callFake(
-                            function (dayToCheckFor) {
-                                return dayToCheckFor === "Sunday";
-                            }
-                        );
+                        spyOn(mockMoment, "format").and.returnValue("Sun");
 
                         actualValue = paymentAddView.getDefaultPaymentDate();
                     });
@@ -549,7 +545,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                     beforeEach(function () {
                         spyOn(mockUtils, "moment").and.returnValue(mockMoment);
                         spyOn(mockMoment, "add").and.callThrough();
-                        spyOn(mockMoment, "day").and.returnValue(false);
+                        spyOn(mockMoment, "format").and.returnValue(false);
 
                         actualValue = paymentAddView.getDefaultPaymentDate();
                     });
@@ -569,11 +565,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                     beforeEach(function () {
                         spyOn(mockUtils, "moment").and.returnValue(mockMoment);
                         spyOn(mockMoment, "add").and.callThrough();
-                        spyOn(mockMoment, "day").and.callFake(
-                            function (dayToCheckFor) {
-                                return dayToCheckFor === "Saturday";
-                            }
-                        );
+                        spyOn(mockMoment, "format").and.returnValue("Sat");
 
                         actualValue = paymentAddView.getDefaultPaymentDate();
                     });

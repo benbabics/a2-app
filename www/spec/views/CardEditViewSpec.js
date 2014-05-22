@@ -48,13 +48,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                             middleNameMaxLength: 1,
                             lastNameMaxLength: 12
                         }
-                    }
-                },
-                permissions: [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ]
+                    },
+                    permissions: [
+                        "PERMISSION_1",
+                        "PERMISSION_2",
+                        "PERMISSION_3"
+                    ]
+                }
             },
             mockCardModel = {
                 number: 2456,

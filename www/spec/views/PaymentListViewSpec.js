@@ -49,13 +49,13 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                             middleNameMaxLength: 1,
                             lastNameMaxLength: 12
                         }
-                    }
-                },
-                permissions: [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ]
+                    },
+                    permissions: [
+                        "PERMISSION_1",
+                        "PERMISSION_2",
+                        "PERMISSION_3"
+                    ]
+                }
             },
             userModel = UserModel.getInstance(),
             mockNode = document.createElement("li"),

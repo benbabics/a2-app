@@ -62,7 +62,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/BaseView", 
 
                 return {
                     "payment"    : paymentConfiguration,
-                    "permissions": this.userModel.get("permissions")
+                    "permissions": this.userModel.get("selectedCompany").get("permissions")
                 };
             },
 

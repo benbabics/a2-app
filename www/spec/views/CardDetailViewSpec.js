@@ -49,13 +49,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                             middleNameMaxLength: 1,
                             lastNameMaxLength: 12
                         }
-                    }
-                },
-                permissions: [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ]
+                    },
+                    permissions: [
+                        "PERMISSION_1",
+                        "PERMISSION_2",
+                        "PERMISSION_3"
+                    ]
+                }
             },
             userModel = UserModel.getInstance(),
             mockCardModel = {
@@ -176,7 +176,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 beforeEach(function () {
                     mockConfiguration = {
                         "card"       : utils._.extend({}, utils.deepClone(globals.cardDetails.configuration)),
-                        "permissions": userModel.get("permissions")
+                        "permissions": userModel.get("selectedCompany").get("permissions")
                     };
 
                     actualContent = cardDetailView.$el.find(":jqmData(role=content)");
@@ -232,8 +232,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                     describe("when the user has the MOBILE_CARD_EDIT permission", function () {
                         beforeEach(function () {
-                            userModel.set("permissions", {"MOBILE_CARD_EDIT": true});
-                            mockConfiguration.permissions = userModel.get("permissions");
+                            userModel.get("selectedCompany").set("permissions", {"MOBILE_CARD_EDIT": true});
+                            mockConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
                         });
 
                         it("should include a button to edit card when it's configured to be visible",
@@ -273,8 +273,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                     describe("when the user does NOT have the MOBILE_CARD_EDIT permission", function () {
                         beforeEach(function () {
-                            userModel.set("permissions", {"MOBILE_CARD_EDIT": false});
-                            mockConfiguration.permissions = userModel.get("permissions");
+                            userModel.get("selectedCompany").set("permissions", {"MOBILE_CARD_EDIT": false});
+                            mockConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
                         });
 
                         it("should NOT include a button to edit card when it's configured to be visible",
@@ -332,7 +332,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                             },
                             actualConfiguration;
 
-                        expectedConfiguration.permissions = userModel.get("permissions");
+                        expectedConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
                         cardDetailView.model = null;
 
                         actualConfiguration = cardDetailView.getConfiguration();
@@ -368,7 +368,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                         }
                         expectedConfiguration.card.editButton.visible = false;
                         expectedConfiguration.card.terminateButton.visible = false;
-                        expectedConfiguration.permissions = userModel.get("permissions");
+                        expectedConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
 
                         actualConfiguration = cardDetailView.getConfiguration();
 
@@ -403,7 +403,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                         }
                         expectedConfiguration.card.editButton.visible = true;
                         expectedConfiguration.card.terminateButton.visible = true;
-                        expectedConfiguration.permissions = userModel.get("permissions");
+                        expectedConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
 
                         actualConfiguration = cardDetailView.getConfiguration();
 

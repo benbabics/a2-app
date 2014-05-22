@@ -396,22 +396,6 @@ define(function (require) {
     };
 
     /**
-     * User Data
-     */
-    globals.userData = {};
-    globals.userData.permissions = {
-        "USER"                   : false,
-        "MOBILE_CARD_VIEW"       : false,
-        "MOBILE_CARD_EDIT"       : false,
-        "MOBILE_CARD_ADD"        : false,
-        "MOBILE_DRIVER_FULL_VIEW": false,
-        "MOBILE_DRIVER_EDIT"     : false,
-        "MOBILE_DRIVER_ADD"      : false,
-        "MOBILE_PAYMENT_VIEW"    : false,
-        "MOBILE_PAYMENT_MAKE"    : false
-    };
-
-    /**
      * Company Data
      */
     globals.companyData = {};
@@ -421,6 +405,17 @@ define(function (require) {
         "LICENSE_PLATE_NUMBER"  : false,
         "VEHICLE_DESCRIPTION"   : false,
         "COMPANY_VEHICLE_NUMBER": false
+    };
+    globals.companyData.permissions = {
+        "USER"                   : false,
+        "MOBILE_CARD_VIEW"       : false,
+        "MOBILE_CARD_EDIT"       : false,
+        "MOBILE_CARD_ADD"        : false,
+        "MOBILE_DRIVER_FULL_VIEW": false,
+        "MOBILE_DRIVER_EDIT"     : false,
+        "MOBILE_DRIVER_ADD"      : false,
+        "MOBILE_PAYMENT_VIEW"    : false,
+        "MOBILE_PAYMENT_MAKE"    : false
     };
 
     /**

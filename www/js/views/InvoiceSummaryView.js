@@ -66,7 +66,7 @@ define(["backbone", "mustache", "utils", "globals", "text!tmpl/invoice/summary.h
 
                 return {
                     "invoiceSummary": invoiceSummaryConfiguration,
-                    "permissions"   : user.permissions
+                    "permissions"   : user.selectedCompany.permissions
                 };
             }
         });

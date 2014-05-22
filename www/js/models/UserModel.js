@@ -10,8 +10,7 @@ define(["backbone", "globals", "models/CompanyModel"],
                 "firstName"          : null,
                 "email"              : null,
                 "selectedCompany"    : null,
-                "hasMultipleAccounts": false,
-                "permissions"        : globals.userData.permissions
+                "hasMultipleAccounts": false
             },
 
             initialize: function (options) {
@@ -27,23 +26,11 @@ define(["backbone", "globals", "models/CompanyModel"],
                         this.set("selectedCompany", selectedCompany);
                     }
                     if (options.hasMultipleAccounts) { this.set("hasMultipleAccounts", options.hasMultipleAccounts);}
-                    if (options.permissions) { this.setPermissions(options.permissions); }
                 }
             },
 
             reset: function () {
                 this.set(this.defaults);
-            },
-
-            setPermissions: function (permsList) {
-                var newPerms = this.defaults.permissions; // start with the permission defaults
-
-                // Set only the permissions from the list to true
-                for (var i = 0; i < permsList.length; i++) {
-                    newPerms[permsList[i]] = true;
-                }
-
-                this.set("permissions", newPerms);
             },
 
             toJSON: function () {

@@ -129,10 +129,10 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
             getDefaultPaymentDate: function () {
                 var defaultPaymentDate = utils.moment();
 
-                if (defaultPaymentDate.day("Sunday")) {
+                if (defaultPaymentDate.format("ddd") === "Sun") {
                     return defaultPaymentDate.add("days", 1);
                 }
-                if (defaultPaymentDate.day("Saturday")) {
+                if (defaultPaymentDate.format("ddd") === "Sat") {
                     return defaultPaymentDate.add("days", 2);
                 }
 

@@ -49,13 +49,13 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                             middleNameMaxLength: 1,
                             lastNameMaxLength: 12
                         }
-                    }
-                },
-                permissions: [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ]
+                    },
+                    permissions: [
+                        "PERMISSION_1",
+                        "PERMISSION_2",
+                        "PERMISSION_3"
+                    ]
+                }
             },
             userModel = UserModel.getInstance(),
             mockDriverModel = {
@@ -229,14 +229,14 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 it("should call Mustache.render() on the headerTemplate", function () {
                     expect(mockMustache.render).toHaveBeenCalledWith(driverListView.headerTemplate,
                         {
-                            "permissions"   : userModel.get("permissions")
+                            "permissions"   : userModel.get("selectedCompany").get("permissions")
                         });
                 });
 
                 it("should call the html function on the header", function () {
                     var expectedContent = Mustache.render(searchResultsHeaderTemplate,
                         {
-                            "permissions": userModel.get("permissions")
+                            "permissions": userModel.get("selectedCompany").get("permissions")
                         });
                     expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
                 });
@@ -244,7 +244,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 describe("when dynamically rendering the template based on the model data", function () {
                     it("should include a link to the Driver Add page if the user has the MOBILE_DRIVER_ADD permission",
                         function () {
-                            driverListView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": true});
+                            driverListView.userModel.get("selectedCompany").set("permissions", {"MOBILE_DRIVER_ADD": true});
                             driverListView.renderHeader();
 
                             expect(actualHeader[0]).toContainElement("a[href='#driverAdd']");
@@ -252,7 +252,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
 
                     it("should NOT include a link to the Driver Add page if the user does NOT have the MOBILE_DRIVER_ADD permission",
                         function () {
-                            driverListView.userModel.set("permissions", {"MOBILE_DRIVER_ADD": false});
+                            driverListView.userModel.get("selectedCompany").set("permissions", {"MOBILE_DRIVER_ADD": false});
                             driverListView.renderHeader();
 
                             expect(actualHeader[0]).not.toContainElement("a[href='#driverAdd']");

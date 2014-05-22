@@ -49,13 +49,13 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                             middleNameMaxLength: 1,
                             lastNameMaxLength: 12
                         }
-                    }
-                },
-                permissions: [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ]
+                    },
+                    permissions: [
+                        "PERMISSION_1",
+                        "PERMISSION_2",
+                        "PERMISSION_3"
+                    ]
+                }
             },
             userModel = UserModel.getInstance(),
             mockCardModel = {
@@ -231,14 +231,14 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                 it("should call Mustache.render() on the headerTemplate", function () {
                     expect(mockMustache.render).toHaveBeenCalledWith(cardListView.headerTemplate,
                         {
-                            "permissions"   : userModel.get("permissions")
+                            "permissions"   : userModel.get("selectedCompany").get("permissions")
                         });
                 });
 
                 it("should call the html function on the header", function () {
                     var expectedContent = Mustache.render(searchResultsHeaderTemplate,
                         {
-                            "permissions": userModel.get("permissions")
+                            "permissions": userModel.get("selectedCompany").get("permissions")
                         });
                     expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
                 });
@@ -246,7 +246,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                 describe("when dynamically rendering the template based on the model data", function () {
                     it("should include a link to the Card Add page if the user has the MOBILE_CARD_ADD permission",
                         function () {
-                            cardListView.userModel.set("permissions", {"MOBILE_CARD_ADD": true});
+                            cardListView.userModel.get("selectedCompany").set("permissions", {"MOBILE_CARD_ADD": true});
                             cardListView.renderHeader();
 
                             expect(actualHeader[0]).toContainElement("a[href='#cardAdd']");
@@ -254,7 +254,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
 
                     it("should NOT include a link to the Card Add page if the user does NOT have the MOBILE_CARD_ADD permission",
                         function () {
-                            cardListView.userModel.set("permissions", {"MOBILE_CARD_ADD": false});
+                            cardListView.userModel.get("selectedCompany")
+                                .set("permissions", {"MOBILE_CARD_ADD": false});
                             cardListView.renderHeader();
 
                             expect(actualHeader[0]).not.toContainElement("a[href='#cardAdd']");

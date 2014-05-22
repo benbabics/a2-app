@@ -41,7 +41,7 @@ define(["backbone", "utils", "mustache", "globals", "views/CardView",
 
                 $header.html(Mustache.render(this.headerTemplate,
                     {
-                        "permissions": this.userModel.get("permissions")
+                        "permissions": this.userModel.get("selectedCompany").get("permissions")
                     }));
             },
 

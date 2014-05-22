@@ -73,13 +73,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                         "postalCode"    : "Postal Code",
                         "countryCode"   : "Country Code",
                         "residence"     : true
-                    }
-                },
-                permissions: [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ]
+                    },
+                    permissions: [
+                        "PERMISSION_1",
+                        "PERMISSION_2",
+                        "PERMISSION_3"
+                    ]
+                }
             },
             mockInvoiceSummaryModel = {
                 "invoiceId"         : "Invoice Id",
@@ -198,7 +198,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                 beforeEach(function () {
                     expectedConfiguration = {
                         "invoiceSummary": utils._.extend({}, utils.deepClone(globals.invoiceSummary.configuration)),
-                        "permissions"   : userModel.get("permissions")
+                        "permissions"   : userModel.get("selectedCompany").get("permissions")
                     };
 
                     actualContent = invoiceSummaryView.$el.find(":jqmData(role=content)");
@@ -240,7 +240,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                 describe("when dynamically rendering the template based on the model data", function () {
                     describe("when the user has the MOBILE_PAYMENT_MAKE permission", function () {
                         beforeEach(function () {
-                            invoiceSummaryView.userModel.set("permissions", {"MOBILE_PAYMENT_MAKE": true});
+                            invoiceSummaryView.userModel.get("selectedCompany")
+                                .set("permissions", {"MOBILE_PAYMENT_MAKE": true});
                         });
 
                         describe("when unableToMakePaymentMessage has a value", function () {
@@ -249,7 +250,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                             beforeEach(function () {
                                 expectedConfiguration = {
                                     "invoiceSummary": utils._.extend({}, utils.deepClone(globals.invoiceSummary.configuration)),
-                                    "permissions": userModel.get("permissions")
+                                    "permissions": userModel.get("selectedCompany").get("permissions")
                                 };
                                 expectedConfiguration.invoiceSummary.makePaymentButton.visible = true;
                                 expectedConfiguration.invoiceSummary.unableToMakePaymentMessage = unableToMakePaymentMessage;
@@ -274,7 +275,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                             beforeEach(function () {
                                 expectedConfiguration = {
                                     "invoiceSummary": utils._.extend({}, utils.deepClone(globals.invoiceSummary.configuration)),
-                                    "permissions": userModel.get("permissions")
+                                    "permissions": userModel.get("selectedCompany").get("permissions")
                                 };
                                 expectedConfiguration.invoiceSummary.makePaymentButton.visible = true;
                                 expectedConfiguration.invoiceSummary.unableToMakePaymentMessage = null;
@@ -294,10 +295,11 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
 
                     it("should NOT include a link to the Payment Add page if the user does NOT have the MOBILE_PAYMENT_MAKE permission",
                         function () {
-                            invoiceSummaryView.userModel.set("permissions", {"MOBILE_PAYMENT_MAKE": false});
+                            invoiceSummaryView.userModel.get("selectedCompany")
+                                .set("permissions", {"MOBILE_PAYMENT_MAKE": false});
                             expectedConfiguration = {
                                 "invoiceSummary": utils._.extend({}, utils.deepClone(globals.invoiceSummary.configuration)),
-                                "permissions": userModel.get("permissions")
+                                "permissions": userModel.get("selectedCompany").get("permissions")
                             };
                             expectedConfiguration.invoiceSummary.makePaymentButton.visible = true;
 
@@ -331,7 +333,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                             expectedConfiguration = {
                                 invoiceSummary: utils._.extend({},
                                     utils.deepClone(globals.invoiceSummary.configuration)),
-                                "permissions" : user.permissions
+                                "permissions" : user.selectedCompany.permissions
                             };
 
 
@@ -384,7 +386,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                             expectedConfiguration = {
                                 invoiceSummary: utils._.extend({},
                                     utils.deepClone(globals.invoiceSummary.configuration)),
-                                "permissions" : user.permissions
+                                "permissions" : user.selectedCompany.permissions
                             };
 
 
@@ -437,7 +439,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                             expectedConfiguration = {
                                 invoiceSummary: utils._.extend({},
                                     utils.deepClone(globals.invoiceSummary.configuration)),
-                                "permissions" : user.permissions
+                                "permissions" : user.selectedCompany.permissions
                             };
 
 

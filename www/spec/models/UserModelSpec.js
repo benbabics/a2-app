@@ -46,16 +46,11 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                 it("should set hasMultipleAccounts to default", function () {
                     expect(userModel.defaults.hasMultipleAccounts).toBeFalsy();
                 });
-
-                it("should set permissions to default", function () {
-                    expect(userModel.defaults.permissions).toEqual(globals.userData.permissions);
-                });
             });
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(userModel, "set").and.callThrough();
-                    spyOn(userModel, "setPermissions").and.callFake(function () { });
                 });
 
                 it("is defined", function () {
@@ -73,7 +68,6 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
 
                     it("should NOT call set", function () {
                         expect(userModel.set).not.toHaveBeenCalled();
-                        expect(userModel.setPermissions).not.toHaveBeenCalled();
                     });
                 });
 
@@ -86,7 +80,6 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
 
                     it("should NOT call set", function () {
                         expect(userModel.set).not.toHaveBeenCalled();
-                        expect(userModel.setPermissions).not.toHaveBeenCalled();
                     });
                 });
 
@@ -132,12 +125,7 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                                         lastNameMaxLength: 12
                                     }
                                 }
-                            },
-                            permissions: [
-                                "PERMISSION_1",
-                                "PERMISSION_2",
-                                "PERMISSION_3"
-                            ]
+                            }
                         };
 
                     beforeEach(function () {
@@ -191,10 +179,6 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                     it("should set hasMultipleAccounts", function () {
                         expect(userModel.set).toHaveBeenCalledWith("hasMultipleAccounts", options.hasMultipleAccounts);
                     });
-
-                    it("should set permissions", function () {
-                        expect(userModel.setPermissions).toHaveBeenCalledWith(options.permissions);
-                    });
                 });
             });
 
@@ -215,72 +199,6 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
 
                 it("should call set", function () {
                     expect(userModel.set).toHaveBeenCalledWith(userModel.defaults);
-                });
-            });
-
-            describe("has a setPermissions function that", function () {
-                var mockPermissions = [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ];
-
-                beforeEach(function () {
-                    spyOn(userModel, "set").and.callThrough();
-
-                    userModel.setPermissions(mockPermissions);
-                });
-
-                it("is defined", function () {
-                    expect(userModel.setPermissions).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(userModel.setPermissions).toEqual(jasmine.any(Function));
-                });
-
-                it("should call set", function () {
-                    expect(userModel.set).toHaveBeenCalled();
-                    expect(userModel.set.calls.mostRecent().args.length).toEqual(2);
-                    expect(userModel.set.calls.mostRecent().args[0]).toEqual("permissions");
-                });
-
-                describe("when building a new object to set the permissions property with", function () {
-                    var newPermissions;
-
-                    beforeEach(function () {
-                        newPermissions = userModel.set.calls.mostRecent().args[1];
-                    });
-
-                    it("should include all the default permissions", function () {
-                        var numOfMatches = 0;
-
-                        // find all elements in the newPermissions that have a matching key with the default permissions
-                        utils._.each(userModel.defaults.permissions, function (value, key, list) {
-                            if (utils._.has(newPermissions, key)) {
-                                numOfMatches += 1;
-                            }
-                        });
-
-                        expect(numOfMatches).toEqual(utils._.size(userModel.defaults.permissions));
-                    });
-
-                    it("should set only the passed in permissions to true", function () {
-                        var truePermissions = {},
-                            matchingPermissions;
-
-                        // find all elements in newPermissions that are set to true
-                        utils._.each(newPermissions, function (value, key, list) {
-                            if (value) {
-                                truePermissions[key] = value;
-                            }
-                        });
-
-                        // get all the truePermissions that match the mockPermissions
-                        matchingPermissions = utils._.pick(truePermissions, mockPermissions);
-
-                        expect(utils._.size(matchingPermissions)).toEqual(utils._.size(mockPermissions));
-                    });
                 });
             });
 
@@ -339,9 +257,9 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                                 authorizationProfiles : null,
                                 bankAccounts : null,
                                 defaultShippingAddress : null,
-                                shippingMethods : null
-                            },
-                            permissions: userModel.defaults.permissions
+                                shippingMethods : null,
+                                permissions: globals.companyData.permissions
+                            }
                         };
                         userModel.clear();
                         userModel.initialize(mockUserModel);
@@ -375,7 +293,6 @@ define(["Squire", "utils", "globals", "models/CompanyModel", "backbone"],
                             authenticated : true,
                             firstName     : "Beavis",
                             email         : "cornholio@bnbinc.com",
-                            permissions   : userModel.defaults.permissions
                         };
                         userModel.clear();
                         userModel.initialize(mockUserModel);

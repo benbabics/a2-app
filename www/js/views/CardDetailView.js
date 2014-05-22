@@ -64,7 +64,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/BaseView", 
 
                 return {
                     "card"       : cardConfiguration,
-                    "permissions": this.userModel.get("permissions")
+                    "permissions": this.userModel.get("selectedCompany").get("permissions")
                 };
             },
 

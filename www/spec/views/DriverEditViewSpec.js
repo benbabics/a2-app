@@ -49,13 +49,13 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                             middleNameMaxLength: 1,
                             lastNameMaxLength: 12
                         }
-                    }
-                },
-                permissions: [
-                    "PERMISSION_1",
-                    "PERMISSION_2",
-                    "PERMISSION_3"
-                ]
+                    },
+                    permissions: [
+                        "PERMISSION_1",
+                        "PERMISSION_2",
+                        "PERMISSION_3"
+                    ]
+                }
             },
             userModel = UserModel.getInstance(),
             mockDriverModel = {
@@ -170,7 +170,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                 beforeEach(function () {
                     mockConfiguration = {
                         "driver"     : utils._.extend({}, utils.deepClone(globals.driverEdit.configuration)),
-                        "permissions": userModel.get("permissions")
+                        "permissions": userModel.get("selectedCompany").get("permissions")
                     };
 
                     actualContent = driverEditView.$el.find(":jqmData(role=content)");
@@ -227,8 +227,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     it("should include a button with the correct text", function () {
                         var button,
                             mockButtonLabel = "adfbawdfrghw45y62345b612";
-                        userModel.set("permissions", {"MOBILE_DRIVER_EDIT": true});
-                        mockConfiguration.permissions = userModel.get("permissions");
+                        userModel.get("selectedCompany").set("permissions", {"MOBILE_DRIVER_EDIT": true});
+                        mockConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
                         mockConfiguration.driver.submitButton.label = mockButtonLabel;
 
                         driverEditView.render();
@@ -239,8 +239,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                     it("should include a button to change status if the user has the MOBILE_DRIVER_EDIT permission",
                         function () {
-                            userModel.set("permissions", {"MOBILE_DRIVER_EDIT": true});
-                            mockConfiguration.permissions = userModel.get("permissions");
+                            userModel.get("selectedCompany").set("permissions", {"MOBILE_DRIVER_EDIT": true});
+                            mockConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
 
                             driverEditView.render();
 
@@ -249,8 +249,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                     it("should NOT include a button to change status if the user does NOT have the MOBILE_DRIVER_EDIT permission",
                         function () {
-                            userModel.set("permissions", {"MOBILE_DRIVER_EDIT": false});
-                            mockConfiguration.permissions = userModel.get("permissions");
+                            userModel.get("selectedCompany").set("permissions", {"MOBILE_DRIVER_EDIT": false});
+                            mockConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
 
                             driverEditView.render();
 
@@ -276,7 +276,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                             },
                             actualConfiguration;
 
-                        expectedConfiguration.permissions = userModel.get("permissions");
+                        expectedConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
                         driverEditView.model = null;
 
                         actualConfiguration = driverEditView.getConfiguration();
@@ -309,7 +309,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                             expectedConfiguration.driver.department.value = driverModelJSON.department.name;
                         }
                         expectedConfiguration.driver.submitButton.label = globals.driverEdit.constants.BUTTON_ACTIVATE;
-                        expectedConfiguration.permissions = userModel.get("permissions");
+                        expectedConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
 
                         actualConfiguration = driverEditView.getConfiguration();
 
@@ -341,7 +341,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                             expectedConfiguration.driver.department.value = driverModelJSON.department.name;
                         }
                         expectedConfiguration.driver.submitButton.label = globals.driverEdit.constants.BUTTON_TERMINATE;
-                        expectedConfiguration.permissions = userModel.get("permissions");
+                        expectedConfiguration.permissions = userModel.get("selectedCompany").get("permissions");
 
                         actualConfiguration = driverEditView.getConfiguration();
 

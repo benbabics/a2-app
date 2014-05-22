@@ -114,10 +114,10 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
             getEarlistPaymentDate: function () {
                 var earlistPaymentDate = utils.moment();
 
-                if (earlistPaymentDate.day("Sunday")) {
+                if (earlistPaymentDate.format("ddd") === "Sun") {
                     return earlistPaymentDate.add("days", 1);
                 }
-                if (earlistPaymentDate.day("Saturday")) {
+                if (earlistPaymentDate.format("ddd") === "Sat") {
                     return earlistPaymentDate.add("days", 2);
                 }
 
