@@ -1,6 +1,6 @@
-define(["backbone", "Squire", "mustache", "globals", "utils", "models/PaymentModel",
+define(["backbone", "Squire", "mustache", "globals", "utils", "models/PaymentModel", "views/BaseView",
         "text!tmpl/payment/payment.html", "jasmine-jquery"],
-    function (Backbone, Squire, Mustache, globals, utils, PaymentModel, pageTemplate) {
+    function (Backbone, Squire, Mustache, globals, utils, PaymentModel, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -24,6 +24,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/PaymentMod
 
         squire.mock("backbone", Backbone);
         squire.mock("mustache", mockMustache);
+        squire.mock("views/BaseView", BaseView);
 
         describe("A Payment View", function () {
             beforeEach(function (done) {
@@ -46,8 +47,8 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/PaymentMod
                 expect(paymentView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(paymentView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(paymentView instanceof BaseView).toBeTruthy();
             });
 
             describe("has a constructor that", function () {
@@ -65,31 +66,6 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/PaymentMod
 
                 it("should set the template", function () {
                     expect(paymentView.template).toEqual(pageTemplate);
-                });
-            });
-
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(PaymentView.__super__, "initialize").and.callFake(function () {});
-                    spyOn(mockMustache, "parse").and.callThrough();
-
-                    paymentView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(paymentView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(paymentView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should call super()", function () {
-                    expect(PaymentView.__super__.initialize).toHaveBeenCalledWith();
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(paymentView.template);
                 });
             });
 

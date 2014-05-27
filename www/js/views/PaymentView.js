@@ -1,21 +1,13 @@
-define(["backbone", "utils", "mustache", "globals", "text!tmpl/payment/payment.html"],
-    function (Backbone, utils, Mustache, globals, pageTemplate) {
+define(["backbone", "utils", "mustache", "globals", "views/BaseView", "text!tmpl/payment/payment.html"],
+    function (Backbone, utils, Mustache, globals, BaseView, pageTemplate) {
 
         "use strict";
 
 
-        var PaymentView = Backbone.View.extend({
+        var PaymentView = BaseView.extend({
             tagName: "li",
 
             template: pageTemplate,
-
-            initialize: function () {
-                // call super
-                this.constructor.__super__.initialize.apply(this, arguments);
-
-                // parse the template
-                Mustache.parse(this.template);
-            },
 
             render: function () {
                 this.$el.html(Mustache.render(this.template, this.getConfiguration()));

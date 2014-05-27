@@ -13,7 +13,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
             addDetailsTemplate: paymentChangeDetailsTemplate,
 
             invoiceSummaryModel: null,
-            userModel: null,
 
             events: utils._.extend({}, ValidationFormView.prototype.events, {
                 "click #submitPaymentAdd-btn": "submitForm",
@@ -32,13 +31,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                 // set context
                 utils._.bindAll(this, "handlePageBeforeShow");
 
-                if (options) {
-                    if (options.invoiceSummaryModel) {
-                        this.invoiceSummaryModel = options.invoiceSummaryModel;
-                    }
-                    if (options.userModel) {
-                        this.userModel = options.userModel;
-                    }
+                if (options && options.invoiceSummaryModel) {
+                    this.invoiceSummaryModel = options.invoiceSummaryModel;
                 }
 
                 // jQM Events
@@ -60,7 +54,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
 
             setupDatepicker: function () {
                 this.$el.find("#scheduledDate").date({
-                    minDate: this.getDefaultPaymentDate().toDate(),
+                    minDate: this.getEarlistPaymentDate().toDate(),
                     beforeShowDay: utils.$.datepicker.noWeekends
                 });
             },
@@ -79,7 +73,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                 });
 
                 paymentConfiguration.scheduledDate.value = this.model.get("scheduledDate");
-                paymentConfiguration.scheduledDate.minValue = this.getDefaultPaymentDate().toDate();
+                paymentConfiguration.scheduledDate.minValue = this.getEarlistPaymentDate().toDate();
                 paymentConfiguration.amount.value = this.model.get("amount");
 
                 paymentConfiguration.bankAccount.enabled = bankAccountListValues.length > 1;
@@ -106,37 +100,14 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                 };
             },
 
-            findDefaultBankAccount: function () {
-                var selectedCompany = this.userModel.get("selectedCompany");
-                return selectedCompany.get("bankAccounts").findWhere({"defaultBank": true});
-            },
-
-            findBankAccount: function (id) {
-                var selectedCompany = this.userModel.get("selectedCompany");
-                return selectedCompany.get("bankAccounts").findWhere({"id": id});
-            },
-
             resetModel: function () {
                 PaymentAddView.__super__.resetModel.apply(this, arguments);
 
                 this.model.set("paymentDueDate", this.invoiceSummaryModel.get("paymentDueDate"));
                 this.model.set("minimumPaymentDue", this.invoiceSummaryModel.get("minimumPaymentDue"));
                 this.model.set("amount", this.invoiceSummaryModel.get("minimumPaymentDue"));
-                this.model.set("scheduledDate", this.getDefaultPaymentDate().format("MM/DD/YYYY"));
+                this.model.set("scheduledDate", this.getEarlistPaymentDate().format("MM/DD/YYYY"));
                 this.model.set("bankAccount", this.findDefaultBankAccount());
-            },
-
-            getDefaultPaymentDate: function () {
-                var defaultPaymentDate = utils.moment();
-
-                if (defaultPaymentDate.format("ddd") === "Sun") {
-                    return defaultPaymentDate.add("days", 1);
-                }
-                if (defaultPaymentDate.format("ddd") === "Sat") {
-                    return defaultPaymentDate.add("days", 2);
-                }
-
-                return defaultPaymentDate;
             },
 
             pageBeforeShow: function () {

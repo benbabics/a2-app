@@ -1,6 +1,6 @@
-define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel", "text!tmpl/driver/search.html",
-    "text!tmpl/driver/searchHeader.html", "jasmine-jquery"],
-    function (Squire, globals, utils, Backbone, Mustache, UserModel, pageTemplate, searchHeaderTemplate) {
+define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel", "views/FormView",
+        "text!tmpl/driver/search.html", "text!tmpl/driver/searchHeader.html", "jasmine-jquery"],
+    function (Squire, globals, utils, Backbone, Mustache, UserModel, FormView, pageTemplate, searchHeaderTemplate) {
 
         "use strict";
 
@@ -71,36 +71,36 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
         squire.mock("utils", mockUtils);
+        squire.mock("views/FormView", FormView);
         squire.mock("models/UserModel", UserModel);
 
         describe("A Driver Search View", function () {
             beforeEach(function (done) {
-                squire.require(["views/DriverSearchView"],
-                    function (JasmineDriverSearchView) {
-                        loadFixtures("../../../index.html");
+                squire.require(["views/DriverSearchView"], function (JasmineDriverSearchView) {
+                    loadFixtures("../../../index.html");
 
-                        DriverSearchView = JasmineDriverSearchView;
+                    DriverSearchView = JasmineDriverSearchView;
 
-                        driverModel.set(mockDriverModel);
-                        userModel.initialize(mockUserModel);
+                    driverModel.set(mockDriverModel);
+                    userModel.initialize(mockUserModel);
 
-                        spyOn(UserModel, "getInstance").and.returnValue(userModel);
+                    spyOn(UserModel, "getInstance").and.returnValue(userModel);
 
-                        driverSearchView =  new DriverSearchView({
-                            model: driverModel,
-                            userModel: userModel
-                        });
-
-                        done();
+                    driverSearchView =  new DriverSearchView({
+                        model: driverModel,
+                        userModel: userModel
                     });
+
+                    done();
+                });
             });
 
             it("is defined", function () {
                 expect(driverSearchView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(driverSearchView instanceof Backbone.View).toBeTruthy();
+            it("looks like a FormView", function () {
+                expect(driverSearchView instanceof FormView).toBeTruthy();
             });
 
             describe("has events that", function () {
@@ -141,6 +141,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
+                    spyOn(DriverSearchView.__super__, "initialize").and.callFake(function () {});
                     spyOn(mockMustache, "parse").and.callThrough();
                     spyOn(driverSearchView.$el, "on").and.callFake(function () {});
                     spyOn(mockUtils._, "bindAll").and.callFake(function () { });
@@ -156,20 +157,16 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     expect(driverSearchView.initialize).toEqual(jasmine.any(Function));
                 });
 
+                it("should call super()", function () {
+                    expect(DriverSearchView.__super__.initialize).toHaveBeenCalledWith();
+                });
+
                 it("should call utils._.bindAll", function () {
                     expect(mockUtils._.bindAll).toHaveBeenCalledWith(driverSearchView, "handlePageBeforeShow");
                 });
 
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(driverSearchView.template);
-                });
-
                 it("should parse the headerTemplate", function () {
                     expect(mockMustache.parse).toHaveBeenCalledWith(driverSearchView.headerTemplate);
-                });
-
-                it("should set userModel", function () {
-                    expect(driverSearchView.userModel).toEqual(userModel);
                 });
 
                 it("should call on() on $el", function () {

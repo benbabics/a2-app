@@ -1,6 +1,6 @@
-define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel",
+define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel", "views/BaseView",
         "text!tmpl/card/card.html", "jasmine-jquery"],
-    function (Backbone, Squire, Mustache, globals, utils, CardModel, pageTemplate) {
+    function (Backbone, Squire, Mustache, globals, utils, CardModel, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -26,6 +26,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel"
 
         squire.mock("backbone", Backbone);
         squire.mock("mustache", mockMustache);
+        squire.mock("views/BaseView", BaseView);
 
         describe("A Card View", function () {
             beforeEach(function (done) {
@@ -46,8 +47,8 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel"
                 expect(cardView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(cardView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(cardView instanceof BaseView).toBeTruthy();
             });
 
             describe("has a constructor that", function () {
@@ -65,26 +66,6 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/CardModel"
 
                 it("should set the template", function () {
                     expect(cardView.template).toEqual(pageTemplate);
-                });
-            });
-
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(mockMustache, "parse").and.callThrough();
-
-                    cardView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(cardView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(cardView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(cardView.template);
                 });
             });
 

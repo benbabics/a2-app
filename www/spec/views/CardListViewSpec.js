@@ -1,7 +1,7 @@
 define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardCollection",
-        "models/CardModel", "models/UserModel", "text!tmpl/card/searchResults.html",
+        "models/CardModel", "models/UserModel", "views/BaseView", "text!tmpl/card/searchResults.html",
         "text!tmpl/card/searchResultsHeader.html", "jasmine-jquery"],
-    function (Squire, globals, utils, Backbone, Mustache, CardCollection, CardModel, UserModel,
+    function (Squire, globals, utils, Backbone, Mustache, CardCollection, CardModel, UserModel, BaseView,
               pageTemplate, searchResultsHeaderTemplate) {
 
         "use strict";
@@ -82,40 +82,43 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                 render: function () { return mockCardView; }
             },
             cardCollection,
+            CardListView,
             cardListView;
 
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
+        squire.mock("views/BaseView", BaseView);
         squire.mock("views/CardView", Squire.Helpers.returns(mockCardView));
 
         describe("A Card List View", function () {
             beforeEach(function (done) {
-                squire.require(["views/CardListView"],
-                    function (CardListView) {
-                        loadFixtures("../../../index.html");
+                squire.require(["views/CardListView"], function (JasmineCardListView) {
+                    loadFixtures("../../../index.html");
 
-                        userModel.initialize(mockUserModel);
-                        cardModel = new CardModel();
-                        cardModel.initialize(mockCardModel);
+                    CardListView = JasmineCardListView;
 
-                        cardCollection = new CardCollection();
-                        cardCollection.add(cardModel);
+                    userModel.initialize(mockUserModel);
+                    cardModel = new CardModel();
+                    cardModel.initialize(mockCardModel);
 
-                        cardListView =  new CardListView({
-                            collection: cardCollection,
-                            userModel: userModel
-                        });
+                    cardCollection = new CardCollection();
+                    cardCollection.add(cardModel);
 
-                        done();
+                    cardListView =  new CardListView({
+                        collection: cardCollection,
+                        userModel: userModel
                     });
+
+                    done();
+                });
             });
 
             it("is defined", function () {
                 expect(cardListView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(cardListView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(cardListView instanceof BaseView).toBeTruthy();
             });
 
             describe("has events that", function () {
@@ -152,6 +155,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
+                    spyOn(CardListView.__super__, "initialize").and.callFake(function () {});
                     spyOn(mockMustache, "parse").and.callThrough();
                     cardListView.initialize();
                 });
@@ -164,16 +168,12 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                     expect(cardListView.initialize).toEqual(jasmine.any(Function));
                 });
 
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(cardListView.template);
+                it("should call super()", function () {
+                    expect(CardListView.__super__.initialize).toHaveBeenCalledWith();
                 });
 
                 it("should parse the headerTemplate", function () {
                     expect(mockMustache.parse).toHaveBeenCalledWith(cardListView.headerTemplate);
-                });
-
-                it("should set userModel", function () {
-                    expect(cardListView.userModel).toEqual(userModel);
                 });
             });
 

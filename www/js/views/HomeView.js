@@ -1,21 +1,13 @@
-define(["backbone", "utils", "mustache", "globals", "text!tmpl/home/page.html"],
-    function (Backbone, utils, Mustache, globals, pageTemplate) {
+define(["backbone", "utils", "mustache", "globals", "views/BaseView", "text!tmpl/home/page.html"],
+    function (Backbone, utils, Mustache, globals, BaseView, pageTemplate) {
 
         "use strict";
 
 
-        var HomeView = Backbone.View.extend({
+        var HomeView = BaseView.extend({
             el: "#home",
 
             template: pageTemplate,
-
-            initialize: function () {
-                // call super
-                this.constructor.__super__.initialize.apply(this, arguments);
-
-                // parse the template
-                Mustache.parse(this.template);
-            },
 
             render: function () {
                 var $content = this.$el.find(":jqmData(role=content)");

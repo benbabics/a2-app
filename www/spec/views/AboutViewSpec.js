@@ -1,5 +1,5 @@
-define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, pageTemplate) {
+define(["Squire", "backbone", "mustache", "views/BaseView", "text!tmpl/about/page.html", "jasmine-jquery"],
+    function (Squire, Backbone, Mustache, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -16,29 +16,29 @@ define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-
 
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
+        squire.mock("views/BaseView", BaseView);
 
         describe("An About View", function () {
             beforeEach(function (done) {
-                squire.require(["views/AboutView"],
-                    function (AboutView) {
-                        loadFixtures("../../../index.html");
+                squire.require(["views/AboutView"], function (AboutView) {
+                    loadFixtures("../../../index.html");
 
-                        appModel.set(mockAppModel);
+                    appModel.set(mockAppModel);
 
-                        aboutView =  new AboutView({
-                            model: appModel
-                        });
-
-                        done();
+                    aboutView =  new AboutView({
+                        model: appModel
                     });
+
+                    done();
+                });
             });
 
             it("is defined", function () {
                 expect(aboutView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(aboutView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(aboutView instanceof BaseView).toBeTruthy();
             });
 
             describe("has a constructor that", function () {
@@ -60,30 +60,6 @@ define(["Squire", "backbone", "mustache", "text!tmpl/about/page.html", "jasmine-
 
                 it("should set the template", function () {
                     expect(aboutView.template).toEqual(pageTemplate);
-                });
-            });
-
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(mockMustache, "parse").and.callThrough();
-                    spyOn(aboutView, "pageCreate").and.callFake(function () { });
-                    aboutView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(aboutView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(aboutView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(aboutView.template);
-                });
-
-                it("should call pageCreate()", function () {
-                    expect(aboutView.pageCreate).toHaveBeenCalledWith();
                 });
             });
 

@@ -73,6 +73,8 @@ define(function (require) {
     };
 
     globals.APP.constants = {
+        "DEFAULT_DEPARTMENT_NAME": "UNASSIGNED",
+        "DEFAULT_SHIPPING_METHOD_NAME": "STANDARD",
         "APP_VERSION_STATUS" : "appVersionStatus",
         "LAST_WARN_VERSION"  : "lastWarnVersion",
         "STATES": [
@@ -676,7 +678,6 @@ define(function (require) {
      */
     globals.cardAdd = {};
     globals.cardAdd.constants = {
-        "DEFAULT_DEPARTMENT_NAME": "UNASSIGNED",
         "NO_AUTH_PROFILES_MESSAGE": "The account must have at least one profile set-up to add a card."
     };
     globals.cardAdd.configuration = {
@@ -800,7 +801,6 @@ define(function (require) {
      */
     globals.cardEdit = {};
     globals.cardEdit.constants = {
-        "DEFAULT_DEPARTMENT_NAME": "UNASSIGNED",
         "NO_AUTH_PROFILES_MESSAGE": "The account must have at least one profile set-up to edit a card."
     };
     globals.cardEdit.configuration = {
@@ -866,7 +866,6 @@ define(function (require) {
      */
     globals.cardShipping = {};
     globals.cardShipping.constants = {
-        "DEFAULT_SHIPPING_METHOD_NAME"     : "STANDARD",
         "ERROR_FIRST_NAME_REQUIRED_FIELD"  : "First Name must have a value",
         "ERROR_LAST_NAME_REQUIRED_FIELD"   : "Last Name must have a value",
         "ERROR_COMPANY_NAME_REQUIRED_FIELD": "Company must have a value",
@@ -1132,9 +1131,6 @@ define(function (require) {
      * Driver Add
      */
     globals.driverAdd = {};
-    globals.driverAdd.constants = {
-        "DEFAULT_DEPARTMENT_NAME"             : "UNASSIGNED"
-    };
     globals.driverAdd.configuration = {
         "firstName": {
             "label"      : "First Name",

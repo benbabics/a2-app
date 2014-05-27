@@ -1,6 +1,6 @@
-define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel", "text!tmpl/card/search.html",
-        "text!tmpl/card/searchHeader.html", "jasmine-jquery"],
-    function (Squire, globals, utils, Backbone, Mustache, UserModel, pageTemplate, searchHeaderTemplate) {
+define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel", "views/FormView",
+        "text!tmpl/card/search.html", "text!tmpl/card/searchHeader.html", "jasmine-jquery"],
+    function (Squire, globals, utils, Backbone, Mustache, UserModel, FormView, pageTemplate, searchHeaderTemplate) {
 
         "use strict";
 
@@ -65,36 +65,36 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
         squire.mock("utils", mockUtils);
+        squire.mock("views/FormView", FormView);
         squire.mock("models/UserModel", UserModel);
 
         describe("A Card Search View", function () {
             beforeEach(function (done) {
-                squire.require(["views/CardSearchView"],
-                    function (JasmineCardSearchView) {
-                        loadFixtures("../../../index.html");
+                squire.require(["views/CardSearchView"], function (JasmineCardSearchView) {
+                    loadFixtures("../../../index.html");
 
-                        CardSearchView = JasmineCardSearchView;
+                    CardSearchView = JasmineCardSearchView;
 
-                        cardModel.set(mockCardModel);
-                        userModel.initialize(mockUserModel);
+                    cardModel.set(mockCardModel);
+                    userModel.initialize(mockUserModel);
 
-                        spyOn(UserModel, "getInstance").and.returnValue(userModel);
+                    spyOn(UserModel, "getInstance").and.returnValue(userModel);
 
-                        cardSearchView =  new CardSearchView({
-                            model: cardModel,
-                            userModel: userModel
-                        });
-
-                        done();
+                    cardSearchView =  new CardSearchView({
+                        model: cardModel,
+                        userModel: userModel
                     });
+
+                    done();
+                });
             });
 
             it("is defined", function () {
                 expect(cardSearchView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(cardSearchView instanceof Backbone.View).toBeTruthy();
+            it("looks like a FormView", function () {
+                expect(cardSearchView instanceof FormView).toBeTruthy();
             });
 
             describe("has events that", function () {
@@ -135,6 +135,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
+                    spyOn(CardSearchView.__super__, "initialize").and.callFake(function () {});
                     spyOn(mockMustache, "parse").and.callThrough();
                     spyOn(cardSearchView.$el, "on").and.callFake(function () {});
                     spyOn(mockUtils._, "bindAll").and.callFake(function () { });
@@ -149,20 +150,16 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     expect(cardSearchView.initialize).toEqual(jasmine.any(Function));
                 });
 
+                it("should call super()", function () {
+                    expect(CardSearchView.__super__.initialize).toHaveBeenCalledWith();
+                });
+
                 it("should call utils._.bindAll", function () {
                     expect(mockUtils._.bindAll).toHaveBeenCalledWith(cardSearchView, "handlePageBeforeShow");
                 });
 
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(cardSearchView.template);
-                });
-
                 it("should parse the headerTemplate", function () {
                     expect(mockMustache.parse).toHaveBeenCalledWith(cardSearchView.headerTemplate);
-                });
-
-                it("should set userModel", function () {
-                    expect(cardSearchView.userModel).toEqual(userModel);
                 });
 
                 it("should call on() on $el", function () {

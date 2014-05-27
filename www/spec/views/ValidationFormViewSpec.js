@@ -1,5 +1,5 @@
-define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-validation"],
-    function (Squire, Mustache, globals, utils) {
+define(["Squire", "mustache", "globals", "utils", "views/FormView", "jasmine-jquery", "backbone-validation"],
+    function (Squire, Mustache, globals, utils, FormView) {
 
         "use strict";
 
@@ -65,6 +65,7 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
         squire.mock("facade", mockFacade);
         squire.mock("mustache", mockMustache);
         squire.mock("utils", mockUtils);
+        squire.mock("views/FormView", FormView);
 
         describe("A Validation Form View", function () {
             beforeEach(function (done) {
@@ -82,8 +83,8 @@ define(["Squire", "mustache", "globals", "utils", "jasmine-jquery", "backbone-va
                 expect(validationFormView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(validationFormView instanceof Backbone.View).toBeTruthy();
+            it("looks like a FormView", function () {
+                expect(validationFormView instanceof FormView).toBeTruthy();
             });
 
             describe("has a constructor that", function () {

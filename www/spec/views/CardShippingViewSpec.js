@@ -1,6 +1,7 @@
 define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel", "models/ShippingModel",
-        "models/UserModel", "text!tmpl/card/shipping.html", "text!tmpl/card/cardChangeDetails.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, CardModel, ShippingModel, UserModel,
+        "models/UserModel", "views/ValidationFormView", "text!tmpl/card/shipping.html",
+        "text!tmpl/card/cardChangeDetails.html", "jasmine-jquery"],
+    function (Squire, Backbone, Mustache, globals, utils, CardModel, ShippingModel, UserModel, ValidationFormView,
               pageTemplate, cardChangeDetailsTemplate) {
 
         "use strict";
@@ -124,6 +125,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
         squire.mock("mustache", mockMustache);
         squire.mock("utils", mockUtils);
         squire.mock("backbone", Backbone);
+        squire.mock("views/ValidationFormView", ValidationFormView);
 
         describe("A Card Shipping View", function () {
             beforeEach(function (done) {
@@ -148,8 +150,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 expect(cardShippingView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(cardShippingView instanceof Backbone.View).toBeTruthy();
+            it("looks like a ValidationFormView", function () {
+                expect(cardShippingView instanceof ValidationFormView).toBeTruthy();
             });
 
             describe("has events that", function () {
@@ -210,10 +212,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                 it("should parse the changeDetailsTemplate", function () {
                     expect(mockMustache.parse).toHaveBeenCalledWith(cardShippingView.changeDetailsTemplate);
-                });
-
-                it("should set userModel", function () {
-                    expect(cardShippingView.userModel).toEqual(userModel);
                 });
             });
 
@@ -545,83 +543,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 it("should set residence on the model", function () {
                     expect(cardShippingView.model.set)
                         .toHaveBeenCalledWith("residence", defaultShippingAddress.residence);
-                });
-            });
-
-            describe("has a findDefaultShippingMethod function that", function () {
-                var mockShippingMethod = {
-                        id: "134613456",
-                        name: "UNASSIGNED",
-                        visible: true
-                    },
-                    shippingMethods;
-
-                beforeEach(function () {
-                    shippingMethods = userModel.get("selectedCompany").get("shippingMethods");
-                    spyOn(shippingMethods, "findWhere").and.returnValue(mockShippingMethod);
-                });
-
-                it("is defined", function () {
-                    expect(cardShippingView.findDefaultShippingMethod).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(cardShippingView.findDefaultShippingMethod).toEqual(jasmine.any(Function));
-                });
-
-                it("should call findWhere on the shippingMethods collection", function () {
-                    cardShippingView.findDefaultShippingMethod();
-
-                    expect(shippingMethods.findWhere).toHaveBeenCalledWith(
-                        {
-                            "id": globals.cardShipping.constants.DEFAULT_SHIPPING_METHOD_NAME
-                        }
-                    );
-                });
-
-                it("should return the expected value", function () {
-                    var actualValue = cardShippingView.findDefaultShippingMethod();
-
-                    expect(actualValue).toEqual(mockShippingMethod);
-                });
-            });
-
-            describe("has a findShippingMethod function that", function () {
-                var mockShippingMethodId = "25621354",
-                    mockShippingMethod = {
-                        id: "134613456",
-                        name: "UNASSIGNED",
-                        visible: true
-                    },
-                    shippingMethods;
-
-                beforeEach(function () {
-                    shippingMethods = userModel.get("selectedCompany").get("shippingMethods");
-                    spyOn(shippingMethods, "findWhere").and.returnValue(mockShippingMethod);
-                });
-
-                it("is defined", function () {
-                    expect(cardShippingView.findShippingMethod).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(cardShippingView.findShippingMethod).toEqual(jasmine.any(Function));
-                });
-
-                it("should call findWhere on the shippingMethods collection", function () {
-                    cardShippingView.findShippingMethod(mockShippingMethodId);
-
-                    expect(shippingMethods.findWhere).toHaveBeenCalledWith(
-                        {
-                            "id": mockShippingMethodId
-                        }
-                    );
-                });
-
-                it("should return the expected value", function () {
-                    var actualValue = cardShippingView.findShippingMethod(mockShippingMethodId);
-
-                    expect(actualValue).toEqual(mockShippingMethod);
                 });
             });
 

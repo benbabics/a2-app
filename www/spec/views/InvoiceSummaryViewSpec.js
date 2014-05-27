@@ -1,6 +1,6 @@
-define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel",
+define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel", "views/BaseView",
         "text!tmpl/invoice/summary.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, UserModel, pageTemplate) {
+    function (Squire, Backbone, Mustache, globals, utils, UserModel, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -106,6 +106,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
 
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
+        squire.mock("views/BaseView", BaseView);
 
         describe("An Invoice Summary View", function () {
             beforeEach(function (done) {
@@ -132,8 +133,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                 expect(invoiceSummaryView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(invoiceSummaryView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(invoiceSummaryView instanceof BaseView).toBeTruthy();
             });
 
             describe("has a constructor that", function () {
@@ -178,16 +179,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                     expect(InvoiceSummaryView.__super__.initialize).toHaveBeenCalledWith();
                 });
 
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(invoiceSummaryView.template);
-                });
-
                 it("should set makePaymentAvailabilityModel", function () {
                     expect(invoiceSummaryView.makePaymentAvailabilityModel).toEqual(makePaymentAvailabilityModel);
-                });
-
-                it("should set userModel", function () {
-                    expect(invoiceSummaryView.userModel).toEqual(userModel);
                 });
             });
 

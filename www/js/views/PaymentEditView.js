@@ -1,6 +1,7 @@
 define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationFormView",
         "text!tmpl/payment/paymentEdit.html", "text!tmpl/payment/paymentChangeDetails.html"],
-    function (Backbone, utils, facade, Mustache, globals, ValidationFormView, pageTemplate, paymentChangeDetailsTemplate) {
+    function (Backbone, utils, facade, Mustache, globals, ValidationFormView, pageTemplate,
+              paymentChangeDetailsTemplate) {
 
         "use strict";
 
@@ -12,7 +13,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
             editDetailsTemplate: paymentChangeDetailsTemplate,
 
             invoiceSummaryModel: null,
-            userModel: null,
 
             events: utils._.extend({}, ValidationFormView.prototype.events, {
                 "click #submitPaymentEdit-btn": "submitForm",
@@ -28,13 +28,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                 // parse the edit details template
                 Mustache.parse(this.editDetailsTemplate);
 
-                if (options) {
-                    if (options.invoiceSummaryModel) {
-                        this.invoiceSummaryModel = options.invoiceSummaryModel;
-                    }
-                    if (options.userModel) {
-                        this.userModel = options.userModel;
-                    }
+                if (options && options.invoiceSummaryModel) {
+                    this.invoiceSummaryModel = options.invoiceSummaryModel;
                 }
             },
 
@@ -101,27 +96,9 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                 };
             },
 
-            findBankAccount: function (id) {
-                var selectedCompany = this.userModel.get("selectedCompany");
-                return selectedCompany.get("bankAccounts").findWhere({"id": id});
-            },
-
             updateModelFromSummary: function () {
                 this.model.set("paymentDueDate", this.invoiceSummaryModel.get("paymentDueDate"));
                 this.model.set("minimumPaymentDue", this.invoiceSummaryModel.get("minimumPaymentDue"));
-            },
-
-            getEarlistPaymentDate: function () {
-                var earlistPaymentDate = utils.moment();
-
-                if (earlistPaymentDate.format("ddd") === "Sun") {
-                    return earlistPaymentDate.add("days", 1);
-                }
-                if (earlistPaymentDate.format("ddd") === "Sat") {
-                    return earlistPaymentDate.add("days", 2);
-                }
-
-                return earlistPaymentDate;
             },
 
             /*

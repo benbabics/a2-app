@@ -4,8 +4,7 @@ define(["backbone", "globals", "facade", "utils", "mustache", "views/BaseView"],
         "use strict";
 
 
-        var FormView;
-        FormView = BaseView.extend({
+        var FormView = BaseView.extend({
 
             events: {
                 "change :input": "handleInputChanged"

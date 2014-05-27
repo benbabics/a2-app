@@ -1,6 +1,6 @@
-define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel",
+define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel", "views/BaseView",
         "text!tmpl/payment/searchResults.html", "jasmine-jquery"],
-    function (Squire, globals, utils, Backbone, Mustache, UserModel, pageTemplate) {
+    function (Squire, globals, utils, Backbone, Mustache, UserModel, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -69,6 +69,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
+        squire.mock("views/BaseView", BaseView);
         squire.mock("views/PaymentView", Squire.Helpers.returns(mockPaymentView));
 
         describe("A Payment List View", function () {
@@ -92,8 +93,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 expect(paymentListView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(paymentListView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(paymentListView instanceof BaseView).toBeTruthy();
             });
 
             describe("has a constructor that", function () {
@@ -115,29 +116,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 it("should set the template", function () {
                     expect(paymentListView.template).toEqual(pageTemplate);
-                });
-            });
-
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(mockMustache, "parse").and.callThrough();
-                    paymentListView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(paymentListView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(paymentListView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(paymentListView.template);
-                });
-
-                it("should set userModel", function () {
-                    expect(paymentListView.userModel).toEqual(userModel);
                 });
             });
 

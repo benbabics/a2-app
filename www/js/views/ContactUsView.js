@@ -10,26 +10,12 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
 
             template: pageTemplate,
 
-            userModel: null,
-
             events: utils._.extend({}, ValidationFormView.prototype.events, {
                 "click #submitContactUs-btn": "submitForm",
 
                 // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it
                 "submit #contactUsForm"     : "submitForm"
             }),
-
-            initialize: function (options) {
-                // call super
-                ContactUsView.__super__.initialize.apply(this, arguments);
-
-                // parse the template
-                Mustache.parse(this.template);
-
-                if (options && options.userModel) {
-                    this.userModel = options.userModel;
-                }
-            },
 
             render: function () {
                 var $content = this.$el.find(":jqmData(role=content)");

@@ -1,10 +1,11 @@
-define(["globals", "utils", "facade", "backbone", "mustache", "models/AppModel", "text!tmpl/updatePrompt/page.html"],
-    function (globals, utils, facade, Backbone, Mustache, AppModel, pageTemplate) {
+define(["globals", "utils", "facade", "backbone", "mustache", "models/AppModel", "views/BaseView",
+        "text!tmpl/updatePrompt/page.html"],
+    function (globals, utils, facade, Backbone, Mustache, AppModel, BaseView, pageTemplate) {
 
         "use strict";
 
 
-        var UpdatePromptView = Backbone.View.extend({
+        var UpdatePromptView = BaseView.extend({
             appModel: null,
             template: pageTemplate,
 
@@ -23,13 +24,13 @@ define(["globals", "utils", "facade", "backbone", "mustache", "models/AppModel",
             },
 
             initialize: function () {
+                // call super
+                this.constructor.__super__.initialize.apply(this, arguments);
+
                 // set context
                 utils._.bindAll(this, "handleUpdateDismiss", "handleUpdateClick");
 
                 this.appModel = AppModel.getInstance();
-
-                // parse the template
-                Mustache.parse(this.template);
             },
 
             render: function () {

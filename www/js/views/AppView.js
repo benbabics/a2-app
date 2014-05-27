@@ -42,7 +42,7 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
                     else {
                         try {
                             utils.$.mobile.loading("show");
-                        } catch (e) {}
+                        } catch (ignore) {}
                     }
                 };
 
@@ -54,7 +54,7 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
                         try {
                             // This call throws an exception if called during startup before mobile.loaderWidget is defined
                             utils.$.mobile.loading("hide");
-                        } catch (e) {}
+                        } catch (ignore) {}
                     }
                 };
             },

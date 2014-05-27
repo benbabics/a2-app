@@ -12,8 +12,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
             template: pageTemplate,
             addDetailsTemplate: driverAddDetailsTemplate,
 
-            userModel: null,
-
             events: utils._.extend({}, ValidationFormView.prototype.events, {
                 "click #submitDriverAdd-btn": "submitForm",
 
@@ -30,10 +28,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
 
                 // parse the add details template
                 Mustache.parse(this.addDetailsTemplate);
-
-                if (options && options.userModel) {
-                    this.userModel = options.userModel;
-                }
 
                 // jQM Events
                 this.$el.on("pagebeforeshow", this.handlePageBeforeShow);
@@ -66,7 +60,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
                         departmentListValues.push({
                             "id": department.id,
                             "name": department.name,
-                            "selected": department.name === globals.driverAdd.constants.DEFAULT_DEPARTMENT_NAME
+                            "selected": department.name === globals.APP.constants.DEFAULT_DEPARTMENT_NAME
                         });
                     }
                 });
@@ -116,17 +110,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
                     "message": response.message,
                     "driver" : driverConfiguration
                 };
-            },
-
-            findDefaultDepartment: function () {
-                var selectedCompany = this.userModel.get("selectedCompany");
-                return selectedCompany.get("departments")
-                    .findWhere({"visible": true, "name": globals.driverAdd.constants.DEFAULT_DEPARTMENT_NAME});
-            },
-
-            findDepartment: function (id) {
-                var selectedCompany = this.userModel.get("selectedCompany");
-                return selectedCompany.get("departments").findWhere({"visible": true, "id": id});
             },
 
             pageBeforeShow: function () {

@@ -1,4 +1,4 @@
-define(["backbone", "globals", "facade", "utils", "mustache",  "views/FormView", "backbone-validation"],
+define(["backbone", "globals", "facade", "utils", "mustache", "views/FormView", "backbone-validation"],
     function (Backbone, globals, facade, utils, Mustache, FormView) {
 
         "use strict";

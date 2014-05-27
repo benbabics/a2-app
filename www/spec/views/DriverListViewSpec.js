@@ -1,7 +1,7 @@
 define(["Squire", "globals", "utils", "backbone", "mustache", "collections/DriverCollection",
-        "models/DriverModel", "models/UserModel", "text!tmpl/driver/searchResults.html",
+        "models/DriverModel", "models/UserModel", "views/BaseView", "text!tmpl/driver/searchResults.html",
         "text!tmpl/driver/searchResultsHeader.html", "jasmine-jquery"],
-    function (Squire, globals, utils, Backbone, Mustache, DriverCollection, DriverModel, UserModel,
+    function (Squire, globals, utils, Backbone, Mustache, DriverCollection, DriverModel, UserModel, BaseView,
               pageTemplate, searchResultsHeaderTemplate) {
 
         "use strict";
@@ -80,40 +80,43 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 render: function () { return mockDriverView; }
             },
             driverCollection,
+            DriverListView,
             driverListView;
 
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
+        squire.mock("views/BaseView", BaseView);
         squire.mock("views/DriverView", Squire.Helpers.returns(mockDriverView));
 
         describe("A Driver List View", function () {
             beforeEach(function (done) {
-                squire.require(["views/DriverListView"],
-                    function (DriverListView) {
-                        loadFixtures("../../../index.html");
+                squire.require(["views/DriverListView"], function (JasmineDriverListView) {
+                    loadFixtures("../../../index.html");
 
-                        userModel.initialize(mockUserModel);
-                        driverModel = new DriverModel();
-                        driverModel.initialize(mockDriverModel);
+                    DriverListView = JasmineDriverListView;
 
-                        driverCollection = new DriverCollection();
-                        driverCollection.add(driverModel);
+                    userModel.initialize(mockUserModel);
+                    driverModel = new DriverModel();
+                    driverModel.initialize(mockDriverModel);
 
-                        driverListView =  new DriverListView({
-                            collection: driverCollection,
-                            userModel: userModel
-                        });
+                    driverCollection = new DriverCollection();
+                    driverCollection.add(driverModel);
 
-                        done();
+                    driverListView =  new DriverListView({
+                        collection: driverCollection,
+                        userModel: userModel
                     });
+
+                    done();
+                });
             });
 
             it("is defined", function () {
                 expect(driverListView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(driverListView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(driverListView instanceof BaseView).toBeTruthy();
             });
 
             describe("has events that", function () {
@@ -150,6 +153,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
+                    spyOn(DriverListView.__super__, "initialize").and.callFake(function () {});
                     spyOn(mockMustache, "parse").and.callThrough();
                     driverListView.initialize();
                 });
@@ -162,16 +166,12 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                     expect(driverListView.initialize).toEqual(jasmine.any(Function));
                 });
 
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(driverListView.template);
+                it("should call super()", function () {
+                    expect(DriverListView.__super__.initialize).toHaveBeenCalledWith();
                 });
 
                 it("should parse the headerTemplate", function () {
                     expect(mockMustache.parse).toHaveBeenCalledWith(driverListView.headerTemplate);
-                });
-
-                it("should set userModel", function () {
-                    expect(driverListView.userModel).toEqual(userModel);
                 });
             });
 

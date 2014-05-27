@@ -11,8 +11,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
             template: pageTemplate,
             headerTemplate: searchHeaderTemplate,
 
-            userModel: null,
-
             events: utils._.extend({}, FormView.prototype.events, {
                 "click #submitCardSearch-btn": "submitForm",
 
@@ -27,13 +25,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
                 // set context
                 utils._.bindAll(this, "handlePageBeforeShow");
 
-                // parse the templates
+                // parse the header template
                 Mustache.parse(this.headerTemplate);
-                Mustache.parse(this.template);
-
-                if (options && options.userModel) {
-                    this.userModel = options.userModel;
-                }
 
                 // jQM Events
                 this.$el.on("pagebeforeshow", this.handlePageBeforeShow);

@@ -1,17 +1,15 @@
-define(["backbone", "utils", "mustache", "globals", "views/DriverView",
+define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/DriverView",
     "text!tmpl/driver/searchResults.html", "text!tmpl/driver/searchResultsHeader.html"],
-    function (Backbone, utils, Mustache, globals, DriverView, pageTemplate, searchResultsHeaderTemplate) {
+    function (Backbone, utils, Mustache, globals, BaseView, DriverView, pageTemplate, searchResultsHeaderTemplate) {
 
         "use strict";
 
 
-        var DriverListView = Backbone.View.extend({
+        var DriverListView = BaseView.extend({
             el: "#driverSearchResults",
 
             template: pageTemplate,
             headerTemplate: searchResultsHeaderTemplate,
-
-            userModel: null,
 
             events: {
                 "click #showAllResults-btn": "handleShowAllDrivers"
@@ -21,13 +19,8 @@ define(["backbone", "utils", "mustache", "globals", "views/DriverView",
                 // call super
                 this.constructor.__super__.initialize.apply(this, arguments);
 
-                // parse the templates
+                // parse the header template
                 Mustache.parse(this.headerTemplate);
-                Mustache.parse(this.template);
-
-                if (options && options.userModel) {
-                    this.userModel = options.userModel;
-                }
             },
 
             render: function () {
@@ -71,7 +64,7 @@ define(["backbone", "utils", "mustache", "globals", "views/DriverView",
                 try {
                     // This call throws an exception if called during startup before the list is ready
                     listContainer.listview("refresh");
-                } catch (e) {}
+                } catch (ignore) {}
             },
 
             getConfiguration: function () {
@@ -83,8 +76,7 @@ define(["backbone", "utils", "mustache", "globals", "views/DriverView",
                         "numberDisplayed": this.collection.length,
                         "totalResults"   : this.collection.totalResults
                     });
-                }
-                else {
+                } else {
                     resultsInfo = globals.driverSearchResults.constants.NO_RESULTS_MESSAGE;
                 }
 

@@ -1,6 +1,7 @@
 define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel", "models/UserModel",
-        "text!tmpl/card/cardEdit.html", "text!tmpl/card/cardChangeDetails.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, CardModel, UserModel,
+        "views/ValidationFormView", "text!tmpl/card/cardEdit.html", "text!tmpl/card/cardChangeDetails.html",
+        "jasmine-jquery"],
+    function (Squire, Backbone, Mustache, globals, utils, CardModel, UserModel, ValidationFormView,
               pageTemplate, cardChangeDetailsTemplate) {
 
         "use strict";
@@ -79,6 +80,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
         squire.mock("mustache", mockMustache);
         squire.mock("utils", mockUtils);
         squire.mock("backbone", Backbone);
+        squire.mock("views/ValidationFormView", ValidationFormView);
 
         describe("A Card Edit View", function () {
             beforeEach(function (done) {
@@ -106,8 +108,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 expect(cardEditView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(cardEditView instanceof Backbone.View).toBeTruthy();
+            it("looks like a ValidationFormView", function () {
+                expect(cardEditView instanceof ValidationFormView).toBeTruthy();
             });
 
             describe("has events that", function () {
@@ -143,37 +145,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                 it("should set the changeDetailsTemplate", function () {
                     expect(cardEditView.changeDetailsTemplate).toEqual(cardChangeDetailsTemplate);
-                });
-            });
-
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(mockMustache, "parse").and.callThrough();
-                    spyOn(cardEditView.$el, "on").and.callFake(function () {});
-                    spyOn(CardEditView.__super__, "initialize").and.callFake(function () {});
-                    spyOn(mockUtils._, "bindAll").and.callFake(function () { });
-
-                    cardEditView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(cardEditView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(cardEditView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should call super()", function () {
-                    expect(CardEditView.__super__.initialize).toHaveBeenCalledWith();
-                });
-
-                it("should parse the changeDetailsTemplate", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(cardEditView.changeDetailsTemplate);
-                });
-
-                it("should set userModel", function () {
-                    expect(cardEditView.userModel).toEqual(userModel);
                 });
             });
 

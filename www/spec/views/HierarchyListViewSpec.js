@@ -1,6 +1,6 @@
-define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel",
+define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel", "views/BaseView",
         "text!tmpl/hierarchy/hierarchyList.html", "text!tmpl/hierarchy/hierarchyListHeader.html", "jasmine-jquery"],
-    function (Squire, globals, utils, Backbone, Mustache, UserModel, pageTemplate, headerTemplate) {
+    function (Squire, globals, utils, Backbone, Mustache, UserModel, BaseView, pageTemplate, headerTemplate) {
 
         "use strict";
 
@@ -70,38 +70,41 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 initialize: function () { },
                 render: function () { return mockHierarchyView; }
             },
+            HierarchyListView,
             hierarchyListView;
 
         squire.mock("backbone", mockBackbone);
         squire.mock("mustache", mockMustache);
         squire.mock("collections/HierarchyCollection", Squire.Helpers.returns(hierarchyCollection));
+        squire.mock("views/BaseView", BaseView);
         squire.mock("views/HierarchyView", Squire.Helpers.returns(mockHierarchyView));
 
         describe("A Hierarchy List View", function () {
             beforeEach(function (done) {
-                squire.require(["views/HierarchyListView"],
-                    function (HierarchyListView) {
-                        loadFixtures("../../../index.html");
+                squire.require(["views/HierarchyListView"], function (JasmineHierarchyListView) {
+                    loadFixtures("../../../index.html");
 
-                        userModel.initialize(mockUserModel);
-                        hierarchyModel.set(mockHierarchyModel);
-                        hierarchyCollection.add(hierarchyModel);
+                    HierarchyListView = JasmineHierarchyListView;
 
-                        hierarchyListView =  new HierarchyListView({
-                            collection: hierarchyCollection,
-                            userModel: userModel
-                        });
+                    userModel.initialize(mockUserModel);
+                    hierarchyModel.set(mockHierarchyModel);
+                    hierarchyCollection.add(hierarchyModel);
 
-                        done();
+                    hierarchyListView =  new HierarchyListView({
+                        collection: hierarchyCollection,
+                        userModel: userModel
                     });
+
+                    done();
+                });
             });
 
             it("is defined", function () {
                 expect(hierarchyListView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(hierarchyListView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(hierarchyListView instanceof BaseView).toBeTruthy();
             });
 
             describe("has a constructor that", function () {
@@ -132,6 +135,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
             describe("has an initialize function that", function () {
                 beforeEach(function () {
+                    spyOn(HierarchyListView.__super__, "initialize").and.callFake(function () {});
                     spyOn(mockMustache, "parse").and.callThrough();
                     hierarchyListView.initialize();
                 });
@@ -144,16 +148,12 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     expect(hierarchyListView.initialize).toEqual(jasmine.any(Function));
                 });
 
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(hierarchyListView.template);
+                it("should call super()", function () {
+                    expect(HierarchyListView.__super__.initialize).toHaveBeenCalledWith();
                 });
 
                 it("should parse the headerTemplate", function () {
                     expect(mockMustache.parse).toHaveBeenCalledWith(hierarchyListView.headerTemplate);
-                });
-
-                it("should set userModel", function () {
-                    expect(hierarchyListView.userModel).toEqual(userModel);
                 });
             });
 

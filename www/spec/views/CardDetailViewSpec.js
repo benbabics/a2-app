@@ -140,35 +140,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 });
             });
 
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(mockMustache, "parse").and.callThrough();
-                    spyOn(CardDetailView.__super__, "initialize").and.callFake(function () {});
-
-                    cardDetailView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(cardDetailView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(cardDetailView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should call super()", function () {
-                    expect(CardDetailView.__super__.initialize).toHaveBeenCalledWith();
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(cardDetailView.template);
-                });
-
-                it("should set userModel", function () {
-                    expect(cardDetailView.userModel).toEqual(userModel);
-                });
-            });
-
             describe("has a render function that", function () {
                 var actualContent,
                     mockConfiguration;

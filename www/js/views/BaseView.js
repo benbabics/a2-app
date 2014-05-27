@@ -1,11 +1,13 @@
-define(["backbone", "utils", "mustache"],
-    function (Backbone, utils, Mustache) {
+define(["backbone", "globals", "utils", "mustache"],
+    function (Backbone, globals, utils, Mustache) {
 
         "use strict";
 
 
         var BaseView = Backbone.View.extend({
-            initialize: function () {
+            userModel: null,
+
+            initialize: function (options) {
                 // call super
                 BaseView.__super__.initialize.apply(this, arguments);
 
@@ -13,6 +15,10 @@ define(["backbone", "utils", "mustache"],
 
                 // cache the template
                 Mustache.parse(this.template);
+
+                if (options && options.userModel) {
+                    this.userModel = options.userModel;
+                }
 
                 // create page
                 this.pageCreate();
@@ -47,6 +53,83 @@ define(["backbone", "utils", "mustache"],
                 } else {
                     this.model.set(this.model.defaults);
                 }
+            },
+
+            findDefaultAuthorizationProfile: function () {
+                var selectedCompany = this.userModel.get("selectedCompany");
+                return selectedCompany.get("authorizationProfiles").at(0);
+            },
+
+            findDefaultBankAccount: function () {
+                var selectedCompany = this.userModel.get("selectedCompany"),
+                    bankAccounts = selectedCompany.get("bankAccounts"),
+                    defaultBankAccount = bankAccounts.findWhere({"defaultBank": true});
+
+                // Return the default if one was found
+                if (defaultBankAccount) {
+                    return defaultBankAccount;
+                }
+
+                // otherwise return the first one in the collection
+                return bankAccounts.at(0);
+            },
+
+            findDefaultDepartment: function () {
+                var selectedCompany = this.userModel.get("selectedCompany"),
+                    departments = selectedCompany.get("departments"),
+                    defaultDepartment = departments
+                        .findWhere({"visible": true, "name": globals.APP.constants.DEFAULT_DEPARTMENT_NAME});
+
+                // Return the default if one was found
+                if (defaultDepartment) {
+                    return defaultDepartment;
+                }
+
+                // otherwise return the first one in the collection
+                return departments.at(0);
+            },
+
+            findDefaultShippingMethod: function () {
+                var selectedCompany = this.userModel.get("selectedCompany"),
+                    shippingMethods = selectedCompany.get("shippingMethods"),
+                    defaultShippingMethod = shippingMethods
+                        .findWhere({"id": globals.APP.constants.DEFAULT_SHIPPING_METHOD_NAME});
+
+                // Return the default if one was found
+                if (defaultShippingMethod) {
+                    return defaultShippingMethod;
+                }
+
+                // otherwise return the first one in the collection
+                return shippingMethods.at(0);
+            },
+
+            findBankAccount: function (id) {
+                var selectedCompany = this.userModel.get("selectedCompany");
+                return selectedCompany.get("bankAccounts").findWhere({"id": id});
+            },
+
+            findDepartment: function (id) {
+                var selectedCompany = this.userModel.get("selectedCompany");
+                return selectedCompany.get("departments").findWhere({"visible": true, "id": id});
+            },
+
+            findShippingMethod: function (id) {
+                var selectedCompany = this.userModel.get("selectedCompany");
+                return selectedCompany.get("shippingMethods").findWhere({"id": id});
+            },
+
+            getEarlistPaymentDate: function () {
+                var earlistPaymentDate = utils.moment();
+
+                if (earlistPaymentDate.format("ddd") === "Sun") {
+                    return earlistPaymentDate.add("days", 1);
+                }
+                if (earlistPaymentDate.format("ddd") === "Sat") {
+                    return earlistPaymentDate.add("days", 2);
+                }
+
+                return earlistPaymentDate;
             }
         });
 

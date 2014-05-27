@@ -1,10 +1,12 @@
-define(["backbone", "utils", "globals", "mustache", "text!tmpl/updatePrompt/page.html", "Squire", "jasmine-jquery"],
-    function (Backbone, utils, globals, Mustache, pageTemplate, Squire) {
+define(["backbone", "utils", "globals", "mustache", "views/BaseView", "text!tmpl/updatePrompt/page.html", "Squire",
+        "jasmine-jquery"],
+    function (Backbone, utils, globals, Mustache, BaseView, pageTemplate, Squire) {
         "use strict";
 
         var squire = new Squire(),
             mockMustache = Mustache,
             mockBackbone = Backbone,
+            mockUtils = utils,
             mockAppModel = {
                 "buildVersion"   : "1.1.2",
                 "platform"       : "Android",
@@ -29,17 +31,22 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updatePrompt/page
             mockFacade = {
                 publish: function () { }
             },
+            UpdatePromptView,
             updatePromptView;
 
         squire.mock("backbone", mockBackbone);
         squire.mock("facade", mockFacade);
         squire.mock("mustache", mockMustache);
+        squire.mock("utils", mockUtils);
         squire.mock("models/AppModel", AppModel);
+        squire.mock("views/BaseView", BaseView);
 
         describe("A UpdatePrompt View", function () {
             beforeEach(function (done) {
-                squire.require(["views/UpdatePromptView"], function (UpdatePromptView) {
+                squire.require(["views/UpdatePromptView"], function (JasmineUpdatePromptView) {
                     loadFixtures("../../../index.html");
+
+                    UpdatePromptView = JasmineUpdatePromptView;
 
                     appModel.set(mockAppModel);
                     spyOn(AppModel, "getInstance").and.callFake(function () { return appModel; });
@@ -54,8 +61,8 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updatePrompt/page
                 expect(updatePromptView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(updatePromptView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(updatePromptView instanceof BaseView).toBeTruthy();
             });
 
             describe("has events that", function () {
@@ -80,11 +87,36 @@ define(["backbone", "utils", "globals", "mustache", "text!tmpl/updatePrompt/page
                 it("should set the template", function () {
                     expect(updatePromptView.template).toEqual(pageTemplate);
                 });
+            });
 
-                describe("when initializing the AppModel", function () {
-                    it("should set the appModel variable to the AppModel instance", function () {
-                        expect(updatePromptView.appModel).toEqual(appModel);
-                    });
+            describe("has an initialize function that", function () {
+                beforeEach(function () {
+                    spyOn(mockMustache, "parse").and.callThrough();
+                    spyOn(UpdatePromptView.__super__, "initialize").and.callFake(function () {});
+                    spyOn(mockUtils._, "bindAll").and.callFake(function () { });
+
+                    updatePromptView.initialize();
+                });
+
+                it("is defined", function () {
+                    expect(updatePromptView.initialize).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(updatePromptView.initialize).toEqual(jasmine.any(Function));
+                });
+
+                it("should call super()", function () {
+                    expect(UpdatePromptView.__super__.initialize).toHaveBeenCalledWith();
+                });
+
+                it("should call utils._.bindAll", function () {
+                    expect(mockUtils._.bindAll)
+                        .toHaveBeenCalledWith(updatePromptView, "handleUpdateDismiss", "handleUpdateClick");
+                });
+
+                it("should set the appModel variable to the AppModel instance", function () {
+                    expect(updatePromptView.appModel).toEqual(appModel);
                 });
             });
 

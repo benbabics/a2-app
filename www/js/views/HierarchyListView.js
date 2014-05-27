@@ -1,29 +1,22 @@
-define(["backbone", "utils", "mustache", "globals", "views/HierarchyView",
+define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/HierarchyView",
         "text!tmpl/hierarchy/hierarchyList.html", "text!tmpl/hierarchy/hierarchyListHeader.html"],
-    function (Backbone, utils, Mustache, globals, HierarchyView, pageTemplate, hierarchyListHeaderTemplate) {
+    function (Backbone, utils, Mustache, globals, BaseView, HierarchyView, pageTemplate, hierarchyListHeaderTemplate) {
 
         "use strict";
 
 
-        var HierarchyListView = Backbone.View.extend({
+        var HierarchyListView = BaseView.extend({
             el: "#hierarchyManager",
 
             template: pageTemplate,
             headerTemplate: hierarchyListHeaderTemplate,
 
-            userModel: null,
-
             initialize: function (options) {
                 // call super
                 this.constructor.__super__.initialize.apply(this, arguments);
 
-                // parse the templates
-                Mustache.parse(this.template);
+                // parse the header template
                 Mustache.parse(this.headerTemplate);
-
-                if (options && options.userModel) {
-                    this.userModel = options.userModel;
-                }
             },
 
             render: function () {
@@ -66,7 +59,7 @@ define(["backbone", "utils", "mustache", "globals", "views/HierarchyView",
                 try {
                     // This call throws an exception if called during startup before the list is ready
                     listContainer.listview("refresh");
-                } catch (e) {}
+                } catch (ignore) {}
             }
         });
 

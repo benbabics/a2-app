@@ -1,6 +1,6 @@
-define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel", "views/ValidationFormView",
+define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationFormView",
         "text!tmpl/login/page.html", "backbone-validation"],
-    function (Backbone, utils, facade, Mustache, globals, UserModel, ValidationFormView, pageTemplate) {
+    function (Backbone, utils, facade, Mustache, globals, ValidationFormView, pageTemplate) {
 
         "use strict";
 
@@ -16,11 +16,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/UserModel"
                 // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it
                 "submit #loginForm"     : "submitForm"
             }),
-
-            initialize: function () {
-                // call super
-                LoginView.__super__.initialize.apply(this, arguments);
-            },
 
             pageCreate: function () {
                 var $content = this.$el.find(":jqmData(role=content)");

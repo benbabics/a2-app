@@ -1,5 +1,6 @@
-define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contactUs/page.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, pageTemplate) {
+define(["Squire", "backbone", "mustache", "globals", "utils", "views/ValidationFormView",
+        "text!tmpl/contactUs/page.html", "jasmine-jquery"],
+    function (Squire, Backbone, Mustache, globals, utils, ValidationFormView, pageTemplate) {
 
         "use strict";
 
@@ -21,6 +22,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
 
         squire.mock("mustache", mockMustache);
         squire.mock("backbone", Backbone);
+        squire.mock("views/ValidationFormView", ValidationFormView);
 
         describe("A Contact Us View", function () {
             beforeEach(function (done) {
@@ -44,8 +46,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
                 expect(contactUsView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(contactUsView instanceof Backbone.View).toBeTruthy();
+            it("looks like a ValidationFormView", function () {
+                expect(contactUsView instanceof ValidationFormView).toBeTruthy();
             });
 
             describe("has events that", function () {
@@ -77,35 +79,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "text!tmpl/contact
 
                 it("should set the template", function () {
                     expect(contactUsView.template).toEqual(pageTemplate);
-                });
-            });
-
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(mockMustache, "parse").and.callThrough();
-                    spyOn(ContactUsView.__super__, "initialize").and.callFake(function () {});
-
-                    contactUsView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(contactUsView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(contactUsView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should call super()", function () {
-                    expect(ContactUsView.__super__.initialize).toHaveBeenCalledWith();
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(contactUsView.template);
-                });
-
-                it("should set userModel", function () {
-                    expect(contactUsView.userModel).toEqual(userModel);
                 });
             });
 

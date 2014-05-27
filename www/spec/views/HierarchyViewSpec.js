@@ -52,26 +52,6 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "views/BaseView",
                 });
             });
 
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(HierarchyView.__super__, "initialize").and.callFake(function () {});
-
-                    hierarchyView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(hierarchyView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(hierarchyView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should call super()", function () {
-                    expect(HierarchyView.__super__.initialize).toHaveBeenCalledWith();
-                });
-            });
-
             describe("has a render function that", function () {
                 beforeEach(function () {
                     spyOn(mockMustache, "render").and.callThrough();

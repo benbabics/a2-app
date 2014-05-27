@@ -1,31 +1,22 @@
-define(["backbone", "mustache", "utils", "globals", "text!tmpl/invoice/summary.html"],
-    function (Backbone, Mustache, utils, globals, pageTemplate) {
+define(["backbone", "mustache", "utils", "globals", "views/BaseView", "text!tmpl/invoice/summary.html"],
+    function (Backbone, Mustache, utils, globals, BaseView, pageTemplate) {
 
         "use strict";
 
 
-        var InvoiceSummaryView = Backbone.View.extend({
+        var InvoiceSummaryView = BaseView.extend({
             el: "#invoiceSummary",
 
             template: pageTemplate,
 
             makePaymentAvailabilityModel: null,
-            userModel: null,
 
             initialize: function (options) {
                 // call super
                 this.constructor.__super__.initialize.apply(this, arguments);
 
-                // parse the template
-                Mustache.parse(this.template);
-
-                if (options) {
-                    if (options.makePaymentAvailabilityModel) {
-                        this.makePaymentAvailabilityModel = options.makePaymentAvailabilityModel;
-                    }
-                    if (options.userModel) {
-                        this.userModel = options.userModel;
-                    }
+                if (options && options.makePaymentAvailabilityModel) {
+                    this.makePaymentAvailabilityModel = options.makePaymentAvailabilityModel;
                 }
             },
 
@@ -36,18 +27,21 @@ define(["backbone", "mustache", "utils", "globals", "text!tmpl/invoice/summary.h
             },
 
             getConfiguration: function () {
-                var invoiceSummaryConfiguration = utils._.extend({}, utils.deepClone(globals.invoiceSummary.configuration)),
+                var invoiceSummaryConfiguration =
+                        utils._.extend({}, utils.deepClone(globals.invoiceSummary.configuration)),
                     user = this.userModel.toJSON(),
                     invoiceSummary = this.model.toJSON(),
                     makePaymentAvailability = this.makePaymentAvailabilityModel.toJSON();
 
                 invoiceSummaryConfiguration.accountNumber.value = invoiceSummary.accountNumber;
-                invoiceSummaryConfiguration.availableCredit.value = utils.formatCurrency(invoiceSummary.availableCredit);
+                invoiceSummaryConfiguration.availableCredit.value =
+                    utils.formatCurrency(invoiceSummary.availableCredit);
                 invoiceSummaryConfiguration.currentBalance.value = utils.formatCurrency(invoiceSummary.currentBalance);
                 invoiceSummaryConfiguration.currentBalance.asOfValue = invoiceSummary.currentBalanceAsOf;
 
                 invoiceSummaryConfiguration.paymentDueDate.value = invoiceSummary.paymentDueDate;
-                invoiceSummaryConfiguration.minimumPaymentDue.value = utils.formatCurrency(invoiceSummary.minimumPaymentDue);
+                invoiceSummaryConfiguration.minimumPaymentDue.value =
+                    utils.formatCurrency(invoiceSummary.minimumPaymentDue);
                 invoiceSummaryConfiguration.invoiceNumber.value = invoiceSummary.invoiceNumber;
                 invoiceSummaryConfiguration.closingDate.value = invoiceSummary.closingDate;
 

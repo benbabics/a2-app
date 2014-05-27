@@ -12,26 +12,12 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
             template: pageTemplate,
             changeDetailsTemplate: cardChangeDetailsTemplate,
 
-            userModel: null,
-
             events: utils._.extend({}, ValidationFormView.prototype.events, {
                 "click #submitCardEdit-btn": "submitForm",
 
                 // Clicking 'GO', 'Search', .. from the soft keyboard submits the form so lets handle it
                 "submit #cardEditForm"     : "submitForm"
             }),
-
-            initialize: function (options) {
-                // call super
-                this.constructor.__super__.initialize.apply(this, arguments);
-
-                // parse the add/edit details template
-                Mustache.parse(this.changeDetailsTemplate);
-
-                if (options && options.userModel) {
-                    this.userModel = options.userModel;
-                }
-            },
 
             render: function () {
                 var $content = this.$el.find(":jqmData(role=content)");

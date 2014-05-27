@@ -9,11 +9,6 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "text!tmpl
 
             template: pageTemplate,
 
-            initialize: function () {
-                // call super
-                this.constructor.__super__.initialize.apply(this, arguments);
-            },
-
             render: function () {
                 this.$el.html(Mustache.render(this.template));
                 return this;

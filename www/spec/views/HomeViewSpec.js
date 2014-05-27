@@ -1,5 +1,6 @@
-define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/page.html", "jasmine-jquery"],
-    function (Backbone, Squire, Mustache, globals, utils, pageTemplate) {
+define(["backbone", "Squire", "mustache", "globals", "utils", "views/BaseView",
+        "text!tmpl/home/page.html", "jasmine-jquery"],
+    function (Backbone, Squire, Mustache, globals, utils, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -23,6 +24,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
 
         squire.mock("backbone", Backbone);
         squire.mock("mustache", mockMustache);
+        squire.mock("views/BaseView", BaseView);
 
         describe("A Home View", function () {
             beforeEach(function (done) {
@@ -46,8 +48,8 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
                 expect(homeView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(homeView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(homeView instanceof BaseView).toBeTruthy();
             });
 
             describe("has a constructor that", function () {
@@ -69,26 +71,6 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "text!tmpl/home/pa
 
                 it("should set the template", function () {
                     expect(homeView.template).toEqual(pageTemplate);
-                });
-            });
-
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(mockMustache, "parse").and.callThrough();
-
-                    homeView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(homeView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(homeView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(homeView.template);
                 });
             });
 

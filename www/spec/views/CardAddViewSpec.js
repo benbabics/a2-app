@@ -1,6 +1,6 @@
 define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel", "models/UserModel",
-        "text!tmpl/card/cardAdd.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, CardModel, UserModel, pageTemplate) {
+        "views/ValidationFormView", "text!tmpl/card/cardAdd.html", "jasmine-jquery"],
+    function (Squire, Backbone, Mustache, globals, utils, CardModel, UserModel, ValidationFormView, pageTemplate) {
 
         "use strict";
 
@@ -64,6 +64,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
         squire.mock("mustache", mockMustache);
         squire.mock("utils", mockUtils);
         squire.mock("backbone", Backbone);
+        squire.mock("views/ValidationFormView", ValidationFormView);
 
         describe("A Card Add View", function () {
             beforeEach(function (done) {
@@ -91,8 +92,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 expect(cardAddView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(cardAddView instanceof Backbone.View).toBeTruthy();
+            it("looks like a ValidationFormView", function () {
+                expect(cardAddView instanceof ValidationFormView).toBeTruthy();
             });
 
             describe("has events that", function () {
@@ -150,10 +151,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                 it("should call utils._.bindAll", function () {
                     expect(mockUtils._.bindAll).toHaveBeenCalledWith(cardAddView, "handlePageBeforeShow");
-                });
-
-                it("should set userModel", function () {
-                    expect(cardAddView.userModel).toEqual(userModel);
                 });
 
                 it("should call on() on $el", function () {
@@ -389,7 +386,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                                 departmentListValues.push({
                                     "id": department.id,
                                     "name": department.name,
-                                    "selected": department.name === globals.cardAdd.constants.DEFAULT_DEPARTMENT_NAME
+                                    "selected": department.name === globals.APP.constants.DEFAULT_DEPARTMENT_NAME
                                 });
                             }
                         });
@@ -433,119 +430,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                         expect(actualConfiguration).toEqual(expectedConfiguration);
                     });
-                });
-            });
-
-            describe("has a findDefaultAuthorizationProfile function that", function () {
-                var mockAuthorizationProfileModel = {
-                        id     : 2457624567,
-                        name   : "Mock Name",
-                        productRestriction: 2134
-                    },
-                    authorizationProfiles;
-
-                beforeEach(function () {
-                    authorizationProfiles = userModel.get("selectedCompany").get("authorizationProfiles");
-                    spyOn(authorizationProfiles, "at").and.returnValue(mockAuthorizationProfileModel);
-                });
-
-                it("is defined", function () {
-                    expect(cardAddView.findDefaultAuthorizationProfile).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(cardAddView.findDefaultAuthorizationProfile).toEqual(jasmine.any(Function));
-                });
-
-                it("should call at on the departments collection", function () {
-                    cardAddView.findDefaultAuthorizationProfile();
-
-                    expect(authorizationProfiles.at).toHaveBeenCalledWith(0);
-                });
-
-                it("should return the expected value", function () {
-                    var actualValue = cardAddView.findDefaultAuthorizationProfile();
-
-                    expect(actualValue).toEqual(mockAuthorizationProfileModel);
-                });
-            });
-
-            describe("has a findDefaultDepartment function that", function () {
-                var mockDepartment = {
-                        id: "134613456",
-                        name: "UNASSIGNED",
-                        visible: true
-                    },
-                    departments;
-
-                beforeEach(function () {
-                    departments = userModel.get("selectedCompany").get("departments");
-                    spyOn(departments, "findWhere").and.returnValue(mockDepartment);
-                });
-
-                it("is defined", function () {
-                    expect(cardAddView.findDefaultDepartment).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(cardAddView.findDefaultDepartment).toEqual(jasmine.any(Function));
-                });
-
-                it("should call findWhere on the departments collection", function () {
-                    cardAddView.findDefaultDepartment();
-
-                    expect(departments.findWhere).toHaveBeenCalledWith(
-                        {
-                            "visible": true,
-                            "name"   : globals.cardAdd.constants.DEFAULT_DEPARTMENT_NAME
-                        }
-                    );
-                });
-
-                it("should return the expected value", function () {
-                    var actualValue = cardAddView.findDefaultDepartment();
-
-                    expect(actualValue).toEqual(mockDepartment);
-                });
-            });
-
-            describe("has a findDepartment function that", function () {
-                var mockDepartmentId = "25621354",
-                    mockDepartment = {
-                        id: "134613456",
-                        name: "UNASSIGNED",
-                        visible: true
-                    },
-                    departments;
-
-                beforeEach(function () {
-                    departments = userModel.get("selectedCompany").get("departments");
-                    spyOn(departments, "findWhere").and.returnValue(mockDepartment);
-                });
-
-                it("is defined", function () {
-                    expect(cardAddView.findDepartment).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(cardAddView.findDepartment).toEqual(jasmine.any(Function));
-                });
-
-                it("should call findWhere on the departments collection", function () {
-                    cardAddView.findDepartment(mockDepartmentId);
-
-                    expect(departments.findWhere).toHaveBeenCalledWith(
-                        {
-                            "visible": true,
-                            "id": mockDepartmentId
-                        }
-                    );
-                });
-
-                it("should return the expected value", function () {
-                    var actualValue = cardAddView.findDepartment(mockDepartmentId);
-
-                    expect(actualValue).toEqual(mockDepartment);
                 });
             });
 

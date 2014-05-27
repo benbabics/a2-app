@@ -1,6 +1,7 @@
 define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentModel", "models/UserModel",
-        "text!tmpl/payment/paymentEdit.html", "text!tmpl/payment/paymentChangeDetails.html", "jasmine-jquery"],
-    function (Squire, Backbone, Mustache, globals, utils, PaymentModel, UserModel,
+        "views/ValidationFormView", "text!tmpl/payment/paymentEdit.html",
+        "text!tmpl/payment/paymentChangeDetails.html", "jasmine-jquery"],
+    function (Squire, Backbone, Mustache, globals, utils, PaymentModel, UserModel, ValidationFormView,
               pageTemplate, paymentChangeDetailsTemplate) {
 
         "use strict";
@@ -90,6 +91,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
         squire.mock("mustache", mockMustache);
         squire.mock("utils", mockUtils);
         squire.mock("backbone", Backbone);
+        squire.mock("views/ValidationFormView", ValidationFormView);
 
         describe("A Payment Edit View", function () {
             beforeEach(function (done) {
@@ -120,8 +122,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                 expect(paymentEditView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(paymentEditView instanceof Backbone.View).toBeTruthy();
+            it("looks like a ValidationFormView", function () {
+                expect(paymentEditView instanceof ValidationFormView).toBeTruthy();
             });
 
             describe("has events that", function () {
@@ -186,10 +188,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
 
                 it("should set invoiceSummaryModel", function () {
                     expect(paymentEditView.invoiceSummaryModel).toEqual(invoiceSummaryModel);
-                });
-
-                it("should set userModel", function () {
-                    expect(paymentEditView.userModel).toEqual(userModel);
                 });
             });
 
@@ -389,40 +387,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                 });
             });
 
-            describe("has a findBankAccount function that", function () {
-                var mockBankAccountId = "25621354",
-                    mockBankAccount = {
-                        id: "134613456",
-                        name: "UNASSIGNED",
-                        defaultBank: true
-                    },
-                    bankAccounts,
-                    actualValue;
-
-                beforeEach(function () {
-                    bankAccounts = userModel.get("selectedCompany").get("bankAccounts");
-                    spyOn(bankAccounts, "findWhere").and.returnValue(mockBankAccount);
-
-                    actualValue = paymentEditView.findBankAccount(mockBankAccountId);
-                });
-
-                it("is defined", function () {
-                    expect(paymentEditView.findBankAccount).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(paymentEditView.findBankAccount).toEqual(jasmine.any(Function));
-                });
-
-                it("should call findWhere on the bankAccounts collection", function () {
-                    expect(bankAccounts.findWhere).toHaveBeenCalledWith({"id": mockBankAccountId});
-                });
-
-                it("should return the expected value", function () {
-                    expect(actualValue).toEqual(mockBankAccount);
-                });
-            });
-
             describe("has an updateModelFromSummary function that", function () {
                 beforeEach(function () {
                     spyOn(paymentEditView.model, "set").and.callFake(function () {});
@@ -446,82 +410,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                 it("should set minimumPaymentDue on the model", function () {
                     expect(paymentEditView.model.set)
                         .toHaveBeenCalledWith("minimumPaymentDue", mockInvoiceSummaryModel.minimumPaymentDue);
-                });
-            });
-
-            describe("has a getEarlistPaymentDate function that", function () {
-                var mockMomentAfterAdd = {},
-                    mockMoment = {
-                        format: function () { return ""; },
-                        add   : function () { return mockMomentAfterAdd; }
-                    };
-
-                it("is defined", function () {
-                    expect(paymentEditView.getEarlistPaymentDate).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(paymentEditView.getEarlistPaymentDate).toEqual(jasmine.any(Function));
-                });
-
-                describe("when the day is Sunday", function () {
-                    var actualValue;
-
-                    beforeEach(function () {
-                        spyOn(mockUtils, "moment").and.returnValue(mockMoment);
-                        spyOn(mockMoment, "add").and.callThrough();
-                        spyOn(mockMoment, "format").and.returnValue("Sun");
-
-                        actualValue = paymentEditView.getEarlistPaymentDate();
-                    });
-
-                    it("should call add on moment", function () {
-                        expect(mockMoment.add).toHaveBeenCalledWith("days", 1);
-                    });
-
-                    it("should return the expected value", function () {
-                        expect(actualValue).toEqual(mockMomentAfterAdd);
-                    });
-                });
-
-                describe("when the day is Monday - Friday", function () {
-                    var actualValue;
-
-                    beforeEach(function () {
-                        spyOn(mockUtils, "moment").and.returnValue(mockMoment);
-                        spyOn(mockMoment, "add").and.callThrough();
-                        spyOn(mockMoment, "format").and.returnValue(false);
-
-                        actualValue = paymentEditView.getEarlistPaymentDate();
-                    });
-
-                    it("should NOT call add on moment", function () {
-                        expect(mockMoment.add).not.toHaveBeenCalled();
-                    });
-
-                    it("should return the expected value", function () {
-                        expect(actualValue).toEqual(mockMoment);
-                    });
-                });
-
-                describe("when the day is Saturday", function () {
-                    var actualValue;
-
-                    beforeEach(function () {
-                        spyOn(mockUtils, "moment").and.returnValue(mockMoment);
-                        spyOn(mockMoment, "add").and.callThrough();
-                        spyOn(mockMoment, "format").and.returnValue("Sat");
-
-                        actualValue = paymentEditView.getEarlistPaymentDate();
-                    });
-
-                    it("should call add on moment", function () {
-                        expect(mockMoment.add).toHaveBeenCalledWith("days", 2);
-                    });
-
-                    it("should return the expected value", function () {
-                        expect(actualValue).toEqual(mockMomentAfterAdd);
-                    });
                 });
             });
 

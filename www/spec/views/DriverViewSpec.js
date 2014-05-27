@@ -1,6 +1,6 @@
-define(["backbone", "Squire", "mustache", "globals", "utils", "models/DriverModel",
+define(["backbone", "Squire", "mustache", "globals", "utils", "models/DriverModel", "views/BaseView",
         "text!tmpl/driver/driver.html", "jasmine-jquery"],
-    function (Backbone, Squire, Mustache, globals, utils, DriverModel, pageTemplate) {
+    function (Backbone, Squire, Mustache, globals, utils, DriverModel, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -24,6 +24,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/DriverMode
 
         squire.mock("backbone", Backbone);
         squire.mock("mustache", mockMustache);
+        squire.mock("views/BaseView", BaseView);
 
         describe("A Driver View", function () {
             beforeEach(function (done) {
@@ -44,8 +45,8 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/DriverMode
                 expect(driverView).toBeDefined();
             });
 
-            it("looks like a Backbone View", function () {
-                expect(driverView instanceof Backbone.View).toBeTruthy();
+            it("looks like a BaseView", function () {
+                expect(driverView instanceof BaseView).toBeTruthy();
             });
 
             describe("has a constructor that", function () {
@@ -63,26 +64,6 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "models/DriverMode
 
                 it("should set the template", function () {
                     expect(driverView.template).toEqual(pageTemplate);
-                });
-            });
-
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(mockMustache, "parse").and.callThrough();
-
-                    driverView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(driverView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(driverView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(driverView.template);
                 });
             });
 

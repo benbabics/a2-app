@@ -10,8 +10,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
 
             template: pageTemplate,
 
-            userModel: null,
-
             events: utils._.extend({}, ValidationFormView.prototype.events, {
                 "click #submitCardAdd-btn": "submitForm",
 
@@ -25,10 +23,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
 
                 // set context
                 utils._.bindAll(this, "handlePageBeforeShow");
-
-                if (options && options.userModel) {
-                    this.userModel = options.userModel;
-                }
 
                 // jQM Events
                 this.$el.on("pagebeforeshow", this.handlePageBeforeShow);
@@ -77,7 +71,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                             departmentListValues.push({
                                 "id": department.id,
                                 "name": department.name,
-                                "selected": department.name === globals.cardAdd.constants.DEFAULT_DEPARTMENT_NAME
+                                "selected": department.name === globals.APP.constants.DEFAULT_DEPARTMENT_NAME
                             });
                         }
                     });
@@ -118,22 +112,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                     "card"          : cardConfiguration,
                     "requiredFields": user.selectedCompany.requiredFields
                 };
-            },
-
-            findDefaultAuthorizationProfile: function () {
-                var selectedCompany = this.userModel.get("selectedCompany");
-                return selectedCompany.get("authorizationProfiles").at(0);
-            },
-
-            findDefaultDepartment: function () {
-                var selectedCompany = this.userModel.get("selectedCompany");
-                return selectedCompany.get("departments")
-                    .findWhere({"visible": true, "name": globals.cardAdd.constants.DEFAULT_DEPARTMENT_NAME});
-            },
-
-            findDepartment: function (id) {
-                var selectedCompany = this.userModel.get("selectedCompany");
-                return selectedCompany.get("departments").findWhere({"visible": true, "id": id});
             },
 
             pageBeforeShow: function () {

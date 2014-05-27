@@ -13,7 +13,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
             changeDetailsTemplate: cardChangeDetailsTemplate,
 
             cardModel: null,
-            userModel: null,
 
             events: utils._.extend({}, ValidationFormView.prototype.events, {
                 "click #submitCardShipping-btn": "submitForm",
@@ -28,10 +27,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
 
                 // parse the add/edit details template
                 Mustache.parse(this.changeDetailsTemplate);
-
-                if (options && options.userModel) {
-                    this.userModel = options.userModel;
-                }
             },
 
             setCardModel: function (cardModel) {
@@ -159,17 +154,6 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 this.model.set("postalCode", user.selectedCompany.defaultShippingAddress.postalCode);
                 this.model.set("countryCode", user.selectedCompany.defaultShippingAddress.countryCode);
                 this.model.set("residence", user.selectedCompany.defaultShippingAddress.residence);
-            },
-
-            findDefaultShippingMethod: function () {
-                var selectedCompany = this.userModel.get("selectedCompany");
-                return selectedCompany.get("shippingMethods")
-                    .findWhere({"id": globals.cardShipping.constants.DEFAULT_SHIPPING_METHOD_NAME});
-            },
-
-            findShippingMethod: function (id) {
-                var selectedCompany = this.userModel.get("selectedCompany");
-                return selectedCompany.get("shippingMethods").findWhere({"id": id});
             },
 
             isAfterShippingCutoff: function () {

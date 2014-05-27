@@ -1,28 +1,14 @@
-define(["backbone", "utils", "mustache", "globals", "views/PaymentView",
+define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/PaymentView",
         "text!tmpl/payment/searchResults.html"],
-    function (Backbone, utils, Mustache, globals, PaymentView, pageTemplate) {
+    function (Backbone, utils, Mustache, globals, BaseView, PaymentView, pageTemplate) {
 
         "use strict";
 
 
-        var PaymentListView = Backbone.View.extend({
+        var PaymentListView = BaseView.extend({
             el: "#paymentHistory",
 
             template: pageTemplate,
-
-            userModel: null,
-
-            initialize: function (options) {
-                // call super
-                this.constructor.__super__.initialize.apply(this, arguments);
-
-                // parse the template
-                Mustache.parse(this.template);
-
-                if (options && options.userModel) {
-                    this.userModel = options.userModel;
-                }
-            },
 
             render: function () {
                 var $content = this.$el.find(":jqmData(role=content)"),
@@ -50,7 +36,7 @@ define(["backbone", "utils", "mustache", "globals", "views/PaymentView",
                 try {
                     // This call throws an exception if called during startup before the list is ready
                     listContainer.listview("refresh");
-                } catch (e) {}
+                } catch (ignore) {}
 
                 this.$el.trigger("create");
             }

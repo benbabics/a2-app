@@ -9,22 +9,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/BaseView", 
 
             template: pageTemplate,
 
-            userModel: null,
-
             events: {
                 "click #submitChangeStatus-btn": "handleChangeStatus"
-            },
-
-            initialize: function (options) {
-                // call super
-                this.constructor.__super__.initialize.apply(this, arguments);
-
-                // parse the template
-                Mustache.parse(this.template);
-
-                if (options && options.userModel) {
-                    this.userModel = options.userModel;
-                }
             },
 
             render: function () {

@@ -141,35 +141,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                 });
             });
 
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(mockMustache, "parse").and.callThrough();
-                    spyOn(PaymentDetailView.__super__, "initialize").and.callFake(function () {});
-
-                    paymentDetailView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(paymentDetailView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(paymentDetailView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should call super()", function () {
-                    expect(PaymentDetailView.__super__.initialize).toHaveBeenCalledWith();
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(paymentDetailView.template);
-                });
-
-                it("should set userModel", function () {
-                    expect(paymentDetailView.userModel).toEqual(userModel);
-                });
-            });
-
             describe("has a render function that", function () {
                 var actualContent,
                     mockConfiguration;

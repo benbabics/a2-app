@@ -134,35 +134,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                 });
             });
 
-            describe("has an initialize function that", function () {
-                beforeEach(function () {
-                    spyOn(mockMustache, "parse").and.callThrough();
-                    spyOn(DriverEditView.__super__, "initialize").and.callFake(function () {});
-
-                    driverEditView.initialize();
-                });
-
-                it("is defined", function () {
-                    expect(driverEditView.initialize).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(driverEditView.initialize).toEqual(jasmine.any(Function));
-                });
-
-                it("should call super()", function () {
-                    expect(DriverEditView.__super__.initialize).toHaveBeenCalledWith();
-                });
-
-                it("should parse the template", function () {
-                    expect(mockMustache.parse).toHaveBeenCalledWith(driverEditView.template);
-                });
-
-                it("should set userModel", function () {
-                    expect(driverEditView.userModel).toEqual(userModel);
-                });
-            });
-
             describe("has a render function that", function () {
                 var actualContent,
                     mockConfiguration;
