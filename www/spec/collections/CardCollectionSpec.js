@@ -61,7 +61,7 @@ define(["utils", "globals", "Squire", "models/CardModel", "models/UserModel"],
         describe("A Card Collection", function () {
             beforeEach(function (done) {
                 squire.require(["collections/CardCollection"], function (JasmineCardCollection) {
-                    userModel.initialize(mockUserModel);
+                    userModel.parse(mockUserModel);
 
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 

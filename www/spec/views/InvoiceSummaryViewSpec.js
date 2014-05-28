@@ -115,7 +115,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
 
                     invoiceSummaryModel.set(mockInvoiceSummaryModel);
                     makePaymentAvailabilityModel.set(mockMakePaymentAvailabilityModel);
-                    userModel.initialize(mockUserModel);
+                    userModel.parse(mockUserModel);
 
                     InvoiceSummaryView = JasmineInvoiceSummaryView;
 

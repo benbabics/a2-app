@@ -88,7 +88,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     loadFixtures("../../../index.html");
 
                     cardModel.initialize(mockCardModel);
-                    userModel.initialize(mockUserModel);
+                    userModel.parse(mockUserModel);
 
                     CardDetailView = JasmineCardDetailView;
                     cardDetailView = new CardDetailView({

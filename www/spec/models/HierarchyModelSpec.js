@@ -49,7 +49,7 @@ define(["Squire", "utils", "globals", "backbone"],
                 });
             });
 
-            describe("has an initialize function that", function () {
+            describe("has a parse function that", function () {
                 beforeEach(function () {
                     spyOn(hierarchyModel, "set").and.callThrough();
                     spyOn(hierarchyModel, "get").and.callThrough();
@@ -57,16 +57,16 @@ define(["Squire", "utils", "globals", "backbone"],
                 });
 
                 it("is defined", function () {
-                    expect(hierarchyModel.initialize).toBeDefined();
+                    expect(hierarchyModel.parse).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(hierarchyModel.initialize).toEqual(jasmine.any(Function));
+                    expect(hierarchyModel.parse).toEqual(jasmine.any(Function));
                 });
 
                 describe("when options are not provided", function () {
                     beforeEach(function () {
-                        hierarchyModel.initialize();
+                        hierarchyModel.parse();
                     });
 
                     it("should NOT call set", function () {
@@ -79,7 +79,7 @@ define(["Squire", "utils", "globals", "backbone"],
                     var options = {};
 
                     beforeEach(function () {
-                        hierarchyModel.initialize(options);
+                        hierarchyModel.parse(options);
                     });
 
                     it("should NOT call set", function () {
@@ -113,7 +113,7 @@ define(["Squire", "utils", "globals", "backbone"],
                     };
 
                     beforeEach(function () {
-                        hierarchyModel.initialize(options);
+                        hierarchyModel.parse(options);
                     });
 
                     it("should call set 3 times", function () {
@@ -160,6 +160,7 @@ define(["Squire", "utils", "globals", "backbone"],
                 beforeEach(function () {
                     spyOn(hierarchyModel, "set").and.callThrough();
 
+                    mockHierarchyCollection.reset([]);
                     hierarchyModel.setChildren(mockChildren);
                 });
 
@@ -245,7 +246,8 @@ define(["Squire", "utils", "globals", "backbone"],
                             ]
                         };
                         hierarchyModel.clear();
-                        hierarchyModel.initialize(mockHierarchyModel);
+                        mockHierarchyCollection.reset([]);
+                        hierarchyModel.parse(mockHierarchyModel);
                         children = hierarchyModel.get("children");
 
                         spyOn(children, "toJSON").and.callThrough();
@@ -278,7 +280,7 @@ define(["Squire", "utils", "globals", "backbone"],
                             "displayNumber": "Number"
                         };
                         hierarchyModel.clear();
-                        hierarchyModel.initialize(mockHierarchyModel);
+                        hierarchyModel.parse(mockHierarchyModel);
 
                         spyOn(HierarchyModel.__super__, "toJSON").and.callThrough();
 

@@ -4,11 +4,24 @@ define(["backbone", "utils", "Squire", "controllers/BaseController"],
         "use strict";
 
         var squire = new Squire(),
+            mockFacade = {
+                publish: function () { }
+            },
             mockUtils = utils,
-            mockUserModel = { },
+            mockUserModel = {
+                authenticated: true,
+                firstName: "Beavis",
+                email: "cornholio@bnbinc.com",
+                hasMultipleAccounts: false,
+                selectedCompany: {
+                    name: "Beavis and Butthead Inc",
+                    accountId: "3673683",
+                    wexAccountNumber: "5764309"
+                }
+            },
             userModel = new Backbone.Model(),
             UserModel = {
-                getInstance: function () { }
+                getInstance: function () { return userModel; }
             },
             mockHomeView = {
                 $el: "",
@@ -19,15 +32,16 @@ define(["backbone", "utils", "Squire", "controllers/BaseController"],
             homeController;
 
         squire.mock("backbone", Backbone);
+        squire.mock("facade", mockFacade);
         squire.mock("utils", mockUtils);
         squire.mock("controllers/BaseController", BaseController);
+        squire.mock("models/UserModel", UserModel);
         squire.mock("views/HomeView", Squire.Helpers.returns(mockHomeView));
 
         describe("A Home Controller", function () {
             beforeEach(function (done) {
                 squire.require(["controllers/HomeController"], function (HomeController) {
                     userModel.set(mockUserModel);
-                    spyOn(UserModel, "getInstance").and.callFake(function () { return userModel; });
 
                     homeController = HomeController;
                     homeController.init();
@@ -63,6 +77,10 @@ define(["backbone", "utils", "Squire", "controllers/BaseController"],
                     expect(homeController.init).toEqual(jasmine.any(Function));
                 });
 
+                it("should set the userModel variable to a UserModel object", function () {
+                    expect(homeController.userModel).toEqual(userModel);
+                });
+
                 describe("when initializing the HomeView", function () {
                     beforeEach(function () {
                         spyOn(mockHomeView, "constructor").and.callThrough();
@@ -73,7 +91,6 @@ define(["backbone", "utils", "Squire", "controllers/BaseController"],
                     });
 
                     xit("should send in the correct parameters to the constructor", function () {
-                        expect(mockHomeView.constructor).toHaveBeenCalled();
                         expect(mockHomeView.constructor).toHaveBeenCalledWith({
                             model: userModel
                         });
@@ -104,13 +121,54 @@ define(["backbone", "utils", "Squire", "controllers/BaseController"],
                 });
 
                 it("should change the page to the Home View Page", function () {
-                    expect(mockUtils.changePage).toHaveBeenCalled();
+                    expect(mockUtils.changePage).toHaveBeenCalledWith(mockHomeView.$el, null, null, true);
+                });
+            });
 
-                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(4);
-                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockHomeView.$el);
-                    expect(mockUtils.changePage.calls.mostRecent().args[1]).toBeNull();
-                    expect(mockUtils.changePage.calls.mostRecent().args[2]).toBeNull();
-                    expect(mockUtils.changePage.calls.mostRecent().args[3]).toBeTruthy();
+            describe("has a beforeNavigateCondition function that", function () {
+                it("is defined", function () {
+                    expect(homeController.beforeNavigateCondition).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(homeController.beforeNavigateCondition).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the user has a selected company", function () {
+                    var actualReturnValue;
+
+                    beforeEach(function () {
+                        spyOn(mockFacade, "publish").and.callThrough();
+
+                        actualReturnValue = homeController.beforeNavigateCondition();
+                    });
+
+                    it("should call NOT publish on the facade", function () {
+                        expect(mockFacade.publish).not.toHaveBeenCalled();
+                    });
+
+                    it("should return true", function () {
+                        expect(actualReturnValue).toBeTruthy();
+                    });
+                });
+
+                describe("when the user does NOT have a selected company", function () {
+                    var actualReturnValue;
+
+                    beforeEach(function () {
+                        userModel.set("selectedCompany", null);
+                        spyOn(mockFacade, "publish").and.callThrough();
+
+                        actualReturnValue = homeController.beforeNavigateCondition();
+                    });
+
+                    it("should call publish on the facade", function () {
+                        expect(mockFacade.publish).toHaveBeenCalledWith("hierarchy", "navigate");
+                    });
+
+                    it("should return false", function () {
+                        expect(actualReturnValue).toBeFalsy();
+                    });
                 });
             });
         });

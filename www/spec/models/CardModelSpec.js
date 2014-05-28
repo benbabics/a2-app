@@ -71,7 +71,7 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                 squire.require(["models/CardModel"], function (JasmineCardModel) {
                     CardModel = JasmineCardModel;
 
-                    userModel.initialize(mockUserModel);
+                    userModel.parse(mockUserModel);
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 
                     cardModel = new CardModel();

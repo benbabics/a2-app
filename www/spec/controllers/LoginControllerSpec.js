@@ -13,7 +13,7 @@ define(["utils", "Squire", "globals", "controllers/BaseController"],
                 reset: function () { },
                 get: function () { },
                 set: function () { },
-                initialize: function () { }
+                parse: function () { }
             },
             UserModel = {
                 getInstance: function () { }
@@ -93,7 +93,6 @@ define(["utils", "Squire", "globals", "controllers/BaseController"],
                     });
 
                     xit("should send in the correct parameters to the constructor", function () {
-                        expect(mockLoginView.constructor).toHaveBeenCalled();
                         expect(mockLoginView.constructor).toHaveBeenCalledWith({
                             model: mockLoginModel,
                             el   : document.body
@@ -108,12 +107,7 @@ define(["utils", "Squire", "globals", "controllers/BaseController"],
 
                     loginController.init();
 
-                    expect(mockUtils._.bindAll).toHaveBeenCalled();
-
-                    expect(mockUtils._.bindAll.calls.mostRecent().args.length).toEqual(3);
-                    expect(mockUtils._.bindAll.calls.mostRecent().args[0]).toEqual(loginController);
-                    expect(mockUtils._.bindAll.calls.mostRecent().args[1]).toEqual("navigate");
-                    expect(mockUtils._.bindAll.calls.mostRecent().args[2]).toEqual("setAuthentication");
+                    expect(mockUtils._.bindAll).toHaveBeenCalledWith(loginController, "navigate", "setAuthentication");
                 });
 
                 it("should register a function as the handler for the view loginSuccess event", function () {
@@ -121,11 +115,8 @@ define(["utils", "Squire", "globals", "controllers/BaseController"],
 
                     loginController.init();
 
-                    expect(mockLoginView.on).toHaveBeenCalled();
-                    expect(mockLoginView.on.calls.argsFor(0).length).toEqual(3);
-                    expect(mockLoginView.on.calls.argsFor(0)[0]).toEqual("loginSuccess");
-                    expect(mockLoginView.on.calls.argsFor(0)[1]).toEqual(loginController.handleLoginSuccess);
-                    expect(mockLoginView.on.calls.argsFor(0)[2]).toEqual(loginController);
+                    expect(mockLoginView.on)
+                        .toHaveBeenCalledWith("loginSuccess", loginController.handleLoginSuccess, loginController);
                 });
 
                 it("should register a function as the handler for the view loginFailure event", function () {
@@ -133,11 +124,8 @@ define(["utils", "Squire", "globals", "controllers/BaseController"],
 
                     loginController.init();
 
-                    expect(mockLoginView.on).toHaveBeenCalled();
-                    expect(mockLoginView.on.calls.argsFor(1).length).toEqual(3);
-                    expect(mockLoginView.on.calls.argsFor(1)[0]).toEqual("loginFailure");
-                    expect(mockLoginView.on.calls.argsFor(1)[1]).toEqual(loginController.clearAuthentication);
-                    expect(mockLoginView.on.calls.argsFor(1)[2]).toEqual(loginController);
+                    expect(mockLoginView.on)
+                        .toHaveBeenCalledWith("loginFailure", loginController.clearAuthentication, loginController);
                 });
             });
 
@@ -157,13 +145,7 @@ define(["utils", "Squire", "globals", "controllers/BaseController"],
                 });
 
                 it("should change the page to the Login View Page", function () {
-                    expect(mockUtils.changePage).toHaveBeenCalled();
-
-                    expect(mockUtils.changePage.calls.mostRecent().args.length).toEqual(4);
-                    expect(mockUtils.changePage.calls.mostRecent().args[0]).toEqual(mockLoginView.$el);
-                    expect(mockUtils.changePage.calls.mostRecent().args[1]).toBeNull();
-                    expect(mockUtils.changePage.calls.mostRecent().args[2]).toBeNull();
-                    expect(mockUtils.changePage.calls.mostRecent().args[3]).toBeTruthy();
+                    expect(mockUtils.changePage).toHaveBeenCalledWith(mockLoginView.$el, null, null, true);
                 });
             });
 
@@ -188,14 +170,14 @@ define(["utils", "Squire", "globals", "controllers/BaseController"],
                         },
                         objectToInitializeUserModel;
 
-                    spyOn(mockUserModel, "initialize").and.callFake(function () { });
+                    spyOn(mockUserModel, "parse").and.callFake(function () { });
 
                     loginController.setAuthentication(mockResponse);
 
-                    expect(mockUserModel.initialize).toHaveBeenCalled();
-                    expect(mockUserModel.initialize.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockUserModel.parse).toHaveBeenCalled();
+                    expect(mockUserModel.parse.calls.mostRecent().args.length).toEqual(1);
 
-                    objectToInitializeUserModel = mockUserModel.initialize.calls.mostRecent().args[0];
+                    objectToInitializeUserModel = mockUserModel.parse.calls.mostRecent().args[0];
 
                     expect(objectToInitializeUserModel.authenticated).toBeTruthy();
                     expect(objectToInitializeUserModel.firstName).toEqual(mockResponse.firstName);
@@ -247,10 +229,7 @@ define(["utils", "Squire", "globals", "controllers/BaseController"],
                 });
 
                 it("should publish to navigate to home", function () {
-                    expect(mockFacade.publish).toHaveBeenCalled();
-                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(2);
-                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("home");
-                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("navigate");
+                    expect(mockFacade.publish).toHaveBeenCalledWith("home", "navigate");
                 });
             });
 

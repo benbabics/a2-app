@@ -16,6 +16,7 @@ define(["backbone", "utils", "facade"],
                 "driverAdd"             : "showDriverAdd",
                 "driverSearch"          : "showDriverSearch",
                 "driverDetails(/)(:id)" : "showDriverDetails",
+                "hierarchyManager"      : "showHierarchyManager",
                 "invoiceSummary"        : "showInvoiceSummary",
                 "paymentAdd"            : "showPaymentAdd",
                 "paymentDetails(/)(:id)": "showPaymentDetails",
@@ -55,6 +56,10 @@ define(["backbone", "utils", "facade"],
 
             showDriverDetails: function (id) {
                 facade.publish("driver", "navigateDriverDetails", id);
+            },
+
+            showHierarchyManager: function () {
+                facade.publish("hierarchy", "navigate");
             },
 
             showInvoiceSummary: function () {

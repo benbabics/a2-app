@@ -134,7 +134,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                     cardModel.initialize(mockCardModel);
                     shippingModel.initialize(mockShippingModel);
-                    userModel.initialize(mockUserModel);
+                    userModel.parse(mockUserModel);
 
                     CardShippingView = JasmineCardShippingView;
                     cardShippingView = new CardShippingView({

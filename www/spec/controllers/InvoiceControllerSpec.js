@@ -164,7 +164,7 @@ define(["utils", "backbone", "globals", "Squire", "controllers/BaseController", 
                     paymentModel.set("bankAccount", bankAccountModel);
                     invoiceSummaryModel.set(mockInvoiceSummaryModel);
                     makePaymentAvailabilityModel.set(mockMakePaymentAvailabilityModel);
-                    userModel.initialize(mockUserModel);
+                    userModel.parse(mockUserModel);
                     spyOn(UserModel, "getInstance").and.callThrough();
 
                     invoiceController = InvoiceController;

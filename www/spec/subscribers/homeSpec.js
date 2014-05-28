@@ -10,7 +10,8 @@ define(["Squire"],
                 subscribeTo: jasmine.createSpy("subscribeTo() spy").and.returnValue(mockSubscribe)
             },
             mockHomeController = {
-                init: function () { }
+                init: jasmine.createSpy("init() spy"),
+                beforeNavigateCondition: jasmine.createSpy("beforeNavigateCondition() spy")
             },
             homeSubscriber;
 
@@ -30,11 +31,7 @@ define(["Squire"],
             });
 
             it("should call the subscribeTo function on the facade", function () {
-                expect(mockFacade.subscribeTo).toHaveBeenCalled();
-
-                expect(mockFacade.subscribeTo.calls.mostRecent().args.length).toEqual(2);
-                expect(mockFacade.subscribeTo.calls.mostRecent().args[0]).toEqual("home");
-                expect(mockFacade.subscribeTo.calls.mostRecent().args[1]).toEqual(mockHomeController);
+                expect(mockFacade.subscribeTo).toHaveBeenCalledWith("home", mockHomeController);
             });
 
             it("should call subscribe 1 time", function () {
@@ -42,12 +39,12 @@ define(["Squire"],
             });
 
             it("should subscribe to navigate", function () {
-                expect(mockSubscribe).toHaveBeenCalledWith("navigate", "navigate");
+                expect(mockSubscribe)
+                    .toHaveBeenCalledWith("navigate", "navigate", mockHomeController.beforeNavigateCondition);
             });
 
             describe("has an init function that", function () {
                 beforeEach(function () {
-                    spyOn(mockHomeController, "init").and.callThrough();
                     homeSubscriber.init();
                 });
 
@@ -60,9 +57,7 @@ define(["Squire"],
                 });
 
                 it("should call the init function on the controller", function () {
-                    expect(mockHomeController.init).toHaveBeenCalled();
-
-                    expect(mockHomeController.init.calls.mostRecent().args.length).toEqual(0);
+                    expect(mockHomeController.init).toHaveBeenCalledWith();
                 });
             });
         });

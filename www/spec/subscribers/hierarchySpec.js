@@ -9,7 +9,7 @@ define(["Squire"],
                 subscribeTo: jasmine.createSpy("subscribeTo() spy").and.returnValue(mockSubscribe)
             },
             mockHierarchyController = {
-                init: function () { return true; }
+                init: jasmine.createSpy("init() spy")
             },
             hierarchySubscriber;
 
@@ -32,13 +32,16 @@ define(["Squire"],
                 expect(mockFacade.subscribeTo).toHaveBeenCalledWith("hierarchy", mockHierarchyController);
             });
 
-            it("should call subscribe 0 times", function () {
-                expect(mockSubscribe.calls.count()).toEqual(0);
+            it("should call subscribe 1 time", function () {
+                expect(mockSubscribe.calls.count()).toEqual(1);
+            });
+
+            it("should subscribe to navigate", function () {
+                expect(mockSubscribe).toHaveBeenCalledWith("navigate", "navigate");
             });
 
             describe("has an init function that", function () {
                 beforeEach(function () {
-                    spyOn(mockHierarchyController, "init").and.callThrough();
                     hierarchySubscriber.init();
                 });
 

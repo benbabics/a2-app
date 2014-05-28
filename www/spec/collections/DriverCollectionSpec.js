@@ -61,7 +61,7 @@ define(["utils", "globals", "Squire", "models/DriverModel", "models/UserModel"],
         describe("A Driver Collection", function () {
             beforeEach(function (done) {
                 squire.require(["collections/DriverCollection"], function (JasmineDriverCollection) {
-                    userModel.initialize(mockUserModel);
+                    userModel.parse(mockUserModel);
 
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 

@@ -86,7 +86,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                     loadFixtures("../../../index.html");
 
                     driverModel.initialize(mockDriverModel);
-                    userModel.initialize(mockUserModel);
+                    userModel.parse(mockUserModel);
 
                     DriverEditView = JasmineDriverEditView;
                     driverEditView = new DriverEditView({

@@ -60,6 +60,10 @@ define(["utils", "Squire", "backbone"],
                     expect(appRouter.routes["driverDetails(/)(:id)"]).toEqual("showDriverDetails");
                 });
 
+                it("should set 'hierarchyManager' to showHierarchyManager", function () {
+                    expect(appRouter.routes.hierarchyManager).toEqual("showHierarchyManager");
+                });
+
                 it("should set 'invoiceSummary' to showInvoiceSummary", function () {
                     expect(appRouter.routes.invoiceSummary).toEqual("showInvoiceSummary");
                 });
@@ -226,6 +230,26 @@ define(["utils", "Squire", "backbone"],
 
                 it("should call publish on the facade", function () {
                     expect(mockFacade.publish).toHaveBeenCalledWith("driver", "navigateDriverDetails", mockDriverId);
+                });
+            });
+
+            describe("has a showHierarchyManager function that", function () {
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callThrough();
+
+                    appRouter.showHierarchyManager();
+                });
+
+                it("is defined", function () {
+                    expect(appRouter.showHierarchyManager).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(appRouter.showHierarchyManager).toEqual(jasmine.any(Function));
+                });
+
+                it("should call publish on the facade", function () {
+                    expect(mockFacade.publish).toHaveBeenCalledWith("hierarchy", "navigate");
                 });
             });
 

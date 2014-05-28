@@ -92,7 +92,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
 
                     invoiceSummaryModel.set(mockInvoiceSummaryModel);
                     paymentModel.initialize(mockPaymentModel);
-                    userModel.initialize(mockUserModel);
+                    userModel.parse(mockUserModel);
 
                     bankAccounts.set(mockUserModel.selectedCompany.bankAccounts);
                     userModel.get("selectedCompany").set("bankAccounts", bankAccounts);

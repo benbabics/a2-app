@@ -1,30 +1,36 @@
-define(["backbone", "globals", "utils", "models/AddressModel", "models/AuthorizationProfileModel",
+define(["backbone", "globals", "utils", "models/AddressModel", "models/AjaxModel", "models/AuthorizationProfileModel",
         "models/CompanySettingsModel", "models/DepartmentModel", "models/ShippingMethodModel",
         "collections/AuthorizationProfileCollection", "collections/BankAccountCollection",
         "collections/DepartmentCollection", "collections/ShippingMethodCollection"],
-    function (Backbone, globals, utils, AddressModel, AuthorizationProfileModel, CompanySettingsModel, DepartmentModel,
-              ShippingMethodModel, AuthorizationProfileCollection, BankAccountCollection, DepartmentCollection,
-              ShippingMethodCollection) {
+    function (Backbone, globals, utils, AddressModel, AjaxModel, AuthorizationProfileModel, CompanySettingsModel,
+              DepartmentModel, ShippingMethodModel, AuthorizationProfileCollection, BankAccountCollection,
+              DepartmentCollection, ShippingMethodCollection) {
 
         "use strict";
 
 
-        var CompanyModel = Backbone.Model.extend({
-            defaults: {
-                "name"                  : null,
-                "accountId"             : null,
-                "wexAccountNumber"      : null,
-                "departments"           : null,
-                "requiredFields"        : globals.companyData.requiredFields,
-                "settings"              : null,
-                "authorizationProfiles" : null,
-                "bankAccounts"          : null,
-                "defaultShippingAddress": null,
-                "shippingMethods"       : null,
-                "permissions"           : globals.companyData.permissions
+        var CompanyModel = AjaxModel.extend({
+            defaults: function () {
+                return utils._.extend({}, utils.deepClone(AjaxModel.prototype.defaults), {
+                    "name"                  : null,
+                    "accountId"             : null,
+                    "wexAccountNumber"      : null,
+                    "departments"           : null,
+                    "requiredFields"        : globals.companyData.requiredFields,
+                    "settings"              : null,
+                    "authorizationProfiles" : null,
+                    "bankAccounts"          : null,
+                    "defaultShippingAddress": null,
+                    "shippingMethods"       : null,
+                    "permissions"           : globals.companyData.permissions
+                });
             },
 
-            initialize: function (options) {
+            urlRoot: function () {
+                return globals.WEBSERVICE.ACCOUNTS.URL + "/"  + this.get("accountId");
+            },
+
+            parse: function (options) {
                 var settings,
                     defaultShippingAddress;
 
@@ -49,33 +55,12 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
                 }
             },
 
-            /**
-             * This function is overrode from Backbone and is ONLY used to retrieve a small portion of the companies
-             * properties as many of them are set via the initialize function
-             *
-             * @param method - only a value of read results in properties being fetched
-             * @param model
-             * @param options
-             * @returns {*}
-             */
             sync: function (method, model, options) {
-                var deferred = utils.Deferred();
-
-                if (method === "read") {
-                    utils
-                        .when(
-                            this.fetchAuthorizationProfiles(),
-                            this.fetchBankAccounts()
-                        )
-                        .done(function () {
-                            deferred.resolve();
-                        })
-                        .fail(function () {
-                            deferred.reject();
-                        });
+                if (method === "patch") {
+                    options.type = "POST";
                 }
 
-                return deferred.promise();
+                CompanyModel.__super__.sync.call(this, method, model, options);
             },
 
             setDepartments: function (departmentsList) {
@@ -93,7 +78,8 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
             },
 
             setPermissions: function (permsList) {
-                var newPerms = this.defaults.permissions; // start with the permission defaults
+                // start with the permission defaults
+                var newPerms = utils._.extend({}, utils.deepClone(this.defaults().permissions));
 
                 // Set only the permissions from the list to true
                 for (var i = 0; i < permsList.length; i++) {
@@ -105,7 +91,8 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
 
             setRequiredFields: function (requiredFieldsList) {
                 var index,
-                    newRequiredFields = this.defaults.requiredFields; // start with the defaults
+                    // start with the defaults
+                    newRequiredFields = utils._.extend({}, utils.deepClone(this.defaults().requiredFields));
 
                 // Set only the required fields from the list to true
                 for (index = 0; index < requiredFieldsList.length; index++) {
@@ -152,6 +139,29 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/Authoriza
                 }
 
                 return json;
+            },
+
+            /**
+             * This function is fetches the company details that are not included in the GET company response
+             *
+             * @returns {*}
+             */
+            fetchProperties: function () {
+                var deferred = utils.Deferred();
+
+                utils
+                    .when(
+                        this.fetchAuthorizationProfiles(),
+                        this.fetchBankAccounts()
+                    )
+                    .done(function () {
+                        deferred.resolve();
+                    })
+                    .fail(function () {
+                        deferred.reject();
+                    });
+
+                return deferred.promise();
             },
 
             fetchAuthorizationProfiles: function () {

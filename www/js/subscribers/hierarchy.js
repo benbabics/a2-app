@@ -6,6 +6,8 @@ define(["facade", "controllers/HierarchyController"],
 
         var subscribe = facade.subscribeTo("hierarchy", controller);
 
+        subscribe("navigate", "navigate");
+
 
         return {
             init: function () {

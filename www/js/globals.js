@@ -1427,5 +1427,28 @@ define(function (require) {
         "OK_BTN_TEXT": "Yes"
     };
 
+    /**
+     * Page :: Hierarchy Manager
+     */
+    globals.hierarchyManager = {};
+    globals.hierarchyManager.constants = {
+        "TOP_LEVEL_TITLE"   : "National ID List",
+        "SECOND_LEVEL_TITLE": "Account List for:<br/>{{hierarchyName}}"
+    };
+    globals.hierarchyManager.configuration = {
+        "backButton": {
+            "visible": false
+        },
+        "title": {
+            "value": ""
+        },
+        "name": {
+            "value": ""
+        },
+        "displayNumber": {
+            "value": ""
+        }
+    };
+
     return globals;
 });

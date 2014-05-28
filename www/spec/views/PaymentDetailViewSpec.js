@@ -88,7 +88,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                     bankAccountModel.set(mockBankAccountModel);
                     paymentModel.set(mockPaymentModel);
                     paymentModel.set("bankAccount", bankAccountModel);
-                    userModel.initialize(mockUserModel);
+                    userModel.parse(mockUserModel);
 
                     PaymentDetailView = JasminePaymentDetailView;
                     paymentDetailView = new PaymentDetailView({

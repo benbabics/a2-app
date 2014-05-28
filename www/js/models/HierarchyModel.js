@@ -12,7 +12,7 @@ define(["backbone", "utils", "collections/HierarchyCollection"],
                 "children"     : null
             },
 
-            initialize: function (options) {
+            parse: function (options) {
                 if (options) {
                     if (options.accountId) { this.set("accountId", options.accountId); }
                     if (options.name) { this.set("name", options.name); }
@@ -22,13 +22,19 @@ define(["backbone", "utils", "collections/HierarchyCollection"],
             },
 
             setChildren: function (childrenList) {
-                var children = new HierarchyCollection(),
+                var children,
                     hierarchy;
 
-                children.reset([]);
+                // There is a circular dependency so we need to make sure that HierarchyCollection is defined
+                // See http://requirejs.org/docs/api.html#circular
+                if (!HierarchyCollection) {
+                    HierarchyCollection = require("collections/HierarchyCollection");
+                }
+
+                children = new HierarchyCollection();
                 utils._.each(childrenList, function (childOptions) {
                     hierarchy = new HierarchyModel();
-                    hierarchy.initialize(childOptions);
+                    hierarchy.parse(childOptions);
                     children.add(hierarchy);
                 });
 

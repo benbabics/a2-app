@@ -1,5 +1,6 @@
-define(["backbone", "globals", "models/CompanyModel"],
-    function (Backbone, globals, CompanyModel) {
+define(["backbone", "globals", "utils", "collections/HierarchyCollection", "models/CompanyModel",
+        "models/HierarchyModel"],
+    function (Backbone, globals, utils, HierarchyCollection, CompanyModel, HierarchyModel) {
 
         "use strict";
 
@@ -10,10 +11,11 @@ define(["backbone", "globals", "models/CompanyModel"],
                 "firstName"          : null,
                 "email"              : null,
                 "selectedCompany"    : null,
-                "hasMultipleAccounts": false
+                "hasMultipleAccounts": false,
+                "hierarchies"        : null
             },
 
-            initialize: function (options) {
+            parse: function (options) {
                 var selectedCompany;
 
                 if (options) {
@@ -22,11 +24,25 @@ define(["backbone", "globals", "models/CompanyModel"],
                     if (options.email) { this.set("email", options.email); }
                     if (options.selectedCompany) {
                         selectedCompany = new CompanyModel();
-                        selectedCompany.initialize(options.selectedCompany);
+                        selectedCompany.parse(options.selectedCompany);
                         this.set("selectedCompany", selectedCompany);
                     }
-                    if (options.hasMultipleAccounts) { this.set("hasMultipleAccounts", options.hasMultipleAccounts);}
+                    if (options.hasMultipleAccounts) { this.set("hasMultipleAccounts", options.hasMultipleAccounts); }
+                    if (options.hierarchyDetails) { this.setHierarchies(options.hierarchyDetails); }
                 }
+            },
+
+            setHierarchies: function (hierarchiesList) {
+                var hierarchies = new HierarchyCollection(),
+                    hierarchy;
+
+                utils._.each(hierarchiesList, function (hierarchyOptions) {
+                    hierarchy = new HierarchyModel();
+                    hierarchy.parse(hierarchyOptions);
+                    hierarchies.add(hierarchy);
+                });
+
+                this.set("hierarchies", hierarchies);
             },
 
             reset: function () {
@@ -38,6 +54,9 @@ define(["backbone", "globals", "models/CompanyModel"],
 
                 if (json.selectedCompany) {
                     json.selectedCompany = json.selectedCompany.toJSON();
+                }
+                if (json.hierarchies) {
+                    json.hierarchies = json.hierarchies.toJSON();
                 }
 
                 return json;

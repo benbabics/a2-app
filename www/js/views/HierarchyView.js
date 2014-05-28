@@ -1,5 +1,5 @@
-define(["backbone", "utils", "mustache", "globals", "views/BaseView", "text!tmpl/hierarchy/hierarchy.html"],
-    function (Backbone, utils, Mustache, globals, BaseView, pageTemplate) {
+define(["utils", "mustache", "globals", "views/BaseView", "text!tmpl/hierarchy/hierarchy.html"],
+    function (utils, Mustache, globals, BaseView, pageTemplate) {
 
         "use strict";
 
@@ -9,9 +9,41 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "text!tmpl
 
             template: pageTemplate,
 
+            events: {
+                "click": "handleClick"
+            },
+
             render: function () {
-                this.$el.html(Mustache.render(this.template));
+                this.$el.html(Mustache.render(this.template, this.getConfiguration()));
                 return this;
+            },
+
+            getConfiguration: function () {
+                var hierarchyConfiguration = null,
+                    hierarchy;
+
+                if (this.model) {
+                    hierarchy = this.model.toJSON();
+                    hierarchyConfiguration = utils._.extend({},
+                        utils.deepClone(globals.hierarchyManager.configuration));
+
+                    // populate configuration details
+                    hierarchyConfiguration.name.value = hierarchy.name;
+                    hierarchyConfiguration.displayNumber.value = hierarchy.displayNumber;
+                }
+
+                return {
+                    "hierarchy" : hierarchyConfiguration
+                };
+            },
+
+            /*
+             * Event Handlers
+             */
+            handleClick: function (evt) {
+                evt.preventDefault();
+
+                this.trigger("hierarchySelected", this.model.get("accountId"));
             }
         });
 

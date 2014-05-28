@@ -28,20 +28,19 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Hie
             renderHeader: function () {
                 var $header = this.$el.find(":jqmData(role=header)");
 
-                // TODO - Only show 'Back' when the user has a selected company
-
-                $header.html(Mustache.render(this.headerTemplate));
+                $header.html(Mustache.render(this.headerTemplate, this.getHeaderConfiguration()));
             },
 
             renderContent: function () {
                 var $content = this.$el.find(":jqmData(role=content)"),
                     container = document.createDocumentFragment(),
-                    listContainer;
+                    listContainer,
+                    self = this;
 
                 // empty list
                 $content.find("#hierarchyList").empty();
 
-                $content.html(Mustache.render(this.template));
+                $content.html(Mustache.render(this.template, this.getConfiguration()));
 
                 listContainer = $content.find("#hierarchyList");
 
@@ -51,6 +50,10 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Hie
                         model: hierarchy
                     });
                     hierarchyView.render();
+
+                    // listen for events
+                    hierarchyView.on("hierarchySelected", self.hierarchySelected, self);
+
                     container.appendChild(hierarchyView.el);  // add hierarchy to the list
                 });
 
@@ -60,6 +63,75 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Hie
                     // This call throws an exception if called during startup before the list is ready
                     listContainer.listview("refresh");
                 } catch (ignore) {}
+            },
+
+            getHeaderConfiguration: function () {
+                var configuration = utils._.extend({}, utils.deepClone(globals.hierarchyManager.configuration)),
+                    allowBackButton = false;
+
+                // populate configuration details
+                if (this.userModel.get("selectedCompany")) {
+                    allowBackButton = true;
+                }
+
+                configuration.backButton.visible = allowBackButton;
+
+                return configuration;
+
+            },
+
+            getConfiguration: function () {
+                var configuration = utils._.extend({}, utils.deepClone(globals.hierarchyManager.configuration)),
+                    title;
+
+                // populate configuration details
+                if (this.model) {
+                    title = Mustache.render(globals.hierarchyManager.constants.SECOND_LEVEL_TITLE,
+                        {
+                            "hierarchyName": this.model.get("name")
+                        });
+                } else {
+                    title = globals.hierarchyManager.constants.TOP_LEVEL_TITLE;
+                }
+
+                configuration.title.value = title;
+
+                return configuration;
+            },
+
+            setCollection: function (collection) {
+                this.collection = collection;
+
+                if (this.collection) {
+                    if (utils._.size(this.collection) === 1) {
+                        this.setModel(this.collection.at(0));
+                    }
+                }
+            },
+
+            setModel: function (model) {
+                this.model = model;
+
+                if (this.model) {
+                    this.setCollection(this.model.get("children"));
+                }
+            },
+
+            findHierarchy: function (accountId) {
+                return this.collection.findWhere({"accountId": accountId});
+            },
+
+            hierarchySelected: function (accountId) {
+                var hierarchy = this.findHierarchy(accountId);
+
+                if (hierarchy) {
+                    if (hierarchy.get("children") && utils._.size(hierarchy.get("children")) > 0) {
+                        this.setModel(hierarchy);
+                        this.render();
+                    } else {
+                        this.trigger("hierarchySelected", accountId);
+                    }
+                }
             }
         });
 

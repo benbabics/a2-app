@@ -6,7 +6,7 @@ define(["facade", "controllers/HomeController"],
 
         var subscribe = facade.subscribeTo("home", controller);
 
-        subscribe("navigate", "navigate");
+        subscribe("navigate", "navigate", controller.beforeNavigateCondition);
 
 
         return {

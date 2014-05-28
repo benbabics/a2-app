@@ -62,7 +62,7 @@ define(["Squire", "backbone", "globals", "models/UserModel"],
         describe("A Make Payment Availability Model", function () {
             beforeEach(function (done) {
                 squire.require(["models/MakePaymentAvailabilityModel"], function (MakePaymentAvailabilityModel) {
-                    userModel.initialize(mockUserModel);
+                    userModel.parse(mockUserModel);
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 
                     makePaymentAvailabilityModel = new MakePaymentAvailabilityModel();

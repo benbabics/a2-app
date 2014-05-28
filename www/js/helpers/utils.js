@@ -226,7 +226,7 @@ define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezon
         };
 
         /**
-         * Funciton to format the provided number as currency
+         * Function to format the provided number as currency
          * @param number the number to format as currency
          * @returns {string} the number formatted as currency
          */
