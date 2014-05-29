@@ -36,19 +36,12 @@ define(["globals", "utils", "models/AjaxModel", "models/BankAccountModel", "mode
                     },
                     {
                         fn: function (value, attr, computedState) {
-                            var paymentDueDate = utils.moment(this.get("paymentDueDate")),
-                                today = utils.moment().startOf("day"),
+                            var today = utils.moment().startOf("day"),
                                 enteredDate = utils.moment(value);
 
                             // Date cannot be before today
                             if (enteredDate.isBefore(today)) {
                                 return globals.payment.constants.ERROR_SCHEDULED_DATE_BEFORE_TODAY;
-                            }
-
-                            // Only validate that the scheduled date is not after the payment due date when
-                            // the scheduled date is after today
-                            if (enteredDate.isAfter(today) && enteredDate.isAfter(paymentDueDate)) {
-                                return globals.payment.constants.ERROR_SCHEDULED_DATE_AFTER_DUE_DATE;
                             }
                         }
                     }
@@ -121,9 +114,17 @@ define(["globals", "utils", "models/AjaxModel", "models/BankAccountModel", "mode
             validateWarnings: function () {
                 var warnings = [],
                     warningsCount = 0,
-                    minimumPaymentDue = this.get("minimumPaymentDue");
+                    minimumPaymentDue = this.get("minimumPaymentDue"),
+                    paymentDueDate = utils.moment(this.get("paymentDueDate")),
+                    enteredAmount = this.get("amount"),
+                    enteredDate = utils.moment(this.get("scheduledDate"));
 
-                if (this.get("amount") < minimumPaymentDue) {
+                if (enteredDate.isAfter(paymentDueDate)) {
+                    warnings[warningsCount] = globals.payment.constants.ERROR_SCHEDULED_DATE_AFTER_DUE_DATE;
+                    warningsCount++;
+                }
+
+                if (enteredAmount < minimumPaymentDue) {
                     warnings[warningsCount] = globals.payment.constants.ERROR_AMOUNT_LESS_THAN_PAYMENT_DUE;
                     warningsCount++;
                 }

@@ -182,10 +182,7 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
 
                     describe("the third validation rule", function () {
                         describe("should have a fn function that", function () {
-                            var today = utils.moment().startOf("day").format("MM/DD/YYYY"),
-                                yesterday = utils.moment().add("days", -1).format("MM/DD/YYYY"),
-                                tomorrow = utils.moment().add("days", 1).format("MM/DD/YYYY"),
-                                dayAfterTomorrow = utils.moment().add("days", 2).format("MM/DD/YYYY");
+                            var yesterday = utils.moment().add("days", -1).format("MM/DD/YYYY");
 
                             it("is defined", function () {
                                 expect(paymentModel.validation.scheduledDate[2].fn).toBeDefined();
@@ -200,60 +197,6 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
                                     expect(paymentModel.validation.scheduledDate[2].fn
                                         .call(paymentModel, yesterday))
                                         .toEqual(globals.payment.constants.ERROR_SCHEDULED_DATE_BEFORE_TODAY);
-                                });
-                            });
-
-                            describe("when the actual value is today and before the payment due date", function () {
-                                it("should return the expected result", function () {
-                                    paymentModel.set("paymentDueDate", tomorrow);
-
-                                    expect(paymentModel.validation.scheduledDate[2].fn
-                                        .call(paymentModel, today)).toBeUndefined();
-                                });
-                            });
-
-                            describe("when the actual value is today and equal to the payment due date", function () {
-                                it("should return the expected result", function () {
-                                    paymentModel.set("paymentDueDate", today);
-
-                                    expect(paymentModel.validation.scheduledDate[2].fn
-                                        .call(paymentModel, today)).toBeUndefined();
-                                });
-                            });
-
-                            describe("when the actual value is today and after the payment due date", function () {
-                                it("should return the expected result", function () {
-                                    paymentModel.set("paymentDueDate", yesterday);
-
-                                    expect(paymentModel.validation.scheduledDate[2].fn
-                                        .call(paymentModel, today)).toBeUndefined();
-                                });
-                            });
-
-                            describe("when the actual value after today and before the payment due date", function () {
-                                it("should return the expected result", function () {
-                                    paymentModel.set("paymentDueDate", dayAfterTomorrow);
-
-                                    expect(paymentModel.validation.scheduledDate[2].fn
-                                        .call(paymentModel, tomorrow)).toBeUndefined();
-                                });
-                            });
-
-                            describe("when the actual value after today and equal to payment due date", function () {
-                                it("should return the expected result", function () {
-                                    paymentModel.set("paymentDueDate", tomorrow);
-
-                                    expect(paymentModel.validation.scheduledDate[2].fn
-                                        .call(paymentModel, tomorrow)).toBeUndefined();
-                                });
-                            });
-
-                            describe("when the actual value after today and after the payment due date", function () {
-                                it("should return the expected result", function () {
-                                    paymentModel.set("paymentDueDate", today);
-
-                                    expect(paymentModel.validation.scheduledDate[2].fn.call(paymentModel, tomorrow))
-                                        .toEqual(globals.payment.constants.ERROR_SCHEDULED_DATE_AFTER_DUE_DATE);
                                 });
                             });
                         });
@@ -572,10 +515,16 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
 
 
             describe("has a validateWarnings function that", function () {
-                var minimumPaymentDue = 234.56;
+                var minimumPaymentDue = 234.56,
+                    paymentDueDate = utils.moment(),
+                    actualResponse;
 
                 beforeEach(function () {
                     paymentModel.set("minimumPaymentDue", minimumPaymentDue);
+                    paymentModel.set("paymentDueDate", paymentDueDate.format("MM/DD/YYYY"));
+
+                    paymentModel.set("amount", minimumPaymentDue);
+                    paymentModel.set("scheduledDate", paymentDueDate.format("MM/DD/YYYY"));
                 });
 
                 it("is defined", function () {
@@ -586,11 +535,41 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
                     expect(paymentModel.validateWarnings).toEqual(jasmine.any(Function));
                 });
 
+                describe("when the date is before the payment due date", function () {
+                    it("should return the expected result", function () {
+                        paymentModel.set("scheduledDate", paymentDueDate.add("days", -1).format("MM/DD/YYYY"));
+
+                        actualResponse = paymentModel.validateWarnings();
+                        expect(actualResponse).toBeUndefined();
+                    });
+                });
+
+                describe("when the date is equal to the payment due date", function () {
+                    it("should return the expected result", function () {
+                        paymentModel.set("scheduledDate", paymentDueDate.format("MM/DD/YYYY"));
+
+                        actualResponse = paymentModel.validateWarnings();
+                        expect(actualResponse).toBeUndefined();
+                    });
+                });
+
+                describe("when the date is after the payment due date", function () {
+                    it("should return the expected result", function () {
+                        paymentModel.set("scheduledDate", paymentDueDate.add("days", 1).format("MM/DD/YYYY"));
+
+                        actualResponse = paymentModel.validateWarnings();
+                        expect(utils._.size(actualResponse)).toEqual(1);
+                        expect(actualResponse[0])
+                            .toEqual(globals.payment.constants.ERROR_SCHEDULED_DATE_AFTER_DUE_DATE);
+                    });
+                });
+
                 describe("when the amount is greater than the minimum payment due", function () {
                     it("should return the expected result", function () {
                         paymentModel.set("amount", minimumPaymentDue + 1);
 
-                        expect(paymentModel.validateWarnings()).toBeUndefined();
+                        actualResponse = paymentModel.validateWarnings();
+                        expect(actualResponse).toBeUndefined();
                     });
                 });
 
@@ -598,7 +577,8 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
                     it("should return the expected result", function () {
                         paymentModel.set("amount", minimumPaymentDue);
 
-                        expect(paymentModel.validateWarnings()).toBeUndefined();
+                        actualResponse = paymentModel.validateWarnings();
+                        expect(actualResponse).toBeUndefined();
                     });
                 });
 
@@ -606,10 +586,25 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
                     it("should return the expected result", function () {
                         paymentModel.set("amount", minimumPaymentDue - 1);
 
-                        expect(paymentModel.validateWarnings())
-                            .toEqual([globals.payment.constants.ERROR_AMOUNT_LESS_THAN_PAYMENT_DUE]);
+                        actualResponse = paymentModel.validateWarnings();
+                        expect(utils._.size(actualResponse)).toEqual(1);
+                        expect(actualResponse[0]).toEqual(globals.payment.constants.ERROR_AMOUNT_LESS_THAN_PAYMENT_DUE);
                     });
                 });
+
+                describe("when the amount is less than to the minimum payment due and date is after the payment due date",
+                    function () {
+                        it("should return the expected result", function () {
+                            paymentModel.set("amount", minimumPaymentDue - 1);
+                            paymentModel.set("scheduledDate", paymentDueDate.add("days", 1).format("MM/DD/YYYY"));
+                            actualResponse = paymentModel.validateWarnings();
+                            expect(utils._.size(actualResponse)).toEqual(2);
+                            expect(actualResponse[0])
+                                .toEqual(globals.payment.constants.ERROR_SCHEDULED_DATE_AFTER_DUE_DATE);
+                            expect(actualResponse[1])
+                                .toEqual(globals.payment.constants.ERROR_AMOUNT_LESS_THAN_PAYMENT_DUE);
+                        });
+                    });
             });
 
             describe("has a toJSON function that", function () {
