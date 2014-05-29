@@ -70,11 +70,11 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
 
         describe("A Payment Model", function () {
             beforeEach(function (done) {
-                squire.require(["models/PaymentModel"], function (JasmineCompanyModel) {
+                squire.require(["models/PaymentModel"], function (JasminePaymentModel) {
                     userModel.parse(mockUserModel);
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 
-                    PaymentModel = JasmineCompanyModel;
+                    PaymentModel = JasminePaymentModel;
                     paymentModel = new PaymentModel();
 
                     done();
@@ -261,8 +261,8 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
                 });
 
                 describe("has a validation configuration for the amount field that", function () {
-                    it("has 3 validation rules", function () {
-                        expect(paymentModel.validation.amount.length).toEqual(3);
+                    it("has 2 validation rules", function () {
+                        expect(paymentModel.validation.amount.length).toEqual(2);
                     });
 
                     describe("the first validation rule", function () {
@@ -285,48 +285,6 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
                         it("should set the error message", function () {
                             expect(paymentModel.validation.amount[1].msg)
                                 .toEqual(globals.payment.constants.ERROR_AMOUNT_MUST_BE_NUMERIC);
-                        });
-                    });
-
-                    describe("the third validation rule", function () {
-                        var minimumPaymentDue = 234.56;
-
-                        beforeEach(function () {
-                            paymentModel.set("minimumPaymentDue", minimumPaymentDue);
-                        });
-
-                        describe("should have a fn function that", function () {
-                            it("is defined", function () {
-                                expect(paymentModel.validation.amount[2].fn).toBeDefined();
-                            });
-
-                            it("is a function", function () {
-                                expect(paymentModel.validation.amount[2].fn).toEqual(jasmine.any(Function));
-                            });
-
-                            describe("when the actual value is greater than the minimum payment due", function () {
-                                it("should return the expected result", function () {
-                                    expect(paymentModel.validation.amount[2].fn
-                                        .call(paymentModel, minimumPaymentDue + 1)).toBeUndefined();
-                                });
-                            });
-
-                            describe("when the actual value is equal to the minimum payment due", function () {
-                                it("should return the expected result", function () {
-                                    expect(paymentModel.validation.amount[2].fn
-                                        .call(paymentModel, minimumPaymentDue)).toBeUndefined();
-                                });
-                            });
-
-                            describe("when the actual value is less than to the minimum payment due", function () {
-                                it("should return the expected result", function () {
-                                    var actualValue = paymentModel.validation.amount[2].fn
-                                        .call(paymentModel, minimumPaymentDue - 1);
-
-                                    expect(actualValue)
-                                        .toEqual(globals.payment.constants.ERROR_AMOUNT_LESS_THAN_PAYMENT_DUE);
-                                });
-                            });
                         });
                     });
                 });
@@ -609,6 +567,48 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
                         };
 
                     expect(paymentModel.save).toHaveBeenCalledWith(expectedAttributes, expectedOptions);
+                });
+            });
+
+
+            describe("has a validateWarnings function that", function () {
+                var minimumPaymentDue = 234.56;
+
+                beforeEach(function () {
+                    paymentModel.set("minimumPaymentDue", minimumPaymentDue);
+                });
+
+                it("is defined", function () {
+                    expect(paymentModel.validateWarnings).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(paymentModel.validateWarnings).toEqual(jasmine.any(Function));
+                });
+
+                describe("when the amount is greater than the minimum payment due", function () {
+                    it("should return the expected result", function () {
+                        paymentModel.set("amount", minimumPaymentDue + 1);
+
+                        expect(paymentModel.validateWarnings()).toBeUndefined();
+                    });
+                });
+
+                describe("when the amount is equal to the minimum payment due", function () {
+                    it("should return the expected result", function () {
+                        paymentModel.set("amount", minimumPaymentDue);
+
+                        expect(paymentModel.validateWarnings()).toBeUndefined();
+                    });
+                });
+
+                describe("when the amount is less than to the minimum payment due", function () {
+                    it("should return the expected result", function () {
+                        paymentModel.set("amount", minimumPaymentDue - 1);
+
+                        expect(paymentModel.validateWarnings())
+                            .toEqual([globals.payment.constants.ERROR_AMOUNT_LESS_THAN_PAYMENT_DUE]);
+                    });
                 });
             });
 

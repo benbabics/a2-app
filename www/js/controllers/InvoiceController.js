@@ -80,7 +80,7 @@ define(["facade", "globals", "utils", "collections/PaymentCollection", "controll
                 if (selectedCompany.areFetchedPropertiesEmpty()) {
                     view.showLoadingIndicator();
 
-                    utils.when(selectedCompany.fetch())
+                    utils.when(selectedCompany.fetchProperties())
                         .always(function () {
                             view.hideLoadingIndicator();
                         })

@@ -61,15 +61,6 @@ define(["globals", "utils", "models/AjaxModel", "models/BankAccountModel", "mode
                     {
                         pattern: globals.APP.NUMBER_PATTERN,
                         msg    : globals.payment.constants.ERROR_AMOUNT_MUST_BE_NUMERIC
-                    },
-                    {
-                        fn: function (value, attr, computedState) {
-                            var minimumPaymentDue = this.get("minimumPaymentDue");
-
-                            if (value < minimumPaymentDue) {
-                                return globals.payment.constants.ERROR_AMOUNT_LESS_THAN_PAYMENT_DUE;
-                            }
-                        }
                     }
                 ]
             },
@@ -125,6 +116,21 @@ define(["globals", "utils", "models/AjaxModel", "models/BankAccountModel", "mode
 
                 options.patch = true;
                 this.save(attributes, options);
+            },
+
+            validateWarnings: function () {
+                var warnings = [],
+                    warningsCount = 0,
+                    minimumPaymentDue = this.get("minimumPaymentDue");
+
+                if (this.get("amount") < minimumPaymentDue) {
+                    warnings[warningsCount] = globals.payment.constants.ERROR_AMOUNT_LESS_THAN_PAYMENT_DUE;
+                    warningsCount++;
+                }
+
+                if (warningsCount) {
+                    return warnings;
+                }
             },
 
             toJSON: function () {

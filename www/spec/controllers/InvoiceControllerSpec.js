@@ -400,22 +400,22 @@ define(["utils", "backbone", "globals", "Squire", "controllers/BaseController", 
                     });
 
                     it("should call showLoadingIndicator on the View", function () {
-                        spyOn(selectedCompany, "fetch").and.returnValue(true);
+                        spyOn(selectedCompany, "fetchProperties").and.returnValue(true);
 
                         invoiceController.fetchPaymentProperties(mockView, callback);
                         expect(mockView.showLoadingIndicator).toHaveBeenCalledWith();
                     });
 
-                    it("should call fetch on the Company", function () {
-                        spyOn(selectedCompany, "fetch").and.returnValue(true);
+                    it("should call fetchProperties on the Company", function () {
+                        spyOn(selectedCompany, "fetchProperties").and.returnValue(true);
 
                         invoiceController.fetchPaymentProperties(mockView, callback);
-                        expect(selectedCompany.fetch).toHaveBeenCalledWith();
+                        expect(selectedCompany.fetchProperties).toHaveBeenCalledWith();
                     });
 
-                    describe("when the call to fetch on the Company finishes successfully", function () {
+                    describe("when the call to fetchProperties on the Company finishes successfully", function () {
                         beforeEach(function () {
-                            spyOn(selectedCompany, "fetch").and.callFake(function () {
+                            spyOn(selectedCompany, "fetchProperties").and.callFake(function () {
                                 var deferred = utils.Deferred();
 
                                 deferred.resolve();
@@ -434,9 +434,9 @@ define(["utils", "backbone", "globals", "Squire", "controllers/BaseController", 
                         });
                     });
 
-                    describe("when the call to fetch on the Company finishes in failure", function () {
+                    describe("when the call to fetchProperties on the Company finishes in failure", function () {
                         beforeEach(function () {
-                            spyOn(selectedCompany, "fetch").and.callFake(function () {
+                            spyOn(selectedCompany, "fetchProperties").and.callFake(function () {
                                 var deferred = utils.Deferred();
 
                                 deferred.reject();
@@ -456,7 +456,7 @@ define(["utils", "backbone", "globals", "Squire", "controllers/BaseController", 
                     });
 
                     it("should return false", function () {
-                        spyOn(selectedCompany, "fetch").and.returnValue(true);
+                        spyOn(selectedCompany, "fetchProperties").and.returnValue(true);
 
                         expect(invoiceController.fetchPaymentProperties(mockView, callback)).toBeFalsy();
                     });

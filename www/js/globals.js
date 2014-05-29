@@ -378,11 +378,22 @@ define(function (require) {
     };
 
     /**
-     * Validation
+     * Validation Errors
      */
     globals.VALIDATION_ERRORS = {
         "TITLE" : "Cannot complete request",
         "HEADER": "<div class='ui-body ui-body-e'>The following fields are required:</div>"
+    };
+
+    /**
+     * Validation Warnings
+     */
+    globals.VALIDATION_WARNINGS = {
+        "TITLE" : "Warning",
+        "HEADER": "<div class='ui-body ui-body-e'>The following warnings were found:</div>",
+        "FOOTER": "<div class='ui-body'>Would you like to proceed?</div>",
+        "PRIMARY_BUTTON_TEXT": "Yes",
+        "SECONDARY_BUTTON_TEXT": "No"
     };
 
     /**
@@ -1254,11 +1265,11 @@ define(function (require) {
         "STATUS_SCHEDULED": "SCHEDULED",
         "ERROR_SCHEDULED_DATE_REQUIRED_FIELD": "Payment Date must have a value",
         "ERROR_SCHEDULED_DATE_MUST_BE_A_DATE": "Payment Date must be a date",
-        "ERROR_SCHEDULED_DATE_AFTER_DUE_DATE": "Payment date entered is after the due date.",
-        "ERROR_SCHEDULED_DATE_BEFORE_TODAY"  : "Payment date entered is before today.",
+        "ERROR_SCHEDULED_DATE_AFTER_DUE_DATE": "Your payment is scheduled to be paid after the due date. This could result in late fees and service interruption to your account",
+        "ERROR_SCHEDULED_DATE_BEFORE_TODAY"  : "You have entered a date for which processing has already occurred. The next available processing date is today",
         "ERROR_AMOUNT_REQUIRED_FIELD"        : "Amount must have a value",
         "ERROR_AMOUNT_MUST_BE_NUMERIC"       : "Amount must be numeric.",
-        "ERROR_AMOUNT_LESS_THAN_PAYMENT_DUE" : "Amount entered is less than payment due amount."
+        "ERROR_AMOUNT_LESS_THAN_PAYMENT_DUE" : "This amount is less than the minimum payment"
     };
 
     /**

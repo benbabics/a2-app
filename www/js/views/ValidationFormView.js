@@ -65,9 +65,9 @@ define(["backbone", "globals", "facade", "utils", "mustache", "views/FormView", 
                 $fieldLabel.append("<span class='required'>*</span>");
             },
 
-            convertErrorsToUnorderedList: function (error) {
+            convertArrayToUnorderedList: function (errors) {
                 var errorMessages =  "<ul>";
-                utils._.each(error, function (value, key, list) {
+                utils._.each(errors, function (value, key, list) {
                     errorMessages += "<li>" + value + "</li>";
                 });
                 errorMessages +=  "</ul>";
@@ -75,11 +75,25 @@ define(["backbone", "globals", "facade", "utils", "mustache", "views/FormView", 
                 return errorMessages;
             },
 
+            handleValidationWarning: function (model, warnings, callback) {
+                var message = globals.VALIDATION_WARNINGS.HEADER +
+                    this.convertArrayToUnorderedList(warnings) +
+                    globals.VALIDATION_WARNINGS.FOOTER;
+
+                facade.publish("app", "alert", {
+                    title            : globals.VALIDATION_WARNINGS.TITLE,
+                    message          : message,
+                    primaryBtnLabel  : globals.VALIDATION_WARNINGS.PRIMARY_BUTTON_TEXT,
+                    primaryBtnHandler: callback,
+                    secondaryBtnLabel: globals.VALIDATION_WARNINGS.SECONDARY_BUTTON_TEXT
+                });
+            },
+
             /*
              * Event Handlers
              */
-            handleValidationError: function (model, error) {
-                var message = globals.VALIDATION_ERRORS.HEADER + this.convertErrorsToUnorderedList(error);
+            handleValidationError: function (model, errors) {
+                var message = globals.VALIDATION_ERRORS.HEADER + this.convertArrayToUnorderedList(errors);
 
                 facade.publish("app", "alert", {
                     title            : globals.VALIDATION_ERRORS.TITLE,

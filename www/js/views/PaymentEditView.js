@@ -28,6 +28,9 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                 // parse the edit details template
                 Mustache.parse(this.editDetailsTemplate);
 
+                // set context
+                utils._.bindAll(this, "savePayment");
+
                 if (options && options.invoiceSummaryModel) {
                     this.invoiceSummaryModel = options.invoiceSummaryModel;
                 }
@@ -113,10 +116,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                 }
             },
 
-            submitForm: function (evt) {
+            savePayment: function () {
                 var self = this;
-
-                evt.preventDefault();
 
                 this.model.edit({
                     success: function (model, response) {
@@ -126,6 +127,25 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                         self.trigger("paymentEditSuccess", message);
                     }
                 });
+            },
+
+            submitForm: function (evt) {
+                var errors,
+                    warnings;
+
+                evt.preventDefault();
+
+                errors = this.model.validate();
+                if (errors) {
+                    this.handleValidationError(this.model, errors);
+                } else {
+                    warnings = this.model.validateWarnings();
+                    if (warnings) {
+                        this.handleValidationWarning(this.model, warnings, this.savePayment);
+                    } else {
+                        this.savePayment();
+                    }
+                }
             }
         });
 

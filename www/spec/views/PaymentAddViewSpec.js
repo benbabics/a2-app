@@ -179,7 +179,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                 });
 
                 it("should call utils._.bindAll", function () {
-                    expect(mockUtils._.bindAll).toHaveBeenCalledWith(paymentAddView, "handlePageBeforeShow");
+                    expect(mockUtils._.bindAll)
+                        .toHaveBeenCalledWith(paymentAddView, "handlePageBeforeShow", "savePayment");
                 });
 
                 it("should set invoiceSummaryModel", function () {
@@ -542,27 +543,18 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                 });
             });
 
-            describe("has a submitForm function that", function () {
-                var mockEvent = {
-                    preventDefault : function () { }
-                };
-
+            describe("has a savePayment function that", function () {
                 beforeEach(function () {
-                    spyOn(mockEvent, "preventDefault").and.callThrough();
                     spyOn(paymentModel, "add").and.callFake(function () { });
-                    paymentAddView.submitForm(mockEvent);
+                    paymentAddView.savePayment();
                 });
 
                 it("is defined", function () {
-                    expect(paymentAddView.submitForm).toBeDefined();
+                    expect(paymentAddView.savePayment).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(paymentAddView.submitForm).toEqual(jasmine.any(Function));
-                });
-
-                it("should call event.preventDefault", function () {
-                    expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                    expect(paymentAddView.savePayment).toEqual(jasmine.any(Function));
                 });
 
                 describe("when calling add() on the model", function () {
@@ -605,6 +597,142 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                                     .toHaveBeenCalledWith("paymentAddSuccess", mockMustacheRenderReturnValue);
                             });
                         });
+                });
+            });
+
+            describe("has a submitForm function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    spyOn(mockEvent, "preventDefault").and.callThrough();
+
+                    paymentAddView.submitForm(mockEvent);
+                });
+
+                it("is defined", function () {
+                    expect(paymentAddView.submitForm).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(paymentAddView.submitForm).toEqual(jasmine.any(Function));
+                });
+
+                it("should call event.preventDefault", function () {
+                    expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                });
+
+                describe("when validate returns errors", function () {
+                    var mockErrors = [
+                            {
+                                error: "asdfgasdf"
+                            }
+                        ];
+
+                    beforeEach(function () {
+                        spyOn(paymentModel, "validate").and.returnValue(mockErrors);
+                        spyOn(paymentAddView, "handleValidationError").and.callFake(function () {});
+                        spyOn(paymentModel, "validateWarnings").and.returnValue();
+                        spyOn(paymentAddView, "handleValidationWarning").and.callFake(function () {});
+                        spyOn(paymentAddView, "savePayment").and.callFake(function () { });
+
+                        paymentAddView.submitForm(mockEvent);
+                    });
+
+                    it("should call validate on the PaymentModel", function () {
+                        expect(paymentModel.validate).toHaveBeenCalledWith();
+                    });
+
+                    it("should call handleValidationError", function () {
+                        expect(paymentAddView.handleValidationError).toHaveBeenCalledWith(paymentModel, mockErrors);
+                    });
+
+                    it("should NOT call validateWarnings on the PaymentModel", function () {
+                        expect(paymentModel.validateWarnings).not.toHaveBeenCalled();
+                    });
+
+                    it("should NOT call handleValidationWarning", function () {
+                        expect(paymentAddView.handleValidationWarning).not.toHaveBeenCalled();
+                    });
+
+                    it("should NOT call savePayment", function () {
+                        expect(paymentAddView.savePayment).not.toHaveBeenCalled();
+                    });
+                });
+
+                describe("when validate does NOT return errors", function () {
+                    beforeEach(function () {
+                        spyOn(paymentModel, "validate").and.returnValue();
+                        spyOn(paymentAddView, "handleValidationError").and.callFake(function () {});
+                    });
+
+                    describe("when validateWarnings returns warnings", function () {
+                        var mockWarnings = [
+                                {
+                                    warning: "asdfgasdf"
+                                }
+                            ];
+
+                        beforeEach(function () {
+                            spyOn(paymentModel, "validateWarnings").and.returnValue(mockWarnings);
+                            spyOn(paymentAddView, "handleValidationWarning").and.callFake(function () {});
+                            spyOn(paymentAddView, "savePayment").and.callFake(function () { });
+
+                            paymentAddView.submitForm(mockEvent);
+                        });
+
+                        it("should call validate on the PaymentModel", function () {
+                            expect(paymentModel.validate).toHaveBeenCalledWith();
+                        });
+
+                        it("should NOT call handleValidationError", function () {
+                            expect(paymentAddView.handleValidationError).not.toHaveBeenCalled();
+                        });
+
+                        it("should call validateWarnings on the PaymentModel", function () {
+                            expect(paymentModel.validateWarnings).toHaveBeenCalled();
+                        });
+
+                        it("should call handleValidationWarning", function () {
+                            expect(paymentAddView.handleValidationWarning).
+                                toHaveBeenCalledWith(paymentModel, mockWarnings, paymentAddView.savePayment);
+                        });
+
+                        it("should NOT call savePayment", function () {
+                            expect(paymentAddView.savePayment).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("when validateWarnings does NOT return warnings", function () {
+                        beforeEach(function () {
+                            spyOn(paymentModel, "validateWarnings").and.returnValue();
+                            spyOn(paymentAddView, "handleValidationWarning").and.callFake(function () {});
+                            spyOn(paymentAddView, "savePayment").and.callFake(function () { });
+
+                            paymentAddView.submitForm(mockEvent);
+                        });
+
+                        it("should call validate on the PaymentModel", function () {
+                            expect(paymentModel.validate).toHaveBeenCalledWith();
+                        });
+
+                        it("should NOT call handleValidationError", function () {
+                            expect(paymentAddView.handleValidationError).not.toHaveBeenCalled();
+                        });
+
+                        it("should call validateWarnings on the PaymentModel", function () {
+                            expect(paymentModel.validateWarnings).toHaveBeenCalled();
+                        });
+
+                        it("should NOT call handleValidationWarning", function () {
+                            expect(paymentAddView.handleValidationWarning).not.toHaveBeenCalled();
+                        });
+
+                        it("should call savePayment", function () {
+                            expect(paymentAddView.savePayment).toHaveBeenCalledWith();
+                        });
+                    });
                 });
             });
         });

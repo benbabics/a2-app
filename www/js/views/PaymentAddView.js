@@ -29,7 +29,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                 Mustache.parse(this.addDetailsTemplate);
 
                 // set context
-                utils._.bindAll(this, "handlePageBeforeShow");
+                utils._.bindAll(this, "handlePageBeforeShow", "savePayment");
 
                 if (options && options.invoiceSummaryModel) {
                     this.invoiceSummaryModel = options.invoiceSummaryModel;
@@ -130,10 +130,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                 }
             },
 
-            submitForm: function (evt) {
+            savePayment: function () {
                 var self = this;
-
-                evt.preventDefault();
 
                 this.model.add({
                     success: function (model, response) {
@@ -143,6 +141,25 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                         self.trigger("paymentAddSuccess", message);
                     }
                 });
+            },
+
+            submitForm: function (evt) {
+                var errors,
+                    warnings;
+
+                evt.preventDefault();
+
+                errors = this.model.validate();
+                if (errors) {
+                    this.handleValidationError(this.model, errors);
+                } else {
+                    warnings = this.model.validateWarnings();
+                    if (warnings) {
+                        this.handleValidationWarning(this.model, warnings, this.savePayment);
+                    } else {
+                        this.savePayment();
+                    }
+                }
             }
         });
 

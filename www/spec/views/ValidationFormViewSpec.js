@@ -287,7 +287,7 @@ define(["Squire", "mustache", "globals", "utils", "views/FormView", "jasmine-jqu
                 });
             });
 
-            describe("has a convertErrorsToUnorderedList function that", function () {
+            describe("has a convertArrayToUnorderedList function that", function () {
                 var mockErrors = {
                     field1: "Error Message 1",
                     field2: "Error Message 2",
@@ -295,23 +295,73 @@ define(["Squire", "mustache", "globals", "utils", "views/FormView", "jasmine-jqu
                 };
 
                 beforeEach(function () {
-                    validationFormView.convertErrorsToUnorderedList(mockErrors);
+                    validationFormView.convertArrayToUnorderedList(mockErrors);
                 });
 
                 it("is defined", function () {
-                    expect(validationFormView.convertErrorsToUnorderedList).toBeDefined();
+                    expect(validationFormView.convertArrayToUnorderedList).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(validationFormView.convertErrorsToUnorderedList).toEqual(jasmine.any(Function));
+                    expect(validationFormView.convertArrayToUnorderedList).toEqual(jasmine.any(Function));
                 });
 
                 it("should return expected result", function () {
                     var expectedValue = "<ul><li>Error Message 1</li>" +
                             "<li>Error Message 2</li>" +
                             "<li>Error Message 5</li></ul>",
-                        actualValue = validationFormView.convertErrorsToUnorderedList(mockErrors);
+                        actualValue = validationFormView.convertArrayToUnorderedList(mockErrors);
                     expect(actualValue).toEqual(expectedValue);
+                });
+            });
+
+            describe("has a handleValidationWarning function that", function () {
+                var mockConvertedWarnings = "",
+                    mockWarnings = {
+                        field1: "Warning Message 1",
+                        field2: "Warning Message 2"
+                    },
+                    mockCallback = function () { return true; };
+
+                beforeEach(function () {
+                    spyOn(mockFacade, "publish").and.callThrough();
+                    spyOn(validationFormView, "convertArrayToUnorderedList").and.callFake(
+                        function () {
+                            return mockConvertedWarnings;
+                        }
+                    );
+
+                    validationFormView.handleValidationWarning(formModel, mockWarnings, mockCallback);
+                });
+
+                it("is defined", function () {
+                    expect(validationFormView.handleValidationWarning).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(validationFormView.handleValidationWarning).toEqual(jasmine.any(Function));
+                });
+
+                it("should call convertArrayToUnorderedList", function () {
+                    expect(validationFormView.convertArrayToUnorderedList).toHaveBeenCalledWith(mockWarnings);
+                });
+
+                it("should call publish on the facade", function () {
+                    var appAlertOptions;
+
+                    expect(mockFacade.publish).toHaveBeenCalled();
+
+                    expect(mockFacade.publish.calls.mostRecent().args.length).toEqual(3);
+                    expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
+                    expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
+
+                    appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
+                    expect(appAlertOptions.title).toEqual(globals.VALIDATION_WARNINGS.TITLE);
+                    expect(appAlertOptions.message).toEqual(globals.VALIDATION_WARNINGS.HEADER +
+                        mockConvertedWarnings + globals.VALIDATION_WARNINGS.FOOTER);
+                    expect(appAlertOptions.primaryBtnLabel).toEqual(globals.VALIDATION_WARNINGS.PRIMARY_BUTTON_TEXT);
+                    expect(appAlertOptions.primaryBtnHandler).toEqual(mockCallback);
+                    expect(appAlertOptions.secondaryBtnLabel).toEqual(globals.VALIDATION_WARNINGS.SECONDARY_BUTTON_TEXT);
                 });
             });
 
@@ -325,7 +375,7 @@ define(["Squire", "mustache", "globals", "utils", "views/FormView", "jasmine-jqu
 
                 beforeEach(function () {
                     spyOn(mockFacade, "publish").and.callThrough();
-                    spyOn(validationFormView, "convertErrorsToUnorderedList").and.callFake(
+                    spyOn(validationFormView, "convertArrayToUnorderedList").and.callFake(
                         function () {
                             return mockConvertedErrors;
                         }
@@ -342,12 +392,12 @@ define(["Squire", "mustache", "globals", "utils", "views/FormView", "jasmine-jqu
                     expect(validationFormView.handleValidationError).toEqual(jasmine.any(Function));
                 });
 
-                it("should call convertErrorsToUnorderedList", function () {
-                    expect(validationFormView.convertErrorsToUnorderedList).toHaveBeenCalledWith(mockErrors);
+                it("should call convertArrayToUnorderedList", function () {
+                    expect(validationFormView.convertArrayToUnorderedList).toHaveBeenCalledWith(mockErrors);
                 });
 
                 it("should call publish on the facade", function () {
-                    var appALertOptions;
+                    var appAlertOptions;
 
                     expect(mockFacade.publish).toHaveBeenCalled();
 
@@ -355,10 +405,10 @@ define(["Squire", "mustache", "globals", "utils", "views/FormView", "jasmine-jqu
                     expect(mockFacade.publish.calls.mostRecent().args[0]).toEqual("app");
                     expect(mockFacade.publish.calls.mostRecent().args[1]).toEqual("alert");
 
-                    appALertOptions = mockFacade.publish.calls.mostRecent().args[2];
-                    expect(appALertOptions.title).toEqual(globals.VALIDATION_ERRORS.TITLE);
-                    expect(appALertOptions.message).toEqual(globals.VALIDATION_ERRORS.HEADER + mockConvertedErrors);
-                    expect(appALertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
+                    appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
+                    expect(appAlertOptions.title).toEqual(globals.VALIDATION_ERRORS.TITLE);
+                    expect(appAlertOptions.message).toEqual(globals.VALIDATION_ERRORS.HEADER + mockConvertedErrors);
+                    expect(appAlertOptions.primaryBtnLabel).toEqual(globals.DIALOG.DEFAULT_BTN_TEXT);
                 });
             });
         });
