@@ -186,5 +186,35 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "views/BaseView",
                     });
                 });
             });
+
+            describe("has a handleClick function that", function () {
+                var mockEvent = {
+                    preventDefault : function () { }
+                };
+
+                beforeEach(function () {
+                    spyOn(mockEvent, "preventDefault").and.callThrough();
+                    spyOn(hierarchyView, "trigger").and.callFake(function () {});
+
+                    hierarchyView.handleClick(mockEvent);
+                });
+
+                it("is defined", function () {
+                    expect(hierarchyView.handleClick).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(hierarchyView.handleClick).toEqual(jasmine.any(Function));
+                });
+
+                it("should call event.preventDefault", function () {
+                    expect(mockEvent.preventDefault).toHaveBeenCalledWith();
+                });
+
+                it("should call trigger", function () {
+                    expect(hierarchyView.trigger)
+                        .toHaveBeenCalledWith("hierarchySelected", mockHierarchyModel.accountId);
+                });
+            });
         });
     });
