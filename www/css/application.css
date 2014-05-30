@@ -171,3 +171,11 @@ div.hasDatepicker{ display: block; padding: 0; overflow: visible;  margin: 8px 0
 #popupDialog .ui-btn-active .ui-btn-inner{
     background: #5393c5;
 }
+
+
+/*********************************************
+* Login Page
+********************************************/
+#login {
+    padding-top: 0px !important;
+}
