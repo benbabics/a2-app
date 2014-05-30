@@ -22,6 +22,7 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Hie
             render: function () {
                 this.renderHeader();
                 this.renderContent();
+
                 this.$el.trigger("create");
             },
 

@@ -26,7 +26,7 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Dri
             render: function () {
                 this.renderHeader();
                 this.renderContent();
-                this.$el.trigger("create");
+                //this.$el.trigger("create");
             },
 
             renderHeader: function () {
@@ -36,6 +36,8 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Dri
                     {
                         "permissions": this.userModel.get("selectedCompany").get("permissions")
                     }));
+
+                $header.trigger("create");
             },
 
             renderContent: function () {
@@ -47,6 +49,8 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Dri
                 $content.find("#driverSearchResultList").empty();
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
+
+                $content.trigger("create");
 
                 listContainer = $content.find("#driverSearchResultList");
 
