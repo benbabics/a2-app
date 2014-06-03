@@ -26,7 +26,6 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Dri
             render: function () {
                 this.renderHeader();
                 this.renderContent();
-                //this.$el.trigger("create");
             },
 
             renderHeader: function () {
@@ -50,8 +49,6 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Dri
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
 
-                $content.trigger("create");
-
                 listContainer = $content.find("#driverSearchResultList");
 
                 // populate $list
@@ -69,6 +66,8 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Dri
                     // This call throws an exception if called during startup before the list is ready
                     listContainer.listview("refresh");
                 } catch (ignore) {}
+
+                $content.trigger("create");
             },
 
             getConfiguration: function () {

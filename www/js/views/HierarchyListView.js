@@ -22,14 +22,12 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Hie
             render: function () {
                 this.renderHeader();
                 this.renderContent();
-
-                this.$el.trigger("create");
             },
 
             renderHeader: function () {
                 var $header = this.$el.find(":jqmData(role=header)");
-
                 $header.html(Mustache.render(this.headerTemplate, this.getHeaderConfiguration()));
+                $header.trigger("create");
             },
 
             renderContent: function () {
@@ -64,6 +62,8 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Hie
                     // This call throws an exception if called during startup before the list is ready
                     listContainer.listview("refresh");
                 } catch (ignore) {}
+
+                $content.trigger("create");
             },
 
             getHeaderConfiguration: function () {

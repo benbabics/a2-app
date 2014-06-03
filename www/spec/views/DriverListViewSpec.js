@@ -179,7 +179,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 beforeEach(function () {
                     spyOn(driverListView, "renderHeader").and.callFake(function () { });
                     spyOn(driverListView, "renderContent").and.callFake(function () { });
-                    spyOn(driverListView.$el, "trigger").and.callThrough();
 
                     driverListView.render();
                 });
@@ -199,10 +198,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 it("should call renderContent", function () {
                     expect(driverListView.renderContent).toHaveBeenCalledWith();
                 });
-
-                it("should call the trigger function on the $el", function () {
-                    expect(driverListView.$el.trigger).toHaveBeenCalledWith("create");
-                });
             });
 
             describe("has a renderHeader function that", function () {
@@ -213,6 +208,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                     spyOn(driverListView.$el, "find").and.returnValue(actualHeader);
                     spyOn(actualHeader, "html").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(actualHeader, "trigger").and.callThrough();
 
                     driverListView.renderHeader();
 
@@ -239,6 +235,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                             "permissions": userModel.get("selectedCompany").get("permissions")
                         });
                     expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
+                });
+
+                it("should call the trigger function on the header", function () {
+                    expect(actualHeader.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
@@ -270,8 +270,9 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                     spyOn(driverListView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(driverListView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
+                    spyOn(driverListView, "getConfiguration").and.returnValue(mockConfiguration);
                     spyOn(driverCollection, "each").and.callThrough();
+                    spyOn(actualContent, "trigger").and.callThrough();
 
                     driverListView.renderContent();
                 });
@@ -294,10 +295,11 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                 });
 
                 it("should call each on the collection sending a function and scope object", function () {
-                    expect(driverCollection.each).toHaveBeenCalled();
-                    expect(driverCollection.each.calls.mostRecent().args.length).toEqual(2);
-                    expect(driverCollection.each.calls.mostRecent().args[0]).toEqual(jasmine.any(Function));
-                    expect(driverCollection.each.calls.mostRecent().args[1]).toEqual(driverListView);
+                    expect(driverCollection.each).toHaveBeenCalledWith(jasmine.any(Function), driverListView);
+                });
+
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

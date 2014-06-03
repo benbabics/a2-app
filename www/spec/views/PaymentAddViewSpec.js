@@ -203,11 +203,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                     actualContent = paymentAddView.$el.find(":jqmData(role=content)");
                     spyOn(paymentAddView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(paymentAddView.$el, "trigger").and.callThrough();
+                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(paymentAddView, "resetModel").and.callFake(function () { });
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(paymentAddView, "getConfiguration").and
-                        .callFake(function () { return expectedConfiguration; });
+                    spyOn(paymentAddView, "getConfiguration").and.returnValue(expectedConfiguration);
                     spyOn(paymentAddView, "setupDatepicker").and.callFake(function () { });
                     spyOn(paymentAddView, "formatRequiredFields").and.callThrough();
 
@@ -247,8 +246,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                     expect(paymentAddView.formatRequiredFields).toHaveBeenCalledWith();
                 });
 
-                it("should call the trigger function on the $el", function () {
-                    expect(paymentAddView.$el.trigger).toHaveBeenCalledWith("create");
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

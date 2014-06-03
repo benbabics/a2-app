@@ -172,7 +172,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 beforeEach(function () {
                     spyOn(cardSearchView, "renderHeader").and.callFake(function () { });
                     spyOn(cardSearchView, "renderContent").and.callFake(function () { });
-                    spyOn(cardSearchView.$el, "trigger").and.callThrough();
 
                     cardSearchView.render();
                 });
@@ -192,10 +191,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 it("should call renderContent", function () {
                     expect(cardSearchView.renderContent).toHaveBeenCalledWith();
                 });
-
-                it("should call the trigger function on the $el", function () {
-                    expect(cardSearchView.$el.trigger).toHaveBeenCalledWith("create");
-                });
             });
 
             describe("has a renderHeader function that", function () {
@@ -206,6 +201,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     spyOn(cardSearchView.$el, "find").and.returnValue(actualHeader);
                     spyOn(actualHeader, "html").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
+                    spyOn(actualHeader, "trigger").and.callThrough();
 
                     cardSearchView.renderHeader();
 
@@ -232,6 +228,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                             "permissions": userModel.get("selectedCompany").get("permissions")
                         });
                     expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
+                });
+
+                it("should call the trigger function on the header", function () {
+                    expect(actualHeader.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
@@ -265,7 +265,8 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     spyOn(cardSearchView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(cardSearchView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
+                    spyOn(cardSearchView, "getConfiguration").and.returnValue(mockConfiguration);
+                    spyOn(actualContent, "trigger").and.callThrough();
 
                     cardSearchView.renderContent();
                 });
@@ -285,6 +286,10 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 it("should call the html function on the content", function () {
                     var expectedContent = Mustache.render(pageTemplate, mockConfiguration);
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
+                });
+
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

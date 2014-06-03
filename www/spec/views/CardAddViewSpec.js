@@ -173,10 +173,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     actualContent = cardAddView.$el.find(":jqmData(role=content)");
                     spyOn(cardAddView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(cardAddView.$el, "trigger").and.callThrough();
+                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(cardAddView, "resetModel").and.callFake(function () { });
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(cardAddView, "getConfiguration").and.callFake(function () { return expectedConfiguration; });
+                    spyOn(cardAddView, "getConfiguration").and.returnValue(expectedConfiguration);
                     spyOn(cardAddView, "formatRequiredFields").and.callThrough();
 
                     cardAddView.render();
@@ -199,10 +199,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 });
 
                 it("should call Mustache.render() on the template", function () {
-                    expect(mockMustache.render).toHaveBeenCalled();
-                    expect(mockMustache.render.calls.argsFor(0).length).toEqual(2);
-                    expect(mockMustache.render.calls.argsFor(0)[0]).toEqual(cardAddView.template);
-                    expect(mockMustache.render.calls.argsFor(0)[1]).toEqual(expectedConfiguration);
+                    expect(mockMustache.render).toHaveBeenCalledWith(cardAddView.template, expectedConfiguration);
                 });
 
                 it("should call the html function on the content", function () {
@@ -214,8 +211,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(cardAddView.formatRequiredFields).toHaveBeenCalledWith();
                 });
 
-                it("should call the trigger function on the $el", function () {
-                    expect(cardAddView.$el.trigger).toHaveBeenCalledWith("create");
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {

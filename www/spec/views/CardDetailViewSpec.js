@@ -154,9 +154,9 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                     spyOn(cardDetailView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(cardDetailView.$el, "trigger").and.callThrough();
+                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(cardDetailView, "getConfiguration").and.callFake(function () { return mockConfiguration; });
+                    spyOn(cardDetailView, "getConfiguration").and.returnValue(mockConfiguration);
 
                     cardDetailView.render();
                 });
@@ -182,8 +182,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
                 });
 
-                it("should call the trigger function on the $el", function () {
-                    expect(cardDetailView.$el.trigger).toHaveBeenCalledWith("create");
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
@@ -420,10 +420,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                             });
 
                             it("should call trigger", function () {
-                                expect(cardDetailView.trigger).toHaveBeenCalled();
-                                expect(cardDetailView.trigger.calls.mostRecent().args.length).toEqual(2);
-                                expect(cardDetailView.trigger.calls.mostRecent().args[0]).toEqual(eventToTrigger);
-                                expect(cardDetailView.trigger.calls.mostRecent().args[1]).toEqual(response);
+                                expect(cardDetailView.trigger).toHaveBeenCalledWith(eventToTrigger, response);
                             });
                         });
                 });

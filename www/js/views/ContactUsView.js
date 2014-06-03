@@ -24,7 +24,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
 
                 this.formatRequiredFields();
 
-                this.$el.trigger("create");
+                $content.trigger("create");
             },
 
             getConfiguration: function () {

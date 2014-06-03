@@ -254,7 +254,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     actualContent = cardShippingView.$el.find(":jqmData(role=content)");
                     spyOn(cardShippingView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(cardShippingView.$el, "trigger").and.callThrough();
+                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(cardShippingView, "resetModel").and.callThrough();
                     spyOn(cardShippingView, "getConfiguration").and.returnValue(expectedConfiguration);
@@ -293,8 +293,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(cardShippingView.formatRequiredFields).toHaveBeenCalledWith();
                 });
 
-                it("should call the trigger function on the $el", function () {
-                    expect(cardShippingView.$el.trigger).toHaveBeenCalledWith("create");
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

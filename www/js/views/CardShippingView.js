@@ -44,7 +44,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 this.updateShippingWarning();
                 this.formatRequiredFields();
 
-                this.$el.trigger("create");
+                $content.trigger("create");
             },
 
             getConfiguration: function () {

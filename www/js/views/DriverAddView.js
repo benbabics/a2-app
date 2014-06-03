@@ -40,7 +40,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
 
                 this.formatRequiredFields();
 
-                this.$el.trigger("create");
+                $content.trigger("create");
             },
 
             resetForm: function () {

@@ -26,7 +26,6 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Car
             render: function () {
                 this.renderHeader();
                 this.renderContent();
-                this.$el.trigger("create");
             },
 
             renderHeader: function () {
@@ -36,6 +35,7 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Car
                     {
                         "permissions": this.userModel.get("selectedCompany").get("permissions")
                     }));
+                $header.trigger("create");
             },
 
             renderContent: function () {
@@ -65,6 +65,8 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Car
                     // This call throws an exception if called during startup before the list is ready
                     listContainer.listview("refresh");
                 } catch (ignore) {}
+
+                $content.trigger("create");
             },
 
             getConfiguration: function () {

@@ -208,11 +208,10 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                     actualContent = paymentEditView.$el.find(":jqmData(role=content)");
                     spyOn(paymentEditView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(paymentEditView.$el, "trigger").and.callThrough();
+                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(paymentEditView, "updateModelFromSummary").and.callFake(function () { });
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(paymentEditView, "getConfiguration").and
-                        .callFake(function () { return mockConfiguration; });
+                    spyOn(paymentEditView, "getConfiguration").and.returnValue(mockConfiguration);
                     spyOn(paymentEditView, "setupDatepicker").and.callFake(function () { });
                     spyOn(paymentEditView, "formatRequiredFields").and.callThrough();
 
@@ -248,8 +247,8 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                     expect(paymentEditView.formatRequiredFields).toHaveBeenCalledWith();
                 });
 
-                it("should call the trigger function on the $el", function () {
-                    expect(paymentEditView.$el.trigger).toHaveBeenCalledWith("create");
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {

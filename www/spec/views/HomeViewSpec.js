@@ -78,13 +78,14 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "views/BaseView",
                 var actualContent;
 
                 beforeEach(function () {
+                    actualContent = homeView.$el.find(":jqmData(role=content)");
+
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(homeView.$el, "trigger").and.callThrough();
+                    spyOn(homeView.$el, "find").and.returnValue(actualContent);
+                    spyOn(actualContent, "trigger").and.callThrough();
 
                     homeView.initialize();
                     homeView.render();
-
-                    actualContent = homeView.$el.find(":jqmData(role=content)");
                 });
 
                 it("is defined", function () {
@@ -107,8 +108,8 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "views/BaseView",
                     expect(actualContent[0]).toContainHtml(expectedContent);
                 });
 
-                it("should call the trigger function on the $el", function () {
-                    expect(homeView.$el.trigger).toHaveBeenCalledWith("create");
+                it("should call the trigger function on the content", function () {
+                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {

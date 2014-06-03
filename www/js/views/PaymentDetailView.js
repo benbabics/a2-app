@@ -16,10 +16,8 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/BaseView", 
 
             render: function () {
                 var $content = this.$el.find(":jqmData(role=content)");
-
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
-
-                this.$el.trigger("create");
+                $content.trigger("create");
             },
 
             getConfiguration: function () {
