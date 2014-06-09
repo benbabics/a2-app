@@ -13,7 +13,7 @@ define(["utils", "Squire", "globals", "controllers/BaseController"],
                 reset: function () { },
                 get: function () { },
                 set: function () { },
-                parse: function () { }
+                initialize: function () { }
             },
             UserModel = {
                 getInstance: function () { }
@@ -170,14 +170,14 @@ define(["utils", "Squire", "globals", "controllers/BaseController"],
                         },
                         objectToInitializeUserModel;
 
-                    spyOn(mockUserModel, "parse").and.callFake(function () { });
+                    spyOn(mockUserModel, "initialize").and.callFake(function () { });
 
                     loginController.setAuthentication(mockResponse);
 
-                    expect(mockUserModel.parse).toHaveBeenCalled();
-                    expect(mockUserModel.parse.calls.mostRecent().args.length).toEqual(1);
+                    expect(mockUserModel.initialize).toHaveBeenCalled();
+                    expect(mockUserModel.initialize.calls.mostRecent().args.length).toEqual(1);
 
-                    objectToInitializeUserModel = mockUserModel.parse.calls.mostRecent().args[0];
+                    objectToInitializeUserModel = mockUserModel.initialize.calls.mostRecent().args[0];
 
                     expect(objectToInitializeUserModel.authenticated).toBeTruthy();
                     expect(objectToInitializeUserModel.firstName).toEqual(mockResponse.firstName);

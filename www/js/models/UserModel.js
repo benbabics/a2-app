@@ -15,7 +15,7 @@ define(["backbone", "globals", "utils", "collections/HierarchyCollection", "mode
                 "hierarchies"        : null
             },
 
-            parse: function (options) {
+            initialize: function (options) {
                 var selectedCompany;
 
                 if (options) {
@@ -38,7 +38,7 @@ define(["backbone", "globals", "utils", "collections/HierarchyCollection", "mode
 
                 utils._.each(hierarchiesList, function (hierarchyOptions) {
                     hierarchy = new HierarchyModel();
-                    hierarchy.parse(hierarchyOptions);
+                    hierarchy.initialize(hierarchyOptions);
                     hierarchies.add(hierarchy);
                 });
 

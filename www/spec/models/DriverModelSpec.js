@@ -72,7 +72,7 @@ define(["Squire", "mustache", "globals", "utils", "models/UserModel", "backbone"
                 squire.require(["models/DriverModel"], function (JasmineDriverModel) {
                     DriverModel = JasmineDriverModel;
 
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 
                     driverModel = new DriverModel();

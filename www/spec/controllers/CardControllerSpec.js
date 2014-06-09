@@ -157,7 +157,7 @@ define(["globals", "backbone", "utils", "Squire", "controllers/BaseController", 
             beforeEach(function (done) {
                 squire.require(["controllers/CardController"], function (CardController) {
                     cardModel.set(mockCardModel);
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
                     spyOn(UserModel, "getInstance").and.callThrough();
 
                     cardController = CardController;

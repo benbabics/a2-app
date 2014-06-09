@@ -71,7 +71,7 @@ define(["Squire", "utils", "globals", "backbone", "models/UserModel"],
         describe("A Payment Model", function () {
             beforeEach(function (done) {
                 squire.require(["models/PaymentModel"], function (JasminePaymentModel) {
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 
                     PaymentModel = JasminePaymentModel;

@@ -106,7 +106,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                     HierarchyListView = JasmineHierarchyListView;
 
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
                     hierarchyModel.set(mockHierarchyModel);
                     hierarchyCollection.reset([]);
                     hierarchyCollection.add(hierarchyModel);

@@ -82,7 +82,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     DriverSearchView = JasmineDriverSearchView;
 
                     driverModel.set(mockDriverModel);
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
 
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 

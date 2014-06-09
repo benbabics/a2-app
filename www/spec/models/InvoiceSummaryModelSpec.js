@@ -62,7 +62,7 @@ define(["Squire", "backbone", "globals", "models/UserModel"],
         describe("An Invoice Summary Model", function () {
             beforeEach(function (done) {
                 squire.require(["models/InvoiceSummaryModel"], function (InvoiceSummaryModel) {
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 
                     invoiceSummaryModel = new InvoiceSummaryModel();

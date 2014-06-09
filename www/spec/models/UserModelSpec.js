@@ -52,7 +52,7 @@ define(["Squire", "backbone", "utils", "globals", "collections/HierarchyCollecti
                 });
             });
 
-            describe("has a parse function that", function () {
+            describe("has an initialize function that", function () {
                 beforeEach(function () {
                     spyOn(companyModel, "parse").and.callFake(function () {});
                     spyOn(userModel, "setHierarchies").and.callFake(function () {});
@@ -60,16 +60,16 @@ define(["Squire", "backbone", "utils", "globals", "collections/HierarchyCollecti
                 });
 
                 it("is defined", function () {
-                    expect(userModel.parse).toBeDefined();
+                    expect(userModel.initialize).toBeDefined();
                 });
 
                 it("is a function", function () {
-                    expect(userModel.parse).toEqual(jasmine.any(Function));
+                    expect(userModel.initialize).toEqual(jasmine.any(Function));
                 });
 
                 describe("when options are not provided", function () {
                     beforeEach(function () {
-                        userModel.parse();
+                        userModel.initialize();
                     });
 
                     it("should NOT call set", function () {
@@ -83,7 +83,7 @@ define(["Squire", "backbone", "utils", "globals", "collections/HierarchyCollecti
                     var options = {};
 
                     beforeEach(function () {
-                        userModel.parse(options);
+                        userModel.initialize(options);
                     });
 
                     it("should NOT call set", function () {
@@ -175,7 +175,7 @@ define(["Squire", "backbone", "utils", "globals", "collections/HierarchyCollecti
                         };
 
                     beforeEach(function () {
-                        userModel.parse(options);
+                        userModel.initialize(options);
                     });
 
                     it("should call set 5 times", function () {
@@ -377,7 +377,7 @@ define(["Squire", "backbone", "utils", "globals", "collections/HierarchyCollecti
                             }
                         };
                         userModel.clear();
-                        userModel.parse(mockUserModel);
+                        userModel.initialize(mockUserModel);
                         selectedCompany = userModel.get("selectedCompany");
 
                         spyOn(selectedCompany, "toJSON").and.callThrough();
@@ -410,7 +410,7 @@ define(["Squire", "backbone", "utils", "globals", "collections/HierarchyCollecti
                             email         : "cornholio@bnbinc.com"
                         };
                         userModel.clear();
-                        userModel.parse(mockUserModel);
+                        userModel.initialize(mockUserModel);
 
                         spyOn(userModel.__proto__.constructor.__super__, "toJSON").and.callThrough();
 
@@ -479,7 +479,7 @@ define(["Squire", "backbone", "utils", "globals", "collections/HierarchyCollecti
                             ]
                         };
                         userModel.clear();
-                        userModel.parse(mockUserModel);
+                        userModel.initialize(mockUserModel);
                         userModel.setHierarchies(mockUserModel.hierarchies);
                         hierarchies = userModel.get("hierarchies");
 
@@ -552,7 +552,7 @@ define(["Squire", "backbone", "utils", "globals", "collections/HierarchyCollecti
                             }
                         };
                         userModel.clear();
-                        userModel.parse(mockUserModel);
+                        userModel.initialize(mockUserModel);
 
                         spyOn(userModel.__proto__.constructor.__super__, "toJSON").and.callThrough();
 

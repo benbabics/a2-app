@@ -90,7 +90,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     loadFixtures("../../../index.html");
 
                     cardModel.initialize(mockCardModel);
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
                     authorizationProfiles = new Backbone.Collection();
                     userModel.get("selectedCompany").set("authorizationProfiles", authorizationProfiles);
 

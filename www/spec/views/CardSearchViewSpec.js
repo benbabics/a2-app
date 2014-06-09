@@ -76,7 +76,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     CardSearchView = JasmineCardSearchView;
 
                     cardModel.set(mockCardModel);
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
 
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 

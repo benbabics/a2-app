@@ -12,7 +12,7 @@ define(["backbone", "utils", "collections/HierarchyCollection"],
                 "children"     : null
             },
 
-            parse: function (options) {
+            initialize: function (options) {
                 if (options) {
                     if (options.accountId) { this.set("accountId", options.accountId); }
                     if (options.name) { this.set("name", options.name); }
@@ -34,7 +34,7 @@ define(["backbone", "utils", "collections/HierarchyCollection"],
                 children = new HierarchyCollection();
                 utils._.each(childrenList, function (childOptions) {
                     hierarchy = new HierarchyModel();
-                    hierarchy.parse(childOptions);
+                    hierarchy.initialize(childOptions);
                     children.add(hierarchy);
                 });
 

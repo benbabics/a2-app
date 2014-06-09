@@ -61,7 +61,7 @@ define(["utils", "globals", "Squire", "models/AuthorizationProfileModel", "model
         describe("An Authorization Profile Collection", function () {
             beforeEach(function (done) {
                 squire.require(["collections/AuthorizationProfileCollection"], function (JasmineAuthorizationProfileCollection) {
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
 
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 

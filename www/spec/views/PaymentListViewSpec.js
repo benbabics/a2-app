@@ -77,7 +77,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 squire.require(["views/PaymentListView"], function (PaymentListView) {
                     loadFixtures("../../../index.html");
 
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
                     paymentCollection.add(paymentModel);
 
                     paymentListView =  new PaymentListView({

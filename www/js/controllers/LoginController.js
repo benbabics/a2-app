@@ -39,7 +39,7 @@ define(["facade", "utils", "globals", "controllers/BaseController", "views/Login
             },
 
             setAuthentication: function (authenticationResponse) {
-                this.userModel.parse(utils._.extend(authenticationResponse, {"authenticated": true}));
+                this.userModel.initialize(utils._.extend(authenticationResponse, {"authenticated": true}));
             },
 
             clearAuthentication: function () {

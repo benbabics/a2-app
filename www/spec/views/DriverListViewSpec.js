@@ -95,7 +95,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
 
                     DriverListView = JasmineDriverListView;
 
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
                     driverModel = new DriverModel();
                     driverModel.initialize(mockDriverModel);
 

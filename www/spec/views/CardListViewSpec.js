@@ -97,7 +97,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
 
                     CardListView = JasmineCardListView;
 
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
                     cardModel = new CardModel();
                     cardModel.initialize(mockCardModel);
 

@@ -61,7 +61,7 @@ define(["utils", "globals", "Squire", "models/BankAccountModel", "models/UserMod
         describe("A Bank Account Collection", function () {
             beforeEach(function (done) {
                 squire.require(["collections/BankAccountCollection"], function (JasmineBankAccountCollection) {
-                    userModel.parse(mockUserModel);
+                    userModel.initialize(mockUserModel);
 
                     spyOn(UserModel, "getInstance").and.returnValue(userModel);
 
