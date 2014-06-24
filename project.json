@@ -1,11 +1,11 @@
 {
 "stage":
     {
-    "app_url" : "https://uat.account.wexmobile.com/mobileweb"
+    "app_url" : "https://uat.account.wexmobile.com/accountmaintenancerest"
     },
 "prod":
     {
-    "app_url" : "https://account.wexmobile.com/mobileweb"
+    "app_url" : "https://account.wexmobile.com/accountmaintenancerest"
     },
 
 "android":
