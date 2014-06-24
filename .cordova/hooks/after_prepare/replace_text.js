@@ -39,4 +39,6 @@ if (rootdir) {
     update_file(rootdir, "platforms/android/assets/www/js/globals.js", target, "android", configobj);
 
     update_file(rootdir, "platforms/ios/www/js/globals.js", target, "ios", configobj);
+    
+    replace_string_in_file(path.join(rootdir, "platforms/android/AndroidManifest.xml"), "userPortrait", "portrait");
 }
