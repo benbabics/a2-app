@@ -39,14 +39,13 @@
         <option name="myLocal" value="false" />
         <inspection_tool class="JSFieldCanBeLocal" enabled="false" level="WARNING" enabled_by_default="false" />
         <inspection_tool class="JSHint" enabled="true" level="ERROR" enabled_by_default="true" />
-        <inspection_tool class="JSLint" enabled="true" level="ERROR" enabled_by_default="true" />
       </profile>
     </profiles>
     <option name="PROJECT_PROFILE" value="Project Default" />
     <option name="USE_PROJECT_PROFILE" value="true" />
     <version value="1.0" />
   </component>
-  <component name="JSHintConfiguration" version="2.4.3" use-config-file="true" default-config-file-path="$PROJECT_DIR$/.jshintrc">
+  <component name="JSHintConfiguration" version="2.5.1" use-config-file="true" default-config-file-path="$PROJECT_DIR$/.jshintrc">
     <option bitwise="true" />
     <option camelcase="false" />
     <option curly="true" />
@@ -303,13 +302,6 @@
     <option name="myConfigurationMap">
       <map>
         <entry key="$PROJECT_DIR$">
-          <value>
-            <SvnBranchConfiguration>
-              <option name="trunkUrl" value="" />
-            </SvnBranchConfiguration>
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/../MobileService">
           <value>
             <SvnBranchConfiguration>
               <option name="trunkUrl" value="" />
