@@ -17,7 +17,7 @@
        under the License.
  */
 
-package com.wex.wol.accountmaintenance;
+package com.wex.wol.AccountMaintenance;
 
 import android.os.Bundle;
 import org.apache.cordova.*;
