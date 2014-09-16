@@ -84,7 +84,7 @@ define(["globals", "facade", "utils", "collections/CardCollection", "controllers
                 if (selectedCompany.areFetchedPropertiesEmpty()) {
                     view.showLoadingIndicator();
 
-                    utils.when(selectedCompany.fetchProperties())
+                    utils.when(selectedCompany.fetchAuthorizationProfiles())
                         .always(function () {
                             view.hideLoadingIndicator();
                         })

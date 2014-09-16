@@ -141,29 +141,6 @@ define(["backbone", "globals", "utils", "models/AddressModel", "models/AjaxModel
                 return json;
             },
 
-            /**
-             * This function is fetches the company details that are not included in the GET company response
-             *
-             * @returns {*}
-             */
-            fetchProperties: function () {
-                var deferred = utils.Deferred();
-
-                utils
-                    .when(
-                        this.fetchAuthorizationProfiles(),
-                        this.fetchBankAccounts()
-                    )
-                    .done(function () {
-                        deferred.resolve();
-                    })
-                    .fail(function () {
-                        deferred.reject();
-                    });
-
-                return deferred.promise();
-            },
-
             fetchAuthorizationProfiles: function () {
                 var deferred   = utils.Deferred(),
                     authorizationProfiles = new AuthorizationProfileCollection(),

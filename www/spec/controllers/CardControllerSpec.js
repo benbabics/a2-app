@@ -443,22 +443,22 @@ define(["globals", "backbone", "utils", "Squire", "controllers/BaseController", 
                     });
 
                     it("should call showLoadingIndicator on the View", function () {
-                        spyOn(selectedCompany, "fetchProperties").and.returnValue(true);
+                        spyOn(selectedCompany, "fetchAuthorizationProfiles").and.returnValue(true);
 
                         cardController.fetchProperties(mockView, callback);
                         expect(mockView.showLoadingIndicator).toHaveBeenCalledWith();
                     });
 
-                    it("should call fetchProperties on the Company", function () {
-                        spyOn(selectedCompany, "fetchProperties").and.returnValue(true);
+                    it("should call fetchAuthorizationProfiles on the Company", function () {
+                        spyOn(selectedCompany, "fetchAuthorizationProfiles").and.returnValue(true);
 
                         cardController.fetchProperties(mockView, callback);
-                        expect(selectedCompany.fetchProperties).toHaveBeenCalledWith();
+                        expect(selectedCompany.fetchAuthorizationProfiles).toHaveBeenCalledWith();
                     });
 
-                    describe("when the call to fetchProperties on the Company finishes successfully", function () {
+                    describe("when the call to fetchAuthorizationProfiles on the Company finishes successfully", function () {
                         beforeEach(function () {
-                            spyOn(selectedCompany, "fetchProperties").and.callFake(function () {
+                            spyOn(selectedCompany, "fetchAuthorizationProfiles").and.callFake(function () {
                                 var deferred = utils.Deferred();
 
                                 deferred.resolve();
@@ -477,9 +477,9 @@ define(["globals", "backbone", "utils", "Squire", "controllers/BaseController", 
                         });
                     });
 
-                    describe("when the call to fetchProperties on the Company finishes in failure", function () {
+                    describe("when the call to fetchAuthorizationProfiles on the Company finishes in failure", function () {
                         beforeEach(function () {
-                            spyOn(selectedCompany, "fetchProperties").and.callFake(function () {
+                            spyOn(selectedCompany, "fetchAuthorizationProfiles").and.callFake(function () {
                                 var deferred = utils.Deferred();
 
                                 deferred.reject();
@@ -499,7 +499,7 @@ define(["globals", "backbone", "utils", "Squire", "controllers/BaseController", 
                     });
 
                     it("should return false", function () {
-                        spyOn(selectedCompany, "fetchProperties").and.returnValue(true);
+                        spyOn(selectedCompany, "fetchAuthorizationProfiles").and.returnValue(true);
 
                         expect(cardController.fetchProperties(mockView, callback)).toBeFalsy();
                     });
