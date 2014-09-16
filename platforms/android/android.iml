@@ -3,13 +3,13 @@
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
-        <option name="APK_PATH" value="/bin/WEXonline-debug.apk" />
+        <option name="APK_PATH" value="/ant-build/WEXonline-debug.apk" />
       </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
-    <output url="file://$MODULE_DIR$/bin" />
-    <output-test url="file://$MODULE_DIR$/bin" />
+    <output url="file://$MODULE_DIR$/ant-build" />
+    <output-test url="file://$MODULE_DIR$/ant-build" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" generated="true" />
