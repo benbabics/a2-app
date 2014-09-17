@@ -16,7 +16,7 @@
     {{#subject}}
     <div data-role="fieldcontain">
         <label for="subject">{{label}}:</label>
-        <select id="subject" data-theme="a" name="{{name}}" data-theme="c">
+        <select id="subject" data-theme="a" name="{{name}}">
             <option value="">- - Select - -</option>
             <option value="Cards & Drivers">Cards &amp; Drivers</option>
             <option value="Invoice & Payment">Invoice &amp; Payment</option>
@@ -32,6 +32,6 @@
     {{/message}}
 </form>
 {{#submitButton}}
-<button id="submitContactUs-btn" data-role="button" data-theme="c">{{label}}</button>
+<button id="submitContactUs-btn" class="ui-btn ui-btn-c ui-corner-all">{{label}}</button>
 {{/submitButton}}
 {{/authenticated}}
