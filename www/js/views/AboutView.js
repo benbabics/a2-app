@@ -9,7 +9,7 @@ define(["backbone", "mustache", "views/BaseView", "text!tmpl/about/page.html"],
             template: pageTemplate,
 
             pageCreate: function () {
-                var $content = this.$el.find(":jqmData(role=content)");
+                var $content = this.$el.find(".ui-content");
                 $content.html(Mustache.render(this.template, this.model.toJSON()));
                 $content.trigger("create");
             }

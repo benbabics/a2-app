@@ -200,7 +200,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                 beforeEach(function () {
                     expectedConfiguration = utils._.extend({}, utils.deepClone(globals.paymentAdd.configuration));
 
-                    actualContent = paymentAddView.$el.find(":jqmData(role=content)");
+                    actualContent = paymentAddView.$el.find(".ui-content");
                     spyOn(paymentAddView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();

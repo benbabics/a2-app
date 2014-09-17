@@ -82,7 +82,7 @@ define(["Squire", "backbone", "mustache", "globals", "views/ValidationFormView",
                 var actualContent;
 
                 beforeEach(function () {
-                    actualContent = loginView.$el.find(":jqmData(role=content)");
+                    actualContent = loginView.$el.find(".ui-content");
 
                     spyOn(loginView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();

@@ -10,7 +10,7 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "text!tmpl
             template: pageTemplate,
 
             render: function () {
-                var $content = this.$el.find(":jqmData(role=content)");
+                var $content = this.$el.find(".ui-content");
                 $content.html(Mustache.render(this.template, this.model.toJSON()));
                 $content.trigger("create");
             }

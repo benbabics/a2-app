@@ -144,7 +144,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                         "permissions": userModel.get("selectedCompany").get("permissions")
                     };
 
-                    actualContent = driverEditView.$el.find(":jqmData(role=content)");
+                    actualContent = driverEditView.$el.find(".ui-content");
 
                     spyOn(driverEditView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();

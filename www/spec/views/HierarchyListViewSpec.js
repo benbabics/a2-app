@@ -274,7 +274,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 beforeEach(function () {
                     hierarchyListView.collection = hierarchyCollection;
-                    actualContent = hierarchyListView.$el.find(":jqmData(role=content)");
+                    actualContent = hierarchyListView.$el.find(".ui-content");
                     actualHierarchyListContainer = actualContent.find("#hierarchyList");
 
                     spyOn(document, "createDocumentFragment").and.returnValue(mockDocumentFragment);
@@ -301,7 +301,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 });
 
                 it("should call find on the hierarchyListView.$el", function () {
-                    expect(hierarchyListView.$el.find).toHaveBeenCalledWith(":jqmData(role=content)");
+                    expect(hierarchyListView.$el.find).toHaveBeenCalledWith(".ui-content");
                 });
 
                 it("should call createDocumentFragment on the document", function () {

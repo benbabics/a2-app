@@ -159,7 +159,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     };
                     expectedConfiguration.card.ableToEditCard = true;
 
-                    actualContent = cardEditView.$el.find(":jqmData(role=content)");
+                    actualContent = cardEditView.$el.find(".ui-content");
                     spyOn(cardEditView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();

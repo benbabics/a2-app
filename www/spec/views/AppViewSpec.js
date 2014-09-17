@@ -317,7 +317,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                             if (findParameter === ":jqmData(role='header')") {
                                 return mockHeader;
                             }
-                            if (findParameter === ":jqmData(role=content)") {
+                            if (findParameter === ".ui-content") {
                                 return mockContent;
                             }
                             if (findParameter === "#" + globals.DIALOG.ID) {
@@ -374,7 +374,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                 });
 
                 it("should call find on the current page to get the content", function () {
-                    expect(mockCurrentPage.find).toHaveBeenCalledWith(":jqmData(role=content)");
+                    expect(mockCurrentPage.find).toHaveBeenCalledWith(".ui-content");
                 });
 
                 it("should call Mustache.render() on the dialog template", function () {

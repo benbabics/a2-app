@@ -39,7 +39,7 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Car
             },
 
             renderContent: function () {
-                var $content = this.$el.find(":jqmData(role=content)"),
+                var $content = this.$el.find(".ui-content"),
                     container = document.createDocumentFragment(),
                     listContainer;
 

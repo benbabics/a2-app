@@ -205,7 +205,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                 beforeEach(function () {
                     mockConfiguration.payment = utils._.extend({}, utils.deepClone(globals.paymentEdit.configuration));
 
-                    actualContent = paymentEditView.$el.find(":jqmData(role=content)");
+                    actualContent = paymentEditView.$el.find(".ui-content");
                     spyOn(paymentEditView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();

@@ -150,7 +150,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                         "permissions": userModel.get("selectedCompany").get("permissions")
                     };
 
-                    actualContent = cardDetailView.$el.find(":jqmData(role=content)");
+                    actualContent = cardDetailView.$el.find(".ui-content");
 
                     spyOn(cardDetailView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();

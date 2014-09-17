@@ -91,7 +91,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "views/ValidationF
                     expectedConfiguration.sender.value = mockUserModel.email;
                     expectedConfiguration.authenticated = mockUserModel.authenticated;
 
-                    actualContent = contactUsView.$el.find(":jqmData(role=content)");
+                    actualContent = contactUsView.$el.find(".ui-content");
                     spyOn(contactUsView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();
