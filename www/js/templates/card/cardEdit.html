@@ -10,13 +10,13 @@
     {{#ableToEditCard}}
         <form id="cardEditForm" class="ui-body ui-body-d">
             {{#id}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label>{{label}}:</label>
                     <span>{{value}}</span>
             </div>
             {{/id}}
             {{#customVehicleId}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="customVehicleId">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -28,7 +28,7 @@
             {{/customVehicleId}}
 
             {{#vehicleDescription}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="vehicleDescription">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -40,7 +40,7 @@
             {{/vehicleDescription}}
 
             {{#vin}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="vin">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -52,7 +52,7 @@
             {{/vin}}
 
             {{#licensePlateNumber}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="licensePlateNumber">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -64,7 +64,7 @@
             {{/licensePlateNumber}}
 
             {{#licensePlateState}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="licensePlateState">{{label}}:</label>
                     <select id="licensePlateState" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
                         {{#values}}
@@ -75,7 +75,7 @@
             {{/licensePlateState}}
 
             {{#departmentId}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="departmentId">{{label}}:</label>
                     <select id="departmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
                         {{#values}}
@@ -86,7 +86,7 @@
             {{/departmentId}}
 
             {{#authorizationProfileName}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="authorizationProfileName">{{label}}:</label>
                     <select id="authorizationProfileName" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
                         {{#values}}

@@ -8,13 +8,13 @@
 <p>We will make every effort to respond to you within 24 hours. If your request is urgent, please contact Customer Service at <a href="tel://1-866-885-2057">1-866-885-2057</a>. All fields are required.</p>
 <form id="contactUsForm" action="#contactUs" method="post" class="ui-body ui-body-d">
     {{#sender}}
-    <div data-role="fieldcontain">
+    <div class="ui-field-contain">
         <label for="sender">{{label}}:</label>
         <input type="text" name="{{name}}" maxlength="{{maxLength}}" data-theme="a" id="sender" value="{{value}}" />
     </div>
     {{/sender}}
     {{#subject}}
-    <div data-role="fieldcontain">
+    <div class="ui-field-contain">
         <label for="subject">{{label}}:</label>
         <select id="subject" data-theme="a" name="{{name}}">
             <option value="">- - Select - -</option>
@@ -25,7 +25,7 @@
     </div>
     {{/subject}}
     {{#message}}
-    <div data-role="fieldcontain">
+    <div class="ui-field-contain">
         <label for="message">{{label}}:</label>
         <textarea name="{{name}}" maxlength="{{maxLength}}" data-theme="a" id="message"></textarea>
     </div>
