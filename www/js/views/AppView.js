@@ -77,7 +77,7 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
              *    unhighlightButton - the id of a button to unhighlight as inactive
              */
             displayDialog: function (dialogOptions) {
-                var currentPage, header, headerPosition, dialogBox, btnPrimary, btnSecondary, btnTertiary;
+                var currentPage, dialogBox, btnPrimary, btnSecondary, btnTertiary;
 
                 currentPage = utils.getPageBody().pagecontainer("getActivePage");
 
@@ -108,9 +108,6 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
                     popupafterclose: function () {
                         if (utils.isFn(dialogOptions.popupafterclose)) {
                             dialogOptions.popupafterclose();
-                        }
-                        if (header && header.css("position") === "absolute") {
-                            header.css("position", headerPosition);
                         }
                         utils.$(this).remove(); //remove jqm popup markup on close
                     }

@@ -428,88 +428,27 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                         remove: function () {}
                     };
 
-                    describe("when the header has an absolute position", function () {
-                        beforeEach(function () {
-                            cssSpy.and.returnValue("absolute");
-                            appView.displayDialog(dialogOptions);
+                    beforeEach(function () {
+                        appView.displayDialog(dialogOptions);
 
-                            spyOn(dialogOptions, "popupafterclose").and.callThrough();
-                            spyOn(utils, "$").and.returnValue(mockJqueryReturn);
-                            spyOn(mockJqueryReturn, "remove").and.callThrough();
+                        spyOn(dialogOptions, "popupafterclose").and.callThrough();
+                        spyOn(utils, "$").and.returnValue(mockJqueryReturn);
+                        spyOn(mockJqueryReturn, "remove").and.callThrough();
 
-                            var callback = mockPopup.bind.calls.argsFor(0)[0];
-                            callback.popupafterclose.call(mockDialog);
-                        });
-
-                        it("should get the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position");
-                        });
-
-                        it("should NOT set the css value of position on the header", function () {
-                            expect(mockHeader.css).not.toHaveBeenCalledWith("position", "absolute");
-                        });
-
-                        it("should call popupafterclose on the dialog options", function () {
-                            expect(dialogOptions.popupafterclose).toHaveBeenCalledWith();
-                        });
-
-                        it("should get the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position");
-                        });
-
-                        it("should set the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position", "Mock Value");
-                        });
-
-                        it("should call $ on utils", function () {
-                            expect(utils.$).toHaveBeenCalledWith(mockDialog);
-                        });
-
-                        it("should call remove", function () {
-                            expect(mockJqueryReturn.remove).toHaveBeenCalledWith();
-                        });
+                        var callback = mockPopup.bind.calls.argsFor(0)[0];
+                        callback.popupafterclose.call(mockDialog);
                     });
 
-                    describe("when the header has a fixed position", function () {
-                        beforeEach(function () {
-                            cssSpy.and.returnValue("fixed");
-                            appView.displayDialog(dialogOptions);
+                    it("should call popupafterclose on the dialog options", function () {
+                        expect(dialogOptions.popupafterclose).toHaveBeenCalledWith();
+                    });
 
-                            spyOn(dialogOptions, "popupafterclose").and.callThrough();
-                            spyOn(utils, "$").and.returnValue(mockJqueryReturn);
-                            spyOn(mockJqueryReturn, "remove").and.callThrough();
+                    it("should call $ on utils", function () {
+                        expect(utils.$).toHaveBeenCalledWith(mockDialog);
+                    });
 
-                            var callback = mockPopup.bind.calls.argsFor(0)[0];
-                            callback.popupafterclose.call(mockDialog);
-                        });
-
-                        it("should get the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position");
-                        });
-
-                        it("should set the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position", "absolute");
-                        });
-
-                        it("should call popupafterclose on the dialog options", function () {
-                            expect(dialogOptions.popupafterclose).toHaveBeenCalledWith();
-                        });
-
-                        it("should get the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position");
-                        });
-
-                        it("should NOT set the css value of position on the header", function () {
-                            expect(mockHeader.css).not.toHaveBeenCalledWith("position", "Mock Value");
-                        });
-
-                        it("should call $ on utils", function () {
-                            expect(utils.$).toHaveBeenCalledWith(mockDialog);
-                        });
-
-                        it("should call remove", function () {
-                            expect(mockJqueryReturn.remove).toHaveBeenCalledWith();
-                        });
+                    it("should call remove", function () {
+                        expect(mockJqueryReturn.remove).toHaveBeenCalledWith();
                     });
                 });
 
