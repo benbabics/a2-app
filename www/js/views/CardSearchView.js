@@ -45,13 +45,13 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/FormView",
                         "permissions": this.userModel.get("selectedCompany").get("permissions")
                     }));
 
-                $header.trigger("create");
+                $header.enhanceWithin();
             },
 
             renderContent: function () {
                 var $content = this.$el.find(".ui-content");
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
-                $content.trigger("create");
+                $content.enhanceWithin();
             },
 
             getConfiguration: function () {

@@ -24,7 +24,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
 
                 this.formatRequiredFields();
 
-                $content.trigger("create");
+                $content.enhanceWithin();
             },
 
             /*

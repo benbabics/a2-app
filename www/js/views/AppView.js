@@ -100,7 +100,7 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
                 btnSecondary = dialogBox.find("#" + globals.DIALOG.SECONDARY_BTN_ID);
                 btnTertiary = dialogBox.find("#" + globals.DIALOG.TERTIARY_BTN_ID);
 
-                dialogBox.trigger("create"); //create JQM markup
+                dialogBox.enhanceWithin(); //create JQM markup
 
                 // assign any callbacks
                 dialogBox.popup().bind({

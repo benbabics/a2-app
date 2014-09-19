@@ -23,7 +23,7 @@ define(["backbone", "mustache", "utils", "globals", "views/BaseView", "text!tmpl
             render: function () {
                 var $content = this.$el.find(".ui-content");
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
-                $content.trigger("create");
+                $content.enhanceWithin();
             },
 
             getConfiguration: function () {

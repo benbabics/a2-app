@@ -11,7 +11,7 @@ define(["backbone", "mustache", "views/BaseView", "text!tmpl/about/page.html"],
             pageCreate: function () {
                 var $content = this.$el.find(".ui-content");
                 $content.html(Mustache.render(this.template, this.model.toJSON()));
-                $content.trigger("create");
+                $content.enhanceWithin();
             }
         });
 
