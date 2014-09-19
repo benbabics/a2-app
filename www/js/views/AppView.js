@@ -81,15 +81,6 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
 
                 currentPage = utils.getPageBody().pagecontainer("getActivePage");
 
-                // change the header from a fixed header so as to prevent weird dialog positioning and behavior
-                header = currentPage.find(":jqmData(role='header')");
-                if (header) {
-                    headerPosition = header.css("position");
-                    if (headerPosition === "fixed") {
-                        header.css("position", "absolute");
-                    }
-                }
-
                 // append the dialogue box
                 currentPage.find(".ui-content").append(Mustache.render(this.dialogTemplate, dialogOptions));
 
@@ -152,17 +143,6 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
 
                 // open the dialog
                 dialogBox.popup("open");
-
-                // I'm not positive, but I don't think this hack is needed now that we are adding the dialog template
-                // to the page currently active. Either way I had to comment out this code in order to get the
-                // "window.history.back();" line to work in ContactUsController.showConfirmation and I'm leaving the
-                // code in here rather then deleting it in case it needs to be added back in but added a TODO to delete
-                // it later if my guess ends up being correct.
-
-                // update the state so that closing the dialog using data-rel="back" returns to the right page.
-                // Note that updating window.location.hash to dialogBox.attr("id") resulted in the list of fuel sites scrolling slightly, and pushing the state does not scroll
-                // TODO - Delete this hack
-                //window.history.pushState({}, "", "#" + dialogBox.attr("id"));
             },
 
             /**
@@ -173,9 +153,7 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
             },
 
             unhighlightButton: function (button) {
-                button.removeClass("ui-btn-up-a ui-btn-up-b ui-btn-up-c ui-btn-up-d ui-btn-up-e ui-btn-hover-a ui-btn-hover-b ui-btn-hover-c ui-btn-hover-d ui-btn-hover-e")
-                    .addClass("ui-btn-up-d")
-                    .attr("data-theme", "d");
+                button.removeClass("ui-btn-active");
             },
 
             navigateCheckConnection: function (callback) {

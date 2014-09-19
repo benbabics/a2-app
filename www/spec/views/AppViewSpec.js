@@ -590,16 +590,6 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
             });
 
             describe("has a highlightButton function that", function () {
-                var mockButton = {
-                    addClass : function () { return this; }
-                };
-
-                beforeEach(function () {
-                    spyOn(mockButton, "addClass").and.callThrough();
-
-                    appView.highlightButton(mockButton);
-                });
-
                 it("is defined", function () {
                     expect(appView.highlightButton).toBeDefined();
                 });
@@ -608,26 +598,16 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     expect(appView.highlightButton).toEqual(jasmine.any(Function));
                 });
 
-                it("should call addClass on the button", function () {
-                    expect(mockButton.addClass).toHaveBeenCalledWith("ui-btn-active");
+                it("should add the active class to the button", function () {
+                    var mockButton = $("<button></button>");
+
+                    expect(mockButton.toHaveClass("ui-btn-active")).toBeFalsy();
+                    appView.highlightButton(mockButton);
+                    expect(mockButton.toHaveClass("ui-btn-active")).toBeTruthy();
                 });
             });
 
             describe("has a unhighlightButton function that", function () {
-                var mockButton = {
-                    addClass : function () { return this; },
-                    attr : function () { return this; },
-                    removeClass : function () { return this; }
-                };
-
-                beforeEach(function () {
-                    spyOn(mockButton, "addClass").and.callThrough();
-                    spyOn(mockButton, "attr").and.callThrough();
-                    spyOn(mockButton, "removeClass").and.callThrough();
-
-                    appView.unhighlightButton(mockButton);
-                });
-
                 it("is defined", function () {
                     expect(appView.unhighlightButton).toBeDefined();
                 });
@@ -636,17 +616,12 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     expect(appView.unhighlightButton).toEqual(jasmine.any(Function));
                 });
 
-                it("should call removeClass on the button", function () {
-                    expect(mockButton.removeClass)
-                        .toHaveBeenCalledWith("ui-btn-up-a ui-btn-up-b ui-btn-up-c ui-btn-up-d ui-btn-up-e ui-btn-hover-a ui-btn-hover-b ui-btn-hover-c ui-btn-hover-d ui-btn-hover-e");
-                });
+                it("should remove the ui-active class", function () {
+                    var mockButton = $("<button></button>").addClass("ui-btn-active");
 
-                it("should call addClass on the button", function () {
-                    expect(mockButton.addClass).toHaveBeenCalledWith("ui-btn-up-d");
-                });
-
-                it("should call attr on the button", function () {
-                    expect(mockButton.attr).toHaveBeenCalledWith("data-theme", "d");
+                    expect(mockButton.toHaveClass("ui-btn-active")).toBeTruthy();
+                    appView.unhighlightButton(mockButton);
+                    expect(mockButton.toHaveClass("ui-btn-active")).toBeFalsy();
                 });
             });
 
