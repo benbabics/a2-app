@@ -164,13 +164,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                 describe("when checking that the view is the active page", function () {
                     describe("when NOT the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.callFake(function () { return false; });
-                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
+                            spyOn(appView.$el, "is").and.returnValue(false);
+                            spyOn(mockUtils.$.mobile, "loading");
                             appView.showLoadingIndicator(true);
-                        });
-
-                        it("should call the is function on AppView.$el", function () {
-                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
                         });
 
                         it("should NOT call the loading function on utils.$.mobile", function () {
@@ -180,13 +176,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
 
                     describe("when the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.callFake(function () { return true; });
-                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
+                            spyOn(appView.$el, "is").and.returnValue(true);
+                            spyOn(mockUtils.$.mobile, "loading");
                             appView.showLoadingIndicator(true);
-                        });
-
-                        it("should call the is function on AppView.$el", function () {
-                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
                         });
 
                         it("should call the loading function on utils.$.mobile", function () {
@@ -219,13 +211,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                 describe("when checking that the view is the active page", function () {
                     describe("when NOT the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.callFake(function () { return false; });
-                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
+                            spyOn(appView.$el, "is").and.returnValue(false);
+                            spyOn(mockUtils.$.mobile, "loading");
                             appView.hideLoadingIndicator(true);
-                        });
-
-                        it("should call the is function on AppView.$el", function () {
-                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
                         });
 
                         it("should NOT call the loading function on utils.$.mobile", function () {
@@ -235,13 +223,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
 
                     describe("when the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.callFake(function () { return true; });
-                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
+                            spyOn(appView.$el, "is").and.returnValue(true);
+                            spyOn(mockUtils.$.mobile, "loading");
                             appView.hideLoadingIndicator(true);
-                        });
-
-                        it("should call the is function on AppView.$el", function () {
-                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
                         });
 
                         it("should call the loading function on utils.$.mobile", function () {
@@ -307,10 +291,14 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                         find : function () { }
                     },
                     mockMustacheRenderResponse = "Render response",
-                    cssSpy;
+                    cssSpy,
+                    mockBody = {
+                        pagecontainer: function () { }
+                    };
 
                 beforeEach(function () {
-                    utils.$.mobile.activePage = mockCurrentPage;
+                    spyOn(utils, "getPageBody").and.returnValue(mockBody);
+                    spyOn(mockBody, "pagecontainer").and.returnValue(mockCurrentPage);
 
                     spyOn(mockCurrentPage, "find").and.callFake(
                         function (findParameter) {

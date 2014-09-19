@@ -29,7 +29,7 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
                 // handle toggling loading indicator
                 function handleLoader(toggle) {
                     // is this page visible?
-                    if (this.$el.is(utils.$.mobile.activePage)) {
+                    if (this.$el.is(utils.getPageBody().pagecontainer("getActivePage"))) {
                         this[(toggle ? "show" : "hide") + "LoadingIndicator"]();
                     }
                 }
@@ -79,7 +79,7 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
             displayDialog: function (dialogOptions) {
                 var currentPage, header, headerPosition, dialogBox, btnPrimary, btnSecondary, btnTertiary;
 
-                currentPage = utils.$.mobile.activePage;
+                currentPage = utils.getPageBody().pagecontainer("getActivePage");
 
                 // change the header from a fixed header so as to prevent weird dialog positioning and behavior
                 header = currentPage.find(":jqmData(role='header')");

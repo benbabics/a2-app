@@ -163,12 +163,35 @@ define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezon
                     window.location.hash = viewID.attr ? viewID.attr("id") : viewID;
                 }
 
-                utils.$.mobile.changePage(viewID, {
+                utils.getPageBody().pagecontainer("change", viewID, {
                     transition: effect,
                     reverse   : direction,
                     changeHash: updateHash
                 });
             });
+        };
+
+        /**
+         * Function to determine if the page id is the active page
+         *
+         * @param pageId the id of the page to check for being active
+         * @returns {boolean} true if the page is active, false otherwise
+         */
+        utils.isActivePage = function (pageId) {
+            if (!utils.getPageBody().pagecontainer("getActivePage")) {
+                return false;
+            }
+
+            return pageId === utils.getPageBody().pagecontainer("getActivePage").attr("id");
+        };
+
+        /**
+         * Function to encapsulate the retrieval of the body element of the page
+         *
+         * @returns {*|jQuery|HTMLElement} the body element
+         */
+        utils.getPageBody = function () {
+            return utils.$("body");
         };
 
         /**
@@ -183,20 +206,6 @@ define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezon
             }
 
             return true;
-        };
-
-        /**
-         * Function to determine if the page id is the active page
-         *
-         * @param pageId the id of the page to check for being active
-         * @returns {boolean} true if the page is active, false otherwise
-         */
-        utils.isActivePage = function (pageId) {
-            if (!utils.$.mobile.activePage) {
-                return false;
-            }
-
-            return pageId === utils.$.mobile.activePage.attr("id");
         };
 
         /**
