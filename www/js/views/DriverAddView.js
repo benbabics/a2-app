@@ -30,7 +30,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
                 Mustache.parse(this.addDetailsTemplate);
 
                 // jQM Events
-                this.$el.on("pagebeforeshow", this.handlePageBeforeShow);
+                this.$el.on("pagecontainerbeforeshow", this.handlePageBeforeShow);
             },
 
             render: function () {

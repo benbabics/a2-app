@@ -155,7 +155,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                 it("should call on() on $el", function () {
                     expect(cardAddView.$el.on)
-                        .toHaveBeenCalledWith("pagebeforeshow", cardAddView.handlePageBeforeShow);
+                        .toHaveBeenCalledWith("pagecontainerbeforeshow", cardAddView.handlePageBeforeShow);
                 });
             });
 

@@ -36,7 +36,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
                 }
 
                 // jQM Events
-                this.$el.on("pagebeforeshow", this.handlePageBeforeShow);
+                this.$el.on("pagecontainerbeforeshow", this.handlePageBeforeShow);
             },
 
             render: function () {

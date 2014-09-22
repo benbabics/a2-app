@@ -172,7 +172,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
 
                 it("should call on() on $el", function () {
                     expect(driverAddView.$el.on)
-                        .toHaveBeenCalledWith("pagebeforeshow", driverAddView.handlePageBeforeShow);
+                        .toHaveBeenCalledWith("pagecontainerbeforeshow", driverAddView.handlePageBeforeShow);
                 });
             });
 

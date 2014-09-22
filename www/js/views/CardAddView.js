@@ -25,7 +25,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 utils._.bindAll(this, "handlePageBeforeShow");
 
                 // jQM Events
-                this.$el.on("pagebeforeshow", this.handlePageBeforeShow);
+                this.$el.on("pagecontainerbeforeshow", this.handlePageBeforeShow);
             },
 
             render: function () {
