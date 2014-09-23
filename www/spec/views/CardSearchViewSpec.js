@@ -164,7 +164,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 it("should call on() on $el", function () {
                     expect(cardSearchView.$el.on)
-                        .toHaveBeenCalledWith("pagecontainerbeforeshow", cardSearchView.handlePageBeforeShow);
+                        .toHaveBeenCalledWith("pagebeforeshow", cardSearchView.handlePageBeforeShow);
                 });
             });
 

@@ -171,7 +171,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                 it("should call on() on $el", function () {
                     expect(driverSearchView.$el.on)
-                        .toHaveBeenCalledWith("pagecontainerbeforeshow", driverSearchView.handlePageBeforeShow);
+                        .toHaveBeenCalledWith("pagebeforeshow", driverSearchView.handlePageBeforeShow);
                 });
             });
 

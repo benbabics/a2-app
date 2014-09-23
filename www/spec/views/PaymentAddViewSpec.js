@@ -189,7 +189,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
 
                 it("should call on() on $el", function () {
                     expect(paymentAddView.$el.on)
-                        .toHaveBeenCalledWith("pagecontainerbeforeshow", paymentAddView.handlePageBeforeShow);
+                        .toHaveBeenCalledWith("pagebeforeshow", paymentAddView.handlePageBeforeShow);
                 });
             });
 
