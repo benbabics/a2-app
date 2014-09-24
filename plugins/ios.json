@@ -25,7 +25,11 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "xml": "<preference name=\"StatusBarOverlaysWebView\" value=\"true\" />",
+                            "count": 2
+                        },
+                        {
+                            "xml": "<feature name=\"ApplicationInfo\"><param name=\"ios-package\" onload=\"true\" value=\"ApplicationInfo\" /></feature>",
                             "count": 1
                         },
                         {
@@ -37,19 +41,15 @@
                             "count": 1
                         },
                         {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
                             "xml": "<feature name=\"StatusBar\"><param name=\"ios-package\" onload=\"true\" value=\"CDVStatusBar\" /></feature>",
                             "count": 1
                         },
                         {
-                            "xml": "<preference name=\"StatusBarOverlaysWebView\" value=\"true\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<preference name=\"StatusBarBackgroundColor\" value=\"#000000\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"ApplicationInfo\"><param name=\"ios-package\" onload=\"true\" value=\"ApplicationInfo\" /></feature>",
+                            "xml": "<preference name=\"StatusBarStyle\" value=\"lightcontent\" />",
                             "count": 1
                         }
                     ]
@@ -58,20 +58,20 @@
         }
     },
     "installed_plugins": {
-        "org.apache.cordova.splashscreen": {
+        "com.wex.plugins.applicationInfo": {
             "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
         },
         "org.apache.cordova.device": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
         },
         "org.apache.cordova.network-information": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
+        },
+        "org.apache.cordova.splashscreen": {
+            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
         },
         "org.apache.cordova.statusbar": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
-        },
-        "com.wex.plugins.applicationInfo": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
         }
     },
     "dependent_plugins": {}

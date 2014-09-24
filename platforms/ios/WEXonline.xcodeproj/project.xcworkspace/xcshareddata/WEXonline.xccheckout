@@ -10,34 +10,34 @@
 	<string>WEXonline</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>D7284459-6134-4F97-8992-E2202F964DB2</key>
+		<key>4bd57a7e-560c-0410-aecd-ac3eef6e8585++726</key>
 		<string>http://svn.wrightexpress.com/stormwind/eCommerce_team/Mobile/AcctMaint/trunk</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>platforms/ios/WEXonline.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>D7284459-6134-4F97-8992-E2202F964DB2</key>
+		<key>4bd57a7e-560c-0410-aecd-ac3eef6e8585++726</key>
 		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectRepositoryRootDictionary</key>
 	<dict>
-		<key>D7284459-6134-4F97-8992-E2202F964DB2</key>
+		<key>4bd57a7e-560c-0410-aecd-ac3eef6e8585++726</key>
 		<string>http://svn.wrightexpress.com/stormwind</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>http://svn.wrightexpress.com/stormwind/eCommerce_team/Mobile/AcctMaint/trunk/platforms/ios/WEXonline.xcodeproj</string>
+	<string>http://svn.wrightexpress.com/stormwind/eCommerce_team/Mobile/AcctMaint/trunk/platforms/ios/WEXonline.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>D7284459-6134-4F97-8992-E2202F964DB2</string>
+	<string>4bd57a7e-560c-0410-aecd-ac3eef6e8585++726</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.subversion</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>D7284459-6134-4F97-8992-E2202F964DB2</string>
+			<string>4bd57a7e-560c-0410-aecd-ac3eef6e8585++726</string>
 			<key>IDESourceControlWCCName</key>
 			<string>AcctMaint</string>
 		</dict>
