@@ -1171,7 +1171,7 @@
       <module fileurl="file://$PROJECT_DIR$/www/www.iml" filepath="$PROJECT_DIR$/www/www.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="Android SDK" project-jdk-type="Android SDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="Android SDK" project-jdk-type="Android SDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ProjectRunConfigurationManager">
@@ -1217,6 +1217,13 @@
             </SvnBranchConfiguration>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../MobileService">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="trunkUrl" value="" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../MobileWeb">
           <value>
             <SvnBranchConfiguration>
@@ -1232,6 +1239,239 @@
     <mapping directory="" vcs="svn" />
     <mapping directory="$PROJECT_DIR$/../MobileService" vcs="svn" />
     <mapping directory="$PROJECT_DIR$/../MobileWeb" vcs="svn" />
+  </component>
+  <component name="libraryTable">
+    <library name="build1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/svnkit.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/com.wex.wol.ant_eclipse_project.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/svnkit-cli.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/com.wex.wol.ant.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/collection-setter-injector.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/jsr173_1.0_api.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/pmd-4.2.5.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/jaxb-commons-lang-plugin-2.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/servlet-api-2.5.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/jaxb-xjc-2.1.13.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/ganymed-ssh2-build210.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/svnkit-javahl.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/build/checkstyle-all-5.1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="lib2">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/asm-analysis-3.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/jsr305.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/commons-lang-2.4.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/annotations.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/findbugs.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/asm-tree-3.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/asm-commons-3.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/jaxen-1.1.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/findbugs-ant.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/dom4j-1.6.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/bcel.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/ant.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/asm-xml-3.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/asm-3.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/yjp-controller-api-redist.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/jcip-annotations.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/jdepend-2.9.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/asm-util-3.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/lib/jFormatString.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="lib3">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/tiles-jsp-2.2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/xercesImpl-2.7.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/cglib-nodep-2.1_3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-struts-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/ldapbp.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/XmlSchema-1.4.5.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/aspectjrt-1.6.6.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-codec-1.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-instrument-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-logging-1.1.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-jdbc-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/xmlsec-1.3.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/tiles-template-2.2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/neethi-2.0.4.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/asm-3.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/struts-taglib-1.3.10.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/DeuceService.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-discovery-0.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-validator-1.3.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/wss4j-1.5.8.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/acegi-security-1.0.7.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/jdom-1.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/tiles-core-2.2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/slf4j-api-1.5.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/antlr-2.7.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-beanutils-core-1.8.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-tx-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/struts-extras-1.3.10.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/edtftpj.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/tiles-servlet-2.2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-lang-2.5.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-asm-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-collections-3.2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/jsr173_api-1.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-dbcp-1.2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/jta-UNKNOWN.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/stax-utils-20040917.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/struts-core-1.3.10.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-beanutils-bean-collections-1.8.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-context-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-context-support-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/SiebelJI_enu-8.1.1.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/slf4j-log4j12-1.5.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-expression-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/javacsv.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/aspectjweaver-1.6.6.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/Siebel-8.1.1.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-web-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-chain-1.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-ldap-1.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/jstl-1.1.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-modules-cache-0.8.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/struts-tiles-1.3.10.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-jms-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/jaxen-1.1.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/mail.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/cxf-2.2.8.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-httpclient-3.0.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-digester-1.8.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-webmvc-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/FastInfoset-1.2.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/standard.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/opensaml-1.0.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-orm-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/xjavadoc-1.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/stax-api-1.0.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/jamon-2.6.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/ojdbc6_g.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/asm-commons-2.2.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/oro-2.0.8.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/wstx-asl-3.0.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-attributes-api-2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-io-1.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/log4j-1.2.13.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/tiles-api-2.2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/quartz-all-1.6.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/ibatis-sqlmap-2.3.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-beans-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/commons-pool-1.5.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-aop-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/jsch-20101213.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/ehcache-1.3.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/aopalliance-1.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/xmlParserAPIs-2.6.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/bcprov-jdk15-1.45.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/wsdl4j-1.6.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/spring-core-3.0.2.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/jaxb-impl-2.1.13.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/webapp/WEB-INF/lib/jaxws-api-2.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="noUpdateChecks1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/plugin/noUpdateChecks.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="optional1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/optional/ojdbc6.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/optional/commons-attributes-plugin-2.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/optional/commons-attributes-compiler-2.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/optional/commons-collections-testframework-3.2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="optionalPlugin1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/optionalPlugin/poweruser.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/test/tools/findbugs-2.0.0/optionalPlugin/bugCollectionCloud.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="perf1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/perf/japex.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/perf/mail.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/perf/stax-ex.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/perf/sjsxp.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/perf/streambuffer.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/perf/jcommon-1.0.0-rc1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/perf/ant.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/perf/jfreechart-1.0.0-rc1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="src1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/japex-src.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/ibatis-src-2.2.0.638.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/acegi-security-1.0.3-src.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/jetty-util-6.1.0.src.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/wss4j-1.5.8-sources.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/spring-modules-cache-src.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/jetty-6.1.0-src.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/apache-cxf-2.2.8-src.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/jaxb-xjc.src.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/spring-ldap-src-1.2-RC1.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/wss4j-src-1.5.0.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/jaxb-api-src.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/ehcache-1.5.0-sources.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/spring-2.0.6.src.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/commons-pool-1.5.3-src.zip!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/xfire-distribution-1.2.2-sources.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/src/jaxb-impl.src.zip!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="test1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/xmlunit-1.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/ant-launcher-1.7.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/easymock-2.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/mockito-all-1.9.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/asm-tree-2.2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/jetty-util-6.1.5.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/quartz-all-1.6.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/aspectjrt-1.5.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/jetty-6.1.5.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/catalina-ant.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/jakarta-oro-2.0.8.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/catalina-deployer.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/cobertura.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/jta-UNKNOWN.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/servlet-api-2.5.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/activation.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/jsp-api.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/junit-4.8.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/cobertura-1.9.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/asm-3.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/jmock-1.0.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/FastInfoset-1.2.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/spring-test-3.0.5.RELEASE.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../MobileService/lib/test/commons-el.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
   </component>
 </project>
 

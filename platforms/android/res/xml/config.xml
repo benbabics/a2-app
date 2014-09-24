@@ -1,11 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget android-versionCode="1" id="com.wex.wol.AccountMaintenance" ios-CFBundleVersion="1" version="1.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
-    <feature name="App">
-        <param name="android-package" value="org.apache.cordova.App" />
-    </feature>
-    <feature name="SplashScreen">
-        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+    <feature name="ApplicationInfo">
+        <param name="android-package" value="com.wex.plugins.applicationInfo.ApplicationInfoPlugin" />
     </feature>
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
@@ -13,9 +10,17 @@
     <feature name="NetworkStatus">
         <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
     </feature>
-    <feature name="ApplicationInfo">
-        <param name="android-package" value="com.wex.plugins.applicationInfo.ApplicationInfoPlugin" />
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
     </feature>
+    <feature name="StatusBar">
+        <param name="android-package" onload="true" value="org.apache.cordova.statusbar.StatusBar" />
+    </feature>
+    <preference name="ErrorUrl" value="error.html" />
+    <preference name="LoadUrlTimeoutValue" value="18000" />
+    <preference name="KeepRunning" value="false" />
+    <preference name="SplashScreen" value="splash" />
+    <preference name="SplashScreenDelay" value="20000" />
     <name>WEXonline</name>
     <description>
         Account Maintenance for Classic and WOL NP customers.
@@ -27,26 +32,5 @@
     <preference name="Fullscreen" value="false" />
     <preference name="Orientation" value="portrait" />
     <preference name="DisallowOverscroll" value="false" />
-    <preference name="android-installLocation" value="auto" />
-    <preference name="android-minSdkVersion" value="10" />
-    <preference name="auto-hide-splash-screen" value="false" />
-    <preference name="detect-data-types" value="true" />
-    <preference name="disable-cursor" value="false" />
-    <preference name="exit-on-suspend" value="false" />
-    <preference name="ios-statusbarstyle" value="black-opaque" />
-    <preference name="permissions" value="none" />
-    <preference name="prerendered-icon" value="true" />
-    <preference name="show-splash-screen-spinner" value="true" />
-    <preference name="stay-in-webview" value="false" />
-    <preference name="target-device" value="universal" />
-    <preference name="webviewbounce" value="true" />
-    <preference name="ErrorUrl" value="error.html" />
-    <preference name="LoadUrlTimeoutValue" value="18000" />
-    <preference name="KeepRunning" value="false" />
-    <preference name="SplashScreen" value="splash" />
-    <preference name="SplashScreenDelay" value="20000" />
-    <preference name="AutoHideSplashScreen" value="false" />
-    <preference name="StatusBarOverlaysWebView" value="false" />
-    <access origin="*" />
     <access origin="*.wexmobile.com" />
 </widget>
