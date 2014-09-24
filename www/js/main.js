@@ -38,9 +38,6 @@ require.config({
     //be triggered, and the deps config will be confusing
     //for those cases.
     shim: {
-        "underscore" : {
-            "exports": "_"
-        },
         "backbone": {
             "deps"   : ["underscore", "jquery", "mustache"],
             "exports": "Backbone"

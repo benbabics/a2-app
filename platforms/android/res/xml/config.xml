@@ -32,6 +32,5 @@
     <preference name="Fullscreen" value="false" />
     <preference name="Orientation" value="portrait" />
     <preference name="DisallowOverscroll" value="false" />
-    <access origin="*" />
     <access origin="*.wexmobile.com" />
 </widget>
