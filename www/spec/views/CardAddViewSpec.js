@@ -173,7 +173,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     actualContent = cardAddView.$el.find(".ui-content");
                     spyOn(cardAddView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(cardAddView, "resetModel").and.callFake(function () { });
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(cardAddView, "getConfiguration").and.returnValue(expectedConfiguration);
@@ -209,10 +208,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
 
                 it("should call formatRequiredFields()", function () {
                     expect(cardAddView.formatRequiredFields).toHaveBeenCalledWith();
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {

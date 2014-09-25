@@ -86,7 +86,6 @@ define(["Squire", "backbone", "mustache", "globals", "views/ValidationFormView",
 
                     spyOn(loginView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(loginView, "formatRequiredFields").and.callThrough();
                     loginView.initialize();
@@ -111,10 +110,6 @@ define(["Squire", "backbone", "mustache", "globals", "views/ValidationFormView",
 
                 it("should call formatRequiredFields()", function () {
                     expect(loginView.formatRequiredFields).toHaveBeenCalledWith();
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

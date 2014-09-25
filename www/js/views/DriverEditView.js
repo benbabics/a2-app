@@ -18,7 +18,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/BaseView", 
 
                 $content.html(Mustache.render(this.template, this.getConfiguration()));
 
-                $content.enhancedWithin();
+                $content.enhanceWithin();
             },
 
             getConfiguration: function () {

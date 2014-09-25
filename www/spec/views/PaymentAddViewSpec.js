@@ -203,7 +203,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                     actualContent = paymentAddView.$el.find(".ui-content");
                     spyOn(paymentAddView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(paymentAddView, "resetModel").and.callFake(function () { });
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(paymentAddView, "getConfiguration").and.returnValue(expectedConfiguration);
@@ -244,10 +243,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
 
                 it("should call formatRequiredFields()", function () {
                     expect(paymentAddView.formatRequiredFields).toHaveBeenCalledWith();
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 
