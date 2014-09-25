@@ -37,7 +37,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
 
                 this.formatRequiredFields();
 
-                $content.trigger("create");
+                $content.enhanceWithin();
             },
 
             resetForm: function () {

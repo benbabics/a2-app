@@ -12,7 +12,7 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "text!tmpl
             render: function () {
                 var $content = this.$el.find(".ui-content");
                 $content.html(Mustache.render(this.template, this.model.toJSON()));
-                $content.trigger("create");
+                $content.enhanceWithin();
             }
         });
 

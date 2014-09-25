@@ -27,7 +27,7 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Hie
             renderHeader: function () {
                 var $header = this.$el.find(":jqmData(role=header)");
                 $header.html(Mustache.render(this.headerTemplate, this.getHeaderConfiguration()));
-                $header.trigger("create");
+                $header.enhanceWithin();
             },
 
             renderContent: function () {
@@ -63,7 +63,7 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Hie
                     listContainer.listview("refresh");
                 } catch (ignore) {}
 
-                $content.trigger("create");
+                $content.enhanceWithin();
             },
 
             getHeaderConfiguration: function () {

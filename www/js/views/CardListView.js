@@ -35,7 +35,7 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Car
                     {
                         "permissions": this.userModel.get("selectedCompany").get("permissions")
                     }));
-                $header.trigger("create");
+                $header.enhanceWithin();
             },
 
             renderContent: function () {
@@ -66,7 +66,7 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Car
                     listContainer.listview("refresh");
                 } catch (ignore) {}
 
-                $content.trigger("create");
+                $content.enhanceWithin();
             },
 
             getConfiguration: function () {

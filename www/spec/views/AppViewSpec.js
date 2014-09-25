@@ -164,13 +164,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                 describe("when checking that the view is the active page", function () {
                     describe("when NOT the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.callFake(function () { return false; });
-                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
+                            spyOn(appView.$el, "is").and.returnValue(false);
+                            spyOn(mockUtils.$.mobile, "loading");
                             appView.showLoadingIndicator(true);
-                        });
-
-                        it("should call the is function on AppView.$el", function () {
-                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
                         });
 
                         it("should NOT call the loading function on utils.$.mobile", function () {
@@ -180,13 +176,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
 
                     describe("when the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.callFake(function () { return true; });
-                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
+                            spyOn(appView.$el, "is").and.returnValue(true);
+                            spyOn(mockUtils.$.mobile, "loading");
                             appView.showLoadingIndicator(true);
-                        });
-
-                        it("should call the is function on AppView.$el", function () {
-                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
                         });
 
                         it("should call the loading function on utils.$.mobile", function () {
@@ -219,13 +211,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                 describe("when checking that the view is the active page", function () {
                     describe("when NOT the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.callFake(function () { return false; });
-                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
+                            spyOn(appView.$el, "is").and.returnValue(false);
+                            spyOn(mockUtils.$.mobile, "loading");
                             appView.hideLoadingIndicator(true);
-                        });
-
-                        it("should call the is function on AppView.$el", function () {
-                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
                         });
 
                         it("should NOT call the loading function on utils.$.mobile", function () {
@@ -235,13 +223,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
 
                     describe("when the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.callFake(function () { return true; });
-                            spyOn(mockUtils.$.mobile, "loading").and.callFake(function () {});
+                            spyOn(appView.$el, "is").and.returnValue(true);
+                            spyOn(mockUtils.$.mobile, "loading");
                             appView.hideLoadingIndicator(true);
-                        });
-
-                        it("should call the is function on AppView.$el", function () {
-                            expect(appView.$el.is).toHaveBeenCalledWith(mockUtils.$.mobile.activePage);
                         });
 
                         it("should call the loading function on utils.$.mobile", function () {
@@ -307,10 +291,14 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                         find : function () { }
                     },
                     mockMustacheRenderResponse = "Render response",
-                    cssSpy;
+                    cssSpy,
+                    mockBody = {
+                        pagecontainer: function () { }
+                    };
 
                 beforeEach(function () {
-                    utils.$.mobile.activePage = mockCurrentPage;
+                    spyOn(utils, "getPageBody").and.returnValue(mockBody);
+                    spyOn(mockBody, "pagecontainer").and.returnValue(mockCurrentPage);
 
                     spyOn(mockCurrentPage, "find").and.callFake(
                         function (findParameter) {
@@ -440,88 +428,27 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                         remove: function () {}
                     };
 
-                    describe("when the header has an absolute position", function () {
-                        beforeEach(function () {
-                            cssSpy.and.returnValue("absolute");
-                            appView.displayDialog(dialogOptions);
+                    beforeEach(function () {
+                        appView.displayDialog(dialogOptions);
 
-                            spyOn(dialogOptions, "popupafterclose").and.callThrough();
-                            spyOn(utils, "$").and.returnValue(mockJqueryReturn);
-                            spyOn(mockJqueryReturn, "remove").and.callThrough();
+                        spyOn(dialogOptions, "popupafterclose").and.callThrough();
+                        spyOn(utils, "$").and.returnValue(mockJqueryReturn);
+                        spyOn(mockJqueryReturn, "remove").and.callThrough();
 
-                            var callback = mockPopup.bind.calls.argsFor(0)[0];
-                            callback.popupafterclose.call(mockDialog);
-                        });
-
-                        it("should get the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position");
-                        });
-
-                        it("should NOT set the css value of position on the header", function () {
-                            expect(mockHeader.css).not.toHaveBeenCalledWith("position", "absolute");
-                        });
-
-                        it("should call popupafterclose on the dialog options", function () {
-                            expect(dialogOptions.popupafterclose).toHaveBeenCalledWith();
-                        });
-
-                        it("should get the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position");
-                        });
-
-                        it("should set the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position", "Mock Value");
-                        });
-
-                        it("should call $ on utils", function () {
-                            expect(utils.$).toHaveBeenCalledWith(mockDialog);
-                        });
-
-                        it("should call remove", function () {
-                            expect(mockJqueryReturn.remove).toHaveBeenCalledWith();
-                        });
+                        var callback = mockPopup.bind.calls.argsFor(0)[0];
+                        callback.popupafterclose.call(mockDialog);
                     });
 
-                    describe("when the header has a fixed position", function () {
-                        beforeEach(function () {
-                            cssSpy.and.returnValue("fixed");
-                            appView.displayDialog(dialogOptions);
+                    it("should call popupafterclose on the dialog options", function () {
+                        expect(dialogOptions.popupafterclose).toHaveBeenCalledWith();
+                    });
 
-                            spyOn(dialogOptions, "popupafterclose").and.callThrough();
-                            spyOn(utils, "$").and.returnValue(mockJqueryReturn);
-                            spyOn(mockJqueryReturn, "remove").and.callThrough();
+                    it("should call $ on utils", function () {
+                        expect(utils.$).toHaveBeenCalledWith(mockDialog);
+                    });
 
-                            var callback = mockPopup.bind.calls.argsFor(0)[0];
-                            callback.popupafterclose.call(mockDialog);
-                        });
-
-                        it("should get the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position");
-                        });
-
-                        it("should set the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position", "absolute");
-                        });
-
-                        it("should call popupafterclose on the dialog options", function () {
-                            expect(dialogOptions.popupafterclose).toHaveBeenCalledWith();
-                        });
-
-                        it("should get the css value of position on the header", function () {
-                            expect(mockHeader.css).toHaveBeenCalledWith("position");
-                        });
-
-                        it("should NOT set the css value of position on the header", function () {
-                            expect(mockHeader.css).not.toHaveBeenCalledWith("position", "Mock Value");
-                        });
-
-                        it("should call $ on utils", function () {
-                            expect(utils.$).toHaveBeenCalledWith(mockDialog);
-                        });
-
-                        it("should call remove", function () {
-                            expect(mockJqueryReturn.remove).toHaveBeenCalledWith();
-                        });
+                    it("should call remove", function () {
+                        expect(mockJqueryReturn.remove).toHaveBeenCalledWith();
                     });
                 });
 
@@ -602,16 +529,6 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
             });
 
             describe("has a highlightButton function that", function () {
-                var mockButton = {
-                    addClass : function () { return this; }
-                };
-
-                beforeEach(function () {
-                    spyOn(mockButton, "addClass").and.callThrough();
-
-                    appView.highlightButton(mockButton);
-                });
-
                 it("is defined", function () {
                     expect(appView.highlightButton).toBeDefined();
                 });
@@ -620,26 +537,16 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     expect(appView.highlightButton).toEqual(jasmine.any(Function));
                 });
 
-                it("should call addClass on the button", function () {
-                    expect(mockButton.addClass).toHaveBeenCalledWith("ui-btn-active");
+                it("should add the active class to the button", function () {
+                    var mockButton = $("<button></button>");
+
+                    expect(mockButton.toHaveClass("ui-btn-active")).toBeFalsy();
+                    appView.highlightButton(mockButton);
+                    expect(mockButton.toHaveClass("ui-btn-active")).toBeTruthy();
                 });
             });
 
             describe("has a unhighlightButton function that", function () {
-                var mockButton = {
-                    addClass : function () { return this; },
-                    attr : function () { return this; },
-                    removeClass : function () { return this; }
-                };
-
-                beforeEach(function () {
-                    spyOn(mockButton, "addClass").and.callThrough();
-                    spyOn(mockButton, "attr").and.callThrough();
-                    spyOn(mockButton, "removeClass").and.callThrough();
-
-                    appView.unhighlightButton(mockButton);
-                });
-
                 it("is defined", function () {
                     expect(appView.unhighlightButton).toBeDefined();
                 });
@@ -648,17 +555,12 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     expect(appView.unhighlightButton).toEqual(jasmine.any(Function));
                 });
 
-                it("should call removeClass on the button", function () {
-                    expect(mockButton.removeClass)
-                        .toHaveBeenCalledWith("ui-btn-up-a ui-btn-up-b ui-btn-up-c ui-btn-up-d ui-btn-up-e ui-btn-hover-a ui-btn-hover-b ui-btn-hover-c ui-btn-hover-d ui-btn-hover-e");
-                });
+                it("should remove the ui-active class", function () {
+                    var mockButton = $("<button></button>").addClass("ui-btn-active");
 
-                it("should call addClass on the button", function () {
-                    expect(mockButton.addClass).toHaveBeenCalledWith("ui-btn-up-d");
-                });
-
-                it("should call attr on the button", function () {
-                    expect(mockButton.attr).toHaveBeenCalledWith("data-theme", "d");
+                    expect(mockButton.toHaveClass("ui-btn-active")).toBeTruthy();
+                    appView.unhighlightButton(mockButton);
+                    expect(mockButton.toHaveClass("ui-btn-active")).toBeFalsy();
                 });
             });
 

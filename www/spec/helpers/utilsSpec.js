@@ -1,12 +1,14 @@
-define(["Squire", "backbone", "globals"],
-    function (Squire, Backbone, globals) {
+define(["Squire", "backbone", "jquery", "globals"],
+    function (Squire, Backbone, $, globals) {
 
         "use strict";
 
         var utilsClass,
+            mockjQuery = $,
             squire = new Squire();
 
         squire.mock("backbone", Backbone);
+        squire.mock("jquery", mockjQuery);
 
         describe("The utils class", function () {
 
@@ -183,10 +185,14 @@ define(["Squire", "backbone", "globals"],
             });
 
             describe("has a changePage function that", function () {
-                var mockViewId = "testViewId";
+                var mockViewId = "testViewId",
+                    mockBody = {
+                        pagecontainer: function () { }
+                    };
 
                 beforeEach(function () {
-                    spyOn(utilsClass.$.mobile, "changePage").and.callFake(function () { });
+                    spyOn(utilsClass, "getPageBody").and.returnValue(mockBody);
+                    spyOn(mockBody, "pagecontainer");
                 });
 
                 it("is defined", function () {
@@ -201,7 +207,7 @@ define(["Squire", "backbone", "globals"],
                     it("should call changePage on JQM", function () {
                         utilsClass.changePage(mockViewId);
 
-                        expect(utilsClass.$.mobile.changePage).toHaveBeenCalledWith(mockViewId,
+                        expect(mockBody.pagecontainer).toHaveBeenCalledWith("change", mockViewId,
                             {
                                 transition: globals.DEFAULT.PAGE_TRANSITION,
                                 reverse   : false,
@@ -218,7 +224,7 @@ define(["Squire", "backbone", "globals"],
 
                         utilsClass.changePage(mockViewId, transition, direction, updateHash);
 
-                        expect(utilsClass.$.mobile.changePage).toHaveBeenCalledWith(mockViewId,
+                        expect(mockBody.pagecontainer).toHaveBeenCalledWith("change", mockViewId,
                             {
                                 transition: transition,
                                 reverse   : direction,
@@ -311,7 +317,10 @@ define(["Squire", "backbone", "globals"],
             });
 
             describe("has an isActivePage function that", function () {
-                var mockPageId = "pageId";
+                var mockPageId = "pageId",
+                    mockBody = {
+                        pagecontainer: function () { }
+                    };
 
                 it("is defined", function () {
                     expect(utilsClass.isActivePage).toBeDefined();
@@ -323,7 +332,8 @@ define(["Squire", "backbone", "globals"],
 
                 describe("when there is NOT an active page", function () {
                     beforeEach(function () {
-                        utilsClass.$.mobile.activePage = null;
+                        spyOn(utilsClass, "getPageBody").and.returnValue(mockBody);
+                        spyOn(mockBody, "pagecontainer").and.returnValue(null);
                     });
 
                     it("should return expected value", function () {
@@ -340,7 +350,8 @@ define(["Squire", "backbone", "globals"],
                         actualResponse;
 
                     beforeEach(function () {
-                        utilsClass.$.mobile.activePage = mockActivePage;
+                        spyOn(utilsClass, "getPageBody").and.returnValue(mockBody);
+                        spyOn(mockBody, "pagecontainer").and.returnValue(mockActivePage);
                     });
 
                     describe("when the id of the active page is the page being checked", function () {
@@ -348,10 +359,6 @@ define(["Squire", "backbone", "globals"],
                             spyOn(mockActivePage, "attr").and.returnValue(mockPageId);
 
                             actualResponse = utilsClass.isActivePage(mockPageId);
-                        });
-
-                        it("should call attr on the active page", function () {
-                            expect(mockActivePage.attr).toHaveBeenCalledWith("id");
                         });
 
                         it("should return expected value", function () {
@@ -366,14 +373,20 @@ define(["Squire", "backbone", "globals"],
                             actualResponse = utilsClass.isActivePage("256fsagv");
                         });
 
-                        it("should call attr on the active page", function () {
-                            expect(mockActivePage.attr).toHaveBeenCalledWith("id");
-                        });
-
                         it("should return expected value", function () {
                             expect(actualResponse).toBeFalsy();
                         });
                     });
+                });
+            });
+
+            describe("has an getPageBody function that", function () {
+                it("is defined", function () {
+                    expect(utilsClass.getPageBody).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(utilsClass.getPageBody).toEqual(jasmine.any(Function));
                 });
             });
 

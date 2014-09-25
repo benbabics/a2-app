@@ -38,7 +38,7 @@ define(["backbone", "utils", "mustache", "globals", "views/BaseView", "views/Pay
                     listContainer.listview("refresh");
                 } catch (ignore) {}
 
-                $content.trigger("create");
+                $content.enhanceWithin();
             }
         });
 
