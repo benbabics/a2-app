@@ -208,7 +208,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                     spyOn(driverListView.$el, "find").and.returnValue(actualHeader);
                     spyOn(actualHeader, "html").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(actualHeader, "trigger").and.callThrough();
 
                     driverListView.renderHeader();
 
@@ -235,10 +234,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                             "permissions": userModel.get("selectedCompany").get("permissions")
                         });
                     expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
-                });
-
-                it("should call the trigger function on the header", function () {
-                    expect(actualHeader.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
@@ -272,7 +267,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(driverListView, "getConfiguration").and.returnValue(mockConfiguration);
                     spyOn(driverCollection, "each").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
 
                     driverListView.renderContent();
                 });
@@ -296,10 +290,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/Drive
 
                 it("should call each on the collection sending a function and scope object", function () {
                     expect(driverCollection.each).toHaveBeenCalledWith(jasmine.any(Function), driverListView);
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

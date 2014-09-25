@@ -130,7 +130,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     spyOn(paymentListView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "find").and.returnValue(actualList);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(paymentCollection, "each").and.callThrough();
                     spyOn(actualList, "empty").and.callFake(function () { });
@@ -170,10 +169,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
 
                     // The argument is a document fragment containing the PaymentView elements
                     expect(actualList.append.calls.argsFor(0)[0].nodeName).toEqual("#document-fragment");
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
         });

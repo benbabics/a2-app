@@ -82,7 +82,6 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "views/BaseView",
 
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(homeView.$el, "find").and.returnValue(actualContent);
-                    spyOn(actualContent, "trigger").and.callThrough();
 
                     homeView.initialize();
                     homeView.render();
@@ -106,10 +105,6 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "views/BaseView",
                     expectedContent = Mustache.render(pageTemplate);
 
                     expect(actualContent[0]).toContainHtml(expectedContent);
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {

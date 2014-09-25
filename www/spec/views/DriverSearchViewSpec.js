@@ -208,7 +208,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     spyOn(driverSearchView.$el, "find").and.returnValue(actualHeader);
                     spyOn(actualHeader, "html").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(actualHeader, "trigger").and.callThrough();
 
                     driverSearchView.renderHeader();
 
@@ -235,10 +234,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                             "permissions": userModel.get("selectedCompany").get("permissions")
                         });
                     expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
-                });
-
-                it("should call the trigger function on the header", function () {
-                    expect(actualHeader.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
@@ -273,7 +268,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(driverSearchView, "getConfiguration").and.returnValue(mockConfiguration);
-                    spyOn(actualContent, "trigger").and.callThrough();
 
                     driverSearchView.renderContent();
                 });
@@ -293,10 +287,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                 it("should call the html function on the content", function () {
                     var expectedContent = Mustache.render(pageTemplate, mockConfiguration);
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 

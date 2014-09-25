@@ -70,7 +70,6 @@ define(["Squire", "backbone", "mustache", "views/BaseView", "text!tmpl/about/pag
                     actualContent = aboutView.$el.find(".ui-content");
                     spyOn(aboutView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
                     aboutView.initialize();
                 });
@@ -90,10 +89,6 @@ define(["Squire", "backbone", "mustache", "views/BaseView", "text!tmpl/about/pag
                 it("should call the html function on the content", function () {
                     var expectedContent = Mustache.render(pageTemplate, appModel.toJSON());
                     expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
         });

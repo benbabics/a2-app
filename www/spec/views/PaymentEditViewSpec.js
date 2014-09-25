@@ -208,7 +208,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
                     actualContent = paymentEditView.$el.find(".ui-content");
                     spyOn(paymentEditView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
                     spyOn(paymentEditView, "updateModelFromSummary").and.callFake(function () { });
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(paymentEditView, "getConfiguration").and.returnValue(mockConfiguration);
@@ -245,10 +244,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/PaymentMod
 
                 it("should call formatRequiredFields()", function () {
                     expect(paymentEditView.formatRequiredFields).toHaveBeenCalledWith();
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {

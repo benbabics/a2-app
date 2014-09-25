@@ -40,7 +40,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/DriverMode
 
                 this.formatRequiredFields();
 
-                $content.enhancedWithin();
+                $content.enhanceWithin();
             },
 
             resetForm: function () {

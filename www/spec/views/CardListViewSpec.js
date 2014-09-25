@@ -210,7 +210,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                     spyOn(cardListView.$el, "find").and.returnValue(actualHeader);
                     spyOn(actualHeader, "html").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(actualHeader, "trigger").and.callThrough();
 
                     cardListView.renderHeader();
 
@@ -237,10 +236,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                             "permissions": userModel.get("selectedCompany").get("permissions")
                         });
                     expect(actualHeader.html).toHaveBeenCalledWith(expectedContent);
-                });
-
-                it("should call the trigger function on the header", function () {
-                    expect(actualHeader.trigger).toHaveBeenCalledWith("create");
                 });
 
                 describe("when dynamically rendering the template based on the model data", function () {
@@ -275,7 +270,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(cardListView, "getConfiguration").and.returnValue(mockConfiguration);
                     spyOn(cardCollection, "each").and.callThrough();
-                    spyOn(actualContent, "trigger").and.callThrough();
 
                     cardListView.renderContent();
                 });
@@ -299,10 +293,6 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "collections/CardC
 
                 it("should call each on the collection sending a function and scope object", function () {
                     expect(cardCollection.each).toHaveBeenCalledWith(jasmine.any(Function), cardListView);
-                });
-
-                it("should call the trigger function on the content", function () {
-                    expect(actualContent.trigger).toHaveBeenCalledWith("create");
                 });
             });
 
