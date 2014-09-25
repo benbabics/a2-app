@@ -10,7 +10,7 @@
     {{#ableToContinue}}
         <form id="cardShippingForm" class="ui-body ui-body-d">
             {{#shippingMethod}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="shippingMethod">{{label}}:</label>
                     <select id="shippingMethod" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
                         {{#values}}
@@ -26,7 +26,7 @@
             <b>Shipping Address</b>
 
             {{#firstName}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="firstName">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -37,7 +37,7 @@
             {{/firstName}}
 
             {{#lastName}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="lastName">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -48,7 +48,7 @@
             {{/lastName}}
 
             {{#companyName}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="companyName">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -59,7 +59,7 @@
             {{/companyName}}
 
             {{#addressLine1}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="addressLine1">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -70,7 +70,7 @@
             {{/addressLine1}}
 
             {{#addressLine2}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="addressLine2">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -81,7 +81,7 @@
             {{/addressLine2}}
 
             {{#city}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="city">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -92,7 +92,7 @@
             {{/city}}
 
             {{#state}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="state">{{label}}:</label>
                     <select id="state" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
                         {{#values}}
@@ -103,7 +103,7 @@
             {{/state}}
 
             {{#postalCode}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="postalCode">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -114,7 +114,7 @@
             {{/postalCode}}
 
             {{#residence}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label>{{label}}</label>
                     <fieldset name="{{name}}" data-role="controlgroup" data-type="horizontal">
                         {{#values}}

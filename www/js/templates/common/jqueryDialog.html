@@ -1,21 +1,23 @@
 <!-- dialogue box -->
-<div data-role="popup" id="popupDialog" data-dismissible="false" data-theme="a" style="max-width:400px;" class="ui-corner-all">
+<div data-role="popup" id="popupDialog" data-dismissible="false" data-overlay-theme="b" data-theme="a">
     {{#title}}
-        <div data-role="header" data-theme="a">
-            <h1>{{{title}}}</h1>
-        </div>
+    <div data-role="header" data-theme="b">
+        <h1>{{title}}</h1>
+    </div>
     {{/title}}
 
     <div data-role="content" data-theme="c" class="ui-corner-bottom ui-content">
         <div>{{{message}}}</div>
         <div class="dialog-footer">
             {{#tertiaryBtnLabel}}
-            <a href="#" class="ui-btn ui-btn-a ui-corner-all" data-inline="true" data-rel="back" id="tertiary">{{tertiaryBtnLabel}}</a>
+            <a href="#" data-rel="back" id="tertiary" class="ui-btn ui-corner-all">{{tertiaryBtnLabel}}</a>
             {{/tertiaryBtnLabel}}
             {{#secondaryBtnLabel}}
-            <a href="#" class="ui-btn ui-btn-a ui-corner-all" data-inline="true" data-rel="back" id="secondary">{{secondaryBtnLabel}}</a>
+            <a href="#" data-rel="back" id="secondary" class="ui-btn ui-corner-all">{{secondaryBtnLabel}}</a>
             {{/secondaryBtnLabel}}
-            <a href="#" class="ui-btn ui-btn-b ui-corner-all" data-inline="true" data-rel="back" data-transition="flow" id="primary">{{primaryBtnLabel}}</a>
+            {{#primaryBtnLabel}}
+            <a href="#" data-rel="back" data-transition="flow" id="primary" class="ui-btn ui-btn-b ui-corner-all">{{primaryBtnLabel}}</a>
+            {{/primaryBtnLabel}}
         </div>
     </div>
 </div>

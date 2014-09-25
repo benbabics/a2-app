@@ -3,7 +3,7 @@
 {{#driver}}
     <form id="driverAddForm" class="ui-body ui-body-d">
         {{#firstName}}
-            <div data-role="fieldcontain">
+            <div class="ui-field-contain">
                 <label for="firstName">{{label}}:</label>
                 <input type="text"
                        name="{{name}}"
@@ -15,7 +15,7 @@
         {{/firstName}}
 
         {{#lastName}}
-            <div data-role="fieldcontain">
+            <div class="ui-field-contain">
                 <label for="lastName">{{label}}:</label>
                 <input type="text"
                        name="{{name}}"
@@ -27,7 +27,7 @@
         {{/lastName}}
 
         {{#middleName}}
-            <div data-role="fieldcontain">
+            <div class="ui-field-contain">
                 <label for="middleName">{{label}}:</label>
                 <input type="text"
                        name="{{name}}"
@@ -40,7 +40,7 @@
 
         {{#requiredFields.DRIVER_ID}}
             {{#id}}
-                <div data-role="fieldcontain">
+                <div class="ui-field-contain">
                     <label for="id">{{label}}:</label>
                     <input type="text"
                            name="{{name}}"
@@ -53,7 +53,7 @@
         {{/requiredFields.DRIVER_ID}}
 
         {{#departmentId}}
-            <div data-role="fieldcontain">
+            <div class="ui-field-contain">
                 <label for="departmentId">{{label}}:</label>
                 <select id="departmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
                     {{#values}}

@@ -1,25 +1,25 @@
 <h2 class="ui-title">Driver - Search</h2>
 <form id="driverSearchForm" class="ui-body ui-body-d">
     {{#firstName}}
-    <div data-role="fieldcontain">
+    <div class="ui-field-contain">
         <label for="firstName">{{label}}:</label>
         <input type="text" name="{{name}}" id="firstName" value="{{value}}" />
     </div>
     {{/firstName}}
     {{#lastName}}
-    <div data-role="fieldcontain">
+    <div class="ui-field-contain">
         <label for="lastName">{{label}}:</label>
         <input type="text" name="{{name}}" id="lastName" value="{{value}}" />
     </div>
     {{/lastName}}
     {{#id}}
-    <div data-role="fieldcontain">
+    <div class="ui-field-contain">
         <label for="id">{{label}}:</label>
         <input type="text" name="{{name}}" id="id" value="{{value}}" />
     </div>
     {{/id}}
     {{#status}}
-    <div data-role="fieldcontain">
+    <div class="ui-field-contain">
         <label for="status">{{label}}:</label>
         <select id="status" name="{{name}}">
         {{#values}}
@@ -29,7 +29,7 @@
     </div>
     {{/status}}
     {{#departmentId}}
-    <div data-role="fieldcontain">
+    <div class="ui-field-contain">
         <label for="departmentId">{{label}}:</label>
         <select id="departmentId" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
             {{#values}}

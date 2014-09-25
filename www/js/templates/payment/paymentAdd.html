@@ -5,7 +5,7 @@
 
 <form id="paymentAddForm" class="ui-body ui-body-d">
     {{#scheduledDate}}
-        <div data-role="fieldcontain">
+        <div class="ui-field-contain">
             <label for="scheduledDate">{{label}}:</label>
             <input type="text"
                    name="{{name}}"
@@ -18,7 +18,7 @@
     {{/scheduledDate}}
 
     {{#amount}}
-        <div data-role="fieldcontain">
+        <div class="ui-field-contain">
             <label for="amount">{{label}}:</label>
             <input type="text"
                    name="{{name}}"
@@ -28,7 +28,7 @@
     {{/amount}}
 
     {{#bankAccount}}
-        <div data-role="fieldcontain">
+        <div class="ui-field-contain">
             <label for="bankAccount">{{label}}:</label>
             <select id="bankAccount" name="{{name}}" {{^enabled}} disabled=disabled {{/enabled}}>
                 {{#values}}
