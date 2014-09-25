@@ -267,7 +267,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     mockConfiguration = globals.driverSearch.configuration;
 
                 beforeEach(function () {
-                    actualContent = driverSearchView.$el.find(":jqmData(role=content)");
+                    actualContent = driverSearchView.$el.find(".ui-content");
 
                     spyOn(driverSearchView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();

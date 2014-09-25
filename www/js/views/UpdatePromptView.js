@@ -34,7 +34,7 @@ define(["globals", "utils", "facade", "backbone", "mustache", "models/AppModel",
             },
 
             render: function () {
-                var $content = this.$el.find(":jqmData(role=content)");
+                var $content = this.$el.find(".ui-content");
                 $content.html(Mustache.render(this.template, this.templateContent));
                 $content.trigger("create");
             },

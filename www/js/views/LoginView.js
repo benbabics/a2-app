@@ -18,7 +18,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "views/ValidationF
             }),
 
             pageCreate: function () {
-                var $content = this.$el.find(":jqmData(role=content)");
+                var $content = this.$el.find(".ui-content");
 
                 $content.html(Mustache.render(this.template, globals.login.configuration));
 

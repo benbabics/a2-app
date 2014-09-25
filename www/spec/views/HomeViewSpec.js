@@ -78,7 +78,7 @@ define(["backbone", "Squire", "mustache", "globals", "utils", "views/BaseView",
                 var actualContent;
 
                 beforeEach(function () {
-                    actualContent = homeView.$el.find(":jqmData(role=content)");
+                    actualContent = homeView.$el.find(".ui-content");
 
                     spyOn(mockMustache, "render").and.callThrough();
                     spyOn(homeView.$el, "find").and.returnValue(actualContent);

@@ -194,7 +194,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/UserModel"
                         "permissions"   : userModel.get("selectedCompany").get("permissions")
                     };
 
-                    actualContent = invoiceSummaryView.$el.find(":jqmData(role=content)");
+                    actualContent = invoiceSummaryView.$el.find(".ui-content");
                     spyOn(invoiceSummaryView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();

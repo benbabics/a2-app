@@ -67,7 +67,7 @@ define(["Squire", "backbone", "mustache", "views/BaseView", "text!tmpl/about/pag
                 var actualContent;
 
                 beforeEach(function () {
-                    actualContent = aboutView.$el.find(":jqmData(role=content)");
+                    actualContent = aboutView.$el.find(".ui-content");
                     spyOn(aboutView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();

@@ -124,7 +124,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     actualList;
 
                 beforeEach(function () {
-                    actualContent = paymentListView.$el.find(":jqmData(role=content)");
+                    actualContent = paymentListView.$el.find(".ui-content");
                     actualList = actualContent.find("#paymentSearchResultList");
 
                     spyOn(paymentListView.$el, "find").and.returnValue(actualContent);

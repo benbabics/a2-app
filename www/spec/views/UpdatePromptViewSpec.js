@@ -133,7 +133,7 @@ define(["backbone", "utils", "globals", "mustache", "views/BaseView", "text!tmpl
                     var actualContent;
 
                     beforeEach(function () {
-                        actualContent = updatePromptView.$el.find(":jqmData(role=content)");
+                        actualContent = updatePromptView.$el.find(".ui-content");
                         spyOn(updatePromptView.$el, "find").and.returnValue(actualContent);
                         spyOn(actualContent, "html").and.callThrough();
                         spyOn(actualContent, "trigger").and.callThrough();

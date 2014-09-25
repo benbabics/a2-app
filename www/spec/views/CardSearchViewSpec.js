@@ -260,7 +260,7 @@ define(["Squire", "globals", "utils", "backbone", "mustache", "models/UserModel"
                     mockConfiguration = globals.cardSearch.configuration;
 
                 beforeEach(function () {
-                    actualContent = cardSearchView.$el.find(":jqmData(role=content)");
+                    actualContent = cardSearchView.$el.find(".ui-content");
 
                     spyOn(cardSearchView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();

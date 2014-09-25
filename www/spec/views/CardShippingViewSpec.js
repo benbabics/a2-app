@@ -251,7 +251,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     };
                     expectedConfiguration.shipping.ableToContinue = true;
 
-                    actualContent = cardShippingView.$el.find(":jqmData(role=content)");
+                    actualContent = cardShippingView.$el.find(".ui-content");
                     spyOn(cardShippingView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();

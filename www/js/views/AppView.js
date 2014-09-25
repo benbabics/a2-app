@@ -91,7 +91,7 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
                 }
 
                 // append the dialogue box
-                currentPage.find(":jqmData(role=content)").append(Mustache.render(this.dialogTemplate, dialogOptions));
+                currentPage.find(".ui-content").append(Mustache.render(this.dialogTemplate, dialogOptions));
 
                 dialogBox = currentPage.find("#" + globals.DIALOG.ID);
 

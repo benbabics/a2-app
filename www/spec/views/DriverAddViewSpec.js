@@ -187,7 +187,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/DriverMode
                         "requiredFields": driverAddView.userModel.get("selectedCompany").get("requiredFields")
                     };
 
-                    actualContent = driverAddView.$el.find(":jqmData(role=content)");
+                    actualContent = driverAddView.$el.find(".ui-content");
                     spyOn(driverAddView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(actualContent, "trigger").and.callThrough();
