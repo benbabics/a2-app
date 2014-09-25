@@ -29,7 +29,7 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
                 // handle toggling loading indicator
                 function handleLoader(toggle) {
                     // is this page visible?
-                    if (this.$el.is(utils.getPageBody().pagecontainer("getActivePage"))) {
+                    if (utils.isActivePage(this.$el.attr("id"))) {
                         this[(toggle ? "show" : "hide") + "LoadingIndicator"]();
                     }
                 }
@@ -79,7 +79,7 @@ define(["backbone", "facade", "mustache", "utils", "globals", "text!tmpl/common/
             displayDialog: function (dialogOptions) {
                 var currentPage, dialogBox, btnPrimary, btnSecondary, btnTertiary;
 
-                currentPage = utils.getPageBody().pagecontainer("getActivePage");
+                currentPage = utils.getActivePage();
 
                 // append the dialogue box
                 currentPage.find(".ui-content").append(Mustache.render(this.dialogTemplate, dialogOptions));

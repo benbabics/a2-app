@@ -164,7 +164,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                 describe("when checking that the view is the active page", function () {
                     describe("when NOT the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.returnValue(false);
+                            spyOn(mockUtils, "isActivePage").and.returnValue(false);
                             spyOn(mockUtils.$.mobile, "loading");
                             appView.showLoadingIndicator(true);
                         });
@@ -176,7 +176,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
 
                     describe("when the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.returnValue(true);
+                            spyOn(mockUtils, "isActivePage").and.returnValue(true);
                             spyOn(mockUtils.$.mobile, "loading");
                             appView.showLoadingIndicator(true);
                         });
@@ -211,7 +211,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                 describe("when checking that the view is the active page", function () {
                     describe("when NOT the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.returnValue(false);
+                            spyOn(mockUtils, "isActivePage").and.returnValue(false);
                             spyOn(mockUtils.$.mobile, "loading");
                             appView.hideLoadingIndicator(true);
                         });
@@ -223,7 +223,7 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
 
                     describe("when the active page", function () {
                         beforeEach(function () {
-                            spyOn(appView.$el, "is").and.returnValue(true);
+                            spyOn(mockUtils, "isActivePage").and.returnValue(true);
                             spyOn(mockUtils.$.mobile, "loading");
                             appView.hideLoadingIndicator(true);
                         });
@@ -274,7 +274,8 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     mockDialog = {
                         find : function () { },
                         popup: function () { return mockPopup; },
-                        trigger : function () { }
+                        trigger : function () { },
+                        enhanceWithin: function () { }
                     },
                     mockPrimaryButton = {
                         on: function () { }
@@ -291,14 +292,10 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                         find : function () { }
                     },
                     mockMustacheRenderResponse = "Render response",
-                    cssSpy,
-                    mockBody = {
-                        pagecontainer: function () { }
-                    };
+                    cssSpy;
 
                 beforeEach(function () {
-                    spyOn(utils, "getPageBody").and.returnValue(mockBody);
-                    spyOn(mockBody, "pagecontainer").and.returnValue(mockCurrentPage);
+                    spyOn(utils, "getActivePage").and.returnValue(mockCurrentPage);
 
                     spyOn(mockCurrentPage, "find").and.callFake(
                         function (findParameter) {
@@ -357,10 +354,6 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                     expect(appView.displayDialog).toEqual(jasmine.any(Function));
                 });
 
-                it("should call find on the current page to get the header", function () {
-                    expect(mockCurrentPage.find).toHaveBeenCalledWith(":jqmData(role='header')");
-                });
-
                 it("should call find on the current page to get the content", function () {
                     expect(mockCurrentPage.find).toHaveBeenCalledWith(".ui-content");
                 });
@@ -387,10 +380,6 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
 
                 it("should call find on the dialog to get the tertiary button", function () {
                     expect(mockDialog.find).toHaveBeenCalledWith("#" + globals.DIALOG.TERTIARY_BTN_ID);
-                });
-
-                it("should call trigger on the dialog ", function () {
-                    expect(mockDialog.trigger).toHaveBeenCalledWith("create");
                 });
 
                 it("should call popup on the dialog with no arguments", function () {
@@ -540,9 +529,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                 it("should add the active class to the button", function () {
                     var mockButton = $("<button></button>");
 
-                    expect(mockButton.toHaveClass("ui-btn-active")).toBeFalsy();
+                    expect(mockButton).not.toHaveClass("ui-btn-active");
                     appView.highlightButton(mockButton);
-                    expect(mockButton.toHaveClass("ui-btn-active")).toBeTruthy();
+                    expect(mockButton).toHaveClass("ui-btn-active");
                 });
             });
 
@@ -558,9 +547,9 @@ define(["backbone", "mustache", "utils", "Squire", "globals", "text!tmpl/common/
                 it("should remove the ui-active class", function () {
                     var mockButton = $("<button></button>").addClass("ui-btn-active");
 
-                    expect(mockButton.toHaveClass("ui-btn-active")).toBeTruthy();
+                    expect(mockButton).toHaveClass("ui-btn-active");
                     appView.unhighlightButton(mockButton);
-                    expect(mockButton.toHaveClass("ui-btn-active")).toBeFalsy();
+                    expect(mockButton).not.toHaveClass("ui-btn-active");
                 });
             });
 

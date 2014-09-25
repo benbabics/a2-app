@@ -316,11 +316,47 @@ define(["Squire", "backbone", "jquery", "globals"],
                 });
             });
 
-            describe("has an isActivePage function that", function () {
-                var mockPageId = "pageId",
+            describe("has an getPageBody function that", function () {
+                it("is defined", function () {
+                    expect(utilsClass.getPageBody).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(utilsClass.getPageBody).toEqual(jasmine.any(Function));
+                });
+
+                // TODO: figure out how to mock $("body")
+            });
+
+            describe("has an getActivePage function that", function () {
+
+                var mockActivePage = {
+                        attr: function () {}
+                    },
                     mockBody = {
                         pagecontainer: function () { }
                     };
+
+                beforeEach(function () {
+                    spyOn(utilsClass, "getPageBody").and.returnValue(mockBody);
+                    spyOn(mockBody, "pagecontainer").and.returnValue(mockActivePage);
+                });
+
+                it("is defined", function () {
+                    expect(utilsClass.getActivePage).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(utilsClass.getActivePage).toEqual(jasmine.any(Function));
+                });
+
+                it("should return the Active Page", function () {
+                    expect(utilsClass.getActivePage()).toEqual(mockActivePage);
+                });
+            });
+
+            describe("has an isActivePage function that", function () {
+                var mockPageId = "pageId";
 
                 it("is defined", function () {
                     expect(utilsClass.isActivePage).toBeDefined();
@@ -332,8 +368,7 @@ define(["Squire", "backbone", "jquery", "globals"],
 
                 describe("when there is NOT an active page", function () {
                     beforeEach(function () {
-                        spyOn(utilsClass, "getPageBody").and.returnValue(mockBody);
-                        spyOn(mockBody, "pagecontainer").and.returnValue(null);
+                        spyOn(utilsClass, "getActivePage").and.returnValue(null);
                     });
 
                     it("should return expected value", function () {
@@ -350,8 +385,7 @@ define(["Squire", "backbone", "jquery", "globals"],
                         actualResponse;
 
                     beforeEach(function () {
-                        spyOn(utilsClass, "getPageBody").and.returnValue(mockBody);
-                        spyOn(mockBody, "pagecontainer").and.returnValue(mockActivePage);
+                        spyOn(utilsClass, "getActivePage").and.returnValue(mockActivePage);
                     });
 
                     describe("when the id of the active page is the page being checked", function () {
@@ -377,16 +411,6 @@ define(["Squire", "backbone", "jquery", "globals"],
                             expect(actualResponse).toBeFalsy();
                         });
                     });
-                });
-            });
-
-            describe("has an getPageBody function that", function () {
-                it("is defined", function () {
-                    expect(utilsClass.getPageBody).toBeDefined();
-                });
-
-                it("is a function", function () {
-                    expect(utilsClass.getPageBody).toEqual(jasmine.any(Function));
                 });
             });
 

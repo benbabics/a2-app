@@ -172,26 +172,35 @@ define(["jquery", "underscore", "globals", "backbone", "moment", "moment-timezon
         };
 
         /**
-         * Function to determine if the page id is the active page
-         *
-         * @param pageId the id of the page to check for being active
-         * @returns {boolean} true if the page is active, false otherwise
-         */
-        utils.isActivePage = function (pageId) {
-            if (!utils.getPageBody().pagecontainer("getActivePage")) {
-                return false;
-            }
-
-            return pageId === utils.getPageBody().pagecontainer("getActivePage").attr("id");
-        };
-
-        /**
          * Function to encapsulate the retrieval of the body element of the page
          *
          * @returns {*|jQuery|HTMLElement} the body element
          */
         utils.getPageBody = function () {
             return utils.$("body");
+        };
+
+        /**
+         * Function to get the jQuery object representing the currently active page
+         *
+         * @returns {jQuery} the active page
+         */
+        utils.getActivePage = function () {
+            return utils.getPageBody().pagecontainer("getActivePage");
+        };
+
+        /**
+         * Function to determine if the page id is the active page
+         *
+         * @param pageId the id of the page to check for being active
+         * @returns {boolean} true if the page is active, false otherwise
+         */
+        utils.isActivePage = function (pageId) {
+            if (!utils.getActivePage()) {
+                return false;
+            }
+
+            return pageId === utils.getActivePage().attr("id");
         };
 
         /**
