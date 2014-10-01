@@ -59,7 +59,7 @@
     },
     "installed_plugins": {
         "com.wex.plugins.applicationInfo": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
         },
         "org.apache.cordova.device": {
             "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
