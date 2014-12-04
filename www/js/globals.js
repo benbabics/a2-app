@@ -1315,7 +1315,7 @@ define(function (require) {
      */
     globals.paymentDetails = {};
     globals.paymentDetails.constants = {
-        "CANCEL_PAYMENT_SUCCESS_TITLE": "Payment<br/>Cancellation"
+        "CANCEL_PAYMENT_SUCCESS_TITLE": "Payment Cancellation"
     };
     globals.paymentDetails.configuration = {
         "scheduledDate": {
