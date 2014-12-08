@@ -961,7 +961,7 @@ define(function (require) {
      */
     globals.cardTerminate = {};
     globals.cardTerminate.constants = {
-        "CONFIRMATION_TITLE": "Terminate<br/>Card",
+        "CONFIRMATION_TITLE": "Terminate Card",
         "CONFIRMATION_MESSAGE": "Are you sure you want to terminate this card?<br/>This action cannot be undone.",
         "CANCEL_BTN_TEXT": "Cancel",
         "OK_BTN_TEXT": "Terminate"
@@ -1132,7 +1132,7 @@ define(function (require) {
      */
     globals.driverTerminate = {};
     globals.driverTerminate.constants = {
-        "CONFIRMATION_TITLE": "Terminate<br/>Driver",
+        "CONFIRMATION_TITLE": "Terminate Driver",
         "CONFIRMATION_MESSAGE": "Are you sure you want to terminate the driver?",
         "CANCEL_BTN_TEXT": "Cancel",
         "OK_BTN_TEXT": "Terminate"
@@ -1184,7 +1184,7 @@ define(function (require) {
 
     globals.driverAddedDetails = {};
     globals.driverAddedDetails.constants = {
-        "SUCCESS_TITLE": "Driver<br/>Confirmation",
+        "SUCCESS_TITLE": "Driver Confirmation",
         "BUTTON_ACTIVATE": "ACTIVATE",
         "BUTTON_TERMINATE": "TERMINATE"
     };
@@ -1406,7 +1406,7 @@ define(function (require) {
 
     globals.paymentChangedDetails = {};
     globals.paymentChangedDetails.constants = {
-        "SUCCESS_TITLE": "Payment<br/>Confirmation"
+        "SUCCESS_TITLE": "Payment Confirmation"
     };
     globals.paymentChangedDetails.configuration = {
         "scheduledDate": {
