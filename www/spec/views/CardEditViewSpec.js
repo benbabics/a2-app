@@ -148,23 +148,96 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                 });
             });
 
-            describe("has a render function that", function () {
+            describe("has a renderWithConfiguration function that", function () {
                 var actualContent,
-                    expectedConfiguration;
+                    configuration;
 
                 beforeEach(function () {
-                    expectedConfiguration = {
+                    configuration = {
                         "card"          : utils._.extend({}, utils.deepClone(globals.cardEdit.configuration)),
                         "requiredFields": cardEditView.userModel.get("selectedCompany").get("requiredFields")
                     };
-                    expectedConfiguration.card.ableToEditCard = true;
+                    configuration.card.ableToEditCard = true;
 
                     actualContent = cardEditView.$el.find(".ui-content");
                     spyOn(cardEditView.$el, "find").and.returnValue(actualContent);
                     spyOn(actualContent, "html").and.callThrough();
                     spyOn(mockMustache, "render").and.callThrough();
-                    spyOn(cardEditView, "getConfiguration").and.returnValue(expectedConfiguration);
                     spyOn(cardEditView, "formatRequiredFields").and.callThrough();
+
+                    cardEditView.renderWithConfiguration(configuration);
+                });
+
+                it("is defined", function () {
+                    expect(cardEditView.renderWithConfiguration).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardEditView.renderWithConfiguration).toEqual(jasmine.any(Function));
+                });
+
+                it("should call Mustache.render() on the template", function () {
+                    expect(mockMustache.render).toHaveBeenCalledWith(cardEditView.template, configuration);
+                });
+
+                it("should call the html function on the content", function () {
+                    var expectedContent = Mustache.render(pageTemplate, configuration);
+                    expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
+                });
+
+                it("should call formatRequiredFields()", function () {
+                    expect(cardEditView.formatRequiredFields).toHaveBeenCalledWith();
+                });
+
+                describe("when dynamically rendering the template based on the model data", function () {
+                    describe("when able to edit card", function () {
+                        beforeEach(function () {
+                            configuration.card.ableToEditCard = true;
+                            configuration.card.unableToEditCardMessage = "Should not include this";
+
+                            cardEditView.renderWithConfiguration(configuration);
+                        });
+
+                        it("should NOT include an unable to edit card message", function () {
+                            expect(actualContent[0]).not
+                                .toContainText(configuration.card.unableToEditCardMessage);
+                        });
+
+                        it("should include a cardEditForm", function () {
+                            expect(actualContent[0]).toContainElement("form[id='cardEditForm']");
+                        });
+                    });
+
+                    describe("when NOT able to edit card", function () {
+                        beforeEach(function () {
+                            configuration.card.ableToEditCard = false;
+                            configuration.card.unableToEditCardMessage = "Unable to add card";
+
+                            cardEditView.renderWithConfiguration(configuration);
+                        });
+
+                        it("should include an unable to edit card message", function () {
+                            expect(actualContent[0]).toContainText(configuration.card.unableToEditCardMessage);
+                        });
+
+                        it("should NOT include a cardEditForm", function () {
+                            expect(actualContent[0]).not.toContainElement("form[id='cardEditForm']");
+                        });
+                    });
+                });
+            });
+
+            describe("has a render function that", function () {
+                var newConfiguration;
+
+                beforeEach(function () {
+                    newConfiguration = {
+                        "card"          : utils._.extend({}, utils.deepClone(globals.cardEdit.configuration)),
+                        "requiredFields": cardEditView.userModel.get("selectedCompany").get("requiredFields")
+                    };
+
+                    spyOn(cardEditView, "getConfiguration").and.returnValue(newConfiguration);
+                    spyOn(cardEditView, "renderWithConfiguration");
 
                     cardEditView.render();
                 });
@@ -181,54 +254,33 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                     expect(cardEditView.getConfiguration).toHaveBeenCalledWith();
                 });
 
-                it("should call Mustache.render() on the template", function () {
-                    expect(mockMustache.render).toHaveBeenCalledWith(cardEditView.template, expectedConfiguration);
+                it("should call renderWithConfiguration sending the new configuration", function () {
+                    expect(cardEditView.renderWithConfiguration).toHaveBeenCalledWith(newConfiguration);
                 });
 
-                it("should call the html function on the content", function () {
-                    var expectedContent = Mustache.render(pageTemplate, expectedConfiguration);
-                    expect(actualContent.html).toHaveBeenCalledWith(expectedContent);
+                it("should set the originalConfiguration with the new configuration", function () {
+                    expect(cardEditView.originalConfiguration).toEqual(newConfiguration);
+                });
+            });
+
+            describe("has a rollbackChanges function that", function () {
+
+                beforeEach(function () {
+                    spyOn(cardEditView, "renderWithConfiguration");
+
+                    cardEditView.rollbackChanges();
                 });
 
-                it("should call formatRequiredFields()", function () {
-                    expect(cardEditView.formatRequiredFields).toHaveBeenCalledWith();
+                it("is defined", function () {
+                    expect(cardEditView.rollbackChanges).toBeDefined();
                 });
 
-                describe("when dynamically rendering the template based on the model data", function () {
-                    describe("when able to edit card", function () {
-                        beforeEach(function () {
-                            expectedConfiguration.card.ableToEditCard = true;
-                            expectedConfiguration.card.unableToEditCardMessage = "Should not include this";
+                it("is a function", function () {
+                    expect(cardEditView.rollbackChanges).toEqual(jasmine.any(Function));
+                });
 
-                            cardEditView.render();
-                        });
-
-                        it("should NOT include an unable to edit card message", function () {
-                            expect(actualContent[0]).not
-                                .toContainText(expectedConfiguration.card.unableToEditCardMessage);
-                        });
-
-                        it("should include a cardEditForm", function () {
-                            expect(actualContent[0]).toContainElement("form[id='cardEditForm']");
-                        });
-                    });
-
-                    describe("when NOT able to edit card", function () {
-                        beforeEach(function () {
-                            expectedConfiguration.card.ableToEditCard = false;
-                            expectedConfiguration.card.unableToEditCardMessage = "Unable to add card";
-
-                            cardEditView.render();
-                        });
-
-                        it("should include an unable to edit card message", function () {
-                            expect(actualContent[0]).toContainText(expectedConfiguration.card.unableToEditCardMessage);
-                        });
-
-                        it("should NOT include a cardEditForm", function () {
-                            expect(actualContent[0]).not.toContainElement("form[id='cardEditForm']");
-                        });
-                    });
+                it("should call renderWithConfiguration sending the original configuration", function () {
+                    expect(cardEditView.renderWithConfiguration).toHaveBeenCalledWith(cardEditView.originalConfiguration);
                 });
             });
 

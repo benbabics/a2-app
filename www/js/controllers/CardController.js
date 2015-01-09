@@ -129,6 +129,10 @@ define(["globals", "facade", "utils", "collections/CardCollection", "controllers
                 utils.changePage(this.cardSearchView.$el, null, null, true);
             },
 
+            rollbackEditChanges: function () {
+                this.cardEditView.rollbackChanges();
+            },
+
             showCardAddShippingDetails: function () {
                 this.showCardShippingDetails(this.cardAddView.model);
             },
@@ -193,7 +197,10 @@ define(["globals", "facade", "utils", "collections/CardCollection", "controllers
                     primaryBtnHandler: function () {
                         self.showCardEditShippingDetails();
                     },
-                    secondaryBtnLabel: constants.REISSUE_PROMPT_CANCEL_BTN_TEXT
+                    secondaryBtnLabel: constants.REISSUE_PROMPT_CANCEL_BTN_TEXT,
+                    secondaryBtnHandler: function () {
+                        self.rollbackEditChanges();
+                    }
                 });
             },
 

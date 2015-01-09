@@ -50,7 +50,8 @@ define(["globals", "backbone", "utils", "Squire", "controllers/BaseController", 
                 on: function () { },
                 showLoadingIndicator: function () { },
                 hideLoadingIndicator: function () { },
-                setModel: function () { }
+                setModel: function () { },
+                rollbackChanges: function () { }
             },
             mockCardListView = {
                 $el: "",
@@ -741,6 +742,26 @@ define(["globals", "backbone", "utils", "Squire", "controllers/BaseController", 
                 });
             });
 
+            describe("has a rollbackEditChanges function that", function () {
+                beforeEach(function () {
+                    spyOn(mockCardEditView, "rollbackChanges");
+
+                    cardController.rollbackEditChanges();
+                });
+
+                it("is defined", function () {
+                    expect(cardController.rollbackEditChanges).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.rollbackEditChanges).toEqual(jasmine.any(Function));
+                });
+
+                it("should rollback the changes to the Card model being edited", function () {
+                    expect(mockCardEditView.rollbackChanges).toHaveBeenCalledWith();
+                });
+            });
+
             describe("has a showCardAddShippingDetails function that", function () {
                 beforeEach(function () {
                     mockCardShippingView.model = null;
@@ -1047,6 +1068,20 @@ define(["globals", "backbone", "utils", "Squire", "controllers/BaseController", 
 
                     it("should call showCardEditShippingDetails", function () {
                         expect(cardController.showCardEditShippingDetails).toHaveBeenCalledWith();
+                    });
+
+                });
+
+                describe("when the Cancel button is clicked on the prompt", function () {
+
+                    beforeEach(function () {
+                        spyOn(cardController, "rollbackEditChanges");
+
+                        this.appAlertOptions.secondaryBtnHandler.call(cardController);
+                    });
+
+                    it("should call rollbackEditChanges", function () {
+                        expect(cardController.rollbackEditChanges).toHaveBeenCalledWith();
                     });
 
                 });

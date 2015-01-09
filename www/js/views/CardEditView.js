@@ -11,6 +11,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
 
             template: pageTemplate,
             changeDetailsTemplate: cardChangeDetailsTemplate,
+            originalConfiguration: {},
 
             events: utils._.extend({}, ValidationFormView.prototype.events, {
                 "click #submitCardEdit-btn": "submitForm",
@@ -19,14 +20,27 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                 "submit #cardEditForm"     : "submitForm"
             }),
 
-            render: function () {
+            renderWithConfiguration: function (configuration) {
                 var $content = this.$el.find(".ui-content");
 
-                $content.html(Mustache.render(this.template, this.getConfiguration()));
+                $content.html(Mustache.render(this.template, configuration));
 
                 this.formatRequiredFields();
 
                 $content.enhanceWithin();
+            },
+
+            render: function () {
+                var newConfiguration = this.getConfiguration();
+
+                this.renderWithConfiguration(newConfiguration);
+
+                // Store the configuration in case we need to rollback changes
+                this.originalConfiguration = newConfiguration;
+            },
+
+            rollbackChanges: function () {
+                this.renderWithConfiguration(this.originalConfiguration);
             },
 
             getConfiguration: function () {
