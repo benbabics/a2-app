@@ -589,14 +589,15 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                                     type: "INFO",
                                     message: "ADDRESS_IS_REQUIRED"
                                 };
-                                spyOn(cardEditView, "trigger").and.callFake(function () { });
+                                spyOn(cardEditView, "trigger");
 
                                 options = cardModel.edit.calls.mostRecent().args[1];
                                 options.error.call(cardEditView, model, response);
                             });
 
                             it("should trigger cardEditSubmitted", function () {
-                                expect(cardEditView.trigger).toHaveBeenCalledWith("cardEditSubmitted");
+                                expect(cardEditView.trigger).toHaveBeenCalledWith("cardEditSubmitted",
+                                    globals.cardEdit.constants.REISSUE_PROMPT_MESSAGE);
                             });
                         });
 
@@ -606,7 +607,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                                     type: "INFO",
                                     message: "NOT ADDRESS_IS_REQUIRED"
                                 };
-                                spyOn(cardEditView, "trigger").and.callFake(function () { });
+                                spyOn(cardEditView, "trigger");
 
                                 options = cardModel.edit.calls.mostRecent().args[1];
                                 options.error.call(cardEditView, model, response);
@@ -623,7 +624,7 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                                     type: "NOT INFO",
                                     message: "ADDRESS_IS_REQUIRED"
                                 };
-                                spyOn(cardEditView, "trigger").and.callFake(function () { });
+                                spyOn(cardEditView, "trigger");
 
                                 options = cardModel.edit.calls.mostRecent().args[1];
                                 options.error.call(cardEditView, model, response);
@@ -634,22 +635,6 @@ define(["Squire", "backbone", "mustache", "globals", "utils", "models/CardModel"
                             });
                         });
 
-                        describe("When neither the response type is INFO or message is ADDRESS_IS_REQUIRED", function () {
-                            beforeEach(function () {
-                                response = {
-                                    type: "NOT INFO",
-                                    message: "NOT ADDRESS_IS_REQUIRED"
-                                };
-                                spyOn(cardEditView, "trigger").and.callFake(function () { });
-
-                                options = cardModel.edit.calls.mostRecent().args[1];
-                                options.error.call(cardEditView, model, response);
-                            });
-
-                            it("should NOT call trigger", function () {
-                                expect(cardEditView.trigger).not.toHaveBeenCalled();
-                            });
-                        });
                     });
                 });
             });

@@ -158,7 +158,7 @@ define(["backbone", "utils", "facade", "mustache", "globals", "models/CardModel"
                     error: function (model, response, options) {
                         if (response.type === "INFO" &&
                             response.message === "ADDRESS_IS_REQUIRED") {
-                            self.trigger("cardEditSubmitted");
+                            self.trigger("cardEditSubmitted", globals.cardEdit.constants.REISSUE_PROMPT_MESSAGE);
                         }
                     }
                 });

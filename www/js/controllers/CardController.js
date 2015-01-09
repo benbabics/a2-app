@@ -66,7 +66,7 @@ define(["globals", "facade", "utils", "collections/CardCollection", "controllers
                 // listen for events
                 this.cardAddView.on("cardAddSubmitted", this.showCardAddShippingDetails, this);
                 this.cardEditView.on("cardEditSuccess", this.showCardEditDetails, this);
-                this.cardEditView.on("cardEditSubmitted", this.showCardEditShippingDetails, this);
+                this.cardEditView.on("cardEditSubmitted", this.showReissueCardPrompt, this);
                 this.cardShippingView.on("cardAddSuccess", this.showCardAddDetails, this);
                 this.cardShippingView.on("cardEditSuccess", this.showCardEditDetails, this);
                 this.cardDetailView.on("terminateCardSuccess", this.showCardStatusChangeDetails, this);
@@ -179,6 +179,21 @@ define(["globals", "facade", "utils", "collections/CardCollection", "controllers
                     popupafterclose:   function () {
                         self.updateCollection();
                     }
+                });
+            },
+
+            showReissueCardPrompt: function (reissueCardPromptMessage) {
+                var self = this,
+                    constants = globals.cardEdit.constants;
+
+                facade.publish("app", "alert", {
+                    title            : constants.REISSUE_PROMPT_TITLE,
+                    message          : reissueCardPromptMessage,
+                    primaryBtnLabel  : constants.REISSUE_PROMPT_OK_BTN_TEXT,
+                    primaryBtnHandler: function () {
+                        self.showCardEditShippingDetails();
+                    },
+                    secondaryBtnLabel: constants.REISSUE_PROMPT_CANCEL_BTN_TEXT
                 });
             },
 

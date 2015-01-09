@@ -343,7 +343,7 @@ define(["globals", "backbone", "utils", "Squire", "controllers/BaseController", 
                         cardController.init();
 
                         expect(mockCardEditView.on).toHaveBeenCalledWith("cardEditSubmitted",
-                            cardController.showCardEditShippingDetails,
+                            cardController.showReissueCardPrompt,
                             cardController);
                     });
 
@@ -991,6 +991,64 @@ define(["globals", "backbone", "utils", "Squire", "controllers/BaseController", 
                     it("should call updateCollection", function () {
                         expect(cardController.updateCollection).toHaveBeenCalledWith();
                     });
+                });
+            });
+
+            describe("has a showReissueCardPrompt function that", function () {
+
+                beforeEach(function () {
+                    this.message = "Reissue prompt message";
+                    spyOn(mockFacade, "publish");
+
+                    cardController.showReissueCardPrompt(this.message);
+
+                    this.appAlertOptions = mockFacade.publish.calls.mostRecent().args[2];
+                });
+
+                it("is defined", function () {
+                    expect(cardController.showReissueCardPrompt).toBeDefined();
+                });
+
+                it("is a function", function () {
+                    expect(cardController.showReissueCardPrompt).toEqual(jasmine.any(Function));
+                });
+
+                describe("when displaying the prompt", function () {
+
+                    it("should display the prompt using an alert dialog", function () {
+                        expect(mockFacade.publish).toHaveBeenCalledWith("app", "alert", jasmine.any(Object));
+                    });
+
+                    it("should display the proper title in the dialog", function () {
+                        expect(this.appAlertOptions).toEqual(jasmine.objectContaining(
+                            {title: globals.cardEdit.constants.REISSUE_PROMPT_TITLE}));
+                    });
+
+                    it("should display the passed in message as the body of the dialog", function () {
+                        expect(this.appAlertOptions).toEqual(jasmine.objectContaining(
+                            {message: this.message}));
+                    });
+
+                    it("should display a Cancel and a Continue button on the prompt", function () {
+                        expect(this.appAlertOptions).toEqual(jasmine.objectContaining(
+                            {primaryBtnLabel: globals.cardEdit.constants.REISSUE_PROMPT_OK_BTN_TEXT}));
+                        expect(this.appAlertOptions).toEqual(jasmine.objectContaining(
+                            {secondaryBtnLabel: globals.cardEdit.constants.REISSUE_PROMPT_CANCEL_BTN_TEXT}));
+                    });
+                });
+
+                describe("when the Continue button is clicked on the prompt", function () {
+
+                    beforeEach(function () {
+                        spyOn(cardController, "showCardEditShippingDetails");
+
+                        this.appAlertOptions.primaryBtnHandler.call(cardController);
+                    });
+
+                    it("should call showCardEditShippingDetails", function () {
+                        expect(cardController.showCardEditShippingDetails).toHaveBeenCalledWith();
+                    });
+
                 });
             });
 

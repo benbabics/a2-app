@@ -812,7 +812,11 @@ define(function (require) {
      */
     globals.cardEdit = {};
     globals.cardEdit.constants = {
-        "NO_AUTH_PROFILES_MESSAGE": "The account must have at least one profile set-up to edit a card."
+        "NO_AUTH_PROFILES_MESSAGE": "The account must have at least one profile set-up to edit a card.",
+        "REISSUE_PROMPT_TITLE": "Reissue Required",
+        "REISSUE_PROMPT_MESSAGE": "This change will require a reissue. Do you want to continue?",
+        "REISSUE_PROMPT_CANCEL_BTN_TEXT": "Cancel",
+        "REISSUE_PROMPT_OK_BTN_TEXT": "Continue"
     };
     globals.cardEdit.configuration = {
         "ableToEditCard"         : null,
