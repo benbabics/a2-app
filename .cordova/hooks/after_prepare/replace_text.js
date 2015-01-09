@@ -1,25 +1,34 @@
 #!/usr/bin/env node
 
 // this plugin replaces arbitrary text in arbitrary files
+
+"use strict";
+
 //
 
 /* jshint -W106 */ // suppress the jshint warnings about non camel case functions
 
-var fs = require("fs");
-var path = require("path");
-
-var rootdir = process.argv[2];
+var fs      = require("fs"),
+    path    = require("path"),
+    rootdir = process.argv[2],
+    target  = "stage"; //default to stage
 
 function replace_string_in_file(filename, to_replace, replace_with) {
-    var data = fs.readFileSync(filename, "utf8");
+    var data = fs.readFileSync(filename, "utf8"),
+        result = data.replace(to_replace, replace_with);
 
-    var result = data.replace(to_replace, replace_with);
+    console.log("Updating file: " + filename);
+
     fs.writeFileSync(filename, result, "utf8");
 }
 
 function update_file(rootdir, filename, target, platform, configobj) {
     var fullfilename = path.join(rootdir, filename);
+
+    console.log("Target: " + target + " - Platform: " + platform);
+
     if (fs.existsSync(fullfilename)) {
+
         replace_string_in_file(fullfilename, "@@@STRING_REPLACE_APP_URL@@@", configobj[target].app_url);
 
         console.log("App URL set to: " + configobj[target].app_url);
@@ -29,19 +38,18 @@ function update_file(rootdir, filename, target, platform, configobj) {
         console.log("App Store URL set to: " + configobj[target].app_store_url);
 
     } else {
-        console.log("missing: "+fullfilename);
+        console.log("Error missing: " + fullfilename);
     }
 }
 
-var target = "stage"; //default to stage
+
 if (process.env.TARGET) {
     target = process.env.TARGET;
 }
 
 if (rootdir) {
-    var ourconfigfile = path.join(rootdir, "project.json");
-    var configobj = JSON.parse(fs.readFileSync(ourconfigfile, "utf8"));
-
+    var ourconfigfile = path.join(rootdir, "project.json"),
+        configobj = JSON.parse(fs.readFileSync(ourconfigfile, "utf8"));
 
     update_file(rootdir, "platforms/android/assets/www/js/globals.js", target, "android", configobj);
 
