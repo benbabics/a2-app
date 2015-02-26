@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.wex.wol.AccountMaintenance"
-    version="1.1.2" android-versionCode="1" ios-CFBundleVersion="1"
+    version="1.1.2" android-versionCode="4" ios-CFBundleVersion="4"
     xmlns="http://www.w3.org/ns/widgets"
     xmlns:gap="http://phonegap.com/ns/1.0">
 

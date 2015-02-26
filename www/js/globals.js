@@ -812,7 +812,11 @@ define(function (require) {
      */
     globals.cardEdit = {};
     globals.cardEdit.constants = {
-        "NO_AUTH_PROFILES_MESSAGE": "The account must have at least one profile set-up to edit a card."
+        "NO_AUTH_PROFILES_MESSAGE": "The account must have at least one profile set-up to edit a card.",
+        "REISSUE_PROMPT_TITLE": "Reissue Required",
+        "REISSUE_PROMPT_MESSAGE": "This change will require a reissue. Do you want to continue?",
+        "REISSUE_PROMPT_CANCEL_BTN_TEXT": "Cancel",
+        "REISSUE_PROMPT_OK_BTN_TEXT": "Continue"
     };
     globals.cardEdit.configuration = {
         "ableToEditCard"         : null,
@@ -961,7 +965,7 @@ define(function (require) {
      */
     globals.cardTerminate = {};
     globals.cardTerminate.constants = {
-        "CONFIRMATION_TITLE": "Terminate<br/>Card",
+        "CONFIRMATION_TITLE": "Terminate Card",
         "CONFIRMATION_MESSAGE": "Are you sure you want to terminate this card?<br/>This action cannot be undone.",
         "CANCEL_BTN_TEXT": "Cancel",
         "OK_BTN_TEXT": "Terminate"
@@ -1132,7 +1136,7 @@ define(function (require) {
      */
     globals.driverTerminate = {};
     globals.driverTerminate.constants = {
-        "CONFIRMATION_TITLE": "Terminate<br/>Driver",
+        "CONFIRMATION_TITLE": "Terminate Driver",
         "CONFIRMATION_MESSAGE": "Are you sure you want to terminate the driver?",
         "CANCEL_BTN_TEXT": "Cancel",
         "OK_BTN_TEXT": "Terminate"
@@ -1184,7 +1188,7 @@ define(function (require) {
 
     globals.driverAddedDetails = {};
     globals.driverAddedDetails.constants = {
-        "SUCCESS_TITLE": "Driver<br/>Confirmation",
+        "SUCCESS_TITLE": "Driver Confirmation",
         "BUTTON_ACTIVATE": "ACTIVATE",
         "BUTTON_TERMINATE": "TERMINATE"
     };
@@ -1315,7 +1319,7 @@ define(function (require) {
      */
     globals.paymentDetails = {};
     globals.paymentDetails.constants = {
-        "CANCEL_PAYMENT_SUCCESS_TITLE": "Payment<br/>Cancellation"
+        "CANCEL_PAYMENT_SUCCESS_TITLE": "Payment Cancellation"
     };
     globals.paymentDetails.configuration = {
         "scheduledDate": {
@@ -1406,7 +1410,7 @@ define(function (require) {
 
     globals.paymentChangedDetails = {};
     globals.paymentChangedDetails.constants = {
-        "SUCCESS_TITLE": "Payment<br/>Confirmation"
+        "SUCCESS_TITLE": "Payment Confirmation"
     };
     globals.paymentChangedDetails.configuration = {
         "scheduledDate": {
