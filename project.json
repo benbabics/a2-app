@@ -1,0 +1,34 @@
+{
+  "dev": {
+    "app_urls": {
+    },
+    "api_credentials": {
+    },
+    "content_security_policy": "default-src * 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+    "logging_enabled": "true"
+  },
+  "dit": {
+    "app_urls": {
+    },
+    "api_credentials": {
+    },
+    "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://172.28.163.78:* 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+    "logging_enabled": "true"
+  },
+  "stage": {
+    "app_urls": {
+    },
+    "api_credentials": {
+    },
+    "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://uat.account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+    "logging_enabled": "true"
+  },
+  "prod": {
+    "app_urls": {
+    },
+    "api_credentials": {
+    },
+    "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+    "logging_enabled": "false"
+  }
+}

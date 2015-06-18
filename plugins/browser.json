@@ -1,0 +1,41 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"browser-package\" value=\"Device\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.ionic.keyboard": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        }
+    },
+    "dependent_plugins": {}
+}
