@@ -1,1 +1,0 @@
-define(['jquery'],function($){'use strict';function init(){$.mobile.pushStateEnabled=false;$.mobile.linkBindingEnabled=false;$.mobile.hashListeningEnabled=false;$.support.cors=true;$.mobile.allowCrossDomainPages=true}$(document).on('mobileinit',init)});
