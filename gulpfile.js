@@ -124,6 +124,14 @@ gulp.task("ionic-stage-build-browser", function () {
     sh.exec("TARGET=stage ionic build browser");
 });
 
+gulp.task("ionic-stage-emulate-android", function () {
+    sh.exec("TARGET=stage ionic emulate android");
+});
+
+gulp.task("ionic-stage-run-android", function () {
+    sh.exec("TARGET=stage ionic run android");
+});
+
 gulp.task("ionic-prod-build", function () {
     sh.exec("TARGET=prod ionic build");
 });

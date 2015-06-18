@@ -5,11 +5,11 @@
     </feature>
     <name>AcctMaint</name>
     <description>
-      App for managing WEX fleet accounts
-  </description>
+        App for managing WEX fleet accounts
+    </description>
     <author email="MobileDevelopment@wexinc.com" href="http://www.wexinc.com">
-      WEX Mobile Development Team
-  </author>
+        WEX Mobile Development Team
+    </author>
     <content src="index.html" />
     <access origin="*" />
     <preference name="webviewbounce" value="false" />
