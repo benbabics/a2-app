@@ -1,5 +1,5 @@
 {
-  "directory": "www/lib",
+  "directory": "./www/lib",
   "scripts": {
     "postinstall": "wiredep -s ./www/index.html"
   }
