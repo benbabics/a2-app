@@ -37,12 +37,6 @@ function updateConstants(rootdir, fileName, target, configObj) {
         console.log("In " + fullFileName + " - setting AUTH_API URL to: " + configObj[target].app_urls.auth_api);
         replaceStringInFile(fullFileName, "@@@STRING_REPLACE_APP_URL_AUTH_API@@@", configObj[target].app_urls.auth_api);
 
-        console.log("In " + fullFileName + " - setting DRIVER_API URL to: " + configObj[target].app_urls.driver_api);
-        replaceStringInFile(fullFileName, "@@@STRING_REPLACE_APP_URL_DRIVER_API@@@", configObj[target].app_urls.driver_api);
-
-        console.log("In " + fullFileName + " - setting PAYMENT_API URL to: " + configObj[target].app_urls.payment_api);
-        replaceStringInFile(fullFileName, "@@@STRING_REPLACE_APP_URL_PAYMENT_API@@@", configObj[target].app_urls.payment_api);
-
         replaceStringInFile(fullFileName, "@@@STRING_REPLACE_API_USERNAME@@@", configObj[target].api_credentials.username);
         replaceStringInFile(fullFileName, "@@@STRING_REPLACE_API_PASSWORD@@@", configObj[target].api_credentials.password);
         replaceStringInFile(fullFileName, "@@@STRING_REPLACE_LOGGING_ENABLED@@@", configObj[target].logging_enabled);
