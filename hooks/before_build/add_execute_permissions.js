@@ -11,8 +11,8 @@ var rootdir = process.argv[2];
 
 //if on os x or linux
 if(os.platform() === "linux" || os.platform() === "darwin") {
-    var addedPlatform = process.env.CORDOVA_PLATFORMS,
-        platformBuildToolsDir = path.join(rootdir, "platforms", addedPlatform, "cordova");
+    var platformToBuild = process.env.CORDOVA_PLATFORMS,
+        platformBuildToolsDir = path.join(rootdir, "platforms", platformToBuild, "cordova");
 
     if(fs.existsSync(platformBuildToolsDir)) {
         //add execution permissions to the new platform's build tools dir
