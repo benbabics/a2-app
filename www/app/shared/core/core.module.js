@@ -46,16 +46,6 @@
                 $rootScope.$broadcast("cordovaResume");
             }, false);
 
-            //apply a proxy event for the cordova online event
-            document.addEventListener("online", function () {
-                $rootScope.$broadcast("cordovaOnline");
-            }, false);
-
-            //apply a proxy event for the cordova offline event
-            document.addEventListener("offline", function () {
-                $rootScope.$broadcast("cordovaOffline");
-            }, false);
-
             /**
              * Set up loading indicator
              */

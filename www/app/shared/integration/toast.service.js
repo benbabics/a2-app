@@ -3,13 +3,13 @@
     "use strict";
 
     /* @ngInject */
-    function ToastService($window, $ionicLoading, CommonService) {
+    function ToastService($window, $ionicLoading, $cordovaToast, CommonService) {
         var toast,
             _ = CommonService._;
 
         if ($window.plugins) {
             //if Cordova is available to use, use the Cordova toast plugin
-            toast = $window.plugins.toast;
+            toast = $cordovaToast;
         }
         else {
             //cordova isn't available on this platform (probably because we're testing on a desktop browser), so create a basic
