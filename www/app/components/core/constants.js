@@ -3,7 +3,7 @@
 
     var appGlobals = {},
         globals = function (sharedGlobals) {
-            return angular.extend(sharedGlobals, appGlobals);
+            return angular.extend({}, sharedGlobals, appGlobals);
         };
 
     angular
