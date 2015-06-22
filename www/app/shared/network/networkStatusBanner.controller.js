@@ -4,7 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function NetworkStatusBannerController($scope, globals) {
+    function NetworkStatusBannerController($rootScope, $scope, globals) {
 
         var vm = this;
 
@@ -16,8 +16,8 @@
         //////////////////////
         // Controller initialization
         function activate() {
-            $scope.$on("cordovaOnline", _.bind(onOnline, vm));
-            $scope.$on("cordovaOffline", _.bind(onOffline, vm));
+            $rootScope.$on("$cordovaNetwork:online", _.bind(onOnline, vm));
+            $rootScope.$on("$cordovaNetwork:offline", _.bind(onOffline, vm));
         }
 
         function onOnline() {
