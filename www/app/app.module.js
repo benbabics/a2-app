@@ -3,7 +3,10 @@
 
     angular.module("app", [
         /* shared modules */
-        "app.shared"
+        "app.shared",
+
+        /* app components */
+        "app.components"
     ]);
 })();
 
