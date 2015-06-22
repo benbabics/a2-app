@@ -13,8 +13,8 @@
             // utility functions
             "maskAccountNumber"    : maskAccountNumber,
             "loadingBegin"         : loadingBegin,
-                "loadingComplete": loadingComplete,
-                "fieldHasError": fieldHasError
+            "loadingComplete"      : loadingComplete,
+            "fieldHasError"        : fieldHasError
         },
             loadingIndicatorCount = 0;
 
