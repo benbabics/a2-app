@@ -35,6 +35,20 @@
                         {
                             "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -64,6 +78,9 @@
             "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
         },
         "nl.x-services.plugins.toast": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        },
+        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
         }
     },

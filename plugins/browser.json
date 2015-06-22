@@ -41,6 +41,9 @@
         },
         "nl.x-services.plugins.toast": {
             "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
         }
     },
     "dependent_plugins": {}
