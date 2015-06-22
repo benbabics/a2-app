@@ -40,7 +40,11 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "com.ionic.keyboard",
-    "cordova-plugin-crosswalk-webview"
+    "cordova-plugin-crosswalk-webview",
+    {
+      "locator": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
+      "id": "nl.x-services.plugins.toast"
+    }
   ],
   "cordovaPlatforms": [
     {

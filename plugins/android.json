@@ -31,6 +31,10 @@
                         {
                             "xml": "<preference name=\"webView\" value=\"org.crosswalk.engine.XWalkWebViewEngine\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -57,6 +61,9 @@
             "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
         },
         "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        },
+        "nl.x-services.plugins.toast": {
             "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
         }
     },
