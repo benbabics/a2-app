@@ -57,6 +57,6 @@
     }
 
     angular
-        .module("app.core")
+        .module("app.shared.core")
         .factory("CommonService", CommonService);
 })();

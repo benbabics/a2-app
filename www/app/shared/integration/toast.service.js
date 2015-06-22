@@ -49,6 +49,6 @@
     }
 
     angular
-        .module("app.integration")
+        .module("app.shared.integration")
         .factory("ToastService", ToastService);
 }());

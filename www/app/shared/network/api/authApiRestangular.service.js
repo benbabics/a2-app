@@ -30,6 +30,6 @@
     }
 
     angular
-        .module("app.api")
+        .module("app.shared.api")
         .factory("AuthApiRestangular", AuthApiRestangular);
 })();

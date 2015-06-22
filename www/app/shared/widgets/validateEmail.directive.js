@@ -33,6 +33,6 @@
     }
 
     angular
-        .module("app.widgets")
+        .module("app.shared.widgets")
         .directive("validateEmail", validateEmail);
 })();

@@ -33,6 +33,6 @@
     }
 
     angular
-        .module("app.storage")
+        .module("app.shared.storage")
         .factory("LocalStorage", LocalStorage);
 })();

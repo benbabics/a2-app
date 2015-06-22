@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    angular.module("app.api", [])
+    angular.module("app.shared.api", [])
 
         .run(function (Restangular, HttpResponseReporterInterceptor, AuthenticationErrorInterceptor) {
 

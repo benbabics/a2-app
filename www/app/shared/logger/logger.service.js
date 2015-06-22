@@ -66,6 +66,6 @@
     }
 
     angular
-        .module("app.logger")
+        .module("app.shared.logger")
         .factory("Logger", Logger);
 })();

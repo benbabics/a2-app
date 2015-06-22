@@ -7,6 +7,6 @@
     }
 
     angular
-        .module("app.auth")
+        .module("app.shared.auth")
         .factory("AuthenticationResource", AuthenticationResource);
 })();

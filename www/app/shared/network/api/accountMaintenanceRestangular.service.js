@@ -59,6 +59,6 @@
     }
 
     angular
-        .module("app.api")
+        .module("app.shared.api")
         .factory("AccountMaintenanceRestangular", AccountMaintenanceRestangular);
 })();

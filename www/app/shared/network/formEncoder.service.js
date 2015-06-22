@@ -26,6 +26,6 @@
     }
 
     angular
-        .module("app.network")
+        .module("app.shared.network")
         .factory("FormEncoder", FormEncoder);
 })();

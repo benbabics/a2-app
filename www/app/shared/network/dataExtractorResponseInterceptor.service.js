@@ -46,6 +46,6 @@
     }
 
     angular
-        .module("app.network")
+        .module("app.shared.network")
         .factory("DataExtractorResponseInterceptor", DataExtractorResponseInterceptor);
 })();

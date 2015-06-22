@@ -42,6 +42,6 @@
         return directive;
     }
 
-    angular.module("app.widgets")
+    angular.module("app.shared.widgets")
         .directive("wexNotificationBar", wexNotificationBar);
 }());

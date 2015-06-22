@@ -18,6 +18,6 @@
     }
 
     angular
-        .module("app.widgets")
+        .module("app.shared.widgets")
         .filter("wexCardSuffix", wexCardSuffix);
 })();

@@ -31,6 +31,6 @@
         }
     }
 
-    angular.module("app.network")
+    angular.module("app.shared.network")
         .controller("ServerConnectionErrorBannerController", ServerConnectionErrorBannerController);
 }());

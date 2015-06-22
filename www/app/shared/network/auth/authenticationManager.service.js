@@ -113,6 +113,6 @@
     }
 
     angular
-        .module("app.auth")
+        .module("app.shared.auth")
         .factory("AuthenticationManager", AuthenticationManager);
 })();

@@ -28,6 +28,6 @@
     }
 
     angular
-        .module("app.integration")
+        .module("app.shared.integration")
         .factory("_", LodashService);
 })();
