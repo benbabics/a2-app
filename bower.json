@@ -6,7 +6,8 @@
     "restangular": "1.5.1",
     "lodash": "~3.5.0",
     "angular-base64": "~2.0.5",
-    "ngCordova": "~0.1.17-alpha"
+    "ngCordova": "~0.1.17-alpha",
+    "ngFitText": "~3.3.3"
   },
   "resolutions": {
     "ionic": "1.0.0",

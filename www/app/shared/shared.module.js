@@ -22,7 +22,8 @@
 
         /* 3rd Party modules */
         "restangular",                // From https://github.com/mgonto/restangular
-        "ngCordova"                   // From https://github.com/driftyco/ng-cordova
+        "ngCordova",                  // From https://github.com/driftyco/ng-cordova
+        "ngFitText"                   // From http://patrickmarabeas.github.io/ng-FitText.js/
     ])
 
         .run(function ($ionicPlatform, _, $rootScope, $ionicLoading, globals, Logger) {  // Services may be included here in order to force them to be instantiated at startup
