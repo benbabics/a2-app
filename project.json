@@ -5,8 +5,8 @@
     "api_credentials": {
     },
     "auth": {
-      "client_id": "mobileCardActivator",
-      "client_secret": "E%bRr^TPBwwmmerIW?|0o0J*X%q_q6HTth7zZQ5j"
+      "client_id": "mobileAccountManagement",
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
     "content_security_policy": "default-src * 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "true"
@@ -17,8 +17,8 @@
     "api_credentials": {
     },
     "auth": {
-      "client_id": "mobileCardActivator",
-      "client_secret": "E%bRr^TPBwwmmerIW?|0o0J*X%q_q6HTth7zZQ5j"
+      "client_id": "mobileAccountManagement",
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://172.28.163.78:* 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "true"
@@ -29,8 +29,8 @@
     "api_credentials": {
     },
     "auth": {
-      "client_id": "mobileCardActivator",
-      "client_secret": "E%bRr^TPBwwmmerIW?|0o0J*X%q_q6HTth7zZQ5j"
+      "client_id": "mobileAccountManagement",
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://uat.account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "true"
@@ -41,8 +41,8 @@
     "api_credentials": {
     },
     "auth": {
-      "client_id": "mobileCardActivator",
-      "client_secret": "E%bRr^TPBwwmmerIW?|0o0J*X%q_q6HTth7zZQ5j"
+      "client_id": "mobileAccountManagement",
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "false"
