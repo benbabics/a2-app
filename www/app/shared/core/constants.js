@@ -21,10 +21,9 @@
         AUTH              : {
             TOKENS: "uaa/oauth/token"
         },
-        //TODO - Update
         CLIENT_CREDENTIALS: {
-            CLIENT_ID    : "mobileCardActivator",
-            CLIENT_SECRET: "E%bRr^TPBwwmmerIW?|0o0J*X%q_q6HTth7zZQ5j"
+            CLIENT_ID    : "@@@STRING_REPLACE_AUTH_CLIENT_ID@@@",
+            CLIENT_SECRET: "@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@"
         }
     };
 

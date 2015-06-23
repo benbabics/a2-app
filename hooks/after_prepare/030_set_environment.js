@@ -41,6 +41,9 @@ function updateConstants(rootdir, fileName, target, configObj) {
         replaceStringInFile(fullFileName, "@@@STRING_REPLACE_API_PASSWORD@@@", configObj[target].api_credentials.password);
         replaceStringInFile(fullFileName, "@@@STRING_REPLACE_LOGGING_ENABLED@@@", configObj[target].logging_enabled);
 
+        replaceStringInFile(fullFileName, "@@@STRING_REPLACE_AUTH_CLIENT_ID@@@", configObj[target].auth.client_id);
+        replaceStringInFile(fullFileName, "@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@", configObj[target].auth.client_secret);
+
     } else {
         console.log("ERROR missing " + fullFileName + " file.");
     }

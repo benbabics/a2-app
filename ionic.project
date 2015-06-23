@@ -6,6 +6,7 @@
     "index",
     "watch"
   ],
+  "documentRoot": "platforms/browser/www",
   "watchPatterns": [
     "www/**/*",
     "!www/lib/**/*"
