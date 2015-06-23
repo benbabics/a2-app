@@ -53,6 +53,7 @@
       "platform": "android",
       "locator": "browser"
     },
-    "android"
+    "android",
+    "ios"
   ]
 }
