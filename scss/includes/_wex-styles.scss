@@ -1,0 +1,265 @@
+@import "wex-brand";
+@import "wex-mixins";
+@import "ionic.app";
+
+/**----------------------------------------------------------
+ Header, Navigation
+ ----------------------------------------------------------**/
+.bar-wex {
+  background-color: $charcoal;
+
+  .title {
+    color: $inverse-font-color;
+  }
+}
+
+.bar-notification {
+  background-color: $warning-message-fill;
+  font-size: $bar-title-font-size;
+
+  .title:before {
+    font-family: ionicons;
+    content: "\f100";
+  }
+
+  .title {
+    color: $warning-message-color;
+    margin-right: $button-bar-button-height;
+
+    /* ngFitText doesn't seem to account for ionicons, so we need this extra padding to make sure the last couple characters fit
+    in the container. */
+    /* TODO figure out a better way to accomplish this */
+    .title-text:after {
+      content: "\00a0\00a0\00a0";
+    }
+  }
+
+  .close-button {
+    float: right;
+
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    color: #bbb;
+  }
+}
+
+/**-----------------------------------------------------------
+ Buttons/Icons
+ ----------------------------------------------------------**/
+.button-default {
+  background-color: $secondary-button-color;
+  color: $secondary-button-font-color;
+  text-transform: uppercase;
+}
+
+.button-submit {
+  background-color: $primary-button-color;
+  color: $primary-button-font-color;
+  text-transform: uppercase;
+}
+
+/* Refresh Button - per platform */
+.button-refresh {
+  @extend .ion-refresh;  /* default icon - neither Android nor iOS */
+}
+
+.platform-android .button-refresh {
+  @extend .ion-android-refresh;
+}
+
+.platform-ios .button-refresh {
+  @extend .ion-ios-refresh-empty;
+}
+
+/* Add Button - per platform */
+.button-add {
+  @extend .ion-plus;  /* default icon - neither Android nor iOS */
+}
+
+.platform-android .button-add {
+  @extend .ion-android-add;
+}
+
+.platform-ios .button-add {
+  @extend .ion-ios-plus-empty;
+}
+
+/* Remove Button - per platform */
+.button-remove {
+  @extend .ion-trash-b;  /* default icon - neither Android nor iOS */
+}
+
+.platform-android .button-remove {
+  @extend .ion-trash-a;
+}
+
+.platform-ios .button-remove {
+  @extend .ion-ios-trash;
+}
+
+/* Remove Item Icon - per platform */
+.icon-item-remove {
+  @extend .ion-android-cancel;  /* default icon - neither Android nor iOS */
+  color: $wex-red;
+}
+
+.platform-android .icon-item-remove {
+  @extend .ion-android-cancel;
+}
+
+.platform-ios .icon-item-remove {
+  @extend .ion-ios-close;
+}
+
+/* Alert Icon - per platform */
+.icon-alert {
+  @extend .ion-android-alert; /* default icon - neither Android nor iOS */
+}
+
+.platform-android .icon-alert {
+  @extend .ion-android-alert
+}
+
+.platform-ios .icon-alert {
+  @extend .ion-alert-circled;
+}
+
+/**-----------------------------------------------------------
+ Error Messaging
+ ----------------------------------------------------------**/
+.error-text {
+  color: $error-message-color;
+}
+
+.error-msg {
+  @extend .error-text;
+
+  font-size: 0.9em;
+}
+
+form.ng-submitted input.ng-invalid {
+  background-color: $error-message-fill;
+}
+
+.card.card-error {
+  background-color: $error-message-fill;
+  color: $error-message-color;
+  border: 1px solid $error-message-color;
+  @include box-shadow(none);
+
+  .item-divider {
+    background-color: $error-message-fill;
+    color: $error-message-color;
+  }
+}
+
+/**----------------------------------------------------------
+ Success Messaging
+ ---------------------------------------------------------**/
+.card.card-success {
+  background-color: $success-message-fill;
+  color: $success-message-color;
+  border: 1px solid $success-message-color;
+  @include box-shadow(none);
+
+  .item-divider {
+    background-color: $success-message-fill;
+    color: $success-message-color;
+    border: none;
+  }
+}
+
+
+/**-----------------------------------------------------------
+List
+ ----------------------------------------------------------**/
+
+.list .item {
+  left: 0;
+  right: 0;
+}
+
+/**------------------------------------------------------
+ Links
+ ------------------------------------------------------**/
+a {
+  color: $link-font-color;
+  text-decoration: none;
+}
+
+/**------------------------------------------------------
+ Forms
+ ------------------------------------------------------**/
+input[name=passcode] {
+  -webkit-text-security: disc;
+  text-security: disc;
+}
+
+/**------------------------------------------------------
+ Popup
+ ------------------------------------------------------**/
+.popup {
+
+  .popup-body {
+    text-align: center;
+  }
+}
+
+/**------------------------------------------------------
+ ToolTips
+ ------------------------------------------------------**/
+.icon-tooltip {
+  color: #3A97B5;
+  margin-top: -4px;
+}
+
+.transparent {
+  background: transparent !important;
+}
+
+ion-modal-view.modal-tooltip {
+  width: 100% !important;
+  height: 100%;
+  top: 0 !important;
+  left: 0 !important;
+
+  ion-pane {
+    .pane-tooltip {
+      background-color: white;
+      border: 1px solid #6d6d6d;
+      margin: 110px 10px 0;
+
+      .header-tooltip {
+        background-color: #F5F5F5;
+        border-bottom: 1px solid #d7d7d7;
+        text-align: center;
+        margin: 0;
+        padding: 15px 0;
+      }
+
+      .contents-tooltip {
+        margin: 0 auto;
+        padding: 0 10%;
+        overflow-x: hidden;
+
+        img {
+          display: block;
+          margin: auto;
+        }
+      }
+    }
+  }
+}
+
+/* Fix modal backdrop for smaller devices */
+@media (max-width: 679px) {
+  .active .modal-backdrop-bg {
+    opacity: .5;
+  }
+  .modal-backdrop-bg {
+    -webkit-transition: opacity 300ms ease-in-out;
+    transition: opacity 300ms ease-in-out;
+    background-color: #000;
+    opacity: 0;
+  }
+}
