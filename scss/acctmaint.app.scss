@@ -2,3 +2,16 @@
 @import "includes/wex-mixins";
 @import "includes/wex-styles";
 @import "includes/ionic.app";
+
+/**------------------------------------------------------
+ User Login Page
+ ------------------------------------------------------**/
+$user-login-gradient-top: #7f7f7f;
+$user-login-gradient-bottom: #414141;
+
+.user-login-view {
+  background: -webkit-linear-gradient($user-login-gradient-top, $user-login-gradient-bottom);
+  background: linear-gradient($user-login-gradient-top, $user-login-gradient-bottom);
+
+  color: $inverse-font-color;
+}
