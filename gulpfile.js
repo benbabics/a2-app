@@ -101,41 +101,51 @@ gulp.task("ionic-serve-lab", function () {
 });
 
 gulp.task("ionic-dev-build", function () {
-    sh.exec("TARGET=dev ionic build");
+    sh.env["TARGET"] = "dev";
+    sh.exec("ionic build");
 });
 
 gulp.task("ionic-dev-build-browser", function () {
-    sh.exec("TARGET=dev ionic build browser");
+    sh.env["TARGET"] = "dev";
+    sh.exec("ionic build browser");
 });
 
 gulp.task("ionic-dit-build", function () {
-    sh.exec("TARGET=dit ionic build");
+    sh.env["TARGET"] = "dit";
+    sh.exec("ionic build");
 });
 
 gulp.task("ionic-dit-build-browser", function () {
-    sh.exec("TARGET=dit ionic build browser");
+    sh.env["TARGET"] = "dit";
+    sh.exec("ionic build browser");
 });
 
 gulp.task("ionic-stage-build", function () {
-    sh.exec("TARGET=stage ionic build");
+    sh.env["TARGET"] = "stage";
+    sh.exec("ionic build");
 });
 
 gulp.task("ionic-stage-build-browser", function () {
-    sh.exec("TARGET=stage ionic build browser");
+    sh.env["TARGET"] = "stage";
+    sh.exec("ionic build browser");
 });
 
 gulp.task("ionic-stage-emulate-android", function () {
-    sh.exec("TARGET=stage ionic emulate android");
+    sh.env["TARGET"] = "stage";
+    sh.exec("ionic emulate android");
 });
 
 gulp.task("ionic-stage-run-android", function () {
-    sh.exec("TARGET=stage ionic run android");
+    sh.env["TARGET"] = "stage";
+    sh.exec("ionic run android");
 });
 
 gulp.task("ionic-prod-build", function () {
-    sh.exec("TARGET=prod ionic build");
+    sh.env["TARGET"] = "prod";
+    sh.exec("ionic build");
 });
 
 gulp.task("ionic-prod-build-release", function () {
-    sh.exec("TARGET=prod ionic build --release");
+    sh.env["TARGET"] = "prod";
+    sh.exec("ionic build --release");
 });

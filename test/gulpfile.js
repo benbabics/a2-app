@@ -54,7 +54,8 @@ var destPaths = {
 gulp.task("default", ["protractor-watch"]);
 
 gulp.task("ionic-dev-build-browser", function () {
-    sh.exec("TARGET=dev ionic build browser");
+    sh.env["TARGET"] = "dev";
+    sh.exec("ionic build browser");
 });
 
 /**
