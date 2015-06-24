@@ -120,6 +120,11 @@ gulp.task("ionic-dit-build-browser", function () {
     sh.exec("ionic build browser");
 });
 
+gulp.task("ionic-dit-emulate-ios", function () {
+    sh.env["TARGET"] = "dit";
+    sh.exec("ionic emulate ios");
+});
+
 gulp.task("ionic-stage-build", function () {
     sh.env["TARGET"] = "stage";
     sh.exec("ionic build");
@@ -135,9 +140,19 @@ gulp.task("ionic-stage-emulate-android", function () {
     sh.exec("ionic emulate android");
 });
 
+gulp.task("ionic-stage-emulate-ios", function () {
+    sh.env["TARGET"] = "stage";
+    sh.exec("ionic emulate ios");
+});
+
 gulp.task("ionic-stage-run-android", function () {
     sh.env["TARGET"] = "stage";
     sh.exec("ionic run android");
+});
+
+gulp.task("ionic-stage-run-ios", function () {
+    sh.env["TARGET"] = "stage";
+    sh.exec("ionic run ios --device");
 });
 
 gulp.task("ionic-prod-build", function () {
