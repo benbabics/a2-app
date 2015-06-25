@@ -28,6 +28,7 @@ module.exports = function(config) {
             "lib/restangular/dist/restangular.js",
             "lib/angular-base64/angular-base64.js",
             "lib/ngCordova/dist/ng-cordova.js",
+            "lib/ngFitText/src/ng-FitText.js",
 
             // Test libraries
             "../test/lib/**/*.js",
