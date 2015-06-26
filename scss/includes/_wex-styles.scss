@@ -137,10 +137,6 @@
   font-size: 0.9em;
 }
 
-form.ng-submitted input.ng-invalid {
-  background-color: $error-message-fill;
-}
-
 .card.card-error {
   background-color: $error-message-fill;
   color: $error-message-color;

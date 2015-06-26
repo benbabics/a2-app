@@ -1,5 +1,27 @@
 <ion-view view-title="{{vm.config.title}}" hide-nav-bar="true" class="user-login-view">
     <ion-content>
         <h1 class="title">{{vm.config.title}}</h1>
+
+        <form novalidate name="vm.userLoginForm">
+            <div class="list list-inset">
+                <div class="padding">
+                    <span class="item item-input item-user-name">
+                        <input ng-model="vm.user.userName" name="userName" type="text" required
+                               placeholder="{{vm.config.userName.label}}">
+                    </span>
+                </div>
+
+                <div class="padding">
+                    <span class="item item-input item-password">
+                        <input ng-model="vm.user.password" name="password" type="password" required
+                               placeholder="{{vm.config.password.label}}">
+                    </span>
+                </div>
+
+                <div class="padding">
+                    <wex-submit>{{vm.config.submitButton}}</wex-submit>
+                </div>
+            </div>
+        </form>
     </ion-content>
 </ion-view>

@@ -9,6 +9,7 @@
 
         var vm = this;
         vm.config = globals.USER_LOGIN.CONFIG;
+        vm.user = {};
     }
 
     angular.module("app.components.user.auth")

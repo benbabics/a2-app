@@ -14,4 +14,8 @@ $user-login-gradient-bottom: #414141;
   background: linear-gradient($user-login-gradient-top, $user-login-gradient-bottom);
 
   color: $inverse-font-color;
+
+  form .list {
+    background: none;
+  }
 }

@@ -10,7 +10,14 @@
 
     appGlobals.USER_LOGIN = {
         "CONFIG": {
-            "title": "WEX Fleet Manager"
+            "title": "WEX Fleet Manager",
+            "userName": {
+                "label": "User Name"
+            },
+            "password": {
+                "label": "Password"
+            },
+            "submitButton": "Log In"
         }
     };
 
