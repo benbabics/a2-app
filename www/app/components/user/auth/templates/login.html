@@ -7,19 +7,21 @@
                 <div class="padding">
                     <span class="item item-input item-user-name">
                         <input ng-model="vm.user.userName" name="userName" type="text" required
-                               placeholder="{{vm.config.userName.label}}" maxlength="{{vm.config.userName.maxLength}}">
+                               wex-placeholder="{{vm.config.userName.label}}"
+                               maxlength="{{vm.config.userName.maxLength}}">
                     </span>
                 </div>
 
                 <div class="padding">
                     <span class="item item-input item-password">
                         <input ng-model="vm.user.password" name="password" type="password" required
-                               placeholder="{{vm.config.password.label}}" maxlength="{{vm.config.password.maxLength}}">
+                               wex-placeholder="{{vm.config.password.label}}"
+                               maxlength="{{vm.config.password.maxLength}}">
                     </span>
                 </div>
 
                 <div class="padding">
-                    <wex-submit>{{vm.config.submitButton}}</wex-submit>
+                    <wex-required-submit text="{{vm.config.submitButton}}"></wex-required-submit>
                 </div>
             </div>
         </form>
