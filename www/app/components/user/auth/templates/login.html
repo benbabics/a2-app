@@ -7,14 +7,14 @@
                 <div class="padding">
                     <span class="item item-input item-user-name">
                         <input ng-model="vm.user.userName" name="userName" type="text" required
-                               placeholder="{{vm.config.userName.label}}">
+                               placeholder="{{vm.config.userName.label}}" maxlength="{{vm.config.userName.maxLength}}">
                     </span>
                 </div>
 
                 <div class="padding">
                     <span class="item item-input item-password">
                         <input ng-model="vm.user.password" name="password" type="password" required
-                               placeholder="{{vm.config.password.label}}">
+                               placeholder="{{vm.config.password.label}}" maxlength="{{vm.config.password.maxLength}}">
                     </span>
                 </div>
 
