@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AuthenticationManager($q, FormEncoder, AuthenticationResource, UserManager, globals, CommonService, Logger) {
+    function AuthenticationManager($q, FormEncoder, AuthenticationResource, UserManager, globals, CommonService) {
 
         // Private members
         var _ = CommonService._;
@@ -36,11 +36,11 @@
             credentials = this.getUserCredentials();
 
             data = FormEncoder.encode({
-                    "grant_type": "password",
-                    "username": credentials.username,
-                    "password": credentials.password,
-                    "scope": "read"
-                });
+                "grant_type": "password",
+                "username": credentials.username,
+                "password": credentials.password,
+                "scope": "read"
+            });
 
             // Get a new token
             return getToken(credentials.username, data);
@@ -64,35 +64,36 @@
 
         function getToken(username, data) {
 
-            var deferred = $q.defer();
-
-            AuthenticationResource.post(data)
+            return $q.when(AuthenticationResource.post(data))
                 .then(function (authResponse) {
 
                     if (authResponse.data) {
 
                         UserManager.setProfile(username, authResponse.data);
-                        deferred.resolve();
+                        return authResponse.data;
 
                     }
                     // authResponse didn't give us data
                     else {
-                        Logger.log("No data in Response from getting an Auth Token");
-                        deferred.reject();
+                        throw new Error("No data in Response from getting an Auth Token");
                     }
-                },
+                })
                 // get token failed
-                function (response) {
+                .catch(function (failureResponse) {
+                    var error = "";
+
+                    // TODO: move to CommonService
+                    if (_.has(failureResponse, data)) {
+                        error += failureResponse.data.error ? failureResponse.data.error + " " : "";
+                        error += failureResponse.data.error_description || "";
+                    }
+                    else {
+                        error = failureResponse;
+                    }
 
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
-
-                    Logger.log("Getting Auth Token failed");
-
-                    deferred.reject(response);
-
+                    throw new Error("Getting Auth Token failed: " + error);
                 });
-
-            return deferred.promise;
 
         }
 

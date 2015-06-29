@@ -58,6 +58,12 @@
                     mockRejection.status = 401;
                 });
 
+                it("should return false", function () {
+                    var result = AuthenticationErrorInterceptor.responseError(mockRejection, restangularDeferred, restangularResponseHandler);
+
+                    expect(result).toBeFalsy();
+                });
+
                 describe("when the user has already authenticated previously and has a valid refresh token", function () {
 
                     describe("when the Authentication refreshes successfully", function () {
@@ -104,8 +110,10 @@
                         });
 
                         afterEach(function() {
-                            $httpBackend.verifyNoOutstandingExpectation();
-                            $httpBackend.verifyNoOutstandingRequest();
+                            /*TODO - Figure out why a digest cycle is already in process here when calling expect($rootScope.$digest).toThrow()
+                             and remove the $rootScope.$$phase checks. */
+                            $httpBackend.verifyNoOutstandingExpectation(!$rootScope.$$phase);
+                            $httpBackend.verifyNoOutstandingRequest(!$rootScope.$$phase);
                         });
 
                         it("should try to refresh the Authentication", function () {
@@ -150,11 +158,10 @@
                                     }
                                 };
 
-                                it("should return true", function () {
+                                it("should throw an error", function () {
                                     authenticationDeferred.reject(authenticationResponse);
-                                    $rootScope.$digest();
 
-                                    expect(errorResult).toBeTruthy();
+                                    expect($rootScope.$digest).toThrow();
                                 });
 
                             });
@@ -170,11 +177,10 @@
                                 };
 
                                 refreshAuthenticationDeferred.reject(refreshResponse);
-                                $rootScope.$digest();
                             });
 
-                            it("should return true", function () {
-                                expect(errorResult).toBeTruthy();
+                            it("should throw an error", function () {
+                                expect($rootScope.$digest).toThrow();
                             });
 
                         });
@@ -223,11 +229,10 @@
 
                         beforeEach(function () {
                             authenticationDeferred.reject(authenticationResponse);
-                            $rootScope.$digest();
                         });
 
-                        it("should return true", function () {
-                            expect(errorResult).toBeTruthy();
+                        it("should throw an error", function () {
+                            expect($rootScope.$digest).toThrow();
                         });
 
                     });
@@ -274,11 +279,10 @@
 
                         beforeEach(function () {
                             authenticationDeferred.reject(authenticationResponse);
-                            $rootScope.$digest();
                         });
 
-                        it("should return true", function () {
-                            expect(errorResult).toBeTruthy();
+                        it("should throw an error", function () {
+                            expect($rootScope.$digest).toThrow();
                         });
 
                     });

@@ -23,14 +23,22 @@
                 if (AuthenticationManager.userLoggedIn() && AuthenticationManager.hasRefreshToken()) {
 
                     // Try refreshing the Access Token
-                    return refreshAuthentication(rejection, deferred, responseHandler);
+                    refreshAuthentication(rejection, deferred, responseHandler)
+                        .catch(function () {
+                            handleUnrecoverableError(rejection, deferred);
+                        });
 
                 }
                 // We haven't gotten an Access Token yet
                 else {
                     // Get an Access Token
-                    return authenticate(rejection, deferred, responseHandler);
+                    authenticate(rejection, deferred, responseHandler)
+                        .catch(function () {
+                            handleUnrecoverableError(rejection, deferred);
+                        });
                 }
+
+                return false;
 
             }
 
@@ -47,7 +55,10 @@
                     // When Authentication successful, retry the previous failed request
                     return retryFailedRequest(originalFailedResponse.config, deferred, responseHandler);
 
-                }, function (failedRefreshResponse) {
+                })
+                .catch(function (failedRefreshError) {
+
+                    Logger.log(failedRefreshError);
 
                     // Refresh didn't work - try getting a new Access Token and Refresh Token
                     return authenticate(originalFailedResponse, deferred, responseHandler);
@@ -62,8 +73,10 @@
                     // When Authentication successful, retry the previous failed request
                     return retryFailedRequest(originalFailedResponse.config, deferred, responseHandler);
 
-                }, function (failedAuthenticateResponse) {
-                    return true;
+                })
+                .catch(function (failedAuthenticateError) {
+                    Logger.log(failedAuthenticateError);
+                    throw new Error("Unrecoverable error: " + failedAuthenticateError);
                 });
         }
 
@@ -74,6 +87,11 @@
             $injector.get("$http")(failedRequest).then(responseHandler, deferred.reject);
 
             return false;
+        }
+
+        function handleUnrecoverableError(failedRequest, deferred) {
+            Logger.log("AuthenticationErrorInterceptor unable to handle the error.");
+            deferred.reject(failedRequest);
         }
     }
 
