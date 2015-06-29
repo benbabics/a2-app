@@ -18,4 +18,11 @@ $user-login-gradient-bottom: #414141;
   form .list {
     background: none;
   }
+
+  .header-login {
+    background: url(../img/login_header.png) no-repeat 50% 50%;
+    background-size: contain;
+
+    height: $input-height-base * 2;
+  }
 }
