@@ -3,6 +3,7 @@
         <div class="padding">
             <div class="header-login"></div>
         </div>
+        <div class="card card-error padding">Invalid login information.Please check your username and password or go online to set up or recover your username and password.</div>
 
         <form novalidate name="vm.userLoginForm">
             <div class="list list-inset">
@@ -22,9 +23,19 @@
                     </span>
                 </div>
 
+                <!--<div class="align-center">
+                    <input type="checkbox" name="remember" value="username"> Remember User Name
+                </div>
+                <br>-->
+
                 <div class="padding">
                     <wex-required-submit text="{{vm.config.submitButton}}"></wex-required-submit>
                 </div>
+
+                <!--<p class="align-center hyperlink">
+                    <a href="#">Terms & Policies</a>
+                </p>-->
+
             </div>
         </form>
     </ion-content>
