@@ -1,6 +1,6 @@
+@import "ionic.app";
 @import "wex-brand";
 @import "wex-mixins";
-@import "ionic.app";
 
 /**----------------------------------------------------------
  Header, Navigation
@@ -46,6 +46,10 @@
 /**-----------------------------------------------------------
  Buttons/Icons
  ----------------------------------------------------------**/
+.button {
+  border: none;
+}
+
 .button-default {
   background-color: $secondary-button-color;
   color: $secondary-button-font-color;
@@ -56,6 +60,12 @@
   background-color: $primary-button-color;
   color: $primary-button-font-color;
   text-transform: uppercase;
+}
+
+.button[disabled] {
+  background-color: $button-disabled-color;
+  color: $button-disabled-font-color;
+  opacity: initial;
 }
 
 /* Refresh Button - per platform */
