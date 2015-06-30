@@ -27,7 +27,6 @@
             it("should return a new User object", function () {
                 expect(UserManager.getNewUser()).toEqual(jasmine.objectContaining({
                     username: "",
-                    password: "",
                     oauth: null
                 }));
             });

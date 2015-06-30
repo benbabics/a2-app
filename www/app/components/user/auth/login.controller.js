@@ -5,11 +5,11 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function LoginController(globals, AuthenticationManager, CommonService, UserManager) {
+    function LoginController(globals, AuthenticationManager, CommonService) {
 
         var vm = this;
         vm.config = globals.USER_LOGIN.CONFIG;
-        vm.user = UserManager.getNewUser();
+        vm.user = {};
         vm.authenticateUser = authenticateUser;
 
         activate();

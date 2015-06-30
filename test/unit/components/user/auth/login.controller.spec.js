@@ -6,13 +6,8 @@
         ctrl,
         AuthenticationManager,
         CommonService,
-        UserManager,
         globals,
         deferred,
-        newUser = {
-            username : "",
-            password : ""
-        },
         $state;
 
     describe("A Login Controller", function () {
@@ -37,10 +32,7 @@
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate"]);
             CommonService = jasmine.createSpyObj("CommonService", ["loadingBegin", "loadingComplete"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["getNewUser"]);
             $state = jasmine.createSpyObj("state", ["go"]);
-
-            UserManager.getNewUser.and.returnValue(newUser);
 
             inject(function (_$rootScope_, $controller, $q, _globals_) {
                 $scope = _$rootScope_.$new();
@@ -53,18 +45,12 @@
                     globals: globals,
                     AuthenticationManager: AuthenticationManager,
                     CommonService: CommonService,
-                    UserManager: UserManager,
                     $state: $state
                 });
             });
         });
 
         describe("has an activate function that", function () {
-            it("should get a New User", function () {
-                expect(UserManager.getNewUser).toHaveBeenCalledWith();
-                expect(ctrl.user).toEqual(newUser);
-            });
-
             it("should clear previous error", function () {
                 expect(ctrl.globalError).toBeFalsy();
             });

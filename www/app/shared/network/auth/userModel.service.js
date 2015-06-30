@@ -5,7 +5,6 @@
 
         function UserModel() {
             this.username = "";
-            this.password = "";
             this.oauth = null;
         }
 

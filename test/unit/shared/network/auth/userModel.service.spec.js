@@ -21,7 +21,6 @@
                     newField2: "some other value",
                     newField3: "yet another value",
                     username : "username value",
-                    password : "password value",
                     oauth    : "OAuth2Token value"
                 },
                 userModelKeys,
