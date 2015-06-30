@@ -17,7 +17,7 @@
 
         function request(headers) {
 
-            if (UserManager.getProfile().loggedIn) {
+            if (UserManager.getProfile().isLoggedIn()) {
                 headers.Authorization = "Bearer " + UserManager.getProfile().oauth.access_token;
             }
 

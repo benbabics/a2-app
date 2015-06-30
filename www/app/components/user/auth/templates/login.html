@@ -3,13 +3,18 @@
         <div class="padding">
             <div class="header-login"></div>
         </div>
-        <div class="card card-error padding">Invalid login information.Please check your username and password or go online to set up or recover your username and password.</div>
 
-        <form novalidate name="vm.userLoginForm">
+        <div class="card card-error padding"
+             id="errorMessage"
+             ng-if="vm.globalError">
+            {{vm.globalError}}
+        </div>
+
+        <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.authenticateUser()">
             <div class="list list-inset">
                 <div class="padding">
                     <span class="item item-input item-user-name">
-                        <input ng-model="vm.user.userName" name="userName" type="text" required
+                        <input ng-model="vm.user.username" name="userName" type="text" required
                                wex-placeholder="{{vm.config.userName.label}}"
                                maxlength="{{vm.config.userName.maxLength}}">
                     </span>

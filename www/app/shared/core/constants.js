@@ -43,16 +43,6 @@
     };
 
     /**
-     * User Constants
-     */
-    sharedGlobals.USER = {
-        CREDENTIALS: {
-            username: "@@@STRING_REPLACE_API_USERNAME@@@",
-            password: "@@@STRING_REPLACE_API_PASSWORD@@@"
-        }
-    };
-
-    /**
      * App-level notifications
      */
     sharedGlobals.NOTIFICATIONS = {

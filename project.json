@@ -1,8 +1,8 @@
 {
   "dev": {
     "app_urls": {
-    },
-    "api_credentials": {
+      "am_api": "http://localhost:20080",
+      "auth_api": "http://localhost:26080"
     },
     "auth": {
       "client_id": "mobileAccountManagement",
@@ -13,8 +13,8 @@
   },
   "dit": {
     "app_urls": {
-    },
-    "api_credentials": {
+      "am_api": "http://172.28.163.78:20080",
+      "auth_api": "http://172.28.163.78:26080"
     },
     "auth": {
       "client_id": "mobileAccountManagement",
@@ -25,8 +25,8 @@
   },
   "stage": {
     "app_urls": {
-    },
-    "api_credentials": {
+      "am_api": "https://uat.account.wexmobile.com/maintenance",
+      "auth_api": "https://uat.account.wexmobile.com/authAPI"
     },
     "auth": {
       "client_id": "mobileAccountManagement",
@@ -37,8 +37,8 @@
   },
   "prod": {
     "app_urls": {
-    },
-    "api_credentials": {
+      "am_api": "https://account.wexmobile.com/maintenance",
+      "auth_api": "https://account.wexmobile.com/authAPI"
     },
     "auth": {
       "client_id": "mobileAccountManagement",

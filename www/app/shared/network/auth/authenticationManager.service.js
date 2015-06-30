@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AuthenticationManager($q, FormEncoder, AuthenticationResource, UserManager, globals, CommonService) {
+    function AuthenticationManager(FormEncoder, AuthenticationResource, UserManager, CommonService) {
 
         // Private members
         var _ = CommonService._;
@@ -14,7 +14,6 @@
         var service = {
             authenticate         : authenticate,
             refreshAuthentication: refreshAuthentication,
-            getUserCredentials   : getUserCredentials,
             userLoggedIn         : userLoggedIn,
             hasRefreshToken      : hasRefreshToken
         };
@@ -28,22 +27,17 @@
 
         }
 
-        function authenticate() {
+        function authenticate(username, password) {
 
-            var data,
-                credentials;
-
-            credentials = this.getUserCredentials();
-
-            data = FormEncoder.encode({
+            var data = FormEncoder.encode({
                 "grant_type": "password",
-                "username": credentials.username,
-                "password": credentials.password,
+                "username": username,
+                "password": password,
                 "scope": "read"
             });
 
             // Get a new token
-            return getToken(credentials.username, data);
+            return getToken(username, data);
         }
 
         function refreshAuthentication() {
@@ -64,7 +58,7 @@
 
         function getToken(username, data) {
 
-            return $q.when(AuthenticationResource.post(data))
+            return AuthenticationResource.post(data)
                 .then(function (authResponse) {
 
                     if (authResponse.data) {
@@ -97,15 +91,8 @@
 
         }
 
-        function getUserCredentials() {
-            // Abstracting these hard coded values for now
-            // In the future we'll retrieve these from the user directly
-
-            return globals.USER.CREDENTIALS;
-        }
-
         function userLoggedIn() {
-            return (!_.isEmpty(UserManager.getProfile().loggedIn));
+            return (!_.isEmpty(UserManager.getProfile().isLoggedIn()));
         }
 
         function hasRefreshToken() {

@@ -1,29 +1,13 @@
 (function () {
     "use strict";
 
-    var UserManager,
-        LocalStorage,
-        mockUserProfile = {
-            username: "SomeUser",
-            oauth: {
-                refreshToken: "1349758ukdafgn975",
-                accessToken: "as;kv987145oihkfdp9u"
-            }
-        };
+    var UserManager;
 
     describe("A User Manager", function () {
 
         beforeEach(function () {
 
             module("app.shared.auth");
-
-            // mock dependencies
-            LocalStorage = jasmine.createSpyObj("LocalStorage", ["setObject", "getObject"]);
-            LocalStorage.getObject.and.returnValue(mockUserProfile);
-
-            module(function($provide) {
-                $provide.value("LocalStorage", LocalStorage);
-            });
 
             inject(function (_UserManager_) {
                 UserManager = _UserManager_;
@@ -33,23 +17,21 @@
 
         describe("has an activate function that", function () {
 
-            it("should get the user's profile out of LocalStorage", function () {
-                expect(LocalStorage.getObject).toHaveBeenCalledWith("utoken");
+            // TODO: test something here?
+
+        });
+
+
+        describe("has a getNewUser function that", function () {
+
+            it("should return a new User object", function () {
+                expect(UserManager.getNewUser()).toEqual(jasmine.objectContaining({
+                    username: "",
+                    password: "",
+                    oauth: null
+                }));
             });
 
-            describe("when the user profile is found in LocalStorage", function () {
-
-                it("should set the user's username", function () {
-                    expect(UserManager.getProfile().username).toEqual(mockUserProfile.username);
-                });
-
-                it("should set the user's oauth object", function () {
-                    expect(UserManager.getProfile().oauth).toEqual(mockUserProfile.oauth);
-                });
-
-            });
-
-            // TODO: figure out how to test calling activate() again when LocalStorage doesn't return the user profile
         });
 
         describe("has a setProfile function that", function () {
@@ -70,11 +52,6 @@
 
             it("should set the oauth object with the passed in argument", function () {
                 expect(UserManager.getProfile().oauth).toEqual(newOauth);
-            });
-
-            it("should store the user profile in LocalStorage", function () {
-                expect(LocalStorage.setObject).toHaveBeenCalledWith("utoken",
-                    jasmine.objectContaining({username: newUsername, oauth: newOauth}));
             });
 
         });
@@ -121,10 +98,10 @@
                 expect(profile.oauth).toBeDefined();
             });
 
-            describe("has a loggedIn function that", function () {
+            describe("has an isLoggedIn function that", function () {
 
                 it("should return the oauth object", function () {
-                    expect(profile.loggedIn).toEqual(profile.oauth);
+                    expect(profile.isLoggedIn()).toEqual(profile.oauth);
                 });
 
             });

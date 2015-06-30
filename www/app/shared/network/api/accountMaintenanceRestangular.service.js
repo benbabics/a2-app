@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AccountMaintenanceRestangular(Restangular, globals, AuthorizationHeaderRequestInterceptor,
+    function AccountMaintenanceRestangular(Restangular, globals, AuthenticationErrorInterceptor, AuthorizationHeaderRequestInterceptor,
                                            DataExtractorResponseInterceptor, CommonService) {
 
         // Private members
@@ -31,6 +31,10 @@
 
             RestangularConfigurer.addResponseInterceptor(function (data, operation, what, url, response, deferred) {
                 return DataExtractorResponseInterceptor.response(data, operation);
+            });
+
+            RestangularConfigurer.addErrorInterceptor(function(response, deferred, responseHandler) {
+                return AuthenticationErrorInterceptor.responseError(response, deferred, responseHandler);
             });
         }
 

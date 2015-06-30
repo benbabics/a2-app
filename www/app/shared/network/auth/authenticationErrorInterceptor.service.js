@@ -32,10 +32,11 @@
                 // We haven't gotten an Access Token yet
                 else {
                     // Get an Access Token
-                    authenticate(rejection, deferred, responseHandler)
-                        .catch(function () {
-                            handleUnrecoverableError(rejection, deferred);
-                        });
+                    authenticate(rejection, deferred, responseHandler);
+                    //TODO - Either remove or uncomment this once the changes to authenticate have been made to go to the login page
+                        //.catch(function () {
+                        //    handleUnrecoverableError(rejection, deferred);
+                        //});
                 }
 
                 return false;
@@ -67,17 +68,10 @@
         }
 
         function authenticate(originalFailedResponse, deferred, responseHandler) {
-            return AuthenticationManager.authenticate()
-                .then(function() {
+            // TODO - Do something that results in the login page being displayed
+            // TODO - Stretch goal - Remember what the user was trying to do and do it after auth
 
-                    // When Authentication successful, retry the previous failed request
-                    return retryFailedRequest(originalFailedResponse.config, deferred, responseHandler);
-
-                })
-                .catch(function (failedAuthenticateError) {
-                    Logger.log(failedAuthenticateError);
-                    throw new Error("Unrecoverable error: " + failedAuthenticateError);
-                });
+            return false;
         }
 
         function retryFailedRequest(failedRequest, deferred, responseHandler) {

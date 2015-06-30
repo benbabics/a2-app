@@ -50,7 +50,9 @@
 
                 beforeEach(function () {
                     UserManager.getProfile.and.returnValue({
-                        loggedIn: mockOauth,
+                        isLoggedIn: function () {
+                            return mockOauth;
+                        },
                         oauth: mockOauth
                     });
 
@@ -76,7 +78,9 @@
 
                 beforeEach(function () {
                     UserManager.getProfile.and.returnValue({
-                        loggedIn: mockOauth,
+                        isLoggedIn: function () {
+                            return mockOauth;
+                        },
                         oauth: mockOauth
                     });
 

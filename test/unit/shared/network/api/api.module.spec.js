@@ -3,7 +3,6 @@
 
     var $rootScope,
         HttpResponseReporterInterceptor,
-        AuthenticationErrorInterceptor,
         Restangular;
 
     describe("An API Module", function () {
@@ -14,11 +13,9 @@
 
             // mock dependencies
             HttpResponseReporterInterceptor = jasmine.createSpyObj("HttpResponseReporterInterceptor", ["response", "responseError"]);
-            AuthenticationErrorInterceptor = jasmine.createSpyObj("AuthenticationErrorInterceptor", ["responseError"]);
 
             module(function ($provide) {
                 $provide.value("HttpResponseReporterInterceptor", HttpResponseReporterInterceptor);
-                $provide.value("AuthenticationErrorInterceptor", AuthenticationErrorInterceptor);
             });
 
             inject(function (_$rootScope_, _Restangular_) {
@@ -65,8 +62,8 @@
 
                 describe("have ErrorInterceptors that", function () {
 
-                    it("should be at least 2 of", function () {
-                        expect(Restangular.configuration.errorInterceptors.length).toBeGreaterThan(1);
+                    it("should be at least 1 of", function () {
+                        expect(Restangular.configuration.errorInterceptors.length).toBeGreaterThan(0);
                     });
 
                     describe("when the ErrorInterceptors are called", function () {
@@ -94,11 +91,8 @@
                             expect(HttpResponseReporterInterceptor.responseError).toHaveBeenCalledWith(response);
                         });
 
-                        it("should call AuthenticationErrorInterceptor.responseError", function () {
-                            expect(AuthenticationErrorInterceptor.responseError)
-                                .toHaveBeenCalledWith(response, deferred, responseHandler);
-                        });
                     });
+
                 });
 
             });

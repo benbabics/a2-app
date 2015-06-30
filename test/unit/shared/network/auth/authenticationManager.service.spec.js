@@ -10,8 +10,7 @@
         $base64,
         $rootScope,
         $httpBackend,
-        globals,
-        CREDENTIALS = {
+        user = {
             username: "IVREXXMS2",
             password: "Tester12"
         },
@@ -45,8 +44,7 @@
                 $base64 = _$base64_;
                 $rootScope = _$rootScope_;
                 $httpBackend = _$httpBackend_;
-                globals = _globals_;
-                TOKEN_URL = globals.AUTH_API.BASE_URL + "/" + "uaa/oauth/token";
+                TOKEN_URL = _globals_.AUTH_API.BASE_URL + "/" + "uaa/oauth/token";
             });
 
             // set up spies
@@ -64,8 +62,8 @@
             beforeEach(function () {
                 rawParams = {
                     "grant_type": "password",
-                    "username": CREDENTIALS.username,
-                    "password": CREDENTIALS.password,
+                    "username": user.username,
+                    "password": user.password,
                     "scope": "read"
                 };
                 encodedParams = "grant_type=" + rawParams.grant_type +
@@ -74,15 +72,11 @@
                     "&scope=" + rawParams.scope;
                 headers = {
                     "Content-Type"    : "application/x-www-form-urlencoded",
-                    "Authorization"   : "Basic " + $base64.encode("mobileCardActivator:E%bRr^TPBwwmmerIW?|0o0J*X%q_q6HTth7zZQ5j"),
+                    "Authorization"   : "Basic " + $base64.encode("@@@STRING_REPLACE_AUTH_CLIENT_ID@@@:@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@"),
                     "Accept"          : "application/json, text/plain, */*",
                     "X-Requested-With": "XMLHttpRequest"
                 };
 
-                spyOn(AuthenticationManager, "getUserCredentials").and.returnValue({
-                    "username": CREDENTIALS.username,
-                    "password": CREDENTIALS.password
-                });
                 FormEncoder.encode.and.returnValue(encodedParams);
             });
 
@@ -96,7 +90,7 @@
             describe("when getting an authentication token", function () {
 
                 beforeEach(function () {
-                    AuthenticationManager.authenticate();
+                    AuthenticationManager.authenticate(user.username, user.password);
                 });
 
                 afterEach(function () {
@@ -125,13 +119,13 @@
                     beforeEach(function () {
                         getTokenRequest.respond(200, mockData);
 
-                        AuthenticationManager.authenticate()
+                        AuthenticationManager.authenticate(user.username, user.password)
                             .then(resolveHandler, rejectHandler);
                         $httpBackend.flush();
                     });
 
                     it("should set the profile on the User", function () {
-                        expect(UserManager.setProfile).toHaveBeenCalledWith(CREDENTIALS.username, mockData);
+                        expect(UserManager.setProfile).toHaveBeenCalledWith(user.username, mockData);
                     });
 
                     it("should resolve with the expected response data", function () {
@@ -145,7 +139,7 @@
                     beforeEach(function () {
                         getTokenRequest.respond(200, null);
 
-                        AuthenticationManager.authenticate()
+                        AuthenticationManager.authenticate(user.username, user.password)
                             .then(resolveHandler, rejectHandler);
 
                         try {
@@ -173,7 +167,7 @@
                 beforeEach(function () {
                     getTokenRequest.respond(500, mockData);
 
-                    AuthenticationManager.authenticate()
+                    AuthenticationManager.authenticate(user.username, user.password)
                         .then(resolveHandler, rejectHandler);
 
                     try {
@@ -211,14 +205,14 @@
                     "&refresh_token=" + rawParams.refresh_token;
                 headers = {
                     "Content-Type"    : "application/x-www-form-urlencoded",
-                    "Authorization"   : "Basic " + $base64.encode("mobileCardActivator:E%bRr^TPBwwmmerIW?|0o0J*X%q_q6HTth7zZQ5j"),
+                    "Authorization"   : "Basic " + $base64.encode("@@@STRING_REPLACE_AUTH_CLIENT_ID@@@:@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@"),
                     "Accept"          : "application/json, text/plain, */*",
                     "X-Requested-With": "XMLHttpRequest"
                 };
                 logoutSpy = jasmine.createSpy("logOut");
 
                 UserManager.getProfile.and.returnValue({
-                    "username": CREDENTIALS.username,
+                    "username": user.username,
                     "oauth": {
                         refresh_token: rawParams.refresh_token
                     },
@@ -276,7 +270,7 @@
                     });
 
                     it("should set the profile on the User", function () {
-                        expect(UserManager.setProfile).toHaveBeenCalledWith(CREDENTIALS.username, mockData);
+                        expect(UserManager.setProfile).toHaveBeenCalledWith(user.username, mockData);
                     });
 
                     it("should resolve with the expected data", function () {
@@ -340,38 +334,19 @@
 
         });
 
-        describe("has a getUserCredentials function that", function () {
-
-            var mockCredentials = {
-                    username: "someName",
-                    password: "somePassword"
-                },
-                realCredentials;
-
-            beforeEach(function () {
-                realCredentials = globals.USER.CREDENTIALS;
-                globals.USER.CREDENTIALS = mockCredentials;
-            });
-
-            afterEach(function () {
-                globals.USER.CREDENTIALS = realCredentials;
-            });
-
-            it("should return the user credentials", function () {
-                expect(AuthenticationManager.getUserCredentials()).toEqual(mockCredentials);
-            });
-
-        });
-
         describe("has a userLoggedIn function that", function () {
 
             describe("when the user is logged in", function () {
 
                 beforeEach(function () {
-                    UserManager.getProfile.and.returnValue({loggedIn: {
-                        refresh_token: "1349758ukdafgn975",
-                        access_token: "as;kv987145oihkfdp9u"
-                    }});
+                    UserManager.getProfile.and.returnValue({
+                        isLoggedIn: function () {
+                            return {
+                                refresh_token: "1349758ukdafgn975",
+                                access_token : "as;kv987145oihkfdp9u"
+                            };
+                        }
+                    });
                 });
 
                 it("should return true", function () {
@@ -383,7 +358,11 @@
             describe("when the user is NOT logged in", function () {
 
                 beforeEach(function () {
-                    UserManager.getProfile.and.returnValue({loggedIn: {}});
+                    UserManager.getProfile.and.returnValue({
+                        isLoggedIn: function () {
+                            return {};
+                        }
+                    });
                 });
 
                 it("should return false", function () {

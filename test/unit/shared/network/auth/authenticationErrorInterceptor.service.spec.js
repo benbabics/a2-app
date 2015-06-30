@@ -132,39 +132,7 @@
                                 $rootScope.$digest();
                             });
 
-                            it("should re-Authenticate", function () {
-                                expect(AuthenticationManager.authenticate).toHaveBeenCalledWith();
-                            });
-
-                            describe("when the Authentication is successful", function () {
-
-                                it("should retry the failed request", function () {
-                                    $httpBackend.expect(MOCK_FAILED_REQUEST_CONFIG.method, MOCK_FAILED_REQUEST_CONFIG.url);
-
-                                    authenticationDeferred.resolve();
-                                    $rootScope.$digest();
-                                    $httpBackend.flush();
-                                });
-
-                            });
-
-                            describe("when the Authentication fails", function () {
-
-                                var authenticationResponse = {
-                                    status: 400,
-                                    data: {
-                                        error: "some error",
-                                        error_description: "some description"
-                                    }
-                                };
-
-                                it("should throw an error", function () {
-                                    authenticationDeferred.reject(authenticationResponse);
-
-                                    expect($rootScope.$digest).toThrow();
-                                });
-
-                            });
+                            //TODO - Should go to login page?
 
                         });
 
@@ -201,41 +169,7 @@
                         errorResult = AuthenticationErrorInterceptor.responseError(mockRejection, restangularDeferred, restangularResponseHandler);
                     });
 
-                    it("should Authenticate", function () {
-                        expect(AuthenticationManager.authenticate).toHaveBeenCalledWith();
-                    });
-
-                    describe("when the Authentication is successful", function () {
-
-                        it("should retry the failed request", function () {
-                            $httpBackend.expect(MOCK_FAILED_REQUEST_CONFIG.method, MOCK_FAILED_REQUEST_CONFIG.url);
-
-                            authenticationDeferred.resolve();
-                            $rootScope.$digest();
-                            $httpBackend.flush();
-                        });
-
-                    });
-
-                    describe("when the Authentication fails", function () {
-
-                        var authenticationResponse = {
-                            status: 400,
-                            data: {
-                                error: "some error",
-                                error_description: "some description"
-                            }
-                        };
-
-                        beforeEach(function () {
-                            authenticationDeferred.reject(authenticationResponse);
-                        });
-
-                        it("should throw an error", function () {
-                            expect($rootScope.$digest).toThrow();
-                        });
-
-                    });
+                    //TODO - Should go to login page?
 
                 });
 
@@ -251,41 +185,7 @@
                         errorResult = AuthenticationErrorInterceptor.responseError(mockRejection, restangularDeferred, restangularResponseHandler);
                     });
 
-                    it("should Authenticate", function () {
-                        expect(AuthenticationManager.authenticate).toHaveBeenCalledWith();
-                    });
-
-                    describe("when the Authentication is successful", function () {
-
-                        it("should retry the failed request", function () {
-                            $httpBackend.expect(MOCK_FAILED_REQUEST_CONFIG.method, MOCK_FAILED_REQUEST_CONFIG.url);
-
-                            authenticationDeferred.resolve();
-                            $rootScope.$digest();
-                            $httpBackend.flush();
-                        });
-
-                    });
-
-                    describe("when the Authentication fails", function () {
-
-                        var authenticationResponse = {
-                            status: 400,
-                            data: {
-                                error: "some error",
-                                error_description: "some description"
-                            }
-                        };
-
-                        beforeEach(function () {
-                            authenticationDeferred.reject(authenticationResponse);
-                        });
-
-                        it("should throw an error", function () {
-                            expect($rootScope.$digest).toThrow();
-                        });
-
-                    });
+                    //TODO - Should go to login page?
 
                 });
 

@@ -4,15 +4,13 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function UserManager(LocalStorage) {
-        // Constants
-        var USERKEY = "utoken";
-
+    function UserManager(UserModel) {
         // Private members
         var profile = {};
 
         // Revealed Public members
         var service = {
+            getNewUser: getNewUser,
             setProfile: setProfile,
             getProfile: getProfile
         };
@@ -23,31 +21,16 @@
         //////////////////////
 
         function activate() {
-            // TODO: move into a UserModel
-            var user = {
-                username: "",
-                oauth: null,
-                get loggedIn() {
-                    return this.oauth;
-                },
-                logOut: function () {
-                    this.oauth = null;
-                }
-            };
+            profile = getNewUser();
+        }
 
-            var localUser = LocalStorage.getObject(USERKEY);
-            if (localUser) {
-                user.username = localUser.username;
-                user.oauth = localUser.oauth;
-            }
-
-            profile = user;
+        function getNewUser() {
+            return new UserModel();
         }
 
         function setProfile(username, oauth) {
             profile.username = username;
             profile.oauth = oauth;
-            LocalStorage.setObject(USERKEY, profile);
         }
 
         function getProfile() {
