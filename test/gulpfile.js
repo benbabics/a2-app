@@ -92,11 +92,11 @@ gulp.task("protractor-run-all", function () {
         .on("error", function(e) { throw e; });
 });
 
-gulp.task("protractor-run-driverLogin", function () {
+gulp.task("protractor-run-userLogin", function () {
     gulp.src(sourcePaths.root.testsE2E)
         .pipe(protractor({
             configFile: sourcePaths.root.protractorConf,
-            args: ["--suite=driverLogin"]
+            args: ["--suite=userLogin"]
         }))
         .on("error", function (e) {
             throw e;

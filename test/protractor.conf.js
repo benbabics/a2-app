@@ -20,7 +20,7 @@
         suites: {
             smoke: "e2e/specs/smoketests/**/*.js",
             full: "e2e/specs/**/*.spec.js",
-            driverLogin: "e2e/specs/driverLogin/**/*.js"
+            userLogin: "e2e/specs/userLogin/**/*.js"
         },
 
         // For a list of available capabilities, see
