@@ -1,12 +1,12 @@
 "use strict";
 
-var DriverLoginPage = require("../../pages/driverLogin.page.js");
+var UserLoginPage = require("../../pages/userLogin.page.js");
 
 (function () {
-    describe("A Driver Login page", function () {
+    describe("A User Login page", function () {
 
         beforeAll(function () {
-            this.page = new DriverLoginPage();
+            this.page = new UserLoginPage();
         });
 
         it("should have the correct URL", function () {

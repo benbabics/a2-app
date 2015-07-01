@@ -103,14 +103,9 @@
                     $scope.$digest();
                 });
 
-                //TODO - remove this once error messages have been coded
-                it("should NOT have an error message", function () {
-                    expect(ctrl.globalError).toBeFalsy();
+                it("should have an error message", function () {
+                    expect(ctrl.globalError).toEqual("Invalid login information. Please check your username and password or go online to set up or recover your username and password.");
                 });
-
-                //it("should have an error message", function () {
-                //    expect(ctrl.globalError).toEqual(ctrl.config.serverErrors[errorReason]);
-                //});
 
                 it("should NOT navigate away from the login page", function () {
                     expect($state.go).not.toHaveBeenCalled();

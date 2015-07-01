@@ -19,7 +19,10 @@
                 "label": "Password",
                 "maxLength": 30
             },
-            "submitButton": "Log In"
+            "submitButton": "Log In",
+            "serverErrors": {
+                "DEFAULT": "Invalid login information. Please check your username and password or go online to set up or recover your username and password."
+            }
         }
     };
 

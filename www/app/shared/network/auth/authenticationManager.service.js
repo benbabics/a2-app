@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AuthenticationManager(FormEncoder, AuthenticationResource, UserManager, CommonService) {
+    function AuthenticationManager($q, FormEncoder, AuthenticationResource, UserManager, CommonService) {
 
         // Private members
         var _ = CommonService._;
@@ -58,7 +58,7 @@
 
         function getToken(username, data) {
 
-            return AuthenticationResource.post(data)
+            return $q.when(AuthenticationResource.post(data))
                 .then(function (authResponse) {
 
                     if (authResponse.data) {
@@ -77,16 +77,17 @@
                     var error = "";
 
                     // TODO: move to CommonService
-                    if (_.has(failureResponse, data)) {
-                        error += failureResponse.data.error ? failureResponse.data.error + " " : "";
+                    // TODO: figure out why _.has(failureResponse, "data.error_description") returns false
+                    if (_.has(failureResponse, "data")) {
                         error += failureResponse.data.error_description || "";
                     }
-                    else {
-                        error = failureResponse;
+
+                    if (!error) {
+                        error = "Getting Auth Token failed: " + failureResponse;
                     }
 
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
-                    throw new Error("Getting Auth Token failed: " + error);
+                    throw new Error(error);
                 });
 
         }

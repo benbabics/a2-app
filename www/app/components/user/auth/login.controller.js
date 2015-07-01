@@ -35,8 +35,8 @@
                     // transition to the landing page
                     //TODO - $state.go("");
                 })
-                .catch(function (failedAuthenticateError) {
-                    //TODO - vm.globalError = vm.config.serverErrors[failedAuthenticateError];
+                .catch(function (failedAuthenticationError) {
+                    vm.globalError = vm.config.serverErrors[failedAuthenticationError] || vm.config.serverErrors["DEFAULT"];
                 })
                 .finally(function () {
                     CommonService.loadingComplete();

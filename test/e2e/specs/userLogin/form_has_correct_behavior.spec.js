@@ -1,15 +1,15 @@
 "use strict";
 
-var DriverLoginPage = require("../../pages/driverLogin.page.js");
+var UserLoginPage = require("../../pages/userLogin.page.js");
 
 (function () {
     var mockUserName = "mockUserName",
         mockPassword = "mockPassword";
 
-    describe("A Driver Login page", function () {
+    describe("A User Login page", function () {
 
         beforeAll(function () {
-            this.page = new DriverLoginPage();
+            this.page = new UserLoginPage();
         });
 
         describe("has a username field that", function() {
