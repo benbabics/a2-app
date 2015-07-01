@@ -6,21 +6,19 @@ var AuthenticateUserRequestFailedPasswordRequired = require("../../mocks/authent
 var AuthenticateUserRequestFailedUsernameRequiredMock = require("../../mocks/authenticateUserRequestFailedUsernameRequired.mock.js");
 
 (function () {
-    var mockUsername = "invalid@invalid.com",
-        mockPassword = "0123456789012";
+    var mockUsername = "username1",
+        mockPassword = "Password1";
 
     describe("A User Login page", function () {
-        beforeAll(function () {
-            this.page = new UserLoginPage();
-        });
-
         describe("When authentication fails with a Bad Credentials error", function () {
             beforeAll(function () {
-                this.page.typeUserName(mockUsername);
-                this.page.typePassword(mockPassword);
-
                 // Set up HTTP Request/Response Mocks
                 browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestFailedBadCredentials);
+
+                this.page = new UserLoginPage();
+
+                this.page.typeUserName(mockUsername);
+                this.page.typePassword(mockPassword);
 
                 this.page.submit();
             });
@@ -47,11 +45,13 @@ var AuthenticateUserRequestFailedUsernameRequiredMock = require("../../mocks/aut
 
         describe("When authentication fails with a Password Required error", function () {
             beforeAll(function () {
-                this.page.typeUserName(mockUsername);
-                this.page.typePassword(mockPassword);
-
                 // Set up HTTP Request/Response Mocks
                 browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestFailedPasswordRequired);
+
+                this.page = new UserLoginPage();
+
+                this.page.typeUserName(mockUsername);
+                this.page.typePassword(mockPassword);
 
                 this.page.submit();
             });
@@ -78,11 +78,13 @@ var AuthenticateUserRequestFailedUsernameRequiredMock = require("../../mocks/aut
 
         describe("When authentication fails with a Username Required error", function () {
             beforeAll(function () {
-                this.page.typeUserName(mockUsername);
-                this.page.typePassword(mockPassword);
-
                 // Set up HTTP Request/Response Mocks
                 browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestFailedUsernameRequiredMock);
+
+                this.page = new UserLoginPage();
+
+                this.page.typeUserName(mockUsername);
+                this.page.typePassword(mockPassword);
 
                 this.page.submit();
             });

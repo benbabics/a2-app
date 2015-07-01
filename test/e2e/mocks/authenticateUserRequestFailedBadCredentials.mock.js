@@ -7,13 +7,11 @@ var AuthenticateUserRequestFailedBadCredentialsMock = (function () {
             .run(function($httpBackend) {
 
                 var mockAuthenticateUserResponse = {
-                    "data": {
-                        "error": "unauthorized",
-                        "error_description": "BAD_CREDENTIALS"
-                    }
+                    "error": "unauthorized",
+                    "error_description": "BAD_CREDENTIALS"
                 };
 
-                $httpBackend.whenGET(/\/uaa\/oauth\/token/).respond(function (method, url, data, headers) {
+                $httpBackend.whenPOST(/\/uaa\/oauth\/token/).respond(function (method, url, data, headers) {
                     return [401, mockAuthenticateUserResponse, {}];
                 });
             });

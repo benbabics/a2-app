@@ -7,13 +7,11 @@ var AuthenticateUserRequestFailedPasswordRequiredMock = (function () {
             .run(function($httpBackend) {
 
                 var mockAuthenticateUserResponse = {
-                    "data": {
-                        "error": "unauthorized",
-                        "error_description": "PASSWORD_REQUIRED"
-                    }
+                    "error": "unauthorized",
+                    "error_description": "PASSWORD_REQUIRED"
                 };
 
-                $httpBackend.whenGET(/\/uaa\/oauth\/token/).respond(function (method, url, data, headers) {
+                $httpBackend.whenPOST(/\/uaa\/oauth\/token/).respond(function (method, url, data, headers) {
                     return [401, mockAuthenticateUserResponse, {}];
                 });
             });
