@@ -21,7 +21,8 @@
             },
             "submitButton": "Log In",
             "serverErrors": {
-                "DEFAULT": "Invalid login information. Please check your username and password or go online to set up or recover your username and password."
+                "DEFAULT": "Invalid login information. Please check your username and password or go online to set up or recover your username and password.",
+                "USER_LOCKED": "You have exceeded the number of allowable login attempts. You will need to access your online account to retrieve your username and password."
             }
         }
     };

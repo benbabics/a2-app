@@ -36,7 +36,7 @@
                     //TODO - $state.go("");
                 })
                 .catch(function (failedAuthenticationError) {
-                    vm.globalError = vm.config.serverErrors[failedAuthenticationError] || vm.config.serverErrors["DEFAULT"];
+                    vm.globalError = vm.config.serverErrors[failedAuthenticationError.message] || vm.config.serverErrors["DEFAULT"];
                 })
                 .finally(function () {
                     CommonService.loadingComplete();
