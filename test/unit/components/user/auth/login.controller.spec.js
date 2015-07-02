@@ -86,10 +86,9 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
-                //TODO
-                //it("should navigate to the landing page", function () {
-                //    expect($state.go).toHaveBeenCalledWith("");
-                //});
+                it("should navigate to the landing page", function () {
+                    expect($state.go).toHaveBeenCalledWith("landing");
+                });
 
             });
 

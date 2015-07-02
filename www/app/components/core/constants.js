@@ -31,6 +31,10 @@
         }
     };
 
+    appGlobals.LANDING = {
+        "CONFIG": {}
+    };
+
     angular
         .module("app.components.core")
         .constant("appGlobals", appGlobals)

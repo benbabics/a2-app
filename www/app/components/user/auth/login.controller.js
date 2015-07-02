@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function LoginController(globals, AuthenticationManager, CommonService) {
+    function LoginController($state, globals, AuthenticationManager, CommonService) {
 
         var vm = this;
         vm.config = globals.USER_LOGIN.CONFIG;
@@ -33,7 +33,7 @@
             return AuthenticationManager.authenticate(vm.user.username, vm.user.password)
                 .then(function() {
                     // transition to the landing page
-                    //TODO - $state.go("");
+                    $state.go("landing");
                 })
                 .catch(function (failedAuthenticationError) {
                     vm.globalError = vm.config.serverErrors[failedAuthenticationError.message] || vm.config.serverErrors["DEFAULT"];
