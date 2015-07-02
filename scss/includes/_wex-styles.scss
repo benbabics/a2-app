@@ -43,6 +43,22 @@
   }
 }
 
+/* scalable images used as header bar title need to be scaled to the correct title height */
+.nav-bar-title .img-scalable {
+  height: $bar-height - $bar-padding-landscape*2;
+  margin: $bar-padding-landscape;
+}
+
+/**------------------------------------------------------
+ Images
+ ------------------------------------------------------**/
+/* scales the source image to the size of the element */
+.img-scalable {
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: contain;
+}
+
 /**-----------------------------------------------------------
  Buttons/Icons
  ----------------------------------------------------------**/
