@@ -79,7 +79,10 @@
 
                     // TODO: move to CommonService
                     // TODO: figure out why _.has(failureResponse, "data.error_description") returns false
-                    if (_.has(failureResponse, "data")) {
+                    // even when it exists and has a value
+                    if (_.has(failureResponse, "data" &&
+                            failureResponse.data &&
+                            failureResponse.data.error_description)) {
                         error += failureResponse.data.error_description || "";
                     }
 
