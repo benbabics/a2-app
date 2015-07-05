@@ -5,7 +5,8 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AuthenticationErrorInterceptor($injector, AuthenticationManager, AuthorizationHeaderRequestInterceptor, Logger) {
+    function AuthenticationErrorInterceptor($injector, AuthenticationManager, AuthorizationHeaderRequestInterceptor,
+                                            Logger) {
 
         // Revealed Public members
         var service = {
@@ -75,7 +76,8 @@
         }
 
         function retryFailedRequest(failedRequest, deferred, responseHandler) {
-            // Because no request interceptors are called this way, let's add the authorization header to the original request
+            // Because no request interceptors are called this way,
+            // let's add the authorization header to the original request
             AuthorizationHeaderRequestInterceptor.request(failedRequest.headers);
 
             $injector.get("$http")(failedRequest).then(responseHandler, deferred.reject);
@@ -84,7 +86,7 @@
         }
 
         function handleUnrecoverableError(failedRequest, deferred) {
-            Logger.log("AuthenticationErrorInterceptor unable to handle the error.");
+            Logger.info("AuthenticationErrorInterceptor unable to handle the error.");
             deferred.reject(failedRequest);
         }
     }

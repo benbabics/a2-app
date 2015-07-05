@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AuthenticationManager($q, FormEncoder, AuthenticationResource, UserManager, CommonService) {
+    function AuthenticationManager($q, FormEncoder, AuthenticationResource, UserManager, CommonService, Logger) {
 
         // Private members
         var _ = CommonService._;
@@ -69,6 +69,7 @@
                     }
                     // authResponse didn't give us data
                     else {
+                        Logger.error("No data in Response from getting an Auth Token");
                         throw new Error("No data in Response from getting an Auth Token");
                     }
                 })
@@ -85,6 +86,8 @@
                     if (!error) {
                         error = "Getting Auth Token failed: " + failureResponse;
                     }
+
+                    Logger.error("Error getting token:" + error);
 
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
                     throw new Error(error);

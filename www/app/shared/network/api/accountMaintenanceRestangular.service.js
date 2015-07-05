@@ -5,8 +5,9 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AccountMaintenanceRestangular(Restangular, globals, AuthenticationErrorInterceptor, AuthorizationHeaderRequestInterceptor,
-                                           DataExtractorResponseInterceptor, CommonService) {
+    function AccountMaintenanceRestangular(Restangular, globals, AuthenticationErrorInterceptor,
+                                           AuthorizationHeaderRequestInterceptor, DataExtractorResponseInterceptor,
+                                           CommonService, Logger) {
 
         // Private members
         var _ = CommonService._;
@@ -41,6 +42,7 @@
         function getFieldId(route) {
 
             if (_.isUndefined(route)) {
+                Logger.warn("You're creating a Restangular entity without the path.");
                 throw new Error("You're creating a Restangular entity without the path.");
             }
 
