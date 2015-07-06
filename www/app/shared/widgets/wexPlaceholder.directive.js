@@ -4,6 +4,10 @@
     /* jshint -W003 */
     /* jshint -W026 */ // These allow us to show the definition of the Directive above the scroll
 
+    /* Used for showing/hiding placeholder text when an input field is selected/deselected.
+     This differs from the standard Ionic behavior of only hiding placeholders when text has been typed into a field.
+     */
+
     /* @ngInject */
     function wexPlaceholder(CommonService) {
         var directive = {
