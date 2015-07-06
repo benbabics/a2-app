@@ -15,6 +15,7 @@
             });
 
             module("app.components.core");
+            module("app.shared");
 
             inject(function(_appGlobals_) {
                 appGlobals = _appGlobals_;
