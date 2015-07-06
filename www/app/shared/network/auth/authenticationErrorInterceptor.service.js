@@ -5,8 +5,8 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AuthenticationErrorInterceptor($injector, AuthenticationManager, AuthorizationHeaderRequestInterceptor,
-                                            Logger) {
+    function AuthenticationErrorInterceptor($injector, $state, AuthenticationManager,
+                                            AuthorizationHeaderRequestInterceptor, Logger) {
 
         // Revealed Public members
         var service = {
@@ -69,7 +69,8 @@
         }
 
         function authenticate(originalFailedResponse, deferred, responseHandler) {
-            // TODO - Do something that results in the login page being displayed
+            $state.go("user.auth.login");
+
             // TODO - Stretch goal - Remember what the user was trying to do and do it after auth
 
             return false;

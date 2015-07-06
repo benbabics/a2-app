@@ -4,6 +4,7 @@
     var AuthenticationErrorInterceptor,
         $rootScope,
         $httpBackend,
+        $state,
         MOCK_FAILED_REQUEST_CONFIG = {
             method: "POST",
             url: "http://somedomain.com/someendpoint"
@@ -25,6 +26,7 @@
         beforeEach(function () {
 
             module("app.shared");
+            module("app.components");
             module("app.html");
 
             // mock dependencies
@@ -34,12 +36,13 @@
                 $provide.value("AuthenticationManager", AuthenticationManager);
             });
 
-            inject(function (_AuthenticationErrorInterceptor_, _$httpBackend_, _$rootScope_, $q) {
+            inject(function (_AuthenticationErrorInterceptor_, _$httpBackend_, _$rootScope_, _$state_, $q) {
                 AuthenticationErrorInterceptor = _AuthenticationErrorInterceptor_;
                 $httpBackend = _$httpBackend_;
                 $rootScope = _$rootScope_;
                 refreshAuthenticationDeferred = $q.defer();
                 authenticationDeferred = $q.defer();
+                $state = _$state_;
             });
 
             // set up spies
@@ -48,6 +51,7 @@
             AuthenticationManager.authenticate.and.returnValue(authenticationDeferred.promise);
             restangularDeferred = jasmine.createSpyObj("deferred", ["reject"]);
             restangularResponseHandler = jasmine.createSpy("responseHandler");
+            spyOn($state, "go");
         });
 
         describe("has a responseError function that", function () {
@@ -132,7 +136,9 @@
                                 $rootScope.$digest();
                             });
 
-                            //TODO - Should go to login page?
+                            it("should redirect to the login page", function () {
+                                expect($state.go).toHaveBeenCalledWith("user.auth.login");
+                            });
 
                         });
 
@@ -169,7 +175,9 @@
                         errorResult = AuthenticationErrorInterceptor.responseError(mockRejection, restangularDeferred, restangularResponseHandler);
                     });
 
-                    //TODO - Should go to login page?
+                    it("should redirect to the login page", function () {
+                        expect($state.go).toHaveBeenCalledWith("user.auth.login");
+                    });
 
                 });
 
@@ -185,7 +193,9 @@
                         errorResult = AuthenticationErrorInterceptor.responseError(mockRejection, restangularDeferred, restangularResponseHandler);
                     });
 
-                    //TODO - Should go to login page?
+                    it("should redirect to the login page", function () {
+                        expect($state.go).toHaveBeenCalledWith("user.auth.login");
+                    });
 
                 });
 
