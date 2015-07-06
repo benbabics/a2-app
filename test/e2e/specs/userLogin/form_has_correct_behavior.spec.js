@@ -1,6 +1,8 @@
 "use strict";
 
 var UserLoginPage = require("../../pages/userLogin.page.js");
+var AuthenticateUserRequestSuccessMock = require("../../mocks/authenticateUserRequestSuccess.mock.js");
+var AuthenticateUserRequestFailedBadCredentials = require("../../mocks/authenticateUserRequestFailedBadCredentials.mock.js");
 
 (function () {
     var mockUserName = "mockUserName",
@@ -162,6 +164,68 @@ var UserLoginPage = require("../../pages/userLogin.page.js");
 
                 it("should be enabled", function() {
                     expect(this.page.submitButton.getAttribute("ng-disabled")).toBe("false");
+                });
+
+                describe("when it is clicked", function () {
+
+                    describe("when the user is successfully authenticated", function () {
+
+                        beforeAll(function () {
+                            browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestSuccessMock);
+
+                            browser.refresh();
+
+                            //repopulate fields
+                            this.page.typeUserName(mockUserName);
+                            this.page.typePassword(mockPassword);
+                        });
+
+                        afterAll(function () {
+                            browser.removeMockModule("AuthenticateUserMock");
+
+                            browser.refresh();
+
+                            //go back to login and repopulate fields
+                            this.page.focus();
+                            this.page.typeUserName(mockUserName);
+                            this.page.typePassword(mockPassword);
+                        });
+
+                        it("should navigate the user to the landing page", function () {
+                            this.page.submit();
+
+                            expect(browser.getCurrentUrl()).toMatch("/#/landing");
+                        });
+                    });
+
+                    describe("when the user is NOT successfully authenticated", function () {
+
+                        beforeAll(function () {
+                            browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestFailedBadCredentials);
+
+                            browser.refresh();
+
+                            //repopulate fields
+                            this.page.typeUserName(mockUserName);
+                            this.page.typePassword(mockPassword);
+                        });
+
+                        afterAll(function () {
+                            browser.removeMockModule("AuthenticateUserMock");
+
+                            browser.refresh();
+
+                            //repopulate fields
+                            this.page.typeUserName(mockUserName);
+                            this.page.typePassword(mockPassword);
+                        });
+
+                        it("should stay on the login page", function () {
+                            this.page.submit();
+
+                            expect(browser.getCurrentUrl()).toMatch("/#/user/auth/login");
+                        });
+                    });
                 });
             });
 
