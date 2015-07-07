@@ -4,13 +4,9 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     angular.module("app.shared", [
-        /* Angular and Ionic modules */
-        "ionic",
-        "ngAnimate",
-        "base64",
-        "ui.router",
 
         /* Our reusable cross app modules */
+        "app.shared.dependencies",
         "app.shared.core",
         "app.shared.storage",
         "app.shared.network",
@@ -18,12 +14,7 @@
         "app.shared.api",
         "app.shared.integration",
         "app.shared.logger",
-        "app.shared.widgets",
-
-        /* 3rd Party modules */
-        "restangular",                // From https://github.com/mgonto/restangular
-        "ngCordova",                  // From https://github.com/driftyco/ng-cordova
-        "ngFitText"                   // From http://patrickmarabeas.github.io/ng-FitText.js/
+        "app.shared.widgets"
     ])
 
         .run(function ($ionicPlatform, _, $rootScope, $ionicLoading, globals, Logger) {  // Services may be included here in order to force them to be instantiated at startup

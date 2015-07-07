@@ -2,18 +2,36 @@
     "use strict";
 
     var AuthApiRestangular,
-        globals,
-        $base64;
+        $base64,
+        globals = {
+            AUTH_API: {
+                BASE_URL: "mock base url",
+                AUTH: {
+                    TOKENS: "mock token url"
+                },
+                CLIENT_CREDENTIALS: {
+                    CLIENT_ID: "mock client id",
+                    CLIENT_SECRET: "mock client secret"
+                }
+            }
+        };
 
     describe("An Auth API Restangular Service", function () {
 
         beforeEach(function () {
 
-            module("app.shared");
+            module("app.shared.dependencies");
 
-            inject(function (_AuthApiRestangular_, _Restangular_, _globals_, _$base64_) {
+            module(function ($provide) {
+                $provide.value("globals", globals);
+            });
+
+            module("app.shared.network");
+            module("app.shared.auth");
+            module("app.shared.api");
+
+            inject(function (_AuthApiRestangular_, _Restangular_, _$base64_) {
                 AuthApiRestangular = _AuthApiRestangular_;
-                globals = _globals_;
                 $base64 = _$base64_;
             });
 
@@ -33,8 +51,11 @@
                 var headers = {};
 
                 headers["Content-Type"] = "application/x-www-form-urlencoded";
-                headers.Authorization = "Basic " + $base64.encode(
-                        "@@@STRING_REPLACE_AUTH_CLIENT_ID@@@:@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@");
+                headers.Authorization = "Basic " + $base64.encode([
+                    globals.AUTH_API.CLIENT_CREDENTIALS.CLIENT_ID,
+                    ":",
+                    globals.AUTH_API.CLIENT_CREDENTIALS.CLIENT_SECRET
+                ].join(""));
 
                 expect(AuthApiRestangular.configuration.defaultHeaders).toEqual(headers);
             });

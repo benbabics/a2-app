@@ -14,16 +14,39 @@
             username: "IVREXXMS2",
             password: "Tester12"
         },
-        TOKEN_URL,
         getTokenRequest,
         resolveHandler,
-        rejectHandler;
+        rejectHandler,
+        globals = {
+            AUTH_API: {
+                BASE_URL: "mock base url",
+                AUTH: {
+                    TOKENS: "mock token url"
+                },
+                CLIENT_CREDENTIALS: {
+                    CLIENT_ID: "mock client id",
+                    CLIENT_SECRET: "mock client secret"
+                }
+            }
+        },
+        TOKEN_URL = globals.AUTH_API.BASE_URL + "/" + globals.AUTH_API.AUTH.TOKENS;
 
     describe("An Authentication Manager", function () {
 
         beforeEach(function () {
 
-            module("app.shared");
+            module("app.shared.dependencies");
+            module("app.shared.core");
+
+            module(function ($provide) {
+                $provide.value("globals", globals);
+            });
+
+            module("app.shared.network");
+            module("app.shared.auth");
+            module("app.shared.api");
+            module("app.shared.integration");
+            module("app.shared.logger");
 
             // mock dependencies
             FormEncoder = jasmine.createSpyObj("FormEncoder", ["encode"]);
@@ -39,12 +62,11 @@
                 $provide.value("AuthenticationErrorInterceptor", AuthenticationErrorInterceptor);
             });
 
-            inject(function (_AuthenticationManager_, _$base64_, _$rootScope_, _$httpBackend_, _globals_) {
+            inject(function (_AuthenticationManager_, _$base64_, _$rootScope_, _$httpBackend_) {
                 AuthenticationManager = _AuthenticationManager_;
                 $base64 = _$base64_;
                 $rootScope = _$rootScope_;
                 $httpBackend = _$httpBackend_;
-                TOKEN_URL = _globals_.AUTH_API.BASE_URL + "/" + "uaa/oauth/token";
             });
 
             // set up spies
@@ -72,7 +94,11 @@
                     "&scope=" + rawParams.scope;
                 headers = {
                     "Content-Type"    : "application/x-www-form-urlencoded",
-                    "Authorization"   : "Basic " + $base64.encode("@@@STRING_REPLACE_AUTH_CLIENT_ID@@@:@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@"),
+                    "Authorization": "Basic " + $base64.encode([
+                        globals.AUTH_API.CLIENT_CREDENTIALS.CLIENT_ID,
+                        ":",
+                        globals.AUTH_API.CLIENT_CREDENTIALS.CLIENT_SECRET
+                    ].join("")),
                     "Accept"          : "application/json, text/plain, */*",
                     "X-Requested-With": "XMLHttpRequest"
                 };
@@ -205,7 +231,11 @@
                     "&refresh_token=" + rawParams.refresh_token;
                 headers = {
                     "Content-Type"    : "application/x-www-form-urlencoded",
-                    "Authorization"   : "Basic " + $base64.encode("@@@STRING_REPLACE_AUTH_CLIENT_ID@@@:@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@"),
+                    "Authorization": "Basic " + $base64.encode([
+                        globals.AUTH_API.CLIENT_CREDENTIALS.CLIENT_ID,
+                        ":",
+                        globals.AUTH_API.CLIENT_CREDENTIALS.CLIENT_SECRET
+                    ].join("")),
                     "Accept"          : "application/json, text/plain, */*",
                     "X-Requested-With": "XMLHttpRequest"
                 };
