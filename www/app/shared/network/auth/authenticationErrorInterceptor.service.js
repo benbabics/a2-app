@@ -34,10 +34,6 @@
                 else {
                     // Get an Access Token
                     authenticate(rejection, deferred, responseHandler);
-                    //TODO - Either remove or uncomment this once the changes to authenticate have been made to go to the login page
-                        //.catch(function () {
-                        //    handleUnrecoverableError(rejection, deferred);
-                        //});
                 }
 
                 return false;
