@@ -75,21 +75,11 @@
                 })
                 // get token failed
                 .catch(function (failureResponse) {
-                    var error = "";
-
-                    // TODO: move to CommonService
-                    if (_.has(failureResponse, "data") && failureResponse.data) {
-                        error += failureResponse.data.error_description || "";
-                    }
-
-                    if (!error) {
-                        error = "Getting Auth Token failed: " + failureResponse;
-                    }
-
-                    Logger.error("Error getting token:" + error);
+                    var error = CommonService.getErrorMessage(failureResponse);
 
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
-                    throw new Error(error);
+                    Logger.error("Getting Auth Token failed: " + error);
+                    throw new Error("Getting Auth Token failed: " + error);
                 });
 
         }

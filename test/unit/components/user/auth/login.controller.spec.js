@@ -92,18 +92,118 @@
 
             });
 
-            describe("when the User is NOT Authenticated successfully", function () {
+            describe("when the User is NOT Authenticated successfully with a BAD_CREDENTIALS error", function () {
 
-                var errorReason = "AUTHENTICATION_FAILED";
+                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: BAD_CREDENTIALS");
 
                 beforeEach(function () {
                     //reject with an error message
-                    deferred.reject(errorReason);
+                    deferred.reject(errorObjectArg);
                     $scope.$digest();
                 });
 
                 it("should have an error message", function () {
                     expect(ctrl.globalError).toEqual("Invalid login information. Please check your username and password or go online to set up or recover your username and password.");
+                });
+
+                it("should NOT navigate away from the login page", function () {
+                    expect($state.go).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("when the User is NOT Authenticated successfully with a USER_NOT_ACTIVE error", function () {
+
+                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: USER_NOT_ACTIVE");
+
+                beforeEach(function () {
+                    //reject with an error message
+                    deferred.reject(errorObjectArg);
+                    $scope.$digest();
+                });
+
+                it("should have an error message", function () {
+                    expect(ctrl.globalError).toEqual("Invalid login information. Go online to set up or recover your username and password.");
+                });
+
+                it("should NOT navigate away from the login page", function () {
+                    expect($state.go).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("when the User is NOT Authenticated successfully with a USER_MUST_ACCEPT_TERMS error", function () {
+
+                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: USER_MUST_ACCEPT_TERMS");
+
+                beforeEach(function () {
+                    //reject with an error message
+                    deferred.reject(errorObjectArg);
+                    $scope.$digest();
+                });
+
+                it("should have an error message", function () {
+                    expect(ctrl.globalError).toEqual("Invalid login information. Go online to set up or recover your username and password.");
+                });
+
+                it("should NOT navigate away from the login page", function () {
+                    expect($state.go).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("when the User is NOT Authenticated successfully with a USER_MUST_SETUP_SECURITY_QUESTIONS error", function () {
+
+                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: USER_MUST_SETUP_SECURITY_QUESTIONS");
+
+                beforeEach(function () {
+                    //reject with an error message
+                    deferred.reject(errorObjectArg);
+                    $scope.$digest();
+                });
+
+                it("should have an error message", function () {
+                    expect(ctrl.globalError).toEqual("Invalid login information. Go online to set up or recover your username and password.");
+                });
+
+                it("should NOT navigate away from the login page", function () {
+                    expect($state.go).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("when the User is NOT Authenticated successfully with a PASSWORD_EXPIRED error", function () {
+
+                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: PASSWORD_EXPIRED");
+
+                beforeEach(function () {
+                    //reject with an error message
+                    deferred.reject(errorObjectArg);
+                    $scope.$digest();
+                });
+
+                it("should have an error message", function () {
+                    expect(ctrl.globalError).toEqual("Invalid login information. Go online to set up or recover your username and password.");
+                });
+
+                it("should NOT navigate away from the login page", function () {
+                    expect($state.go).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("when the User is NOT Authenticated successfully with a USER_LOCKED error", function () {
+
+                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: USER_LOCKED");
+
+                beforeEach(function () {
+                    //reject with an error message
+                    deferred.reject(errorObjectArg);
+                    $scope.$digest();
+                });
+
+                it("should have an error message", function () {
+                    expect(ctrl.globalError).toEqual("You have exceeded the number of allowable login attempts. You will need to access your online account to retrieve your username and password.");
                 });
 
                 it("should NOT navigate away from the login page", function () {

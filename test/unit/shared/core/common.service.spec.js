@@ -2,11 +2,24 @@
     "use strict";
 
     var CommonService,
+        globals = {
+            GENERAL: {
+                ERRORS: {
+                    "UNKNOWN_EXCEPTION": "ERROR: cause unknown."
+                }
+            }
+        },
         $rootScope;
 
     describe("A Common Service", function () {
 
         beforeEach(function () {
+
+            module("app.shared.dependencies");
+
+            module(function ($provide) {
+                $provide.value("globals", globals);
+            });
 
             module("app.shared");
 
@@ -152,6 +165,130 @@
                     });
                 });
             });
+        });
+
+        describe("has a getErrorMessage function that", function () {
+
+            var errorObjectArg,
+                errorMessageResult;
+
+            describe("when the error object param is a string", function () {
+
+                beforeEach(function () {
+                    errorObjectArg = "There was a specific error";
+
+                    errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
+                });
+
+                it("should return the error object param", function () {
+                    expect(errorObjectArg).toEqual(errorMessageResult);
+                });
+
+            });
+
+            describe("when the error object param is a failed response object", function () {
+
+                describe("when the response object has error and error_description properties", function () {
+
+                    beforeEach(function () {
+                        errorObjectArg = {
+                            data: {
+                                error: "There is a type for this error",
+                                error_description: "There is a description for this error"
+                            }
+                        };
+
+                        errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
+                    });
+
+                    it("should return the error property in the error message", function () {
+                        expect(errorMessageResult).toMatch(errorObjectArg.data.error  + ": " + errorObjectArg.data.error_description);
+                    });
+
+                });
+
+                describe("when the response object has an error property", function () {
+
+                    beforeEach(function () {
+                        errorObjectArg = {
+                            data: {
+                                error: "There is a type for this error"
+                            }
+                        };
+
+                        errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
+                    });
+
+                    it("should return the error property in the error message", function () {
+                        expect(errorMessageResult).toMatch(errorObjectArg.data.error);
+                    });
+
+                });
+
+                describe("when the response object has an error_description property", function () {
+
+                    beforeEach(function () {
+                        errorObjectArg = {
+                            data: {
+                                error_description: "There is a description for this error"
+                            }
+                        };
+
+                        errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
+                    });
+
+                    it("should return the error_description property in the error message", function () {
+                        expect(errorMessageResult).toMatch(errorObjectArg.data.error_description);
+                    });
+
+                });
+
+                describe("when the response object does not have an error or an error_description property", function () {
+
+                    beforeEach(function () {
+                        errorObjectArg = {};
+
+                        errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
+                    });
+
+                    it("should return an Unknown Exception error message", function () {
+                        expect(errorMessageResult).toEqual("ERROR: cause unknown.");
+                    });
+
+                });
+
+                describe("when the response object has a data property that is null", function () {
+
+                    beforeEach(function () {
+                        errorObjectArg = {
+                            data: null
+                        };
+
+                        errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
+                    });
+
+                    it("should return an Unknown Exception error message", function () {
+                        expect(errorMessageResult).toEqual("ERROR: cause unknown.");
+                    });
+
+                });
+
+            });
+
+            describe("when the error object param is NOT a string or a failed response object", function () {
+
+                beforeEach(function () {
+                    errorObjectArg = {};
+
+                    errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
+                });
+
+                it("should return an Unknown Exception error message", function () {
+                    expect(errorMessageResult).toEqual("ERROR: cause unknown.");
+                });
+
+            });
+
         });
 
     });

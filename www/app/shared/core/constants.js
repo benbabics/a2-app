@@ -7,6 +7,15 @@
         };
 
     /**
+     * General
+     */
+    sharedGlobals.GENERAL = {
+        ERRORS: {
+            "UNKNOWN_EXCEPTION": "ERROR: cause unknown."
+        }
+    };
+
+    /**
      * Logging
      */
     sharedGlobals.LOGGING = {

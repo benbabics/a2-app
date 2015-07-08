@@ -1,8 +1,8 @@
 {
   "dev": {
     "app_urls": {
-      "am_api": "http://localhost:20080",
-      "auth_api": "http://localhost:26080"
+      "am_api": "http://127.0.0.1:20080",
+      "auth_api": "http://127.0.0.1:26080"
     },
     "auth": {
       "client_id": "mobileAccountManagement",
