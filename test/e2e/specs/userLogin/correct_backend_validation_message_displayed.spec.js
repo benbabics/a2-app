@@ -9,6 +9,8 @@ var AuthenticateUserRequestFailedUserMustAcceptTermsMock = require("../../mocks/
 var AuthenticateUserRequestFailedUserMustSetupSecurityQuestionsMock = require("../../mocks/AuthenticateUserRequestFailedUserMustSetupSecurityQuestions.mock.js");
 var AuthenticateUserRequestFailedUserNotActiveMock = require("../../mocks/authenticateUserRequestFailedUserNotActive.mock.js");
 var AuthenticateUserRequestFailedPasswordExpiredMock = require("../../mocks/authenticateUserRequestFailedPasswordExpired.mock.js");
+var AuthenticateUserRequestFailedAuthorizationFailedMock = require("../../mocks/authenticateUserRequestFailedAuthorizationFailed.mock.js");
+
 
 (function () {
     var mockUsername = "username1",
@@ -271,6 +273,39 @@ var AuthenticateUserRequestFailedPasswordExpiredMock = require("../../mocks/auth
                 expect(this.page.errorMessage.isPresent()).toBeTruthy();
                 expect(this.page.errorMessage.isDisplayed()).toBeTruthy();
                 expect(this.page.errorMessage.getText()).toMatch("Invalid login information. Go online to set up or recover your username and password.");
+            });
+
+            it("should still have values in username and password", function () {
+                expect(this.page.getUserName()).toMatch(mockUsername);
+                expect(this.page.getPassword()).toMatch(mockPassword);
+            });
+        });
+
+        describe("When authentication fails with a Authorization Failed error", function () {
+            beforeAll(function () {
+                // Set up HTTP Request/Response Mocks
+                browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestFailedAuthorizationFailedMock);
+
+                this.page = new UserLoginPage();
+
+                this.page.typeUserName(mockUsername);
+                this.page.typePassword(mockPassword);
+
+                this.page.submit();
+            });
+
+            afterAll(function () {
+                this.page.clearUserName();
+                this.page.clearPassword();
+
+                // Remove HTTP Request/Response Mocks
+                browser.removeMockModule("AuthenticateUserMock");
+            });
+
+            it("should have an error message", function () {
+                expect(this.page.errorMessage.isPresent()).toBeTruthy();
+                expect(this.page.errorMessage.isDisplayed()).toBeTruthy();
+                expect(this.page.errorMessage.getText()).toMatch("Your account is not able to be managed via the mobile application at this time.");
             });
 
             it("should still have values in username and password", function () {
