@@ -94,7 +94,7 @@
 
             describe("when the User is NOT Authenticated successfully with a BAD_CREDENTIALS error", function () {
 
-                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: BAD_CREDENTIALS");
+                var errorObjectArg = new Error("BAD_CREDENTIALS");
 
                 beforeEach(function () {
                     //reject with an error message
@@ -114,7 +114,7 @@
 
             describe("when the User is NOT Authenticated successfully with a USER_NOT_ACTIVE error", function () {
 
-                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: USER_NOT_ACTIVE");
+                var errorObjectArg = new Error("USER_NOT_ACTIVE");
 
                 beforeEach(function () {
                     //reject with an error message
@@ -134,7 +134,7 @@
 
             describe("when the User is NOT Authenticated successfully with a USER_MUST_ACCEPT_TERMS error", function () {
 
-                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: USER_MUST_ACCEPT_TERMS");
+                var errorObjectArg = new Error("USER_MUST_ACCEPT_TERMS");
 
                 beforeEach(function () {
                     //reject with an error message
@@ -154,7 +154,7 @@
 
             describe("when the User is NOT Authenticated successfully with a USER_MUST_SETUP_SECURITY_QUESTIONS error", function () {
 
-                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: USER_MUST_SETUP_SECURITY_QUESTIONS");
+                var errorObjectArg = new Error("USER_MUST_SETUP_SECURITY_QUESTIONS");
 
                 beforeEach(function () {
                     //reject with an error message
@@ -174,7 +174,7 @@
 
             describe("when the User is NOT Authenticated successfully with a PASSWORD_EXPIRED error", function () {
 
-                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: PASSWORD_EXPIRED");
+                var errorObjectArg = new Error("PASSWORD_EXPIRED");
 
                 beforeEach(function () {
                     //reject with an error message
@@ -194,7 +194,7 @@
 
             describe("when the User is NOT Authenticated successfully with a USER_LOCKED error", function () {
 
-                var errorObjectArg = new Error("Getting Auth Token failed: There is a type for this error: USER_LOCKED");
+                var errorObjectArg = new Error("USER_LOCKED");
 
                 beforeEach(function () {
                     //reject with an error message
