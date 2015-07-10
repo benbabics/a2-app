@@ -28,8 +28,8 @@ var AuthenticateUserRequestFailedBadCredentials = require("../../mocks/authentic
                         this.page.focusUserName();
                     });
 
-                    it("should have no placeholder text", function() {
-                        expect(this.page.userNameInput.getAttribute("placeholder")).toBeFalsy();
+                    it("should have the expected placeholder text", function() {
+                        expect(this.page.userNameInput.getAttribute("placeholder")).toEqual("User Name");
                     });
                 });
 
@@ -41,41 +41,6 @@ var AuthenticateUserRequestFailedBadCredentials = require("../../mocks/authentic
 
                     it("should have the expected placeholder text", function() {
                         expect(this.page.userNameInput.getAttribute("placeholder")).toEqual("User Name");
-                    });
-                });
-            });
-
-            //TODO - getAttribute("placeholder") captures placeholder text whether it is displayed or not
-            // Find out way to capture only visible placeholder text and verify based on that
-            xdescribe("when it is NOT empty", function() {
-
-                beforeAll(function() {
-                    this.page.typeUserName(mockUserName);
-                });
-
-                afterAll(function() {
-                    this.page.clearUserName();
-                });
-
-                describe("when it is selected", function() {
-
-                    beforeAll(function() {
-                        this.page.focusUserName();
-                    });
-
-                    it("should have no placeholder text", function() {
-                        expect(this.page.userNameInput.getAttribute("placeholder")).toBeFalsy();
-                    });
-                });
-
-                describe("when it is NOT selected", function() {
-
-                    beforeAll(function() {
-                        this.page.focusPassword();
-                    });
-
-                    it("should have no placeholder text", function() {
-                        expect(this.page.userNameInput.getAttribute("placeholder")).toBeFalsy();
                     });
                 });
             });
@@ -95,8 +60,8 @@ var AuthenticateUserRequestFailedBadCredentials = require("../../mocks/authentic
                         this.page.focusPassword();
                     });
 
-                    it("should have no placeholder text", function() {
-                        expect(this.page.passwordInput.getAttribute("placeholder")).toBeFalsy();
+                    it("should have the expected placeholder text", function() {
+                        expect(this.page.passwordInput.getAttribute("placeholder")).toEqual("Password");
                     });
                 });
 
@@ -108,41 +73,6 @@ var AuthenticateUserRequestFailedBadCredentials = require("../../mocks/authentic
 
                     it("should have the expected placeholder text", function() {
                         expect(this.page.passwordInput.getAttribute("placeholder")).toEqual("Password");
-                    });
-                });
-            });
-
-            //TODO - getAttribute("placeholder") captures placeholder text whether it is displayed or not
-            // Find out way to capture only visible placeholder text and verify based on that
-            xdescribe("when it is NOT empty", function() {
-
-                beforeAll(function() {
-                    this.page.typePassword(mockPassword);
-                });
-
-                afterAll(function() {
-                    this.page.clearPassword();
-                });
-
-                describe("when it is selected", function() {
-
-                    beforeAll(function() {
-                        this.page.focusPassword();
-                    });
-
-                    it("should have no placeholder text", function() {
-                        expect(this.page.passwordInput.getAttribute("placeholder")).toBeFalsy();
-                    });
-                });
-
-                describe("when it is NOT selected", function() {
-
-                    beforeAll(function() {
-                        this.page.focusUserName();
-                    });
-
-                    it("should have no placeholder text", function() {
-                        expect(this.page.passwordInput.getAttribute("placeholder")).toBeFalsy();
                     });
                 });
             });
