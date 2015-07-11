@@ -8,25 +8,23 @@
     function AuthenticationManager($q, FormEncoder, AuthenticationResource, UserManager, CommonService, Logger) {
 
         // Private members
-        var _ = CommonService._;
+        var _ = CommonService._,
+            oauth;
 
         // Revealed Public members
         var service = {
-            authenticate         : authenticate,
-            refreshAuthentication: refreshAuthentication,
-            userLoggedIn         : userLoggedIn,
-            hasRefreshToken      : hasRefreshToken,
-            logOut               : logOut
+            authenticate          : authenticate,
+            refreshAuthentication : refreshAuthentication,
+            userLoggedIn          : userLoggedIn,
+            hasRefreshToken       : hasRefreshToken,
+            getAuthorizationHeader: getAuthorizationHeader,
+            logOut                : logOut,
+            //TODO - Remove this once we figure out how to test without being able to set the token
+            setToken              : setToken
         };
-
-        activate();
 
         return service;
         //////////////////////
-
-        function activate() {
-
-        }
 
         function authenticate(username, password) {
 
@@ -46,7 +44,7 @@
 
             data = FormEncoder.encode({
                 "grant_type": "refresh_token",
-                "refresh_token": UserManager.getAuthToken().refresh_token || null
+                "refresh_token": oauth.refresh_token || null
             });
 
             // Log the user out so that if the Refresh attempt fails we aren't keeping any invalid/expired tokens
@@ -63,7 +61,9 @@
 
                     if (authResponse.data) {
 
-                        UserManager.setUserData(username, authResponse.data);
+                        oauth = authResponse.data;
+
+                        UserManager.setUsername(username);
                         return authResponse.data;
 
                     }
@@ -85,15 +85,27 @@
         }
 
         function userLoggedIn() {
-            return UserManager.hasAuthentication();
+            return (!_.isEmpty(oauth));
         }
 
         function hasRefreshToken() {
-            return (!_.isEmpty(UserManager.getAuthToken().refresh_token));
+            return (!_.isEmpty(oauth.refresh_token));
+        }
+
+        function getAuthorizationHeader() {
+            if (userLoggedIn()) {
+                return "Bearer " + oauth.access_token;
+            }
+
+            return null;
         }
 
         function logOut() {
-            UserManager.clearAuthentication();
+            oauth = null;
+        }
+
+        function setToken(token) {
+            oauth = token;
         }
     }
 

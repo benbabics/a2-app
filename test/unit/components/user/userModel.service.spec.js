@@ -1,12 +1,13 @@
 (function () {
     "use strict";
 
-    describe("A UserModel Service", function () {
+    describe("A User Model Service", function () {
 
         var _;
 
         beforeEach(function () {
             module("app.shared");
+            module("app.components.user");
 
             inject(function (CommonService) {
                 _ = CommonService._;
@@ -20,8 +21,7 @@
                     newField1: "some value",
                     newField2: "some other value",
                     newField3: "yet another value",
-                    username : "username value",
-                    oauth    : "OAuth2Token value"
+                    username : "username value"
                 },
                 userModelKeys,
                 userResourceKeys;

@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AuthorizationHeaderRequestInterceptor(UserManager) {
+    function AuthorizationHeaderRequestInterceptor(AuthenticationManager) {
 
         // Revealed Public members
         var service = {
@@ -17,8 +17,8 @@
 
         function request(headers) {
 
-            if (UserManager.hasAuthentication()) {
-                headers.Authorization = "Bearer " + UserManager.getAuthToken().access_token;
+            if (AuthenticationManager.userLoggedIn()) {
+                headers.Authorization = AuthenticationManager.getAuthorizationHeader();
             }
 
             return {headers: headers};

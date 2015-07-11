@@ -5,7 +5,6 @@
 
         function UserModel() {
             this.username = "";
-            this.oauth = null;
         }
 
         UserModel.prototype.set = function (userResource) {
@@ -16,6 +15,6 @@
     };
 
     angular
-        .module("app.shared.auth")
+        .module("app.components.user")
         .factory("UserModel", UserModel);
 })();

@@ -4,7 +4,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     var AuthorizationHeaderRequestInterceptor,
-        UserManager,
+        AuthenticationManager,
         $rootScope,
         TOKEN_URL;
 
@@ -23,10 +23,10 @@
             });
 
             // mock dependencies
-            UserManager = jasmine.createSpyObj("UserManager", ["getAuthToken", "hasAuthentication"]);
+            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn", "getAuthorizationHeader"]);
 
             module(function($provide) {
-                $provide.value("UserManager", UserManager);
+                $provide.value("AuthenticationManager", AuthenticationManager);
             });
 
             inject(function (_$rootScope_, _AuthorizationHeaderRequestInterceptor_, globals) {
@@ -41,40 +41,33 @@
 
             describe("when the user is logged in", function () {
 
-                var mockOauth = {
-                        refresh_token: "1349758ukdafgn975",
-                        access_token: "as;kv987145oihkfdp9u"
-                    },
+                var mockAuthorizationHeader = "Mock Authorization Header",
                     interceptedRequest,
                     mockHeaders = {};
 
                 beforeEach(function () {
-                    UserManager.hasAuthentication.and.returnValue(true);
-                    UserManager.getAuthToken.and.returnValue(mockOauth);
+                    AuthenticationManager.userLoggedIn.and.returnValue(true);
+                    AuthenticationManager.getAuthorizationHeader.and.returnValue(mockAuthorizationHeader);
 
                     interceptedRequest = AuthorizationHeaderRequestInterceptor.request(mockHeaders);
                     $rootScope.$digest();
                 });
 
-                it("should set the Authorization Header with a Bearer type token", function () {
-                    expect(interceptedRequest.headers.Authorization).toMatch(/^Bearer/);
-                });
-
-                it("should set the Bearer token with the user's Oauth Access Token", function () {
-                    expect(interceptedRequest.headers.Authorization).toMatch(mockOauth.access_token);
+                it("should set the Authorization Header", function () {
+                    expect(interceptedRequest.headers.Authorization).toMatch(mockAuthorizationHeader);
                 });
 
             });
 
             describe("when the user is NOT logged in", function () {
 
-                var mockOauth = null,
+                var mockAuthorizationHeader = null,
                     interceptedRequest,
                     mockHeaders = {};
 
                 beforeEach(function () {
-                    UserManager.hasAuthentication.and.returnValue(false);
-                    UserManager.getAuthToken.and.returnValue(mockOauth);
+                    AuthenticationManager.userLoggedIn.and.returnValue(false);
+                    AuthenticationManager.getAuthorizationHeader.and.returnValue(mockAuthorizationHeader);
 
                     interceptedRequest = AuthorizationHeaderRequestInterceptor.request(mockHeaders);
                     $rootScope.$digest();

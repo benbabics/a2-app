@@ -15,6 +15,7 @@
                 url: ""
             }
         },
+        AuthorizationHeaderRequestInterceptor,
         AuthenticationManager,
         refreshAuthenticationDeferred,
         authenticationDeferred,
@@ -30,10 +31,12 @@
             module("app.html");
 
             // mock dependencies
-            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn", "hasRefreshToken", "refreshAuthentication", "authenticate", "logOut"]);
+            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn", "hasRefreshToken", "refreshAuthentication", "authenticate", "logOut", "getAuthorizationHeader"]);
+            AuthorizationHeaderRequestInterceptor = jasmine.createSpyObj("AuthorizationHeaderRequestInterceptor", ["request"]);
 
             module(function($provide) {
                 $provide.value("AuthenticationManager", AuthenticationManager);
+                $provide.value("AuthorizationHeaderRequestInterceptor", AuthorizationHeaderRequestInterceptor);
             });
 
             inject(function (_AuthenticationErrorInterceptor_, _$httpBackend_, _$rootScope_, _$state_, $q) {

@@ -50,7 +50,7 @@
 
             // mock dependencies
             FormEncoder = jasmine.createSpyObj("FormEncoder", ["encode"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["setProfile", "setUserData", "hasAuthentication", "getUsername", "getAuthToken", "clearAuthentication"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["getNewUser", "getUsername", "setUser", "setUsername"]);
             AuthenticationErrorInterceptor = jasmine.createSpyObj("AuthenticationErrorInterceptor", ["responseError"]);
 
             module(function($provide) {
@@ -150,8 +150,8 @@
                         $httpBackend.flush();
                     });
 
-                    it("should set the profile on the User", function () {
-                        expect(UserManager.setUserData).toHaveBeenCalledWith(mockUser.username, mockData);
+                    it("should set the username on the User", function () {
+                        expect(UserManager.setUsername).toHaveBeenCalledWith(mockUser.username);
                     });
 
                     it("should resolve with the expected response data", function () {
@@ -175,8 +175,8 @@
                         }
                     });
 
-                    it("should NOT set the profile on the User", function () {
-                        expect(UserManager.setProfile).not.toHaveBeenCalled();
+                    it("should NOT set the username on the User", function () {
+                        expect(UserManager.setUsername).not.toHaveBeenCalled();
                     });
 
                     it("should throw an error", function () {
@@ -203,8 +203,8 @@
                     }
                 });
 
-                it("should NOT set the profile on the User", function () {
-                    expect(UserManager.setProfile).not.toHaveBeenCalled();
+                it("should NOT set the username on the User", function () {
+                    expect(UserManager.setUsername).not.toHaveBeenCalled();
                 });
 
                 it("should throw an error", function () {
@@ -219,8 +219,7 @@
 
             var rawParams = {},
                 encodedParams,
-                headers = {},
-                logoutSpy;
+                headers = {};
 
             beforeEach(function () {
                 rawParams = {
@@ -240,9 +239,6 @@
                     "X-Requested-With": "XMLHttpRequest"
                 };
 
-                UserManager.getAuthToken.and.returnValue({
-                    refresh_token: rawParams.refresh_token
-                });
                 UserManager.getUsername.and.returnValue(mockUser.username);
                 FormEncoder.encode.and.returnValue(encodedParams);
             });
@@ -257,6 +253,11 @@
             describe("when refreshing an authentication token", function () {
 
                 beforeEach(function () {
+                    AuthenticationManager.setToken({
+                        refresh_token: rawParams.refresh_token,
+                        access_token: "as;kv987145oihkfdp9u"
+                    });
+
                     AuthenticationManager.refreshAuthentication();
                 });
 
@@ -265,7 +266,7 @@
                 });
 
                 it("should log the user out", function () {
-                    expect(UserManager.clearAuthentication).toHaveBeenCalled();
+                    expect(AuthenticationManager.userLoggedIn()).toBeFalsy();
                 });
 
                 it("should make a POST request to the token URL", function () {
@@ -288,6 +289,11 @@
                     var mockData = "some data";
 
                     beforeEach(function () {
+                        AuthenticationManager.setToken({
+                            refresh_token: "1349758ukdafgn975",
+                            access_token: "as;kv987145oihkfdp9u"
+                        });
+
                         getTokenRequest.respond(200, mockData);
 
                         AuthenticationManager.refreshAuthentication()
@@ -295,8 +301,8 @@
                         $httpBackend.flush();
                     });
 
-                    it("should set the data on the User", function () {
-                        expect(UserManager.setUserData).toHaveBeenCalledWith(mockUser.username, mockData);
+                    it("should set the username on the User", function () {
+                        expect(UserManager.setUsername).toHaveBeenCalledWith(mockUser.username);
                     });
 
                     it("should resolve with the expected data", function () {
@@ -308,6 +314,11 @@
                 describe("when there is no data in the response", function () {
 
                     beforeEach(function () {
+                        AuthenticationManager.setToken({
+                            refresh_token: "1349758ukdafgn975",
+                            access_token: "as;kv987145oihkfdp9u"
+                        });
+
                         getTokenRequest.respond(200, null);
 
                         AuthenticationManager.refreshAuthentication()
@@ -320,8 +331,8 @@
                         }
                     });
 
-                    it("should NOT set the data on the User", function () {
-                        expect(UserManager.setUserData).not.toHaveBeenCalled();
+                    it("should NOT set the username on the User", function () {
+                        expect(UserManager.setUsername).not.toHaveBeenCalled();
                     });
 
                     it("should throw an error", function () {
@@ -336,6 +347,11 @@
                 var mockData = "There was an error";
 
                 beforeEach(function () {
+                    AuthenticationManager.setToken({
+                        refresh_token: "1349758ukdafgn975",
+                        access_token: "as;kv987145oihkfdp9u"
+                    });
+
                     getTokenRequest.respond(500, mockData);
 
                     AuthenticationManager.refreshAuthentication()
@@ -348,8 +364,8 @@
                     }
                 });
 
-                it("should NOT set the data on the User", function () {
-                    expect(UserManager.setUserData).not.toHaveBeenCalled();
+                it("should NOT set the username on the User", function () {
+                    expect(UserManager.setUsername).not.toHaveBeenCalled();
                 });
 
                 it("should throw an error", function () {
@@ -365,7 +381,10 @@
             describe("when the user is logged in", function () {
 
                 beforeEach(function () {
-                    UserManager.hasAuthentication.and.returnValue(true);
+                    AuthenticationManager.setToken({
+                        refresh_token: "1349758ukdafgn975",
+                        access_token: "as;kv987145oihkfdp9u"
+                    });
                 });
 
                 it("should return true", function () {
@@ -377,7 +396,7 @@
             describe("when the user is NOT logged in", function () {
 
                 beforeEach(function () {
-                    UserManager.hasAuthentication.and.returnValue(false);
+                    AuthenticationManager.setToken(null);
                 });
 
                 it("should return false", function () {
@@ -393,7 +412,7 @@
             describe("when there is a refreshToken", function () {
 
                 beforeEach(function () {
-                    UserManager.getAuthToken.and.returnValue({
+                    AuthenticationManager.setToken({
                         refresh_token: "1349758ukdafgn975",
                         access_token: "as;kv987145oihkfdp9u"
                     });
@@ -408,7 +427,7 @@
             describe("when the refreshToken is null", function () {
 
                 beforeEach(function () {
-                    UserManager.getAuthToken.and.returnValue({
+                    AuthenticationManager.setToken({
                         refresh_token: null,
                         access_token: "as;kv987145oihkfdp9u"
                     });
@@ -423,7 +442,7 @@
             describe("when the refreshToken is empty", function () {
 
                 beforeEach(function () {
-                    UserManager.getAuthToken.and.returnValue({
+                    AuthenticationManager.setToken({
                         refresh_token: "",
                         access_token: "as;kv987145oihkfdp9u"
                     });
@@ -438,7 +457,7 @@
             describe("when the refreshToken is undefined", function () {
 
                 beforeEach(function () {
-                    UserManager.getAuthToken.and.returnValue({
+                    AuthenticationManager.setToken({
                         access_token: "as;kv987145oihkfdp9u"
                     });
                 });
