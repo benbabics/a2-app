@@ -10,7 +10,7 @@
         $base64,
         $rootScope,
         $httpBackend,
-        user = {
+        mockUser = {
             username: "IVREXXMS2",
             password: "Tester12"
         },
@@ -50,7 +50,7 @@
 
             // mock dependencies
             FormEncoder = jasmine.createSpyObj("FormEncoder", ["encode"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["setProfile", "getProfile"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["setProfile", "setUserData", "hasAuthentication", "getUsername", "getAuthToken", "clearAuthentication"]);
             AuthenticationErrorInterceptor = jasmine.createSpyObj("AuthenticationErrorInterceptor", ["responseError"]);
 
             module(function($provide) {
@@ -84,8 +84,8 @@
             beforeEach(function () {
                 rawParams = {
                     "grant_type": "password",
-                    "username": user.username,
-                    "password": user.password,
+                    "username": mockUser.username,
+                    "password": mockUser.password,
                     "scope": "read"
                 };
                 encodedParams = "grant_type=" + rawParams.grant_type +
@@ -116,7 +116,7 @@
             describe("when getting an authentication token", function () {
 
                 beforeEach(function () {
-                    AuthenticationManager.authenticate(user.username, user.password);
+                    AuthenticationManager.authenticate(mockUser.username, mockUser.password);
                 });
 
                 afterEach(function () {
@@ -145,13 +145,13 @@
                     beforeEach(function () {
                         getTokenRequest.respond(200, mockData);
 
-                        AuthenticationManager.authenticate(user.username, user.password)
+                        AuthenticationManager.authenticate(mockUser.username, mockUser.password)
                             .then(resolveHandler, rejectHandler);
                         $httpBackend.flush();
                     });
 
                     it("should set the profile on the User", function () {
-                        expect(UserManager.setProfile).toHaveBeenCalledWith(user.username, mockData);
+                        expect(UserManager.setUserData).toHaveBeenCalledWith(mockUser.username, mockData);
                     });
 
                     it("should resolve with the expected response data", function () {
@@ -165,7 +165,7 @@
                     beforeEach(function () {
                         getTokenRequest.respond(200, null);
 
-                        AuthenticationManager.authenticate(user.username, user.password)
+                        AuthenticationManager.authenticate(mockUser.username, mockUser.password)
                             .then(resolveHandler, rejectHandler);
 
                         try {
@@ -193,7 +193,7 @@
                 beforeEach(function () {
                     getTokenRequest.respond(500, mockData);
 
-                    AuthenticationManager.authenticate(user.username, user.password)
+                    AuthenticationManager.authenticate(mockUser.username, mockUser.password)
                         .then(resolveHandler, rejectHandler);
 
                     try {
@@ -239,15 +239,11 @@
                     "Accept"          : "application/json, text/plain, */*",
                     "X-Requested-With": "XMLHttpRequest"
                 };
-                logoutSpy = jasmine.createSpy("logOut");
 
-                UserManager.getProfile.and.returnValue({
-                    "username": user.username,
-                    "oauth": {
-                        refresh_token: rawParams.refresh_token
-                    },
-                    logOut: logoutSpy
+                UserManager.getAuthToken.and.returnValue({
+                    refresh_token: rawParams.refresh_token
                 });
+                UserManager.getUsername.and.returnValue(mockUser.username);
                 FormEncoder.encode.and.returnValue(encodedParams);
             });
 
@@ -269,7 +265,7 @@
                 });
 
                 it("should log the user out", function () {
-                    expect(logoutSpy).toHaveBeenCalled();
+                    expect(UserManager.clearAuthentication).toHaveBeenCalled();
                 });
 
                 it("should make a POST request to the token URL", function () {
@@ -299,8 +295,8 @@
                         $httpBackend.flush();
                     });
 
-                    it("should set the profile on the User", function () {
-                        expect(UserManager.setProfile).toHaveBeenCalledWith(user.username, mockData);
+                    it("should set the data on the User", function () {
+                        expect(UserManager.setUserData).toHaveBeenCalledWith(mockUser.username, mockData);
                     });
 
                     it("should resolve with the expected data", function () {
@@ -324,8 +320,8 @@
                         }
                     });
 
-                    it("should NOT set the profile on the User", function () {
-                        expect(UserManager.setProfile).not.toHaveBeenCalled();
+                    it("should NOT set the data on the User", function () {
+                        expect(UserManager.setUserData).not.toHaveBeenCalled();
                     });
 
                     it("should throw an error", function () {
@@ -352,8 +348,8 @@
                     }
                 });
 
-                it("should NOT set the profile on the User", function () {
-                    expect(UserManager.setProfile).not.toHaveBeenCalled();
+                it("should NOT set the data on the User", function () {
+                    expect(UserManager.setUserData).not.toHaveBeenCalled();
                 });
 
                 it("should throw an error", function () {
@@ -369,14 +365,7 @@
             describe("when the user is logged in", function () {
 
                 beforeEach(function () {
-                    UserManager.getProfile.and.returnValue({
-                        isLoggedIn: function () {
-                            return {
-                                refresh_token: "1349758ukdafgn975",
-                                access_token : "as;kv987145oihkfdp9u"
-                            };
-                        }
-                    });
+                    UserManager.hasAuthentication.and.returnValue(true);
                 });
 
                 it("should return true", function () {
@@ -388,11 +377,7 @@
             describe("when the user is NOT logged in", function () {
 
                 beforeEach(function () {
-                    UserManager.getProfile.and.returnValue({
-                        isLoggedIn: function () {
-                            return {};
-                        }
-                    });
+                    UserManager.hasAuthentication.and.returnValue(false);
                 });
 
                 it("should return false", function () {
@@ -408,10 +393,10 @@
             describe("when there is a refreshToken", function () {
 
                 beforeEach(function () {
-                    UserManager.getProfile.and.returnValue({oauth: {
+                    UserManager.getAuthToken.and.returnValue({
                         refresh_token: "1349758ukdafgn975",
                         access_token: "as;kv987145oihkfdp9u"
-                    }});
+                    });
                 });
 
                 it("should return true", function () {
@@ -423,10 +408,10 @@
             describe("when the refreshToken is null", function () {
 
                 beforeEach(function () {
-                    UserManager.getProfile.and.returnValue({oauth: {
+                    UserManager.getAuthToken.and.returnValue({
                         refresh_token: null,
                         access_token: "as;kv987145oihkfdp9u"
-                    }});
+                    });
                 });
 
                 it("should return false", function () {
@@ -438,10 +423,10 @@
             describe("when the refreshToken is empty", function () {
 
                 beforeEach(function () {
-                    UserManager.getProfile.and.returnValue({oauth: {
+                    UserManager.getAuthToken.and.returnValue({
                         refresh_token: "",
                         access_token: "as;kv987145oihkfdp9u"
-                    }});
+                    });
                 });
 
                 it("should return false", function () {
@@ -453,9 +438,9 @@
             describe("when the refreshToken is undefined", function () {
 
                 beforeEach(function () {
-                    UserManager.getProfile.and.returnValue({oauth: {
+                    UserManager.getAuthToken.and.returnValue({
                         access_token: "as;kv987145oihkfdp9u"
-                    }});
+                    });
                 });
 
                 it("should return false", function () {

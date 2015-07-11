@@ -30,7 +30,7 @@
             module("app.html");
 
             // mock dependencies
-            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn", "hasRefreshToken", "refreshAuthentication", "authenticate"]);
+            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn", "hasRefreshToken", "refreshAuthentication", "authenticate", "logOut"]);
 
             module(function($provide) {
                 $provide.value("AuthenticationManager", AuthenticationManager);
@@ -136,6 +136,10 @@
                                 $rootScope.$digest();
                             });
 
+                            it("should call AuthenticationManager.logOut", function () {
+                                expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                            });
+
                             it("should redirect to the login page", function () {
                                 expect($state.go).toHaveBeenCalledWith("user.auth.login");
                             });
@@ -175,6 +179,10 @@
                         errorResult = AuthenticationErrorInterceptor.responseError(mockRejection, restangularDeferred, restangularResponseHandler);
                     });
 
+                    it("should call AuthenticationManager.logOut", function () {
+                        expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                    });
+
                     it("should redirect to the login page", function () {
                         expect($state.go).toHaveBeenCalledWith("user.auth.login");
                     });
@@ -191,6 +199,10 @@
                         mockRejection.config = MOCK_FAILED_REQUEST_CONFIG;
 
                         errorResult = AuthenticationErrorInterceptor.responseError(mockRejection, restangularDeferred, restangularResponseHandler);
+                    });
+
+                    it("should call AuthenticationManager.logOut", function () {
+                        expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                     });
 
                     it("should redirect to the login page", function () {

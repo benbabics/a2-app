@@ -79,34 +79,6 @@
 
         });
 
-        describe("has an isLoggedIn function that", function () {
-            var user;
-
-            beforeEach(inject(function (UserModel) {
-                user = new UserModel();
-                user.oauth = "Fake oauth value";
-            }));
-
-            it("should return the oauth object", function () {
-                expect(user.isLoggedIn()).toEqual(user.oauth);
-            });
-
-        });
-
-        describe("has a logOut function that", function () {
-            var user;
-
-            beforeEach(inject(function (UserModel) {
-                user = new UserModel();
-                user.oauth = "Fake oauth value";
-
-                user.logOut();
-            }));
-
-            it("should null out the oauth object", function () {
-                expect(user.oauth).toBeNull();
-            });
-        });
     });
 
 })();

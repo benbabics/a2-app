@@ -1,26 +1,30 @@
 (function () {
     "use strict";
 
-    var UserManager;
+    var UserManager,
+        mockUserProfile = {};
 
     describe("A User Manager", function () {
 
         beforeEach(function () {
 
-            module("app.shared.auth");
+            module("app.shared");
 
-            inject(function (_UserManager_) {
+            mockUserProfile = jasmine.createSpyObj("UserModel", ["UserModel", "set"]);
+
+            inject(function (_UserManager_, UserModel) {
+                angular.extend(mockUserProfile, new UserModel());
+
                 UserManager = _UserManager_;
+                UserManager.setProfile(mockUserProfile);
             });
-
         });
 
         describe("has an activate function that", function () {
 
-            // TODO: test something here?
+            // TODO: figure out how to test this
 
         });
-
 
         describe("has a getNewUser function that", function () {
 
@@ -33,7 +37,7 @@
 
         });
 
-        describe("has a setProfile function that", function () {
+        describe("has a setUserData function that", function () {
 
             var newUsername = "SomeDifferentUser",
                 newOauth = {
@@ -42,81 +46,101 @@
                 };
 
             beforeEach(function () {
-                UserManager.setProfile(newUsername, newOauth);
+                UserManager.setUserData(newUsername, newOauth);
             });
 
             it("should set the username with the passed in argument", function () {
-                expect(UserManager.getProfile().username).toEqual(newUsername);
+                expect(mockUserProfile.username).toEqual(newUsername);
             });
 
             it("should set the oauth object with the passed in argument", function () {
-                expect(UserManager.getProfile().oauth).toEqual(newOauth);
+                expect(mockUserProfile.oauth).toEqual(newOauth);
             });
 
         });
 
-        describe("has a getProfile function that", function () {
+        describe("has a setProfile function that", function () {
 
-            var newUsername = "SomeDifferentUser",
-                newOauth = {
+            var newProfile = {
+                username:"SomeDifferentUser",
+                oauth: {
+                    refreshToken: "aslkjb9sf8g7olkq2jr4",
+                    accessToken: "345978243095yhwjkerhy"
+                }
+            };
+
+            beforeEach(function () {
+                UserManager.setProfile(newProfile);
+            });
+
+            // TODO: figure out how to test this without direct access to profile
+        });
+
+        describe("has a getUsername function that", function () {
+
+            beforeEach(function () {
+                mockUserProfile.username = "SomeDifferentUser";
+            });
+
+            it("should return the username property from the profile", function () {
+                expect(UserManager.getUsername()).toEqual(mockUserProfile.username);
+            });
+        });
+
+        describe("has a getAuthToken function that", function () {
+
+            beforeEach(function () {
+                mockUserProfile.oauth = {
                     refreshToken: "aslkjb9sf8g7olkq2jr4",
                     accessToken: "345978243095yhwjkerhy"
                 };
-
-            beforeEach(function () {
-                UserManager.setProfile(newUsername, newOauth);
             });
 
-            it("should return the User's profile", function () {
-                expect(UserManager.getProfile())
-                    .toEqual(jasmine.objectContaining({username: newUsername, oauth: newOauth}));
+            it("should return the oauth object of the profile", function () {
+                expect(UserManager.getAuthToken()).toEqual(mockUserProfile.oauth);
             });
 
         });
 
-        describe("has a User profile that", function () {
+        describe("has a hasAuthentication function that", function () {
 
-            var newUsername = "SomeDifferentUser",
-                newOauth = {
-                    refreshToken: "aslkjb9sf8g7olkq2jr4",
-                    accessToken: "345978243095yhwjkerhy"
-                },
-                profile;
+            it("should return true when the oauth object is NOT empty", function () {
+                mockUserProfile.oauth = "Fake oauth value";
+
+                expect(UserManager.hasAuthentication()).toBeTruthy();
+            });
+
+            it("should return false when the oauth object is empty", function () {
+                mockUserProfile.oauth = "";
+
+                expect(UserManager.hasAuthentication()).toBeFalsy();
+            });
+
+            it("should return false when the oauth object is null", function () {
+                mockUserProfile.oauth = null;
+
+                expect(UserManager.hasAuthentication()).toBeFalsy();
+            });
+
+            it("should return false when the oauth object is undefined", function () {
+                mockUserProfile.oauth = undefined;
+
+                expect(UserManager.hasAuthentication()).toBeFalsy();
+            });
+
+        });
+
+        describe("has a clearAuthentication function that", function () {
 
             beforeEach(function () {
-                UserManager.setProfile(newUsername, newOauth);
+                mockUserProfile.oauth = "Fake oauth value";
 
-                profile = UserManager.getProfile();
+                UserManager.clearAuthentication();
             });
 
-            it("has a username", function () {
-                expect(profile.username).toBeDefined();
+            it("should null out the oauth object", function () {
+                expect(mockUserProfile.oauth).toBeNull();
             });
-
-            it("has an oauth object", function () {
-                expect(profile.oauth).toBeDefined();
-            });
-
-            describe("has an isLoggedIn function that", function () {
-
-                it("should return the oauth object", function () {
-                    expect(profile.isLoggedIn()).toEqual(profile.oauth);
-                });
-
-            });
-
-            describe("has a logOut function that", function () {
-
-                beforeEach(function () {
-                    profile.logOut();
-                });
-
-                it("should null out the oauth object", function () {
-                    expect(profile.oauth).toBeNull();
-                });
-
-            });
-
         });
 
     });

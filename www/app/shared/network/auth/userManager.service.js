@@ -4,15 +4,20 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function UserManager(UserModel) {
+    function UserManager(UserModel, CommonService) {
         // Private members
-        var profile = {};
+        var profile = {},
+            _ = CommonService._;
 
         // Revealed Public members
         var service = {
-            getNewUser: getNewUser,
-            setProfile: setProfile,
-            getProfile: getProfile
+            getNewUser         : getNewUser,
+            setUserData        : setUserData,
+            setProfile         : setProfile,
+            getUsername        : getUsername,
+            getAuthToken       : getAuthToken,
+            hasAuthentication  : hasAuthentication,
+            clearAuthentication: clearAuthentication
         };
 
         activate();
@@ -28,13 +33,29 @@
             return new UserModel();
         }
 
-        function setProfile(username, oauth) {
+        function setUserData(username, oauth) {
             profile.username = username;
             profile.oauth = oauth;
         }
 
-        function getProfile() {
-            return profile;
+        function setProfile(userProfile) {
+            profile = userProfile;
+        }
+
+        function getUsername() {
+            return profile.username;
+        }
+
+        function getAuthToken() {
+            return profile.oauth;
+        }
+
+        function hasAuthentication() {
+            return (!_.isEmpty(profile.oauth));
+        }
+
+        function clearAuthentication() {
+            profile.oauth = null;
         }
 
     }

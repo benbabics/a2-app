@@ -8,14 +8,6 @@
             this.oauth = null;
         }
 
-        UserModel.prototype.isLoggedIn = function () {
-            return this.oauth;
-        };
-
-        UserModel.prototype.logOut = function () {
-            this.oauth = null;
-        };
-
         UserModel.prototype.set = function (userResource) {
             angular.extend(this, userResource);
         };

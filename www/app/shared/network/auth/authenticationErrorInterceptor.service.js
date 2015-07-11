@@ -30,10 +30,9 @@
                         });
 
                 }
-                // We haven't gotten an Access Token yet
+                // We don't have an Access Token
                 else {
-                    // Get an Access Token
-                    authenticate(rejection, deferred, responseHandler);
+                    authenticate();
                 }
 
                 return false;
@@ -64,7 +63,10 @@
                 });
         }
 
-        function authenticate(originalFailedResponse, deferred, responseHandler) {
+        function authenticate() {
+            // Log out the user
+            AuthenticationManager.logOut();
+
             $state.go("user.auth.login");
 
             // TODO - Stretch goal - Remember what the user was trying to do and do it after auth

@@ -15,7 +15,8 @@
             authenticate         : authenticate,
             refreshAuthentication: refreshAuthentication,
             userLoggedIn         : userLoggedIn,
-            hasRefreshToken      : hasRefreshToken
+            hasRefreshToken      : hasRefreshToken,
+            logOut               : logOut
         };
 
         activate();
@@ -41,19 +42,18 @@
         }
 
         function refreshAuthentication() {
-            var data,
-                userProfile = UserManager.getProfile();
+            var data;
 
             data = FormEncoder.encode({
                 "grant_type": "refresh_token",
-                "refresh_token": userProfile.oauth.refresh_token || null
+                "refresh_token": UserManager.getAuthToken().refresh_token || null
             });
 
-            // Clear out the oauth object so that if the Refresh attempt fails we aren't keeping any invalid/expired tokens
-            userProfile.logOut();
+            // Log the user out so that if the Refresh attempt fails we aren't keeping any invalid/expired tokens
+            logOut();
 
             // Refresh the token
-            return getToken(userProfile.username, data);
+            return getToken(UserManager.getUsername(), data);
         }
 
         function getToken(username, data) {
@@ -63,7 +63,7 @@
 
                     if (authResponse.data) {
 
-                        UserManager.setProfile(username, authResponse.data);
+                        UserManager.setUserData(username, authResponse.data);
                         return authResponse.data;
 
                     }
@@ -75,27 +75,25 @@
                 })
                 // get token failed
                 .catch(function (failureResponse) {
+                    var error = CommonService.getErrorMessage(failureResponse);
+
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
-
-                    var error = "Getting Auth Token failed: " + CommonService.getErrorMessage(failureResponse);
-
-                    Logger.error(error);
-
-                    if (_.isObject(failureResponse.data) && failureResponse.data.error_description) {
-                        throw new Error(failureResponse.data.error_description);
-                    }
-
-                    throw new Error(error);
+                    Logger.error("Getting Auth Token failed: " + error);
+                    throw new Error("Getting Auth Token failed: " + error);
                 });
 
         }
 
         function userLoggedIn() {
-            return (!_.isEmpty(UserManager.getProfile().isLoggedIn()));
+            return UserManager.hasAuthentication();
         }
 
         function hasRefreshToken() {
-            return (!_.isEmpty(UserManager.getProfile().oauth.refresh_token));
+            return (!_.isEmpty(UserManager.getAuthToken().refresh_token));
+        }
+
+        function logOut() {
+            UserManager.clearAuthentication();
         }
     }
 

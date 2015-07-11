@@ -17,8 +17,8 @@
 
         function request(headers) {
 
-            if (UserManager.getProfile().isLoggedIn()) {
-                headers.Authorization = "Bearer " + UserManager.getProfile().oauth.access_token;
+            if (UserManager.hasAuthentication()) {
+                headers.Authorization = "Bearer " + UserManager.getAuthToken().access_token;
             }
 
             return {headers: headers};

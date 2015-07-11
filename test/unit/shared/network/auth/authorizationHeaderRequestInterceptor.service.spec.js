@@ -23,7 +23,7 @@
             });
 
             // mock dependencies
-            UserManager = jasmine.createSpyObj("UserManager", ["setProfile", "getProfile"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["getAuthToken", "hasAuthentication"]);
 
             module(function($provide) {
                 $provide.value("UserManager", UserManager);
@@ -49,12 +49,8 @@
                     mockHeaders = {};
 
                 beforeEach(function () {
-                    UserManager.getProfile.and.returnValue({
-                        isLoggedIn: function () {
-                            return mockOauth;
-                        },
-                        oauth: mockOauth
-                    });
+                    UserManager.hasAuthentication.and.returnValue(true);
+                    UserManager.getAuthToken.and.returnValue(mockOauth);
 
                     interceptedRequest = AuthorizationHeaderRequestInterceptor.request(mockHeaders);
                     $rootScope.$digest();
@@ -77,12 +73,8 @@
                     mockHeaders = {};
 
                 beforeEach(function () {
-                    UserManager.getProfile.and.returnValue({
-                        isLoggedIn: function () {
-                            return mockOauth;
-                        },
-                        oauth: mockOauth
-                    });
+                    UserManager.hasAuthentication.and.returnValue(false);
+                    UserManager.getAuthToken.and.returnValue(mockOauth);
 
                     interceptedRequest = AuthorizationHeaderRequestInterceptor.request(mockHeaders);
                     $rootScope.$digest();
