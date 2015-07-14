@@ -7,6 +7,7 @@
         getCurrentUserDeferred,
         resolveHandler,
         rejectHandler,
+        AccountModel,
         UserManager,
         UsersResource,
         UsersResourceOne,
@@ -18,6 +19,7 @@
 
             module("app.shared");
             module("app.html");
+            module("app.components.account");
             module("app.components.user");
 
             // mock dependencies
@@ -29,11 +31,12 @@
 
             remoteUser = jasmine.createSpyObj("UserModel", ["UserModel", "set"]);
 
-            inject(function (_$q_, _$rootScope_, globals, _UserManager_, UserModel) {
+            inject(function (_$q_, _$rootScope_, _AccountModel_, globals, _UserManager_, UserModel) {
                 remoteUser = new UserModel();
 
                 $q = _$q_;
                 $rootScope = _$rootScope_;
+                AccountModel = _AccountModel_;
                 UserManager = _UserManager_;
                 UserManager.setUser(remoteUser);
 
@@ -61,8 +64,8 @@
                     email: "",
                     firstName: "",
                     username: "",
-                    company: {},
-                    billingCompany: {}
+                    company: new AccountModel(),
+                    billingCompany: new AccountModel()
                 }));
             });
 

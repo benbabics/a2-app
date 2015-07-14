@@ -1,16 +1,14 @@
 (function () {
     "use strict";
 
-    var UserModel = function () {
+    var UserModel = function (AccountModel) {
 
         function UserModel() {
             this.email = "";
             this.firstName = "";
             this.username = "";
-
-            //TODO - Should these be moved into separate models?
-            this.company = {};
-            this.billingCompany = {};
+            this.company = new AccountModel();
+            this.billingCompany = new AccountModel();
         }
 
         UserModel.prototype.set = function (userResource) {

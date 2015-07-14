@@ -7,6 +7,7 @@
 
         beforeEach(function () {
             module("app.shared");
+            module("app.components.account");
             module("app.components.user");
 
             inject(function (CommonService) {
