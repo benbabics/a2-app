@@ -48,6 +48,10 @@
         },
         ACCOUNTS: {
             "BASE": "secure/accounts"
+        },
+        USERS   : {
+            "BASE"               : "users",
+            "CURRENT"            : "current"
         }
     };
 

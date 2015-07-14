@@ -21,7 +21,19 @@
                     newField1: "some value",
                     newField2: "some other value",
                     newField3: "yet another value",
-                    username : "username value"
+                    email    : "email address value",
+                    firstName: "first name value",
+                    username : "username value",
+                    company  : {
+                        accountId    : "company account id value",
+                        accountNumber: "company account number value",
+                        name         : "company name value"
+                    },
+                    billingCompany: {
+                        accountId    : "billing company account id value",
+                        accountNumber: "billing company account number value",
+                        name         : "billing company name value"
+                    }
                 },
                 userModelKeys,
                 userResourceKeys;

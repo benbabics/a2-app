@@ -1,7 +1,14 @@
 (function () {
     "use strict";
 
-    var UserManager,
+    var $q,
+        $rootScope,
+        CURRENT_USER_URL,
+        getCurrentUserDeferred,
+        resolveHandler,
+        rejectHandler,
+        UserManager,
+        UsersResource,
         mockUserProfile = {};
 
     describe("A User Manager", function () {
@@ -9,16 +16,32 @@
         beforeEach(function () {
 
             module("app.shared");
+            module("app.html");
             module("app.components.user");
+
+            // mock dependencies
+            UsersResource = jasmine.createSpyObj("UsersResource", ["customGET"]);
+
+            module(function ($provide) {
+                $provide.value("UsersResource", UsersResource);
+            });
 
             mockUserProfile = jasmine.createSpyObj("UserModel", ["UserModel", "set"]);
 
-            inject(function (_UserManager_, UserModel) {
+            inject(function (_$q_, _$rootScope_, globals, _UserManager_, UserModel) {
                 angular.extend(mockUserProfile, new UserModel());
 
+                $q = _$q_;
+                $rootScope = _$rootScope_;
                 UserManager = _UserManager_;
                 UserManager.setUser(mockUserProfile);
+
+                CURRENT_USER_URL = "/" + globals.ACCOUNT_MAINTENANCE_API.USERS.CURRENT;
             });
+
+            // set up spies
+            resolveHandler = jasmine.createSpy("resolveHandler");
+            rejectHandler = jasmine.createSpy("rejectHandler");
         });
 
         describe("has an activate function that", function () {
@@ -31,8 +54,108 @@
 
             it("should return a new User object", function () {
                 expect(UserManager.getNewUser()).toEqual(jasmine.objectContaining({
-                    username: ""
+                    email: "",
+                    firstName: "",
+                    username: "",
+                    company: {},
+                    billingCompany: {}
                 }));
+            });
+
+        });
+
+        describe("has a retrieveCurrentUserDetails function that", function () {
+
+            var mockResponse = {
+                    data: {
+                        firstName: "first name value",
+                        username : "username value",
+                        company  : {
+                            accountId    : "company account id value",
+                            accountNumber: "company account number value",
+                            name         : "company name value"
+                        },
+                        billingCompany: {
+                            accountId    : "billing company account id value",
+                            accountNumber: "billing company account number value",
+                            name         : "billing company name value"
+                        }
+                    }
+                };
+
+
+            beforeEach(function () {
+                getCurrentUserDeferred = $q.defer();
+
+                UsersResource.customGET.and.returnValue(getCurrentUserDeferred.promise);
+
+                UserManager.setUser(null);
+
+                UserManager.retrieveCurrentUserDetails()
+                    .then(resolveHandler, rejectHandler);
+            });
+
+            describe("when getting a details of the current user token", function () {
+
+                it("should call UsersResource.customGET with the correct URL", function () {
+                    expect(UsersResource.customGET).toHaveBeenCalledWith(CURRENT_USER_URL);
+                });
+
+            });
+
+            describe("when the current user is retrieved successfully", function () {
+
+                describe("when there is data in the response", function () {
+
+                    beforeEach(function () {
+                        getCurrentUserDeferred.resolve(mockResponse);
+                        $rootScope.$digest();
+                    });
+
+                    it("should set the user", function () {
+                        expect(UserManager.getUser()).toEqual(mockResponse.data);
+                    });
+
+                    it("should resolve", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(mockResponse.data);
+                        expect(rejectHandler).not.toHaveBeenCalled();
+                    });
+
+                });
+
+                describe("when there is no data in the response", function () {
+
+                    beforeEach(function () {
+                        getCurrentUserDeferred.resolve(null);
+                    });
+
+                    it("should throw an error", function () {
+                        expect($rootScope.$digest).toThrow();
+                    });
+
+                    it("should NOT update the user", function () {
+                        expect(UserManager.getUser()).toBeNull();
+                    });
+
+                });
+            });
+
+            describe("when retrieving the current user fails", function () {
+
+                var mockResponse = "Some error";
+
+                beforeEach(function () {
+                    getCurrentUserDeferred.reject(mockResponse);
+                });
+
+                it("should throw an error", function () {
+                    expect($rootScope.$digest).toThrow();
+                });
+
+                it("should NOT update the user", function () {
+                    expect(UserManager.getUser()).toBeNull();
+                });
+
             });
 
         });
