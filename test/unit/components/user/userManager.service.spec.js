@@ -102,7 +102,7 @@
                     .then(resolveHandler, rejectHandler);
             });
 
-            describe("when getting a details of the current user token", function () {
+            describe("when getting a details of the current user", function () {
 
                 it("should call UsersResource.one", function () {
                     expect(UsersResource.one).toHaveBeenCalledWith();
