@@ -7,7 +7,9 @@
         AuthenticationManager,
         CommonService,
         globals,
-        deferred,
+        authenticateDeferred,
+        retrieveCurrentUserDeferred,
+        UserManager,
         $state;
 
     describe("A Login Controller", function () {
@@ -30,13 +32,15 @@
             });
 
             // mock dependencies
-            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate"]);
+            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate", "logOut"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["retrieveCurrentUserDetails"]);
             CommonService = jasmine.createSpyObj("CommonService", ["loadingBegin", "loadingComplete"]);
             $state = jasmine.createSpyObj("state", ["go"]);
 
             inject(function (_$rootScope_, $controller, $q, _globals_) {
                 $scope = _$rootScope_.$new();
-                deferred = $q.defer();
+                authenticateDeferred = $q.defer();
+                retrieveCurrentUserDeferred = $q.defer();
                 globals = _globals_;
                 $rootScope = _$rootScope_;
 
@@ -45,6 +49,7 @@
                     globals: globals,
                     AuthenticationManager: AuthenticationManager,
                     CommonService: CommonService,
+                    UserManager: UserManager,
                     $state: $state
                 });
             });
@@ -64,7 +69,7 @@
             };
 
             beforeEach(function () {
-                AuthenticationManager.authenticate.and.returnValue(deferred.promise);
+                AuthenticationManager.authenticate.and.returnValue(authenticateDeferred.promise);
 
                 ctrl.user = mockUser;
                 ctrl.authenticateUser();
@@ -77,17 +82,52 @@
             describe("when the User is Authenticated successfully", function () {
 
                 beforeEach(function () {
+                    UserManager.retrieveCurrentUserDetails.and.returnValue(retrieveCurrentUserDeferred.promise);
+
                     //return a promise object and resolve it
-                    deferred.resolve();
-                    $scope.$digest();
+                    authenticateDeferred.resolve();
                 });
 
-                it("should NOT have an error message", function () {
-                    expect(ctrl.globalError).toBeFalsy();
+                describe("when the User Details is Retrieved successfully", function () {
+
+                    beforeEach(function () {
+                        //return a promise object and resolve it
+                        retrieveCurrentUserDeferred.resolve();
+                        $scope.$digest();
+                    });
+
+                    it("should NOT have an error message", function () {
+                        expect(ctrl.globalError).toBeFalsy();
+                    });
+
+                    it("should navigate to the landing page", function () {
+                        expect($state.go).toHaveBeenCalledWith("landing");
+                    });
+
                 });
 
-                it("should navigate to the landing page", function () {
-                    expect($state.go).toHaveBeenCalledWith("landing");
+                describe("when the User Details is NOT Retrieved successfully", function () {
+
+                    var errorObjectArg = new Error("Something bad happened");
+
+                    beforeEach(function () {
+                        //reject with an error message
+                        retrieveCurrentUserDeferred.reject(errorObjectArg);
+                        $scope.$digest();
+                    });
+
+                    it("should call AuthenticationManager.logOut", function () {
+                        expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                    });
+
+                    it("should have an error message", function () {
+                        expect(ctrl.globalError).toEqual("Invalid login information. Please check your username and password or go online to set up or recover your username and password.");
+                    });
+
+                    it("should NOT navigate away from the login page", function () {
+                        expect($state.go).not.toHaveBeenCalled();
+                    });
+
                 });
 
             });
@@ -98,8 +138,16 @@
 
                 beforeEach(function () {
                     //reject with an error message
-                    deferred.reject(errorObjectArg);
+                    authenticateDeferred.reject(errorObjectArg);
                     $scope.$digest();
+                });
+
+                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
+                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                });
+
+                it("should call AuthenticationManager.logOut", function () {
+                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -118,8 +166,16 @@
 
                 beforeEach(function () {
                     //reject with an error message
-                    deferred.reject(errorObjectArg);
+                    authenticateDeferred.reject(errorObjectArg);
                     $scope.$digest();
+                });
+
+                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
+                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                });
+
+                it("should call AuthenticationManager.logOut", function () {
+                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -138,8 +194,16 @@
 
                 beforeEach(function () {
                     //reject with an error message
-                    deferred.reject(errorObjectArg);
+                    authenticateDeferred.reject(errorObjectArg);
                     $scope.$digest();
+                });
+
+                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
+                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                });
+
+                it("should call AuthenticationManager.logOut", function () {
+                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -158,8 +222,16 @@
 
                 beforeEach(function () {
                     //reject with an error message
-                    deferred.reject(errorObjectArg);
+                    authenticateDeferred.reject(errorObjectArg);
                     $scope.$digest();
+                });
+
+                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
+                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                });
+
+                it("should call AuthenticationManager.logOut", function () {
+                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -178,8 +250,16 @@
 
                 beforeEach(function () {
                     //reject with an error message
-                    deferred.reject(errorObjectArg);
+                    authenticateDeferred.reject(errorObjectArg);
                     $scope.$digest();
+                });
+
+                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
+                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                });
+
+                it("should call AuthenticationManager.logOut", function () {
+                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -198,8 +278,16 @@
 
                 beforeEach(function () {
                     //reject with an error message
-                    deferred.reject(errorObjectArg);
+                    authenticateDeferred.reject(errorObjectArg);
                     $scope.$digest();
+                });
+
+                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
+                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                });
+
+                it("should call AuthenticationManager.logOut", function () {
+                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -218,8 +306,16 @@
 
                 beforeEach(function () {
                     //reject with an error message
-                    deferred.reject(errorObjectArg);
+                    authenticateDeferred.reject(errorObjectArg);
                     $scope.$digest();
+                });
+
+                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
+                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                });
+
+                it("should call AuthenticationManager.logOut", function () {
+                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {

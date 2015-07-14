@@ -10,6 +10,8 @@ var AuthenticateUserRequestFailedUserMustSetupSecurityQuestionsMock = require(".
 var AuthenticateUserRequestFailedUserNotActiveMock = require("../../mocks/authenticateUserRequestFailedUserNotActive.mock.js");
 var AuthenticateUserRequestFailedPasswordExpiredMock = require("../../mocks/authenticateUserRequestFailedPasswordExpired.mock.js");
 var AuthenticateUserRequestFailedAuthorizationFailedMock = require("../../mocks/authenticateUserRequestFailedAuthorizationFailed.mock.js");
+var AuthenticateUserRequestSuccessMock = require("../../mocks/authenticateUserRequestSuccess.mock.js");
+var RetrieveCurrentUserRequestFailedMock = require("../../mocks/retrieveCurrentUserRequestFailed.mock.js");
 
 
 (function () {
@@ -306,6 +308,41 @@ var AuthenticateUserRequestFailedAuthorizationFailedMock = require("../../mocks/
                 expect(this.page.errorMessage.isPresent()).toBeTruthy();
                 expect(this.page.errorMessage.isDisplayed()).toBeTruthy();
                 expect(this.page.errorMessage.getText()).toMatch("Your account is not able to be managed via the mobile application at this time.");
+            });
+
+            it("should still have values in username and password", function () {
+                expect(this.page.getUserName()).toMatch(mockUsername);
+                expect(this.page.getPassword()).toMatch(mockPassword);
+            });
+        });
+
+        describe("When retrieving the current user fails", function () {
+            beforeAll(function () {
+                // Set up HTTP Request/Response Mocks
+                browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestSuccessMock);
+                browser.addMockModule("RetrieveCurrentUserMock", RetrieveCurrentUserRequestFailedMock);
+
+                this.page = new UserLoginPage();
+
+                this.page.typeUserName(mockUsername);
+                this.page.typePassword(mockPassword);
+
+                this.page.submit();
+            });
+
+            afterAll(function () {
+                this.page.clearUserName();
+                this.page.clearPassword();
+
+                // Remove HTTP Request/Response Mocks
+                browser.removeMockModule("AuthenticateUserMock");
+                browser.removeMockModule("RetrieveCurrentUserMock");
+            });
+
+            it("should have an error message", function () {
+                expect(this.page.errorMessage.isPresent()).toBeTruthy();
+                expect(this.page.errorMessage.isDisplayed()).toBeTruthy();
+                expect(this.page.errorMessage.getText()).toMatch("Invalid login information. Please check your username and password or go online to set up or recover your username and password.");
             });
 
             it("should still have values in username and password", function () {

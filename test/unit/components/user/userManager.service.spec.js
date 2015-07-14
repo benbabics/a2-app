@@ -9,7 +9,8 @@
         rejectHandler,
         UserManager,
         UsersResource,
-        mockUserProfile = {};
+        UsersResourceOne,
+        remoteUser = {};
 
     describe("A User Manager", function () {
 
@@ -20,28 +21,31 @@
             module("app.components.user");
 
             // mock dependencies
-            UsersResource = jasmine.createSpyObj("UsersResource", ["customGET"]);
+            UsersResource = jasmine.createSpyObj("UsersResource", ["one"]);
 
             module(function ($provide) {
                 $provide.value("UsersResource", UsersResource);
             });
 
-            mockUserProfile = jasmine.createSpyObj("UserModel", ["UserModel", "set"]);
+            remoteUser = jasmine.createSpyObj("UserModel", ["UserModel", "set"]);
 
             inject(function (_$q_, _$rootScope_, globals, _UserManager_, UserModel) {
-                angular.extend(mockUserProfile, new UserModel());
+                remoteUser = new UserModel();
 
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 UserManager = _UserManager_;
-                UserManager.setUser(mockUserProfile);
+                UserManager.setUser(remoteUser);
 
-                CURRENT_USER_URL = "/" + globals.ACCOUNT_MAINTENANCE_API.USERS.CURRENT;
+                CURRENT_USER_URL = globals.ACCOUNT_MAINTENANCE_API.USERS.CURRENT;
             });
 
             // set up spies
+            UsersResourceOne = jasmine.createSpyObj("UsersResourceOne", ["customGET"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
+
+            UsersResource.one.and.returnValue(UsersResourceOne);
         });
 
         describe("has an activate function that", function () {
@@ -87,7 +91,7 @@
             beforeEach(function () {
                 getCurrentUserDeferred = $q.defer();
 
-                UsersResource.customGET.and.returnValue(getCurrentUserDeferred.promise);
+                UsersResourceOne.customGET.and.returnValue(getCurrentUserDeferred.promise);
 
                 UserManager.setUser(null);
 
@@ -97,8 +101,12 @@
 
             describe("when getting a details of the current user token", function () {
 
-                it("should call UsersResource.customGET with the correct URL", function () {
-                    expect(UsersResource.customGET).toHaveBeenCalledWith(CURRENT_USER_URL);
+                it("should call UsersResource.one", function () {
+                    expect(UsersResource.one).toHaveBeenCalledWith();
+                });
+
+                it("should call UsersResourceOne.customGET with the correct URL", function () {
+                    expect(UsersResourceOne.customGET).toHaveBeenCalledWith(CURRENT_USER_URL);
                 });
 
             });

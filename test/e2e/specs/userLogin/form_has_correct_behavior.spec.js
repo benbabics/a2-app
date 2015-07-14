@@ -3,6 +3,7 @@
 var UserLoginPage = require("../../pages/userLogin.page.js");
 var AuthenticateUserRequestSuccessMock = require("../../mocks/authenticateUserRequestSuccess.mock.js");
 var AuthenticateUserRequestFailedBadCredentials = require("../../mocks/authenticateUserRequestFailedBadCredentials.mock.js");
+var RetrieveCurrentUserRequestSuccessMock = require("../../mocks/retrieveCurrentUserRequestSuccess.mock.js");
 
 (function () {
     var mockUserName = "mockUserName",
@@ -102,6 +103,7 @@ var AuthenticateUserRequestFailedBadCredentials = require("../../mocks/authentic
 
                         beforeAll(function () {
                             browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestSuccessMock);
+                            browser.addMockModule("RetrieveCurrentUserMock", RetrieveCurrentUserRequestSuccessMock);
 
                             browser.refresh();
 
@@ -112,6 +114,7 @@ var AuthenticateUserRequestFailedBadCredentials = require("../../mocks/authentic
 
                         afterAll(function () {
                             browser.removeMockModule("AuthenticateUserMock");
+                            browser.removeMockModule("RetrieveCurrentUserMock");
 
                             browser.refresh();
 
