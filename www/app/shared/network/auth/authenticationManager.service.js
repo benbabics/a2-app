@@ -5,15 +5,18 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AuthenticationManager($q, FormEncoder, AuthenticationResource, UserManager, CommonService, Logger) {
+    function AuthenticationManager($q, FormEncoder, AuthenticationResource, CommonService, Logger) {
 
         // Private members
         var _ = CommonService._,
-            oauth;
+            oauth,
+            tokenUsername;
 
         // Revealed Public members
         var service = {
             authenticate          : authenticate,
+            getUsername           : getUsername,
+            setUsername           : setUsername,
             refreshAuthentication : refreshAuthentication,
             userLoggedIn          : userLoggedIn,
             hasRefreshToken       : hasRefreshToken,
@@ -39,6 +42,14 @@
             return getToken(username, data);
         }
 
+        function getUsername() {
+            return tokenUsername;
+        }
+
+        function setUsername(username) {
+            tokenUsername = username;
+        }
+
         function refreshAuthentication() {
             var data;
 
@@ -51,7 +62,7 @@
             logOut();
 
             // Refresh the token
-            return getToken(UserManager.getUsername(), data);
+            return getToken(getUsername(), data);
         }
 
         function getToken(username, data) {
@@ -62,8 +73,8 @@
                     if (authResponse.data) {
 
                         oauth = authResponse.data;
+                        tokenUsername = username;
 
-                        UserManager.setUsername(username);
                         return authResponse.data;
 
                     }

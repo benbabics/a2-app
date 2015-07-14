@@ -11,9 +11,7 @@
         // Revealed Public members
         var service = {
             getNewUser : getNewUser,
-            getUsername: getUsername,
-            setUser    : setUser,
-            setUsername: setUsername
+            setUser    : setUser
         };
 
         activate();
@@ -29,16 +27,8 @@
             return new UserModel();
         }
 
-        function getUsername() {
-            return user.username;
-        }
-
         function setUser(userInfo) {
             user = userInfo;
-        }
-
-        function setUsername(username) {
-            user.username = username;
         }
 
     }

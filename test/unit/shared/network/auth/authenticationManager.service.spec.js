@@ -5,7 +5,6 @@
 
     var AuthenticationManager,
         FormEncoder,
-        UserManager,
         AuthenticationErrorInterceptor,
         $base64,
         $rootScope,
@@ -50,12 +49,10 @@
 
             // mock dependencies
             FormEncoder = jasmine.createSpyObj("FormEncoder", ["encode"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["getNewUser", "getUsername", "setUser", "setUsername"]);
             AuthenticationErrorInterceptor = jasmine.createSpyObj("AuthenticationErrorInterceptor", ["responseError"]);
 
             module(function($provide) {
                 $provide.value("FormEncoder", FormEncoder);
-                $provide.value("UserManager", UserManager);
 
                 // Stub interceptors
                 $provide.value("AuthorizationHeaderRequestInterceptor", {});
@@ -147,11 +144,19 @@
 
                         AuthenticationManager.authenticate(mockUser.username, mockUser.password)
                             .then(resolveHandler, rejectHandler);
-                        $httpBackend.flush();
+                        try {
+                            $httpBackend.flush();
+                        }
+                        catch (error) {
+                        }
                     });
 
-                    it("should set the username on the User", function () {
-                        expect(UserManager.setUsername).toHaveBeenCalledWith(mockUser.username);
+                    it("should set the username", function () {
+                        expect(AuthenticationManager.getUsername()).toEqual(mockUser.username);
+                    });
+
+                    it("should log in the user", function () {
+                        expect(AuthenticationManager.userLoggedIn()).toBeTruthy();
                     });
 
                     it("should resolve with the expected response data", function () {
@@ -161,8 +166,11 @@
                 });
 
                 describe("when there is no data in the response", function () {
+                    var initialUsername = "Initial Username";
 
                     beforeEach(function () {
+                        AuthenticationManager.setUsername(initialUsername);
+
                         getTokenRequest.respond(200, null);
 
                         AuthenticationManager.authenticate(mockUser.username, mockUser.password)
@@ -175,8 +183,12 @@
                         }
                     });
 
-                    it("should NOT set the username on the User", function () {
-                        expect(UserManager.setUsername).not.toHaveBeenCalled();
+                    it("should NOT update the username", function () {
+                        expect(AuthenticationManager.getUsername()).toEqual(initialUsername);
+                    });
+
+                    it("should NOT log in the user", function () {
+                        expect(AuthenticationManager.userLoggedIn()).toBeFalsy();
                     });
 
                     it("should throw an error", function () {
@@ -188,9 +200,12 @@
 
             describe("when retrieving the token fails", function () {
 
-                var mockData = "There was an error";
+                var mockData = "There was an error",
+                    initialUsername = "Initial Username";
 
                 beforeEach(function () {
+                    AuthenticationManager.setUsername(initialUsername);
+
                     getTokenRequest.respond(500, mockData);
 
                     AuthenticationManager.authenticate(mockUser.username, mockUser.password)
@@ -203,8 +218,12 @@
                     }
                 });
 
-                it("should NOT set the username on the User", function () {
-                    expect(UserManager.setUsername).not.toHaveBeenCalled();
+                it("should NOT update the username", function () {
+                    expect(AuthenticationManager.getUsername()).toEqual(initialUsername);
+                });
+
+                it("should NOT log in the user", function () {
+                    expect(AuthenticationManager.userLoggedIn()).toBeFalsy();
                 });
 
                 it("should throw an error", function () {
@@ -239,7 +258,6 @@
                     "X-Requested-With": "XMLHttpRequest"
                 };
 
-                UserManager.getUsername.and.returnValue(mockUser.username);
                 FormEncoder.encode.and.returnValue(encodedParams);
             });
 
@@ -296,13 +314,23 @@
 
                         getTokenRequest.respond(200, mockData);
 
+                        AuthenticationManager.setUsername(mockUser.username);
+
                         AuthenticationManager.refreshAuthentication()
                             .then(resolveHandler, rejectHandler);
-                        $httpBackend.flush();
+                        try {
+                            $httpBackend.flush();
+                        }
+                        catch (error) {
+                        }
                     });
 
-                    it("should set the username on the User", function () {
-                        expect(UserManager.setUsername).toHaveBeenCalledWith(mockUser.username);
+                    it("should set the username", function () {
+                        expect(AuthenticationManager.getUsername()).toEqual(mockUser.username);
+                    });
+
+                    it("should log in the user", function () {
+                        expect(AuthenticationManager.userLoggedIn()).toBeTruthy();
                     });
 
                     it("should resolve with the expected data", function () {
@@ -313,7 +341,11 @@
 
                 describe("when there is no data in the response", function () {
 
+                    var initialUsername = "Initial Username";
+
                     beforeEach(function () {
+                        AuthenticationManager.setUsername(initialUsername);
+
                         AuthenticationManager.setToken({
                             refresh_token: "1349758ukdafgn975",
                             access_token: "as;kv987145oihkfdp9u"
@@ -331,8 +363,12 @@
                         }
                     });
 
-                    it("should NOT set the username on the User", function () {
-                        expect(UserManager.setUsername).not.toHaveBeenCalled();
+                    it("should NOT update the username", function () {
+                        expect(AuthenticationManager.getUsername()).toEqual(initialUsername);
+                    });
+
+                    it("should NOT log in the user", function () {
+                        expect(AuthenticationManager.userLoggedIn()).toBeFalsy();
                     });
 
                     it("should throw an error", function () {
@@ -344,9 +380,12 @@
 
             describe("when retrieving the token fails", function () {
 
-                var mockData = "There was an error";
+                var mockData = "There was an error",
+                    initialUsername = "Initial Username";
 
                 beforeEach(function () {
+                    AuthenticationManager.setUsername(initialUsername);
+
                     AuthenticationManager.setToken({
                         refresh_token: "1349758ukdafgn975",
                         access_token: "as;kv987145oihkfdp9u"
@@ -364,8 +403,12 @@
                     }
                 });
 
-                it("should NOT set the username on the User", function () {
-                    expect(UserManager.setUsername).not.toHaveBeenCalled();
+                it("should NOT update the username", function () {
+                    expect(AuthenticationManager.getUsername()).toEqual(initialUsername);
+                });
+
+                it("should NOT log in the user", function () {
+                    expect(AuthenticationManager.userLoggedIn()).toBeFalsy();
                 });
 
                 it("should throw an error", function () {

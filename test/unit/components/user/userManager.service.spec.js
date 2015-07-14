@@ -37,17 +37,6 @@
 
         });
 
-        describe("has a getUsername function that", function () {
-
-            beforeEach(function () {
-                mockUserProfile.username = "SomeDifferentUser";
-            });
-
-            it("should return the username property from the profile", function () {
-                expect(UserManager.getUsername()).toEqual(mockUserProfile.username);
-            });
-        });
-
         describe("has a setUser function that", function () {
 
             var newUser = {
@@ -59,20 +48,6 @@
             });
 
             // TODO: figure out how to test this without direct access to user
-        });
-
-        describe("has a setUsername function that", function () {
-
-            var newUsername = "SomeDifferentUser";
-
-            beforeEach(function () {
-                UserManager.setUsername(newUsername);
-            });
-
-            it("should set the username with the passed in argument", function () {
-                expect(mockUserProfile.username).toEqual(newUsername);
-            });
-
         });
 
     });
