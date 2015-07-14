@@ -49,9 +49,12 @@
         ACCOUNTS: {
             "BASE": "secure/accounts"
         },
+        INVOICES: {
+            "CURRENT_INVOICE_SUMMARY": "payments/currentInvoiceSummary"
+        },
         USERS   : {
-            "BASE"               : "users",
-            "CURRENT"            : "current"
+            "BASE"   : "users",
+            "CURRENT": "current"
         }
     };
 
