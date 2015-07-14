@@ -168,17 +168,62 @@
 
         });
 
+        describe("has a getUser function that", function () {
+
+            var newUser = {
+                firstName: "first name value",
+                username : "username value",
+                company  : {
+                    accountId    : "company account id value",
+                    accountNumber: "company account number value",
+                    name         : "company name value"
+                },
+                billingCompany: {
+                    accountId    : "billing company account id value",
+                    accountNumber: "billing company account number value",
+                    name         : "billing company name value"
+                }
+            };
+
+            it("should return the user passed to setUser", function () {
+                var result;
+
+                UserManager.setUser(newUser);
+                result = UserManager.getUser();
+
+                expect(result).toEqual(newUser);
+            }) ;
+
+            // TODO: figure out how to test this without using setUser
+        });
+
         describe("has a setUser function that", function () {
 
             var newUser = {
-                username:"SomeDifferentUser"
+                firstName: "first name value",
+                username : "username value",
+                company  : {
+                    accountId    : "company account id value",
+                    accountNumber: "company account number value",
+                    name         : "company name value"
+                },
+                billingCompany: {
+                    accountId    : "billing company account id value",
+                    accountNumber: "billing company account number value",
+                    name         : "billing company name value"
+                }
             };
 
-            beforeEach(function () {
-                UserManager.setUser(newUser);
-            });
+            it("should update the user returned by getUser", function () {
+                var result;
 
-            // TODO: figure out how to test this without direct access to user
+                UserManager.setUser(newUser);
+                result = UserManager.getUser();
+
+                expect(result).toEqual(newUser);
+            }) ;
+
+            // TODO: figure out how to test this without using getUser
         });
 
     });
