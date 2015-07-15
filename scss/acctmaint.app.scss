@@ -36,29 +36,65 @@ $user-login-gradient-bottom: #414141;
 
 /**-----Make Payment----**/
 
-.fleetlogo {
+ .fleetlogo {
   margin-top: 0px !important;
-}
-
-.align_center {
-  text-align:center;
-}
-
-.btn_align {
-  float:left;
-}
-
-.block_align {
+  color: #ffffff;
+  width:75%;
   display:inline-block;
-}
+ }
 
-.content_align {
+ .align_center {
+  text-align:center;
+ }
+
+ .btn_align {
+  float:left;
+ }
+
+ .block_align {
+  display:inline-block;
+ }
+
+ .content_align {
   display: inline-block;
   float:right;
-}
+ }
 
  .menu_height {
    display:block;
    line-height:0px;
+   color: #ffffff;
+   margin-bottom:10px;
+   font-size: 10px;
  }
 
+ .item-content {
+   background-color:#424242;
+   color: #ffffff;
+   border-color:#333333;
+ }
+
+ a {
+   color: #ffffff;
+   text-decoration:none;
+ }
+
+ .menu_logo,.menu_logo:hover,.menu_logo:active,.menu_logo:focus {
+   line-height:20px;
+   padding-bottom:0px;
+   color:#fff;
+
+ }
+
+  .header-item {
+   margin-top:10px !important;
+ }
+
+  .header_top{
+    top:0px !important;
+    border:1px solid #ddd!important;
+  }
+
+  .green {
+    color:green;
+  }

@@ -1,16 +1,13 @@
 <ion-view class="landing-view">
     <ion-nav-title>
-        <wex-scalable-img src="img/fleet_manager_logo_small.png"></wex-scalable-img>
+        <wex-scalable-img src="img/fleet_manager_logo_small.png" class="fleetlogo"></wex-scalable-img>
+        <button class="button button-icon icon ion-navicon menu_logo" onclick="$('#menu_swipe').toggle()"><label class="menu_height">MENU</label></button>
     </ion-nav-title>
 
     <ion-content>
-        <div class="bar bar-header bar-dark">
-            <img src="img/fleet_manager_logo_small.png" alt="logo" class="fleetlogo">
-            <button class="button button-icon icon ion-navicon fleetlogo"><label class="menu_height">MENU</label></button>
-        </div>
-        <div class="user-land-view content has-header item item-divider padding">
+        <div class="user-land-view content has-header item item-divider padding header_top">
             <div class="item item-text-wrap">
-                <h3 style="display:inline-block">ACME Company<br>123456789</h3><h3 class="content_align">$150 Available</h3>
+                <h3 style="display:inline-block">ACME Company<br>123456789</h3><h3 class="content_align green">$150<br> Available</h3>
             </div>
 
             <div class="item item-divider">
@@ -25,9 +22,9 @@
 
             <div class="item item-divider">
                 <button class="button button-block button-light">Make Payment</button>
-                <div class="align_center"><button class="button button-clear button-positive">View Activity</button></div></div>
-            <div class="item item-divider">
-
+                <div class="align_center"><button class="button button-clear button-positive">View Activity</button></div>
+            </div>
+            <div>
                 <button class="button button-block button-light item item-icon-right">
                     <i class="icon ion-chevron-right"></i> <span class="btn_align">Cards</span>
                 </button>
