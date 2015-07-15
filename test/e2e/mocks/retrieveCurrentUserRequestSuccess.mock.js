@@ -7,17 +7,17 @@ var RetrieveCurrentUserRequestSuccessMock = (function () {
             .run(function ($httpBackend) {
 
                 var mockRetrieveCurrentUserResponse = {
-                    firstName: "first name value",
-                    username : "username value",
+                    firstName: "firstName",
+                    username : "username",
                     company  : {
-                        accountId    : "company account id value",
-                        accountNumber: "company account number value",
-                        name         : "company name value"
+                        accountId    : "companyAccountId",
+                        accountNumber: "companyAccountNumber",
+                        name         : "companyName"
                     },
                     billingCompany: {
-                        accountId    : "billing company account id value",
-                        accountNumber: "billing company account number value",
-                        name         : "billing company name value"
+                        accountId    : "billingCompanyAccountId",
+                        accountNumber: "billingCompanyAccountNumber",
+                        name         : "billingCompanyName"
                     }
                 };
 

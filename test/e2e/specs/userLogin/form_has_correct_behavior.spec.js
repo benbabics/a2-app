@@ -4,6 +4,7 @@ var UserLoginPage = require("../../pages/userLogin.page.js");
 var AuthenticateUserRequestSuccessMock = require("../../mocks/authenticateUserRequestSuccess.mock.js");
 var AuthenticateUserRequestFailedBadCredentials = require("../../mocks/authenticateUserRequestFailedBadCredentials.mock.js");
 var RetrieveCurrentUserRequestSuccessMock = require("../../mocks/retrieveCurrentUserRequestSuccess.mock.js");
+var RetrieveCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/retrieveCurrentInvoiceSummaryRequestSuccess.mock.js");
 
 (function () {
     var mockUserName = "mockUserName",
@@ -104,17 +105,21 @@ var RetrieveCurrentUserRequestSuccessMock = require("../../mocks/retrieveCurrent
                         beforeAll(function () {
                             browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestSuccessMock);
                             browser.addMockModule("RetrieveCurrentUserMock", RetrieveCurrentUserRequestSuccessMock);
+                            browser.addMockModule("RetrieveCurrentInvoiceSummaryMock", RetrieveCurrentInvoiceSummaryRequestSuccessMock);
 
                             browser.refresh();
 
                             //repopulate fields
                             this.page.typeUserName(mockUserName);
                             this.page.typePassword(mockPassword);
+
+                            this.page.submit();
                         });
 
                         afterAll(function () {
                             browser.removeMockModule("AuthenticateUserMock");
                             browser.removeMockModule("RetrieveCurrentUserMock");
+                            browser.removeMockModule("RetrieveCurrentInvoiceSummaryMock");
 
                             browser.refresh();
 
@@ -125,8 +130,6 @@ var RetrieveCurrentUserRequestSuccessMock = require("../../mocks/retrieveCurrent
                         });
 
                         it("should navigate the user to the landing page", function () {
-                            this.page.submit();
-
                             expect(browser.getCurrentUrl()).toMatch("/#/landing");
                         });
                     });
