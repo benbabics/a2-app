@@ -14,7 +14,7 @@ var RetrieveCurrentInvoiceSummaryRequestSuccessMock = (function () {
                     currentBalanceAsOf: "2015-06-30",
                     invoiceId         : "3673672",
                     invoiceNumber     : "367367367376",
-                    minimumPaymentDue : "200.00",
+                    minimumPaymentDue : "200",
                     paymentDueDate    : "2015-07-31"
                 };
 

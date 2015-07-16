@@ -92,6 +92,16 @@ gulp.task("protractor-run-all", function () {
         .on("error", function(e) { throw e; });
 });
 
+gulp.task("protractor-run-landing", function () {
+    gulp.src(sourcePaths.root.testsE2E)
+        .pipe(protractor({
+            configFile: sourcePaths.root.protractorConf,
+            args: ["--suite=landing"]
+        }))
+        .on("error", function (e) {
+            throw e;
+        });
+});
 gulp.task("protractor-run-userLogin", function () {
     gulp.src(sourcePaths.root.testsE2E)
         .pipe(protractor({

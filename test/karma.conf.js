@@ -29,6 +29,8 @@ module.exports = function(config) {
             "lib/angular-base64/angular-base64.js",
             "lib/ngCordova/dist/ng-cordova.js",
             "lib/ngFitText/src/ng-FitText.js",
+            "lib/moment/moment.js",
+            "lib/angular-moment/angular-moment.js",
 
             // Test libraries
             "../test/lib/**/*.js",

@@ -33,7 +33,17 @@
     };
 
     appGlobals.LANDING = {
-        "CONFIG": {}
+        "CONFIG": {
+            "title": "WEX Fleet Manager",
+            "availableCredit": "Available",
+            "paymentDueDate": "Payment Due Date",
+            "currentBalance": "Current Balance",
+            "minimumPayment": "Minimum Payment",
+            "makePayment": "Make Payment",
+            "viewActivity": "View Activity",
+            "cards": "Cards",
+            "drivers": "Drivers"
+        }
     };
 
     angular

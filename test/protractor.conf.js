@@ -20,6 +20,7 @@
         suites: {
             smoke: "e2e/specs/smoketests/**/*.js",
             full: "e2e/specs/**/*.spec.js",
+            landing: "e2e/specs/landing/**/*.js",
             userLogin: "e2e/specs/userLogin/**/*.js"
         },
 

@@ -5,11 +5,12 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function LandingController($scope, globals, currentInvoiceSummary) {
+    function LandingController($scope, currentInvoiceSummary, globals, UserManager) {
 
         var vm = this;
-        vm.invoiceSummary = globals.LANDING.CONFIG;
+        vm.config = globals.LANDING.CONFIG;
         vm.invoiceSummary = {};
+        vm.billingCompany = {};
 
         activate();
 
@@ -18,6 +19,8 @@
         function activate() {
             // set event listeners
             $scope.$on("$ionicView.beforeEnter", beforeEnter);
+
+            vm.billingCompany = UserManager.getUser().billingCompany;
         }
 
         function beforeEnter() {
