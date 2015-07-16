@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    var $rootScope,
+    var $ionicHistory,
+        $rootScope,
         $scope,
         ctrl,
         AuthenticationManager,
@@ -37,7 +38,8 @@
             CommonService = jasmine.createSpyObj("CommonService", ["loadingBegin", "loadingComplete"]);
             $state = jasmine.createSpyObj("state", ["go"]);
 
-            inject(function (_$rootScope_, $controller, $q, _globals_) {
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _globals_) {
+                $ionicHistory = _$ionicHistory_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
                 retrieveCurrentUserDeferred = $q.defer();
@@ -91,9 +93,15 @@
                 describe("when the User Details is Retrieved successfully", function () {
 
                     beforeEach(function () {
+                        spyOn($ionicHistory, "nextViewOptions");
+
                         //return a promise object and resolve it
                         retrieveCurrentUserDeferred.resolve();
                         $scope.$digest();
+                    });
+
+                    it("should call disable backing up to the login page", function () {
+                        expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
                     });
 
                     it("should NOT have an error message", function () {

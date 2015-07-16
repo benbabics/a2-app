@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function LoginController($state, globals, AuthenticationManager, CommonService, UserManager) {
+    function LoginController($ionicHistory, $state, globals, AuthenticationManager, CommonService, UserManager) {
 
         var vm = this;
         vm.config = globals.USER_LOGIN.CONFIG;
@@ -30,6 +30,14 @@
                     return UserManager.retrieveCurrentUserDetails();
                 })
                 .then(function() {
+                    // Do not allow backing up to the login page.
+                    // Possibly need to clear the history after going to the landing page instead?
+                    $ionicHistory.nextViewOptions(
+                        {
+                            disableBack: true
+                        }
+                    );
+
                     // transition to the landing page
                     $state.go("landing");
                 })
