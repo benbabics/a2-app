@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function CommonService(_, $rootScope, globals) {
+    function CommonService(_, $ionicPopup, $rootScope, globals) {
 
         // Private members
         var loadingIndicatorCount = 0;
@@ -16,6 +16,7 @@
             "_": _,
 
             // utility functions
+            "displayAlert"     : displayAlert,
             "maskAccountNumber": maskAccountNumber,
             "loadingBegin"     : loadingBegin,
             "loadingComplete"  : loadingComplete,
@@ -27,6 +28,48 @@
         //////////////////////
 
         // Common utility functions go here
+
+        function displayAlert(options) {
+            var mappedOptions = {};
+
+        if (_.isObject(options)) {
+            // Only set the options if they are provided as setting them to a option NOT specified
+            // results in us passing undefined values which may or may not be acceptable
+            if (_.isString(options.title)) {
+                mappedOptions.title = options.title;
+            }
+
+            if (_.isString(options.subTitle)) {
+                mappedOptions.subTitle = options.subTitle;
+            }
+
+            mappedOptions.cssClass = options.cssClass || "wex-alert-popup";
+
+            if (_.isString(options.content)) {
+                mappedOptions.template = options.content;
+            }
+
+            if (_.isString(options.buttonText)) {
+                mappedOptions.okText = options.buttonText;
+            }
+
+            if (_.isString(options.buttonCssClass)) {
+                mappedOptions.okType = options.buttonCssClass;
+            }
+        }
+        else {
+            mappedOptions = {
+                cssClass: "wex-alert-popup"
+            };
+        }
+
+
+            var alertPopup = $ionicPopup.alert(mappedOptions);
+
+            alertPopup.then(function (resolution) {
+                // close popup
+            });
+        }
 
         function maskAccountNumber(accountNumber) {
 

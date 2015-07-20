@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    var CommonService,
+    var $ionicPopup,
+        CommonService,
         globals = {
             GENERAL: {
                 ERRORS: {
@@ -9,6 +10,7 @@
                 }
             }
         },
+        popupDeferred,
         $rootScope;
 
     describe("A Common Service", function () {
@@ -17,16 +19,135 @@
 
             module("app.shared.dependencies");
 
+            // mock dependencies
+            $ionicPopup = jasmine.createSpyObj("$ionicPopup", ["alert"]);
+
             module(function ($provide) {
+                $provide.value("$ionicPopup", $ionicPopup);
                 $provide.value("globals", globals);
             });
 
             module("app.shared");
 
-            inject(function (_CommonService_, _$rootScope_) {
+            inject(function ($q, _CommonService_, _$rootScope_) {
                 $rootScope = _$rootScope_;
+                popupDeferred = $q.defer();
 
                 CommonService = _CommonService_;
+            });
+
+            $ionicPopup.alert.and.returnValue(popupDeferred.promise);
+            popupDeferred.resolve();
+        });
+
+        describe("has a displayAlert function that", function () {
+
+            describe("when options are NOT provided", function () {
+
+                beforeEach(function () {
+                    CommonService.displayAlert();
+                });
+
+                it("should call $ionicPopup.alert with the default cssClass", function () {
+                    expect($ionicPopup.alert).toHaveBeenCalledWith({cssClass: "wex-alert-popup"});
+                });
+
+            });
+
+            describe("when options.title is provided", function () {
+
+                var options = {
+                    title: "Test Title"
+                };
+
+                beforeEach(function () {
+                    CommonService.displayAlert(options);
+                });
+
+                it("should call $ionicPopup.alert with the correct options", function () {
+                    expect($ionicPopup.alert).toHaveBeenCalledWith({title: "Test Title", cssClass: "wex-alert-popup"});
+                });
+
+            });
+
+            describe("when options.subTitle is provided", function () {
+
+                var options = {
+                    subTitle: "Test SubTitle"
+                };
+
+                beforeEach(function () {
+                    CommonService.displayAlert(options);
+                });
+
+                it("should call $ionicPopup.alert with the correct options", function () {
+                    expect($ionicPopup.alert).toHaveBeenCalledWith({subTitle: "Test SubTitle", cssClass: "wex-alert-popup"});
+                });
+
+            });
+
+            describe("when options.cssClass is provided", function () {
+
+                var options = {
+                    cssClass: "wex-alert-dialog"
+                };
+
+                beforeEach(function () {
+                    CommonService.displayAlert(options);
+                });
+
+                it("should call $ionicPopup.alert with the correct options", function () {
+                    expect($ionicPopup.alert).toHaveBeenCalledWith({cssClass: "wex-alert-dialog"});
+                });
+
+            });
+
+            describe("when options.content is provided", function () {
+
+                var options = {
+                    content: "Test Content"
+                };
+
+                beforeEach(function () {
+                    CommonService.displayAlert(options);
+                });
+
+                it("should call $ionicPopup.alert with the correct options", function () {
+                    expect($ionicPopup.alert).toHaveBeenCalledWith({template: "Test Content", cssClass: "wex-alert-popup"});
+                });
+
+            });
+
+            describe("when options.buttonText is provided", function () {
+
+                var options = {
+                    buttonText: "Button Text"
+                };
+
+                beforeEach(function () {
+                    CommonService.displayAlert(options);
+                });
+
+                it("should call $ionicPopup.alert with the correct options", function () {
+                    expect($ionicPopup.alert).toHaveBeenCalledWith({okText: "Button Text", cssClass: "wex-alert-popup"});
+                });
+
+            });
+
+            describe("when options.buttonCssClass is provided", function () {
+
+                var options = {
+                    buttonCssClass: "wex-alert-button"
+                };
+
+                beforeEach(function () {
+                    CommonService.displayAlert(options);
+                });
+
+                it("should call $ionicPopup.alert with the correct options", function () {
+                    expect($ionicPopup.alert).toHaveBeenCalledWith({okType: "wex-alert-button", cssClass: "wex-alert-popup"});
+                });
+
             });
 
         });
