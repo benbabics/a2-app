@@ -34,6 +34,7 @@ $user-login-gradient-bottom: #414141;
   display:inline-block;
  }
 /**Content Alignment**/
+
  .align_center {
   text-align:center;
  }
@@ -54,6 +55,7 @@ $user-login-gradient-bottom: #414141;
    color:#807f7f;
  }
 /**Menu Bar**/
+
  .menu_height {
    display:block;
    line-height:0px;
@@ -98,4 +100,29 @@ $user-login-gradient-bottom: #414141;
 }
 .arrow-align {
   padding-bottom:0px! important;
+}
+
+
+/** Alert Popup **/
+
+.wex-warning-popup {
+  .popup {
+    background-color: $warning-message-fill;
+    color: $warning-message-color;
+    border: 1px solid $warning-message-color;
+    @include box-shadow(none);
+
+    .popup-head {
+      border:none;
+    }
+  .popup-title {
+    color:inherit;
+    font-size:small;
+  }
+    .popup-body {
+      color:$warning-message-color;
+      border:none;
+    }
+
+  }
 }

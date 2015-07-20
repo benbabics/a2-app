@@ -31,7 +31,7 @@
         //TODO - Remove this
         function popupTest() {
             CommonService.displayAlert({
-                title: "Make Payment",
+               cssClass: "wex-warning-popup",
                 content: "Online payment is not currently available for this account. The account has set up an alternative method of payment, such as direct debit.",
                 buttonText: "OK",
                 buttonCssClass: "button-submit"
