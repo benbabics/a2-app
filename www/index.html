@@ -35,7 +35,7 @@
         </ion-side-menu-content>
 
         <ion-side-menu side="right">
-            <!-- TODO add menu options here -->
+            <ng-include src="'app/components/menu/templates/menu.html'"></ng-include>
         </ion-side-menu>
     </ion-side-menus>
 
@@ -115,13 +115,14 @@
         <script src="app/components/payment/payment.module.js"></script>
         <script src="app/components/payment/payment.routes.js"></script>
         <script src="app/components/payment/makePayment.controller.js"></script>
+    <script src="app/components/menu/menu.module.js"></script>
+    <script src="app/components/landing/landing.module.js"></script>
+    <script src="app/components/landing/landing.routes.js"></script>
+    <script src="app/components/landing/landing.controller.js"></script>
         <script src="app/components/invoice/invoice.module.js"></script>
         <script src="app/components/invoice/invoicesResource.service.js"></script>
         <script src="app/components/invoice/invoiceSummaryModel.service.js"></script>
         <script src="app/components/invoice/invoiceManager.service.js"></script>
-    <script src="app/components/landing/landing.module.js"></script>
-    <script src="app/components/landing/landing.routes.js"></script>
-    <script src="app/components/landing/landing.controller.js"></script>
         <script src="app/components/core/core.module.js"></script>
         <script src="app/components/core/core.config.js"></script>
         <script src="app/components/core/constants.js"></script>

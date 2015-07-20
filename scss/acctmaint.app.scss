@@ -64,40 +64,44 @@ $user-login-gradient-bottom: #414141;
    font-size: 10px;
  }
 
- .item-content {
-   background-color:#424242;
-   color: #ffffff;
-   border-color:#333333;
- }
+/**------------------------------------------------------
+ Side Menu
+ ------------------------------------------------------**/
+.menu-view {
+  background-color: #424242;
 
- .menu_logo,.menu_logo:hover,.menu_logo:active,.menu_logo:focus {
-   line-height:20px;
-   padding-bottom:0px;
-   color:#fff;
-
- }
-
-  .green {
-    color:green;
+  .item {
+    background-color: #424242;
+    color: #ffffff;
+    border-color: #333333;
   }
-  .content_border {
-    text-decoration: none;
-    border:0px;
-  }
-  .shadow{
-    box-shadow: 5px 5px 2px #e5e5e5;
-  }
+}
 
- .body-text {
-   color:#807f7f;
- }
- .black{
-   color:#333 !important;
- }
+.green {
+  color: green;
+}
+
+.content_border {
+  text-decoration: none;
+  border: 0px;
+}
+
+.shadow {
+  box-shadow: 5px 5px 2px #e5e5e5;
+}
+
+.body-text {
+  color: #807f7f;
+}
+
+.black {
+  color: #333 !important;
+}
 
 .divider {
   border-bottom: 1px solid #ccc;
 }
+
 .arrow-align {
   padding-bottom:0px! important;
 }
