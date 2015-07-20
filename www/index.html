@@ -17,45 +17,27 @@
     </head>
     <body ng-app="app">
 
-        <!--
-        The nav bar that will be updated as we navigate between views.
-        -->
-        <!--<ion-nav-bar>
-            <ion-nav-title class="bar-wex">
-                <button class="button button-icon icon ion-navicon block"><label class="menu_height">MENU</label></button>
-            </ion-nav-title>
-        </ion-nav-bar>-->
-        <ion-nav-bar class="bar-dark nav-bar-container">
-            <ion-nav-back-button class="hide"></ion-nav-back-button>
-            <div class="nav-bar-block" nav-bar="active">
-                <ion-header-bar class="bar-dark bar bar-header disable-user-behavior" align-title="center">
-                    <button class="button back-button buttons  button-clear header-item"><i class="icon ion-ios-arrow-back"></i>
-                <span class="back-text">
-                    <span class="default-title hide"></span>
-                    <span class="previous-title"></span>
-                </span>
-                    </button>
-                    <div class="title title-center header-item">Make Payment</div>
-                    <button class="button button-icon icon ion-navicon header-item"><label class="menu_height">MENU</label></button>
-                </ion-header-bar>
+    <ion-side-menus enable-menu-with-back-views="true">
+        <ion-side-menu-content>
+            <!--
+            The nav bar that will be updated as we navigate between views.
+            -->
+            <ion-nav-bar class="bar-wex">
+                <ion-nav-buttons side="right">
+                    <button menu-toggle="right" class="button icon ion-navicon"></button>
+                </ion-nav-buttons>
+            </ion-nav-bar>
 
-            </div>
-            <!--<div class="nav-bar-block" nav-bar="cached">
-                <ion-header-bar class="bar-positive bar bar-header disable-user-behavior" align-title="center">
-                    <button ng-click="$ionicGoBack()" class="button back-button hide buttons  button-clear header-item" style="opacity: 0;"><i class="icon ion-ios-arrow-back"></i>
-            <span class="back-text" style="-webkit-transform: translate3d(0px, 0px, 0px); opacity: 0;">
-                <span class="default-title"></span><span class="previous-title hide"></span>
-            </span>
-                    </button>
-                    <div class="title title-center header-item" style="-webkit-transform: translate3d(-109.629150390625px, 0px, 0px); opacity: 0;">Home</div>
-                </ion-header-bar>
-            </div>-->
-        </ion-nav-bar>
+            <!--
+            The views will be rendered in the <ion-nav-view> directive below
+            -->
+            <ion-nav-view></ion-nav-view>
+        </ion-side-menu-content>
 
-        <!--
-        The views will be rendered in the <ion-nav-view> directive below
-        -->
-        <ion-nav-view></ion-nav-view>
+        <ion-side-menu side="right">
+            <!-- TODO add menu options here -->
+        </ion-side-menu>
+    </ion-side-menus>
 
         <!-- libraries -->
 
@@ -133,13 +115,13 @@
         <script src="app/components/payment/payment.module.js"></script>
         <script src="app/components/payment/payment.routes.js"></script>
         <script src="app/components/payment/makePayment.controller.js"></script>
-        <script src="app/components/landing/landing.module.js"></script>
-        <script src="app/components/landing/landing.routes.js"></script>
-        <script src="app/components/landing/landing.controller.js"></script>
         <script src="app/components/invoice/invoice.module.js"></script>
         <script src="app/components/invoice/invoicesResource.service.js"></script>
         <script src="app/components/invoice/invoiceSummaryModel.service.js"></script>
         <script src="app/components/invoice/invoiceManager.service.js"></script>
+    <script src="app/components/landing/landing.module.js"></script>
+    <script src="app/components/landing/landing.routes.js"></script>
+    <script src="app/components/landing/landing.controller.js"></script>
         <script src="app/components/core/core.module.js"></script>
         <script src="app/components/core/core.config.js"></script>
         <script src="app/components/core/constants.js"></script>

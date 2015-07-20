@@ -1,54 +1,57 @@
+<ion-view class="landing-view">
+    <ion-nav-title>
+        <wex-scalable-img src="img/fleet_manager_logo_small.png"></wex-scalable-img>
+    </ion-nav-title>
 
-<!--<ion-nav-title>
-    <wex-scalable-img class="header-login" src="img/fleet_manager_logo.png"></wex-scalable-img>
-    <button class="button button-icon icon ion-navicon block"><label class="menu_height">MENU</label></button>
-</ion-nav-title>
-<ion-header-bar class="bar-dark">
-    <wex-scalable-img class="header-login" src="img/fleet_manager_logo.png"></wex-scalable-img>
-    <button class="butin icon button-clear ion-navicon-round menu_logo"><label class="menu_height">MENU</label></button>
-</ion-header-bar>-->
-<ion-view>
-<ion-content>
-    <div class="content has-header item item-divider padding header_top">
-        <div class="shadow">
-            <div class="item item-text-wrap">
-                <h3 id="companyDetails" class="block_align black">{{vm.billingCompany.name}}<br>{{vm.billingCompany.accountNumber}}</h3>
-                <h3 id="availableCredit" class="content_align green">{{vm.invoiceSummary.availableCredit | currency}}<br>{{vm.config.availableCredit}}</h3>
-            </div>
+    <ion-content>
+        <div class="content item item-divider padding">
+            <div class="shadow">
+                <div class="item item-text-wrap">
+                    <h3 id="companyDetails" class="block_align black">{{vm.billingCompany.name}}<br>{{vm.billingCompany.accountNumber}}
+                    </h3>
 
-            <div class="item item-divider">
-                <p class="divider padding-top">
-                    <span id="paymentDueDateLabel" class="block_align">{{vm.config.paymentDueDate}}</span>
-                    <span id="paymentDueDate" class="content_align">{{vm.invoiceSummary.paymentDueDate | amDateFormat:"M/D/YYYY"}}</span>
-                </p>
+                    <h3 id="availableCredit" class="content_align green">{{vm.invoiceSummary.availableCredit |
+                        currency}}<br>{{vm.config.availableCredit}}</h3>
+                </div>
 
-                <p class="divider padding-top">
-                    <span id="currentBalanceLabel" class="block_align">{{vm.config.currentBalance}}</span>
-                    <span id="currentBalance" class="content_align">{{vm.invoiceSummary.currentBalance | currency}}</span>
-                </p>
+                <div class="item item-divider">
+                    <p class="divider padding-top">
+                        <span id="paymentDueDateLabel" class="block_align">{{vm.config.paymentDueDate}}</span>
+                        <span id="paymentDueDate" class="content_align">{{vm.invoiceSummary.paymentDueDate | amDateFormat:"M/D/YYYY"}}</span>
+                    </p>
 
-                <p class="divider padding-top">
-                    <span id="minimumPaymentLabel" class="block_align">{{vm.config.minimumPayment}}</span>
-                    <span id="minimumPayment" class="content_align">{{vm.invoiceSummary.minimumPaymentDue | currency}}</span>
-                </p>
-           <br>
-                <button id="makePaymentButton" class="button button-block button-submit" ng-click="showAlert();">{{vm.config.makePayment}}</button>
-                <div class="align_center">
-                    <button id="viewActivityButton" class="button button-clear button-positive" ng-click="vm.popupTest()">{{vm.config.viewActivity}}</button>
+                    <p class="divider padding-top">
+                        <span id="currentBalanceLabel" class="block_align">{{vm.config.currentBalance}}</span>
+                        <span id="currentBalance"
+                              class="content_align">{{vm.invoiceSummary.currentBalance | currency}}</span>
+                    </p>
+
+                    <p class="divider padding-top">
+                        <span id="minimumPaymentLabel" class="block_align">{{vm.config.minimumPayment}}</span>
+                        <span id="minimumPayment" class="content_align">{{vm.invoiceSummary.minimumPaymentDue | currency}}</span>
+                    </p>
+                    <br>
+                    <button id="makePaymentButton" class="button button-block button-submit" ng-click="showAlert();">
+                        {{vm.config.makePayment}}
+                    </button>
+                    <div class="align_center">
+                        <button id="viewActivityButton" class="button button-clear button-positive"
+                                ng-click="vm.popupTest()">{{vm.config.viewActivity}}
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div>
-            <button class="button button-block button-light item item-icon-right shadow">
-                <i class="icon ion-chevron-right"></i>
-                <span id="cardsButton" class="btn_align">{{vm.config.cards}}</span>
-            </button>
+            <div>
+                <button class="button button-block button-light item item-icon-right shadow">
+                    <i class="icon ion-chevron-right"></i>
+                    <span id="cardsButton" class="btn_align">{{vm.config.cards}}</span>
+                </button>
 
-            <button class="button button-block button-light item item-icon-right shadow">
-                <i class="icon ion-chevron-right"></i>
-                <span id="driversButton" class="btn_align">{{vm.config.drivers}}</span>
-            </button>
+                <button class="button button-block button-light item item-icon-right shadow">
+                    <i class="icon ion-chevron-right"></i>
+                    <span id="driversButton" class="btn_align">{{vm.config.drivers}}</span>
+                </button>
+            </div>
         </div>
-    </div>
-</ion-content>
+    </ion-content>
 </ion-view>
