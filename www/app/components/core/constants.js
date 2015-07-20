@@ -46,6 +46,11 @@
         }
     };
 
+    appGlobals.MAKE_PAYMENT = {
+        "CONFIG": {
+        }
+    };
+
     angular
         .module("app.components.core")
         .constant("appGlobals", appGlobals)

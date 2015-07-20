@@ -7,6 +7,7 @@
         "app.components.account",
         "app.components.user",
         "app.components.landing",
-        "app.components.invoice"
+        "app.components.invoice",
+        "app.components.payment"
     ]);
 })();
