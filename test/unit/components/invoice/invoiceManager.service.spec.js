@@ -45,7 +45,7 @@
             });
 
             // set up spies
-            InvoicesResourceOne = jasmine.createSpyObj("InvoicesResourceOne", ["customGET"]);
+            InvoicesResourceOne = jasmine.createSpyObj("InvoicesResourceOne", ["doGET"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
@@ -78,7 +78,7 @@
             beforeEach(function () {
                 getCurrentInvoiceSummaryDeferred = $q.defer();
 
-                InvoicesResourceOne.customGET.and.returnValue(getCurrentInvoiceSummaryDeferred.promise);
+                InvoicesResourceOne.doGET.and.returnValue(getCurrentInvoiceSummaryDeferred.promise);
 
                 InvoiceManager.setInvoiceSummary(null);
 
@@ -92,8 +92,8 @@
                     expect(InvoicesResource.one).toHaveBeenCalledWith();
                 });
 
-                it("should call InvoicesResourceOne.customGET with the correct URL", function () {
-                    expect(InvoicesResourceOne.customGET).toHaveBeenCalledWith(CURRENT_INVOICE_SUMMARY_URL);
+                it("should call InvoicesResourceOne.doGET with the correct URL", function () {
+                    expect(InvoicesResourceOne.doGET).toHaveBeenCalledWith(CURRENT_INVOICE_SUMMARY_URL);
                 });
 
             });

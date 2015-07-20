@@ -31,7 +31,7 @@
         function retrieveCurrentInvoiceSummary(billingAccountId) {
             var url = billingAccountId + "/" + globals.ACCOUNT_MAINTENANCE_API.INVOICES.CURRENT_INVOICE_SUMMARY;
 
-            return $q.when(InvoicesResource.one().customGET(url))
+            return $q.when(InvoicesResource.one().doGET(url))
                 .then(function (currentInvoiceSummaryResponse) {
                     if (currentInvoiceSummaryResponse && currentInvoiceSummaryResponse.data) {
                         setInvoiceSummary(currentInvoiceSummaryResponse.data);
