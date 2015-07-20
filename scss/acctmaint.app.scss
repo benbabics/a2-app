@@ -22,17 +22,8 @@ $user-login-gradient-bottom: #414141;
   .header-login {
     height: $input-height-base * 2;
   }
-
-  .align-center {
-    text-align: center;
-  }
 }
 
-.landing-view {
-  img {
-    border: 10px solid #989898;
-  }
-}
 
 /**-----Make Payment----**/
 
@@ -42,24 +33,27 @@ $user-login-gradient-bottom: #414141;
   width:75%;
   display:inline-block;
  }
-
+/**Content Alignment**/
  .align_center {
   text-align:center;
  }
 
  .btn_align {
   float:left;
+   font-weight:bold;
  }
 
  .block_align {
   display:inline-block;
+   color:#807f7f;
  }
 
  .content_align {
   display: inline-block;
   float:right;
+   color:#807f7f;
  }
-
+/**Menu Bar**/
  .menu_height {
    display:block;
    line-height:0px;
@@ -74,18 +68,12 @@ $user-login-gradient-bottom: #414141;
    border-color:#333333;
  }
 
- a {
-   color: #ffffff;
-   text-decoration:none;
- }
-
  .menu_logo,.menu_logo:hover,.menu_logo:active,.menu_logo:focus {
    line-height:20px;
    padding-bottom:0px;
    color:#fff;
 
  }
-
   .header-item {
    margin-top:10px !important;
  }
@@ -98,3 +86,24 @@ $user-login-gradient-bottom: #414141;
   .green {
     color:green;
   }
+  .content_border {
+    text-decoration: none;
+    border:0px;
+  }
+  .shadow{
+    box-shadow: 5px 5px 2px #e5e5e5;
+  }
+
+ .body-text {
+   color:#807f7f;
+ }
+ .black{
+   color:#333 !important;
+ }
+
+.divider {
+  border-bottom: 1px solid #ccc;
+}
+.arrow-align {
+  padding-bottom:0px! important;
+}

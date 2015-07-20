@@ -20,7 +20,36 @@
         <!--
         The nav bar that will be updated as we navigate between views.
         -->
-        <ion-nav-bar class="bar-wex">
+        <!--<ion-nav-bar>
+            <ion-nav-title class="bar-wex">
+                <button class="button button-icon icon ion-navicon block"><label class="menu_height">MENU</label></button>
+            </ion-nav-title>
+        </ion-nav-bar>-->
+        <ion-nav-bar class="bar-dark nav-bar-container">
+            <ion-nav-back-button class="hide"></ion-nav-back-button>
+            <div class="nav-bar-block" nav-bar="active">
+                <ion-header-bar class="bar-dark bar bar-header disable-user-behavior" align-title="center">
+                    <button class="button back-button buttons  button-clear header-item"><i class="icon ion-ios-arrow-back"></i>
+                <span class="back-text">
+                    <span class="default-title hide"></span>
+                    <span class="previous-title"></span>
+                </span>
+                    </button>
+                    <div class="title title-center header-item">Make Payment</div>
+                    <button class="button button-icon icon ion-navicon header-item"><label class="menu_height">MENU</label></button>
+                </ion-header-bar>
+
+            </div>
+            <!--<div class="nav-bar-block" nav-bar="cached">
+                <ion-header-bar class="bar-positive bar bar-header disable-user-behavior" align-title="center">
+                    <button ng-click="$ionicGoBack()" class="button back-button hide buttons  button-clear header-item" style="opacity: 0;"><i class="icon ion-ios-arrow-back"></i>
+            <span class="back-text" style="-webkit-transform: translate3d(0px, 0px, 0px); opacity: 0;">
+                <span class="default-title"></span><span class="previous-title hide"></span>
+            </span>
+                    </button>
+                    <div class="title title-center header-item" style="-webkit-transform: translate3d(-109.629150390625px, 0px, 0px); opacity: 0;">Home</div>
+                </ion-header-bar>
+            </div>-->
         </ion-nav-bar>
 
         <!--
@@ -53,14 +82,14 @@
         <!-- inject:js -->
         <script src="app/shared/widgets/widgets.module.js"></script>
         <script src="app/shared/widgets/toolTip/wexToolTip.directive.js"></script>
-        <script src="app/shared/network/api/api.module.js"></script>
-        <script src="app/shared/network/api/authApiRestangular.service.js"></script>
-        <script src="app/shared/network/api/accountMaintenanceRestangular.service.js"></script>
         <script src="app/shared/network/auth/auth.module.js"></script>
         <script src="app/shared/network/auth/authorizationHeaderRequestInterceptor.service.js"></script>
         <script src="app/shared/network/auth/authenticationResource.service.js"></script>
         <script src="app/shared/network/auth/authenticationManager.service.js"></script>
         <script src="app/shared/network/auth/authenticationErrorInterceptor.service.js"></script>
+        <script src="app/shared/network/api/api.module.js"></script>
+        <script src="app/shared/network/api/authApiRestangular.service.js"></script>
+        <script src="app/shared/network/api/accountMaintenanceRestangular.service.js"></script>
         <script src="app/components/user/auth/auth.module.js"></script>
         <script src="app/components/user/auth/login.controller.js"></script>
         <script src="app/components/user/auth/auth.routes.js"></script>
@@ -89,10 +118,10 @@
         <script src="app/shared/network/dataExtractorResponseInterceptor.service.js"></script>
         <script src="app/shared/logger/logger.module.js"></script>
         <script src="app/shared/logger/logger.service.js"></script>
-        <script src="app/shared/dependencies/dependencies.module.js"></script>
         <script src="app/shared/integration/integration.module.js"></script>
         <script src="app/shared/integration/toast.service.js"></script>
         <script src="app/shared/integration/lodash.service.js"></script>
+        <script src="app/shared/dependencies/dependencies.module.js"></script>
         <script src="app/shared/core/core.module.js"></script>
         <script src="app/shared/core/constants.js"></script>
         <script src="app/shared/core/common.service.js"></script>
