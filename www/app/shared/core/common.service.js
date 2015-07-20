@@ -32,37 +32,36 @@
         function displayAlert(options) {
             var mappedOptions = {};
 
-        if (_.isObject(options)) {
-            // Only set the options if they are provided as setting them to a option NOT specified
-            // results in us passing undefined values which may or may not be acceptable
-            if (_.isString(options.title)) {
-                mappedOptions.title = options.title;
+            if (_.isObject(options)) {
+                // Only set the options if they are provided as setting them to a option NOT specified
+                // results in us passing undefined values which may or may not be acceptable
+                if (_.isString(options.title)) {
+                    mappedOptions.title = options.title;
+                }
+
+                if (_.isString(options.subTitle)) {
+                    mappedOptions.subTitle = options.subTitle;
+                }
+
+                mappedOptions.cssClass = options.cssClass || "wex-alert-popup";
+
+                if (_.isString(options.content)) {
+                    mappedOptions.template = options.content;
+                }
+
+                if (_.isString(options.buttonText)) {
+                    mappedOptions.okText = options.buttonText;
+                }
+
+                if (_.isString(options.buttonCssClass)) {
+                    mappedOptions.okType = options.buttonCssClass;
+                }
             }
-
-            if (_.isString(options.subTitle)) {
-                mappedOptions.subTitle = options.subTitle;
+            else {
+                mappedOptions = {
+                    cssClass: "wex-alert-popup"
+                };
             }
-
-            mappedOptions.cssClass = options.cssClass || "wex-alert-popup";
-
-            if (_.isString(options.content)) {
-                mappedOptions.template = options.content;
-            }
-
-            if (_.isString(options.buttonText)) {
-                mappedOptions.okText = options.buttonText;
-            }
-
-            if (_.isString(options.buttonCssClass)) {
-                mappedOptions.okType = options.buttonCssClass;
-            }
-        }
-        else {
-            mappedOptions = {
-                cssClass: "wex-alert-popup"
-            };
-        }
-
 
             var alertPopup = $ionicPopup.alert(mappedOptions);
 
