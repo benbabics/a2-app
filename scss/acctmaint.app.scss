@@ -24,15 +24,6 @@ $user-login-gradient-bottom: #414141;
   }
 }
 
-
-/**-----Make Payment----**/
-
- .fleetlogo {
-  margin-top: 0px !important;
-  color: #ffffff;
-  width:75%;
-  display:inline-block;
- }
 /**Content Alignment**/
 
  .align_center {
@@ -54,15 +45,32 @@ $user-login-gradient-bottom: #414141;
   float:right;
    color:#807f7f;
  }
-/**Menu Bar**/
 
- .menu_height {
-   display:block;
-   line-height:0px;
-   color: #ffffff;
-   margin-bottom:10px;
-   font-size: 10px;
+ .green {
+  color: #6d9940;
  }
+
+ .content_border {
+  text-decoration: none;
+  border: 0px;
+ }
+
+ .body-text {
+  color: #807f7f;
+ }
+
+ .black {
+  color: #000000 !important;
+ }
+
+ .divider {
+  border-bottom: 1px solid #e5e5e5;
+ }
+
+ .arrow-align {
+  padding-bottom:0px! important;
+ }
+
 
 /**------------------------------------------------------
  Side Menu
@@ -75,39 +83,30 @@ $user-login-gradient-bottom: #414141;
     color: #ffffff;
     border-color: #333333;
   }
+  a:active {
+    background-color: #333333;
+  }
 }
 
-.green {
-  color: green;
-}
+/**------------------------------
+ Landing view
+----------------------------------**/
+.landing-view {
+  background-color: #989898;
 
-.content_border {
-  text-decoration: none;
-  border: 0px;
-}
-
-.shadow {
-  box-shadow: 5px 5px 2px #e5e5e5;
-}
-
-.body-text {
-  color: #807f7f;
-}
-
-.black {
-  color: #333 !important;
-}
-
-.divider {
-  border-bottom: 1px solid #ccc;
-}
-
-.arrow-align {
-  padding-bottom:0px! important;
+  .main-container {
+    border-bottom:0px;
+    background-color: #989898;
+  }
+  .inner-container {
+    background-color: #eeedec;
+  }
 }
 
 
-/** Alert Popup **/
+/**--------------------------------
+  Alert Popup
+ ----------------------------------**/
 
 .wex-warning-popup {
   .popup {
@@ -119,6 +118,7 @@ $user-login-gradient-bottom: #414141;
     .popup-head {
       border:none;
     }
+
   .popup-title {
     color:inherit;
     font-size:small;
