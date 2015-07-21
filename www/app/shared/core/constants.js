@@ -52,6 +52,9 @@
         INVOICES: {
             "CURRENT_INVOICE_SUMMARY": "payments/currentInvoiceSummary"
         },
+        PAYMENTS: {
+            "MAKE_PAYMENT_AVAILABILITY": "payments/makePaymentAvailability"
+        },
         USERS   : {
             "BASE"   : "users",
             "CURRENT": "current"

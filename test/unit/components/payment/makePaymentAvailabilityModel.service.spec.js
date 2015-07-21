@@ -18,13 +18,13 @@
 
             var makePaymentAvailability,
                 mockMakePaymentAvailabilityResource = {
-                    newField1         : "some value",
-                    newField2         : "some other value",
-                    newField3         : "yet another value",
-                    bankAccountSetup  : "true",
-                    directDebitEnabled: "false",
-                    makePaymentAllowed: "false",
-                    outstandingPayment: "true"
+                    newField1                             : "some value",
+                    newField2                             : "some other value",
+                    newField3                             : "yet another value",
+                    makePaymentAllowed                    : "false",
+                    shouldDisplayBankAccountSetupMessage  : "true",
+                    shouldDisplayDirectDebitEnabledMessage: "false",
+                    shouldDisplayOutstandingPaymentMessage: "true"
                 },
                 makePaymentAvailabilityModelKeys,
                 makePaymentAvailabilityResourceKeys;

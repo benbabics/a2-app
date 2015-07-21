@@ -4,10 +4,10 @@
     var MakePaymentAvailabilityModel = function () {
 
         function MakePaymentAvailabilityModel() {
-            this.bankAccountSetup = "";
-            this.directDebitEnabled = "";
             this.makePaymentAllowed = "";
-            this.outstandingPayment = "";
+            this.shouldDisplayBankAccountSetupMessage = "";
+            this.shouldDisplayDirectDebitEnabledMessage = "";
+            this.shouldDisplayOutstandingPaymentMessage = "";
         }
 
         MakePaymentAvailabilityModel.prototype.set = function (makePaymentAvailabilityResource) {

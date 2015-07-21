@@ -4,9 +4,15 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function PaymentManager() {
+    function PaymentManager($q, CommonService, globals, Logger, MakePaymentAvailabilityModel, PaymentsResource) {
+        // Private members
+        var makePaymentAvailability = {};
+
         // Revealed Public members
         var service = {
+            fetchMakePaymentAvailability: fetchMakePaymentAvailability,
+            getMakePaymentAvailability  : getMakePaymentAvailability,
+            setMakePaymentAvailability  : setMakePaymentAvailability
         };
 
         activate();
@@ -15,6 +21,42 @@
         //////////////////////
 
         function activate() {
+            makePaymentAvailability = new MakePaymentAvailabilityModel();
+        }
+
+        function getMakePaymentAvailability() {
+            return makePaymentAvailability;
+        }
+
+        function fetchMakePaymentAvailability(billingAccountId) {
+            var url = billingAccountId + "/" + globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.MAKE_PAYMENT_AVAILABILITY;
+
+            return $q.when(PaymentsResource.one().doGET(url))
+                .then(function (makePaymentAvailabilityResponse) {
+                    if (makePaymentAvailabilityResponse && makePaymentAvailabilityResponse.data) {
+                        setMakePaymentAvailability(makePaymentAvailabilityResponse.data);
+                        return getMakePaymentAvailability();
+                    }
+                    // no data in the response
+                    else {
+                        Logger.error("No data in Response from getting the Make Payment Availability");
+                        throw new Error("No data in Response from getting the Make Payment Availability");
+                    }
+                })
+                // get token failed
+                .catch(function (failureResponse) {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+
+                    var error = "Getting Make Payment Availability failed: " + CommonService.getErrorMessage(failureResponse);
+
+                    Logger.error(error);
+                    throw new Error(error);
+                });
+
+        }
+
+        function setMakePaymentAvailability(makePaymentAvailabilityInfo) {
+            makePaymentAvailability = makePaymentAvailabilityInfo;
         }
 
     }
