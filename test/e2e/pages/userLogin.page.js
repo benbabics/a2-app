@@ -1,8 +1,12 @@
 "use strict";
 
+var AppPage = require("./app.page.js");
+
 var UserLoginPage = (function () {
 
     function UserLoginPage() {
+        AppPage.call(this);
+
         this.focus();
 
         this.userNameInput = element(by.css("form[name='vm.userLoginForm'] input[name='userName']"));
@@ -10,6 +14,8 @@ var UserLoginPage = (function () {
         this.errorMessage = element(by.id("errorMessage"));
         this.submitButton = element(by.css("form[name='vm.userLoginForm'] button[type='submit']"));
     }
+
+    UserLoginPage.prototype = Object.create(AppPage.prototype);
 
     UserLoginPage.prototype.focus = function () {
         return browser.get("/#/user/auth/login");

@@ -1,8 +1,12 @@
 "use strict";
 
+var AppPage = require("./app.page.js");
+
 var PaymentAddPage = (function () {
 
     function PaymentAddPage() {
+        AppPage.call(this);
+
         this.focus();
 
         this.invoiceNumberLabel  = element(by.id("invoiceNumberLabel"));
@@ -21,6 +25,8 @@ var PaymentAddPage = (function () {
         this.paymentDate         = element(by.id("paymentDate"));
         this.submitButton        = element(by.id("makePaymentButton"));
     }
+
+    PaymentAddPage.prototype = Object.create(AppPage.prototype);
 
     PaymentAddPage.prototype.focus = function () {
         //TODO - Figure out why this isn't working
