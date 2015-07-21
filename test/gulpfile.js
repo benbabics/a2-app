@@ -103,6 +103,17 @@ gulp.task("protractor-run-landing", function () {
         });
 });
 
+gulp.task("protractor-run-menu", function () {
+    gulp.src(sourcePaths.root.testsE2E)
+        .pipe(protractor({
+            configFile: sourcePaths.root.protractorConf,
+            args: ["--suite=menu"]
+        }))
+        .on("error", function (e) {
+            throw e;
+        });
+});
+
 gulp.task("protractor-run-navBar", function () {
     gulp.src(sourcePaths.root.testsE2E)
         .pipe(protractor({

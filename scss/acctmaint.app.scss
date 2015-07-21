@@ -76,15 +76,16 @@ $user-login-gradient-bottom: #414141;
  Side Menu
  ------------------------------------------------------**/
 .menu-view {
-  background-color: #424242;
+  background-color: $charcoal-light;
 
-  .item {
-    background-color: #424242;
-    color: #ffffff;
-    border-color: #333333;
+  .item, .item-content {
+    background-color: $charcoal-light;
+    color: $inverse-font-color;
+    border-color: $charcoal;
   }
+
   a:active {
-    background-color: #333333;
+    background-color: $charcoal;
   }
 }
 
