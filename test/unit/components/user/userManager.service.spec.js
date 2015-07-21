@@ -71,7 +71,7 @@
 
         });
 
-        describe("has a retrieveCurrentUserDetails function that", function () {
+        describe("has a fetchCurrentUserDetails function that", function () {
 
             var mockResponse = {
                     data: {
@@ -98,7 +98,7 @@
 
                 UserManager.setUser(null);
 
-                UserManager.retrieveCurrentUserDetails()
+                UserManager.fetchCurrentUserDetails()
                     .then(resolveHandler, rejectHandler);
             });
 
@@ -114,7 +114,7 @@
 
             });
 
-            describe("when the current user is retrieved successfully", function () {
+            describe("when the current user is fetched successfully", function () {
 
                 describe("when there is data in the response", function () {
 

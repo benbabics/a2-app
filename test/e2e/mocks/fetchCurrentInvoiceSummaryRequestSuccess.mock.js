@@ -1,12 +1,12 @@
 "use strict";
 
-var RetrieveCurrentInvoiceSummaryRequestSuccessMock = (function () {
+var FetchCurrentInvoiceSummaryRequestSuccessMock = (function () {
 
-    function RetrieveCurrentInvoiceSummaryRequestSuccessMock() {
-        angular.module("RetrieveCurrentInvoiceSummaryMock", ["app", "ngMockE2E"])
+    function FetchCurrentInvoiceSummaryRequestSuccessMock() {
+        angular.module("FetchCurrentInvoiceSummaryMock", ["app", "ngMockE2E"])
             .run(function ($httpBackend) {
 
-                var mockRetrieveCurrentInvoiceSummaryResponse = {
+                var mockFetchCurrentInvoiceSummaryResponse = {
                     accountNumber     : "5v661356",
                     availableCredit   : "350.29",
                     closingDate       : "2015-07-15",
@@ -19,13 +19,13 @@ var RetrieveCurrentInvoiceSummaryRequestSuccessMock = (function () {
                 };
 
                 $httpBackend.whenGET(/\/secure\/accounts\/[a-zA-Z0-9-]*\/payments\/currentInvoiceSummary/).respond(function (method, url, data, headers) {
-                    return [200, mockRetrieveCurrentInvoiceSummaryResponse, {}];
+                    return [200, mockFetchCurrentInvoiceSummaryResponse, {}];
                 });
             });
     }
 
-    return RetrieveCurrentInvoiceSummaryRequestSuccessMock;
+    return FetchCurrentInvoiceSummaryRequestSuccessMock;
 
 })();
 
-module.exports = RetrieveCurrentInvoiceSummaryRequestSuccessMock;
+module.exports = FetchCurrentInvoiceSummaryRequestSuccessMock;

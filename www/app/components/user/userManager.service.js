@@ -10,10 +10,10 @@
 
         // Revealed Public members
         var service = {
-            getNewUser                : getNewUser,
-            retrieveCurrentUserDetails: retrieveCurrentUserDetails,
-            getUser                   : getUser,
-            setUser                   : setUser
+            getNewUser             : getNewUser,
+            fetchCurrentUserDetails: fetchCurrentUserDetails,
+            getUser                : getUser,
+            setUser                : setUser
         };
 
         activate();
@@ -25,15 +25,7 @@
             user = getNewUser();
         }
 
-        function getNewUser() {
-            return new UserModel();
-        }
-
-        function getUser() {
-            return user;
-        }
-
-        function retrieveCurrentUserDetails() {
+        function fetchCurrentUserDetails() {
 
             return $q.when(UsersResource.one().doGET(globals.ACCOUNT_MAINTENANCE_API.USERS.CURRENT))
                 .then(function (currentUserDetailsResponse) {
@@ -57,6 +49,14 @@
                     throw new Error(error);
                 });
 
+        }
+
+        function getNewUser() {
+            return new UserModel();
+        }
+
+        function getUser() {
+            return user;
         }
 
         function setUser(userInfo) {

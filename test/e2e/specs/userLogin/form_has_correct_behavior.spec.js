@@ -3,8 +3,8 @@
 var UserLoginPage = require("../../pages/userLogin.page.js");
 var AuthenticateUserRequestSuccessMock = require("../../mocks/authenticateUserRequestSuccess.mock.js");
 var AuthenticateUserRequestFailedBadCredentials = require("../../mocks/authenticateUserRequestFailedBadCredentials.mock.js");
-var RetrieveCurrentUserRequestSuccessMock = require("../../mocks/retrieveCurrentUserRequestSuccess.mock.js");
-var RetrieveCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/retrieveCurrentInvoiceSummaryRequestSuccess.mock.js");
+var FetchCurrentUserRequestSuccessMock = require("../../mocks/fetchCurrentUserRequestSuccess.mock.js");
+var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCurrentInvoiceSummaryRequestSuccess.mock.js");
 
 (function () {
     var mockUserName = "mockUserName",
@@ -104,8 +104,8 @@ var RetrieveCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/retri
 
                         beforeAll(function () {
                             browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestSuccessMock);
-                            browser.addMockModule("RetrieveCurrentUserMock", RetrieveCurrentUserRequestSuccessMock);
-                            browser.addMockModule("RetrieveCurrentInvoiceSummaryMock", RetrieveCurrentInvoiceSummaryRequestSuccessMock);
+                            browser.addMockModule("FetchCurrentUserMock", FetchCurrentUserRequestSuccessMock);
+                            browser.addMockModule("FetchCurrentInvoiceSummaryMock", FetchCurrentInvoiceSummaryRequestSuccessMock);
 
                             browser.refresh();
 
@@ -118,8 +118,8 @@ var RetrieveCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/retri
 
                         afterAll(function () {
                             browser.removeMockModule("AuthenticateUserMock");
-                            browser.removeMockModule("RetrieveCurrentUserMock");
-                            browser.removeMockModule("RetrieveCurrentInvoiceSummaryMock");
+                            browser.removeMockModule("FetchCurrentUserMock");
+                            browser.removeMockModule("FetchCurrentInvoiceSummaryMock");
 
                             browser.refresh();
 

@@ -27,7 +27,7 @@
 
             return AuthenticationManager.authenticate(vm.user.username, vm.user.password)
                 .then(function () {
-                    return UserManager.retrieveCurrentUserDetails();
+                    return UserManager.fetchCurrentUserDetails();
                 })
                 .then(function() {
                     // Do not allow backing up to the login page.

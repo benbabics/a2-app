@@ -58,7 +58,7 @@
 
         });
 
-        describe("has a retrieveCurrentInvoiceSummary function that", function () {
+        describe("has a fetchCurrentInvoiceSummary function that", function () {
 
             var mockResponse = {
                     data: {
@@ -82,7 +82,7 @@
 
                 InvoiceManager.setInvoiceSummary(null);
 
-                InvoiceManager.retrieveCurrentInvoiceSummary(billingAccountId)
+                InvoiceManager.fetchCurrentInvoiceSummary(billingAccountId)
                     .then(resolveHandler, rejectHandler);
             });
 
@@ -98,7 +98,7 @@
 
             });
 
-            describe("when the current invoice summary is retrieved successfully", function () {
+            describe("when the current invoice summary is fetched successfully", function () {
 
                 describe("when there is data in the response", function () {
 

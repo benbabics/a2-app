@@ -90,7 +90,7 @@
 
             });
 
-            describe("when the make payment availability is retrieved successfully", function () {
+            describe("when the make payment availability is fetched successfully", function () {
 
                 describe("when there is data in the response", function () {
 

@@ -44,7 +44,7 @@
             module("app.html");
 
             // mock dependencies
-            InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["retrieveCurrentInvoiceSummary"]);
+            InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["fetchCurrentInvoiceSummary"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             module(function($provide) {
                 $provide.value("InvoiceManager", InvoiceManager);
@@ -91,20 +91,20 @@
             //TODO - figure out why this doesn't work. The resolve method does not seem to be getting called
             xdescribe("when navigated to", function () {
 
-                var retrieveCurrentInvoiceSummaryDeferred;
+                var fetchCurrentInvoiceSummaryDeferred;
 
                 beforeEach(function () {
-                    retrieveCurrentInvoiceSummaryDeferred = $q.defer();
+                    fetchCurrentInvoiceSummaryDeferred = $q.defer();
                     UserManager.getUser.and.returnValue(mockUser);
-                    InvoiceManager.retrieveCurrentInvoiceSummary.and.returnValue(retrieveCurrentInvoiceSummaryDeferred.promise);
+                    InvoiceManager.fetchCurrentInvoiceSummary.and.returnValue(fetchCurrentInvoiceSummaryDeferred.promise);
 
                     $state.go(stateName);
-                    retrieveCurrentInvoiceSummaryDeferred.resolve(mockInvoiceSummary);
+                    fetchCurrentInvoiceSummaryDeferred.resolve(mockInvoiceSummary);
                     $rootScope.$digest();
                 });
 
-                it("should call InvoiceManager.retrieveCurrentInvoiceSummary with the correct account id", function () {
-                    expect(InvoiceManager.retrieveCurrentInvoiceSummary).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                it("should call InvoiceManager.fetchCurrentInvoiceSummary with the correct account id", function () {
+                    expect(InvoiceManager.fetchCurrentInvoiceSummary).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                 });
 
                 it("should transition successfully", function () {

@@ -19,7 +19,7 @@
                             billingAccountId = UserManager.getUser().billingCompany.accountId;
 
                             // Return the current invoice summary
-                            return InvoiceManager.retrieveCurrentInvoiceSummary(billingAccountId)
+                            return InvoiceManager.fetchCurrentInvoiceSummary(billingAccountId)
                                 .finally(function() {
                                     CommonService.loadingComplete();
                                 });

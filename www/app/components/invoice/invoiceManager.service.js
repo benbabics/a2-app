@@ -10,9 +10,9 @@
 
         // Revealed Public members
         var service = {
-            retrieveCurrentInvoiceSummary: retrieveCurrentInvoiceSummary,
-            getInvoiceSummary            : getInvoiceSummary,
-            setInvoiceSummary            : setInvoiceSummary
+            fetchCurrentInvoiceSummary: fetchCurrentInvoiceSummary,
+            getInvoiceSummary         : getInvoiceSummary,
+            setInvoiceSummary         : setInvoiceSummary
         };
 
         activate();
@@ -24,11 +24,7 @@
             invoiceSummary = new InvoiceSummaryModel();
         }
 
-        function getInvoiceSummary() {
-            return invoiceSummary;
-        }
-
-        function retrieveCurrentInvoiceSummary(billingAccountId) {
+        function fetchCurrentInvoiceSummary(billingAccountId) {
             var url = billingAccountId + "/" + globals.ACCOUNT_MAINTENANCE_API.INVOICES.CURRENT_INVOICE_SUMMARY;
 
             return $q.when(InvoicesResource.one().doGET(url))
@@ -52,7 +48,10 @@
                     Logger.error(error);
                     throw new Error(error);
                 });
+        }
 
+        function getInvoiceSummary() {
+            return invoiceSummary;
         }
 
         function setInvoiceSummary(invoiceSummaryInfo) {

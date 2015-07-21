@@ -11,7 +11,7 @@ var AuthenticateUserRequestFailedUserNotActiveMock = require("../../mocks/authen
 var AuthenticateUserRequestFailedPasswordExpiredMock = require("../../mocks/authenticateUserRequestFailedPasswordExpired.mock.js");
 var AuthenticateUserRequestFailedAuthorizationFailedMock = require("../../mocks/authenticateUserRequestFailedAuthorizationFailed.mock.js");
 var AuthenticateUserRequestSuccessMock = require("../../mocks/authenticateUserRequestSuccess.mock.js");
-var RetrieveCurrentUserRequestFailedMock = require("../../mocks/retrieveCurrentUserRequestFailed.mock.js");
+var FetchCurrentUserRequestFailedMock = require("../../mocks/fetchCurrentUserRequestFailed.mock.js");
 
 
 (function () {
@@ -320,7 +320,7 @@ var RetrieveCurrentUserRequestFailedMock = require("../../mocks/retrieveCurrentU
             beforeAll(function () {
                 // Set up HTTP Request/Response Mocks
                 browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestSuccessMock);
-                browser.addMockModule("RetrieveCurrentUserMock", RetrieveCurrentUserRequestFailedMock);
+                browser.addMockModule("FetchCurrentUserMock", FetchCurrentUserRequestFailedMock);
 
                 this.page = new UserLoginPage();
 
@@ -336,7 +336,7 @@ var RetrieveCurrentUserRequestFailedMock = require("../../mocks/retrieveCurrentU
 
                 // Remove HTTP Request/Response Mocks
                 browser.removeMockModule("AuthenticateUserMock");
-                browser.removeMockModule("RetrieveCurrentUserMock");
+                browser.removeMockModule("FetchCurrentUserMock");
             });
 
             it("should have an error message", function () {

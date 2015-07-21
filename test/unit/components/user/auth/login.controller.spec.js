@@ -9,7 +9,7 @@
         CommonService,
         globals,
         authenticateDeferred,
-        retrieveCurrentUserDeferred,
+        fetchCurrentUserDeferred,
         UserManager,
         $state;
 
@@ -34,7 +34,7 @@
 
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate", "logOut"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["retrieveCurrentUserDetails"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
             CommonService = jasmine.createSpyObj("CommonService", ["loadingBegin", "loadingComplete"]);
             $state = jasmine.createSpyObj("state", ["go"]);
 
@@ -42,7 +42,7 @@
                 $ionicHistory = _$ionicHistory_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
-                retrieveCurrentUserDeferred = $q.defer();
+                fetchCurrentUserDeferred = $q.defer();
                 globals = _globals_;
                 $rootScope = _$rootScope_;
 
@@ -84,19 +84,19 @@
             describe("when the User is Authenticated successfully", function () {
 
                 beforeEach(function () {
-                    UserManager.retrieveCurrentUserDetails.and.returnValue(retrieveCurrentUserDeferred.promise);
+                    UserManager.fetchCurrentUserDetails.and.returnValue(fetchCurrentUserDeferred.promise);
 
                     //return a promise object and resolve it
                     authenticateDeferred.resolve();
                 });
 
-                describe("when the User Details is Retrieved successfully", function () {
+                describe("when the User Details is fetched successfully", function () {
 
                     beforeEach(function () {
                         spyOn($ionicHistory, "nextViewOptions");
 
                         //return a promise object and resolve it
-                        retrieveCurrentUserDeferred.resolve();
+                        fetchCurrentUserDeferred.resolve();
                         $scope.$digest();
                     });
 
@@ -114,13 +114,13 @@
 
                 });
 
-                describe("when the User Details is NOT Retrieved successfully", function () {
+                describe("when the User Details is NOT fetched successfully", function () {
 
                     var errorObjectArg = new Error("Something bad happened");
 
                     beforeEach(function () {
                         //reject with an error message
-                        retrieveCurrentUserDeferred.reject(errorObjectArg);
+                        fetchCurrentUserDeferred.reject(errorObjectArg);
                         $scope.$digest();
                     });
 
@@ -150,8 +150,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
-                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
+                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
                 it("should call AuthenticationManager.logOut", function () {
@@ -178,8 +178,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
-                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
+                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
                 it("should call AuthenticationManager.logOut", function () {
@@ -206,8 +206,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
-                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
+                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
                 it("should call AuthenticationManager.logOut", function () {
@@ -234,8 +234,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
-                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
+                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
                 it("should call AuthenticationManager.logOut", function () {
@@ -262,8 +262,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
-                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
+                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
                 it("should call AuthenticationManager.logOut", function () {
@@ -290,8 +290,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
-                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
+                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
                 it("should call AuthenticationManager.logOut", function () {
@@ -318,8 +318,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.retrieveCurrentUserDetails", function () {
-                    expect(UserManager.retrieveCurrentUserDetails).not.toHaveBeenCalled();
+                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
+                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
                 it("should call AuthenticationManager.logOut", function () {

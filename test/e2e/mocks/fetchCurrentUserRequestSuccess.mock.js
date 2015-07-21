@@ -1,12 +1,12 @@
 "use strict";
 
-var RetrieveCurrentUserRequestSuccessMock = (function () {
+var FetchCurrentUserRequestSuccessMock = (function () {
 
-    function RetrieveCurrentUserRequestSuccessMock() {
-        angular.module("RetrieveCurrentUserMock", ["app", "ngMockE2E"])
+    function FetchCurrentUserRequestSuccessMock() {
+        angular.module("FetchCurrentUserMock", ["app", "ngMockE2E"])
             .run(function ($httpBackend) {
 
-                var mockRetrieveCurrentUserResponse = {
+                var mockFetchCurrentUserResponse = {
                     firstName: "firstName",
                     username : "username",
                     company  : {
@@ -22,13 +22,13 @@ var RetrieveCurrentUserRequestSuccessMock = (function () {
                 };
 
                 $httpBackend.whenGET(/\/users\/current/).respond(function (method, url, data, headers) {
-                    return [200, mockRetrieveCurrentUserResponse, {}];
+                    return [200, mockFetchCurrentUserResponse, {}];
                 });
             });
     }
 
-    return RetrieveCurrentUserRequestSuccessMock;
+    return FetchCurrentUserRequestSuccessMock;
 
 })();
 
-module.exports = RetrieveCurrentUserRequestSuccessMock;
+module.exports = FetchCurrentUserRequestSuccessMock;

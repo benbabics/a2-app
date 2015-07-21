@@ -25,7 +25,7 @@
         }
 
         function beforeEnter() {
-            vm.invoiceSummary = currentInvoiceSummary; // the invoiceSummary object should be bound now to the object returned by retrieveCurrentInvoiceSummary
+            vm.invoiceSummary = currentInvoiceSummary; // the invoiceSummary object should be bound now to the object returned by fetchCurrentInvoiceSummary
         }
 
         //TODO - Remove this
