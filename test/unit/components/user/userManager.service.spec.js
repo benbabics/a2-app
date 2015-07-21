@@ -57,20 +57,6 @@
 
         });
 
-        describe("has a getNewUser function that", function () {
-
-            it("should return a new User object", function () {
-                expect(UserManager.getNewUser()).toEqual(jasmine.objectContaining({
-                    email: "",
-                    firstName: "",
-                    username: "",
-                    company: new AccountModel(),
-                    billingCompany: new AccountModel()
-                }));
-            });
-
-        });
-
         describe("has a fetchCurrentUserDetails function that", function () {
 
             var mockResponse = {

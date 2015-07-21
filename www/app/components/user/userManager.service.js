@@ -10,7 +10,6 @@
 
         // Revealed Public members
         var service = {
-            getNewUser             : getNewUser,
             fetchCurrentUserDetails: fetchCurrentUserDetails,
             getUser                : getUser,
             setUser                : setUser
@@ -22,7 +21,7 @@
         //////////////////////
 
         function activate() {
-            user = getNewUser();
+            user = new UserModel();
         }
 
         function fetchCurrentUserDetails() {
@@ -49,10 +48,6 @@
                     throw new Error(error);
                 });
 
-        }
-
-        function getNewUser() {
-            return new UserModel();
         }
 
         function getUser() {
