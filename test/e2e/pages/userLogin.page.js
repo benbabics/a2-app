@@ -1,7 +1,5 @@
 "use strict";
 
-var TestUtils = require("../testUtils.protractor.js");
-
 var UserLoginPage = (function () {
 
     function UserLoginPage() {
@@ -51,6 +49,20 @@ var UserLoginPage = (function () {
 
     UserLoginPage.prototype.submit = function () {
         return this.submitButton.click();
+    };
+
+    UserLoginPage.prototype.doLogin = function () {
+        this.focus();
+
+        browser.refresh();
+
+        //repopulate fields
+        this.typeUserName("mockUserName");
+        this.typePassword("mockPassword");
+
+        this.submit();
+
+        return browser.waitForAngular();
     };
 
     return UserLoginPage;

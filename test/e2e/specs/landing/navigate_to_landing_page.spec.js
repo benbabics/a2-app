@@ -7,8 +7,6 @@ var RetrieveCurrentUserRequestSuccessMock = require("../../mocks/retrieveCurrent
 var RetrieveCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/retrieveCurrentInvoiceSummaryRequestSuccess.mock.js");
 
 (function () {
-    var mockUserName = "mockUserName",
-        mockPassword = "mockPassword";
 
     describe("A Landing page", function () {
 
@@ -22,15 +20,7 @@ var RetrieveCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/retri
             browser.addMockModule("RetrieveCurrentUserMock", RetrieveCurrentUserRequestSuccessMock);
             browser.addMockModule("RetrieveCurrentInvoiceSummaryMock", RetrieveCurrentInvoiceSummaryRequestSuccessMock);
 
-            browser.refresh();
-
-            //repopulate fields
-            loginPage.typeUserName(mockUserName);
-            loginPage.typePassword(mockPassword);
-
-            loginPage.submit();
-
-            browser.waitForAngular();
+            loginPage.doLogin();
 
             this.page = new LandingPage();
         });
@@ -90,7 +80,7 @@ var RetrieveCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/retri
         });
 
         it("should have a Make Payment button displayed", function () {
-            expect(this.page.makePaymentButton.getText()).toMatch("Make Payment");
+            expect(this.page.makePaymentButton.getText()).toMatch("MAKE PAYMENT");
             expect(this.page.makePaymentButton.isPresent()).toBeTruthy();
             expect(this.page.makePaymentButton.isDisplayed()).toBeTruthy();
         });
