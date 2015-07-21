@@ -3,16 +3,16 @@
 var PaymentAddPage = require("../../pages/paymentAdd.page.js");
 var UserLoginPage = require("../../pages/userLogin.page.js");
 var AuthenticateUserRequestSuccessMock = require("../../mocks/authenticateUserRequestSuccess.mock.js");
-var RetrieveCurrentUserRequestSuccessMock = require("../../mocks/retrieveCurrentUserRequestSuccess.mock.js");
-var RetrieveCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/retrieveCurrentInvoiceSummaryRequestSuccess.mock.js");
+var FetchCurrentUserRequestSuccessMock = require("../../mocks/fetchCurrentUserRequestSuccess.mock.js");
+var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCurrentInvoiceSummaryRequestSuccess.mock.js");
 
 (function () {
     describe("A Side Menu", function () {
 
         beforeAll(function () {
             browser.addMockModule("AuthenticateUserMock", AuthenticateUserRequestSuccessMock);
-            browser.addMockModule("RetrieveCurrentUserMock", RetrieveCurrentUserRequestSuccessMock);
-            browser.addMockModule("RetrieveCurrentInvoiceSummaryMock", RetrieveCurrentInvoiceSummaryRequestSuccessMock);
+            browser.addMockModule("FetchCurrentUserMock", FetchCurrentUserRequestSuccessMock);
+            browser.addMockModule("FetchCurrentInvoiceSummaryMock", FetchCurrentInvoiceSummaryRequestSuccessMock);
 
             //log in so we can get to the landing page
             new UserLoginPage().doLogin();
@@ -24,8 +24,8 @@ var RetrieveCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/retri
 
         afterAll(function () {
             browser.removeMockModule("AuthenticateUserMock");
-            browser.removeMockModule("RetrieveCurrentUserMock");
-            browser.removeMockModule("RetrieveCurrentInvoiceSummaryMock");
+            browser.removeMockModule("FetchCurrentUserMock");
+            browser.removeMockModule("FetchCurrentInvoiceSummaryMock");
         });
 
         //TODO - The login validator/redirection handler is interfering with these tests.
