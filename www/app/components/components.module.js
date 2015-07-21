@@ -9,6 +9,7 @@
         "app.components.landing",
         "app.components.invoice",
         "app.components.payment",
-        "app.components.menu"
+        "app.components.menu",
+        "app.components.navBar"
     ]);
 })();

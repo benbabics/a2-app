@@ -22,9 +22,12 @@
             <!--
             The nav bar that will be updated as we navigate between views.
             -->
-            <ion-nav-bar class="bar-wex">
+            <ion-nav-bar class="bar-wex" ng-controller="NavBarController as vm">
                 <ion-nav-buttons side="right">
-                    <button menu-toggle="right" class="button icon ion-navicon"></button>
+                    <button menu-toggle="right"
+                            class="button button-clear button-menu"
+                            data-text="{{vm.config.menuButtonText}}">
+                    </button>
                 </ion-nav-buttons>
             </ion-nav-bar>
 
@@ -104,6 +107,9 @@
         <script src="app/shared/integration/toast.service.js"></script>
         <script src="app/shared/integration/lodash.service.js"></script>
         <script src="app/shared/dependencies/dependencies.module.js"></script>
+    <script src="app/components/core/core.module.js"></script>
+    <script src="app/components/core/core.config.js"></script>
+    <script src="app/components/core/constants.js"></script>
         <script src="app/shared/core/core.module.js"></script>
         <script src="app/shared/core/constants.js"></script>
         <script src="app/shared/core/common.service.js"></script>
@@ -115,6 +121,8 @@
         <script src="app/components/payment/payment.module.js"></script>
         <script src="app/components/payment/payment.routes.js"></script>
         <script src="app/components/payment/makePayment.controller.js"></script>
+    <script src="app/components/navBar/navBar.module.js"></script>
+    <script src="app/components/navBar/navBar.controller.js"></script>
     <script src="app/components/menu/menu.module.js"></script>
     <script src="app/components/landing/landing.module.js"></script>
     <script src="app/components/landing/landing.routes.js"></script>
@@ -123,9 +131,6 @@
         <script src="app/components/invoice/invoicesResource.service.js"></script>
         <script src="app/components/invoice/invoiceSummaryModel.service.js"></script>
         <script src="app/components/invoice/invoiceManager.service.js"></script>
-        <script src="app/components/core/core.module.js"></script>
-        <script src="app/components/core/core.config.js"></script>
-        <script src="app/components/core/constants.js"></script>
         <script src="app/components/account/account.module.js"></script>
         <script src="app/components/account/accountModel.service.js"></script>
         <script src="app/shared/shared.module.js"></script>

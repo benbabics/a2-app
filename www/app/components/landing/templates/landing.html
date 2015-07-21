@@ -7,28 +7,39 @@
         <div class="content item item-divider padding">
             <div class="shadow">
                 <div class="item item-text-wrap">
-                    <h3 id="companyDetails" class="block_align black">{{vm.billingCompany.name}}<br>{{vm.billingCompany.accountNumber}}
+                    <h3 id="companyDetails" class="block_align black">
+                        {{vm.billingCompany.name}}
+                        <br>
+                        {{vm.billingCompany.accountNumber}}
                     </h3>
 
-                    <h3 id="availableCredit" class="content_align green">{{vm.invoiceSummary.availableCredit |
-                        currency}}<br>{{vm.config.availableCredit}}</h3>
+                    <h3 id="availableCredit" class="content_align green">
+                        {{vm.invoiceSummary.availableCredit | currency}}
+                        <br>
+                        {{vm.config.availableCredit}}
+                    </h3>
                 </div>
 
                 <div class="item item-divider">
                     <p class="divider padding-top">
                         <span id="paymentDueDateLabel" class="block_align">{{vm.config.paymentDueDate}}</span>
-                        <span id="paymentDueDate" class="content_align">{{vm.invoiceSummary.paymentDueDate | amDateFormat:"M/D/YYYY"}}</span>
+                        <span id="paymentDueDate" class="content_align">
+                            {{vm.invoiceSummary.paymentDueDate | amDateFormat:"M/D/YYYY"}}
+                        </span>
                     </p>
 
                     <p class="divider padding-top">
                         <span id="currentBalanceLabel" class="block_align">{{vm.config.currentBalance}}</span>
-                        <span id="currentBalance"
-                              class="content_align">{{vm.invoiceSummary.currentBalance | currency}}</span>
+                        <span id="currentBalance" class="content_align">
+                            {{vm.invoiceSummary.currentBalance | currency}}
+                        </span>
                     </p>
 
                     <p class="divider padding-top">
                         <span id="minimumPaymentLabel" class="block_align">{{vm.config.minimumPayment}}</span>
-                        <span id="minimumPayment" class="content_align">{{vm.invoiceSummary.minimumPaymentDue | currency}}</span>
+                        <span id="minimumPayment" class="content_align">
+                            {{vm.invoiceSummary.minimumPaymentDue | currency}}
+                        </span>
                     </p>
                     <br>
                     <button id="makePaymentButton" class="button button-block button-submit" ng-click="showAlert();">

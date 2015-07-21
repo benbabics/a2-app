@@ -51,6 +51,12 @@
         }
     };
 
+    appGlobals.NAV_BAR = {
+        "CONFIG": {
+            "menuButtonText": "Menu"
+        }
+    };
+
     angular
         .module("app.components.core")
         .constant("appGlobals", appGlobals)

@@ -5,11 +5,34 @@
 /**----------------------------------------------------------
  Header, Navigation
  ----------------------------------------------------------**/
+$menu-button-line-height: ($button-large-icon-size + $button-small-font-size) / 2;
+
 .bar-wex {
   background-color: $charcoal;
 
   .title {
     color: $inverse-font-color;
+  }
+
+  .button {
+    color: $inverse-font-color;
+  }
+
+  .button-menu:before {
+    font-family: ionicons;
+    font-size: $button-large-icon-size;
+    line-height: $menu-button-line-height;
+    white-space: pre;
+
+    content: "\f20e\A"; /* ion-navicon */
+  }
+
+  .button-menu:after {
+    font-size: $button-small-font-size;
+    line-height: $menu-button-line-height;
+    white-space: pre;
+
+    content: "\A" attr(data-text);
   }
 }
 
