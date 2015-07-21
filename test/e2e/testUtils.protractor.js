@@ -7,6 +7,7 @@ var _ = require("lodash");
 var TestUtils = (function () {
 
     var TestUtils = {
+        findElementByXPathWithClass: findElementByXPathWithClass,
         hasClass: hasClass,
         waitForElementRemoval: waitForElementRemoval,
         waitForElementHiding: waitForElementHiding
@@ -15,6 +16,10 @@ var TestUtils = (function () {
     return TestUtils;
 
     //////////////////////
+
+    function findElementByXPathWithClass(xpath, className) {
+        return element(by.xpath(xpath + "[contains(concat(' ', @class, ' '), ' " + className + " ')]"));
+    }
 
     function hasClass(element, cls) {
         return element.getAttribute("class")
