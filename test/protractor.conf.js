@@ -21,6 +21,7 @@
             smoke: "e2e/specs/smoketests/**/*.js",
             full: "e2e/specs/**/*.spec.js",
             landing: "e2e/specs/landing/**/*.js",
+            payment: "e2e/specs/payment/**/*.js",
             userLogin: "e2e/specs/userLogin/**/*.js"
         },
 

@@ -48,6 +48,15 @@
 
     appGlobals.MAKE_PAYMENT = {
         "CONFIG": {
+            "title": "Make Payment",
+            "invoiceNumber": "Invoice Number",
+            "paymentDueDate": "Payment Due Date",
+            "currentBalance": "Current Balance",
+            "minimumPayment": "Minimum Payment",
+            "amount": "Amount",
+            "bankAccount": "From Account",
+            "paymentDate": "Date",
+            "submitButton": "Next"
         }
     };
 

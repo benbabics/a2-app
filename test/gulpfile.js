@@ -102,6 +102,18 @@ gulp.task("protractor-run-landing", function () {
             throw e;
         });
 });
+
+gulp.task("protractor-run-payment", function () {
+    gulp.src(sourcePaths.root.testsE2E)
+        .pipe(protractor({
+            configFile: sourcePaths.root.protractorConf,
+            args: ["--suite=payment"]
+        }))
+        .on("error", function (e) {
+            throw e;
+        });
+});
+
 gulp.task("protractor-run-userLogin", function () {
     gulp.src(sourcePaths.root.testsE2E)
         .pipe(protractor({

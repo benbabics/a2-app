@@ -1,39 +1,54 @@
-<ion-view>
+<ion-view view-title="{{vm.config.title}}">
     <ion-content>
-        <div class="item item-divider"><div class="padding">
-            <p class="divider padding-top"><span class="block_align">Invoice Number</span> <span class="content_align">12345678</span></p>
-            <br>
-            <p class="divider padding-top"><span class="block_align black"> Current Balance</span> <span class="content_align black">$650.00</span></p>
+        <div class="item item-divider">
+            <div class="padding">
+                <p class="padding-top">
+                    <span id="invoiceNumberLabel" class="block_align">{{vm.config.invoiceNumber}}</span>
+                    <span id="invoiceNumber" class="content_align">{{vm.invoiceSummary.invoiceNumber}}</span>
+                </p>
+                <br>
+                <p class="padding-top">
+                    <span id="currentBalanceLabel" class="block_align black">{{vm.config.currentBalance}}</span>
+                    <span id="currentBalance" class="content_align black">{{vm.invoiceSummary.currentBalance | currency}}</span>
+                </p>
 
-            <p class="divider padding-top"><span class="block_align black"> Minimum Payment</span> <span class="content_align black">$600.00</span></p>
+                <p class="padding-top">
+                    <span id="minimumPaymentLabel" class="block_align black">{{vm.config.minimumPayment}}</span>
+                    <span id="minimumPayment" class="content_align black">{{vm.invoiceSummary.minimumPaymentDue | currency}}</span>
+                </p>
 
-            <p class="divider padding-top"><span class="block_align black"> Payment due date</span> <span class="content_align black">06/08/2015</span></p>
-        </div>
+                <p class="padding-top">
+                    <span id="paymentDueDateLabel" class="block_align black">{{vm.config.paymentDueDate}}</span>
+                    <span id="paymentDueDate" class="content_align black">{{vm.invoiceSummary.paymentDueDate | amDateFormat:"M/D/YYYY"}}</span>
+                </p>
+            </div>
         </div>
         <div class="item item-wrap arrow-align">
-            <p class="padding-left padding-right"><span class="block_align">Amount</span>
-                <span class="content_align"><a href="#amt">$600.00</a>
+            <p class="padding-left padding-right">
+                <span id="paymentAmountLabel" class="block_align">{{vm.config.amount}}</span>
+                <span id="paymentAmount" class="content_align">$600.00
                      <span class="button button-icon icon ion-ios-arrow-forward"></span>
                 </span>
-
             </p>
         </div>
         <div class="item item-wrap arrow-align">
-            <p class="padding-left padding-right"><span class="block_align">From Account</span>
-                <span class="content_align"><a href="#amt">Checking 3456</a>
+            <p class="padding-left padding-right">
+                <span id="bankAccountLabel" class="block_align">{{vm.config.bankAccount}}</span>
+                <span id="bankAccount" class="content_align">Checking 3456
                      <span class="button button-icon icon ion-ios-arrow-forward"></span>
                 </span>
             </p>
         </div>
         <div class="item item-wrap arrow-align">
-            <p class="padding-left padding-right"><span class="block_align">Date</span>
-                <span class="content_align"><a href="#amt">06/01/2015</a>
+            <p class="padding-left padding-right">
+                <span id="paymentDateLabel" class="block_align">{{vm.config.paymentDate}}</span>
+                <span id="paymentDate" class="content_align">06/01/2015
                     <span class="button button-icon icon ion-ios-arrow-forward"></span>
                 </span>
             </p>
         </div> <br>
         <div class="padding" style="text-align:center">
-            <button id="makePaymentButton" class="button button-block button-submit" style="width:75%;display: inline-block">Next</button>
+            <button id="makePaymentButton" class="button button-block button-submit" style="width:75%;display: inline-block">{{vm.config.submitButton}}</button>
         </div>
     </ion-content>
 </ion-view>
