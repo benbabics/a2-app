@@ -1,6 +1,7 @@
 "use strict";
 
 var PaymentAddPage = require("../../pages/paymentAdd.page.js");
+var LandingPage = require("../../pages/landing.page.js");
 var UserLoginPage = require("../../pages/userLogin.page.js");
 var AuthenticateUserRequestSuccessMock = require("../../mocks/authenticateUserRequestSuccess.mock.js");
 var FetchCurrentUserRequestSuccessMock = require("../../mocks/fetchCurrentUserRequestSuccess.mock.js");
@@ -56,6 +57,9 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
         xdescribe("when the 'Make Payment' option is clicked", function () {
 
             beforeAll(function () {
+                //use the landing page for this test
+                this.page = new LandingPage();
+
                 this.page.clickSideMenuButton();
 
                 browser.waitForAngular();
