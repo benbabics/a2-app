@@ -18,8 +18,6 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
             new UserLoginPage().doLogin();
 
             browser.waitForAngular();
-
-            this.page = new PaymentAddPage();
         });
 
         afterAll(function () {
@@ -34,6 +32,9 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
         xdescribe("when the 'Home' option is clicked", function () {
 
             beforeAll(function () {
+                //use the add payment page for this test
+                this.page = new PaymentAddPage();
+
                 this.page.clickSideMenuButton();
 
                 browser.waitForAngular();
