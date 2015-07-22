@@ -66,6 +66,21 @@
         }
     };
 
+    appGlobals.MENU = {
+        "CONFIG": {
+            "options": {
+                "home": "Home",
+                "makePayment": "Make Payment",
+                "viewActivity": "View Activity",
+                "cards": "Cards",
+                "drivers": "Drivers",
+                "paymentHistory": "Payment History",
+                "contactUs": "Contact Us",
+                "logOut": "Log Out"
+            }
+        }
+    };
+
     angular
         .module("app.components.core")
         .constant("appGlobals", appGlobals)

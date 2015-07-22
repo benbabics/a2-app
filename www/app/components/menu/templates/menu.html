@@ -1,13 +1,33 @@
 <ion-content class="menu-view">
     <ion-list>
-        <ion-item class="option-home" ui-sref="landing" menu-close>Home</ion-item>
-        <ion-item class="option-make-payment" ui-sref="payment.add" menu-close>Make Payment</ion-item>
-        <ion-item>View Activity</ion-item>
-        <ion-item>Cards</ion-item>
-        <ion-item>Drivers</ion-item>
-        <ion-item>Payment History</ion-item>
-        <ion-item>Contact Us</ion-item>
-        <ion-item>Log Out</ion-item>
+        <ion-item class="option-home"
+                  ui-sref="landing"
+                  menu-close>
+            {{vm.config.options.home}}
+        </ion-item>
+        <ion-item class="option-make-payment"
+                  ui-sref="payment.add"
+                  menu-close>
+            {{vm.config.options.makePayment}}
+        </ion-item>
+        <ion-item>
+            {{vm.config.options.viewActivity}}
+        </ion-item>
+        <ion-item>
+            {{vm.config.options.cards}}
+        </ion-item>
+        <ion-item>
+            {{vm.config.options.drivers}}
+        </ion-item>
+        <ion-item>
+            {{vm.config.options.paymentHistory}}
+        </ion-item>
+        <ion-item>
+            {{vm.config.options.contactUs}}
+        </ion-item>
+        <ion-item>
+            {{vm.config.options.logOut}}
+        </ion-item>
     </ion-list>
 </ion-content>
 
