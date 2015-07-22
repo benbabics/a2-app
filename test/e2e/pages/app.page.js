@@ -8,6 +8,7 @@ var AppPage = (function () {
         this.sideMenuButton      = TestUtils.findElementByXPathWithClass("//*[@nav-bar='active']//button", "button-menu");
         this.sideMenu            = element(by.tagName("ion-side-menu"));
         this.sideMenuHome        = this.sideMenu.element(by.className("option-home"));
+        this.sideMenuMakePayment = this.sideMenu.element(by.className("option-make-payment"));
     }
 
     AppPage.prototype.clickSideMenuButton = function () {
@@ -16,6 +17,10 @@ var AppPage = (function () {
 
     AppPage.prototype.clickSideMenuHome = function () {
         return this.sideMenuHome.click();
+    };
+
+    AppPage.prototype.clickSideMenuMakePayment = function () {
+        return this.sideMenuMakePayment.click();
     };
 
     return AppPage;

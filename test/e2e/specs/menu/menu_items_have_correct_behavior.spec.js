@@ -30,6 +30,7 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
 
         //TODO - The login validator/redirection handler is interfering with these tests.
         //Reinstate this test when it has been fixed
+
         xdescribe("when the 'Home' option is clicked", function () {
 
             beforeAll(function () {
@@ -42,6 +43,33 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
 
             it("should redirect to the landing page", function () {
                 expect(browser.getCurrentUrl()).toMatch("/#/landing");
+            });
+
+            //TODO - Ionic side menu element always reports itself as displayed, even when it's not.
+            //Figure out another way to test this.
+            xit("should hide the side menu", function () {
+                expect(this.page.sideMenu.isDisplayed()).toBeFalsy();
+            });
+        });
+
+        xdescribe("when the 'Make Payment' option is clicked", function () {
+
+            beforeAll(function () {
+                this.page.clickSideMenuButton();
+
+                browser.waitForAngular();
+
+                this.page.clickSideMenuMakePayment();
+            });
+
+            it("should redirect to the Make Payment page", function () {
+                expect(browser.getCurrentUrl()).toMatch("/#/payment/add");
+            });
+
+            //TODO - Ionic side menu element always reports itself as displayed, even when it's not.
+            //Figure out another way to test this.
+            xit("should hide the side menu", function () {
+                expect(this.page.sideMenu.isDisplayed()).toBeFalsy();
             });
         });
     });
