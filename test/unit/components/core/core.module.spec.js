@@ -9,6 +9,7 @@
 
         beforeEach(function () {
 
+            module("app.shared.dependencies");
             module("app.components.core");
             module("app.shared");
             module("app.components.user");
@@ -22,7 +23,6 @@
 
                 spyOn($rootScope, "$on").and.callThrough();
             });
-
 
         });
 
