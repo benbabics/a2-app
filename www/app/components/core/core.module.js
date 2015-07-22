@@ -53,11 +53,27 @@
 
                         fetchMakePaymentAvailability()
                             .then(function (makePaymentAvailability) {
-                                // set to true so that the state.go can skip the fetch
-                                hasFetchedMakePaymentAvailability = true;
+                                if (makePaymentAvailability.shouldDisplayBankAccountSetupMessage) {
+                                    CommonService.displayAlert({
+                                        cssClass: "wex-warning-popup",
+                                        content: globals.MAKE_PAYMENT.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
+                                        buttonCssClass: "button-submit"
+                                    });
+                                }
+                                else if (makePaymentAvailability.shouldDisplayDirectDebitEnabledMessage) {
+                                    CommonService.displayAlert({
+                                        cssClass: "wex-warning-popup",
+                                        content: globals.MAKE_PAYMENT.WARNINGS.DIRECT_DEBIT_SETUP,
+                                        buttonCssClass: "button-submit"
+                                    });
+                                }
+                                else {
+                                    // set to true so that the state.go can skip the fetch
+                                    hasFetchedMakePaymentAvailability = true;
 
-                                // No problems we're worried about here so go to the payment add page
-                                $state.go(stateName);
+                                    // No problems we're worried about here so go to the payment add page
+                                    $state.go(stateName);
+                                }
                             });
                     }
                     else {
