@@ -1,23 +1,29 @@
-<ion-view view-title="{{vm.config.title}}">
+<ion-view>
+    <ion-nav-title>
+        <button class="button back-button button-clear"><i class="icon ion-ios-arrow-back"></i>
+        </button>
+        <div class="title title-center">Make Payment</div>
+    </ion-nav-title>
+
     <ion-content>
-        <div class="item item-divider">
+        <div class="item item-divider inner-container">
             <div class="padding">
-                <p class="padding-top">
+                <p class="padding-top divider">
                     <span id="invoiceNumberLabel" class="block_align">{{vm.config.invoiceNumber}}</span>
                     <span id="invoiceNumber" class="content_align">{{vm.invoiceSummary.invoiceNumber}}</span>
                 </p>
                 <br>
-                <p class="padding-top">
+                <p class="padding-top divider">
                     <span id="currentBalanceLabel" class="block_align black">{{vm.config.currentBalance}}</span>
                     <span id="currentBalance" class="content_align black">{{vm.invoiceSummary.currentBalance | currency}}</span>
                 </p>
 
-                <p class="padding-top">
+                <p class="padding-top divider">
                     <span id="minimumPaymentLabel" class="block_align black">{{vm.config.minimumPayment}}</span>
                     <span id="minimumPayment" class="content_align black">{{vm.invoiceSummary.minimumPaymentDue | currency}}</span>
                 </p>
 
-                <p class="padding-top">
+                <p class="padding-top divider">
                     <span id="paymentDueDateLabel" class="block_align black">{{vm.config.paymentDueDate}}</span>
                     <span id="paymentDueDate" class="content_align black">{{vm.invoiceSummary.paymentDueDate | amDateFormat:"M/D/YYYY"}}</span>
                 </p>
@@ -47,8 +53,8 @@
                 </span>
             </p>
         </div> <br>
-        <div class="padding" style="text-align:center">
-            <button id="makePaymentButton" class="button button-block button-submit" style="width:75%;display: inline-block">{{vm.config.submitButton}}</button>
+        <div class="padding align_center">
+            <button id="makePaymentButton" class="button button-block button-submit button-width">{{vm.config.submitButton}}</button>
         </div>
     </ion-content>
 </ion-view>

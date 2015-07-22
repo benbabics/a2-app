@@ -71,6 +71,17 @@ $user-login-gradient-bottom: #414141;
   padding-bottom:0px! important;
  }
 
+ .button-width {
+   width:75% !important;
+   display: inline-block;
+ }
+
+.inner-container {
+  background-color: #eeedec;
+}
+ .button-menu {
+   margin-right:10px;
+ }
 
 /**------------------------------------------------------
  Side Menu
@@ -83,9 +94,8 @@ $user-login-gradient-bottom: #414141;
     color: $inverse-font-color;
     border-color: $charcoal;
   }
-
   a:active {
-    background-color: $charcoal;
+    background-color: $charcoal !important;
   }
 }
 
@@ -128,6 +138,12 @@ $user-login-gradient-bottom: #414141;
       color:$warning-message-color;
       border:none;
     }
-
+    .popup-buttons .button {
+      margin-left:27%;
+      margin-right:27%;
+      background-color: $primary-button-color;
+      border: none;
+      color: $primary-button-font-color;
+    }
   }
 }
