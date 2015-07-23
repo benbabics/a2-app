@@ -18,9 +18,7 @@
         beforeEach(function () {
 
             module("app.shared");
-            module("app.components.core");
-            module("app.components.user");
-            module("app.components.user.auth");
+            module("app.components");
 
             // stub the routing and template loading
             module(function ($urlRouterProvider) {

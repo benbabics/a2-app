@@ -19,9 +19,8 @@
                 $ionicConfigProvider.backButton.text = jasmine.createSpy("text").and.callThrough();
             });
 
-            module("app.components.core");
+            module("app.components");
             module("app.shared");
-            module("app.components.user");
 
             inject(function(_appGlobals_) {
                 appGlobals = _appGlobals_;
