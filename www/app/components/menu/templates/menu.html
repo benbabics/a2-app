@@ -1,31 +1,31 @@
 <ion-content class="menu-view">
     <ion-list>
-        <ion-item class="option-home"
+        <ion-item id="option-home"
                   ui-sref="landing"
                   menu-close>
             {{vm.config.options.home}}
         </ion-item>
-        <ion-item class="option-make-payment"
+        <ion-item id="option-make-payment"
                   ui-sref="payment.add"
                   menu-close>
             {{vm.config.options.makePayment}}
         </ion-item>
-        <ion-item>
+        <ion-item id="option-view-activity">
             {{vm.config.options.viewActivity}}
         </ion-item>
-        <ion-item>
+        <ion-item id="option-cards">
             {{vm.config.options.cards}}
         </ion-item>
-        <ion-item>
+        <ion-item id="option-drivers">
             {{vm.config.options.drivers}}
         </ion-item>
-        <ion-item>
+        <ion-item id="option-payment-history">
             {{vm.config.options.paymentHistory}}
         </ion-item>
-        <ion-item>
+        <ion-item id="option-contact-us">
             {{vm.config.options.contactUs}}
         </ion-item>
-        <ion-item>
+        <ion-item id="option-log-out">
             {{vm.config.options.logOut}}
         </ion-item>
     </ion-list>
