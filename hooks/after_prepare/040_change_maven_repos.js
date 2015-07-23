@@ -41,6 +41,22 @@ function changeMavenRepo(rootdir, fileName) {
     }
 }
 
+function changeMavenURL(rootdir, fileName, mavenUrl) {
+    var fullFileName = path.join(rootdir, fileName),
+        mavenCentral = "mavenCentral()",
+        wexNexusUrl = "url 'http://nexus.int.wrightexpress.com/nexus/content/groups/public'";
+
+    if (fs.existsSync(fullFileName)) {
+
+        console.log("In " + fullFileName + " - updating Maven repos");
+
+        replaceStringInFile(fullFileName, mavenUrl, wexNexusUrl);
+
+    } else {
+        console.log("ERROR missing " + fullFileName + " file.");
+    }
+}
+
 if (rootdir) {
     console.log("Updating Maven Repository in build.gradle files to: http://nexus.int.wrightexpress.com/nexus/content/groups/public");
 
@@ -50,6 +66,7 @@ if (rootdir) {
         changeMavenRepo(rootdir, "platforms/android/build.gradle");
         changeMavenRepo(rootdir, "platforms/android/CordovaLib/build.gradle");
 
+        changeMavenURL(rootdir, "platforms/android/cordova-plugin-crosswalk-webview/accountmaintenance-xwalk.gradle", "url 'https://download.01.org/crosswalk/releases/crosswalk/android/maven2'");
 
     } catch(e) {
         console.log(e);
