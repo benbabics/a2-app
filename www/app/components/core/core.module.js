@@ -94,8 +94,13 @@
             AuthenticationManager.logOut();
         }
 
+        function resumeApplication() {
+            $state.go("user.auth.login");
+        }
+
         $rootScope.$on("$stateChangeStart", validateRoutePreconditions);
         $rootScope.$on("cordovaPause", pauseApplication);
+        $rootScope.$on("cordovaResume", resumeApplication);
     }
 
     angular.module("app.components.core", [])

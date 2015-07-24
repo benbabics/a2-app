@@ -258,5 +258,19 @@
             });
 
         });
+
+        describe("has a cordovaResume event handler function that", function () {
+
+            beforeEach(function() {
+                spyOn($state, "go");
+
+                $rootScope.$broadcast("cordovaResume");
+            });
+
+            it("should redirect to the login page", function () {
+                expect($state.go).toHaveBeenCalledWith("user.auth.login");
+            });
+
+        });
     });
 })();
