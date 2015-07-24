@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function LoginController($ionicHistory, $state, globals, AuthenticationManager, CommonService, UserManager) {
+    function LoginController($ionicHistory, $scope, $state, globals, AuthenticationManager, CommonService, UserManager) {
 
         var vm = this;
         vm.config = globals.USER_LOGIN.CONFIG;
@@ -17,6 +17,11 @@
         /////////////////////
         // Controller initialization
         function activate() {
+            // set event listeners
+            $scope.$on("$ionicView.beforeEnter", beforeEnter);
+        }
+
+        function beforeEnter() {
             clearErrorMessage();
 
             $ionicHistory.clearHistory();

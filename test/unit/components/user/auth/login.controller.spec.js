@@ -44,8 +44,6 @@
                 globals = _globals_;
                 $rootScope = _$rootScope_;
 
-                spyOn($ionicHistory, "clearHistory");
-
                 ctrl = $controller("LoginController", {
                     $scope: $scope,
                     globals: globals,
@@ -57,7 +55,17 @@
             });
         });
 
-        describe("has an activate function that", function () {
+        describe("has an $ionicView.beforeEnter event handler function that", function () {
+
+            beforeEach(function() {
+                spyOn($ionicHistory, "clearHistory");
+
+                //setup an existing values to test them being modified
+                ctrl.globalError = "This is a previous error";
+
+                $scope.$broadcast("$ionicView.beforeEnter");
+            });
+
             it("should clear the ionic history", function () {
                 expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
             });
@@ -65,6 +73,7 @@
             it("should clear previous error", function () {
                 expect(ctrl.globalError).toBeFalsy();
             });
+
         });
 
         describe("has a authenticateUser function that", function () {
