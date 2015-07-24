@@ -19,11 +19,11 @@
         function activate() {
             // set event listeners
             $scope.$on("$ionicView.beforeEnter", beforeEnter);
-
-            vm.billingCompany = UserManager.getUser().billingCompany;
         }
 
         function beforeEnter() {
+            vm.billingCompany = UserManager.getUser().billingCompany;
+
             // the invoiceSummary object should be bound now to the object returned by fetchCurrentInvoiceSummary
             vm.invoiceSummary = currentInvoiceSummary;
         }
