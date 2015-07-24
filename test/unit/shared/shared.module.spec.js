@@ -25,6 +25,40 @@
 
         describe("has a run function that", function () {
 
+            describe("has a pause event handler function that", function () {
+
+                beforeEach(function () {
+                    var event = document.createEvent("HTMLEvents");
+                    event.initEvent("pause", true, true);
+
+                    spyOn($rootScope, "$broadcast");
+
+                    document.dispatchEvent(event);
+                });
+
+                it("should call $rootScope.$broadcast", function () {
+                    expect($rootScope.$broadcast).toHaveBeenCalledWith("cordovaPause");
+                });
+
+            });
+
+            describe("has a resume event handler function that", function () {
+
+                beforeEach(function () {
+                    var event = document.createEvent("HTMLEvents");
+                    event.initEvent("resume", true, true);
+
+                    spyOn($rootScope, "$broadcast");
+
+                    document.dispatchEvent(event);
+                });
+
+                it("should call $rootScope.$broadcast", function () {
+                    expect($rootScope.$broadcast).toHaveBeenCalledWith("cordovaResume");
+                });
+
+            });
+
             describe("has a loadingBegin event handler function that", function () {
 
                 beforeEach(function () {

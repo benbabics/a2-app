@@ -89,7 +89,13 @@
             }
         }
 
+        function pauseApplication() {
+            // log out the user
+            AuthenticationManager.logOut();
+        }
+
         $rootScope.$on("$stateChangeStart", validateRoutePreconditions);
+        $rootScope.$on("cordovaPause", pauseApplication);
     }
 
     angular.module("app.components.core", [])

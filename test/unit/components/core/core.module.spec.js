@@ -37,7 +37,7 @@
             module("app.html");
 
             // mock dependencies
-            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn"]);
+            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             CommonService = jasmine.createSpyObj("CommonService", ["displayAlert", "loadingBegin", "loadingComplete"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchMakePaymentAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
@@ -58,7 +58,7 @@
 
         });
 
-        describe("should set an event handler that", function () {
+        describe("should set a $stateChangeStart event handler that", function () {
             var loginRoute = "user.auth.login",
                 landingRoute = "landing",
                 paymentAddRoute = "payment.add";
@@ -245,6 +245,18 @@
                     });
                 });
             });
+        });
+
+        describe("has a cordovaPause event handler function that", function () {
+
+            beforeEach(function() {
+                $rootScope.$broadcast("cordovaPause");
+            });
+
+            it("should log out the User", function () {
+                expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+            });
+
         });
     });
 })();
