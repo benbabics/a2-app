@@ -25,7 +25,9 @@
         <ion-item id="option-contact-us">
             {{vm.config.options.contactUs}}
         </ion-item>
-        <ion-item id="option-log-out">
+        <ion-item id="option-log-out"
+                  ng-click="vm.logOut()"
+                  menu-close>
             {{vm.config.options.logOut}}
         </ion-item>
     </ion-list>

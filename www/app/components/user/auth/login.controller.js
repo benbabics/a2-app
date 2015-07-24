@@ -18,6 +18,8 @@
         // Controller initialization
         function activate() {
             clearErrorMessage();
+
+            $ionicHistory.clearHistory();
         }
 
         function authenticateUser() {
@@ -31,7 +33,6 @@
                 })
                 .then(function() {
                     // Do not allow backing up to the login page.
-                    // Possibly need to clear the history after going to the landing page instead?
                     $ionicHistory.nextViewOptions(
                         {
                             disableBack: true

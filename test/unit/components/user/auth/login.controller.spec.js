@@ -44,6 +44,8 @@
                 globals = _globals_;
                 $rootScope = _$rootScope_;
 
+                spyOn($ionicHistory, "clearHistory");
+
                 ctrl = $controller("LoginController", {
                     $scope: $scope,
                     globals: globals,
@@ -56,6 +58,10 @@
         });
 
         describe("has an activate function that", function () {
+            it("should clear the ionic history", function () {
+                expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+            });
+
             it("should clear previous error", function () {
                 expect(ctrl.globalError).toBeFalsy();
             });
