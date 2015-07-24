@@ -22,9 +22,9 @@
 
                 <div class="item item-divider inner-container">
                     <p class="divider padding-top">
-                        <span id="paymentDueDateLabel" class="block_align">{{vm.config.paymentDueDate}}</span>
-                        <span id="paymentDueDate" class="content_align">
-                            {{vm.invoiceSummary.paymentDueDate | amDateFormat:"M/D/YYYY"}}
+                        <span id="minimumPaymentLabel" class="block_align">{{vm.config.minimumPayment}}</span>
+                        <span id="minimumPayment" class="content_align">
+                            {{vm.invoiceSummary.minimumPaymentDue | currency}}
                         </span>
                     </p>
 
@@ -36,15 +36,18 @@
                     </p>
 
                     <p class="divider padding-top">
-                        <span id="minimumPaymentLabel" class="block_align">{{vm.config.minimumPayment}}</span>
-                        <span id="minimumPayment" class="content_align">
-                            {{vm.invoiceSummary.minimumPaymentDue | currency}}
+                        <span id="paymentDueDateLabel" class="block_align">{{vm.config.paymentDueDate}}</span>
+                        <span id="paymentDueDate" class="content_align">
+                            {{vm.invoiceSummary.paymentDueDate | amDateFormat:"M/D/YYYY"}}
                         </span>
                     </p>
+
                     <br>
+
                     <button id="makePaymentButton" class="button button-block button-submit" ui-sref="payment.add">
                         {{vm.config.makePayment}}
                     </button>
+
                     <div class="align_center">
                         <button id="viewActivityButton" class="button button-clear button-positive">
                             {{vm.config.viewActivity}}
