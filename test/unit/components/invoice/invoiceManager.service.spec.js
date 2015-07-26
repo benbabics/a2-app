@@ -3,7 +3,6 @@
 
     var $q,
         $rootScope,
-        CURRENT_INVOICE_SUMMARY_URL,
         billingAccountId = "141v51235",
         getCurrentInvoiceSummaryDeferred,
         resolveHandler,
@@ -40,8 +39,6 @@
                 AccountModel = _AccountModel_;
                 InvoiceManager = _InvoiceManager_;
                 InvoiceManager.setInvoiceSummary(remoteInvoiceSummary);
-
-                CURRENT_INVOICE_SUMMARY_URL = billingAccountId + "/" + globals.ACCOUNT_MAINTENANCE_API.INVOICES.CURRENT_INVOICE_SUMMARY;
             });
 
             // set up spies
