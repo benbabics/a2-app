@@ -8,6 +8,7 @@
 
         beforeEach(function () {
 
+            module("app.shared");
             module("app.components.payment");
             module("app.html");
 

@@ -3,7 +3,6 @@
 
     var $q,
         $rootScope,
-        MAKE_PAYMENT_AVAILABILITY_URL,
         billingAccountId = "141v51235",
         getMakePaymentAvailabilityModelDeferred,
         resolveHandler,
@@ -37,12 +36,10 @@
                 $rootScope = _$rootScope_;
                 PaymentManager = _PaymentManager_;
                 PaymentManager.setMakePaymentAvailability(remoteMakePaymentAvailability);
-
-                MAKE_PAYMENT_AVAILABILITY_URL = billingAccountId + "/" + globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.MAKE_PAYMENT_AVAILABILITY;
             });
 
             // set up spies
-            PaymentsResourceOne = jasmine.createSpyObj("PaymentsResourceOne", ["doGET"]);
+            PaymentsResourceOne = jasmine.createSpyObj("PaymentsResourceOne", ["makePaymentAvailability"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
@@ -70,7 +67,7 @@
             beforeEach(function () {
                 getMakePaymentAvailabilityModelDeferred = $q.defer();
 
-                PaymentsResourceOne.doGET.and.returnValue(getMakePaymentAvailabilityModelDeferred.promise);
+                PaymentsResourceOne.makePaymentAvailability.and.returnValue(getMakePaymentAvailabilityModelDeferred.promise);
 
                 PaymentManager.setMakePaymentAvailability(null);
 
@@ -80,12 +77,12 @@
 
             describe("when getting a details of the make payment availability", function () {
 
-                it("should call PaymentsResource.one", function () {
-                    expect(PaymentsResource.one).toHaveBeenCalledWith();
+                it("should call PaymentsResource.one with the correct account id", function () {
+                    expect(PaymentsResource.one).toHaveBeenCalledWith(billingAccountId);
                 });
 
-                it("should call PaymentsResourceOne.doGET with the correct URL", function () {
-                    expect(PaymentsResourceOne.doGET).toHaveBeenCalledWith(MAKE_PAYMENT_AVAILABILITY_URL);
+                it("should call PaymentsResourceOne.makePaymentAvailability", function () {
+                    expect(PaymentsResourceOne.makePaymentAvailability).toHaveBeenCalledWith();
                 });
 
             });

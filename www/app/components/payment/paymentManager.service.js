@@ -29,9 +29,7 @@
         }
 
         function fetchMakePaymentAvailability(billingAccountId) {
-            var url = billingAccountId + "/" + globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.MAKE_PAYMENT_AVAILABILITY;
-
-            return $q.when(PaymentsResource.one().doGET(url))
+            return $q.when(PaymentsResource.one(billingAccountId).makePaymentAvailability())
                 .then(function (makePaymentAvailabilityResponse) {
                     if (makePaymentAvailabilityResponse && makePaymentAvailabilityResponse.data) {
                         setMakePaymentAvailability(makePaymentAvailabilityResponse.data);
