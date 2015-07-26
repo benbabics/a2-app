@@ -9,7 +9,7 @@
 
         beforeEach(function () {
 
-            module("app.shared.dependencies");
+            module("app.shared");
 
             module(function (_$ionicConfigProvider_, _$urlRouterProvider_) {
                 $ionicConfigProvider = _$ionicConfigProvider_;
