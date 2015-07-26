@@ -26,7 +26,7 @@
 
         function fetchCurrentUserDetails() {
 
-            return $q.when(UsersResource.one().doGET(globals.ACCOUNT_MAINTENANCE_API.USERS.CURRENT))
+            return $q.when(UsersResource.one().current())
                 .then(function (currentUserDetailsResponse) {
                     if (currentUserDetailsResponse && currentUserDetailsResponse.data) {
                         setUser(currentUserDetailsResponse.data);

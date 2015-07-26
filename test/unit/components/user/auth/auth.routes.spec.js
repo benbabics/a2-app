@@ -8,6 +8,7 @@
 
         beforeEach(function () {
 
+            module("app.shared");
             module("app.components.user");
             module("app.components.user.auth");
             module("app.html");
