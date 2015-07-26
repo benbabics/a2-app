@@ -1,12 +1,12 @@
 "use strict";
 
-var FetchMakePaymentAvailabilityRequestSuccessNoErrorsMock = (function () {
+var FetchPaymentAddAvailabilityRequestSuccessNoErrorsMock = (function () {
 
-    function FetchMakePaymentAvailabilityRequestSuccessNoErrorsMock() {
-        angular.module("FetchMakePaymentAvailabilityRequestSuccessMock", ["app", "ngMockE2E"])
+    function FetchPaymentAddAvailabilityRequestSuccessNoErrorsMock() {
+        angular.module("FetchPaymentAddAvailabilityRequestSuccessMock", ["app", "ngMockE2E"])
             .run(function ($httpBackend) {
 
-                var mockFetchMakePaymentAvailabilityResponse = {
+                var mockFetchPaymentAddAvailabilityResponse = {
                     makePaymentAllowed: true,
                     shouldDisplayBankAccountSetupMessage: false,
                     shouldDisplayDirectDebitEnabledMessage: false,
@@ -14,13 +14,13 @@ var FetchMakePaymentAvailabilityRequestSuccessNoErrorsMock = (function () {
                 };
 
                 $httpBackend.whenGET(/\/secure\/accounts\/[a-zA-Z0-9-]*\/payments\/makePaymentAvailability/).respond(function (method, url, data, headers) {
-                    return [200, mockFetchMakePaymentAvailabilityResponse, {}];
+                    return [200, mockFetchPaymentAddAvailabilityResponse, {}];
                 });
             });
     }
 
-    return FetchMakePaymentAvailabilityRequestSuccessNoErrorsMock;
+    return FetchPaymentAddAvailabilityRequestSuccessNoErrorsMock;
 
 })();
 
-module.exports = FetchMakePaymentAvailabilityRequestSuccessNoErrorsMock;
+module.exports = FetchPaymentAddAvailabilityRequestSuccessNoErrorsMock;

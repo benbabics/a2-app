@@ -5,10 +5,10 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function MakePaymentController($scope, globals, InvoiceManager, UserManager) {
+    function PaymentAddController($scope, globals, InvoiceManager, UserManager) {
 
         var vm = this;
-        vm.config = globals.MAKE_PAYMENT.CONFIG;
+        vm.config = globals.PAYMENT_ADD.CONFIG;
         vm.invoiceSummary = {};
         vm.billingCompany = {};
 
@@ -28,5 +28,5 @@
     }
 
     angular.module("app.components.payment")
-        .controller("MakePaymentController", MakePaymentController);
+        .controller("PaymentAddController", PaymentAddController);
 })();

@@ -35,7 +35,7 @@
         },
         UserManager;
 
-    describe("A Make Payment Controller", function () {
+    describe("A Payment Add Controller", function () {
 
         beforeEach(function () {
 
@@ -61,7 +61,7 @@
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
-                ctrl = $controller("MakePaymentController", {
+                ctrl = $controller("PaymentAddController", {
                     $scope: $scope,
                     InvoiceManager: InvoiceManager,
                     UserManager: UserManager

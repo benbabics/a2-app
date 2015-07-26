@@ -4,15 +4,15 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function PaymentManager($q, CommonService, globals, Logger, MakePaymentAvailabilityModel, PaymentsResource) {
+    function PaymentManager($q, CommonService, Logger, PaymentAddAvailabilityModel, PaymentsResource) {
         // Private members
-        var makePaymentAvailability = {};
+        var paymentAddAvailability = {};
 
         // Revealed Public members
         var service = {
-            fetchMakePaymentAvailability: fetchMakePaymentAvailability,
-            getMakePaymentAvailability  : getMakePaymentAvailability,
-            setMakePaymentAvailability  : setMakePaymentAvailability
+            fetchPaymentAddAvailability: fetchPaymentAddAvailability,
+            getPaymentAddAvailability  : getPaymentAddAvailability,
+            setPaymentAddAvailability  : setPaymentAddAvailability
         };
 
         activate();
@@ -21,31 +21,31 @@
         //////////////////////
 
         function activate() {
-            makePaymentAvailability = new MakePaymentAvailabilityModel();
+            paymentAddAvailability = new PaymentAddAvailabilityModel();
         }
 
-        function getMakePaymentAvailability() {
-            return makePaymentAvailability;
+        function getPaymentAddAvailability() {
+            return paymentAddAvailability;
         }
 
-        function fetchMakePaymentAvailability(billingAccountId) {
-            return $q.when(PaymentsResource.one(billingAccountId).makePaymentAvailability())
-                .then(function (makePaymentAvailabilityResponse) {
-                    if (makePaymentAvailabilityResponse && makePaymentAvailabilityResponse.data) {
-                        setMakePaymentAvailability(makePaymentAvailabilityResponse.data);
-                        return getMakePaymentAvailability();
+        function fetchPaymentAddAvailability(billingAccountId) {
+            return $q.when(PaymentsResource.one(billingAccountId).paymentAddAvailability())
+                .then(function (paymentAddAvailabilityResponse) {
+                    if (paymentAddAvailabilityResponse && paymentAddAvailabilityResponse.data) {
+                        setPaymentAddAvailability(paymentAddAvailabilityResponse.data);
+                        return getPaymentAddAvailability();
                     }
                     // no data in the response
                     else {
-                        Logger.error("No data in Response from getting the Make Payment Availability");
-                        throw new Error("No data in Response from getting the Make Payment Availability");
+                        Logger.error("No data in Response from getting the Payment Add Availability");
+                        throw new Error("No data in Response from getting the Payment Add Availability");
                     }
                 })
                 // get token failed
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Getting Make Payment Availability failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Getting Payment Add Availability failed: " + CommonService.getErrorMessage(failureResponse);
 
                     Logger.error(error);
                     throw new Error(error);
@@ -53,8 +53,8 @@
 
         }
 
-        function setMakePaymentAvailability(makePaymentAvailabilityInfo) {
-            makePaymentAvailability = makePaymentAvailabilityInfo;
+        function setPaymentAddAvailability(paymentAddAvailabilityInfo) {
+            paymentAddAvailability = paymentAddAvailabilityInfo;
         }
 
     }

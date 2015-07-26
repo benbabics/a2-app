@@ -12,15 +12,15 @@
             return "payment.add" === stateName;
         }
 
-        function fetchMakePaymentAvailability() {
+        function fetchPaymentAddAvailability() {
             var billingAccountId;
 
             CommonService.loadingBegin();
 
             billingAccountId = UserManager.getUser().billingCompany.accountId;
 
-            // Return the make payment availability
-            return PaymentManager.fetchMakePaymentAvailability(billingAccountId)
+            // Return the payment add availability
+            return PaymentManager.fetchPaymentAddAvailability(billingAccountId)
                 .finally(function() {
                     CommonService.loadingComplete();
                 });
@@ -69,13 +69,13 @@
                     // and the setup has been verified
                     event.preventDefault();
 
-                    fetchMakePaymentAvailability()
-                        .then(function (makePaymentAvailability) {
-                            if (makePaymentAvailability.shouldDisplayBankAccountSetupMessage) {
-                                displayPopup(globals.MAKE_PAYMENT.WARNINGS.BANK_ACCOUNTS_NOT_SETUP);
+                    fetchPaymentAddAvailability()
+                        .then(function (paymentAddAvailability) {
+                            if (paymentAddAvailability.shouldDisplayBankAccountSetupMessage) {
+                                displayPopup(globals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP);
                             }
-                            else if (makePaymentAvailability.shouldDisplayDirectDebitEnabledMessage) {
-                                displayPopup(globals.MAKE_PAYMENT.WARNINGS.DIRECT_DEBIT_SETUP);
+                            else if (paymentAddAvailability.shouldDisplayDirectDebitEnabledMessage) {
+                                displayPopup(globals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP);
                             }
                             else {
                                 // set to true so that the following state.go can skip the fetch

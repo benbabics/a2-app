@@ -15,8 +15,8 @@
             cache: false,
             views: {
                 "payment-view": {
-                    templateUrl: "app/components/payment/templates/makePayment.html",
-                    controller: "MakePaymentController as vm"
+                    templateUrl: "app/components/payment/templates/paymentAdd.html",
+                    controller: "PaymentAddController as vm"
                 }
             }
         });

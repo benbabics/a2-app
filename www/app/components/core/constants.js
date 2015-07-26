@@ -46,7 +46,7 @@
         }
     };
 
-    appGlobals.MAKE_PAYMENT = {
+    appGlobals.PAYMENT_ADD = {
         "CONFIG": {
             "title": "Make Payment",
             "invoiceNumber": "Invoice Number",

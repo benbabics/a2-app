@@ -4,13 +4,13 @@
     var $q,
         $rootScope,
         billingAccountId = "141v51235",
-        getMakePaymentAvailabilityModelDeferred,
+        getPaymentAddAvailabilityModelDeferred,
         resolveHandler,
         rejectHandler,
         PaymentManager,
         PaymentsResource,
         PaymentsResourceOne,
-        remoteMakePaymentAvailability = {};
+        remotePaymentAddAvailabilityModel = {};
 
     describe("A Payment Manager", function () {
 
@@ -27,19 +27,19 @@
                 $provide.value("PaymentsResource", PaymentsResource);
             });
 
-            remoteMakePaymentAvailability = jasmine.createSpyObj("MakePaymentAvailabilityModel", ["MakePaymentAvailabilityModel", "set"]);
+            remotePaymentAddAvailabilityModel = jasmine.createSpyObj("PaymentAddAvailabilityModel", ["PaymentAddAvailabilityModel", "set"]);
 
-            inject(function (_$q_, _$rootScope_, globals, _PaymentManager_, MakePaymentAvailabilityModel) {
-                remoteMakePaymentAvailability = new MakePaymentAvailabilityModel();
+            inject(function (_$q_, _$rootScope_, globals, _PaymentManager_, PaymentAddAvailabilityModel) {
+                remotePaymentAddAvailabilityModel = new PaymentAddAvailabilityModel();
 
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 PaymentManager = _PaymentManager_;
-                PaymentManager.setMakePaymentAvailability(remoteMakePaymentAvailability);
+                PaymentManager.setPaymentAddAvailability(remotePaymentAddAvailabilityModel);
             });
 
             // set up spies
-            PaymentsResourceOne = jasmine.createSpyObj("PaymentsResourceOne", ["makePaymentAvailability"]);
+            PaymentsResourceOne = jasmine.createSpyObj("PaymentsResourceOne", ["paymentAddAvailability"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
@@ -52,7 +52,7 @@
 
         });
 
-        describe("has a fetchMakePaymentAvailability function that", function () {
+        describe("has a fetchPaymentAddAvailability function that", function () {
 
             var mockResponse = {
                 data: {
@@ -65,39 +65,39 @@
 
 
             beforeEach(function () {
-                getMakePaymentAvailabilityModelDeferred = $q.defer();
+                getPaymentAddAvailabilityModelDeferred = $q.defer();
 
-                PaymentsResourceOne.makePaymentAvailability.and.returnValue(getMakePaymentAvailabilityModelDeferred.promise);
+                PaymentsResourceOne.paymentAddAvailability.and.returnValue(getPaymentAddAvailabilityModelDeferred.promise);
 
-                PaymentManager.setMakePaymentAvailability(null);
+                PaymentManager.setPaymentAddAvailability(null);
 
-                PaymentManager.fetchMakePaymentAvailability(billingAccountId)
+                PaymentManager.fetchPaymentAddAvailability(billingAccountId)
                     .then(resolveHandler, rejectHandler);
             });
 
-            describe("when getting a details of the make payment availability", function () {
+            describe("when getting a details of the payment add availability", function () {
 
                 it("should call PaymentsResource.one with the correct account id", function () {
                     expect(PaymentsResource.one).toHaveBeenCalledWith(billingAccountId);
                 });
 
-                it("should call PaymentsResourceOne.makePaymentAvailability", function () {
-                    expect(PaymentsResourceOne.makePaymentAvailability).toHaveBeenCalledWith();
+                it("should call PaymentsResourceOne.paymentAddAvailability", function () {
+                    expect(PaymentsResourceOne.paymentAddAvailability).toHaveBeenCalledWith();
                 });
 
             });
 
-            describe("when the make payment availability is fetched successfully", function () {
+            describe("when the payment add availability is fetched successfully", function () {
 
                 describe("when there is data in the response", function () {
 
                     beforeEach(function () {
-                        getMakePaymentAvailabilityModelDeferred.resolve(mockResponse);
+                        getPaymentAddAvailabilityModelDeferred.resolve(mockResponse);
                         $rootScope.$digest();
                     });
 
-                    it("should set the make payment availability", function () {
-                        expect(PaymentManager.getMakePaymentAvailability()).toEqual(mockResponse.data);
+                    it("should set the payment add availability", function () {
+                        expect(PaymentManager.getPaymentAddAvailability()).toEqual(mockResponse.data);
                     });
 
                     it("should resolve", function () {
@@ -110,80 +110,80 @@
                 describe("when there is no data in the response", function () {
 
                     beforeEach(function () {
-                        getMakePaymentAvailabilityModelDeferred.resolve(null);
+                        getPaymentAddAvailabilityModelDeferred.resolve(null);
                     });
 
                     it("should throw an error", function () {
                         expect($rootScope.$digest).toThrow();
                     });
 
-                    it("should NOT update the make payment availability", function () {
-                        expect(PaymentManager.getMakePaymentAvailability()).toBeNull();
+                    it("should NOT update the payment add availability", function () {
+                        expect(PaymentManager.getPaymentAddAvailability()).toBeNull();
                     });
 
                 });
             });
 
-            describe("when retrieving the make payment availability fails", function () {
+            describe("when retrieving the payment add availability fails", function () {
 
                 var mockResponse = "Some error";
 
                 beforeEach(function () {
-                    getMakePaymentAvailabilityModelDeferred.reject(mockResponse);
+                    getPaymentAddAvailabilityModelDeferred.reject(mockResponse);
                 });
 
                 it("should throw an error", function () {
                     expect($rootScope.$digest).toThrow();
                 });
 
-                it("should NOT update the make payment availability", function () {
-                    expect(PaymentManager.getMakePaymentAvailability()).toBeNull();
+                it("should NOT update the payment add availability", function () {
+                    expect(PaymentManager.getPaymentAddAvailability()).toBeNull();
                 });
 
             });
 
         });
 
-        describe("has a getMakePaymentAvailability function that", function () {
+        describe("has a getPaymentAddAvailability function that", function () {
 
-            var newMakePaymentAvailability = {
+            var newPaymentAddAvailability = {
                 makePaymentAllowed                    : "false",
                 shouldDisplayBankAccountSetupMessage  : "true",
                 shouldDisplayDirectDebitEnabledMessage: "false",
                 shouldDisplayOutstandingPaymentMessage: "true"
             };
 
-            it("should return the make payment availability passed to setMakePaymentAvailability", function () {
+            it("should return the payment add availability passed to setPaymentAddAvailability", function () {
                 var result;
 
-                PaymentManager.setMakePaymentAvailability(newMakePaymentAvailability);
-                result = PaymentManager.getMakePaymentAvailability();
+                PaymentManager.setPaymentAddAvailability(newPaymentAddAvailability);
+                result = PaymentManager.getPaymentAddAvailability();
 
-                expect(result).toEqual(newMakePaymentAvailability);
+                expect(result).toEqual(newPaymentAddAvailability);
             }) ;
 
-            // TODO: figure out how to test this without using setMakePaymentAvailability
+            // TODO: figure out how to test this without using setPaymentAddAvailability
         });
 
-        describe("has a setMakePaymentAvailability function that", function () {
+        describe("has a setPaymentAddAvailability function that", function () {
 
-            var newMakePaymentAvailability = {
+            var newPaymentAddAvailability = {
                 makePaymentAllowed                    : "false",
                 shouldDisplayBankAccountSetupMessage  : "true",
                 shouldDisplayDirectDebitEnabledMessage: "false",
                 shouldDisplayOutstandingPaymentMessage: "true"
             };
 
-            it("should update the make payment availability returned by getMakePaymentAvailability", function () {
+            it("should update the payment add availability returned by getPaymentAddAvailability", function () {
                 var result;
 
-                PaymentManager.setMakePaymentAvailability(newMakePaymentAvailability);
-                result = PaymentManager.getMakePaymentAvailability();
+                PaymentManager.setPaymentAddAvailability(newPaymentAddAvailability);
+                result = PaymentManager.getPaymentAddAvailability();
 
-                expect(result).toEqual(newMakePaymentAvailability);
+                expect(result).toEqual(newPaymentAddAvailability);
             }) ;
 
-            // TODO: figure out how to test this without using getMakePaymentAvailability
+            // TODO: figure out how to test this without using getPaymentAddAvailability
         });
 
     });

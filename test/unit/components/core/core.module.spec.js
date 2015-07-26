@@ -39,7 +39,7 @@
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             CommonService = jasmine.createSpyObj("CommonService", ["displayAlert", "loadingBegin", "loadingComplete"]);
-            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchMakePaymentAvailability"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             module(function($provide) {
                 $provide.value("AuthenticationManager", AuthenticationManager);
@@ -101,22 +101,22 @@
                 });
 
                 describe("when the user is navigating to the payment add page", function () {
-                    var makePaymentAvailability = {},
-                        fetchMakePaymentAvailabilityDeferred;
+                    var paymentAddAvailability = {},
+                        fetchPaymentAddAvailabilityDeferred;
 
                     describe("when bank accounts have NOT been setup", function () {
 
                         beforeEach(function () {
-                            makePaymentAvailability = {
+                            paymentAddAvailability = {
                                 makePaymentAllowed: false,
                                 shouldDisplayBankAccountSetupMessage: true,
                                 shouldDisplayDirectDebitEnabledMessage: false,
                                 shouldDisplayOutstandingPaymentMessage: false
                             };
 
-                            fetchMakePaymentAvailabilityDeferred = $q.defer();
-                            PaymentManager.fetchMakePaymentAvailability.and.returnValue(fetchMakePaymentAvailabilityDeferred.promise);
-                            fetchMakePaymentAvailabilityDeferred.resolve(makePaymentAvailability);
+                            fetchPaymentAddAvailabilityDeferred = $q.defer();
+                            PaymentManager.fetchPaymentAddAvailability.and.returnValue(fetchPaymentAddAvailabilityDeferred.promise);
+                            fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
 
                             UserManager.getUser.and.returnValue(mockUser);
 
@@ -124,8 +124,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call PaymentManager.fetchMakePaymentAvailability", function () {
-                            expect(PaymentManager.fetchMakePaymentAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                        it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                            expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                         });
 
                         it("should call CommonService.displayAlert", function () {
@@ -140,16 +140,16 @@
                     describe("when direct debit has been setup", function () {
 
                         beforeEach(function () {
-                            makePaymentAvailability = {
+                            paymentAddAvailability = {
                                 makePaymentAllowed: false,
                                 shouldDisplayBankAccountSetupMessage: false,
                                 shouldDisplayDirectDebitEnabledMessage: true,
                                 shouldDisplayOutstandingPaymentMessage: false
                             };
 
-                            fetchMakePaymentAvailabilityDeferred = $q.defer();
-                            PaymentManager.fetchMakePaymentAvailability.and.returnValue(fetchMakePaymentAvailabilityDeferred.promise);
-                            fetchMakePaymentAvailabilityDeferred.resolve(makePaymentAvailability);
+                            fetchPaymentAddAvailabilityDeferred = $q.defer();
+                            PaymentManager.fetchPaymentAddAvailability.and.returnValue(fetchPaymentAddAvailabilityDeferred.promise);
+                            fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
 
                             UserManager.getUser.and.returnValue(mockUser);
 
@@ -157,8 +157,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call PaymentManager.fetchMakePaymentAvailability", function () {
-                            expect(PaymentManager.fetchMakePaymentAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                        it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                            expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                         });
 
                         it("should call CommonService.displayAlert", function () {
@@ -173,16 +173,16 @@
                     describe("when no messages should be displayed", function () {
 
                         beforeEach(function () {
-                            makePaymentAvailability = {
+                            paymentAddAvailability = {
                                 makePaymentAllowed: true,
                                 shouldDisplayBankAccountSetupMessage: false,
                                 shouldDisplayDirectDebitEnabledMessage: false,
                                 shouldDisplayOutstandingPaymentMessage: false
                             };
 
-                            fetchMakePaymentAvailabilityDeferred = $q.defer();
-                            PaymentManager.fetchMakePaymentAvailability.and.returnValue(fetchMakePaymentAvailabilityDeferred.promise);
-                            fetchMakePaymentAvailabilityDeferred.resolve(makePaymentAvailability);
+                            fetchPaymentAddAvailabilityDeferred = $q.defer();
+                            PaymentManager.fetchPaymentAddAvailability.and.returnValue(fetchPaymentAddAvailabilityDeferred.promise);
+                            fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
 
                             UserManager.getUser.and.returnValue(mockUser);
 
@@ -190,8 +190,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call PaymentManager.fetchMakePaymentAvailability", function () {
-                            expect(PaymentManager.fetchMakePaymentAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                        it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                            expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                         });
 
                         it("should continue to the page", function () {

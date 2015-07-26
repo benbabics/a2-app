@@ -5,9 +5,9 @@ var UserLoginPage = require("../../pages/userLogin.page.js");
 var AuthenticateUserRequestSuccessMock = require("../../mocks/authenticateUserRequestSuccess.mock.js");
 var FetchCurrentUserRequestSuccessMock = require("../../mocks/fetchCurrentUserRequestSuccess.mock.js");
 var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCurrentInvoiceSummaryRequestSuccess.mock.js");
-var FetchMakePaymentAvailabilityRequestSuccessBanksNotSetupMock = require("../../mocks/fetchMakePaymentAvailabilityRequestSuccessBanksNotSetup.mock.js");
-var FetchMakePaymentAvailabilityRequestSuccessDirectDebitSetupMock = require("../../mocks/fetchMakePaymentAvailabilityRequestSuccessDirectDebitSetup.mock.js");
-var FetchMakePaymentAvailabilityRequestSuccessNoErrorsMock = require("../../mocks/fetchMakePaymentAvailabilityRequestSuccessNoErrors.mock.js");
+var FetchPaymentAddAvailabilityRequestSuccessBanksNotSetupMock = require("../../mocks/fetchPaymentAddAvailabilityRequestSuccessBanksNotSetup.mock.js");
+var FetchPaymentAddAvailabilityRequestSuccessDirectDebitSetupMock = require("../../mocks/fetchPaymentAddAvailabilityRequestSuccessDirectDebitSetup.mock.js");
+var FetchPaymentAddAvailabilityRequestSuccessNoErrorsMock = require("../../mocks/fetchPaymentAddAvailabilityRequestSuccessNoErrors.mock.js");
 
 (function () {
 
@@ -31,14 +31,14 @@ var FetchMakePaymentAvailabilityRequestSuccessNoErrorsMock = require("../../mock
 
         describe("when bank accounts have NOT been setup", function () {
             beforeAll(function () {
-                browser.addMockModule("FetchMakePaymentAvailabilityRequestSuccessMock", FetchMakePaymentAvailabilityRequestSuccessBanksNotSetupMock);
+                browser.addMockModule("FetchPaymentAddAvailabilityRequestSuccessMock", FetchPaymentAddAvailabilityRequestSuccessBanksNotSetupMock);
 
                 this.page = new PaymentAddPage();
                 browser.waitForAngular();
             });
 
             afterAll(function () {
-                browser.removeMockModule("FetchMakePaymentAvailabilityRequestSuccessMock");
+                browser.removeMockModule("FetchPaymentAddAvailabilityRequestSuccessMock");
             });
 
             it("should NOT go to the payment add page", function () {
@@ -50,14 +50,14 @@ var FetchMakePaymentAvailabilityRequestSuccessNoErrorsMock = require("../../mock
 
         describe("when direct debit has been setup", function () {
             beforeAll(function () {
-                browser.addMockModule("FetchMakePaymentAvailabilityRequestSuccessMock", FetchMakePaymentAvailabilityRequestSuccessDirectDebitSetupMock);
+                browser.addMockModule("FetchPaymentAddAvailabilityRequestSuccessMock", FetchPaymentAddAvailabilityRequestSuccessDirectDebitSetupMock);
 
                 this.page = new PaymentAddPage();
                 browser.waitForAngular();
             });
 
             afterAll(function () {
-                browser.removeMockModule("FetchMakePaymentAvailabilityRequestSuccessMock");
+                browser.removeMockModule("FetchPaymentAddAvailabilityRequestSuccessMock");
             });
 
             it("should NOT go to the payment add page", function () {
@@ -67,16 +67,16 @@ var FetchMakePaymentAvailabilityRequestSuccessNoErrorsMock = require("../../mock
             //TODO - Test that a popup is displayed
         });
 
-        describe("when making a payment is available", function () {
+        describe("when adding a payment is available", function () {
             beforeAll(function () {
-                browser.addMockModule("FetchMakePaymentAvailabilityRequestSuccessMock", FetchMakePaymentAvailabilityRequestSuccessNoErrorsMock);
+                browser.addMockModule("FetchPaymentAddAvailabilityRequestSuccessMock", FetchPaymentAddAvailabilityRequestSuccessNoErrorsMock);
 
                 this.page = new PaymentAddPage();
                 browser.waitForAngular();
             });
 
             afterAll(function () {
-                browser.removeMockModule("FetchMakePaymentAvailabilityRequestSuccessMock");
+                browser.removeMockModule("FetchPaymentAddAvailabilityRequestSuccessMock");
             });
 
             it("should have the correct URL", function () {
