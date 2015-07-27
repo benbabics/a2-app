@@ -4,6 +4,23 @@
     var $scope,
         ctrl,
         InvoiceManager,
+        mockActiveBanks = [
+            {
+                id         : "Bank Id 1",
+                defaultBank: false,
+                name       : "Bank Name 1"
+            },
+            {
+                id         : "Bank Id 2",
+                defaultBank: true,
+                name       : "Bank Name 2"
+            },
+            {
+                id         : "Bank Id 3",
+                defaultBank: false,
+                name       : "Bank Name 3"
+            }
+        ],
         mockCurrentInvoiceSummary = {
             newField1         : "some value",
             newField2         : "some other value",
@@ -62,9 +79,10 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("PaymentAddController", {
-                    $scope: $scope,
+                    $scope        : $scope,
+                    activeBanks   : mockActiveBanks,
                     InvoiceManager: InvoiceManager,
-                    UserManager: UserManager
+                    UserManager   : UserManager
                 });
             });
         });
@@ -80,6 +98,10 @@
                 ctrl.globalError = "This is a previous error";
 
                 $scope.$broadcast("$ionicView.beforeEnter");
+            });
+
+            it("should set the active banks", function () {
+                expect(ctrl.activeBanks).toEqual(mockActiveBanks);
             });
 
             it("should set the billing company", function () {

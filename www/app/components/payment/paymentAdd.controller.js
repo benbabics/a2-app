@@ -5,12 +5,14 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentAddController($scope, globals, InvoiceManager, UserManager) {
+    function PaymentAddController($scope, activeBanks, globals, InvoiceManager, UserManager) {
 
         var vm = this;
         vm.config = globals.PAYMENT_ADD.CONFIG;
-        vm.invoiceSummary = {};
+
+        vm.activeBanks = {};
         vm.billingCompany = {};
+        vm.invoiceSummary = {};
 
         activate();
 
@@ -24,6 +26,9 @@
         function beforeEnter() {
             vm.billingCompany = UserManager.getUser().billingCompany;
             vm.invoiceSummary = InvoiceManager.getInvoiceSummary();
+
+            // the activeBanks object should be bound now to the object returned by fetchActiveBanks
+            vm.activeBanks = activeBanks;
         }
     }
 

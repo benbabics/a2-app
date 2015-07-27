@@ -25,6 +25,7 @@
                 }
             },
             AuthenticationManager,
+            BankManager,
             CommonService,
             PaymentManager,
             UserManager;
@@ -38,11 +39,13 @@
 
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
+            BankManager = jasmine.createSpyObj("BankManager", ["fetchActiveBanks"]);
             CommonService = jasmine.createSpyObj("CommonService", ["displayAlert", "loadingBegin", "loadingComplete"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             module(function($provide) {
                 $provide.value("AuthenticationManager", AuthenticationManager);
+                $provide.value("BankManager", BankManager);
                 $provide.value("CommonService", CommonService);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
@@ -101,7 +104,9 @@
                 });
 
                 describe("when the user is navigating to the payment add page", function () {
-                    var paymentAddAvailability = {},
+                    var activeBanks = [],
+                        paymentAddAvailability = {},
+                        fetchActiveBanksDeferred,
                         fetchPaymentAddAvailabilityDeferred;
 
                     describe("when bank accounts have NOT been setup", function () {
@@ -184,10 +189,18 @@
                             PaymentManager.fetchPaymentAddAvailability.and.returnValue(fetchPaymentAddAvailabilityDeferred.promise);
                             fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
 
+                            fetchActiveBanksDeferred = $q.defer();
+                            BankManager.fetchActiveBanks.and.returnValue(fetchActiveBanksDeferred.promise);
+                            fetchActiveBanksDeferred.resolve(activeBanks);
+
                             UserManager.getUser.and.returnValue(mockUser);
 
                             $state.go(paymentAddRoute);
                             $rootScope.$digest();
+                        });
+
+                        it("should call BankManager.fetchActiveBanks", function () {
+                            expect(BankManager.fetchActiveBanks).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                         });
 
                         it("should call PaymentManager.fetchPaymentAddAvailability", function () {

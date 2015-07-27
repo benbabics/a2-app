@@ -16,7 +16,22 @@
             views: {
                 "payment-view": {
                     templateUrl: "app/components/payment/templates/paymentAdd.html",
-                    controller: "PaymentAddController as vm"
+                    controller: "PaymentAddController as vm",
+                    resolve    : {
+                        activeBanks: function (CommonService, BankManager, UserManager) {
+                            var billingAccountId;
+
+                            CommonService.loadingBegin();
+
+                            billingAccountId = UserManager.getUser().billingCompany.accountId;
+
+                            // Return the collection of active banks
+                            return BankManager.fetchActiveBanks(billingAccountId)
+                                .finally(function() {
+                                    CommonService.loadingComplete();
+                                });
+                        }
+                    }
                 }
             }
         });
