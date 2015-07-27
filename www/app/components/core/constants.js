@@ -60,7 +60,8 @@
         },
         "WARNINGS": {
             "BANK_ACCOUNTS_NOT_SETUP": "You must set up your financial institutions as your payment options online prior to scheduling a payment.",
-            "DIRECT_DEBIT_SETUP": "Online payment is not currently available for this account. The account has set up an alternative method of payment, such as direct debit."
+            "DIRECT_DEBIT_SETUP": "Online payment is not currently available for this account. The account has set up an alternative method of payment, such as direct debit.",
+            "PAYMENT_ALREADY_SCHEDULED": "A payment has been scheduled already."
         }
     };
 

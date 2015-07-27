@@ -77,6 +77,9 @@
                             else if (paymentAddAvailability.shouldDisplayDirectDebitEnabledMessage) {
                                 displayPopup(globals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP);
                             }
+                            else if (paymentAddAvailability.shouldDisplayOutstandingPaymentMessage) {
+                                displayPopup(globals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED);
+                            }
                             else {
                                 // set to true so that the following state.go can skip the fetch
                                 bypass = true;

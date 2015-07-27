@@ -175,6 +175,39 @@
                         });
                     });
 
+                    describe("when a payment has already been scheduled", function () {
+
+                        beforeEach(function () {
+                            paymentAddAvailability = {
+                                makePaymentAllowed: false,
+                                shouldDisplayBankAccountSetupMessage: false,
+                                shouldDisplayDirectDebitEnabledMessage: false,
+                                shouldDisplayOutstandingPaymentMessage: true
+                            };
+
+                            fetchPaymentAddAvailabilityDeferred = $q.defer();
+                            PaymentManager.fetchPaymentAddAvailability.and.returnValue(fetchPaymentAddAvailabilityDeferred.promise);
+                            fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
+
+                            UserManager.getUser.and.returnValue(mockUser);
+
+                            $state.go(paymentAddRoute);
+                            $rootScope.$digest();
+                        });
+
+                        it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                            expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                        });
+
+                        it("should call CommonService.displayAlert", function () {
+                            expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                                cssClass: "wex-warning-popup",
+                                content: "A payment has been scheduled already.",
+                                buttonCssClass: "button-submit"
+                            });
+                        });
+                    });
+
                     describe("when no messages should be displayed", function () {
 
                         beforeEach(function () {
