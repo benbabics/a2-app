@@ -5,6 +5,7 @@
         /* app component modules */
         "app.components.core",
         "app.components.account",
+        "app.components.bank",
         "app.components.user",
         "app.components.landing",
         "app.components.invoice",

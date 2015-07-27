@@ -49,6 +49,9 @@
         ACCOUNTS: {
             "BASE": "secure/accounts"
         },
+        BANKS: {
+            "ACTIVE_BANKS": "payments/activeBanks"
+        },
         INVOICES: {
             "CURRENT_INVOICE_SUMMARY": "payments/currentInvoiceSummary"
         },
