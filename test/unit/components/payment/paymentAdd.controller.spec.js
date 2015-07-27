@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    var $scope,
+    var _,
+        $scope,
         ctrl,
         InvoiceManager,
         mockActiveBanks = [
@@ -73,7 +74,9 @@
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
-            inject(function ($controller, $rootScope) {
+            inject(function ($controller, $rootScope, CommonService) {
+
+                _ = CommonService._;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
@@ -110,6 +113,20 @@
 
             it("should set the invoice summary", function () {
                 expect(ctrl.invoiceSummary).toEqual(mockCurrentInvoiceSummary);
+            });
+
+            it("should set the default payment amount", function () {
+                expect(ctrl.payment.amount).toEqual(mockCurrentInvoiceSummary.minimumPaymentDue);
+            });
+
+            it("should set the default bank", function () {
+                expect(ctrl.payment.bankAccount).toEqual(_.find(mockActiveBanks, "defaultBank", true).name);
+            });
+
+            it("should set the default payment date", function () {
+                // TODO - This seems to be working but is likely fragile. Will be changed once
+                // the page becomes a form so not going to worry about it for now
+                expect(ctrl.payment.paymentDate).toEqual(new Date());
             });
 
         });
