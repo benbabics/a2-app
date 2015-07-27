@@ -23,34 +23,30 @@
 
             describe("when the data is NOT empty", function () {
 
-                describe("when data holds a nested data array", function () {
+                describe("when data holds a data array", function () {
 
-                    describe("when the first object in the array contains a searchResults property", function () {
+                    describe("when the response contains a totalResults property", function () {
 
                         beforeEach(function () {
                             data = {
                                 data: [
                                     {
-                                        searchResults: [
-                                            {
-                                                property1: "value1",
-                                                property2: "value2",
-                                                property3: "value3"
-                                            },
-                                            {
-                                                property1: "value1",
-                                                property2: "value2",
-                                                property3: "value3"
-                                            },
-                                            {
-                                                property1: "value1",
-                                                property2: "value2",
-                                                property3: "value3"
-                                            }
-                                        ],
-                                        totalResults: 3
+                                        property1: "value1",
+                                        property2: "value2",
+                                        property3: "value3"
+                                    },
+                                    {
+                                        property1: "value1",
+                                        property2: "value2",
+                                        property3: "value3"
+                                    },
+                                    {
+                                        property1: "value1",
+                                        property2: "value2",
+                                        property3: "value3"
                                     }
-                                ]
+                                ],
+                                totalResults: 3
                             };
 
                             responseResult = DataExtractorResponseInterceptor.response(data, operation);
@@ -59,15 +55,15 @@
                         it("should set the result with the data", function () {
                             var expectedResult;
 
-                            expectedResult = data.data[0].searchResults;
-                            expectedResult.totalResults = data.data[0].totalResults;
+                            expectedResult = data.data;
+                            expectedResult.totalResults = data.totalResults;
 
                             expect(responseResult).toEqual(jasmine.objectContaining(expectedResult));
                         });
 
                     });
 
-                    describe("when the first object in the array does NOT contain a searchResults property", function () {
+                    describe("when the response does NOT contain a totalResults property", function () {
 
                         beforeEach(function () {
                             data = {
@@ -84,14 +80,14 @@
                         });
 
                         it("should set the result with the data", function () {
-                            expect(responseResult).toEqual(jasmine.objectContaining(data.data[0]));
+                            expect(responseResult).toEqual(jasmine.objectContaining(data.data));
                         });
 
                     });
 
                 });
 
-                describe("when data does NOT hold a nested data array", function () {
+                describe("when data does NOT hold a data array", function () {
 
                     beforeEach(function () {
                         data = {

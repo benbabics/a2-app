@@ -13,31 +13,24 @@
         return service;
         //////////////////////
 
-        function response(data, operation) {
-            var coreData = {},
-                extractedData = operation === "getList" ? [{}] : {};
+        function response(responseData, operation) {
 
-            if (!_.isEmpty(data)) {
+            var extractedData = operation === "getList" ? [{}] : {};
 
-                if (!_.isEmpty(data.data) && !_.isEmpty(data.data[0])) {
+            if (!_.isEmpty(responseData)) {
 
-                    coreData = data.data[0];
+                if (!_.isEmpty(responseData.data) && !_.isEmpty(responseData.data[0])) {
+                    extractedData = responseData.data;
 
-                    // When the operation gets a Collection
-                    if (coreData.searchResults) {
-                        extractedData = coreData.searchResults;
-                        extractedData.totalResults = coreData.totalResults;
-                    }
-                    // when the operation gets an Object
-                    else {
-                        extractedData = coreData;
+                    if (_.has(responseData, "totalResults")) {
+                        extractedData.totalResults = responseData.totalResults;
                     }
                 }
                 else {
-                    extractedData = data;
+                    extractedData = responseData;
                 }
 
-                extractedData.message = data.message || null;
+                extractedData.message = responseData.message || null;
             }
 
             return extractedData;
