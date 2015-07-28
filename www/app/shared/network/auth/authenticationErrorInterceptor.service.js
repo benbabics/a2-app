@@ -67,7 +67,7 @@
             // Log out the user
             AuthenticationManager.logOut();
 
-            $state.go("user.auth.login");
+            $state.go("user.auth.login", {"reason": "TOKEN_EXPIRED"});
 
             // TODO - Stretch goal - Remember what the user was trying to do and do it after auth
 

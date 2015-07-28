@@ -15,6 +15,8 @@
                 url: ""
             }
         },
+        LOGIN_STATE = "user.auth.login",
+        LOGIN_STATE_DATA = {"reason": "TOKEN_EXPIRED"},
         AuthorizationHeaderRequestInterceptor,
         AuthenticationManager,
         refreshAuthenticationDeferred,
@@ -143,8 +145,8 @@
                                 expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                             });
 
-                            it("should redirect to the login page", function () {
-                                expect($state.go).toHaveBeenCalledWith("user.auth.login");
+                            it("should redirect to the login page with a TOKEN_EXPIRED reason", function () {
+                                expect($state.go).toHaveBeenCalledWith(LOGIN_STATE, LOGIN_STATE_DATA);
                             });
 
                         });
@@ -186,8 +188,8 @@
                         expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                     });
 
-                    it("should redirect to the login page", function () {
-                        expect($state.go).toHaveBeenCalledWith("user.auth.login");
+                    it("should redirect to the login page with a TOKEN_EXPIRED reason", function () {
+                        expect($state.go).toHaveBeenCalledWith(LOGIN_STATE, LOGIN_STATE_DATA);
                     });
 
                 });
@@ -208,8 +210,8 @@
                         expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                     });
 
-                    it("should redirect to the login page", function () {
-                        expect($state.go).toHaveBeenCalledWith("user.auth.login");
+                    it("should redirect to the login page with a TOKEN_EXPIRED reason", function () {
+                        expect($state.go).toHaveBeenCalledWith(LOGIN_STATE, LOGIN_STATE_DATA);
                     });
 
                 });
