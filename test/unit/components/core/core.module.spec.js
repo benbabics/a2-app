@@ -32,6 +32,8 @@
 
         beforeEach(function () {
 
+            spyOn(ionic.Platform, "fullScreen").and.callThrough();
+
             module("app.shared");
             module("app.components");
             module("app.shared");
@@ -43,6 +45,7 @@
             CommonService = jasmine.createSpyObj("CommonService", ["displayAlert", "loadingBegin", "loadingComplete"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+
             module(function($provide) {
                 $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("BankManager", BankManager);
@@ -59,6 +62,10 @@
                 spyOn($rootScope, "$on").and.callThrough();
             });
 
+        });
+
+        it("should set the app to fullscreen with a status bar", function() {
+            expect(ionic.Platform.fullScreen).toHaveBeenCalledWith(true, true);
         });
 
         describe("should set a $stateChangeStart event handler that", function () {

@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    function coreRun($rootScope, $state, globals, AuthenticationManager, CommonService, PaymentManager, UserManager) {
+    function coreRun($rootScope, $state, $ionicPlatform, globals, AuthenticationManager, CommonService, PaymentManager, UserManager) {
         var bypass = false;
 
         function isLoginPage(stateName) {
@@ -100,6 +100,12 @@
         function resumeApplication() {
             $state.go("user.auth.login");
         }
+
+        //app must be set to fullscreen so that ionic headers are the correct size in iOS
+        //see: http://forum.ionicframework.com/t/ion-nav-bar-top-padding-in-ios7/2488/12
+        $ionicPlatform.ready(function() {
+            ionic.Platform.fullScreen(true, true);
+        });
 
         $rootScope.$on("$stateChangeStart", validateRoutePreconditions);
         $rootScope.$on("cordovaPause", pauseApplication);
