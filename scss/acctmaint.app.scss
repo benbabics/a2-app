@@ -90,6 +90,7 @@ $user-login-gradient-bottom: #414141;
  ------------------------------------------------------**/
 .menu-view {
   background-color: $charcoal-light;
+  padding-top: $bar-height;
 
   .item, .item-content {
     background-color: $charcoal-light;
