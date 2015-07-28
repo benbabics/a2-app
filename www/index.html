@@ -35,10 +35,25 @@
                 </ion-nav-buttons>
             </ion-nav-bar>
 
+            <div ng-controller="NetworkStatusBannerController as networkStatus">
+                <wex-notification-bar class="network-status-banner"
+                                      text="{{networkStatus.bannerText}}"
+                                      ng-if="!networkStatus.isOnline">
+                </wex-notification-bar>
+
+                <div ng-controller="ServerConnectionErrorBannerController as serverConnection">
+                    <wex-notification-bar class="sever-connection-banner"
+                                          text="{{serverConnection.bannerText}}"
+                                          ng-if="networkStatus.isOnline && !serverConnection.isConnected"
+                                          closeable="true">
+                    </wex-notification-bar>
+                </div>
+            </div>
+
             <!--
             The views will be rendered in the <ion-nav-view> directive below
             -->
-            <ion-nav-view></ion-nav-view>
+            <ion-nav-view class="nav-view-root"></ion-nav-view>
         </ion-side-menu-content>
 
         <ion-side-menu side="right" ng-controller="MenuController as vm">
@@ -131,15 +146,15 @@
         <script src="app/components/landing/landing.module.js"></script>
         <script src="app/components/landing/landing.routes.js"></script>
         <script src="app/components/landing/landing.controller.js"></script>
-        <script src="app/components/menu/menu.module.js"></script>
-        <script src="app/components/menu/menu.controller.js"></script>
+    <script src="app/components/menu/menu.module.js"></script>
+    <script src="app/components/menu/menu.controller.js"></script>
         <script src="app/components/invoice/invoice.module.js"></script>
         <script src="app/components/invoice/invoicesResource.service.js"></script>
         <script src="app/components/invoice/invoiceSummaryModel.service.js"></script>
         <script src="app/components/invoice/invoiceManager.service.js"></script>
-        <script src="app/components/core/core.module.js"></script>
-        <script src="app/components/core/core.config.js"></script>
-        <script src="app/components/core/constants.js"></script>
+    <script src="app/components/core/core.module.js"></script>
+    <script src="app/components/core/core.config.js"></script>
+    <script src="app/components/core/constants.js"></script>
         <script src="app/components/bank/bank.module.js"></script>
         <script src="app/components/bank/banksResource.service.js"></script>
         <script src="app/components/bank/bankModel.service.js"></script>

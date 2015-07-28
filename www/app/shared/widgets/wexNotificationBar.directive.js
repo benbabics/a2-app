@@ -1,42 +1,125 @@
 (function () {
     "use strict";
 
-    function wexNotificationBar($compile, $window, $timeout) {
-        var directive = {
-            restrict   : "E",
-            replace    : true,
-            transclude : true,
-            link : link,
-            scope: {
-                text     : '@',
-                closeable: '='
-            },
-            templateUrl: "app/shared/widgets/notificationBar.directive.html"
-        };
+    /* jshint -W003 */
+    /* jshint -W026 */ // These allow us to show the definition of the Directive above the scroll
 
-        function close(scope) {
+    function wexNotificationBar($rootScope, $compile, $window, $timeout, CommonService) {
+        var directive = {
+                restrict: "E",
+                transclude: true,
+                link: link,
+                scope: {
+                    text: "@",
+                    closeable: "=",
+                    ngIf: "="
+                },
+                templateUrl: "app/shared/widgets/notificationBar.directive.html"
+            },
+            _ = CommonService._;
+
+        function close() {
+            var self = this;
+
+            self.setVisible(false);
+
             $timeout(function () {
-                scope.$emit("bannerClosed");
+                self.$emit("bannerClosed");
+            });
+        }
+
+        function setSubheader(subheader) {
+            if (subheader) {
+                this.barElem.addClass("bar-subheader");
+            }
+            else {
+                this.barElem.removeClass("bar-subheader");
+            }
+        }
+
+        //sets either has-header or has-subheader (based on the bar type) on the active ion-content element if true
+        function setVisible(visible, viewElem) {
+            viewElem = viewElem || CommonService.getActiveNavView();
+            var contentElem = angular.element(viewElem.find("ion-content")),
+                hasBarClass = "has-" + getBarType(),
+                lastBarClass;
+
+            if (contentElem) {
+                lastBarClass = contentElem.attr("notification-bar-class");
+                //remove the last bar class that was set on the element
+                if (lastBarClass) {
+                    contentElem.removeClass(lastBarClass);
+                }
+
+                if (visible) {
+                    //add the new bar class to the element
+                    contentElem.addClass(hasBarClass);
+                    contentElem.attr("notification-bar-class", hasBarClass);
+                }
+                else {
+                    contentElem.removeAttr("notification-bar-class");
+                }
+            }
+        }
+
+        function onViewLeaving() {
+            //remove the bar from the old view
+            this.setVisible(false, CommonService.getActiveView());
+        }
+
+        function onViewEntering() {
+            //add the bar to the new view
+            this.setVisible(this.ngIf, CommonService.getActiveView());
+        }
+
+        function getBarType() {
+            return CommonService.pageHasNavBar() ? "subheader" : "header";
+        }
+
+        function deregisterEventListeners() {
+
+            _.each(this.listenerDestroyers, function (deregister) {
+                deregister();
             });
         }
 
         function link(scope, elem) {
-            //get the default header bar title size for data-fittext-max
+            //public members:
+            //the ion-header-bar element
+            scope.barElem = elem.children();
+            //the default header bar title size for data-fittext-max
             scope.titleSize = $window.getComputedStyle(elem[0], null).getPropertyValue("font-size");
+            //all deregister functions for event listeners
+            scope.listenerDestroyers = [];
 
-            scope.close = function () {
-                close(scope);
-            };
+            //functions
+            scope.close = _.bind(close, scope);
+            scope.setVisible = _.bind(setVisible, scope, _, undefined);
+            scope.setSubheader = _.bind(setSubheader, scope, _);
+            scope.onViewLeaving = _.bind(onViewLeaving, scope);
+            scope.onViewEntering = _.bind(onViewEntering, scope);
+            scope.deregisterEventListeners = _.bind(deregisterEventListeners, scope);
 
+            //watchers
+            scope.$watch(CommonService.pageHasNavBar, scope.setSubheader);
+            scope.$watch("ngIf", scope.setVisible);
+
+            //event listeners
+            scope.listenerDestroyers.push($rootScope.$on("$ionicView.beforeLeave", scope.onViewLeaving));
+            scope.listenerDestroyers.push($rootScope.$on("$ionicView.afterEnter", scope.onViewEntering));
+            scope.$on("$destroy", scope.deregisterEventListeners);
+            scope.$on("$destroy", _.partial(scope.setVisible, false));
+
+            //note: title must be compiled here instead of in the template file or else ngFitText won't work properly
             var titleNode = $compile([
-                '<h1 class="title">',
-                '<span class="title-text" data-fittext data-fittext-max="{{titleSize}}">',
-                '&nbsp;{{text}}',
-                '</span>',
-                '</h1>'
+                "<h1 class='title'>",
+                "<span class='title-text' data-fittext data-fittext-max='{{titleSize}}'>",
+                "&nbsp;{{text}}",
+                "</span>",
+                "</h1>"
             ].join(""))(scope);
 
-            elem.append(titleNode);
+            scope.barElem.append(titleNode);
         }
 
         return directive;

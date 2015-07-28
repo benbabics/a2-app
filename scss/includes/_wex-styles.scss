@@ -58,9 +58,11 @@ $menu-button-line-height: ($button-large-icon-size + $button-small-font-size) / 
   }
 
   .close-button {
-    float: right;
+    display: block !important;
+    width: 100% !important;
+    text-align: right !important;
 
-    background-color: rgba(0, 0, 0, 0);
+    background: none;
     border: none;
     color: #bbb;
   }

@@ -11,7 +11,16 @@
             }
         },
         popupDeferred,
-        $rootScope;
+        $rootScope,
+        navBar,
+        rootNavView,
+        viewActive,
+        viewEntering,
+        activeNavView,
+        embeddedActiveView,
+        embeddedEnteringView,
+        cachedNavView,
+        cachedActiveView;
 
     describe("A Common Service", function () {
 
@@ -29,15 +38,38 @@
 
             module("app.shared");
 
-            inject(function ($q, _CommonService_, _$rootScope_) {
+            inject(function ($q, _CommonService_, _$rootScope_, $compile) {
                 $rootScope = _$rootScope_;
                 popupDeferred = $q.defer();
 
                 CommonService = _CommonService_;
+
+                navBar = $compile("<ion-nav-bar class='bar-wex'></ion-nav-bar>")($rootScope);
+                rootNavView = $compile("<ion-nav-view class='nav-view-root'></ion-nav-view>")($rootScope);
+                activeNavView = $compile("<ion-nav-view nav-view='active'></ion-nav-view>")($rootScope);
+                cachedNavView = $compile("<ion-nav-view nav-view='cached'></ion-nav-view>")($rootScope);
+
+                viewActive = $compile("<ion-view nav-view='active'></ion-view>")($rootScope);
+                viewEntering = $compile("<ion-view nav-view='entering'></ion-view>")($rootScope);
+                embeddedActiveView = $compile("<ion-view nav-view='active'></ion-view>")($rootScope);
+                embeddedEnteringView = $compile("<ion-view nav-view='entering'></ion-view>")($rootScope);
+                cachedActiveView = $compile("<ion-view nav-view='active'></ion-view>")($rootScope);
+
+                angular.element(document.body).append(navBar);
+                angular.element(document.body).append(rootNavView);
+
+                $rootScope.$digest();
             });
 
             $ionicPopup.alert.and.returnValue(popupDeferred.promise);
             popupDeferred.resolve();
+        });
+
+        afterEach(function () {
+            navBar.remove();
+            rootNavView.remove();
+
+            $rootScope.$digest();
         });
 
         describe("has a displayAlert function that", function () {
@@ -412,6 +444,244 @@
 
         });
 
+        describe("has a pageHasNavBar function that", function () {
+
+            describe("when the nav bar is hidden", function () {
+
+                beforeEach(function () {
+                    navBar.addClass("hide");
+
+                    $rootScope.$digest();
+                });
+
+                it("should return false", function () {
+                    expect(CommonService.pageHasNavBar()).toBeFalsy();
+                });
+            });
+
+            describe("when the nav bar is NOT hidden", function () {
+
+                beforeEach(function () {
+                    navBar.removeClass("hide");
+
+                    $rootScope.$digest();
+                });
+
+                it("should return true", function () {
+                    expect(CommonService.pageHasNavBar()).toBeTruthy();
+                });
+            });
+
+            describe("when there is no nav bar", function () {
+
+                beforeEach(function () {
+                    navBar.remove();
+
+                    $rootScope.$digest();
+                });
+
+                it("should return false", function () {
+                    expect(CommonService.pageHasNavBar()).toBeFalsy();
+                });
+            });
+        });
+
+        describe("has a getActiveNavView function that", function () {
+
+            describe("when there is a nav view", function () {
+
+                it("should return the nav view", function () {
+                    expect(CommonService.getActiveNavView()).toEqual(rootNavView);
+                });
+            });
+
+            describe("when there is NOT a nav view", function () {
+
+                beforeEach(function () {
+                    rootNavView.remove();
+
+                    $rootScope.$digest();
+                });
+
+                it("should return null", function () {
+                    expect(CommonService.getActiveNavView()).toEqual(null);
+                });
+            });
+        });
+
+        describe("has a getActiveView function that", function () {
+
+            describe("when there is an active view on the root nav view", function () {
+
+                beforeEach(function () {
+                    rootNavView.append(viewActive);
+
+                    $rootScope.$digest();
+                });
+
+                afterEach(function () {
+                    viewActive.remove();
+
+                    $rootScope.$digest();
+                });
+
+                it("should return the active view", function () {
+                    expect(CommonService.getActiveView()).toEqual(viewActive);
+                });
+
+                describe("when there is also a cached nav view with an active view", function () {
+
+                    beforeEach(function () {
+                        cachedNavView.append(cachedActiveView);
+                        rootNavView.append(cachedNavView);
+
+                        $rootScope.$digest();
+                    });
+
+                    afterEach(function () {
+                        cachedNavView.remove();
+
+                        $rootScope.$digest();
+                    });
+
+                    it("should return the non-cached active view", function () {
+                        expect(CommonService.getActiveView()).toEqual(viewActive);
+                    });
+                });
+            });
+
+            describe("when there is an entering view on the root nav view", function () {
+
+                beforeEach(function () {
+                    rootNavView.append(viewEntering);
+
+                    $rootScope.$digest();
+                });
+
+                afterEach(function () {
+                    viewEntering.remove();
+
+                    $rootScope.$digest();
+                });
+
+                it("should return the entering view", function () {
+                    expect(CommonService.getActiveView()).toEqual(viewEntering);
+                });
+
+                describe("when there is also a cached nav view with an active view", function () {
+
+                    beforeEach(function () {
+                        cachedNavView.append(cachedActiveView);
+                        rootNavView.append(cachedNavView);
+
+                        $rootScope.$digest();
+                    });
+
+                    afterEach(function () {
+                        cachedNavView.remove();
+
+                        $rootScope.$digest();
+                    });
+
+                    it("should return the non-cached entering view", function () {
+                        expect(CommonService.getActiveView()).toEqual(viewEntering);
+                    });
+                });
+            });
+
+            describe("when there is an active nav view in the root nav view", function () {
+
+                beforeEach(function () {
+                    rootNavView.append(activeNavView);
+
+                    $rootScope.$digest();
+                });
+
+                afterEach(function () {
+                    activeNavView.remove();
+
+                    $rootScope.$digest();
+                });
+
+                describe("when there is an active view in the child active nav view", function () {
+
+                    beforeEach(function () {
+                        activeNavView.append(embeddedActiveView);
+
+                        $rootScope.$digest();
+                    });
+
+                    afterEach(function () {
+                        embeddedActiveView.remove();
+
+                        $rootScope.$digest();
+                    });
+
+                    it("should return the embedded active view", function () {
+                        expect(CommonService.getActiveView()).toEqual(embeddedActiveView);
+                    });
+
+                    describe("when there is also a cached nav view with an active view", function () {
+
+                        beforeEach(function () {
+                            cachedNavView.append(cachedActiveView);
+                            rootNavView.append(cachedNavView);
+
+                            $rootScope.$digest();
+                        });
+
+                        afterEach(function () {
+                            cachedNavView.remove();
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should return the non-cached embedded active view", function () {
+                            expect(CommonService.getActiveView()).toEqual(embeddedActiveView);
+                        });
+                    });
+                });
+
+                describe("when there is an entering view in the child active nav view", function () {
+
+                    beforeEach(function () {
+                        activeNavView.append(viewEntering);
+
+                        $rootScope.$digest();
+                    });
+
+                    afterEach(function () {
+                        viewEntering.remove();
+
+                        $rootScope.$digest();
+                    });
+
+                    it("should return the embedded entering view", function () {
+                        expect(CommonService.getActiveView()).toEqual(viewEntering);
+                    });
+
+                    describe("when there is also a cached nav view with an active view", function () {
+
+                        beforeEach(function () {
+                            cachedNavView.append(cachedActiveView);
+                            rootNavView.append(cachedNavView);
+
+                            $rootScope.$digest();
+                        });
+
+                        afterEach(function () {
+                            cachedNavView.remove();
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should return the non-cached embedded entering view", function () {
+                            expect(CommonService.getActiveView()).toEqual(viewEntering);
+                        });
+                    });
+                });
+            });
+        });
     });
 
 })();

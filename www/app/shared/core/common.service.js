@@ -21,7 +21,10 @@
             "loadingBegin"     : loadingBegin,
             "loadingComplete"  : loadingComplete,
             "fieldHasError"    : fieldHasError,
-            "getErrorMessage"  : getErrorMessage
+            "getErrorMessage": getErrorMessage,
+            "pageHasNavBar": pageHasNavBar,
+            "getActiveNavView": getActiveNavView,
+            "getActiveView": getActiveView
         };
 
         return service;
@@ -126,6 +129,73 @@
             }
 
             return errorMessage;
+        }
+
+        /**
+         * Determines whether or not the page currently has a visible navBar.
+         *
+         * @return boolean true if the page has a visible navBar, false if it does not
+         */
+        function pageHasNavBar() {
+            var navBar = document.querySelector("ion-nav-bar.bar-wex");
+
+            if (navBar) {
+                return !angular.element(navBar).hasClass("hide");
+            }
+            return false;
+        }
+
+        /**
+         * Searches for the active ion-nav-view element.
+         *
+         * @return JQLite element representing the active ion-nav-view
+         */
+        function getActiveNavView() {
+            var navView = document.querySelector("ion-nav-view.nav-view-root");
+            return navView ? angular.element(navView) : null;
+        }
+
+        /**
+         * Searches for the active ion-view element, optionally only searching inside the given navView.
+         *
+         * @param [navView]
+         * @return JQLite element representing the active ion-view
+         */
+        function getActiveView(navView) {
+            navView = navView || getActiveNavView();
+            var activeView,
+                findViewByState = function (state) {
+                    var children = navView.children();
+
+                    for (var i = 0; i < children.length; ++i) {
+                        var curChild = angular.element(children[i]);
+
+                        if (curChild.attr("nav-view") === state) {
+                            return curChild;
+                        }
+                    }
+
+                    return null;
+                };
+
+            if (!navView) {
+                return null;
+            }
+
+            //first look for views with the active state
+            activeView = findViewByState("active");
+
+            //if there are no active views, look for ones that are being entered
+            if (!activeView) {
+                activeView = findViewByState("entering");
+            }
+
+            //if the selected view element isn't an ion-view, treat it as a parent nav-view and keep searching down
+            if (activeView && activeView.prop("tagName").toLowerCase() !== "ion-view") {
+                activeView = getActiveView(activeView);
+            }
+
+            return activeView;
         }
     }
 
