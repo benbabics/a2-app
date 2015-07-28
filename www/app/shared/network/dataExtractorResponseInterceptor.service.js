@@ -19,7 +19,7 @@
 
             if (!_.isEmpty(responseData)) {
 
-                if (!_.isEmpty(responseData.data) && !_.isEmpty(responseData.data[0])) {
+                if (_.has(responseData, "data")) {
                     extractedData = responseData.data;
 
                     if (_.has(responseData, "totalResults")) {
