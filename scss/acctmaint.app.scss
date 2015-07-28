@@ -26,62 +26,64 @@ $user-login-gradient-bottom: #414141;
 
 /**Content Alignment**/
 
- .align_center {
-  text-align:center;
- }
+.align_center {
+  text-align: center;
+}
 
- .btn_align {
-  float:left;
-   font-weight:bold;
- }
+.btn_align {
+  float: left;
+  font-weight: bold;
+}
 
- .block_align {
-  display:inline-block;
-   color:#807f7f;
- }
-
- .content_align {
+.block_align {
   display: inline-block;
-  float:right;
-   color:#807f7f;
- }
+  color: #807f7f;
+}
 
- .green {
+.content_align {
+  display: inline-block;
+  float: right;
+  color: #807f7f;
+  text-align: right;
+}
+
+.green {
   color: #6d9940;
- }
+}
 
- .content_border {
+.content_border {
   text-decoration: none;
   border: 0px;
- }
+}
 
- .body-text {
+.body-text {
   color: #807f7f;
- }
+}
 
- .black {
+.black {
   color: #000000 !important;
- }
+}
 
- .divider {
+.divider {
   border-bottom: 1px solid #e5e5e5;
- }
+}
 
- .arrow-align {
-  padding-bottom:0px! important;
- }
+.arrow-align {
+  padding-bottom: 0px ! important;
+}
 
- .button-width {
-   width:75% !important;
-   display: inline-block;
- }
+.button-width {
+  width: 75% !important;
+  display: inline-block;
+}
 
 .inner-container {
   background-color: #eeedec;
 }
- .button-menu {
-   margin-right:10px;
- }
+
+.button-menu {
+  margin-right: 10px;
+}
 
 /**------------------------------------------------------
  Side Menu
@@ -106,14 +108,13 @@ $user-login-gradient-bottom: #414141;
   background-color: #989898;
 
   .main-container {
-    border-bottom:0px;
+    border-bottom: 0px;
     background-color: #989898;
   }
   .inner-container {
     background-color: #eeedec;
   }
 }
-
 
 /**--------------------------------
   Alert Popup
@@ -127,20 +128,20 @@ $user-login-gradient-bottom: #414141;
     @include box-shadow(none);
 
     .popup-head {
-      border:none;
+      border: none;
     }
 
-  .popup-title {
-    color:inherit;
-    font-size:small;
-  }
+    .popup-title {
+      color: inherit;
+      font-size: small;
+    }
     .popup-body {
-      color:$warning-message-color;
-      border:none;
+      color: $warning-message-color;
+      border: none;
     }
     .popup-buttons .button {
-      margin-left:27%;
-      margin-right:27%;
+      margin-left: 27%;
+      margin-right: 27%;
       background-color: $primary-button-color;
       border: none;
       color: $primary-button-font-color;
