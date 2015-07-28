@@ -34,6 +34,7 @@
             }
             else {
                 this.barElem.removeClass("bar-subheader");
+                this.barElem.addClass("bar-header");
             }
         }
 
