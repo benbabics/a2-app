@@ -9,13 +9,54 @@
             method: "POST",
             url: "http://somedomain.com/someendpoint"
         },
+        mockGlobals = {
+            LOGIN_STATE: "user.auth.login",
+            AUTH_API: {
+                BASE_URL: "/someUrl",
+                AUTH: {
+                    TOKENS: "uaa/oauth/token",
+                    ME: "uaa/me"
+                },
+                CLIENT_CREDENTIALS: {
+                    CLIENT_ID    : "Some_Client_Id",
+                    CLIENT_SECRET: "Some_Client_Secret"
+                }
+            },
+            ACCOUNT_MAINTENANCE_API: {
+                BASE_URL: "/someAMRestUrl",
+                CARDS: {
+                    BASE: "Cards_Base",
+                    STATUS: "Status",
+                    CHECK_STATUS_CHANGE: "Status_Change"
+                },
+                ACCOUNTS: {
+                    BASE: "Accounts_Base"
+                },
+                BANKS: {
+                    ACTIVE_BANKS: "Active_Banks"
+                },
+                INVOICES: {
+                    CURRENT_INVOICE_SUMMARY: "Current_Invoice_Summary"
+                },
+                PAYMENTS: {
+                    PAYMENT_ADD_AVAILABILITY: "Make_Payment_Availability"
+                },
+                USERS   : {
+                    BASE   : "User_Base",
+                    CURRENT: "Current_User"
+                }
+            },
+            LOGGING: {
+                ENABLED: false
+            }
+        },
         mockRejection = {
             status: "",
             config: {
                 url: ""
             }
         },
-        LOGIN_STATE = "user.auth.login",
+        LOGIN_STATE = mockGlobals.LOGIN_STATE,
         LOGIN_STATE_DATA = {"reason": "TOKEN_EXPIRED"},
         AuthorizationHeaderRequestInterceptor,
         AuthenticationManager,
@@ -29,6 +70,11 @@
         beforeEach(function () {
 
             module("app.shared");
+
+            module(function ($provide) {
+                $provide.constant("globals", mockGlobals);
+            });
+
             module("app.components");
             module("app.html");
 

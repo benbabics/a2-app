@@ -4,13 +4,69 @@
     var $ionicHistory,
         ctrl,
         AuthenticationManager,
-        $state;
+        $state,
+        mockGlobals = {
+            LOGIN_STATE: "user.auth.login",
+            AUTH_API: {
+                BASE_URL: "/someUrl",
+                AUTH: {
+                    TOKENS: "uaa/oauth/token",
+                    ME: "uaa/me"
+                },
+                CLIENT_CREDENTIALS: {
+                    CLIENT_ID    : "Some_Client_Id",
+                    CLIENT_SECRET: "Some_Client_Secret"
+                }
+            },
+            ACCOUNT_MAINTENANCE_API: {
+                BASE_URL: "/someAMRestUrl",
+                CARDS: {
+                    BASE: "Cards_Base",
+                    STATUS: "Status",
+                    CHECK_STATUS_CHANGE: "Status_Change"
+                },
+                ACCOUNTS: {
+                    BASE: "Accounts_Base"
+                },
+                BANKS: {
+                    ACTIVE_BANKS: "Active_Banks"
+                },
+                INVOICES: {
+                    CURRENT_INVOICE_SUMMARY: "Current_Invoice_Summary"
+                },
+                PAYMENTS: {
+                    PAYMENT_ADD_AVAILABILITY: "Make_Payment_Availability"
+                },
+                USERS   : {
+                    BASE   : "User_Base",
+                    CURRENT: "Current_User"
+                }
+            },
+            NOTIFICATIONS: {
+                "serverConnectionError": "Server connection error",
+                "networkError"         : "Network error"
+            },
+            LOGGING: {
+                ENABLED: false
+            },
+            MENU: {
+                CONFIG: {
+                    options: {
+                    }
+                }
+            }
+        };
 
     describe("A Menu Controller", function () {
 
         beforeEach(function () {
 
             module("app.shared");
+
+            module(function ($provide) {
+                $provide.constant("globals", mockGlobals);
+            });
+
             module("app.components");
 
             // stub the routing and template loading
@@ -47,7 +103,7 @@
             });
 
             it("should navigate to the login page", function () {
-                expect($state.go).toHaveBeenCalledWith("user.auth.login");
+                expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
             });
         });
 

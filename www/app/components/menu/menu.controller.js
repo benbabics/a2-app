@@ -15,7 +15,7 @@
         function logOut() {
             AuthenticationManager.logOut();
 
-            $state.go("user.auth.login");
+            $state.go(globals.LOGIN_STATE);
         }
     }
 

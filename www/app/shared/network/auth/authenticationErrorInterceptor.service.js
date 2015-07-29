@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AuthenticationErrorInterceptor($injector, $state, AuthenticationManager,
+    function AuthenticationErrorInterceptor($injector, $state, globals, AuthenticationManager,
                                             AuthorizationHeaderRequestInterceptor, Logger) {
 
         // Revealed Public members
@@ -67,7 +67,7 @@
             // Log out the user
             AuthenticationManager.logOut();
 
-            $state.go("user.auth.login", {"reason": "TOKEN_EXPIRED"});
+            $state.go(globals.LOGIN_STATE, {"reason": "TOKEN_EXPIRED"});
 
             // TODO - Stretch goal - Remember what the user was trying to do and do it after auth
 

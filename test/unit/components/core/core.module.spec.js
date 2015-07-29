@@ -6,6 +6,65 @@
         var $q,
             $rootScope,
             $state,
+            mockGlobals = {
+                LOGIN_STATE: "user.auth.login",
+                AUTH_API: {
+                    BASE_URL: "/someUrl",
+                    AUTH: {
+                        TOKENS: "uaa/oauth/token",
+                        ME: "uaa/me"
+                    },
+                    CLIENT_CREDENTIALS: {
+                        CLIENT_ID    : "Some_Client_Id",
+                        CLIENT_SECRET: "Some_Client_Secret"
+                    }
+                },
+                ACCOUNT_MAINTENANCE_API: {
+                    BASE_URL: "/someAMRestUrl",
+                    CARDS: {
+                        BASE: "Cards_Base",
+                        STATUS: "Status",
+                        CHECK_STATUS_CHANGE: "Status_Change"
+                    },
+                    ACCOUNTS: {
+                        BASE: "Accounts_Base"
+                    },
+                    BANKS: {
+                        ACTIVE_BANKS: "Active_Banks"
+                    },
+                    INVOICES: {
+                        CURRENT_INVOICE_SUMMARY: "Current_Invoice_Summary"
+                    },
+                    PAYMENTS: {
+                        PAYMENT_ADD_AVAILABILITY: "Make_Payment_Availability"
+                    },
+                    USERS   : {
+                        BASE   : "User_Base",
+                        CURRENT: "Current_User"
+                    }
+                },
+                NOTIFICATIONS: {
+                    "serverConnectionError": "Server connection error",
+                    "networkError"         : "Network error"
+                },
+                LOGGING: {
+                    ENABLED: false
+                },
+                MENU: {
+                    CONFIG: {
+                        options: {
+                        }
+                    }
+                },
+                PAYMENT_ADD: {
+                    CONFIG  : {},
+                    WARNINGS: {
+                        BANK_ACCOUNTS_NOT_SETUP  : "Banks Not Setup",
+                        DIRECT_DEBIT_SETUP       : "Direct Debit Enabled",
+                        PAYMENT_ALREADY_SCHEDULED: "Payment Already Scheduled"
+                    }
+                }
+            },
             mockUser = {
                 newField1: "some value",
                 newField2: "some other value",
@@ -35,6 +94,11 @@
             spyOn(ionic.Platform, "fullScreen").and.callThrough();
 
             module("app.shared");
+
+            module(function ($provide) {
+                $provide.constant("globals", mockGlobals);
+            });
+
             module("app.components");
             module("app.shared");
             module("app.html");
@@ -69,8 +133,7 @@
         });
 
         describe("should set a $stateChangeStart event handler that", function () {
-            var loginRoute = "user.auth.login",
-                landingRoute = "landing",
+            var landingRoute = "landing",
                 paymentAddRoute = "payment.add";
 
             //TODO - the module's run block finishes before the spy can be injected into $rootScope
@@ -88,12 +151,12 @@
                 describe("when the user is navigating to the login page", function () {
 
                     beforeEach(function () {
-                        $state.go(loginRoute);
+                        $state.go(mockGlobals.LOGIN_STATE);
                         $rootScope.$digest();
                     });
 
                     it("should continue to the page", function () {
-                        expect($state.current.name).toEqual(loginRoute);
+                        expect($state.current.name).toEqual(mockGlobals.LOGIN_STATE);
                     });
                 });
 
@@ -143,7 +206,7 @@
                         it("should call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).toHaveBeenCalledWith({
                                 cssClass: "wex-warning-popup",
-                                content: "You must set up your financial institutions as your payment options online prior to scheduling a payment.",
+                                content: mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
                         });
@@ -176,7 +239,7 @@
                         it("should call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).toHaveBeenCalledWith({
                                 cssClass: "wex-warning-popup",
-                                content: "Online payment is not currently available for this account. The account has set up an alternative method of payment, such as direct debit.",
+                                content: mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
                         });
@@ -209,7 +272,7 @@
                         it("should call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).toHaveBeenCalledWith({
                                 cssClass: "wex-warning-popup",
-                                content: "A payment has been scheduled already.",
+                                content: mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
                                 buttonCssClass: "button-submit"
                             });
                         });
@@ -265,12 +328,12 @@
                 describe("when the user is navigating to the login page", function () {
 
                     beforeEach(function () {
-                        $state.go(loginRoute);
+                        $state.go(mockGlobals.LOGIN_STATE);
                         $rootScope.$digest();
                     });
 
                     it("should continue to the page", function () {
-                        expect($state.current.name).toEqual(loginRoute);
+                        expect($state.current.name).toEqual(mockGlobals.LOGIN_STATE);
                     });
                 });
 
@@ -282,7 +345,7 @@
                     });
 
                     it("should redirect to the login page", function () {
-                        expect($state.current.name).toEqual(loginRoute);
+                        expect($state.current.name).toEqual(mockGlobals.LOGIN_STATE);
                     });
                 });
 
@@ -294,7 +357,7 @@
                     });
 
                     it("should redirect to the login page", function () {
-                        expect($state.current.name).toEqual(loginRoute);
+                        expect($state.current.name).toEqual(mockGlobals.LOGIN_STATE);
                     });
                 });
             });
@@ -321,7 +384,7 @@
             });
 
             it("should redirect to the login page", function () {
-                expect($state.go).toHaveBeenCalledWith("user.auth.login");
+                expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
             });
 
         });

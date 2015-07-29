@@ -6,6 +6,8 @@
             return sharedGlobals;
         };
 
+    sharedGlobals.LOGIN_STATE = "@@@STRING_REPLACE_LOGIN_STATE@@@";
+
     /**
      * General
      */

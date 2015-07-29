@@ -5,7 +5,7 @@
         var bypass = false;
 
         function isLoginPage(stateName) {
-            return "user.auth.login" === stateName;
+            return globals.LOGIN_STATE === stateName;
         }
 
         function isPaymentAddPage(stateName) {
@@ -44,7 +44,7 @@
                 if (!AuthenticationManager.userLoggedIn()) {
                     // user is not logged in and is not trying to access the login page so redirect to the login page
                     event.preventDefault();
-                    $state.go("user.auth.login");
+                    $state.go(globals.LOGIN_STATE);
                 }
                 else if (isPaymentAddPage(stateName)) {
                     // Sorry for the hack. We'll try to address if possible
@@ -98,7 +98,7 @@
         }
 
         function resumeApplication() {
-            $state.go("user.auth.login");
+            $state.go(globals.LOGIN_STATE);
         }
 
         //app must be set to fullscreen so that ionic headers are the correct size in iOS

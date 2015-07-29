@@ -6,7 +6,8 @@
     },
     "auth": {
       "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
+      "login_state": "user.auth.login"
     },
     "content_security_policy": "default-src * 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "true"
@@ -18,7 +19,8 @@
     },
     "auth": {
       "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
+      "login_state": "user.auth.login"
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://172.28.163.78:* 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "true"
@@ -30,7 +32,8 @@
     },
     "auth": {
       "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
+      "login_state": "user.auth.login"
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://uat.account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "true"
@@ -42,7 +45,8 @@
     },
     "auth": {
       "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
+      "login_state": "user.auth.login"
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "false"
