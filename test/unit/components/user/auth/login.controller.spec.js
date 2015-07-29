@@ -1,17 +1,21 @@
 (function () {
     "use strict";
 
-    var $ionicHistory,
+    var _,
+        $ionicHistory,
         $rootScope,
         $scope,
+        $state,
+        $stateParams = {
+            reason: "TOKEN_EXPIRED"
+        },
+        authenticateDeferred,
         ctrl,
+        fetchCurrentUserDeferred,
+        globals,
         AuthenticationManager,
         CommonService,
-        globals,
-        authenticateDeferred,
-        fetchCurrentUserDeferred,
-        UserManager,
-        $state;
+        UserManager;
 
     describe("A Login Controller", function () {
 
@@ -33,26 +37,30 @@
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate", "logOut"]);
             UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
-            CommonService = jasmine.createSpyObj("CommonService", ["loadingBegin", "loadingComplete"]);
             $state = jasmine.createSpyObj("state", ["go"]);
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _globals_) {
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _globals_, _CommonService_) {
                 $ionicHistory = _$ionicHistory_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
                 fetchCurrentUserDeferred = $q.defer();
                 globals = _globals_;
                 $rootScope = _$rootScope_;
+                CommonService = _CommonService_;
+                _ = CommonService._;
 
                 ctrl = $controller("LoginController", {
                     $scope: $scope,
+                    $state: $state,
+                    $stateParams: $stateParams,
                     globals: globals,
                     AuthenticationManager: AuthenticationManager,
                     CommonService: CommonService,
-                    UserManager: UserManager,
-                    $state: $state
+                    UserManager: UserManager
                 });
+
             });
+
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -62,16 +70,90 @@
 
                 //setup an existing values to test them being modified
                 ctrl.globalError = "This is a previous error";
-
-                $scope.$broadcast("$ionicView.beforeEnter");
             });
 
-            it("should clear the ionic history", function () {
-                expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+            describe("when _.has returns false", function () {
+
+                beforeEach(function() {
+                    spyOn(_, "has").and.returnValue(false);
+
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
+
+                it("should clear the ionic history", function () {
+                    expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+                });
+
+                it("should clear previous error", function () {
+                    expect(ctrl.globalError).toBeFalsy();
+                });
+
+                it("should call _.has with the expected parameters", function () {
+                    expect(_.has).toHaveBeenCalledWith($stateParams, "reason");
+                });
+
             });
 
-            it("should clear previous error", function () {
-                expect(ctrl.globalError).toBeFalsy();
+            describe("when _.has returns true", function () {
+
+                beforeEach(function() {
+                    spyOn(_, "has").and.returnValue(true);
+
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
+
+                describe("when _.isString returns false", function () {
+
+                    beforeEach(function() {
+                        spyOn(_, "isString").and.returnValue(false);
+
+                        $scope.$broadcast("$ionicView.beforeEnter");
+                    });
+
+                    it("should clear the ionic history", function () {
+                        expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+                    });
+
+                    it("should clear previous error", function () {
+                        expect(ctrl.globalError).toBeFalsy();
+                    });
+
+                    it("should call _.has with the expected parameters", function () {
+                        expect(_.has).toHaveBeenCalledWith($stateParams, "reason");
+                    });
+
+                    it("should call _.isString with the expected parameters", function () {
+                        expect(_.isString).toHaveBeenCalledWith($stateParams.reason);
+                    });
+
+                });
+
+                describe("when _.isString returns true", function () {
+
+                    beforeEach(function() {
+                        spyOn(_, "isString").and.returnValue(true);
+
+                        $scope.$broadcast("$ionicView.beforeEnter");
+                    });
+
+                    it("should clear the ionic history", function () {
+                        expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+                    });
+
+                    it("should clear previous error", function () {
+                        expect(ctrl.globalError).toEqual("Your session has expired. Please login again.");
+                    });
+
+                    it("should call _.has with the expected parameters", function () {
+                        expect(_.has).toHaveBeenCalledWith($stateParams, "reason");
+                    });
+
+                    it("should call _.isString with the expected parameters", function () {
+                        expect(_.isString).toHaveBeenCalledWith($stateParams.reason);
+                    });
+
+                });
+
             });
 
         });

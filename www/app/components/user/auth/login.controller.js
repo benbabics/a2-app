@@ -5,9 +5,10 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function LoginController($ionicHistory, $scope, $state, globals, AuthenticationManager, CommonService, UserManager) {
+    function LoginController($ionicHistory, $scope, $state, $stateParams, globals, AuthenticationManager, CommonService, UserManager) {
 
-        var vm = this;
+        var _ = CommonService._,
+            vm = this;
         vm.config = globals.USER_LOGIN.CONFIG;
         vm.user = {};
         vm.authenticateUser = authenticateUser;
@@ -25,6 +26,10 @@
             clearErrorMessage();
 
             $ionicHistory.clearHistory();
+
+            if (_.has($stateParams, "reason") && _.isString($stateParams.reason)) {
+                vm.globalError = vm.config.serverErrors[$stateParams.reason];
+            }
         }
 
         function authenticateUser() {
