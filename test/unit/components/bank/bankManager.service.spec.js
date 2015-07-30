@@ -34,7 +34,7 @@
             });
 
             // set up spies
-            BanksResourceOne = jasmine.createSpyObj("BanksResourceOne", ["activeBanks"]);
+            BanksResourceOne = jasmine.createSpyObj("BanksResourceOne", ["getActiveBanks"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
@@ -67,7 +67,7 @@
             beforeEach(function () {
                 getActiveBanksDeferred = $q.defer();
 
-                BanksResourceOne.activeBanks.and.returnValue(getActiveBanksDeferred.promise);
+                BanksResourceOne.getActiveBanks.and.returnValue(getActiveBanksDeferred.promise);
 
                 BankManager.setActiveBanks(null);
 
@@ -81,8 +81,8 @@
                     expect(BanksResource.one).toHaveBeenCalledWith(billingAccountId);
                 });
 
-                it("should call BanksResourceOne.activeBanks", function () {
-                    expect(BanksResourceOne.activeBanks).toHaveBeenCalledWith();
+                it("should call BanksResourceOne.getActiveBanks", function () {
+                    expect(BanksResourceOne.getActiveBanks).toHaveBeenCalledWith();
                 });
 
             });

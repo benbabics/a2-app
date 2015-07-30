@@ -10,8 +10,8 @@
 
     function addCustomMethods(RestangularProvider, sharedGlobals) {
         RestangularProvider.addElementTransformer(sharedGlobals.ACCOUNT_MAINTENANCE_API.ACCOUNTS.BASE, false, function(account) {
-            // This will add a method called activeBanks that will do a GET to the path payments/activeBanks
-            account.addRestangularMethod("activeBanks", "get", sharedGlobals.ACCOUNT_MAINTENANCE_API.BANKS.ACTIVE_BANKS);
+            // This will add a method called getActiveBanks that will do a GET to the path payments/activeBanks
+            account.addRestangularMethod("getActiveBanks", "get", sharedGlobals.ACCOUNT_MAINTENANCE_API.BANKS.ACTIVE_BANKS);
 
             return account;
         });
