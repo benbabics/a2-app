@@ -41,7 +41,7 @@
             });
 
             // set up spies
-            UsersResourceOne = jasmine.createSpyObj("UsersResourceOne", ["current"]);
+            UsersResourceOne = jasmine.createSpyObj("UsersResourceOne", ["getCurrent"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
@@ -77,7 +77,7 @@
             beforeEach(function () {
                 getCurrentUserDeferred = $q.defer();
 
-                UsersResourceOne.current.and.returnValue(getCurrentUserDeferred.promise);
+                UsersResourceOne.getCurrent.and.returnValue(getCurrentUserDeferred.promise);
 
                 UserManager.setUser(null);
 
@@ -91,8 +91,8 @@
                     expect(UsersResource.one).toHaveBeenCalledWith();
                 });
 
-                it("should call UsersResourceOne.current", function () {
-                    expect(UsersResourceOne.current).toHaveBeenCalledWith();
+                it("should call UsersResourceOne.getCurrent", function () {
+                    expect(UsersResourceOne.getCurrent).toHaveBeenCalledWith();
                 });
 
             });

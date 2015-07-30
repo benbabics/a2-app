@@ -26,7 +26,7 @@
 
         function fetchCurrentUserDetails() {
 
-            return $q.when(UsersResource.one().current())
+            return $q.when(UsersResource.one().getCurrent())
                 .then(function (currentUserDetailsResponse) {
                     if (currentUserDetailsResponse && currentUserDetailsResponse.data) {
                         setUser(currentUserDetailsResponse.data);
