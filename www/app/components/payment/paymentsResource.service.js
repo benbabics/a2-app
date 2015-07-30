@@ -8,8 +8,8 @@
 
     function addCustomMethods(RestangularProvider, sharedGlobals) {
         RestangularProvider.addElementTransformer(sharedGlobals.ACCOUNT_MAINTENANCE_API.ACCOUNTS.BASE, false, function(account) {
-            // This will add a method called paymentAddAvailability that will do a GET  to the path payments/makePaymentAvailability
-            account.addRestangularMethod("paymentAddAvailability", "get", sharedGlobals.ACCOUNT_MAINTENANCE_API.PAYMENTS.PAYMENT_ADD_AVAILABILITY);
+            // This will add a method called getPaymentAddAvailability that will do a GET  to the path payments/makePaymentAvailability
+            account.addRestangularMethod("getPaymentAddAvailability", "get", sharedGlobals.ACCOUNT_MAINTENANCE_API.PAYMENTS.PAYMENT_ADD_AVAILABILITY);
 
             return account;
         });

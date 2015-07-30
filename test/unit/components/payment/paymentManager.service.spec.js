@@ -39,7 +39,7 @@
             });
 
             // set up spies
-            PaymentsResourceOne = jasmine.createSpyObj("PaymentsResourceOne", ["paymentAddAvailability"]);
+            PaymentsResourceOne = jasmine.createSpyObj("PaymentsResourceOne", ["getPaymentAddAvailability"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
@@ -67,7 +67,7 @@
             beforeEach(function () {
                 getPaymentAddAvailabilityModelDeferred = $q.defer();
 
-                PaymentsResourceOne.paymentAddAvailability.and.returnValue(getPaymentAddAvailabilityModelDeferred.promise);
+                PaymentsResourceOne.getPaymentAddAvailability.and.returnValue(getPaymentAddAvailabilityModelDeferred.promise);
 
                 PaymentManager.setPaymentAddAvailability(null);
 
@@ -81,8 +81,8 @@
                     expect(PaymentsResource.one).toHaveBeenCalledWith(billingAccountId);
                 });
 
-                it("should call PaymentsResourceOne.paymentAddAvailability", function () {
-                    expect(PaymentsResourceOne.paymentAddAvailability).toHaveBeenCalledWith();
+                it("should call PaymentsResourceOne.getPaymentAddAvailability", function () {
+                    expect(PaymentsResourceOne.getPaymentAddAvailability).toHaveBeenCalledWith();
                 });
 
             });
