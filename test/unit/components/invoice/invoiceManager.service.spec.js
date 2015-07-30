@@ -42,7 +42,7 @@
             });
 
             // set up spies
-            InvoicesResourceOne = jasmine.createSpyObj("InvoicesResourceOne", ["currentInvoiceSummary"]);
+            InvoicesResourceOne = jasmine.createSpyObj("InvoicesResourceOne", ["getCurrentInvoiceSummary"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
@@ -75,7 +75,7 @@
             beforeEach(function () {
                 getCurrentInvoiceSummaryDeferred = $q.defer();
 
-                InvoicesResourceOne.currentInvoiceSummary.and.returnValue(getCurrentInvoiceSummaryDeferred.promise);
+                InvoicesResourceOne.getCurrentInvoiceSummary.and.returnValue(getCurrentInvoiceSummaryDeferred.promise);
 
                 InvoiceManager.setInvoiceSummary(null);
 
@@ -89,8 +89,8 @@
                     expect(InvoicesResource.one).toHaveBeenCalledWith(billingAccountId);
                 });
 
-                it("should call InvoicesResourceOne.currentInvoiceSummary", function () {
-                    expect(InvoicesResourceOne.currentInvoiceSummary).toHaveBeenCalledWith();
+                it("should call InvoicesResourceOne.getCurrentInvoiceSummary", function () {
+                    expect(InvoicesResourceOne.getCurrentInvoiceSummary).toHaveBeenCalledWith();
                 });
 
             });

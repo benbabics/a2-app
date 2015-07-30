@@ -25,7 +25,7 @@
         }
 
         function fetchCurrentInvoiceSummary(billingAccountId) {
-            return $q.when(InvoicesResource.one(billingAccountId).currentInvoiceSummary())
+            return $q.when(InvoicesResource.one(billingAccountId).getCurrentInvoiceSummary())
                 .then(function (currentInvoiceSummaryResponse) {
                     if (currentInvoiceSummaryResponse && currentInvoiceSummaryResponse.data) {
                         setInvoiceSummary(currentInvoiceSummaryResponse.data);
