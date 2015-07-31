@@ -1,9 +1,13 @@
 (function () {
     "use strict";
 
+    /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
+
     /* @ngInject */
-    function PaymentsResource(AccountMaintenanceRestangular, globals) {
-        return AccountMaintenanceRestangular.service(globals.ACCOUNT_MAINTENANCE_API.ACCOUNTS.BASE);
+    function PaymentsResource(AccountsResource) {
+
+        return AccountsResource;
+
     }
 
     function addCustomMethods(RestangularProvider, sharedGlobals) {
