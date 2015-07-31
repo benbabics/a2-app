@@ -10,7 +10,7 @@
         AccountModel,
         InvoiceManager,
         InvoicesResource,
-        InvoicesResourceOne,
+        InvoicesResourceForAccount,
         remoteInvoiceSummary = {};
 
     describe("An Invoice Manager", function () {
@@ -23,7 +23,7 @@
             module("app.components.invoice");
 
             // mock dependencies
-            InvoicesResource = jasmine.createSpyObj("InvoicesResource", ["one"]);
+            InvoicesResource = jasmine.createSpyObj("InvoicesResource", ["forAccount"]);
 
             module(function ($provide) {
                 $provide.value("InvoicesResource", InvoicesResource);
@@ -42,11 +42,11 @@
             });
 
             // set up spies
-            InvoicesResourceOne = jasmine.createSpyObj("InvoicesResourceOne", ["getCurrentInvoiceSummary"]);
+            InvoicesResourceForAccount = jasmine.createSpyObj("InvoicesResourceForAccount", ["getCurrentInvoiceSummary"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
-            InvoicesResource.one.and.returnValue(InvoicesResourceOne);
+            InvoicesResource.forAccount.and.returnValue(InvoicesResourceForAccount);
         });
 
         describe("has an activate function that", function () {
@@ -75,7 +75,7 @@
             beforeEach(function () {
                 getCurrentInvoiceSummaryDeferred = $q.defer();
 
-                InvoicesResourceOne.getCurrentInvoiceSummary.and.returnValue(getCurrentInvoiceSummaryDeferred.promise);
+                InvoicesResourceForAccount.getCurrentInvoiceSummary.and.returnValue(getCurrentInvoiceSummaryDeferred.promise);
 
                 InvoiceManager.setInvoiceSummary(null);
 
@@ -85,12 +85,12 @@
 
             describe("when getting a details of the current invoice summary", function () {
 
-                it("should call InvoicesResource.one", function () {
-                    expect(InvoicesResource.one).toHaveBeenCalledWith(billingAccountId);
+                it("should call InvoicesResource.forAccount", function () {
+                    expect(InvoicesResource.forAccount).toHaveBeenCalledWith(billingAccountId);
                 });
 
-                it("should call InvoicesResourceOne.getCurrentInvoiceSummary", function () {
-                    expect(InvoicesResourceOne.getCurrentInvoiceSummary).toHaveBeenCalledWith();
+                it("should call InvoicesResourceForAccount.getCurrentInvoiceSummary", function () {
+                    expect(InvoicesResourceForAccount.getCurrentInvoiceSummary).toHaveBeenCalledWith();
                 });
 
             });
