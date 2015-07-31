@@ -5,7 +5,7 @@
     function wexSubmit() {
         var directive = {
             restrict: "E",
-            templateUrl: "app/shared/widgets/submit.directive.html",
+            templateUrl: "app/shared/widgets/templates/submit.directive.html",
             transclude: true
         };
 

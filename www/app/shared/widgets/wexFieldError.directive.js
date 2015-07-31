@@ -9,7 +9,7 @@
         var directive = {
             restrict: "A",
             transclude: true,
-            templateUrl: "app/shared/widgets/fieldError.directive.html"
+            templateUrl: "app/shared/widgets/templates/fieldError.directive.html"
         };
 
         return directive;

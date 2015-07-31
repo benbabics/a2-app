@@ -6,8 +6,8 @@
     /* @ngInject */
     function wexToolTip($ionicModal, CommonService) {
         // Constants
-        var ICON_TEMPLATE = "app/shared/widgets/toolTip/tooltip.directive.html",
-            MODAL_TEMPLATE = "app/shared/widgets/toolTip/tooltipModal.html";
+        var ICON_TEMPLATE = "app/shared/widgets/templates/toolTip/tooltip.directive.html",
+            MODAL_TEMPLATE = "app/shared/widgets/templates/toolTip/tooltipModal.html";
 
         // Private members
         var _ = CommonService._;

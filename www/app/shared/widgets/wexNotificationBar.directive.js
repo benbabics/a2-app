@@ -14,7 +14,7 @@
                     closeable: "=",
                     ngIf: "="
                 },
-                templateUrl: "app/shared/widgets/notificationBar.directive.html"
+                templateUrl: "app/shared/widgets/templates/notificationBar.directive.html"
             },
             _ = CommonService._;
 

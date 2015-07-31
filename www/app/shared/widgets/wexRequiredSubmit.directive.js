@@ -10,7 +10,7 @@
                 restrict: "E",
                 require: "^form",
                 replace: true,
-                templateUrl: "app/shared/widgets/requiredSubmit.directive.html",
+                templateUrl: "app/shared/widgets/templates/requiredSubmit.directive.html",
                 link: link,
                 scope: {
                     text: "@"

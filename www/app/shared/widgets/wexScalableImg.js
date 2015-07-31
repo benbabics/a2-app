@@ -10,7 +10,7 @@
         var directive = {
             restrict: "E",
             replace: true,
-            templateUrl: "app/shared/widgets/scalableImg.directive.html",
+            templateUrl: "app/shared/widgets/templates/scalableImg.directive.html",
             scope: {
                 src: "@"
             }

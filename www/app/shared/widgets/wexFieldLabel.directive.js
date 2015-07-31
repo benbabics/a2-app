@@ -11,7 +11,7 @@
                 transclude: true,
                 replace: true,
                 link: link,
-                templateUrl: "app/shared/widgets/fieldLabel.directive.html",
+                templateUrl: "app/shared/widgets/templates/fieldLabel.directive.html",
                 scope: {
                     form: "=",
                     fieldName: "@"
