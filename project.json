@@ -1,4 +1,9 @@
 {
+  "all": {
+    "auth": {
+      "login_state": "user.auth.login"
+    }
+  },
   "dev": {
     "app_urls": {
       "am_api": "http://127.0.0.1:20080",
@@ -6,8 +11,7 @@
     },
     "auth": {
       "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
-      "login_state": "user.auth.login"
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
     "content_security_policy": "default-src * 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "true"
@@ -19,8 +23,7 @@
     },
     "auth": {
       "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
-      "login_state": "user.auth.login"
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://172.28.163.78:* 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "true"
@@ -32,8 +35,7 @@
     },
     "auth": {
       "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
-      "login_state": "user.auth.login"
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://uat.account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "true"
@@ -45,8 +47,7 @@
     },
     "auth": {
       "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
-      "login_state": "user.auth.login"
+      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "logging_enabled": "false"
