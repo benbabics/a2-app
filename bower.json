@@ -8,7 +8,8 @@
     "angular-base64": "~2.0.5",
     "ngCordova": "~0.1.17-alpha",
     "ngFitText": "~3.3.3",
-    "angular-moment": "~0.10.1"
+    "angular-moment": "~0.10.1",
+    "ionic-datepicker-widget": "~1.1.1"
   },
   "resolutions": {
     "angular-ui-router": "0.2.13",
