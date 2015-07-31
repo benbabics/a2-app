@@ -178,7 +178,7 @@
             });
 
             it("should create a Modal from a ToolTip Modal Template", function () {
-                expect(templateUrlArg).toEqual("app/shared/widgets/toolTip/tooltipModal.html");
+                expect(templateUrlArg).toEqual("app/shared/widgets/templates/toolTip/tooltipModal.html");
             });
 
             it("should set the scope on the Modal to the directive's scope", function () {
