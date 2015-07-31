@@ -1,9 +1,32 @@
 (function () {
     "use strict";
 
+    /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
+
     /* @ngInject */
     function BanksResource(AccountMaintenanceRestangular, globals) {
-        return AccountMaintenanceRestangular.service(globals.ACCOUNT_MAINTENANCE_API.ACCOUNTS.BASE);
+
+        // Private members
+        var accountsResource;
+
+        // Revealed Public members
+        var service = {
+            forAccount: forAccount
+        };
+
+        activate();
+
+        return service;
+        //////////////////////
+
+        function activate() {
+            accountsResource = AccountMaintenanceRestangular.service(globals.ACCOUNT_MAINTENANCE_API.ACCOUNTS.BASE);
+        }
+
+        function forAccount(accountId) {
+            return accountsResource.one(accountId);
+        }
+
     }
 
     //TODO - Look into creating a custom method on the collection of active banks to get the default bank from the list

@@ -9,7 +9,7 @@
         rejectHandler,
         BankManager,
         BanksResource,
-        BanksResourceOne;
+        BanksResourceForAccount;
 
     describe("A Bank Manager", function () {
 
@@ -21,7 +21,7 @@
             module("app.components.bank");
 
             // mock dependencies
-            BanksResource = jasmine.createSpyObj("BanksResource", ["one"]);
+            BanksResource = jasmine.createSpyObj("BanksResource", ["forAccount"]);
 
             module(function ($provide) {
                 $provide.value("BanksResource", BanksResource);
@@ -34,11 +34,11 @@
             });
 
             // set up spies
-            BanksResourceOne = jasmine.createSpyObj("BanksResourceOne", ["getActiveBanks"]);
+            BanksResourceForAccount = jasmine.createSpyObj("BanksResourceForAccount", ["getActiveBanks"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
-            BanksResource.one.and.returnValue(BanksResourceOne);
+            BanksResource.forAccount.and.returnValue(BanksResourceForAccount);
         });
 
         describe("has a fetchActiveBanks function that", function () {
@@ -67,7 +67,7 @@
             beforeEach(function () {
                 getActiveBanksDeferred = $q.defer();
 
-                BanksResourceOne.getActiveBanks.and.returnValue(getActiveBanksDeferred.promise);
+                BanksResourceForAccount.getActiveBanks.and.returnValue(getActiveBanksDeferred.promise);
 
                 BankManager.setActiveBanks(null);
 
@@ -77,12 +77,12 @@
 
             describe("when getting the active banks", function () {
 
-                it("should call BanksResource.one", function () {
-                    expect(BanksResource.one).toHaveBeenCalledWith(billingAccountId);
+                it("should call BanksResource.forAccount", function () {
+                    expect(BanksResource.forAccount).toHaveBeenCalledWith(billingAccountId);
                 });
 
-                it("should call BanksResourceOne.getActiveBanks", function () {
-                    expect(BanksResourceOne.getActiveBanks).toHaveBeenCalledWith();
+                it("should call BanksResourceForAccount.getActiveBanks", function () {
+                    expect(BanksResourceForAccount.getActiveBanks).toHaveBeenCalledWith();
                 });
 
             });

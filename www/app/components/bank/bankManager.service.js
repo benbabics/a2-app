@@ -19,7 +19,7 @@
         //////////////////////
 
         function fetchActiveBanks(billingAccountId) {
-            return $q.when(BanksResource.one(billingAccountId).getActiveBanks())
+            return $q.when(BanksResource.forAccount(billingAccountId).getActiveBanks())
                 .then(function (activeBanksResponse) {
                     if (activeBanksResponse && activeBanksResponse.data) {
                         setActiveBanks(activeBanksResponse.data);
