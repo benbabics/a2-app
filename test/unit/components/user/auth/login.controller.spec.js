@@ -1,20 +1,16 @@
 (function () {
     "use strict";
 
-    var _,
-        $ionicHistory,
+    var $ionicHistory,
         $rootScope,
         $scope,
         $state,
-        $stateParams = {
-            reason: "TOKEN_EXPIRED"
-        },
+        $stateParams = {},
         authenticateDeferred,
         ctrl,
         fetchCurrentUserDeferred,
         globals,
         AuthenticationManager,
-        CommonService,
         UserManager;
 
     describe("A Login Controller", function () {
@@ -39,15 +35,13 @@
             UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
             $state = jasmine.createSpyObj("state", ["go"]);
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _globals_, _CommonService_) {
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _globals_) {
                 $ionicHistory = _$ionicHistory_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
                 fetchCurrentUserDeferred = $q.defer();
                 globals = _globals_;
                 $rootScope = _$rootScope_;
-                CommonService = _CommonService_;
-                _ = CommonService._;
 
                 ctrl = $controller("LoginController", {
                     $scope: $scope,
@@ -55,7 +49,6 @@
                     $stateParams: $stateParams,
                     globals: globals,
                     AuthenticationManager: AuthenticationManager,
-                    CommonService: CommonService,
                     UserManager: UserManager
                 });
 
@@ -72,10 +65,31 @@
                 ctrl.globalError = "This is a previous error";
             });
 
-            describe("when _.has returns false", function () {
+            describe("when $stateParams.reason is TOKEN_EXPIRED", function () {
 
                 beforeEach(function() {
-                    spyOn(_, "has").and.returnValue(false);
+                    $stateParams.reason = "TOKEN_EXPIRED";
+
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
+
+                it("should clear the ionic history", function () {
+                    expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+                });
+
+                it("should set the error", function () {
+                    expect(ctrl.globalError).toEqual("Your session has expired. Please login again.");
+                });
+
+            });
+
+            describe("when $stateParams.reason is an object", function () {
+
+                beforeEach(function() {
+                    $stateParams.reason = {
+                        randomProperty       : "Property value",
+                        anotherRandomProperty: "Another property value"
+                    };
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -88,70 +102,58 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
-                it("should call _.has with the expected parameters", function () {
-                    expect(_.has).toHaveBeenCalledWith($stateParams, "reason");
-                });
-
             });
 
-            describe("when _.has returns true", function () {
+            describe("when $stateParams.reason is empty string", function () {
 
                 beforeEach(function() {
-                    spyOn(_, "has").and.returnValue(true);
+                    $stateParams.reason = "";
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
 
-                describe("when _.isString returns false", function () {
-
-                    beforeEach(function() {
-                        spyOn(_, "isString").and.returnValue(false);
-
-                        $scope.$broadcast("$ionicView.beforeEnter");
-                    });
-
-                    it("should clear the ionic history", function () {
-                        expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
-                    });
-
-                    it("should clear previous error", function () {
-                        expect(ctrl.globalError).toBeFalsy();
-                    });
-
-                    it("should call _.has with the expected parameters", function () {
-                        expect(_.has).toHaveBeenCalledWith($stateParams, "reason");
-                    });
-
-                    it("should call _.isString with the expected parameters", function () {
-                        expect(_.isString).toHaveBeenCalledWith($stateParams.reason);
-                    });
-
+                it("should clear the ionic history", function () {
+                    expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
                 });
 
-                describe("when _.isString returns true", function () {
+                it("should clear previous error", function () {
+                    expect(ctrl.globalError).toBeFalsy();
+                });
 
-                    beforeEach(function() {
-                        spyOn(_, "isString").and.returnValue(true);
+            });
 
-                        $scope.$broadcast("$ionicView.beforeEnter");
-                    });
+            describe("when $stateParams.reason is null", function () {
 
-                    it("should clear the ionic history", function () {
-                        expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
-                    });
+                beforeEach(function() {
+                    $stateParams.reason = null;
 
-                    it("should clear previous error", function () {
-                        expect(ctrl.globalError).toEqual("Your session has expired. Please login again.");
-                    });
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
 
-                    it("should call _.has with the expected parameters", function () {
-                        expect(_.has).toHaveBeenCalledWith($stateParams, "reason");
-                    });
+                it("should clear the ionic history", function () {
+                    expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+                });
 
-                    it("should call _.isString with the expected parameters", function () {
-                        expect(_.isString).toHaveBeenCalledWith($stateParams.reason);
-                    });
+                it("should clear previous error", function () {
+                    expect(ctrl.globalError).toBeFalsy();
+                });
 
+            });
+
+            describe("when $stateParams.reason is undefined", function () {
+
+                beforeEach(function() {
+                    delete $stateParams.reason;
+
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
+
+                it("should clear the ionic history", function () {
+                    expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+                });
+
+                it("should clear previous error", function () {
+                    expect(ctrl.globalError).toBeFalsy();
                 });
 
             });
