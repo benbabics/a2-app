@@ -29,7 +29,7 @@
         }
 
         function fetchPaymentAddAvailability(billingAccountId) {
-            return $q.when(PaymentsResource.forAccount(billingAccountId).getPaymentAddAvailability())
+            return PaymentsResource.getPaymentAddAvailability(billingAccountId)
                 .then(function (paymentAddAvailabilityResponse) {
                     if (paymentAddAvailabilityResponse && paymentAddAvailabilityResponse.data) {
                         setPaymentAddAvailability(paymentAddAvailabilityResponse.data);

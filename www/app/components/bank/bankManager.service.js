@@ -4,7 +4,8 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function BankManager($q, BanksResource, CommonService, Logger) {
+    function BankManager(BanksResource, CommonService, Logger) {
+
         // Private members
         var activeBanks = {};
 
@@ -19,7 +20,7 @@
         //////////////////////
 
         function fetchActiveBanks(billingAccountId) {
-            return $q.when(BanksResource.forAccount(billingAccountId).getActiveBanks())
+            return BanksResource.getActiveBanks(billingAccountId)
                 .then(function (activeBanksResponse) {
                     if (activeBanksResponse && activeBanksResponse.data) {
                         setActiveBanks(activeBanksResponse.data);

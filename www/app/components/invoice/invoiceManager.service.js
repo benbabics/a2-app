@@ -4,7 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function InvoiceManager($q, CommonService, globals, InvoiceSummaryModel, InvoicesResource, Logger) {
+    function InvoiceManager(CommonService, InvoiceSummaryModel, InvoicesResource, Logger) {
         // Private members
         var invoiceSummary = {};
 
@@ -25,7 +25,7 @@
         }
 
         function fetchCurrentInvoiceSummary(billingAccountId) {
-            return $q.when(InvoicesResource.forAccount(billingAccountId).getCurrentInvoiceSummary())
+            return InvoicesResource.getCurrentInvoiceSummary(billingAccountId)
                 .then(function (currentInvoiceSummaryResponse) {
                     if (currentInvoiceSummaryResponse && currentInvoiceSummaryResponse.data) {
                         setInvoiceSummary(currentInvoiceSummaryResponse.data);

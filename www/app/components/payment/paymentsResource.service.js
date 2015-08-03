@@ -4,23 +4,32 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function PaymentsResource(AccountsResource) {
+    function PaymentsResource($q, globals, AccountsResource) {
 
-        return AccountsResource;
+        // Private members
+        var accountsResource;
 
-    }
+        // Revealed Public members
+        var service = {
+            getPaymentAddAvailability: getPaymentAddAvailability
+        };
 
-    function addCustomMethods(RestangularProvider, sharedGlobals) {
-        RestangularProvider.addElementTransformer(sharedGlobals.ACCOUNT_MAINTENANCE_API.ACCOUNTS.BASE, false, function(account) {
-            // This will add a method called getPaymentAddAvailability that will do a GET  to the path payments/makePaymentAvailability
-            account.addRestangularMethod("getPaymentAddAvailability", "get", sharedGlobals.ACCOUNT_MAINTENANCE_API.PAYMENTS.PAYMENT_ADD_AVAILABILITY);
+        activate();
 
-            return account;
-        });
+        return service;
+        //////////////////////
+
+        function activate() {
+            accountsResource = AccountsResource;
+        }
+
+        function getPaymentAddAvailability(accountId) {
+            return $q.when(accountsResource.forAccount(accountId).doGET(globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.PAYMENT_ADD_AVAILABILITY));
+        }
+
     }
 
     angular
         .module("app.components.payment")
-        .config(addCustomMethods)
         .factory("PaymentsResource", PaymentsResource);
 })();

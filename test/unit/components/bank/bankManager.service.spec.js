@@ -8,8 +8,7 @@
         resolveHandler,
         rejectHandler,
         BankManager,
-        BanksResource,
-        BanksResourceForAccount;
+        BanksResource;
 
     describe("A Bank Manager", function () {
 
@@ -21,7 +20,7 @@
             module("app.components.bank");
 
             // mock dependencies
-            BanksResource = jasmine.createSpyObj("BanksResource", ["forAccount"]);
+            BanksResource = jasmine.createSpyObj("BanksResource", ["getActiveBanks"]);
 
             module(function ($provide) {
                 $provide.value("BanksResource", BanksResource);
@@ -34,11 +33,8 @@
             });
 
             // set up spies
-            BanksResourceForAccount = jasmine.createSpyObj("BanksResourceForAccount", ["getActiveBanks"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
-
-            BanksResource.forAccount.and.returnValue(BanksResourceForAccount);
         });
 
         describe("has a fetchActiveBanks function that", function () {
@@ -67,7 +63,7 @@
             beforeEach(function () {
                 getActiveBanksDeferred = $q.defer();
 
-                BanksResourceForAccount.getActiveBanks.and.returnValue(getActiveBanksDeferred.promise);
+                BanksResource.getActiveBanks.and.returnValue(getActiveBanksDeferred.promise);
 
                 BankManager.setActiveBanks(null);
 
@@ -77,12 +73,8 @@
 
             describe("when getting the active banks", function () {
 
-                it("should call BanksResource.forAccount", function () {
-                    expect(BanksResource.forAccount).toHaveBeenCalledWith(billingAccountId);
-                });
-
-                it("should call BanksResourceForAccount.getActiveBanks", function () {
-                    expect(BanksResourceForAccount.getActiveBanks).toHaveBeenCalledWith();
+                it("should call BanksResource.getActiveBanks", function () {
+                    expect(BanksResource.getActiveBanks).toHaveBeenCalledWith(billingAccountId);
                 });
 
             });

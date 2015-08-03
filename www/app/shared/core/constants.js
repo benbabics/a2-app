@@ -58,6 +58,7 @@
             "CURRENT_INVOICE_SUMMARY": "payments/currentInvoiceSummary"
         },
         PAYMENTS: {
+            "BASE"                    : "payments",
             "PAYMENT_ADD_AVAILABILITY": "payments/makePaymentAvailability"
         },
         USERS   : {

@@ -9,7 +9,6 @@
         rejectHandler,
         PaymentManager,
         PaymentsResource,
-        PaymentsResourceForAccount,
         remotePaymentAddAvailabilityModel = {};
 
     describe("A Payment Manager", function () {
@@ -21,7 +20,7 @@
             module("app.components.payment");
 
             // mock dependencies
-            PaymentsResource = jasmine.createSpyObj("PaymentsResource", ["forAccount"]);
+            PaymentsResource = jasmine.createSpyObj("PaymentsResource", ["getPaymentAddAvailability"]);
 
             module(function ($provide) {
                 $provide.value("PaymentsResource", PaymentsResource);
@@ -39,11 +38,8 @@
             });
 
             // set up spies
-            PaymentsResourceForAccount = jasmine.createSpyObj("PaymentsResourceForAccount", ["getPaymentAddAvailability"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
-
-            PaymentsResource.forAccount.and.returnValue(PaymentsResourceForAccount);
         });
 
         describe("has an activate function that", function () {
@@ -67,7 +63,7 @@
             beforeEach(function () {
                 getPaymentAddAvailabilityModelDeferred = $q.defer();
 
-                PaymentsResourceForAccount.getPaymentAddAvailability.and.returnValue(getPaymentAddAvailabilityModelDeferred.promise);
+                PaymentsResource.getPaymentAddAvailability.and.returnValue(getPaymentAddAvailabilityModelDeferred.promise);
 
                 PaymentManager.setPaymentAddAvailability(null);
 
@@ -77,12 +73,8 @@
 
             describe("when getting a details of the payment add availability", function () {
 
-                it("should call PaymentsResource.forAccount with the correct account id", function () {
-                    expect(PaymentsResource.forAccount).toHaveBeenCalledWith(billingAccountId);
-                });
-
-                it("should call PaymentsResourceForAccount.getPaymentAddAvailability", function () {
-                    expect(PaymentsResourceForAccount.getPaymentAddAvailability).toHaveBeenCalledWith();
+                it("should call PaymentsResource.getPaymentAddAvailability", function () {
+                    expect(PaymentsResource.getPaymentAddAvailability).toHaveBeenCalledWith(billingAccountId);
                 });
 
             });
