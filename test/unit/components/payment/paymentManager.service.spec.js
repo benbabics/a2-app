@@ -9,6 +9,7 @@
         rejectHandler,
         PaymentManager,
         PaymentsResource,
+        mockPaymentAddAvailability = {},
         remotePaymentAddAvailabilityModel = {};
 
     describe("A Payment Manager", function () {
@@ -21,6 +22,7 @@
 
             // mock dependencies
             PaymentsResource = jasmine.createSpyObj("PaymentsResource", ["getPaymentAddAvailability"]);
+            mockPaymentAddAvailability = jasmine.createSpyObj("PaymentAddAvailabilityModel", ["PaymentAddAvailabilityModel", "set"]);
 
             module(function ($provide) {
                 $provide.value("PaymentsResource", PaymentsResource);
@@ -34,7 +36,7 @@
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 PaymentManager = _PaymentManager_;
-                PaymentManager.setPaymentAddAvailability(remotePaymentAddAvailabilityModel);
+                PaymentManager.setPaymentAddAvailability(mockPaymentAddAvailability);
             });
 
             // set up spies
@@ -64,8 +66,7 @@
                 getPaymentAddAvailabilityModelDeferred = $q.defer();
 
                 PaymentsResource.getPaymentAddAvailability.and.returnValue(getPaymentAddAvailabilityModelDeferred.promise);
-
-                PaymentManager.setPaymentAddAvailability(null);
+                spyOn(PaymentManager, "getPaymentAddAvailability").and.returnValue(mockPaymentAddAvailability);
 
                 PaymentManager.fetchPaymentAddAvailability(billingAccountId)
                     .then(resolveHandler, rejectHandler);
@@ -89,11 +90,11 @@
                     });
 
                     it("should set the payment add availability", function () {
-                        expect(PaymentManager.getPaymentAddAvailability()).toEqual(mockResponse.data);
+                        expect(mockPaymentAddAvailability.set).toHaveBeenCalledWith(mockResponse.data);
                     });
 
                     it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(mockResponse.data);
+                        expect(resolveHandler).toHaveBeenCalled();
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
@@ -110,7 +111,7 @@
                     });
 
                     it("should NOT update the payment add availability", function () {
-                        expect(PaymentManager.getPaymentAddAvailability()).toBeNull();
+                        expect(mockPaymentAddAvailability.set).not.toHaveBeenCalled();
                     });
 
                 });
@@ -129,7 +130,7 @@
                 });
 
                 it("should NOT update the payment add availability", function () {
-                    expect(PaymentManager.getPaymentAddAvailability()).toBeNull();
+                    expect(mockPaymentAddAvailability.set).not.toHaveBeenCalled();
                 });
 
             });

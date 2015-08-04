@@ -10,6 +10,7 @@
         UserManager,
         UsersResource,
         UsersResourceOne,
+        mockUser = {},
         remoteUser = {};
 
     describe("A User Manager", function () {
@@ -23,6 +24,7 @@
 
             // mock dependencies
             UsersResource = jasmine.createSpyObj("UsersResource", ["one"]);
+            mockUser = jasmine.createSpyObj("UserModel", ["UserModel", "set"]);
 
             module(function ($provide) {
                 $provide.value("UsersResource", UsersResource);
@@ -37,7 +39,7 @@
                 $rootScope = _$rootScope_;
                 AccountModel = _AccountModel_;
                 UserManager = _UserManager_;
-                UserManager.setUser(remoteUser);
+                UserManager.setUser(mockUser);
             });
 
             // set up spies
@@ -78,8 +80,7 @@
                 getCurrentUserDeferred = $q.defer();
 
                 UsersResourceOne.getCurrent.and.returnValue(getCurrentUserDeferred.promise);
-
-                UserManager.setUser(null);
+                spyOn(UserManager, "getUser").and.returnValue(mockUser);
 
                 UserManager.fetchCurrentUserDetails()
                     .then(resolveHandler, rejectHandler);
@@ -107,11 +108,11 @@
                     });
 
                     it("should set the user", function () {
-                        expect(UserManager.getUser()).toEqual(mockResponse.data);
+                        expect(mockUser.set).toHaveBeenCalledWith(mockResponse.data);
                     });
 
                     it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(mockResponse.data);
+                        expect(resolveHandler).toHaveBeenCalled();
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
@@ -128,7 +129,7 @@
                     });
 
                     it("should NOT update the user", function () {
-                        expect(UserManager.getUser()).toBeNull();
+                        expect(mockUser.set).not.toHaveBeenCalled();
                     });
 
                 });
@@ -147,7 +148,7 @@
                 });
 
                 it("should NOT update the user", function () {
-                    expect(UserManager.getUser()).toBeNull();
+                    expect(mockUser.set).not.toHaveBeenCalled();
                 });
 
             });

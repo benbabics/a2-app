@@ -1,13 +1,17 @@
 (function () {
     "use strict";
 
-    var $q,
+    var _,
+        $q,
         $rootScope,
         billingAccountId = "141v51235",
         getActiveBanksDeferred,
         resolveHandler,
         rejectHandler,
+        bankModel1, bankModel2, bankModel3,
+        mockBankCollection = {},
         BankManager,
+        BankModel,
         BanksResource;
 
     describe("A Bank Manager", function () {
@@ -26,39 +30,30 @@
                 $provide.value("BanksResource", BanksResource);
             });
 
-            inject(function (_$q_, _$rootScope_, globals, _BankManager_) {
+            inject(function (_$q_, _$rootScope_, globals, _BankManager_, _BankModel_, _CommonService_) {
+                _ = _CommonService_._;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 BankManager = _BankManager_;
+                BankModel = _BankModel_;
             });
 
             // set up spies
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
+
+            // set up mocks
+            bankModel1 = getMockBank();
+            bankModel2 = getMockBank();
+            bankModel3 = getMockBank();
+
+            mockBankCollection = {};
+            mockBankCollection[bankModel1.id] = bankModel1;
+            mockBankCollection[bankModel2.id] = bankModel2;
+            mockBankCollection[bankModel3.id] = bankModel3;
         });
 
         describe("has a fetchActiveBanks function that", function () {
-
-            var mockResponse = {
-                    data: [
-                        {
-                            id         : "Bank Id 1",
-                            defaultBank: false,
-                            name       : "Bank Name 1"
-                        },
-                        {
-                            id         : "Bank Id 2",
-                            defaultBank: true,
-                            name       : "Bank Name 2"
-                        },
-                        {
-                            id         : "Bank Id 3",
-                            defaultBank: false,
-                            name       : "Bank Name 3"
-                        }
-                    ]
-                };
-
 
             beforeEach(function () {
                 getActiveBanksDeferred = $q.defer();
@@ -81,19 +76,32 @@
 
             describe("when the active banks are fetched successfully", function () {
 
+                var mockRemoteBanks = {data: {}};
+
                 describe("when there is data in the response", function () {
 
                     beforeEach(function () {
-                        getActiveBanksDeferred.resolve(mockResponse);
+                        mockRemoteBanks.data = _.values(mockBankCollection);
+                        getActiveBanksDeferred.resolve(mockRemoteBanks);
+
+                        getActiveBanksDeferred = $q.defer();
+
+                        BanksResource.getActiveBanks.and.returnValue(getActiveBanksDeferred.promise);
+
+                        BankManager.setActiveBanks(null);
+
+                        BankManager.fetchActiveBanks(billingAccountId)
+                            .then(resolveHandler, rejectHandler);
+
                         $rootScope.$digest();
                     });
 
                     it("should set the active banks", function () {
-                        expect(BankManager.getActiveBanks()).toEqual(mockResponse.data);
+                        expect(BankManager.getActiveBanks()).toEqual(mockBankCollection);
                     });
 
                     it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(mockResponse.data);
+                        expect(resolveHandler).toHaveBeenCalledWith(mockBankCollection);
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
@@ -201,5 +209,19 @@
         });
 
     });
+
+    function getMockBank() {
+        var mockBank = new BankModel();
+        mockBank.id = getRandomNumber(5);
+        mockBank.defaultBank = getRandomNumber(13);
+        mockBank.name = getRandomNumber(5);
+        mockBank.restangularized = true;
+
+        return mockBank;
+    }
+
+    function getRandomNumber(length) {
+        return (Math.random() + 1).toString().substr(2, length);
+    }
 
 })();

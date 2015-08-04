@@ -29,8 +29,8 @@
             return $q.when(UsersResource.one().getCurrent())
                 .then(function (currentUserDetailsResponse) {
                     if (currentUserDetailsResponse && currentUserDetailsResponse.data) {
-                        setUser(currentUserDetailsResponse.data);
-                        return user;
+                        getUser().set(currentUserDetailsResponse.data);
+                        return getUser();
                     }
                     // no data in the response
                     else {
@@ -54,6 +54,8 @@
             return user;
         }
 
+        // Caution against using this as it replaces the object versus setting properties on it or extending it
+        // suggested use for testing only
         function setUser(userInfo) {
             user = userInfo;
         }

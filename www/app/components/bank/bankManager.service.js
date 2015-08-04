@@ -4,7 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function BankManager(BanksResource, CommonService, Logger) {
+    function BankManager(BankModel, BanksResource, CommonService, Logger) {
 
         // Private members
         var activeBanks = {};
@@ -23,7 +23,17 @@
             return BanksResource.getActiveBanks(billingAccountId)
                 .then(function (activeBanksResponse) {
                     if (activeBanksResponse && activeBanksResponse.data) {
-                        setActiveBanks(activeBanksResponse.data);
+                        var remoteCollection = activeBanksResponse.data,
+                            bankModelCollection = {};
+
+                        _.forEach(remoteCollection, function (bank) {
+                            var bankModel = new BankModel();
+                            bankModel.set(bank);
+                            bankModelCollection[bank.id] = bankModel;
+                        });
+
+
+                        setActiveBanks(bankModelCollection);
                         return getActiveBanks();
                     }
                     // no data in the response
@@ -48,6 +58,8 @@
             return activeBanks;
         }
 
+        // Caution against using this as it replaces the collection versus setting properties or extending
+        // each of the models in the collections
         function setActiveBanks(activeBanksInfo) {
             activeBanks = activeBanksInfo;
         }

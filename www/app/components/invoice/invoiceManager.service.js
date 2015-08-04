@@ -28,8 +28,8 @@
             return InvoicesResource.getCurrentInvoiceSummary(billingAccountId)
                 .then(function (currentInvoiceSummaryResponse) {
                     if (currentInvoiceSummaryResponse && currentInvoiceSummaryResponse.data) {
-                        setInvoiceSummary(currentInvoiceSummaryResponse.data);
-                        return invoiceSummary;
+                        getInvoiceSummary().set(currentInvoiceSummaryResponse.data);
+                        return getInvoiceSummary();
                     }
                     // no data in the response
                     else {
@@ -52,6 +52,8 @@
             return invoiceSummary;
         }
 
+        // Caution against using this as it replaces the object versus setting properties on it or extending it
+        // suggested use for testing only
         function setInvoiceSummary(invoiceSummaryInfo) {
             invoiceSummary = invoiceSummaryInfo;
         }

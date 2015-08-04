@@ -32,7 +32,7 @@
             return PaymentsResource.getPaymentAddAvailability(billingAccountId)
                 .then(function (paymentAddAvailabilityResponse) {
                     if (paymentAddAvailabilityResponse && paymentAddAvailabilityResponse.data) {
-                        setPaymentAddAvailability(paymentAddAvailabilityResponse.data);
+                        getPaymentAddAvailability().set(paymentAddAvailabilityResponse.data);
                         return getPaymentAddAvailability();
                     }
                     // no data in the response
@@ -53,6 +53,8 @@
 
         }
 
+        // Caution against using this as it replaces the object versus setting properties on it or extending it
+        // suggested use for testing only
         function setPaymentAddAvailability(paymentAddAvailabilityInfo) {
             paymentAddAvailability = paymentAddAvailabilityInfo;
         }

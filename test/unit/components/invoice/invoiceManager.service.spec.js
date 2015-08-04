@@ -10,6 +10,7 @@
         AccountModel,
         InvoiceManager,
         InvoicesResource,
+        mockInvoiceSummary,
         remoteInvoiceSummary = {};
 
     describe("An Invoice Manager", function () {
@@ -23,6 +24,7 @@
 
             // mock dependencies
             InvoicesResource = jasmine.createSpyObj("InvoicesResource", ["getCurrentInvoiceSummary"]);
+            mockInvoiceSummary = jasmine.createSpyObj("InvoiceSummaryModel", ["InvoiceSummaryModel", "set"]);
 
             module(function ($provide) {
                 $provide.value("InvoicesResource", InvoicesResource);
@@ -37,7 +39,7 @@
                 $rootScope = _$rootScope_;
                 AccountModel = _AccountModel_;
                 InvoiceManager = _InvoiceManager_;
-                InvoiceManager.setInvoiceSummary(remoteInvoiceSummary);
+                InvoiceManager.setInvoiceSummary(mockInvoiceSummary);
             });
 
             // set up spies
@@ -73,7 +75,7 @@
 
                 InvoicesResource.getCurrentInvoiceSummary.and.returnValue(getCurrentInvoiceSummaryDeferred.promise);
 
-                InvoiceManager.setInvoiceSummary(null);
+                spyOn(InvoiceManager, "getInvoiceSummary").and.returnValue(mockInvoiceSummary);
 
                 InvoiceManager.fetchCurrentInvoiceSummary(billingAccountId)
                     .then(resolveHandler, rejectHandler);
@@ -97,11 +99,11 @@
                     });
 
                     it("should set the invoice summary", function () {
-                        expect(InvoiceManager.getInvoiceSummary()).toEqual(mockResponse.data);
+                        expect(mockInvoiceSummary.set).toHaveBeenCalledWith(mockResponse.data);
                     });
 
                     it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(mockResponse.data);
+                        expect(resolveHandler).toHaveBeenCalled();
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
@@ -118,7 +120,7 @@
                     });
 
                     it("should NOT update the invoice summary", function () {
-                        expect(InvoiceManager.getInvoiceSummary()).toBeNull();
+                        expect(mockInvoiceSummary.set).not.toHaveBeenCalled();
                     });
 
                 });
@@ -137,7 +139,7 @@
                 });
 
                 it("should NOT update the invoice summary", function () {
-                    expect(InvoiceManager.getInvoiceSummary()).toBeNull();
+                    expect(mockInvoiceSummary.set).not.toHaveBeenCalled();
                 });
 
             });
