@@ -67,7 +67,7 @@
 
         function getToken(username, data) {
 
-            return $q.when(AuthenticationResource.post(data))
+            return AuthenticationResource.authenticate(data)
                 .then(function (authResponse) {
 
                     if (authResponse.data) {
