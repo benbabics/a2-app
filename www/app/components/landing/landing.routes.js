@@ -6,6 +6,7 @@
 
         $stateProvider.state("landing", {
             url: "/landing",
+            cache: false,
             views: {
                 "@": {
                     templateUrl: "app/components/landing/templates/landing.html",
