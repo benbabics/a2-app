@@ -8,7 +8,8 @@
     function CommonService(_, $ionicPopup, $rootScope, globals) {
 
         // Private members
-        var loadingIndicatorCount = 0;
+        var loadingIndicatorCount = 0,
+            alertPopup;
 
         // Revealed Public members
         var service = {
@@ -16,15 +17,16 @@
             "_": _,
 
             // utility functions
+            "closeAlert"       : closeAlert,
             "displayAlert"     : displayAlert,
-            "maskAccountNumber": maskAccountNumber,
+            "fieldHasError"    : fieldHasError,
+            "getActiveNavView" : getActiveNavView,
+            "getActiveView"    : getActiveView,
+            "getErrorMessage"  : getErrorMessage,
             "loadingBegin"     : loadingBegin,
             "loadingComplete"  : loadingComplete,
-            "fieldHasError"    : fieldHasError,
-            "getErrorMessage": getErrorMessage,
-            "pageHasNavBar": pageHasNavBar,
-            "getActiveNavView": getActiveNavView,
-            "getActiveView": getActiveView
+            "maskAccountNumber": maskAccountNumber,
+            "pageHasNavBar"    : pageHasNavBar
         };
 
         return service;
@@ -32,6 +34,19 @@
 
         // Common utility functions go here
 
+        /**
+         * Closes an alert that had been previously opened by calling the below displayAlert function.
+         */
+        function closeAlert() {
+            if (alertPopup) {
+                alertPopup.close();
+                alertPopup = null;
+            }
+        }
+
+        /**
+         * Displays an alert and save a reference to it for the above closeAlert function to use.
+         */
         function displayAlert(options) {
             var mappedOptions = {};
 
@@ -66,83 +81,15 @@
                 };
             }
 
-            var alertPopup = $ionicPopup.alert(mappedOptions);
+            alertPopup = $ionicPopup.alert(mappedOptions);
 
             alertPopup.then(function (resolution) {
                 // close popup
             });
         }
 
-        function maskAccountNumber(accountNumber) {
-
-            var maskedNumber = "";
-
-            if (!_.isEmpty(accountNumber)) {
-                // Replace all but the last 4 characters with *
-                maskedNumber = accountNumber.replace(/.(?=.{4})/g, "*");
-            }
-
-            return maskedNumber;
-        }
-
-        function loadingBegin() {
-            if (loadingIndicatorCount === 0) {
-                $rootScope.$broadcast("loadingBegin");
-            }
-
-            loadingIndicatorCount++;
-        }
-
-        function loadingComplete() {
-            loadingIndicatorCount--;
-
-            if (loadingIndicatorCount === 0) {
-                $rootScope.$broadcast("loadingComplete");
-            }
-        }
-
         function fieldHasError(field) {
             return (field && field.$error && !_.isEmpty(field.$error));
-        }
-
-        /**
-         * Decomposes the errorObject and pulls out the appropriate values with details about the
-         * error whether it's the response of a failed remote request or simply a string message.
-         *
-         * @param errorObject
-         * @return string the error message
-         */
-        function getErrorMessage(errorObject) {
-
-            var errorMessage = "";
-
-            if (_.isString(errorObject)) {
-                errorMessage = errorObject;
-            }
-            else if (_.isObject(errorObject.data)) {
-                errorMessage += errorObject.data.error ? errorObject.data.error + ": " : "";
-                errorMessage += errorObject.data.error_description || "";
-            }
-
-            if (_.isEmpty(errorMessage)) {
-                errorMessage = globals.GENERAL.ERRORS.UNKNOWN_EXCEPTION;
-            }
-
-            return errorMessage;
-        }
-
-        /**
-         * Determines whether or not the page currently has a visible navBar.
-         *
-         * @return boolean true if the page has a visible navBar, false if it does not
-         */
-        function pageHasNavBar() {
-            var navBar = document.querySelector("ion-nav-bar.bar-wex");
-
-            if (navBar) {
-                return !angular.element(navBar).hasClass("hide");
-            }
-            return false;
         }
 
         /**
@@ -196,6 +143,74 @@
             }
 
             return activeView;
+        }
+
+        /**
+         * Decomposes the errorObject and pulls out the appropriate values with details about the
+         * error whether it's the response of a failed remote request or simply a string message.
+         *
+         * @param errorObject
+         * @return string the error message
+         */
+        function getErrorMessage(errorObject) {
+
+            var errorMessage = "";
+
+            if (_.isString(errorObject)) {
+                errorMessage = errorObject;
+            }
+            else if (_.isObject(errorObject.data)) {
+                errorMessage += errorObject.data.error ? errorObject.data.error + ": " : "";
+                errorMessage += errorObject.data.error_description || "";
+            }
+
+            if (_.isEmpty(errorMessage)) {
+                errorMessage = globals.GENERAL.ERRORS.UNKNOWN_EXCEPTION;
+            }
+
+            return errorMessage;
+        }
+
+        function loadingBegin() {
+            if (loadingIndicatorCount === 0) {
+                $rootScope.$broadcast("loadingBegin");
+            }
+
+            loadingIndicatorCount++;
+        }
+
+        function loadingComplete() {
+            loadingIndicatorCount--;
+
+            if (loadingIndicatorCount === 0) {
+                $rootScope.$broadcast("loadingComplete");
+            }
+        }
+
+        function maskAccountNumber(accountNumber) {
+
+            var maskedNumber = "";
+
+            if (!_.isEmpty(accountNumber)) {
+                // Replace all but the last 4 characters with *
+                maskedNumber = accountNumber.replace(/.(?=.{4})/g, "*");
+            }
+
+            return maskedNumber;
+        }
+
+        /**
+         * Determines whether or not the page currently has a visible navBar.
+         *
+         * @return boolean true if the page has a visible navBar, false if it does not
+         */
+        function pageHasNavBar() {
+            var navBar = document.querySelector("ion-nav-bar.bar-wex");
+
+            if (navBar) {
+                return !angular.element(navBar).hasClass("hide");
+            }
+            return false;
         }
     }
 

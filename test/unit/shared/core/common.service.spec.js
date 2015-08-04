@@ -11,6 +11,7 @@
             }
         },
         popupDeferred,
+        popupPromise,
         $rootScope,
         navBar,
         rootNavView,
@@ -61,7 +62,9 @@
                 $rootScope.$digest();
             });
 
-            $ionicPopup.alert.and.returnValue(popupDeferred.promise);
+            popupPromise = angular.extend({}, popupDeferred.promise, {close: function(){}});
+
+            $ionicPopup.alert.and.returnValue(popupPromise);
             popupDeferred.resolve();
         });
 
@@ -70,6 +73,40 @@
             rootNavView.remove();
 
             $rootScope.$digest();
+        });
+
+        describe("has a closeAlert function that", function () {
+
+            describe("should NOT close an alert when none have been displayed", function () {
+
+                beforeEach(function () {
+                    spyOn(popupPromise, "close");
+
+                    CommonService.closeAlert();
+                });
+
+                it("should NOT try to close the alert", function () {
+                    expect(popupPromise.close).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("should close an alert when one has been displayed", function () {
+
+                beforeEach(function () {
+                    spyOn(popupPromise, "close");
+
+                    CommonService.displayAlert();
+
+                    CommonService.closeAlert();
+                });
+
+                it("should call close the alert", function () {
+                    expect(popupPromise.close).toHaveBeenCalledWith();
+                });
+
+            });
+
         });
 
         describe("has a displayAlert function that", function () {

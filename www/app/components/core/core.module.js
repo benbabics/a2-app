@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    //TODO - Move as much logic out of here as possible
+
     function coreRun($rootScope, $state, $ionicPlatform, globals, AuthenticationManager, CommonService, PaymentManager, UserManager) {
         var bypass = false;
 
@@ -98,6 +100,10 @@
         }
 
         function resumeApplication() {
+            // Close the alert if present
+            CommonService.closeAlert();
+
+            // Go to the login page
             $state.go(globals.LOGIN_STATE);
         }
 

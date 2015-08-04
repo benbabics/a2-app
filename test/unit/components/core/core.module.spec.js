@@ -106,7 +106,7 @@
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             BankManager = jasmine.createSpyObj("BankManager", ["fetchActiveBanks"]);
-            CommonService = jasmine.createSpyObj("CommonService", ["displayAlert", "loadingBegin", "loadingComplete"]);
+            CommonService = jasmine.createSpyObj("CommonService", ["closeAlert", "displayAlert", "loadingBegin", "loadingComplete"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
@@ -381,6 +381,10 @@
                 spyOn($state, "go");
 
                 $rootScope.$broadcast("cordovaResume");
+            });
+
+            it("should close an alert", function () {
+                expect(CommonService.closeAlert).toHaveBeenCalledWith();
             });
 
             it("should redirect to the login page", function () {
