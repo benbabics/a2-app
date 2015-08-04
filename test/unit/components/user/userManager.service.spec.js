@@ -3,13 +3,12 @@
 
     var $q,
         $rootScope,
-        getCurrentUserDeferred,
+        getDetailsDeferred,
         resolveHandler,
         rejectHandler,
         AccountModel,
         UserManager,
         UsersResource,
-        UsersResourceOne,
         mockUser = {},
         remoteUser = {};
 
@@ -23,7 +22,7 @@
             module("app.components.user");
 
             // mock dependencies
-            UsersResource = jasmine.createSpyObj("UsersResource", ["one"]);
+            UsersResource = jasmine.createSpyObj("UsersResource", ["getDetails"]);
             mockUser = jasmine.createSpyObj("UserModel", ["UserModel", "set"]);
 
             module(function ($provide) {
@@ -43,11 +42,8 @@
             });
 
             // set up spies
-            UsersResourceOne = jasmine.createSpyObj("UsersResourceOne", ["getCurrent"]);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
-
-            UsersResource.one.and.returnValue(UsersResourceOne);
         });
 
         describe("has an activate function that", function () {
@@ -77,10 +73,9 @@
 
 
             beforeEach(function () {
-                getCurrentUserDeferred = $q.defer();
+                getDetailsDeferred = $q.defer();
 
-                UsersResourceOne.getCurrent.and.returnValue(getCurrentUserDeferred.promise);
-                spyOn(UserManager, "getUser").and.returnValue(mockUser);
+                UsersResource.getDetails.and.returnValue(getDetailsDeferred.promise);
 
                 UserManager.fetchCurrentUserDetails()
                     .then(resolveHandler, rejectHandler);
@@ -88,12 +83,8 @@
 
             describe("when getting a details of the current user", function () {
 
-                it("should call UsersResource.one", function () {
-                    expect(UsersResource.one).toHaveBeenCalledWith();
-                });
-
-                it("should call UsersResourceOne.getCurrent", function () {
-                    expect(UsersResourceOne.getCurrent).toHaveBeenCalledWith();
+                it("should call UsersResource.getDetails", function () {
+                    expect(UsersResource.getDetails).toHaveBeenCalledWith();
                 });
 
             });
@@ -103,7 +94,7 @@
                 describe("when there is data in the response", function () {
 
                     beforeEach(function () {
-                        getCurrentUserDeferred.resolve(mockResponse);
+                        getDetailsDeferred.resolve(mockResponse);
                         $rootScope.$digest();
                     });
 
@@ -121,7 +112,7 @@
                 describe("when there is no data in the response", function () {
 
                     beforeEach(function () {
-                        getCurrentUserDeferred.resolve(null);
+                        getDetailsDeferred.resolve(null);
                     });
 
                     it("should throw an error", function () {
@@ -140,7 +131,7 @@
                 var mockResponse = "Some error";
 
                 beforeEach(function () {
-                    getCurrentUserDeferred.reject(mockResponse);
+                    getDetailsDeferred.reject(mockResponse);
                 });
 
                 it("should throw an error", function () {

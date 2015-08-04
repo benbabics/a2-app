@@ -4,7 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function UserManager($q, CommonService, globals, Logger, UserModel, UsersResource) {
+    function UserManager(CommonService, Logger, UserModel, UsersResource) {
         // Private members
         var user = {};
 
@@ -26,7 +26,7 @@
 
         function fetchCurrentUserDetails() {
 
-            return $q.when(UsersResource.one().getCurrent())
+            return UsersResource.getDetails()
                 .then(function (currentUserDetailsResponse) {
                     if (currentUserDetailsResponse && currentUserDetailsResponse.data) {
                         getUser().set(currentUserDetailsResponse.data);
