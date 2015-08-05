@@ -43,9 +43,9 @@
             rejectHandler = jasmine.createSpy("rejectHandler");
 
             // set up mocks
-            bankModel1 = getMockBank();
-            bankModel2 = getMockBank();
-            bankModel3 = getMockBank();
+            bankModel1 = TestUtils.getRandomBank(BankModel);
+            bankModel2 = TestUtils.getRandomBank(BankModel);
+            bankModel3 = TestUtils.getRandomBank(BankModel);
 
             mockBankCollection = {};
             mockBankCollection[bankModel1.id] = bankModel1;
@@ -83,8 +83,6 @@
                     beforeEach(function () {
                         mockRemoteBanks.data = _.values(mockBankCollection);
                         getActiveBanksDeferred.resolve(mockRemoteBanks);
-
-                        getActiveBanksDeferred = $q.defer();
 
                         BanksResource.getActiveBanks.and.returnValue(getActiveBanksDeferred.promise);
 
@@ -209,19 +207,5 @@
         });
 
     });
-
-    function getMockBank() {
-        var mockBank = new BankModel();
-        mockBank.id = getRandomNumber(5);
-        mockBank.defaultBank = getRandomNumber(13);
-        mockBank.name = getRandomNumber(5);
-        mockBank.restangularized = true;
-
-        return mockBank;
-    }
-
-    function getRandomNumber(length) {
-        return (Math.random() + 1).toString().substr(2, length);
-    }
 
 })();

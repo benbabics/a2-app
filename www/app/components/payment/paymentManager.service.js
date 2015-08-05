@@ -4,13 +4,14 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function PaymentManager($q, CommonService, Logger, PaymentAddAvailabilityModel, PaymentsResource) {
+    function PaymentManager(CommonService, Logger, PaymentAddAvailabilityModel, PaymentModel, PaymentsResource) {
         // Private members
         var paymentAddAvailability = {};
 
         // Revealed Public members
         var service = {
             fetchPaymentAddAvailability: fetchPaymentAddAvailability,
+            fetchPayments              : fetchPayments,
             getPaymentAddAvailability  : getPaymentAddAvailability,
             setPaymentAddAvailability  : setPaymentAddAvailability
         };
@@ -28,8 +29,8 @@
             return paymentAddAvailability;
         }
 
-        function fetchPaymentAddAvailability(billingAccountId) {
-            return PaymentsResource.getPaymentAddAvailability(billingAccountId)
+        function fetchPaymentAddAvailability(accountId) {
+            return PaymentsResource.getPaymentAddAvailability(accountId)
                 .then(function (paymentAddAvailabilityResponse) {
                     if (paymentAddAvailabilityResponse && paymentAddAvailabilityResponse.data) {
                         getPaymentAddAvailability().set(paymentAddAvailabilityResponse.data);
@@ -41,7 +42,7 @@
                         throw new Error("No data in Response from getting the Payment Add Availability");
                     }
                 })
-                // get token failed
+                // getting payment add availability failed
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
@@ -50,7 +51,42 @@
                     Logger.error(error);
                     throw new Error(error);
                 });
+        }
 
+        function fetchPayments(accountId, pageNumber, pageSize) {
+            var params = {
+                pageNumber: pageNumber,
+                pageSize  : pageSize
+            };
+
+            return PaymentsResource.getPayments(accountId, params)
+                .then(function (paymentsResponse) {
+                    if (paymentsResponse && paymentsResponse.data) {
+                        var paymentModelCollection = {};
+
+                        _.forEach(paymentsResponse.data, function (payment) {
+                            var paymentModel = new PaymentModel();
+                            paymentModel.set(payment);
+                            paymentModelCollection[payment.id] = paymentModel;
+                        });
+
+                        return paymentModelCollection;
+                    }
+                    // no data in the response
+                    else {
+                        Logger.error("No data in Response from getting the Payments");
+                        throw new Error("No data in Response from getting the Payments");
+                    }
+                })
+                // get payments failed
+                .catch(function (failureResponse) {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+
+                    var error = "Getting Payments failed: " + CommonService.getErrorMessage(failureResponse);
+
+                    Logger.error(error);
+                    throw new Error(error);
+                });
         }
 
         // Caution against using this as it replaces the object versus setting properties on it or extending it

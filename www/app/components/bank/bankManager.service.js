@@ -23,15 +23,13 @@
             return BanksResource.getActiveBanks(billingAccountId)
                 .then(function (activeBanksResponse) {
                     if (activeBanksResponse && activeBanksResponse.data) {
-                        var remoteCollection = activeBanksResponse.data,
-                            bankModelCollection = {};
+                        var bankModelCollection = {};
 
-                        _.forEach(remoteCollection, function (bank) {
+                        _.forEach(activeBanksResponse.data, function (bank) {
                             var bankModel = new BankModel();
                             bankModel.set(bank);
                             bankModelCollection[bank.id] = bankModel;
                         });
-
 
                         setActiveBanks(bankModelCollection);
                         return getActiveBanks();

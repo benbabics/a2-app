@@ -11,7 +11,8 @@
 
         // Revealed Public members
         var service = {
-            getPaymentAddAvailability: getPaymentAddAvailability
+            getPaymentAddAvailability: getPaymentAddAvailability,
+            getPayments              : getPayments
         };
 
         activate();
@@ -25,6 +26,10 @@
 
         function getPaymentAddAvailability(accountId) {
             return $q.when(accountsResource.forAccount(accountId).doGET(globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.PAYMENT_ADD_AVAILABILITY));
+        }
+
+        function getPayments(accountId, searchCriteria) {
+            return $q.when(accountsResource.forAccount(accountId).getList(globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.BASE, searchCriteria));
         }
 
     }

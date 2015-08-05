@@ -35,6 +35,9 @@ module.exports = function(config) {
             // Test libraries
             "../test/lib/**/*.js",
 
+            // Test Utilities
+            "../test/unit/testUtils.js",
+
             // Source code
             "app/**/*.module.js",
             "app/**/*!(.module).js",
