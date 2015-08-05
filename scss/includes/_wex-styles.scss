@@ -310,3 +310,68 @@ ion-modal-view.modal-tooltip {
     opacity: 0;
   }
 }
+
+/**------------------------------------------------------
+ Numeric Input Field
+ ------------------------------------------------------**/
+$numeric-keypad-rows: 4;
+$numeric-keypad-height: ($button-height + 5px) * $numeric-keypad-rows;
+$numeric-keypad-button-border: 1px solid #aaa;
+$numeric-keypad-button-voffset: 5px;
+$numeric-keypad-animation: all linear 0.15s;
+
+.numeric-input-field {
+  @extend input;
+  @extend input[type="number"];
+}
+
+.numeric-keypad {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: $numeric-keypad-height;
+
+  border-top: $numeric-keypad-button-border;
+  border-left: $numeric-keypad-button-border;
+
+  .row, .col {
+    padding: 0;
+  }
+
+  .button {
+    margin: 0 0 $numeric-keypad-button-voffset 0;
+
+    border-right: $numeric-keypad-button-border;
+    border-bottom: $numeric-keypad-button-border;
+  }
+
+  .button-delete {
+    @extend .icon;
+    @extend .ion-backspace;
+  }
+}
+
+/* Keypad slide transitions */
+.numeric-keypad.ng-enter {
+  -webkit-transition: $numeric-keypad-animation;
+  transition: $numeric-keypad-animation;
+
+  height: 0;
+}
+
+.numeric-keypad.ng-enter.ng-enter-active {
+  height: $numeric-keypad-height;
+}
+
+.numeric-keypad.ng-leave {
+  -webkit-transition: $numeric-keypad-animation;
+  transition: $numeric-keypad-animation;
+
+  height: $numeric-keypad-height;
+}
+
+.numeric-keypad.ng-leave.ng-leave-active {
+  height: 0;
+}
