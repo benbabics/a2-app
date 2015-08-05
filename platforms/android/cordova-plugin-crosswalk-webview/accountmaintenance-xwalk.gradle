@@ -22,7 +22,7 @@ def DEFAULT_COMMAND_LINE = "--disable-pull-to-refresh-effect"
 
 repositories {
   maven {
-    url 'https://download.01.org/crosswalk/releases/crosswalk/android/maven2'
+    url 'http://nexus.int.wrightexpress.com/nexus/content/groups/public'
   }
 }
 
