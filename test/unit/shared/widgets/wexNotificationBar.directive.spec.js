@@ -37,7 +37,7 @@
                 $scope.$digest();
 
                 spyOn(CommonService, "getActiveNavView").and.returnValue(activeNavView);
-                spyOn(CommonService, "getActiveView").and.returnValue(activeView);
+                spyOn(CommonService, "getFocusedView").and.returnValue(activeView);
                 spyOn(CommonService, "pageHasNavBar").and.callFake(function () {
                     return pageHasNavBar;
                 });

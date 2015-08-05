@@ -65,12 +65,12 @@
 
         function onViewLeaving() {
             //remove the bar from the old view
-            this.setVisible(false, CommonService.getActiveView());
+            this.setVisible(false, CommonService.getFocusedView());
         }
 
         function onViewEntering() {
             //add the bar to the new view
-            this.setVisible(this.ngIf, CommonService.getActiveView());
+            this.setVisible(this.ngIf, CommonService.getFocusedView());
         }
 
         function getBarType() {

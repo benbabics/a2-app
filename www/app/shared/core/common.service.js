@@ -17,16 +17,21 @@
             "_": _,
 
             // utility functions
-            "closeAlert"       : closeAlert,
-            "displayAlert"     : displayAlert,
-            "fieldHasError"    : fieldHasError,
-            "getActiveNavView" : getActiveNavView,
-            "getActiveView"    : getActiveView,
-            "getErrorMessage"  : getErrorMessage,
-            "loadingBegin"     : loadingBegin,
-            "loadingComplete"  : loadingComplete,
-            "maskAccountNumber": maskAccountNumber,
-            "pageHasNavBar"    : pageHasNavBar
+            "closeAlert"             : closeAlert,
+            "displayAlert"           : displayAlert,
+            "fieldHasError"          : fieldHasError,
+            "findViewByState"        : findViewByState,
+            "findViewByStatesInOrder": findViewByStatesInOrder,
+            "findViews"              : findViews,
+            "findViewsMatching"      : findViewsMatching,
+            "getActiveNavView"       : getActiveNavView,
+            "getFocusedView"         : getFocusedView,
+            "getViewContent"         : getViewContent,
+            "getErrorMessage"        : getErrorMessage,
+            "loadingBegin"           : loadingBegin,
+            "loadingComplete"        : loadingComplete,
+            "maskAccountNumber"      : maskAccountNumber,
+            "pageHasNavBar"          : pageHasNavBar
         };
 
         return service;
@@ -93,56 +98,106 @@
         }
 
         /**
-         * Searches for the active ion-nav-view element.
+         * Recursively searches for the first view within a nav-view that matches the given state.
          *
-         * @return JQLite element representing the active ion-nav-view
+         * @param {String} state The state name that the view should match
+         * @param {jqLite} [navView] The nav-view to search within (default: the active nav-view)
+         * @return {jqLite} An element that represents the view, or null if no view was found
+         */
+        function findViewByState(state, navView) {
+            return findViewsMatching([state], true, navView);
+        }
+
+        /**
+         * Recursively searches for the first view within a nav-view that matches any of the given states, searching in
+         * the order that the states are specified.
+         *
+         * @param {Array} orderedStates The ordered array of state names that the view can match
+         * @param {jqLite} [navView] The nav-view to search within (default: the active nav-view)
+         * @return {jqLite} An element that represents the view, or null if no view was found
+         */
+        function findViewByStatesInOrder(orderedStates, navView) {
+            for(var i = 0; i < orderedStates.length; ++i) {
+                var foundView = findViewByState(orderedStates[i], navView);
+
+                if(foundView) {
+                    return foundView;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Recursively searches for views within a nav-view that match the given predicate.
+         *
+         * @param {Function} predicate The predicate function to apply to each view
+         * @param {boolean} [firstView] Whether or not to return only the first view found (default: false)
+         * @param {jqLite} [navView] The nav-view to search within (default: the active nav-view)
+         * @return {Array|jqLite} An array of elements that were found, or a single element (or null) if firstView is
+         * true
+         */
+        function findViews(predicate, firstView, navView) {
+            navView = navView || getActiveNavView();
+
+            var views = [],
+                children;
+
+            if(navView) {
+                children = navView.children();
+
+                for (var i = 0; i < children.length; ++i) {
+                    var curChild = angular.element(children[i]);
+
+                    if (predicate(curChild)) {
+                        //if the current view element isn't an ion-view, treat it as a parent nav-view and keep searching down
+                        if (curChild.prop("tagName").toLowerCase() !== "ion-view") {
+                            //add all the found views from the search in curChild to this array
+                            views = _.union(views, findViews(predicate, false, curChild));
+                        }
+                        else {
+                            views.push(curChild);
+                        }
+                    }
+                }
+            }
+
+            if(firstView) {
+                //only return the first view (or null if there are none)
+                if(views.length > 0) {
+                    views = views[0];
+                }
+                else {
+                    views = null;
+                }
+            }
+            return views;
+        }
+
+        /**
+         * Recursively searches for views within a nav-view that match any of the given states.
+         *
+         * @param {Array} states The array of state names that the views should match
+         * @param {boolean} [firstView] Whether or not to return only the first view found (default: false)
+         * @param {jqLite} [navView] The nav-view to search within (default: the active nav-view)
+         * @return {Array|jqLite} An array of elements that were found, or a single element (or null) if firstView is
+         * true
+         */
+        function findViewsMatching(states, firstView, navView) {
+            return findViews(function (view) {
+                var navViewAttr = view.attr("nav-view");
+
+                return (navViewAttr && _.contains(states, navViewAttr));
+            }, firstView, navView);
+        }
+
+        /**
+         * Searches for the active nav-view element.
+         *
+         * @return {jqLite} element representing the active nav-view, or null if no active element found.
          */
         function getActiveNavView() {
             var navView = document.querySelector("ion-nav-view.nav-view-root");
             return navView ? angular.element(navView) : null;
-        }
-
-        /**
-         * Searches for the active ion-view element, optionally only searching inside the given navView.
-         *
-         * @param [navView]
-         * @return JQLite element representing the active ion-view
-         */
-        function getActiveView(navView) {
-            navView = navView || getActiveNavView();
-            var activeView,
-                findViewByState = function (state) {
-                    var children = navView.children();
-
-                    for (var i = 0; i < children.length; ++i) {
-                        var curChild = angular.element(children[i]);
-
-                        if (curChild.attr("nav-view") === state) {
-                            return curChild;
-                        }
-                    }
-
-                    return null;
-                };
-
-            if (!navView) {
-                return null;
-            }
-
-            //first look for views with the active state
-            activeView = findViewByState("active");
-
-            //if there are no active views, look for ones that are being entered
-            if (!activeView) {
-                activeView = findViewByState("entering");
-            }
-
-            //if the selected view element isn't an ion-view, treat it as a parent nav-view and keep searching down
-            if (activeView && activeView.prop("tagName").toLowerCase() !== "ion-view") {
-                activeView = getActiveView(activeView);
-            }
-
-            return activeView;
         }
 
         /**
@@ -169,6 +224,34 @@
             }
 
             return errorMessage;
+        }
+
+        /**
+         * Searches for the focused view element within a nav-view.
+         *
+         * @param {jqLite} [navView] The nav-view to search within (default: the active nav-view)
+         * @return {jqLite} An element that represents the view, or null if no view was found
+         */
+        function getFocusedView(navView) {
+            return findViewByStatesInOrder(["stage", "entering", "active"], navView);
+        }
+
+        /**
+         * Searches for the content element within a view.
+         *
+         * @param {jqLite} [view] The view to search within (default: the focused view)
+         * @return {jqLite} An element that represents the view, or null if no view was found
+         */
+        function getViewContent(view) {
+            view = view || getFocusedView();
+            var content;
+
+            if(!view) {
+                return null;
+            }
+
+            content = view.find("ion-content");
+            return content.length > 0 ? content : null;
         }
 
         function loadingBegin() {
@@ -202,7 +285,7 @@
         /**
          * Determines whether or not the page currently has a visible navBar.
          *
-         * @return boolean true if the page has a visible navBar, false if it does not
+         * @return {boolean} true if the page has a visible navBar, false if it does not
          */
         function pageHasNavBar() {
             var navBar = document.querySelector("ion-nav-bar.bar-wex");
