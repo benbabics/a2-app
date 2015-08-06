@@ -14,17 +14,23 @@
             <div class="list">
                 <div class="padding">
                     <span class="item item-input item-user-name">
-                        <input ng-model="vm.user.username" name="userName" type="text" required
+                        <input ng-model="vm.user.username"
+                               name="userName"
+                               type="text"
+                               required
                                placeholder="{{vm.config.userName.label}}"
-                               maxlength="{{vm.config.userName.maxLength}}">
+                               wex-max-length="{{vm.config.userName.maxLength}}">
                     </span>
                 </div>
 
                 <div class="padding">
                     <span class="item item-input item-password">
-                        <input ng-model="vm.user.password" name="password" type="password" required
+                        <input ng-model="vm.user.password"
+                               name="password"
+                               type="password"
+                               required
                                placeholder="{{vm.config.password.label}}"
-                               maxlength="{{vm.config.password.maxLength}}">
+                               wex-max-length="{{vm.config.password.maxLength}}">
                     </span>
                 </div>
 
