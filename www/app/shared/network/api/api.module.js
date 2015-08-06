@@ -3,7 +3,7 @@
 
     angular.module("app.shared.api", [])
 
-        .run(function (Restangular, HttpResponseReporterInterceptor) {
+        .run(function (Restangular, AuthenticationErrorInterceptor, HttpResponseReporterInterceptor) {
 
             /**
              * Set up Global Restangular Configuration
@@ -14,6 +14,10 @@
 
             Restangular.addErrorInterceptor(function(response, deferred, responseHandler) {
                 return HttpResponseReporterInterceptor.responseError(response);
+            });
+
+            Restangular.addErrorInterceptor(function(response, deferred, responseHandler) {
+                return AuthenticationErrorInterceptor.responseError(response, deferred, responseHandler);
             });
         });
 

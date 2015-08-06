@@ -2,7 +2,6 @@
     "use strict";
 
     var AccountMaintenanceRestangular,
-        AuthenticationErrorInterceptor,
         AuthorizationHeaderRequestInterceptor,
         DataExtractorResponseInterceptor,
         globals,
@@ -15,12 +14,10 @@
             module("app.shared");
 
             // mock dependencies
-            AuthenticationErrorInterceptor = jasmine.createSpyObj("AuthenticationErrorInterceptor", ["responseError"]);
             AuthorizationHeaderRequestInterceptor = jasmine.createSpyObj("AuthorizationHeaderRequestInterceptor", ["request"]);
             DataExtractorResponseInterceptor = jasmine.createSpyObj("DataExtractorResponseInterceptor", ["response"]);
 
             module(function ($provide) {
-                $provide.value("AuthenticationErrorInterceptor", AuthenticationErrorInterceptor);
                 $provide.value("AuthorizationHeaderRequestInterceptor", AuthorizationHeaderRequestInterceptor);
                 $provide.value("DataExtractorResponseInterceptor", DataExtractorResponseInterceptor);
             });
@@ -109,33 +106,6 @@
 
                 it("should be at least 1 of", function () {
                     expect(AccountMaintenanceRestangular.configuration.errorInterceptors.length).toBeGreaterThan(0);
-                });
-
-                describe("when the ErrorInterceptors are called", function () {
-                    var response = {
-                            name: "Company One",
-                            accountId: "98765",
-                            accountNumber: "1234567890123",
-                            wexAccountNumber: "979sdc09-98"
-                        },
-                        deferred = {
-                            blah: "blah, blah, blah, ...",
-                            deferredStuff: "More stuff in here"
-                        },
-                        responseHandler = function () {
-                            return true;
-                        };
-
-                    beforeEach(function () {
-                        _.forEach(AccountMaintenanceRestangular.configuration.errorInterceptors, function (interceptor) {
-                            interceptor(response, deferred, responseHandler);
-                        });
-                    });
-
-                    it("should call AuthenticationErrorInterceptor.responseError", function () {
-                        expect(AuthenticationErrorInterceptor.responseError)
-                            .toHaveBeenCalledWith(response, deferred, responseHandler);
-                    });
                 });
             });
         });
