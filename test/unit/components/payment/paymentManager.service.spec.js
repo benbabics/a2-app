@@ -70,6 +70,19 @@
 
         });
 
+        describe("has a userLoggedOut event handler function that", function () {
+
+            beforeEach(function() {
+                PaymentManager.setPaymentAddAvailability(mockPaymentAddAvailability);
+                $rootScope.$broadcast("userLoggedOut");
+            });
+
+            it("should reset the payment add availability", function () {
+                expect(PaymentManager.getPaymentAddAvailability()).not.toEqual(mockPaymentAddAvailability);
+            });
+
+        });
+
         describe("has a fetchPaymentAddAvailability function that", function () {
 
             var mockResponse = {

@@ -53,6 +53,25 @@
             mockBankCollection[bankModel3.id] = bankModel3;
         });
 
+        describe("has an activate function that", function () {
+
+            // TODO: figure out how to test this
+
+        });
+
+        describe("has a userLoggedOut event handler function that", function () {
+
+            beforeEach(function() {
+                BankManager.setActiveBanks(mockBankCollection);
+                $rootScope.$broadcast("userLoggedOut");
+            });
+
+            it("should reset the active banks", function () {
+                expect(BankManager.getActiveBanks()).not.toEqual(mockBankCollection);
+            });
+
+        });
+
         describe("has a fetchActiveBanks function that", function () {
 
             beforeEach(function () {

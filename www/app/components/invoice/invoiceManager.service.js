@@ -4,7 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function InvoiceManager(CommonService, InvoiceSummaryModel, InvoicesResource, Logger) {
+    function InvoiceManager($rootScope, CommonService, InvoiceSummaryModel, InvoicesResource, Logger) {
         // Private members
         var invoiceSummary = {};
 
@@ -21,6 +21,12 @@
         //////////////////////
 
         function activate() {
+            $rootScope.$on("userLoggedOut", clearCachedValues);
+
+            clearCachedValues();
+        }
+
+        function clearCachedValues() {
             invoiceSummary = new InvoiceSummaryModel();
         }
 

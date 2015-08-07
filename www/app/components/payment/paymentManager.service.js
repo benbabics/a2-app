@@ -4,7 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function PaymentManager(CommonService, Logger, PaymentAddAvailabilityModel, PaymentModel, PaymentsResource) {
+    function PaymentManager($rootScope, CommonService, Logger, PaymentAddAvailabilityModel, PaymentModel, PaymentsResource) {
         // Private members
         var paymentAddAvailability = {};
 
@@ -22,6 +22,12 @@
         //////////////////////
 
         function activate() {
+            $rootScope.$on("userLoggedOut", clearCachedValues);
+
+            clearCachedValues();
+        }
+
+        function clearCachedValues() {
             paymentAddAvailability = new PaymentAddAvailabilityModel();
         }
 

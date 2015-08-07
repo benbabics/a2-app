@@ -4,7 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function BankManager(BankModel, BanksResource, CommonService, Logger) {
+    function BankManager($rootScope, BankModel, BanksResource, CommonService, Logger) {
 
         // Private members
         var activeBanks = {};
@@ -16,8 +16,20 @@
                 setActiveBanks  : setActiveBanks
             };
 
+        activate();
+
         return service;
         //////////////////////
+
+        function activate() {
+            $rootScope.$on("userLoggedOut", clearCachedValues);
+
+            clearCachedValues();
+        }
+
+        function clearCachedValues() {
+            activeBanks = {};
+        }
 
         function fetchActiveBanks(billingAccountId) {
             return BanksResource.getActiveBanks(billingAccountId)

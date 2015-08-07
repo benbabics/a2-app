@@ -53,6 +53,19 @@
 
         });
 
+        describe("has a userLoggedOut event handler function that", function () {
+
+            beforeEach(function() {
+                InvoiceManager.setInvoiceSummary(mockInvoiceSummary);
+                $rootScope.$broadcast("userLoggedOut");
+            });
+
+            it("should reset the invoice summary", function () {
+                expect(InvoiceManager.getInvoiceSummary()).not.toEqual(mockInvoiceSummary);
+            });
+
+        });
+
         describe("has a fetchCurrentInvoiceSummary function that", function () {
 
             var mockResponse = {
