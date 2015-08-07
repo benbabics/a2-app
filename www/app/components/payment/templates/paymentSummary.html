@@ -1,0 +1,29 @@
+<ion-view view-title="Make Payment">
+    <ion-content>
+        <div class="card card-warning padding">This amount is less than the minimum payment.</div>
+        <p class="padding body-text">Payments received after 3.30 pm Eastern Time may not be posted to your account until the next business day.</p>
+        <p class="padding body-text">Scheduled payments will be processes on the date selected. Payments schedules for weekends/holidays will be posted the next business day.</p>
+
+        <div>
+            <p class="padding divider">
+                <span id="amountLable" class="block_align black">Amount</span>
+                <span id="amount" class="content_align black">$300.00</span>
+            </p>
+
+            <p class="padding divider">
+                <span id="dateLabel" class="block_align black">Date</span>
+                <span id="currentDate" class="content_align black">08/06/2015</span>
+            </p>
+
+            <p class="padding divider">
+                <span id="fromAccountLabel" class="block_align black">From Account</span>
+                <span id="accountType" class="content_align black">Checking 7434</span>
+            </p>
+        </div>
+
+        <div class="padding align_center">
+            <button id="cancel" class="button button-block button-default">Cancel</button>
+            <button id="schedulePayment" class="button button-block button-submit">Schedule Payment</button>
+        </div>
+    </ion-content>
+</ion-view>
