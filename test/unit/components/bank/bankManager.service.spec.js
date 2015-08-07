@@ -4,7 +4,7 @@
     var _,
         $q,
         $rootScope,
-        billingAccountId = "141v51235",
+        accountId = TestUtils.getRandomStringThatIsAlphaNumeric(8),
         getActiveBanksDeferred,
         resolveHandler,
         rejectHandler,
@@ -81,14 +81,14 @@
 
                 BankManager.setActiveBanks(null);
 
-                BankManager.fetchActiveBanks(billingAccountId)
+                BankManager.fetchActiveBanks(accountId)
                     .then(resolveHandler, rejectHandler);
             });
 
             describe("when getting the active banks", function () {
 
                 it("should call BanksResource.getActiveBanks", function () {
-                    expect(BanksResource.getActiveBanks).toHaveBeenCalledWith(billingAccountId);
+                    expect(BanksResource.getActiveBanks).toHaveBeenCalledWith(accountId);
                 });
 
             });
@@ -107,8 +107,8 @@
 
                         BankManager.setActiveBanks(null);
 
-                        BankManager.fetchActiveBanks(billingAccountId)
-                            .then(resolveHandler, rejectHandler);
+                        BankManager.fetchActiveBanks(accountId)
+                            .then(resolveHandler).catch(rejectHandler);
 
                         $rootScope.$digest();
                     });
@@ -191,6 +191,156 @@
             }) ;
 
             // TODO: figure out how to test this without using setActiveBanks
+        });
+
+        describe("has a getOrFetchActiveBanks function that", function () {
+
+            var result;
+
+            beforeEach(function () {
+                BanksResource.getActiveBanks.and.returnValue(getActiveBanksDeferred.promise);
+            });
+
+            describe("when activeBanks have already been fetched", function () {
+
+                beforeEach(function () {
+                    BankManager.setActiveBanks(mockBankCollection);
+
+                    BankManager.getOrFetchActiveBanks(accountId)
+                        .then(function (bankAccounts) { result = bankAccounts; })
+                        .catch(rejectHandler);
+
+                    $rootScope.$digest();
+                });
+
+                it("should NOT call BanksResource.getActiveBanks", function () {
+                    expect(BanksResource.getActiveBanks).not.toHaveBeenCalledWith();
+                });
+
+                it("should return the correct result", function () {
+                    expect(result).toEqual(mockBankCollection);
+                });
+
+                it("should NOT reject", function () {
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("when activeBanks have NOT been fetched", function () {
+
+                beforeEach(function () {
+                    BankManager.setActiveBanks(null);
+
+                    BankManager.getOrFetchActiveBanks(accountId)
+                        .then(function (bankAccounts) { result = bankAccounts; })
+                        .catch(rejectHandler);
+
+                    getActiveBanksDeferred.resolve(mockBankCollection);
+                    $rootScope.$digest();
+                });
+
+                it("should call BanksResource.getActiveBanks", function () {
+                    expect(BanksResource.getActiveBanks).toHaveBeenCalledWith(accountId);
+                });
+
+                it("should return the correct result", function () {
+                    expect(result).not.toBeNull();
+                });
+
+                it("should NOT reject", function () {
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+            });
+
+        });
+
+        describe("has a getDefaultBank function that", function () {
+
+            var defaultBank,
+                expectedResult;
+
+            describe("when none of the banks are the default", function () {
+
+                beforeEach(function () {
+                    bankModel1 = TestUtils.getRandomBank(BankModel);
+                    bankModel1.defaultBank = false;
+
+                    bankModel2 = TestUtils.getRandomBank(BankModel);
+                    bankModel2.defaultBank = false;
+
+                    bankModel3 = TestUtils.getRandomBank(BankModel);
+                    bankModel3.defaultBank = false;
+
+                    mockBankCollection = {};
+                    mockBankCollection[bankModel1.id] = bankModel1;
+                    mockBankCollection[bankModel2.id] = bankModel2;
+                    mockBankCollection[bankModel3.id] = bankModel3;
+
+                    BankManager.setActiveBanks(mockBankCollection);
+
+                    expectedResult = _.first(_.sortBy(mockBankCollection, "name"));
+
+                    BankManager.getDefaultBank(accountId)
+                        .then(function (response) {
+                            defaultBank = response;
+                        })
+                        .catch(rejectHandler);
+
+                    $rootScope.$digest();
+                });
+
+                it("should return the correct bank", function () {
+                    expect(defaultBank).toEqual(expectedResult);
+                });
+
+                it("should NOT reject", function () {
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("when there is a default bank", function () {
+
+                beforeEach(function () {
+                    bankModel1 = TestUtils.getRandomBank(BankModel);
+                    bankModel1.defaultBank = false;
+
+                    bankModel2 = TestUtils.getRandomBank(BankModel);
+                    bankModel2.defaultBank = true;
+
+                    bankModel3 = TestUtils.getRandomBank(BankModel);
+                    bankModel3.defaultBank = false;
+
+                    mockBankCollection = {};
+                    mockBankCollection[bankModel1.id] = bankModel1;
+                    mockBankCollection[bankModel2.id] = bankModel2;
+                    mockBankCollection[bankModel3.id] = bankModel3;
+
+                    BankManager.setActiveBanks(mockBankCollection);
+
+                    expectedResult = bankModel2;
+
+                    BankManager.getDefaultBank(accountId)
+                        .then(function (response) {
+                            defaultBank = response;
+                        })
+                        .catch(rejectHandler);
+
+                    $rootScope.$digest();
+                });
+
+                it("should return the correct bank", function () {
+                    expect(defaultBank).toEqual(expectedResult);
+                });
+
+                it("should NOT reject", function () {
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+            });
+
         });
 
         describe("has a setActiveBanks function that", function () {
