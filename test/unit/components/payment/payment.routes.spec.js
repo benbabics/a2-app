@@ -41,7 +41,7 @@
                     name         : "billing company name value"
                 }
             },
-            BankManager,
+            PaymentAdd,
             UserManager;
 
         beforeEach(function () {
@@ -51,10 +51,10 @@
             module("app.html");
 
             // mock dependencies
-            BankManager = jasmine.createSpyObj("BankManager", ["fetchActiveBanks"]);
+            PaymentAdd = jasmine.createSpyObj("PaymentAdd", ["getOrCreatePaymentAdd"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             module(function($provide) {
-                $provide.value("BankManager", BankManager);
+                $provide.value("PaymentAdd", PaymentAdd);
                 $provide.value("UserManager", UserManager);
             });
 
@@ -97,20 +97,20 @@
 
             describe("when navigated to", function () {
 
-                var fetchActiveBanksDeferred;
+                var getOrFetchPaymentAddDeferred;
 
                 beforeEach(function () {
-                    fetchActiveBanksDeferred = $q.defer();
+                    getOrFetchPaymentAddDeferred = $q.defer();
                     UserManager.getUser.and.returnValue(mockUser);
-                    BankManager.fetchActiveBanks.and.returnValue(fetchActiveBanksDeferred.promise);
+                    PaymentAdd.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
 
                     $state.go(stateName);
-                    fetchActiveBanksDeferred.resolve(mockActiveBanks);
+                    getOrFetchPaymentAddDeferred.resolve(mockActiveBanks);
                     $rootScope.$digest();
                 });
 
-                it("should call BankManager.fetchActiveBanks with the correct account id", function () {
-                    expect(BankManager.fetchActiveBanks).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                it("should call PaymentAdd.getOrCreatePaymentAdd", function () {
+                    expect(PaymentAdd.getOrCreatePaymentAdd).toHaveBeenCalledWith();
                 });
 
                 it("should transition successfully", function () {

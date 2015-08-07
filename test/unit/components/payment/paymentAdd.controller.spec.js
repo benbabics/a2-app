@@ -5,23 +5,11 @@
         $scope,
         ctrl,
         InvoiceManager,
-        mockActiveBanks = [
-            {
-                id         : "Bank Id 1",
-                defaultBank: false,
-                name       : "Bank Name 1"
-            },
-            {
-                id         : "Bank Id 2",
-                defaultBank: true,
-                name       : "Bank Name 2"
-            },
-            {
-                id         : "Bank Id 3",
-                defaultBank: false,
-                name       : "Bank Name 3"
-            }
-        ],
+        mockPayment = {
+            amount     : "amount value",
+            bankAccount: "bank account value",
+            paymentDate: "payment date value"
+        },
         mockCurrentInvoiceSummary = {
             newField1         : "some value",
             newField2         : "some other value",
@@ -73,6 +61,10 @@
             // mock dependencies
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            module(function($provide) {
+                $provide.value("InvoiceManager", InvoiceManager);
+                $provide.value("UserManager", UserManager);
+            });
 
             inject(function ($controller, $rootScope, CommonService) {
 
@@ -83,19 +75,19 @@
 
                 ctrl = $controller("PaymentAddController", {
                     $scope        : $scope,
-                    activeBanks   : mockActiveBanks,
+                    payment       : mockPayment,
                     InvoiceManager: InvoiceManager,
                     UserManager   : UserManager
                 });
             });
+
+            InvoiceManager.getInvoiceSummary.and.returnValue(mockCurrentInvoiceSummary);
+            UserManager.getUser.and.returnValue(mockUser);
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
 
             beforeEach(function() {
-                InvoiceManager.getInvoiceSummary.and.returnValue(mockCurrentInvoiceSummary);
-                UserManager.getUser.and.returnValue(mockUser);
-
                 //setup an existing values to test them being modified
                 ctrl.hasAnyCards = null;
                 ctrl.globalError = "This is a previous error";
@@ -103,8 +95,8 @@
                 $scope.$broadcast("$ionicView.beforeEnter");
             });
 
-            it("should set the active banks", function () {
-                expect(ctrl.activeBanks).toEqual(mockActiveBanks);
+            it("should set the payment", function () {
+                expect(ctrl.payment).toEqual(mockPayment);
             });
 
             it("should set the billing company", function () {
@@ -113,20 +105,6 @@
 
             it("should set the invoice summary", function () {
                 expect(ctrl.invoiceSummary).toEqual(mockCurrentInvoiceSummary);
-            });
-
-            it("should set the default payment amount", function () {
-                expect(ctrl.payment.amount).toEqual(mockCurrentInvoiceSummary.minimumPaymentDue);
-            });
-
-            it("should set the default bank", function () {
-                expect(ctrl.payment.bankAccount).toEqual(_.find(mockActiveBanks, "defaultBank", true).name);
-            });
-
-            it("should set the default payment date", function () {
-                // TODO - This seems to be working but is likely fragile. Will be changed once
-                // the page becomes a form so not going to worry about it for now
-                expect(ctrl.payment.paymentDate).toEqual(new Date());
             });
 
         });

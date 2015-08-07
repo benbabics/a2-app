@@ -9,6 +9,7 @@ var TestUtils = (function () {
             getRandomBank                    : getRandomBank,
             getRandomNumber                  : getRandomNumber,
             getRandomPayment                 : getRandomPayment,
+            getRandomPaymentAdd              : getRandomPaymentAdd,
             getRandomStringThatIsAlphaNumeric: getRandomStringThatIsAlphaNumeric
         };
 
@@ -47,6 +48,16 @@ var TestUtils = (function () {
         randomPayment.restangularized = true;
 
         return randomPayment;
+    }
+
+    function getRandomPaymentAdd(PaymentAddModel, BankModel) {
+        var randomPaymentAdd = new PaymentAddModel();
+
+        randomPaymentAdd.paymentDate = getRandomNumber(13);
+        randomPaymentAdd.amount = getRandomNumber(5);
+        randomPaymentAdd.bankAccount = getRandomBank(BankModel).name;
+
+        return randomPaymentAdd;
     }
 
     function getRandomStringThatIsAlphaNumeric(length) {
