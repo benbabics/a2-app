@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AuthenticationManager(FormEncoder, AuthenticationResource, CommonService, Logger) {
+    function AuthenticationManager($rootScope, FormEncoder, AuthenticationResource, CommonService, Logger) {
 
         // Private members
         var _ = CommonService._,
@@ -119,6 +119,8 @@
 
         function logOut() {
             oauth = null;
+
+            $rootScope.$broadcast("userLoggedOut");
         }
 
         function setToken(token) {
