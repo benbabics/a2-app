@@ -35,20 +35,21 @@
         </div>
         <div class="item item-wrap arrow-align">
             <p class="padding-left padding-right">
+                <span id="paymentDateLabel" class="block_align">{{vm.config.paymentDate}}</span>
+                <span id="paymentDate" class="content_align">{{vm.payment.paymentDate | amDateFormat:"M/D/YYYY"}}
+                    <span class="button button-icon icon ion-ios-arrow-forward"></span>
+                </span>
+            </p>
+        </div>
+        <div class="item item-wrap arrow-align">
+            <p class="padding-left padding-right">
                 <span id="bankAccountLabel" class="block_align">{{vm.config.bankAccount}}</span>
                 <span id="bankAccount" class="content_align">{{vm.payment.bankAccount}}
                      <span class="button button-icon icon ion-ios-arrow-forward"></span>
                 </span>
             </p>
         </div>
-        <div class="item item-wrap arrow-align">
-            <p class="padding-left padding-right">
-                <span id="paymentDateLabel" class="block_align">{{vm.config.paymentDate}}</span>
-                <span id="paymentDate" class="content_align">{{vm.payment.paymentDate | amDateFormat:"M/D/YYYY"}}
-                    <span class="button button-icon icon ion-ios-arrow-forward"></span>
-                </span>
-            </p>
-        </div> <br>
+        <br>
         <div class="padding align_center">
             <button id="makePaymentButton" class="button button-block button-submit button-width">{{vm.config.submitButton}}</button>
         </div>
