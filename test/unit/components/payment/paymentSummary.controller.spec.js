@@ -2,6 +2,7 @@
     "use strict";
 
     var _,
+        $ionicHistory,
         $scope,
         ctrl,
         mockPayment = {
@@ -27,6 +28,9 @@
                 });
             });
 
+            // mock dependencies
+            $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
+
             inject(function ($controller, $rootScope, CommonService) {
 
                 _ = CommonService._;
@@ -35,8 +39,9 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("PaymentSummaryController", {
-                    $scope        : $scope,
-                    payment       : mockPayment
+                    $ionicHistory: $ionicHistory,
+                    $scope       : $scope,
+                    payment      : mockPayment
                 });
 
             });
@@ -55,6 +60,17 @@
 
         });
 
+        describe("has a goBack function that", function () {
+
+            beforeEach(function () {
+                ctrl.goBack();
+            });
+
+            it("should call $ionicHistory.goBack", function () {
+                expect($ionicHistory.goBack).toHaveBeenCalledWith();
+            });
+
+        });
     });
 
 }());
