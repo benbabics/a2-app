@@ -4,6 +4,8 @@
     var _,
         $scope,
         ctrl,
+        BankManager,
+        BankModel,
         InvoiceManager,
         mockPayment = {
             amount     : "amount value",
@@ -59,16 +61,19 @@
             });
 
             // mock dependencies
+            BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             module(function($provide) {
+                $provide.value("BankManager", BankManager);
                 $provide.value("InvoiceManager", InvoiceManager);
                 $provide.value("UserManager", UserManager);
             });
 
-            inject(function ($controller, $rootScope, CommonService) {
+            inject(function ($controller, $rootScope, _BankModel_, CommonService) {
 
                 _ = CommonService._;
+                BankModel = _BankModel_;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
@@ -105,6 +110,63 @@
 
             it("should set the invoice summary", function () {
                 expect(ctrl.invoiceSummary).toEqual(mockCurrentInvoiceSummary);
+            });
+
+            describe("when there are NOT any active banks", function () {
+
+                beforeEach(function() {
+                    BankManager.getActiveBanks.and.returnValue(null);
+
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
+
+                it("should set the hasMultipleBanks flag", function () {
+                    expect(ctrl.hasMultipleBanks).toBeFalsy();
+                });
+
+            });
+
+            describe("when there is a single active bank", function () {
+
+                beforeEach(function() {
+                    var bankModel1,
+                        mockBankCollection = {};
+
+                    bankModel1 = TestUtils.getRandomBank(BankModel);
+                    mockBankCollection[bankModel1.id] = bankModel1;
+
+                    BankManager.getActiveBanks.and.returnValue(mockBankCollection);
+
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
+
+                it("should set the hasMultipleBanks flag", function () {
+                    expect(ctrl.hasMultipleBanks).toBeFalsy();
+                });
+
+            });
+
+            describe("when there are multiple active banks", function () {
+
+                beforeEach(function() {
+                    var bankModel1,
+                        bankModel2,
+                        mockBankCollection = {};
+
+                    bankModel1 = TestUtils.getRandomBank(BankModel);
+                    bankModel2 = TestUtils.getRandomBank(BankModel);
+                    mockBankCollection[bankModel1.id] = bankModel1;
+                    mockBankCollection[bankModel2.id] = bankModel2;
+
+                    BankManager.getActiveBanks.and.returnValue(mockBankCollection);
+
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
+
+                it("should set the hasMultipleBanks flag", function () {
+                    expect(ctrl.hasMultipleBanks).toBeTruthy();
+                });
+
             });
 
         });

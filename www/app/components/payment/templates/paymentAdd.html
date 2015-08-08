@@ -45,7 +45,7 @@
             <p class="padding-left padding-right">
                 <span id="bankAccountLabel" class="block_align">{{vm.config.bankAccount}}</span>
                 <span id="bankAccount" class="content_align">{{vm.payment.bankAccount}}
-                     <span class="button button-icon icon ion-ios-arrow-forward"></span>
+                     <span class="button button-icon icon ion-ios-arrow-forward" ng-if="vm.hasMultipleBanks"></span>
                 </span>
             </p>
         </div>
