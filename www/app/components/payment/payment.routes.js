@@ -30,6 +30,27 @@
                 }
             }
         });
+
+        $stateProvider.state("payment.summary", {
+            url: "/summary",
+            cache: false,
+            views: {
+                "payment-view": {
+                    templateUrl: "app/components/payment/templates/paymentSummary.html",
+                    controller: "PaymentSummaryController as vm",
+                    resolve    : {
+                        payment: function (CommonService, PaymentAdd) {
+                            CommonService.loadingBegin();
+
+                            return PaymentAdd.getOrCreatePaymentAdd()
+                                .finally(function() {
+                                    CommonService.loadingComplete();
+                                });
+                        }
+                    }
+                }
+            }
+        });
     }
 
     angular.module("app.components.payment")

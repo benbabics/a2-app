@@ -51,7 +51,9 @@
         </div>
         <br>
         <div class="padding align_center">
-            <button id="makePaymentButton" class="button button-block button-submit button-width">{{vm.config.submitButton}}</button>
+            <button id="makePaymentButton"
+                    class="button button-block button-submit button-width"
+                    ui-sref="payment.summary">{{vm.config.submitButton}}</button>
         </div>
     </ion-content>
 </ion-view>

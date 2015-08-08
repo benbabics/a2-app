@@ -1,29 +1,29 @@
-<ion-view view-title="Make Payment">
+<ion-view view-title="{{vm.config.title}}" hide-nav-bar="true">
     <ion-content>
-        <div class="card card-warning padding">This amount is less than the minimum payment.</div>
-        <p class="padding body-text">Payments received after 3.30 pm Eastern Time may not be posted to your account until the next business day.</p>
-        <p class="padding body-text">Scheduled payments will be processes on the date selected. Payments schedules for weekends/holidays will be posted the next business day.</p>
+        <!--<div class="card card-warning padding">This amount is less than the minimum payment.</div>-->
+        <p class="padding body-text">{{vm.config.afternoonWarning}}</p>
+        <p class="padding body-text">{{vm.config.weekendHolidayWarning}}</p>
 
         <div>
             <p class="padding divider">
-                <span id="amountLable" class="block_align black">Amount</span>
-                <span id="amount" class="content_align black">$300.00</span>
+                <span id="paymentAmountLabel" class="block_align black">{{vm.config.amount}}</span>
+                <span id="paymentAmount" class="content_align black">{{vm.payment.amount | currency}}</span>
             </p>
 
             <p class="padding divider">
-                <span id="dateLabel" class="block_align black">Date</span>
-                <span id="currentDate" class="content_align black">08/06/2015</span>
+                <span id="paymentDateLabel" class="block_align black">{{vm.config.paymentDate}}</span>
+                <span id="paymentDate" class="content_align black">{{vm.payment.paymentDate | amDateFormat:"M/D/YYYY"}}</span>
             </p>
 
             <p class="padding divider">
-                <span id="fromAccountLabel" class="block_align black">From Account</span>
-                <span id="accountType" class="content_align black">Checking 7434</span>
+                <span id="bankAccountLabel" class="block_align black">{{vm.config.bankAccount}}</span>
+                <span id="bankAccount" class="content_align black">{{vm.payment.bankAccount}}</span>
             </p>
         </div>
 
         <div class="padding align_center">
-            <button id="cancel" class="button button-block button-default">Cancel</button>
-            <button id="schedulePayment" class="button button-block button-submit">Schedule Payment</button>
+            <button id="cancel" class="button button-block button-default">{{vm.config.cancelButton}}</button>
+            <button id="schedulePayment" class="button button-block button-submit">{{vm.config.submitButton}}</button>
         </div>
     </ion-content>
 </ion-view>

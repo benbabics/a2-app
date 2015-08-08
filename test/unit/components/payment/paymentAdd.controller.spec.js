@@ -95,7 +95,6 @@
             beforeEach(function() {
                 //setup an existing values to test them being modified
                 ctrl.hasAnyCards = null;
-                ctrl.globalError = "This is a previous error";
 
                 $scope.$broadcast("$ionicView.beforeEnter");
             });
