@@ -78,6 +78,8 @@
             "submitButton": "Schedule Payment"
         },
         "WARNINGS": {
+            "PAYMENT_AMOUNT_LESS_THAN_MINIMUM": "This amount is less than the minimum payment.",
+            "PAYMENT_DATE_PAST_DUE_DATE": "The date selected for payment is past the due date."
         }
     };
 

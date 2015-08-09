@@ -1,6 +1,12 @@
 <ion-view view-title="{{vm.config.title}}" hide-nav-bar="true">
     <ion-content>
-        <!--<div class="card card-warning padding">This amount is less than the minimum payment.</div>-->
+        <div class="card card-warning padding"
+             ng-if="vm.warnings.length > 0">
+            <div ng-repeat="warning in vm.warnings">
+                {{warning}}
+            </div>
+        </div>
+
         <p class="padding body-text">{{vm.config.afternoonWarning}}</p>
         <p class="padding body-text">{{vm.config.weekendHolidayWarning}}</p>
 

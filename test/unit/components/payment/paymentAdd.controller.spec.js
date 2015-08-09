@@ -13,9 +13,6 @@
             paymentDate: "payment date value"
         },
         mockCurrentInvoiceSummary = {
-            newField1         : "some value",
-            newField2         : "some other value",
-            newField3         : "yet another value",
             accountNumber     : "account number value",
             availableCredit   : "available credit value",
             closingDate       : "closing date value",
