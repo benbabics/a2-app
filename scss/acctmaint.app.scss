@@ -149,3 +149,19 @@ $user-login-gradient-bottom: #414141;
     }
   }
 }
+
+/**----------------------------------------------------------
+ Warning Messaging
+ ---------------------------------------------------------**/
+.card.card-warning {
+  background-color: $warning-message-fill;
+  color: $warning-message-color;
+  border: 1px solid $warning-message-color;
+  @include box-shadow(none);
+
+  .item-divider {
+    background-color: $warning-message-fill;
+    color: $warning-message-color;
+    border: none;
+  }
+}
