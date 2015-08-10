@@ -168,11 +168,24 @@ $menu-button-line-height: ($button-large-icon-size + $button-small-font-size) / 
 }
 
 .platform-android .icon-alert {
-  @extend .ion-android-alert
+  @extend .ion-android-alert;
 }
 
 .platform-ios .icon-alert {
   @extend .ion-alert-circled;
+}
+
+/* Back Icon - per platform */
+.icon-back {
+  @extend .ion-android-arrow-back; /* default icon - neither Android nor iOS */
+}
+
+.platform-android .icon-back {
+  @extend .ion-android-arrow-back;
+}
+
+.platform-ios .icon-back {
+  @extend .ion-ios-arrow-back;
 }
 
 /**-----------------------------------------------------------
@@ -319,6 +332,10 @@ $numeric-keypad-height: ($button-height + 5px) * $numeric-keypad-rows;
 $numeric-keypad-button-border: 1px solid #aaa;
 $numeric-keypad-button-voffset: 5px;
 $numeric-keypad-animation: all linear 0.15s;
+
+.scroll-content.has-numeric-keypad {
+  height: calc(100% - #{$numeric-keypad-height});
+}
 
 .numeric-input-field {
   @extend input;

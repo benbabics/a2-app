@@ -15,7 +15,7 @@
      */
 
     /* @ngInject */
-    function wexNumericInputField(CommonService, $compile) {
+    function wexNumericInputField(CommonService, $compile, $ionicScrollDelegate) {
         var KEY_NUMERIC = "numeric",
             KEY_DECIMAL = "decimal",
             KEY_DELETE = "delete",
@@ -25,6 +25,7 @@
                 link: link,
                 scope: {
                     allowDecimal: "&?",
+                    allowKeypadToggle: "&?",
                     model: "=ngModel"
                 }
             },
@@ -38,7 +39,9 @@
             directiveElem,
             keypadElem,
             modelDisplayElem,
-            modelElem;
+            modelElem,
+            view,
+            viewContent;
 
 
         return directive;
@@ -68,16 +71,36 @@
             }
         }
 
-        function showKeypad(show) {
-            var self = this;
+        function showKeypad(show, apply) {
+            apply = _.isUndefined(apply) ? true : apply;
 
-            self.$apply(function () {
-                self.keypadVisible = show;
-            });
+            var self = this,
+                showFunc = function () {
+                    self.keypadVisible = show;
+
+                    if (show) {
+                        viewContent.addClass("has-numeric-keypad");
+                    }
+                    else {
+                        viewContent.removeClass("has-numeric-keypad");
+                    }
+
+                    //recalculate the scroll content area
+                    $ionicScrollDelegate.resize();
+                };
+
+            if (apply) {
+                self.$apply(showFunc);
+            }
+            else {
+                showFunc();
+            }
         }
 
         function toggleKeypad() {
-            this.showKeypad(!this.keypadVisible);
+            if (this.allowKeypadToggle()) {
+                this.showKeypad(!this.keypadVisible);
+            }
         }
 
         function onKeyPress(value) {
@@ -112,11 +135,13 @@
         }
 
         function link(scope, elem, attrs) {
-            var activeViewContent = CommonService.getViewContent();
-
             //private members:
             //the directive's element
             directiveElem = elem;
+            //the active view element
+            view = CommonService.getFocusedView();
+            //the active content element
+            viewContent = CommonService.getViewContent(view);
             //the element that contains the keypad
             keypadElem = $compile(
                 "<div ng-include=\"'app/shared/widgets/templates/numericInputField/numericKeypad.html'\"></div>"
@@ -130,9 +155,15 @@
             scope.keyMap = keyMap;
             scope.keypadVisible = false;
             //whether decimals are allowed (defaults to true)
-            scope.allowDecimal = _.isUndefined(scope.allowDecimal()) ? _.constant(true) : scope.allowDecimal;
+            scope.allowDecimal = _.isUndefined(scope.allowDecimal()) ?
+                _.constant(true) :
+                scope.allowDecimal;
+            //whether the keypad can be toggled (or conversely is always shown) (defaults to true)
+            scope.allowKeypadToggle = _.isUndefined(scope.allowKeypadToggle()) ?
+                _.constant(true) :
+                scope.allowKeypadToggle;
             scope.keyIsDisabled = _.bind(keyIsDisabled, scope, _);
-            scope.showKeypad = _.bind(showKeypad, scope, _);
+            scope.showKeypad = _.bind(showKeypad, scope, _, _);
             scope.toggleKeypad = _.bind(toggleKeypad, scope);
             scope.onKeyPress = _.bind(onKeyPress, scope, _);
             scope.removeEventListeners = _.bind(removeEventListeners, scope);
@@ -146,13 +177,16 @@
             scope.$on("$destroy", _.bind(keypadElem.remove, keypadElem));
             scope.$on("$destroy", scope.removeEventListeners);
 
-            //add the keypad element to the active view content
-            if (activeViewContent) {
-                activeViewContent.append(keypadElem);
+            //add the keypad element to the active view
+            if (view) {
+                view.append(keypadElem);
             }
 
             //add the model element to the model display element
             modelDisplayElem.append(modelElem);
+
+            //set the default keypad visibility state (based on whether or not keypad toggling is enabled)
+            scope.showKeypad(!scope.allowKeypadToggle(), false);
         }
     }
 

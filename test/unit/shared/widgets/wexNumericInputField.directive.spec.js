@@ -11,6 +11,7 @@
             scope,
             directive,
             isolateScope,
+            view,
             viewContent;
 
         beforeEach(function () {
@@ -23,8 +24,12 @@
 
                 _ = CommonService._;
 
+                view = $compile("<ion-view></ion-view>")($rootScope);
                 viewContent = $compile("<ion-content></ion-content>")($rootScope);
 
+                view.append(viewContent);
+
+                spyOn(CommonService, "getFocusedView").and.returnValue(view);
                 spyOn(CommonService, "getViewContent").and.returnValue(viewContent);
                 spyOn(angular.element.prototype, "on").and.callThrough();
                 spyOn(window, "addEventListener").and.callThrough();
@@ -41,6 +46,10 @@
             expect(isolateScope.allowDecimal()).toBeTruthy();
         });
 
+        it("should allow keypad toggling by default", function () {
+            expect(isolateScope.allowKeypadToggle()).toBeTruthy();
+        });
+
         //TODO figure out a better way to test this
         it("should set the model display element to the directive's element by default", function () {
             //a child element containing the model should be added
@@ -49,7 +58,7 @@
 
         //TODO jasmine turns ng-include elements into comments. Figure out why so that this can be tested
         xit("should add a numeric keypad to the active view content", function () {
-            expect(viewContent[0].querySelector(".numeric-keypad")).not.toEqual(null);
+            expect(view[0].querySelector(".numeric-keypad")).not.toEqual(null);
         });
 
         it("should set a click handler on the directive element", function () {
@@ -60,10 +69,12 @@
             expect(window.addEventListener).toHaveBeenCalledWith("native.keyboardshow", isolateScope.closeKeypad);
         });
 
-        describe("when decimals the allow-decimal attribute is set to true", function () {
+        describe("when the allow-decimal attribute is set to true", function () {
 
             beforeEach(function () {
-                directive = createDirective(true);
+                directive = createDirective({
+                    allowDecimal: true
+                });
                 isolateScope = directive.isolateScope();
             });
 
@@ -72,10 +83,12 @@
             });
         });
 
-        describe("when decimals the allow-decimal attribute is set to false", function () {
+        describe("when the allow-decimal attribute is set to false", function () {
 
             beforeEach(function () {
-                directive = createDirective(false);
+                directive = createDirective({
+                    allowDecimal: false
+                });
                 isolateScope = directive.isolateScope();
             });
 
@@ -84,10 +97,40 @@
             });
         });
 
+        describe("when the allow-keypad-toggle attribute is set to true", function () {
+
+            beforeEach(function () {
+                directive = createDirective({
+                    allowKeypadToggle: true
+                });
+                isolateScope = directive.isolateScope();
+            });
+
+            it("should allow keypad toggling", function () {
+                expect(isolateScope.allowKeypadToggle()).toBeTruthy();
+            });
+        });
+
+        describe("when the allow-keypad-toggle attribute is set to false", function () {
+
+            beforeEach(function () {
+                directive = createDirective({
+                    allowKeypadToggle: false
+                });
+                isolateScope = directive.isolateScope();
+            });
+
+            it("should NOT allow keypad toggling", function () {
+                expect(isolateScope.allowKeypadToggle()).toBeFalsy();
+            });
+        });
+
         describe("when the model should be shown on a nested element", function () {
 
             beforeEach(function () {
-                directive = createDirective(undefined, true);
+                directive = createDirective({
+                    nestedModelDisplayElem: true
+                });
                 isolateScope = directive.isolateScope();
             });
 
@@ -103,7 +146,9 @@
         describe("when the model should NOT be shown on a nested element", function () {
 
             beforeEach(function () {
-                directive = createDirective(undefined, false);
+                directive = createDirective({
+                    nestedModelDisplayElem: false
+                });
                 isolateScope = directive.isolateScope();
             });
 
@@ -188,6 +233,10 @@
                 it("should set keypadVisible to true", function () {
                     expect(isolateScope.keypadVisible).toBeTruthy();
                 });
+
+                it("should add the 'has-numeric-keypad' class to the content element", function () {
+                    expect(viewContent.hasClass("has-numeric-keypad")).toBeTruthy();
+                });
             });
 
             describe("when setting show to false", function () {
@@ -200,36 +249,82 @@
                 it("should set keypadVisible to false", function () {
                     expect(isolateScope.keypadVisible).toBeFalsy();
                 });
+
+                it("should remove the 'has-numeric-keypad' class from the content element", function () {
+                    expect(viewContent.hasClass("has-numeric-keypad")).toBeFalsy();
+                });
             });
         });
 
         describe("has a toggleKeypad function that", function () {
 
-            describe("when keypadVisible is true", function () {
+            describe("when keypad toggling is allowed", function () {
 
                 beforeEach(function () {
-                    isolateScope.keypadVisible = true;
-
-                    isolateScope.toggleKeypad();
-                    isolateScope.$digest();
+                    spyOn(isolateScope, "allowKeypadToggle").and.returnValue(true);
                 });
 
-                it("should set keypadVisible to false", function () {
-                    expect(isolateScope.keypadVisible).toBeFalsy();
+                describe("when keypadVisible is true", function () {
+
+                    beforeEach(function () {
+                        isolateScope.keypadVisible = true;
+
+                        isolateScope.toggleKeypad();
+                        isolateScope.$digest();
+                    });
+
+                    it("should set keypadVisible to false", function () {
+                        expect(isolateScope.keypadVisible).toBeFalsy();
+                    });
+                });
+
+                describe("when keypadVisible is false", function () {
+
+                    beforeEach(function () {
+                        isolateScope.keypadVisible = false;
+
+                        isolateScope.toggleKeypad();
+                        isolateScope.$digest();
+                    });
+
+                    it("should set keypadVisible to true", function () {
+                        expect(isolateScope.keypadVisible).toBeTruthy();
+                    });
                 });
             });
 
-            describe("when keypadVisible is false", function () {
+            describe("when keypad toggling is NOT allowed", function () {
 
                 beforeEach(function () {
-                    isolateScope.keypadVisible = false;
-
-                    isolateScope.toggleKeypad();
-                    isolateScope.$digest();
+                    spyOn(isolateScope, "allowKeypadToggle").and.returnValue(false);
                 });
 
-                it("should set keypadVisible to true", function () {
-                    expect(isolateScope.keypadVisible).toBeTruthy();
+                describe("when keypadVisible is true", function () {
+
+                    beforeEach(function () {
+                        isolateScope.keypadVisible = true;
+
+                        isolateScope.toggleKeypad();
+                        isolateScope.$digest();
+                    });
+
+                    it("should NOT change keypadVisible", function () {
+                        expect(isolateScope.keypadVisible).toBeTruthy();
+                    });
+                });
+
+                describe("when keypadVisible is false", function () {
+
+                    beforeEach(function () {
+                        isolateScope.keypadVisible = false;
+
+                        isolateScope.toggleKeypad();
+                        isolateScope.$digest();
+                    });
+
+                    it("should NOT change keypadVisible", function () {
+                        expect(isolateScope.keypadVisible).toBeFalsy();
+                    });
                 });
             });
         });
@@ -313,13 +408,20 @@
             });
         });
 
-        function createDirective(allowDecimal, nestedModelDisplayElem) {
-            allowDecimal = _.isUndefined(allowDecimal) ? true : allowDecimal;
+        function createDirective(options) {
+            options = options || {};
+            options.allowDecimal = _.isUndefined(options.allowDecimal) ? true : options.allowDecimal;
+            options.allowKeypadToggle = _.isUndefined(options.allowKeypadToggle) ? true : options.allowKeypadToggle;
 
             var markup = [];
-            markup.push("<div ng-model='model' wex-numeric-input-field allow-decimal='" + allowDecimal + "'>");
 
-            if (nestedModelDisplayElem) {
+            markup.push("<div ng-model='model'");
+            markup.push(" wex-numeric-input-field");
+            markup.push(" allow-decimal='" + options.allowDecimal + "'");
+            markup.push(" allow-keypad-toggle='" + options.allowKeypadToggle + "'");
+            markup.push(">");
+
+            if (options.nestedModelDisplayElem) {
                 markup.push("<div data-display-model></div>");
             }
 

@@ -9,7 +9,8 @@
 
         // Private members
         var loadingIndicatorCount = 0,
-            alertPopup;
+            alertPopup,
+            focusedStateOrder = ["stage", "entering", "active"];
 
         // Revealed Public members
         var service = {
@@ -25,9 +26,9 @@
             "findViews"              : findViews,
             "findViewsMatching"      : findViewsMatching,
             "getActiveNavView"       : getActiveNavView,
-            "getFocusedView"         : getFocusedView,
-            "getViewContent"         : getViewContent,
             "getErrorMessage"        : getErrorMessage,
+            "getFocusedView": getFocusedView,
+            "getViewContent": getViewContent,
             "loadingBegin"           : loadingBegin,
             "loadingComplete"        : loadingComplete,
             "maskAccountNumber"      : maskAccountNumber,
@@ -117,14 +118,26 @@
          * @return {jqLite} An element that represents the view, or null if no view was found
          */
         function findViewByStatesInOrder(orderedStates, navView) {
-            for(var i = 0; i < orderedStates.length; ++i) {
-                var foundView = findViewByState(orderedStates[i], navView);
+            var matchingViews = findViewsMatching(orderedStates, false, navView),
+                foundView = null;
+
+            //loop through the states in order and return the first view that matches a given state
+            _.each(orderedStates, function (state) {
+                _.each(matchingViews, function (view) {
+
+                    if (view.attr("nav-view") === state) {
+                        foundView = view;
+
+                        return false;
+                    }
+                });
 
                 if(foundView) {
-                    return foundView;
+                    return false;
                 }
-            }
-            return null;
+            });
+
+            return foundView;
         }
 
         /**
@@ -233,7 +246,7 @@
          * @return {jqLite} An element that represents the view, or null if no view was found
          */
         function getFocusedView(navView) {
-            return findViewByStatesInOrder(["stage", "entering", "active"], navView);
+            return findViewByStatesInOrder(focusedStateOrder, navView);
         }
 
         /**
