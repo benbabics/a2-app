@@ -84,7 +84,7 @@
                 }
             },
             AuthenticationManager,
-            PaymentAdd,
+            Payment,
             CommonService,
             PaymentManager,
             UserManager;
@@ -105,14 +105,14 @@
 
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
-            PaymentAdd = jasmine.createSpyObj("PaymentAdd", ["getOrCreatePaymentAdd"]);
+            Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd"]);
             CommonService = jasmine.createSpyObj("CommonService", ["closeAlert", "displayAlert", "loadingBegin", "loadingComplete"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
             module(function($provide) {
                 $provide.value("AuthenticationManager", AuthenticationManager);
-                $provide.value("PaymentAdd", PaymentAdd);
+                $provide.value("Payment", Payment);
                 $provide.value("CommonService", CommonService);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
@@ -293,7 +293,7 @@
                             fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
 
                             getOrFetchPaymentAddDeferred = $q.defer();
-                            PaymentAdd.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
+                            Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
                             getOrFetchPaymentAddDeferred.resolve(activeBanks);
 
                             UserManager.getUser.and.returnValue(mockUser);
@@ -302,8 +302,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call PaymentAdd.getOrCreatePaymentAdd", function () {
-                            expect(PaymentAdd.getOrCreatePaymentAdd).toHaveBeenCalledWith();
+                        it("should call Payment.getOrCreatePaymentAdd", function () {
+                            expect(Payment.getOrCreatePaymentAdd).toHaveBeenCalledWith();
                         });
 
                         it("should call PaymentManager.fetchPaymentAddAvailability", function () {

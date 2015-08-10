@@ -4,16 +4,16 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function PaymentAdd($q, $rootScope, BankManager, CommonService, InvoiceManager, PaymentAddModel, UserManager) {
+    function Payment($q, $rootScope, BankManager, CommonService, InvoiceManager, PaymentModel, UserManager) {
         // Private members
         var _ = CommonService._,
-            paymentAdd = {};
+            payment = {};
 
         // Revealed Public members
         var service = {
-            getPaymentAdd        : getPaymentAdd,
+            getPayment           : getPayment,
             getOrCreatePaymentAdd: getOrCreatePaymentAdd,
-            setPaymentAdd        : setPaymentAdd
+            setPayment           : setPayment
         };
 
         activate();
@@ -26,48 +26,48 @@
         }
 
         function clearCachedValues() {
-            setPaymentAdd({});
+            setPayment({});
         }
 
-        function getPaymentAdd() {
-            return paymentAdd;
+        function getPayment() {
+            return payment;
         }
 
         function getOrCreatePaymentAdd() {
-            if (_.isEmpty(paymentAdd)) {
+            if (_.isEmpty(payment)) {
                 return initializePaymentAddDetails();
             }
 
             return $q(function(resolve, reject) {
-                resolve(paymentAdd);
+                resolve(payment);
             });
         }
 
         function initializePaymentAddDetails() {
             return BankManager.getDefaultBank(UserManager.getUser().billingCompany.accountId)
                 .then(function(defaultBank) {
-                    var paymentAdd = new PaymentAddModel();
+                    var paymentAdd = new PaymentModel();
 
                     paymentAdd.amount = InvoiceManager.getInvoiceSummary().minimumPaymentDue;
-                    paymentAdd.paymentDate = new Date();
+                    paymentAdd.scheduledDate = new Date();
                     if (_.isObject(defaultBank)) {
                         paymentAdd.bankAccount = defaultBank.name;
                     }
 
-                    setPaymentAdd(paymentAdd);
-                    return getPaymentAdd();
+                    setPayment(paymentAdd);
+                    return getPayment();
                 });
         }
 
         // Caution against using this as it replaces the object versus setting properties on it or extending it
         // suggested use for testing only
-        function setPaymentAdd(paymentAddInfo) {
-            paymentAdd = paymentAddInfo;
+        function setPayment(paymentInfo) {
+            payment = paymentInfo;
         }
 
     }
 
     angular
         .module("app.components.payment")
-        .factory("PaymentAdd", PaymentAdd);
+        .factory("Payment", Payment);
 })();

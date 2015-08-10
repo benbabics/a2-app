@@ -18,10 +18,10 @@
                     templateUrl: "app/components/payment/templates/paymentAdd.html",
                     controller: "PaymentAddController as vm",
                     resolve    : {
-                        payment: function (CommonService, PaymentAdd) {
+                        payment: function (CommonService, Payment) {
                             CommonService.loadingBegin();
 
-                            return PaymentAdd.getOrCreatePaymentAdd()
+                            return Payment.getOrCreatePaymentAdd()
                                 .finally(function() {
                                     CommonService.loadingComplete();
                                 });
@@ -39,10 +39,10 @@
                     templateUrl: "app/components/payment/templates/paymentSummary.html",
                     controller: "PaymentSummaryController as vm",
                     resolve    : {
-                        payment: function (CommonService, PaymentAdd) {
+                        payment: function (CommonService, Payment) {
                             CommonService.loadingBegin();
 
-                            return PaymentAdd.getOrCreatePaymentAdd()
+                            return Payment.getOrCreatePaymentAdd()
                                 .finally(function() {
                                     CommonService.loadingComplete();
                                 });

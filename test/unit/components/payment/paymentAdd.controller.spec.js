@@ -10,7 +10,7 @@
         mockPayment = {
             amount     : "amount value",
             bankAccount: "bank account value",
-            paymentDate: "payment date value"
+            scheduledDate: "payment date value"
         },
         mockCurrentInvoiceSummary = {
             accountNumber     : "account number value",

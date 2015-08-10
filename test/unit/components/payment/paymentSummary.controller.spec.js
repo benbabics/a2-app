@@ -17,11 +17,12 @@
             paymentDueDate    : "2015-05-26"
         },
         mockPayment = {
-            amount     : 150.00,
-            bankAccount: "bank account value",
-            paymentDate: "2015-05-26"
+            amount       : 150.00,
+            bankAccount  : "bank account value",
+            scheduledDate: "2015-05-26"
         },
-        InvoiceManager;
+        InvoiceManager,
+        Payment;
 
     describe("A Payment Summary Controller", function () {
 
@@ -43,6 +44,7 @@
             // mock dependencies
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
+            Payment = jasmine.createSpyObj("Payment", ["getPayment"]);
 
             inject(function ($controller, $rootScope, CommonService) {
 
@@ -54,13 +56,14 @@
                 ctrl = $controller("PaymentSummaryController", {
                     $ionicHistory : $ionicHistory,
                     $scope        : $scope,
-                    payment       : mockPayment,
-                    InvoiceManager: InvoiceManager
+                    InvoiceManager: InvoiceManager,
+                    Payment       : Payment
                 });
 
             });
 
             InvoiceManager.getInvoiceSummary.and.returnValue(mockCurrentInvoiceSummary);
+            Payment.getPayment.and.returnValue(mockPayment);
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -75,7 +78,7 @@
 
                 beforeEach(function() {
                     mockCurrentInvoiceSummary.minimumPaymentDue = mockPayment.amount;
-                    mockCurrentInvoiceSummary.paymentDueDate = mockPayment.paymentDate;
+                    mockCurrentInvoiceSummary.paymentDueDate = mockPayment.scheduledDate;
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -105,7 +108,7 @@
 
                 beforeEach(function() {
                     mockCurrentInvoiceSummary.minimumPaymentDue = mockPayment.amount + 0.01;
-                    mockCurrentInvoiceSummary.paymentDueDate = mockPayment.paymentDate;
+                    mockCurrentInvoiceSummary.paymentDueDate = mockPayment.scheduledDate;
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });

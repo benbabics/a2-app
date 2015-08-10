@@ -8,8 +8,8 @@
         BankManager,
         BankModel,
         InvoiceManager,
-        PaymentAdd,
-        PaymentAddModel,
+        Payment,
+        PaymentModel,
         UserManager,
         mockCurrentInvoiceSummary = {
             accountNumber     : "account number value",
@@ -68,12 +68,12 @@
                 $provide.value("UserManager", UserManager);
             });
 
-            inject(function (_$q_, _$rootScope_, globals, _BankModel_, _PaymentAdd_, _PaymentAddModel_) {
+            inject(function (_$q_, _$rootScope_, globals, _BankModel_, _Payment_, _PaymentModel_) {
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 BankModel = _BankModel_;
-                PaymentAdd = _PaymentAdd_;
-                PaymentAddModel = _PaymentAddModel_;
+                Payment = _Payment_;
+                PaymentModel = _PaymentModel_;
             });
 
             // set up spies
@@ -91,26 +91,26 @@
         describe("has a userLoggedOut event handler function that", function () {
 
             beforeEach(function() {
-                var mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentAddModel, BankModel);
+                var mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
 
-                PaymentAdd.setPaymentAdd(mockPaymentAddModel);
+                Payment.setPayment(mockPaymentAddModel);
                 $rootScope.$broadcast("userLoggedOut");
             });
 
-            it("should reset the payment add model", function () {
-                expect(PaymentAdd.getPaymentAdd()).toEqual({});
+            it("should reset the payment model", function () {
+                expect(Payment.getPayment()).toEqual({});
             });
 
         });
 
-        describe("has a getPaymentAdd function that", function () {
+        describe("has a getPayment function that", function () {
 
-            it("should return the payment add availability passed to setPaymentAddAvailability", function () {
-                var mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentAddModel, BankModel),
+            it("should return the payment  passed to setPayment", function () {
+                var mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel),
                     result;
 
-                PaymentAdd.setPaymentAdd(mockPaymentAddModel);
-                result = PaymentAdd.getPaymentAdd();
+                Payment.setPayment(mockPaymentAddModel);
+                result = Payment.getPayment();
 
                 expect(result).toEqual(mockPaymentAddModel);
             }) ;
@@ -122,16 +122,16 @@
 
             var result;
 
-            describe("when payment add has already been created", function () {
+            describe("when payment has already been created", function () {
 
                 var mockPaymentAddModel;
 
                 beforeEach(function () {
-                    mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentAddModel, BankModel);
+                    mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
 
-                    PaymentAdd.setPaymentAdd(mockPaymentAddModel);
+                    Payment.setPayment(mockPaymentAddModel);
 
-                    PaymentAdd.getOrCreatePaymentAdd()
+                    Payment.getOrCreatePaymentAdd()
                         .then(function (response) {
                             result = response;
                         })
@@ -154,7 +154,7 @@
 
             });
 
-            describe("when payment add has NOT been created", function () {
+            describe("when payment has NOT been created", function () {
 
                 var mockBank,
                     mockCurrentDate;
@@ -165,12 +165,12 @@
                     //return a promise object and resolve it
                     BankManager.getDefaultBank.and.returnValue(getDefaultBankDeferred.promise);
 
-                    PaymentAdd.setPaymentAdd(null);
+                    Payment.setPayment(null);
 
                     mockCurrentDate = new Date();
                     jasmine.clock().mockDate(mockCurrentDate);
 
-                    PaymentAdd.getOrCreatePaymentAdd()
+                    Payment.getOrCreatePaymentAdd()
                         .then(function (response) { result = response; })
                         .catch(rejectHandler);
 
@@ -187,7 +187,7 @@
                 it("should return the correct result", function () {
                     expect(result.amount).toEqual(mockCurrentInvoiceSummary.minimumPaymentDue);
                     expect(result.bankAccount).toEqual(mockBank.name);
-                    expect(result.paymentDate).toEqual(mockCurrentDate);
+                    expect(result.scheduledDate).toEqual(mockCurrentDate);
                 });
 
                 it("should NOT reject", function () {
@@ -198,14 +198,14 @@
 
         });
 
-        describe("has a setPaymentAdd function that", function () {
+        describe("has a setPayment function that", function () {
 
-            it("should return the payment add availability passed to setPaymentAddAvailability", function () {
-                var mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentAddModel, BankModel),
+            it("should return the payment passed to setPayment", function () {
+                var mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel),
                     result;
 
-                PaymentAdd.setPaymentAdd(mockPaymentAddModel);
-                result = PaymentAdd.getPaymentAdd();
+                Payment.setPayment(mockPaymentAddModel);
+                result = Payment.getPayment();
 
                 expect(result).toEqual(mockPaymentAddModel);
             }) ;

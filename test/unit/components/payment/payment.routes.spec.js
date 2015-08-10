@@ -41,7 +41,7 @@
                     name         : "billing company name value"
                 }
             },
-            PaymentAdd,
+            Payment,
             UserManager;
 
         beforeEach(function () {
@@ -51,10 +51,10 @@
             module("app.html");
 
             // mock dependencies
-            PaymentAdd = jasmine.createSpyObj("PaymentAdd", ["getOrCreatePaymentAdd"]);
+            Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             module(function($provide) {
-                $provide.value("PaymentAdd", PaymentAdd);
+                $provide.value("Payment", Payment);
                 $provide.value("UserManager", UserManager);
             });
 
@@ -106,15 +106,15 @@
                 beforeEach(function () {
                     getOrFetchPaymentAddDeferred = $q.defer();
                     UserManager.getUser.and.returnValue(mockUser);
-                    PaymentAdd.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
+                    Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
 
                     $state.go(stateName);
                     getOrFetchPaymentAddDeferred.resolve(mockActiveBanks);
                     $rootScope.$digest();
                 });
 
-                it("should call PaymentAdd.getOrCreatePaymentAdd", function () {
-                    expect(PaymentAdd.getOrCreatePaymentAdd).toHaveBeenCalledWith();
+                it("should call Payment.getOrCreatePaymentAdd", function () {
+                    expect(Payment.getOrCreatePaymentAdd).toHaveBeenCalledWith();
                 });
 
                 it("should transition successfully", function () {
@@ -166,15 +166,15 @@
                 beforeEach(function () {
                     getOrFetchPaymentAddDeferred = $q.defer();
                     UserManager.getUser.and.returnValue(mockUser);
-                    PaymentAdd.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
+                    Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
 
                     $state.go(stateName);
                     getOrFetchPaymentAddDeferred.resolve(mockActiveBanks);
                     $rootScope.$digest();
                 });
 
-                it("should call PaymentAdd.getOrCreatePaymentAdd", function () {
-                    expect(PaymentAdd.getOrCreatePaymentAdd).toHaveBeenCalledWith();
+                it("should call Payment.getOrCreatePaymentAdd", function () {
+                    expect(Payment.getOrCreatePaymentAdd).toHaveBeenCalledWith();
                 });
 
                 it("should transition successfully", function () {

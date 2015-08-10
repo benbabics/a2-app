@@ -56,7 +56,7 @@
             "minimumPayment": "Minimum Payment",
             "amount": "Amount",
             "bankAccount": "From Account",
-            "paymentDate": "Date",
+            "scheduledDate": "Date",
             "submitButton": "Next"
         },
         "WARNINGS": {
@@ -73,7 +73,7 @@
             "weekendHolidayWarning": "Scheduled payments will be processed on the date selected. Payments scheduled for weekends/holidays will be posted the next business day.",
             "amount": "Amount",
             "bankAccount": "From Account",
-            "paymentDate": "Date",
+            "scheduledDate": "Date",
             "cancelButton": "Cancel",
             "submitButton": "Schedule Payment"
         },

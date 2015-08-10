@@ -21,8 +21,8 @@ var PaymentAddPage = (function () {
         this.paymentAmount       = element(by.id("paymentAmount"));
         this.bankAccountLabel    = element(by.id("bankAccountLabel"));
         this.bankAccount         = element(by.id("bankAccount"));
-        this.paymentDateLabel    = element(by.id("paymentDateLabel"));
-        this.paymentDate         = element(by.id("paymentDate"));
+        this.scheduledDateLabel  = element(by.id("scheduledDateLabel"));
+        this.scheduledDate       = element(by.id("scheduledDate"));
         this.submitButton        = element(by.id("makePaymentButton"));
     }
 
