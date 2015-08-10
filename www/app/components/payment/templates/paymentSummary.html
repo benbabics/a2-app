@@ -1,5 +1,9 @@
-<ion-view view-title="{{vm.config.title}}" hide-nav-bar="true">
+<ion-view hide-nav-bar="true">
     <ion-content>
+        <div class="bar bar-header bar-wex">
+            <h1 class="title">{{vm.config.title}}</h1>
+        </div>
+
         <div class="card card-warning padding"
              ng-if="vm.warnings.length > 0">
             <div ng-repeat="warning in vm.warnings">
