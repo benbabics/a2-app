@@ -41,6 +41,16 @@
                 $provide.value("globals", globals);
             });
 
+            // stub the routing and template loading
+            module(function ($urlRouterProvider) {
+                $urlRouterProvider.deferIntercept();
+            });
+
+            module(function ($provide) {
+                $provide.value("$ionicTemplateCache", function () {
+                });
+            });
+
             module("app.shared.network");
             module("app.shared.auth");
             module("app.shared.api");

@@ -32,8 +32,16 @@
         </div>
 
         <div class="padding align_center">
-            <button id="cancel" class="button button-block button-default" ng-click="vm.goBack()">{{vm.config.cancelButton}}</button>
-            <button id="schedulePayment" class="button button-block button-submit">{{vm.config.submitButton}}</button>
+            <button id="cancel"
+                    class="button button-block button-default"
+                    ng-click="vm.goBack()">
+                {{vm.config.cancelButton}}
+            </button>
+            <button id="schedulePayment"
+                    class="button button-block button-submit"
+                    ui-sref="payment.confirmation">
+                {{vm.config.submitButton}}
+            </button>
         </div>
     </ion-content>
 </ion-view>

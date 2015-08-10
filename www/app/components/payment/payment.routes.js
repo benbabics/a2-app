@@ -37,17 +37,18 @@
             views: {
                 "payment-view": {
                     templateUrl: "app/components/payment/templates/paymentSummary.html",
-                    controller: "PaymentSummaryController as vm",
-                    resolve    : {
-                        payment: function (CommonService, Payment) {
-                            CommonService.loadingBegin();
+                    controller: "PaymentSummaryController as vm"
+                }
+            }
+        });
 
-                            return Payment.getOrCreatePaymentAdd()
-                                .finally(function() {
-                                    CommonService.loadingComplete();
-                                });
-                        }
-                    }
+        $stateProvider.state("payment.confirmation", {
+            url: "/confirmation",
+            cache: false,
+            views: {
+                "payment-view": {
+                    templateUrl: "app/components/payment/templates/paymentConfirmation.html",
+                    controller: "PaymentConfirmationController as vm"
                 }
             }
         });

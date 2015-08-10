@@ -83,6 +83,17 @@
         }
     };
 
+    appGlobals.PAYMENT_CONFIRMATION = {
+        "CONFIG": {
+            "title": "Payment Confirmation",
+            "confirmationText": "Your payment has been scheduled.",
+            "amount": "Amount",
+            "bankAccount": "From Account",
+            "scheduledDate": "Date",
+            "activityButton": "Payment Activity"
+        }
+    };
+
     appGlobals.NAV_BAR = {
         "CONFIG": {
             "menuButtonText": "Menu"
@@ -97,7 +108,7 @@
                 "viewActivity": "View Activity",
                 "cards": "Cards",
                 "drivers": "Drivers",
-                "paymentHistory": "Payment History",
+                "paymentHistory": "Payment Activity",
                 "contactUs": "Contact Us",
                 "logOut": "Log Out"
             }

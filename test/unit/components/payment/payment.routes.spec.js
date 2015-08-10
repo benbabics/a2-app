@@ -159,28 +159,40 @@
                 expect($state.href(stateName)).toEqual("#/payment/summary");
             });
 
-            describe("when navigated to", function () {
+        });
 
-                var getOrFetchPaymentAddDeferred;
+        describe("has a payment.confirmation state that", function () {
+            var state,
+                stateName = "payment.confirmation";
 
-                beforeEach(function () {
-                    getOrFetchPaymentAddDeferred = $q.defer();
-                    UserManager.getUser.and.returnValue(mockUser);
-                    Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
 
-                    $state.go(stateName);
-                    getOrFetchPaymentAddDeferred.resolve(mockActiveBanks);
-                    $rootScope.$digest();
-                });
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
 
-                it("should call Payment.getOrCreatePaymentAdd", function () {
-                    expect(Payment.getOrCreatePaymentAdd).toHaveBeenCalledWith();
-                });
+            it("should not be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
 
-                it("should transition successfully", function () {
-                    expect($state.current.name).toBe(stateName);
-                });
+            it("should not be cache", function () {
+                expect(state.cache).toBeFalsy();
+            });
 
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/confirmation");
+            });
+
+            it("should define a payment-view", function () {
+                expect(state.views).toBeDefined();
+                expect(state.views["payment-view"]).toBeDefined();
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName)).toEqual("#/payment/confirmation");
             });
 
         });
