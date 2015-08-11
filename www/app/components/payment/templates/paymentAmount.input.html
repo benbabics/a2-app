@@ -22,6 +22,7 @@
         <div wex-numeric-input-field
              class="amount-input"
              ng-model="vm.amount"
+             formatters="['wexPaymentAmount', 'currency']"
              allow-decimal="false"
              allow-keypad-toggle="false"
              ng-click="vm.clearInput()">

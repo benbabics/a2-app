@@ -7,7 +7,9 @@ var TestUtils = (function () {
     var ALPHANUMERIC_CHARACTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
         TestUtils = {
             getRandomBank                    : getRandomBank,
+            getRandomInteger: getRandomInteger,
             getRandomNumber                  : getRandomNumber,
+            getRandomNumberWithLength: getRandomNumberWithLength,
             getRandomPayment                 : getRandomPayment,
             getRandomPaymentAdd              : getRandomPaymentAdd,
             getRandomStringThatIsAlphaNumeric: getRandomStringThatIsAlphaNumeric
@@ -20,7 +22,7 @@ var TestUtils = (function () {
     function getRandomBank(BankModel) {
         var randomBank = new BankModel();
 
-        randomBank.id = getRandomNumber(5);
+        randomBank.id = getRandomNumberWithLength(5);
         randomBank.defaultBank = getRandomBoolean();
         randomBank.name = getRandomStringThatIsAlphaNumeric(5);
         randomBank.restangularized = true;
@@ -32,16 +34,24 @@ var TestUtils = (function () {
         return Math.random() >= 0.5;
     }
 
-    function getRandomNumber(length) {
+    function getRandomInteger(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function getRandomNumber(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function getRandomNumberWithLength(length) {
         return (Math.random() + 1).toString().substr(2, length);
     }
 
     function getRandomPayment(PaymentModel, BankModel) {
         var randomPayment = new PaymentModel();
 
-        randomPayment.id = getRandomNumber(5);
-        randomPayment.scheduledDate = getRandomNumber(13);
-        randomPayment.amount = getRandomNumber(5);
+        randomPayment.id = getRandomNumberWithLength(5);
+        randomPayment.scheduledDate = getRandomNumberWithLength(13);
+        randomPayment.amount = getRandomNumberWithLength(5);
         randomPayment.bankAccount = getRandomBank(BankModel);
         randomPayment.status = getRandomStringThatIsAlphaNumeric(5);
         randomPayment.confirmationNumber = getRandomStringThatIsAlphaNumeric(5);
@@ -53,8 +63,8 @@ var TestUtils = (function () {
     function getRandomPaymentAdd(PaymentModel, BankModel) {
         var randomPaymentAdd = new PaymentModel();
 
-        randomPaymentAdd.scheduledDate = getRandomNumber(13);
-        randomPaymentAdd.amount = getRandomNumber(5);
+        randomPaymentAdd.scheduledDate = getRandomNumberWithLength(13);
+        randomPaymentAdd.amount = getRandomNumberWithLength(5);
         randomPaymentAdd.bankAccount = getRandomBank(BankModel).name;
 
         return randomPaymentAdd;
