@@ -3,34 +3,34 @@
 
     describe("A Bank Model Service", function () {
 
-        var _;
+        var _,
+            bank;
 
         beforeEach(function () {
             module("app.shared");
             module("app.components.bank");
 
-            inject(function (CommonService) {
+            inject(function (BankModel, CommonService) {
                 _ = CommonService._;
+                bank = new BankModel();
             });
         });
 
         describe("has a set function that", function () {
 
-            var bank,
-                mockBankResource = {
-                    newField1  : "some value",
-                    newField2  : "some other value",
-                    newField3  : "yet another value",
-                    id         : "bank id value",
-                    defaultBank: true,
-                    name       : "company name value"
+            var mockBankResource = {
+                    newField1     : "some value",
+                    newField2     : "some other value",
+                    newField3     : "yet another value",
+                    id            : "bank id value",
+                    defaultBank   : true,
+                    lastFourDigits: 1234,
+                    name          : "company name value"
                 },
                 bankModelKeys,
                 bankResourceKeys;
 
-            beforeEach(inject(function (BankModel) {
-                bank = new BankModel();
-
+            beforeEach(inject(function () {
                 // set all values to "default" to more easily detect any changes
                 for (var property in bank) {
                     if (_.has(bank, property)) {
@@ -77,6 +77,19 @@
                     expect(_.has(bank, key)).toBeTruthy();
                     expect(bank[key]).toEqual(mockBankResource[key]);
                 }
+            });
+
+        });
+
+        describe("has a getDisplayName function that", function () {
+
+            beforeEach(function () {
+                bank.name = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                bank.lastFourDigits = TestUtils.getRandomNumberWithLength(4);
+            });
+
+            it("should return the Bank Name + Last Four Digits", function () {
+                expect(bank.getDisplayName()).toEqual(bank.name + " " + bank.lastFourDigits);
             });
 
         });
