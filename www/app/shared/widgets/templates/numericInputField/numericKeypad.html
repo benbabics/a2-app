@@ -1,4 +1,4 @@
-<div class="numeric-keypad" ng-if="keypadVisible">
+<div class="numeric-keypad" ng-if="keypadVisible || !allowKeypadToggle()">
     <div class="row" ng-repeat="row in keyMap">
         <div class="col" ng-repeat="keyType in row">
             <button class="button button-full"
