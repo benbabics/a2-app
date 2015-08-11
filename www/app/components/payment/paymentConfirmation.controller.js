@@ -24,6 +24,9 @@
 
         function beforeEnter() {
             vm.payment = Payment.getPayment();
+
+            // Clear the payment from the service so that any new add/edit flows cannot use the existing payment
+            Payment.clearPayment();
         }
 
     }

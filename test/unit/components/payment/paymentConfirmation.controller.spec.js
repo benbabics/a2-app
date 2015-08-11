@@ -29,7 +29,7 @@
             });
 
             // mock dependencies
-            Payment = jasmine.createSpyObj("Payment", ["getPayment"]);
+            Payment = jasmine.createSpyObj("Payment", ["clearPayment", "getPayment"]);
 
             inject(function ($controller, $rootScope, CommonService) {
 
@@ -38,7 +38,7 @@
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
-                ctrl = $controller("PaymentSummaryController", {
+                ctrl = $controller("PaymentConfirmationController", {
                     $scope        : $scope,
                     Payment       : Payment
                 });
@@ -50,10 +50,16 @@
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
 
-            it("should set the payment", function () {
+            beforeEach(function () {
                 $scope.$broadcast("$ionicView.beforeEnter");
+            });
 
+            it("should set the payment", function () {
                 expect(ctrl.payment).toEqual(mockPayment);
+            });
+
+            it("should call Payment.clearPayment", function () {
+                expect(Payment.clearPayment).toHaveBeenCalledWith();
             });
 
         });
