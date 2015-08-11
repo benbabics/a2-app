@@ -42,7 +42,8 @@
                 }
             },
             Payment,
-            UserManager;
+            UserManager,
+            InvoiceManager;
 
         beforeEach(function () {
 
@@ -53,9 +54,11 @@
             // mock dependencies
             Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd", "getPayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             module(function($provide) {
                 $provide.value("Payment", Payment);
                 $provide.value("UserManager", UserManager);
+                $provide.value("InvoiceManager", InvoiceManager);
             });
 
             inject(function (_$q_, _$rootScope_, _$state_) {
@@ -266,6 +269,10 @@
 
                 it("should call Payment.getPayment", function () {
                     expect(Payment.getPayment).toHaveBeenCalledWith();
+                });
+
+                it("should call InvoiceManager.getInvoiceSummary", function () {
+                    expect(InvoiceManager.getInvoiceSummary).toHaveBeenCalledWith();
                 });
 
                 it("should transition successfully", function () {

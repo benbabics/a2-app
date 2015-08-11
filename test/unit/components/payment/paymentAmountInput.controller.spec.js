@@ -3,8 +3,35 @@
 
     var ctrl,
         scope,
+        CommonService,
+        $ionicHistory,
         mockPayment = {
-            amount: 123456.78
+            amount: TestUtils.getRandomNumber(1, 999)
+        },
+        mockInvoiceSumary = {
+            currentBalance: TestUtils.getRandomNumber(1000, 10000)
+        },
+        mockGlobals = {
+            PAYMENT_ADD: {
+                "INPUTS": {
+                    "AMOUNT": {
+                        "CONFIG": {
+                            "title": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "ERRORS": {
+                            "zeroPayment": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "paymentTooLarge": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    }
+                }
+            },
+
+            BUTTONS: {
+                "CONFIG": {
+                    "cancel": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "done": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                }
+            }
         };
 
     describe("A Payment Amount Input Controller", function () {
@@ -13,6 +40,10 @@
 
             module("app.shared");
             module("app.components");
+
+            module(function ($provide, sharedGlobals) {
+                $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
+            });
 
             // stub the routing and template loading
             module(function ($urlRouterProvider) {
@@ -24,6 +55,10 @@
                 });
             });
 
+            //mock dependencies:
+            CommonService = jasmine.createSpyObj("CommonService", ["displayAlert"]);
+            $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
+
             inject(function ($rootScope, $controller, $filter, globals) {
 
                 scope = $rootScope.$new();
@@ -31,8 +66,11 @@
                 ctrl = $controller("PaymentAmountInputController", {
                     $scope: scope,
                     $filter: $filter,
+                    $ionicHistory: $ionicHistory,
                     globals: globals,
-                    payment: mockPayment
+                    payment: mockPayment,
+                    invoiceSummary: mockInvoiceSumary,
+                    CommonService: CommonService
                 });
 
             });
@@ -50,16 +88,73 @@
         });
 
         describe("has a clearInput function that", function () {
-            var mockAmount = "500.00";
 
             beforeEach(function () {
-                ctrl.amount = mockAmount;
+                ctrl.amount = TestUtils.getRandomNumber(1, 500);
 
                 ctrl.clearInput();
             });
 
             it("should set the amount to 0", function () {
                 expect(ctrl.amount).toEqual(getDisplayAmount(0));
+            });
+        });
+
+        describe("has a done function that", function () {
+
+            describe("when the amount is zero", function () {
+
+                beforeEach(function () {
+                    ctrl.amount = getDisplayAmount(0);
+
+                    ctrl.done();
+                });
+
+                it("should show the expected error", function () {
+                    expect(CommonService.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
+                        content: mockGlobals.PAYMENT_ADD.INPUTS.AMOUNT.ERRORS.zeroPayment
+                    }));
+                });
+
+                it("should NOT go back to the previous page", function () {
+                    expect($ionicHistory.goBack).not.toHaveBeenCalled();
+                });
+            });
+
+            describe("when the amount is greater than the current balance", function () {
+
+                beforeEach(function () {
+                    ctrl.amount = getDisplayAmount(mockInvoiceSumary.currentBalance + 1);
+
+                    ctrl.done();
+                });
+
+                it("should show the expected error", function () {
+                    expect(CommonService.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
+                        content: mockGlobals.PAYMENT_ADD.INPUTS.AMOUNT.ERRORS.paymentTooLarge
+                    }));
+                });
+
+                it("should NOT go back to the previous page", function () {
+                    expect($ionicHistory.goBack).not.toHaveBeenCalled();
+                });
+            });
+
+            describe("when the amount is greater than 0 but less than the current balance", function () {
+
+                beforeEach(function () {
+                    ctrl.amount = getDisplayAmount(TestUtils.getRandomNumber(1, mockInvoiceSumary.currentBalance));
+
+                    ctrl.done();
+                });
+
+                it("should NOT show an error", function () {
+                    expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                });
+
+                it("should go back to the previous page", function () {
+                    expect($ionicHistory.goBack).toHaveBeenCalledWith();
+                });
             });
         });
     });

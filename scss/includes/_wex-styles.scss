@@ -392,3 +392,35 @@ $numeric-keypad-animation: all linear 0.15s;
 .numeric-keypad.ng-leave.ng-leave-active {
   height: 0;
 }
+
+/**--------------------------------
+  Alert Popup
+ ----------------------------------**/
+.wex-alert-popup {
+  .popup {
+    background-color: $warning-message-fill;
+    color: $warning-message-color;
+    border: 1px solid $warning-message-color;
+    @include box-shadow(none);
+
+    .popup-head {
+      border: none;
+    }
+
+    .popup-title {
+      color: inherit;
+      font-size: small;
+    }
+    .popup-body {
+      color: $warning-message-color;
+      border: none;
+    }
+    .popup-buttons .button {
+      margin-left: 27%;
+      margin-right: 27%;
+      background-color: $primary-button-color;
+      border: none;
+      color: $primary-button-font-color;
+    }
+  }
+}

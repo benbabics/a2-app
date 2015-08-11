@@ -68,6 +68,10 @@
                     resolve: {
                         payment: function (Payment) {
                             return Payment.getPayment();
+                        },
+
+                        invoiceSummary: function (InvoiceManager) {
+                            return InvoiceManager.getInvoiceSummary();
                         }
                     }
                 }

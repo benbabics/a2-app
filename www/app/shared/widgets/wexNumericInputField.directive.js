@@ -109,7 +109,7 @@
                 //backspace
                 case "\b":
                 {
-                    vm.model = vm.model.slice(0, -1);
+                    vm.model = String(vm.model).slice(0, -1);
                     break;
                 }
                 default:

@@ -63,6 +63,17 @@
             "BANK_ACCOUNTS_NOT_SETUP": "You must set up your financial institutions as your payment options online prior to scheduling a payment.",
             "DIRECT_DEBIT_SETUP": "Online payment is not currently available for this account. The account has set up an alternative method of payment, such as direct debit.",
             "PAYMENT_ALREADY_SCHEDULED": "A payment has been scheduled already."
+        },
+        "INPUTS": {
+            "AMOUNT": {
+                "CONFIG": {
+                    "title": "Amount"
+                },
+                "ERRORS": {
+                    "zeroPayment": "The amount entered cannot be \"0.00\".",
+                    "paymentTooLarge": "The amount entered cannot be greater than the Current Balance"
+                }
+            }
         }
     };
 
@@ -91,16 +102,6 @@
             "bankAccount": "From Account",
             "scheduledDate": "Date",
             "activityButton": "Payment Activity"
-        }
-    };
-
-    appGlobals.PAYMENT = {
-        "INPUTS": {
-            "AMOUNT": {
-                "CONFIG": {
-                    "title": "Amount"
-                }
-            }
         }
     };
 
