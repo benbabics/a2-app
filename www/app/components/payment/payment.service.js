@@ -11,6 +11,7 @@
 
         // Revealed Public members
         var service = {
+            clearPayment         : clearPayment,
             getPayment           : getPayment,
             getOrCreatePaymentAdd: getOrCreatePaymentAdd,
             setPayment           : setPayment
@@ -26,6 +27,10 @@
         }
 
         function clearCachedValues() {
+            clearPayment();
+        }
+
+        function clearPayment() {
             setPayment({});
         }
 

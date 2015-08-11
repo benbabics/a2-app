@@ -88,6 +88,21 @@
 
         });
 
+        describe("has a clearPayment function that", function () {
+
+            beforeEach(function() {
+                var mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
+
+                Payment.setPayment(mockPaymentAddModel);
+                Payment.clearPayment();
+            });
+
+            it("should reset the payment model", function () {
+                expect(Payment.getPayment()).toEqual({});
+            });
+
+        });
+
         describe("has a userLoggedOut event handler function that", function () {
 
             beforeEach(function() {
