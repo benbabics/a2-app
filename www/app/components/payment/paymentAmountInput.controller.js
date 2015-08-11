@@ -8,8 +8,15 @@
     function PaymentAmountInputController(globals) {
 
         var vm = this;
+        //public members:
         vm.config = angular.extend({}, globals.PAYMENT.INPUTS.AMOUNT.CONFIG, globals.BUTTONS.CONFIG);
         vm.amount = "";
+
+        vm.clearInput = clearInput;
+
+        function clearInput() {
+            vm.amount = "";
+        }
     }
 
     angular.module("app.components.payment")
