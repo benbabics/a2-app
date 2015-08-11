@@ -64,7 +64,12 @@
             views: {
                 "payment-view@payment": {
                     templateUrl: "app/components/payment/templates/paymentAmount.input.html",
-                    controller: "PaymentAmountInputController as vm"
+                    controller: "PaymentAmountInputController as vm",
+                    resolve: {
+                        payment: function (Payment) {
+                            return Payment.getPayment();
+                        }
+                    }
                 }
             }
         });

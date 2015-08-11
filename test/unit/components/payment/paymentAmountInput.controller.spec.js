@@ -1,7 +1,11 @@
 (function () {
     "use strict";
 
-    var ctrl;
+    var ctrl,
+        scope,
+        mockPayment = {
+            amount: 123456.78
+        };
 
     describe("A Payment Amount Input Controller", function () {
 
@@ -20,12 +24,28 @@
                 });
             });
 
-            inject(function ($controller, globals) {
+            inject(function ($rootScope, $controller, $filter, globals) {
+
+                scope = $rootScope.$new();
 
                 ctrl = $controller("PaymentAmountInputController", {
-                    globals: globals
+                    $scope: scope,
+                    $filter: $filter,
+                    globals: globals,
+                    payment: mockPayment
                 });
 
+            });
+        });
+
+        describe("has an $ionicView.beforeEnter event handler function that", function () {
+
+            beforeEach(function () {
+                scope.$broadcast("$ionicView.beforeEnter");
+            });
+
+            it("should set the amount to the display payment amount", function () {
+                expect(ctrl.amount).toEqual(getDisplayAmount(mockPayment.amount));
             });
         });
 
@@ -38,9 +58,13 @@
                 ctrl.clearInput();
             });
 
-            it("should clear the amount", function () {
-                expect(ctrl.amount).toEqual("");
+            it("should set the amount to 0", function () {
+                expect(ctrl.amount).toEqual(getDisplayAmount(0));
             });
         });
     });
+
+    function getDisplayAmount(value) {
+        return value * 100;
+    }
 }());

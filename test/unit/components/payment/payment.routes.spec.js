@@ -51,7 +51,7 @@
             module("app.html");
 
             // mock dependencies
-            Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd"]);
+            Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd", "getPayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             module(function($provide) {
                 $provide.value("Payment", Payment);
@@ -257,10 +257,20 @@
                 expect($state.href(stateName)).toEqual("#/payment/input/amount");
             });
 
-            it("should transition successfully", function () {
-                $state.go(stateName);
-                $rootScope.$digest();
-                expect($state.current.name).toBe(stateName);
+            describe("when navigated to", function () {
+
+                beforeEach(function () {
+                    $state.go(stateName);
+                    $rootScope.$digest();
+                });
+
+                it("should call Payment.getPayment", function () {
+                    expect(Payment.getPayment).toHaveBeenCalledWith();
+                });
+
+                it("should transition successfully", function () {
+                    expect($state.current.name).toBe(stateName);
+                });
             });
         });
     });
