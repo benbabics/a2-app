@@ -50,9 +50,7 @@
 
                     paymentAdd.amount = InvoiceManager.getInvoiceSummary().minimumPaymentDue;
                     paymentAdd.scheduledDate = new Date();
-                    if (_.isObject(defaultBank)) {
-                        paymentAdd.bankAccount = defaultBank.name;
-                    }
+                    paymentAdd.bankAccount = defaultBank;
 
                     setPayment(paymentAdd);
                     return getPayment();

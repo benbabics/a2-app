@@ -5,12 +5,14 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentSummaryController($ionicHistory, $scope, globals, moment, InvoiceManager, Payment) {
+    function PaymentSummaryController($ionicHistory, $scope, $state, globals, moment,
+                                      CommonService, InvoiceManager, Payment, PaymentManager, UserManager) {
 
         var vm = this;
 
         vm.config = globals.PAYMENT_SUMMARY.CONFIG;
 
+        vm.addPayment = addPayment;
         vm.goBack = goBack;
         vm.payment = {};
         vm.warnings = [];
@@ -22,6 +24,25 @@
         function activate() {
             // set event listeners
             $scope.$on("$ionicView.beforeEnter", beforeEnter);
+        }
+
+        function addPayment() {
+            CommonService.loadingBegin();
+
+            return PaymentManager.addPayment(UserManager.getUser().billingCompany.accountId, vm.payment)
+                .then(function(paymentResponse) {
+                    Payment.getPayment().set(paymentResponse);
+
+                    // transition to the confirmation page
+                    $state.go("payment.confirmation");
+                })
+                .catch(function (paymentError) {
+                    //TODO - What do we do here?
+                })
+                .finally(function () {
+                    CommonService.loadingComplete();
+                });
+
         }
 
         function beforeEnter() {

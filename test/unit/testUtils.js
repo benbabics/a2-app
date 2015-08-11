@@ -7,9 +7,9 @@ var TestUtils = (function () {
     var ALPHANUMERIC_CHARACTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
         TestUtils = {
             getRandomBank                    : getRandomBank,
-            getRandomInteger: getRandomInteger,
+            getRandomInteger                 : getRandomInteger,
             getRandomNumber                  : getRandomNumber,
-            getRandomNumberWithLength: getRandomNumberWithLength,
+            getRandomNumberWithLength        : getRandomNumberWithLength,
             getRandomPayment                 : getRandomPayment,
             getRandomPaymentAdd              : getRandomPaymentAdd,
             getRandomStringThatIsAlphaNumeric: getRandomStringThatIsAlphaNumeric
@@ -34,6 +34,10 @@ var TestUtils = (function () {
         return Math.random() >= 0.5;
     }
 
+    function getRandomDate(start, end) {
+        return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    }
+
     function getRandomInteger(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     }
@@ -50,7 +54,7 @@ var TestUtils = (function () {
         var randomPayment = new PaymentModel();
 
         randomPayment.id = getRandomNumberWithLength(5);
-        randomPayment.scheduledDate = getRandomNumberWithLength(13);
+        randomPayment.scheduledDate = getRandomDate(new Date(2012, 0, 1), new Date());
         randomPayment.amount = getRandomNumberWithLength(5);
         randomPayment.bankAccount = getRandomBank(BankModel);
         randomPayment.status = getRandomStringThatIsAlphaNumeric(5);
@@ -63,7 +67,7 @@ var TestUtils = (function () {
     function getRandomPaymentAdd(PaymentModel, BankModel) {
         var randomPaymentAdd = new PaymentModel();
 
-        randomPaymentAdd.scheduledDate = getRandomNumberWithLength(13);
+        randomPaymentAdd.scheduledDate = getRandomDate(new Date(2012, 0, 1), new Date());
         randomPaymentAdd.amount = getRandomNumberWithLength(5);
         randomPaymentAdd.bankAccount = getRandomBank(BankModel).name;
 

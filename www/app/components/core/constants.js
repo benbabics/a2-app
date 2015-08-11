@@ -68,7 +68,7 @@
 
     appGlobals.PAYMENT_SUMMARY = {
         "CONFIG": {
-            "title": "Make Payment",
+            "title": "Payment Summary",
             "afternoonWarning": "Payments received after 3:30 pm Eastern Time may not be posted to your account until the next business day.",
             "weekendHolidayWarning": "Scheduled payments will be processed on the date selected. Payments scheduled for weekends/holidays will be posted the next business day.",
             "amount": "Amount",

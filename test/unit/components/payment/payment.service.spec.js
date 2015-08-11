@@ -186,7 +186,7 @@
 
                 it("should return the correct result", function () {
                     expect(result.amount).toEqual(mockCurrentInvoiceSummary.minimumPaymentDue);
-                    expect(result.bankAccount).toEqual(mockBank.name);
+                    expect(result.bankAccount).toEqual(mockBank);
                     expect(result.scheduledDate).toEqual(mockCurrentDate);
                 });
 

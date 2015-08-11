@@ -4,12 +4,13 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function PaymentManager($rootScope, CommonService, Logger, PaymentAddAvailabilityModel, PaymentModel, PaymentsResource) {
+    function PaymentManager($rootScope, moment, CommonService, Logger, PaymentAddAvailabilityModel, PaymentModel, PaymentsResource) {
         // Private members
         var paymentAddAvailability = {};
 
         // Revealed Public members
         var service = {
+            addPayment                 : addPayment,
             fetchPaymentAddAvailability: fetchPaymentAddAvailability,
             fetchPayments              : fetchPayments,
             getPaymentAddAvailability  : getPaymentAddAvailability,
@@ -25,6 +26,36 @@
             $rootScope.$on("userLoggedOut", clearCachedValues);
 
             clearCachedValues();
+        }
+
+        function addPayment(accountId, payment) {
+            var requestBody = {
+                amount: payment.amount,
+                bankAccountId: payment.bankAccount.id,
+                scheduledDate: moment(payment.scheduledDate).toISOString()
+            };
+
+            return PaymentsResource.addPayment(accountId, requestBody)
+                .then(function (addPaymentResponse) {
+                    if (addPaymentResponse && addPaymentResponse.data) {
+                        return addPaymentResponse.data;
+                    }
+                    // no data in the response
+                    else {
+                        Logger.error("No data in Response from Adding a Payment");
+                        throw new Error("No data in Response from Adding a Payment");
+                    }
+                })
+                // payment add failed
+                .catch(function (failureResponse) {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+
+                    var error = "Adding a Payment failed: " + CommonService.getErrorMessage(failureResponse);
+
+                    Logger.error(error);
+                    throw new Error(error);
+                });
+
         }
 
         function clearCachedValues() {

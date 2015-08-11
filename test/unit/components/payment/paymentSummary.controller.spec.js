@@ -3,7 +3,9 @@
 
     var _,
         $ionicHistory,
+        $q,
         $scope,
+        $state,
         ctrl,
         mockCurrentInvoiceSummary = {
             accountNumber     : "account number value",
@@ -16,13 +18,30 @@
             minimumPaymentDue : 150.00,
             paymentDueDate    : "2015-05-26"
         },
-        mockPayment = {
-            amount       : 150.00,
-            bankAccount  : "bank account value",
-            scheduledDate: "2015-05-26"
+        mockPayment,
+        mockPaymentAdd,
+        mockUser = {
+            email    : "email address value",
+            firstName: "first name value",
+            username : "username value",
+            company  : {
+                accountId    : "company account id value",
+                accountNumber: "company account number value",
+                name         : "company name value"
+            },
+            billingCompany: {
+                accountId    : "billing company account id value",
+                accountNumber: "billing company account number value",
+                name         : "billing company name value"
+            }
         },
+        moment,
+        BankModel,
         InvoiceManager,
-        Payment;
+        Payment,
+        PaymentManager,
+        PaymentModel,
+        UserManager;
 
     describe("A Payment Summary Controller", function () {
 
@@ -43,12 +62,19 @@
 
             // mock dependencies
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
+            $state = jasmine.createSpyObj("state", ["go"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             Payment = jasmine.createSpyObj("Payment", ["getPayment"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
-            inject(function ($controller, $rootScope, CommonService) {
+            inject(function ($controller, _$q_, $rootScope, _moment_, _BankModel_, CommonService, _PaymentModel_) {
 
                 _ = CommonService._;
+                $q = _$q_;
+                moment = _moment_;
+                BankModel = _BankModel_;
+                PaymentModel = _PaymentModel_;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
@@ -56,14 +82,20 @@
                 ctrl = $controller("PaymentSummaryController", {
                     $ionicHistory : $ionicHistory,
                     $scope        : $scope,
+                    $state        : $state,
                     InvoiceManager: InvoiceManager,
-                    Payment       : Payment
+                    Payment       : Payment,
+                    PaymentManager: PaymentManager,
+                    UserManager   : UserManager
                 });
 
             });
 
+            mockPaymentAdd = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
+            mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
             InvoiceManager.getInvoiceSummary.and.returnValue(mockCurrentInvoiceSummary);
-            Payment.getPayment.and.returnValue(mockPayment);
+            Payment.getPayment.and.returnValue(mockPaymentAdd);
+            UserManager.getUser.and.returnValue(mockUser);
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -71,14 +103,14 @@
             it("should set the payment", function () {
                 $scope.$broadcast("$ionicView.beforeEnter");
 
-                expect(ctrl.payment).toEqual(mockPayment);
+                expect(ctrl.payment).toEqual(mockPaymentAdd);
             });
 
             describe("when payment details meet expectations", function () {
 
                 beforeEach(function() {
-                    mockCurrentInvoiceSummary.minimumPaymentDue = mockPayment.amount;
-                    mockCurrentInvoiceSummary.paymentDueDate = mockPayment.scheduledDate;
+                    mockCurrentInvoiceSummary.minimumPaymentDue = mockPaymentAdd.amount;
+                    mockCurrentInvoiceSummary.paymentDueDate = mockPaymentAdd.scheduledDate;
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -92,8 +124,8 @@
             describe("when payment details exceed expectations", function () {
 
                 beforeEach(function() {
-                    mockCurrentInvoiceSummary.minimumPaymentDue = mockPayment.amount - 0.01;
-                    mockCurrentInvoiceSummary.paymentDueDate = "2015-05-27";
+                    mockCurrentInvoiceSummary.minimumPaymentDue = mockPaymentAdd.amount - 0.01;
+                    mockCurrentInvoiceSummary.paymentDueDate = moment(mockPaymentAdd.scheduledDate).add(1, "day");
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -107,8 +139,8 @@
             describe("when the payment amount is less than the minimum amount due", function () {
 
                 beforeEach(function() {
-                    mockCurrentInvoiceSummary.minimumPaymentDue = mockPayment.amount + 0.01;
-                    mockCurrentInvoiceSummary.paymentDueDate = mockPayment.scheduledDate;
+                    mockCurrentInvoiceSummary.minimumPaymentDue = mockPaymentAdd.amount + 0.01;
+                    mockCurrentInvoiceSummary.paymentDueDate = moment(mockPaymentAdd.scheduledDate);
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -123,8 +155,8 @@
             describe("when the payment date is after than the payment due date", function () {
 
                 beforeEach(function() {
-                    mockCurrentInvoiceSummary.minimumPaymentDue = mockPayment.amount;
-                    mockCurrentInvoiceSummary.paymentDueDate = "2015-05-25";
+                    mockCurrentInvoiceSummary.minimumPaymentDue = mockPaymentAdd.amount;
+                    mockCurrentInvoiceSummary.paymentDueDate = moment(mockPaymentAdd.scheduledDate).subtract(1, "day");
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -139,8 +171,8 @@
             describe("when both warnings should be found", function () {
 
                 beforeEach(function() {
-                    mockCurrentInvoiceSummary.minimumPaymentDue = mockPayment.amount + 0.01;
-                    mockCurrentInvoiceSummary.paymentDueDate = "2015-05-25";
+                    mockCurrentInvoiceSummary.minimumPaymentDue = mockPaymentAdd.amount + 0.01;
+                    mockCurrentInvoiceSummary.paymentDueDate = moment(mockPaymentAdd.scheduledDate).subtract(1, "day");
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -152,6 +184,67 @@
                 });
 
             });
+        });
+
+        describe("has a addPayment function that", function () {
+
+            var addPaymentDeferred;
+
+            beforeEach(function () {
+                addPaymentDeferred = $q.defer();
+                PaymentManager.addPayment.and.returnValue(addPaymentDeferred.promise);
+
+                spyOn(mockPaymentAdd, "set").and.callThrough();
+
+                ctrl.payment = mockPaymentAdd;
+
+                ctrl.addPayment();
+            });
+
+            it("should add the Payment", function () {
+                expect(PaymentManager.addPayment).toHaveBeenCalledWith(mockUser.billingCompany.accountId, mockPaymentAdd);
+            });
+
+            describe("when the Payment is added successfully", function () {
+
+                beforeEach(function () {
+                    //resolve the add payment promise
+                    addPaymentDeferred.resolve(mockPayment);
+
+                    $scope.$digest();
+                });
+
+                it("should set the payment", function () {
+                    expect(mockPaymentAdd.set).toHaveBeenCalledWith(mockPayment);
+                });
+
+                it("should navigate to the payment confirmation page", function () {
+                    expect($state.go).toHaveBeenCalledWith("payment.confirmation");
+                });
+
+            });
+
+            describe("when the Payment is NOT added successfully", function () {
+
+                var errorObjectArg = new Error("Adding payment failed");
+
+                beforeEach(function () {
+                    //reject with an error message
+                    addPaymentDeferred.reject(errorObjectArg);
+
+                    $scope.$digest();
+                });
+
+                it("should NOT set the payment", function () {
+                    expect(mockPaymentAdd.set).not.toHaveBeenCalled();
+                });
+
+                it("should NOT navigate away from the current page", function () {
+                    expect($state.go).not.toHaveBeenCalled();
+                });
+
+            });
+
         });
 
         describe("has a goBack function that", function () {

@@ -1,7 +1,7 @@
 <ion-view hide-nav-bar="true">
-    <div class="bar bar-header bar-wex">
+    <ion-header-bar class="bar bar-header bar-wex">
         <h1 class="title">{{vm.config.title}}</h1>
-    </div>
+    </ion-header-bar>
 
     <ion-content class="padding">
         <br>
@@ -28,14 +28,14 @@
 
             <p class="padding divider">
                 <span id="bankAccountLabel" class="block_align black">{{vm.config.bankAccount}}</span>
-                <span id="bankAccount" class="content_align black">{{vm.payment.bankAccount}}</span>
+                <span id="bankAccount" class="content_align black">{{vm.payment.bankAccount.name}}</span>
             </p>
         </div>
 
         <div class="padding align_center">
             <button id="schedulePayment"
                     class="button button-block button-submit button-width"
-                    ui-sref="payment.confirmation">
+                    ng-click="vm.addPayment()">
                 {{vm.config.submitButton}}
             </button>
             <button id="cancel"

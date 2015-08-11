@@ -1,9 +1,5 @@
-<ion-view hide-nav-bar="true">
+<ion-view view-title="{{vm.config.title}}" hide-back-button="true">
     <ion-content>
-        <div class="bar bar-header bar-wex">
-            <h1 class="title">{{vm.config.title}}</h1>
-        </div>
-
         <div class="item item-divider inner-container">
             <p class="align_center padding green">{{vm.config.confirmationText}}</p>
             <div class="item item-wrap arrow-align">
@@ -21,7 +17,7 @@
             <div class="item item-wrap arrow-align">
                 <p class="padding-left padding-right">
                     <span id="bankAccountLabel" class="block_align">{{vm.config.bankAccount}}</span>
-                    <span id="bankAccount" class="content_align">{{vm.payment.bankAccount}}</span>
+                    <span id="bankAccount" class="content_align">{{vm.payment.bankAccount.name}}</span>
                 </p>
             </div>
             <br>
