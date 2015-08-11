@@ -70,6 +70,7 @@ $user-login-gradient-bottom: #414141;
 
 .arrow-align {
   padding-bottom: 0px ! important;
+  padding-top: 5px !important;
 }
 
 .button-width {
@@ -181,4 +182,23 @@ $user-login-gradient-bottom: #414141;
     font-size: $font-size-large;
     font-weight: bold;
   }
+}
+
+
+/**------ Chevron Alignment -------**/
+
+.label_align {
+  vertical-align: middle;
+  width: 45%;
+}
+
+.value_align {
+  vertical-align: middle;
+  width: 45%;
+  display: inline-block;
+  text-align: right;
+}
+.chevron_align {
+  vertical-align: middle;
+  width: 10%;
 }

@@ -1,9 +1,10 @@
 <ion-view hide-nav-bar="true">
-    <ion-content>
-        <div class="bar bar-header bar-wex">
-            <h1 class="title">{{vm.config.title}}</h1>
-        </div>
+    <div class="bar bar-header bar-wex">
+        <h1 class="title">{{vm.config.title}}</h1>
+    </div>
 
+    <ion-content class="padding">
+        <br>
         <div class="card card-warning padding"
              ng-if="vm.warnings.length > 0">
             <div ng-repeat="warning in vm.warnings">
@@ -32,15 +33,15 @@
         </div>
 
         <div class="padding align_center">
-            <button id="cancel"
-                    class="button button-block button-default"
-                    ng-click="vm.goBack()">
-                {{vm.config.cancelButton}}
-            </button>
             <button id="schedulePayment"
-                    class="button button-block button-submit"
+                    class="button button-block button-submit button-width"
                     ui-sref="payment.confirmation">
                 {{vm.config.submitButton}}
+            </button>
+            <button id="cancel"
+                    class="button button-block button-default button-width"
+                    ng-click="vm.goBack()">
+                {{vm.config.cancelButton}}
             </button>
         </div>
     </ion-content>
