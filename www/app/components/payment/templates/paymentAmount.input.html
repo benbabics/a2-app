@@ -1,0 +1,29 @@
+<ion-view class="payment-amount-input-view" hide-nav-bar="true">
+
+    <!-- Header bar -->
+    <ion-header-bar class="bar bar-wex">
+        <div class="buttons">
+            <button class="button button-clear button-cancel icon icon-back"
+                    ng-click="$ionicGoBack()">
+            </button>
+        </div>
+
+        <h1 class="title">{{vm.config.title}}</h1>
+
+        <div class="buttons">
+            <button class="button button-clear button-done"
+                    ng-click="$ionicGoBack()">
+                {{vm.config.done}}
+            </button>
+        </div>
+    </ion-header-bar>
+
+    <ion-content>
+        <div wex-numeric-input-field
+             class="amount-input"
+             ng-model="vm.amount"
+             allow-decimal="false"
+             allow-keypad-toggle="false">
+        </div>
+    </ion-content>
+</ion-view>

@@ -197,6 +197,72 @@
 
         });
 
+        describe("has a payment.input state that", function () {
+            var state,
+                stateName = "payment.input";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be defined", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should be abstract", function () {
+                expect(state.abstract).toBeTruthy();
+            });
+
+            it("should NOT be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/input");
+            });
+        });
+
+        describe("has a payment.input.amount state that", function () {
+            var state,
+                stateName = "payment.input.amount";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should NOT be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should NOT be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/amount");
+            });
+
+            it("should define a view on the payment view container", function () {
+                expect(state.views).toBeDefined();
+                expect(state.views["payment-view@payment"]).toBeDefined();
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName)).toEqual("#/payment/input/amount");
+            });
+
+            it("should transition successfully", function () {
+                $state.go(stateName);
+                $rootScope.$digest();
+                expect($state.current.name).toBe(stateName);
+            });
+        });
     });
 
 })();

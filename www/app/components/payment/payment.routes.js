@@ -52,6 +52,22 @@
                 }
             }
         });
+
+        $stateProvider.state("payment.input", {
+            abstract: true,
+            url: "/input",
+            cache: false
+        });
+
+        $stateProvider.state("payment.input.amount", {
+            url: "/amount",
+            views: {
+                "payment-view@payment": {
+                    templateUrl: "app/components/payment/templates/paymentAmount.input.html",
+                    controller: "PaymentAmountInputController as vm"
+                }
+            }
+        });
     }
 
     angular.module("app.components.payment")

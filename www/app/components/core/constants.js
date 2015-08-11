@@ -94,6 +94,16 @@
         }
     };
 
+    appGlobals.PAYMENT = {
+        "INPUTS": {
+            "AMOUNT": {
+                "CONFIG": {
+                    "title": "Amount"
+                }
+            }
+        }
+    };
+
     appGlobals.NAV_BAR = {
         "CONFIG": {
             "menuButtonText": "Menu"
@@ -112,6 +122,13 @@
                 "contactUs": "Contact Us",
                 "logOut": "Log Out"
             }
+        }
+    };
+
+    appGlobals.BUTTONS = {
+        "CONFIG": {
+            "cancel": "Cancel",
+            "done": "Done"
         }
     };
 
