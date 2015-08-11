@@ -26,10 +26,12 @@
                 scope: {
                     allowDecimal: "&?",
                     allowKeypadToggle: "&?",
+                    formatters: "=?",
                     model: "=ngModel"
                 }
             },
             _ = CommonService._,
+            vm,
             keyMap = [
                 [numericKey(1), numericKey(2), numericKey(3)],
                 [numericKey(4), numericKey(5), numericKey(6)],
@@ -65,7 +67,7 @@
         function keyIsDisabled(keyType) {
             switch (keyType.type) {
                 case KEY_DECIMAL:
-                    return !this.allowDecimal();
+                    return !vm.allowDecimal();
                 default:
                     return false;
             }
@@ -74,9 +76,8 @@
         function showKeypad(show, apply) {
             apply = _.isUndefined(apply) ? true : apply;
 
-            var self = this,
-                showFunc = function () {
-                    self.keypadVisible = show;
+            var showFunc = function () {
+                vm.keypadVisible = show;
 
                     if (show) {
                         viewContent.addClass("has-numeric-keypad");
@@ -90,7 +91,7 @@
                 };
 
             if (apply) {
-                self.$apply(showFunc);
+                vm.$apply(showFunc);
             }
             else {
                 showFunc();
@@ -98,8 +99,8 @@
         }
 
         function toggleKeypad() {
-            if (this.allowKeypadToggle()) {
-                this.showKeypad(!this.keypadVisible);
+            if (vm.allowKeypadToggle()) {
+                vm.showKeypad(!vm.keypadVisible);
             }
         }
 
@@ -108,12 +109,12 @@
                 //backspace
                 case "\b":
                 {
-                    this.model = this.model.slice(0, -1);
+                    vm.model = vm.model.slice(0, -1);
                     break;
                 }
                 default:
                 {
-                    this.model = this.model + String(value);
+                    vm.model = vm.model + String(value);
                     break;
                 }
             }
@@ -130,11 +131,37 @@
         }
 
         function removeEventListeners() {
-            directiveElem.off("click", this.toggleKeypad);
-            window.removeEventListener("native.keyboardshow", this.closeKeypad);
+            directiveElem.off("click", vm.toggleKeypad);
+            window.removeEventListener("native.keyboardshow", vm.closeKeypad);
+        }
+
+        function getFilteredModelTemplate() {
+            var markup = [],
+                addFilter = function (filter) {
+                    markup.push(" | " + filter);
+                };
+
+            markup.push("{{");
+            markup.push("model");
+
+            if (vm.formatters) {
+                if (_.isArray(vm.formatters)) {
+                    _.each(vm.formatters, function (filter) {
+                        addFilter(filter);
+                    });
+                }
+                else {
+                    addFilter(vm.formatters);
+                }
+            }
+
+            markup.push("}}");
+            return markup.join("");
         }
 
         function link(scope, elem, attrs) {
+            vm = scope;
+
             //private members:
             //the directive's element
             directiveElem = elem;
@@ -149,33 +176,33 @@
             //the element where the model is displayed
             modelDisplayElem = getModelDisplayElement();
             //the model element
-            modelElem = $compile("<span>{{model}}</span>")(scope);
+            modelElem = $compile("<span>" + getFilteredModelTemplate() + "</span>")(scope);
 
             //public members:
-            scope.keyMap = keyMap;
-            scope.keypadVisible = false;
+            vm.keyMap = keyMap;
+            vm.keypadVisible = false;
             //whether decimals are allowed (defaults to true)
-            scope.allowDecimal = _.isUndefined(scope.allowDecimal()) ?
+            vm.allowDecimal = _.isUndefined(vm.allowDecimal()) ?
                 _.constant(true) :
-                scope.allowDecimal;
+                vm.allowDecimal;
             //whether the keypad can be toggled (or conversely is always shown) (defaults to true)
-            scope.allowKeypadToggle = _.isUndefined(scope.allowKeypadToggle()) ?
+            vm.allowKeypadToggle = _.isUndefined(vm.allowKeypadToggle()) ?
                 _.constant(true) :
-                scope.allowKeypadToggle;
-            scope.keyIsDisabled = _.bind(keyIsDisabled, scope, _);
-            scope.showKeypad = _.bind(showKeypad, scope, _, _);
-            scope.toggleKeypad = _.bind(toggleKeypad, scope);
-            scope.onKeyPress = _.bind(onKeyPress, scope, _);
-            scope.removeEventListeners = _.bind(removeEventListeners, scope);
-            scope.closeKeypad = _.partial(scope.showKeypad, false);
+                vm.allowKeypadToggle;
+            vm.keyIsDisabled = keyIsDisabled;
+            vm.showKeypad = showKeypad;
+            vm.toggleKeypad = toggleKeypad;
+            vm.onKeyPress = onKeyPress;
+            vm.removeEventListeners = removeEventListeners;
+            vm.closeKeypad = _.partial(vm.showKeypad, false);
 
 
             //event listeners:
-            directiveElem.on("click", scope.toggleKeypad);
+            directiveElem.on("click", vm.toggleKeypad);
             //hides the keypad if a native keyboard is shown
-            window.addEventListener("native.keyboardshow", scope.closeKeypad);
+            window.addEventListener("native.keyboardshow", vm.closeKeypad);
             scope.$on("$destroy", _.bind(keypadElem.remove, keypadElem));
-            scope.$on("$destroy", scope.removeEventListeners);
+            scope.$on("$destroy", vm.removeEventListeners);
 
             //add the keypad element to the active view
             if (view) {
@@ -186,7 +213,7 @@
             modelDisplayElem.append(modelElem);
 
             //set the default keypad visibility state (based on whether or not keypad toggling is enabled)
-            scope.showKeypad(!scope.allowKeypadToggle(), false);
+            vm.showKeypad(!vm.allowKeypadToggle(), false);
         }
     }
 

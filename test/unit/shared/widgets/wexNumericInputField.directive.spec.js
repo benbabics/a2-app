@@ -125,6 +125,57 @@
             });
         });
 
+        describe("when there are no formatters", function () {
+            var modelElem;
+
+            beforeEach(function () {
+                //TODO figure out a cleaner way to get this
+                modelElem = directive.children();
+            });
+
+            it("should NOT apply any filters to the model", function () {
+                expect(modelElem.text()).toEqual("{{model}}");
+            });
+        });
+
+        describe("when there is a single formatter", function () {
+            var modelElem,
+                mockFilter = "currency";
+
+            beforeEach(function () {
+                directive = createDirective({
+                    formatters: mockFilter
+                });
+                isolateScope = directive.isolateScope();
+
+                //TODO figure out a cleaner way to get this
+                modelElem = directive.children();
+            });
+
+            it("should apply the filter to the model", function () {
+                expect(modelElem.text()).toEqual("{{model | " + mockFilter + "}}");
+            });
+        });
+
+        describe("when there are multiple formatters", function () {
+            var modelElem,
+                mockFilters = ["currency", "wexPaymentAmount"];
+
+            beforeEach(function () {
+                directive = createDirective({
+                    formatters: mockFilters
+                });
+                isolateScope = directive.isolateScope();
+
+                //TODO figure out a cleaner way to get this
+                modelElem = directive.children();
+            });
+
+            it("should apply the filters to the model in order", function () {
+                expect(modelElem.text()).toEqual("{{model | " + mockFilters[0] + " | " + mockFilters[1] + "}}");
+            });
+        });
+
         describe("when the model should be shown on a nested element", function () {
 
             beforeEach(function () {
@@ -410,15 +461,17 @@
 
         function createDirective(options) {
             options = options || {};
-            options.allowDecimal = _.isUndefined(options.allowDecimal) ? true : options.allowDecimal;
-            options.allowKeypadToggle = _.isUndefined(options.allowKeypadToggle) ? true : options.allowKeypadToggle;
+            scope.allowDecimal = _.isUndefined(options.allowDecimal) ? true : options.allowDecimal;
+            scope.allowKeypadToggle = _.isUndefined(options.allowKeypadToggle) ? true : options.allowKeypadToggle;
+            scope.formatters = options.formatters || [];
 
             var markup = [];
 
             markup.push("<div ng-model='model'");
             markup.push(" wex-numeric-input-field");
-            markup.push(" allow-decimal='" + options.allowDecimal + "'");
-            markup.push(" allow-keypad-toggle='" + options.allowKeypadToggle + "'");
+            markup.push(" allow-decimal='allowDecimal'");
+            markup.push(" allow-keypad-toggle='allowKeypadToggle'");
+            markup.push(" formatters='formatters'");
             markup.push(">");
 
             if (options.nestedModelDisplayElem) {
