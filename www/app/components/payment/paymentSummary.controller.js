@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentSummaryController($ionicHistory, $scope, $state, globals, moment,
+    function PaymentSummaryController($scope, $state, globals, moment,
                                       CommonService, InvoiceManager, Payment, PaymentManager, UserManager) {
 
         var vm = this;
@@ -13,7 +13,6 @@
         vm.config = globals.PAYMENT_SUMMARY.CONFIG;
 
         vm.addPayment = addPayment;
-        vm.goBack = goBack;
         vm.payment = {};
         vm.warnings = [];
 
@@ -56,10 +55,6 @@
             if (moment(vm.payment.scheduledDate).isAfter(invoiceSummary.paymentDueDate)) {
                 vm.warnings.push(globals.PAYMENT_SUMMARY.WARNINGS.PAYMENT_DATE_PAST_DUE_DATE);
             }
-        }
-
-        function goBack() {
-            $ionicHistory.goBack();
         }
 
     }

@@ -2,7 +2,6 @@
     "use strict";
 
     var _,
-        $ionicHistory,
         $q,
         $scope,
         $state,
@@ -61,7 +60,6 @@
             });
 
             // mock dependencies
-            $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
             $state = jasmine.createSpyObj("state", ["go"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             Payment = jasmine.createSpyObj("Payment", ["getPayment"]);
@@ -80,7 +78,6 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("PaymentSummaryController", {
-                    $ionicHistory : $ionicHistory,
                     $scope        : $scope,
                     $state        : $state,
                     InvoiceManager: InvoiceManager,
@@ -247,17 +244,6 @@
 
         });
 
-        describe("has a goBack function that", function () {
-
-            beforeEach(function () {
-                ctrl.goBack();
-            });
-
-            it("should call $ionicHistory.goBack", function () {
-                expect($ionicHistory.goBack).toHaveBeenCalledWith();
-            });
-
-        });
     });
 
 }());
