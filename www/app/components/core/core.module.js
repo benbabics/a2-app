@@ -31,7 +31,6 @@
 
         function displayPopup(message) {
             CommonService.displayAlert({
-                cssClass: "wex-warning-popup",
                 content: message,
                 buttonCssClass: "button-submit"
             });

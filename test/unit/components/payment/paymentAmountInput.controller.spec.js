@@ -156,6 +156,23 @@
                     expect($ionicHistory.goBack).toHaveBeenCalledWith();
                 });
             });
+
+            describe("when the amount is equal to the current balance", function () {
+
+                beforeEach(function () {
+                    ctrl.amount = mockInvoiceSumary.currentBalance;
+
+                    ctrl.done();
+                });
+
+                it("should NOT show an error", function () {
+                    expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                });
+
+                it("should go back to the previous page", function () {
+                    expect($ionicHistory.goBack).toHaveBeenCalledWith();
+                });
+            });
         });
     });
 

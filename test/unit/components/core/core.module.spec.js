@@ -204,7 +204,6 @@
 
                         it("should call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                                cssClass: "wex-warning-popup",
                                 content: mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
@@ -238,7 +237,6 @@
 
                         it("should call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                                cssClass: "wex-warning-popup",
                                 content: mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
@@ -272,7 +270,6 @@
 
                         it("should call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                                cssClass: "wex-warning-popup",
                                 content: mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
                                 buttonCssClass: "button-submit"
                             });
