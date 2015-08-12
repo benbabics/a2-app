@@ -8,14 +8,15 @@
     function PaymentAmountInputController($scope, $filter, $ionicHistory, globals, payment, invoiceSummary, CommonService) {
 
         var DEFAULT_VALUE = 0,
-            vm = this;
+            vm = this,
+            firstInput = true;
         //public members:
         vm.config = angular.extend({}, globals.PAYMENT_ADD.INPUTS.AMOUNT.CONFIG, globals.BUTTONS.CONFIG);
         vm.errors = globals.PAYMENT_ADD.INPUTS.AMOUNT.ERRORS;
         vm.amount = getDisplayAmount(DEFAULT_VALUE);
 
-        vm.clearInput = clearInput;
         vm.done = done;
+        vm.onInputChange = onInputChange;
 
         activate();
 
@@ -34,14 +35,6 @@
             vm.amount = getDisplayAmount(DEFAULT_VALUE);
         }
 
-        function getActualAmount(value) {
-            return $filter("wexPaymentAmount")(value);
-        }
-
-        function getDisplayAmount(value) {
-            return value * 100;
-        }
-
         function done() {
             var actualAmount = getActualAmount(vm.amount);
 
@@ -55,6 +48,29 @@
                 payment.amount = actualAmount;
 
                 $ionicHistory.goBack();
+            }
+        }
+
+        function getActualAmount(value) {
+            return $filter("wexPaymentAmount")(value);
+        }
+
+        function getDisplayAmount(value) {
+            return value * 100;
+        }
+
+        function onInputChange(input, newValue, oldValue) {
+
+            //reset the amount if this is the first time the user has entered a value since visiting the page
+            if (firstInput) {
+                if (input === "\b") {
+                    clearInput();
+                }
+                else {
+                    vm.amount = input;
+                }
+
+                firstInput = false;
             }
         }
 

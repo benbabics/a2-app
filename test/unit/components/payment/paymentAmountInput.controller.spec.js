@@ -87,16 +87,45 @@
             });
         });
 
-        describe("has a clearInput function that", function () {
+        describe("has an onInputChange function that", function () {
 
             beforeEach(function () {
                 ctrl.amount = TestUtils.getRandomNumber(1, 500);
-
-                ctrl.clearInput();
             });
 
-            it("should set the amount to 0", function () {
-                expect(ctrl.amount).toEqual(getDisplayAmount(0));
+            describe("when the input value is a backspace", function () {
+
+                beforeEach(function () {
+                    ctrl.onInputChange("\b", ctrl.amount, ctrl.amount);
+                });
+
+                it("should set the amount to 0", function () {
+                    expect(ctrl.amount).toEqual(0);
+                });
+            });
+
+            describe("when the input value is a number", function () {
+                var number;
+
+                beforeEach(function () {
+                    number = TestUtils.getRandomNumber(0, 9);
+                    ctrl.onInputChange(number, ctrl.amount, ctrl.amount);
+                });
+
+                it("should set the amount to the number", function () {
+                    expect(ctrl.amount).toEqual(number);
+                });
+
+                describe("and when it is called twice", function () {
+
+                    beforeEach(function () {
+                        ctrl.onInputChange(number, ctrl.amount, ctrl.amount);
+                    });
+
+                    it("should not modify the amount the second time", function () {
+                        expect(ctrl.amount).toEqual(number);
+                    });
+                });
             });
         });
 
