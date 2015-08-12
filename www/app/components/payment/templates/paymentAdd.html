@@ -56,6 +56,7 @@
         <div class="padding align_center">
             <button id="makePaymentButton"
                     class="button button-block button-submit button-width"
+                    ng-disabled="vm.payment.amount <= 0"
                     ui-sref="payment.summary">{{vm.config.submitButton}}</button>
         </div>
     </ion-content>
