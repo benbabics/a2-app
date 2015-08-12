@@ -303,7 +303,6 @@
 
                         it("should call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                                cssClass: "wex-warning-popup",
                                 content: mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
                                 buttonCssClass: "button-submit"
                             });
