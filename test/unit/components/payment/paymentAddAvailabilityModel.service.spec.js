@@ -22,6 +22,7 @@
                     newField2                             : "some other value",
                     newField3                             : "yet another value",
                     makePaymentAllowed                    : "false",
+                    shouldDisplayCurrentBalanceDueMessage : "false",
                     shouldDisplayBankAccountSetupMessage  : "true",
                     shouldDisplayDirectDebitEnabledMessage: "false",
                     shouldDisplayOutstandingPaymentMessage: "true"

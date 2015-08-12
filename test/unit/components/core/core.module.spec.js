@@ -61,14 +61,12 @@
                     WARNINGS: {
                         BANK_ACCOUNTS_NOT_SETUP  : "Banks Not Setup",
                         DIRECT_DEBIT_SETUP       : "Direct Debit Enabled",
+                        NO_BALANCE_DUE           : "No Current Balance",
                         PAYMENT_ALREADY_SCHEDULED: "Payment Already Scheduled"
                     }
                 }
             },
             mockUser = {
-                newField1: "some value",
-                newField2: "some other value",
-                newField3: "yet another value",
                 email    : "email address value",
                 firstName: "first name value",
                 username : "username value",
@@ -184,6 +182,7 @@
                         beforeEach(function () {
                             paymentAddAvailability = {
                                 makePaymentAllowed: false,
+                                shouldDisplayCurrentBalanceDueMessage: false,
                                 shouldDisplayBankAccountSetupMessage: true,
                                 shouldDisplayDirectDebitEnabledMessage: false,
                                 shouldDisplayOutstandingPaymentMessage: false
@@ -217,6 +216,7 @@
                         beforeEach(function () {
                             paymentAddAvailability = {
                                 makePaymentAllowed: false,
+                                shouldDisplayCurrentBalanceDueMessage: false,
                                 shouldDisplayBankAccountSetupMessage: false,
                                 shouldDisplayDirectDebitEnabledMessage: true,
                                 shouldDisplayOutstandingPaymentMessage: false
@@ -250,6 +250,7 @@
                         beforeEach(function () {
                             paymentAddAvailability = {
                                 makePaymentAllowed: false,
+                                shouldDisplayCurrentBalanceDueMessage: false,
                                 shouldDisplayBankAccountSetupMessage: false,
                                 shouldDisplayDirectDebitEnabledMessage: false,
                                 shouldDisplayOutstandingPaymentMessage: true
@@ -278,11 +279,46 @@
                         });
                     });
 
+                    describe("when the current balance due message should be displayed", function () {
+
+                        beforeEach(function () {
+                            paymentAddAvailability = {
+                                makePaymentAllowed: false,
+                                shouldDisplayCurrentBalanceDueMessage: true,
+                                shouldDisplayBankAccountSetupMessage: false,
+                                shouldDisplayDirectDebitEnabledMessage: false,
+                                shouldDisplayOutstandingPaymentMessage: false
+                            };
+
+                            fetchPaymentAddAvailabilityDeferred = $q.defer();
+                            PaymentManager.fetchPaymentAddAvailability.and.returnValue(fetchPaymentAddAvailabilityDeferred.promise);
+                            fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
+
+                            UserManager.getUser.and.returnValue(mockUser);
+
+                            $state.go(paymentAddRoute);
+                            $rootScope.$digest();
+                        });
+
+                        it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                            expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                        });
+
+                        it("should call CommonService.displayAlert", function () {
+                            expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                                cssClass: "wex-warning-popup",
+                                content: mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
+                                buttonCssClass: "button-submit"
+                            });
+                        });
+                    });
+
                     describe("when no messages should be displayed", function () {
 
                         beforeEach(function () {
                             paymentAddAvailability = {
                                 makePaymentAllowed: true,
+                                shouldDisplayCurrentBalanceDueMessage: false,
                                 shouldDisplayBankAccountSetupMessage: false,
                                 shouldDisplayDirectDebitEnabledMessage: false,
                                 shouldDisplayOutstandingPaymentMessage: false

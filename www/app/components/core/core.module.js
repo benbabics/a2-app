@@ -82,6 +82,9 @@
                             else if (paymentAddAvailability.shouldDisplayOutstandingPaymentMessage) {
                                 displayPopup(globals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED);
                             }
+                            else if (paymentAddAvailability.shouldDisplayCurrentBalanceDueMessage) {
+                                displayPopup(globals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE);
+                            }
                             else {
                                 // set to true so that the following state.go can skip the fetch
                                 bypass = true;

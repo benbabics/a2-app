@@ -5,6 +5,7 @@
 
         function PaymentAddAvailabilityModel() {
             this.makePaymentAllowed = "";
+            this.shouldDisplayCurrentBalanceDueMessage = "";
             this.shouldDisplayBankAccountSetupMessage = "";
             this.shouldDisplayDirectDebitEnabledMessage = "";
             this.shouldDisplayOutstandingPaymentMessage = "";
