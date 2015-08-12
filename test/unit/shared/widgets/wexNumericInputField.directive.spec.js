@@ -381,21 +381,25 @@
         });
 
         describe("has an onKeyPress function that", function () {
-            var initialModelValue = "12345678";
+            var initialModelValue;
 
             beforeEach(function () {
+                initialModelValue = TestUtils.getRandomNumber(0, 1000);
+
                 isolateScope.model = initialModelValue;
             });
 
             describe("when the key value is a numeric character", function () {
-                var number = 9;
+                var number;
 
                 beforeEach(function () {
+                    number = TestUtils.getRandomInteger(0, 9);
+
                     isolateScope.onKeyPress(number);
                 });
 
                 it("should append the value to the model", function () {
-                    expect(isolateScope.model).toEqual(initialModelValue + number);
+                    expect(isolateScope.model).toEqual(initialModelValue + String(number));
                 });
             });
 
@@ -419,7 +423,7 @@
                     it("should remove the last character from the model", function () {
                         isolateScope.onKeyPress(backspace);
 
-                        expect(isolateScope.model).toEqual(initialModelValue.slice(0, -1));
+                        expect(isolateScope.model).toEqual(String(initialModelValue).slice(0, -1));
                     });
                 });
 
@@ -427,13 +431,35 @@
 
                     beforeEach(function () {
                         isolateScope.model = "";
+
+                        isolateScope.onKeyPress(backspace);
                     });
 
                     it("should have no effect on the model", function () {
-                        isolateScope.onKeyPress(backspace);
-
                         expect(isolateScope.model).toEqual("");
                     });
+                });
+            });
+
+            describe("when there is an on-input callback", function () {
+                var mockInputCallback,
+                    input;
+
+                beforeEach(function () {
+                    mockInputCallback = jasmine.createSpy();
+
+                    directive = createDirective({
+                        inputCallback: mockInputCallback
+                    });
+                    isolateScope = directive.isolateScope();
+                    isolateScope.model = initialModelValue;
+
+                    input = TestUtils.getRandomInteger(0, 9);
+                    isolateScope.onKeyPress(input);
+                });
+
+                it("should call the callback with the expected values", function () {
+                    expect(mockInputCallback).toHaveBeenCalledWith(input, isolateScope.model, initialModelValue);
                 });
             });
         });
@@ -464,6 +490,7 @@
             scope.allowDecimal = _.isUndefined(options.allowDecimal) ? true : options.allowDecimal;
             scope.allowKeypadToggle = _.isUndefined(options.allowKeypadToggle) ? true : options.allowKeypadToggle;
             scope.formatters = options.formatters || [];
+            scope.inputCallback = options.inputCallback;
 
             var markup = [];
 
@@ -472,6 +499,9 @@
             markup.push(" allow-decimal='allowDecimal'");
             markup.push(" allow-keypad-toggle='allowKeypadToggle'");
             markup.push(" formatters='formatters'");
+            if (scope.inputCallback) {
+                markup.push(" on-input='inputCallback'");
+            }
             markup.push(">");
 
             if (options.nestedModelDisplayElem) {

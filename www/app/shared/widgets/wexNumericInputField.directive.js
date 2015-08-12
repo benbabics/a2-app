@@ -27,7 +27,8 @@
                     allowDecimal: "&?",
                     allowKeypadToggle: "&?",
                     formatters: "=?",
-                    model: "=ngModel"
+                    model: "=ngModel",
+                    onInput: "=?" //callback: function(input, newValue, oldValue)
                 }
             },
             _ = CommonService._,
@@ -79,16 +80,16 @@
             var showFunc = function () {
                 vm.keypadVisible = show;
 
-                    if (show) {
-                        viewContent.addClass("has-numeric-keypad");
-                    }
-                    else {
-                        viewContent.removeClass("has-numeric-keypad");
-                    }
+                if (show) {
+                    viewContent.addClass("has-numeric-keypad");
+                }
+                else {
+                    viewContent.removeClass("has-numeric-keypad");
+                }
 
-                    //recalculate the scroll content area
-                    $ionicScrollDelegate.resize();
-                };
+                //recalculate the scroll content area
+                $ionicScrollDelegate.resize();
+            };
 
             if (apply) {
                 vm.$apply(showFunc);
@@ -105,6 +106,8 @@
         }
 
         function onKeyPress(value) {
+            var oldValue = vm.model;
+
             switch (value) {
                 //backspace
                 case "\b":
@@ -120,6 +123,10 @@
             }
 
             //TODO limit decimal entry to a single decimal
+
+            if (vm.onInput) {
+                vm.onInput(value, vm.model, oldValue);
+            }
         }
 
         /* Returns the element where the model should be displayed. By default it will be shown in the directive's
