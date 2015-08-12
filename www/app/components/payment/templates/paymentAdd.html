@@ -28,7 +28,7 @@
         <div class="item item-wrap arrow-align">
             <p class="padding-left padding-right">
                 <span id="paymentAmountLabel" class="block_align label_align">{{vm.config.amount}}</span>
-                <span id="paymentAmount" class="value_align">{{vm.payment.amount | currency}}
+                <span id="paymentAmount" class="value_align">{{vm.payment.amount <= 0 ? vm.config.enterAmount : (vm.payment.amount | currency)}}
                     <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
                           ui-sref="payment.input.amount">
                     </span>

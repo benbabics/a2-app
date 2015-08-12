@@ -54,6 +54,7 @@
             "paymentDueDate": "Payment Due Date",
             "currentBalance": "Current Balance",
             "minimumPayment": "Minimum Payment",
+            "enterAmount": "Enter Amount",
             "amount": "Amount",
             "bankAccount": "From Account",
             "scheduledDate": "Date",
