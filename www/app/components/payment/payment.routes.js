@@ -6,23 +6,23 @@
 
         $stateProvider.state("payment", {
             abstract: true,
-            url: "/payment",
+            url     : "/payment",
             template: "<ion-nav-view name='payment-view'></ion-nav-view>"
         });
 
         $stateProvider.state("payment.add", {
-            url: "/add",
+            url  : "/add",
             cache: false,
             views: {
                 "payment-view": {
                     templateUrl: "app/components/payment/templates/paymentAdd.html",
-                    controller: "PaymentAddController as vm",
+                    controller : "PaymentAddController as vm",
                     resolve    : {
                         payment: function (CommonService, Payment) {
                             CommonService.loadingBegin();
 
                             return Payment.getOrCreatePaymentAdd()
-                                .finally(function() {
+                                .finally(function () {
                                     CommonService.loadingComplete();
                                 });
                         }
@@ -32,40 +32,40 @@
         });
 
         $stateProvider.state("payment.summary", {
-            url: "/summary",
+            url  : "/summary",
             cache: false,
             views: {
                 "payment-view": {
                     templateUrl: "app/components/payment/templates/paymentSummary.html",
-                    controller: "PaymentSummaryController as vm"
+                    controller : "PaymentSummaryController as vm"
                 }
             }
         });
 
         $stateProvider.state("payment.confirmation", {
-            url: "/confirmation",
+            url  : "/confirmation",
             cache: false,
             views: {
                 "payment-view": {
                     templateUrl: "app/components/payment/templates/paymentConfirmation.html",
-                    controller: "PaymentConfirmationController as vm"
+                    controller : "PaymentConfirmationController as vm"
                 }
             }
         });
 
         $stateProvider.state("payment.input", {
             abstract: true,
-            url: "/input",
-            cache: false
+            url     : "/input",
+            cache   : false
         });
 
         $stateProvider.state("payment.input.amount", {
-            url: "/amount",
+            url  : "/amount",
             views: {
                 "payment-view@payment": {
                     templateUrl: "app/components/payment/templates/paymentAmount.input.html",
-                    controller: "PaymentAmountInputController as vm",
-                    resolve: {
+                    controller : "PaymentAmountInputController as vm",
+                    resolve    : {
                         payment: function (Payment) {
                             return Payment.getPayment();
                         },
@@ -74,6 +74,16 @@
                             return InvoiceManager.getInvoiceSummary();
                         }
                     }
+                }
+            }
+        });
+
+        $stateProvider.state("payment.input.date", {
+            url  : "/date",
+            views: {
+                "payment-view@payment": {
+                    templateUrl: "app/components/payment/templates/paymentDate.input.html",
+                    controller : "PaymentDateInputController as vm"
                 }
             }
         });

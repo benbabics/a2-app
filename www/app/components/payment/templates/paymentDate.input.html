@@ -1,0 +1,28 @@
+<ion-view class="payment-date-input-view" hide-nav-bar="true">
+
+    <!-- Header bar -->
+    <ion-header-bar class="bar bar-wex">
+        <div class="buttons">
+            <button class="button button-clear button-cancel icon icon-back"
+                    ng-click="$ionicGoBack()">
+            </button>
+        </div>
+
+        <h1 class="title">{{vm.config.title}}</h1>
+
+        <div class="buttons">
+            <button class="button button-clear button-done"
+                    ng-click="vm.done()">
+                {{vm.config.done}}
+            </button>
+        </div>
+    </ion-header-bar>
+
+    <ion-content>
+        <ionic-datepicker value="vm.date" min="vm.minDate" max="vm.maxDate">
+            <button class="button button-block button-positive icon-left ion-calendar">
+                {{vm.date | wexDefaultDateFormat}}
+            </button>
+        </ionic-datepicker>
+    </ion-content>
+</ion-view>

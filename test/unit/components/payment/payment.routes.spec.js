@@ -24,13 +24,13 @@
                 }
             ],
             mockUser = {
-                newField1: "some value",
-                newField2: "some other value",
-                newField3: "yet another value",
-                email    : "email address value",
-                firstName: "first name value",
-                username : "username value",
-                company  : {
+                newField1     : "some value",
+                newField2     : "some other value",
+                newField3     : "yet another value",
+                email         : "email address value",
+                firstName     : "first name value",
+                username      : "username value",
+                company       : {
                     accountId    : "company account id value",
                     accountNumber: "company account number value",
                     name         : "company name value"
@@ -55,7 +55,7 @@
             Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd", "getPayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
-            module(function($provide) {
+            module(function ($provide) {
                 $provide.value("Payment", Payment);
                 $provide.value("UserManager", UserManager);
                 $provide.value("InvoiceManager", InvoiceManager);
@@ -273,6 +273,53 @@
 
                 it("should call InvoiceManager.getInvoiceSummary", function () {
                     expect(InvoiceManager.getInvoiceSummary).toHaveBeenCalledWith();
+                });
+
+                it("should transition successfully", function () {
+                    expect($state.current.name).toBe(stateName);
+                });
+            });
+        });
+
+        describe("has a payment.input.date state that", function () {
+            var state,
+                stateName = "payment.input.date";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should NOT be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should NOT be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/date");
+            });
+
+            it("should define a view on the payment view container", function () {
+                expect(state.views).toBeDefined();
+                expect(state.views["payment-view@payment"]).toBeDefined();
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName)).toEqual("#/payment/input/date");
+            });
+
+            describe("when navigated to", function () {
+
+                beforeEach(function () {
+                    $state.go(stateName);
+                    $rootScope.$digest();
                 });
 
                 it("should transition successfully", function () {

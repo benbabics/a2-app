@@ -75,6 +75,12 @@
                     "zeroPayment": "The amount entered cannot be \"0.00\".",
                     "paymentTooLarge": "The amount entered cannot be greater than the Current Balance"
                 }
+            },
+            "DATE": {
+                "CONFIG": {
+                    "title": "Date",
+                    "maxFutureDays": 180
+                }
             }
         }
     };
