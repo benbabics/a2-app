@@ -1,0 +1,27 @@
+<ion-view class="payment-bank-account-input-view" hide-nav-bar="true">
+
+    <!-- Header bar -->
+    <ion-header-bar class="bar bar-wex">
+        <div class="buttons">
+            <button class="button button-clear button-cancel icon icon-back"
+                    ng-click="$ionicGoBack()">
+            </button>
+        </div>
+
+        <h1 class="title">{{vm.config.title}}</h1>
+    </ion-header-bar>
+
+    <ion-content>
+        <ion-list>
+            <ion-item ng-repeat="bankAccount in vm.bankAccounts">
+                <p ng-click="vm.selectBank(bankAccount)">
+                    {{bankAccount.getDisplayName()}}
+                </p>
+            </ion-item>
+        </ion-list>
+
+        <p class="padding align-center instructions">
+            {{vm.config.instructionalText}}
+        </p>
+    </ion-content>
+</ion-view>

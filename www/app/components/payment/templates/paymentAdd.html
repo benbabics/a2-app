@@ -51,7 +51,9 @@
                 <span id="bankAccountLabel" class="block_align label_align">{{vm.config.bankAccount}}</span>
                 <span id="bankAccount" class="value_align">{{vm.payment.bankAccount.getDisplayName()}}
                      <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
-                           ng-if="vm.hasMultipleBanks">
+                           ng-if="vm.hasMultipleBanks"
+                           ui-sref="payment.input.bankAccount">
+
                      </span>
                 </span>
             </p>

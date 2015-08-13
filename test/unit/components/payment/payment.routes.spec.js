@@ -3,26 +3,15 @@
 
     describe("A Payment Module Route Config", function () {
 
-        var $q,
+        var $injector,
+            $q,
             $rootScope,
             $state,
-            mockActiveBanks = [
-                {
-                    id         : "Bank Id 1",
-                    defaultBank: false,
-                    name       : "Bank Name 1"
-                },
-                {
-                    id         : "Bank Id 2",
-                    defaultBank: true,
-                    name       : "Bank Name 2"
-                },
-                {
-                    id         : "Bank Id 3",
-                    defaultBank: false,
-                    name       : "Bank Name 3"
-                }
-            ],
+            bankModel1,
+            bankModel2,
+            bankModel3,
+            mockBankAccounts,
+            mockPayment,
             mockUser = {
                 newField1     : "some value",
                 newField2     : "some other value",
@@ -41,31 +30,55 @@
                     name         : "billing company name value"
                 }
             },
+            BankManager,
+            BankModel,
             Payment,
-            UserManager,
-            InvoiceManager;
+            PaymentModel,
+            InvoiceManager,
+            UserManager;
 
         beforeEach(function () {
 
             module("app.shared");
+            module("app.components.bank");
             module("app.components.payment");
             module("app.html");
 
             // mock dependencies
             Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd", "getPayment"]);
+            BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             module(function ($provide) {
                 $provide.value("Payment", Payment);
+                $provide.value("BankManager", BankManager);
                 $provide.value("UserManager", UserManager);
                 $provide.value("InvoiceManager", InvoiceManager);
             });
 
-            inject(function (_$q_, _$rootScope_, _$state_) {
+            inject(function (_$injector_, _$q_, _$rootScope_, _$state_, _BankModel_, _PaymentModel_) {
+                $injector = _$injector_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
+                BankModel = _BankModel_;
+                PaymentModel = _PaymentModel_;
             });
+
+            // setup mock objects
+            mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
+
+            bankModel1 = TestUtils.getRandomBank(BankModel);
+            bankModel2 = TestUtils.getRandomBank(BankModel);
+            bankModel3 = TestUtils.getRandomBank(BankModel);
+
+            mockBankAccounts = {};
+            mockBankAccounts[bankModel1.id] = bankModel1;
+            mockBankAccounts[bankModel2.id] = bankModel2;
+            mockBankAccounts[bankModel3.id] = bankModel3;
+
+            BankManager.getActiveBanks.and.returnValue(mockBankAccounts);
+            Payment.getPayment.and.returnValue(mockPayment);
         });
 
         describe("has a payment.add state that", function () {
@@ -112,7 +125,7 @@
                     Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
 
                     $state.go(stateName);
-                    getOrFetchPaymentAddDeferred.resolve(mockActiveBanks);
+                    getOrFetchPaymentAddDeferred.resolve(mockBankAccounts);
                     $rootScope.$digest();
                 });
 
@@ -279,6 +292,122 @@
                     expect($state.current.name).toBe(stateName);
                 });
             });
+        });
+
+        describe("has a payment.input.bankAccount state that", function () {
+            var state,
+                stateName = "payment.input.bankAccount";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should NOT be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should NOT be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/bankAccount");
+            });
+
+            it("should define a view on the payment view container", function () {
+                expect(state.views).toBeDefined();
+                expect(state.views["payment-view@payment"]).toBeDefined();
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName)).toEqual("#/payment/input/bankAccount");
+            });
+
+            describe("when navigated to", function () {
+
+                beforeEach(function () {
+                    $state.go(stateName);
+                    $rootScope.$digest();
+                });
+
+                it("should call Payment.getPayment", function () {
+                    expect(Payment.getPayment).toHaveBeenCalledWith();
+                });
+
+                it("should call BankManager.getActiveBanks", function () {
+                    expect(BankManager.getActiveBanks).toHaveBeenCalledWith();
+                });
+
+                it("should transition successfully", function () {
+                    expect($state.current.name).toBe(stateName);
+                });
+
+                it("should resolve the payment", function () {
+                    expect($injector.invoke($state.current.views["payment-view@payment"].resolve.payment)).toEqual(mockPayment);
+                });
+
+                describe("when the payment does not have a bank account", function () {
+
+                    beforeEach(function () {
+                        mockPayment.bankAccount = null;
+
+                        $state.go(stateName);
+                        $rootScope.$digest();
+                    });
+
+                    it("should resolve the bankAccounts", function () {
+                        var expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
+
+                        expect($injector.invoke($state.current.views["payment-view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
+                    });
+
+                });
+
+                describe("when the payment has a bank account NOT in the collection", function () {
+
+                    beforeEach(function () {
+                        mockPayment.bankAccount = TestUtils.getRandomBank(BankModel);
+
+                        $state.go(stateName);
+                        $rootScope.$digest();
+                    });
+
+                    it("should resolve the bankAccounts", function () {
+                        var expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
+
+                        expect($injector.invoke($state.current.views["payment-view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
+                    });
+
+                });
+
+                describe("when the payment has a bank account in the collection", function () {
+
+                    beforeEach(function () {
+                        mockPayment.bankAccount = bankModel2;
+
+                        $state.go(stateName);
+                        $rootScope.$digest();
+                    });
+
+                    it("should resolve the bankAccounts", function () {
+                        var expectedBankAccounts = {};
+                        expectedBankAccounts[bankModel1.id] = bankModel1;
+                        expectedBankAccounts[bankModel3.id] = bankModel3;
+
+                        expectedBankAccounts = _.sortBy(expectedBankAccounts, "name");
+
+                        expect($injector.invoke($state.current.views["payment-view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
+                    });
+
+                });
+
+            });
+
         });
 
         describe("has a payment.input.date state that", function () {

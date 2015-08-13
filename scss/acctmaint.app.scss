@@ -151,6 +151,20 @@ $user-login-gradient-bottom: #414141;
   }
 }
 
+/**--------------------------------
+  Payment Bank Account Input Page
+ ----------------------------------**/
+.payment-bank-account-input-view {
+
+  .scroll-content {
+    background-color: #bfbfbf;
+
+    .instructions {
+      text-align: center;
+    }
+  }
+}
+
 
 /**------ Chevron Alignment -------**/
 

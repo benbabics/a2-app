@@ -78,6 +78,37 @@
             }
         });
 
+        $stateProvider.state("payment.input.bankAccount", {
+            url: "/bankAccount",
+            views: {
+                "payment-view@payment": {
+                    templateUrl: "app/components/payment/templates/paymentBankAccount.input.html",
+                    controller: "PaymentBankAccountInputController as vm",
+                    resolve: {
+                        payment: function (Payment) {
+                            return Payment.getPayment();
+                        },
+
+                        bankAccounts: function (CommonService, BankManager, Payment) {
+                            var _ = CommonService._,
+                                activeBanks = _.sortBy(BankManager.getActiveBanks(), "name"),
+                                currentBankAccount = Payment.getPayment().bankAccount;
+
+                            // If there is a bank account already selected, remove it from the list
+                            // to only show different bank accounts
+                            if (_.isObject(currentBankAccount)) {
+                                return _.remove(activeBanks, function (bank) {
+                                    return bank.id !== currentBankAccount.id;
+                                });
+                            }
+
+                            return activeBanks;
+                        }
+                    }
+                }
+            }
+        });
+
         $stateProvider.state("payment.input.date", {
             url  : "/date",
             views: {

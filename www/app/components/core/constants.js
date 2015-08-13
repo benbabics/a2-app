@@ -81,6 +81,12 @@
                     "title": "Date",
                     "maxFutureDays": 180
                 }
+            },
+            "BANK_ACCOUNT": {
+                "CONFIG": {
+                    "title": "Account",
+                    "instructionalText": "Please Note: Managing bank accounts can only be completed on the web from the desktop application version."
+                }
             }
         }
     };
