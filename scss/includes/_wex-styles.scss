@@ -44,6 +44,9 @@ $menu-button-line-height: ($button-large-icon-size + $button-small-font-size) / 
     font-family: ionicons;
     content: "\f100";
   }
+  .ion-pos {
+    vertical-align: middle;
+  }
 
   .title {
     color: $warning-message-color;
