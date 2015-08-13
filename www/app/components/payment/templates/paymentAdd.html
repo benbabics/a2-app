@@ -40,7 +40,9 @@
             <p class="padding-left padding-right">
                 <span id="scheduledDateLabel" class="block_align label_align">{{vm.config.scheduledDate}}</span>
                 <span id="scheduledDate" class="value_align">{{vm.payment.scheduledDate | wexDefaultDateFormat}}
-                    <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"></span>
+                    <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
+                          ui-sref="payment.input.date">
+                    </span>
                 </span>
             </p>
         </div>
@@ -48,7 +50,9 @@
             <p class="padding-left padding-right">
                 <span id="bankAccountLabel" class="block_align label_align">{{vm.config.bankAccount}}</span>
                 <span id="bankAccount" class="value_align">{{vm.payment.bankAccount.getDisplayName()}}
-                     <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align" ng-if="vm.hasMultipleBanks"></span>
+                     <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
+                           ng-if="vm.hasMultipleBanks">
+                     </span>
                 </span>
             </p>
         </div>
