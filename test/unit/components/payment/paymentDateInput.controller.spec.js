@@ -24,7 +24,8 @@
                 }
             }
         },
-        mockDateGlobals = angular.extend({}, mockGlobals.PAYMENT_ADD.INPUTS.DATE.CONFIG, mockGlobals.BUTTONS.CONFIG);
+        mockDateGlobals = angular.extend({}, mockGlobals.PAYMENT_ADD.INPUTS.DATE.CONFIG, mockGlobals.BUTTONS.CONFIG),
+        mockPayment;
 
     describe("A Payment Date Input Controller", function () {
 
@@ -50,23 +51,26 @@
             //mock dependencies:
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
 
-            inject(function ($rootScope, $controller, globals, _moment_) {
+            inject(function ($rootScope, $controller, globals, _moment_, BankModel, PaymentModel) {
                 moment = _moment_;
 
                 scope = $rootScope.$new();
+
+                mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
 
                 ctrl = $controller("PaymentDateInputController", {
                     $scope       : scope,
                     $ionicHistory: $ionicHistory,
                     globals      : globals,
-                    moment       : moment
+                    moment       : moment,
+                    payment      : mockPayment
                 });
 
             });
         });
 
-        it("should set the date to today", function () {
-            expect(ctrl.date).toEqual(moment().toDate());
+        it("should set the date to the scheduled date of the payment", function () {
+            expect(ctrl.date).toEqual(moment(mockPayment.scheduledDate).toDate());
         });
 
         it("should set the min date range to yesterday", function () {
@@ -79,9 +83,17 @@
 
         describe("has a done function that", function () {
 
-            it("should go back to the previous page", function () {
-                ctrl.done();
+            beforeEach(function () {
+                ctrl.date = TestUtils.getRandomDate(new Date(2012, 0, 1), new Date());
 
+                ctrl.done();
+            });
+
+            it("should update the payment with the selected date", function () {
+                expect(mockPayment.scheduledDate).toEqual(ctrl.date);
+            });
+
+            it("should go back to the previous page", function () {
                 expect($ionicHistory.goBack).toHaveBeenCalledWith();
             });
         });

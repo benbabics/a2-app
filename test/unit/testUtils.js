@@ -7,6 +7,7 @@ var TestUtils = (function () {
     var ALPHANUMERIC_CHARACTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
         TestUtils = {
             getRandomBank                    : getRandomBank,
+            getRandomDate                    : getRandomDate,
             getRandomInteger                 : getRandomInteger,
             getRandomNumber                  : getRandomNumber,
             getRandomNumberWithLength        : getRandomNumberWithLength,

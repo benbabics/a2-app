@@ -451,8 +451,16 @@
                     $rootScope.$digest();
                 });
 
+                it("should call Payment.getPayment", function () {
+                    expect(Payment.getPayment).toHaveBeenCalledWith();
+                });
+
                 it("should transition successfully", function () {
                     expect($state.current.name).toBe(stateName);
+                });
+
+                it("should resolve the payment", function () {
+                    expect($injector.invoke($state.current.views["payment-view@payment"].resolve.payment)).toEqual(mockPayment);
                 });
             });
         });
