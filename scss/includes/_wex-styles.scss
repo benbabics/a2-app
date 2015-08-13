@@ -277,6 +277,22 @@ input[name=passcode] {
   background: transparent !important;
 }
 
+ion-modal-view.modal-network-status {
+  border: 1px solid #6d6d6d;
+  top: 43%;
+  right: 5%;
+  bottom: 43%;
+  left: 5%;
+  width: 90%;
+  min-height: 0px;
+
+  .contents {
+    margin: 0;
+    padding: 15px 0;
+    text-align: center;
+  }
+}
+
 ion-modal-view.modal-tooltip {
   width: 100% !important;
   height: 100%;

@@ -36,7 +36,7 @@
                 </ion-nav-buttons>
             </ion-nav-bar>
 
-            <div ng-controller="NetworkStatusBannerController as networkStatus">
+            <div ng-controller="NetworkStatusController as networkStatus">
                 <div ng-controller="ServerConnectionErrorBannerController as serverConnection">
                     <wex-notification-bar class="sever-connection-banner"
                                           text="{{serverConnection.bannerText}}"
@@ -117,7 +117,7 @@
         <script src="app/shared/storage/localstorage.service.js"></script>
         <script src="app/shared/network/network.module.js"></script>
         <script src="app/shared/network/serverConnectionErrorBanner.controller.js"></script>
-        <script src="app/shared/network/networkStatusBanner.controller.js"></script>
+        <script src="app/shared/network/networkStatus.controller.js"></script>
         <script src="app/shared/network/network.config.js"></script>
         <script src="app/shared/network/httpResponseReporterInterceptor.service.js"></script>
         <script src="app/shared/network/formEncoder.service.js"></script>
@@ -131,6 +131,11 @@
         <script src="app/shared/core/core.module.js"></script>
         <script src="app/shared/core/constants.js"></script>
         <script src="app/shared/core/common.service.js"></script>
+        <script src="app/components/user/user.module.js"></script>
+        <script src="app/components/user/usersResource.service.js"></script>
+        <script src="app/components/user/userModel.service.js"></script>
+        <script src="app/components/user/userManager.service.js"></script>
+        <script src="app/components/user/user.routes.js"></script>
         <script src="app/components/payment/payment.module.js"></script>
         <script src="app/components/payment/paymentsResource.service.js"></script>
         <script src="app/components/payment/paymentSummary.controller.js"></script>
@@ -142,11 +147,6 @@
         <script src="app/components/payment/paymentAdd.controller.js"></script>
         <script src="app/components/payment/payment.service.js"></script>
         <script src="app/components/payment/payment.routes.js"></script>
-        <script src="app/components/user/user.module.js"></script>
-        <script src="app/components/user/usersResource.service.js"></script>
-        <script src="app/components/user/userModel.service.js"></script>
-        <script src="app/components/user/userManager.service.js"></script>
-        <script src="app/components/user/user.routes.js"></script>
         <script src="app/components/navBar/navBar.module.js"></script>
         <script src="app/components/navBar/navBar.controller.js"></script>
         <script src="app/components/menu/menu.module.js"></script>
