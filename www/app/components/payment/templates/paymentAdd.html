@@ -21,7 +21,7 @@
 
                 <p class="padding-top divider">
                     <span id="paymentDueDateLabel" class="block_align black">{{vm.config.paymentDueDate}}</span>
-                    <span id="paymentDueDate" class="content_align black">{{vm.invoiceSummary.paymentDueDate | amDateFormat:"MM/DD/YYYY"}}</span>
+                    <span id="paymentDueDate" class="content_align black">{{vm.invoiceSummary.paymentDueDate | wexDefaultDateFormat}}</span>
                 </p>
             </div>
         </div>
@@ -39,7 +39,7 @@
         <div class="item item-wrap arrow-align">
             <p class="padding-left padding-right">
                 <span id="scheduledDateLabel" class="block_align label_align">{{vm.config.scheduledDate}}</span>
-                <span id="scheduledDate" class="value_align">{{vm.payment.scheduledDate | amDateFormat:"MM/DD/YYYY"}}
+                <span id="scheduledDate" class="value_align">{{vm.payment.scheduledDate | wexDefaultDateFormat}}
                     <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"></span>
                 </span>
             </p>

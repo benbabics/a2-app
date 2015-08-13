@@ -31,6 +31,7 @@ module.exports = function(config) {
             "lib/ngFitText/src/ng-FitText.js",
             "lib/moment/moment.js",
             "lib/angular-moment/angular-moment.js",
+            "lib/ionic-datepicker-widget/dist/ionic-datepicker.min.js",
 
             // Test libraries
             "../test/lib/**/*.js",

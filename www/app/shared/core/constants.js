@@ -14,7 +14,8 @@
     sharedGlobals.GENERAL = {
         ERRORS: {
             "UNKNOWN_EXCEPTION": "ERROR: cause unknown."
-        }
+        },
+        "defaultDateFormat": "MM/DD/YYYY"
     };
 
     /**
