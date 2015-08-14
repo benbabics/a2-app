@@ -121,6 +121,15 @@
 
     appGlobals.PAYMENT_LIST = {
         "CONFIG": {
+            "title"                     : "Payment Activity",
+            "scheduledPaymentsHeading"  : "Scheduled Payments",
+            "noScheduledPaymentsMessage": "There are currently no payments scheduled.",
+            "completedPaymentsHeading"  : "Completed Payments",
+            "noCompletedPaymentsMessage": "There are currently no payments completed."
+        },
+        "SEARCH_OPTIONS": {
+            "PAGE_NUMBER": 0,
+            "PAGE_SIZE"  : 50
         }
     };
 
