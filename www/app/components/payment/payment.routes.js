@@ -10,6 +10,22 @@
             template: "<ion-nav-view name='payment-view'></ion-nav-view>"
         });
 
+        $stateProvider.state("payment.list", {
+            abstract: true,
+            url: "/list",
+            views: {
+                "payment-view": {
+                    template: "<ion-nav-view></ion-nav-view>"
+                }
+            }
+        });
+
+        $stateProvider.state("payment.list.view", {   // default payment.list child state
+            url: "",
+            templateUrl: "app/components/payment/templates/paymentList.html",
+            controller : "PaymentListController as vm"
+        });
+
         $stateProvider.state("payment.add", {
             url  : "/add",
             cache: false,

@@ -81,6 +81,95 @@
             Payment.getPayment.and.returnValue(mockPayment);
         });
 
+        describe("has a payment state that", function () {
+            var state,
+                stateName = "payment";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be defined", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should be abstract", function () {
+                expect(state.abstract).toBeTruthy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/payment");
+            });
+
+            it("should have the expected template", function () {
+                expect(state.template).toEqual("<ion-nav-view name='payment-view'></ion-nav-view>");
+            });
+        });
+
+        describe("has a payment.list state that", function () {
+            var state,
+                stateName = "payment.list";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should be abstract", function () {
+                expect(state.abstract).toBeTruthy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/list");
+            });
+
+            it("should define a payment view", function () {
+                expect(state.views).toBeDefined();
+                expect(state.views["payment-view"]).toBeDefined();
+                expect(state.views["payment-view"].template).toEqual("<ion-nav-view></ion-nav-view>");
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName)).toEqual("#/payment/list");
+            });
+        });
+
+        describe("has a payment.list.view state that", function () {
+            var state,
+                stateName = "payment.list.view";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should not be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should not be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("");
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName)).toEqual("#/payment/list");
+            });
+
+        });
+
         describe("has a payment.add state that", function () {
             var state,
                 stateName = "payment.add";
@@ -98,7 +187,7 @@
                 expect(state.abstract).toBeFalsy();
             });
 
-            it("should not be cache", function () {
+            it("should not be cached", function () {
                 expect(state.cache).toBeFalsy();
             });
 
@@ -158,7 +247,7 @@
                 expect(state.abstract).toBeFalsy();
             });
 
-            it("should not be cache", function () {
+            it("should not be cached", function () {
                 expect(state.cache).toBeFalsy();
             });
 
@@ -194,7 +283,7 @@
                 expect(state.abstract).toBeFalsy();
             });
 
-            it("should not be cache", function () {
+            it("should not be cached", function () {
                 expect(state.cache).toBeFalsy();
             });
 
