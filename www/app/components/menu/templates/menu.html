@@ -19,8 +19,10 @@
         <ion-item id="option-drivers">
             {{vm.config.options.drivers}}
         </ion-item>
-        <ion-item id="option-payment-history">
-            {{vm.config.options.paymentHistory}}
+        <ion-item id="option-payment-history"
+                  ui-sref="payment.list.view"
+                  menu-close>
+            {{vm.config.options.payments}}
         </ion-item>
         <ion-item id="option-contact-us">
             {{vm.config.options.contactUs}}
