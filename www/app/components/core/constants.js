@@ -119,6 +119,11 @@
         }
     };
 
+    appGlobals.PAYMENT_LIST = {
+        "CONFIG": {
+        }
+    };
+
     appGlobals.NAV_BAR = {
         "CONFIG": {
             "menuButtonText": "Menu"
