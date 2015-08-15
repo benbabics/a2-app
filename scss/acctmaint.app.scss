@@ -10,145 +10,155 @@ $user-login-gradient-top: #7f7f7f;
 $user-login-gradient-bottom: #414141;
 
 .user-login-view {
-  background: -webkit-linear-gradient($user-login-gradient-top, $user-login-gradient-bottom);
-  background: linear-gradient($user-login-gradient-top, $user-login-gradient-bottom);
+    background: -webkit-linear-gradient($user-login-gradient-top, $user-login-gradient-bottom);
+    background: linear-gradient($user-login-gradient-top, $user-login-gradient-bottom);
 
-  color: $inverse-font-color;
+    color: $inverse-font-color;
 
-  form .list {
-    background: none;
-  }
+    form .list {
+        background: none;
+    }
 
-  .header-login {
-    height: $input-height-base * 2;
-  }
+    .header-login {
+        height: $input-height-base * 2;
+    }
 }
 
 /**Content Alignment**/
 
 .align_center {
-  text-align: center;
+    text-align: center;
 }
 
 .btn_align {
-  float: left;
-  font-weight: bold;
+    float: left;
+    font-weight: bold;
 }
 
 .block_align {
-  display: inline-block;
-  color: #807f7f;
+    display: inline-block;
+    color: #807f7f;
 }
 
 .content_align {
-  display: inline-block;
-  float: right;
-  color: #807f7f;
-  text-align: right;
+    display: inline-block;
+    float: right;
+    color: #807f7f;
+    text-align: right;
 }
 
 .green {
-  color: #6d9940 !important;
+    color: #6d9940 !important;
 }
 
 .content_border {
-  text-decoration: none;
-  border: 0px;
+    text-decoration: none;
+    border: 0px;
 }
 
 .body-text {
-  color: #807f7f;
+    color: #807f7f;
 }
 
 .black {
-  color: #000000 !important;
+    color: #000000 !important;
 }
 
 .divider {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .arrow-align {
-  padding-bottom: 0px ! important;
-  padding-top: 5px !important;
+    padding-bottom: 0px ! important;
+    padding-top: 5px !important;
 }
 
 .button-width {
-  width: 75% !important;
-  display: inline-block;
+    width: 75% !important;
+    display: inline-block;
 }
 
 .inner-container {
-  background-color: #eeedec;
+    background-color: #eeedec;
 }
 
 .button-menu {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 /**------------------------------------------------------
  Side Menu
  ------------------------------------------------------**/
 .menu-view {
-  background-color: $charcoal-light;
-  padding-top: $bar-height;
-
-  .item, .item-content {
     background-color: $charcoal-light;
-    color: $inverse-font-color;
-    border-color: $charcoal;
-  }
-  a:active {
-    background-color: $charcoal !important;
-  }
+    padding-top: $bar-height;
+
+    .item, .item-content {
+        background-color: $charcoal-light;
+        color: $inverse-font-color;
+        border-color: $charcoal;
+    }
+    a:active {
+        background-color: $charcoal !important;
+    }
 }
 
 /**------------------------------
  Landing view
 ----------------------------------**/
 .landing-view {
-  background-color: #989898;
-
-  .main-container {
-    border-bottom: 0px;
     background-color: #989898;
-  }
-  .inner-container {
-    background-color: #eeedec;
-  }
+
+    .main-container {
+        border-bottom: 0px;
+        background-color: #989898;
+    }
+    .inner-container {
+        background-color: #eeedec;
+    }
 }
 
 /**----------------------------------------------------------
  Warning Messaging
  ---------------------------------------------------------**/
 .card.card-warning {
-  background-color: $warning-message-fill;
-  color: $warning-message-color;
-  border: 1px solid $warning-message-color;
-  @include box-shadow(none);
-
-  .item-divider {
     background-color: $warning-message-fill;
     color: $warning-message-color;
-    border: none;
-  }
+    border: 1px solid $warning-message-color;
+    @include box-shadow(none);
+
+    .item-divider {
+        background-color: $warning-message-fill;
+        color: $warning-message-color;
+        border: none;
+    }
 }
 
 /**--------------------------------
   Payment Amount Input Page
  ----------------------------------**/
+.platform-ios {
+    .payment-amount-input-view {
+        .title {
+            left: inherit !important;
+            right: inherit !important;
+        }
+    }
+}
+
 .payment-amount-input-view {
 
-  .scroll-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+    .scroll-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-  .amount-input {
-    font-size: $font-size-large;
-    font-weight: bold;
-  }
+    .amount-input {
+        font-size: $font-size-large;
+        font-weight: bold;
+    }
+
 }
 
 /**--------------------------------
@@ -156,30 +166,30 @@ $user-login-gradient-bottom: #414141;
  ----------------------------------**/
 .payment-bank-account-input-view {
 
-  .scroll-content {
-    background-color: #bfbfbf;
+    .scroll-content {
+        background-color: #bfbfbf;
 
-    .instructions {
-      text-align: center;
+        .instructions {
+            text-align: center;
+        }
     }
-  }
 }
-
 
 /**------ Chevron Alignment -------**/
 
 .label_align {
-  vertical-align: middle;
-  width: 45%;
+    vertical-align: middle;
+    width: 45%;
 }
 
 .value_align {
-  vertical-align: middle;
-  width: 45%;
-  display: inline-block;
-  text-align: right;
+    vertical-align: middle;
+    width: 45%;
+    display: inline-block;
+    text-align: right;
 }
+
 .chevron_align {
-  vertical-align: middle;
-  width: 10%;
+    vertical-align: middle;
+    width: 10%;
 }
