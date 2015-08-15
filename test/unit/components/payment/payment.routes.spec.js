@@ -212,9 +212,8 @@
                     PaymentManager.fetchPayments.and.returnValue(fetchPaymentsDeferred.promise);
 
                     $state.go(stateName);
-                    $rootScope.$digest();
                     fetchPaymentsDeferred.resolve(mockPayments);
-                    $rootScope.$apply();
+                    $rootScope.$digest();
                 });
 
                 it("should call PaymentManager.fetchPayments", function () {
