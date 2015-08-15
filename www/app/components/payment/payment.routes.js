@@ -23,7 +23,20 @@
         $stateProvider.state("payment.list.view", {   // default payment.list child state
             url: "",
             templateUrl: "app/components/payment/templates/paymentList.html",
-            controller : "PaymentListController as vm"
+            controller : "PaymentListController as vm",
+            resolve    : {
+                payments: function (globals, CommonService, PaymentManager, UserManager) {
+                    var billingAccountId = UserManager.getUser().billingCompany.accountId,
+                        options = globals.PAYMENT_LIST.SEARCH_OPTIONS;
+
+                    CommonService.loadingBegin();
+
+                    return PaymentManager.fetchPayments(billingAccountId, options.PAGE_NUMBER, options.PAGE_SIZE)
+                        .finally(function () {
+                            CommonService.loadingComplete();
+                        });
+                }
+            }
         });
 
         $stateProvider.state("payment.add", {

@@ -7,11 +7,30 @@
             $q,
             $rootScope,
             $state,
-            bankModel1,
-            bankModel2,
-            bankModel3,
+            mockBank1,
+            mockBank2,
+            mockBank3,
             mockBankAccounts,
-            mockPayment,
+            mockGlobals = {
+                PAYMENT_LIST: {
+                    "SEARCH_OPTIONS": {
+                        "PAGE_NUMBER": TestUtils.getRandomInteger(0, 20),
+                        "PAGE_SIZE": TestUtils.getRandomInteger(10, 100)
+                    }
+                },
+
+                BUTTONS: {
+                    "CONFIG": {
+                        "cancel": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "done": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    }
+                }
+            },
+            mockPayment1,
+            mockPayment2,
+            mockPayment3,
+            mockPayment4,
+            mockPayments,
             mockUser = {
                 newField1     : "some value",
                 newField2     : "some other value",
@@ -33,6 +52,7 @@
             BankManager,
             BankModel,
             Payment,
+            PaymentManager,
             PaymentModel,
             InvoiceManager,
             UserManager;
@@ -47,13 +67,16 @@
             // mock dependencies
             Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd", "getPayment"]);
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayments"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
-            module(function ($provide) {
-                $provide.value("Payment", Payment);
+            module(function ($provide, sharedGlobals) {
+                $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
                 $provide.value("BankManager", BankManager);
-                $provide.value("UserManager", UserManager);
                 $provide.value("InvoiceManager", InvoiceManager);
+                $provide.value("Payment", Payment);
+                $provide.value("PaymentManager", PaymentManager);
+                $provide.value("UserManager", UserManager);
             });
 
             inject(function (_$injector_, _$q_, _$rootScope_, _$state_, _BankModel_, _PaymentModel_) {
@@ -66,19 +89,29 @@
             });
 
             // setup mock objects
-            mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
+            mockPayment1 = TestUtils.getRandomPayment(PaymentModel, BankModel);
+            mockPayment2 = TestUtils.getRandomPayment(PaymentModel, BankModel);
+            mockPayment3 = TestUtils.getRandomPayment(PaymentModel, BankModel);
+            mockPayment4 = TestUtils.getRandomPayment(PaymentModel, BankModel);
 
-            bankModel1 = TestUtils.getRandomBank(BankModel);
-            bankModel2 = TestUtils.getRandomBank(BankModel);
-            bankModel3 = TestUtils.getRandomBank(BankModel);
+            mockPayments = {};
+            mockPayments[mockPayment1.id] = mockPayment1;
+            mockPayments[mockPayment2.id] = mockPayment2;
+            mockPayments[mockPayment3.id] = mockPayment3;
+            mockPayments[mockPayment4.id] = mockPayment4;
+
+            mockBank1 = TestUtils.getRandomBank(BankModel);
+            mockBank2 = TestUtils.getRandomBank(BankModel);
+            mockBank3 = TestUtils.getRandomBank(BankModel);
 
             mockBankAccounts = {};
-            mockBankAccounts[bankModel1.id] = bankModel1;
-            mockBankAccounts[bankModel2.id] = bankModel2;
-            mockBankAccounts[bankModel3.id] = bankModel3;
+            mockBankAccounts[mockBank1.id] = mockBank1;
+            mockBankAccounts[mockBank2.id] = mockBank2;
+            mockBankAccounts[mockBank3.id] = mockBank3;
 
             BankManager.getActiveBanks.and.returnValue(mockBankAccounts);
-            Payment.getPayment.and.returnValue(mockPayment);
+            Payment.getPayment.and.returnValue(mockPayment1);
+
         });
 
         describe("has a payment state that", function () {
@@ -166,6 +199,34 @@
 
             it("should respond to the URL", function () {
                 expect($state.href(stateName)).toEqual("#/payment/list");
+            });
+
+            describe("when navigated to", function () {
+
+                var fetchPaymentsDeferred;
+
+                beforeEach(function () {
+
+                    fetchPaymentsDeferred = $q.defer();
+                    UserManager.getUser.and.returnValue(mockUser);
+                    PaymentManager.fetchPayments.and.returnValue(fetchPaymentsDeferred.promise);
+
+                    $state.go(stateName);
+                    $rootScope.$digest();
+                    fetchPaymentsDeferred.resolve(mockPayments);
+                    $rootScope.$apply();
+                });
+
+                it("should call PaymentManager.fetchPayments", function () {
+                    expect(PaymentManager.fetchPayments).toHaveBeenCalledWith(mockUser.billingCompany.accountId,
+                        mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
+                        mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE);
+                });
+
+                it("should transition successfully", function () {
+                    expect($state.current.name).toBe(stateName);
+                });
+
             });
 
         });
@@ -380,6 +441,10 @@
                 it("should transition successfully", function () {
                     expect($state.current.name).toBe(stateName);
                 });
+
+                it("should resolve the payment", function () {
+                    expect($injector.invoke($state.current.views["payment-view@payment"].resolve.payment)).toEqual(mockPayment1);
+                });
             });
         });
 
@@ -437,13 +502,13 @@
                 });
 
                 it("should resolve the payment", function () {
-                    expect($injector.invoke($state.current.views["payment-view@payment"].resolve.payment)).toEqual(mockPayment);
+                    expect($injector.invoke($state.current.views["payment-view@payment"].resolve.payment)).toEqual(mockPayment1);
                 });
 
                 describe("when the payment does not have a bank account", function () {
 
                     beforeEach(function () {
-                        mockPayment.bankAccount = null;
+                        mockPayment1.bankAccount = null;
 
                         $state.go(stateName);
                         $rootScope.$digest();
@@ -460,7 +525,7 @@
                 describe("when the payment has a bank account NOT in the collection", function () {
 
                     beforeEach(function () {
-                        mockPayment.bankAccount = TestUtils.getRandomBank(BankModel);
+                        mockPayment1.bankAccount = TestUtils.getRandomBank(BankModel);
 
                         $state.go(stateName);
                         $rootScope.$digest();
@@ -477,7 +542,7 @@
                 describe("when the payment has a bank account in the collection", function () {
 
                     beforeEach(function () {
-                        mockPayment.bankAccount = bankModel2;
+                        mockPayment1.bankAccount = mockBank2;
 
                         $state.go(stateName);
                         $rootScope.$digest();
@@ -485,8 +550,8 @@
 
                     it("should resolve the bankAccounts", function () {
                         var expectedBankAccounts = {};
-                        expectedBankAccounts[bankModel1.id] = bankModel1;
-                        expectedBankAccounts[bankModel3.id] = bankModel3;
+                        expectedBankAccounts[mockBank1.id] = mockBank1;
+                        expectedBankAccounts[mockBank3.id] = mockBank3;
 
                         expectedBankAccounts = _.sortBy(expectedBankAccounts, "name");
 
@@ -549,7 +614,7 @@
                 });
 
                 it("should resolve the payment", function () {
-                    expect($injector.invoke($state.current.views["payment-view@payment"].resolve.payment)).toEqual(mockPayment);
+                    expect($injector.invoke($state.current.views["payment-view@payment"].resolve.payment)).toEqual(mockPayment1);
                 });
             });
         });
