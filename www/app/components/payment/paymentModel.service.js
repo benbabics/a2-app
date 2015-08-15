@@ -1,7 +1,10 @@
 (function () {
     "use strict";
 
-    var PaymentModel = function (BankModel) {
+    var PaymentModel = function (globals, BankModel) {
+
+        // Constants
+        var PAYMENT_STATUS = globals.PAYMENT.STATUS;
 
         function PaymentModel() {
             this.id = "";
@@ -14,6 +17,10 @@
 
         PaymentModel.prototype.set = function (paymentResource) {
             angular.extend(this, paymentResource);
+        };
+
+        PaymentModel.prototype.isScheduled = function () {
+            return this.status && this.status.toUpperCase() === PAYMENT_STATUS.SCHEDULED;
         };
 
         return PaymentModel;

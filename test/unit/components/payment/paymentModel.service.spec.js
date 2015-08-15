@@ -3,22 +3,24 @@
 
     describe("A Payment Model Service", function () {
 
-        var _;
+        var _,
+            payment;
 
         beforeEach(function () {
             module("app.shared");
             module("app.components.bank");
             module("app.components.payment");
 
-            inject(function (CommonService) {
+            inject(function (CommonService, PaymentModel) {
                 _ = CommonService._;
+
+                payment = new PaymentModel();
             });
         });
 
         describe("has a set function that", function () {
 
-            var payment,
-                mockPaymentResource = {
+            var mockPaymentResource = {
                     newField1         : "some value",
                     newField2         : "some other value",
                     newField3         : "yet another value",
@@ -36,9 +38,7 @@
                 paymentModelKeys,
                 paymentResourceKeys;
 
-            beforeEach(inject(function (PaymentModel) {
-                payment = new PaymentModel();
-
+            beforeEach(inject(function () {
                 // set all values to "default" to more easily detect any changes
                 for (var property in payment) {
                     if (_.has(payment, property)) {
@@ -85,6 +85,106 @@
                     expect(_.has(payment, key)).toBeTruthy();
                     expect(payment[key]).toEqual(mockPaymentResource[key]);
                 }
+            });
+
+        });
+
+        describe("has an isScheduled function that", function () {
+
+            describe("when the Payment is Canceled", function () {
+
+                beforeEach(function () {
+                    payment.status = "CANCELLED";
+                });
+
+                it("should return false", function () {
+                    expect(payment.isScheduled()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment is Complete", function () {
+
+                beforeEach(function () {
+                    payment.status = "COMPLETE";
+                });
+
+                it("should return false", function () {
+                    expect(payment.isScheduled()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment is Scheduled", function () {
+
+                beforeEach(function () {
+                    payment.status = "SCHEDULED";
+                });
+
+                it("should return true", function () {
+                    expect(payment.isScheduled()).toBeTruthy();
+                });
+
+            });
+
+            describe("when the Payment is Pending", function () {
+
+                beforeEach(function () {
+                    payment.status = "PENDING";
+                });
+
+                it("should return false", function () {
+                    expect(payment.isScheduled()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment is Unknown", function () {
+
+                beforeEach(function () {
+                    payment.status = "UNKNOWN";
+                });
+
+                it("should return false", function () {
+                    expect(payment.isScheduled()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment status is null", function () {
+
+                beforeEach(function () {
+                    payment.status = null;
+                });
+
+                it("should return false", function () {
+                    expect(payment.isScheduled()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment status is empty", function () {
+
+                beforeEach(function () {
+                    payment.status = "";
+                });
+
+                it("should return false", function () {
+                    expect(payment.isScheduled()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment status is undefined", function () {
+
+                beforeEach(function () {
+                    payment.status = undefined;
+                });
+
+                it("should return false", function () {
+                    expect(payment.isScheduled()).toBeFalsy();
+                });
+
             });
 
         });

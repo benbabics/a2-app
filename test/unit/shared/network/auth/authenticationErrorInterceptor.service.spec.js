@@ -48,6 +48,15 @@
             },
             LOGGING: {
                 ENABLED: false
+            },
+            PAYMENT: {
+                STATUS: {
+                    "CANCELLED": "CANCELLED",
+                    "COMPLETE" : "COMPLETE",
+                    "SCHEDULED": "SCHEDULED",
+                    "PENDING"  : "PENDING",
+                    "UNKNOWN"  : "UNKNOWN"
+                }
             }
         },
         mockRejection = {

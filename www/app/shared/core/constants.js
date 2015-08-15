@@ -69,6 +69,19 @@
     };
 
     /**
+     * Payment Constants
+     */
+    sharedGlobals.PAYMENT = {
+        STATUS: {
+            "CANCELLED": "CANCELLED",
+            "COMPLETE" : "COMPLETE",
+            "SCHEDULED": "SCHEDULED",
+            "PENDING"  : "PENDING",
+            "UNKNOWN"  : "UNKNOWN"
+        }
+    };
+
+    /**
      * App-level notifications
      */
     sharedGlobals.NOTIFICATIONS = {

@@ -5,9 +5,10 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentListController($scope, globals) {
+    function PaymentListController($scope, globals, payments, CommonService) {
 
-        var vm = this;
+        var _ = CommonService._,
+            vm = this;
 
         vm.config = globals.PAYMENT_LIST.CONFIG;
 
@@ -24,7 +25,25 @@
         }
 
         function beforeEnter() {
-            //TODO - something
+
+            var paymentsArray,
+                unsortedScheduledPayments;
+
+            // TODO - Have PaymentManager.fetchPayments return an array?
+            // Convert the payments object into an array
+            paymentsArray = _.values(payments);
+
+            // Move the scheduled payments from paymentsArray into unsortedScheduledPayments
+            unsortedScheduledPayments = _.remove(paymentsArray, function (payment) {
+                return payment.isScheduled();
+            });
+
+            // Sort the scheduled payments by scheduled date ascending
+            vm.scheduledPayments = _.sortByOrder(unsortedScheduledPayments, ["scheduledDate"], ["asc"]);
+
+            // Sort the rest of the payments by scheduled date descending
+            vm.completedPayments = _.sortByOrder(paymentsArray, ["scheduledDate"], ["desc"]);
+
         }
 
     }

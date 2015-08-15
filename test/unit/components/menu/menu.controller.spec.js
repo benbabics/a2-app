@@ -42,6 +42,15 @@
                     CURRENT: "Current_User"
                 }
             },
+            PAYMENT: {
+                STATUS: {
+                    "CANCELLED": "CANCELLED",
+                    "COMPLETE" : "COMPLETE",
+                    "SCHEDULED": "SCHEDULED",
+                    "PENDING"  : "PENDING",
+                    "UNKNOWN"  : "UNKNOWN"
+                }
+            },
             NOTIFICATIONS: {
                 "serverConnectionError": "Server connection error",
                 "networkError"         : "Network error"
