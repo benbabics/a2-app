@@ -40,13 +40,15 @@
 
         beforeEach(function () {
 
+            module("app.shared");
             module("app.components.landing");
             module("app.html");
 
             // mock dependencies
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["fetchCurrentInvoiceSummary"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            module(function($provide) {
+            module(function($provide, sharedGlobals) {
+                $provide.value("globals", sharedGlobals);
                 $provide.value("InvoiceManager", InvoiceManager);
                 $provide.value("UserManager", UserManager);
             });
@@ -88,8 +90,7 @@
                 expect($state.href(stateName)).toEqual("#/landing");
             });
 
-            //TODO - figure out why this doesn't work. The resolve method does not seem to be getting called
-            xdescribe("when navigated to", function () {
+            describe("when navigated to", function () {
 
                 var fetchCurrentInvoiceSummaryDeferred;
 
