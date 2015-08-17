@@ -14,6 +14,7 @@
         "restangular",                // From https://github.com/mgonto/restangular
         "ngCordova",                  // From https://github.com/driftyco/ng-cordova
         "ngFitText",                  // From http://patrickmarabeas.github.io/ng-FitText.js/
-        "ionic-datepicker"            // From https://github.com/markomarkovic/ionic-datepicker-widget
+        "ionic-datepicker",           // From https://github.com/markomarkovic/ionic-datepicker-widget
+        "angAccordion"                // From https://github.com/sherwaniusman/angular-accordion
     ]);
 })();

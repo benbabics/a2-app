@@ -446,3 +446,18 @@ $numeric-keypad-animation: all linear 0.15s;
     }
   }
 }
+
+/**------------------------------------------------------
+ Accordion
+ ------------------------------------------------------**/
+.accordion {
+    .collapsible-item {
+        .title {
+            font-weight: bold;
+        }
+
+        .body {
+            transition-duration: 0.0s;
+        }
+    }
+}
