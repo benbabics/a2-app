@@ -2,6 +2,10 @@
     "use strict";
 
     var $ionicPopup,
+        $ionicPlatform,
+        $compile,
+        $rootScope,
+        $state,
         CommonService,
         globals = {
             GENERAL: {
@@ -12,8 +16,6 @@
         },
         popupDeferred,
         popupPromise,
-        $rootScope,
-        $compile,
         navBar,
         rootNavView;
 
@@ -33,9 +35,11 @@
 
             module("app.shared");
 
-            inject(function ($q, _CommonService_, _$rootScope_, _$compile_) {
+            inject(function ($q, _CommonService_, _$rootScope_, _$compile_, _$state_, _$ionicPlatform_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
+                $state = _$state_;
+                $ionicPlatform = _$ionicPlatform_;
                 popupDeferred = $q.defer();
 
                 CommonService = _CommonService_;
@@ -47,6 +51,10 @@
                 angular.element(document.body).append(rootNavView);
 
                 $rootScope.$digest();
+
+                // spies
+                spyOn($state, "go").and.callThrough();
+                spyOn($ionicPlatform, "registerBackButtonAction").and.callThrough();
             });
 
             popupPromise = angular.extend({}, popupDeferred.promise, {
@@ -1784,6 +1792,37 @@
                     it("should return the content", function () {
                         expect(CommonService.getViewContent(view)).toEqual(content);
                     });
+                });
+            });
+        });
+
+        describe("has a setBackButtonStateRef function that", function () {
+            var mockScope,
+                mockState;
+
+            beforeEach(function () {
+                mockScope = jasmine.createSpyObj("scope", ["$on"]);
+                mockState = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                CommonService.setBackButtonStateRef(mockScope, mockState);
+            });
+
+            it("should call $ionicPlatform.registerBackButtonAction with the correct priority", function () {
+                expect($ionicPlatform.registerBackButtonAction).toHaveBeenCalledWith(jasmine.any(Function), 101);
+            });
+
+            it("should set a listener for $destroy to deregister the back button action", function () {
+                expect(mockScope.$on).toHaveBeenCalledWith("$destroy", jasmine.any(Function));
+            });
+
+            //TODO figure out how to trigger the back button
+            xdescribe("when the back button has been pressed", function () {
+
+                beforeEach(function () {
+                });
+
+                it("should call $state.go with the given state", function () {
+                    expect($state.go).toHaveBeenCalledWith(mockState);
                 });
             });
         });

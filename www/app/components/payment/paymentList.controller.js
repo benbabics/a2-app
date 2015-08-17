@@ -44,6 +44,8 @@
             // Sort the rest of the payments by scheduled date descending
             vm.completedPayments = _.sortByOrder(paymentsArray, ["scheduledDate"], ["desc"]);
 
+            //override the back button to go to the landing page
+            CommonService.setBackButtonStateRef($scope, "landing");
         }
 
     }

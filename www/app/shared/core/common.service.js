@@ -6,7 +6,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function CommonService(_, $ionicPopup, $rootScope, globals) {
+    function CommonService(_, $ionicPlatform, $ionicPopup, $rootScope, $state, globals) {
 
         // Private members
         var loadingIndicatorCount = 0,
@@ -33,7 +33,8 @@
             "loadingBegin"           : loadingBegin,
             "loadingComplete"        : loadingComplete,
             "maskAccountNumber"      : maskAccountNumber,
-            "pageHasNavBar"          : pageHasNavBar
+            "pageHasNavBar"          : pageHasNavBar,
+            "setBackButtonStateRef"  : setBackButtonStateRef
         };
 
         return service;
@@ -308,6 +309,14 @@
                 return !angular.element(navBar).hasClass("hide");
             }
             return false;
+        }
+
+        function setBackButtonStateRef(scope, state) {
+            var deregister = $ionicPlatform.registerBackButtonAction(function () {
+                $state.go(state);
+            }, 101);
+
+            scope.$on("$destroy", deregister);
         }
     }
 

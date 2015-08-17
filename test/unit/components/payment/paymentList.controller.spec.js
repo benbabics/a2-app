@@ -3,6 +3,7 @@
 
     var _,
         $scope,
+        CommonService,
         ctrl,
         mockCompletedPayments,
         mockPayments,
@@ -25,8 +26,9 @@
                 });
             });
 
-            inject(function ($controller, $rootScope, BankModel, CommonService, PaymentModel) {
+            inject(function ($controller, $rootScope, BankModel, PaymentModel, _CommonService_) {
 
+                CommonService = _CommonService_;
                 _ = CommonService._;
 
                 // setup mock objects
@@ -34,10 +36,10 @@
                 mockScheduledPayments = getRandomScheduledPayments(PaymentModel, BankModel);
 
                 mockPayments = {};
-                _.forEach(mockCompletedPayments, function(payment) {
+                _.forEach(mockCompletedPayments, function (payment) {
                     mockPayments[payment.id] = payment;
                 });
-                _.forEach(mockScheduledPayments, function(payment) {
+                _.forEach(mockScheduledPayments, function (payment) {
                     mockPayments[payment.id] = payment;
                 });
 
@@ -48,6 +50,9 @@
                     $scope  : $scope,
                     payments: mockPayments
                 });
+
+                // spies
+                spyOn(CommonService, "setBackButtonStateRef");
 
             });
 
@@ -65,6 +70,10 @@
 
             it("should set the scheduled payments", function () {
                 expect(ctrl.scheduledPayments).toEqual(_.sortByOrder(mockScheduledPayments, ["scheduledDate"], ["asc"]));
+            });
+
+            it("should override the back button to go to the landing page", function () {
+                expect(CommonService.setBackButtonStateRef).toHaveBeenCalledWith($scope, "landing");
             });
 
         });
