@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
+    /* jshint -W003 */
+    /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
@@ -132,7 +133,7 @@
                     }
                 });
 
-                if(foundView) {
+                if (foundView) {
                     return false;
                 }
             });
@@ -155,7 +156,7 @@
             var views = [],
                 children;
 
-            if(navView) {
+            if (navView) {
                 children = navView.children();
 
                 for (var i = 0; i < children.length; ++i) {
@@ -174,9 +175,9 @@
                 }
             }
 
-            if(firstView) {
+            if (firstView) {
                 //only return the first view (or null if there are none)
-                if(views.length > 0) {
+                if (views.length > 0) {
                     views = views[0];
                 }
                 else {
@@ -259,7 +260,7 @@
             view = view || getFocusedView();
             var content;
 
-            if(!view) {
+            if (!view) {
                 return null;
             }
 

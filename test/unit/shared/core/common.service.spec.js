@@ -49,7 +49,10 @@
                 $rootScope.$digest();
             });
 
-            popupPromise = angular.extend({}, popupDeferred.promise, {close: function(){}});
+            popupPromise = angular.extend({}, popupDeferred.promise, {
+                close: function () {
+                }
+            });
 
             $ionicPopup.alert.and.returnValue(popupPromise);
             popupDeferred.resolve();
@@ -370,7 +373,7 @@
                     beforeEach(function () {
                         errorObjectArg = {
                             data: {
-                                error: "There is a type for this error",
+                                error            : "There is a type for this error",
                                 error_description: "There is a description for this error"
                             }
                         };
@@ -379,7 +382,7 @@
                     });
 
                     it("should return the error property in the error message", function () {
-                        expect(errorMessageResult).toMatch(errorObjectArg.data.error  + ": " + errorObjectArg.data.error_description);
+                        expect(errorMessageResult).toMatch(errorObjectArg.data.error + ": " + errorObjectArg.data.error_description);
                     });
 
                 });
@@ -535,32 +538,32 @@
 
         describe("has a findViews function that", function () {
 
-            describe("given a predicate that selects for views with a specific state", function() {
+            describe("given a predicate that selects for views with a specific state", function () {
                 var state = "mockState",
-                    predicate = function(view) {
+                    predicate = function (view) {
                         return view.attr("nav-view") === state;
                     };
 
-                describe("when there is no view at the root", function() {
+                describe("when there is no view at the root", function () {
 
-                    describe("when firstView is true", function() {
+                    describe("when firstView is true", function () {
 
-                        it("should return null", function() {
+                        it("should return null", function () {
                             expect(CommonService.findViews(predicate, true)).toEqual(null);
                         });
                     });
 
-                    describe("when firstView is false", function() {
+                    describe("when firstView is false", function () {
 
-                        it("should return an empty array", function() {
+                        it("should return an empty array", function () {
                             expect(CommonService.findViews(predicate, false)).toEqual([]);
                         });
                     });
 
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
+                    describe("when there is a view with a state we aren't looking for on the root", function () {
                         var decoyView;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             decoyView = createView("decoyState");
 
                             rootNavView.append(decoyView);
@@ -574,26 +577,26 @@
                             $rootScope.$digest();
                         });
 
-                        describe("when firstView is true", function() {
+                        describe("when firstView is true", function () {
 
-                            it("should return null", function() {
+                            it("should return null", function () {
                                 expect(CommonService.findViews(predicate, true)).toEqual(null);
                             });
                         });
 
-                        describe("when firstView is false", function() {
+                        describe("when firstView is false", function () {
 
-                            it("should return an empty array", function() {
+                            it("should return an empty array", function () {
                                 expect(CommonService.findViews(predicate, false)).toEqual([]);
                             });
                         });
                     });
                 });
 
-                describe("when there is a view with the specified state at the root", function() {
+                describe("when there is a view with the specified state at the root", function () {
                     var view;
 
-                    beforeEach(function() {
+                    beforeEach(function () {
                         view = createView(state);
 
                         rootNavView.append(view);
@@ -607,24 +610,24 @@
                         $rootScope.$digest();
                     });
 
-                    describe("when firstView is true", function() {
+                    describe("when firstView is true", function () {
 
-                        it("should return the view", function() {
+                        it("should return the view", function () {
                             expect(CommonService.findViews(predicate, true)).toEqual(view);
                         });
                     });
 
-                    describe("when firstView is false", function() {
+                    describe("when firstView is false", function () {
 
-                        it("should return an array containing the view", function() {
+                        it("should return an array containing the view", function () {
                             expect(CommonService.findViews(predicate, false)).toEqual([view]);
                         });
                     });
 
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
+                    describe("when there is a view with a state we aren't looking for on the root", function () {
                         var decoyView;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             decoyView = createView("decoyState");
 
                             rootNavView.append(decoyView);
@@ -638,16 +641,16 @@
                             $rootScope.$digest();
                         });
 
-                        describe("when firstView is true", function() {
+                        describe("when firstView is true", function () {
 
-                            it("should return the specified view", function() {
+                            it("should return the specified view", function () {
                                 expect(CommonService.findViews(predicate, true)).toEqual(view);
                             });
                         });
 
-                        describe("when firstView is false", function() {
+                        describe("when firstView is false", function () {
 
-                            it("should return an array containing only the specified view", function() {
+                            it("should return an array containing only the specified view", function () {
                                 expect(CommonService.findViews(predicate, false)).toEqual([view]);
                             });
                         });
@@ -655,93 +658,93 @@
                 });
 
                 describe("when there is a nav-view with the specified state at the root with an embedded view",
-                    function() {
+                    function () {
 
-                    var navView,
-                        embeddedView;
+                        var navView,
+                            embeddedView;
 
-                    beforeEach(function() {
-                        navView = createNavView(state);
-                        embeddedView = createView(state, navView);
+                        beforeEach(function () {
+                            navView = createNavView(state);
+                            embeddedView = createView(state, navView);
 
-                        rootNavView.append(navView);
-
-                        $rootScope.$digest();
-                    });
-
-                    afterEach(function () {
-                        navView.remove();
-
-                        $rootScope.$digest();
-                    });
-
-                    describe("when firstView is true", function() {
-
-                        it("should return the embedded view", function() {
-                            expect(CommonService.findViews(predicate, true)).toEqual(embeddedView);
-                        });
-                    });
-
-                    describe("when firstView is false", function() {
-
-                        it("should return an array containing the embedded view", function() {
-                            expect(CommonService.findViews(predicate, false)).toEqual([embeddedView]);
-                        });
-                    });
-
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
-                        var decoyView;
-
-                        beforeEach(function() {
-                            decoyView = createView("decoyState");
-
-                            rootNavView.append(decoyView);
+                            rootNavView.append(navView);
 
                             $rootScope.$digest();
                         });
 
                         afterEach(function () {
-                            decoyView.remove();
+                            navView.remove();
 
                             $rootScope.$digest();
                         });
 
-                        describe("when firstView is true", function() {
+                        describe("when firstView is true", function () {
 
-                            it("should return the specified view", function() {
+                            it("should return the embedded view", function () {
                                 expect(CommonService.findViews(predicate, true)).toEqual(embeddedView);
                             });
                         });
 
-                        describe("when firstView is false", function() {
+                        describe("when firstView is false", function () {
 
-                            it("should return an array containing only the specified view", function() {
+                            it("should return an array containing the embedded view", function () {
                                 expect(CommonService.findViews(predicate, false)).toEqual([embeddedView]);
                             });
                         });
+
+                        describe("when there is a view with a state we aren't looking for on the root", function () {
+                            var decoyView;
+
+                            beforeEach(function () {
+                                decoyView = createView("decoyState");
+
+                                rootNavView.append(decoyView);
+
+                                $rootScope.$digest();
+                            });
+
+                            afterEach(function () {
+                                decoyView.remove();
+
+                                $rootScope.$digest();
+                            });
+
+                            describe("when firstView is true", function () {
+
+                                it("should return the specified view", function () {
+                                    expect(CommonService.findViews(predicate, true)).toEqual(embeddedView);
+                                });
+                            });
+
+                            describe("when firstView is false", function () {
+
+                                it("should return an array containing only the specified view", function () {
+                                    expect(CommonService.findViews(predicate, false)).toEqual([embeddedView]);
+                                });
+                            });
+                        });
                     });
-                });
 
-                describe("given a navView that is null", function() {
+                describe("given a navView that is null", function () {
 
-                    describe("when firstView is true", function() {
+                    describe("when firstView is true", function () {
 
-                        it("should return null", function() {
+                        it("should return null", function () {
                             expect(CommonService.findViews(predicate, true, null)).toEqual(null);
                         });
                     });
 
-                    describe("when firstView is false", function() {
+                    describe("when firstView is false", function () {
 
-                        it("should return an empty array", function() {
+                        it("should return an empty array", function () {
                             expect(CommonService.findViews(predicate, false, null)).toEqual([]);
                         });
                     });
                 });
 
-                describe("given a valid navView", function() {
+                describe("given a valid navView", function () {
 
-                    describe("when there is a view with the specified state in the navView", function() {
+                    describe("when there is a view with the specified state in the navView", function () {
                         var view;
 
                         beforeEach(function () {
@@ -778,38 +781,38 @@
 
         describe("has a findViewsMatching function that", function () {
 
-            describe("when searching for a single state", function() {
+            describe("when searching for a single state", function () {
                 var states = [],
                     state1 = "state1";
 
-                beforeEach(function() {
+                beforeEach(function () {
                     states.push(state1);
                 });
 
-                afterEach(function() {
+                afterEach(function () {
                     states.pop();
                 });
 
-                describe("when there is no view at the root", function() {
+                describe("when there is no view at the root", function () {
 
-                    describe("when firstView is true", function() {
+                    describe("when firstView is true", function () {
 
-                        it("should return null", function() {
+                        it("should return null", function () {
                             expect(CommonService.findViewsMatching(states, true)).toEqual(null);
                         });
                     });
 
-                    describe("when firstView is false", function() {
+                    describe("when firstView is false", function () {
 
-                        it("should return an empty array", function() {
+                        it("should return an empty array", function () {
                             expect(CommonService.findViewsMatching(states, false)).toEqual([]);
                         });
                     });
 
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
+                    describe("when there is a view with a state we aren't looking for on the root", function () {
                         var decoyView;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             decoyView = createView("decoyState");
 
                             rootNavView.append(decoyView);
@@ -823,26 +826,26 @@
                             $rootScope.$digest();
                         });
 
-                        describe("when firstView is true", function() {
+                        describe("when firstView is true", function () {
 
-                            it("should return null", function() {
+                            it("should return null", function () {
                                 expect(CommonService.findViewsMatching(states, true)).toEqual(null);
                             });
                         });
 
-                        describe("when firstView is false", function() {
+                        describe("when firstView is false", function () {
 
-                            it("should return an empty array", function() {
+                            it("should return an empty array", function () {
                                 expect(CommonService.findViewsMatching(states, false)).toEqual([]);
                             });
                         });
                     });
                 });
 
-                describe("when there is a view with the specified state at the root", function() {
+                describe("when there is a view with the specified state at the root", function () {
                     var view;
 
-                    beforeEach(function() {
+                    beforeEach(function () {
                         view = createView(state1);
 
                         rootNavView.append(view);
@@ -856,24 +859,24 @@
                         $rootScope.$digest();
                     });
 
-                    describe("when firstView is true", function() {
+                    describe("when firstView is true", function () {
 
-                        it("should return the view", function() {
+                        it("should return the view", function () {
                             expect(CommonService.findViewsMatching(states, true)).toEqual(view);
                         });
                     });
 
-                    describe("when firstView is false", function() {
+                    describe("when firstView is false", function () {
 
-                        it("should return an array containing the view", function() {
+                        it("should return an array containing the view", function () {
                             expect(CommonService.findViewsMatching(states, false)).toEqual([view]);
                         });
                     });
 
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
+                    describe("when there is a view with a state we aren't looking for on the root", function () {
                         var decoyView;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             decoyView = createView("decoyState");
 
                             rootNavView.append(decoyView);
@@ -887,16 +890,16 @@
                             $rootScope.$digest();
                         });
 
-                        describe("when firstView is true", function() {
+                        describe("when firstView is true", function () {
 
-                            it("should return the specified view", function() {
+                            it("should return the specified view", function () {
                                 expect(CommonService.findViewsMatching(states, true)).toEqual(view);
                             });
                         });
 
-                        describe("when firstView is false", function() {
+                        describe("when firstView is false", function () {
 
-                            it("should return an array containing only the specified view", function() {
+                            it("should return an array containing only the specified view", function () {
                                 expect(CommonService.findViewsMatching(states, false)).toEqual([view]);
                             });
                         });
@@ -904,93 +907,93 @@
                 });
 
                 describe("when there is a nav-view with the specified state at the root with an embedded view",
-                    function() {
+                    function () {
 
-                    var navView,
-                        embeddedView;
+                        var navView,
+                            embeddedView;
 
-                    beforeEach(function() {
-                        navView = createNavView(state1);
-                        embeddedView = createView(state1, navView);
+                        beforeEach(function () {
+                            navView = createNavView(state1);
+                            embeddedView = createView(state1, navView);
 
-                        rootNavView.append(navView);
-
-                        $rootScope.$digest();
-                    });
-
-                    afterEach(function () {
-                        navView.remove();
-
-                        $rootScope.$digest();
-                    });
-
-                    describe("when firstView is true", function() {
-
-                        it("should return the embedded view", function() {
-                            expect(CommonService.findViewsMatching(states, true)).toEqual(embeddedView);
-                        });
-                    });
-
-                    describe("when firstView is false", function() {
-
-                        it("should return an array containing the embedded view", function() {
-                            expect(CommonService.findViewsMatching(states, false)).toEqual([embeddedView]);
-                        });
-                    });
-
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
-                        var decoyView;
-
-                        beforeEach(function() {
-                            decoyView = createView("decoyState");
-
-                            rootNavView.append(decoyView);
+                            rootNavView.append(navView);
 
                             $rootScope.$digest();
                         });
 
                         afterEach(function () {
-                            decoyView.remove();
+                            navView.remove();
 
                             $rootScope.$digest();
                         });
 
-                        describe("when firstView is true", function() {
+                        describe("when firstView is true", function () {
 
-                            it("should return the specified view", function() {
+                            it("should return the embedded view", function () {
                                 expect(CommonService.findViewsMatching(states, true)).toEqual(embeddedView);
                             });
                         });
 
-                        describe("when firstView is false", function() {
+                        describe("when firstView is false", function () {
 
-                            it("should return an array containing only the specified view", function() {
+                            it("should return an array containing the embedded view", function () {
                                 expect(CommonService.findViewsMatching(states, false)).toEqual([embeddedView]);
                             });
                         });
+
+                        describe("when there is a view with a state we aren't looking for on the root", function () {
+                            var decoyView;
+
+                            beforeEach(function () {
+                                decoyView = createView("decoyState");
+
+                                rootNavView.append(decoyView);
+
+                                $rootScope.$digest();
+                            });
+
+                            afterEach(function () {
+                                decoyView.remove();
+
+                                $rootScope.$digest();
+                            });
+
+                            describe("when firstView is true", function () {
+
+                                it("should return the specified view", function () {
+                                    expect(CommonService.findViewsMatching(states, true)).toEqual(embeddedView);
+                                });
+                            });
+
+                            describe("when firstView is false", function () {
+
+                                it("should return an array containing only the specified view", function () {
+                                    expect(CommonService.findViewsMatching(states, false)).toEqual([embeddedView]);
+                                });
+                            });
+                        });
                     });
-                });
 
-                describe("given a navView that is null", function() {
+                describe("given a navView that is null", function () {
 
-                    describe("when firstView is true", function() {
+                    describe("when firstView is true", function () {
 
-                        it("should return null", function() {
+                        it("should return null", function () {
                             expect(CommonService.findViewsMatching(states, true, null)).toEqual(null);
                         });
                     });
 
-                    describe("when firstView is false", function() {
+                    describe("when firstView is false", function () {
 
-                        it("should return an empty array", function() {
+                        it("should return an empty array", function () {
                             expect(CommonService.findViewsMatching(states, false, null)).toEqual([]);
                         });
                     });
                 });
 
-                describe("given a valid navView", function() {
+                describe("given a valid navView", function () {
 
-                    describe("when there is a view with the specified state in the navView", function() {
+                    describe("when there is a view with the specified state in the navView", function () {
                         var view;
 
                         beforeEach(function () {
@@ -1023,21 +1026,21 @@
                     });
                 });
 
-                describe("when also searching for a second state", function() {
+                describe("when also searching for a second state", function () {
                     var state2 = "state2";
 
-                    beforeEach(function() {
+                    beforeEach(function () {
                         states.push(state2);
                     });
 
-                    afterEach(function() {
+                    afterEach(function () {
                         states.pop();
                     });
 
-                    describe("when views with both specified states are present on the root", function() {
+                    describe("when views with both specified states are present on the root", function () {
                         var view1, view2;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             view1 = createView(state1);
                             view2 = createView(state2);
 
@@ -1054,24 +1057,24 @@
                             $rootScope.$digest();
                         });
 
-                        describe("when firstView is true", function() {
+                        describe("when firstView is true", function () {
 
-                            it("should return the first view", function() {
+                            it("should return the first view", function () {
                                 expect(CommonService.findViewsMatching(states, true)).toEqual(view1);
                             });
                         });
 
-                        describe("when firstView is false", function() {
+                        describe("when firstView is false", function () {
 
-                            it("should return an array containing the first and second views", function() {
+                            it("should return an array containing the first and second views", function () {
                                 expect(CommonService.findViewsMatching(states, false)).toEqual([view1, view2]);
                             });
                         });
 
-                        describe("when there is a view with a state we aren't looking for on the root", function() {
+                        describe("when there is a view with a state we aren't looking for on the root", function () {
                             var decoyView;
 
-                            beforeEach(function() {
+                            beforeEach(function () {
                                 decoyView = createView("decoyState");
 
                                 rootNavView.append(decoyView);
@@ -1085,16 +1088,16 @@
                                 $rootScope.$digest();
                             });
 
-                            describe("when firstView is true", function() {
+                            describe("when firstView is true", function () {
 
-                                it("should return the first view", function() {
+                                it("should return the first view", function () {
                                     expect(CommonService.findViewsMatching(states, true)).toEqual(view1);
                                 });
                             });
 
-                            describe("when firstView is false", function() {
+                            describe("when firstView is false", function () {
 
-                                it("should return an array containing the first and second views", function() {
+                                it("should return an array containing the first and second views", function () {
                                     expect(CommonService.findViewsMatching(states, false)).toEqual([view1, view2]);
                                 });
                             });
@@ -1104,13 +1107,13 @@
                     describe([
                         "when there is a nav-view at the root that has the first specified state with an embedded view",
                         "and there is a nav-view at the root that has the second specified state with an embedded view"
-                    ].join(), function() {
+                    ].join(), function () {
                         var navView1,
                             embeddedView1,
                             navView2,
                             embeddedView2;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             navView1 = createNavView(state1);
                             embeddedView1 = createView(state1, navView1);
 
@@ -1130,16 +1133,16 @@
                             $rootScope.$digest();
                         });
 
-                        describe("when firstView is true", function() {
+                        describe("when firstView is true", function () {
 
-                            it("should return the first embedded view", function() {
+                            it("should return the first embedded view", function () {
                                 expect(CommonService.findViewsMatching(states, true)).toEqual(embeddedView1);
                             });
                         });
 
-                        describe("when firstView is false", function() {
+                        describe("when firstView is false", function () {
 
-                            it("should return an array containing the first and second embedded views", function() {
+                            it("should return an array containing the first and second embedded views", function () {
                                 expect(CommonService.findViewsMatching(states, false)).toEqual([
                                     embeddedView1,
                                     embeddedView2
@@ -1147,10 +1150,10 @@
                             });
                         });
 
-                        describe("when there is a view with a state we aren't looking for on the root", function() {
+                        describe("when there is a view with a state we aren't looking for on the root", function () {
                             var decoyView;
 
-                            beforeEach(function() {
+                            beforeEach(function () {
                                 decoyView = createView("decoyState");
 
                                 rootNavView.append(decoyView);
@@ -1164,16 +1167,16 @@
                                 $rootScope.$digest();
                             });
 
-                            describe("when firstView is true", function() {
+                            describe("when firstView is true", function () {
 
-                                it("should return the first embedded view", function() {
+                                it("should return the first embedded view", function () {
                                     expect(CommonService.findViewsMatching(states, true)).toEqual(embeddedView1);
                                 });
                             });
 
-                            describe("when firstView is false", function() {
+                            describe("when firstView is false", function () {
 
-                                it("should return an array containing the first and second embedded views", function() {
+                                it("should return an array containing the first and second embedded views", function () {
                                     expect(CommonService.findViewsMatching(states, false)).toEqual([
                                         embeddedView1,
                                         embeddedView2
@@ -1192,21 +1195,21 @@
             });
         });
 
-        describe("has a findViewByState function that", function() {
+        describe("has a findViewByState function that", function () {
             var state = "mockState";
 
-            describe("when searching for the specified state", function() {
+            describe("when searching for the specified state", function () {
 
-                describe("when there is no view at the root", function() {
+                describe("when there is no view at the root", function () {
 
                     it("should return null", function () {
                         expect(CommonService.findViewByState(state)).toEqual(null);
                     });
 
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
+                    describe("when there is a view with a state we aren't looking for on the root", function () {
                         var decoyView;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             decoyView = createView("decoyState");
 
                             rootNavView.append(decoyView);
@@ -1226,10 +1229,10 @@
                     });
                 });
 
-                describe("when there is a view with the specified state at the root", function() {
+                describe("when there is a view with the specified state at the root", function () {
                     var view;
 
-                    beforeEach(function() {
+                    beforeEach(function () {
                         view = createView(state);
 
                         rootNavView.append(view);
@@ -1247,10 +1250,10 @@
                         expect(CommonService.findViewByState(state)).toEqual(view);
                     });
 
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
+                    describe("when there is a view with a state we aren't looking for on the root", function () {
                         var decoyView;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             decoyView = createView("decoyState");
 
                             rootNavView.append(decoyView);
@@ -1272,63 +1275,63 @@
                 });
 
                 describe("when there is a nav-view with the specified state at the root with an embedded view",
-                    function() {
+                    function () {
 
-                    var navView,
-                        embeddedView;
+                        var navView,
+                            embeddedView;
 
-                    beforeEach(function() {
-                        navView = createNavView(state);
-                        embeddedView = createView(state, navView);
+                        beforeEach(function () {
+                            navView = createNavView(state);
+                            embeddedView = createView(state, navView);
 
-                        rootNavView.append(navView);
-
-                        $rootScope.$digest();
-                    });
-
-                    afterEach(function () {
-                        navView.remove();
-
-                        $rootScope.$digest();
-                    });
-
-                    it("should return the embedded view", function () {
-                        expect(CommonService.findViewByState(state)).toEqual(embeddedView);
-                    });
-
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
-                        var decoyView;
-
-                        beforeEach(function() {
-                            decoyView = createView("decoyState");
-
-                            rootNavView.append(decoyView);
+                            rootNavView.append(navView);
 
                             $rootScope.$digest();
                         });
 
                         afterEach(function () {
-                            decoyView.remove();
+                            navView.remove();
 
                             $rootScope.$digest();
                         });
 
-                        it("should return the specified view", function () {
+                        it("should return the embedded view", function () {
                             expect(CommonService.findViewByState(state)).toEqual(embeddedView);
                         });
-                    });
-                });
 
-                describe("given a navView that is null", function() {
+                        describe("when there is a view with a state we aren't looking for on the root", function () {
+                            var decoyView;
+
+                            beforeEach(function () {
+                                decoyView = createView("decoyState");
+
+                                rootNavView.append(decoyView);
+
+                                $rootScope.$digest();
+                            });
+
+                            afterEach(function () {
+                                decoyView.remove();
+
+                                $rootScope.$digest();
+                            });
+
+                            it("should return the specified view", function () {
+                                expect(CommonService.findViewByState(state)).toEqual(embeddedView);
+                            });
+                        });
+                    });
+
+                describe("given a navView that is null", function () {
 
                     it("should return null", function () {
                         expect(CommonService.findViewByState(state, null)).toEqual(null);
                     });
                 });
 
-                describe("given a valid navView", function() {
+                describe("given a valid navView", function () {
 
-                    describe("when there is a view with the specified state in the navView", function() {
+                    describe("when there is a view with the specified state in the navView", function () {
                         var view;
 
                         beforeEach(function () {
@@ -1353,23 +1356,23 @@
             });
         });
 
-        describe("has a findViewByStatesInOrder function that", function() {
+        describe("has a findViewByStatesInOrder function that", function () {
 
-            describe("when searching for two states", function() {
+            describe("when searching for two states", function () {
                 var state1 = "state1",
                     state2 = "state2",
                     states = [state1, state2];
 
-                describe("when there is no view at the root", function() {
+                describe("when there is no view at the root", function () {
 
                     it("should return null", function () {
                         expect(CommonService.findViewByStatesInOrder(states)).toEqual(null);
                     });
 
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
+                    describe("when there is a view with a state we aren't looking for on the root", function () {
                         var decoyView;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             decoyView = createView("decoyState");
 
                             rootNavView.append(decoyView);
@@ -1389,10 +1392,10 @@
                     });
                 });
 
-                describe("when only a view with the first state is present", function() {
+                describe("when only a view with the first state is present", function () {
                     var view1;
 
-                    beforeEach(function() {
+                    beforeEach(function () {
                         view1 = createView(state1);
 
                         rootNavView.append(view1);
@@ -1410,10 +1413,10 @@
                         expect(CommonService.findViewByStatesInOrder(states)).toEqual(view1);
                     });
 
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
+                    describe("when there is a view with a state we aren't looking for on the root", function () {
                         var decoyView;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             decoyView = createView("decoyState");
 
                             rootNavView.append(decoyView);
@@ -1433,10 +1436,10 @@
                     });
                 });
 
-                describe("when only a view with the second state is present", function() {
+                describe("when only a view with the second state is present", function () {
                     var view2;
 
-                    beforeEach(function() {
+                    beforeEach(function () {
                         view2 = createView(state2);
 
                         rootNavView.append(view2);
@@ -1454,10 +1457,10 @@
                         expect(CommonService.findViewByStatesInOrder(states)).toEqual(view2);
                     });
 
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
+                    describe("when there is a view with a state we aren't looking for on the root", function () {
                         var decoyView;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             decoyView = createView("decoyState");
 
                             rootNavView.append(decoyView);
@@ -1477,10 +1480,10 @@
                     });
                 });
 
-                describe("when views with both states are present", function() {
+                describe("when views with both states are present", function () {
                     var view1, view2;
 
-                    beforeEach(function() {
+                    beforeEach(function () {
                         view1 = createView(state1);
                         view2 = createView(state2);
 
@@ -1501,10 +1504,10 @@
                         expect(CommonService.findViewByStatesInOrder(states)).toEqual(view1);
                     });
 
-                    describe("when there is a view with a state we aren't looking for on the root", function() {
+                    describe("when there is a view with a state we aren't looking for on the root", function () {
                         var decoyView;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             decoyView = createView("decoyState");
 
                             rootNavView.append(decoyView);
@@ -1629,12 +1632,12 @@
                     });
                 });
 
-                describe("given a valid navView", function() {
+                describe("given a valid navView", function () {
 
-                    describe("when only a view with the first state is present", function() {
+                    describe("when only a view with the first state is present", function () {
                         var view1;
 
-                        beforeEach(function() {
+                        beforeEach(function () {
                             view1 = createView(state1);
 
                             rootNavView.append(view1);
@@ -1652,10 +1655,10 @@
                             expect(CommonService.findViewByStatesInOrder(states, rootNavView)).toEqual(view1);
                         });
 
-                        describe("when there is a view with a state we aren't looking for on the root", function() {
+                        describe("when there is a view with a state we aren't looking for on the root", function () {
                             var decoyView;
 
-                            beforeEach(function() {
+                            beforeEach(function () {
                                 decoyView = createView("decoyState");
 
                                 rootNavView.append(decoyView);
@@ -1684,38 +1687,38 @@
             });
         });
 
-        describe("has a getFocusedView function that", function() {
+        describe("has a getFocusedView function that", function () {
 
             //TODO figure out a way to test this
-            xit("should call findViewByStatesInOrder with the expected values", function() {
+            xit("should call findViewByStatesInOrder with the expected values", function () {
             });
 
             //TODO additional tests
         });
 
-        describe("has a getViewContent function that", function() {
+        describe("has a getViewContent function that", function () {
 
-            describe("when the focused view has no content", function() {
+            describe("when the focused view has no content", function () {
                 var view;
 
-                beforeEach(function() {
+                beforeEach(function () {
                     view = createView("active", rootNavView);
                 });
 
-                afterEach(function() {
+                afterEach(function () {
                     view.remove();
                 });
 
-                it("should return null", function() {
+                it("should return null", function () {
                     expect(CommonService.getViewContent()).toEqual(null);
                 });
             });
 
-            describe("when the focused view has content", function() {
+            describe("when the focused view has content", function () {
                 var view,
                     content;
 
-                beforeEach(function() {
+                beforeEach(function () {
                     view = createView("active", rootNavView);
                     content = $compile("<ion-content></ion-content>")($rootScope);
 
@@ -1724,46 +1727,46 @@
                     $rootScope.$digest();
                 });
 
-                afterEach(function() {
+                afterEach(function () {
                     view.remove();
 
                     $rootScope.$digest();
                 });
 
-                it("should return the content", function() {
+                it("should return the content", function () {
                     expect(CommonService.getViewContent()).toEqual(content);
                 });
             });
 
-            describe("when passed a null view", function() {
+            describe("when passed a null view", function () {
 
-                it("should return null", function() {
+                it("should return null", function () {
                     expect(CommonService.getViewContent(null)).toEqual(null);
                 });
             });
 
-            describe("when passed a valid view", function() {
+            describe("when passed a valid view", function () {
                 var view;
 
-                describe("when the view has no content", function() {
+                describe("when the view has no content", function () {
 
-                    beforeEach(function() {
+                    beforeEach(function () {
                         view = createView("mockState");
                     });
 
-                    afterEach(function() {
+                    afterEach(function () {
                         view.remove();
                     });
 
-                    it("should return null", function() {
+                    it("should return null", function () {
                         expect(CommonService.getViewContent(view)).toEqual(null);
                     });
                 });
 
-                describe("when the view has content", function() {
+                describe("when the view has content", function () {
                     var content;
 
-                    beforeEach(function() {
+                    beforeEach(function () {
                         view = createView("mockState");
                         content = $compile("<ion-content></ion-content>")($rootScope);
 
@@ -1772,13 +1775,13 @@
                         $rootScope.$digest();
                     });
 
-                    afterEach(function() {
+                    afterEach(function () {
                         view.remove();
 
                         $rootScope.$digest();
                     });
 
-                    it("should return the content", function() {
+                    it("should return the content", function () {
                         expect(CommonService.getViewContent(view)).toEqual(content);
                     });
                 });
@@ -1787,13 +1790,13 @@
     });
 
     function createNavView(state) {
-        return $compile("<ion-nav-view nav-view='"+state+"'></ion-nav-view>")($rootScope);
+        return $compile("<ion-nav-view nav-view='" + state + "'></ion-nav-view>")($rootScope);
     }
 
     function createView(state, parent) {
-        var view = $compile("<ion-view nav-view='"+state+"'></ion-view>")($rootScope);
+        var view = $compile("<ion-view nav-view='" + state + "'></ion-view>")($rootScope);
 
-        if(parent) {
+        if (parent) {
             parent.append(view);
         }
 
