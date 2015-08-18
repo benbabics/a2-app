@@ -17,6 +17,8 @@
 
         PaymentModel.prototype.set = function (paymentResource) {
             angular.extend(this, paymentResource);
+            this.bankAccount = new BankModel();
+            this.bankAccount.set(paymentResource.bankAccount);
         };
 
         PaymentModel.prototype.isScheduled = function () {

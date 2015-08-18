@@ -460,4 +460,11 @@ $numeric-keypad-animation: all linear 0.15s;
             transition-duration: 0.0s;
         }
     }
+
+    .collapsible-item.open {
+        .body {
+            max-height: inherit;
+        }
+
+    }
 }

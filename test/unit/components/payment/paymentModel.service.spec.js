@@ -4,15 +4,18 @@
     describe("A Payment Model Service", function () {
 
         var _,
-            payment;
+            payment,
+            BankModel;
 
         beforeEach(function () {
             module("app.shared");
             module("app.components.bank");
             module("app.components.payment");
 
-            inject(function (CommonService, PaymentModel) {
+            inject(function (_BankModel_, CommonService, PaymentModel) {
                 _ = CommonService._;
+
+                BankModel = _BankModel_;
 
                 payment = new PaymentModel();
             });
@@ -30,6 +33,7 @@
                     bankAccount       : {
                         id            : "bank id value",
                         defaultBank   : true,
+                        lastFourDigits: "1234",
                         name          : "company name value"
                     },
                     status            : "status value",
@@ -58,7 +62,15 @@
 
                 for (var i = 0; i < keysIntersection.length; i++) {
                     key = keysIntersection[i];
-                    expect(payment[key]).toEqual(mockPaymentResource[key]);
+                    if (key === "bankAccount") {
+                        var expectedBank = new BankModel();
+                        expectedBank.set(mockPaymentResource[key]);
+
+                        expect(payment[key]).toEqual(expectedBank);
+                    }
+                    else {
+                        expect(payment[key]).toEqual(mockPaymentResource[key]);
+                    }
                 }
             });
 

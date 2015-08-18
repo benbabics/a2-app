@@ -15,7 +15,11 @@
         };
 
         BankModel.prototype.getDisplayName = function () {
-            return this.name + " " + this.lastFourDigits;
+            if (this.name) {
+                return this.name + " " + this.lastFourDigits;
+            }
+
+            return this.lastFourDigits;
         };
 
         return BankModel;

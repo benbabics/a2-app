@@ -22,6 +22,7 @@
 
         $stateProvider.state("payment.list.view", {   // default payment.list child state
             url: "",
+            cache: false,
             templateUrl: "app/components/payment/templates/paymentList.html",
             controller : "PaymentListController as vm",
             resolve    : {
