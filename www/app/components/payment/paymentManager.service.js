@@ -86,7 +86,7 @@
                         throw new Error("No data in Response from getting a Payment");
                     }
                 })
-                // getting payment add availability failed
+                // getting payment failed
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
