@@ -12,6 +12,10 @@
 
         // clear the default text from the back button
         $ionicConfigProvider.backButton.text("");
+
+        // do not show the title of the previous page
+        $ionicConfigProvider.backButton.previousTitleText(false);
+
     };
 
     angular

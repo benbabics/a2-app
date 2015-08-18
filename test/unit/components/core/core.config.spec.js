@@ -17,6 +17,7 @@
 
                 $urlRouterProvider.otherwise = jasmine.createSpy("otherwise").and.callThrough();
                 $ionicConfigProvider.backButton.text = jasmine.createSpy("text").and.callThrough();
+                $ionicConfigProvider.backButton.previousTitleText = jasmine.createSpy("previousTitleText").and.callThrough();
             });
 
             module("app.components");
@@ -33,6 +34,10 @@
 
         it("should set the back button text to the expected value", function () {
             expect($ionicConfigProvider.backButton.text).toHaveBeenCalledWith("");
+        });
+
+        it("should set the previous title text to be false", function () {
+            expect($ionicConfigProvider.backButton.previousTitleText).toHaveBeenCalledWith(false);
         });
 
     });
