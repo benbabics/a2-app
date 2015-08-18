@@ -149,7 +149,6 @@
 
     appGlobals.NAV_BAR = {
         "CONFIG": {
-            "menuButtonText": "Menu"
         }
     };
 
