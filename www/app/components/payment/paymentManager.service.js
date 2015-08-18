@@ -38,7 +38,7 @@
             return PaymentsResource.addPayment(accountId, requestBody)
                 .then(function (addPaymentResponse) {
                     if (addPaymentResponse && addPaymentResponse.data) {
-                        return addPaymentResponse.data;
+                        return createPayment(addPaymentResponse.data);
                     }
                     // no data in the response
                     else {
@@ -60,6 +60,13 @@
 
         function clearCachedValues() {
             paymentAddAvailability = new PaymentAddAvailabilityModel();
+        }
+
+        function createPayment(paymentResource) {
+            var paymentModel = new PaymentModel();
+            paymentModel.set(paymentResource);
+
+            return paymentModel;
         }
 
         function getPaymentAddAvailability() {
@@ -102,9 +109,7 @@
                         var paymentModelCollection = {};
 
                         _.forEach(paymentsResponse.data, function (payment) {
-                            var paymentModel = new PaymentModel();
-                            paymentModel.set(payment);
-                            paymentModelCollection[payment.id] = paymentModel;
+                            paymentModelCollection[payment.id] = createPayment(payment);
                         });
 
                         return paymentModelCollection;

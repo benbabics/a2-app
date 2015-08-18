@@ -132,7 +132,10 @@
                     });
 
                     it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(mockResponse.data);
+                        var expectedResult = new PaymentModel();
+                        expectedResult.set(mockResponse.data);
+
+                        expect(resolveHandler).toHaveBeenCalledWith(expectedResult);
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
