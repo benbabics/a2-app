@@ -6,6 +6,8 @@
     </span>
     <span class="value_align">
         {{payment.amount | currency}}
-        <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"></span>
+        <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
+              ui-sref="payment.view({ paymentId: payment.id })">
+        </span>
     </span>
 </span>
