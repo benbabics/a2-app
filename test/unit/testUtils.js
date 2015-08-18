@@ -7,6 +7,7 @@ var TestUtils = (function () {
     var ALPHANUMERIC_CHARACTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
         TestUtils = {
             getRandomBank                    : getRandomBank,
+            getRandomBoolean                 : getRandomBoolean,
             getRandomDate                    : getRandomDate,
             getRandomInteger                 : getRandomInteger,
             getRandomNumber                  : getRandomNumber,
@@ -36,6 +37,9 @@ var TestUtils = (function () {
     }
 
     function getRandomDate(start, end) {
+        start = start || new Date(1970, 1, 1);
+        end = end || new Date();
+
         return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
     }
 

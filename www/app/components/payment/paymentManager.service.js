@@ -11,6 +11,7 @@
         // Revealed Public members
         var service = {
             addPayment                 : addPayment,
+            fetchPayment               : fetchPayment,
             fetchPaymentAddAvailability: fetchPaymentAddAvailability,
             fetchPayments              : fetchPayments,
             getPaymentAddAvailability  : getPaymentAddAvailability,
@@ -71,6 +72,29 @@
 
         function getPaymentAddAvailability() {
             return paymentAddAvailability;
+        }
+
+        function fetchPayment(accountId, paymentId) {
+            return PaymentsResource.getPayment(accountId, paymentId)
+                .then(function (paymentResponse) {
+                    if (paymentResponse && paymentResponse.data) {
+                        return createPayment(paymentResponse.data);
+                    }
+                    // no data in the response
+                    else {
+                        Logger.error("No data in Response from getting a Payment");
+                        throw new Error("No data in Response from getting a Payment");
+                    }
+                })
+                // getting payment add availability failed
+                .catch(function (failureResponse) {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+
+                    var error = "Getting a Payment failed: " + CommonService.getErrorMessage(failureResponse);
+
+                    Logger.error(error);
+                    throw new Error(error);
+                });
         }
 
         function fetchPaymentAddAvailability(accountId) {

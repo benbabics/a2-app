@@ -7,6 +7,7 @@
         moment,
         pageNumber = TestUtils.getRandomNumberWithLength(1),
         pageSize = TestUtils.getRandomNumberWithLength(2),
+        paymentId = TestUtils.getRandomStringThatIsAlphaNumeric(5),
         resolveHandler,
         rejectHandler,
         BankModel,
@@ -28,7 +29,7 @@
             module("app.components.payment");
 
             // mock dependencies
-            PaymentsResource = jasmine.createSpyObj("PaymentsResource", ["addPayment", "getPaymentAddAvailability", "getPayments"]);
+            PaymentsResource = jasmine.createSpyObj("PaymentsResource", ["addPayment", "getPaymentAddAvailability", "getPayments", "getPayment"]);
             mockPaymentAddAvailability = jasmine.createSpyObj("PaymentAddAvailabilityModel", ["PaymentAddAvailabilityModel", "set"]);
 
             module(function ($provide) {
@@ -168,6 +169,80 @@
 
             });
 
+        });
+
+        describe("has a fetchPayment function that", function() {
+            var paymentModelDeferred,
+                mockResponse = {
+                    data: {
+                        id                : TestUtils.getRandomStringThatIsAlphaNumeric(5),
+                        scheduledDate     : TestUtils.getRandomDate(),
+                        amount            : TestUtils.getRandomNumber(1, 1000),
+                        bankAccount       : {
+                            id         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            defaultBank: TestUtils.getRandomBoolean(),
+                            name       : TestUtils.getRandomStringThatIsAlphaNumeric(20)
+                        },
+                        status            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        confirmationNumber: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    }
+                };
+
+            beforeEach(function () {
+                paymentModelDeferred = $q.defer();
+
+                PaymentsResource.getPayment.and.returnValue(paymentModelDeferred.promise);
+
+                PaymentManager.fetchPayment(accountId, paymentId)
+                    .then(resolveHandler)
+                    .catch(rejectHandler);
+            });
+
+            it("should call PaymentsResource.getPayment", function () {
+                expect(PaymentsResource.getPayment).toHaveBeenCalledWith(accountId, paymentId);
+            });
+
+            describe("when the payment is fetched successfully", function() {
+
+                describe("when there is data in the response", function () {
+
+                    beforeEach(function() {
+                        paymentModelDeferred.resolve(mockResponse);
+                        $rootScope.$digest();
+                    });
+
+                    it("should resolve with the expected value", function () {
+                        var expectedResult = new PaymentModel();
+                        expectedResult.set(mockResponse.data);
+
+                        expect(resolveHandler).toHaveBeenCalledWith(expectedResult);
+                        expect(rejectHandler).not.toHaveBeenCalled();
+                    });
+                });
+
+                describe("when there is NOT data in the response", function () {
+
+                    beforeEach(function () {
+                        paymentModelDeferred.resolve(null);
+                    });
+
+                    it("should throw an error", function () {
+                        expect($rootScope.$digest).toThrow();
+                    });
+                });
+
+                describe("when getting the payment fails", function () {
+                    var mockErrorResponse = TestUtils.getRandomStringThatIsAlphaNumeric(20);
+
+                    beforeEach(function () {
+                        paymentModelDeferred.reject(mockErrorResponse);
+                    });
+
+                    it("should throw an error", function () {
+                        expect($rootScope.$digest).toThrow();
+                    });
+                });
+            });
         });
 
         describe("has a fetchPaymentAddAvailability function that", function () {
