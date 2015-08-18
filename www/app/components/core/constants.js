@@ -119,6 +119,20 @@
         }
     };
 
+    appGlobals.PAYMENT_VIEW = {
+        "CONFIG": {
+            "title"           : "Payment Details",
+            "amount"          : "Amount",
+            "bankAccount"     : "Account",
+            "postedDate"      : "Date Posted",
+            "scheduledDate"   : "Date Scheduled",
+            "inProcess"       : "In Process",
+            "method"          : "Method",
+            "editButton"      : "Edit Payment",
+            "cancelButton"    : "Cancel Payment"
+        }
+    };
+
     appGlobals.PAYMENT_LIST = {
         "CONFIG"        : {
             "title"                     : "Payment Activity",
