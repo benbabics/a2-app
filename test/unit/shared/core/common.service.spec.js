@@ -374,26 +374,23 @@
 
             });
 
-            describe("when the error object param is a failed response object", function () {
+            describe("when the error object param is an object of the Error class", function () {
 
-                describe("when the response object has error and error_description properties", function () {
+                beforeEach(function () {
+                    errorObjectArg = {
+                        message: "There is a description for this error"
+                    };
 
-                    beforeEach(function () {
-                        errorObjectArg = {
-                            data: {
-                                error            : "There is a type for this error",
-                                error_description: "There is a description for this error"
-                            }
-                        };
-
-                        errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
-                    });
-
-                    it("should return the error property in the error message", function () {
-                        expect(errorMessageResult).toMatch(errorObjectArg.data.error + ": " + errorObjectArg.data.error_description);
-                    });
-
+                    errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
                 });
+
+                it("should return the message property in the error object", function () {
+                    expect(errorMessageResult).toMatch(errorObjectArg.message);
+                });
+
+            });
+
+            describe("when the error object param is a failed response object", function () {
 
                 describe("when the response object has an error property", function () {
 
@@ -407,7 +404,7 @@
                         errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
                     });
 
-                    it("should return the error property in the error message", function () {
+                    it("should return the error property in the error object", function () {
                         expect(errorMessageResult).toMatch(errorObjectArg.data.error);
                     });
 
@@ -425,7 +422,7 @@
                         errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
                     });
 
-                    it("should return the error_description property in the error message", function () {
+                    it("should return the error_description property in the error object", function () {
                         expect(errorMessageResult).toMatch(errorObjectArg.data.error_description);
                     });
 
@@ -435,22 +432,6 @@
 
                     beforeEach(function () {
                         errorObjectArg = {};
-
-                        errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
-                    });
-
-                    it("should return an Unknown Exception error message", function () {
-                        expect(errorMessageResult).toEqual("ERROR: cause unknown.");
-                    });
-
-                });
-
-                describe("when the response object has a data property that is null", function () {
-
-                    beforeEach(function () {
-                        errorObjectArg = {
-                            data: null
-                        };
 
                         errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
                     });

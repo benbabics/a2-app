@@ -229,6 +229,10 @@
             if (_.isString(errorObject)) {
                 errorMessage = errorObject;
             }
+            // if an Error class object
+            else if (_.has(errorObject, "message")) {
+                errorMessage = errorObject.message;
+            }
             else if (_.isObject(errorObject.data)) {
                 errorMessage += errorObject.data.error ? errorObject.data.error + ": " : "";
                 errorMessage += errorObject.data.error_description || "";
