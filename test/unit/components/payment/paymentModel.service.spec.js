@@ -37,7 +37,8 @@
                         name          : "company name value"
                     },
                     status            : "status value",
-                    confirmationNumber: "confirmationNumber value"
+                    confirmationNumber: "confirmationNumber value",
+                    method            : "method value"
                 },
                 paymentModelKeys,
                 paymentResourceKeys;

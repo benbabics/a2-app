@@ -13,6 +13,7 @@
             this.bankAccount = new BankModel();
             this.status = "";
             this.confirmationNumber = "";
+            this.method = "";
         }
 
         PaymentModel.prototype.set = function (paymentResource) {
