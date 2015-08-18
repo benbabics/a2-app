@@ -12,6 +12,7 @@
         // Revealed Public members
         var service = {
             addPayment               : addPayment,
+            getPayment               : getPayment,
             getPaymentAddAvailability: getPaymentAddAvailability,
             getPayments              : getPayments
         };
@@ -27,6 +28,10 @@
 
         function addPayment(accountId, payment) {
             return $q.when(accountsResource.forAccount(accountId).post(globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.BASE, payment));
+        }
+
+        function getPayment(accountId, paymentId) {
+            return $q.when(accountsResource.forAccount(accountId).doGET(globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.BASE + "/" + paymentId));
         }
 
         function getPaymentAddAvailability(accountId) {
