@@ -22,6 +22,10 @@
             this.bankAccount.set(paymentResource.bankAccount);
         };
 
+        PaymentModel.prototype.isPending = function () {
+            return this.status && this.status.toUpperCase() === PAYMENT_STATUS.PENDING;
+        };
+
         PaymentModel.prototype.isScheduled = function () {
             return this.status && this.status.toUpperCase() === PAYMENT_STATUS.SCHEDULED;
         };

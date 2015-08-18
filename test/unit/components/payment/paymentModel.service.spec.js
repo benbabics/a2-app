@@ -102,6 +102,106 @@
 
         });
 
+        describe("has an isPending function that", function () {
+
+            describe("when the Payment is Canceled", function () {
+
+                beforeEach(function () {
+                    payment.status = "CANCELLED";
+                });
+
+                it("should return false", function () {
+                    expect(payment.isPending()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment is Complete", function () {
+
+                beforeEach(function () {
+                    payment.status = "COMPLETE";
+                });
+
+                it("should return false", function () {
+                    expect(payment.isPending()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment is Scheduled", function () {
+
+                beforeEach(function () {
+                    payment.status = "SCHEDULED";
+                });
+
+                it("should return false", function () {
+                    expect(payment.isPending()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment is Pending", function () {
+
+                beforeEach(function () {
+                    payment.status = "PENDING";
+                });
+
+                it("should return true", function () {
+                    expect(payment.isPending()).toBeTruthy();
+                });
+
+            });
+
+            describe("when the Payment is Unknown", function () {
+
+                beforeEach(function () {
+                    payment.status = "UNKNOWN";
+                });
+
+                it("should return false", function () {
+                    expect(payment.isPending()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment status is null", function () {
+
+                beforeEach(function () {
+                    payment.status = null;
+                });
+
+                it("should return false", function () {
+                    expect(payment.isPending()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment status is empty", function () {
+
+                beforeEach(function () {
+                    payment.status = "";
+                });
+
+                it("should return false", function () {
+                    expect(payment.isPending()).toBeFalsy();
+                });
+
+            });
+
+            describe("when the Payment status is undefined", function () {
+
+                beforeEach(function () {
+                    payment.status = undefined;
+                });
+
+                it("should return false", function () {
+                    expect(payment.isPending()).toBeFalsy();
+                });
+
+            });
+
+        });
+
         describe("has an isScheduled function that", function () {
 
             describe("when the Payment is Canceled", function () {
