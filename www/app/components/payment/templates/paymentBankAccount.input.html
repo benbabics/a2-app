@@ -14,7 +14,8 @@
     <ion-content>
         <ion-list>
             <ion-item ng-repeat="bankAccount in vm.bankAccounts">
-                <p ng-click="vm.selectBank(bankAccount)">
+                <p ng-click="vm.selectBank(bankAccount)"
+                   class="align_center">
                     {{bankAccount.getDisplayName()}}
                 </p>
             </ion-item>
