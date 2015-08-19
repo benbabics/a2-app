@@ -17,7 +17,21 @@
         mockPaymentAddAvailability = {},
         paymentModel1, paymentModel2, paymentModel3,
         mockPaymentCollection = {},
-        remotePaymentAddAvailabilityModel = {};
+        remotePaymentAddAvailabilityModel = {},
+        mockGlobals = {
+            PAYMENT_LIST: {
+                SEARCH_OPTIONS: {
+                    PAGE_NUMBER: TestUtils.getRandomInteger(0, 100),
+                    PAGE_SIZE: TestUtils.getRandomInteger(1, 100)
+                }
+            },
+
+            PAYMENT: {
+                STATUS: {
+                    SCHEDULED: "scheduled"
+                }
+            }
+        };
 
     describe("A Payment Manager", function () {
 
@@ -32,8 +46,9 @@
             PaymentsResource = jasmine.createSpyObj("PaymentsResource", ["addPayment", "getPaymentAddAvailability", "getPayments", "getPayment"]);
             mockPaymentAddAvailability = jasmine.createSpyObj("PaymentAddAvailabilityModel", ["PaymentAddAvailabilityModel", "set"]);
 
-            module(function ($provide) {
+            module(function ($provide, sharedGlobals) {
                 $provide.value("PaymentsResource", PaymentsResource);
+                $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
             });
 
             remotePaymentAddAvailabilityModel = jasmine.createSpyObj("PaymentAddAvailabilityModel", ["PaymentAddAvailabilityModel", "set"]);
@@ -396,6 +411,103 @@
                 });
 
                 describe("when there is no data in the response", function () {
+
+                    beforeEach(function () {
+                        getPaymentsDeferred.resolve(null);
+                    });
+
+                    it("should throw an error", function () {
+                        expect($rootScope.$digest).toThrow();
+                    });
+
+                });
+            });
+
+            describe("when retrieving the payments fails", function () {
+
+                var mockResponse = "Some error";
+
+                beforeEach(function () {
+                    getPaymentsDeferred.reject(mockResponse);
+                });
+
+                it("should throw an error", function () {
+                    expect($rootScope.$digest).toThrow();
+                });
+
+            });
+
+        });
+
+        describe("has a fetchScheduledPaymentsCount function that", function() {
+            var getPaymentsDeferred;
+
+            beforeEach(function () {
+                getPaymentsDeferred = $q.defer();
+
+                PaymentsResource.getPayments.and.returnValue(getPaymentsDeferred.promise);
+
+                PaymentManager.fetchScheduledPaymentsCount(accountId)
+                    .then(resolveHandler)
+                    .catch(rejectHandler);
+            });
+
+            it("should call PaymentsResource.getPayments with the expected values", function () {
+                expect(PaymentsResource.getPayments).toHaveBeenCalledWith(accountId, jasmine.objectContaining({
+                    pageNumber: mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
+                    pageSize  : mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE
+                }));
+            });
+
+            describe("when the payments are fetched successfully", function () {
+                var mockRemoteBanks = {
+                    data: {}
+                    },
+                    numScheduledPayments = 0,
+                    mockScheduledPayments = {};
+
+                describe("when there is a valid response", function () {
+
+                    describe("when the response contains scheduled payments", function() {
+
+                        beforeEach(function () {
+                            numScheduledPayments = TestUtils.getRandomInteger(1, 100);
+                            for(var i = 0; i < numScheduledPayments; ++i) {
+                                var curPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
+                                curPayment.status = mockGlobals.PAYMENT.STATUS.SCHEDULED;
+
+                                mockScheduledPayments[TestUtils.getRandomStringThatIsAlphaNumeric(5)] = curPayment;
+                            }
+
+                            mockRemoteBanks.data = _.values(angular.extend({}, mockPaymentCollection, mockScheduledPayments));
+                            getPaymentsDeferred.resolve(mockRemoteBanks);
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should resolve with the expected value", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(numScheduledPayments);
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("when the response contains no scheduled payments", function() {
+
+                        beforeEach(function () {
+                            mockRemoteBanks.data = _.values(mockPaymentCollection);
+                            getPaymentsDeferred.resolve(mockRemoteBanks);
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should resolve with 0", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(0);
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+
+                describe("when there is no valid response", function () {
 
                     beforeEach(function () {
                         getPaymentsDeferred.resolve(null);
