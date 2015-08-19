@@ -7,8 +7,8 @@
                     <span id="paymentAmount" class="content_align">{{vm.payment.amount | currency}}</span>
                 </p>
                 <p class="padding divider">
-                    <span id="scheduledDateLabel" class="block_align">{{vm.config.scheduledDate}}</span>
-                    <span id="scheduledDate" class="content_align">{{vm.payment.scheduledDate | wexDefaultDateFormat}}</span>
+                    <span id="scheduledDateLabel" class="block_align">{{vm.payment.isScheduled() ? vm.config.scheduledDate : vm.config.postedDate}}</span>
+                    <span id="scheduledDate" class="content_align">{{vm.payment.isPending() ? vm.config.inProcess : (vm.payment.scheduledDate | wexDefaultDateFormat)}}</span>
                 </p>
                 <p class="padding divider">
                     <span id="paymentMethodLabel" class="block_align">{{vm.config.method}}</span>
@@ -20,16 +20,32 @@
                 </p>
             </div>
 
-            <div>
-                <button class="button button-block button-light item item-icon-right">
-                    <i class="icon ion-chevron-right"></i>
-                    <span id="cancelButton" class="btn_align">{{vm.config.cancelButton}}</span>
-                </button>
+            <div ng-if="vm.payment.isScheduled()"
+                 class="padding-top">
+                <div class="item item-wrap arrow-align button-row">
+                    <p>
+                        <span class="block_align label_align">
+                            {{vm.config.cancelButton}}
+                        </span>
+                        <span class="value_align">
+                            <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align">
+                            </span>
+                        </span>
+                    </p>
+                </div>
 
-                <button class="button button-block button-light item item-icon-right">
-                    <i class="icon ion-chevron-right"></i>
-                    <span id="editButton" class="btn_align">{{vm.config.editButton}}</span>
-                </button>
+                <div class="item item-wrap arrow-align button-row"
+                     ng-if="vm.scheduledPaymentsCount == 1">
+                    <p>
+                        <span class="block_align label_align">
+                            {{vm.config.editButton}}
+                        </span>
+                        <span class="value_align">
+                            <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align">
+                            </span>
+                        </span>
+                    </p>
+                </div>
             </div>
         </div>
     </ion-content>
