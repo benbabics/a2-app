@@ -4,18 +4,20 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function PaymentManager($q, $rootScope, moment, CommonService, Logger,
+    function PaymentManager($q, globals, $rootScope, moment, CommonService, Logger,
                             PaymentAddAvailabilityModel, PaymentModel, PaymentsResource) {
         // Private members
         var paymentAddAvailability = {},
             payments;
 
         // Revealed Public members
-        var service = {
+        var _ = CommonService._,
+            service = {
             addPayment                 : addPayment,
             fetchPayment               : fetchPayment,
             fetchPaymentAddAvailability: fetchPaymentAddAvailability,
             fetchPayments              : fetchPayments,
+            fetchScheduledPaymentsCount: fetchScheduledPaymentsCount,
             getPaymentAddAvailability  : getPaymentAddAvailability,
             getPayments                : getPayments,
             setPaymentAddAvailability  : setPaymentAddAvailability,
@@ -132,6 +134,37 @@
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
                     var error = "Getting Payments failed: " + CommonService.getErrorMessage(failureResponse);
+
+                    Logger.error(error);
+                    throw new Error(error);
+                });
+        }
+
+        function fetchScheduledPaymentsCount(accountId) {
+            var searchOptions = globals.PAYMENT_LIST.SEARCH_OPTIONS;
+
+            return fetchPayments(accountId, searchOptions.PAGE_NUMBER, searchOptions.PAGE_SIZE)
+                .then(function(payments) {
+                    if(payments) {
+                        return _.reduce(payments, function(scheduledPaymentsCount, payment) {
+                            if(payment.isScheduled()) {
+                                ++scheduledPaymentsCount;
+                            }
+
+                            return scheduledPaymentsCount;
+                        }, 0);
+                    }
+                    // no payments in response
+                    else {
+                        Logger.error("No payments returned from fetching Payments");
+                        throw new Error("No payments returned from fetching Payments");
+                    }
+                })
+                // get payments failed
+                .catch(function(failureResponse) {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+
+                    var error = "Getting scheduled payments count failed: " + CommonService.getErrorMessage(failureResponse);
 
                     Logger.error(error);
                     throw new Error(error);
