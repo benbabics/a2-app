@@ -12,8 +12,8 @@
 
         $stateProvider.state("payment.list", {
             abstract: true,
-            url: "/list",
-            views: {
+            url     : "/list",
+            views   : {
                 "payment-view": {
                     template: "<ion-nav-view></ion-nav-view>"
                 }
@@ -21,8 +21,8 @@
         });
 
         $stateProvider.state("payment.list.view", {   // default payment.list child state
-            url: "",
-            cache: false,
+            url        : "",
+            cache      : false,
             templateUrl: "app/components/payment/templates/paymentList.html",
             controller : "PaymentListController as vm",
             resolve    : {
@@ -36,6 +36,33 @@
                         .finally(function () {
                             CommonService.loadingComplete();
                         });
+                }
+            }
+        });
+
+        $stateProvider.state("payment.view", {
+            url        : "/view/:paymentId",
+            cache      : false,
+            views: {
+                "payment-view": {
+                    templateUrl: "app/components/payment/templates/paymentView.html",
+                    controller : "PaymentViewController as vm",
+                    resolve    : {
+                        payment: function ($stateParams, CommonService, PaymentManager) {
+                            var paymentId = $stateParams.paymentId;
+
+                            CommonService.loadingBegin();
+
+                            return PaymentManager.fetchPayment(paymentId)
+                                .finally(function () {
+                                    CommonService.loadingComplete();
+                                });
+                        },
+
+                        scheduledPaymentsCount: function () {
+                            return 1;
+                        }
+                    }
                 }
             }
         });
@@ -109,12 +136,12 @@
         });
 
         $stateProvider.state("payment.input.bankAccount", {
-            url: "/bankAccount",
+            url  : "/bankAccount",
             views: {
                 "payment-view@payment": {
                     templateUrl: "app/components/payment/templates/paymentBankAccount.input.html",
-                    controller: "PaymentBankAccountInputController as vm",
-                    resolve: {
+                    controller : "PaymentBankAccountInputController as vm",
+                    resolve    : {
                         payment: function (Payment) {
                             return Payment.getPayment();
                         },
