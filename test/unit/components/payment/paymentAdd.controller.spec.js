@@ -7,6 +7,30 @@
         BankManager,
         BankModel,
         InvoiceManager,
+        mockGlobals = {
+            PAYMENT_ADD: {
+                "CONFIG"  : {
+                    "title"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "invoiceNumber" : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "paymentDueDate": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "currentBalance": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "minimumPayment": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "enterAmount"   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "amount"        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "bankAccount"   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "scheduledDate" : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "submitButton"  : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                },
+                "INPUTS": {
+                    "DATE": {
+                        "CONFIG": {
+                            "title"        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "maxFutureDays": TestUtils.getRandomInteger(1, 365)
+                        }
+                    }
+                }
+            }
+        },
         mockPayment = {
             amount     : "amount value",
             bankAccount: "bank account value",
@@ -38,6 +62,7 @@
                 name         : "billing company name value"
             }
         },
+        moment,
         UserManager;
 
     describe("A Payment Add Controller", function () {
@@ -46,6 +71,10 @@
 
             module("app.shared");
             module("app.components");
+
+            module(function ($provide, sharedGlobals) {
+                $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
+            });
 
             // stub the routing and template loading
             module(function ($urlRouterProvider) {
@@ -67,9 +96,10 @@
                 $provide.value("UserManager", UserManager);
             });
 
-            inject(function ($controller, $rootScope, _BankModel_, CommonService) {
+            inject(function ($controller, $rootScope, _moment_, _BankModel_, CommonService) {
 
                 _ = CommonService._;
+                moment = _moment_;
                 BankModel = _BankModel_;
 
                 // create a scope object for us to use.
@@ -94,6 +124,14 @@
                 ctrl.hasAnyCards = null;
 
                 $scope.$broadcast("$ionicView.beforeEnter");
+            });
+
+            it("should set the min date range to yesterday", function () {
+                expect(ctrl.minDate).toEqual(moment().subtract(1, "days").toDate());
+            });
+
+            it("should set the max date range to the expected time in the future", function () {
+                expect(ctrl.maxDate).toEqual(moment().add(mockGlobals.PAYMENT_ADD.INPUTS.DATE.CONFIG.maxFutureDays, "days").toDate());
             });
 
             it("should set the payment", function () {

@@ -172,21 +172,6 @@
                 }
             }
         });
-
-        $stateProvider.state("payment.input.date", {
-            url  : "/date",
-            views: {
-                "payment-view@payment": {
-                    templateUrl: "app/components/payment/templates/paymentDate.input.html",
-                    controller : "PaymentDateInputController as vm",
-                    resolve    : {
-                        payment: function (Payment) {
-                            return Payment.getPayment();
-                        }
-                    }
-                }
-            }
-        });
     }
 
     angular.module("app.components.payment")

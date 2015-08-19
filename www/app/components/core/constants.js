@@ -78,7 +78,6 @@
             },
             "DATE"        : {
                 "CONFIG": {
-                    "title"        : "Date",
                     "maxFutureDays": 180
                 }
             },

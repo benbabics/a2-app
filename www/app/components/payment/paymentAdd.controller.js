@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentAddController($scope, globals, payment, BankManager, InvoiceManager, UserManager) {
+    function PaymentAddController($scope, globals, moment, payment, BankManager, InvoiceManager, UserManager) {
 
         var vm = this;
 
@@ -15,6 +15,8 @@
         vm.billingCompany = {};
         vm.invoiceSummary = {};
         vm.payment = {};
+        vm.minDate = {};
+        vm.maxDate = {};
 
         activate();
 
@@ -30,6 +32,8 @@
             vm.billingCompany = UserManager.getUser().billingCompany;
             vm.invoiceSummary = InvoiceManager.getInvoiceSummary();
             vm.payment = payment;
+            vm.minDate = moment().subtract(1, "days").toDate();
+            vm.maxDate = moment().add(globals.PAYMENT_ADD.INPUTS.DATE.CONFIG.maxFutureDays, "days").toDate();
         }
 
     }

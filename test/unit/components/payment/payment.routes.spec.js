@@ -650,60 +650,6 @@
 
         });
 
-        describe("has a payment.input.date state that", function () {
-            var state,
-                stateName = "payment.input.date";
-
-            beforeEach(function () {
-                state = $state.get(stateName);
-            });
-
-            it("should be valid", function () {
-                expect(state).toBeDefined();
-                expect(state).not.toBeNull();
-            });
-
-            it("should NOT be abstract", function () {
-                expect(state.abstract).toBeFalsy();
-            });
-
-            it("should NOT be cached", function () {
-                expect(state.cache).toBeFalsy();
-            });
-
-            it("should have the expected URL", function () {
-                expect(state.url).toEqual("/date");
-            });
-
-            it("should define a view on the payment view container", function () {
-                expect(state.views).toBeDefined();
-                expect(state.views["payment-view@payment"]).toBeDefined();
-            });
-
-            it("should respond to the URL", function () {
-                expect($state.href(stateName)).toEqual("#/payment/input/date");
-            });
-
-            describe("when navigated to", function () {
-
-                beforeEach(function () {
-                    $state.go(stateName);
-                    $rootScope.$digest();
-                });
-
-                it("should call Payment.getPayment", function () {
-                    expect(Payment.getPayment).toHaveBeenCalledWith();
-                });
-
-                it("should transition successfully", function () {
-                    expect($state.current.name).toBe(stateName);
-                });
-
-                it("should resolve the payment", function () {
-                    expect($injector.invoke($state.current.views["payment-view@payment"].resolve.payment)).toEqual(mockPayment1);
-                });
-            });
-        });
     });
 
 })();

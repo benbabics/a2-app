@@ -40,9 +40,12 @@
             <p class="padding-left padding-right">
                 <span id="scheduledDateLabel" class="block_align label_align">{{vm.config.scheduledDate}}</span>
                 <span id="scheduledDate" class="value_align">{{vm.payment.scheduledDate | wexDefaultDateFormat}}
-                    <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
-                          ui-sref="payment.input.date">
-                    </span>
+                    <ionic-datepicker value="vm.payment.scheduledDate"
+                                      min="vm.minDate"
+                                      max="vm.maxDate"
+                                      title="vm.config.scheduledDate"
+                                      class="button button-icon icon ion-ios-arrow-forward content-align chevron_align">
+                    </ionic-datepicker>
                 </span>
             </p>
         </div>
@@ -53,7 +56,6 @@
                      <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
                            ng-if="vm.hasMultipleBanks"
                            ui-sref="payment.input.bankAccount">
-
                      </span>
                 </span>
             </p>
