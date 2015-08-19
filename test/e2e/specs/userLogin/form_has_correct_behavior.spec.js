@@ -31,7 +31,7 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
                     });
 
                     it("should have the expected placeholder text", function() {
-                        expect(this.page.userNameInput.getAttribute("placeholder")).toEqual("User Name");
+                        expect(this.page.userNameInput.getAttribute("placeholder")).toEqual("Username");
                     });
                 });
 
@@ -42,7 +42,7 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
                     });
 
                     it("should have the expected placeholder text", function() {
-                        expect(this.page.userNameInput.getAttribute("placeholder")).toEqual("User Name");
+                        expect(this.page.userNameInput.getAttribute("placeholder")).toEqual("Username");
                     });
                 });
             });

@@ -12,7 +12,7 @@
         "CONFIG": {
             "title"       : "WEX Fleet Manager",
             "userName"    : {
-                "label"    : "User Name",
+                "label"    : "Username",
                 "maxLength": 30
             },
             "password"    : {
