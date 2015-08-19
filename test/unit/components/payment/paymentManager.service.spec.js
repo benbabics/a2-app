@@ -172,77 +172,87 @@
         });
 
         describe("has a fetchPayment function that", function() {
-            var paymentModelDeferred,
-                mockResponse = {
-                    data: {
-                        id                : TestUtils.getRandomStringThatIsAlphaNumeric(5),
-                        scheduledDate     : TestUtils.getRandomDate(),
-                        amount            : TestUtils.getRandomNumber(1, 1000),
-                        bankAccount       : {
-                            id         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                            defaultBank: TestUtils.getRandomBoolean(),
-                            name       : TestUtils.getRandomStringThatIsAlphaNumeric(20)
-                        },
-                        status            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        confirmationNumber: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    }
-                };
+            var fetchedPayment;
 
-            beforeEach(function () {
-                paymentModelDeferred = $q.defer();
+            describe("when payments is NOT empty", function () {
 
-                PaymentsResource.getPayment.and.returnValue(paymentModelDeferred.promise);
+                beforeEach(function() {
+                    PaymentManager.setPayments(mockPaymentCollection);
+                });
 
-                PaymentManager.fetchPayment(accountId, paymentId)
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-            });
-
-            it("should call PaymentsResource.getPayment", function () {
-                expect(PaymentsResource.getPayment).toHaveBeenCalledWith(accountId, paymentId);
-            });
-
-            describe("when the payment is fetched successfully", function() {
-
-                describe("when there is data in the response", function () {
+                describe("when the payment to fetch is in the list", function () {
 
                     beforeEach(function() {
-                        paymentModelDeferred.resolve(mockResponse);
+                        PaymentManager.fetchPayment(paymentModel1.id)
+                            .then(function (paymentFound) {
+                                fetchedPayment = paymentFound;
+                            })
+                            .catch(rejectHandler);
+
                         $rootScope.$digest();
                     });
 
-                    it("should resolve with the expected value", function () {
-                        var expectedResult = new PaymentModel();
-                        expectedResult.set(mockResponse.data);
+                    it("should return the expected payment", function () {
+                        expect(fetchedPayment).toEqual(paymentModel1);
+                    });
 
-                        expect(resolveHandler).toHaveBeenCalledWith(expectedResult);
+
+                    it("should NOT reject", function () {
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
+
                 });
 
-                describe("when there is NOT data in the response", function () {
+                describe("when the payment to fetch is NOT in the list", function () {
 
-                    beforeEach(function () {
-                        paymentModelDeferred.resolve(null);
+                    beforeEach(function() {
+                        PaymentManager.fetchPayment(paymentId)
+                            .then(function (paymentFound) {
+                                fetchedPayment = paymentFound;
+                            })
+                            .catch(rejectHandler);
+
+                        $rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        expect($rootScope.$digest).toThrow();
+                    it("should return undefined", function () {
+                        expect(fetchedPayment).toBeUndefined();
                     });
+
+
+                    it("should NOT reject", function () {
+                        expect(rejectHandler).not.toHaveBeenCalled();
+                    });
+
                 });
 
-                describe("when getting the payment fails", function () {
-                    var mockErrorResponse = TestUtils.getRandomStringThatIsAlphaNumeric(20);
-
-                    beforeEach(function () {
-                        paymentModelDeferred.reject(mockErrorResponse);
-                    });
-
-                    it("should throw an error", function () {
-                        expect($rootScope.$digest).toThrow();
-                    });
-                });
             });
+
+            describe("when payments is empty", function () {
+
+                beforeEach(function() {
+                    PaymentManager.setPayments({});
+
+                    PaymentManager.fetchPayment(paymentModel1.id)
+                        .then(function (paymentFound) {
+                            fetchedPayment = paymentFound;
+                        })
+                        .catch(rejectHandler);
+
+                    $rootScope.$digest();
+                });
+
+                it("should return undefined", function () {
+                    expect(fetchedPayment).toBeUndefined();
+                });
+
+
+                it("should NOT reject", function () {
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+            });
+
         });
 
         describe("has a fetchPaymentAddAvailability function that", function () {
@@ -414,6 +424,20 @@
 
         });
 
+        describe("has a getPayments function that", function () {
+
+            it("should return the payments passed to setPayments", function () {
+                var result;
+
+                PaymentManager.setPayments(mockPaymentCollection);
+                result = PaymentManager.getPayments();
+
+                expect(result).toEqual(mockPaymentCollection);
+            }) ;
+
+            // TODO: figure out how to test this without using setPayments
+        });
+
         describe("has a getPaymentAddAvailability function that", function () {
 
             var newPaymentAddAvailability = {
@@ -454,6 +478,20 @@
             }) ;
 
             // TODO: figure out how to test this without using getPaymentAddAvailability
+        });
+
+        describe("has a setPayments function that", function () {
+
+            it("should update the payments returned by getPayments", function () {
+                var result;
+
+                PaymentManager.setPayments(mockPaymentCollection);
+                result = PaymentManager.getPayments();
+
+                expect(result).toEqual(mockPaymentCollection);
+            }) ;
+
+            // TODO: figure out how to test this without using getPayments
         });
 
     });
