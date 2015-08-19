@@ -4,7 +4,7 @@
     <p ng-if="payments.length == 0">
         <span>{{noPaymentsMessage}}</span>
     </p>
-    <p ng-if="payments.length > 0"
+    <p ng-if="payments.length > 0" class="divider"
        ng-repeat="payment in payments">
         <wex-payment-list-item payment="payment"></wex-payment-list-item>
     </p>

@@ -3,20 +3,20 @@
         <div class="item item-divider inner-container" style="border:0px">
             <div class="padding item item-wrap arrow-align">
                 <p class="padding divider">
-                    <span id="paymentAmountLabel" class="block_align">{{vm.config.amount}}</span>
-                    <span id="paymentAmount" class="content_align">{{vm.payment.amount | currency}}</span>
+                    <span id="paymentAmountLabel" class="block_align black">{{vm.config.amount}}</span>
+                    <span id="paymentAmount" class="content_align black">{{vm.payment.amount | currency}}</span>
                 </p>
                 <p class="padding divider">
-                    <span id="scheduledDateLabel" class="block_align">{{vm.payment.isScheduled() ? vm.config.scheduledDate : vm.config.postedDate}}</span>
-                    <span id="scheduledDate" class="content_align">{{vm.payment.isPending() ? vm.config.inProcess : (vm.payment.scheduledDate | wexDefaultDateFormat)}}</span>
+                    <span id="scheduledDateLabel" class="block_align black">{{vm.payment.isScheduled() ? vm.config.scheduledDate : vm.config.postedDate}}</span>
+                    <span id="scheduledDate" class="content_align black">{{vm.payment.isPending() ? vm.config.inProcess : (vm.payment.scheduledDate | wexDefaultDateFormat)}}</span>
                 </p>
                 <p class="padding divider">
-                    <span id="paymentMethodLabel" class="block_align">{{vm.config.method}}</span>
-                    <span id="paymentMethod" class="content_align">{{vm.payment.method}}</span>
+                    <span id="paymentMethodLabel" class="block_align black">{{vm.config.method}}</span>
+                    <span id="paymentMethod" class="content_align black">{{vm.payment.method}}</span>
                 </p>
                 <p class="padding divider">
-                    <span id="bankAccountLabel" class="block_align">{{vm.config.bankAccount}}</span>
-                    <span id="bankAccount" class="content_align">{{vm.payment.bankAccount.getDisplayName()}}</span>
+                    <span id="bankAccountLabel" class="block_align black">{{vm.config.bankAccount}}</span>
+                    <span id="bankAccount" class="content_align black">{{vm.payment.bankAccount.getDisplayName()}}</span>
                 </p>
             </div>
 
