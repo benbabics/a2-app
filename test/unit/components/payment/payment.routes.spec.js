@@ -67,7 +67,7 @@
             // mock dependencies
             Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd", "getPayment"]);
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks"]);
-            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayments"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayment", "fetchPayments", "fetchScheduledPaymentsCount"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             module(function ($provide, sharedGlobals) {
@@ -224,6 +224,93 @@
 
                 it("should transition successfully", function () {
                     expect($state.current.name).toBe(stateName);
+                });
+
+            });
+
+        });
+
+        describe("has a payment.view state that", function () {
+            var state,
+                stateName = "payment.view";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should not be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should not be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/view/:paymentId");
+            });
+
+            it("should define a payment-view", function () {
+                expect(state.views).toBeDefined();
+                expect(state.views["payment-view"]).toBeDefined();
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName, {paymentId: "1234"})).toEqual("#/payment/view/1234");
+            });
+
+            describe("when navigated to", function () {
+
+                var fetchPaymentDeferred,
+                    fetchScheduledPaymentsCountDeferred,
+                    mockPaymentId = TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
+
+                beforeEach(function () {
+                    fetchPaymentDeferred = $q.defer();
+                    PaymentManager.fetchPayment.and.returnValue(fetchPaymentDeferred.promise);
+
+                    fetchScheduledPaymentsCountDeferred = $q.defer();
+                    PaymentManager.fetchScheduledPaymentsCount.and.returnValue(fetchScheduledPaymentsCountDeferred.promise);
+
+                    UserManager.getUser.and.returnValue(mockUser);
+
+                    $state.go(stateName, {paymentId: mockPaymentId});
+
+                    fetchPaymentDeferred.resolve(mockPayment4);
+                    fetchScheduledPaymentsCountDeferred.resolve(mockScheduledPaymentCount);
+                    $rootScope.$digest();
+                });
+
+                it("should call PaymentManager.fetchPayment", function () {
+                    expect(PaymentManager.fetchPayment).toHaveBeenCalledWith(mockPaymentId);
+                });
+
+                it("should call PaymentManager.fetchScheduledPaymentsCount", function () {
+                    expect(PaymentManager.fetchScheduledPaymentsCount).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                });
+
+                it("should transition successfully", function () {
+                    expect($state.current.name).toBe(stateName);
+                });
+
+                it("should resolve the payment", function () {
+                    $injector.invoke($state.current.views["payment-view"].resolve.payment)
+                        .then(function (payment) {
+                            expect(payment).toEqual(mockPayment4);
+                        });
+                });
+
+                it("should resolve the scheduledPaymentsCount", function () {
+                    $injector.invoke($state.current.views["payment-view"].resolve.scheduledPaymentsCount)
+                        .then(function (scheduledPaymentCount) {
+                            expect(scheduledPaymentCount).toEqual(mockScheduledPaymentCount);
+                        });
                 });
 
             });

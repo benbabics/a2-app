@@ -59,8 +59,15 @@
                                 });
                         },
 
-                        scheduledPaymentsCount: function () {
-                            return 1;
+                        scheduledPaymentsCount: function (globals, CommonService, PaymentManager, UserManager) {
+                            var billingAccountId = UserManager.getUser().billingCompany.accountId;
+
+                            CommonService.loadingBegin();
+
+                            return PaymentManager.fetchScheduledPaymentsCount(billingAccountId)
+                                .finally(function () {
+                                    CommonService.loadingComplete();
+                                });
                         }
                     }
                 }
