@@ -4,9 +4,11 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function PaymentManager($rootScope, moment, CommonService, Logger, PaymentAddAvailabilityModel, PaymentModel, PaymentsResource) {
+    function PaymentManager($q, $rootScope, moment, CommonService, Logger,
+                            PaymentAddAvailabilityModel, PaymentModel, PaymentsResource) {
         // Private members
-        var paymentAddAvailability = {};
+        var paymentAddAvailability = {},
+            payments;
 
         // Revealed Public members
         var service = {
@@ -15,7 +17,9 @@
             fetchPaymentAddAvailability: fetchPaymentAddAvailability,
             fetchPayments              : fetchPayments,
             getPaymentAddAvailability  : getPaymentAddAvailability,
-            setPaymentAddAvailability  : setPaymentAddAvailability
+            getPayments                : getPayments,
+            setPaymentAddAvailability  : setPaymentAddAvailability,
+            setPayments                : setPayments
         };
 
         activate();
@@ -70,31 +74,10 @@
             return paymentModel;
         }
 
-        function getPaymentAddAvailability() {
-            return paymentAddAvailability;
-        }
-
-        function fetchPayment(accountId, paymentId) {
-            return PaymentsResource.getPayment(accountId, paymentId)
-                .then(function (paymentResponse) {
-                    if (paymentResponse && paymentResponse.data) {
-                        return createPayment(paymentResponse.data);
-                    }
-                    // no data in the response
-                    else {
-                        Logger.error("No data in Response from getting a Payment");
-                        throw new Error("No data in Response from getting a Payment");
-                    }
-                })
-                // getting payment failed
-                .catch(function (failureResponse) {
-                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
-
-                    var error = "Getting a Payment failed: " + CommonService.getErrorMessage(failureResponse);
-
-                    Logger.error(error);
-                    throw new Error(error);
-                });
+        function fetchPayment(paymentId) {
+            return $q(function(resolve, reject) {
+                resolve(_.find(payments, "id", paymentId));
+            });
         }
 
         function fetchPaymentAddAvailability(accountId) {
@@ -130,13 +113,13 @@
             return PaymentsResource.getPayments(accountId, params)
                 .then(function (paymentsResponse) {
                     if (paymentsResponse && paymentsResponse.data) {
-                        var paymentModelCollection = {};
+                        payments = {};
 
                         _.forEach(paymentsResponse.data, function (payment) {
-                            paymentModelCollection[payment.id] = createPayment(payment);
+                            payments[payment.id] = createPayment(payment);
                         });
 
-                        return paymentModelCollection;
+                        return payments;
                     }
                     // no data in the response
                     else {
@@ -155,10 +138,25 @@
                 });
         }
 
+
+        function getPaymentAddAvailability() {
+            return paymentAddAvailability;
+        }
+
+        function getPayments() {
+            return payments;
+        }
+
         // Caution against using this as it replaces the object versus setting properties on it or extending it
         // suggested use for testing only
         function setPaymentAddAvailability(paymentAddAvailabilityInfo) {
             paymentAddAvailability = paymentAddAvailabilityInfo;
+        }
+
+        // Caution against using this as it replaces the object versus setting properties on it or extending it
+        // suggested use for testing only
+        function setPayments(paymentsInfo) {
+            payments = paymentsInfo;
         }
 
     }
