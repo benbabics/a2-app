@@ -51,9 +51,9 @@
         "CONFIG"  : {
             "title"         : "Make Payment",
             "invoiceNumber" : "Invoice Number",
-            "paymentDueDate": "Payment Due Date",
-            "currentBalance": "Current Balance",
-            "minimumPayment": "Minimum Payment",
+            "paymentDueDate": "Due Date",
+            "currentBalance": "Statement Balance",
+            "minimumPayment": "Current Balance",
             "enterAmount"   : "Enter Amount",
             "amount"        : "Amount",
             "bankAccount"   : "From Account",
