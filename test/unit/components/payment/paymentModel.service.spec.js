@@ -159,6 +159,17 @@
                 });
             });
 
+            describe("when the method is unrecognized", function () {
+
+                beforeEach(function () {
+                    payment.method = TestUtils.getRandomStringThatIsAlphaNumeric(20);
+                });
+
+                it("should return the bank account's display name", function () {
+                    expect(payment.getBankAccountDisplayName()).toEqual(payment.bankAccount.getDisplayName());
+                });
+            });
+
             describe("when the method is empty", function () {
 
                 beforeEach(function () {
