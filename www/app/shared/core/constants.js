@@ -78,6 +78,21 @@
             "SCHEDULED": "SCHEDULED",
             "PENDING"  : "PENDING",
             "UNKNOWN"  : "UNKNOWN"
+        },
+        METHOD: {
+            DIRECT_DEBIT: "DIRECT_DEBIT",
+            ONLINE      : "ONLINE",
+            CHECK       : "CHECK",
+            IVR         : "IVR",
+            UNKNOWN     : "UNKNOWN",
+
+            DISPLAY_MAPPINGS: {
+                DIRECT_DEBIT: "Direct Debit",
+                ONLINE      : "Online Payment",
+                CHECK       : "Check",
+                IVR         : "Phone Payment",
+                UNKNOWN     : "Unknown"
+            }
         }
     };
 

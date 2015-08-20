@@ -1,10 +1,13 @@
 (function () {
     "use strict";
 
-    var PaymentModel = function (globals, BankModel) {
+    var PaymentModel = function (globals, BankModel, CommonService) {
 
         // Constants
-        var PAYMENT_STATUS = globals.PAYMENT.STATUS;
+        var PAYMENT_STATUS = globals.PAYMENT.STATUS,
+            PAYMENT_METHOD = globals.PAYMENT.METHOD;
+
+        var _ = CommonService._;
 
         function PaymentModel() {
             this.id = "";
@@ -20,6 +23,17 @@
             angular.extend(this, paymentResource);
             this.bankAccount = new BankModel();
             this.bankAccount.set(paymentResource.bankAccount);
+        };
+
+        PaymentModel.prototype.getMethodDisplayName = function () {
+            var method = this.method ? this.method.toUpperCase() : null;
+
+            if (method) {
+                if (_.has(PAYMENT_METHOD.DISPLAY_MAPPINGS, method)) {
+                    return PAYMENT_METHOD.DISPLAY_MAPPINGS[method];
+                }
+            }
+            return PAYMENT_METHOD.DISPLAY_MAPPINGS.UNKNOWN;
         };
 
         PaymentModel.prototype.isPending = function () {

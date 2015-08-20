@@ -302,6 +302,64 @@
 
         });
 
+        describe("has a getMethodDisplayName function that", function () {
+
+            describe("when the method is DIRECT_DEBIT", function () {
+
+                beforeEach(function () {
+                    payment.method = "DIRECT_DEBIT";
+                });
+
+                it("should return 'Direct Debit'", function () {
+                    expect(payment.getMethodDisplayName()).toEqual("Direct Debit");
+                });
+            });
+
+            describe("when the method is ONLINE", function () {
+
+                beforeEach(function () {
+                    payment.method = "ONLINE";
+                });
+
+                it("should return 'Online Payment'", function () {
+                    expect(payment.getMethodDisplayName()).toEqual("Online Payment");
+                });
+            });
+
+            describe("when the method is CHECK", function () {
+
+                beforeEach(function () {
+                    payment.method = "CHECK";
+                });
+
+                it("should return 'Check'", function () {
+                    expect(payment.getMethodDisplayName()).toEqual("Check");
+                });
+            });
+
+            describe("when the method is IVR", function () {
+
+                beforeEach(function () {
+                    payment.method = "IVR";
+                });
+
+                it("should return 'Phone Payment'", function () {
+                    expect(payment.getMethodDisplayName()).toEqual("Phone Payment");
+                });
+            });
+
+            describe("when the method is UNKNOWN", function () {
+
+                beforeEach(function () {
+                    payment.method = "UNKNOWN";
+                });
+
+                it("should return 'Unknown'", function () {
+                    expect(payment.getMethodDisplayName()).toEqual("Unknown");
+                });
+            });
+        });
+
     });
 
 })();
