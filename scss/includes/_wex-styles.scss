@@ -465,6 +465,16 @@ $numeric-keypad-animation: all linear 0.15s;
     }
 }
 
+/**--------------------------------
+  Datepicker
+ ----------------------------------**/
+.datepicker {
+    .selected {
+        background-color: $wex-red !important;;
+        color: $inverse-font-color
+    }
+}
+
 .button-row {
     margin-top: 10px;
 }
