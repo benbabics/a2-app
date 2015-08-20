@@ -15,9 +15,13 @@ $warning-message-fill: #f9f9d0;
 $link-font-color: #3A97B5;
 
 //buttons
-$primary-button-color: #fcc336;
-$primary-button-font-color: #000;
-$secondary-button-color: $charcoal;
-$secondary-button-font-color: #E6FFE6;
-$button-disabled-color: #eeeeee;
-$button-disabled-font-color: #c2c2c2;
+$wex-button-color: #fcc336;
+$wex-button-font-color: #000;
+$wex-button-disabled-color: #eeeeee;
+$wex-button-disabled-font-color: #c2c2c2;
+$wex-inverted-button-color: $charcoal;
+$wex-inverted-button-font-color: #E6E6E6;
+$wex-inverted-button-disabled-color: $charcoal-light;
+$wex-inverted-button-disabled-font-color: $wex-button-disabled-font-color;
+$wex-inverted-button-activated-color: $charcoal-light;
+$wex-inverted-button-activated-font-color: $wex-inverted-button-font-color;

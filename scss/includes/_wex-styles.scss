@@ -91,20 +91,20 @@
 }
 
 .button-default {
-  background-color: $secondary-button-color;
-  color: $secondary-button-font-color;
+  background-color: $wex-inverted-button-color;
+  color: $wex-inverted-button-font-color;
   text-transform: uppercase;
 }
 
 .button-submit {
-  background-color: $primary-button-color;
-  color: $primary-button-font-color;
+  background-color: $wex-button-color;
+  color: $wex-button-font-color;
   text-transform: uppercase;
 }
 
 .button[disabled] {
-  background-color: $button-disabled-color;
-  color: $button-disabled-font-color;
+  background-color: $wex-button-disabled-color;
+  color: $wex-button-disabled-font-color;
   opacity: initial;
 }
 
@@ -345,10 +345,18 @@ ion-modal-view.modal-tooltip {
 /**------------------------------------------------------
  Numeric Input Field
  ------------------------------------------------------**/
-$numeric-keypad-rows: 4;
-$numeric-keypad-height: ($button-height + 5px) * $numeric-keypad-rows;
-$numeric-keypad-button-border: 1px solid #aaa;
+$numeric-keypad-button-border: 1px solid $inverse-font-color;
 $numeric-keypad-button-voffset: 5px;
+$numeric-keypad-button-color: $wex-inverted-button-color;
+$numeric-keypad-button-font-color: $wex-inverted-button-font-color;
+$numeric-keypad-button-disabled-color: $wex-inverted-button-disabled-color;
+$numeric-keypad-button-disabled-font-color: $wex-inverted-button-disabled-font-color;
+$numeric-keypad-button-activated-color: $wex-inverted-button-activated-color;
+$numeric-keypad-button-activated-font-color: $wex-inverted-button-activated-font-color;
+$numeric-keypad-button-height: 62px;
+$numeric-keypad-button-font-size: 22px;
+$numeric-keypad-rows: 4;
+$numeric-keypad-height: $numeric-keypad-button-height * $numeric-keypad-rows;
 $numeric-keypad-animation: all linear 0.15s;
 
 .scroll-content.has-numeric-keypad {
@@ -378,8 +386,25 @@ $numeric-keypad-animation: all linear 0.15s;
   .button {
     margin: 0 0 $numeric-keypad-button-voffset 0;
 
+    min-height: $numeric-keypad-button-height !important;
+
     border-right: $numeric-keypad-button-border;
     border-bottom: $numeric-keypad-button-border;
+
+    color: $numeric-keypad-button-font-color;
+    background-color: $numeric-keypad-button-color;
+
+    font-size: $numeric-keypad-button-font-size;
+  }
+
+  .button[disabled] {
+    color: $numeric-keypad-button-disabled-font-color;
+    background-color: $numeric-keypad-button-disabled-color;
+  }
+
+  .button.activated {
+    color: $numeric-keypad-button-activated-font-color;
+    background-color: $numeric-keypad-button-activated-color;
   }
 
   .button-delete {
@@ -436,9 +461,9 @@ $numeric-keypad-animation: all linear 0.15s;
     .popup-buttons .button {
       margin-left: 27%;
       margin-right: 27%;
-      background-color: $primary-button-color;
+      background-color: $wex-button-color;
       border: none;
-      color: $primary-button-font-color;
+      color: $wex-button-font-color;
     }
   }
 }
