@@ -25,6 +25,16 @@
             this.bankAccount.set(paymentResource.bankAccount);
         };
 
+        PaymentModel.prototype.getBankAccountDisplayName = function () {
+            var method = this.method ? this.method.toUpperCase() : null;
+
+            if (method && _.has(PAYMENT_METHOD.BANK_ACCOUNT_NAME_DISPLAY_OVERRIDE, method)) {
+                return PAYMENT_METHOD.BANK_ACCOUNT_NAME_DISPLAY_OVERRIDE[method];
+            }
+
+            return this.bankAccount.getDisplayName();
+        };
+
         PaymentModel.prototype.getMethodDisplayName = function () {
             var method = this.method ? this.method.toUpperCase() : null;
 

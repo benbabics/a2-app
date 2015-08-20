@@ -92,6 +92,11 @@
                 CHECK       : "Check",
                 IVR         : "Phone Payment",
                 UNKNOWN     : "Unknown"
+            },
+
+            BANK_ACCOUNT_NAME_DISPLAY_OVERRIDE: {
+                DIRECT_DEBIT: "N/A",
+                CHECK       : "N/A"
             }
         }
     };

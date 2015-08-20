@@ -102,6 +102,97 @@
 
         });
 
+        describe("has a getBankAccountDisplayName function that", function () {
+
+            describe("when the method is DIRECT_DEBIT", function () {
+
+                beforeEach(function () {
+                    payment.method = "DIRECT_DEBIT";
+                });
+
+                it("should return 'N/A'", function () {
+                    expect(payment.getBankAccountDisplayName()).toEqual("N/A");
+                });
+            });
+
+            describe("when the method is ONLINE", function () {
+
+                beforeEach(function () {
+                    payment.method = "ONLINE";
+                });
+
+                it("should return the bank account's display name", function () {
+                    expect(payment.getBankAccountDisplayName()).toEqual(payment.bankAccount.getDisplayName());
+                });
+            });
+
+            describe("when the method is CHECK", function () {
+
+                beforeEach(function () {
+                    payment.method = "CHECK";
+                });
+
+                it("should return 'N/A'", function () {
+                    expect(payment.getBankAccountDisplayName()).toEqual("N/A");
+                });
+            });
+
+            describe("when the method is IVR", function () {
+
+                beforeEach(function () {
+                    payment.method = "IVR";
+                });
+
+                it("should return the bank account's display name", function () {
+                    expect(payment.getBankAccountDisplayName()).toEqual(payment.bankAccount.getDisplayName());
+                });
+            });
+
+            describe("when the method is UNKNOWN", function () {
+
+                beforeEach(function () {
+                    payment.method = "UNKNOWN";
+                });
+
+                it("should return the bank account's display name", function () {
+                    expect(payment.getBankAccountDisplayName()).toEqual(payment.bankAccount.getDisplayName());
+                });
+            });
+
+            describe("when the method is empty", function () {
+
+                beforeEach(function () {
+                    payment.method = "";
+                });
+
+                it("should return the bank account's display name", function () {
+                    expect(payment.getBankAccountDisplayName()).toEqual(payment.bankAccount.getDisplayName());
+                });
+            });
+
+            describe("when the method is null", function () {
+
+                beforeEach(function () {
+                    payment.method = null;
+                });
+
+                it("should return the bank account's display name", function () {
+                    expect(payment.getBankAccountDisplayName()).toEqual(payment.bankAccount.getDisplayName());
+                });
+            });
+
+            describe("when the method is undefined", function () {
+
+                beforeEach(function () {
+                    delete payment.method;
+                });
+
+                it("should return the bank account's display name", function () {
+                    expect(payment.getBankAccountDisplayName()).toEqual(payment.bankAccount.getDisplayName());
+                });
+            });
+        });
+
         describe("has an isPending function that", function () {
 
             describe("when the Payment is Canceled", function () {
