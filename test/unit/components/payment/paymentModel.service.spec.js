@@ -358,6 +358,50 @@
                     expect(payment.getMethodDisplayName()).toEqual("Unknown");
                 });
             });
+
+            describe("when the method is unrecognized", function () {
+
+                beforeEach(function () {
+                    payment.method = TestUtils.getRandomStringThatIsAlphaNumeric(20);
+                });
+
+                it("should return 'Unknown'", function () {
+                    expect(payment.getMethodDisplayName()).toEqual("Unknown");
+                });
+            });
+
+            describe("when the method is null", function () {
+
+                beforeEach(function () {
+                    payment.method = null;
+                });
+
+                it("should return 'Unknown'", function () {
+                    expect(payment.getMethodDisplayName()).toEqual("Unknown");
+                });
+            });
+
+            describe("when the method is empty", function () {
+
+                beforeEach(function () {
+                    payment.method = "";
+                });
+
+                it("should return 'Unknown'", function () {
+                    expect(payment.getMethodDisplayName()).toEqual("Unknown");
+                });
+            });
+
+            describe("when the method is undefined", function () {
+
+                beforeEach(function () {
+                    payment.method = undefined;
+                });
+
+                it("should return 'Unknown'", function () {
+                    expect(payment.getMethodDisplayName()).toEqual("Unknown");
+                });
+            });
         });
 
     });

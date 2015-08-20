@@ -28,12 +28,12 @@
         PaymentModel.prototype.getMethodDisplayName = function () {
             var method = this.method ? this.method.toUpperCase() : null;
 
-            if (method) {
-                if (_.has(PAYMENT_METHOD.DISPLAY_MAPPINGS, method)) {
-                    return PAYMENT_METHOD.DISPLAY_MAPPINGS[method];
-                }
+            if (method && _.has(PAYMENT_METHOD.DISPLAY_MAPPINGS, method)) {
+                return PAYMENT_METHOD.DISPLAY_MAPPINGS[method];
             }
-            return PAYMENT_METHOD.DISPLAY_MAPPINGS.UNKNOWN;
+            else {
+                return PAYMENT_METHOD.DISPLAY_MAPPINGS.UNKNOWN;
+            }
         };
 
         PaymentModel.prototype.isPending = function () {
