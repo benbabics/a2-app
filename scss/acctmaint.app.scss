@@ -191,17 +191,22 @@ $user-login-gradient-bottom: #414141;
 
 .label_align {
     vertical-align: middle;
-    width: 45%;
+    width: 50%;
+    margin-top:10px !important;
 }
 
 .value_align {
     vertical-align: middle;
-    width: 45%;
     display: inline-block;
     text-align: right;
+    float: right;
 }
 
 .chevron_align {
     vertical-align: middle;
-    width: 10%;
+}
+
+/** Hyperlink Color **/
+.active-link {
+    color: #32819b !important;
 }
