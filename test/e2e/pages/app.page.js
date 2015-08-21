@@ -5,7 +5,7 @@ var TestUtils = require("../testUtils.protractor.js");
 var AppPage = (function () {
 
     function AppPage() {
-        this.sideMenuButton         = TestUtils.findElementByXPathWithClass("//*[@nav-bar='active']//button", "button-menu");
+        this.sideMenuButton         = TestUtils.findElementByXPathWithClass("//*[@nav-bar='active']//button", "ion-navicon-round");
         this.sideMenu               = element(by.tagName("ion-side-menu"));
         this.sideMenuHome           = this.sideMenu.element(by.id("option-home"));
         this.sideMenuMakePayment    = this.sideMenu.element(by.id("option-make-payment"));

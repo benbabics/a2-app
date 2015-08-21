@@ -15,21 +15,6 @@
   .button {
     color: $inverse-font-color;
   }
-
-  .button-menu:before {
-    font-family: ionicons;
-    font-size: $button-large-icon-size;
-    white-space: pre;
-
-    content: "\f20d\A"; /* ion-navicon-round */
-  }
-
-  .button-menu:after {
-    font-size: $button-small-font-size;
-    white-space: pre;
-
-    content: "\A" attr(data-text);
-  }
 }
 
 .bar-notification {
