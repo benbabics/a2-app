@@ -10,7 +10,7 @@
     "ngFitText": "~3",
     "angular-moment": "~0",
     "ionic-datepicker-widget": "~1",
-    "ang-accordion": "*",
+    "ang-accordion": "git://github.com/sherwaniusman/angular-accordion.git",
     "angular-ui-router": ">=0.2.15"
   },
   "resolutions": {
