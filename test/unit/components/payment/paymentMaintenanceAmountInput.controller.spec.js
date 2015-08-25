@@ -12,14 +12,14 @@
             currentBalance: TestUtils.getRandomNumber(1000, 10000)
         },
         mockGlobals = {
-            PAYMENT_ADD: {
+            PAYMENT_MAINTENANCE_FORM: {
                 "INPUTS": {
                     "AMOUNT": {
                         "CONFIG": {
                             "title": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                         },
                         "ERRORS": {
-                            "zeroPayment": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "zeroPayment"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                             "paymentTooLarge": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                         }
                     }
@@ -29,12 +29,12 @@
             BUTTONS: {
                 "CONFIG": {
                     "cancel": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "done": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    "done"  : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 }
             }
         };
 
-    describe("A Payment Amount Input Controller", function () {
+    describe("A Payment Maintenance Amount Input Controller", function () {
 
         beforeEach(function () {
 
@@ -63,14 +63,14 @@
 
                 scope = $rootScope.$new();
 
-                ctrl = $controller("PaymentAmountInputController", {
-                    $scope: scope,
-                    $filter: $filter,
-                    $ionicHistory: $ionicHistory,
-                    globals: globals,
-                    payment: mockPayment,
+                ctrl = $controller("PaymentMaintenanceAmountInputController", {
+                    $scope        : scope,
+                    $filter       : $filter,
+                    $ionicHistory : $ionicHistory,
+                    globals       : globals,
+                    payment       : mockPayment,
                     invoiceSummary: mockInvoiceSumary,
-                    CommonService: CommonService
+                    CommonService : CommonService
                 });
 
             });
@@ -141,7 +141,7 @@
 
                 it("should show the expected error", function () {
                     expect(CommonService.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
-                        content: mockGlobals.PAYMENT_ADD.INPUTS.AMOUNT.ERRORS.zeroPayment
+                        content: mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT.ERRORS.zeroPayment
                     }));
                 });
 
@@ -160,7 +160,7 @@
 
                 it("should show the expected error", function () {
                     expect(CommonService.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
-                        content: mockGlobals.PAYMENT_ADD.INPUTS.AMOUNT.ERRORS.paymentTooLarge
+                        content: mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT.ERRORS.paymentTooLarge
                     }));
                 });
 

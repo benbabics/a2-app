@@ -7,10 +7,12 @@
         BankManager,
         BankModel,
         InvoiceManager,
+        mockMaintenanceState,
+        mockStateParams,
+        mockMaintenance,
         mockGlobals = {
-            PAYMENT_ADD: {
-                "CONFIG"  : {
-                    "title"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+            PAYMENT_MAINTENANCE_FORM: {
+                "CONFIG": {
                     "invoiceNumber" : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "paymentDueDate": TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "currentBalance": TestUtils.getRandomStringThatIsAlphaNumeric(10),
@@ -28,12 +30,17 @@
                             "maxFutureDays": TestUtils.getRandomInteger(1, 365)
                         }
                     }
+                },
+                "ADD"   : {
+                    "CONFIG": {
+                        "title": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    }
                 }
             }
         },
         mockPayment = {
-            amount     : "amount value",
-            bankAccount: "bank account value",
+            amount       : "amount value",
+            bankAccount  : "bank account value",
             scheduledDate: "payment date value"
         },
         mockCurrentInvoiceSummary = {
@@ -48,10 +55,10 @@
             paymentDueDate    : "payment due date value"
         },
         mockUser = {
-            email    : "email address value",
-            firstName: "first name value",
-            username : "username value",
-            company  : {
+            email         : "email address value",
+            firstName     : "first name value",
+            username      : "username value",
+            company       : {
                 accountId    : "company account id value",
                 accountNumber: "company account number value",
                 name         : "company name value"
@@ -65,7 +72,7 @@
         moment,
         UserManager;
 
-    describe("A Payment Add Controller", function () {
+    describe("A Payment Maintenance Form Controller", function () {
 
         beforeEach(function () {
 
@@ -90,13 +97,13 @@
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            module(function($provide) {
+            module(function ($provide) {
                 $provide.value("BankManager", BankManager);
                 $provide.value("InvoiceManager", InvoiceManager);
                 $provide.value("UserManager", UserManager);
             });
 
-            inject(function ($controller, $rootScope, _moment_, _BankModel_, CommonService) {
+            inject(function ($controller, $rootScope, _moment_, _BankModel_, appGlobals, CommonService) {
 
                 _ = CommonService._;
                 moment = _moment_;
@@ -105,8 +112,20 @@
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
-                ctrl = $controller("PaymentAddController", {
+                mockMaintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
+                mockStateParams = {
+                    maintenanceState: mockMaintenanceState
+                };
+                mockMaintenance = {
+                    state : mockMaintenanceState,
+                    states: appGlobals.PAYMENT_MAINTENANCE.STATES,
+                    go    : jasmine.createSpy("go")
+                };
+
+                ctrl = $controller("PaymentMaintenanceFormController", {
                     $scope        : $scope,
+                    $stateParams  : mockStateParams,
+                    maintenance   : mockMaintenance,
                     payment       : mockPayment,
                     InvoiceManager: InvoiceManager,
                     UserManager   : UserManager
@@ -117,9 +136,16 @@
             UserManager.getUser.and.returnValue(mockUser);
         });
 
+        it("should set the config to the expected value", function () {
+            expect(ctrl.config).toEqual(angular.extend({},
+                mockGlobals.PAYMENT_MAINTENANCE_FORM.CONFIG,
+                getConfig(mockMaintenance)
+            ));
+        });
+
         describe("has an $ionicView.beforeEnter event handler function that", function () {
 
-            beforeEach(function() {
+            beforeEach(function () {
                 //setup an existing values to test them being modified
                 ctrl.hasAnyCards = null;
 
@@ -131,7 +157,7 @@
             });
 
             it("should set the max date range to the expected time in the future", function () {
-                expect(ctrl.maxDate).toEqual(moment().add(mockGlobals.PAYMENT_ADD.INPUTS.DATE.CONFIG.maxFutureDays, "days").toDate());
+                expect(ctrl.maxDate).toEqual(moment().add(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.DATE.CONFIG.maxFutureDays, "days").toDate());
             });
 
             it("should set the payment", function () {
@@ -148,7 +174,7 @@
 
             describe("when there are NOT any active banks", function () {
 
-                beforeEach(function() {
+                beforeEach(function () {
                     BankManager.getActiveBanks.and.returnValue(null);
 
                     $scope.$broadcast("$ionicView.beforeEnter");
@@ -162,7 +188,7 @@
 
             describe("when there is a single active bank", function () {
 
-                beforeEach(function() {
+                beforeEach(function () {
                     var bankModel1,
                         mockBankCollection = {};
 
@@ -182,7 +208,7 @@
 
             describe("when there are multiple active banks", function () {
 
-                beforeEach(function() {
+                beforeEach(function () {
                     var bankModel1,
                         bankModel2,
                         mockBankCollection = {};
@@ -206,5 +232,14 @@
         });
 
     });
+
+    function getConfig(maintenance) {
+        switch (maintenance.state) {
+            case maintenance.states.ADD:
+                return mockGlobals.PAYMENT_MAINTENANCE_FORM.ADD.CONFIG;
+            default:
+                return null;
+        }
+    }
 
 }());

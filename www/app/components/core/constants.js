@@ -48,8 +48,22 @@
     };
 
     appGlobals.PAYMENT_ADD = {
-        "CONFIG"  : {
-            "title"         : "Make Payment",
+        "WARNINGS": {
+            "BANK_ACCOUNTS_NOT_SETUP"  : "You must set up your financial institutions as your payment options online prior to scheduling a payment.",
+            "DIRECT_DEBIT_SETUP"       : "Online payment is not currently available for this account. The account has set up an alternative method of payment, such as direct debit.",
+            "NO_BALANCE_DUE"           : "Current Balance needs to be greater than $0.00.",
+            "PAYMENT_ALREADY_SCHEDULED": "A payment has been scheduled already."
+        }
+    };
+
+    appGlobals.PAYMENT_MAINTENANCE = {
+        STATES: {
+            "ADD": "add"
+        }
+    };
+
+    appGlobals.PAYMENT_MAINTENANCE_FORM = {
+        "CONFIG": {
             "invoiceNumber" : "Invoice Number",
             "paymentDueDate": "Due Date",
             "currentBalance": "Current Balance",
@@ -60,13 +74,7 @@
             "scheduledDate" : "Date",
             "submitButton"  : "Next"
         },
-        "WARNINGS": {
-            "BANK_ACCOUNTS_NOT_SETUP"  : "You must set up your financial institutions as your payment options online prior to scheduling a payment.",
-            "DIRECT_DEBIT_SETUP"       : "Online payment is not currently available for this account. The account has set up an alternative method of payment, such as direct debit.",
-            "NO_BALANCE_DUE"           : "Current Balance needs to be greater than $0.00.",
-            "PAYMENT_ALREADY_SCHEDULED": "A payment has been scheduled already."
-        },
-        "INPUTS"  : {
+        "INPUTS": {
             "AMOUNT"      : {
                 "CONFIG": {
                     "title": "Amount"
@@ -87,10 +95,15 @@
                     "instructionalText": "Please Note: Managing bank accounts can only be completed on the web from the desktop application version."
                 }
             }
+        },
+        "ADD"   : {
+            "CONFIG": {
+                "title": "Make Payment"
+            }
         }
     };
 
-    appGlobals.PAYMENT_SUMMARY = {
+    appGlobals.PAYMENT_MAINTENANCE_SUMMARY = {
         "CONFIG"  : {
             "title"                : "Payment Summary",
             "afternoonWarning"     : "Payments received after 3:30 pm Eastern Time may not be posted to your account until the next business day.",
@@ -104,10 +117,13 @@
         "WARNINGS": {
             "PAYMENT_AMOUNT_LESS_THAN_MINIMUM": "This amount is less than the minimum payment.",
             "PAYMENT_DATE_PAST_DUE_DATE"      : "The date selected for payment is past the due date."
+        },
+        "ADD"     : {
+            "CONFIG": {}
         }
     };
 
-    appGlobals.PAYMENT_CONFIRMATION = {
+    appGlobals.PAYMENT_MAINTENANCE_CONFIRMATION = {
         "CONFIG": {
             "title"           : "Payment Confirmation",
             "confirmationText": "Your payment has been scheduled.",
@@ -115,20 +131,23 @@
             "bankAccount"     : "From Account",
             "scheduledDate"   : "Date",
             "activityButton"  : "Payment Activity"
+        },
+        "ADD"   : {
+            "CONFIG": {}
         }
     };
 
     appGlobals.PAYMENT_VIEW = {
         "CONFIG": {
-            "title"           : "Payment Details",
-            "amount"          : "Amount",
-            "bankAccount"     : "Account",
-            "postedDate"      : "Date Posted",
-            "scheduledDate"   : "Date Scheduled",
-            "inProcess"       : "In Process",
-            "method"          : "Method",
-            "editButton"      : "Edit Payment",
-            "cancelButton"    : "Cancel Payment"
+            "title"        : "Payment Details",
+            "amount"       : "Amount",
+            "bankAccount"  : "Account",
+            "postedDate"   : "Date Posted",
+            "scheduledDate": "Date Scheduled",
+            "inProcess"    : "In Process",
+            "method"       : "Method",
+            "editButton"   : "Edit Payment",
+            "cancelButton" : "Cancel Payment"
         }
     };
 

@@ -7,12 +7,12 @@
             $rootScope,
             $state,
             mockGlobals = {
-                LOGIN_STATE: "user.auth.login",
-                AUTH_API: {
-                    BASE_URL: "/someUrl",
-                    AUTH: {
+                LOGIN_STATE            : "user.auth.login",
+                AUTH_API               : {
+                    BASE_URL          : "/someUrl",
+                    AUTH              : {
                         TOKENS: "uaa/oauth/token",
-                        ME: "uaa/me"
+                        ME    : "uaa/me"
                     },
                     CLIENT_CREDENTIALS: {
                         CLIENT_ID    : "Some_Client_Id",
@@ -21,15 +21,15 @@
                 },
                 ACCOUNT_MAINTENANCE_API: {
                     BASE_URL: "/someAMRestUrl",
-                    CARDS: {
-                        BASE: "Cards_Base",
-                        STATUS: "Status",
+                    CARDS   : {
+                        BASE               : "Cards_Base",
+                        STATUS             : "Status",
                         CHECK_STATUS_CHANGE: "Status_Change"
                     },
                     ACCOUNTS: {
                         BASE: "Accounts_Base"
                     },
-                    BANKS: {
+                    BANKS   : {
                         ACTIVE_BANKS: "Active_Banks"
                     },
                     INVOICES: {
@@ -43,20 +43,19 @@
                         CURRENT: "Current_User"
                     }
                 },
-                NOTIFICATIONS: {
+                NOTIFICATIONS          : {
                     "serverConnectionError": "Server connection error",
                     "networkError"         : "Network error"
                 },
-                LOGGING: {
+                LOGGING                : {
                     ENABLED: false
                 },
-                MENU: {
+                MENU                   : {
                     CONFIG: {
-                        options: {
-                        }
+                        options: {}
                     }
                 },
-                PAYMENT_ADD: {
+                PAYMENT_ADD            : {
                     CONFIG  : {},
                     WARNINGS: {
                         BANK_ACCOUNTS_NOT_SETUP  : "Banks Not Setup",
@@ -67,10 +66,10 @@
                 }
             },
             mockUser = {
-                email    : "email address value",
-                firstName: "first name value",
-                username : "username value",
-                company  : {
+                email         : "email address value",
+                firstName     : "first name value",
+                username      : "username value",
+                company       : {
                     accountId    : "company account id value",
                     accountNumber: "company account number value",
                     name         : "company name value"
@@ -98,6 +97,11 @@
             });
 
             module("app.components");
+
+            module(function ($provide, globals, appGlobals) {
+                $provide.constant("globals", angular.extend({}, appGlobals, globals));
+            });
+
             module("app.shared");
             module("app.html");
 
@@ -108,7 +112,7 @@
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
-            module(function($provide) {
+            module(function ($provide) {
                 $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("Payment", Payment);
                 $provide.value("CommonService", CommonService);
@@ -126,13 +130,14 @@
 
         });
 
-        it("should set the app to fullscreen with a status bar", function() {
+        it("should set the app to fullscreen with a status bar", function () {
             expect(ionic.Platform.fullScreen).toHaveBeenCalledWith(true, true);
         });
 
         describe("should set a $stateChangeStart event handler that", function () {
             var landingRoute = "landing",
-                paymentAddRoute = "payment.add";
+                paymentAddRoute = "payment.add",
+                paymentMaintenanceFormRoute = "payment.maintenance.form";
 
             //TODO - the module's run block finishes before the spy can be injected into $rootScope
             //Figure out how to test this
@@ -181,9 +186,9 @@
 
                         beforeEach(function () {
                             paymentAddAvailability = {
-                                makePaymentAllowed: false,
-                                shouldDisplayCurrentBalanceDueMessage: false,
-                                shouldDisplayBankAccountSetupMessage: true,
+                                makePaymentAllowed                    : false,
+                                shouldDisplayCurrentBalanceDueMessage : false,
+                                shouldDisplayBankAccountSetupMessage  : true,
                                 shouldDisplayDirectDebitEnabledMessage: false,
                                 shouldDisplayOutstandingPaymentMessage: false
                             };
@@ -204,7 +209,7 @@
 
                         it("should call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                                content: mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
+                                content       : mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
                         });
@@ -214,9 +219,9 @@
 
                         beforeEach(function () {
                             paymentAddAvailability = {
-                                makePaymentAllowed: false,
-                                shouldDisplayCurrentBalanceDueMessage: false,
-                                shouldDisplayBankAccountSetupMessage: false,
+                                makePaymentAllowed                    : false,
+                                shouldDisplayCurrentBalanceDueMessage : false,
+                                shouldDisplayBankAccountSetupMessage  : false,
                                 shouldDisplayDirectDebitEnabledMessage: true,
                                 shouldDisplayOutstandingPaymentMessage: false
                             };
@@ -237,7 +242,7 @@
 
                         it("should call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                                content: mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
+                                content       : mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
                         });
@@ -247,9 +252,9 @@
 
                         beforeEach(function () {
                             paymentAddAvailability = {
-                                makePaymentAllowed: false,
-                                shouldDisplayCurrentBalanceDueMessage: false,
-                                shouldDisplayBankAccountSetupMessage: false,
+                                makePaymentAllowed                    : false,
+                                shouldDisplayCurrentBalanceDueMessage : false,
+                                shouldDisplayBankAccountSetupMessage  : false,
                                 shouldDisplayDirectDebitEnabledMessage: false,
                                 shouldDisplayOutstandingPaymentMessage: true
                             };
@@ -270,7 +275,7 @@
 
                         it("should call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                                content: mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
+                                content       : mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
                                 buttonCssClass: "button-submit"
                             });
                         });
@@ -280,9 +285,9 @@
 
                         beforeEach(function () {
                             paymentAddAvailability = {
-                                makePaymentAllowed: false,
-                                shouldDisplayCurrentBalanceDueMessage: true,
-                                shouldDisplayBankAccountSetupMessage: false,
+                                makePaymentAllowed                    : false,
+                                shouldDisplayCurrentBalanceDueMessage : true,
+                                shouldDisplayBankAccountSetupMessage  : false,
                                 shouldDisplayDirectDebitEnabledMessage: false,
                                 shouldDisplayOutstandingPaymentMessage: false
                             };
@@ -303,7 +308,7 @@
 
                         it("should call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                                content: mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
+                                content       : mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
                                 buttonCssClass: "button-submit"
                             });
                         });
@@ -313,9 +318,9 @@
 
                         beforeEach(function () {
                             paymentAddAvailability = {
-                                makePaymentAllowed: true,
-                                shouldDisplayCurrentBalanceDueMessage: false,
-                                shouldDisplayBankAccountSetupMessage: false,
+                                makePaymentAllowed                    : true,
+                                shouldDisplayCurrentBalanceDueMessage : false,
+                                shouldDisplayBankAccountSetupMessage  : false,
                                 shouldDisplayDirectDebitEnabledMessage: false,
                                 shouldDisplayOutstandingPaymentMessage: false
                             };
@@ -342,8 +347,8 @@
                             expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                         });
 
-                        it("should continue to the page", function () {
-                            expect($state.current.name).toEqual(paymentAddRoute);
+                        it("should continue to the maintenance form page", function () {
+                            expect($state.current.name).toEqual(paymentMaintenanceFormRoute);
                         });
 
                     });
@@ -397,7 +402,7 @@
 
         describe("has a cordovaPause event handler function that", function () {
 
-            beforeEach(function() {
+            beforeEach(function () {
                 $rootScope.$broadcast("cordovaPause");
             });
 
@@ -409,7 +414,7 @@
 
         describe("has a cordovaResume event handler function that", function () {
 
-            beforeEach(function() {
+            beforeEach(function () {
                 spyOn($state, "go");
 
                 $rootScope.$broadcast("cordovaResume");

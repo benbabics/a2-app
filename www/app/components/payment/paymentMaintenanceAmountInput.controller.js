@@ -5,14 +5,17 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentAmountInputController($scope, $filter, $ionicHistory, globals, payment, invoiceSummary, CommonService) {
+    function PaymentMaintenanceAmountInputController($scope, $filter, $ionicHistory, globals, payment, invoiceSummary,
+                                                     CommonService) {
 
         var DEFAULT_VALUE = 0,
             vm = this,
+            paymentMaintenanceAmountInput = globals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT,
             firstInput = true;
+
         //public members:
-        vm.config = angular.extend({}, globals.PAYMENT_ADD.INPUTS.AMOUNT.CONFIG, globals.BUTTONS.CONFIG);
-        vm.errors = globals.PAYMENT_ADD.INPUTS.AMOUNT.ERRORS;
+        vm.config = angular.extend({}, paymentMaintenanceAmountInput.CONFIG, globals.BUTTONS.CONFIG);
+        vm.errors = paymentMaintenanceAmountInput.ERRORS;
         vm.amount = getDisplayAmount(DEFAULT_VALUE);
 
         vm.done = done;
@@ -82,5 +85,5 @@
     }
 
     angular.module("app.components.payment")
-        .controller("PaymentAmountInputController", PaymentAmountInputController);
+        .controller("PaymentMaintenanceAmountInputController", PaymentMaintenanceAmountInputController);
 }());

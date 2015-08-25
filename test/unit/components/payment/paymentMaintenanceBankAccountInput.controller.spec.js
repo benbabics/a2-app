@@ -10,11 +10,11 @@
         mockBankAccounts,
         mockPayment,
         mockGlobals = {
-            PAYMENT_ADD: {
+            PAYMENT_MAINTENANCE_FORM: {
                 "INPUTS": {
                     "BANK_ACCOUNT": {
                         "CONFIG": {
-                            "title": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "title"            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                             "instructionalText": TestUtils.getRandomStringThatIsAlphaNumeric(30)
                         }
                     }
@@ -29,7 +29,7 @@
         },
         BankModel;
 
-    describe("A Payment Bank Account Input Controller", function () {
+    describe("A Payment Maintenance Bank Account Input Controller", function () {
 
         beforeEach(function () {
 
@@ -70,12 +70,12 @@
                 mockBankAccounts[bankModel2.id] = bankModel2;
                 mockBankAccounts[bankModel3.id] = bankModel3;
 
-                ctrl = $controller("PaymentBankAccountInputController", {
+                ctrl = $controller("PaymentMaintenanceBankAccountInputController", {
                     $ionicHistory: $ionicHistory,
-                    $scope: scope,
-                    bankAccounts: mockBankAccounts,
-                    globals: globals,
-                    payment: mockPayment
+                    $scope       : scope,
+                    bankAccounts : mockBankAccounts,
+                    globals      : globals,
+                    payment      : mockPayment
                 });
 
             });

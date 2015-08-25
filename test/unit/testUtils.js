@@ -14,7 +14,9 @@ var TestUtils = (function () {
             getRandomNumberWithLength        : getRandomNumberWithLength,
             getRandomPayment                 : getRandomPayment,
             getRandomPaymentAdd              : getRandomPaymentAdd,
-            getRandomStringThatIsAlphaNumeric: getRandomStringThatIsAlphaNumeric
+            getRandomStringThatIsAlphaNumeric: getRandomStringThatIsAlphaNumeric,
+            getRandomValueFromArray          : getRandomValueFromArray,
+            getRandomValueFromMap            : getRandomValueFromMap
         };
 
     return TestUtils;
@@ -86,6 +88,14 @@ var TestUtils = (function () {
         }
 
         return result;
+    }
+
+    function getRandomValueFromArray(array) {
+        return array ? array[getRandomInteger(0, array.length)] : null;
+    }
+
+    function getRandomValueFromMap(map) {
+        return map ? getRandomValueFromArray(_.values(map)) : null;
     }
 
 })();

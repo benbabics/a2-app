@@ -12,17 +12,23 @@
             mockBank3,
             mockBankAccounts,
             mockGlobals = {
+                PAYMENT_MAINTENANCE: {
+                    STATES: {
+                        "ADD": "add"
+                    }
+                },
+
                 PAYMENT_LIST: {
                     "SEARCH_OPTIONS": {
                         "PAGE_NUMBER": TestUtils.getRandomInteger(0, 20),
-                        "PAGE_SIZE": TestUtils.getRandomInteger(10, 100)
+                        "PAGE_SIZE"  : TestUtils.getRandomInteger(10, 100)
                     }
                 },
 
                 BUTTONS: {
                     "CONFIG": {
                         "cancel": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "done": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        "done"  : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     }
                 }
             },
@@ -136,7 +142,7 @@
             });
 
             it("should have the expected template", function () {
-                expect(state.template).toEqual("<ion-nav-view name='payment-view'></ion-nav-view>");
+                expect(state.template).toEqual("<ion-nav-view name='view'></ion-nav-view>");
             });
         });
 
@@ -163,8 +169,8 @@
 
             it("should define a payment view", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["payment-view"]).toBeDefined();
-                expect(state.views["payment-view"].template).toEqual("<ion-nav-view></ion-nav-view>");
+                expect(state.views["view@payment"]).toBeDefined();
+                expect(state.views["view@payment"].template).toEqual("<ion-nav-view></ion-nav-view>");
             });
 
             it("should respond to the URL", function () {
@@ -255,9 +261,9 @@
                 expect(state.url).toEqual("/view/:paymentId");
             });
 
-            it("should define a payment-view", function () {
+            it("should define a view@payment", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["payment-view"]).toBeDefined();
+                expect(state.views["view@payment"]).toBeDefined();
             });
 
             it("should respond to the URL", function () {
@@ -300,14 +306,14 @@
                 });
 
                 it("should resolve the payment", function () {
-                    $injector.invoke($state.current.views["payment-view"].resolve.payment)
+                    $injector.invoke($state.current.views["view@payment"].resolve.payment)
                         .then(function (payment) {
                             expect(payment).toEqual(mockPayment4);
                         });
                 });
 
                 it("should resolve the scheduledPaymentsCount", function () {
-                    $injector.invoke($state.current.views["payment-view"].resolve.scheduledPaymentsCount)
+                    $injector.invoke($state.current.views["view@payment"].resolve.scheduledPaymentsCount)
                         .then(function (scheduledPaymentCount) {
                             expect(scheduledPaymentCount).toEqual(mockScheduledPaymentCount);
                         });
@@ -320,6 +326,109 @@
         describe("has a payment.add state that", function () {
             var state,
                 stateName = "payment.add";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be defined", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should NOT be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/add");
+            });
+
+            describe("when navigated to", function () {
+                var getOrFetchPaymentAddDeferred;
+
+                beforeEach(function () {
+                    getOrFetchPaymentAddDeferred = $q.defer();
+                    Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
+                    getOrFetchPaymentAddDeferred.resolve();
+
+                    $state.go(stateName);
+                    $rootScope.$digest();
+                });
+
+                it("should transition to the payment.maintenance.form page in the add state", function () {
+                    expect($state.current.name).toBe("payment.maintenance.form");
+
+                    $injector.invoke(function ($stateParams) {
+                        expect($stateParams).toEqual({maintenanceState: mockGlobals.PAYMENT_MAINTENANCE.STATES.ADD});
+                    });
+                });
+            });
+        });
+
+        describe("has a payment.maintenance state that", function () {
+            var state,
+                stateName = "payment.maintenance";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be defined", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should be abstract", function () {
+                expect(state.abstract).toBeTruthy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/maintenance/:maintenanceState");
+            });
+
+            describe("when a child state is navigated to", function () {
+
+                var maintenanceState,
+                    childStateName = "payment.maintenance.confirmation";
+
+                beforeEach(function () {
+                    maintenanceState = getRandomMaintenanceState();
+
+                    $state.go(childStateName, {maintenanceState: maintenanceState});
+                    $rootScope.$digest();
+                });
+
+                it("should resolve a maintenance object with the expected values", function () {
+                    expect($injector.invoke($state.$current.parent.resolve.maintenance)).toEqual(jasmine.objectContaining({
+                        state : maintenanceState,
+                        states: mockGlobals.PAYMENT_MAINTENANCE.STATES,
+                        go    : jasmine.any(Function)
+                    }));
+                });
+
+                describe("should resolve a maintenance object with a go function that", function () {
+                    var mockMaintenanceState = "payment.maintenance.input.amount";
+
+                    beforeEach(function () {
+                        $injector.invoke($state.$current.parent.resolve.maintenance).go(mockMaintenanceState);
+                        $rootScope.$digest();
+                    });
+
+                    it("should transition to the expected maintenance state", function () {
+                        expect($state.$current.name).toEqual(mockMaintenanceState);
+
+                        $injector.invoke(function ($stateParams) {
+                            expect($stateParams).toEqual({maintenanceState: maintenanceState});
+                        });
+                    });
+                });
+            });
+        });
+
+        describe("has a payment.maintenance.form state that", function () {
+            var state,
+                stateName = "payment.maintenance.form";
 
             beforeEach(function () {
                 state = $state.get(stateName);
@@ -339,16 +448,16 @@
             });
 
             it("should have the expected URL", function () {
-                expect(state.url).toEqual("/add");
+                expect(state.url).toEqual("/form");
             });
 
-            it("should define a payment-view", function () {
+            it("should define a view@payment", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["payment-view"]).toBeDefined();
+                expect(state.views["view@payment"]).toBeDefined();
             });
 
             it("should respond to the URL", function () {
-                expect($state.href(stateName)).toEqual("#/payment/add");
+                expect($state.href(stateName)).toMatch(/#\/payment\/maintenance\/.*\/form/);
             });
 
             describe("when navigated to", function () {
@@ -360,7 +469,7 @@
                     UserManager.getUser.and.returnValue(mockUser);
                     Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
 
-                    $state.go(stateName);
+                    $state.go(stateName, {maintenanceState: getRandomMaintenanceState()});
                     getOrFetchPaymentAddDeferred.resolve(mockBankAccounts);
                     $rootScope.$digest();
                 });
@@ -377,9 +486,9 @@
 
         });
 
-        describe("has a payment.summary state that", function () {
+        describe("has a payment.maintenance.summary state that", function () {
             var state,
-                stateName = "payment.summary";
+                stateName = "payment.maintenance.summary";
 
             beforeEach(function () {
                 state = $state.get(stateName);
@@ -402,20 +511,20 @@
                 expect(state.url).toEqual("/summary");
             });
 
-            it("should define a payment-view", function () {
+            it("should define a view@payment", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["payment-view"]).toBeDefined();
+                expect(state.views["view@payment"]).toBeDefined();
             });
 
             it("should respond to the URL", function () {
-                expect($state.href(stateName)).toEqual("#/payment/summary");
+                expect($state.href(stateName)).toMatch(/#\/payment\/maintenance\/.*\/summary/);
             });
 
         });
 
-        describe("has a payment.confirmation state that", function () {
+        describe("has a payment.maintenance.confirmation state that", function () {
             var state,
-                stateName = "payment.confirmation";
+                stateName = "payment.maintenance.confirmation";
 
             beforeEach(function () {
                 state = $state.get(stateName);
@@ -438,20 +547,20 @@
                 expect(state.url).toEqual("/confirmation");
             });
 
-            it("should define a payment-view", function () {
+            it("should define a view@payment", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["payment-view"]).toBeDefined();
+                expect(state.views["view@payment"]).toBeDefined();
             });
 
             it("should respond to the URL", function () {
-                expect($state.href(stateName)).toEqual("#/payment/confirmation");
+                expect($state.href(stateName)).toMatch(/#\/payment\/maintenance\/.*\/confirmation/);
             });
 
         });
 
-        describe("has a payment.input state that", function () {
+        describe("has a payment.maintenance.input state that", function () {
             var state,
-                stateName = "payment.input";
+                stateName = "payment.maintenance.input";
 
             beforeEach(function () {
                 state = $state.get(stateName);
@@ -471,13 +580,13 @@
             });
 
             it("should have the expected URL", function () {
-                expect(state.url).toEqual("/input");
+                expect($state.href(stateName)).toMatch(/#\/payment\/maintenance\/.*\/input/);
             });
         });
 
-        describe("has a payment.input.amount state that", function () {
+        describe("has a payment.maintenance.input.amount state that", function () {
             var state,
-                stateName = "payment.input.amount";
+                stateName = "payment.maintenance.input.amount";
 
             beforeEach(function () {
                 state = $state.get(stateName);
@@ -502,17 +611,17 @@
 
             it("should define a view on the payment view container", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["payment-view@payment"]).toBeDefined();
+                expect(state.views["view@payment"]).toBeDefined();
             });
 
             it("should respond to the URL", function () {
-                expect($state.href(stateName)).toEqual("#/payment/input/amount");
+                expect($state.href(stateName)).toMatch(/#\/payment\/maintenance\/.*\/input\/amount/);
             });
 
             describe("when navigated to", function () {
 
                 beforeEach(function () {
-                    $state.go(stateName);
+                    $state.go(stateName, {maintenanceState: getRandomMaintenanceState});
                     $rootScope.$digest();
                 });
 
@@ -529,14 +638,14 @@
                 });
 
                 it("should resolve the payment", function () {
-                    expect($injector.invoke($state.current.views["payment-view@payment"].resolve.payment)).toEqual(mockPayment1);
+                    expect($injector.invoke($state.current.views["view@payment"].resolve.payment)).toEqual(mockPayment1);
                 });
             });
         });
 
-        describe("has a payment.input.bankAccount state that", function () {
+        describe("has a payment.maintenance.input.bankAccount state that", function () {
             var state,
-                stateName = "payment.input.bankAccount";
+                stateName = "payment.maintenance.input.bankAccount";
 
             beforeEach(function () {
                 state = $state.get(stateName);
@@ -561,17 +670,17 @@
 
             it("should define a view on the payment view container", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["payment-view@payment"]).toBeDefined();
+                expect(state.views["view@payment"]).toBeDefined();
             });
 
             it("should respond to the URL", function () {
-                expect($state.href(stateName)).toEqual("#/payment/input/bankAccount");
+                expect($state.href(stateName)).toMatch(/#\/payment\/maintenance\/.*\/input\/bankAccount/);
             });
 
             describe("when navigated to", function () {
 
                 beforeEach(function () {
-                    $state.go(stateName);
+                    $state.go(stateName, {maintenanceState: getRandomMaintenanceState});
                     $rootScope.$digest();
                 });
 
@@ -588,7 +697,7 @@
                 });
 
                 it("should resolve the payment", function () {
-                    expect($injector.invoke($state.current.views["payment-view@payment"].resolve.payment)).toEqual(mockPayment1);
+                    expect($injector.invoke($state.current.views["view@payment"].resolve.payment)).toEqual(mockPayment1);
                 });
 
                 describe("when the payment does not have a bank account", function () {
@@ -603,7 +712,7 @@
                     it("should resolve the bankAccounts", function () {
                         var expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
 
-                        expect($injector.invoke($state.current.views["payment-view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
+                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
                     });
 
                 });
@@ -620,7 +729,7 @@
                     it("should resolve the bankAccounts", function () {
                         var expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
 
-                        expect($injector.invoke($state.current.views["payment-view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
+                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
                     });
 
                 });
@@ -641,7 +750,7 @@
 
                         expectedBankAccounts = _.sortBy(expectedBankAccounts, "name");
 
-                        expect($injector.invoke($state.current.views["payment-view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
+                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
                     });
 
                 });
@@ -649,6 +758,10 @@
             });
 
         });
+
+        function getRandomMaintenanceState() {
+            return TestUtils.getRandomValueFromMap(mockGlobals.PAYMENT_MAINTENANCE.STATES);
+        }
 
     });
 

@@ -5,12 +5,13 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentBankAccountInputController($ionicHistory, $scope, bankAccounts, globals, payment) {
+    function PaymentMaintenanceBankAccountInputController($ionicHistory, $scope, bankAccounts, globals, payment) {
 
-        var vm = this;
+        var vm = this,
+            paymentMaintenanceBankAccountInput = globals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT;
 
         //public members:
-        vm.config = angular.extend({}, globals.PAYMENT_ADD.INPUTS.BANK_ACCOUNT.CONFIG, globals.BUTTONS.CONFIG);
+        vm.config = angular.extend({}, paymentMaintenanceBankAccountInput.CONFIG, globals.BUTTONS.CONFIG);
 
         vm.selectBank = selectBank;
 
@@ -36,5 +37,5 @@
     }
 
     angular.module("app.components.payment")
-        .controller("PaymentBankAccountInputController", PaymentBankAccountInputController);
+        .controller("PaymentMaintenanceBankAccountInputController", PaymentMaintenanceBankAccountInputController);
 }());

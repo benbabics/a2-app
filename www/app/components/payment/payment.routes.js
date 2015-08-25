@@ -2,19 +2,23 @@
     "use strict";
 
     /* @ngInject */
-    function configureRoutes($stateProvider) {
+    function configureRoutes($stateProvider, $urlRouterProvider) {
+
+        $urlRouterProvider.when("/payment/add", function(globals, $state) {
+            goToMaintenanceState($state, "payment.maintenance.form", globals.PAYMENT_MAINTENANCE.STATES.ADD);
+        });
 
         $stateProvider.state("payment", {
             abstract: true,
             url     : "/payment",
-            template: "<ion-nav-view name='payment-view'></ion-nav-view>"
+            template: "<ion-nav-view name='view'></ion-nav-view>"
         });
 
         $stateProvider.state("payment.list", {
             abstract: true,
             url     : "/list",
             views   : {
-                "payment-view": {
+                "view@payment": {
                     template: "<ion-nav-view></ion-nav-view>"
                 }
             }
@@ -44,7 +48,7 @@
             url        : "/view/:paymentId",
             cache      : false,
             views: {
-                "payment-view": {
+                "view@payment": {
                     templateUrl: "app/components/payment/templates/paymentView.html",
                     controller : "PaymentViewController as vm",
                     resolve    : {
@@ -75,12 +79,32 @@
         });
 
         $stateProvider.state("payment.add", {
-            url  : "/add",
+            url: "/add"
+        });
+
+        $stateProvider.state("payment.maintenance", {
+            abstract: true,
+            url: "/maintenance/:maintenanceState",
+            resolve: {
+                maintenance: function (globals, $state, $stateParams) {
+                    return {
+                        state: $stateParams.maintenanceState,
+                        states: globals.PAYMENT_MAINTENANCE.STATES,
+                        go: function(stateName, params) {
+                            goToMaintenanceState($state, stateName, $stateParams.maintenanceState, params);
+                        }
+                    };
+                }
+            }
+        });
+
+        $stateProvider.state("payment.maintenance.form", {
+            url  : "/form",
             cache: false,
             views: {
-                "payment-view": {
-                    templateUrl: "app/components/payment/templates/paymentAdd.html",
-                    controller : "PaymentAddController as vm",
+                "view@payment": {
+                    templateUrl: "app/components/payment/templates/paymentMaintenanceForm.html",
+                    controller : "PaymentMaintenanceFormController as vm",
                     resolve    : {
                         payment: function (CommonService, Payment) {
                             CommonService.loadingBegin();
@@ -95,40 +119,40 @@
             }
         });
 
-        $stateProvider.state("payment.summary", {
+        $stateProvider.state("payment.maintenance.summary", {
             url  : "/summary",
             cache: false,
             views: {
-                "payment-view": {
-                    templateUrl: "app/components/payment/templates/paymentSummary.html",
-                    controller : "PaymentSummaryController as vm"
+                "view@payment": {
+                    templateUrl: "app/components/payment/templates/paymentMaintenanceSummary.html",
+                    controller : "PaymentMaintenanceSummaryController as vm"
                 }
             }
         });
 
-        $stateProvider.state("payment.confirmation", {
+        $stateProvider.state("payment.maintenance.confirmation", {
             url  : "/confirmation",
             cache: false,
             views: {
-                "payment-view": {
-                    templateUrl: "app/components/payment/templates/paymentConfirmation.html",
-                    controller : "PaymentConfirmationController as vm"
+                "view@payment": {
+                    templateUrl: "app/components/payment/templates/paymentMaintenanceConfirmation.html",
+                    controller : "PaymentMaintenanceConfirmationController as vm"
                 }
             }
         });
 
-        $stateProvider.state("payment.input", {
+        $stateProvider.state("payment.maintenance.input", {
             abstract: true,
             url     : "/input",
             cache   : false
         });
 
-        $stateProvider.state("payment.input.amount", {
+        $stateProvider.state("payment.maintenance.input.amount", {
             url  : "/amount",
             views: {
-                "payment-view@payment": {
-                    templateUrl: "app/components/payment/templates/paymentAmount.input.html",
-                    controller : "PaymentAmountInputController as vm",
+                "view@payment": {
+                    templateUrl: "app/components/payment/templates/paymentMaintenanceAmount.input.html",
+                    controller : "PaymentMaintenanceAmountInputController as vm",
                     resolve    : {
                         payment: function (Payment) {
                             return Payment.getPayment();
@@ -142,12 +166,12 @@
             }
         });
 
-        $stateProvider.state("payment.input.bankAccount", {
+        $stateProvider.state("payment.maintenance.input.bankAccount", {
             url  : "/bankAccount",
             views: {
-                "payment-view@payment": {
-                    templateUrl: "app/components/payment/templates/paymentBankAccount.input.html",
-                    controller : "PaymentBankAccountInputController as vm",
+                "view@payment": {
+                    templateUrl: "app/components/payment/templates/paymentMaintenanceBankAccount.input.html",
+                    controller : "PaymentMaintenanceBankAccountInputController as vm",
                     resolve    : {
                         payment: function (Payment) {
                             return Payment.getPayment();
@@ -172,6 +196,12 @@
                 }
             }
         });
+
+        function goToMaintenanceState($state, stateName, maintenanceState, params) {
+            params = params || {};
+
+            $state.go(stateName, angular.extend({}, { maintenanceState: maintenanceState }, params));
+        }
     }
 
     angular.module("app.components.payment")
