@@ -14,14 +14,15 @@
     "angular-ui-router": ">=0.2.15"
   },
   "resolutions": {
-    "angular": ">=1.4"
+    "angular": ">=1.4",
+    "angular-ui-router": ">=0.2.15"
   },
   "overrides": {
     "ionic": {
       "dependencies": {
-        "angular": "*",
-        "angular-animate": "*",
-        "angular-sanitize": "*",
+        "angular": "1.4.3",
+        "angular-animate": "1.4.3",
+        "angular-sanitize": "1.4.3",
         "angular-ui-router": ">=0.2.15"
       }
     }
