@@ -21,7 +21,8 @@
             getPaymentAddAvailability  : getPaymentAddAvailability,
             getPayments                : getPayments,
             setPaymentAddAvailability  : setPaymentAddAvailability,
-            setPayments                : setPayments
+            setPayments                : setPayments,
+            updatePayment              : updatePayment
         };
 
         activate();
@@ -190,6 +191,35 @@
         // suggested use for testing only
         function setPayments(paymentsInfo) {
             payments = paymentsInfo;
+        }
+
+        function updatePayment(accountId, payment) {
+            var requestBody = {
+                amount       : payment.amount,
+                bankAccountId: payment.bankAccount.id,
+                scheduledDate: moment(payment.scheduledDate).toISOString()
+            };
+
+            return PaymentsResource.postPayment(accountId, payment.id, requestBody)
+                .then(function (postPaymentResponse) {
+                    if (postPaymentResponse && postPaymentResponse.data) {
+                        return createPayment(postPaymentResponse.data);
+                    }
+                    // no data in the response
+                    else {
+                        var error = "No data in Response from Updating a Payment";
+                        Logger.error(error);
+                        throw new Error(error);
+                    }
+                })
+                // payment update failed
+                .catch(function (failureResponse) {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+
+                    var error = "Updating a Payment failed: " + CommonService.getErrorMessage(failureResponse);
+                    Logger.error(error);
+                    throw new Error(error);
+                });
         }
 
     }
