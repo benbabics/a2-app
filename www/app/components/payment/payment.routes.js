@@ -8,6 +8,10 @@
             goToMaintenanceState($state, "payment.maintenance.form", globals.PAYMENT_MAINTENANCE.STATES.ADD);
         });
 
+        $urlRouterProvider.when("/payment/update", function(globals, $state) {
+            goToMaintenanceState($state, "payment.maintenance.form", globals.PAYMENT_MAINTENANCE.STATES.UPDATE);
+        });
+
         $stateProvider.state("payment", {
             abstract: true,
             url     : "/payment",
@@ -80,6 +84,10 @@
 
         $stateProvider.state("payment.add", {
             url: "/add"
+        });
+
+        $stateProvider.state("payment.update", {
+            url: "/update"
         });
 
         $stateProvider.state("payment.maintenance", {

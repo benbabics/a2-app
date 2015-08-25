@@ -3,7 +3,9 @@
 
     var _,
         $scope,
+        $state,
         ctrl,
+        Payment,
         mockPayment,
         mockScheduledPaymentsCount = TestUtils.getRandomInteger(0, 100);
 
@@ -24,6 +26,10 @@
                 });
             });
 
+            // mock dependencies
+            Payment = jasmine.createSpyObj("Payment", ["setPayment"]);
+            $state = jasmine.createSpyObj("$state", ["go"]);
+
             inject(function ($controller, $rootScope, BankModel, CommonService, PaymentModel) {
 
                 _ = CommonService._;
@@ -35,6 +41,8 @@
 
                 ctrl = $controller("PaymentViewController", {
                     $scope                : $scope,
+                    $state                : $state,
+                    Payment               : Payment,
                     payment               : mockPayment,
                     scheduledPaymentsCount: mockScheduledPaymentsCount
                 });
@@ -60,6 +68,23 @@
                 expect(ctrl.scheduledPaymentsCount).toEqual(mockScheduledPaymentsCount);
             });
 
+        });
+
+        describe("has an editPayment function that", function () {
+
+            beforeEach(function () {
+                ctrl.payment = mockPayment;
+
+                ctrl.editPayment();
+            });
+
+            it("should call Payment.setPayment with the expected value", function () {
+                expect(Payment.setPayment).toHaveBeenCalledWith(mockPayment);
+            });
+
+            it("should navigate to the payment.update flow", function () {
+                expect($state.go).toHaveBeenCalledWith("payment.update");
+            });
         });
 
     });

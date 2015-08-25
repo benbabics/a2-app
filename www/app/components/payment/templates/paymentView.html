@@ -35,7 +35,8 @@
                 </div>
 
                 <div class="item item-wrap arrow-align button-row"
-                     ng-if="vm.scheduledPaymentsCount == 1">
+                     ng-if="vm.scheduledPaymentsCount == 1"
+                     ng-click="vm.editPayment()">
                     <p>
                         <span class="block_align label_align">
                             {{vm.config.editButton}}

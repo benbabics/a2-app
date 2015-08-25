@@ -14,7 +14,8 @@
             mockGlobals = {
                 PAYMENT_MAINTENANCE: {
                     STATES: {
-                        "ADD": "add"
+                        "ADD": "add",
+                        "UPDATE": "update"
                     }
                 },
 
@@ -361,6 +362,49 @@
 
                     $injector.invoke(function ($stateParams) {
                         expect($stateParams).toEqual({maintenanceState: mockGlobals.PAYMENT_MAINTENANCE.STATES.ADD});
+                    });
+                });
+            });
+        });
+
+        describe("has a payment.update state that", function () {
+            var state,
+                stateName = "payment.update";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be defined", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should NOT be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/update");
+            });
+
+            describe("when navigated to", function () {
+                var getOrFetchPaymentAddDeferred;
+
+                beforeEach(function () {
+                    getOrFetchPaymentAddDeferred = $q.defer();
+                    Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
+                    getOrFetchPaymentAddDeferred.resolve();
+
+                    $state.go(stateName);
+                    $rootScope.$digest();
+                });
+
+                it("should transition to the payment.maintenance.form page in the update state", function () {
+                    expect($state.current.name).toBe("payment.maintenance.form");
+
+                    $injector.invoke(function ($stateParams) {
+                        expect($stateParams).toEqual({maintenanceState: mockGlobals.PAYMENT_MAINTENANCE.STATES.UPDATE});
                     });
                 });
             });

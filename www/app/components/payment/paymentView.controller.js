@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentViewController($scope, globals, payment, scheduledPaymentsCount) {
+    function PaymentViewController($scope, $state, globals, payment, scheduledPaymentsCount, Payment) {
 
         var vm = this;
 
@@ -13,6 +13,8 @@
 
         vm.payment = {};
         vm.scheduledPaymentsCount = 0;
+
+        vm.editPayment = editPayment;
 
         activate();
 
@@ -26,6 +28,11 @@
         function beforeEnter() {
             vm.scheduledPaymentsCount = scheduledPaymentsCount;
             vm.payment = payment;
+        }
+
+        function editPayment() {
+            Payment.setPayment(vm.payment);
+            $state.go("payment.update");
         }
 
     }
