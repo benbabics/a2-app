@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
+    /* jshint -W003 */
+    /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
     function PaymentsResource($q, globals, AccountsResource) {
@@ -14,7 +15,8 @@
             addPayment               : addPayment,
             getPayment               : getPayment,
             getPaymentAddAvailability: getPaymentAddAvailability,
-            getPayments              : getPayments
+            getPayments              : getPayments,
+            postPayment              : postPayment
         };
 
         activate();
@@ -40,6 +42,10 @@
 
         function getPayments(accountId, searchCriteria) {
             return $q.when(accountsResource.forAccount(accountId).getList(globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.BASE, searchCriteria));
+        }
+
+        function postPayment(accountId, paymentId, payment) {
+            return $q.when(accountsResource.forAccount(accountId).doPOST(payment, globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.BASE + "/" + paymentId));
         }
 
     }
