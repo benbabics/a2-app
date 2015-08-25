@@ -10,7 +10,7 @@
     "ngFitText": "~3",
     "angular-moment": "~0",
     "ionic-datepicker-widget": "~1",
-    "ang-accordion": "git://github.com/sherwaniusman/angular-accordion.git",
+    "ang-accordion": "*",
     "angular-ui-router": ">=0.2.15"
   },
   "resolutions": {
@@ -20,9 +20,9 @@
   "overrides": {
     "ionic": {
       "dependencies": {
-        "angular": "1.4.3",
-        "angular-animate": "1.4.3",
-        "angular-sanitize": "1.4.3",
+        "angular": "*",
+        "angular-animate": "*",
+        "angular-sanitize": "*",
         "angular-ui-router": ">=0.2.15"
       }
     }
