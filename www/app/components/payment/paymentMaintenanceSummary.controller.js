@@ -49,6 +49,8 @@
             switch (maintenance.state) {
                 case maintenance.states.ADD:
                     return paymentMaintenanceSummary.ADD.CONFIG;
+                case maintenance.states.UPDATE:
+                    return paymentMaintenanceSummary.UPDATE.CONFIG;
                 default:
                     var error = "Unrecognized payment maintenance state: " + maintenance.state;
 
@@ -62,12 +64,33 @@
             switch (maintenance.state) {
                 case maintenance.states.ADD:
                     return addPayment();
+                case maintenance.states.UPDATE:
+                    return updatePayment();
                 default:
                     var error = "Unrecognized payment maintenance state: " + maintenance.state;
 
                     Logger.error(error);
                     throw new Error(error);
             }
+        }
+
+        function updatePayment() {
+            CommonService.loadingBegin();
+
+            return PaymentManager.updatePayment(UserManager.getUser().billingCompany.accountId, vm.payment)
+                .then(function (paymentResponse) {
+                    Payment.getPayment().set(paymentResponse);
+
+                    // transition to the confirmation page
+                    maintenance.go("payment.maintenance.confirmation");
+                })
+                .catch(function (paymentError) {
+                    //TODO - What do we do here?
+                })
+                .finally(function () {
+                    CommonService.loadingComplete();
+                });
+
         }
 
         function beforeEnter() {

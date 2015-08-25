@@ -34,6 +34,8 @@
             switch(maintenance.state) {
                 case maintenance.states.ADD:
                     return paymentMaintenanceConfirmation.ADD.CONFIG;
+                case maintenance.states.UPDATE:
+                    return paymentMaintenanceConfirmation.UPDATE.CONFIG;
                 default:
                     var error = "Unrecognized payment maintenance state: " + maintenance.state;
 

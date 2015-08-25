@@ -19,6 +19,10 @@
                 },
                 "ADD"   : {
                     "CONFIG": {}
+                },
+
+                "UPDATE": {
+                    "CONFIG": {}
                 }
             }
         },
@@ -111,6 +115,8 @@
         switch (maintenance.state) {
             case maintenance.states.ADD:
                 return mockGlobals.PAYMENT_MAINTENANCE_CONFIRMATION.ADD.CONFIG;
+            case maintenance.states.UPDATE:
+                return mockGlobals.PAYMENT_MAINTENANCE_CONFIRMATION.UPDATE.CONFIG;
             default:
                 return null;
         }

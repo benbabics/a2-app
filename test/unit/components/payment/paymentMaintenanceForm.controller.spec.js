@@ -35,6 +35,11 @@
                     "CONFIG": {
                         "title": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     }
+                },
+                "UPDATE": {
+                    "CONFIG": {
+                        "title": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    }
                 }
             }
         },
@@ -237,6 +242,8 @@
         switch (maintenance.state) {
             case maintenance.states.ADD:
                 return mockGlobals.PAYMENT_MAINTENANCE_FORM.ADD.CONFIG;
+            case maintenance.states.UPDATE:
+                return mockGlobals.PAYMENT_MAINTENANCE_FORM.UPDATE.CONFIG;
             default:
                 return null;
         }

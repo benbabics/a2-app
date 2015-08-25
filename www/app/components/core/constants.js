@@ -58,7 +58,8 @@
 
     appGlobals.PAYMENT_MAINTENANCE = {
         STATES: {
-            "ADD": "add"
+            "ADD": "add",
+            "UPDATE": "update"
         }
     };
 
@@ -100,6 +101,11 @@
             "CONFIG": {
                 "title": "Make Payment"
             }
+        },
+        "UPDATE"  : {
+            "CONFIG": {
+                "title": "Edit Payment"
+            }
         }
     };
 
@@ -120,6 +126,9 @@
         },
         "ADD"     : {
             "CONFIG": {}
+        },
+        "UPDATE"    : {
+            "CONFIG": {}
         }
     };
 
@@ -133,6 +142,9 @@
             "activityButton"  : "Payment Activity"
         },
         "ADD"   : {
+            "CONFIG": {}
+        },
+        "UPDATE"  : {
             "CONFIG": {}
         }
     };

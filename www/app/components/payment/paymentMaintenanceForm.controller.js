@@ -43,6 +43,8 @@
             switch(maintenance.state) {
                 case maintenance.states.ADD:
                     return paymentMaintenanceForm.ADD.CONFIG;
+                case maintenance.states.UPDATE:
+                    return paymentMaintenanceForm.UPDATE.CONFIG;
                 default:
                     var error = "Unrecognized payment maintenance state: " + maintenance.state;
 

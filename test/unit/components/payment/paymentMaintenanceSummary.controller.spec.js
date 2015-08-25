@@ -27,6 +27,9 @@
                 },
                 "ADD"     : {
                     "CONFIG": {}
+                },
+                "UPDATE"  : {
+                    "CONFIG": {}
                 }
             }
         },
@@ -91,7 +94,7 @@
             $state = jasmine.createSpyObj("state", ["go"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             Payment = jasmine.createSpyObj("Payment", ["getPayment"]);
-            PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "updatePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
             inject(function ($controller, _$q_, $rootScope, _moment_, _BankModel_, appGlobals, CommonService, _PaymentModel_) {
@@ -128,7 +131,18 @@
 
             });
 
-            mockPaymentProcess = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
+            switch(mockMaintenance.state) {
+                case mockMaintenance.states.ADD:
+                    mockPaymentProcess = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
+                    break;
+                case mockMaintenance.states.UPDATE:
+                    mockPaymentProcess = TestUtils.getRandomPaymentUpdate(PaymentModel, BankModel);
+                    break;
+                default:
+                    mockPaymentProcess = null;
+                    break;
+            }
+
             mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
             InvoiceManager.getInvoiceSummary.and.returnValue(mockCurrentInvoiceSummary);
             Payment.getPayment.and.returnValue(mockPaymentProcess);
@@ -300,6 +314,8 @@
         switch (maintenance.state) {
             case maintenance.states.ADD:
                 return mockGlobals.PAYMENT_MAINTENANCE_SUMMARY.ADD.CONFIG;
+            case maintenance.states.UPDATE:
+                return mockGlobals.PAYMENT_MAINTENANCE_SUMMARY.UPDATE.CONFIG;
             default:
                 return null;
         }
@@ -309,6 +325,8 @@
         switch (maintenance.state) {
             case maintenance.states.ADD:
                 return PaymentManager.addPayment;
+            case maintenance.states.UPDATE:
+                return PaymentManager.updatePayment;
             default:
                 return null;
         }
