@@ -13,6 +13,7 @@
         // Revealed Public members
         var service = {
             addPayment               : addPayment,
+            deletePayment            : deletePayment,
             getPayment               : getPayment,
             getPaymentAddAvailability: getPaymentAddAvailability,
             getPayments              : getPayments,
@@ -30,6 +31,10 @@
 
         function addPayment(accountId, payment) {
             return $q.when(accountsResource.forAccount(accountId).post(globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.BASE, payment));
+        }
+
+        function deletePayment(accountId, paymentId) {
+            return $q.when(accountsResource.forAccount(accountId).doDELETE(globals.ACCOUNT_MAINTENANCE_API.PAYMENTS.BASE + "/" + paymentId));
         }
 
         function getPayment(accountId, paymentId) {
