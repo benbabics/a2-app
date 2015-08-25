@@ -20,6 +20,7 @@
             fetchScheduledPaymentsCount: fetchScheduledPaymentsCount,
             getPaymentAddAvailability  : getPaymentAddAvailability,
             getPayments                : getPayments,
+            removePayment              : removePayment,
             setPaymentAddAvailability  : setPaymentAddAvailability,
             setPayments                : setPayments,
             updatePayment              : updatePayment
@@ -179,6 +180,24 @@
 
         function getPayments() {
             return payments;
+        }
+
+        function removePayment(accountId, paymentId) {
+            return PaymentsResource.deletePayment(accountId, paymentId)
+                .then(function () {
+                    //remove the payment from the collection
+                    if(_.has(payments, paymentId)) {
+                        delete payments[paymentId];
+                    }
+                })
+                // deleting payment failed
+                .catch(function (failureResponse) {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+
+                    var error = "Removing a Payment failed: " + CommonService.getErrorMessage(failureResponse);
+                    Logger.error(error);
+                    throw new Error(error);
+                });
         }
 
         // Caution against using this as it replaces the object versus setting properties on it or extending it

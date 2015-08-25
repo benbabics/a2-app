@@ -43,7 +43,14 @@
             module("app.components.payment");
 
             // mock dependencies
-            PaymentsResource = jasmine.createSpyObj("PaymentsResource", ["addPayment", "getPaymentAddAvailability", "getPayments", "getPayment", "postPayment"]);
+            PaymentsResource = jasmine.createSpyObj("PaymentsResource", [
+                "addPayment",
+                "deletePayment",
+                "getPaymentAddAvailability",
+                "getPayments",
+                "getPayment",
+                "postPayment"
+            ]);
             mockPaymentAddAvailability = jasmine.createSpyObj("PaymentAddAvailabilityModel", ["PaymentAddAvailabilityModel", "set"]);
 
             module(function ($provide, sharedGlobals) {
@@ -687,6 +694,70 @@
 
                 it("should throw an error", function () {
                     expect($rootScope.$digest).toThrow();
+                });
+
+            });
+
+        });
+
+        describe("has a removePayment function that", function () {
+
+            var deletePaymentDeferred;
+
+            beforeEach(function () {
+                PaymentManager.setPayments(mockPaymentCollection);
+                deletePaymentDeferred = $q.defer();
+
+                PaymentsResource.deletePayment.and.returnValue(deletePaymentDeferred.promise);
+
+                PaymentManager.removePayment(accountId, paymentModel1.id)
+                    .then(resolveHandler)
+                    .catch(rejectHandler);
+            });
+
+            it("should call PaymentsResource.deletePayment", function () {
+                expect(PaymentsResource.deletePayment).toHaveBeenCalledWith(accountId, paymentModel1.id);
+            });
+
+            describe("when the payment is deleted successfully", function () {
+
+                var mockResponse;
+
+                beforeEach(function () {
+                    deletePaymentDeferred.resolve();
+                    $rootScope.$digest();
+                });
+
+                it("should resolve", function () {
+                    expect(resolveHandler).toHaveBeenCalledWith(mockResponse);
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+                it("should remove the payment from the collection", function () {
+                    var paymentObject = {};
+                    paymentObject[paymentModel1.id] = paymentModel1;
+
+                    expect(mockPaymentCollection).not.toEqual(jasmine.objectContaining(paymentObject));
+                });
+            });
+
+            describe("when deleting the payment fails", function () {
+
+                var mockResponse = "Some error";
+
+                beforeEach(function () {
+                    deletePaymentDeferred.reject(mockResponse);
+                });
+
+                it("should throw an error", function () {
+                    expect($rootScope.$digest).toThrow();
+                });
+
+                it("should NOT remove the payment from the collection", function () {
+                    var paymentObject = {};
+                    paymentObject[paymentModel1.id] = paymentModel1;
+
+                    expect(mockPaymentCollection).toEqual(jasmine.objectContaining(paymentObject));
                 });
 
             });
