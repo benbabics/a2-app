@@ -6,7 +6,7 @@
     "restangular": "~1",
     "lodash": "~3",
     "angular-base64": "~2",
-    "ngCordova": "~0",
+    "ngCordova": "0.1.20-alpha",
     "ngFitText": "~3",
     "angular-moment": "~0",
     "ionic-datepicker-widget": "~1",
