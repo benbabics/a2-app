@@ -2,6 +2,7 @@
     "use strict";
 
     var $scope,
+        $ionicHistory,
         ctrl,
         mockCurrentInvoiceSummary = {
             accountNumber     : "account number value",
@@ -50,6 +51,7 @@
 
             // mock dependencies
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearHistory"]);
 
             inject(function ($controller, $rootScope) {
 
@@ -57,8 +59,9 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("LandingController", {
-                    $scope: $scope,
-                    UserManager: UserManager,
+                    $scope               : $scope,
+                    $ionicHistory        : $ionicHistory,
+                    UserManager          : UserManager,
                     currentInvoiceSummary: mockCurrentInvoiceSummary
                 });
             });
@@ -82,6 +85,10 @@
 
             it("should set the invoice summary", function () {
                 expect(ctrl.invoiceSummary).toEqual(mockCurrentInvoiceSummary);
+            });
+
+            it("should clear the navigation history", function () {
+                expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
             });
 
         });

@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function LandingController($scope, currentInvoiceSummary, globals, UserManager) {
+    function LandingController($scope, $ionicHistory, currentInvoiceSummary, globals, UserManager) {
 
         var vm = this;
         vm.config = globals.LANDING.CONFIG;
@@ -22,6 +22,9 @@
         }
 
         function beforeEnter() {
+            //restart the app history when going back to the landing page
+            $ionicHistory.clearHistory();
+
             vm.billingCompany = UserManager.getUser().billingCompany;
 
             // the invoiceSummary object should be bound now to the object returned by fetchCurrentInvoiceSummary
