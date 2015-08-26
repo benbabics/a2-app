@@ -23,7 +23,7 @@
             <div ng-if="vm.payment.isScheduled()"
                  class="padding-top">
                 <div class="item item-wrap arrow-align button-row"
-                     ng-click="vm.confirmPaymentCancel()">
+                     ng-click="vm.displayCancelPaymentPopup()">
                     <p>
                         <span class="block_align label_align">
                             {{vm.config.cancelButton}}

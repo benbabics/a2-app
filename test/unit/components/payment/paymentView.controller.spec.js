@@ -128,12 +128,12 @@
 
         });
 
-        describe("has a confirmPaymentCancel function that", function () {
+        describe("has a displayCancelPaymentPopup function that", function () {
 
             beforeEach(function () {
                 ctrl.payment = mockPayment;
 
-                ctrl.confirmPaymentCancel();
+                ctrl.displayCancelPaymentPopup();
             });
 
             it("should call CommonService.displayConfirm with the expected values", function () {

@@ -15,7 +15,7 @@
         vm.payment = {};
         vm.scheduledPaymentsCount = 0;
 
-        vm.confirmPaymentCancel = confirmPaymentCancel;
+        vm.displayCancelPaymentPopup = displayCancelPaymentPopup;
         vm.editPayment = editPayment;
 
         activate();
@@ -32,25 +32,13 @@
             vm.payment = payment;
         }
 
-        function cancelPayment() {
-            return PaymentManager.removePayment(UserManager.getUser().billingCompany.accountId, vm.payment.id);
-        }
-
         function confirmPaymentCancel() {
-            displayCancelPaymentPopup()
-                .then(function (result) {
-                    if (result) {
-                        cancelPayment()
-                            .then(function () {
-                                $state.go("payment.list.view");
-                            })
-                            .catch(function (errorResponse) {
-                                //TODO - What do we do here?
-                            });
-                    }
-                    else {
-                        //close the popup
-                    }
+            PaymentManager.removePayment(UserManager.getUser().billingCompany.accountId, vm.payment.id)
+                .then(function () {
+                    $state.go("payment.list.view");
+                })
+                .catch(function (errorResponse) {
+                    //TODO - What do we do here?
                 });
         }
 
@@ -61,7 +49,15 @@
                 cancelButtonText    : vm.config.cancelPaymentConfirm.noButton,
                 okButtonCssClass    : "button-submit",
                 cancelButtonCssClass: "button-default"
-            });
+            })
+                .then(function (result) {
+                    if (result) {
+                        confirmPaymentCancel();
+                    }
+                    else {
+                        //close the popup
+                    }
+                });
         }
 
         function editPayment() {
