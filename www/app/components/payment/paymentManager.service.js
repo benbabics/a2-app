@@ -69,6 +69,7 @@
 
         function clearCachedValues() {
             paymentAddAvailability = new PaymentAddAvailabilityModel();
+            payments = {};
         }
 
         function createPayment(paymentResource) {
@@ -79,9 +80,7 @@
         }
 
         function fetchPayment(paymentId) {
-            return $q(function(resolve, reject) {
-                resolve(_.find(payments, "id", paymentId));
-            });
+            return $q.when(_.find(payments, "id", paymentId));
         }
 
         function fetchPaymentAddAvailability(accountId) {

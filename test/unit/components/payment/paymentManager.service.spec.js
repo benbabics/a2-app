@@ -97,11 +97,16 @@
 
             beforeEach(function () {
                 PaymentManager.setPaymentAddAvailability(mockPaymentAddAvailability);
+                PaymentManager.setPayments(mockPaymentCollection);
                 $rootScope.$broadcast("userLoggedOut");
             });
 
             it("should reset the payment add availability", function () {
                 expect(PaymentManager.getPaymentAddAvailability()).not.toEqual(mockPaymentAddAvailability);
+            });
+
+            it("should reset the payments", function () {
+                expect(PaymentManager.getPayments()).toEqual({});
             });
 
         });
