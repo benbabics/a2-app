@@ -476,22 +476,35 @@
                         data: {}
                     },
                     numScheduledPayments = 0,
-                    mockScheduledPayments = {};
+                    numNonScheduledPayments = 0,
+                    mockScheduledPayments = {},
+                    mockNonScheduledPayments = {};
 
                 describe("when there is a valid response", function () {
 
                     describe("when the response contains scheduled payments", function () {
 
                         beforeEach(function () {
+                            var curPayment, i;
+
                             numScheduledPayments = TestUtils.getRandomInteger(1, 100);
-                            for (var i = 0; i < numScheduledPayments; ++i) {
-                                var curPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
+                            for (i = 0; i < numScheduledPayments; ++i) {
+                                curPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
                                 curPayment.status = mockGlobals.PAYMENT.STATUS.SCHEDULED;
 
                                 mockScheduledPayments[TestUtils.getRandomStringThatIsAlphaNumeric(5)] = curPayment;
                             }
 
-                            mockRemoteBanks.data = _.values(angular.extend({}, mockPaymentCollection, mockScheduledPayments));
+                            numNonScheduledPayments = TestUtils.getRandomInteger(1, 100);
+                            for (i = 0; i < numNonScheduledPayments; ++i) {
+                                curPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
+                                curPayment.status = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+
+                                mockNonScheduledPayments[TestUtils.getRandomStringThatIsAlphaNumeric(5)] = curPayment;
+                            }
+
+                            mockRemoteBanks.data = _.values(angular.extend({}, mockNonScheduledPayments, mockScheduledPayments));
                             getPaymentsDeferred.resolve(mockRemoteBanks);
 
                             $rootScope.$digest();
@@ -506,7 +519,7 @@
                     describe("when the response contains no scheduled payments", function () {
 
                         beforeEach(function () {
-                            mockRemoteBanks.data = _.values(mockPaymentCollection);
+                            mockRemoteBanks.data = _.values(mockNonScheduledPayments);
                             getPaymentsDeferred.resolve(mockRemoteBanks);
 
                             $rootScope.$digest();
