@@ -20,7 +20,24 @@
                 </p>
             </div>
 
+
             <div ng-if="vm.payment.isScheduled()"
+                 ng-click="vm.displayCancelPaymentPopup()">
+                <button class="button button-block button-light item item-icon-right">
+                    <i class="icon ion-chevron-right"></i>
+                    <span id="cancelButton" class="btn_align">{{vm.config.cancelButton}}</span>
+                </button>
+             </div>
+
+            <div ng-if="vm.scheduledPaymentsCount == 1"
+                 ng-click="vm.editPayment()">
+                <button class="button button-block button-light item item-icon-right">
+                    <i class="icon ion-chevron-right"></i>
+                    <span id="editButton" class="btn_align">{{vm.config.editButton}}</span>
+                </button>
+            </div>
+
+            <!--<div ng-if="vm.payment.isScheduled()"
                  class="padding-top">
                 <div class="item item-wrap arrow-align button-row"
                      ng-click="vm.displayCancelPaymentPopup()">
@@ -48,7 +65,7 @@
                         </span>
                     </p>
                 </div>
-            </div>
+            </div>-->
         </div>
     </ion-content>
 </ion-view>>
