@@ -21,9 +21,10 @@
 
             // utility functions
             "closeAlert"             : closeAlert,
-            "closeConfirm"             : closeConfirm,
+            "closeAllPopups"         : closeAllPopups,
+            "closeConfirm"           : closeConfirm,
             "displayAlert"           : displayAlert,
-            "displayConfirm"           : displayConfirm,
+            "displayConfirm"         : displayConfirm,
             "fieldHasError"          : fieldHasError,
             "findViewByState"        : findViewByState,
             "findViewByStatesInOrder": findViewByStatesInOrder,
@@ -53,6 +54,16 @@
                 alertPopup.close();
                 alertPopup = null;
             }
+        }
+
+        /**
+         * Closes all popups that have been previously opened by calling any of the displayPopup functions.
+         */
+        function closeAllPopups() {
+            closeAlert();
+            closeConfirm();
+
+            //TODO close datepicker modal popup
         }
 
         /**

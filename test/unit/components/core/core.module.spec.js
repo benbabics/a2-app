@@ -111,7 +111,7 @@
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks"]);
             Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd"]);
-            CommonService = jasmine.createSpyObj("CommonService", ["closeAlert", "displayAlert", "loadingBegin", "loadingComplete"]);
+            CommonService = jasmine.createSpyObj("CommonService", ["closeAllPopups", "displayAlert", "loadingBegin", "loadingComplete"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
@@ -424,8 +424,8 @@
                 $rootScope.$broadcast("cordovaResume");
             });
 
-            it("should close an alert", function () {
-                expect(CommonService.closeAlert).toHaveBeenCalledWith();
+            it("should close any popups", function () {
+                expect(CommonService.closeAllPopups).toHaveBeenCalledWith();
             });
 
             it("should redirect to the login page", function () {

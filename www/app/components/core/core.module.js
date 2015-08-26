@@ -102,8 +102,8 @@
         }
 
         function resumeApplication() {
-            // Close the alert if present
-            CommonService.closeAlert();
+            // Close any opened popups
+            CommonService.closeAllPopups();
 
             // Go to the login page
             $state.go(globals.LOGIN_STATE);

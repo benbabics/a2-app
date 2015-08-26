@@ -152,6 +152,70 @@
 
         });
 
+        describe("has a closeAllPopups function that", function () {
+
+            describe("should NOT close an alert when none have been displayed", function () {
+
+                beforeEach(function () {
+                    spyOn(alertPromise, "close");
+
+                    CommonService.closeAlert();
+                });
+
+                it("should NOT try to close the alert", function () {
+                    expect(alertPromise.close).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("should close an alert when one has been displayed", function () {
+
+                beforeEach(function () {
+                    spyOn(alertPromise, "close");
+
+                    CommonService.displayAlert();
+
+                    CommonService.closeAlert();
+                });
+
+                it("should call close the alert", function () {
+                    expect(alertPromise.close).toHaveBeenCalledWith();
+                });
+
+            });
+
+            describe("should NOT close a confirm when none have been displayed", function () {
+
+                beforeEach(function () {
+                    spyOn(confirmPromise, "close");
+
+                    CommonService.closeConfirm();
+                });
+
+                it("should NOT try to close the confirm", function () {
+                    expect(confirmPromise.close).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("should close a confirm when one has been displayed", function () {
+
+                beforeEach(function () {
+                    spyOn(confirmPromise, "close");
+
+                    CommonService.displayConfirm();
+
+                    CommonService.closeConfirm();
+                });
+
+                it("should call close the confirm", function () {
+                    expect(confirmPromise.close).toHaveBeenCalledWith();
+                });
+
+            });
+
+        });
+
         describe("has a displayAlert function that", function () {
 
             describe("when options are NOT provided", function () {
