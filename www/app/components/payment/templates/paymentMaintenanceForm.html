@@ -27,37 +27,34 @@
         </div>
         <div class="item item-wrap arrow-align">
             <p class="padding-left padding-right">
-                <span id="paymentAmountLabel" class="block_align label_align">{{vm.config.amount}}</span>
-                <span id="paymentAmount" class="value_align active-link">{{vm.payment.amount <= 0 ? vm.config.enterAmount : (vm.payment.amount | currency)}}
+                <span id="paymentAmountLabel" class="block_align label_align">{{vm.config.amount}}
+                <span id="paymentAmount" class="value_align active-link">{{vm.payment.amount <= 0 ? vm.config.enterAmount : (vm.payment.amount | currency)}}</span></span>
                     <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
                           ng-click="vm.maintenance.go('payment.maintenance.input.amount')">
                     </span>
-                </span>
             </p>
         </div>
 
         <div class="item item-wrap arrow-align">
             <p class="padding-left padding-right">
-                <span id="scheduledDateLabel" class="block_align label_align">{{vm.config.scheduledDate}}</span>
-                <span id="scheduledDate" class="value_align active-link">{{vm.payment.scheduledDate | wexDefaultDateFormat}}
+                <span id="scheduledDateLabel" class="block_align label_align">{{vm.config.scheduledDate}}
+                <span id="scheduledDate" class="value_align active-link">{{vm.payment.scheduledDate | wexDefaultDateFormat}}</span></span>
                     <ionic-datepicker value="vm.payment.scheduledDate"
                                       min="vm.minDate"
                                       max="vm.maxDate"
                                       title="vm.config.scheduledDate"
                                       class="button button-icon icon ion-ios-arrow-forward content-align chevron_align">
                     </ionic-datepicker>
-                </span>
             </p>
         </div>
-        <div class="item item-wrap arrow-align">
+        <div class="item item-wrap">
             <p class="padding-left padding-right">
-                <span id="bankAccountLabel" class="block_align label_align">{{vm.config.bankAccount}}</span>
-                <span id="bankAccount" class="value_align active-link">{{vm.payment.bankAccount.getDisplayName()}}
+                <span id="bankAccountLabel" class="block_align label_align">{{vm.config.bankAccount}}
+                <span id="bankAccount" class="value_align active-link">{{vm.payment.bankAccount.getDisplayName()}}</span></span>
                      <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
                            ng-if="vm.hasMultipleBanks"
                            ng-click="vm.maintenance.go('payment.maintenance.input.bankAccount')">
                      </span>
-                </span>
             </p>
         </div>
         <br>

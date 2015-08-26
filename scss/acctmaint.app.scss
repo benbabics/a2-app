@@ -45,6 +45,7 @@ $user-login-gradient-bottom: #414141;
     float: right;
     color: #807f7f;
     text-align: right;
+    padding-right: 10px !important;
 }
 
 .green {
@@ -191,9 +192,9 @@ $user-login-gradient-bottom: #414141;
 
 .label_align {
     vertical-align: middle;
-    width: 50%;
-    margin-top:10px !important;
-}
+    width:96%;
+    display: inline-block;
+    }
 
 .value_align {
     vertical-align: middle;
@@ -206,7 +207,19 @@ $user-login-gradient-bottom: #414141;
     vertical-align: middle;
 }
 
+.list_align {
+    vertical-align: middle;
+    width: 50%;
+}
 /** Hyperlink Color **/
 .active-link {
     color: #32819b !important;
+}
+
+/* Fix for content alignment in ipad-mini */
+@media (min-width: 679px) {
+
+    .label_align {
+        width: 98%;
+    }
 }
