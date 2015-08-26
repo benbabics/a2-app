@@ -5,8 +5,8 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentMaintenanceFormController($scope, globals, maintenance, moment, payment,
-                                              BankManager, InvoiceManager, Logger, UserManager) {
+    function PaymentMaintenanceFormController($scope, globals, hasMultipleBanks, maintenance, moment, payment,
+                                              InvoiceManager, Logger, UserManager) {
 
         var vm = this,
             paymentMaintenanceForm = globals.PAYMENT_MAINTENANCE_FORM;
@@ -31,8 +31,8 @@
         }
 
         function beforeEnter() {
-            vm.hasMultipleBanks = _.size(BankManager.getActiveBanks()) > 1;
             vm.billingCompany = UserManager.getUser().billingCompany;
+            vm.hasMultipleBanks = hasMultipleBanks;
             vm.invoiceSummary = InvoiceManager.getInvoiceSummary();
             vm.payment = payment;
             vm.minDate = moment().subtract(1, "days").toDate();

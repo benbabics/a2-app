@@ -343,6 +343,75 @@
 
         });
 
+        describe("has a hasMultipleBanks function that", function () {
+
+            var hasMultipleBanksReturnedValue;
+
+            describe("when there is a single active bank", function () {
+
+                beforeEach(function () {
+                    var bankModel1,
+                        mockBankCollection = {};
+
+                    bankModel1 = TestUtils.getRandomBank(BankModel);
+                    mockBankCollection[bankModel1.id] = bankModel1;
+
+                    BankManager.setActiveBanks(mockBankCollection);
+
+                    BankManager.hasMultipleBanks(accountId)
+                            .then(function (response) {
+                                hasMultipleBanksReturnedValue = response;
+                            })
+                            .catch(rejectHandler);
+
+                    $rootScope.$digest();
+                });
+
+                it("should return false", function () {
+                    expect(hasMultipleBanksReturnedValue).toBeFalsy();
+                });
+
+                it("should NOT reject", function () {
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("when there are multiple active banks", function () {
+
+                beforeEach(function () {
+                    var bankModel1,
+                        bankModel2,
+                        mockBankCollection = {};
+
+                    bankModel1 = TestUtils.getRandomBank(BankModel);
+                    bankModel2 = TestUtils.getRandomBank(BankModel);
+                    mockBankCollection[bankModel1.id] = bankModel1;
+                    mockBankCollection[bankModel2.id] = bankModel2;
+
+                    BankManager.setActiveBanks(mockBankCollection);
+
+                    BankManager.hasMultipleBanks(accountId)
+                            .then(function (response) {
+                                hasMultipleBanksReturnedValue = response;
+                            })
+                            .catch(rejectHandler);
+
+                    $rootScope.$digest();
+                });
+
+                it("should return true", function () {
+                    expect(hasMultipleBanksReturnedValue).toBeTruthy();
+                });
+
+                it("should NOT reject", function () {
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+            });
+
+        });
+
         describe("has a setActiveBanks function that", function () {
 
             var newActiveBanks = [

@@ -73,7 +73,7 @@
 
             // mock dependencies
             Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd", "getPayment"]);
-            BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks"]);
+            BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayment", "fetchPayments", "fetchScheduledPaymentsCount"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
@@ -346,14 +346,21 @@
             });
 
             describe("when navigated to", function () {
-                var getOrFetchPaymentAddDeferred;
+                var getOrFetchPaymentAddDeferred,
+                    hasMultipleBanksDeferred,
+                    mockHasMultipleBanks = TestUtils.getRandomBoolean();
 
                 beforeEach(function () {
                     getOrFetchPaymentAddDeferred = $q.defer();
                     Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
-                    getOrFetchPaymentAddDeferred.resolve();
 
-                    $state.go(stateName);
+                    hasMultipleBanksDeferred = $q.defer();
+                    UserManager.getUser.and.returnValue(mockUser);
+                    BankManager.hasMultipleBanks.and.returnValue(hasMultipleBanksDeferred.promise);
+
+                    $state.go(stateName, {maintenanceState: getRandomMaintenanceState()});
+                    getOrFetchPaymentAddDeferred.resolve(mockPayment1);
+                    hasMultipleBanksDeferred.resolve(mockHasMultipleBanks);
                     $rootScope.$digest();
                 });
 
@@ -389,14 +396,21 @@
             });
 
             describe("when navigated to", function () {
-                var getOrFetchPaymentAddDeferred;
+                var getOrFetchPaymentAddDeferred,
+                    hasMultipleBanksDeferred,
+                    mockHasMultipleBanks = TestUtils.getRandomBoolean();
 
                 beforeEach(function () {
                     getOrFetchPaymentAddDeferred = $q.defer();
                     Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
-                    getOrFetchPaymentAddDeferred.resolve();
 
-                    $state.go(stateName);
+                    hasMultipleBanksDeferred = $q.defer();
+                    UserManager.getUser.and.returnValue(mockUser);
+                    BankManager.hasMultipleBanks.and.returnValue(hasMultipleBanksDeferred.promise);
+
+                    $state.go(stateName, {maintenanceState: getRandomMaintenanceState()});
+                    getOrFetchPaymentAddDeferred.resolve(mockPayment1);
+                    hasMultipleBanksDeferred.resolve(mockHasMultipleBanks);
                     $rootScope.$digest();
                 });
 
@@ -506,20 +520,30 @@
 
             describe("when navigated to", function () {
 
-                var getOrFetchPaymentAddDeferred;
+                var getOrFetchPaymentAddDeferred,
+                    hasMultipleBanksDeferred,
+                    mockHasMultipleBanks = TestUtils.getRandomBoolean();
 
                 beforeEach(function () {
                     getOrFetchPaymentAddDeferred = $q.defer();
-                    UserManager.getUser.and.returnValue(mockUser);
                     Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
 
+                    hasMultipleBanksDeferred = $q.defer();
+                    UserManager.getUser.and.returnValue(mockUser);
+                    BankManager.hasMultipleBanks.and.returnValue(hasMultipleBanksDeferred.promise);
+
                     $state.go(stateName, {maintenanceState: getRandomMaintenanceState()});
-                    getOrFetchPaymentAddDeferred.resolve(mockBankAccounts);
+                    getOrFetchPaymentAddDeferred.resolve(mockPayment1);
+                    hasMultipleBanksDeferred.resolve(mockHasMultipleBanks);
                     $rootScope.$digest();
                 });
 
                 it("should call Payment.getOrCreatePaymentAdd", function () {
                     expect(Payment.getOrCreatePaymentAdd).toHaveBeenCalledWith();
+                });
+
+                it("should call BankManager.hasMultipleBanks", function () {
+                    expect(BankManager.hasMultipleBanks).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                 });
 
                 it("should transition successfully", function () {

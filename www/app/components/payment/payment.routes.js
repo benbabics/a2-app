@@ -114,6 +114,19 @@
                     templateUrl: "app/components/payment/templates/paymentMaintenanceForm.html",
                     controller : "PaymentMaintenanceFormController as vm",
                     resolve    : {
+                        hasMultipleBanks: function (BankManager, CommonService, UserManager) {
+                            var billingAccountId;
+
+                            CommonService.loadingBegin();
+
+                            billingAccountId = UserManager.getUser().billingCompany.accountId;
+
+                            return BankManager.hasMultipleBanks(billingAccountId)
+                                .finally(function () {
+                                    CommonService.loadingComplete();
+                                });
+                        },
+
                         payment: function (CommonService, Payment) {
                             CommonService.loadingBegin();
 

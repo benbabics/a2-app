@@ -16,6 +16,7 @@
                 getActiveBanks       : getActiveBanks,
                 getOrFetchActiveBanks: getOrFetchActiveBanks,
                 getDefaultBank       : getDefaultBank,
+                hasMultipleBanks     : hasMultipleBanks,
                 setActiveBanks       : setActiveBanks
             };
 
@@ -97,6 +98,13 @@
 
                     return _.first(_.sortBy(bankModelCollection, "name"));
                 });
+        }
+
+        function hasMultipleBanks(accountId) {
+            return getOrFetchActiveBanks(accountId)
+                    .then(function(activeBanks) {
+                        return _.size(activeBanks) > 1;
+                    });
         }
 
         // Caution against using this as it replaces the collection versus setting properties or extending

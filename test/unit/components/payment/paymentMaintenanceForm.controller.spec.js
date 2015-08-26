@@ -43,6 +43,7 @@
                 }
             }
         },
+        mockHasMultipleBanks = TestUtils.getRandomBoolean(),
         mockPayment = {
             amount       : "amount value",
             bankAccount  : "bank account value",
@@ -128,12 +129,13 @@
                 };
 
                 ctrl = $controller("PaymentMaintenanceFormController", {
-                    $scope        : $scope,
-                    $stateParams  : mockStateParams,
-                    maintenance   : mockMaintenance,
-                    payment       : mockPayment,
-                    InvoiceManager: InvoiceManager,
-                    UserManager   : UserManager
+                    $scope          : $scope,
+                    $stateParams    : mockStateParams,
+                    hasMultipleBanks: mockHasMultipleBanks,
+                    maintenance     : mockMaintenance,
+                    payment         : mockPayment,
+                    InvoiceManager  : InvoiceManager,
+                    UserManager     : UserManager
                 });
             });
 
@@ -165,6 +167,10 @@
                 expect(ctrl.maxDate).toEqual(moment().add(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.DATE.CONFIG.maxFutureDays, "days").toDate());
             });
 
+            it("should set hasMultipleBanks", function () {
+                expect(ctrl.hasMultipleBanks).toEqual(mockHasMultipleBanks);
+            });
+
             it("should set the payment", function () {
                 expect(ctrl.payment).toEqual(mockPayment);
             });
@@ -175,63 +181,6 @@
 
             it("should set the invoice summary", function () {
                 expect(ctrl.invoiceSummary).toEqual(mockCurrentInvoiceSummary);
-            });
-
-            describe("when there are NOT any active banks", function () {
-
-                beforeEach(function () {
-                    BankManager.getActiveBanks.and.returnValue(null);
-
-                    $scope.$broadcast("$ionicView.beforeEnter");
-                });
-
-                it("should set the hasMultipleBanks flag", function () {
-                    expect(ctrl.hasMultipleBanks).toBeFalsy();
-                });
-
-            });
-
-            describe("when there is a single active bank", function () {
-
-                beforeEach(function () {
-                    var bankModel1,
-                        mockBankCollection = {};
-
-                    bankModel1 = TestUtils.getRandomBank(BankModel);
-                    mockBankCollection[bankModel1.id] = bankModel1;
-
-                    BankManager.getActiveBanks.and.returnValue(mockBankCollection);
-
-                    $scope.$broadcast("$ionicView.beforeEnter");
-                });
-
-                it("should set the hasMultipleBanks flag", function () {
-                    expect(ctrl.hasMultipleBanks).toBeFalsy();
-                });
-
-            });
-
-            describe("when there are multiple active banks", function () {
-
-                beforeEach(function () {
-                    var bankModel1,
-                        bankModel2,
-                        mockBankCollection = {};
-
-                    bankModel1 = TestUtils.getRandomBank(BankModel);
-                    bankModel2 = TestUtils.getRandomBank(BankModel);
-                    mockBankCollection[bankModel1.id] = bankModel1;
-                    mockBankCollection[bankModel2.id] = bankModel2;
-
-                    BankManager.getActiveBanks.and.returnValue(mockBankCollection);
-
-                    $scope.$broadcast("$ionicView.beforeEnter");
-                });
-
-                it("should set the hasMultipleBanks flag", function () {
-                    expect(ctrl.hasMultipleBanks).toBeTruthy();
-                });
-
             });
 
         });
