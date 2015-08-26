@@ -11,6 +11,7 @@
         // Private members
         var loadingIndicatorCount = 0,
             alertPopup,
+            confirmPopup,
             focusedStateOrder = ["stage", "entering", "active"];
 
         // Revealed Public members
@@ -20,7 +21,9 @@
 
             // utility functions
             "closeAlert"             : closeAlert,
+            "closeConfirm"             : closeConfirm,
             "displayAlert"           : displayAlert,
+            "displayConfirm"           : displayConfirm,
             "fieldHasError"          : fieldHasError,
             "findViewByState"        : findViewByState,
             "findViewByStatesInOrder": findViewByStatesInOrder,
@@ -43,7 +46,7 @@
         // Common utility functions go here
 
         /**
-         * Closes an alert that had been previously opened by calling the below displayAlert function.
+         * Closes an alert that had been previously opened by calling the displayAlert function.
          */
         function closeAlert() {
             if (alertPopup) {
@@ -53,27 +56,25 @@
         }
 
         /**
-         * Displays an alert and save a reference to it for the above closeAlert function to use.
+         * Closes a confirm that had been previously opened by calling the displayConfirm function.
+         */
+        function closeConfirm() {
+            if (confirmPopup) {
+                confirmPopup.close();
+                confirmPopup = null;
+            }
+        }
+
+        /**
+         * Displays an alert and saves a reference to it for the closeAlert function to use.
          */
         function displayAlert(options) {
             var mappedOptions = {};
 
             if (_.isObject(options)) {
-                // Only set the options if they are provided as setting them to a option NOT specified
-                // results in us passing undefined values which may or may not be acceptable
-                if (_.isString(options.title)) {
-                    mappedOptions.title = options.title;
-                }
+                mappedOptions = mapCommonPopupOptions(options);
 
-                if (_.isString(options.subTitle)) {
-                    mappedOptions.subTitle = options.subTitle;
-                }
-
-                mappedOptions.cssClass = options.cssClass || "wex-alert-popup";
-
-                if (_.isString(options.content)) {
-                    mappedOptions.template = options.content;
-                }
+                mappedOptions.cssClass = mappedOptions.cssClass || "wex-alert-popup";
 
                 if (_.isString(options.buttonText)) {
                     mappedOptions.okText = options.buttonText;
@@ -94,6 +95,44 @@
             alertPopup.then(function (resolution) {
                 // close popup
             });
+        }
+
+        /**
+         * Displays a confirm and saves a reference to it for the closeConfirm function to use.
+         */
+        function displayConfirm(options) {
+            var mappedOptions = {};
+
+            if (_.isObject(options)) {
+                mappedOptions = mapCommonPopupOptions(options);
+
+                mappedOptions.cssClass = mappedOptions.cssClass || "wex-confirm-popup";
+
+                if (_.isString(options.okButtonText)) {
+                    mappedOptions.okText = options.okButtonText;
+                }
+
+                if (_.isString(options.okButtonCssClass)) {
+                    mappedOptions.okType = options.okButtonCssClass;
+                }
+
+                if (_.isString(options.cancelButtonText)) {
+                    mappedOptions.cancelText = options.cancelButtonText;
+                }
+
+                if (_.isString(options.cancelButtonCssClass)) {
+                    mappedOptions.cancelType = options.cancelButtonCssClass;
+                }
+            }
+            else {
+                mappedOptions = {
+                    cssClass: "wex-confirm-popup"
+                };
+            }
+
+            confirmPopup = $ionicPopup.confirm(mappedOptions);
+
+            return confirmPopup;
         }
 
         function fieldHasError(field) {
@@ -287,6 +326,34 @@
             if (loadingIndicatorCount === 0) {
                 $rootScope.$broadcast("loadingComplete");
             }
+        }
+
+        function mapCommonPopupOptions(options) {
+            var mappedOptions = {};
+
+            // Only set the options if they are provided as setting them to a option NOT specified
+            // results in us passing undefined values which may or may not be acceptable
+            if (_.isString(options.title)) {
+                mappedOptions.title = options.title;
+            }
+
+            if (_.isString(options.subTitle)) {
+                mappedOptions.subTitle = options.subTitle;
+            }
+
+            if (_.isString(options.cssClass)) {
+                mappedOptions.cssClass = options.cssClass;
+            }
+
+            if (_.isString(options.content)) {
+                mappedOptions.template = options.content;
+            }
+
+            if (_.isString(options.contentUrl)) {
+                mappedOptions.templateUrl = options.contentUrl;
+            }
+
+            return mappedOptions;
         }
 
         function maskAccountNumber(accountNumber) {

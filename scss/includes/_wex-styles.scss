@@ -422,9 +422,9 @@ $numeric-keypad-animation: all linear 0.15s;
 }
 
 /**--------------------------------
-  Alert Popup
+  Popup
  ----------------------------------**/
-.wex-alert-popup {
+.wex-popup {
   .popup {
     background-color: $warning-message-fill;
     color: $warning-message-color;
@@ -443,6 +443,17 @@ $numeric-keypad-animation: all linear 0.15s;
       color: $warning-message-color;
       border: none;
     }
+  }
+}
+
+/**--------------------------------
+  Alert Popup
+ ----------------------------------**/
+.wex-alert-popup {
+  @extend .wex-popup;
+
+  .popup {
+
     .popup-buttons .button {
       margin-left: 27%;
       margin-right: 27%;
@@ -451,6 +462,13 @@ $numeric-keypad-animation: all linear 0.15s;
       color: $wex-button-font-color;
     }
   }
+}
+
+/**--------------------------------
+  Confirm Popup
+ ----------------------------------**/
+.wex-confirm-popup {
+  @extend .wex-popup;
 }
 
 /**------------------------------------------------------

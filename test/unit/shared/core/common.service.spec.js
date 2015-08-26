@@ -14,8 +14,10 @@
                 }
             }
         },
-        popupDeferred,
-        popupPromise,
+        alertDeferred,
+        confirmDeferred,
+        alertPromise,
+        confirmPromise,
         navBar,
         rootNavView;
 
@@ -26,7 +28,7 @@
             module("app.shared.dependencies");
 
             // mock dependencies
-            $ionicPopup = jasmine.createSpyObj("$ionicPopup", ["alert"]);
+            $ionicPopup = jasmine.createSpyObj("$ionicPopup", ["alert", "confirm"]);
 
             module(function ($provide) {
                 $provide.value("$ionicPopup", $ionicPopup);
@@ -40,7 +42,8 @@
                 $compile = _$compile_;
                 $state = _$state_;
                 $ionicPlatform = _$ionicPlatform_;
-                popupDeferred = $q.defer();
+                alertDeferred = $q.defer();
+                confirmDeferred = $q.defer();
 
                 CommonService = _CommonService_;
 
@@ -57,13 +60,21 @@
                 spyOn($ionicPlatform, "registerBackButtonAction").and.callThrough();
             });
 
-            popupPromise = angular.extend({}, popupDeferred.promise, {
+            alertPromise = angular.extend({}, alertDeferred.promise, {
                 close: function () {
                 }
             });
 
-            $ionicPopup.alert.and.returnValue(popupPromise);
-            popupDeferred.resolve();
+            confirmPromise = angular.extend({}, confirmDeferred.promise, {
+                close: function () {
+                }
+            });
+
+            $ionicPopup.alert.and.returnValue(alertPromise);
+            alertDeferred.resolve();
+
+            $ionicPopup.confirm.and.returnValue(confirmPromise);
+            confirmDeferred.resolve();
         });
 
         afterEach(function () {
@@ -78,13 +89,13 @@
             describe("should NOT close an alert when none have been displayed", function () {
 
                 beforeEach(function () {
-                    spyOn(popupPromise, "close");
+                    spyOn(alertPromise, "close");
 
                     CommonService.closeAlert();
                 });
 
                 it("should NOT try to close the alert", function () {
-                    expect(popupPromise.close).not.toHaveBeenCalled();
+                    expect(alertPromise.close).not.toHaveBeenCalled();
                 });
 
             });
@@ -92,7 +103,7 @@
             describe("should close an alert when one has been displayed", function () {
 
                 beforeEach(function () {
-                    spyOn(popupPromise, "close");
+                    spyOn(alertPromise, "close");
 
                     CommonService.displayAlert();
 
@@ -100,7 +111,41 @@
                 });
 
                 it("should call close the alert", function () {
-                    expect(popupPromise.close).toHaveBeenCalledWith();
+                    expect(alertPromise.close).toHaveBeenCalledWith();
+                });
+
+            });
+
+        });
+
+        describe("has a closeConfirm function that", function () {
+
+            describe("should NOT close a confirm when none have been displayed", function () {
+
+                beforeEach(function () {
+                    spyOn(confirmPromise, "close");
+
+                    CommonService.closeConfirm();
+                });
+
+                it("should NOT try to close the confirm", function () {
+                    expect(confirmPromise.close).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("should close a confirm when one has been displayed", function () {
+
+                beforeEach(function () {
+                    spyOn(confirmPromise, "close");
+
+                    CommonService.displayConfirm();
+
+                    CommonService.closeConfirm();
+                });
+
+                it("should call close the confirm", function () {
+                    expect(confirmPromise.close).toHaveBeenCalledWith();
                 });
 
             });
@@ -185,6 +230,25 @@
 
             });
 
+            describe("when options.contentUrl is provided", function () {
+
+                var options = {
+                    contentUrl: TestUtils.getRandomStringThatIsAlphaNumeric(20)
+                };
+
+                beforeEach(function () {
+                    CommonService.displayAlert(options);
+                });
+
+                it("should call $ionicPopup.alert with the correct options", function () {
+                    expect($ionicPopup.alert).toHaveBeenCalledWith({
+                        templateUrl: options.contentUrl,
+                        cssClass: "wex-alert-popup"
+                    });
+                });
+
+            });
+
             describe("when options.buttonText is provided", function () {
 
                 var options = {
@@ -213,6 +277,187 @@
 
                 it("should call $ionicPopup.alert with the correct options", function () {
                     expect($ionicPopup.alert).toHaveBeenCalledWith({okType: "wex-alert-button", cssClass: "wex-alert-popup"});
+                });
+
+            });
+
+        });
+
+        describe("has a displayConfirm function that", function () {
+            var defaultCssClass = "wex-confirm-popup";
+
+            describe("when options are NOT provided", function () {
+
+                beforeEach(function () {
+                    CommonService.displayConfirm();
+                });
+
+                it("should call $ionicPopup.confirm with the default cssClass", function () {
+                    expect($ionicPopup.confirm).toHaveBeenCalledWith({cssClass: defaultCssClass});
+                });
+
+            });
+
+            describe("when options.title is provided", function () {
+
+                var options = {
+                    title: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+
+                beforeEach(function () {
+                    CommonService.displayConfirm(options);
+                });
+
+                it("should call $ionicPopup.alert with the correct options", function () {
+                    expect($ionicPopup.confirm).toHaveBeenCalledWith({
+                        title: options.title,
+                        cssClass: defaultCssClass
+                    });
+                });
+
+            });
+
+            describe("when options.subTitle is provided", function () {
+
+                var options = {
+                    subTitle: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+
+                beforeEach(function () {
+                    CommonService.displayConfirm(options);
+                });
+
+                it("should call $ionicPopup.confirm with the correct options", function () {
+                    expect($ionicPopup.confirm).toHaveBeenCalledWith({
+                        subTitle: options.subTitle,
+                        cssClass: defaultCssClass
+                    });
+                });
+
+            });
+
+            describe("when options.cssClass is provided", function () {
+
+                var options = {
+                    cssClass: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+
+                beforeEach(function () {
+                    CommonService.displayConfirm(options);
+                });
+
+                it("should call $ionicPopup.confirm with the correct options", function () {
+                    expect($ionicPopup.confirm).toHaveBeenCalledWith({cssClass: options.cssClass});
+                });
+
+            });
+
+            describe("when options.content is provided", function () {
+
+                var options = {
+                    content: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+
+                beforeEach(function () {
+                    CommonService.displayConfirm(options);
+                });
+
+                it("should call $ionicPopup.confirm with the correct options", function () {
+                    expect($ionicPopup.confirm).toHaveBeenCalledWith({
+                        template: options.content,
+                        cssClass: defaultCssClass
+                    });
+                });
+
+            });
+
+            describe("when options.contentUrl is provided", function () {
+
+                var options = {
+                    contentUrl: TestUtils.getRandomStringThatIsAlphaNumeric(20)
+                };
+
+                beforeEach(function () {
+                    CommonService.displayConfirm(options);
+                });
+
+                it("should call $ionicPopup.confirm with the correct options", function () {
+                    expect($ionicPopup.confirm).toHaveBeenCalledWith({
+                        templateUrl: options.contentUrl,
+                        cssClass: defaultCssClass
+                    });
+                });
+
+            });
+
+            describe("when options.okButtonText is provided", function () {
+
+                var options = {
+                    okButtonText: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+
+                beforeEach(function () {
+                    CommonService.displayConfirm(options);
+                });
+
+                it("should call $ionicPopup.confirm with the correct options", function () {
+                    expect($ionicPopup.confirm).toHaveBeenCalledWith({
+                        okText: options.okButtonText,
+                        cssClass: defaultCssClass});
+                });
+
+            });
+
+            describe("when options.okButtonCssClass is provided", function () {
+
+                var options = {
+                    okButtonCssClass: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+
+                beforeEach(function () {
+                    CommonService.displayConfirm(options);
+                });
+
+                it("should call $ionicPopup.confirm with the correct options", function () {
+                    expect($ionicPopup.confirm).toHaveBeenCalledWith({
+                        okType: options.okButtonCssClass,
+                        cssClass: defaultCssClass});
+                });
+
+            });
+
+            describe("when options.cancelButtonText is provided", function () {
+
+                var options = {
+                    cancelButtonText: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+
+                beforeEach(function () {
+                    CommonService.displayConfirm(options);
+                });
+
+                it("should call $ionicPopup.confirm with the correct options", function () {
+                    expect($ionicPopup.confirm).toHaveBeenCalledWith({
+                        cancelText: options.cancelButtonText,
+                        cssClass: defaultCssClass});
+                });
+
+            });
+
+            describe("when options.cancelButtonCssClass is provided", function () {
+
+                var options = {
+                    cancelButtonCssClass: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+
+                beforeEach(function () {
+                    CommonService.displayConfirm(options);
+                });
+
+                it("should call $ionicPopup.confirm with the correct options", function () {
+                    expect($ionicPopup.confirm).toHaveBeenCalledWith({
+                        cancelType: options.cancelButtonCssClass,
+                        cssClass: defaultCssClass});
                 });
 
             });
