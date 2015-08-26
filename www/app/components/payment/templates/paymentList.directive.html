@@ -2,7 +2,7 @@
         item-title="{{title}}"
         initially-open="true">
     <p ng-if="payments.length == 0">
-        <span>{{noPaymentsMessage}}</span>
+        <span class="no-payments">{{noPaymentsMessage}}</span>
     </p>
     <p ng-if="payments.length > 0" class="divider"
        ng-repeat="payment in payments">
