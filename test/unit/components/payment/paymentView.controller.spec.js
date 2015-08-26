@@ -2,12 +2,16 @@
     "use strict";
 
     var _,
+        $rootScope,
         $scope,
         $state,
         ctrl,
         CommonService,
         Payment,
+        PaymentManager,
+        UserManager,
         confirmDeferred,
+        removePaymentDeferred,
         mockPayment,
         mockScheduledPaymentsCount = TestUtils.getRandomInteger(0, 100),
         mockGlobals = {
@@ -30,7 +34,22 @@
                 }
             }
         },
-        mockConfig = mockGlobals.PAYMENT_VIEW.CONFIG;
+        mockConfig = mockGlobals.PAYMENT_VIEW.CONFIG,
+        mockUser = {
+            email         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+            firstName     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+            username      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+            company       : {
+                accountId    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                accountNumber: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                name         : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+            },
+            billingCompany: {
+                accountId    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                accountNumber: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                name         : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+            }
+        };
 
     describe("A Payment View Controller", function () {
 
@@ -57,11 +76,15 @@
             Payment = jasmine.createSpyObj("Payment", ["setPayment"]);
             $state = jasmine.createSpyObj("$state", ["go"]);
             CommonService = jasmine.createSpyObj("CommonService", ["displayConfirm"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["removePayment"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
-            inject(function ($controller, $rootScope, $q, BankModel, _CommonService_, PaymentModel) {
+            inject(function (_$rootScope_, _CommonService_, $controller, $q, BankModel, PaymentModel) {
 
+                $rootScope = _$rootScope_;
                 _ = _CommonService_._;
                 confirmDeferred = $q.defer();
+                removePaymentDeferred = $q.defer();
 
                 mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
 
@@ -73,13 +96,16 @@
                     $state                : $state,
                     CommonService         : CommonService,
                     Payment               : Payment,
+                    PaymentManager        : PaymentManager,
+                    UserManager           : UserManager,
                     payment               : mockPayment,
                     scheduledPaymentsCount: mockScheduledPaymentsCount
                 });
             });
 
             CommonService.displayConfirm.and.returnValue(confirmDeferred.promise);
-            confirmDeferred.resolve();
+            UserManager.getUser.and.returnValue(mockUser);
+            PaymentManager.removePayment.and.returnValue(removePaymentDeferred.promise);
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -105,6 +131,8 @@
         describe("has a confirmPaymentCancel function that", function () {
 
             beforeEach(function () {
+                ctrl.payment = mockPayment;
+
                 ctrl.confirmPaymentCancel();
             });
 
@@ -115,6 +143,61 @@
                     cancelButtonText    : mockConfig.cancelPaymentConfirm.noButton,
                     okButtonCssClass    : "button-submit",
                     cancelButtonCssClass: "button-default"
+                });
+            });
+
+            describe("when the user confirms the cancel", function () {
+
+                beforeEach(function() {
+                    confirmDeferred.resolve(true);
+                    $rootScope.$digest();
+                });
+
+                it("should call PaymentManager.removePayment with the expected values", function () {
+                    expect(PaymentManager.removePayment).toHaveBeenCalledWith(
+                        mockUser.billingCompany.accountId,
+                        mockPayment.id
+                    );
+                });
+
+                describe("when removing the payment is successful", function () {
+
+                    beforeEach(function () {
+                        removePaymentDeferred.resolve();
+                        $rootScope.$digest();
+                    });
+
+                    it("should redirect to payment.list.view", function () {
+                        expect($state.go).toHaveBeenCalledWith("payment.list.view");
+                    });
+                });
+
+                describe("when removing the payment is NOT successful", function () {
+
+                    beforeEach(function () {
+                        removePaymentDeferred.reject();
+                        $rootScope.$digest();
+                    });
+
+                    it("should NOT redirect to payment.list.view", function () {
+                        expect($state.go).not.toHaveBeenCalledWith("payment.list.view");
+                    });
+                });
+            });
+
+            describe("when the user denies the cancel", function () {
+
+                beforeEach(function () {
+                    confirmDeferred.resolve(false);
+                    $rootScope.$digest();
+                });
+
+                it("should NOT call PaymentManager.removePayment", function () {
+                    expect(PaymentManager.removePayment).not.toHaveBeenCalledWith();
+                });
+
+                it("should NOT redirect to payment.list.view", function () {
+                    expect($state.go).not.toHaveBeenCalledWith("payment.list.view");
                 });
             });
         });

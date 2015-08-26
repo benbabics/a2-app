@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function PaymentViewController($scope, $state, globals, payment, scheduledPaymentsCount,
-                                   CommonService, Payment) {
+                                   CommonService, Payment, PaymentManager, UserManager) {
 
         var vm = this;
 
@@ -32,12 +32,21 @@
             vm.payment = payment;
         }
 
+        function cancelPayment() {
+            return PaymentManager.removePayment(UserManager.getUser().billingCompany.accountId, vm.payment.id);
+        }
+
         function confirmPaymentCancel() {
             displayCancelPaymentPopup()
                 .then(function (result) {
                     if (result) {
-                        //TODO cancel the payment
-                        //TODO redirect to payment list view
+                        cancelPayment()
+                            .then(function () {
+                                $state.go("payment.list.view");
+                            })
+                            .catch(function (errorResponse) {
+                                //TODO - What do we do here?
+                            });
                     }
                     else {
                         //close the popup
