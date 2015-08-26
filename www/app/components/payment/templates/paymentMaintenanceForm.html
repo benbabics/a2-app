@@ -47,7 +47,8 @@
                     </ionic-datepicker>
             </p>
         </div>
-        <div class="item item-wrap">
+        <div class="item item-wrap"
+             ng-class="{'arrow-align':vm.hasMultipleBanks}">
             <p class="padding-left padding-right">
                 <span id="bankAccountLabel" class="block_align label_align">{{vm.config.bankAccount}}
                 <span id="bankAccount" class="value_align active-link">{{vm.payment.bankAccount.getDisplayName()}}</span></span>
