@@ -77,9 +77,7 @@
                 return fetchActiveBanks(accountId);
             }
 
-            return $q(function(resolve, reject) {
-                resolve(activeBanks);
-            });
+            return $q.when(activeBanks);
         }
 
         function getDefaultBank(accountId) {

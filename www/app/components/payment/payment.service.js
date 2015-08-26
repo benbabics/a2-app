@@ -43,9 +43,7 @@
                 return initializePaymentAddDetails();
             }
 
-            return $q(function(resolve, reject) {
-                resolve(payment);
-            });
+            return $q.when(payment);
         }
 
         function initializePaymentAddDetails() {
