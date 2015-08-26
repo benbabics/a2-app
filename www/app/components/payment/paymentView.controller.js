@@ -5,7 +5,8 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentViewController($scope, $state, globals, payment, scheduledPaymentsCount, Payment) {
+    function PaymentViewController($scope, $state, globals, payment, scheduledPaymentsCount,
+                                   CommonService, Payment) {
 
         var vm = this;
 
@@ -14,6 +15,7 @@
         vm.payment = {};
         vm.scheduledPaymentsCount = 0;
 
+        vm.confirmPaymentCancel = confirmPaymentCancel;
         vm.editPayment = editPayment;
 
         activate();
@@ -28,6 +30,29 @@
         function beforeEnter() {
             vm.scheduledPaymentsCount = scheduledPaymentsCount;
             vm.payment = payment;
+        }
+
+        function confirmPaymentCancel() {
+            displayCancelPaymentPopup()
+                .then(function (result) {
+                    if (result) {
+                        //TODO cancel the payment
+                        //TODO redirect to payment list view
+                    }
+                    else {
+                        //close the popup
+                    }
+                });
+        }
+
+        function displayCancelPaymentPopup() {
+            return CommonService.displayConfirm({
+                content             : vm.config.cancelPaymentConfirm.content,
+                okButtonText        : vm.config.cancelPaymentConfirm.yesButton,
+                cancelButtonText    : vm.config.cancelPaymentConfirm.noButton,
+                okButtonCssClass    : "button-submit",
+                cancelButtonCssClass: "button-default"
+            });
         }
 
         function editPayment() {
