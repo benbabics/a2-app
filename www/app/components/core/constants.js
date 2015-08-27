@@ -71,7 +71,7 @@
             "minimumPayment": "Statement Balance",
             "enterAmount"   : "Enter Amount",
             "amount"        : "Amount",
-            "bankAccount"   : "From Account",
+            "bankAccount"   : "Bank Account",
             "scheduledDate" : "Date",
             "submitButton"  : "Next"
         },
@@ -92,7 +92,7 @@
             },
             "BANK_ACCOUNT": {
                 "CONFIG": {
-                    "title"            : "Account",
+                    "title"            : "Bank Account",
                     "instructionalText": "Please Note: Managing bank accounts can only be completed on the web from the desktop application version."
                 }
             }
@@ -115,7 +115,7 @@
             "afternoonWarning"     : "Payments received after 3:30 pm Eastern Time may not be posted to your account until the next business day.",
             "weekendHolidayWarning": "Scheduled payments will be processed on the date selected. Payments scheduled for weekends/holidays will be posted the next business day.",
             "amount"               : "Amount",
-            "bankAccount"          : "From Account",
+            "bankAccount"          : "Bank Account",
             "scheduledDate"        : "Date",
             "cancelButton"         : "Cancel",
             "submitButton"         : "Schedule Payment"
@@ -137,7 +137,7 @@
             "title"           : "Payment Confirmation",
             "confirmationText": "Your payment has been scheduled.",
             "amount"          : "Amount",
-            "bankAccount"     : "From Account",
+            "bankAccount"     : "Bank Account",
             "scheduledDate"   : "Date",
             "activityButton"  : "Payment Activity"
         },
@@ -153,7 +153,7 @@
         "CONFIG": {
             "title"               : "Payment Details",
             "amount"              : "Amount",
-            "bankAccount"         : "Account",
+            "bankAccount"         : "Bank Account",
             "postedDate"          : "Date Posted",
             "scheduledDate"       : "Date Scheduled",
             "inProcess"           : "In Process",
