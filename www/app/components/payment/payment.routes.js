@@ -4,6 +4,10 @@
     /* @ngInject */
     function configureRoutes($stateProvider, $urlRouterProvider) {
 
+        $urlRouterProvider.when("/payment/add/verify", function($state, globals, CommonService, PaymentManager, UserManager) {
+            validateBeforeNavigateToPaymentAdd($state, globals, CommonService, PaymentManager, UserManager);
+        });
+
         $urlRouterProvider.when("/payment/add", function(globals, $state) {
             goToMaintenanceState($state, "payment.maintenance.form", globals.PAYMENT_MAINTENANCE.STATES.ADD);
         });
@@ -223,6 +227,49 @@
 
             $state.go(stateName, angular.extend({}, { maintenanceState: maintenanceState }, params));
         }
+
+        function validateBeforeNavigateToPaymentAdd($state, globals, CommonService, PaymentManager, UserManager) {
+            var billingAccountId;
+
+            CommonService.loadingBegin();
+
+            billingAccountId = UserManager.getUser().billingCompany.accountId;
+
+            PaymentManager.fetchPaymentAddAvailability(billingAccountId)
+                .then(function (paymentAddAvailability) {
+                    var errorMessage;
+
+                    if (paymentAddAvailability.shouldDisplayBankAccountSetupMessage) {
+                        errorMessage = globals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP;
+                    }
+                    else if (paymentAddAvailability.shouldDisplayDirectDebitEnabledMessage) {
+                        errorMessage = globals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP;
+                    }
+                    else if (paymentAddAvailability.shouldDisplayOutstandingPaymentMessage) {
+                        errorMessage = globals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED;
+                    }
+                    else if (paymentAddAvailability.shouldDisplayCurrentBalanceDueMessage) {
+                        errorMessage = globals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE;
+                    }
+
+                    if (errorMessage) {
+                        $state.go("payment.list.view");
+
+                        CommonService.displayAlert({
+                            content: errorMessage,
+                            buttonCssClass: "button-submit"
+                        });
+                    }
+                    else {
+                        // No problems we're worried about here so go to the payment add page
+                        $state.go("payment.add");
+                    }
+                })
+                .finally(function () {
+                    CommonService.loadingComplete();
+                });
+        }
+
     }
 
     angular.module("app.components.payment")

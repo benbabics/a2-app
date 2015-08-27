@@ -4,6 +4,7 @@
     describe("A Payment Module Route Config", function () {
 
         var $injector,
+            $location,
             $q,
             $rootScope,
             $state,
@@ -23,6 +24,16 @@
                     "SEARCH_OPTIONS": {
                         "PAGE_NUMBER": TestUtils.getRandomInteger(0, 20),
                         "PAGE_SIZE"  : TestUtils.getRandomInteger(10, 100)
+                    }
+                },
+
+                PAYMENT_ADD            : {
+                    CONFIG  : {},
+                    WARNINGS: {
+                        BANK_ACCOUNTS_NOT_SETUP  : "Banks Not Setup",
+                        DIRECT_DEBIT_SETUP       : "Direct Debit Enabled",
+                        NO_BALANCE_DUE           : "No Current Balance",
+                        PAYMENT_ALREADY_SCHEDULED: "Payment Already Scheduled"
                     }
                 },
 
@@ -58,6 +69,7 @@
             },
             BankManager,
             BankModel,
+            CommonService,
             Payment,
             PaymentManager,
             PaymentModel,
@@ -74,7 +86,7 @@
             // mock dependencies
             Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd", "getPayment"]);
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks"]);
-            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayment", "fetchPayments", "fetchScheduledPaymentsCount"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayment", "fetchPaymentAddAvailability", "fetchPayments", "fetchScheduledPaymentsCount"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             module(function ($provide, sharedGlobals) {
@@ -86,12 +98,14 @@
                 $provide.value("UserManager", UserManager);
             });
 
-            inject(function (_$injector_, _$q_, _$rootScope_, _$state_, _BankModel_, _PaymentModel_) {
+            inject(function (_$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _CommonService_, _PaymentModel_) {
                 $injector = _$injector_;
+                $location = _$location_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
                 BankModel = _BankModel_;
+                CommonService = _CommonService_;
                 PaymentModel = _PaymentModel_;
             });
 
@@ -821,6 +835,193 @@
                         expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
                     });
 
+                });
+
+            });
+
+        });
+
+        describe("has a URL handler for '/payment/add/verify' that", function () {
+
+            var paymentAddVerifyPath = "/payment/add/verify",
+                paymentAddAvailability = {},
+                paymentAddState = "payment.add",
+                paymentListState = "payment.list.view",
+                fetchPaymentAddAvailabilityDeferred;
+
+            beforeEach(function () {
+                fetchPaymentAddAvailabilityDeferred = $q.defer();
+                PaymentManager.fetchPaymentAddAvailability.and.returnValue(fetchPaymentAddAvailabilityDeferred.promise);
+
+                UserManager.getUser.and.returnValue(mockUser);
+
+                spyOn($state, "go");
+                spyOn(CommonService, "displayAlert");
+            });
+
+            describe("when bank accounts have NOT been setup", function () {
+
+                beforeEach(function () {
+                    paymentAddAvailability = {
+                        makePaymentAllowed                    : false,
+                        shouldDisplayCurrentBalanceDueMessage : false,
+                        shouldDisplayBankAccountSetupMessage  : true,
+                        shouldDisplayDirectDebitEnabledMessage: false,
+                        shouldDisplayOutstandingPaymentMessage: false
+                    };
+
+                    fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
+
+                    $location.path(paymentAddVerifyPath);
+                    $rootScope.$digest();
+                });
+
+                it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                    expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                });
+
+                it("should call CommonService.displayAlert", function () {
+                    expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                        content       : mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
+                        buttonCssClass: "button-submit"
+                    });
+                });
+
+                it("should redirect to the payment list", function () {
+                    expect($state.go).toHaveBeenCalledWith(paymentListState);
+                });
+
+            });
+
+            describe("when direct debit has been setup", function () {
+
+                beforeEach(function () {
+                    paymentAddAvailability = {
+                        makePaymentAllowed                    : false,
+                        shouldDisplayCurrentBalanceDueMessage : false,
+                        shouldDisplayBankAccountSetupMessage  : false,
+                        shouldDisplayDirectDebitEnabledMessage: true,
+                        shouldDisplayOutstandingPaymentMessage: false
+                    };
+
+                    fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
+
+                    $location.path(paymentAddVerifyPath);
+                    $rootScope.$digest();
+                });
+
+                it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                    expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                });
+
+                it("should call CommonService.displayAlert", function () {
+                    expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                        content       : mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
+                        buttonCssClass: "button-submit"
+                    });
+                });
+
+                it("should redirect to the payment list", function () {
+                    expect($state.go).toHaveBeenCalledWith(paymentListState);
+                });
+
+            });
+
+            describe("when a payment has already been scheduled", function () {
+
+                beforeEach(function () {
+                    paymentAddAvailability = {
+                        makePaymentAllowed                    : false,
+                        shouldDisplayCurrentBalanceDueMessage : false,
+                        shouldDisplayBankAccountSetupMessage  : false,
+                        shouldDisplayDirectDebitEnabledMessage: false,
+                        shouldDisplayOutstandingPaymentMessage: true
+                    };
+
+                    fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
+
+                    $location.path(paymentAddVerifyPath);
+                    $rootScope.$digest();
+                });
+
+                it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                    expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                });
+
+                it("should call CommonService.displayAlert", function () {
+                    expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                        content       : mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
+                        buttonCssClass: "button-submit"
+                    });
+                });
+
+                it("should redirect to the payment list", function () {
+                    expect($state.go).toHaveBeenCalledWith(paymentListState);
+                });
+
+            });
+
+            describe("when the current balance due message should be displayed", function () {
+
+                beforeEach(function () {
+                    paymentAddAvailability = {
+                        makePaymentAllowed                    : false,
+                        shouldDisplayCurrentBalanceDueMessage : true,
+                        shouldDisplayBankAccountSetupMessage  : false,
+                        shouldDisplayDirectDebitEnabledMessage: false,
+                        shouldDisplayOutstandingPaymentMessage: false
+                    };
+
+                    fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
+
+                    $location.path(paymentAddVerifyPath);
+                    $rootScope.$digest();
+                });
+
+                it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                    expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                });
+
+                it("should call CommonService.displayAlert", function () {
+                    expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                        content       : mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
+                        buttonCssClass: "button-submit"
+                    });
+                });
+
+                it("should redirect to the payment list", function () {
+                    expect($state.go).toHaveBeenCalledWith(paymentListState);
+                });
+
+            });
+
+            describe("when no messages should be displayed", function () {
+
+                beforeEach(function () {
+                    paymentAddAvailability = {
+                        makePaymentAllowed                    : true,
+                        shouldDisplayCurrentBalanceDueMessage : false,
+                        shouldDisplayBankAccountSetupMessage  : false,
+                        shouldDisplayDirectDebitEnabledMessage: false,
+                        shouldDisplayOutstandingPaymentMessage: false
+                    };
+
+                    fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
+
+                    $location.path(paymentAddVerifyPath);
+                    $rootScope.$digest();
+                });
+
+                it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                    expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                });
+
+                it("should NOT call CommonService.displayAlert", function () {
+                    expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                });
+
+                it("should redirect to the payment add state", function () {
+                    expect($state.go).toHaveBeenCalledWith(paymentAddState);
                 });
 
             });
