@@ -65,20 +65,21 @@
 
     appGlobals.PAYMENT_MAINTENANCE_FORM = {
         "CONFIG": {
-            "invoiceNumber" : "Invoice Number",
-            "paymentDueDate": "Due Date",
-            "currentBalance": "Current Balance",
-            "minimumPayment": "Statement Balance",
-            "enterAmount"   : "Enter Amount",
-            "amount"        : "Amount",
-            "bankAccount"   : "Bank Account",
-            "scheduledDate" : "Date",
-            "submitButton"  : "Next"
+            "invoiceNumber"           : "Invoice Number",
+            "paymentDueDate"          : "Due Date",
+            "currentBalance"          : "Current Balance",
+            "minimumPayment"          : "Statement Balance",
+            "enterAmount"             : "Enter Amount",
+            "amount"                  : "Amount",
+            "bankAccount"             : "Bank Account",
+            "scheduledDate"           : "Date",
+            "scheduledDatePickerTitle": "Select Date",
+            "submitButton"            : "Next"
         },
         "INPUTS": {
             "AMOUNT"      : {
                 "CONFIG": {
-                    "title": "Amount"
+                    "title": "Enter Amount"
                 },
                 "ERRORS": {
                     "zeroPayment"    : "The amount entered cannot be \"0.00\".",
@@ -92,7 +93,7 @@
             },
             "BANK_ACCOUNT": {
                 "CONFIG": {
-                    "title"            : "Bank Account",
+                    "title"            : "Select Bank Account",
                     "instructionalText": "Please Note: Managing bank accounts can only be completed on the web from the desktop application version."
                 }
             }
