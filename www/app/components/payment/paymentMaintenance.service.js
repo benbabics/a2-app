@@ -4,7 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function Payment($q, $rootScope, BankManager, CommonService, InvoiceManager, PaymentModel, UserManager) {
+    function PaymentMaintenance($q, $rootScope, BankManager, CommonService, InvoiceManager, PaymentModel, UserManager) {
         // Private members
         var _ = CommonService._,
             payment = {};
@@ -70,5 +70,5 @@
 
     angular
         .module("app.components.payment")
-        .factory("Payment", Payment);
+        .factory("PaymentMaintenance", PaymentMaintenance);
 })();

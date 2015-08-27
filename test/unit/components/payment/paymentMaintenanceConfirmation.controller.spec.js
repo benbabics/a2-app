@@ -31,7 +31,7 @@
             bankAccount  : "bank account value",
             scheduledDate: "2015-05-26"
         },
-        Payment;
+        PaymentMaintenance;
 
     describe("A Payment Maintenance Confirmation Controller", function () {
 
@@ -55,7 +55,7 @@
             });
 
             // mock dependencies
-            Payment = jasmine.createSpyObj("Payment", ["clearPayment", "getPayment"]);
+            PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["clearPayment", "getPayment"]);
 
             inject(function ($controller, $rootScope, appGlobals, CommonService) {
 
@@ -75,15 +75,15 @@
                 };
 
                 ctrl = $controller("PaymentMaintenanceConfirmationController", {
-                    $scope      : $scope,
-                    $stateParams: mockStateParams,
-                    maintenance : mockMaintenance,
-                    Payment     : Payment
+                    $scope            : $scope,
+                    $stateParams      : mockStateParams,
+                    maintenance       : mockMaintenance,
+                    PaymentMaintenance: PaymentMaintenance
                 });
 
             });
 
-            Payment.getPayment.and.returnValue(mockPayment);
+            PaymentMaintenance.getPayment.and.returnValue(mockPayment);
         });
 
         it("should set the config to the expected value", function () {
@@ -103,8 +103,8 @@
                 expect(ctrl.payment).toEqual(mockPayment);
             });
 
-            it("should call Payment.clearPayment", function () {
-                expect(Payment.clearPayment).toHaveBeenCalledWith();
+            it("should call PaymentMaintenance.clearPayment", function () {
+                expect(PaymentMaintenance.clearPayment).toHaveBeenCalledWith();
             });
 
         });

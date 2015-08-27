@@ -8,7 +8,7 @@
         BankManager,
         BankModel,
         InvoiceManager,
-        Payment,
+        PaymentMaintenance,
         PaymentModel,
         UserManager,
         mockCurrentInvoiceSummary = {
@@ -41,7 +41,7 @@
             }
         };
 
-    describe("A Payment Add Service", function () {
+    describe("A Payment Maintenance Service", function () {
 
         beforeEach(function () {
 
@@ -68,11 +68,11 @@
                 $provide.value("UserManager", UserManager);
             });
 
-            inject(function (_$q_, _$rootScope_, globals, _BankModel_, _Payment_, _PaymentModel_) {
+            inject(function (_$q_, _$rootScope_, globals, _BankModel_, _PaymentMaintenance_, _PaymentModel_) {
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 BankModel = _BankModel_;
-                Payment = _Payment_;
+                PaymentMaintenance = _PaymentMaintenance_;
                 PaymentModel = _PaymentModel_;
             });
 
@@ -93,12 +93,12 @@
             beforeEach(function() {
                 var mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
 
-                Payment.setPayment(mockPaymentAddModel);
-                Payment.clearPayment();
+                PaymentMaintenance.setPayment(mockPaymentAddModel);
+                PaymentMaintenance.clearPayment();
             });
 
             it("should reset the payment model", function () {
-                expect(Payment.getPayment()).toEqual({});
+                expect(PaymentMaintenance.getPayment()).toEqual({});
             });
 
         });
@@ -108,12 +108,12 @@
             beforeEach(function() {
                 var mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
 
-                Payment.setPayment(mockPaymentAddModel);
+                PaymentMaintenance.setPayment(mockPaymentAddModel);
                 $rootScope.$broadcast("userLoggedOut");
             });
 
             it("should reset the payment model", function () {
-                expect(Payment.getPayment()).toEqual({});
+                expect(PaymentMaintenance.getPayment()).toEqual({});
             });
 
         });
@@ -124,8 +124,8 @@
                 var mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel),
                     result;
 
-                Payment.setPayment(mockPaymentAddModel);
-                result = Payment.getPayment();
+                PaymentMaintenance.setPayment(mockPaymentAddModel);
+                result = PaymentMaintenance.getPayment();
 
                 expect(result).toEqual(mockPaymentAddModel);
             }) ;
@@ -144,9 +144,9 @@
                 beforeEach(function () {
                     mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
 
-                    Payment.setPayment(mockPaymentAddModel);
+                    PaymentMaintenance.setPayment(mockPaymentAddModel);
 
-                    Payment.getOrCreatePaymentAdd()
+                    PaymentMaintenance.getOrCreatePaymentAdd()
                         .then(function (response) {
                             result = response;
                         })
@@ -180,12 +180,12 @@
                     //return a promise object and resolve it
                     BankManager.getDefaultBank.and.returnValue(getDefaultBankDeferred.promise);
 
-                    Payment.setPayment(null);
+                    PaymentMaintenance.setPayment(null);
 
                     mockCurrentDate = new Date();
                     jasmine.clock().mockDate(mockCurrentDate);
 
-                    Payment.getOrCreatePaymentAdd()
+                    PaymentMaintenance.getOrCreatePaymentAdd()
                         .then(function (response) { result = response; })
                         .catch(rejectHandler);
 
@@ -219,8 +219,8 @@
                 var mockPaymentAddModel = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel),
                     result;
 
-                Payment.setPayment(mockPaymentAddModel);
-                result = Payment.getPayment();
+                PaymentMaintenance.setPayment(mockPaymentAddModel);
+                result = PaymentMaintenance.getPayment();
 
                 expect(result).toEqual(mockPaymentAddModel);
             }) ;

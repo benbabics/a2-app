@@ -70,7 +70,7 @@
             BankManager,
             BankModel,
             CommonService,
-            Payment,
+            PaymentMaintenance,
             PaymentManager,
             PaymentModel,
             InvoiceManager,
@@ -84,7 +84,7 @@
             module("app.html");
 
             // mock dependencies
-            Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd", "getPayment"]);
+            PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getOrCreatePaymentAdd", "getPayment"]);
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayment", "fetchPaymentAddAvailability", "fetchPayments", "fetchScheduledPaymentsCount"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
@@ -93,7 +93,7 @@
                 $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
                 $provide.value("BankManager", BankManager);
                 $provide.value("InvoiceManager", InvoiceManager);
-                $provide.value("Payment", Payment);
+                $provide.value("PaymentMaintenance", PaymentMaintenance);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
             });
@@ -131,7 +131,7 @@
             mockBankAccounts[mockBank3.id] = mockBank3;
 
             BankManager.getActiveBanks.and.returnValue(mockBankAccounts);
-            Payment.getPayment.and.returnValue(mockPayment1);
+            PaymentMaintenance.getPayment.and.returnValue(mockPayment1);
 
         });
 
@@ -366,7 +366,7 @@
 
                 beforeEach(function () {
                     getOrFetchPaymentAddDeferred = $q.defer();
-                    Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
+                    PaymentMaintenance.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
 
                     hasMultipleBanksDeferred = $q.defer();
                     UserManager.getUser.and.returnValue(mockUser);
@@ -416,7 +416,7 @@
 
                 beforeEach(function () {
                     getOrFetchPaymentAddDeferred = $q.defer();
-                    Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
+                    PaymentMaintenance.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
 
                     hasMultipleBanksDeferred = $q.defer();
                     UserManager.getUser.and.returnValue(mockUser);
@@ -540,7 +540,7 @@
 
                 beforeEach(function () {
                     getOrFetchPaymentAddDeferred = $q.defer();
-                    Payment.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
+                    PaymentMaintenance.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
 
                     hasMultipleBanksDeferred = $q.defer();
                     UserManager.getUser.and.returnValue(mockUser);
@@ -552,8 +552,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call Payment.getOrCreatePaymentAdd", function () {
-                    expect(Payment.getOrCreatePaymentAdd).toHaveBeenCalledWith();
+                it("should call PaymentMaintenance.getOrCreatePaymentAdd", function () {
+                    expect(PaymentMaintenance.getOrCreatePaymentAdd).toHaveBeenCalledWith();
                 });
 
                 it("should call BankManager.hasMultipleBanks", function () {
@@ -707,8 +707,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call Payment.getPayment", function () {
-                    expect(Payment.getPayment).toHaveBeenCalledWith();
+                it("should call PaymentMaintenance.getPayment", function () {
+                    expect(PaymentMaintenance.getPayment).toHaveBeenCalledWith();
                 });
 
                 it("should call InvoiceManager.getInvoiceSummary", function () {
@@ -766,8 +766,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call Payment.getPayment", function () {
-                    expect(Payment.getPayment).toHaveBeenCalledWith();
+                it("should call PaymentMaintenance.getPayment", function () {
+                    expect(PaymentMaintenance.getPayment).toHaveBeenCalledWith();
                 });
 
                 it("should call BankManager.getActiveBanks", function () {

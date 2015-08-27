@@ -131,10 +131,10 @@
                                 });
                         },
 
-                        payment: function (CommonService, Payment) {
+                        payment: function (CommonService, PaymentMaintenance) {
                             CommonService.loadingBegin();
 
-                            return Payment.getOrCreatePaymentAdd()
+                            return PaymentMaintenance.getOrCreatePaymentAdd()
                                 .finally(function () {
                                     CommonService.loadingComplete();
                                 });
@@ -179,8 +179,8 @@
                     templateUrl: "app/components/payment/templates/paymentMaintenanceAmount.input.html",
                     controller : "PaymentMaintenanceAmountInputController as vm",
                     resolve    : {
-                        payment: function (Payment) {
-                            return Payment.getPayment();
+                        payment: function (PaymentMaintenance) {
+                            return PaymentMaintenance.getPayment();
                         },
 
                         invoiceSummary: function (InvoiceManager) {
@@ -198,14 +198,14 @@
                     templateUrl: "app/components/payment/templates/paymentMaintenanceBankAccount.input.html",
                     controller : "PaymentMaintenanceBankAccountInputController as vm",
                     resolve    : {
-                        payment: function (Payment) {
-                            return Payment.getPayment();
+                        payment: function (PaymentMaintenance) {
+                            return PaymentMaintenance.getPayment();
                         },
 
-                        bankAccounts: function (CommonService, BankManager, Payment) {
+                        bankAccounts: function (CommonService, BankManager, PaymentMaintenance) {
                             var _ = CommonService._,
                                 activeBanks = _.sortBy(BankManager.getActiveBanks(), "name"),
-                                currentBankAccount = Payment.getPayment().bankAccount;
+                                currentBankAccount = PaymentMaintenance.getPayment().bankAccount;
 
                             // If there is a bank account already selected, remove it from the list
                             // to only show different bank accounts

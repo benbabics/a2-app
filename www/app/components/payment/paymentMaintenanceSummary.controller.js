@@ -6,7 +6,8 @@
 
     /* @ngInject */
     function PaymentMaintenanceSummaryController($scope, globals, maintenance, moment,
-                                                 CommonService, InvoiceManager, Logger, Payment, PaymentManager, UserManager) {
+                                                 CommonService, InvoiceManager, Logger,
+                                                 PaymentMaintenance, PaymentManager, UserManager) {
 
         var vm = this,
             paymentMaintenanceSummary = globals.PAYMENT_MAINTENANCE_SUMMARY;
@@ -31,7 +32,7 @@
 
             return PaymentManager.addPayment(UserManager.getUser().billingCompany.accountId, vm.payment)
                 .then(function (paymentResponse) {
-                    Payment.getPayment().set(paymentResponse);
+                    PaymentMaintenance.getPayment().set(paymentResponse);
 
                     // transition to the confirmation page
                     maintenance.go("payment.maintenance.confirmation");
@@ -79,7 +80,7 @@
 
             return PaymentManager.updatePayment(UserManager.getUser().billingCompany.accountId, vm.payment)
                 .then(function (paymentResponse) {
-                    Payment.getPayment().set(paymentResponse);
+                    PaymentMaintenance.getPayment().set(paymentResponse);
 
                     // transition to the confirmation page
                     maintenance.go("payment.maintenance.confirmation");
@@ -96,7 +97,7 @@
         function beforeEnter() {
             var invoiceSummary = InvoiceManager.getInvoiceSummary();
 
-            vm.payment = Payment.getPayment();
+            vm.payment = PaymentMaintenance.getPayment();
 
             if (parseFloat(vm.payment.amount) < parseFloat(invoiceSummary.minimumPaymentDue)) {
                 vm.warnings.push(paymentMaintenanceSummary.WARNINGS.PAYMENT_AMOUNT_LESS_THAN_MINIMUM);

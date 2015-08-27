@@ -64,7 +64,7 @@
         moment,
         BankModel,
         InvoiceManager,
-        Payment,
+        PaymentMaintenance,
         PaymentManager,
         PaymentModel,
         UserManager;
@@ -93,7 +93,7 @@
             // mock dependencies
             $state = jasmine.createSpyObj("state", ["go"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
-            Payment = jasmine.createSpyObj("Payment", ["getPayment"]);
+            PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getPayment"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "updatePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
@@ -119,14 +119,14 @@
                 };
 
                 ctrl = $controller("PaymentMaintenanceSummaryController", {
-                    $scope        : $scope,
-                    $state        : $state,
-                    $stateParams  : mockStateParams,
-                    maintenance   : mockMaintenance,
-                    InvoiceManager: InvoiceManager,
-                    Payment       : Payment,
-                    PaymentManager: PaymentManager,
-                    UserManager   : UserManager
+                    $scope            : $scope,
+                    $state            : $state,
+                    $stateParams      : mockStateParams,
+                    maintenance       : mockMaintenance,
+                    InvoiceManager    : InvoiceManager,
+                    PaymentMaintenance: PaymentMaintenance,
+                    PaymentManager    : PaymentManager,
+                    UserManager       : UserManager
                 });
 
             });
@@ -145,7 +145,7 @@
 
             mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
             InvoiceManager.getInvoiceSummary.and.returnValue(mockCurrentInvoiceSummary);
-            Payment.getPayment.and.returnValue(mockPaymentProcess);
+            PaymentMaintenance.getPayment.and.returnValue(mockPaymentProcess);
             UserManager.getUser.and.returnValue(mockUser);
         });
 

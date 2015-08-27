@@ -83,7 +83,7 @@
             },
             AuthenticationManager,
             BankManager,
-            Payment,
+            PaymentMaintenance,
             CommonService,
             PaymentManager,
             UserManager;
@@ -110,7 +110,7 @@
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks"]);
-            Payment = jasmine.createSpyObj("Payment", ["getOrCreatePaymentAdd"]);
+            PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getOrCreatePaymentAdd"]);
             CommonService = jasmine.createSpyObj("CommonService", ["closeAllPopups", "displayAlert", "loadingBegin", "loadingComplete"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
@@ -118,7 +118,7 @@
             module(function ($provide) {
                 $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("BankManager", BankManager);
-                $provide.value("Payment", Payment);
+                $provide.value("PaymentMaintenance", PaymentMaintenance);
                 $provide.value("CommonService", CommonService);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
