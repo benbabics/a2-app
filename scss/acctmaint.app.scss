@@ -137,6 +137,27 @@ $user-login-gradient-bottom: #414141;
 }
 
 /**--------------------------------
+  Payment Input Page
+ ----------------------------------**/
+.payment-maintenance-form-item {
+
+    @extend .item;
+    @include flexbox();
+    @include align-items(center);
+    @include justify-content(space-between);
+
+    padding: 5px 26px 0;
+
+    span {
+        font-size: 14px;
+    }
+
+    .right-padding {
+        padding-right: 28px;
+    }
+}
+
+/**--------------------------------
   Payment Amount Input Page
  ----------------------------------**/
 .platform-ios {

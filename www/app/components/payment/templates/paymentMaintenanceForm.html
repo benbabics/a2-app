@@ -25,42 +25,56 @@
                 </p>
             </div>
         </div>
-        <div class="item item-wrap arrow-align">
-            <p class="padding-left padding-right">
-                <span id="paymentAmountLabel" class="block_align label_align">{{vm.config.amount}}
-                    <span id="paymentAmount" class="value_align active-link">{{vm.payment.amount <= 0 ? vm.config.enterAmount : (vm.payment.amount | currency)}}</span>
+
+        <div class="payment-maintenance-form-item">
+            <span class="block_align">
+                {{vm.config.amount}}
+            </span>
+            <div ng-click="vm.maintenance.go('payment.maintenance.input.amount')">
+                <span class="active-link">
+                    {{vm.payment.amount <= 0 ? vm.config.enterAmount : (vm.payment.amount | currency)}}
                 </span>
-                <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
+                <span class="button button-icon icon ion-ios-arrow-forward chevron_align"
                       ng-click="vm.maintenance.go('payment.maintenance.input.amount')">
                 </span>
-            </p>
+            </div>
         </div>
 
-        <div class="item item-wrap arrow-align">
-            <p class="padding-left padding-right">
-                <span id="scheduledDateLabel" class="block_align label_align">{{vm.config.scheduledDate}}
-                    <span id="scheduledDate" class="value_align active-link">{{vm.payment.scheduledDate | wexDefaultDateFormat}}</span>
+        <div class="payment-maintenance-form-item">
+            <span class="block_align">
+                {{vm.config.scheduledDate}}
+            </span>
+            <ionic-datepicker value="vm.payment.scheduledDate"
+                              min="vm.minDate"
+                              max="vm.maxDate"
+                              title="vm.config.scheduledDate">
+                <span class="active-link">
+                    {{vm.payment.scheduledDate | wexDefaultDateFormat}}
                 </span>
-                <ionic-datepicker value="vm.payment.scheduledDate"
-                                  min="vm.minDate"
-                                  max="vm.maxDate"
-                                  title="vm.config.scheduledDate"
-                                  class="button button-icon icon ion-ios-arrow-forward content-align chevron_align">
-                </ionic-datepicker>
-            </p>
-        </div>
-        <div class="item item-wrap"
-             ng-class="{'arrow-align':vm.hasMultipleBanks}">
-            <p class="padding-left padding-right">
-                <span id="bankAccountLabel" class="block_align label_align">{{vm.config.bankAccount}}
-                    <span id="bankAccount" class="value_align active-link">{{vm.payment.bankAccount.getDisplayName()}}</span>
+                <span class="button button-icon icon ion-ios-arrow-forward chevron_align">
                 </span>
-                 <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
-                       ng-if="vm.hasMultipleBanks"
-                       ng-click="vm.maintenance.go('payment.maintenance.input.bankAccount')">
-                 </span>
-            </p>
+            </ionic-datepicker>
         </div>
+
+        <div class="payment-maintenance-form-item">
+            <span class="block_align">
+                {{vm.config.bankAccount}}
+            </span>
+
+            <div ng-if="!vm.hasMultipleBanks">
+                <span class="button right-padding">
+                    {{vm.payment.bankAccount.getDisplayName()}}
+                </span>
+            </div>
+            <div ng-if="vm.hasMultipleBanks"
+                 ng-click="vm.maintenance.go('payment.maintenance.input.bankAccount')">
+                <span class="active-link">
+                    {{vm.payment.bankAccount.getDisplayName()}}
+                </span>
+                <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
+            </div>
+        </div>
+
         <br>
         <div class="padding align_center">
             <button id="makePaymentButton"
