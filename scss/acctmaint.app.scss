@@ -67,6 +67,7 @@ $user-login-gradient-bottom: #414141;
 }
 
 .divider {
+    padding-top: 5px;
     border-bottom: 1px solid #e5e5e5;
 }
 
@@ -243,4 +244,18 @@ $user-login-gradient-bottom: #414141;
     font-style: italic;
     text-align: center;
     display: block;
+}
+
+/**Fix for Bug-377 **/
+
+.divider:last-child {
+    border-bottom: none !important;
+}
+
+.collapsible-item {
+    margin-bottom: 0px !important;
+}
+
+.collapsible-item body {
+    border: 0 !important;
 }
