@@ -794,7 +794,8 @@
                     it("should resolve the bankAccounts", function () {
                         var expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
 
-                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
+                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment1}))
+                            .toEqual(expectedBankAccounts);
                     });
 
                 });
@@ -811,7 +812,8 @@
                     it("should resolve the bankAccounts", function () {
                         var expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
 
-                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
+                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment1}))
+                            .toEqual(expectedBankAccounts);
                     });
 
                 });
@@ -832,7 +834,8 @@
 
                         expectedBankAccounts = _.sortBy(expectedBankAccounts, "name");
 
-                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts)).toEqual(expectedBankAccounts);
+                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment1}))
+                            .toEqual(expectedBankAccounts);
                     });
 
                 });

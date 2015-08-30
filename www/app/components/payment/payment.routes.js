@@ -202,10 +202,10 @@
                             return PaymentMaintenance.getPayment();
                         },
 
-                        bankAccounts: function (CommonService, BankManager, PaymentMaintenance) {
+                        bankAccounts: function (payment, BankManager, CommonService) {
                             var _ = CommonService._,
                                 activeBanks = _.sortBy(BankManager.getActiveBanks(), "name"),
-                                currentBankAccount = PaymentMaintenance.getPayment().bankAccount;
+                                currentBankAccount = payment.bankAccount;
 
                             // If there is a bank account already selected, remove it from the list
                             // to only show different bank accounts
