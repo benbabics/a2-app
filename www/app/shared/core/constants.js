@@ -45,12 +45,12 @@
     sharedGlobals.ACCOUNT_MAINTENANCE_API = {
         BASE_URL: "@@@STRING_REPLACE_APP_URL_AM_API@@@",
         CARDS   : {
-            "BASE"               : "secure/cards",
+            "BASE"               : "cards",
             "STATUS"             : "status",
             "CHECK_STATUS_CHANGE": "checkScheduledStatusChange"
         },
         ACCOUNTS: {
-            "BASE": "secure/accounts"
+            "BASE": "accounts"
         },
         BANKS: {
             "ACTIVE_BANKS": "payments/activeBanks"
