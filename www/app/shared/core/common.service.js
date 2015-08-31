@@ -6,7 +6,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function CommonService(_, $ionicPlatform, $ionicPopup, $rootScope, $state, globals) {
+    function CommonService(_, $ionicPlatform, $ionicPopup, $rootScope, $state, globals, Logger) {
 
         // Private members
         var loadingIndicatorCount = 0,
@@ -26,6 +26,7 @@
             "closeConfirm"             : closeConfirm,
             "displayAlert"             : displayAlert,
             "displayConfirm"           : displayConfirm,
+            "exitApp"                  : exitApp,
             "fieldHasError"            : fieldHasError,
             "findActiveBackButton"     : findActiveBackButton,
             "findBackButton"           : findBackButton,
@@ -42,6 +43,7 @@
             "getUnfocusedNavBar"       : getUnfocusedNavBar,
             "getUnfocusedView"         : getUnfocusedView,
             "getViewContent"           : getViewContent,
+            "goToBackState"            : goToBackState,
             "loadingBegin"             : loadingBegin,
             "loadingComplete"          : loadingComplete,
             "maskAccountNumber"        : maskAccountNumber,
@@ -152,6 +154,16 @@
             confirmPopup = $ionicPopup.confirm(mappedOptions);
 
             return confirmPopup;
+        }
+
+        function exitApp() {
+            //close the app (this does not work on iOS since it does not allow apps to close themselves)
+            if (navigator.app) {
+                navigator.app.exitApp();
+            }
+
+            //app couldn't be closed (i.e. on iOS or a browser, so just go back to the login page)
+            $state.go(globals.LOGIN_STATE);
         }
 
         function fieldHasError(field) {
@@ -444,6 +456,32 @@
 
             content = view.find("ion-content");
             return content.length > 0 ? content : null;
+        }
+
+        /**
+         * Goes to the back state specified by a given back button.
+         *
+         * @param {jqLite} [backButton] The back button to use (default: the active back button)
+         * @return {Boolean} True if the call is successful
+         * @throws {Error} Throws error if the back button couldn't be found
+         */
+        function goToBackState(backButton) {
+            var backButtonScope;
+
+            backButton = backButton || findActiveBackButton();
+
+            //if there is a back button, call its goBack function
+            if(backButton) {
+                backButtonScope = backButton.isolateScope();
+                if(backButtonScope) {
+                    backButtonScope.goBack();
+                    return true;
+                }
+            }
+
+            var error = "Couldn't find the back button to go the back state";
+            Logger.error(error);
+            throw new Error(error);
         }
 
         function loadingBegin() {

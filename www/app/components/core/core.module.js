@@ -5,6 +5,10 @@
 
     function coreRun($rootScope, $state, $ionicPlatform, globals, AuthenticationManager, CommonService) {
 
+        function isExitState(stateName) {
+            return "app.exit" === stateName;
+        }
+
         function isLoginPage(stateName) {
             return globals.LOGIN_STATE === stateName;
         }
@@ -13,7 +17,7 @@
 
             var stateName = toState.name;
 
-            if (!isLoginPage(stateName)) {
+            if (!isLoginPage(stateName) && !isExitState(stateName)) {
                 // when navigating to any page that isn't the login page, validate that the user is logged in
                 if (!AuthenticationManager.userLoggedIn()) {
                     // user is not logged in and is not trying to access the login page so redirect to the login page
@@ -45,6 +49,9 @@
         $rootScope.$on("$stateChangeStart", validateRoutePreconditions);
         $rootScope.$on("cordovaPause", pauseApplication);
         $rootScope.$on("cordovaResume", resumeApplication);
+
+        //make the hardware back button go to the same state as the back button by default
+        $ionicPlatform.registerBackButtonAction(CommonService.goToBackState, 101);
     }
 
     angular.module("app.components.core", [])
