@@ -22,7 +22,6 @@
             });
 
             spyOn(CommonService, "findActiveBackButton");
-            spyOn(CommonService, "findCachedBackButton");
             mockBackButton = jasmine.createSpyObj("jqLite", ["isolateScope"]);
             mockBackButtonScope = jasmine.createSpyObj("WexBackButton", ["getOverrideBackState", "overrideBackState"]);
 
@@ -39,20 +38,23 @@
             expect(wexBackState.scope.backStateApplied).toEqual(false);
         });
 
-        it("should set pageActive to false", function () {
-            expect(wexBackState.scope.pageActive).toEqual(false);
+        it("should set appliedBackButtonBackScope to null", function () {
+            expect(wexBackState.scope.appliedBackButtonBackScope).toEqual(null);
         });
 
-        it("should set a scope event listener for $ionicView.afterEnter with onEnter", function () {
-            expect(wexBackState.scope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", wexBackState.scope.onEnter);
+        it("should set a scope event listener for $ionicView.afterEnter with applyBackState", function () {
+            expect(wexBackState.scope.$on).toHaveBeenCalledWith(
+                "$ionicView.afterEnter",
+                wexBackState.scope.applyBackState
+            );
         });
 
-        it("should set a scope event listener for $destroy with onLeave", function () {
-            expect(wexBackState.scope.$on).toHaveBeenCalledWith("$destroy", wexBackState.scope.onLeave);
+        it("should set a scope event listener for $destroy with removeBackState", function () {
+            expect(wexBackState.scope.$on).toHaveBeenCalledWith("$destroy", wexBackState.scope.removeBackState);
         });
 
-        it("should set a scope event listener for userLoggedOut with onLogOut", function () {
-            expect(wexBackState.scope.$on).toHaveBeenCalledWith("userLoggedOut", wexBackState.scope.onLogOut);
+        it("should set a scope event listener for userLoggedOut with removeBackState", function () {
+            expect(wexBackState.scope.$on).toHaveBeenCalledWith("userLoggedOut", wexBackState.scope.removeBackState);
         });
 
         describe("when a back state value is provided", function () {
@@ -79,10 +81,6 @@
 
         describe("has an applyBackState function that", function () {
 
-            beforeEach(function () {
-                this.pageActive = TestUtils.getRandomBoolean();
-            });
-
             describe("when the back state hasn't been applied", function() {
 
                 beforeEach(function () {
@@ -99,7 +97,6 @@
 
                         beforeEach(function () {
                             CommonService.findActiveBackButton.and.returnValue(mockBackButton);
-                            CommonService.findCachedBackButton.and.returnValue(mockBackButton);
                         });
 
                         describe("when there is a scope on the back button", function () {
@@ -123,6 +120,14 @@
                                 expect(mockBackButtonScope.overrideBackState).toHaveBeenCalledWith(mockState);
                             });
 
+                            it("should set backStateApplied to true", function () {
+                                expect(wexBackState.scope.backStateApplied).toEqual(true);
+                            });
+
+                            it("should set appliedBackButtonBackScope to the button's scope", function () {
+                                expect(wexBackState.scope.appliedBackButtonBackScope).toEqual(mockBackButtonScope);
+                            });
+
                             it("should return true", function () {
                                 expect(result).toBeTruthy();
                             });
@@ -144,7 +149,6 @@
 
                         beforeEach(function () {
                             CommonService.findActiveBackButton.and.returnValue(null);
-                            CommonService.findCachedBackButton.and.returnValue(null);
                         });
 
                         it("should throw an error", function () {
@@ -179,62 +183,45 @@
 
         describe("has a removeBackState function that", function () {
 
-            beforeEach(function () {
-                this.pageActive = TestUtils.getRandomBoolean();
-            });
-
             describe("when the back state has been applied", function() {
 
                 beforeEach(function () {
                     wexBackState.scope.backStateApplied = true;
                 });
 
-                describe("when there is a back button", function () {
+                describe("when there is a back button scope", function () {
+                    var result,
+                        mockPrevState;
 
                     beforeEach(function () {
-                        CommonService.findActiveBackButton.and.returnValue(mockBackButton);
-                        CommonService.findCachedBackButton.and.returnValue(mockBackButton);
+                        wexBackState.scope.appliedBackButtonBackScope = mockBackButtonScope;
+                        wexBackState.scope.prevBackState = mockPrevState =
+                            TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        result = wexBackState.scope.removeBackState();
                     });
 
-                    describe("when there is a scope on the back button", function () {
-                        var result,
-                            mockPrevState;
-
-                        beforeEach(function () {
-                            wexBackState.scope.prevBackState = mockPrevState =
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10);
-
-                            mockBackButton.isolateScope.and.returnValue(mockBackButtonScope);
-
-                            result = wexBackState.scope.removeBackState();
-                        });
-
-                        it("should call WexBackButton.overrideBackState with prevBackState", function () {
-                            expect(mockBackButtonScope.overrideBackState).toHaveBeenCalledWith(mockPrevState);
-                        });
-
-                        it("should return true", function () {
-                            expect(result).toBeTruthy();
-                        });
+                    it("should call WexBackButton.overrideBackState with prevBackState", function () {
+                        expect(mockBackButtonScope.overrideBackState).toHaveBeenCalledWith(mockPrevState);
                     });
 
-                    describe("when there is NOT a scope on the back button", function () {
+                    it("should set backStateApplied to false", function () {
+                        expect(wexBackState.scope.backStateApplied).toEqual(false);
+                    });
 
-                        beforeEach(function () {
-                            mockBackButton.isolateScope.and.returnValue(null);
-                        });
+                    it("should set appliedBackButtonBackScope to null", function () {
+                        expect(wexBackState.scope.appliedBackButtonBackScope).toEqual(null);
+                    });
 
-                        it("should throw an error", function () {
-                            expect(wexBackState.scope.removeBackState).toThrow();
-                        });
+                    it("should return true", function () {
+                        expect(result).toBeTruthy();
                     });
                 });
 
-                describe("when there is NOT a back button", function () {
+                describe("when there is NOT a back button scope", function () {
 
                     beforeEach(function () {
-                        CommonService.findActiveBackButton.and.returnValue(null);
-                        CommonService.findCachedBackButton.and.returnValue(null);
+                        wexBackState.scope.appliedBackButtonBackScope = null;
                     });
 
                     it("should throw an error", function () {
@@ -252,57 +239,6 @@
                 it("should return false", function () {
                     expect(wexBackState.scope.removeBackState()).toBeFalsy();
                 });
-            });
-        });
-
-        describe("has an onEnter function that", function () {
-
-            beforeEach(function () {
-                spyOn(wexBackState.scope, "applyBackState");
-
-                wexBackState.scope.onEnter();
-            });
-
-            it("should set pageActive to true", function () {
-                expect(wexBackState.scope.pageActive).toBeTruthy();
-            });
-
-            it("should call applyBackState", function () {
-                expect(wexBackState.scope.applyBackState).toHaveBeenCalled();
-            });
-        });
-
-        describe("has an onLeave function that", function () {
-
-            beforeEach(function () {
-                spyOn(wexBackState.scope, "removeBackState");
-
-                wexBackState.scope.onLeave();
-            });
-
-            it("should set pageActive to false", function () {
-                expect(wexBackState.scope.pageActive).toBeFalsy();
-            });
-
-            it("should call removeBackState", function () {
-                expect(wexBackState.scope.removeBackState).toHaveBeenCalled();
-            });
-        });
-
-        describe("has an onLogOut function that", function () {
-
-            beforeEach(function () {
-                spyOn(wexBackState.scope, "removeBackState");
-
-                wexBackState.scope.onLogOut();
-            });
-
-            it("should set pageActive to false", function () {
-                expect(wexBackState.scope.pageActive).toBeFalsy();
-            });
-
-            it("should call removeBackState", function () {
-                expect(wexBackState.scope.removeBackState).toHaveBeenCalled();
             });
         });
     });

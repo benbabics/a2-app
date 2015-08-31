@@ -24,7 +24,7 @@
         //////////////////////
 
         function applyBackState() {
-            var backButton = getBackButton(this.pageActive),
+            var backButton = CommonService.findActiveBackButton(),
                 backButtonScope;
 
             if(!this.backStateApplied) {
@@ -33,6 +33,7 @@
                     if (backButtonScope) {
                         this.prevBackState = backButtonScope.getOverrideBackState();
                         this.backStateApplied = true;
+                        this.appliedBackButtonBackScope = backButtonScope;
                         backButtonScope.overrideBackState(this.wexBackState);
                         return true;
                     }
@@ -42,42 +43,17 @@
                 Logger.error(error);
                 throw new Error(error);
             }
-        }
-
-        function getBackButton(pageActive) {
-            return (pageActive ?
-                CommonService.findActiveBackButton() :
-                CommonService.findCachedBackButton()
-            );
-        }
-
-        function onEnter() {
-            this.pageActive = true;
-            this.applyBackState();
-        }
-
-        function onLeave() {
-            this.pageActive = false;
-            this.removeBackState();
-        }
-
-        function onLogOut() {
-            this.removeBackState();
-            this.pageActive = false;
+            return false;
         }
 
         function removeBackState() {
-            var backButton = getBackButton(this.pageActive),
-                backButtonScope;
-
             if(this.backStateApplied) {
-                if (backButton) {
-                    backButtonScope = backButton.isolateScope();
-                    if (backButtonScope) {
-                        this.backStateApplied = false;
-                        backButtonScope.overrideBackState(this.prevBackState);
-                        return true;
-                    }
+                if (this.appliedBackButtonBackScope) {
+
+                    this.backStateApplied = false;
+                    this.appliedBackButtonBackScope.overrideBackState(this.prevBackState);
+                    this.appliedBackButtonBackScope = null;
+                    return true;
                 }
 
                 var error = "Failed to restore back button state from " + this.wexBackState;
@@ -92,18 +68,15 @@
             scope.wexBackState = attrs.wexBackState;
             scope.prevBackState = null;
             scope.backStateApplied = false;
-            scope.pageActive = false;
+            scope.appliedBackButtonBackScope = null;
 
             scope.applyBackState = _.bind(applyBackState, scope);
-            scope.onEnter = _.bind(onEnter, scope);
-            scope.onLeave = _.bind(onLeave, scope);
-            scope.onLogOut = _.bind(onLogOut, scope);
             scope.removeBackState = _.bind(removeBackState, scope);
 
             //event listeners
-            scope.$on("$ionicView.afterEnter", scope.onEnter);
-            scope.$on("$destroy", scope.onLeave);
-            scope.$on("userLoggedOut", scope.onLogOut);
+            scope.$on("$ionicView.afterEnter", scope.applyBackState);
+            scope.$on("$destroy", scope.removeBackState);
+            scope.$on("userLoggedOut", scope.removeBackState);
         }
     }
 

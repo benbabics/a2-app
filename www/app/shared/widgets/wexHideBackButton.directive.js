@@ -24,7 +24,7 @@
         //////////////////////
 
         function applyHideState() {
-            var backButton = getBackButton(this.pageActive),
+            var backButton = CommonService.findActiveBackButton(),
                 backButtonScope;
 
             if(!this.hideStateApplied) {
@@ -33,6 +33,7 @@
                     if (backButtonScope) {
                         this.prevHideState = backButtonScope.isHidden();
                         this.hideStateApplied = true;
+                        this.appliedBackButtonHideScope = backButtonScope;
                         backButtonScope.setHidden(this.wexHideBackButton);
                         return true;
                     }
@@ -45,40 +46,14 @@
             return false;
         }
 
-        function getBackButton(pageActive) {
-            return (pageActive ?
-                CommonService.findActiveBackButton() :
-                CommonService.findCachedBackButton()
-            );
-        }
-
-        function onEnter() {
-            this.pageActive = true;
-            this.applyHideState();
-        }
-
-        function onLeave() {
-            this.pageActive = false;
-            this.removeHideState();
-        }
-
-        function onLogOut() {
-            this.removeHideState();
-            this.pageActive = false;
-        }
-
         function removeHideState() {
-            var backButton = getBackButton(this.pageActive),
-                backButtonScope;
+            if (this.hideStateApplied) {
+                if (this.appliedBackButtonHideScope) {
 
-            if(this.hideStateApplied) {
-                if (backButton) {
-                    backButtonScope = backButton.isolateScope();
-                    if (backButtonScope) {
-                        this.hideStateApplied = false;
-                        backButtonScope.setHidden(this.prevHideState);
-                        return true;
-                    }
+                    this.hideStateApplied = false;
+                    this.appliedBackButtonHideScope.setHidden(this.prevHideState);
+                    this.appliedBackButtonHideScope = null;
+                    return true;
                 }
 
                 var error = "Failed to restore back button hide state from " + this.wexHideBackButton;
@@ -93,18 +68,15 @@
             scope.wexHideBackButton = Boolean(scope.$eval(attrs.wexHideBackButton));
             scope.prevHideState = null;
             scope.hideStateApplied = false;
-            scope.pageActive = false;
+            scope.appliedBackButtonHideScope = null;
 
             scope.applyHideState = _.bind(applyHideState, scope);
-            scope.onEnter = _.bind(onEnter, scope);
-            scope.onLeave = _.bind(onLeave, scope);
-            scope.onLogOut = _.bind(onLogOut, scope);
             scope.removeHideState = _.bind(removeHideState, scope);
 
             //event listeners
-            scope.$on("$ionicView.afterEnter", scope.onEnter);
-            scope.$on("$destroy", scope.onLeave);
-            scope.$on("userLoggedOut", scope.onLogOut);
+            scope.$on("$ionicView.afterEnter", scope.applyHideState);
+            scope.$on("$destroy", scope.removeHideState);
+            scope.$on("userLoggedOut", scope.removeHideState);
         }
     }
 
