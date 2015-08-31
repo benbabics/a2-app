@@ -51,7 +51,9 @@
         $rootScope.$on("cordovaResume", resumeApplication);
 
         //make the hardware back button go to the same state as the back button by default
-        $ionicPlatform.registerBackButtonAction(CommonService.goToBackState, 101);
+        $ionicPlatform.registerBackButtonAction(function (event) {
+            CommonService.goToBackState();
+        }, 101);
     }
 
     angular.module("app.components.core", [])
