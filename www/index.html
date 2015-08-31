@@ -26,8 +26,10 @@
             The nav bar that will be updated as we navigate between views.
             -->
             <ion-nav-bar class="bar-wex" ng-controller="NavBarController as vm" ng-cloak>
-                <ion-nav-back-button>
-                </ion-nav-back-button>
+                <ion-nav-buttons side="left">
+                    <wex-back-button hide="true">
+                    </wex-back-button>
+                </ion-nav-buttons>
 
                 <ion-nav-buttons side="right">
                     <button menu-toggle="right"
@@ -107,11 +109,14 @@
         <script src="app/shared/widgets/wexNoTransition.directive.js"></script>
         <script src="app/shared/widgets/wexMaxLength.directive.js"></script>
         <script src="app/shared/widgets/wexInteger.directive.js"></script>
+        <script src="app/shared/widgets/wexHideBackButton.directive.js"></script>
         <script src="app/shared/widgets/wexFieldLabel.directive.js"></script>
         <script src="app/shared/widgets/wexFieldError.directive.js"></script>
         <script src="app/shared/widgets/wexDefaultDateFormat.filter.js"></script>
         <script src="app/shared/widgets/wexCardSuffix.filter.js"></script>
         <script src="app/shared/widgets/wexCardSuffix.directive.js"></script>
+        <script src="app/shared/widgets/wexBackState.directive.js"></script>
+        <script src="app/shared/widgets/wexBackButton.directive.js"></script>
         <script src="app/shared/widgets/wexAccountNumber.filter.js"></script>
         <script src="app/shared/widgets/validateEmail.directive.js"></script>
         <script src="app/shared/storage/storage.module.js"></script>

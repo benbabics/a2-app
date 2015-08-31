@@ -19,7 +19,9 @@
         alertPromise,
         confirmPromise,
         navBar,
-        rootNavView;
+        rootNavView,
+        focusedStateOrder = ["stage", "entering", "active"],
+        unfocusedStateOrder = ["cached", "leaving", "active"];
 
     describe("A Common Service", function () {
 
@@ -2113,6 +2115,71 @@
 
                 it("should call $state.go with the given state", function () {
                     expect($state.go).toHaveBeenCalledWith(mockState);
+                });
+            });
+        });
+
+        //TODO
+        xdescribe("has a findActiveBackButton function that", function () {
+        });
+
+        //TODO
+        xdescribe("has a findBackButton function that", function () {
+        });
+
+        //TODO
+        xdescribe("has a findCachedBackButton function that", function () {
+        });
+
+        //TODO
+        xdescribe("has a findNavBarByStatesInOrder function that", function () {
+        });
+
+        describe("has a getFocusedNavBar function that", function () {
+
+            beforeEach(function () {
+                CommonService.getFocusedNavBar();
+            });
+
+            //TODO figure out how to test this
+            xit("should call findNavBarByStatesInOrder with the expected values", function () {
+            });
+        });
+
+        describe("has a getUnfocusedNavBar function that", function () {
+
+            beforeEach(function () {
+                CommonService.getUnfocusedNavBar();
+            });
+
+            //TODO figure out how to test this
+            xit("should call findNavBarByStatesInOrder with the expected values", function () {
+            });
+        });
+
+        describe("has a getUnfocusedView function that", function () {
+
+            describe("when passed a navView", function () {
+                var mockNavView;
+
+                beforeEach(function () {
+                    mockNavView = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                    CommonService.getUnfocusedView(mockNavView);
+                });
+
+                //TODO figure out how to test this
+                xit("should call findViewByStatesInOrder with the expected values", function () {
+                });
+            });
+
+            describe("when NOT passed a navView", function () {
+                beforeEach(function () {
+                    CommonService.getUnfocusedView();
+                });
+
+                //TODO figure out how to test this
+                xit("should call findViewByStatesInOrder with the expected values", function () {
                 });
             });
         });

@@ -12,7 +12,8 @@
         var loadingIndicatorCount = 0,
             alertPopup,
             confirmPopup,
-            focusedStateOrder = ["stage", "entering", "active"];
+            focusedStateOrder = ["stage", "entering", "active"],
+            unfocusedStateOrder = ["cached", "leaving", "active"];
 
         // Revealed Public members
         var service = {
@@ -20,25 +21,32 @@
             "_": _,
 
             // utility functions
-            "closeAlert"             : closeAlert,
-            "closeAllPopups"         : closeAllPopups,
-            "closeConfirm"           : closeConfirm,
-            "displayAlert"           : displayAlert,
-            "displayConfirm"         : displayConfirm,
-            "fieldHasError"          : fieldHasError,
-            "findViewByState"        : findViewByState,
-            "findViewByStatesInOrder": findViewByStatesInOrder,
-            "findViews"              : findViews,
-            "findViewsMatching"      : findViewsMatching,
-            "getActiveNavView"       : getActiveNavView,
-            "getErrorMessage"        : getErrorMessage,
-            "getFocusedView"         : getFocusedView,
-            "getViewContent"         : getViewContent,
-            "loadingBegin"           : loadingBegin,
-            "loadingComplete"        : loadingComplete,
-            "maskAccountNumber"      : maskAccountNumber,
-            "pageHasNavBar"          : pageHasNavBar,
-            "setBackButtonStateRef"  : setBackButtonStateRef
+            "closeAlert"               : closeAlert,
+            "closeAllPopups"           : closeAllPopups,
+            "closeConfirm"             : closeConfirm,
+            "displayAlert"             : displayAlert,
+            "displayConfirm"           : displayConfirm,
+            "fieldHasError"            : fieldHasError,
+            "findActiveBackButton"     : findActiveBackButton,
+            "findBackButton"           : findBackButton,
+            "findCachedBackButton"     : findCachedBackButton,
+            "findNavBarByStatesInOrder": findNavBarByStatesInOrder,
+            "findViewByState"          : findViewByState,
+            "findViewByStatesInOrder"  : findViewByStatesInOrder,
+            "findViews"                : findViews,
+            "findViewsMatching"        : findViewsMatching,
+            "getActiveNavView"         : getActiveNavView,
+            "getErrorMessage"          : getErrorMessage,
+            "getFocusedNavBar"         : getFocusedNavBar,
+            "getFocusedView"           : getFocusedView,
+            "getUnfocusedNavBar"       : getUnfocusedNavBar,
+            "getUnfocusedView"         : getUnfocusedView,
+            "getViewContent"           : getViewContent,
+            "loadingBegin"             : loadingBegin,
+            "loadingComplete"          : loadingComplete,
+            "maskAccountNumber"        : maskAccountNumber,
+            "pageHasNavBar"            : pageHasNavBar,
+            "setBackButtonStateRef"    : setBackButtonStateRef
         };
 
         return service;
@@ -148,6 +156,93 @@
 
         function fieldHasError(field) {
             return (field && field.$error && !_.isEmpty(field.$error));
+        }
+
+        /**
+         * Searches for the wex-back-button element on the active view.
+         *
+         * @return {jqLite} An element that represents the back button, or null if no back button was found
+         */
+        function findActiveBackButton() {
+            var view = getFocusedView(),
+                navBar = getFocusedNavBar();
+
+            if(view) {
+                return findBackButton(view, navBar);
+            }
+            else {
+                return null;
+            }
+        }
+
+        /**
+         * Searches for the primary wex-back-button element for the given view.
+         *
+         * @param {jqLite} view The view to search on
+         * @param {jqLite} [navBar] The nav-bar to search on
+         * @return {jqLite} An element that represents the back button, or null if no back button was found
+         */
+        function findBackButton(view, navBar) {
+            var backButton;
+
+            //first search the view to see if it has an overriding back button
+            backButton = view[0].querySelector(".button-wex-back");
+
+            //there's no override, so look for the global back button on the nav-bar
+            if(!backButton && navBar) {
+                backButton = navBar[0].querySelector(".button-wex-back");
+            }
+
+            return backButton ? angular.element(backButton) : null;
+        }
+
+        /**
+         * Searches for the wex-back-button element on the cached view.
+         *
+         * @return {jqLite} An element that represents the back button, or null if no back button was found
+         */
+        function findCachedBackButton() {
+            var view = getUnfocusedView(),
+                navBar = getUnfocusedNavBar();
+
+            if(view) {
+                return findBackButton(view, navBar);
+            }
+            else {
+                return null;
+            }
+        }
+
+        /**
+         * Searches for the first nav-bar that matches any of the given states, searching in the order that the states
+         * are specified.
+         *
+         * @param {Array} orderedStates The ordered array of state names that the nav-bar can match
+         * @return {jqLite} An element that represents the nav-bar, or null if no matching nav-bar was found
+         */
+        function findNavBarByStatesInOrder(orderedStates) {
+            var navBarBlocks = document.querySelectorAll(".nav-bar-block"),
+                navBar = null;
+
+            //loop through the states in order and return the first nav-bar that matches a given state
+            _.each(orderedStates, function (state) {
+                for (var i = 0; i < navBarBlocks.length; ++i) {
+                    var curNavBlock = angular.element(navBarBlocks[i]);
+
+                    //if the cur nav-block matches the given state, see if it has a header-bar in it
+                    if (curNavBlock.attr("nav-bar") === state) {
+                        var curNavBar = curNavBlock.find("ion-header-bar");
+
+                        //found a matching nav-bar, so end the loop
+                        if(curNavBar.length > 0) {
+                            navBar = curNavBar;
+                            return false;
+                        }
+                    }
+                }
+            });
+
+            return navBar;
         }
 
         /**
@@ -296,6 +391,15 @@
         }
 
         /**
+         * Searches for the focused nav-bar element.
+         *
+         * @return {jqLite} An element that represents the nav-bar, or null if no nav-bar was found
+         */
+        function getFocusedNavBar() {
+            return findNavBarByStatesInOrder(focusedStateOrder);
+        }
+
+        /**
          * Searches for the focused view element within a nav-view.
          *
          * @param {jqLite} [navView] The nav-view to search within (default: the active nav-view)
@@ -303,6 +407,25 @@
          */
         function getFocusedView(navView) {
             return findViewByStatesInOrder(focusedStateOrder, navView);
+        }
+
+        /**
+         * Searches for the unfocused nav-bar element.
+         *
+         * @return {jqLite} An element that represents the nav-bar, or null if no nav-bar was found
+         */
+        function getUnfocusedNavBar() {
+            return findNavBarByStatesInOrder(unfocusedStateOrder);
+        }
+
+        /**
+         * Searches for the unfocused view element within a nav-view.
+         *
+         * @param {jqLite} [navView] The nav-view to search within (default: the active nav-view)
+         * @return {jqLite} An element that represents the view, or null if no view was found
+         */
+        function getUnfocusedView(navView) {
+            return findViewByStatesInOrder(unfocusedStateOrder, navView);
         }
 
         /**
