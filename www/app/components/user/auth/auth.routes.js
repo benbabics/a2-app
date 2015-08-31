@@ -17,6 +17,10 @@
                     templateUrl: "app/components/user/auth/templates/login.html",
                     controller: "LoginController as vm"
                 }
+            },
+            onEnter: function(AuthenticationManager) {
+                //log out the user
+                AuthenticationManager.logOut();
             }
         });
     }
