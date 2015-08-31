@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentMaintenanceSummaryController($scope, globals, maintenance, moment,
+    function PaymentMaintenanceSummaryController($scope, $ionicHistory, globals, maintenance, moment,
                                                  CommonService, InvoiceManager, Logger,
                                                  PaymentMaintenance, PaymentManager, UserManager) {
 
@@ -34,8 +34,7 @@
                 .then(function (paymentResponse) {
                     PaymentMaintenance.getPayment().set(paymentResponse);
 
-                    // transition to the confirmation page
-                    maintenance.go("payment.maintenance.confirmation");
+                    goToConfirmationPage();
                 })
                 .catch(function (paymentError) {
                     //TODO - What do we do here?
@@ -60,6 +59,14 @@
             }
         }
 
+        function goToConfirmationPage() {
+            // do not allow backing up to the summary page
+            $ionicHistory.nextViewOptions({disableBack: true});
+
+            // transition to the confirmation page
+            maintenance.go("payment.maintenance.confirmation");
+        }
+
         function processPayment() {
             // call the function that corresponds to the current state
             switch (maintenance.state) {
@@ -82,8 +89,7 @@
                 .then(function (paymentResponse) {
                     PaymentMaintenance.getPayment().set(paymentResponse);
 
-                    // transition to the confirmation page
-                    maintenance.go("payment.maintenance.confirmation");
+                    goToConfirmationPage();
                 })
                 .catch(function (paymentError) {
                     //TODO - What do we do here?

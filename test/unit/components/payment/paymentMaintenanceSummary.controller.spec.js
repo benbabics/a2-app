@@ -5,6 +5,7 @@
         $q,
         $scope,
         $state,
+        $ionicHistory,
         ctrl,
         mockMaintenanceState,
         mockStateParams,
@@ -92,6 +93,7 @@
 
             // mock dependencies
             $state = jasmine.createSpyObj("state", ["go"]);
+            $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["nextViewOptions"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getPayment"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "updatePayment"]);
@@ -122,6 +124,7 @@
                     $scope            : $scope,
                     $state            : $state,
                     $stateParams      : mockStateParams,
+                    $ionicHistory     : $ionicHistory,
                     maintenance       : mockMaintenance,
                     InvoiceManager    : InvoiceManager,
                     PaymentMaintenance: PaymentMaintenance,
@@ -277,6 +280,10 @@
 
                 it("should set the payment", function () {
                     expect(mockPaymentProcess.set).toHaveBeenCalledWith(mockPayment);
+                });
+
+                it("should disable the back button for the confirmation page", function () {
+                    expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
                 });
 
                 it("should navigate to the payment maintenance confirmation page", function () {
