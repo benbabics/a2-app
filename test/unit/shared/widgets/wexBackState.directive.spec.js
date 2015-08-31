@@ -57,6 +57,13 @@
             expect(wexBackState.scope.$on).toHaveBeenCalledWith("userLoggedOut", wexBackState.scope.removeBackState);
         });
 
+        it("should set a scope event listener for $ionicView.beforeLeave with removeBackState", function () {
+            expect(wexBackState.scope.$on).toHaveBeenCalledWith(
+                "$ionicView.beforeLeave",
+                wexBackState.scope.removeBackState
+            );
+        });
+
         describe("when a back state value is provided", function () {
 
             beforeEach(function () {

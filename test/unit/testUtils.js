@@ -61,7 +61,7 @@ var TestUtils = (function () {
     function getRandomPayment(PaymentModel, BankModel) {
         var randomPayment = new PaymentModel();
 
-        randomPayment.id = getRandomNumberWithLength(5);
+        randomPayment.id = getRandomNumberWithLength(10);
         randomPayment.scheduledDate = getRandomDate(new Date(2012, 0, 1), new Date());
         randomPayment.amount = getRandomNumberWithLength(5);
         randomPayment.bankAccount = getRandomBank(BankModel);

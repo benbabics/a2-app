@@ -56,9 +56,16 @@
             );
         });
 
-        it("should set a scope event listener for userLoggedOut with onLogOut", function () {
+        it("should set a scope event listener for userLoggedOut with removeHideState", function () {
             expect(wexHideBackButton.scope.$on).toHaveBeenCalledWith(
                 "userLoggedOut",
+                wexHideBackButton.scope.removeHideState
+            );
+        });
+
+        it("should set a scope event listener for $ionicView.beforeLeave with removeHideState", function () {
+            expect(wexHideBackButton.scope.$on).toHaveBeenCalledWith(
+                "$ionicView.beforeLeave",
                 wexHideBackButton.scope.removeHideState
             );
         });

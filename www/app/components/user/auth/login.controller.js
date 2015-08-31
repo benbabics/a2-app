@@ -49,6 +49,11 @@
                         }
                     );
 
+                    //the login page seems to behave differently than other pages and usually doesn't emit a $ionicView.beforeLeave or $destroy event...
+                    //the back button needs at least one of these events to function properly, so we have to broadcast one manually here
+                    //TODO remove when this is no longer an issue?
+                    $scope.$broadcast("$ionicView.beforeLeave");
+
                     // transition to the landing page
                     $state.go("landing");
                 })

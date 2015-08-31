@@ -75,6 +75,7 @@
 
             //event listeners
             scope.$on("$ionicView.afterEnter", scope.applyBackState);
+            scope.$on("$ionicView.beforeLeave", scope.removeBackState);
             scope.$on("$destroy", scope.removeBackState);
             scope.$on("userLoggedOut", scope.removeBackState);
         }

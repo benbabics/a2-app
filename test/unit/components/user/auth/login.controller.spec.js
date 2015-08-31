@@ -191,6 +191,7 @@
 
                     beforeEach(function () {
                         spyOn($ionicHistory, "nextViewOptions");
+                        spyOn($scope, "$broadcast");
 
                         //return a promise object and resolve it
                         fetchCurrentUserDeferred.resolve();
@@ -203,6 +204,10 @@
 
                     it("should NOT have an error message", function () {
                         expect(ctrl.globalError).toBeFalsy();
+                    });
+
+                    it("should broadcast the $ionicView.beforeLeave event", function () {
+                        expect($scope.$broadcast).toHaveBeenCalledWith("$ionicView.beforeLeave");
                     });
 
                     it("should navigate to the landing page", function () {

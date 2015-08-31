@@ -75,6 +75,7 @@
 
             //event listeners
             scope.$on("$ionicView.afterEnter", scope.applyHideState);
+            scope.$on("$ionicView.beforeLeave", scope.removeHideState);
             scope.$on("$destroy", scope.removeHideState);
             scope.$on("userLoggedOut", scope.removeHideState);
         }
