@@ -62,6 +62,11 @@
             "BASE"                    : "payments",
             "PAYMENT_ADD_AVAILABILITY": "payments/makePaymentAvailability"
         },
+        TRANSACTIONS: {
+            "POSTED": {
+                "BASE": "postedTransactions"
+            }
+        },
         USERS   : {
             "BASE"   : "users",
             "CURRENT": "current"
