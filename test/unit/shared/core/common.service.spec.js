@@ -2088,37 +2088,6 @@
             });
         });
 
-        describe("has a setBackButtonStateRef function that", function () {
-            var mockScope,
-                mockState;
-
-            beforeEach(function () {
-                mockScope = jasmine.createSpyObj("scope", ["$on"]);
-                mockState = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-
-                CommonService.setBackButtonStateRef(mockScope, mockState);
-            });
-
-            it("should call $ionicPlatform.registerBackButtonAction with the correct priority", function () {
-                expect($ionicPlatform.registerBackButtonAction).toHaveBeenCalledWith(jasmine.any(Function), 101);
-            });
-
-            it("should set a listener for $destroy to deregister the back button action", function () {
-                expect(mockScope.$on).toHaveBeenCalledWith("$destroy", jasmine.any(Function));
-            });
-
-            //TODO figure out how to trigger the back button
-            xdescribe("when the back button has been pressed", function () {
-
-                beforeEach(function () {
-                });
-
-                it("should call $state.go with the given state", function () {
-                    expect($state.go).toHaveBeenCalledWith(mockState);
-                });
-            });
-        });
-
         //TODO
         xdescribe("has a findActiveBackButton function that", function () {
         });

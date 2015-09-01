@@ -47,8 +47,7 @@
             "loadingBegin"             : loadingBegin,
             "loadingComplete"          : loadingComplete,
             "maskAccountNumber"        : maskAccountNumber,
-            "pageHasNavBar"            : pageHasNavBar,
-            "setBackButtonStateRef"    : setBackButtonStateRef
+            "pageHasNavBar"            : pageHasNavBar
         };
 
         return service;
@@ -554,13 +553,6 @@
             return false;
         }
 
-        function setBackButtonStateRef(scope, state) {
-            var deregister = $ionicPlatform.registerBackButtonAction(function () {
-                $state.go(state);
-            }, 101);
-
-            scope.$on("$destroy", deregister);
-        }
     }
 
     angular

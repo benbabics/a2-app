@@ -51,9 +51,6 @@
                     payments: mockPayments
                 });
 
-                // spies
-                spyOn(CommonService, "setBackButtonStateRef");
-
             });
 
         });
@@ -70,10 +67,6 @@
 
             it("should set the scheduled payments", function () {
                 expect(ctrl.scheduledPayments).toEqual(_.sortByOrder(mockScheduledPayments, ["scheduledDate"], ["asc"]));
-            });
-
-            it("should override the back button to go to the landing page", function () {
-                expect(CommonService.setBackButtonStateRef).toHaveBeenCalledWith($scope, "landing");
             });
 
         });
