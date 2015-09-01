@@ -24,6 +24,17 @@
                                 .finally(function() {
                                     CommonService.loadingComplete();
                                 });
+                        },
+
+                        scheduledPaymentsCount: function (globals, CommonService, PaymentManager, UserManager) {
+                            var billingAccountId = UserManager.getUser().billingCompany.accountId;
+
+                            CommonService.loadingBegin();
+
+                            return PaymentManager.fetchScheduledPaymentsCount(billingAccountId)
+                                .finally(function () {
+                                    CommonService.loadingComplete();
+                                });
                         }
                     }
                 }

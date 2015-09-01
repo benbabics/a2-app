@@ -3,7 +3,8 @@
 
     describe("A Landing Module Route Config", function () {
 
-        var $q,
+        var $injector,
+            $q,
             $rootScope,
             $state,
             mockInvoiceSummary = {
@@ -36,6 +37,7 @@
                 }
             },
             InvoiceManager,
+            PaymentManager,
             UserManager;
 
         beforeEach(function () {
@@ -46,14 +48,17 @@
 
             // mock dependencies
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["fetchCurrentInvoiceSummary"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchScheduledPaymentsCount"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             module(function($provide, sharedGlobals) {
                 $provide.value("globals", sharedGlobals);
                 $provide.value("InvoiceManager", InvoiceManager);
+                $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
             });
 
-            inject(function (_$q_, _$rootScope_, _$state_) {
+            inject(function (_$injector_, _$q_, _$rootScope_, _$state_) {
+                $injector = _$injector_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
@@ -92,15 +97,23 @@
 
             describe("when navigated to", function () {
 
-                var fetchCurrentInvoiceSummaryDeferred;
+                var fetchCurrentInvoiceSummaryDeferred,
+                    fetchScheduledPaymentsCountDeferred,
+                    mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
 
                 beforeEach(function () {
                     fetchCurrentInvoiceSummaryDeferred = $q.defer();
-                    UserManager.getUser.and.returnValue(mockUser);
                     InvoiceManager.fetchCurrentInvoiceSummary.and.returnValue(fetchCurrentInvoiceSummaryDeferred.promise);
 
+                    fetchScheduledPaymentsCountDeferred = $q.defer();
+                    PaymentManager.fetchScheduledPaymentsCount.and.returnValue(fetchScheduledPaymentsCountDeferred.promise);
+
+                    UserManager.getUser.and.returnValue(mockUser);
+
                     $state.go(stateName);
+
                     fetchCurrentInvoiceSummaryDeferred.resolve(mockInvoiceSummary);
+                    fetchScheduledPaymentsCountDeferred.resolve(mockScheduledPaymentCount);
                     $rootScope.$digest();
                 });
 
@@ -108,8 +121,26 @@
                     expect(InvoiceManager.fetchCurrentInvoiceSummary).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                 });
 
+                it("should call PaymentManager.fetchScheduledPaymentsCount with the correct account id", function () {
+                    expect(PaymentManager.fetchScheduledPaymentsCount).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                });
+
                 it("should transition successfully", function () {
                     expect($state.current.name).toBe(stateName);
+                });
+
+                it("should resolve the currentInvoiceSummary", function () {
+                    $injector.invoke($state.current.views["@"].resolve.currentInvoiceSummary)
+                        .then(function (payment) {
+                            expect(payment).toEqual(mockInvoiceSummary);
+                        });
+                });
+
+                it("should resolve the scheduledPaymentsCount", function () {
+                    $injector.invoke($state.current.views["@"].resolve.scheduledPaymentsCount)
+                        .then(function (scheduledPaymentCount) {
+                            expect(scheduledPaymentCount).toEqual(mockScheduledPaymentCount);
+                        });
                 });
 
             });

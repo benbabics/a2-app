@@ -30,6 +30,7 @@
                 name         : "billing company name value"
             }
         },
+        mockScheduledPaymentCount,
         UserManager;
 
     describe("A Landing Controller", function () {
@@ -52,6 +53,7 @@
             // mock dependencies
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearHistory"]);
+            mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
 
             inject(function ($controller, $rootScope) {
 
@@ -59,10 +61,11 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("LandingController", {
-                    $scope               : $scope,
-                    $ionicHistory        : $ionicHistory,
-                    UserManager          : UserManager,
-                    currentInvoiceSummary: mockCurrentInvoiceSummary
+                    $scope                : $scope,
+                    $ionicHistory         : $ionicHistory,
+                    UserManager           : UserManager,
+                    currentInvoiceSummary : mockCurrentInvoiceSummary,
+                    scheduledPaymentsCount: mockScheduledPaymentCount
                 });
             });
         });
@@ -75,6 +78,7 @@
                 //setup an existing values to test them being modified
                 ctrl.hasAnyCards = null;
                 ctrl.globalError = "This is a previous error";
+                ctrl.scheduledPaymentsCount = null;
 
                 $scope.$broadcast("$ionicView.beforeEnter");
             });
@@ -85,6 +89,10 @@
 
             it("should set the invoice summary", function () {
                 expect(ctrl.invoiceSummary).toEqual(mockCurrentInvoiceSummary);
+            });
+
+            it("should set the scheduled payments count", function () {
+                expect(ctrl.scheduledPaymentsCount).toEqual(mockScheduledPaymentCount);
             });
 
             it("should clear the navigation history", function () {

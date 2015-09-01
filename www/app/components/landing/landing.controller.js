@@ -5,12 +5,14 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function LandingController($scope, $ionicHistory, currentInvoiceSummary, globals, UserManager) {
+    function LandingController($scope, $ionicHistory, currentInvoiceSummary,
+                               globals, scheduledPaymentsCount, UserManager) {
 
         var vm = this;
         vm.config = globals.LANDING.CONFIG;
         vm.invoiceSummary = {};
         vm.billingCompany = {};
+        vm.scheduledPaymentsCount = 0;
 
         activate();
 
@@ -29,6 +31,9 @@
 
             // the invoiceSummary object should be bound now to the object returned by fetchCurrentInvoiceSummary
             vm.invoiceSummary = currentInvoiceSummary;
+
+            // the scheduledPaymentsCount object should be bound now to the object returned by fetchScheduledPaymentsCount
+            vm.scheduledPaymentsCount = scheduledPaymentsCount;
         }
     }
 
