@@ -191,14 +191,13 @@
     appGlobals.MENU = {
         "CONFIG": {
             "options": {
-                "home"        : "Home",
-                "makePayment" : "Make Payment",
-                "viewActivity": "View Activity",
-                "cards"       : "Cards",
-                "drivers"     : "Drivers",
-                "payments"    : "Payment Activity",
-                "contactUs"   : "Contact Us",
-                "logOut"      : "Log Out"
+                "home"               : "Home",
+                "addPayment"         : "Make Payment",
+                "payments"           : "Payment Activity",
+                "transactionActivity": "Transaction Activity",
+                "cards"              : "Cards",
+                "termsAndPolicies"   : "Terms and Policies",
+                "logOut"             : "Log Out"
             }
         }
     };

@@ -42,9 +42,9 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
             expect(this.page.sideMenuMakePayment.getInnerHtml()).toMatch("Make Payment");
         });
 
-        it("should have a 'View Activity' option", function() {
-            expect(this.page.sideMenuViewActivity.isPresent()).toBeTruthy();
-            expect(this.page.sideMenuViewActivity.getInnerHtml()).toMatch("View Activity");
+        it("should have a 'Transaction Activity' option", function() {
+            expect(this.page.sideMenuTransactionActivity.isPresent()).toBeTruthy();
+            expect(this.page.sideMenuTransactionActivity.getInnerHtml()).toMatch("Transaction Activity");
         });
 
         it("should have a 'Cards' option", function() {
@@ -52,19 +52,14 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
             expect(this.page.sideMenuCards.getInnerHtml()).toMatch("Cards");
         });
 
-        it("should have a 'Drivers' option", function() {
-            expect(this.page.sideMenuDrivers.isPresent()).toBeTruthy();
-            expect(this.page.sideMenuDrivers.getInnerHtml()).toMatch("Drivers");
-        });
-
-        it("should have a 'Payment History' option", function() {
+        it("should have a 'Payment Activity' option", function() {
             expect(this.page.sideMenuPaymentHistory.isPresent()).toBeTruthy();
-            expect(this.page.sideMenuPaymentHistory.getInnerHtml()).toMatch("Payment History");
+            expect(this.page.sideMenuPaymentHistory.getInnerHtml()).toMatch("Payment Activity");
         });
 
-        it("should have a 'Contact Us' option", function() {
-            expect(this.page.sideMenuContactUs.isPresent()).toBeTruthy();
-            expect(this.page.sideMenuContactUs.getInnerHtml()).toMatch("Contact Us");
+        it("should have a 'Terms and Policies' option", function() {
+            expect(this.page.sideMenuTerms.isPresent()).toBeTruthy();
+            expect(this.page.sideMenuTerms.getInnerHtml()).toMatch("Terms and Policies");
         });
 
         it("should have a 'Log Out' option", function() {

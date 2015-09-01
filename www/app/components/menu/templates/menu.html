@@ -5,27 +5,24 @@
                   menu-close>
             {{vm.config.options.home}}
         </ion-item>
-        <ion-item id="option-make-payment"
+        <ion-item id="option-add-payment"
                   href="#/payment/add/verify"
                   menu-close>
-            {{vm.config.options.makePayment}}
+            {{vm.config.options.addPayment}}
         </ion-item>
-        <ion-item id="option-view-activity">
-            {{vm.config.options.viewActivity}}
-        </ion-item>
-        <ion-item id="option-cards">
-            {{vm.config.options.cards}}
-        </ion-item>
-        <ion-item id="option-drivers">
-            {{vm.config.options.drivers}}
-        </ion-item>
-        <ion-item id="option-payment-history"
+        <ion-item id="option-payments"
                   ui-sref="payment.list.view"
                   menu-close>
             {{vm.config.options.payments}}
         </ion-item>
-        <ion-item id="option-contact-us">
-            {{vm.config.options.contactUs}}
+        <ion-item id="option-transaction-activity">
+            {{vm.config.options.transactionActivity}}
+        </ion-item>
+        <ion-item id="option-cards">
+            {{vm.config.options.cards}}
+        </ion-item>
+        <ion-item id="option-terms-and-policies">
+            {{vm.config.options.termsAndPolicies}}
         </ion-item>
         <ion-item id="option-log-out"
                   ng-click="vm.logOut()"
