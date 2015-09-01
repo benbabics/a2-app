@@ -183,6 +183,13 @@
         }
     };
 
+
+    appGlobals.TRANSACTION_LIST = {
+        "CONFIG"        : {
+            "title": "Transaction Activity"
+        }
+    };
+
     appGlobals.NAV_BAR = {
         "CONFIG": {
         }
