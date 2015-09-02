@@ -5,8 +5,8 @@
     /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function TransactionManager($q, globals, $rootScope, moment, CommonService, Logger,
-                            PostedTransactionModel, TransactionsResource) {
+    function TransactionManager($q, $rootScope, CommonService, Logger,
+                                PostedTransactionModel, TransactionsResource) {
         // Private members
         var postedTransactions;
 

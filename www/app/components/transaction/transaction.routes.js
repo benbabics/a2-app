@@ -13,6 +13,18 @@
                 }
             }
         });
+
+        $stateProvider.state("transaction.list", {
+            cache      : false,
+            url     : "/list",
+            views   : {
+                "view@transaction": {
+                    templateUrl: "app/components/transaction/templates/transactionList.html",
+                    controller : "TransactionListController as vm"
+                }
+            }
+        });
+
     }
 
     angular.module("app.components.transaction")
