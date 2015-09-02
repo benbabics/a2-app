@@ -15,6 +15,7 @@ var TestUtils = (function () {
             getRandomPayment                 : getRandomPayment,
             getRandomPaymentAdd              : getRandomPaymentAdd,
             getRandomPaymentUpdate           : getRandomPaymentUpdate,
+            getRandomPostedTransaction       : getRandomPostedTransaction,
             getRandomStringThatIsAlphaNumeric: getRandomStringThatIsAlphaNumeric,
             getRandomValueFromArray          : getRandomValueFromArray,
             getRandomValueFromMap            : getRandomValueFromMap
@@ -91,6 +92,34 @@ var TestUtils = (function () {
         randomPaymentUpdate.id = getRandomStringThatIsAlphaNumeric(5);
 
         return randomPaymentUpdate;
+    }
+
+    function getRandomPostedTransaction(PostedTransactionModel) {
+        var randomPostedTransaction = new PostedTransactionModel();
+
+        randomPostedTransaction.set({
+            transactionId     : getRandomStringThatIsAlphaNumeric(10),
+            transactionDate   : getRandomDate(),
+            postDate          : getRandomDate(),
+            accountNumber     : getRandomStringThatIsAlphaNumeric(10),
+            accountName       : getRandomStringThatIsAlphaNumeric(10),
+            cardNumber        : getRandomStringThatIsAlphaNumeric(10),
+            driverFirstName   : getRandomStringThatIsAlphaNumeric(10),
+            driverMiddleName  : getRandomStringThatIsAlphaNumeric(10),
+            driverLastName    : getRandomStringThatIsAlphaNumeric(10),
+            customVehicleId   : getRandomStringThatIsAlphaNumeric(10),
+            merchantBrand     : getRandomStringThatIsAlphaNumeric(10),
+            merchantName      : getRandomStringThatIsAlphaNumeric(10),
+            merchantAddress   : getRandomStringThatIsAlphaNumeric(10),
+            merchantCity      : getRandomStringThatIsAlphaNumeric(10),
+            merchantState     : getRandomStringThatIsAlphaNumeric(10),
+            merchantZipCode   : getRandomStringThatIsAlphaNumeric(10),
+            productDescription: getRandomStringThatIsAlphaNumeric(10),
+            grossCost         : getRandomNumber(1, 9999),
+            netCost           : getRandomNumber(1, 9999)
+        });
+
+        return randomPostedTransaction;
     }
 
     function getRandomStringThatIsAlphaNumeric(length) {
