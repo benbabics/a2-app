@@ -25,6 +25,35 @@
             }
         });
 
+        $stateProvider.state("transaction.posted", {
+            abstract: true,
+            url     : "/posted",
+            views   : {
+                "view@transaction": {
+                    template: "<ion-nav-view></ion-nav-view>"
+                }
+            }
+        });
+
+        $stateProvider.state("transaction.posted.detail", {
+            url        : "/detail/:transactionId",
+            cache      : false,
+            templateUrl: "app/components/transaction/templates/postedTransactionDetail.html",
+            controller : "PostedTransactionDetailController as vm",
+            resolve    : {
+                postedTransaction: function ($stateParams, CommonService, TransactionManager) {
+                    var transactionId = $stateParams.transactionId;
+
+                    CommonService.loadingBegin();
+
+                    return TransactionManager.fetchPostedTransaction(transactionId)
+                        .finally(function () {
+                            CommonService.loadingComplete();
+                        });
+                }
+            }
+        });
+
     }
 
     angular.module("app.components.transaction")

@@ -3,43 +3,43 @@
         <div class="padding item-wrap">
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.cardNumber}}</span>
-                <span class="content_align black">xxxx23456</span>
+                <span class="content_align black">{{vm.postedTransaction.cardNumber}}</span>
             </p>
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.postedDate}}</span>
-                <span class="content_align black">05/342838</span>
+                <span class="content_align black">{{vm.postedTransaction.postDate | wexDefaultDateFormat}}</span>
             </p>
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.transactionDate}}</span>
-                <span class="content_align black">06/12/2015 09:42 AM</span>
+                <span class="content_align black">{{vm.postedTransaction.transactionDate | wexDefaultDateTimeFormat}}</span>
             </p>
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.grossCost}}</span>
-                <span class="content_align black">$150.56</span>
+                <span class="content_align black">{{vm.postedTransaction.grossCost | currency}}</span>
             </p>
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.netCost}}</span>
-                <span class="content_align black">$150.56</span>
+                <span class="content_align black">{{vm.postedTransaction.netCost | currency}}</span>
             </p>
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.productDescription}}</span>
-                <span class="content_align black">Unleaded Fuel</span>
+                <span class="content_align black">{{vm.postedTransaction.productDescription}}</span>
             </p>
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.driverName}}</span>
-                <span class="content_align black">John Smith</span>
+                <span class="content_align black">{{vm.postedTransaction.driverFirstName}} {{vm.postedTransaction.driverLastName}}</span>
             </p>
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.customVehicleAssetId}}</span>
-                <span class="content_align black">VEH313</span>
+                <span class="content_align black">{{vm.postedTransaction.customVehicleId}}</span>
             </p>
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.merchantName}}</span>
-                <span class="content_align black">Sunoco 123</span>
+                <span class="content_align black">{{vm.postedTransaction.merchantName}}</span>
             </p>
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.merchantCityState}}</span>
-                <span class="content_align black">Boston,MA</span>
+                <span class="content_align black">{{vm.postedTransaction.merchantCity}}, {{vm.postedTransaction.merchantState}}</span>
             </p>
         </div>
     </ion-content>

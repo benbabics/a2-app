@@ -3,27 +3,7 @@
 
     var $scope,
         ctrl,
-        mockPostedTransaction = {
-            transactionId     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            transactionDate   : TestUtils.getRandomDate(),
-            postDate          : TestUtils.getRandomDate(),
-            accountNumber     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            accountName       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            cardNumber        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            driverFirstName   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            driverMiddleName  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            driverLastName    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            customVehicleId   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            merchantBrand     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            merchantName      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            merchantAddress   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            merchantCity      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            merchantState     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            merchantZipCode   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            productDescription: TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            grossCost         : TestUtils.getRandomNumber(1, 9999),
-            netCost           : TestUtils.getRandomNumber(1, 9999)
-        };
+        mockPostedTransaction;
 
     describe("A Posted Transaction Detail Controller", function () {
 
@@ -42,10 +22,12 @@
                 });
             });
 
-            inject(function ($controller, $rootScope) {
+            inject(function ($controller, $rootScope, PostedTransactionModel) {
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
+
+                mockPostedTransaction = TestUtils.getRandomPostedTransaction(PostedTransactionModel);
 
                 ctrl = $controller("PostedTransactionDetailController", {
                     $scope           : $scope,

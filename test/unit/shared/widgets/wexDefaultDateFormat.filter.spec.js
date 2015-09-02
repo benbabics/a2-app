@@ -17,7 +17,7 @@
         });
 
         it("should format a date to the expected string", function () {
-            var date = new Date();
+            var date = TestUtils.getRandomDate();
 
             expect(filter(date)).toEqual($filter("amDateFormat")(date, "MM/DD/YYYY"));
         });

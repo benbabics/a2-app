@@ -12,10 +12,11 @@
      * General
      */
     sharedGlobals.GENERAL = {
-        ERRORS: {
+        ERRORS                 : {
             "UNKNOWN_EXCEPTION": "ERROR: cause unknown."
         },
-        "defaultDateFormat": "MM/DD/YYYY"
+        "defaultDateFormat"    : "MM/DD/YYYY",
+        "defaultDateTimeFormat": "MM/DD/YYYY hh:mm:ss A"
     };
 
     /**
