@@ -183,10 +183,25 @@
         }
     };
 
-
     appGlobals.TRANSACTION_LIST = {
         "CONFIG"        : {
             "title": "Transaction Activity"
+        }
+    };
+
+    appGlobals.POSTED_TRANSACTION_DETAIL = {
+        "CONFIG": {
+            "cardNumber"          : "Card Number (masked)",
+            "customVehicleAssetId": "Custom Vehicle/Asset ID",
+            "driverName"          : "Driver Name",
+            "grossCost"           : "Gross Cost",
+            "merchantName"        : "Merchant Name",
+            "merchantCityState"   : "Merchant City, ST",
+            "netCost"             : "Net Cost",
+            "postedDate"          : "Post Date",
+            "productDescription"  : "Product Description",
+            "title"               : "Transaction Details",
+            "transactionDate"     : "Trans Date/Time"
         }
     };
 
