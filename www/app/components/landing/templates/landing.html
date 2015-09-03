@@ -6,60 +6,83 @@
     <ion-content>
         <div class="content item item-divider padding main-container">
 
-                <div class="item item-text-wrap">
-                    <!-- Do not format the content in the h3 to make the code more readable as the spaces and lines impact the display -->
-                    <h3 id="companyDetails" class="block_align black">{{vm.billingCompany.name}}<br>{{vm.billingCompany.accountNumber}}</h3>
+            <!--<div class="item item-text-wrap">
+                <!-- Do not format the content in the h3 to make the code more readable as the spaces and lines impact the display
+                <h3 id="companyDetails" class="block_align black">{{vm.billingCompany.name}}<br>{{vm.billingCompany.accountNumber}}</h3>
 
-                    <h3 id="availableCredit" class="content_align green align_right">{{vm.invoiceSummary.availableCredit | currency}}<br>{{vm.config.availableCredit}}</h3>
-                </div>
+                <h3 id="availableCredit" class="content_align green align_right">{{vm.invoiceSummary.availableCredit | currency}}<br>{{vm.config.availableCredit}}</h3>
+            </div> -->
 
-                <div class="item item-divider inner-container">
-                    <p class="divider padding-top">
-                        <span id="minimumPaymentLabel" class="block_align">{{vm.config.minimumPayment}}</span>
-                        <span id="minimumPayment" class="content_align">
-                            {{vm.invoiceSummary.minimumPaymentDue | currency}}
-                        </span>
-                    </p>
 
-                    <p class="divider padding-top">
-                        <span id="currentBalanceLabel" class="block_align">{{vm.config.currentBalance}}</span>
-                        <span id="currentBalance" class="content_align">
-                            {{vm.invoiceSummary.currentBalance | currency}}
-                        </span>
-                    </p>
+            <div class="row">
+                <!-- Do not format the content in the h3 to make the code more readable as the spaces and lines impact the display -->
+                <div class="col col-50" id="companyDetails">{{vm.billingCompany.name}}<br><span class="body-text">{{vm.billingCompany.accountNumber}}</span></div>
 
-                    <p class="divider padding-top">
-                        <span id="paymentDueDateLabel" class="block_align">{{vm.config.paymentDueDate}}</span>
-                        <span id="paymentDueDate" class="content_align">
-                            {{vm.invoiceSummary.paymentDueDate | wexDefaultDateFormat}}
-                        </span>
-                    </p>
+                <div class="col col-50 content_align" id="availableCredit"><span class="balance-available">{{vm.config.availableCredit}}</span><br><span class="balance-positive">{{vm.invoiceSummary.availableCredit | currency}}</span></div>
+            </div>
 
-                    <br>
-
-                    <a id="makePaymentButton" class="button button-block button-submit" href="#/payment/add/verify">
-                        {{vm.config.makePayment}}
-                    </a>
-
-                    <div class="align_center">
-                        <button id="viewActivityButton"
-                                class="button button-clear button-positive"
-                                ui-sref="transaction.list">
-                            {{vm.config.viewActivity}}
-                        </button>
+            <div class="inner-container">
+                <div class="row invoice-divider">
+                    <div class="col col-50 currentBalLabel" id="currentBalanceLabel">{{vm.config.currentBalance}}</div>
+                    <div class="col col-50 currentBal content_align" id="currentBalance">
+                        {{vm.invoiceSummary.currentBalance | currency}}
                     </div>
                 </div>
-            <div>
-                <button class="button button-block button-light item item-icon-right">
+                <div class="row invoice-divider">
+                    <div class="col col-50" id="minimumPaymentLabel">{{vm.config.minimumPayment}}</div>
+                    <div class="col col-50 content_align" id="minimumPayment">
+                        {{vm.invoiceSummary.minimumPaymentDue | currency}}
+                    </div>
+                </div>
+
+                <div class="row invoice-divider">
+                    <div class="col col-50" id="paymentDueDateLabel">{{vm.config.paymentDueDate}}</div>
+                    <div class="col col-50 content_align" id="paymentDueDate">
+                        {{vm.invoiceSummary.paymentDueDate | wexDefaultDateFormat}}
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="padding button-container">
+
+                <button class="button button-block button-blue item item-icon-right button-font  button-divider" href="#/payment/add/verify">
                     <i class="icon ion-chevron-right"></i>
-                    <span id="cardsButton" class="btn_align">{{vm.config.cards}}</span>
+                    <span id="makePaymentButton" class="btn_align">{{vm.config.makePayment}}</span><span class="paymentScheduled">1 Scheduled</span>
                 </button>
 
-                <button class="button button-block button-light item item-icon-right">
+                <button class="button button-block button-blue item item-icon-right button-font no-margin">
                     <i class="icon ion-chevron-right"></i>
-                    <span id="driversButton" class="btn_align">{{vm.config.drivers}}</span>
+                    <span id="viewActivityButton" class="btn_align">{{vm.config.viewActivity}}</span>
+                </button>
+
+                <button class="button button-block button-light item item-icon-right button-font">
+                    <i class="icon ion-chevron-right"></i>
+                    <span id="cardsButton" class="btn_align black">{{vm.config.cards}}</span>
+                </button>
+
+            </div>
+
+            <a id="makePaymentButton" class="button button-block button-submit" href="#/payment/add/verify">
+                {{vm.config.makePayment}}
+            </a>
+
+            <div class="align_center">
+                <button id="viewActivityButton"
+                        class="button button-clear button-positive"
+                        ui-sref="transaction.list">
+                    {{vm.config.viewActivity}}
                 </button>
             </div>
+
+
         </div>
+
+        <!-- <button class="button button-block button-light item item-icon-right">
+             <i class="icon ion-chevron-right"></i>
+             <span id="driversButton" class="btn_align">{{vm.config.drivers}}</span>
+         </button>-->
+
     </ion-content>
 </ion-view>

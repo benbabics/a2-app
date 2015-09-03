@@ -33,20 +33,18 @@ $user-login-gradient-bottom: #414141;
 
 .btn_align {
     float: left;
-    font-weight: bold;
 }
 
 .block_align {
     display: inline-block;
-    color: #807f7f;
+    text-align: left;
 }
+
 
 .content_align {
     display: inline-block;
     float: right;
-    color: #807f7f;
     text-align: right;
-    padding-right: 10px !important;
 }
 
 .green {
@@ -110,17 +108,76 @@ $user-login-gradient-bottom: #414141;
  Landing view
 ----------------------------------**/
 .landing-view {
-    background-color: #989898;
+    background-color: #fff;
 
     .main-container {
         border-bottom: 0px;
-        background-color: #989898;
+        background-color: #fff;
     }
     .inner-container {
-        background-color: #eeedec;
+        background-color: #f0f0f0;
+    }
+
+    #companyDetails {
+        font-weight: bold;
+        font-size:12px;
+    }
+    .balance-positive {
+        color: #39802b;
+        font-weight: bold;
+        font-size: 22px;
+    }
+    .balance-negative {
+        color: #B30308;
+        font-weight: bold;
+        font-size: 22px;
+    }
+    .balance-available {
+        color: #39802b;
+        font-size: 12px;
+    }
+    .balance-low {
+        color: #b30308;
+        font-size: 12px;
+    }
+    .button-container {
+        background-color: #d9d9d9;
+
+       .button-divider {
+           margin-bottom: 0px;
+           border-bottom: 1px solid #71a6c8;
+       }
+       .no-margin {
+           margin-top: 0px !important;
+       }
     }
 }
-
+.invoice-divider {
+    border-bottom: 1px solid #fff !important;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.currentBalLabel {
+    font-weight: bold;
+    font-size: 13px !important;
+    color: #000 !important;
+}
+.currentBal {
+    font-size: 16px !important;
+    font-weight: bold;
+    color: #000 !important;
+}
+.button-font {
+    font-size: 18px !important;
+}
+.button-blue {
+    background-color: #05629f !important;
+    color: #fff !important;
+}
+.paymentScheduled {
+    font-size: 12px !important;
+    padding-left: 60px !important;
+}
 /**----------------------------------------------------------
  Warning Messaging
  ---------------------------------------------------------**/
