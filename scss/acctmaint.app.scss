@@ -111,73 +111,128 @@ $user-login-gradient-bottom: #414141;
     background-color: #fff;
 
     .main-container {
-        border-bottom: 0px;
+        border-bottom: 0;
         background-color: #fff;
+        padding: 0;
+
+        .row {
+            padding: 8px;
+
+            .col {
+                padding: 0;
+            }
+
+            .content_align {
+                padding-right: 8px;
+            }
+        }
     }
+
     .inner-container {
         background-color: #f0f0f0;
+        margin: 8px;
+
+        .row {
+            padding-right: 0;
+        }
     }
 
     #companyDetails {
         font-weight: bold;
-        font-size:12px;
+        font-size: 12px;
+
+        .body-text {
+            color: #414141;
+        }
     }
+
+    #availableCredit {
+        .label {
+            font-weight: normal;
+            font-size: 12px;
+        }
+
+        .value {
+            font-weight: bold;
+            font-size: 22px;
+        }
+    }
+
     .balance-positive {
         color: #39802b;
-        font-weight: bold;
-        font-size: 22px;
     }
+
     .balance-negative {
         color: #B30308;
-        font-weight: bold;
-        font-size: 22px;
     }
-    .balance-available {
-        color: #39802b;
-        font-size: 12px;
+
+    .invoice-divider {
+        border-bottom: 1px solid #fff;
+        padding: 8px;
+
+        .label {
+            color: #000;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        #currentBalance {
+            font-size: 16px;
+        }
+
+        .value {
+            color: #000;
+            font-weight: bold;
+            font-size: 13px;
+        }
     }
-    .balance-low {
-        color: #b30308;
-        font-size: 12px;
-    }
+
     .button-container {
         background-color: #d9d9d9;
+        padding: 8px;
 
-       .button-divider {
-           margin-bottom: 0px;
-           border-bottom: 1px solid #71a6c8;
-       }
-       .no-margin {
-           margin-top: 0px !important;
-       }
+        .button-divider {
+            margin-bottom: 0;
+            border-bottom: 1px solid #71a6c8;
+        }
+
+        .button-group {
+            margin: 8px 0 0;
+
+            .button {
+                margin: 0;
+            }
+        }
+
+        .button {
+            font-size: 18px;
+            font-weight: normal;
+            margin: 0;
+            padding: 0;
+
+            .row {
+                padding: 0 8px;
+            }
+
+            .ion-chevron-right {
+                margin: 0;
+                right: 0;
+            }
+        }
+
+        .button-stable {
+            color: #fff;
+        }
+
+        .badge {
+            font-size: 12px;
+            float: right;
+            padding-top: 7px;
+            position: absolute;
+        }
     }
 }
-.invoice-divider {
-    border-bottom: 1px solid #fff !important;
-    padding-right: 15px;
-    padding-left: 15px;
-}
-.currentBalLabel {
-    font-weight: bold;
-    font-size: 13px !important;
-    color: #000 !important;
-}
-.currentBal {
-    font-size: 16px !important;
-    font-weight: bold;
-    color: #000 !important;
-}
-.button-font {
-    font-size: 18px !important;
-}
-.button-blue {
-    background-color: #05629f !important;
-    color: #fff !important;
-}
-.paymentScheduled {
-    font-size: 12px !important;
-    padding-left: 60px !important;
-}
+
 /**----------------------------------------------------------
  Warning Messaging
  ---------------------------------------------------------**/
