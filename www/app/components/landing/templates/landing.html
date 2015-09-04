@@ -13,7 +13,10 @@
                     <span class="body-text">{{vm.billingCompany.accountNumber}}</span>
                 </div>
 
-                <div class="col col-50 content_align balance-positive" id="availableCredit">
+                <div class="col col-50 content_align"
+                     wex-colored-currency
+                     ng-model="vm.invoiceSummary.availableCredit"
+                     id="availableCredit">
                     <span class="label">{{vm.config.availableCredit}}</span>
                     <br>
                     <span class="value">{{vm.invoiceSummary.availableCredit | currency}}</span>
