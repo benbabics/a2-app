@@ -6,6 +6,7 @@ var TestUtils = (function () {
 
     var ALPHANUMERIC_CHARACTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
         TestUtils = {
+            getRandomAccount                 : getRandomAccount,
             getRandomBank                    : getRandomBank,
             getRandomBoolean                 : getRandomBoolean,
             getRandomDate                    : getRandomDate,
@@ -17,6 +18,7 @@ var TestUtils = (function () {
             getRandomPaymentUpdate           : getRandomPaymentUpdate,
             getRandomPostedTransaction       : getRandomPostedTransaction,
             getRandomStringThatIsAlphaNumeric: getRandomStringThatIsAlphaNumeric,
+            getRandomUser                    : getRandomUser,
             getRandomValueFromArray          : getRandomValueFromArray,
             getRandomValueFromMap            : getRandomValueFromMap
         };
@@ -24,6 +26,18 @@ var TestUtils = (function () {
     return TestUtils;
 
     //////////////////////
+
+    function getRandomAccount(AccountModel) {
+        var account = new AccountModel();
+
+        account.set({
+            accountId    : getRandomStringThatIsAlphaNumeric(10),
+            accountNumber: getRandomStringThatIsAlphaNumeric(10),
+            name         : getRandomStringThatIsAlphaNumeric(10)
+        });
+
+        return account;
+    }
 
     function getRandomBank(BankModel) {
         var randomBank = new BankModel();
@@ -129,6 +143,20 @@ var TestUtils = (function () {
         }
 
         return result;
+    }
+
+    function getRandomUser(UserModel, AccountModel) {
+        var user = new UserModel();
+
+        user.set({
+            email         : getRandomStringThatIsAlphaNumeric(10),
+            firstName     : getRandomStringThatIsAlphaNumeric(10),
+            username      : getRandomStringThatIsAlphaNumeric(10),
+            company       : getRandomAccount(AccountModel),
+            billingCompany: getRandomAccount(AccountModel)
+        });
+
+        return user;
     }
 
     function getRandomValueFromArray(array) {

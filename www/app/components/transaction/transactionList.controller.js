@@ -5,11 +5,18 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function TransactionListController($scope, globals) {
+    function TransactionListController($scope, globals, moment,
+                                       CommonService, Logger, TransactionManager, UserManager) {
 
-        var vm = this;
+        var _ = CommonService._,
+            vm = this,
+            currentPage = 0;
 
         vm.config = globals.TRANSACTION_LIST.CONFIG;
+        vm.postedTransactions = [];
+        vm.searchOptions = globals.TRANSACTION_LIST.SEARCH_OPTIONS;
+
+        vm.loadNextPage = loadNextPage;
 
         activate();
 
@@ -21,6 +28,34 @@
         }
 
         function beforeEnter() {
+        }
+
+        function loadNextPage() {
+            var billingAccountId = UserManager.getUser().billingCompany.accountId,
+                fromDate = moment().subtract(vm.searchOptions.MAX_DAYS, "days").toDate(),
+                toDate = moment().toDate();
+
+            CommonService.loadingBegin();
+
+            //fetch the next page of transactions
+            return TransactionManager.fetchPostedTransactions(billingAccountId, fromDate, toDate, currentPage, vm.searchOptions.PAGE_SIZE)
+                .then(function (postedTransactions) {
+                    if (_.isEmpty(postedTransactions)) {
+                        return true;
+                    }
+                    else {
+                        //add the fetched transactions to the current list
+                        Array.prototype.push.apply(vm.postedTransactions, postedTransactions);
+
+                        ++currentPage;
+                        return false;
+                    }
+                })
+                .catch(function (errorResponse) {
+                    //TODO - What do we do here?
+                    Logger.error("Failed to fetch next page of posted transactions: " + errorResponse);
+                })
+                .finally(CommonService.loadingComplete);
         }
 
     }

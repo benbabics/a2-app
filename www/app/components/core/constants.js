@@ -185,7 +185,12 @@
 
     appGlobals.TRANSACTION_LIST = {
         "CONFIG"        : {
-            "title": "Transaction Activity"
+            "title"          : "Transaction Activity",
+            "reloadDistance" : "5%"
+        },
+        "SEARCH_OPTIONS": {
+            "MAX_DAYS" : 60,
+            "PAGE_SIZE": 25
         }
     };
 
