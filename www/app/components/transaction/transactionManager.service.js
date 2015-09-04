@@ -57,9 +57,17 @@
                 .then(function (postedTransactionsResponse) {
                     if (postedTransactionsResponse && postedTransactionsResponse.data) {
                         //map the posted transaction data to model objects
-                        postedTransactions = _.map(postedTransactionsResponse.data, createPostedTransaction);
+                        var fetchedTransactions = _.map(postedTransactionsResponse.data, createPostedTransaction);
 
-                        return postedTransactions;
+                        //reset the cache if we're fetching the first page of results
+                        if(pageNumber === 0) {
+                            postedTransactions = [];
+                        }
+
+                        //only cache the fetched transactions that haven't been cached yet
+                        postedTransactions = _.unique(postedTransactions.concat(fetchedTransactions), "transactionId");
+
+                        return fetchedTransactions;
                     }
                     // no data in the response
                     else {
