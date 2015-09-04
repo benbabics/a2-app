@@ -52,7 +52,9 @@
                             </div>
                             <div class="col col-50 content_align">
                                 <i class="icon ion-chevron-right"></i>
-                                <span class="badge">1 Scheduled</span>
+                                <span class="badge" ng-if="vm.scheduledPaymentsCount > 0">
+                                    {{vm.scheduledPaymentsCount}} {{vm.config.scheduledPayments}}
+                                </span>
                             </div>
                         </div>
                     </a>
