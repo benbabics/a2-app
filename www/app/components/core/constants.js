@@ -122,8 +122,8 @@
             "submitButton"         : "Schedule Payment"
         },
         "WARNINGS": {
-            "PAYMENT_AMOUNT_LESS_THAN_MINIMUM": "This amount is less than the statement balance.",
-            "PAYMENT_DATE_PAST_DUE_DATE"      : "The date selected for payment is past the due date."
+            "PAYMENT_AMOUNT_LESS_THAN_MINIMUM": "This amount is less than the Statement Balance.",
+            "PAYMENT_DATE_PAST_DUE_DATE"      : "The date selected for payment is past the Due Date."
         },
         "ADD"     : {
             "CONFIG": {}
