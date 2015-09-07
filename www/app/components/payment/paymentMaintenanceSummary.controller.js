@@ -38,6 +38,7 @@
                 })
                 .catch(function (paymentError) {
                     //TODO - What do we do here?
+                    Logger.error("Failed to add payment: " + paymentError);
                 })
                 .finally(function () {
                     CommonService.loadingComplete();
@@ -93,6 +94,7 @@
                 })
                 .catch(function (paymentError) {
                     //TODO - What do we do here?
+                    Logger.error("Failed to update payment: " + paymentError);
                 })
                 .finally(function () {
                     CommonService.loadingComplete();

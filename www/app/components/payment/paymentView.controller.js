@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function PaymentViewController($scope, $state, globals, payment, scheduledPaymentsCount,
-                                   CommonService, PaymentMaintenance, PaymentManager, UserManager) {
+                                   CommonService, Logger, PaymentMaintenance, PaymentManager, UserManager) {
 
         var vm = this;
 
@@ -39,6 +39,7 @@
                 })
                 .catch(function (errorResponse) {
                     //TODO - What do we do here?
+                    Logger.error("Failed to remove payment: " + errorResponse);
                 });
         }
 
