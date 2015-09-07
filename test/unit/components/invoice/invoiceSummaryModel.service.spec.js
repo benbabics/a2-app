@@ -23,13 +23,17 @@
                     newField3         : "yet another value",
                     accountNumber     : "account number value",
                     availableCredit   : "available credit value",
+                    billingDate       : "available credit value",
+                    billedAmount      : "available credit value",
                     closingDate       : "closing date value",
                     currentBalance    : "current balance value",
                     currentBalanceAsOf: "current balance as of value",
                     invoiceId         : "invoice id value",
                     invoiceNumber     : "invoice number value",
                     minimumPaymentDue : "minimum payment due value",
-                    paymentDueDate    : "payment due date value"
+                    paymentDueDate    : "payment due date value",
+                    statementBalance  : "payment due date value",
+                    unbilledAmount    : "payment due date value"
                 },
                 invoiceSummaryModelKeys,
                 invoiceSummaryResourceKeys;

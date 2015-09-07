@@ -6,6 +6,8 @@
         function InvoiceSummaryModel() {
             this.accountNumber = "";
             this.availableCredit = "";
+            this.billingDate = "";
+            this.billedAmount = "";
             this.closingDate = "";
             this.currentBalance = "";
             this.currentBalanceAsOf = "";
@@ -13,6 +15,8 @@
             this.invoiceNumber = "";
             this.minimumPaymentDue = "";
             this.paymentDueDate = "";
+            this.statementBalance = "";
+            this.unbilledAmount = "";
         }
 
         InvoiceSummaryModel.prototype.set = function (invoiceSummaryResource) {
