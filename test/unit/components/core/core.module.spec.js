@@ -65,22 +65,6 @@
                     }
                 }
             },
-            mockPayment = {},
-            mockUser = {
-                email         : "email address value",
-                firstName     : "first name value",
-                username      : "username value",
-                company       : {
-                    accountId    : "company account id value",
-                    accountNumber: "company account number value",
-                    name         : "company name value"
-                },
-                billingCompany: {
-                    accountId    : "billing company account id value",
-                    accountNumber: "billing company account number value",
-                    name         : "billing company name value"
-                }
-            },
             AuthenticationManager,
             BankManager,
             PaymentMaintenance,

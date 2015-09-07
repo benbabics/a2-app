@@ -6,7 +6,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function CommonService(_, $ionicPlatform, $ionicPopup, $rootScope, $state, globals, Logger) {
+    function CommonService(_, $ionicPopup, $rootScope, $state, globals, Logger) {
 
         // Private members
         var loadingIndicatorCount = 0,
