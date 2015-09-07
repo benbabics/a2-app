@@ -51,6 +51,7 @@
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchScheduledPaymentsCount"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             module(function($provide, sharedGlobals) {
+                $provide.value("accountId", mockUser.billingCompany.accountId);
                 $provide.value("globals", sharedGlobals);
                 $provide.value("InvoiceManager", InvoiceManager);
                 $provide.value("PaymentManager", PaymentManager);
@@ -63,6 +64,8 @@
                 $rootScope = _$rootScope_;
                 $state = _$state_;
             });
+
+            UserManager.getUser.and.returnValue(mockUser);
         });
 
         describe("has a landing state that", function () {
@@ -108,8 +111,6 @@
                     fetchScheduledPaymentsCountDeferred = $q.defer();
                     PaymentManager.fetchScheduledPaymentsCount.and.returnValue(fetchScheduledPaymentsCountDeferred.promise);
 
-                    UserManager.getUser.and.returnValue(mockUser);
-
                     $state.go(stateName);
 
                     fetchCurrentInvoiceSummaryDeferred.resolve(mockInvoiceSummary);
@@ -131,8 +132,8 @@
 
                 it("should resolve the currentInvoiceSummary", function () {
                     $injector.invoke($state.current.views["@"].resolve.currentInvoiceSummary)
-                        .then(function (payment) {
-                            expect(payment).toEqual(mockInvoiceSummary);
+                        .then(function (currentInvoiceSummary) {
+                            expect(currentInvoiceSummary).toEqual(mockInvoiceSummary);
                         });
                 });
 

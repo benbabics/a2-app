@@ -12,26 +12,24 @@
                     templateUrl: "app/components/landing/templates/landing.html",
                     controller: "LandingController as vm",
                     resolve    : {
-                        currentInvoiceSummary: function (CommonService, InvoiceManager, UserManager) {
-                            var billingAccountId;
+                        accountId: function (UserManager) {
+                            return UserManager.getUser().billingCompany.accountId;
+                        },
 
+                        currentInvoiceSummary: function (accountId, CommonService, InvoiceManager) {
                             CommonService.loadingBegin();
 
-                            billingAccountId = UserManager.getUser().billingCompany.accountId;
-
                             // Return the current invoice summary
-                            return InvoiceManager.fetchCurrentInvoiceSummary(billingAccountId)
+                            return InvoiceManager.fetchCurrentInvoiceSummary(accountId)
                                 .finally(function() {
                                     CommonService.loadingComplete();
                                 });
                         },
 
-                        scheduledPaymentsCount: function (globals, CommonService, PaymentManager, UserManager) {
-                            var billingAccountId = UserManager.getUser().billingCompany.accountId;
-
+                        scheduledPaymentsCount: function (accountId, globals, CommonService, PaymentManager) {
                             CommonService.loadingBegin();
 
-                            return PaymentManager.fetchScheduledPaymentsCount(billingAccountId)
+                            return PaymentManager.fetchScheduledPaymentsCount(accountId)
                                 .finally(function () {
                                     CommonService.loadingComplete();
                                 });
