@@ -15,6 +15,7 @@
         ERRORS                 : {
             "UNKNOWN_EXCEPTION": "ERROR: cause unknown."
         },
+        "cardNumberMask"       : "****",
         "defaultDateFormat"    : "MM/DD/YYYY",
         "defaultDateTimeFormat": "MM/DD/YYYY hh:mm:ss A"
     };

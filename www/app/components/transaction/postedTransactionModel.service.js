@@ -7,9 +7,9 @@
             this.transactionId = "";
             this.transactionDate = "";
             this.postDate = "";
-            this.accountNumber = "";
             this.accountName = "";
-            this.cardNumber = "";
+            this.embossedAccountNumber = "";
+            this.embossedCardNumber = "";
             this.driverFirstName = "";
             this.driverMiddleName = "";
             this.driverLastName = "";

@@ -3,7 +3,7 @@
         <div class="padding item-wrap">
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.cardNumber}}</span>
-                <span class="content_align black">{{vm.postedTransaction.cardNumber}}</span>
+                <span class="content_align black">{{vm.postedTransaction.embossedCardNumber | wexCardNumber}}</span>
             </p>
             <p class="padding divider">
                 <span class="block_align black">{{vm.config.postedDate}}</span>
