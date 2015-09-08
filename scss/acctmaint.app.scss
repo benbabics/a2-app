@@ -126,6 +126,17 @@ $user-login-gradient-bottom: #414141;
                 padding-right: 8px;
             }
         }
+
+        .header {
+            border-bottom: 1px #ddd solid;
+            padding-bottom: 2px;
+            padding-top: 10px;
+            margin-bottom: 8px;
+        }
+    }
+
+    .chart-container {
+        padding-left: 16px;
     }
 
     .inner-container {
@@ -140,22 +151,46 @@ $user-login-gradient-bottom: #414141;
     #companyDetails {
         font-weight: bold;
         font-size: 12px;
+        line-height: 13px;
 
         .body-text {
+            font-weight: normal;
+            font-size: 10px;
             color: #414141;
         }
     }
 
-    #availableCredit {
+    .graph-amounts {
+        line-height: 12px;
+        padding-top: 12px;
+
         .label {
+            float: right;
             font-weight: normal;
             font-size: 12px;
         }
 
         .value {
             font-weight: bold;
+            font-size: 13px;
+        }
+    }
+
+    #availableCredit {
+        line-height: 18px;
+        padding-top: 0;
+
+        .value {
             font-size: 22px;
         }
+    }
+
+    #billedAmount {
+        color: #334c5b;
+    }
+
+    #unbilledAmount {
+        color: #3799b3;
     }
 
     .balance-positive {

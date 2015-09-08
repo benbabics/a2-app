@@ -34,6 +34,17 @@
 
             // the scheduledPaymentsCount object should be bound now to the object returned by fetchScheduledPaymentsCount
             vm.scheduledPaymentsCount = scheduledPaymentsCount;
+
+            vm.chart = {
+                options: globals.LANDING.CHART.options,
+                labels: [vm.config.availableCredit, vm.config.billedAmount, vm.config.unbilledAmount],
+                colors: [
+                    vm.invoiceSummary.availableCredit > 0 ? globals.LANDING.CHART.colors.availableCreditPositive : globals.LANDING.CHART.colors.availableCreditNegative,
+                    globals.LANDING.CHART.colors.billedAmount,
+                    globals.LANDING.CHART.colors.unbilledAmount
+                ],
+                data  : [vm.invoiceSummary.availableCredit, vm.invoiceSummary.billedAmount, vm.invoiceSummary.unbilledAmount]
+            };
         }
     }
 

@@ -6,20 +6,48 @@
     <ion-content>
         <div class="content item item-divider main-container">
 
-            <div class="row">
-                <div class="col col-50" id="companyDetails">
+            <div class="row header">
+                <div class="col col-100" id="companyDetails">
                     <span>{{vm.billingCompany.name}}</span>
                     <br>
                     <span class="body-text">{{vm.billingCompany.accountNumber}}</span>
                 </div>
+            </div>
 
-                <div class="col col-50 content_align"
-                     wex-colored-currency
-                     ng-model="vm.invoiceSummary.availableCredit"
-                     id="availableCredit">
-                    <span class="label">{{vm.config.availableCredit}}</span>
-                    <br>
-                    <span class="value">{{vm.invoiceSummary.availableCredit | currency}}</span>
+            <div class="row">
+                <div class="col col-50">
+                    <canvas id="doughnut"
+                            width="125"
+                            height="125"
+                            class="chart chart-doughnut"
+                            chart-options="vm.chart.options"
+                            chart-data="vm.chart.data"
+                            chart-colours="vm.chart.colors"
+                            chart-labels="vm.chart.labels">
+                    </canvas>
+                </div>
+
+                <div class="col content_align">
+                    <div wex-colored-currency
+                         ng-model="vm.invoiceSummary.availableCredit"
+                         id="availableCredit"
+                         class="graph-amounts">
+                        <span class="label">{{vm.config.availableCredit}}</span>
+                        <br>
+                        <span class="value">{{vm.invoiceSummary.availableCredit | currency}}</span>
+                    </div>
+                    <div id="billedAmount"
+                         class="graph-amounts">
+                        <span class="label">{{vm.config.billedAmount}}</span>
+                        <br>
+                        <span class="value">{{vm.invoiceSummary.billedAmount | currency}}</span>
+                    </div>
+                    <div id="unbilledAmount"
+                         class="graph-amounts">
+                        <span class="label">{{vm.config.unbilledAmount}}</span>
+                        <br>
+                        <span class="value">{{vm.invoiceSummary.unbilledAmount | currency}}</span>
+                    </div>
                 </div>
             </div>
 

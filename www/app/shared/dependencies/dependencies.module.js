@@ -15,6 +15,7 @@
         "ngCordova",                  // From https://github.com/driftyco/ng-cordova
         "ngFitText",                  // From http://patrickmarabeas.github.io/ng-FitText.js/
         "ionic-datepicker",           // From https://github.com/markomarkovic/ionic-datepicker-widget
-        "angAccordion"                // From https://github.com/sherwaniusman/angular-accordion
+        "angAccordion",               // From https://github.com/sherwaniusman/angular-accordion
+        "chart.js"                    // From http://jtblin.github.io/angular-chart.js/
     ]);
 })();

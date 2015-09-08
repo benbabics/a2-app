@@ -37,6 +37,8 @@
         "CONFIG": {
             "title"            : "WEX Fleet Manager",
             "availableCredit"  : "Available",
+            "billedAmount"     : "Billed",
+            "unbilledAmount"   : "Unbilled",
             "paymentDueDate"   : "Payment Due Date",
             "currentBalance"   : "Current Balance",
             "minimumPayment"   : "Minimum Payment",
@@ -44,6 +46,22 @@
             "viewActivity"     : "View Activity",
             "cards"            : "Cards",
             "scheduledPayments": "Scheduled"
+        },
+        "CHART": {
+            "options": {
+                animation: false,
+                percentageInnerCutout: 40,
+                showTooltips: false,
+                segmentStrokeWidth: 1,
+                scaleOverride: true,
+                responsive: false
+            },
+            "colors": {
+                availableCreditPositive: "#39802b",
+                availableCreditNegative: "#b30308",
+                billedAmount: "#334c5b",
+                unbilledAmount: "#3799b3"
+            }
         }
     };
 

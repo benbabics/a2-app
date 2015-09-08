@@ -4,34 +4,13 @@
     var $scope,
         $ionicHistory,
         ctrl,
-        mockCurrentInvoiceSummary = {
-            accountNumber     : "account number value",
-            availableCredit   : "available credit value",
-            closingDate       : "closing date value",
-            currentBalance    : "current balance value",
-            currentBalanceAsOf: "current balance as of value",
-            invoiceId         : "invoice id value",
-            invoiceNumber     : "invoice number value",
-            minimumPaymentDue : "minimum payment due value",
-            paymentDueDate    : "payment due date value"
-        },
-        mockUser = {
-            email    : "email address value",
-            firstName: "first name value",
-            username : "username value",
-            company  : {
-                accountId    : "company account id value",
-                accountNumber: "company account number value",
-                name         : "company name value"
-            },
-            billingCompany: {
-                accountId    : "billing company account id value",
-                accountNumber: "billing company account number value",
-                name         : "billing company name value"
-            }
-        },
+        mockCurrentInvoiceSummary,
+        mockUser,
         mockScheduledPaymentCount,
-        UserManager;
+        AccountModel,
+        InvoiceSummaryModel,
+        UserManager,
+        UserModel;
 
     describe("A Landing Controller", function () {
 
@@ -55,7 +34,16 @@
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearHistory"]);
             mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
 
-            inject(function ($controller, $rootScope) {
+            inject(function ($controller, $rootScope, _AccountModel_, _InvoiceSummaryModel_, _UserModel_) {
+
+                AccountModel = _AccountModel_;
+                InvoiceSummaryModel = _InvoiceSummaryModel_;
+                UserModel = _UserModel_;
+
+                //setup mocks
+                mockCurrentInvoiceSummary = TestUtils.getRandomInvoiceSummary(InvoiceSummaryModel);
+                mockUser = TestUtils.getRandomUser(UserModel, AccountModel);
+                UserManager.getUser.and.returnValue(mockUser);
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
@@ -73,8 +61,6 @@
         describe("has an $ionicView.beforeEnter event handler function that", function () {
 
             beforeEach(function() {
-                UserManager.getUser.and.returnValue(mockUser);
-
                 //setup an existing values to test them being modified
                 ctrl.hasAnyCards = null;
                 ctrl.globalError = "This is a previous error";
@@ -97,6 +83,22 @@
 
             it("should clear the navigation history", function () {
                 expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+            });
+
+            it("should set the chart options", function () {
+                expect(ctrl.chart).toEqual({
+                    options: {
+                        animation: false,
+                        percentageInnerCutout: 40,
+                        showTooltips: false,
+                        segmentStrokeWidth: 1,
+                        scaleOverride: true,
+                        responsive: false
+                    },
+                    labels: ["Available", "Billed", "Unbilled"],
+                    colors: [mockCurrentInvoiceSummary.availableCredit > 0 ? "#39802b" : "#b30308", "#334c5b", "#3799b3"],
+                    data  : [mockCurrentInvoiceSummary.availableCredit, mockCurrentInvoiceSummary.billedAmount, mockCurrentInvoiceSummary.unbilledAmount]
+                });
             });
 
         });

@@ -33,6 +33,8 @@ module.exports = function(config) {
             "lib/angular-moment/angular-moment.js",
             "lib/ionic-datepicker-widget/dist/ionic-datepicker.min.js",
             "lib/ang-accordion/js/ang-accordion.js",
+            "lib/Chart.js/Chart.js",
+            "lib/angular-chart.js/dist/angular-chart.js",
 
             // Test libraries
             "../test/lib/**/*.js",

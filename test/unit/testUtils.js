@@ -11,6 +11,7 @@ var TestUtils = (function () {
             getRandomBoolean                 : getRandomBoolean,
             getRandomDate                    : getRandomDate,
             getRandomInteger                 : getRandomInteger,
+            getRandomInvoiceSummary          : getRandomInvoiceSummary,
             getRandomNumber                  : getRandomNumber,
             getRandomNumberWithLength        : getRandomNumberWithLength,
             getRandomPayment                 : getRandomPayment,
@@ -63,6 +64,26 @@ var TestUtils = (function () {
 
     function getRandomInteger(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function getRandomInvoiceSummary(InvoiceSummaryModel) {
+        var randomInvoiceSummary = new InvoiceSummaryModel();
+
+        randomInvoiceSummary.accountNumber = getRandomStringThatIsAlphaNumeric(10);
+        randomInvoiceSummary.availableCredit = getRandomNumberWithLength(8);
+        randomInvoiceSummary.billingDate = getRandomDate();
+        randomInvoiceSummary.billedAmount = getRandomNumberWithLength(5);
+        randomInvoiceSummary.closingDate = getRandomDate();
+        randomInvoiceSummary.currentBalance = getRandomNumberWithLength(5);
+        randomInvoiceSummary.currentBalanceAsOf = getRandomDate();
+        randomInvoiceSummary.invoiceId = getRandomNumberWithLength(10);
+        randomInvoiceSummary.invoiceNumber = getRandomStringThatIsAlphaNumeric(10);
+        randomInvoiceSummary.minimumPaymentDue = getRandomNumberWithLength(5);
+        randomInvoiceSummary.paymentDueDate = getRandomDate();
+        randomInvoiceSummary.statementBalance = getRandomNumberWithLength(5);
+        randomInvoiceSummary.unbilledAmount = getRandomNumberWithLength(5);
+
+        return randomInvoiceSummary;
     }
 
     function getRandomNumber(min, max) {

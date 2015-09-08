@@ -11,7 +11,8 @@
     "angular-moment": "~0",
     "ionic-datepicker-widget": "~1",
     "ang-accordion": "*",
-    "angular-ui-router": ">=0.2.15"
+    "angular-ui-router": ">=0.2.15",
+    "angular-chart.js": "~0.8.2"
   },
   "resolutions": {
     "angular": ">=1.4",
