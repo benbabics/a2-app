@@ -69,7 +69,7 @@
 
         function clearCachedValues() {
             paymentAddAvailability = new PaymentAddAvailabilityModel();
-            payments = {};
+            payments = [];
         }
 
         function createPayment(paymentResource) {
@@ -116,18 +116,16 @@
             return PaymentsResource.getPayments(accountId, params)
                 .then(function (paymentsResponse) {
                     if (paymentsResponse && paymentsResponse.data) {
-                        payments = {};
-
-                        _.forEach(paymentsResponse.data, function (payment) {
-                            payments[payment.id] = createPayment(payment);
-                        });
+                        // map the payment data to model objects
+                        payments = _.map(paymentsResponse.data, createPayment);
 
                         return payments;
                     }
                     // no data in the response
                     else {
-                        Logger.error("No data in Response from getting the Payments");
-                        throw new Error("No data in Response from getting the Payments");
+                        var error = "No data in Response from getting the Payments";
+                        Logger.error(error);
+                        throw new Error(error);
                     }
                 })
                 // get payments failed
@@ -185,9 +183,9 @@
             return PaymentsResource.deletePayment(accountId, paymentId)
                 .then(function () {
                     //remove the payment from the collection
-                    if(_.has(payments, paymentId)) {
-                        delete payments[paymentId];
-                    }
+                    _.remove(payments, function (payment) {
+                        return payment.id === paymentId;
+                    });
                 })
                 // deleting payment failed
                 .catch(function (failureResponse) {

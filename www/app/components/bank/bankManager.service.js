@@ -32,7 +32,14 @@
         }
 
         function clearCachedValues() {
-            activeBanks = {};
+            activeBanks = [];
+        }
+
+        function createBank(bankResource) {
+            var bankModel = new BankModel();
+            bankModel.set(bankResource);
+
+            return bankModel;
         }
 
         function fetchActiveBanks(accountId) {
@@ -40,16 +47,10 @@
             return BanksResource.getActiveBanks(accountId)
                 .then(function (activeBanksResponse) {
                     if (activeBanksResponse && activeBanksResponse.data) {
-                        var bankModelCollection = {};
+                        // map the active bank data to model objects
+                        activeBanks = _.map(activeBanksResponse.data, createBank);
 
-                        _.forEach(activeBanksResponse.data, function (bank) {
-                            var bankModel = new BankModel();
-                            bankModel.set(bank);
-                            bankModelCollection[bank.id] = bankModel;
-                        });
-
-                        setActiveBanks(bankModelCollection);
-                        return bankModelCollection;
+                        return activeBanks;
                     }
                     // no data in the response
                     else {

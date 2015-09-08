@@ -26,23 +26,24 @@
 
         function beforeEnter() {
 
-            var paymentsArray,
-                unsortedScheduledPayments;
+            var unsortedScheduledPayments,
+                unsortedCompletedPayments;
 
-            // TODO - Have PaymentManager.fetchPayments return an array?
-            // Convert the payments object into an array
-            paymentsArray = _.values(payments);
-
-            // Move the scheduled payments from paymentsArray into unsortedScheduledPayments
-            unsortedScheduledPayments = _.remove(paymentsArray, function (payment) {
+            // Get the list of scheduled payments from payments into unsortedScheduledPayments
+            unsortedScheduledPayments = _.filter(payments, function (payment) {
                 return payment.isScheduled();
+            });
+
+            // Get the list of completed payments from payments into unsortedCompletedPayments
+            unsortedCompletedPayments = _.filter(payments, function (payment) {
+                return !payment.isScheduled();
             });
 
             // Sort the scheduled payments by scheduled date ascending
             vm.scheduledPayments = _.sortByOrder(unsortedScheduledPayments, ["scheduledDate"], ["asc"]);
 
             // Sort the rest of the payments by scheduled date descending
-            vm.completedPayments = _.sortByOrder(paymentsArray, ["scheduledDate"], ["desc"]);
+            vm.completedPayments = _.sortByOrder(unsortedCompletedPayments, ["scheduledDate"], ["desc"]);
         }
 
     }

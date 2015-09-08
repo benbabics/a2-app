@@ -8,8 +8,7 @@
         getActiveBanksDeferred,
         resolveHandler,
         rejectHandler,
-        bankModel1, bankModel2, bankModel3,
-        mockBankCollection = {},
+        mockBankCollection,
         BankManager,
         BankModel,
         BanksResource;
@@ -43,14 +42,13 @@
             rejectHandler = jasmine.createSpy("rejectHandler");
 
             // set up mocks
-            bankModel1 = TestUtils.getRandomBank(BankModel);
-            bankModel2 = TestUtils.getRandomBank(BankModel);
-            bankModel3 = TestUtils.getRandomBank(BankModel);
+            var numModels, i;
 
-            mockBankCollection = {};
-            mockBankCollection[bankModel1.id] = bankModel1;
-            mockBankCollection[bankModel2.id] = bankModel2;
-            mockBankCollection[bankModel3.id] = bankModel3;
+            mockBankCollection = [];
+            numModels = TestUtils.getRandomInteger(1, 100);
+            for (i = 0; i < numModels; ++i) {
+                mockBankCollection.push(TestUtils.getRandomBank(BankModel));
+            }
         });
 
         describe("has an activate function that", function () {
@@ -67,7 +65,7 @@
             });
 
             it("should reset the active banks", function () {
-                expect(BankManager.getActiveBanks()).not.toEqual(mockBankCollection);
+                expect(BankManager.getActiveBanks()).toEqual([]);
             });
 
         });
@@ -100,7 +98,7 @@
                 describe("when there is data in the response", function () {
 
                     beforeEach(function () {
-                        mockRemoteBanks.data = _.values(mockBankCollection);
+                        mockRemoteBanks.data = mockBankCollection.slice();
                         getActiveBanksDeferred.resolve(mockRemoteBanks);
 
                         BanksResource.getActiveBanks.and.returnValue(getActiveBanksDeferred.promise);
@@ -118,7 +116,7 @@
                     });
 
                     it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(mockBankCollection);
+                        expect(resolveHandler).toHaveBeenCalledWith(mockRemoteBanks.data);
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
@@ -163,31 +161,13 @@
 
         describe("has a getActiveBanks function that", function () {
 
-            var newActiveBanks = [
-                    {
-                        id         : "Bank Id 1",
-                        defaultBank: false,
-                        name       : "Bank Name 1"
-                    },
-                    {
-                        id         : "Bank Id 2",
-                        defaultBank: true,
-                        name       : "Bank Name 2"
-                    },
-                    {
-                        id         : "Bank Id 3",
-                        defaultBank: false,
-                        name       : "Bank Name 3"
-                    }
-                ];
-
             it("should return the active banks passed to setActiveBanks", function () {
                 var result;
 
-                BankManager.setActiveBanks(newActiveBanks);
+                BankManager.setActiveBanks(mockBankCollection);
                 result = BankManager.getActiveBanks();
 
-                expect(result).toEqual(newActiveBanks);
+                expect(result).toEqual(mockBankCollection);
             }) ;
 
             // TODO: figure out how to test this without using setActiveBanks
@@ -264,19 +244,10 @@
             describe("when none of the banks are the default", function () {
 
                 beforeEach(function () {
-                    bankModel1 = TestUtils.getRandomBank(BankModel);
-                    bankModel1.defaultBank = false;
 
-                    bankModel2 = TestUtils.getRandomBank(BankModel);
-                    bankModel2.defaultBank = false;
-
-                    bankModel3 = TestUtils.getRandomBank(BankModel);
-                    bankModel3.defaultBank = false;
-
-                    mockBankCollection = {};
-                    mockBankCollection[bankModel1.id] = bankModel1;
-                    mockBankCollection[bankModel2.id] = bankModel2;
-                    mockBankCollection[bankModel3.id] = bankModel3;
+                    mockBankCollection.forEach(function(bankModel) {
+                        bankModel.defaultBank = false;
+                    });
 
                     BankManager.setActiveBanks(mockBankCollection);
 
@@ -304,23 +275,14 @@
             describe("when there is a default bank", function () {
 
                 beforeEach(function () {
-                    bankModel1 = TestUtils.getRandomBank(BankModel);
-                    bankModel1.defaultBank = false;
+                    mockBankCollection.forEach(function(bankModel) {
+                        bankModel.defaultBank = false;
+                    });
 
-                    bankModel2 = TestUtils.getRandomBank(BankModel);
-                    bankModel2.defaultBank = true;
-
-                    bankModel3 = TestUtils.getRandomBank(BankModel);
-                    bankModel3.defaultBank = false;
-
-                    mockBankCollection = {};
-                    mockBankCollection[bankModel1.id] = bankModel1;
-                    mockBankCollection[bankModel2.id] = bankModel2;
-                    mockBankCollection[bankModel3.id] = bankModel3;
+                    expectedResult = TestUtils.getRandomValueFromArray(mockBankCollection);
+                    expectedResult.defaultBank = true;
 
                     BankManager.setActiveBanks(mockBankCollection);
-
-                    expectedResult = bankModel2;
 
                     BankManager.getDefaultBank(accountId)
                         .then(function (response) {
@@ -350,11 +312,9 @@
             describe("when there is a single active bank", function () {
 
                 beforeEach(function () {
-                    var bankModel1,
-                        mockBankCollection = {};
+                    var mockBankCollection = [];
 
-                    bankModel1 = TestUtils.getRandomBank(BankModel);
-                    mockBankCollection[bankModel1.id] = bankModel1;
+                    mockBankCollection.push(TestUtils.getRandomBank(BankModel));
 
                     BankManager.setActiveBanks(mockBankCollection);
 
@@ -380,14 +340,15 @@
             describe("when there are multiple active banks", function () {
 
                 beforeEach(function () {
-                    var bankModel1,
-                        bankModel2,
-                        mockBankCollection = {};
+                    var i,
+                        mockBankCollection,
+                        numModels;
 
-                    bankModel1 = TestUtils.getRandomBank(BankModel);
-                    bankModel2 = TestUtils.getRandomBank(BankModel);
-                    mockBankCollection[bankModel1.id] = bankModel1;
-                    mockBankCollection[bankModel2.id] = bankModel2;
+                    mockBankCollection = [];
+                    numModels = TestUtils.getRandomInteger(2, 100);
+                    for (i = 0; i < numModels; ++i) {
+                        mockBankCollection.push(TestUtils.getRandomBank(BankModel));
+                    }
 
                     BankManager.setActiveBanks(mockBankCollection);
 
@@ -414,31 +375,13 @@
 
         describe("has a setActiveBanks function that", function () {
 
-            var newActiveBanks = [
-                    {
-                        id         : "Bank Id 1",
-                        defaultBank: false,
-                        name       : "Bank Name 1"
-                    },
-                    {
-                        id         : "Bank Id 2",
-                        defaultBank: true,
-                        name       : "Bank Name 2"
-                    },
-                    {
-                        id         : "Bank Id 3",
-                        defaultBank: false,
-                        name       : "Bank Name 3"
-                    }
-                ];
-
             it("should update the active banks returned by getActiveBanks", function () {
                 var result;
 
-                BankManager.setActiveBanks(newActiveBanks);
+                BankManager.setActiveBanks(mockBankCollection);
                 result = BankManager.getActiveBanks();
 
-                expect(result).toEqual(newActiveBanks);
+                expect(result).toEqual(mockBankCollection);
             }) ;
 
             // TODO: figure out how to test this without using getActiveBanks

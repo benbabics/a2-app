@@ -15,8 +15,7 @@
         PaymentModel,
         PaymentsResource,
         mockPaymentAddAvailability = {},
-        paymentModel1, paymentModel2, paymentModel3,
-        mockPaymentCollection = {},
+        mockPaymentCollection,
         remotePaymentAddAvailabilityModel = {},
         mockGlobals = {
             PAYMENT_LIST: {
@@ -77,14 +76,13 @@
             rejectHandler = jasmine.createSpy("rejectHandler");
 
             // set up mocks
-            paymentModel1 = TestUtils.getRandomPayment(PaymentModel, BankModel);
-            paymentModel2 = TestUtils.getRandomPayment(PaymentModel, BankModel);
-            paymentModel3 = TestUtils.getRandomPayment(PaymentModel, BankModel);
+            var numModels, i;
 
-            mockPaymentCollection = {};
-            mockPaymentCollection[paymentModel1.id] = paymentModel1;
-            mockPaymentCollection[paymentModel2.id] = paymentModel2;
-            mockPaymentCollection[paymentModel3.id] = paymentModel3;
+            mockPaymentCollection = [];
+            numModels = TestUtils.getRandomInteger(1, 100);
+            for (i = 0; i < numModels; ++i) {
+                mockPaymentCollection.push(TestUtils.getRandomPayment(PaymentModel, BankModel));
+            }
         });
 
         describe("has an activate function that", function () {
@@ -106,7 +104,7 @@
             });
 
             it("should reset the payments", function () {
-                expect(PaymentManager.getPayments()).toEqual({});
+                expect(PaymentManager.getPayments()).toEqual([]);
             });
 
         });
@@ -199,18 +197,20 @@
         });
 
         describe("has a fetchPayment function that", function () {
-            var fetchedPayment;
+            var fetchedPayment,
+                paymentToFetch;
 
             describe("when payments is NOT empty", function () {
 
                 beforeEach(function () {
+                    paymentToFetch = TestUtils.getRandomValueFromArray(mockPaymentCollection);
                     PaymentManager.setPayments(mockPaymentCollection);
                 });
 
                 describe("when the payment to fetch is in the list", function () {
 
                     beforeEach(function () {
-                        PaymentManager.fetchPayment(paymentModel1.id)
+                        PaymentManager.fetchPayment(paymentToFetch.id)
                             .then(function (paymentFound) {
                                 fetchedPayment = paymentFound;
                             })
@@ -220,7 +220,7 @@
                     });
 
                     it("should return the expected payment", function () {
-                        expect(fetchedPayment).toEqual(paymentModel1);
+                        expect(fetchedPayment).toEqual(paymentToFetch);
                     });
 
 
@@ -258,9 +258,9 @@
             describe("when payments is empty", function () {
 
                 beforeEach(function () {
-                    PaymentManager.setPayments({});
+                    PaymentManager.setPayments([]);
 
-                    PaymentManager.fetchPayment(paymentModel1.id)
+                    PaymentManager.fetchPayment(paymentId)
                         .then(function (paymentFound) {
                             fetchedPayment = paymentFound;
                         })
@@ -403,7 +403,7 @@
                 describe("when there is data in the response", function () {
 
                     beforeEach(function () {
-                        mockRemoteBanks.data = _.values(mockPaymentCollection);
+                        mockRemoteBanks.data = mockPaymentCollection.slice();
                         getPaymentsDeferred.resolve(mockRemoteBanks);
 
                         PaymentsResource.getPayments.and.returnValue(getPaymentsDeferred.promise);
@@ -415,8 +415,12 @@
                         $rootScope.$digest();
                     });
 
+                    it("should set the payments", function () {
+                        expect(PaymentManager.getPayments()).toEqual(mockPaymentCollection);
+                    });
+
                     it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(mockPaymentCollection);
+                        expect(resolveHandler).toHaveBeenCalledWith(mockRemoteBanks.data);
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
@@ -477,8 +481,8 @@
                     },
                     numScheduledPayments = 0,
                     numNonScheduledPayments = 0,
-                    mockScheduledPayments = {},
-                    mockNonScheduledPayments = {};
+                    mockScheduledPayments = [],
+                    mockNonScheduledPayments = [];
 
                 describe("when there is a valid response", function () {
 
@@ -492,7 +496,7 @@
                                 curPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
                                 curPayment.status = mockGlobals.PAYMENT.STATUS.SCHEDULED;
 
-                                mockScheduledPayments[TestUtils.getRandomStringThatIsAlphaNumeric(5)] = curPayment;
+                                mockScheduledPayments.push(curPayment);
                             }
 
                             numNonScheduledPayments = TestUtils.getRandomInteger(1, 100);
@@ -500,8 +504,7 @@
                                 curPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
                                 curPayment.status = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
-
-                                mockNonScheduledPayments[TestUtils.getRandomStringThatIsAlphaNumeric(5)] = curPayment;
+                                mockNonScheduledPayments.push(curPayment);
                             }
 
                             mockRemoteBanks.data = _.values(angular.extend({}, mockNonScheduledPayments, mockScheduledPayments));
@@ -720,21 +723,23 @@
 
         describe("has a removePayment function that", function () {
 
-            var deletePaymentDeferred;
+            var deletePaymentDeferred,
+                paymentToRemove;
 
             beforeEach(function () {
+                paymentToRemove = TestUtils.getRandomValueFromArray(mockPaymentCollection);
                 PaymentManager.setPayments(mockPaymentCollection);
                 deletePaymentDeferred = $q.defer();
 
                 PaymentsResource.deletePayment.and.returnValue(deletePaymentDeferred.promise);
 
-                PaymentManager.removePayment(accountId, paymentModel1.id)
+                PaymentManager.removePayment(accountId, paymentToRemove.id)
                     .then(resolveHandler)
                     .catch(rejectHandler);
             });
 
             it("should call PaymentsResource.deletePayment", function () {
-                expect(PaymentsResource.deletePayment).toHaveBeenCalledWith(accountId, paymentModel1.id);
+                expect(PaymentsResource.deletePayment).toHaveBeenCalledWith(accountId, paymentToRemove.id);
             });
 
             describe("when the payment is deleted successfully", function () {
@@ -752,10 +757,7 @@
                 });
 
                 it("should remove the payment from the collection", function () {
-                    var paymentObject = {};
-                    paymentObject[paymentModel1.id] = paymentModel1;
-
-                    expect(mockPaymentCollection).not.toEqual(jasmine.objectContaining(paymentObject));
+                    expect(_.find(PaymentManager.getPayments(), { "id": paymentToRemove.id })).toBeUndefined();
                 });
             });
 
@@ -772,10 +774,7 @@
                 });
 
                 it("should NOT remove the payment from the collection", function () {
-                    var paymentObject = {};
-                    paymentObject[paymentModel1.id] = paymentModel1;
-
-                    expect(mockPaymentCollection).toEqual(jasmine.objectContaining(paymentObject));
+                    expect(_.find(PaymentManager.getPayments(), { "id": paymentToRemove.id })).toEqual(paymentToRemove);
                 });
 
             });
