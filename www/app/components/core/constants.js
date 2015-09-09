@@ -76,8 +76,8 @@
 
     appGlobals.PAYMENT_MAINTENANCE = {
         STATES: {
-            "ADD": "add",
-            "UPDATE": "update"
+            "ADD": "ADD",
+            "UPDATE": "UPDATE"
         }
     };
 

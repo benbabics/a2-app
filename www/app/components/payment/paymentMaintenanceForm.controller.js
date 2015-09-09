@@ -6,9 +6,10 @@
 
     /* @ngInject */
     function PaymentMaintenanceFormController($scope, globals, hasMultipleBanks, maintenance, moment, payment,
-                                              InvoiceManager, Logger, UserManager) {
+                                              CommonService, InvoiceManager, Logger, UserManager) {
 
-        var vm = this,
+        var _ = CommonService._,
+            vm = this,
             paymentMaintenanceForm = globals.PAYMENT_MAINTENANCE_FORM;
 
         vm.config = angular.extend({}, paymentMaintenanceForm.CONFIG, getConfig());
@@ -40,16 +41,14 @@
         }
 
         function getConfig() {
-            switch(maintenance.state) {
-                case maintenance.states.ADD:
-                    return paymentMaintenanceForm.ADD.CONFIG;
-                case maintenance.states.UPDATE:
-                    return paymentMaintenanceForm.UPDATE.CONFIG;
-                default:
-                    var error = "Unrecognized payment maintenance state: " + maintenance.state;
+            if(_.has(paymentMaintenanceForm, maintenance.state)) {
+                return paymentMaintenanceForm[maintenance.state].CONFIG;
+            }
+            else {
+                var error = "Unrecognized payment maintenance state: " + maintenance.state;
 
-                    Logger.error(error);
-                    throw new Error(error);
+                Logger.error(error);
+                throw new Error(error);
             }
         }
 

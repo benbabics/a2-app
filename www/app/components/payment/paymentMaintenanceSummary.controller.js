@@ -9,7 +9,8 @@
                                                  CommonService, InvoiceManager, Logger,
                                                  PaymentMaintenance, PaymentManager, UserManager) {
 
-        var vm = this,
+        var _ = CommonService._,
+            vm = this,
             paymentMaintenanceSummary = globals.PAYMENT_MAINTENANCE_SUMMARY;
 
         vm.config = angular.extend({}, paymentMaintenanceSummary.CONFIG, getConfig());
@@ -47,16 +48,14 @@
         }
 
         function getConfig() {
-            switch (maintenance.state) {
-                case maintenance.states.ADD:
-                    return paymentMaintenanceSummary.ADD.CONFIG;
-                case maintenance.states.UPDATE:
-                    return paymentMaintenanceSummary.UPDATE.CONFIG;
-                default:
-                    var error = "Unrecognized payment maintenance state: " + maintenance.state;
+            if(_.has(paymentMaintenanceSummary, maintenance.state)) {
+                return paymentMaintenanceSummary[maintenance.state].CONFIG;
+            }
+            else {
+                var error = "Unrecognized payment maintenance state: " + maintenance.state;
 
-                    Logger.error(error);
-                    throw new Error(error);
+                Logger.error(error);
+                throw new Error(error);
             }
         }
 

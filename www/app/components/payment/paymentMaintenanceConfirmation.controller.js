@@ -5,9 +5,11 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentMaintenanceConfirmationController($scope, globals, maintenance, PaymentMaintenance) {
+    function PaymentMaintenanceConfirmationController($scope, globals, maintenance,
+                                                      CommonService, Logger, PaymentMaintenance) {
 
-        var vm = this,
+        var _ = CommonService._,
+            vm = this,
             paymentMaintenanceConfirmation = globals.PAYMENT_MAINTENANCE_CONFIRMATION;
 
         vm.config = angular.extend({}, paymentMaintenanceConfirmation.CONFIG, getConfig());
@@ -31,16 +33,14 @@
         }
 
         function getConfig() {
-            switch(maintenance.state) {
-                case maintenance.states.ADD:
-                    return paymentMaintenanceConfirmation.ADD.CONFIG;
-                case maintenance.states.UPDATE:
-                    return paymentMaintenanceConfirmation.UPDATE.CONFIG;
-                default:
-                    var error = "Unrecognized payment maintenance state: " + maintenance.state;
+            if(_.has(paymentMaintenanceConfirmation, maintenance.state)) {
+                return paymentMaintenanceConfirmation[maintenance.state].CONFIG;
+            }
+            else {
+                var error = "Unrecognized payment maintenance state: " + maintenance.state;
 
-                    Logger.error(error);
-                    throw new Error(error);
+                Logger.error(error);
+                throw new Error(error);
             }
         }
 
