@@ -45,7 +45,7 @@
                     }
                     else {
                         //add the fetched transactions to the current list
-                        Array.prototype.push.apply(vm.postedTransactions, postedTransactions);
+                        vm.postedTransactions = vm.postedTransactions.concat(postedTransactions);
 
                         ++currentPage;
                         return false;
