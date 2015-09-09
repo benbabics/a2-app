@@ -333,7 +333,7 @@
                 expect(result).toEqual(mockPostedTransactionsCollection);
             });
 
-            // TODO: figure out how to test this without using setPayments
+            // TODO: figure out how to test this without using setPostedTransactions
         });
 
         describe("has a setPostedTransactions function that", function () {
@@ -347,7 +347,7 @@
                 expect(result).toEqual(mockPostedTransactionsCollection);
             });
 
-            // TODO: figure out how to test this without using getPayments
+            // TODO: figure out how to test this without using getPostedTransactions
         });
     });
 })();
