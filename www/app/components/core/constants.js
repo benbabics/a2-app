@@ -204,7 +204,8 @@
     appGlobals.TRANSACTION_LIST = {
         "CONFIG"        : {
             "title"          : "Transaction Activity",
-            "reloadDistance" : "5%"
+            "reloadDistance" : "5%",
+            "emptyList"      : "No Records Found."
         },
         "SEARCH_OPTIONS": {
             "MAX_DAYS" : 60,
