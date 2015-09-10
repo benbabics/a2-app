@@ -66,9 +66,9 @@
                     {{vm.payment.bankAccount.getDisplayName()}}
                 </span>
             </div>
-            <div ng-if="vm.hasMultipleBanks"
+            <div ng-if="vm.hasMultipleBanks" style="text-align:right"
                  ng-click="vm.maintenance.go('payment.maintenance.input.bankAccount')">
-                <span class="active-link">
+                <span class="active-link wordwrap">
                     {{vm.payment.bankAccount.getDisplayName()}}
                 </span>
                 <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
