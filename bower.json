@@ -2,17 +2,18 @@
   "name": "AcctMaint",
   "private": "true",
   "dependencies": {
-    "ionic": "~1",
-    "restangular": "~1",
-    "lodash": "~3",
+    "ang-accordion": "*",
     "angular-base64": "~2",
+    "angular-chart.js": "~0.8.2",
+    "angular-moment": "~0",
+    "angular-ui-router": ">=0.2.15",
+    "ionic": "~1",
+    "ionic-datepicker-widget": "~1",
+    "lodash": "~3",
     "ngCordova": "0.1.20-alpha",
     "ngFitText": "~3",
-    "angular-moment": "~0",
-    "ionic-datepicker-widget": "~1",
-    "ang-accordion": "*",
-    "angular-ui-router": ">=0.2.15",
-    "angular-chart.js": "~0.8.2"
+    "ngstorage": "~0.3.9",
+    "restangular": "~1"
   },
   "resolutions": {
     "angular": ">=1.4",

@@ -8,6 +8,12 @@
 
     appGlobals.DEFAULT_ROUTE = "/user/auth/login";
 
+    appGlobals.LOCALSTORAGE = {
+        "CONFIG": {
+            "keyPrefix": "FLEET_MANAGER-"
+        }
+    };
+
     appGlobals.USER_LOGIN = {
         "CONFIG": {
             "title"       : "WEX Fleet Manager",

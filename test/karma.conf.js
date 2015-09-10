@@ -35,6 +35,7 @@ module.exports = function(config) {
             "lib/ang-accordion/js/ang-accordion.js",
             "lib/Chart.js/Chart.js",
             "lib/angular-chart.js/dist/angular-chart.js",
+            "lib/ngstorage/ngStorage.js",
 
             // Test libraries
             "../test/lib/**/*.js",

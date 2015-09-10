@@ -18,8 +18,13 @@
 
     };
 
+    var ngStorageConfig = function ($localStorageProvider, appGlobals) {
+        $localStorageProvider.setKeyPrefix(appGlobals.LOCALSTORAGE.CONFIG.keyPrefix);
+    };
+
     angular
         .module("app.components.core")
         .config(urlConfig)
-        .config(ionicConfig);
+        .config(ionicConfig)
+        .config(ngStorageConfig);
 })();

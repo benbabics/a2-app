@@ -8,7 +8,6 @@
         /* Our reusable cross app modules */
         "app.shared.dependencies",
         "app.shared.core",
-        "app.shared.storage",
         "app.shared.network",
         "app.shared.auth",
         "app.shared.api",
