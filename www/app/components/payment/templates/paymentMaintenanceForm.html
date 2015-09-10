@@ -27,7 +27,7 @@
         </div>
 
         <div class="payment-maintenance-form-item">
-            <span class="block_align">
+            <span class="block_align black">
                 {{vm.config.amount}}
             </span>
             <div ng-click="vm.maintenance.go('payment.maintenance.input.amount')">
@@ -41,7 +41,7 @@
         </div>
 
         <div class="payment-maintenance-form-item">
-            <span class="block_align">
+            <span class="block_align black">
                 {{vm.config.scheduledDate}}
             </span>
             <ionic-datepicker value="vm.payment.scheduledDate"
@@ -57,7 +57,7 @@
         </div>
 
         <div class="payment-maintenance-form-item">
-            <span class="block_align">
+            <span class="block_align black">
                 {{vm.config.bankAccount}}
             </span>
 
@@ -66,7 +66,7 @@
                     {{vm.payment.bankAccount.getDisplayName()}}
                 </span>
             </div>
-            <div ng-if="vm.hasMultipleBanks" style="text-align:right"
+            <div ng-if="vm.hasMultipleBanks" class="right-align"
                  ng-click="vm.maintenance.go('payment.maintenance.input.bankAccount')">
                 <span class="active-link wordwrap">
                     {{vm.payment.bankAccount.getDisplayName()}}
