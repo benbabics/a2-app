@@ -14,6 +14,7 @@
 
         vm.config = angular.extend({}, paymentMaintenanceForm.CONFIG, getConfig());
 
+        vm.backStateOverride = null;
         vm.billingCompany = {};
         vm.hasMultipleBanks = false;
         vm.invoiceSummary = {};
@@ -29,6 +30,11 @@
         function activate() {
             // set event listeners
             $scope.$on("$ionicView.beforeEnter", beforeEnter);
+
+            //override back to go to the landing page if we're in ADD mode
+            if(maintenance.state === maintenance.states.ADD) {
+                vm.backStateOverride = "landing";
+            }
         }
 
         function beforeEnter() {

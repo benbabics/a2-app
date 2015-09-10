@@ -150,6 +150,10 @@
             ));
         });
 
+        it("should set backStateOverride to the expected value", function () {
+            expect(ctrl.backStateOverride).toEqual(getBackStateOverride(mockMaintenance));
+        });
+
         describe("has an $ionicView.beforeEnter event handler function that", function () {
 
             beforeEach(function () {
@@ -186,6 +190,14 @@
         });
 
     });
+
+    function getBackStateOverride(maintenance) {
+        if(maintenance.state === maintenance.states.ADD) {
+            return "landing";
+        }
+
+        return null;
+    }
 
     function getConfig(maintenance) {
         switch (maintenance.state) {
