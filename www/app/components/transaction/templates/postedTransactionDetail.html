@@ -14,6 +14,10 @@
                 <span class="content_align black">{{vm.postedTransaction.transactionDate | wexDefaultDateTimeFormat}}</span>
             </p>
             <p class="padding divider">
+                <span class="block_align black">{{vm.config.transactionId}}</span>
+                <span class="content_align black">{{vm.postedTransaction.transactionId}}</span>
+            </p>
+            <p class="padding divider">
                 <span class="block_align black">{{vm.config.grossCost}}</span>
                 <span class="content_align black">{{vm.postedTransaction.grossCost | currency}}</span>
             </p>

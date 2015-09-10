@@ -225,7 +225,8 @@
             "postedDate"          : "Post Date",
             "productDescription"  : "Product Description",
             "title"               : "Transaction Details",
-            "transactionDate"     : "Trans Date/Time"
+            "transactionDate"     : "Trans Date/Time",
+            "transactionId"       : "Trans ID"
         }
     };
 
