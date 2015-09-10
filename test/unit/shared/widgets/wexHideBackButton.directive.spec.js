@@ -21,53 +21,41 @@
                 CommonService = _CommonService_;
             });
 
-            spyOn(CommonService, "findActiveBackButton");
+            //mock objects:
             mockBackButton = jasmine.createSpyObj("jqLite", ["isolateScope"]);
             mockBackButtonScope = jasmine.createSpyObj("WexBackButton", ["isHidden", "setHidden"]);
 
             mockHide = TestUtils.getRandomBoolean();
 
+            //spies:
+            spyOn(CommonService, "findActiveBackButton");
+            spyOn($rootScope, "$on");
+
             wexHideBackButton = createWexHideBackButton({hide: mockHide});
         });
 
-        it("should set prevHideState to null", function () {
-            expect(wexHideBackButton.scope.prevHideState).toEqual(null);
+        it("should set prevState to null", function () {
+            expect(wexHideBackButton.vm.prevState).toEqual(null);
         });
 
-        it("should set hideStateApplied to false", function () {
-            expect(wexHideBackButton.scope.hideStateApplied).toEqual(false);
+        it("should set stateApplied to false", function () {
+            expect(wexHideBackButton.vm.stateApplied).toEqual(false);
         });
 
-        it("should set appliedBackButtonHideScope to null", function () {
-            expect(wexHideBackButton.scope.appliedBackButtonHideScope).toEqual(null);
+        it("should set backButtonScope to null", function () {
+            expect(wexHideBackButton.vm.backButtonScope).toEqual(null);
         });
 
-        it("should set a scope event listener for $ionicView.afterEnter with applyHideState", function () {
-            expect(wexHideBackButton.scope.$on).toHaveBeenCalledWith(
-                "$ionicView.afterEnter",
-                wexHideBackButton.scope.applyHideState
-            );
+        it("should set activeViewState to null", function () {
+            expect(wexHideBackButton.vm.activeViewState).toEqual(null);
         });
 
-        it("should set a scope event listener for $destroy with removeHideState", function () {
-            expect(wexHideBackButton.scope.$on).toHaveBeenCalledWith(
-                "$destroy",
-                wexHideBackButton.scope.removeHideState
-            );
+        it("should set a scope event listener for $ionicView.afterEnter", function () {
+            expect(wexHideBackButton.scope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
         });
 
-        it("should set a scope event listener for userLoggedOut with removeHideState", function () {
-            expect(wexHideBackButton.scope.$on).toHaveBeenCalledWith(
-                "userLoggedOut",
-                wexHideBackButton.scope.removeHideState
-            );
-        });
-
-        it("should set a scope event listener for $ionicView.beforeLeave with removeHideState", function () {
-            expect(wexHideBackButton.scope.$on).toHaveBeenCalledWith(
-                "$ionicView.beforeLeave",
-                wexHideBackButton.scope.removeHideState
-            );
+        it("should set a root scope event listener for $stateChangeSuccess", function () {
+            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
         });
 
         describe("when a hide value is provided", function () {
@@ -77,7 +65,7 @@
             });
 
             it("should set wexHideBackButton to the provided value", function () {
-                expect(wexHideBackButton.scope.wexHideBackButton).toEqual(mockHide);
+                expect(wexHideBackButton.vm.wexHideBackButton).toEqual(mockHide);
             });
         });
 
@@ -88,151 +76,217 @@
             });
 
             it("wexHideBackButton should be falsy", function () {
-                expect(wexHideBackButton.scope.wexHideBackButton).toBeFalsy();
+                expect(wexHideBackButton.vm.wexHideBackButton).toBeFalsy();
             });
         });
 
         describe("has an applyHideState function that", function () {
 
-            describe("when the hide state hasn't been applied", function() {
+            describe("when there is a back button", function () {
 
                 beforeEach(function () {
-                    wexHideBackButton.scope.hideStateApplied = false;
+                    CommonService.findActiveBackButton.and.returnValue(mockBackButton);
                 });
 
-                describe("when there is a back button", function () {
+                describe("when there is a scope on the back button", function () {
+                    var mockButtonHidden;
 
                     beforeEach(function () {
-                        CommonService.findActiveBackButton.and.returnValue(mockBackButton);
+                        mockButtonHidden = TestUtils.getRandomBoolean();
+
+                        mockBackButton.isolateScope.and.returnValue(mockBackButtonScope);
+                        mockBackButtonScope.isHidden.and.returnValue(mockButtonHidden);
+
+                        wexHideBackButton.vm.applyHideState();
                     });
 
-                    describe("when there is a scope on the back button", function () {
-                        var result,
-                            mockButtonHidden;
-
-                        beforeEach(function () {
-                            mockButtonHidden = TestUtils.getRandomBoolean();
-
-                            mockBackButton.isolateScope.and.returnValue(mockBackButtonScope);
-                            mockBackButtonScope.isHidden.and.returnValue(mockButtonHidden);
-
-                            result = wexHideBackButton.scope.applyHideState();
-                        });
-
-                        it("should set prevHideState to the button's hide state", function () {
-                            expect(wexHideBackButton.scope.prevHideState).toEqual(mockButtonHidden);
-                        });
-
-                        it("should call WexBackButton.setHidden with the hide state", function () {
-                            expect(mockBackButtonScope.setHidden).toHaveBeenCalledWith(mockHide);
-                        });
-
-                        it("should set hideStateApplied to true", function () {
-                            expect(wexHideBackButton.scope.hideStateApplied).toEqual(true);
-                        });
-
-                        it("should set appliedBackButtonHideScope to the button's scope", function () {
-                            expect(wexHideBackButton.scope.appliedBackButtonHideScope).toEqual(mockBackButtonScope);
-                        });
-
-                        it("should return true", function () {
-                            expect(result).toBeTruthy();
-                        });
+                    it("should set prevState to the button's hide state", function () {
+                        expect(wexHideBackButton.vm.prevState).toEqual(mockButtonHidden);
                     });
 
-                    describe("when there is NOT a scope on the back button", function () {
+                    it("should call WexBackButton.setHidden with the hide state", function () {
+                        expect(mockBackButtonScope.setHidden).toHaveBeenCalledWith(mockHide);
+                    });
 
-                        beforeEach(function () {
-                            mockBackButton.isolateScope.and.returnValue(null);
-                        });
-
-                        it("should throw an error", function () {
-                            expect(wexHideBackButton.scope.applyHideState).toThrow();
-                        });
+                    it("should set backButtonScope to the button's scope", function () {
+                        expect(wexHideBackButton.vm.backButtonScope).toEqual(mockBackButtonScope);
                     });
                 });
 
-                describe("when there is NOT a back button", function () {
+                describe("when there is NOT a scope on the back button", function () {
 
                     beforeEach(function () {
-                        CommonService.findActiveBackButton.and.returnValue(null);
+                        mockBackButton.isolateScope.and.returnValue(null);
                     });
 
                     it("should throw an error", function () {
-                        expect(wexHideBackButton.scope.applyHideState).toThrow();
+                        expect(wexHideBackButton.vm.applyHideState).toThrow();
                     });
                 });
             });
 
-            describe("when the hide state has been applied", function () {
+            describe("when there is NOT a back button", function () {
 
                 beforeEach(function () {
-                    wexHideBackButton.scope.hideStateApplied = true;
+                    CommonService.findActiveBackButton.and.returnValue(null);
                 });
 
-                it("should return false", function () {
-                    expect(wexHideBackButton.scope.applyHideState()).toBeFalsy();
+                it("should throw an error", function () {
+                    expect(wexHideBackButton.vm.applyHideState).toThrow();
+                });
+            });
+        });
+
+        describe("has an onEnter function that", function () {
+            var stateName;
+
+            beforeEach(function () {
+                stateName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                spyOn(wexHideBackButton.vm, "applyHideState");
+            });
+
+            describe("when a hide state has NOT been applied", function () {
+
+                beforeEach(function () {
+                    wexHideBackButton.vm.stateApplied = false;
+
+                    wexHideBackButton.vm.onEnter(stateName);
+                });
+
+                it("should set stateApplied to true", function () {
+                    expect(wexHideBackButton.vm.stateApplied).toEqual(true);
+                });
+
+                it("should set activeViewState to the current state name", function () {
+                    expect(wexHideBackButton.vm.activeViewState).toEqual(stateName);
+                });
+
+                it("should call applyHideState", function () {
+                    expect(wexHideBackButton.vm.applyHideState).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("when a back state has been applied", function () {
+
+                beforeEach(function () {
+                    wexHideBackButton.vm.stateApplied = true;
+
+                    wexHideBackButton.vm.onEnter(stateName);
+                });
+
+                it("should NOT set activeViewState to the current state name", function () {
+                    expect(wexHideBackButton.vm.activeViewState).not.toEqual(stateName);
+                });
+
+                it("should NOT call applyHideState", function () {
+                    expect(wexHideBackButton.vm.applyHideState).not.toHaveBeenCalled();
+                });
+            });
+        });
+
+        describe("has an onLeave function that", function () {
+            var stateName;
+
+            beforeEach(function () {
+                stateName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                spyOn(wexHideBackButton.vm, "removeHideState");
+            });
+
+            describe("when the current state name matches the activeViewState", function () {
+
+                beforeEach(function () {
+                    wexHideBackButton.vm.activeViewState = stateName;
+                });
+
+                describe("when a hide state has been applied", function() {
+
+                    beforeEach(function () {
+                        wexHideBackButton.vm.stateApplied = true;
+
+                        wexHideBackButton.vm.onLeave(stateName);
+                    });
+
+                    it("should call removeHideState", function () {
+                        expect(wexHideBackButton.vm.removeHideState).toHaveBeenCalledWith();
+                    });
+
+                    it("should set stateApplied to false", function () {
+                        expect(wexHideBackButton.vm.stateApplied).toEqual(false);
+                    });
+
+                    it("should set activeViewState to null", function () {
+                        expect(wexHideBackButton.vm.activeViewState).toEqual(null);
+                    });
+                });
+
+                describe("when a back state has NOT been applied", function() {
+
+                    beforeEach(function () {
+                        wexHideBackButton.vm.stateApplied = false;
+
+                        wexHideBackButton.vm.onLeave(stateName);
+                    });
+
+                    it("should NOT call removeHideState", function () {
+                        expect(wexHideBackButton.vm.removeHideState).not.toHaveBeenCalled();
+                    });
+
+                    it("should NOT set activeViewState to null", function () {
+                        expect(wexHideBackButton.vm.activeViewState).not.toEqual(null);
+                    });
+                });
+            });
+
+            describe("when the current state name does NOT match the activeViewState", function () {
+
+                beforeEach(function () {
+                    wexHideBackButton.vm.activeViewState = stateName = TestUtils.getRandomStringThatIsAlphaNumeric(5);
+
+                    wexHideBackButton.vm.onLeave(stateName);
+                });
+
+                it("should NOT call removeHideState", function () {
+                    expect(wexHideBackButton.vm.removeHideState).not.toHaveBeenCalled();
+                });
+
+                it("should NOT set activeViewState to null", function () {
+                    expect(wexHideBackButton.vm.activeViewState).not.toEqual(null);
                 });
             });
         });
 
         describe("has a removeHideState function that", function () {
 
-            describe("when the hide state has been applied", function() {
+            describe("when there is a back button scope", function () {
+                var mockPrevHidden;
 
                 beforeEach(function () {
-                    wexHideBackButton.scope.hideStateApplied = true;
+                    wexHideBackButton.vm.backButtonScope = mockBackButtonScope;
+                    wexHideBackButton.vm.prevState = mockPrevHidden =
+                        TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                    wexHideBackButton.vm.removeHideState();
                 });
 
-                describe("when there is a back button scope", function () {
-                    var result,
-                        mockPrevHidden;
-
-                    beforeEach(function () {
-                        wexHideBackButton.scope.appliedBackButtonHideScope = mockBackButtonScope;
-                        wexHideBackButton.scope.prevHideState = mockPrevHidden = TestUtils.getRandomBoolean();
-
-                        result = wexHideBackButton.scope.removeHideState();
-                    });
-
-
-                    it("should call WexBackButton.setHidden with prevHideState", function () {
-                        expect(mockBackButtonScope.setHidden).toHaveBeenCalledWith(mockPrevHidden);
-                    });
-
-                    it("should set hideStateApplied to false", function () {
-                        expect(wexHideBackButton.scope.hideStateApplied).toEqual(false);
-                    });
-
-                    it("should set appliedBackButtonHideScope to null", function () {
-                        expect(wexHideBackButton.scope.appliedBackButtonHideScope).toEqual(null);
-                    });
-
-                    it("should return true", function () {
-                        expect(result).toBeTruthy();
-                    });
+                it("should call WexBackButton.setHidden with prevState", function () {
+                    expect(mockBackButtonScope.setHidden).toHaveBeenCalledWith(mockPrevHidden);
                 });
 
-                describe("when there is NOT a back button scope", function () {
-
-                    beforeEach(function () {
-                        wexHideBackButton.scope.appliedBackButtonHideScope = null;
-                    });
-
-                    it("should throw an error", function () {
-                        expect(wexHideBackButton.scope.removeHideState).toThrow();
-                    });
+                it("should set backButtonScope to null", function () {
+                    expect(wexHideBackButton.vm.backButtonScope).toEqual(null);
                 });
             });
 
-            describe("when the back state has NOT been applied", function () {
+            describe("when there is NOT a back button scope", function () {
 
                 beforeEach(function () {
-                    wexHideBackButton.scope.hideStateApplied = false;
+                    wexHideBackButton.vm.backButtonScope = null;
                 });
 
-                it("should return false", function () {
-                    expect(wexHideBackButton.scope.removeHideState()).toBeFalsy();
+                it("should throw an error", function () {
+                    expect(wexHideBackButton.vm.removeHideState).toThrow();
                 });
             });
         });
@@ -254,14 +308,13 @@
         markup.push(">");
         markup.push("</div>");
 
-        spyOn(scope, "$on");
-
         element = $compile(markup.join(""))(scope);
         $rootScope.$digest();
 
         return {
             element: element,
-            scope  : scope
+            scope  : scope,
+            vm     : scope.wexHideBackButton
         };
     }
 })();

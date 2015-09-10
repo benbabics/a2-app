@@ -13,7 +13,7 @@
      */
 
     /* @ngInject */
-    function wexBackState(CommonService, Logger) {
+    function wexBackState($rootScope, CommonService, Logger) {
         var directive = {
                 restrict: "A",
                 link    : link
@@ -24,60 +24,81 @@
         //////////////////////
 
         function applyBackState() {
-            var backButton = CommonService.findActiveBackButton(),
-                backButtonScope;
+            var backButton = CommonService.findActiveBackButton();
 
-            if(!this.backStateApplied) {
-                if (this.wexBackState && backButton) {
-                    backButtonScope = backButton.isolateScope();
-                    if (backButtonScope) {
-                        this.prevBackState = backButtonScope.getOverrideBackState();
-                        this.backStateApplied = true;
-                        this.appliedBackButtonBackScope = backButtonScope;
-                        backButtonScope.overrideBackState(this.wexBackState);
-                        return true;
-                    }
-                }
+            if (backButton && backButton.isolateScope()) {
+                this.backButtonScope = backButton.isolateScope();
+                this.prevState = this.backButtonScope.getOverrideBackState();
 
+                //set the override state on the button
+                this.backButtonScope.overrideBackState(this.wexBackState);
+            }
+            else {
                 var error = "Failed to override back button state to " + this.wexBackState;
                 Logger.error(error);
                 throw new Error(error);
             }
-            return false;
+        }
+
+        function onEnter(stateName) {
+            if(this.wexBackState && !this.stateApplied) {
+                this.stateApplied = true;
+                this.activeViewState = stateName;
+
+                this.applyBackState();
+            }
+        }
+
+        function onLeave(stateName) {
+            if(this.stateApplied && stateName === this.activeViewState) {
+                this.removeBackState();
+
+                this.stateApplied = false;
+                this.activeViewState = null;
+            }
         }
 
         function removeBackState() {
-            if(this.backStateApplied) {
-                if (this.appliedBackButtonBackScope) {
+            if (this.backButtonScope) {
+                //restore the previous override state on the back button
+                this.backButtonScope.overrideBackState(this.prevState);
 
-                    this.backStateApplied = false;
-                    this.appliedBackButtonBackScope.overrideBackState(this.prevBackState);
-                    this.appliedBackButtonBackScope = null;
-                    return true;
-                }
-
+                this.backButtonScope = null;
+            }
+            else {
                 var error = "Failed to restore back button state from " + this.wexBackState;
                 Logger.error(error);
                 throw new Error(error);
             }
-            return false;
         }
 
         function link(scope, elem, attrs) {
-            //scope objects:
-            scope.wexBackState = attrs.wexBackState;
-            scope.prevBackState = null;
-            scope.backStateApplied = false;
-            scope.appliedBackButtonBackScope = null;
+            var removeLeaveListener,
+                vm = scope.wexBackState = {};
 
-            scope.applyBackState = _.bind(applyBackState, scope);
-            scope.removeBackState = _.bind(removeBackState, scope);
+            //vm objects:
+            vm.wexBackState = attrs.wexBackState;
+            vm.prevState = null;
+            vm.stateApplied = false;
+            vm.backButtonScope = null;
+            vm.activeViewState = null;
 
-            //event listeners
-            scope.$on("$ionicView.afterEnter", scope.applyBackState);
-            scope.$on("$ionicView.beforeLeave", scope.removeBackState);
-            scope.$on("$destroy", scope.removeBackState);
-            scope.$on("userLoggedOut", scope.removeBackState);
+            vm.applyBackState = _.bind(applyBackState, vm);
+            vm.onEnter = _.bind(onEnter, vm);
+            vm.onLeave = _.bind(onLeave, vm);
+            vm.removeBackState = _.bind(removeBackState, vm);
+
+            //event listeners:
+            scope.$on("$ionicView.afterEnter", function(event, stateInfo) {
+                vm.onEnter(stateInfo.stateName);
+            });
+
+            removeLeaveListener = $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams, fromState, fromParams) {
+                //only fire this listener once
+                removeLeaveListener();
+
+                vm.onLeave(fromState.name);
+            });
         }
     }
 

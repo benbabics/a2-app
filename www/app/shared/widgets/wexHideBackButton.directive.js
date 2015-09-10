@@ -13,7 +13,7 @@
      */
 
     /* @ngInject */
-    function wexHideBackButton(CommonService, Logger) {
+    function wexHideBackButton($rootScope, CommonService, Logger) {
         var directive = {
                 restrict: "A",
                 link    : link
@@ -24,60 +24,81 @@
         //////////////////////
 
         function applyHideState() {
-            var backButton = CommonService.findActiveBackButton(),
-                backButtonScope;
+            var backButton = CommonService.findActiveBackButton();
 
-            if(!this.hideStateApplied) {
-                if (backButton) {
-                    backButtonScope = backButton.isolateScope();
-                    if (backButtonScope) {
-                        this.prevHideState = backButtonScope.isHidden();
-                        this.hideStateApplied = true;
-                        this.appliedBackButtonHideScope = backButtonScope;
-                        backButtonScope.setHidden(this.wexHideBackButton);
-                        return true;
-                    }
-                }
+            if (backButton && backButton.isolateScope()) {
+                this.backButtonScope = backButton.isolateScope();
+                this.prevState = this.backButtonScope.isHidden();
 
+                //set the hide state on the back button
+                this.backButtonScope.setHidden(this.wexHideBackButton);
+            }
+            else {
                 var error = "Failed to set button hide state " + this.wexHideBackButton;
                 Logger.error(error);
                 throw new Error(error);
             }
-            return false;
+        }
+
+        function onEnter(stateName) {
+            if(!this.stateApplied) {
+                this.stateApplied = true;
+                this.activeViewState = stateName;
+
+                this.applyHideState();
+            }
+        }
+
+        function onLeave(stateName) {
+            if(this.stateApplied && stateName === this.activeViewState) {
+                this.removeHideState();
+
+                this.stateApplied = false;
+                this.activeViewState = null;
+            }
         }
 
         function removeHideState() {
-            if (this.hideStateApplied) {
-                if (this.appliedBackButtonHideScope) {
+            if (this.backButtonScope) {
+                //restore the previous hide state on the back button
+                this.backButtonScope.setHidden(this.prevState);
 
-                    this.hideStateApplied = false;
-                    this.appliedBackButtonHideScope.setHidden(this.prevHideState);
-                    this.appliedBackButtonHideScope = null;
-                    return true;
-                }
-
+                this.backButtonScope = null;
+            }
+            else {
                 var error = "Failed to restore back button hide state from " + this.wexHideBackButton;
                 Logger.error(error);
                 throw new Error(error);
             }
-            return false;
         }
 
         function link(scope, elem, attrs) {
+            var removeLeaveListener,
+                vm = scope.wexHideBackButton = {};
+
             //scope objects:
-            scope.wexHideBackButton = Boolean(scope.$eval(attrs.wexHideBackButton));
-            scope.prevHideState = null;
-            scope.hideStateApplied = false;
-            scope.appliedBackButtonHideScope = null;
+            vm.wexHideBackButton = Boolean(scope.$eval(attrs.wexHideBackButton));
+            vm.prevState = null;
+            vm.stateApplied = false;
+            vm.backButtonScope = null;
+            vm.activeViewState = null;
 
-            scope.applyHideState = _.bind(applyHideState, scope);
-            scope.removeHideState = _.bind(removeHideState, scope);
+            vm.applyHideState = _.bind(applyHideState, vm);
+            vm.onEnter = _.bind(onEnter, vm);
+            vm.onLeave = _.bind(onLeave, vm);
+            vm.removeHideState = _.bind(removeHideState, vm);
 
-            //event listeners
-            scope.$on("$ionicView.afterEnter", scope.applyHideState);
-            scope.$on("$ionicView.beforeLeave", scope.removeHideState);
-            scope.$on("$destroy", scope.removeHideState);
-            scope.$on("userLoggedOut", scope.removeHideState);
+            //event listeners:
+            scope.$on("$ionicView.afterEnter", function(event, stateInfo) {
+                vm.onEnter(stateInfo.stateName);
+            });
+
+            removeLeaveListener = $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams, fromState, fromParams) {
+                //only fire this listener once
+                removeLeaveListener();
+
+                vm.onLeave(fromState.name);
+            });
         }
     }
 
