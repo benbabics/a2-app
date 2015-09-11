@@ -9,6 +9,7 @@ var TestUtils = (function () {
             getRandomAccount                 : getRandomAccount,
             getRandomBank                    : getRandomBank,
             getRandomBoolean                 : getRandomBoolean,
+            getRandomCard                    : getRandomCard,
             getRandomDate                    : getRandomDate,
             getRandomInteger                 : getRandomInteger,
             getRandomInvoiceSummary          : getRandomInvoiceSummary,
