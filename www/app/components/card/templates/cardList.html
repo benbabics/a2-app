@@ -1,0 +1,28 @@
+<ion-view view-title="Cards" wex-back-state="landing">
+    <ion-content class="padding">
+        <wex-infinite-list on-reload="vm.loadNextPage" reload-distance="vm.config.reloadDistance">
+            <div class="list">
+                <div class="bar bar-header">
+                    <div class="item-input-wrapper" placeholder="Search Card No & Embossing">
+                        <span class="icon ion-android-search"></span>
+                    </div>
+                </div>
+            </div><br>
+            <div class="row divider">
+                <div class="col col-30">Card No</div>
+                <div class="col col-30">Embossing</div>
+                <div class="col col-30">Status</div>
+            </div>
+            <div class="row divider">
+                <div class="col col-30 wordwrap" style="margin-top:10px">{{transaction.embossedCardNumber | wexCardNumber}}</div>
+                <div class="col col-30 wordwrap" style="margin-top:10px">{{transaction.customVehicleId}}</div>
+                <div class="col col-30 right-align" style="margin-top:10px">Active</div>
+                <div class="col col-10">
+                    <span class="button button-icon icon ion-ios-arrow-forward"
+                          style="vertical-align:middle">
+                    </span>
+                </div>
+            </div>
+        </wex-infinite-list>
+    </ion-content>
+</ion-view>
