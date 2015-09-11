@@ -55,6 +55,22 @@ var TestUtils = (function () {
         return Math.random() >= 0.5;
     }
 
+    function getRandomCard(CardModel) {
+        var randomCard = new CardModel();
+
+        randomCard.cardId = getRandomNumberWithLength(12);
+        randomCard.accountId = getRandomStringThatIsAlphaNumeric(10);
+        randomCard.cardType = getRandomStringThatIsAlphaNumeric(10);
+        randomCard.embossedAccountNumber = getRandomStringThatIsAlphaNumeric(13);
+        randomCard.embossedCardNumber = getRandomStringThatIsAlphaNumeric(5);
+        randomCard.embossingValue1 = getRandomStringThatIsAlphaNumeric(15);
+        randomCard.embossingValue2 = getRandomStringThatIsAlphaNumeric(15);
+        randomCard.embossingValue3 = getRandomStringThatIsAlphaNumeric(15);
+        randomCard.status = getRandomStringThatIsAlphaNumeric(5);
+
+        return randomCard;
+    }
+
     function getRandomDate(start, end) {
         start = start || new Date(1970, 1, 1);
         end = end || new Date();
