@@ -18,12 +18,13 @@
                 </p>
             </div>
             <br>
-            <div>
+            <div ng-if="vm.card.isActive() || vm.card.isSuspended()">
                 <button class="button button-block button-light item item-icon-right">
                     <i class="icon ion-chevron-right"></i>
                     <span class="btn_align black">{{::vm.config.changeStatusButton}}</span>
                 </button>
-                <button class="button button-block button-light item item-icon-right">
+                <button class="button button-block button-light item item-icon-right"
+                        ng-if="vm.card.isActive()">
                     <i class="icon ion-chevron-right"></i>
                     <span class="btn_align black">{{::vm.config.reissueCardButton}}</span>
                 </button>
