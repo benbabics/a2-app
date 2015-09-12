@@ -6,7 +6,9 @@
         var $injector,
             $q,
             $rootScope,
-            $state;
+            $state,
+            mockCard,
+            CardManager;
 
         beforeEach(function () {
 
@@ -14,11 +16,19 @@
             module("app.components.card");
             module("app.html");
 
-            inject(function (_$injector_, _$q_, _$rootScope_, _$state_) {
+            // mock dependencies
+            CardManager = jasmine.createSpyObj("CardManager", ["fetchCard"]);
+            module(function ($provide) {
+                $provide.value("CardManager", CardManager);
+            });
+
+            inject(function (_$injector_, _$q_, _$rootScope_, _$state_, CardModel) {
                 $injector = _$injector_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
+
+                mockCard = TestUtils.getRandomCard(CardModel);
             });
         });
 
@@ -92,5 +102,69 @@
             });
 
         });
+
+        describe("has a card.detail state that", function () {
+            var state,
+                stateName = "card.detail";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should not be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should not be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/detail/:cardId");
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName, {cardId: "1234"})).toEqual("#/card/detail/1234");
+            });
+
+            describe("when navigated to", function () {
+
+                var fetchCardDeferred,
+                    mockCardId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                beforeEach(function () {
+                    fetchCardDeferred = $q.defer();
+                    CardManager.fetchCard.and.returnValue(fetchCardDeferred.promise);
+
+                    $state.go(stateName, {cardId: mockCardId});
+
+                    fetchCardDeferred.resolve(mockCard);
+                    $rootScope.$digest();
+                });
+
+                it("should call CardManager.fetchCard", function () {
+                    expect(CardManager.fetchCard).toHaveBeenCalledWith(mockCardId);
+                });
+
+                it("should transition successfully", function () {
+                    expect($state.current.name).toBe(stateName);
+                });
+
+                it("should resolve the card", function () {
+                    $injector.invoke($state.current.views["view@card"].resolve.card)
+                        .then(function (card) {
+                            expect(card).toEqual(mockCard);
+                        });
+                });
+
+            });
+
+        });
+
     });
 })();

@@ -24,6 +24,30 @@
                 }
             }
         });
+
+        $stateProvider.state("card.detail", {
+            url        : "/detail/:cardId",
+            cache      : false,
+            views   : {
+                "view@card": {
+                    templateUrl: "app/components/card/templates/cardDetail.html",
+                    controller : "CardDetailController as vm",
+                    resolve    : {
+                        card: function ($stateParams, CardManager, CommonService) {
+                            var cardId = $stateParams.cardId;
+
+                            CommonService.loadingBegin();
+
+                            return CardManager.fetchCard(cardId)
+                                .finally(function () {
+                                    CommonService.loadingComplete();
+                                });
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
     angular.module("app.components.card")
