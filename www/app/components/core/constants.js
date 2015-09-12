@@ -248,9 +248,10 @@
 
     appGlobals.POSTED_TRANSACTION_DETAIL = {
         "CONFIG": {
-            "cardNumber"          : "Card Number (masked)",
-            "customVehicleAssetId": "Custom Vehicle/Asset ID",
-            "driverName"          : "Driver Name",
+            "cardNumber"          : "Card Number",
+            "customVehicleAssetId": "Asset ID",
+            "driverFirstName"     : "Driver First Name",
+            "driverLastName"      : "Driver Last Name",
             "grossCost"           : "Gross Cost",
             "merchantName"        : "Merchant Name",
             "merchantCityState"   : "Merchant City, ST",
