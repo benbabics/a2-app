@@ -3,18 +3,13 @@
 
     var $q,
         $rootScope,
-        accountId = TestUtils.getRandomStringThatIsAlphaNumeric(10),
-        embossedCardNumberFilter = TestUtils.getRandomStringThatIsAlphaNumeric(3),
-        embossingValue2Filter = TestUtils.getRandomStringThatIsAlphaNumeric(5),
-        pageNumber = TestUtils.getRandomNumberWithLength(1),
-        pageSize = TestUtils.getRandomNumberWithLength(2),
         paymentId = TestUtils.getRandomStringThatIsAlphaNumeric(5),
         resolveHandler,
         rejectHandler,
-        statuses = TestUtils.getRandomStringThatIsAlphaNumeric(10),
         CardManager,
         CardModel,
         CardsResource,
+        mockCachedCardCollection,
         mockCardCollection;
 
     describe("A Card Manager", function () {
@@ -52,6 +47,12 @@
             numModels = TestUtils.getRandomInteger(1, 100);
             for (i = 0; i < numModels; ++i) {
                 mockCardCollection.push(TestUtils.getRandomCard(CardModel));
+            }
+
+            mockCachedCardCollection = [];
+            numModels = TestUtils.getRandomInteger(1, 100);
+            for (i = 0; i < numModels; ++i) {
+                mockCachedCardCollection.push(TestUtils.getRandomCard(CardModel));
             }
         });
 
@@ -162,63 +163,141 @@
 
         describe("has a fetchCards function that", function () {
 
-            var getCardsDeferred;
+            var getCardsDeferred,
+                mockAccountId,
+                mockEmbossedCardNumberFilter,
+                mockEmbossingValue2Filter,
+                mockStatuses,
+                mockPageNumber,
+                mockPageSize;
 
             beforeEach(function () {
                 getCardsDeferred = $q.defer();
+                mockAccountId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                mockEmbossedCardNumberFilter = TestUtils.getRandomStringThatIsAlphaNumeric(5);
+                mockEmbossingValue2Filter = TestUtils.getRandomStringThatIsAlphaNumeric(5);
+                mockStatuses = TestUtils.getRandomStringThatIsAlphaNumeric(50);
+                mockPageNumber = TestUtils.getRandomInteger(0, 10);
+                mockPageSize = TestUtils.getRandomInteger(1, 100);
+
+                CardManager.setCards(mockCachedCardCollection.slice());
 
                 CardsResource.getCards.and.returnValue(getCardsDeferred.promise);
-
-                CardManager.fetchCards(accountId, embossedCardNumberFilter, embossingValue2Filter, statuses, pageNumber, pageSize)
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
             });
 
             describe("when getting the cards", function () {
 
-                it("should call CardsResource.getCards", function () {
-                    expect(CardsResource.getCards).toHaveBeenCalledWith(accountId, {
-                        embossedCardNumberFilter: embossedCardNumberFilter,
-                        embossingValue2Filter   : embossingValue2Filter,
-                        status                  : statuses,
-                        pageNumber: pageNumber,
-                        pageSize  : pageSize
-                    });
+                beforeEach(function () {
+                    CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                 });
 
+                it("should call CardsResource.getCards", function () {
+                    expect(CardsResource.getCards).toHaveBeenCalledWith(mockAccountId, {
+                        embossedCardNumberFilter: mockEmbossedCardNumberFilter,
+                        embossingValue2Filter   : mockEmbossingValue2Filter,
+                        status                  : mockStatuses,
+                        pageNumber              : mockPageNumber,
+                        pageSize                : mockPageSize
+                    });
+                });
             });
 
             describe("when the cards are fetched successfully", function () {
+                var mockCards = {data: {}};
 
-                var mockRemoteCards = {data: {}};
+                beforeEach(function () {
+                    mockCards.data = mockCardCollection.slice();
+                });
 
                 describe("when there is data in the response", function () {
 
-                    beforeEach(function () {
-                        mockRemoteCards.data = mockCardCollection.slice();
-                        getCardsDeferred.resolve(mockRemoteCards);
+                    describe("when the first page is requested", function () {
 
-                        CardsResource.getCards.and.returnValue(getCardsDeferred.promise);
+                        beforeEach(function () {
+                            mockPageNumber = 0;
 
-                        CardManager.fetchCards(accountId, embossedCardNumberFilter, embossingValue2Filter, statuses, pageNumber, pageSize)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
+                            CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
+                                .then(resolveHandler)
+                                .catch(rejectHandler);
+                        });
 
-                        $rootScope.$digest();
+                        beforeEach(function () {
+                            getCardsDeferred.resolve(mockCards);
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should resolve", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(mockCards.data);
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
+
+                        it("should reset cards to an array of models set from the data", function () {
+                            expect(CardManager.getCards()).toEqual(mockCardCollection);
+                        });
                     });
 
-                    it("should set the cards", function () {
-                        expect(CardManager.getCards()).toEqual(mockCardCollection);
-                    });
+                    describe("when a page beyond the first page requested", function () {
 
-                    it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(mockRemoteCards.data);
-                        expect(rejectHandler).not.toHaveBeenCalled();
-                    });
+                        beforeEach(function () {
+                            mockPageNumber = TestUtils.getRandomInteger(1, 10);
 
+                            CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
+                                .then(resolveHandler)
+                                .catch(rejectHandler);
+                        });
+
+                        describe("when there are cards in the fetched data that are already cached", function () {
+
+                            beforeEach(function () {
+                                Array.prototype.push.apply(mockCards.data, mockCachedCardCollection);
+
+                                getCardsDeferred.resolve(mockCards);
+
+                                $rootScope.$digest();
+                            });
+
+                            it("should resolve", function () {
+                                expect(resolveHandler).toHaveBeenCalledWith(mockCards.data);
+                                expect(rejectHandler).not.toHaveBeenCalled();
+                            });
+
+                            it("should add only the uncached cards from the data to cards", function () {
+                                var expectedValues = _.unique(mockCachedCardCollection.concat(mockCards.data), "cardId");
+
+                                expect(CardManager.getCards()).toEqual(expectedValues);
+                            });
+                        });
+
+                        describe("when there are no cards in the fetched data that are already cached", function () {
+
+                            beforeEach(function () {
+                                getCardsDeferred.resolve(mockCards);
+
+                                $rootScope.$digest();
+                            });
+
+                            it("should resolve", function () {
+                                expect(resolveHandler).toHaveBeenCalledWith(mockCards.data);
+                                expect(rejectHandler).not.toHaveBeenCalled();
+                            });
+
+                            it("should add all of the fetched cards to cards", function () {
+                                expect(CardManager.getCards()).toEqual(mockCachedCardCollection.concat(mockCards.data));
+                            });
+                        });
+                    });
                 });
 
                 describe("when there is no data in the response", function () {
+
+                    beforeEach(function () {
+                        CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
 
                     beforeEach(function () {
                         getCardsDeferred.resolve(null);
@@ -228,12 +307,20 @@
                         expect($rootScope.$digest).toThrow();
                     });
 
+                    it("should NOT modify cards", function () {
+                        expect(CardManager.getCards()).toEqual(mockCachedCardCollection);
+                    });
                 });
             });
 
             describe("when retrieving the cards fails", function () {
-
                 var mockResponse = "Some error";
+
+                beforeEach(function () {
+                    CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                });
 
                 beforeEach(function () {
                     getCardsDeferred.reject(mockResponse);
@@ -242,7 +329,6 @@
                 it("should throw an error", function () {
                     expect($rootScope.$digest).toThrow();
                 });
-
             });
 
         });

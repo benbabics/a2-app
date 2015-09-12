@@ -56,10 +56,18 @@
             return CardsResource.getCards(accountId, params)
                 .then(function (cardsResponse) {
                     if (cardsResponse && cardsResponse.data) {
-                        // map the card data to model objects
-                        cards = _.map(cardsResponse.data, createCard);
+                        //map the card data to model objects
+                        var fetchedCards = _.map(cardsResponse.data, createCard);
 
-                        return cards;
+                        //reset the cache if we're fetching the first page of results
+                        if (pageNumber === 0) {
+                            cards = [];
+                        }
+
+                        //only cache the fetched cards that haven't been cached yet
+                        cards = _.unique(cards.concat(fetchedCards), "cardId");
+
+                        return fetchedCards;
                     }
                     // no data in the response
                     else {
