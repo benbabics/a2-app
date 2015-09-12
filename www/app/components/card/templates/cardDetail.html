@@ -4,17 +4,17 @@
             <div class="padding item item-wrap arrow-align">
                 <p class="padding divider">
                     <span class="block_align black">{{::vm.config.cardNumber}}</span>
-                    <span class="content_align black">{{card.embossedCardNumber | wexCardNumber}}</span>
+                    <span class="content_align black">{{vm.card.embossedCardNumber | wexCardNumber}}</span>
                 </p>
 
                 <p class="padding divider">
                     <span class="block_align black">{{::vm.config.embossing}}</span>
-                    <span class="content_align black">{{card.embossingValue2}}</span>
+                    <span class="content_align black">{{vm.card.embossingValue2}}</span>
                 </p>
 
                 <p class="padding divider">
                     <span class="block_align black">{{::vm.config.status}}</span>
-                    <span class="content_align black wordwrap">{{card.getStatusDisplayName()}}</span>
+                    <span class="content_align black wordwrap">{{vm.card.getStatusDisplayName()}}</span>
                 </p>
             </div>
             <br>
