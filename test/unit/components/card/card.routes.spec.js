@@ -3,7 +3,10 @@
 
     describe("A Card Module Route Config", function () {
 
-        var $state;
+        var $injector,
+            $q,
+            $rootScope,
+            $state;
 
         beforeEach(function () {
 
@@ -11,7 +14,10 @@
             module("app.components.card");
             module("app.html");
 
-            inject(function (_$state_) {
+            inject(function (_$injector_, _$q_, _$rootScope_, _$state_) {
+                $injector = _$injector_;
+                $q = _$q_;
+                $rootScope = _$rootScope_;
                 $state = _$state_;
             });
         });
@@ -41,6 +47,50 @@
                 expect(state.views).toBeDefined();
                 expect(state.views["@"]).toBeDefined();
             });
+        });
+
+        describe("has a card.list state that", function () {
+            var state,
+                stateName = "card.list";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should not be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should not be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/list");
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName)).toEqual("#/card/list");
+            });
+
+            describe("when navigated to", function () {
+
+                beforeEach(function () {
+                    $state.go(stateName);
+                    $rootScope.$digest();
+                });
+
+                it("should transition successfully", function () {
+                    expect($state.current.name).toBe(stateName);
+                });
+
+            });
+
         });
     });
 })();

@@ -32,19 +32,19 @@
                          ng-model="vm.invoiceSummary.availableCredit"
                          id="availableCredit"
                          class="graph-amounts">
-                        <span class="label">{{vm.config.availableCredit}}</span>
+                        <span class="label">{{::vm.config.availableCredit}}</span>
                         <br>
                         <span class="value">{{vm.invoiceSummary.availableCredit | currency}}</span>
                     </div>
                     <div id="billedAmount"
                          class="graph-amounts">
-                        <span class="label">{{vm.config.billedAmount}}</span>
+                        <span class="label">{{::vm.config.billedAmount}}</span>
                         <br>
                         <span class="value">{{vm.invoiceSummary.billedAmount | currency}}</span>
                     </div>
                     <div id="unbilledAmount"
                          class="graph-amounts">
-                        <span class="label">{{vm.config.unbilledAmount}}</span>
+                        <span class="label">{{::vm.config.unbilledAmount}}</span>
                         <br>
                         <span class="value">{{vm.invoiceSummary.unbilledAmount | currency}}</span>
                     </div>
@@ -53,20 +53,20 @@
 
             <div class="inner-container">
                 <div class="row invoice-divider">
-                    <div class="col col-50 label">{{vm.config.currentBalance}}</div>
+                    <div class="col col-50 label">{{::vm.config.currentBalance}}</div>
                     <div class="col col-50 content_align value" id="currentBalance">
                         {{vm.invoiceSummary.currentBalance | currency}}
                     </div>
                 </div>
                 <div class="row invoice-divider">
-                    <div class="col col-50 label">{{vm.config.minimumPayment}}</div>
+                    <div class="col col-50 label">{{::vm.config.minimumPayment}}</div>
                     <div class="col col-50 content_align value" id="minimumPayment">
                         {{vm.invoiceSummary.minimumPaymentDue | currency}}
                     </div>
                 </div>
 
                 <div class="row invoice-divider">
-                    <div class="col col-50 label">{{vm.config.paymentDueDate}}</div>
+                    <div class="col col-50 label">{{::vm.config.paymentDueDate}}</div>
                     <div class="col col-50 content_align value" id="paymentDueDate">
                         {{vm.invoiceSummary.paymentDueDate | wexDefaultDateFormat}}
                     </div>
@@ -79,12 +79,12 @@
                        href="#/payment/add/verify">
                         <div class="row">
                             <div class="col col-50">
-                                <span class="btn_align">{{vm.config.makePayment}}</span>
+                                <span class="btn_align">{{::vm.config.makePayment}}</span>
                             </div>
                             <div class="col col-50 content_align">
                                 <i class="icon ion-chevron-right"></i>
                                 <span class="badge" ng-if="vm.scheduledPaymentsCount > 0">
-                                    {{vm.scheduledPaymentsCount}} {{vm.config.scheduledPayments}}
+                                    {{vm.scheduledPaymentsCount}} {{::vm.config.scheduledPayments}}
                                 </span>
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                        ui-sref="transaction.list">
                         <div class="row">
                             <div class="col col-50">
-                                <span id="viewActivityButton" class="btn_align">{{vm.config.viewActivity}}</span>
+                                <span id="viewActivityButton" class="btn_align">{{::vm.config.viewActivity}}</span>
                             </div>
                             <div class="col col-50 content_align">
                                 <i class="icon ion-chevron-right"></i>
@@ -104,10 +104,11 @@
                 </div>
 
                 <div class="button-group">
-                    <a class="button button-block button-light item item-icon-right">
+                    <a class="button button-block button-light item item-icon-right"
+                            ui-sref="card.list">
                         <div class="row">
                             <div class="col col-50">
-                                <span id="cardsButton" class="btn_align black">{{vm.config.cards}}</span>
+                                <span id="cardsButton" class="btn_align black">{{::vm.config.cards}}</span>
                             </div>
                             <div class="col col-50 content_align">
                                 <i class="icon ion-chevron-right"></i>

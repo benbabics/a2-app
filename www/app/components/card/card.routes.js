@@ -13,6 +13,17 @@
                 }
             }
         });
+
+        $stateProvider.state("card.list", {
+            cache      : false,
+            url     : "/list",
+            views   : {
+                "view@card": {
+                    templateUrl: "app/components/card/templates/cardList.html",
+                    controller : "CardListController as vm"
+                }
+            }
+        });
     }
 
     angular.module("app.components.card")

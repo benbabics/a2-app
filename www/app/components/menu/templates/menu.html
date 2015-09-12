@@ -3,33 +3,35 @@
         <ion-item id="option-home"
                   ui-sref="landing"
                   menu-close>
-            {{vm.config.options.home}}
+            {{::vm.config.options.home}}
         </ion-item>
         <ion-item id="option-add-payment"
                   href="#/payment/add/verify"
                   menu-close>
-            {{vm.config.options.addPayment}}
+            {{::vm.config.options.addPayment}}
         </ion-item>
         <ion-item id="option-payments"
                   ui-sref="payment.list.view"
                   menu-close>
-            {{vm.config.options.payments}}
+            {{::vm.config.options.payments}}
         </ion-item>
         <ion-item id="option-transaction-activity"
                   ui-sref="transaction.list"
                   menu-close>
-            {{vm.config.options.transactionActivity}}
+            {{::vm.config.options.transactionActivity}}
         </ion-item>
-        <ion-item id="option-cards">
-            {{vm.config.options.cards}}
+        <ion-item id="option-cards"
+                ui-sref="card.list"
+                menu-close>
+            {{::vm.config.options.cards}}
         </ion-item>
         <ion-item id="option-terms-and-policies">
-            {{vm.config.options.termsAndPolicies}}
+            {{::vm.config.options.termsAndPolicies}}
         </ion-item>
         <ion-item id="option-log-out"
                   ng-click="vm.logOut()"
                   menu-close>
-            {{vm.config.options.logOut}}
+            {{::vm.config.options.logOut}}
         </ion-item>
     </ion-list>
 </ion-content>
