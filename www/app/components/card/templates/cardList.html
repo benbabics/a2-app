@@ -1,25 +1,25 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="landing">
     <ion-content class="padding">
-        <div>
-            <div class="list">
-                <div class="bar bar-header">
-                    <div class="item-input-wrapper" placeholder="{{::vm.config.searchPlaceholder}}">
-                        <span class="icon ion-android-search"></span>
-                    </div>
+        <div class="list">
+            <div class="bar bar-header">
+                <div class="item-input-wrapper" placeholder="{{::vm.config.searchPlaceholder}}">
+                    <span class="icon ion-android-search"></span>
                 </div>
-            </div><br>
-            <div class="row divider">
-                <div class="col col-30">{{::vm.config.cardNumber}}</div>
-                <div class="col col-30">{{::vm.config.embossing}}</div>
-                <div class="col col-30">{{::vm.config.status}}</div>
             </div>
+        </div><br>
+        <div class="row divider">
+            <div class="col col-30">{{::vm.config.cardNumber}}</div>
+            <div class="col col-30">{{::vm.config.embossing}}</div>
+            <div class="col col-30">{{::vm.config.status}}</div>
+        </div>
+        <wex-infinite-list on-reload="vm.loadNextPage" reload-distance="vm.config.reloadDistance">
             <div ng-switch="vm.cards.length > 0">
                 <div ng-switch-when="true"
                      class="row divider"
                      collection-repeat="card in vm.cards">
                     <div class="col col-30 wordwrap" style="margin-top:10px">{{card.embossedCardNumber | wexCardNumber}}</div>
                     <div class="col col-30 wordwrap" style="margin-top:10px">{{card.embossingValue2}}</div>
-                    <div class="col col-30 right-align" style="margin-top:10px">{{card.status}}</div>
+                    <div class="col col-30 right-align" style="margin-top:10px">{{card.getStatusDisplayName()}}</div>
                     <div class="col col-10">
                         <span class="button button-icon icon ion-ios-arrow-forward"
                               style="vertical-align:middle">
@@ -28,6 +28,6 @@
                 </div>
                 <div ng-switch-when="false" class="no-cards">{{::vm.config.emptyList}}</div>
             </div>
-        </div>
+        </wex-infinite-list>
     </ion-content>
 </ion-view>

@@ -109,6 +109,24 @@
     };
 
     /**
+     * Card Constants
+     */
+    sharedGlobals.CARD = {
+        STATUS: {
+            ACTIVE    : "active",
+            SUSPENDED : "suspended",
+            TERMINATED: "terminated",
+
+            DISPLAY_MAPPINGS: {
+                ACTIVE    : "Active",
+                SUSPENDED : "Suspended",
+                TERMINATED: "Terminated",
+                UNKNOWN   : "Unknown"
+            }
+        }
+    };
+
+    /**
      * App-level notifications
      */
     sharedGlobals.NOTIFICATIONS = {

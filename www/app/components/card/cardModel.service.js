@@ -1,7 +1,10 @@
 (function () {
     "use strict";
 
-    var CardModel = function () {
+    var CardModel = function (globals) {
+
+        // Constants
+        var CARD_STATUS = globals.CARD.STATUS;
 
         function CardModel() {
             this.cardId = "";
@@ -17,6 +20,30 @@
 
         CardModel.prototype.set = function (cardResource) {
             angular.extend(this, cardResource);
+        };
+
+
+        CardModel.prototype.getStatusDisplayName = function () {
+            var status = this.status ? this.status.toUpperCase() : null;
+
+            if (status && _.has(CARD_STATUS.DISPLAY_MAPPINGS, status)) {
+                return CARD_STATUS.DISPLAY_MAPPINGS[status];
+            }
+            else {
+                return CARD_STATUS.DISPLAY_MAPPINGS.UNKNOWN;
+            }
+        };
+
+        CardModel.prototype.isActive = function () {
+            return this.status && this.status.toLowerCase() === CARD_STATUS.ACTIVE;
+        };
+
+        CardModel.prototype.isSuspended = function () {
+            return this.status && this.status.toLowerCase() === CARD_STATUS.SUSPENDED;
+        };
+
+        CardModel.prototype.isTerminated = function () {
+            return this.status && this.status.toLowerCase() === CARD_STATUS.TERMINATED;
         };
 
         return CardModel;

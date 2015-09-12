@@ -82,7 +82,8 @@
             "emptyList"        : "No Records Found."
         },
         "SEARCH_OPTIONS": {
-            "PAGE_SIZE": 25
+            "PAGE_SIZE": 25,
+            "STATUSES" : "active,suspended,terminated"
         }
     };
 

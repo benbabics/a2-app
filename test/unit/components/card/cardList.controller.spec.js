@@ -21,8 +21,8 @@
                     "reloadDistance": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 },
                 "SEARCH_OPTIONS": {
-                    "MAX_DAYS" : TestUtils.getRandomInteger(1, 100),
-                    "PAGE_SIZE": TestUtils.getRandomInteger(1, 100)
+                    "PAGE_SIZE": TestUtils.getRandomInteger(1, 100),
+                    "STATUSES": TestUtils.getRandomStringThatIsAlphaNumeric(50)
                 }
             }
         };
@@ -90,6 +90,112 @@
 
             // Doesn't do anything yet
 
+        });
+
+        describe("has a loadNextPage function that", function () {
+            var fetchCardsDeferred;
+
+            beforeEach(function () {
+                fetchCardsDeferred = $q.defer();
+                CardManager.fetchCards.and.returnValue(fetchCardsDeferred.promise);
+            });
+
+            beforeEach(function () {
+                ctrl.loadNextPage()
+                    .then(resolveHandler)
+                    .catch(rejectHandler);
+            });
+
+            it("should call CommonService.loadingBegin", function () {
+                expect(CommonService.loadingBegin).toHaveBeenCalledWith();
+            });
+
+            it("should call CardManager.fetchCards with the expected values", function () {
+                expect(CardManager.fetchCards).toHaveBeenCalledWith(
+                    mockUser.billingCompany.accountId,
+                    undefined,
+                    undefined,
+                    mockGlobals.CARD_LIST.SEARCH_OPTIONS.STATUSES,
+                    0,
+                    mockGlobals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE
+                );
+            });
+
+            describe("when fetchCards resolves with an empty list of cards", function () {
+
+                beforeEach(function () {
+                    fetchCardsDeferred.resolve([]);
+
+                    $rootScope.$digest();
+                });
+
+                it("should resolve with a value of true", function () {
+                    expect(resolveHandler).toHaveBeenCalledWith(true);
+                });
+
+                it("should NOT reject", function () {
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+                it("should call CommonService.loadingComplete", function () {
+                    expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("when fetchCards resolves with a non-empty list of cards", function () {
+                var mockCards;
+
+                beforeEach(function () {
+                    var numCards = TestUtils.getRandomInteger(1, 100);
+                    mockCards = [];
+                    for (var i = 0; i < numCards; ++i) {
+                        mockCards.push(TestUtils.getRandomCard(CardModel));
+                    }
+                });
+
+                beforeEach(function () {
+                    fetchCardsDeferred.resolve(mockCards);
+
+                    $rootScope.$digest();
+                });
+
+                it("should add the cards to the list", function () {
+                    expect(ctrl.cards).toEqual(mockCards);
+                });
+
+                xit("should increment the current page", function () {
+                    //TODO figure out how to test this
+                });
+
+                it("should resolve with a value of false", function () {
+                    expect(resolveHandler).toHaveBeenCalledWith(false);
+                });
+
+                it("should NOT reject", function () {
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+                it("should call CommonService.loadingComplete", function () {
+                    expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("when fetchCards rejects", function () {
+
+                beforeEach(function () {
+                    fetchCardsDeferred.reject();
+
+                    $rootScope.$digest();
+                });
+
+                it("should throw an error", function () {
+                    expect($rootScope.$digest).toThrow();
+                });
+
+                it("should call CommonService.loadingComplete", function () {
+                    expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                });
+            });
         });
 
     });
