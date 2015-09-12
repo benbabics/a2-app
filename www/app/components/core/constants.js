@@ -71,6 +71,17 @@
         }
     };
 
+    appGlobals.CARD_DETAIL = {
+        "CONFIG": {
+            "title"             : "Card Details",
+            "cardNumber"        : "Card Number",
+            "embossing"         : "Embossing",
+            "status"            : "Status",
+            "changeStatusButton": "Change Status",
+            "reissueCardButton" : "Reissue Card"
+        }
+    };
+
     appGlobals.CARD_LIST = {
         "CONFIG"        : {
             "title"            : "Cards",
