@@ -71,6 +71,21 @@
         }
     };
 
+    appGlobals.CARD_LIST = {
+        "CONFIG"        : {
+            "title"            : "Cards",
+            "searchPlaceholder": "Search Card No & Embossing",
+            "cardNumber"       : "Card No",
+            "embossing"        : "Embossing",
+            "status"           : "Status",
+            "reloadDistance"   : "5%",
+            "emptyList"        : "No Records Found."
+        },
+        "SEARCH_OPTIONS": {
+            "PAGE_SIZE": 25
+        }
+    };
+
     appGlobals.PAYMENT_ADD = {
         "WARNINGS": {
             "BANK_ACCOUNTS_NOT_SETUP"  : "You must set up your financial institutions as your payment options online prior to scheduling a payment.",
