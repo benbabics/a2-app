@@ -294,10 +294,20 @@ $user-login-gradient-bottom: #414141;
 /**--------------------------------
   Card Activity Page
  ----------------------------------**/
-.no-cards {
-    font-style: italic;
-    text-align: center;
-    display: block;
+.card-list {
+    .bar-subheader {
+        background-color: #eee;
+
+        .item-input-wrapper {
+            background-color: #fff;
+        }
+    }
+
+    .no-cards {
+        font-style: italic;
+        text-align: center;
+        display: block;
+    }
 }
 
 /**--------------------------------
