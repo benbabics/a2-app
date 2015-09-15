@@ -57,62 +57,62 @@
             });
         });
 
-        describe("has a loadMore function that", function () {
+        describe("when a custom loading complete flag is specified", function () {
+            var loadingComplete;
 
             beforeEach(function () {
-                spyOn(wexInfiniteList.scope, "$broadcast");
-            });
+                loadingComplete = TestUtils.getRandomBoolean();
 
-            describe("when allDataLoaded is true", function () {
-
-                beforeEach(function () {
-                    wexInfiniteList.scope.allDataLoaded = true;
-
-                    wexInfiniteList.scope.loadMore();
-
-                    $rootScope.$digest();
-                });
-
-                it("should NOT call onReload", function () {
-                    expect(mockReloadCallback).not.toHaveBeenCalled();
-                });
-
-                it("should NOT change the value of allDataLoaded", function () {
-                    expect(wexInfiniteList.scope.allDataLoaded).toBeTruthy();
-                });
-
-                it("should broadcast scroll.infiniteScrollComplete", function () {
-                    expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
+                wexInfiniteList = createWexInfiniteList({
+                    onReload: mockReloadCallback,
+                    loadingComplete: loadingComplete
                 });
             });
 
-            describe("when allDataLoaded is false", function () {
-                var reloadCallbackDeferred;
+            it("should initialize loadingComplete to a getter for the given value", function () {
+                expect(wexInfiniteList.scope.loadingComplete).toBeDefined();
+                expect(wexInfiniteList.scope.loadingComplete()).toEqual(loadingComplete);
+            });
+        });
 
-                beforeEach(function () {
-                    reloadCallbackDeferred = $q.defer();
-                    mockReloadCallback.and.returnValue(reloadCallbackDeferred.promise);
-                });
+        describe("when a custom loading complete flag is NOT specified", function () {
 
-                beforeEach(function () {
-                    wexInfiniteList.scope.allDataLoaded = false;
+            beforeEach(function () {
+                wexInfiniteList = createWexInfiniteList({onReload: mockReloadCallback});
+            });
 
-                    wexInfiniteList.scope.loadMore();
-                });
+            it("should initialize loadingComplete to a getter for allDataLoaded", function () {
+                expect(wexInfiniteList.scope.loadingComplete).toBeDefined();
+                expect(wexInfiniteList.scope.loadingComplete()).toEqual(wexInfiniteList.scope.allDataLoaded);
+            });
+        });
 
-                it("should call onReload", function () {
-                    expect(mockReloadCallback).toHaveBeenCalledWith();
-                });
+        describe("has a loadMore function that", function () {
 
-                describe("when the reload callback promise resolves with true", function () {
+            describe("when custom loading complete flag is specified", function () {
+
+                describe("when it is true", function () {
 
                     beforeEach(function () {
-                        reloadCallbackDeferred.resolve(true);
+                        wexInfiniteList = createWexInfiniteList({
+                            onReload: mockReloadCallback,
+                            loadingComplete: true
+                        });
+
+                        spyOn(wexInfiniteList.scope, "$broadcast");
+                    });
+
+                    beforeEach(function () {
+                        wexInfiniteList.scope.loadMore();
 
                         $rootScope.$digest();
                     });
 
-                    it("should set allDataLoaded to true", function () {
+                    it("should NOT call onReload", function () {
+                        expect(mockReloadCallback).not.toHaveBeenCalled();
+                    });
+
+                    it("should NOT change the value of allDataLoaded", function () {
                         expect(wexInfiniteList.scope.allDataLoaded).toBeTruthy();
                     });
 
@@ -121,54 +121,217 @@
                     });
                 });
 
-                describe("when the reload callback promise resolves with false", function () {
+                describe("when it is false", function () {
+                    var reloadCallbackDeferred;
 
                     beforeEach(function () {
-                        reloadCallbackDeferred.resolve(false);
+                        wexInfiniteList = createWexInfiniteList({
+                            onReload       : mockReloadCallback,
+                            loadingComplete: false
+                        });
+
+                        spyOn(wexInfiniteList.scope, "$broadcast");
+                        reloadCallbackDeferred = $q.defer();
+                        mockReloadCallback.and.returnValue(reloadCallbackDeferred.promise);
+                    });
+
+                    beforeEach(function() {
+                        wexInfiniteList.scope.loadMore();
 
                         $rootScope.$digest();
                     });
 
-                    it("should set allDataLoaded to false", function () {
-                        expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
+                    it("should call onReload", function () {
+                        expect(mockReloadCallback).toHaveBeenCalledWith();
                     });
 
-                    it("should broadcast scroll.infiniteScrollComplete", function () {
-                        expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
+                    describe("when the reload callback promise resolves with true", function () {
+
+                        beforeEach(function () {
+                            reloadCallbackDeferred.resolve(true);
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should set allDataLoaded to true", function () {
+                            expect(wexInfiniteList.scope.allDataLoaded).toBeTruthy();
+                        });
+
+                        it("should broadcast scroll.infiniteScrollComplete", function () {
+                            expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
+                        });
+                    });
+
+                    describe("when the reload callback promise resolves with false", function () {
+
+                        beforeEach(function () {
+                            reloadCallbackDeferred.resolve(false);
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should set allDataLoaded to false", function () {
+                            expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
+                        });
+
+                        it("should broadcast scroll.infiniteScrollComplete", function () {
+                            expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
+                        });
+                    });
+
+                    describe("when the reload callback promise resolves with no value", function () {
+
+                        beforeEach(function () {
+                            reloadCallbackDeferred.resolve();
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should set allDataLoaded to false", function () {
+                            expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
+                        });
+
+                        it("should broadcast scroll.infiniteScrollComplete", function () {
+                            expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
+                        });
+                    });
+
+                    describe("when the reload callback promise rejects", function () {
+
+                        beforeEach(function () {
+                            reloadCallbackDeferred.reject();
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should NOT change the value of allDataLoaded", function () {
+                            expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
+                        });
+
+                        it("should broadcast scroll.infiniteScrollComplete", function () {
+                            expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
+                        });
                     });
                 });
+            });
 
-                describe("when the reload callback promise resolves with no value", function () {
+            describe("when custom loading complete flag is NOT specified", function () {
 
-                    beforeEach(function () {
-                        reloadCallbackDeferred.resolve();
-
-                        $rootScope.$digest();
-                    });
-
-                    it("should set allDataLoaded to false", function () {
-                        expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
-                    });
-
-                    it("should broadcast scroll.infiniteScrollComplete", function () {
-                        expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
-                    });
+                beforeEach(function () {
+                    wexInfiniteList = createWexInfiniteList({onReload: mockReloadCallback});
                 });
 
-                describe("when the reload callback promise rejects", function () {
+                beforeEach(function () {
+                    spyOn(wexInfiniteList.scope, "$broadcast");
+                });
+
+                describe("when allDataLoaded is true", function () {
 
                     beforeEach(function () {
-                        reloadCallbackDeferred.reject();
+                        wexInfiniteList.scope.allDataLoaded = true;
+
+                        wexInfiniteList.scope.loadMore();
 
                         $rootScope.$digest();
+                    });
+
+                    it("should NOT call onReload", function () {
+                        expect(mockReloadCallback).not.toHaveBeenCalled();
                     });
 
                     it("should NOT change the value of allDataLoaded", function () {
-                        expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
+                        expect(wexInfiniteList.scope.allDataLoaded).toBeTruthy();
                     });
 
                     it("should broadcast scroll.infiniteScrollComplete", function () {
                         expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
+                    });
+                });
+
+                describe("when allDataLoaded is false", function () {
+                    var reloadCallbackDeferred;
+
+                    beforeEach(function () {
+                        reloadCallbackDeferred = $q.defer();
+                        mockReloadCallback.and.returnValue(reloadCallbackDeferred.promise);
+                    });
+
+                    beforeEach(function () {
+                        wexInfiniteList.scope.allDataLoaded = false;
+
+                        wexInfiniteList.scope.loadMore();
+                    });
+
+                    it("should call onReload", function () {
+                        expect(mockReloadCallback).toHaveBeenCalledWith();
+                    });
+
+                    describe("when the reload callback promise resolves with true", function () {
+
+                        beforeEach(function () {
+                            reloadCallbackDeferred.resolve(true);
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should set allDataLoaded to true", function () {
+                            expect(wexInfiniteList.scope.allDataLoaded).toBeTruthy();
+                        });
+
+                        it("should broadcast scroll.infiniteScrollComplete", function () {
+                            expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
+                        });
+                    });
+
+                    describe("when the reload callback promise resolves with false", function () {
+
+                        beforeEach(function () {
+                            reloadCallbackDeferred.resolve(false);
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should set allDataLoaded to false", function () {
+                            expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
+                        });
+
+                        it("should broadcast scroll.infiniteScrollComplete", function () {
+                            expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
+                        });
+                    });
+
+                    describe("when the reload callback promise resolves with no value", function () {
+
+                        beforeEach(function () {
+                            reloadCallbackDeferred.resolve();
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should set allDataLoaded to false", function () {
+                            expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
+                        });
+
+                        it("should broadcast scroll.infiniteScrollComplete", function () {
+                            expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
+                        });
+                    });
+
+                    describe("when the reload callback promise rejects", function () {
+
+                        beforeEach(function () {
+                            reloadCallbackDeferred.reject();
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should NOT change the value of allDataLoaded", function () {
+                            expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
+                        });
+
+                        it("should broadcast scroll.infiniteScrollComplete", function () {
+                            expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
+                        });
                     });
                 });
             });
@@ -185,6 +348,7 @@
         options = options || {};
         scope.onReload = options.onReload;
         scope.reloadDistance = options.reloadDistance;
+        scope.loadingComplete = options.loadingComplete;
 
         var markup = [];
 
@@ -194,6 +358,10 @@
         }
         if (scope.reloadDistance) {
             markup.push(" reload-distance='reloadDistance'");
+        }
+
+        if (scope.loadingComplete) {
+            markup.push(" loading-complete='loadingComplete'");
         }
         markup.push(">");
         markup.push("</wex-infinite-list>");

@@ -19,6 +19,7 @@
         vm.searchOptions = globals.CARD_LIST.SEARCH_OPTIONS;
 
         vm.applySearchFilter = applySearchFilter;
+        vm.getActiveSearchFilter = getActiveSearchFilter;
         vm.loadNextPage = loadNextPage;
 
         activate();
@@ -39,6 +40,10 @@
         }
 
         function beforeEnter() {
+        }
+
+        function getActiveSearchFilter() {
+            return activeSearchFilter;
         }
 
         function loadNextPage() {

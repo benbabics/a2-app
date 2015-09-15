@@ -92,8 +92,121 @@
 
         });
 
+        describe("has an applySearchFilter function that", function () {
+            var searchFilter,
+                view,
+                cardList,
+                infiniteListElem,
+                infiniteListController;
+
+            beforeEach(function () {
+                searchFilter = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                view = jasmine.createSpyObj("view", ["querySelector"]);
+                cardList = jasmine.createSpyObj("cardList", ["querySelectorAll"]);
+                infiniteListElem = jasmine.createSpyObj("infiniteListElem", ["controller"]);
+                infiniteListController = jasmine.createSpyObj("infiniteListController", ["checkBounds"]);
+
+                ctrl.loadingComplete = true;
+                ctrl.cards = [TestUtils.getRandomCard(CardModel)];
+            });
+
+            beforeEach(function () {
+                view.querySelector.and.callFake(function (query) {
+                    if(query === ".card-list") {
+                        return cardList;
+                    }
+                    else if(query === "ion-infinite-scroll") {
+                        return infiniteListElem;
+                    }
+                });
+
+                spyOn(CommonService, "getFocusedView").and.returnValue([view]);
+                spyOn(angular.element.prototype, "remove");
+                spyOn(angular.element.prototype, "controller").and.returnValue(infiniteListController);
+            });
+
+            describe("when the filter is equal to the active filter", function () {
+
+                beforeEach(function () {
+                    ctrl.searchFilter = ctrl.getActiveSearchFilter();
+
+                    ctrl.applySearchFilter();
+                });
+
+                it("should NOT set loadingComplete to false", function () {
+                    expect(ctrl.loadingComplete).not.toBeFalsy();
+                });
+
+                xit("should NOT set currentPage to 0", function () {
+                    //TODO figure out how to test this
+                });
+
+                it("should NOT set cards to an empty array", function () {
+                    expect(ctrl.cards).not.toEqual([]);
+                });
+
+                it("should NOT remove the existing items from the DOM list", function () {
+                    expect(view.querySelector).not.toHaveBeenCalled();
+                    expect(cardList.querySelectorAll).not.toHaveBeenCalled();
+                    expect(angular.element.prototype.remove).not.toHaveBeenCalled();
+                });
+
+                it("should NOT call checkBounds on the infinite scroll's controller", function () {
+                    $rootScope.$digest();
+
+                    expect(infiniteListController.checkBounds).not.toHaveBeenCalled();
+                });
+            });
+
+            describe("when the filter is NOT equal to the active filter", function () {
+
+                beforeEach(function () {
+                    ctrl.searchFilter = searchFilter;
+
+                    ctrl.applySearchFilter();
+                });
+
+                //TODO figure out how to test without getActiveSearchFilter
+                it("should set the active filter to the search filter", function () {
+                    expect(ctrl.getActiveSearchFilter()).toEqual(searchFilter);
+                });
+
+                it("should set loadingComplete to false", function () {
+                    expect(ctrl.loadingComplete).toBeFalsy();
+                });
+
+                xit("should set currentPage to 0", function () {
+                    //TODO figure out how to test this
+                });
+
+                it("should set cards to an empty array", function () {
+                    expect(ctrl.cards).toEqual([]);
+                });
+
+                it("should remove the existing items from the DOM list", function () {
+                    expect(view.querySelector).toHaveBeenCalledWith(".card-list");
+                    expect(cardList.querySelectorAll).toHaveBeenCalledWith(".row");
+                    expect(angular.element.prototype.remove).toHaveBeenCalledWith();
+                });
+
+                it("should call checkBounds on the infinite scroll's controller", function () {
+                    $rootScope.$digest();
+
+                    expect(infiniteListController.checkBounds).toHaveBeenCalledWith();
+                });
+            });
+        });
+
+        describe("has a getActiveSearchFilter function that", function () {
+
+            xit("should return the active search filter", function () {
+                //TODO figure out how to test this
+            });
+        });
+
         describe("has a loadNextPage function that", function () {
-            var fetchCardsDeferred;
+            var fetchCardsDeferred,
+                activeSearchFilter = "";
 
             beforeEach(function () {
                 fetchCardsDeferred = $q.defer();
@@ -111,10 +224,11 @@
             });
 
             it("should call CardManager.fetchCards with the expected values", function () {
+                //TODO figure out how to test activeSearchFilter
                 expect(CardManager.fetchCards).toHaveBeenCalledWith(
                     mockUser.billingCompany.accountId,
-                    "",
-                    "",
+                    activeSearchFilter,
+                    activeSearchFilter,
                     mockGlobals.CARD_LIST.SEARCH_OPTIONS.STATUSES,
                     0,
                     mockGlobals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE
@@ -131,6 +245,10 @@
 
                 it("should resolve with a value of true", function () {
                     expect(resolveHandler).toHaveBeenCalledWith(true);
+                });
+
+                it("should set loadingComplete to true", function () {
+                    expect(ctrl.loadingComplete).toBeTruthy();
                 });
 
                 it("should NOT reject", function () {
@@ -169,6 +287,10 @@
 
                 it("should resolve with a value of false", function () {
                     expect(resolveHandler).toHaveBeenCalledWith(false);
+                });
+
+                it("should set loadingComplete to false", function () {
+                    expect(ctrl.loadingComplete).toBeFalsy();
                 });
 
                 it("should NOT reject", function () {
