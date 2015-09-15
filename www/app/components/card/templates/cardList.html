@@ -6,7 +6,8 @@
         </label>
     </ion-header>
     <ion-content class="padding has-subheader">
-        <div class="row divider list-header">
+        <div class="row divider list-header"
+             ng-if="vm.cards.length > 0">
             <div class="col col-30">{{::vm.config.cardNumber}}</div>
             <div class="col col-30">{{::vm.config.embossing}}</div>
             <div class="col col-30 right-align">{{::vm.config.status}}</div>
