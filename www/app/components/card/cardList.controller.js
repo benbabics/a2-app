@@ -52,7 +52,7 @@
             CommonService.loadingBegin();
 
             //fetch the next page of cards
-            return CardManager.fetchCards(billingAccountId, vm.searchFilter, vm.searchFilter, vm.searchOptions.STATUSES, currentPage, vm.searchOptions.PAGE_SIZE)
+            return CardManager.fetchCards(billingAccountId, activeSearchFilter, activeSearchFilter, vm.searchOptions.STATUSES, currentPage, vm.searchOptions.PAGE_SIZE)
                 .then(function (cards) {
                     vm.loadingComplete = _.isEmpty(cards);
 
