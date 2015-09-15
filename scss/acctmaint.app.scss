@@ -207,25 +207,23 @@ $user-login-gradient-bottom: #414141;
 
         .label {
             color: #000;
-            font-weight: bold;
             font-size: 13px;
-        }
-        .label1 {
-            color: #000;
-            font-size: 13px;
-        }
-        #currentBalance {
-            font-size: 16px;
         }
 
         .value {
             color: #000;
-            font-weight: bold;
             font-size: 13px;
         }
-        .value1 {
-            color: #000;
-            font-size: 13px;
+    }
+
+    .current-balance {
+        .label {
+            font-weight: bold;
+        }
+
+        .value {
+            font-weight: bold;
+            font-size: 16px;
         }
     }
 

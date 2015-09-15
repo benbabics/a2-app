@@ -52,22 +52,22 @@
             </div>
 
             <div class="inner-container">
-                <div class="row invoice-divider">
+                <div class="row invoice-divider current-balance">
                     <div class="col col-50 label">{{::vm.config.currentBalance}}</div>
-                    <div class="col col-50 content_align value" id="currentBalance">
+                    <div class="col col-50 content_align value">
                         {{vm.invoiceSummary.currentBalance | currency}}
                     </div>
                 </div>
                 <div class="row invoice-divider">
                     <div class="col col-50 label">{{::vm.config.minimumPayment}}</div>
-                    <div class="col col-50 content_align value" id="minimumPayment">
+                    <div class="col col-50 content_align value">
                         {{vm.invoiceSummary.minimumPaymentDue | currency}}
                     </div>
                 </div>
 
                 <div class="row invoice-divider">
                     <div class="col col-50 label">{{::vm.config.paymentDueDate}}</div>
-                    <div class="col col-50 content_align value" id="paymentDueDate">
+                    <div class="col col-50 content_align value">
                         {{vm.invoiceSummary.paymentDueDate | wexDefaultDateFormat}}
                     </div>
                 </div>
