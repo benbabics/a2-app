@@ -113,8 +113,8 @@
             it("should call CardManager.fetchCards with the expected values", function () {
                 expect(CardManager.fetchCards).toHaveBeenCalledWith(
                     mockUser.billingCompany.accountId,
-                    undefined,
-                    undefined,
+                    "",
+                    "",
                     mockGlobals.CARD_LIST.SEARCH_OPTIONS.STATUSES,
                     0,
                     mockGlobals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE

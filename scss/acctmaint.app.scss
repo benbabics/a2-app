@@ -292,9 +292,13 @@ $user-login-gradient-bottom: #414141;
 /**--------------------------------
   Card Activity Page
  ----------------------------------**/
-.card-list {
+.card-list-view {
     .bar-subheader {
         background-color: #eee;
+
+        form {
+            width: 100%;
+        }
 
         .item-input-wrapper {
             background-color: #fff;

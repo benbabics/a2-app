@@ -25,8 +25,8 @@
             wexInfiniteList = createWexInfiniteList({onReload: mockReloadCallback});
         });
 
-        it("should initialize loadingComplete to false", function () {
-            expect(wexInfiniteList.scope.loadingComplete).toBeFalsy();
+        it("should initialize allDataLoaded to false", function () {
+            expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
         });
 
         describe("when a reload distance is specified", function () {
@@ -63,10 +63,10 @@
                 spyOn(wexInfiniteList.scope, "$broadcast");
             });
 
-            describe("when loadingComplete is true", function () {
+            describe("when allDataLoaded is true", function () {
 
                 beforeEach(function () {
-                    wexInfiniteList.scope.loadingComplete = true;
+                    wexInfiniteList.scope.allDataLoaded = true;
 
                     wexInfiniteList.scope.loadMore();
 
@@ -77,8 +77,8 @@
                     expect(mockReloadCallback).not.toHaveBeenCalled();
                 });
 
-                it("should NOT change the value of loadingComplete", function () {
-                    expect(wexInfiniteList.scope.loadingComplete).toBeTruthy();
+                it("should NOT change the value of allDataLoaded", function () {
+                    expect(wexInfiniteList.scope.allDataLoaded).toBeTruthy();
                 });
 
                 it("should broadcast scroll.infiniteScrollComplete", function () {
@@ -86,7 +86,7 @@
                 });
             });
 
-            describe("when loadingComplete is false", function () {
+            describe("when allDataLoaded is false", function () {
                 var reloadCallbackDeferred;
 
                 beforeEach(function () {
@@ -95,7 +95,7 @@
                 });
 
                 beforeEach(function () {
-                    wexInfiniteList.scope.loadingComplete = false;
+                    wexInfiniteList.scope.allDataLoaded = false;
 
                     wexInfiniteList.scope.loadMore();
                 });
@@ -112,8 +112,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should set loadingComplete to true", function () {
-                        expect(wexInfiniteList.scope.loadingComplete).toBeTruthy();
+                    it("should set allDataLoaded to true", function () {
+                        expect(wexInfiniteList.scope.allDataLoaded).toBeTruthy();
                     });
 
                     it("should broadcast scroll.infiniteScrollComplete", function () {
@@ -129,8 +129,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should set loadingComplete to false", function () {
-                        expect(wexInfiniteList.scope.loadingComplete).toBeFalsy();
+                    it("should set allDataLoaded to false", function () {
+                        expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
                     });
 
                     it("should broadcast scroll.infiniteScrollComplete", function () {
@@ -146,8 +146,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should set loadingComplete to false", function () {
-                        expect(wexInfiniteList.scope.loadingComplete).toBeFalsy();
+                    it("should set allDataLoaded to false", function () {
+                        expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
                     });
 
                     it("should broadcast scroll.infiniteScrollComplete", function () {
@@ -163,8 +163,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should NOT change the value of loadingComplete", function () {
-                        expect(wexInfiniteList.scope.loadingComplete).toBeFalsy();
+                    it("should NOT change the value of allDataLoaded", function () {
+                        expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
                     });
 
                     it("should broadcast scroll.infiniteScrollComplete", function () {

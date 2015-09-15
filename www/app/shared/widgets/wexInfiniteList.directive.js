@@ -25,8 +25,9 @@
             link       : link,
             templateUrl: "app/shared/widgets/templates/infiniteList.html",
             scope      : {
-                onReload      : "=",
-                reloadDistance: "=?"
+                onReload       : "=",
+                reloadDistance : "=?",
+                loadingComplete: "&?"
             }
         };
 
@@ -36,19 +37,24 @@
         function loadMore() {
             var self = this;
 
-            $q.when(self.loadingComplete || self.onReload())
-                .then(function (loadingComplete) {
-                    self.loadingComplete = loadingComplete;
+            $q.when(self.loadingComplete() || self.onReload())
+                .then(function (allDataLoaded) {
+                    self.allDataLoaded = allDataLoaded;
                 })
                 .finally(function () {
                     self.$broadcast("scroll.infiniteScrollComplete");
                 });
         }
 
+        function allDataLoaded() {
+            return this.allDataLoaded;
+        }
+
         function link(scope, elem, attrs) {
             //scope objects:
             scope.reloadDistance = scope.reloadDistance || DEFAULT_RELOAD_DISTANCE;
-            scope.loadingComplete = false;
+            scope.loadingComplete = scope.loadingComplete || _.bind(allDataLoaded, scope);
+            scope.allDataLoaded = false;
 
             scope.loadMore = _.bind(loadMore, scope);
         }
