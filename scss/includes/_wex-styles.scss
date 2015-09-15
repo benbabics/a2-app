@@ -172,6 +172,19 @@
   @extend .ion-ios-arrow-back;
 }
 
+/* Search Icon - per platform */
+.icon-search {
+    @extend .ion-search;  /* default icon - neither Android nor iOS */
+}
+
+.platform-android .icon-search {
+    @extend .ion-android-search;
+}
+
+.platform-ios .icon-search {
+    @extend .ion-ios-search-strong;
+}
+
 /**-----------------------------------------------------------
  Error Messaging
  ----------------------------------------------------------**/
