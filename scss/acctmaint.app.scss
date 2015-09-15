@@ -301,12 +301,29 @@ $user-login-gradient-bottom: #414141;
         }
     }
 
-    .margin {
-       margin-top: 12px !important;
+    .padding {
+        padding-right: 0;
     }
 
-    .top-padding {
-         padding-top: 10px;
+    .list-header {
+        font-weight: bold;
+        margin-top: 0;
+    }
+
+    .row {
+        padding: 0;
+
+        .col {
+            padding: 0;
+        }
+    }
+
+    .row+.row {
+        margin-top: 0;
+    }
+
+    .margin {
+       margin-top: 12px;
     }
 
     .no-cards {
@@ -314,10 +331,6 @@ $user-login-gradient-bottom: #414141;
         text-align: center;
         display: block;
     }
-
-}
-.bold {
-    font-weight: bold !important;
 }
 
 /**--------------------------------
