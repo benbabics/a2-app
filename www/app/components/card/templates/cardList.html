@@ -6,7 +6,7 @@
         </label>
     </ion-header>
     <ion-content class="padding has-subheader">
-        <div class="row divider">
+        <div class="row divider bold">
             <div class="col col-30">{{::vm.config.cardNumber}}</div>
             <div class="col col-30">{{::vm.config.embossing}}</div>
             <div class="col col-30 right-align">{{::vm.config.status}}</div>
@@ -15,11 +15,11 @@
         <wex-infinite-list on-reload="vm.loadNextPage" reload-distance="vm.config.reloadDistance">
             <div ng-switch="vm.cards.length > 0">
                 <div ng-switch-when="true"
-                     class="row divider"
+                     class="row divider top-padding"
                      collection-repeat="card in vm.cards">
-                    <div class="col col-30 wordwrap" style="margin-top:10px">{{card.embossedCardNumber | wexCardNumber}}</div>
-                    <div class="col col-30 wordwrap" style="margin-top:10px">{{card.embossingValue2}}</div>
-                    <div class="col col-30 right-align" style="margin-top:10px">{{card.getStatusDisplayName()}}</div>
+                    <div class="col col-30 wordwrap margin">{{card.embossedCardNumber | wexCardNumber}}</div>
+                    <div class="col col-30 wordwrap margin">{{card.embossingValue2}}</div>
+                    <div class="col col-30 right-align margin">{{card.getStatusDisplayName()}}</div>
                     <div class="col col-10">
                         <span class="button button-icon icon ion-ios-arrow-forward"
                               style="vertical-align:middle"
@@ -32,3 +32,4 @@
         </wex-infinite-list>
     </ion-content>
 </ion-view>
+s

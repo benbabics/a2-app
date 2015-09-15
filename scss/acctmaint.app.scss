@@ -303,11 +303,23 @@ $user-login-gradient-bottom: #414141;
         }
     }
 
+    .margin {
+       margin-top: 12px !important;
+    }
+
+    .top-padding {
+         padding-top: 10px;
+    }
+
     .no-cards {
         font-style: italic;
         text-align: center;
         display: block;
     }
+
+}
+.bold {
+    font-weight: bold !important;
 }
 
 /**--------------------------------
@@ -453,4 +465,10 @@ $user-login-gradient-bottom: #414141;
 }
 .right-align {
     text-align: right;
+}
+
+/** Flex minimum content sizing **/
+.shrink {
+    dislay: inline-block;
+    width: 70% !important;
 }
