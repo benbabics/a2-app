@@ -183,9 +183,7 @@
             return PaymentsResource.deletePayment(accountId, paymentId)
                 .then(function () {
                     //remove the payment from the collection
-                    _.remove(payments, function (payment) {
-                        return payment.id === paymentId;
-                    });
+                    _.remove(payments, {id: paymentId});
                 })
                 // deleting payment failed
                 .catch(function (failureResponse) {
