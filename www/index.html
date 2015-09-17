@@ -28,7 +28,7 @@
             -->
             <ion-nav-bar class="bar-wex" ng-controller="NavBarController as vm" ng-cloak>
                 <ion-nav-buttons side="left">
-                    <wex-back-button>
+                    <wex-back-button class="button-wex-back">
                     </wex-back-button>
                 </ion-nav-buttons>
 
@@ -134,11 +134,11 @@
         <script src="app/shared/network/httpResponseReporterInterceptor.service.js"></script>
         <script src="app/shared/network/formEncoder.service.js"></script>
         <script src="app/shared/network/dataExtractorResponseInterceptor.service.js"></script>
-        <script src="app/shared/logger/logger.module.js"></script>
-        <script src="app/shared/logger/logger.service.js"></script>
         <script src="app/shared/integration/integration.module.js"></script>
         <script src="app/shared/integration/toast.service.js"></script>
         <script src="app/shared/integration/lodash.service.js"></script>
+        <script src="app/shared/logger/logger.module.js"></script>
+        <script src="app/shared/logger/logger.service.js"></script>
         <script src="app/shared/dependencies/dependencies.module.js"></script>
         <script src="app/shared/core/core.module.js"></script>
         <script src="app/shared/core/core.routes.js"></script>
@@ -160,7 +160,6 @@
         <script src="app/components/payment/wexPaymentList.directive.js"></script>
         <script src="app/components/payment/payment.module.js"></script>
         <script src="app/components/payment/paymentsResource.service.js"></script>
-        <script src="app/components/payment/paymentDetail.controller.js"></script>
         <script src="app/components/payment/paymentModel.service.js"></script>
         <script src="app/components/payment/paymentManager.service.js"></script>
         <script src="app/components/payment/paymentMaintenanceSummary.controller.js"></script>
@@ -170,6 +169,7 @@
         <script src="app/components/payment/paymentMaintenanceAmountInput.controller.js"></script>
         <script src="app/components/payment/paymentMaintenance.service.js"></script>
         <script src="app/components/payment/paymentList.controller.js"></script>
+        <script src="app/components/payment/paymentDetail.controller.js"></script>
         <script src="app/components/payment/paymentAddAvailabilityModel.service.js"></script>
         <script src="app/components/payment/payment.routes.js"></script>
         <script src="app/components/navBar/navBar.module.js"></script>
@@ -179,13 +179,13 @@
         <script src="app/components/landing/landing.module.js"></script>
         <script src="app/components/landing/landing.routes.js"></script>
         <script src="app/components/landing/landing.controller.js"></script>
+        <script src="app/components/core/core.module.js"></script>
+        <script src="app/components/core/core.config.js"></script>
+        <script src="app/components/core/constants.js"></script>
         <script src="app/components/invoice/invoice.module.js"></script>
         <script src="app/components/invoice/invoicesResource.service.js"></script>
         <script src="app/components/invoice/invoiceSummaryModel.service.js"></script>
         <script src="app/components/invoice/invoiceManager.service.js"></script>
-        <script src="app/components/core/core.module.js"></script>
-        <script src="app/components/core/core.config.js"></script>
-        <script src="app/components/core/constants.js"></script>
         <script src="app/components/card/card.module.js"></script>
         <script src="app/components/card/cardsResource.service.js"></script>
         <script src="app/components/card/cardModel.service.js"></script>

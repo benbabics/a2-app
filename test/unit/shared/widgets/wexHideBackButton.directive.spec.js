@@ -3,6 +3,7 @@
 
     var $rootScope,
         $compile,
+        $interval,
         CommonService,
         wexHideBackButton,
         mockHide,
@@ -15,9 +16,10 @@
             module("app.shared");
             module("app.html");
 
-            inject(function (_$rootScope_, _$compile_, _CommonService_) {
+            inject(function (_$rootScope_, _$compile_, _$interval_, _CommonService_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
+                $interval = _$interval_;
                 CommonService = _CommonService_;
             });
 
@@ -117,10 +119,34 @@
 
                     beforeEach(function () {
                         mockBackButton.isolateScope.and.returnValue(null);
+
+                        wexHideBackButton.vm.applyHideState();
                     });
 
-                    it("should throw an error", function () {
-                        expect(wexHideBackButton.vm.applyHideState).toThrow();
+                    describe("when there is a scope on the back button after 500ms", function () {
+                        var mockButtonHidden;
+
+                        beforeEach(function() {
+                            mockButtonHidden = TestUtils.getRandomBoolean();
+
+                            mockBackButton.isolateScope.and.returnValue(mockBackButtonScope);
+                            mockBackButtonScope.isHidden.and.returnValue(mockButtonHidden);
+
+                            $interval.flush(500);
+                            $rootScope.$digest();
+                        });
+
+                        it("should set prevState to the button's hide state", function () {
+                            expect(wexHideBackButton.vm.prevState).toEqual(mockButtonHidden);
+                        });
+
+                        it("should call WexBackButton.setHidden with the hide state", function () {
+                            expect(mockBackButtonScope.setHidden).toHaveBeenCalledWith(mockHide);
+                        });
+
+                        it("should set backButtonScope to the button's scope", function () {
+                            expect(wexHideBackButton.vm.backButtonScope).toEqual(mockBackButtonScope);
+                        });
                     });
                 });
             });

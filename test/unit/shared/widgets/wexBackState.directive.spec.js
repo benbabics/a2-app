@@ -3,6 +3,7 @@
 
     var $rootScope,
         $compile,
+        $interval,
         CommonService,
         wexBackState,
         mockState,
@@ -15,9 +16,10 @@
             module("app.shared");
             module("app.html");
 
-            inject(function (_$rootScope_, _$compile_, _CommonService_) {
+            inject(function (_$rootScope_, _$compile_, _$interval_, _CommonService_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
+                $interval = _$interval_;
                 CommonService = _CommonService_;
             });
 
@@ -117,10 +119,33 @@
 
                     beforeEach(function () {
                         mockBackButton.isolateScope.and.returnValue(null);
+
+                        wexBackState.vm.applyBackState();
                     });
 
-                    it("should throw an error", function () {
-                        expect(wexBackState.vm.applyBackState).toThrow();
+                    describe("when there is a scope on the back button after 500ms", function () {
+                        var mockOverrideState;
+
+                        beforeEach(function () {
+                            mockOverrideState = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            mockBackButton.isolateScope.and.returnValue(mockBackButtonScope);
+                            mockBackButtonScope.getOverrideBackState.and.returnValue(mockOverrideState);
+
+                            wexBackState.vm.applyBackState();
+                        });
+
+                        it("should set prevState to the button's override back state", function () {
+                            expect(wexBackState.vm.prevState).toEqual(mockOverrideState);
+                        });
+
+                        it("should call WexBackButton.overrideBackState with the back state", function () {
+                            expect(mockBackButtonScope.overrideBackState).toHaveBeenCalledWith(mockState);
+                        });
+
+                        it("should set backButtonScope to the button's scope", function () {
+                            expect(wexBackState.vm.backButtonScope).toEqual(mockBackButtonScope);
+                        });
                     });
                 });
             });

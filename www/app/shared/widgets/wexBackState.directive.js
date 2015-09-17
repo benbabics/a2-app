@@ -13,7 +13,7 @@
      */
 
     /* @ngInject */
-    function wexBackState($rootScope, CommonService, Logger) {
+    function wexBackState($rootScope, $interval, CommonService, Logger) {
         var directive = {
                 restrict: "A",
                 link    : link
@@ -26,12 +26,18 @@
         function applyBackState() {
             var backButton = CommonService.findActiveBackButton();
 
-            if (backButton && backButton.isolateScope()) {
-                this.backButtonScope = backButton.isolateScope();
-                this.prevState = this.backButtonScope.getOverrideBackState();
+            if (backButton) {
+                if(backButton.isolateScope()) {
+                    this.backButtonScope = backButton.isolateScope();
+                    this.prevState = this.backButtonScope.getOverrideBackState();
 
-                //set the override state on the button
-                this.backButtonScope.overrideBackState(this.wexBackState);
+                    //set the override state on the button
+                    this.backButtonScope.overrideBackState(this.wexBackState);
+                }
+                else {
+                    //back button directive hasn't been loaded yet, so wait and try it again later
+                    $interval(this.applyBackState, 500, 1);
+                }
             }
             else {
                 var error = "Failed to override back button state to " + this.wexBackState;

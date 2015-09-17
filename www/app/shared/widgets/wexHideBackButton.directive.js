@@ -13,7 +13,7 @@
      */
 
     /* @ngInject */
-    function wexHideBackButton($rootScope, CommonService, Logger) {
+    function wexHideBackButton($rootScope, $interval, CommonService, Logger) {
         var directive = {
                 restrict: "A",
                 link    : link
@@ -26,15 +26,21 @@
         function applyHideState() {
             var backButton = CommonService.findActiveBackButton();
 
-            if (backButton && backButton.isolateScope()) {
-                this.backButtonScope = backButton.isolateScope();
-                this.prevState = this.backButtonScope.isHidden();
+            if (backButton) {
+                if(backButton.isolateScope()) {
+                    this.backButtonScope = backButton.isolateScope();
+                    this.prevState = this.backButtonScope.isHidden();
 
-                //set the hide state on the back button
-                this.backButtonScope.setHidden(this.wexHideBackButton);
+                    //set the hide state on the back button
+                    this.backButtonScope.setHidden(this.wexHideBackButton);
+                }
+                else {
+                    //back button directive hasn't been loaded yet, so wait and try it again later
+                    $interval(this.applyHideState, 500, 1);
+                }
             }
             else {
-                var error = "Failed to set button hide state " + this.wexHideBackButton;
+                var error = "Failed to set button hide state to " + this.wexHideBackButton;
                 Logger.error(error);
                 throw new Error(error);
             }
