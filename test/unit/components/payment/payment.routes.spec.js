@@ -251,9 +251,9 @@
 
         });
 
-        describe("has a payment.view state that", function () {
+        describe("has a payment.detail state that", function () {
             var state,
-                stateName = "payment.view";
+                stateName = "payment.detail";
 
             beforeEach(function () {
                 state = $state.get(stateName);
@@ -273,7 +273,7 @@
             });
 
             it("should have the expected URL", function () {
-                expect(state.url).toEqual("/view/:paymentId");
+                expect(state.url).toEqual("/detail/:paymentId");
             });
 
             it("should define a view@payment", function () {
@@ -282,7 +282,7 @@
             });
 
             it("should respond to the URL", function () {
-                expect($state.href(stateName, {paymentId: "1234"})).toEqual("#/payment/view/1234");
+                expect($state.href(stateName, {paymentId: "1234"})).toEqual("#/payment/detail/1234");
             });
 
             describe("when navigated to", function () {

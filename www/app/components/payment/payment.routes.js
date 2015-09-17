@@ -52,13 +52,13 @@
             }
         });
 
-        $stateProvider.state("payment.view", {
-            url        : "/view/:paymentId",
+        $stateProvider.state("payment.detail", {
+            url        : "/detail/:paymentId",
             cache      : false,
             views: {
                 "view@payment": {
-                    templateUrl: "app/components/payment/templates/paymentView.html",
-                    controller : "PaymentViewController as vm",
+                    templateUrl: "app/components/payment/templates/paymentDetail.html",
+                    controller : "PaymentDetailController as vm",
                     resolve    : {
                         payment: function ($stateParams, CommonService, PaymentManager) {
                             var paymentId = $stateParams.paymentId;

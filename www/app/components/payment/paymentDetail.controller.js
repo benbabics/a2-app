@@ -5,8 +5,8 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentViewController($scope, $state, globals, payment, scheduledPaymentsCount,
-                                   CommonService, Logger, PaymentMaintenance, PaymentManager, UserManager) {
+    function PaymentDetailController($scope, $state, globals, payment, scheduledPaymentsCount,
+                                     CommonService, Logger, PaymentMaintenance, PaymentManager, UserManager) {
 
         var vm = this;
 
@@ -69,5 +69,5 @@
     }
 
     angular.module("app.components.payment")
-        .controller("PaymentViewController", PaymentViewController);
+        .controller("PaymentDetailController", PaymentDetailController);
 })();

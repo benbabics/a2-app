@@ -91,7 +91,7 @@
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
-                ctrl = $controller("PaymentViewController", {
+                ctrl = $controller("PaymentDetailController", {
                     $scope                : $scope,
                     $state                : $state,
                     CommonService         : CommonService,

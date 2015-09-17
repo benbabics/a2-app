@@ -27,7 +27,7 @@
             }
         };
 
-    describe("A Transaction List Controller", function () {
+    describe("A Card List Controller", function () {
 
         beforeEach(function () {
 
