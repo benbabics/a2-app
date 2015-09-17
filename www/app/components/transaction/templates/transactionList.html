@@ -1,6 +1,6 @@
-<ion-view view-title="{{vm.config.title}}" wex-back-state="landing">
+<ion-view view-title="{{::vm.config.title}}" wex-back-state="landing">
     <ion-content class="padding">
-        <wex-infinite-list on-reload="vm.loadNextPage" reload-distance="vm.config.reloadDistance">
+        <wex-infinite-list on-reload="vm.loadNextPage" reload-distance="::vm.config.reloadDistance">
             <div ng-switch="vm.postedTransactions.length > 0">
                 <div ng-switch-when="true"
                      class="row divider"

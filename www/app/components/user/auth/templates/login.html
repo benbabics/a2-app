@@ -1,4 +1,4 @@
-<ion-view view-title="{{vm.config.title}}" hide-nav-bar="true" class="user-login-view" wex-back-state="app.exit">
+<ion-view view-title="{{::vm.config.title}}" hide-nav-bar="true" class="user-login-view" wex-back-state="app.exit">
     <ion-content>
         <div class="padding">
             <wex-scalable-img class="header-login" src="img/fleet_manager_logo.png"></wex-scalable-img>
@@ -18,8 +18,8 @@
                                name="userName"
                                type="text"
                                required
-                               placeholder="{{vm.config.userName.label}}"
-                               wex-max-length="{{vm.config.userName.maxLength}}">
+                               placeholder="{{::vm.config.userName.label}}"
+                               wex-max-length="{{::vm.config.userName.maxLength}}">
                     </span>
                 </div>
 
@@ -29,13 +29,13 @@
                                name="password"
                                type="password"
                                required
-                               placeholder="{{vm.config.password.label}}"
-                               wex-max-length="{{vm.config.password.maxLength}}">
+                               placeholder="{{::vm.config.password.label}}"
+                               wex-max-length="{{::vm.config.password.maxLength}}">
                     </span>
                 </div>
 
                 <div class="padding">
-                    <wex-required-submit text="{{vm.config.submitButton}}"></wex-required-submit>
+                    <wex-required-submit text="{{::vm.config.submitButton}}"></wex-required-submit>
                 </div>
 
             </div>

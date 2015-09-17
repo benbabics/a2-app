@@ -1,9 +1,9 @@
-<ion-view view-title="{{vm.config.title}}">
+<ion-view view-title="{{::vm.config.title}}">
     <ion-content class="padding inner-container">
         <div class="item item-divider inner-container" style="border:0px">
             <div class="padding item item-wrap arrow-align">
                 <p class="padding divider">
-                    <span id="paymentAmountLabel" class="block_align black">{{vm.config.amount}}</span>
+                    <span id="paymentAmountLabel" class="block_align black">{{::vm.config.amount}}</span>
                     <span id="paymentAmount" class="content_align black">{{vm.payment.amount | currency}}</span>
                 </p>
                 <p class="padding divider">
@@ -11,11 +11,11 @@
                     <span id="scheduledDate" class="content_align black">{{vm.payment.isPending() ? vm.config.inProcess : (vm.payment.scheduledDate | wexDefaultDateFormat)}}</span>
                 </p>
                 <p class="padding divider">
-                    <span id="paymentMethodLabel" class="block_align black">{{vm.config.method}}</span>
+                    <span id="paymentMethodLabel" class="block_align black">{{::vm.config.method}}</span>
                     <span id="paymentMethod" class="content_align black">{{vm.payment.getMethodDisplayName()}}</span>
                 </p>
                 <p class="padding divider">
-                    <span id="bankAccountLabel" class="block_align black">{{vm.config.bankAccount}}</span>
+                    <span id="bankAccountLabel" class="block_align black">{{::vm.config.bankAccount}}</span>
                     <span id="bankAccount" class="content_align black wordwrap">{{vm.payment.getBankAccountDisplayName()}}</span>
                 </p>
             </div>
@@ -25,7 +25,7 @@
                 <div ng-click="vm.displayCancelPaymentPopup()">
                     <button class="button button-block button-light item item-icon-right">
                         <i class="icon ion-chevron-right"></i>
-                        <span id="cancelButton" class="btn_align">{{vm.config.cancelButton}}</span>
+                        <span id="cancelButton" class="btn_align">{{::vm.config.cancelButton}}</span>
                     </button>
                  </div>
 
@@ -33,7 +33,7 @@
                      ng-click="vm.editPayment()">
                     <button class="button button-block button-light item item-icon-right">
                         <i class="icon ion-chevron-right"></i>
-                        <span id="editButton" class="btn_align">{{vm.config.editButton}}</span>
+                        <span id="editButton" class="btn_align">{{::vm.config.editButton}}</span>
                     </button>
                 </div>
             </div>
