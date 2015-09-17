@@ -132,7 +132,8 @@
                             mockBackButton.isolateScope.and.returnValue(mockBackButtonScope);
                             mockBackButtonScope.getOverrideBackState.and.returnValue(mockOverrideState);
 
-                            wexBackState.vm.applyBackState();
+                            $interval.flush(500);
+                            $rootScope.$digest();
                         });
 
                         it("should set prevState to the button's override back state", function () {
