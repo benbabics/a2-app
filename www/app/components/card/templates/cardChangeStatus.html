@@ -7,19 +7,20 @@
             </wex-back-button>
         </div>
 
-        <h1 class="title">Change Status</h1>
+        <h1 class="title">{{::vm.config.title}}</h1>
     </ion-header-bar>
 
-    <ion-content>
-        <div class="bar bar-wex">
-            <h1 class="title"> Card12345</h1>
-        </div><br><br>
+    <ion-header-bar class="bar bar-subheader bar-wex" align-title="center">
+        <h1 class="title">{{::vm.config.card}} {{vm.card.embossedCardNumber | wexCardNumber}}</h1>
+    </ion-header-bar>
+
+    <ion-content class="has-subheader">
         <div class="padding">
             <a class="button button-block button-light">
-                <span class="align_center active-link">Activate Card</span>
+                <span class="align_center active-link">{{::vm.config.statuses.activate}}</span>
             </a>
             <a class="button button-block button-light">
-                <span class="align_center active-link">Terminate Card</span>
+                <span class="align_center active-link">{{::vm.config.statuses.terminate}}</span>
             </a>
         </div>
     </ion-content>
