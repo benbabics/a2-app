@@ -6,7 +6,7 @@
 
         $stateProvider.state("card", {
             abstract: true,
-            url: "/card",
+            url  : "/card",
             views: {
                 "@": {
                     template: "<ion-nav-view name='view'></ion-nav-view>"
@@ -15,9 +15,9 @@
         });
 
         $stateProvider.state("card.list", {
-            cache      : false,
-            url     : "/list",
-            views   : {
+            cache: false,
+            url  : "/list",
+            views: {
                 "view@card": {
                     templateUrl: "app/components/card/templates/cardList.html",
                     controller : "CardListController as vm"
@@ -26,9 +26,9 @@
         });
 
         $stateProvider.state("card.detail", {
-            url        : "/detail/:cardId",
-            cache      : false,
-            views   : {
+            url  : "/detail/:cardId",
+            cache: false,
+            views: {
                 "view@card": {
                     templateUrl: "app/components/card/templates/cardDetail.html",
                     controller : "CardDetailController as vm",
