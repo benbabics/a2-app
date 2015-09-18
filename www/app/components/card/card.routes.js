@@ -67,7 +67,7 @@
 
         $stateProvider.state("card.changeStatus.form", {
             cache: false,
-            url: "",
+            url  : "",
             views: {
                 "view@card": {
                     templateUrl: "app/components/card/templates/cardChangeStatus.html",
