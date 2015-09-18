@@ -166,5 +166,80 @@
 
         });
 
+        describe("has a card.changeStatus state that", function () {
+            var state,
+                stateName = "card.changeStatus";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be defined", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should be abstract", function () {
+                expect(state.abstract).toBeTruthy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/changeStatus/:cardId");
+            });
+
+            describe("when a child state is navigated to", function () {
+                var childStateName = "card.changeStatus.form",
+                    fetchCardDeferred;
+
+                beforeEach(function () {
+                    fetchCardDeferred = $q.defer();
+                    CardManager.fetchCard.and.returnValue(fetchCardDeferred.promise);
+                });
+
+                beforeEach(function () {
+                    $state.go(childStateName, {cardId: mockCard.cardId});
+
+                    fetchCardDeferred.resolve(mockCard);
+                    $rootScope.$digest();
+                });
+
+                it("should resolve the expected card", function () {
+                    $injector.invoke($state.$current.parent.resolve.card)
+                        .then(function (card) {
+                            expect(card).toEqual(mockCard);
+                        });
+                });
+            });
+        });
+
+        describe("has a card.changeStatus.form state that", function () {
+            var state,
+                stateName = "card.changeStatus.form";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should not be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should not be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should use its parent's URL", function () {
+                expect(state.url).toEqual("");
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/changeStatus/" + mockCard.cardId);
+            });
+        });
     });
 })();

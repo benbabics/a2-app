@@ -48,6 +48,34 @@
             }
         });
 
+        $stateProvider.state("card.changeStatus", {
+            abstract: true,
+            url     : "/changeStatus/:cardId",
+            resolve : {
+                card: function ($stateParams, CardManager, CommonService) {
+                    var cardId = $stateParams.cardId;
+
+                    CommonService.loadingBegin();
+
+                    return CardManager.fetchCard(cardId)
+                        .finally(function () {
+                            CommonService.loadingComplete();
+                        });
+                }
+            }
+        });
+
+        $stateProvider.state("card.changeStatus.form", {
+            cache: false,
+            url: "",
+            views: {
+                "view@card": {
+                    templateUrl: "app/components/card/templates/cardChangeStatus.html",
+                    controller : "CardChangeStatusController as vm"
+                }
+            }
+        });
+
     }
 
     angular.module("app.components.card")
