@@ -12,10 +12,11 @@
         // Revealed Public members
         var _ = CommonService._,
             service = {
-                fetchCard : fetchCard,
-                fetchCards: fetchCards,
-                getCards  : getCards,
-                setCards  : setCards
+                fetchCard   : fetchCard,
+                fetchCards  : fetchCards,
+                getCards    : getCards,
+                setCards    : setCards,
+                updateStatus: updateStatus
             };
 
         activate();
@@ -94,6 +95,42 @@
         // suggested use for testing only
         function setCards(cardsInfo) {
             cards = cardsInfo;
+        }
+
+        function updateStatus(accountId, cardId, newStatus) {
+            return CardsResource.postStatusChange(accountId, cardId, newStatus)
+                .then(function(cardResponse) {
+                    if (cardResponse && cardResponse.data) {
+                        var cachedCard = _.find(cards, {cardId: cardId});
+
+                        if(cachedCard) {
+                            //update the existing card object in the cache
+                            cachedCard.set(cardResponse.data);
+                        }
+                        else {
+                            //the card should be in the cache, so log a warning
+                            Logger.warn("Updated card was not found in the cache (this should not happen)");
+
+                            //map the data to a card model to be returned
+                            cachedCard = createCard(cardResponse.data);
+                        }
+
+                        return cachedCard;
+                    }
+                    // no data in the response
+                    else {
+                        var error = "No data in Response from updating the Card Status";
+                        Logger.error(error);
+                        throw new Error(error);
+                    }
+                })
+                .catch(function(failureResponse) {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+
+                    var error = "Updating Card Status failed: " + CommonService.getErrorMessage(failureResponse);
+                    Logger.error(error);
+                    throw new Error(error);
+                });
         }
     }
 

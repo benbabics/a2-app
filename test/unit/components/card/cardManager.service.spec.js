@@ -22,7 +22,8 @@
 
             // mock dependencies
             CardsResource = jasmine.createSpyObj("CardsResource", [
-                "getCards"
+                "getCards",
+                "postStatusChange"
             ]);
 
             module(function ($provide) {
@@ -359,6 +360,121 @@
             });
 
             // TODO: figure out how to test this without using getCards
+        });
+
+        describe("has an updateStatus function that", function () {
+            var postStatusChangeDeferred,
+                accountId,
+                card,
+                newStatus,
+                originalCards;
+
+            beforeEach(function () {
+                postStatusChangeDeferred = $q.defer();
+                accountId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                newStatus = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                card = TestUtils.getRandomCard(CardModel);
+                mockCachedCardCollection.push(card);
+                originalCards = mockCachedCardCollection.slice();
+
+                CardsResource.postStatusChange.and.returnValue(postStatusChangeDeferred.promise);
+                CardManager.setCards(originalCards);
+            });
+
+            beforeEach(function () {
+                CardManager.updateStatus(accountId, card.cardId, newStatus)
+                    .then(resolveHandler)
+                    .catch(rejectHandler);
+            });
+
+            it("should call CardsResource.postStatusChange with the expected values", function () {
+                expect(CardsResource.postStatusChange).toHaveBeenCalledWith(accountId, card.cardId, newStatus);
+            });
+
+            describe("when the status change succeeds", function () {
+                var response = {data: {}};
+
+                describe("when there is data in the response", function () {
+
+                    describe("when the card already exists in the cached collection", function () {
+
+                        beforeEach(function () {
+                            response.data = TestUtils.getRandomCard(CardModel);
+
+                            response.data.cardId = card.cardId;
+
+                            postStatusChangeDeferred.resolve(response);
+                            $rootScope.$digest();
+                        });
+
+                        it("should update the cached card with the new card's fields", function () {
+                            var cachedCard = _.find(CardManager.getCards(), {cardId: card.cardId}),
+                                updatedCard = angular.extend(new CardModel(), card, response.data);
+
+                            expect(cachedCard).toEqual(updatedCard);
+                        });
+
+                        it("should resolve with the updated cached card", function () {
+                            var cachedCard = _.find(mockCachedCardCollection, {cardId: card.cardId});
+
+                            expect(resolveHandler).toHaveBeenCalledWith(cachedCard);
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("when the card does NOT already exist in the cached collection", function () {
+
+                        beforeEach(function () {
+                            response.data = TestUtils.getRandomCard(CardModel);
+
+                            postStatusChangeDeferred.resolve(response);
+                            $rootScope.$digest();
+                        });
+
+                        it("should resolve with the updated card", function () {
+                            var updatedCard = angular.extend(new CardModel(), response.data);
+
+                            expect(resolveHandler).toHaveBeenCalledWith(updatedCard);
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
+
+                        it("should NOT modify cards", function () {
+                            expect(CardManager.getCards()).toEqual(originalCards);
+                        });
+                    });
+                });
+
+                describe("when there is NOT data in the response", function () {
+
+                    beforeEach(function () {
+                        delete response.data;
+
+                        postStatusChangeDeferred.resolve(response);
+                    });
+
+                    it("should throw an error", function () {
+                        expect($rootScope.$digest).toThrowError("No data in Response from updating the Card Status");
+                    });
+
+                    it("should NOT modify cards", function () {
+                        expect(CardManager.getCards()).toEqual(originalCards);
+                    });
+                });
+            });
+
+            describe("when the status change does NOT succeed", function () {
+                var error;
+
+                beforeEach(function () {
+                    error = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                    postStatusChangeDeferred.reject(error);
+                });
+
+                it("should throw an error", function () {
+                    expect($rootScope.$digest).toThrowError("Updating Card Status failed: " + error);
+                });
+            });
         });
 
     });
