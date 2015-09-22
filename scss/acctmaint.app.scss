@@ -150,13 +150,13 @@ $user-login-gradient-bottom: #414141;
 
     #companyDetails {
         font-weight: bold;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 13px;
 
         .body-text {
             font-weight: normal;
-            font-size: 10px;
-            color: #414141;
+            font-size: 13px;
+            color: #000;
         }
     }
 
@@ -478,6 +478,7 @@ $user-login-gradient-bottom: #414141;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 .right-align {
     text-align: right;
 }
