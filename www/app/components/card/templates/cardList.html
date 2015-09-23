@@ -19,14 +19,14 @@
             <div ng-switch="vm.cards.length > 0">
                 <div ng-switch-when="true"
                      class="row divider"
-                     collection-repeat="card in vm.cards">
+                     collection-repeat="card in vm.cards"
+                     ui-sref="card.detail({cardId: card.cardId})">
                     <div class="col col-25 ellipsis margin">{{card.embossedCardNumber | wexCardNumber}}</div>
                     <div class="col col-40 ellipsis margin">{{card.embossingValue2}}</div>
                     <div class="col col-25 right-align margin">{{card.getStatusDisplayName()}}</div>
                     <div class="col col-10">
                         <span class="button button-icon icon ion-ios-arrow-forward"
-                              style="vertical-align:middle"
-                              ui-sref="card.detail({cardId: card.cardId})">
+                              style="vertical-align:middle">
                         </span>
                     </div>
                 </div>

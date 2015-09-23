@@ -1,4 +1,4 @@
-<span>
+<div ui-sref="payment.detail({ paymentId: payment.id })">
     <span class="block_align black list_align ellipsis">
         {{payment.getBankAccountDisplayName()}}
         <br>
@@ -6,8 +6,7 @@
     </span>
     <span class="value_align">
         {{payment.amount | currency}}
-        <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align"
-              ui-sref="payment.detail({ paymentId: payment.id })">
+        <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align">
         </span>
     </span>
-</span>
+</div>
