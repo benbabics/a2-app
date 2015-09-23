@@ -62,13 +62,13 @@
             </span>
 
             <div ng-if="!vm.hasMultipleBanks">
-                <span class="button right-padding">
+                <span class="button right-padding ellipsis float-right">
                     {{vm.payment.bankAccount.getDisplayName()}}
                 </span>
             </div>
             <div ng-if="vm.hasMultipleBanks" class="right-align shrink"
                  ng-click="vm.maintenance.go('payment.maintenance.input.bankAccount')">
-                <span class="active-link wordwrap">
+                <span class="active-link ellipsis">
                     {{vm.payment.bankAccount.getDisplayName()}}
                 </span>
                 <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>

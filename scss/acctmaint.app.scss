@@ -151,7 +151,7 @@ $user-login-gradient-bottom: #414141;
     #companyDetails {
         font-weight: bold;
         font-size: 16px;
-        line-height: 13px;
+        line-height: 15px;
 
         .body-text {
             font-weight: normal;
@@ -360,6 +360,9 @@ $user-login-gradient-bottom: #414141;
     .right-padding {
         padding-right: 28px;
     }
+    .float-right {
+        float:right;
+    }
 }
 
 /**--------------------------------
@@ -471,12 +474,19 @@ $user-login-gradient-bottom: #414141;
 }
 
 /**** Fix for Bug-412*****/
-.wordwrap {
+.ellipsis {
     width: 50%;
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.wordwrap {
+    width: 50%;
+    float: right;
+    text-align: right;
+    white-space: pre-wrap;
 }
 
 .right-align {

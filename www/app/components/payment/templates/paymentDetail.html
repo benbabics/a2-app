@@ -15,15 +15,15 @@
                     <span id="paymentMethod" class="content_align black">{{vm.payment.getMethodDisplayName()}}</span>
                 </p>
                 <p class="padding divider">
-                    <span id="bankAccountLabel" class="block_align black">{{::vm.config.bankAccount}}</span>
-                    <span id="bankAccount" class="content_align black wordwrap">{{vm.payment.getBankAccountDisplayName()}}</span>
+                    <span id="bankAccountLabel" class="black">{{::vm.config.bankAccount}}</span>
+                    <span id="bankAccount" class="black wordwrap">{{vm.payment.getBankAccountDisplayName()}}</span>
                 </p>
             </div>
             <br>
 
             <div ng-if="vm.payment.isScheduled()">
                 <div ng-click="vm.displayCancelPaymentPopup()">
-                    <button class="button button-block button-light item item-icon-right">
+                    <button class="button button-block button-light item item-icon-right black">
                         <i class="icon ion-chevron-right"></i>
                         <span id="cancelButton" class="btn_align">{{::vm.config.cancelButton}}</span>
                     </button>
@@ -31,7 +31,7 @@
 
                 <div ng-if="vm.scheduledPaymentsCount == 1"
                      ng-click="vm.editPayment()">
-                    <button class="button button-block button-light item item-icon-right">
+                    <button class="button button-block button-light item item-icon-right black">
                         <i class="icon ion-chevron-right"></i>
                         <span id="editButton" class="btn_align">{{::vm.config.editButton}}</span>
                     </button>
