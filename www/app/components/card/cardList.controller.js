@@ -52,7 +52,9 @@
             CommonService.loadingBegin();
 
             //fetch the next page of cards
-            return CardManager.fetchCards(billingAccountId, activeSearchFilter, activeSearchFilter, vm.searchOptions.STATUSES, currentPage, vm.searchOptions.PAGE_SIZE)
+            // Passing in activeSearchFilter 3 times seems strange but the controller wants to apply the same filter to the
+            // card number, embossing line 1 and embossing line 2 and it doesn't seem right to have the manager know that
+            return CardManager.fetchCards(billingAccountId, activeSearchFilter, activeSearchFilter, activeSearchFilter, vm.searchOptions.STATUSES, currentPage, vm.searchOptions.PAGE_SIZE)
                 .then(function (cards) {
                     vm.loadingComplete = _.isEmpty(cards);
 

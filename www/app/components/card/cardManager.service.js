@@ -45,9 +45,10 @@
             return $q.when(_.find(cards, {cardId: cardId}));
         }
 
-        function fetchCards(accountId, embossedCardNumberFilter, embossingValue2Filter, statuses, pageNumber, pageSize) {
+        function fetchCards(accountId, embossedCardNumberFilter, embossingValue1Filter, embossingValue2Filter, statuses, pageNumber, pageSize) {
             var params = {
                 embossedCardNumberFilter: embossedCardNumberFilter,
+                embossingValue1Filter: embossingValue1Filter,
                 embossingValue2Filter   : embossingValue2Filter,
                 status                  : statuses,
                 pageNumber              : pageNumber,

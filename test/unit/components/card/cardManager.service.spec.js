@@ -167,6 +167,7 @@
             var getCardsDeferred,
                 mockAccountId,
                 mockEmbossedCardNumberFilter,
+                mockEmbossingValue1Filter,
                 mockEmbossingValue2Filter,
                 mockStatuses,
                 mockPageNumber,
@@ -176,6 +177,7 @@
                 getCardsDeferred = $q.defer();
                 mockAccountId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 mockEmbossedCardNumberFilter = TestUtils.getRandomStringThatIsAlphaNumeric(5);
+                mockEmbossingValue1Filter = TestUtils.getRandomStringThatIsAlphaNumeric(5);
                 mockEmbossingValue2Filter = TestUtils.getRandomStringThatIsAlphaNumeric(5);
                 mockStatuses = TestUtils.getRandomStringThatIsAlphaNumeric(50);
                 mockPageNumber = TestUtils.getRandomInteger(0, 10);
@@ -189,7 +191,7 @@
             describe("when getting the cards", function () {
 
                 beforeEach(function () {
-                    CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
+                    CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue1Filter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
                         .then(resolveHandler)
                         .catch(rejectHandler);
                 });
@@ -197,6 +199,7 @@
                 it("should call CardsResource.getCards", function () {
                     expect(CardsResource.getCards).toHaveBeenCalledWith(mockAccountId, {
                         embossedCardNumberFilter: mockEmbossedCardNumberFilter,
+                        embossingValue1Filter: mockEmbossingValue1Filter,
                         embossingValue2Filter   : mockEmbossingValue2Filter,
                         status                  : mockStatuses,
                         pageNumber              : mockPageNumber,
@@ -219,7 +222,7 @@
                         beforeEach(function () {
                             mockPageNumber = 0;
 
-                            CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
+                            CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue1Filter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
                                 .then(resolveHandler)
                                 .catch(rejectHandler);
                         });
@@ -245,7 +248,7 @@
                         beforeEach(function () {
                             mockPageNumber = TestUtils.getRandomInteger(1, 10);
 
-                            CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
+                            CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue1Filter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
                                 .then(resolveHandler)
                                 .catch(rejectHandler);
                         });
@@ -295,7 +298,7 @@
                 describe("when there is no data in the response", function () {
 
                     beforeEach(function () {
-                        CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
+                        CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue1Filter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                     });
@@ -318,7 +321,7 @@
                 var mockResponse = "Some error";
 
                 beforeEach(function () {
-                    CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
+                    CardManager.fetchCards(mockAccountId, mockEmbossedCardNumberFilter, mockEmbossingValue1Filter, mockEmbossingValue2Filter, mockStatuses, mockPageNumber, mockPageSize)
                         .then(resolveHandler)
                         .catch(rejectHandler);
                 });

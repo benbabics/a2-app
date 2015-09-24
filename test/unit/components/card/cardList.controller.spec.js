@@ -229,6 +229,7 @@
                     mockUser.billingCompany.accountId,
                     activeSearchFilter,
                     activeSearchFilter,
+                    activeSearchFilter,
                     mockGlobals.CARD_LIST.SEARCH_OPTIONS.STATUSES,
                     0,
                     mockGlobals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE

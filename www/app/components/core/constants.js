@@ -75,7 +75,8 @@
         "CONFIG": {
             "title"             : "Card Details",
             "cardNumber"        : "Card Number",
-            "embossing"         : "Embossing",
+            "standardEmbossing" : "Standard Embossing",
+            "optionalEmbossing" : "Optional Embossing",
             "status"            : "Status",
             "changeStatusButton": "Change Status",
             "reissueCardButton" : "Reissue Card"
