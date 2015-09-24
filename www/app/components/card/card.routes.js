@@ -76,6 +76,16 @@
             }
         });
 
+        $stateProvider.state("card.changeStatus.confirmation", {
+            cache: false,
+            url  : "/confirmation",
+            views: {
+                "view@card": {
+                    templateUrl: "app/components/card/templates/cardChangeStatusConfirmation.html",
+                    controller : "CardChangeStatusConfirmationController as vm"
+                }
+            }
+        });
     }
 
     angular.module("app.components.card")
