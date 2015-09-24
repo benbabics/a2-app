@@ -10,16 +10,16 @@
         <h1 class="title">{{::vm.config.title}}</h1>
     </ion-header-bar>
 
-    <ion-header-bar class="bar bar-subheader bar-wex" align-title="center">
-        <h1 class="title">{{::vm.config.card}} {{vm.card.embossedCardNumber | wexCardNumber}}</h1>
-    </ion-header-bar>
-
-    <ion-content class="has-subheader">
+    <ion-content>
         <div class="padding">
-            <a class="button button-block button-light">
+            <a class="button button-block button-light"
+               ng-if="!vm.card.isActive()"
+               ng-click="vm.promptStatusChange(vm.cardStatuses.ACTIVE)">
                 <span class="align_center active-link">{{::vm.config.statuses.activate}}</span>
             </a>
-            <a class="button button-block button-light">
+            <a class="button button-block button-light"
+               ng-if="!vm.card.isTerminated()"
+               ng-click="vm.promptStatusChange(vm.cardStatuses.TERMINATED)">
                 <span class="align_center active-link">{{::vm.config.statuses.terminate}}</span>
             </a>
         </div>

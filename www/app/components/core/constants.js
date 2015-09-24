@@ -105,8 +105,16 @@
                 "activate" : "Activate Card",
                 "terminate": "Terminate Card"
             },
-            "title"   : "Change Status",
-            "card"    : "Card"
+            "title"            : "Change Status",
+            "card"             : "Card",
+            "confirmationPopup": {
+                "contentMessages": {
+                    "active"    : "Are you sure you want to activate this card?",
+                    "terminated": "Are you sure you want to terminate this card?"
+                },
+                "yesButton"      : "Yes",
+                "noButton"       : "No"
+            }
         }
     };
 
