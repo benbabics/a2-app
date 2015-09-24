@@ -110,6 +110,21 @@
         }
     };
 
+    appGlobals.CARD_CHANGE_STATUS_CONFIRMATION = {
+        "CONFIG": {
+            "title"               : "Change Status Confirmation",
+            "confirmationMessages": {
+                "active"    : "Card has been activated.",
+                "terminated": "Card has been terminated."
+            },
+            "cardNumber"          : "Card Number",
+            "standardEmbossing"   : "Standard Embossing",
+            "optionalEmbossing"   : "Optional Embossing",
+            "status"              : "Status",
+            "cards"               : "Cards"
+        }
+    };
+
     appGlobals.PAYMENT_ADD = {
         "WARNINGS": {
             "BANK_ACCOUNTS_NOT_SETUP"  : "You must set up your financial institutions as your payment options online prior to scheduling a payment.",

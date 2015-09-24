@@ -1,7 +1,7 @@
-<ion-view view-title="Change Status Confirmation" wex-hide-back-button="true">
+<ion-view view-title="{{::vm.config.title}}" wex-hide-back-button="true">
     <ion-content class="padding inner-container">
         <div class="item item-divider inner-container" style="border:0px">
-            <p class="align_center padding green">Card has been activated.</p>
+            <p class="align_center padding green">{{::vm.getConfirmationMessage()}}</p>
             <div class="padding item item-wrap arrow-align">
                 <p class="padding divider">
                     <span class="block_align black">{{::vm.config.cardNumber}}</span>
@@ -9,8 +9,13 @@
                 </p>
 
                 <p class="padding divider">
-                    <span class="block_align black">{{::vm.config.embossing}}</span>
+                    <span class="block_align black">{{::vm.config.standardEmbossing}}</span>
                     <span class="content_align black wordwrap">{{vm.card.embossingValue2}}</span>
+                </p>
+
+                <p class="padding divider">
+                    <span class="block_align black">{{::vm.config.optionalEmbossing}}</span>
+                    <span class="content_align black wordwrap">{{vm.card.embossingValue1}}</span>
                 </p>
 
                 <p class="padding divider">
@@ -28,4 +33,4 @@
             </div>
         </div>
     </ion-content>
-</ion-view>>
+</ion-view>
