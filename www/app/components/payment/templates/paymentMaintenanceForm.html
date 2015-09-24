@@ -61,7 +61,7 @@
                 {{::vm.config.bankAccount}}
             </span>
 
-            <div ng-if="!vm.hasMultipleBanks">
+            <div ng-if="!vm.hasMultipleBanks" class="shrink">
                 <span class="button right-padding ellipsis float-right">
                     {{vm.payment.bankAccount.getDisplayName()}}
                 </span>
