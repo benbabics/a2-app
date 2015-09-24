@@ -9,6 +9,7 @@
  ------------------------------------------------------**/
 $user-login-gradient-top: #7f7f7f;
 $user-login-gradient-bottom: #414141;
+$container-background-color: #f0f0f0;
 
 .user-login-view {
     background: -webkit-linear-gradient($user-login-gradient-top, $user-login-gradient-bottom);
@@ -80,7 +81,7 @@ $user-login-gradient-bottom: #414141;
 }
 
 .inner-container {
-    background-color: #eeedec;
+    background-color: $container-background-color;
 }
 
 .button-menu {
@@ -140,7 +141,7 @@ $user-login-gradient-bottom: #414141;
     }
 
     .inner-container {
-        background-color: #f0f0f0;
+        background-color: $container-background-color;
         margin: 8px;
 
         .row {
@@ -294,7 +295,7 @@ $user-login-gradient-bottom: #414141;
  ----------------------------------**/
 .card-list-view {
     .bar-subheader {
-        background-color: #eee;
+        background-color: #d9d9d9;
 
         form {
             width: 100%;
@@ -398,7 +399,7 @@ $user-login-gradient-bottom: #414141;
 .payment-bank-account-input-view {
 
     .scroll-content {
-        background-color: #bfbfbf;
+        background-color: $container-background-color;
 
         .instructions {
             text-align: center;
@@ -441,7 +442,7 @@ $user-login-gradient-bottom: #414141;
 }
 /** Hyperlink Color **/
 .active-link {
-    color: #32819b !important;
+    color: $link-font-color;
 }
 
 /* Fix for content alignment in ipad-mini */
