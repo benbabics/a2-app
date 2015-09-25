@@ -53,7 +53,7 @@
             "cards"              : "Cards",
             "scheduledPayments"  : "Scheduled"
         },
-        "CHART" : {
+        "CHART": {
             "options": {
                 animation         : false,
                 percentageInnerCutout: 40,

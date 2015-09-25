@@ -35,17 +35,38 @@
             // the scheduledPaymentsCount object should be bound now to the object returned by fetchScheduledPaymentsCount
             vm.scheduledPaymentsCount = scheduledPaymentsCount;
 
-            vm.chart = {
-                options: globals.LANDING.CHART.options,
-                labels: [vm.config.availableCredit, vm.config.billedAmount, vm.config.unbilledAmount],
-                colors: [
-                    vm.invoiceSummary.availableCredit > 0 ? globals.LANDING.CHART.colors.availableCreditPositive : globals.LANDING.CHART.colors.availableCreditNegative,
-                    globals.LANDING.CHART.colors.billedAmount,
-                    globals.LANDING.CHART.colors.unbilledAmount
-                ],
-                data  : [vm.invoiceSummary.availableCredit, vm.invoiceSummary.billedAmount, vm.invoiceSummary.unbilledAmount]
-            };
+            vm.chart = getChartConfiguration();
         }
+
+        function getChartConfiguration() {
+
+            if (!vm.invoiceSummary.isAnyCreditAvailable()) {
+                return {
+                    options: globals.LANDING.CHART.options,
+                    labels : [vm.config.availableCredit],
+                    colors : [globals.LANDING.CHART.colors.availableCreditNegative],
+                    data   : [vm.invoiceSummary.availableCredit]
+                };
+            }
+
+            if (vm.invoiceSummary.isAllCreditAvailable()) {
+                return {
+                    options: globals.LANDING.CHART.options,
+                    labels : [vm.config.availableCredit],
+                    colors : [globals.LANDING.CHART.colors.availableCreditPositive],
+                    data   : [vm.invoiceSummary.availableCredit]
+                };
+            }
+
+            return {
+                options: globals.LANDING.CHART.options,
+                labels : [vm.config.availableCredit, vm.config.billedAmount, vm.config.unbilledAmount],
+                colors : [globals.LANDING.CHART.colors.availableCreditPositive, globals.LANDING.CHART.colors.billedAmount, globals.LANDING.CHART.colors.unbilledAmount],
+                data   : [vm.invoiceSummary.availableCredit, vm.invoiceSummary.billedAmount, vm.invoiceSummary.unbilledAmount]
+            };
+
+        }
+
     }
 
     angular.module("app.components.landing")

@@ -86,19 +86,87 @@
             });
 
             it("should set the chart options", function () {
-                expect(ctrl.chart).toEqual({
-                    options: {
-                        animation: false,
-                        percentageInnerCutout: 40,
-                        showTooltips: false,
-                        segmentStrokeWidth: 1,
-                        scaleOverride: true,
-                        responsive: false
-                    },
-                    labels: ["Available", "Billed", "Unbilled"],
-                    colors: [mockCurrentInvoiceSummary.availableCredit > 0 ? "#39802b" : "#b30308", "#334c5b", "#3799b3"],
-                    data  : [mockCurrentInvoiceSummary.availableCredit, mockCurrentInvoiceSummary.billedAmount, mockCurrentInvoiceSummary.unbilledAmount]
+
+                describe("when no credit is available", function () {
+
+                    beforeEach(function () {
+                        ctrl.invoiceSummary.availableCredit = -TestUtils.getRandomNumber(0.1, 9999.99);
+                    });
+
+                    it("should show the available credit with a color of #b30308", function () {
+
+                        expect(ctrl.chart).toEqual({
+                            options: {
+                                animation            : false,
+                                percentageInnerCutout: 40,
+                                showTooltips         : false,
+                                segmentStrokeWidth   : 1,
+                                scaleOverride        : true,
+                                responsive           : false
+                            },
+                            labels : ["Available"],
+                            colors : ["#b30308"],
+                            data   : [mockCurrentInvoiceSummary.availableCredit]
+                        });
+
+                    });
+
                 });
+
+                describe("when all credit is available", function () {
+
+                    beforeEach(function () {
+                        ctrl.invoiceSummary.creditLimit = TestUtils.getRandomNumber(10.0, 9999.0);
+                        ctrl.invoiceSummary.availableCredit = TestUtils.getRandomNumber(ctrl.invoiceSummary.creditLimit, 9999.99);
+                    });
+
+                    it("should show the available credit with a color of #39802b", function () {
+
+                        expect(ctrl.chart).toEqual({
+                            options: {
+                                animation            : false,
+                                percentageInnerCutout: 40,
+                                showTooltips         : false,
+                                segmentStrokeWidth   : 1,
+                                scaleOverride        : true,
+                                responsive           : false
+                            },
+                            labels : ["Available"],
+                            colors : ["#39802b"],
+                            data   : [mockCurrentInvoiceSummary.availableCredit]
+                        });
+
+                    });
+
+                });
+
+                describe("when some credit is available", function () {
+
+                    beforeEach(function () {
+                        ctrl.invoiceSummary.creditLimit = TestUtils.getRandomNumber(10.0, 9999.0);
+                        ctrl.invoiceSummary.availableCredit = TestUtils.getRandomNumber(10.0, ctrl.invoiceSummary.creditLimit);
+                    });
+
+                    it("should show the available credit, billed amount and unbilled amount", function () {
+
+                        expect(ctrl.chart).toEqual({
+                            options: {
+                                animation            : false,
+                                percentageInnerCutout: 40,
+                                showTooltips         : false,
+                                segmentStrokeWidth   : 1,
+                                scaleOverride        : true,
+                                responsive           : false
+                            },
+                            labels : ["Available", "Billed", "Unbilled"],
+                            colors : ["#39802b", "#334c5b", "#3799b3"],
+                            data   : [mockCurrentInvoiceSummary.availableCredit, mockCurrentInvoiceSummary.billedAmount, mockCurrentInvoiceSummary.unbilledAmount]
+                        });
+
+                    });
+
+                });
+
             });
 
         });

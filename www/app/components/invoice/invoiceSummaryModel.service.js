@@ -9,6 +9,7 @@
             this.billingDate = "";
             this.billedAmount = "";
             this.closingDate = "";
+            this.creditLimit = "";
             this.currentBalance = "";
             this.currentBalanceAsOf = "";
             this.invoiceId = "";
@@ -21,6 +22,14 @@
 
         InvoiceSummaryModel.prototype.set = function (invoiceSummaryResource) {
             angular.extend(this, invoiceSummaryResource);
+        };
+
+        InvoiceSummaryModel.prototype.isAllCreditAvailable = function () {
+            return this.availableCredit >= this.creditLimit;
+        };
+
+        InvoiceSummaryModel.prototype.isAnyCreditAvailable = function () {
+            return this.availableCredit > 0;
         };
 
         return InvoiceSummaryModel;

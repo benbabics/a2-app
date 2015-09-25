@@ -91,6 +91,7 @@ var TestUtils = (function () {
         randomInvoiceSummary.billingDate = getRandomDate();
         randomInvoiceSummary.billedAmount = getRandomNumberWithLength(5);
         randomInvoiceSummary.closingDate = getRandomDate();
+        randomInvoiceSummary.creditLimit = getRandomNumberWithLength(5);
         randomInvoiceSummary.currentBalance = getRandomNumberWithLength(5);
         randomInvoiceSummary.currentBalanceAsOf = getRandomDate();
         randomInvoiceSummary.invoiceId = getRandomNumberWithLength(10);
