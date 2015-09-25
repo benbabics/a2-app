@@ -41,31 +41,31 @@
 
     appGlobals.LANDING = {
         "CONFIG": {
-            "title"            : "WEX Fleet Manager",
-            "availableCredit"  : "Available",
-            "billedAmount"     : "Billed",
-            "unbilledAmount"   : "Unbilled",
-            "paymentDueDate"   : "Payment Due Date",
-            "currentBalance"   : "Current Balance",
-            "minimumPayment"   : "Minimum Payment",
-            "makePayment"      : "Make Payment",
-            "viewActivity"     : "View Activity",
-            "cards"            : "Cards",
-            "scheduledPayments": "Scheduled"
+            "title"              : "WEX Fleet Manager",
+            "availableCredit"    : "Available",
+            "billedAmount"       : "Billed",
+            "unbilledAmount"     : "Unbilled",
+            "paymentDueDate"     : "Payment Due Date",
+            "currentBalance"     : "Current Balance",
+            "minimumPayment"     : "Minimum Payment",
+            "makePayment"        : "Make Payment",
+            "transactionActivity": "Transaction Activity",
+            "cards"              : "Cards",
+            "scheduledPayments"  : "Scheduled"
         },
-        "CHART": {
+        "CHART" : {
             "options": {
-                animation: false,
+                animation         : false,
                 percentageInnerCutout: 40,
-                showTooltips: false,
+                showTooltips      : false,
                 segmentStrokeWidth: 1,
-                scaleOverride: true,
-                responsive: false
+                scaleOverride     : true,
+                responsive        : false
             },
-            "colors": {
+            "colors" : {
                 availableCreditPositive: "#39802b",
                 availableCreditNegative: "#b30308",
-                billedAmount: "#334c5b",
+                billedAmount  : "#334c5b",
                 unbilledAmount: "#3799b3"
             }
         }

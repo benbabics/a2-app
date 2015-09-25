@@ -85,10 +85,10 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
             expect(this.page.makePaymentButton.isDisplayed()).toBeTruthy();
         });
 
-        it("should have a View Activity button displayed", function () {
-            expect(this.page.viewActivityButton.getText()).toMatch("View Activity");
-            expect(this.page.viewActivityButton.isPresent()).toBeTruthy();
-            expect(this.page.viewActivityButton.isDisplayed()).toBeTruthy();
+        it("should have a Transaction Activity button displayed", function () {
+            expect(this.page.transactionActivityButton.getText()).toMatch("View Activity");
+            expect(this.page.transactionActivityButton.isPresent()).toBeTruthy();
+            expect(this.page.transactionActivityButton.isDisplayed()).toBeTruthy();
         });
 
         it("should have a Cards button displayed", function () {
