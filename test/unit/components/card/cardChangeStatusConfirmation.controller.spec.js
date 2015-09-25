@@ -101,7 +101,7 @@
                 });
             });
 
-            describe("when the card is null", function () {
+            describe("when the card status is null", function () {
 
                 beforeEach(function () {
                     mockCard.status = null;
@@ -112,7 +112,7 @@
                 });
             });
 
-            describe("when the card is undefined", function () {
+            describe("when the card status is undefined", function () {
 
                 beforeEach(function () {
                     mockCard.status = undefined;
@@ -123,7 +123,7 @@
                 });
             });
 
-            describe("when the card is empty", function () {
+            describe("when the card status is empty", function () {
 
                 beforeEach(function () {
                     mockCard.status = "";
@@ -134,7 +134,7 @@
                 });
             });
 
-            describe("when the card is unrecognized", function () {
+            describe("when the card status is unrecognized", function () {
 
                 beforeEach(function () {
                     mockCard.status = TestUtils.getRandomStringThatIsAlphaNumeric(10);
