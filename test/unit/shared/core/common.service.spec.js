@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    var $ionicPopup,
+    var _,
+        $ionicPopup,
         $ionicPlatform,
         $compile,
         $rootScope,
@@ -21,7 +22,11 @@
         navBar,
         rootNavView,
         focusedStateOrder = ["stage", "entering", "active"],
-        unfocusedStateOrder = ["cached", "leaving", "active"];
+        unfocusedStateOrder = ["cached", "leaving", "active"],
+        poBoxAcceptableValues = ["PO Box", "P O Box", "POBox", "P OBox", "P.O. Box", "P. O. Box", "P.O.Box", "P. O.Box",
+            "PO. Box", "P O. Box", "PO.Box", "P OBox", "P.O Box", "P. O Box", "P.OBox", "P. OBox", "POB", "P.O.B.",
+            "POST OFFICE BOX", "Post Office Box"],
+        poBoxUnacceptableValues = ["P Box", "P Box", "PBox", "Pb", "PB", "pB", "pb", "Po", "PO", "pO", "po"];
 
     describe("A Common Service", function () {
 
@@ -48,6 +53,8 @@
                 confirmDeferred = $q.defer();
 
                 CommonService = _CommonService_;
+
+                _ = CommonService._;
 
                 navBar = $compile("<ion-nav-bar class='bar-wex'></ion-nav-bar>")($rootScope);
                 rootNavView = $compile("<ion-nav-view class='nav-view-root'></ion-nav-view>")($rootScope);
@@ -2150,6 +2157,51 @@
                 //TODO figure out how to test this
                 xit("should call findViewByStatesInOrder with the expected values", function () {
                 });
+            });
+        });
+
+        describe("has an isPoBox function that", function () {
+
+            it("should return false when value is null", function () {
+                expect(CommonService.isPoBox(null)).toBeFalsy();
+            });
+
+            it("should return false when value is an empty string", function () {
+                expect(CommonService.isPoBox("")).toBeFalsy();
+            });
+
+            it("should return false when value is an object", function () {
+                expect(CommonService.isPoBox({})).toBeFalsy();
+            });
+
+            it("should return false when value is an array", function () {
+                expect(CommonService.isPoBox([])).toBeFalsy();
+            });
+
+            it("should return false when value is a boolean", function () {
+                expect(CommonService.isPoBox(TestUtils.getRandomBoolean())).toBeFalsy();
+            });
+
+            it("should return false when value is a number", function () {
+                expect(CommonService.isPoBox(TestUtils.getRandomNumber(0, 100))).toBeFalsy();
+            });
+
+            it("should return true for acceptable values", function () {
+                _.forEach(poBoxAcceptableValues, function(value) {
+                    expect(CommonService.isPoBox(value)).toBeTruthy();
+                });
+            });
+
+            it("should return false for unacceptable values", function () {
+                _.forEach(poBoxUnacceptableValues, function(value) {
+                    expect(CommonService.isPoBox(value)).toBeFalsy();
+                });
+            });
+
+            it("should return false for strings starting with a number", function () {
+                var string = TestUtils.getRandomInteger(1, 1000) + TestUtils.getRandomStringThatIsAlphaNumeric(50);
+
+                expect(CommonService.isPoBox(string)).toBeFalsy();
             });
         });
     });

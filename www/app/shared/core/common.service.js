@@ -9,7 +9,8 @@
     function CommonService(_, $ionicPopup, $rootScope, $state, globals, Logger) {
 
         // Private members
-        var loadingIndicatorCount = 0,
+        var POBOX_REGEX = new RegExp("([\\w\\s*\\W]*(P(OST)?(\\.)?\\s*O(FF(ICE)?)?(\\.)?\\s*B(OX)?))[\\w\\s*\\W]*"),
+            loadingIndicatorCount = 0,
             alertPopup,
             confirmPopup,
             focusedStateOrder = ["stage", "entering", "active"],
@@ -44,6 +45,7 @@
             "getUnfocusedView"         : getUnfocusedView,
             "getViewContent"           : getViewContent,
             "goToBackState"            : goToBackState,
+            "isPoBox"                  : isPoBox,
             "loadingBegin"             : loadingBegin,
             "loadingComplete"          : loadingComplete,
             "maskAccountNumber"        : maskAccountNumber,
@@ -481,6 +483,10 @@
             var error = "Couldn't find the back button to go the back state";
             Logger.error(error);
             throw new Error(error);
+        }
+
+        function isPoBox(addressLine) {
+            return _.isString(addressLine) && addressLine.length > 0 && !!addressLine.toUpperCase().match(POBOX_REGEX);
         }
 
         function loadingBegin() {
