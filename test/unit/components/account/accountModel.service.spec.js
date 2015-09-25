@@ -17,19 +17,18 @@
         describe("has a set function that", function () {
 
             var account,
-                mockAccountResource = {
-                    newField1    : "some value",
-                    newField2    : "some other value",
-                    newField3    : "yet another value",
-                    accountId    : "company account id value",
-                    accountNumber: "company account number value",
-                    name         : "company name value"
-                },
+                mockAccountResource,
                 accountModelKeys,
                 accountResourceKeys;
 
-            beforeEach(inject(function (AccountModel) {
+            beforeEach(inject(function (AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel) {
                 account = new AccountModel();
+
+                mockAccountResource = angular.extend(TestUtils.getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel), {
+                    newField1: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    newField2: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    newField3: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                });
 
                 // set all values to "default" to more easily detect any changes
                 for (var property in account) {

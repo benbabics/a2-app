@@ -7,6 +7,7 @@ var TestUtils = (function () {
     var ALPHANUMERIC_CHARACTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
         TestUtils = {
             getRandomAccount                 : getRandomAccount,
+            getRandomAddress                 : getRandomAddress,
             getRandomBank                    : getRandomBank,
             getRandomBoolean                 : getRandomBoolean,
             getRandomCard                    : getRandomCard,
@@ -19,8 +20,11 @@ var TestUtils = (function () {
             getRandomPaymentAdd              : getRandomPaymentAdd,
             getRandomPaymentUpdate           : getRandomPaymentUpdate,
             getRandomPostedTransaction       : getRandomPostedTransaction,
+            getRandomShippingCarrier         : getRandomShippingCarrier,
+            getRandomShippingMethod          : getRandomShippingMethod,
             getRandomStringThatIsAlphaNumeric: getRandomStringThatIsAlphaNumeric,
             getRandomUser                    : getRandomUser,
+            getRandomUserAccount             : getRandomUserAccount,
             getRandomValueFromArray          : getRandomValueFromArray,
             getRandomValueFromMap            : getRandomValueFromMap
         };
@@ -29,16 +33,40 @@ var TestUtils = (function () {
 
     //////////////////////
 
-    function getRandomAccount(AccountModel) {
+    function getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel) {
         var account = new AccountModel();
 
         account.set({
-            accountId    : getRandomStringThatIsAlphaNumeric(10),
-            accountNumber: getRandomStringThatIsAlphaNumeric(10),
-            name         : getRandomStringThatIsAlphaNumeric(10)
+            accountId                 : getRandomStringThatIsAlphaNumeric(5),
+            accountNumber             : getRandomNumberWithLength(10),
+            name                      : getRandomStringThatIsAlphaNumeric(10),
+            defaultCardShippingAddress: getRandomAddress(AddressModel),
+            regularCardShippingMethod : getRandomShippingMethod(ShippingMethodModel),
+            cardShippingCarrier       : getRandomShippingCarrier(ShippingCarrierModel, ShippingMethodModel),
+            status                    : getRandomStringThatIsAlphaNumeric(10),
+            statusReason              : getRandomStringThatIsAlphaNumeric(10)
         });
 
         return account;
+    }
+
+    function getRandomAddress(AddressModel) {
+        var address = new AddressModel();
+
+        address.set({
+            firstName   : getRandomStringThatIsAlphaNumeric(10),
+            lastName    : getRandomStringThatIsAlphaNumeric(10),
+            companyName : getRandomStringThatIsAlphaNumeric(15),
+            addressLine1: getRandomStringThatIsAlphaNumeric(10),
+            addressLine2: getRandomStringThatIsAlphaNumeric(10),
+            city        : getRandomStringThatIsAlphaNumeric(10),
+            state       : getRandomStringThatIsAlphaNumeric(2),
+            postalCode  : getRandomNumberWithLength(5),
+            countryCode : getRandomStringThatIsAlphaNumeric(5),
+            residence   : getRandomBoolean()
+        });
+
+        return address;
     }
 
     function getRandomBank(BankModel) {
@@ -175,6 +203,43 @@ var TestUtils = (function () {
         return randomPostedTransaction;
     }
 
+    function getRandomShippingCarrier(ShippingCarrierModel, ShippingMethodModel) {
+        var shippingCarrier = new ShippingCarrierModel();
+
+        shippingCarrier.set({
+            id             : getRandomStringThatIsAlphaNumeric(5),
+            name           : getRandomStringThatIsAlphaNumeric(10),
+            isDefault      : getRandomBoolean(),
+            wexDefault     : getRandomBoolean(),
+            shippingMethods: (function () {
+                var shippingMethods = [],
+                    numMethods = getRandomInteger(1, 5);
+
+                for (var i = 0; i < numMethods; ++i) {
+                    shippingMethods.push(getRandomShippingMethod(ShippingMethodModel));
+                }
+
+                return shippingMethods;
+            })()
+        });
+
+        return shippingCarrier;
+    }
+
+    function getRandomShippingMethod(ShippingMethodModel) {
+        var shippingMethod = new ShippingMethodModel();
+
+        shippingMethod.set({
+            id          : getRandomStringThatIsAlphaNumeric(5),
+            name        : getRandomStringThatIsAlphaNumeric(10),
+            cost        : getRandomNumber(1, 10),
+            poBoxAllowed: getRandomBoolean(),
+            isDefault   : getRandomBoolean()
+        });
+
+        return shippingMethod;
+    }
+
     function getRandomStringThatIsAlphaNumeric(length) {
         var result = "";
         for (var i = length; i > 0; --i) {
@@ -184,26 +249,38 @@ var TestUtils = (function () {
         return result;
     }
 
-    function getRandomUser(UserModel, AccountModel) {
+    function getRandomUser(UserModel, UserAccountModel) {
         var user = new UserModel();
 
         user.set({
             email         : getRandomStringThatIsAlphaNumeric(10),
             firstName     : getRandomStringThatIsAlphaNumeric(10),
             username      : getRandomStringThatIsAlphaNumeric(10),
-            company       : getRandomAccount(AccountModel),
-            billingCompany: getRandomAccount(AccountModel)
+            company       : getRandomUserAccount(UserAccountModel),
+            billingCompany: getRandomUserAccount(UserAccountModel)
         });
 
         return user;
     }
 
+    function getRandomUserAccount(UserAccountModel) {
+        var account = new UserAccountModel();
+
+        account.set({
+            accountId    : getRandomStringThatIsAlphaNumeric(10),
+            accountNumber: getRandomStringThatIsAlphaNumeric(10),
+            name         : getRandomStringThatIsAlphaNumeric(10)
+        });
+
+        return account;
+    }
+
     function getRandomValueFromArray(array) {
-        return array ? array[getRandomInteger(0, array.length)] : null;
+        return (_.isArray(array) && array.length > 0) ? array[getRandomInteger(0, array.length)] : null;
     }
 
     function getRandomValueFromMap(map) {
-        return map ? getRandomValueFromArray(_.values(map)) : null;
+        return _.isObject(map) ? getRandomValueFromArray(_.values(map)) : null;
     }
 
 })();

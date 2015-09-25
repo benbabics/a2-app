@@ -8,7 +8,7 @@
         CardManager,
         UserManager,
         UserModel,
-        AccountModel,
+        UserAccountModel,
         CardModel,
         ctrl,
         resolveHandler,
@@ -49,11 +49,11 @@
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
             inject(function (_$rootScope_, _$q_, $controller,
-                             _CommonService_, _UserModel_, _AccountModel_, _CardModel_) {
+                             _CommonService_, _UserModel_, _UserAccountModel_, _CardModel_) {
                 $rootScope = _$rootScope_;
                 $q = _$q_;
                 UserModel = _UserModel_;
-                AccountModel = _AccountModel_;
+                UserAccountModel = _UserAccountModel_;
                 CommonService = _CommonService_;
                 CardModel = _CardModel_;
 
@@ -78,7 +78,7 @@
             rejectHandler = jasmine.createSpy("rejectHandler");
 
             //setup mocks
-            mockUser = TestUtils.getRandomUser(UserModel, AccountModel);
+            mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
             UserManager.getUser.and.returnValue(mockUser);
         });
 

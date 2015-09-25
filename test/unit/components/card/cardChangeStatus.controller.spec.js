@@ -63,7 +63,7 @@
                 "go"
             ]);
 
-            inject(function ($controller, _$rootScope_, _$q_, sharedGlobals, AccountModel, _CardModel_, UserModel) {
+            inject(function ($controller, _$rootScope_, _$q_, sharedGlobals, UserAccountModel, _CardModel_, UserModel) {
                 $rootScope = _$rootScope_;
                 $q = _$q_;
                 CardModel = _CardModel_;
@@ -71,7 +71,7 @@
                 $scope = $rootScope.$new();
 
                 mockCard = TestUtils.getRandomCard(CardModel);
-                mockUser = TestUtils.getRandomUser(UserModel, AccountModel);
+                mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
                 mockGlobals.CARD = sharedGlobals.CARD;
 
                 ctrl = $controller("CardChangeStatusController", {

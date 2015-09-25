@@ -7,7 +7,7 @@
         mockCurrentInvoiceSummary,
         mockUser,
         mockScheduledPaymentCount,
-        AccountModel,
+        UserAccountModel,
         InvoiceSummaryModel,
         UserManager,
         UserModel;
@@ -34,15 +34,15 @@
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearHistory"]);
             mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
 
-            inject(function ($controller, $rootScope, _AccountModel_, _InvoiceSummaryModel_, _UserModel_) {
+            inject(function ($controller, $rootScope, _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_) {
 
-                AccountModel = _AccountModel_;
+                UserAccountModel = _UserAccountModel_;
                 InvoiceSummaryModel = _InvoiceSummaryModel_;
                 UserModel = _UserModel_;
 
                 //setup mocks
                 mockCurrentInvoiceSummary = TestUtils.getRandomInvoiceSummary(InvoiceSummaryModel);
-                mockUser = TestUtils.getRandomUser(UserModel, AccountModel);
+                mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
                 UserManager.getUser.and.returnValue(mockUser);
 
                 // create a scope object for us to use.

@@ -18,29 +18,18 @@
         describe("has a set function that", function () {
 
             var user,
-                mockUserResource = {
-                    newField1: "some value",
-                    newField2: "some other value",
-                    newField3: "yet another value",
-                    email    : "email address value",
-                    firstName: "first name value",
-                    username : "username value",
-                    company  : {
-                        accountId    : "company account id value",
-                        accountNumber: "company account number value",
-                        name         : "company name value"
-                    },
-                    billingCompany: {
-                        accountId    : "billing company account id value",
-                        accountNumber: "billing company account number value",
-                        name         : "billing company name value"
-                    }
-                },
+                mockUserResource,
                 userModelKeys,
                 userResourceKeys;
 
-            beforeEach(inject(function (UserModel) {
+            beforeEach(inject(function (UserModel, UserAccountModel) {
                 user = new UserModel();
+
+                mockUserResource = angular.extend(TestUtils.getRandomUser(UserModel, UserAccountModel), {
+                    newField1: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    newField2: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    newField3: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                });
 
                 // set all values to "default" to more easily detect any changes
                 for (var property in user) {
