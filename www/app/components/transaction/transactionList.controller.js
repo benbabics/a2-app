@@ -54,6 +54,9 @@
                 .catch(function (errorResponse) {
                     //TODO - What do we do here?
                     Logger.error("Failed to fetch next page of posted transactions: " + errorResponse);
+
+                    // There was an error fetching data so indicate that there is no more data to fetch
+                    return true;
                 })
                 .finally(CommonService.loadingComplete);
         }

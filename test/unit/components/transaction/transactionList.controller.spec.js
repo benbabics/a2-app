@@ -193,6 +193,10 @@
                     expect($rootScope.$digest).toThrow();
                 });
 
+                it("should resolve with a value of true", function () {
+                    expect(resolveHandler).toHaveBeenCalledWith(true);
+                });
+
                 it("should call CommonService.loadingComplete", function () {
                     expect(CommonService.loadingComplete).toHaveBeenCalledWith();
                 });
