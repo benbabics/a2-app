@@ -14,6 +14,7 @@
 
         vm.config = globals.CARD_LIST.CONFIG;
         vm.cards = [];
+        vm.firstPageLoaded = false;
         vm.loadingComplete = false;
         vm.searchFilter = "";
         vm.searchOptions = globals.CARD_LIST.SEARCH_OPTIONS;
@@ -21,6 +22,7 @@
         vm.applySearchFilter = applySearchFilter;
         vm.getActiveSearchFilter = getActiveSearchFilter;
         vm.loadNextPage = loadNextPage;
+        vm.pageLoaded = pageLoaded;
 
         activate();
 
@@ -72,9 +74,14 @@
                     Logger.error("Failed to fetch next page of cards: " + errorResponse);
 
                     // There was an error fetching data so indicate that there is no more data to fetch
-                    return true;
+                    vm.loadingComplete = true;
+                    return vm.loadingComplete;
                 })
                 .finally(CommonService.loadingComplete);
+        }
+
+        function pageLoaded() {
+            vm.firstPageLoaded = true;
         }
 
         function resetSearch() {

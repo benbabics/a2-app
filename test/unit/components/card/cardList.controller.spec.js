@@ -325,6 +325,14 @@
             });
         });
 
+        describe("has a pageLoaded function that", function () {
+
+            xit("should set firstPageLoaded to truer", function () {
+                //TODO figure out how to test this
+            });
+
+        });
+
     });
 
 }());

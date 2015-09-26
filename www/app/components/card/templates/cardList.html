@@ -15,7 +15,11 @@
             <div class="col col-25 right-align">{{::vm.config.status}}</div>
             <div class="col col-10"></div>
         </div>
-        <wex-infinite-list class="card-list" on-reload="vm.loadNextPage" reload-distance="vm.config.reloadDistance" loading-complete="vm.loadingComplete">
+        <wex-infinite-list class="card-list"
+                           on-reload="vm.loadNextPage"
+                           on-page-loaded="vm.pageLoaded"
+                           reload-distance="vm.config.reloadDistance"
+                           loading-complete="vm.loadingComplete">
             <div ng-switch="vm.cards.length > 0">
                 <div ng-switch-when="true"
                      class="row divider"
@@ -30,7 +34,7 @@
                         </span>
                     </div>
                 </div>
-                <div ng-switch-when="false" class="no-cards">{{::vm.config.emptyList}}</div>
+                <div ng-switch-when="false" ng-if="vm.firstPageLoaded" class="no-cards">{{::vm.config.emptyList}}</div>
             </div>
         </wex-infinite-list>
     </ion-content>
