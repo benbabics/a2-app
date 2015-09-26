@@ -5,6 +5,7 @@
         $compile,
         $q,
         wexInfiniteList,
+        mockPageLoadedCallback,
         mockReloadCallback,
         DEFAULT_RELOAD_DISTANCE = "1%";
 
@@ -20,9 +21,13 @@
                 $q = _$q_;
             });
 
+            mockPageLoadedCallback = jasmine.createSpy("mockPageLoadedCallback");
             mockReloadCallback = jasmine.createSpy("mockReloadCallback");
 
-            wexInfiniteList = createWexInfiniteList({onReload: mockReloadCallback});
+            wexInfiniteList = createWexInfiniteList({
+                onPageLoaded: mockPageLoadedCallback,
+                onReload    : mockReloadCallback
+            });
         });
 
         it("should initialize allDataLoaded to false", function () {
@@ -36,6 +41,7 @@
                 reloadDistance = String(TestUtils.getRandomInteger(1, 100));
 
                 wexInfiniteList = createWexInfiniteList({
+                    onPageLoaded: mockPageLoadedCallback,
                     onReload      : mockReloadCallback,
                     reloadDistance: reloadDistance
                 });
@@ -49,7 +55,10 @@
         describe("when a reload distance is NOT specified", function () {
 
             beforeEach(function () {
-                wexInfiniteList = createWexInfiniteList({onReload: mockReloadCallback});
+                wexInfiniteList = createWexInfiniteList({
+                    onPageLoaded: mockPageLoadedCallback,
+                    onReload    : mockReloadCallback
+                });
             });
 
             it("should initialize reloadDistance to the default value", function () {
@@ -64,7 +73,8 @@
                 loadingComplete = TestUtils.getRandomBoolean();
 
                 wexInfiniteList = createWexInfiniteList({
-                    onReload: mockReloadCallback,
+                    onPageLoaded: mockPageLoadedCallback,
+                    onReload    : mockReloadCallback,
                     loadingComplete: loadingComplete
                 });
             });
@@ -78,7 +88,10 @@
         describe("when a custom loading complete flag is NOT specified", function () {
 
             beforeEach(function () {
-                wexInfiniteList = createWexInfiniteList({onReload: mockReloadCallback});
+                wexInfiniteList = createWexInfiniteList({
+                    onPageLoaded: mockPageLoadedCallback,
+                    onReload    : mockReloadCallback
+                });
             });
 
             it("should initialize loadingComplete to a getter for allDataLoaded", function () {
@@ -95,7 +108,8 @@
 
                     beforeEach(function () {
                         wexInfiniteList = createWexInfiniteList({
-                            onReload: mockReloadCallback,
+                            onPageLoaded: mockPageLoadedCallback,
+                            onReload    : mockReloadCallback,
                             loadingComplete: true
                         });
 
@@ -116,6 +130,10 @@
                         expect(wexInfiniteList.scope.allDataLoaded).toBeTruthy();
                     });
 
+                    it("should call onPageLoaded", function () {
+                        expect(mockPageLoadedCallback).toHaveBeenCalledWith();
+                    });
+
                     it("should broadcast scroll.infiniteScrollComplete", function () {
                         expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
                     });
@@ -126,6 +144,7 @@
 
                     beforeEach(function () {
                         wexInfiniteList = createWexInfiniteList({
+                            onPageLoaded: mockPageLoadedCallback,
                             onReload       : mockReloadCallback,
                             loadingComplete: false
                         });
@@ -135,7 +154,7 @@
                         mockReloadCallback.and.returnValue(reloadCallbackDeferred.promise);
                     });
 
-                    beforeEach(function() {
+                    beforeEach(function () {
                         wexInfiniteList.scope.loadMore();
 
                         $rootScope.$digest();
@@ -157,6 +176,10 @@
                             expect(wexInfiniteList.scope.allDataLoaded).toBeTruthy();
                         });
 
+                        it("should call onPageLoaded", function () {
+                            expect(mockPageLoadedCallback).toHaveBeenCalledWith();
+                        });
+
                         it("should broadcast scroll.infiniteScrollComplete", function () {
                             expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
                         });
@@ -172,6 +195,10 @@
 
                         it("should set allDataLoaded to false", function () {
                             expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
+                        });
+
+                        it("should call onPageLoaded", function () {
+                            expect(mockPageLoadedCallback).toHaveBeenCalledWith();
                         });
 
                         it("should broadcast scroll.infiniteScrollComplete", function () {
@@ -191,6 +218,10 @@
                             expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
                         });
 
+                        it("should call onPageLoaded", function () {
+                            expect(mockPageLoadedCallback).toHaveBeenCalledWith();
+                        });
+
                         it("should broadcast scroll.infiniteScrollComplete", function () {
                             expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
                         });
@@ -208,6 +239,10 @@
                             expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
                         });
 
+                        it("should call onPageLoaded", function () {
+                            expect(mockPageLoadedCallback).toHaveBeenCalledWith();
+                        });
+
                         it("should broadcast scroll.infiniteScrollComplete", function () {
                             expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
                         });
@@ -218,7 +253,10 @@
             describe("when custom loading complete flag is NOT specified", function () {
 
                 beforeEach(function () {
-                    wexInfiniteList = createWexInfiniteList({onReload: mockReloadCallback});
+                    wexInfiniteList = createWexInfiniteList({
+                        onPageLoaded: mockPageLoadedCallback,
+                        onReload    : mockReloadCallback
+                    });
                 });
 
                 beforeEach(function () {
@@ -241,6 +279,10 @@
 
                     it("should NOT change the value of allDataLoaded", function () {
                         expect(wexInfiniteList.scope.allDataLoaded).toBeTruthy();
+                    });
+
+                    it("should call onPageLoaded", function () {
+                        expect(mockPageLoadedCallback).toHaveBeenCalledWith();
                     });
 
                     it("should broadcast scroll.infiniteScrollComplete", function () {
@@ -278,6 +320,10 @@
                             expect(wexInfiniteList.scope.allDataLoaded).toBeTruthy();
                         });
 
+                        it("should call onPageLoaded", function () {
+                            expect(mockPageLoadedCallback).toHaveBeenCalledWith();
+                        });
+
                         it("should broadcast scroll.infiniteScrollComplete", function () {
                             expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
                         });
@@ -293,6 +339,10 @@
 
                         it("should set allDataLoaded to false", function () {
                             expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
+                        });
+
+                        it("should call onPageLoaded", function () {
+                            expect(mockPageLoadedCallback).toHaveBeenCalledWith();
                         });
 
                         it("should broadcast scroll.infiniteScrollComplete", function () {
@@ -312,6 +362,10 @@
                             expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
                         });
 
+                        it("should call onPageLoaded", function () {
+                            expect(mockPageLoadedCallback).toHaveBeenCalledWith();
+                        });
+
                         it("should broadcast scroll.infiniteScrollComplete", function () {
                             expect(wexInfiniteList.scope.$broadcast).toHaveBeenCalledWith("scroll.infiniteScrollComplete");
                         });
@@ -327,6 +381,10 @@
 
                         it("should NOT change the value of allDataLoaded", function () {
                             expect(wexInfiniteList.scope.allDataLoaded).toBeFalsy();
+                        });
+
+                        it("should call onPageLoaded", function () {
+                            expect(mockPageLoadedCallback).toHaveBeenCalledWith();
                         });
 
                         it("should broadcast scroll.infiniteScrollComplete", function () {
@@ -346,6 +404,7 @@
             };
 
         options = options || {};
+        scope.onPageLoaded = options.onPageLoaded;
         scope.onReload = options.onReload;
         scope.reloadDistance = options.reloadDistance;
         scope.loadingComplete = options.loadingComplete;
@@ -353,6 +412,9 @@
         var markup = [];
 
         markup.push("<wex-infinite-list");
+        if (scope.onPageLoaded) {
+            markup.push(" on-page-loaded='onPageLoaded'");
+        }
         if (scope.onReload) {
             markup.push(" on-reload='onReload'");
         }

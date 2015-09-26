@@ -13,10 +13,12 @@
             currentPage = 0;
 
         vm.config = globals.TRANSACTION_LIST.CONFIG;
+        vm.firstPageLoaded = false;
         vm.postedTransactions = [];
         vm.searchOptions = globals.TRANSACTION_LIST.SEARCH_OPTIONS;
 
         vm.loadNextPage = loadNextPage;
+        vm.pageLoaded = pageLoaded;
 
         activate();
 
@@ -59,6 +61,10 @@
                     return true;
                 })
                 .finally(CommonService.loadingComplete);
+        }
+
+        function pageLoaded() {
+            vm.firstPageLoaded = true;
         }
 
     }

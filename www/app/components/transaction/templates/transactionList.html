@@ -1,6 +1,8 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="landing">
     <ion-content class="padding">
-        <wex-infinite-list on-reload="vm.loadNextPage" reload-distance="::vm.config.reloadDistance">
+        <wex-infinite-list on-reload="vm.loadNextPage"
+                           on-page-loaded="vm.pageLoaded"
+                           reload-distance="::vm.config.reloadDistance">
             <div ng-switch="vm.postedTransactions.length > 0">
                 <div ng-switch-when="true"
                      class="row divider"
@@ -17,7 +19,7 @@
                     </div>
                 </div>
 
-                <div ng-switch-when="false" class="no-transactions">{{::vm.config.emptyList}}</div>
+                <div ng-switch-when="false" ng-if="vm.firstPageLoaded" class="no-transactions">{{::vm.config.emptyList}}</div>
             </div>
         </wex-infinite-list>
     </ion-content>
