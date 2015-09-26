@@ -94,6 +94,7 @@
                 throw new Error(error);
             }
 
+            vm.firstPageLoaded = false;
             vm.loadingComplete = false;
             currentPage = 0;
             vm.cards = [];
