@@ -6,6 +6,7 @@
         "app.components.account",
         "app.components.bank",
         "app.components.card",
+        "app.components.contactUs",
         "app.components.core",
         "app.components.landing",
         "app.components.invoice",

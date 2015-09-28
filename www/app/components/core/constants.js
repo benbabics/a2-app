@@ -133,6 +133,12 @@
         }
     };
 
+    appGlobals.CONTACT_US = {
+        "CONFIG": {
+            "title": "Contact Us"
+        }
+    };
+
     appGlobals.PAYMENT_ADD = {
         "WARNINGS": {
             "BANK_ACCOUNTS_NOT_SETUP"  : "You must set up your financial institutions as your payment options online prior to scheduling a payment.",
