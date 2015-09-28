@@ -106,6 +106,30 @@ $container-background-color: #f0f0f0;
 }
 
 /**------------------------------
+ Contact Us view
+----------------------------------**/
+.contact-us-view {
+    .item {
+        border: 0;
+    }
+
+    .wordwrap {
+        float: left;
+        text-align: left;
+        white-space: pre-wrap;
+        width: 100%;
+    }
+
+    #button-area {
+        padding-top: 20px;
+    }
+
+    #content {
+        padding-top: 10px;
+    }
+}
+
+/**------------------------------
  Landing view
 ----------------------------------**/
 .landing-view {
