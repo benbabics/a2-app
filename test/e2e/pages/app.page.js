@@ -12,7 +12,7 @@ var AppPage = (function () {
         this.sideMenuPaymentHistory      = this.sideMenu.element(by.id("option-payments"));
         this.sideMenuTransactionActivity = this.sideMenu.element(by.id("option-transaction-activity"));
         this.sideMenuCards               = this.sideMenu.element(by.id("option-cards"));
-        this.sideMenuTerms               = this.sideMenu.element(by.id("option-terms-and-policies"));
+        this.sideMenuTerms               = this.sideMenu.element(by.id("option-terms"));
         this.sideMenuLogOut              = this.sideMenu.element(by.id("option-log-out"));
     }
 

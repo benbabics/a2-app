@@ -14,6 +14,7 @@
         "app.components.navBar",
         "app.components.payment",
         "app.components.transaction",
+        "app.components.terms",
         "app.components.user"
     ]);
 })();

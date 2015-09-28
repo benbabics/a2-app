@@ -275,6 +275,12 @@
         }
     };
 
+    appGlobals.TERMS_OF_USE = {
+        "CONFIG": {
+            "title": "Terms of Use"
+        }
+    };
+
     appGlobals.TRANSACTION_LIST = {
         "CONFIG"        : {
             "title"          : "Transaction Activity",
@@ -318,8 +324,8 @@
                 "payments"           : "Payment Activity",
                 "transactionActivity": "Transaction Activity",
                 "cards"              : "Cards",
-                "contactUs": "Contact Us",
-                "termsAndPolicies"   : "Terms and Policies",
+                "contactUs"          : "Contact Us",
+                "terms"              : "Terms of Use",
                 "logOut"             : "Log Out"
             }
         }
