@@ -1,18 +1,30 @@
 (function () {
     "use strict";
 
-    var ShippingMethodModel = function () {
+    var ShippingMethodModel = function (CommonService, $filter) {
+        var _ = CommonService._;
 
         function ShippingMethodModel() {
             this.id = "";
             this.name = "";
             this.cost = "";
             this.poBoxAllowed = "";
-            this.isDefault = "";
+            this.default = "";
         }
 
         ShippingMethodModel.prototype.set = function (shippingMethodResource) {
             angular.extend(this, shippingMethodResource);
+        };
+
+        ShippingMethodModel.prototype.getDisplayName = function(showCost) {
+            var displayName = this.name;
+            showCost = _.isUndefined(showCost) ? true : showCost;
+
+            if(showCost) {
+                displayName += " " + $filter("currency")(this.cost);
+            }
+
+            return displayName;
         };
 
         return ShippingMethodModel;

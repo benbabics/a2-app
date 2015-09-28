@@ -83,7 +83,7 @@
 
             beforeEach(function () {
                 _.forEach(shippingCarrier.shippingMethods, function(shippingMethod) {
-                    shippingMethod.isDefault = false;
+                    shippingMethod.default = false;
                 });
             });
 
@@ -92,7 +92,7 @@
 
                 beforeEach(function () {
                     defaultShippingMethod = TestUtils.getRandomValueFromArray(shippingCarrier.shippingMethods);
-                    defaultShippingMethod.isDefault = true;
+                    defaultShippingMethod.default = true;
                 });
 
                 it("should return the default shipping method", function () {

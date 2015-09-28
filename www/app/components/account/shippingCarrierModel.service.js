@@ -7,7 +7,7 @@
         function ShippingCarrierModel() {
             this.id = "";
             this.name = "";
-            this.isDefault = "";
+            this.default = "";
             this.wexDefault = "";
             this.shippingMethods = "";
         }
@@ -27,7 +27,7 @@
         };
 
         ShippingCarrierModel.prototype.getDefaultShippingMethod = function () {
-            return _.find(this.shippingMethods, {isDefault: true});
+            return _.find(this.shippingMethods, {default: true});
         };
 
         return ShippingCarrierModel;

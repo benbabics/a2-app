@@ -133,6 +133,19 @@
         }
     };
 
+    appGlobals.CARD_REISSUE = {
+        "CONFIG": {
+            "title"              : "Reissue Card",
+            "shippingAddress"    : "Shipping Address",
+            "shippingMethod"     : "Shipping Method",
+            "reissueReason"      : "Reason",
+            "selectReissueReason": "Select Reason",
+            "submitButton"       : "Reissue Card",
+            "instructionalText"  : "Orders received after 3:00 pm Eastern Time may be processed the next business day.",
+            "poBoxText"          : "Please Note: You have a P.O. Box address listed. Your card will be delivered via regular mail."
+        }
+    };
+
     appGlobals.CONTACT_US = {
         "CONFIG": {
             "title"          : "Contact Us",

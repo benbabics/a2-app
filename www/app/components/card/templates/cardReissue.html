@@ -1,0 +1,44 @@
+<ion-view view-title="{{::vm.config.title}}">
+
+    <ion-content>
+        <div class="payment-maintenance-form-item">
+            <span class="block_align black">{{::vm.config.shippingAddress}}</span>
+            <div>
+                <span class="right-padding">
+                    {{vm.cardReissue.shippingAddress.firstName}} {{vm.cardReissue.shippingAddress.lastName}}<br>
+                    {{vm.cardReissue.shippingAddress.companyName}}<br>
+                    {{vm.cardReissue.shippingAddress.addressLine1}}<br>
+                    <span ng-if="!!vm.cardReissue.shippingAddress.addressLine2">{{vm.cardReissue.shippingAddress.addressLine2}}<br></span>
+                    {{vm.cardReissue.shippingAddress.city}}, {{vm.cardReissue.shippingAddress.state}} {{vm.cardReissue.shippingAddress.postalCode}}
+                </span>
+            </div>
+        </div>
+
+        <div class="payment-maintenance-form-item">
+            <span class="block_align black">{{::vm.config.shippingMethod}}</span>
+            <div>
+                <span class="active-link" ng-init="showCost = !vm.cardReissue.account.cardShippingCarrier.default">{{vm.cardReissue.selectedShippingMethod.getDisplayName(showCost)}}</span>
+                <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
+            </div>
+        </div>
+
+        <div class="payment-maintenance-form-item">
+            <span class="block_align black">{{::vm.config.reissueReason}}</span>
+            <div>
+                <span class="active-link">{{::vm.config.selectReissueReason}}</span>
+                <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
+            </div>
+        </div>
+        <br>
+
+        <div class="padding">{{::vm.config.instructionalText}}</div>
+        <div class="padding" ng-if="vm.cardReissue.shippingAddress.isPoBox()">{{::vm.config.poBoxText}}</div>
+
+        <br>
+        <div class="padding align_center">
+            <button ng-disabled="!vm.isFormComplete()" class="button button-block button-submit button-width">
+                {{::vm.config.submitButton}}
+            </button>
+        </div>
+    </ion-content>
+</ion-view>
