@@ -431,6 +431,30 @@ $container-background-color: #f0f0f0;
     }
 }
 
+/**------------------------------
+ Terms of Use view
+----------------------------------**/
+.terms-of-use-view {
+    .item {
+        border: 0;
+    }
+
+    .padding {
+        padding: 10px 0;
+    }
+
+    .wordwrap {
+        float: left;
+        text-align: left;
+        white-space: pre-wrap;
+        width: 100%;
+    }
+
+    #content {
+        padding-top: 10px;
+    }
+}
+
 /**--------------------------------
   Transaction Activity Page
  ----------------------------------**/
