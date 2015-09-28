@@ -1,7 +1,43 @@
-<ion-view view-title="{{::vm.config.title}}" wex-back-state="landing">
-    <ion-content class="padding inner-container">
-        <div class="item item-divider inner-container" style="border:0px">
-            Terms of Use content goes here
+<ion-view view-title="{{::vm.config.title}}"
+          class="terms-of-use-view"
+          wex-back-state="landing">
+    <ion-content>
+        <div class="content item main-container">
+            <p id="introduction">
+                <span class="wordwrap" ng-bind-html="vm.config.introduction"></span>
+            </p>
+            <div class="padding">
+                <p>
+                    <span class="wordwrap">{{::vm.config.sectionOne}}</span>
+                </p>
+                <p>
+                    <span class="wordwrap">{{::vm.config.sectionTwo}}</span>
+                </p>
+                <p>
+                    <span class="wordwrap">{{::vm.config.sectionThree}}</span>
+                </p>
+                <p>
+                    <span class="wordwrap">{{::vm.config.sectionFour}}</span>
+                </p>
+                <p>
+                    <span class="wordwrap">{{::vm.config.sectionFive}}</span>
+                </p>
+                <p>
+                    <span class="wordwrap">{{::vm.config.sectionSix}}</span>
+                </p>
+                <p>
+                    <span class="wordwrap">{{::vm.config.sectionSeven}}</span>
+                </p>
+                <p>
+                    <span class="wordwrap">{{::vm.config.sectionEight}}</span>
+                </p>
+                <p>
+                    <span class="wordwrap">{{::vm.config.sectionNine}}</span>
+                </p>
+            </div>
+            <p id="closing">
+                <span class="wordwrap" ng-bind-html="vm.config.closing"></span>
+            </p>
         </div>
     </ion-content>
 </ion-view>>
