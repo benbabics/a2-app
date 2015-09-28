@@ -11,7 +11,8 @@
 
         // Revealed Public members
         var service = {
-            forAccount: forAccount
+            forAccount: forAccount,
+            getAccount: getAccount
         };
 
         activate();
@@ -25,6 +26,10 @@
 
         function forAccount(accountId) {
             return accountsResource.one(accountId);
+        }
+
+        function getAccount(accountId) {
+            return forAccount(accountId).get();
         }
 
     }
