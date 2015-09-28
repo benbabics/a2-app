@@ -318,6 +318,7 @@
                 "payments"           : "Payment Activity",
                 "transactionActivity": "Transaction Activity",
                 "cards"              : "Cards",
+                "contactUs": "Contact Us",
                 "termsAndPolicies"   : "Terms and Policies",
                 "logOut"             : "Log Out"
             }
