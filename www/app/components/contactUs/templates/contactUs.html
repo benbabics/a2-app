@@ -1,7 +1,20 @@
-<ion-view view-title="{{::vm.config.title}}" wex-back-state="landing">
-    <ion-content class="padding inner-container">
-        <div class="item item-divider inner-container" style="border:0px">
-            Contact Us content goes here
+<ion-view view-title="{{::vm.config.title}}"
+          class="contact-us-view"
+          wex-back-state="landing">
+    <ion-content>
+        <div class="content item main-container">
+            <p id="heading">
+                <span class="block_align black wordwrap">{{::vm.config.contentHeading}}</span>
+            </p>
+            <p id="content">
+                <span class="block_align black wordwrap">{{::vm.config.content}}</span>
+            </p>
+            <p id="button-area" class="align_center">
+                <a class="button button-block button-submit button-width"
+                   href="{{::vm.config.sendEmailLink}}">
+                    <span id="sendEmail">{{::vm.config.sendEmailButton}}</span>
+                </a>
+            </p>
         </div>
     </ion-content>
 </ion-view>>

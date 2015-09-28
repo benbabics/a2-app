@@ -135,7 +135,11 @@
 
     appGlobals.CONTACT_US = {
         "CONFIG": {
-            "title": "Contact Us"
+            "title"          : "Contact Us",
+            "contentHeading" : "Do you have a question or comment?",
+            "content"        : "Send us an email, including your name and the name of your business. A representative will respond as soon as possible.",
+            "sendEmailButton": "Send Email",
+            "sendEmailLink"  : "mailto:MobileApplications@wexinc.com?subject=WEX Fleet Manager version 1.0"
         }
     };
 
