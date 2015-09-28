@@ -86,6 +86,33 @@
                 }
             }
         });
+
+        $stateProvider.state("card.reissue", {
+            abstract: true,
+            url     : "/reissue/:cardId",
+            resolve : {
+                cardReissue: function ($stateParams, CardReissueManager, CommonService, UserManager) {
+                    var cardId = $stateParams.cardId,
+                        accountId = UserManager.getUser().billingCompany.accountId;
+
+                    CommonService.loadingBegin();
+
+                    return CardReissueManager.getOrCreateCardReissue(accountId, cardId)
+                        .finally(CommonService.loadingComplete);
+                }
+            }
+        });
+
+        $stateProvider.state("card.reissue.form", {
+            cache: false,
+            url  : "",
+            views: {
+                "view@card": {
+                    templateUrl: "app/components/card/templates/cardReissue.html",
+                    controller : "CardReissueController as vm"
+                }
+            }
+        });
     }
 
     angular.module("app.components.card")

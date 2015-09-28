@@ -30,7 +30,8 @@
                     <span class="btn_align black">{{::vm.config.changeStatusButton}}</span>
                 </button>
                 <button class="button button-block button-light item item-icon-right"
-                        ng-if="vm.card.isActive()">
+                        ng-if="vm.card.isActive()"
+                        ui-sref="card.reissue.form({cardId: vm.card.cardId})">
                     <i class="icon ion-chevron-right"></i>
                     <span class="btn_align black">{{::vm.config.reissueCardButton}}</span>
                 </button>
