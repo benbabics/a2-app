@@ -11,6 +11,7 @@ var TestUtils = (function () {
             getRandomBank                    : getRandomBank,
             getRandomBoolean                 : getRandomBoolean,
             getRandomCard                    : getRandomCard,
+            getRandomCardReissue             : getRandomCardReissue,
             getRandomDate                    : getRandomDate,
             getRandomInteger                 : getRandomInteger,
             getRandomInvoiceSummary          : getRandomInvoiceSummary,
@@ -98,6 +99,30 @@ var TestUtils = (function () {
         randomCard.status = getRandomStringThatIsAlphaNumeric(5);
 
         return randomCard;
+    }
+
+    function getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel) {
+        var cardReissue = new CardReissueModel();
+
+        cardReissue.set({
+            account               : getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel),
+            card                  : getRandomCard(CardModel),
+            shippingAddress       : getRandomAddress(AddressModel),
+            selectedShippingMethod: getRandomShippingMethod(ShippingMethodModel),
+            shippingMethods       : (function () {
+                var shippingMethods = [],
+                    numMethods = getRandomInteger(1, 5);
+
+                for (var i = 0; i < numMethods; ++i) {
+                    shippingMethods.push(getRandomShippingMethod(ShippingMethodModel));
+                }
+
+                return shippingMethods;
+            })(),
+            reissueReason         : getRandomStringThatIsAlphaNumeric(10)
+        });
+
+        return cardReissue;
     }
 
     function getRandomDate(start, end) {
