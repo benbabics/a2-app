@@ -71,7 +71,7 @@
                                 });
                         },
 
-                        isPaymentEditable: function ($q, globals, payment, CommonService, PaymentManager, UserManager) {
+                        isPaymentEditable: function (globals, payment, CommonService, PaymentManager, UserManager) {
                             var billingAccountId = UserManager.getUser().billingCompany.accountId;
 
                             CommonService.loadingBegin();
