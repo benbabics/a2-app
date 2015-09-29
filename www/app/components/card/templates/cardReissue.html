@@ -3,14 +3,13 @@
     <ion-content>
         <div class="payment-maintenance-form-item">
             <span class="block_align black">{{::vm.config.shippingAddress}}</span>
-            <div>
-                <span class="right-padding">
-                    {{vm.cardReissue.shippingAddress.firstName}} {{vm.cardReissue.shippingAddress.lastName}}<br>
-                    {{vm.cardReissue.shippingAddress.companyName}}<br>
-                    {{vm.cardReissue.shippingAddress.addressLine1}}<br>
-                    <span ng-if="!!vm.cardReissue.shippingAddress.addressLine2">{{vm.cardReissue.shippingAddress.addressLine2}}<br></span>
-                    {{vm.cardReissue.shippingAddress.city}}, {{vm.cardReissue.shippingAddress.state}} {{vm.cardReissue.shippingAddress.postalCode}}
-                </span>
+            <div  class="right-padding float-right black">
+                    <span class="wordwrap">{{vm.cardReissue.shippingAddress.firstName}} {{vm.cardReissue.shippingAddress.lastName}}</span>
+                    <span class="wordwrap">{{vm.cardReissue.shippingAddress.companyName}}</span>
+                    <span class="wordwrap">{{vm.cardReissue.shippingAddress.addressLine1}}</span>
+                    <span ng-if="!!vm.cardReissue.shippingAddress.addressLine2" class="wordwrap">{{vm.cardReissue.shippingAddress.addressLine2}}</span>
+                    <span class="wordwrap">{{vm.cardReissue.shippingAddress.city}}, {{vm.cardReissue.shippingAddress.state}} {{vm.cardReissue.shippingAddress.postalCode}}</span>
+
             </div>
         </div>
 
