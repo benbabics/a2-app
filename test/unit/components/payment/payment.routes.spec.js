@@ -8,9 +8,6 @@
             $q,
             $rootScope,
             $state,
-            mockBank1,
-            mockBank2,
-            mockBank3,
             mockBankAccounts,
             mockGlobals = {
                 PAYMENT_MAINTENANCE: {
@@ -44,29 +41,9 @@
                     }
                 }
             },
-            mockPayment1,
-            mockPayment2,
-            mockPayment3,
-            mockPayment4,
+            mockPayment,
             mockPayments,
-            mockUser = {
-                newField1     : "some value",
-                newField2     : "some other value",
-                newField3     : "yet another value",
-                email         : "email address value",
-                firstName     : "first name value",
-                username      : "username value",
-                company       : {
-                    accountId    : "company account id value",
-                    accountNumber: "company account number value",
-                    name         : "company name value"
-                },
-                billingCompany: {
-                    accountId    : "billing company account id value",
-                    accountNumber: "billing company account number value",
-                    name         : "billing company name value"
-                }
-            },
+            mockUser,
             BankManager,
             BankModel,
             CommonService,
@@ -81,6 +58,7 @@
             module("app.shared");
             module("app.components.bank");
             module("app.components.payment");
+            module("app.components.user");
             module("app.html");
 
             // mock dependencies
@@ -98,7 +76,7 @@
                 $provide.value("UserManager", UserManager);
             });
 
-            inject(function (_$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _CommonService_, _PaymentModel_) {
+            inject(function (_$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _CommonService_, _PaymentModel_, UserAccountModel, UserModel) {
                 $injector = _$injector_;
                 $location = _$location_;
                 $q = _$q_;
@@ -107,31 +85,17 @@
                 BankModel = _BankModel_;
                 CommonService = _CommonService_;
                 PaymentModel = _PaymentModel_;
+
+                mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
             });
 
             // setup mock objects
-            mockPayment1 = TestUtils.getRandomPayment(PaymentModel, BankModel);
-            mockPayment2 = TestUtils.getRandomPayment(PaymentModel, BankModel);
-            mockPayment3 = TestUtils.getRandomPayment(PaymentModel, BankModel);
-            mockPayment4 = TestUtils.getRandomPayment(PaymentModel, BankModel);
-
-            mockPayments = {};
-            mockPayments[mockPayment1.id] = mockPayment1;
-            mockPayments[mockPayment2.id] = mockPayment2;
-            mockPayments[mockPayment3.id] = mockPayment3;
-            mockPayments[mockPayment4.id] = mockPayment4;
-
-            mockBank1 = TestUtils.getRandomBank(BankModel);
-            mockBank2 = TestUtils.getRandomBank(BankModel);
-            mockBank3 = TestUtils.getRandomBank(BankModel);
-
-            mockBankAccounts = {};
-            mockBankAccounts[mockBank1.id] = mockBank1;
-            mockBankAccounts[mockBank2.id] = mockBank2;
-            mockBankAccounts[mockBank3.id] = mockBank3;
+            mockBankAccounts = getRandomBanks(BankModel);
+            mockPayments = getRandomPayments(PaymentModel, BankModel);
+            mockPayment = TestUtils.getRandomValueFromArray(mockPayments);
 
             BankManager.getActiveBanks.and.returnValue(mockBankAccounts);
-            PaymentMaintenance.getPayment.and.returnValue(mockPayment1);
+            PaymentMaintenance.getPayment.and.returnValue(mockPayment);
 
         });
 
@@ -289,8 +253,7 @@
 
                 var fetchPaymentDeferred,
                     fetchScheduledPaymentsCountDeferred,
-                    mockPaymentId = TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
+                    mockPaymentId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                 beforeEach(function () {
                     fetchPaymentDeferred = $q.defer();
@@ -303,17 +266,12 @@
 
                     $state.go(stateName, {paymentId: mockPaymentId});
 
-                    fetchPaymentDeferred.resolve(mockPayment4);
-                    fetchScheduledPaymentsCountDeferred.resolve(mockScheduledPaymentCount);
+                    fetchPaymentDeferred.resolve(mockPayment);
                     $rootScope.$digest();
                 });
 
                 it("should call PaymentManager.fetchPayment", function () {
                     expect(PaymentManager.fetchPayment).toHaveBeenCalledWith(mockPaymentId);
-                });
-
-                it("should call PaymentManager.fetchScheduledPaymentsCount", function () {
-                    expect(PaymentManager.fetchScheduledPaymentsCount).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                 });
 
                 it("should transition successfully", function () {
@@ -323,15 +281,67 @@
                 it("should resolve the payment", function () {
                     $injector.invoke($state.current.views["view@payment"].resolve.payment)
                         .then(function (payment) {
-                            expect(payment).toEqual(mockPayment4);
+                            expect(payment).toEqual(mockPayment);
                         });
                 });
 
-                it("should resolve the scheduledPaymentsCount", function () {
-                    $injector.invoke($state.current.views["view@payment"].resolve.scheduledPaymentsCount)
-                        .then(function (scheduledPaymentCount) {
-                            expect(scheduledPaymentCount).toEqual(mockScheduledPaymentCount);
+                describe("when the payment NOT is scheduled", function () {
+
+                    it("should NOT call PaymentManager.fetchScheduledPaymentsCount", function () {
+                        expect(PaymentManager.fetchScheduledPaymentsCount).not.toHaveBeenCalled();
+                    });
+
+                    it("should resolve isPaymentEditable as false", function () {
+                        $injector.invoke($state.current.views["view@payment"].resolve.isPaymentEditable, null, {payment: mockPayment})
+                            .then(function (isPaymentEditable) {
+                                expect(isPaymentEditable).toBeFalsy();
+                            });
+                    });
+
+                });
+
+                describe("when the payment is scheduled", function () {
+
+                    var mockScheduledPaymentCount;
+
+                    beforeEach(function () {
+                        mockPayment.status = "SCHEDULED";
+                    });
+
+                    describe("when there is only 1 scheduled payment", function () {
+
+                        beforeEach(function () {
+                            mockScheduledPaymentCount = 1;
+                            fetchScheduledPaymentsCountDeferred.resolve(mockScheduledPaymentCount);
+                            $rootScope.$digest();
                         });
+
+                        it("should resolve isPaymentEditable as true", function () {
+                            $injector.invoke($state.current.views["view@payment"].resolve.isPaymentEditable, null, {payment: mockPayment})
+                                .then(function (isPaymentEditable) {
+                                    expect(isPaymentEditable).toBeTruthy();
+                                });
+                        });
+
+                    });
+
+                    describe("when there are only multiple scheduled payments", function () {
+
+                        beforeEach(function () {
+                            mockScheduledPaymentCount = TestUtils.getRandomInteger(2, 100);
+                            fetchScheduledPaymentsCountDeferred.resolve(mockScheduledPaymentCount);
+                            $rootScope.$digest();
+                        });
+
+                        it("should resolve isPaymentEditable as false", function () {
+                            $injector.invoke($state.current.views["view@payment"].resolve.isPaymentEditable, null, {payment: mockPayment})
+                                .then(function (isPaymentEditable) {
+                                    expect(isPaymentEditable).toBeFalsy();
+                                });
+                        });
+
+                    });
+
                 });
 
             });
@@ -373,7 +383,7 @@
                     BankManager.hasMultipleBanks.and.returnValue(hasMultipleBanksDeferred.promise);
 
                     $state.go(stateName, {maintenanceState: getRandomMaintenanceState()});
-                    getOrFetchPaymentAddDeferred.resolve(mockPayment1);
+                    getOrFetchPaymentAddDeferred.resolve(mockPayment);
                     hasMultipleBanksDeferred.resolve(mockHasMultipleBanks);
                     $rootScope.$digest();
                 });
@@ -423,7 +433,7 @@
                     BankManager.hasMultipleBanks.and.returnValue(hasMultipleBanksDeferred.promise);
 
                     $state.go(stateName, {maintenanceState: getRandomMaintenanceState()});
-                    getOrFetchPaymentAddDeferred.resolve(mockPayment1);
+                    getOrFetchPaymentAddDeferred.resolve(mockPayment);
                     hasMultipleBanksDeferred.resolve(mockHasMultipleBanks);
                     $rootScope.$digest();
                 });
@@ -547,7 +557,7 @@
                     BankManager.hasMultipleBanks.and.returnValue(hasMultipleBanksDeferred.promise);
 
                     $state.go(stateName, {maintenanceState: getRandomMaintenanceState()});
-                    getOrFetchPaymentAddDeferred.resolve(mockPayment1);
+                    getOrFetchPaymentAddDeferred.resolve(mockPayment);
                     hasMultipleBanksDeferred.resolve(mockHasMultipleBanks);
                     $rootScope.$digest();
                 });
@@ -720,7 +730,7 @@
                 });
 
                 it("should resolve the payment", function () {
-                    expect($injector.invoke($state.current.views["view@payment"].resolve.payment)).toEqual(mockPayment1);
+                    expect($injector.invoke($state.current.views["view@payment"].resolve.payment)).toEqual(mockPayment);
                 });
             });
         });
@@ -779,13 +789,13 @@
                 });
 
                 it("should resolve the payment", function () {
-                    expect($injector.invoke($state.current.views["view@payment"].resolve.payment)).toEqual(mockPayment1);
+                    expect($injector.invoke($state.current.views["view@payment"].resolve.payment)).toEqual(mockPayment);
                 });
 
                 describe("when the payment does not have a bank account", function () {
 
                     beforeEach(function () {
-                        mockPayment1.bankAccount = null;
+                        mockPayment.bankAccount = null;
 
                         $state.go(stateName);
                         $rootScope.$digest();
@@ -794,7 +804,7 @@
                     it("should resolve the bankAccounts", function () {
                         var expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
 
-                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment1}))
+                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment}))
                             .toEqual(expectedBankAccounts);
                     });
 
@@ -803,7 +813,7 @@
                 describe("when the payment has a bank account NOT in the collection", function () {
 
                     beforeEach(function () {
-                        mockPayment1.bankAccount = TestUtils.getRandomBank(BankModel);
+                        mockPayment.bankAccount = TestUtils.getRandomBank(BankModel);
 
                         $state.go(stateName);
                         $rootScope.$digest();
@@ -812,7 +822,7 @@
                     it("should resolve the bankAccounts", function () {
                         var expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
 
-                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment1}))
+                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment}))
                             .toEqual(expectedBankAccounts);
                     });
 
@@ -821,20 +831,22 @@
                 describe("when the payment has a bank account in the collection", function () {
 
                     beforeEach(function () {
-                        mockPayment1.bankAccount = mockBank2;
+                        mockPayment.bankAccount = TestUtils.getRandomValueFromArray(mockBankAccounts);
 
                         $state.go(stateName);
                         $rootScope.$digest();
                     });
 
                     it("should resolve the bankAccounts", function () {
-                        var expectedBankAccounts = {};
-                        expectedBankAccounts[mockBank1.id] = mockBank1;
-                        expectedBankAccounts[mockBank3.id] = mockBank3;
+                        var expectedBankAccounts;
 
-                        expectedBankAccounts = _.sortBy(expectedBankAccounts, "name");
+                        _.remove(mockBankAccounts, function (bank) {
+                            return bank.id === mockPayment.bankAccount.id;
+                        });
 
-                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment1}))
+                        expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
+
+                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment}))
                             .toEqual(expectedBankAccounts);
                     });
 
@@ -1031,10 +1043,37 @@
 
         });
 
+        function getRandomBanks(BankModel) {
+            var i,
+                mockBankCollection,
+                numModels;
+
+            mockBankCollection = [];
+            numModels = TestUtils.getRandomInteger(1, 100);
+            for (i = 0; i < numModels; ++i) {
+                mockBankCollection.push(TestUtils.getRandomBank(BankModel));
+            }
+
+            return mockBankCollection;
+        }
+
         function getRandomMaintenanceState() {
             return TestUtils.getRandomValueFromMap(mockGlobals.PAYMENT_MAINTENANCE.STATES);
         }
 
+        function getRandomPayments(PaymentModel, BankModel) {
+            var i,
+                mockPaymentCollection,
+                numModels;
+
+            mockPaymentCollection = [];
+            numModels = TestUtils.getRandomInteger(1, 100);
+            for (i = 0; i < numModels; ++i) {
+                mockPaymentCollection.push(TestUtils.getRandomPayment(PaymentModel, BankModel));
+            }
+
+            return mockPaymentCollection;
+        }
     });
 
 })();

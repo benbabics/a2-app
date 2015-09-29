@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentDetailController($scope, $state, globals, payment, scheduledPaymentsCount,
+    function PaymentDetailController($scope, $state, globals, isPaymentEditable, payment,
                                      CommonService, Logger, PaymentMaintenance, PaymentManager, UserManager) {
 
         var vm = this;
@@ -13,7 +13,7 @@
         vm.config = globals.PAYMENT_VIEW.CONFIG;
 
         vm.payment = {};
-        vm.scheduledPaymentsCount = 0;
+        vm.isPaymentEditable = "";
 
         vm.displayCancelPaymentPopup = displayCancelPaymentPopup;
         vm.editPayment = editPayment;
@@ -28,7 +28,7 @@
         }
 
         function beforeEnter() {
-            vm.scheduledPaymentsCount = scheduledPaymentsCount;
+            vm.isPaymentEditable = isPaymentEditable;
             vm.payment = payment;
         }
 

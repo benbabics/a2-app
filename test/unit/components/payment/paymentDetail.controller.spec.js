@@ -13,7 +13,7 @@
         confirmDeferred,
         removePaymentDeferred,
         mockPayment,
-        mockScheduledPaymentsCount = TestUtils.getRandomInteger(0, 100),
+        mockIsPaymentEditable = TestUtils.getRandomBoolean(),
         mockGlobals = {
             PAYMENT_VIEW: {
                 "CONFIG": {
@@ -35,21 +35,7 @@
             }
         },
         mockConfig = mockGlobals.PAYMENT_VIEW.CONFIG,
-        mockUser = {
-            email         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            firstName     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            username      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-            company       : {
-                accountId    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                accountNumber: TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                name         : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-            },
-            billingCompany: {
-                accountId    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                accountNumber: TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                name         : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-            }
-        };
+        mockUser;
 
     describe("A Payment View Controller", function () {
 
@@ -79,7 +65,7 @@
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["removePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
-            inject(function (_$rootScope_, _CommonService_, $controller, $q, BankModel, PaymentModel) {
+            inject(function (_$rootScope_, _CommonService_, $controller, $q, BankModel, PaymentModel, UserAccountModel, UserModel) {
 
                 $rootScope = _$rootScope_;
                 _ = _CommonService_._;
@@ -87,19 +73,20 @@
                 removePaymentDeferred = $q.defer();
 
                 mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
+                mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("PaymentDetailController", {
-                    $scope                : $scope,
-                    $state                : $state,
-                    CommonService         : CommonService,
-                    PaymentMaintenance    : PaymentMaintenance,
-                    PaymentManager        : PaymentManager,
-                    UserManager           : UserManager,
-                    payment               : mockPayment,
-                    scheduledPaymentsCount: mockScheduledPaymentsCount
+                    $scope            : $scope,
+                    $state            : $state,
+                    CommonService     : CommonService,
+                    PaymentMaintenance: PaymentMaintenance,
+                    PaymentManager    : PaymentManager,
+                    UserManager       : UserManager,
+                    payment           : mockPayment,
+                    isPaymentEditable : mockIsPaymentEditable
                 });
             });
 
@@ -122,8 +109,8 @@
                 expect(ctrl.payment).toEqual(mockPayment);
             });
 
-            it("should set the scheduled payments count", function () {
-                expect(ctrl.scheduledPaymentsCount).toEqual(mockScheduledPaymentsCount);
+            it("should set the is payment editable indicator", function () {
+                expect(ctrl.isPaymentEditable).toEqual(mockIsPaymentEditable);
             });
 
         });

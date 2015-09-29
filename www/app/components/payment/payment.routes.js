@@ -71,12 +71,19 @@
                                 });
                         },
 
-                        scheduledPaymentsCount: function (globals, CommonService, PaymentManager, UserManager) {
+                        isPaymentEditable: function ($q, globals, payment, CommonService, PaymentManager, UserManager) {
                             var billingAccountId = UserManager.getUser().billingCompany.accountId;
+
+                            if (!payment.isScheduled()) {
+                                return $q.when(false);
+                            }
 
                             CommonService.loadingBegin();
 
                             return PaymentManager.fetchScheduledPaymentsCount(billingAccountId)
+                                .then(function (scheduledPaymentsCount) {
+                                    return scheduledPaymentsCount == 1;
+                                })
                                 .finally(function () {
                                     CommonService.loadingComplete();
                                 });
