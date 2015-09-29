@@ -20,6 +20,7 @@
             fetchScheduledPaymentsCount: fetchScheduledPaymentsCount,
             getPaymentAddAvailability  : getPaymentAddAvailability,
             getPayments                : getPayments,
+            isPaymentEditable          : isPaymentEditable,
             removePayment              : removePayment,
             setPaymentAddAvailability  : setPaymentAddAvailability,
             setPayments                : setPayments,
@@ -170,13 +171,23 @@
                 });
         }
 
-
         function getPaymentAddAvailability() {
             return paymentAddAvailability;
         }
 
         function getPayments() {
             return payments;
+        }
+
+        function isPaymentEditable(accountId, payment) {
+            if (!payment.isScheduled()) {
+                return $q.when(false);
+            }
+
+            return fetchScheduledPaymentsCount(accountId)
+                .then(function (scheduledPaymentsCount) {
+                    return scheduledPaymentsCount === 1;
+                });
         }
 
         function removePayment(accountId, paymentId) {

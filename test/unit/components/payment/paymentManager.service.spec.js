@@ -398,13 +398,13 @@
 
             describe("when the payments are fetched successfully", function () {
 
-                var mockRemoteBanks = {data: {}};
+                var mockRemotePayments = {data: {}};
 
                 describe("when there is data in the response", function () {
 
                     beforeEach(function () {
-                        mockRemoteBanks.data = mockPaymentCollection.slice();
-                        getPaymentsDeferred.resolve(mockRemoteBanks);
+                        mockRemotePayments.data = mockPaymentCollection.slice();
+                        getPaymentsDeferred.resolve(mockRemotePayments);
 
                         PaymentsResource.getPayments.and.returnValue(getPaymentsDeferred.promise);
 
@@ -420,7 +420,7 @@
                     });
 
                     it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(mockRemoteBanks.data);
+                        expect(resolveHandler).toHaveBeenCalledWith(mockRemotePayments.data);
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
@@ -476,7 +476,7 @@
             });
 
             describe("when the payments are fetched successfully", function () {
-                var mockRemoteBanks = {
+                var mockRemotePayments = {
                         data: {}
                     },
                     numScheduledPayments = 0,
@@ -507,8 +507,8 @@
                                 mockNonScheduledPayments.push(curPayment);
                             }
 
-                            mockRemoteBanks.data = _.values(angular.extend({}, mockNonScheduledPayments, mockScheduledPayments));
-                            getPaymentsDeferred.resolve(mockRemoteBanks);
+                            mockRemotePayments.data = _.values(angular.extend({}, mockNonScheduledPayments, mockScheduledPayments));
+                            getPaymentsDeferred.resolve(mockRemotePayments);
 
                             $rootScope.$digest();
                         });
@@ -522,8 +522,8 @@
                     describe("when the response contains no scheduled payments", function () {
 
                         beforeEach(function () {
-                            mockRemoteBanks.data = _.values(mockNonScheduledPayments);
-                            getPaymentsDeferred.resolve(mockRemoteBanks);
+                            mockRemotePayments.data = _.values(mockNonScheduledPayments);
+                            getPaymentsDeferred.resolve(mockRemotePayments);
 
                             $rootScope.$digest();
                         });
@@ -597,6 +597,170 @@
             });
 
             // TODO: figure out how to test this without using setPaymentAddAvailability
+        });
+
+        describe("has an isPaymentEditable function that", function () {
+
+            var actualResult,
+                getPaymentsDeferred;
+
+            beforeEach(function () {
+                getPaymentsDeferred = $q.defer();
+                PaymentsResource.getPayments.and.returnValue(getPaymentsDeferred.promise);
+            });
+
+            describe("when the payment NOT is scheduled", function () {
+
+                beforeEach(function () {
+                    var paymentToCheck = TestUtils.getRandomPayment(PaymentModel, BankModel);
+
+                    PaymentManager.isPaymentEditable(accountId, paymentToCheck)
+                        .then(function (isPaymentEditable) {
+                            actualResult = isPaymentEditable;
+                        })
+                        .catch(rejectHandler);
+                });
+
+                it("should NOT call PaymentsResource.getPayments", function () {
+                    expect(PaymentsResource.getPayments).not.toHaveBeenCalled();
+                });
+
+                it("should resolve with false", function () {
+                    expect(actualResult).toBeFalsy();
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+            });
+
+            describe("when the payment is scheduled", function () {
+
+                var mockRemotePayments = {
+                        data: {}
+                    },
+                    numScheduledPayments = 0,
+                    numNonScheduledPayments = 0,
+                    mockScheduledPayments = [],
+                    mockNonScheduledPayments = [];
+
+                beforeEach(function () {
+                    var paymentToCheck = TestUtils.getRandomPayment(PaymentModel, BankModel);
+                    paymentToCheck.status = "SCHEDULED";
+
+                    PaymentManager.isPaymentEditable(accountId, paymentToCheck)
+                        .then(function (isPaymentEditable) {
+                            actualResult = isPaymentEditable;
+                        })
+                        .catch(rejectHandler);
+                });
+
+                it("should call PaymentsResource.getPayments with the expected values", function () {
+                    expect(PaymentsResource.getPayments).toHaveBeenCalledWith(accountId, jasmine.objectContaining({
+                        pageNumber: mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
+                        pageSize  : mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE
+                    }));
+                });
+
+                describe("when there are no scheduled payments retrieved", function () {
+
+                    beforeEach(function () {
+                        var curPayment, i;
+
+                        mockScheduledPayments = [];
+                        mockNonScheduledPayments = [];
+
+                        numNonScheduledPayments = TestUtils.getRandomInteger(1, 100);
+                        for (i = 0; i < numNonScheduledPayments; ++i) {
+                            curPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
+                            curPayment.status = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            mockNonScheduledPayments.push(curPayment);
+                        }
+
+                        mockRemotePayments.data = _.values(numNonScheduledPayments);
+                        getPaymentsDeferred.resolve(mockRemotePayments);
+
+                        $rootScope.$digest();
+                    });
+
+                    it("should resolve with false", function () {
+                        expect(actualResult).toBeFalsy();
+                        expect(rejectHandler).not.toHaveBeenCalled();
+                    });
+
+                });
+
+                describe("when there is only 1 scheduled payment", function () {
+
+                    beforeEach(function () {
+                        var curPayment, i;
+
+                        mockScheduledPayments = [];
+                        mockNonScheduledPayments = [];
+
+                        curPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
+                        curPayment.status = mockGlobals.PAYMENT.STATUS.SCHEDULED;
+
+                        mockScheduledPayments.push(curPayment);
+
+                        numNonScheduledPayments = TestUtils.getRandomInteger(1, 100);
+                        for (i = 0; i < numNonScheduledPayments; ++i) {
+                            curPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
+                            curPayment.status = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            mockNonScheduledPayments.push(curPayment);
+                        }
+
+                        mockRemotePayments.data = _.values(angular.extend({}, mockNonScheduledPayments, mockScheduledPayments));
+                        getPaymentsDeferred.resolve(mockRemotePayments);
+
+                        $rootScope.$digest();
+                    });
+
+                    it("should resolve with true", function () {
+                        expect(actualResult).toBeTruthy();
+                        expect(rejectHandler).not.toHaveBeenCalled();
+                    });
+
+                });
+
+                describe("when there are multiple scheduled payments", function () {
+
+                    beforeEach(function () {
+                        var curPayment, i;
+
+                        mockScheduledPayments = [];
+                        mockNonScheduledPayments = [];
+
+                        numScheduledPayments = TestUtils.getRandomInteger(2, 100);
+                        for (i = 0; i < numScheduledPayments; ++i) {
+                            curPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
+                            curPayment.status = mockGlobals.PAYMENT.STATUS.SCHEDULED;
+
+                            mockScheduledPayments.push(curPayment);
+                        }
+
+                        numNonScheduledPayments = TestUtils.getRandomInteger(1, 100);
+                        for (i = 0; i < numNonScheduledPayments; ++i) {
+                            curPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
+                            curPayment.status = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            mockNonScheduledPayments.push(curPayment);
+                        }
+
+                        mockRemotePayments.data = _.values(angular.extend({}, mockNonScheduledPayments, mockScheduledPayments));
+                        getPaymentsDeferred.resolve(mockRemotePayments);
+
+                        $rootScope.$digest();
+                    });
+
+                    it("should return false", function () {
+                        expect(actualResult).toBeFalsy(false);
+                    });
+
+                });
+
+            });
+
         });
 
         describe("has a setPaymentAddAvailability function that", function () {

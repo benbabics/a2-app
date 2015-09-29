@@ -64,7 +64,7 @@
             // mock dependencies
             PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getOrCreatePaymentAdd", "getPayment"]);
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks"]);
-            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayment", "fetchPaymentAddAvailability", "fetchPayments", "fetchScheduledPaymentsCount"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayment", "fetchPaymentAddAvailability", "fetchPayments", "isPaymentEditable"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             module(function ($provide, sharedGlobals) {
@@ -252,26 +252,32 @@
             describe("when navigated to", function () {
 
                 var fetchPaymentDeferred,
-                    fetchScheduledPaymentsCountDeferred,
-                    mockPaymentId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                    fetchIsPaymentEditableDeferred,
+                    mockPaymentId = TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    mockIsPaymentEditable = TestUtils.getRandomBoolean();
 
                 beforeEach(function () {
                     fetchPaymentDeferred = $q.defer();
                     PaymentManager.fetchPayment.and.returnValue(fetchPaymentDeferred.promise);
 
-                    fetchScheduledPaymentsCountDeferred = $q.defer();
-                    PaymentManager.fetchScheduledPaymentsCount.and.returnValue(fetchScheduledPaymentsCountDeferred.promise);
+                    fetchIsPaymentEditableDeferred = $q.defer();
+                    PaymentManager.isPaymentEditable.and.returnValue(fetchIsPaymentEditableDeferred.promise);
 
                     UserManager.getUser.and.returnValue(mockUser);
 
                     $state.go(stateName, {paymentId: mockPaymentId});
 
                     fetchPaymentDeferred.resolve(mockPayment);
+                    fetchIsPaymentEditableDeferred.resolve(mockIsPaymentEditable);
                     $rootScope.$digest();
                 });
 
                 it("should call PaymentManager.fetchPayment", function () {
                     expect(PaymentManager.fetchPayment).toHaveBeenCalledWith(mockPaymentId);
+                });
+
+                it("should call PaymentManager.isPaymentEditable", function () {
+                    expect(PaymentManager.isPaymentEditable).toHaveBeenCalledWith(mockUser.billingCompany.accountId, mockPayment);
                 });
 
                 it("should transition successfully", function () {
@@ -285,63 +291,11 @@
                         });
                 });
 
-                describe("when the payment NOT is scheduled", function () {
-
-                    it("should NOT call PaymentManager.fetchScheduledPaymentsCount", function () {
-                        expect(PaymentManager.fetchScheduledPaymentsCount).not.toHaveBeenCalled();
-                    });
-
-                    it("should resolve isPaymentEditable as false", function () {
-                        $injector.invoke($state.current.views["view@payment"].resolve.isPaymentEditable, null, {payment: mockPayment})
-                            .then(function (isPaymentEditable) {
-                                expect(isPaymentEditable).toBeFalsy();
-                            });
-                    });
-
-                });
-
-                describe("when the payment is scheduled", function () {
-
-                    var mockScheduledPaymentCount;
-
-                    beforeEach(function () {
-                        mockPayment.status = "SCHEDULED";
-                    });
-
-                    describe("when there is only 1 scheduled payment", function () {
-
-                        beforeEach(function () {
-                            mockScheduledPaymentCount = 1;
-                            fetchScheduledPaymentsCountDeferred.resolve(mockScheduledPaymentCount);
-                            $rootScope.$digest();
+                it("should resolve isPaymentEditable", function () {
+                    $injector.invoke($state.current.views["view@payment"].resolve.isPaymentEditable, null, {payment: mockPayment})
+                        .then(function (isPaymentEditable) {
+                            expect(isPaymentEditable).toEqual(mockIsPaymentEditable);
                         });
-
-                        it("should resolve isPaymentEditable as true", function () {
-                            $injector.invoke($state.current.views["view@payment"].resolve.isPaymentEditable, null, {payment: mockPayment})
-                                .then(function (isPaymentEditable) {
-                                    expect(isPaymentEditable).toBeTruthy();
-                                });
-                        });
-
-                    });
-
-                    describe("when there are only multiple scheduled payments", function () {
-
-                        beforeEach(function () {
-                            mockScheduledPaymentCount = TestUtils.getRandomInteger(2, 100);
-                            fetchScheduledPaymentsCountDeferred.resolve(mockScheduledPaymentCount);
-                            $rootScope.$digest();
-                        });
-
-                        it("should resolve isPaymentEditable as false", function () {
-                            $injector.invoke($state.current.views["view@payment"].resolve.isPaymentEditable, null, {payment: mockPayment})
-                                .then(function (isPaymentEditable) {
-                                    expect(isPaymentEditable).toBeFalsy();
-                                });
-                        });
-
-                    });
-
                 });
 
             });
