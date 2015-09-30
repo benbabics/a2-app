@@ -1,0 +1,37 @@
+<ion-view class="payment-bank-account-input-view" hide-nav-bar="true">
+
+    <!-- Header bar -->
+    <ion-header-bar class="bar bar-wex">
+        <div class="buttons">
+            <wex-back-button>
+            </wex-back-button>
+        </div>
+
+        <h1 class="title">{{::vm.config.title}}</h1>
+    </ion-header-bar>
+
+    <ion-content>
+        <div class="padding" ng-init="showCost = !vm.cardReissue.hasDefaultCarrier()">
+
+            <a class="button button-block button-light"
+               ng-if="vm.cardReissue.hasDefaultCarrier()"
+               ng-click="vm.confirmSelection(vm.cardReissue.account.regularCardShippingMethod)">
+
+                <span class="align_center active-link">
+                    {{vm.cardReissue.account.regularCardShippingMethod.getDisplayName(showCost)}}
+                </span>
+            </a>
+
+            <a class="button button-block button-light"
+               ng-init="showCarrier = vm.cardReissue.hasDefaultCarrier()"
+               ng-repeat="shippingMethod in vm.cardReissue.shippingMethods"
+               ng-click="vm.confirmSelection(shippingMethod)">
+
+                <span class="align_center active-link">
+                    <span ng-if="showCarrier">{{vm.cardReissue.account.cardShippingCarrier.getDisplayName()}} - </span>
+                    {{shippingMethod.getDisplayName(showCost)}}
+                </span>
+            </a>
+        </div>
+    </ion-content>
+</ion-view>
