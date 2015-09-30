@@ -25,7 +25,7 @@
 
         <div class="payment-maintenance-form-item">
             <span class="block_align black">{{::vm.config.shippingMethod}}</span>
-            <div>
+            <div ui-sref="card.reissue.shippingMethod({cardId: vm.cardReissue.card.cardId})">
                 <span class="active-link">
                     <span ng-if="vm.cardReissue.hasDefaultCarrier()">{{vm.cardReissue.account.cardShippingCarrier.getDisplayName()}} - </span>
                     {{vm.cardReissue.selectedShippingMethod.getDisplayName(!vm.cardReissue.hasDefaultCarrier())}}

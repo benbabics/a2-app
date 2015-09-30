@@ -365,5 +365,35 @@
                 expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/reissue/" + mockCard.cardId);
             });
         });
+
+        describe("has a card.reissue.shippingMethod state that", function () {
+            var state,
+                stateName = "card.reissue.shippingMethod";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should not be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should not be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/shippingMethod");
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/reissue/" + mockCard.cardId + "/shippingMethod");
+            });
+        });
     });
 })();

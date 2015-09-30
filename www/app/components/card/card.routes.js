@@ -113,6 +113,17 @@
                 }
             }
         });
+
+        $stateProvider.state("card.reissue.shippingMethod", {
+            cache: false,
+            url  : "/shippingMethod",
+            views: {
+                "view@card": {
+                    templateUrl: "app/components/card/templates/cardReissueShippingMethod.input.html",
+                    controller : "CardReissueShippingMethodInputController as vm"
+                }
+            }
+        });
     }
 
     angular.module("app.components.card")
