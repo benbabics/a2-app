@@ -16,7 +16,10 @@
         <div class="payment-maintenance-form-item">
             <span class="block_align black">{{::vm.config.shippingMethod}}</span>
             <div>
-                <span class="active-link" ng-init="showCost = !vm.cardReissue.account.cardShippingCarrier.default">{{vm.cardReissue.selectedShippingMethod.getDisplayName(showCost)}}</span>
+                <span class="active-link">
+                    <span ng-if="vm.cardReissue.hasDefaultCarrier()">{{vm.cardReissue.account.cardShippingCarrier.getDisplayName()}} - </span>
+                    {{vm.cardReissue.selectedShippingMethod.getDisplayName(!vm.cardReissue.hasDefaultCarrier())}}
+                </span>
                 <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
             </div>
         </div>

@@ -30,6 +30,10 @@
             return _.find(this.shippingMethods, {default: true});
         };
 
+        ShippingCarrierModel.prototype.getDisplayName = function () {
+            return this.name;
+        };
+
         return ShippingCarrierModel;
     };
 

@@ -39,6 +39,10 @@
             });
         };
 
+        CardReissueModel.prototype.hasDefaultCarrier = function () {
+            return this.account.cardShippingCarrier.default;
+        };
+
         return CardReissueModel;
     };
 

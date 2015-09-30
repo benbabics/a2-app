@@ -3,22 +3,24 @@
 
     describe("A Card Reissue Model Service", function () {
 
-        var _;
+        var _,
+            cardReissue;
 
         beforeEach(function () {
             module("app.shared");
             module("app.components.account");
             module("app.components.card");
 
-            inject(function (CommonService) {
+            inject(function (CommonService, CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel) {
                 _ = CommonService._;
+
+                cardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
             });
         });
 
         describe("has a set function that", function () {
 
-            var cardReissue,
-                mockCardReissueResource,
+            var mockCardReissueResource,
                 cardReissueModelKeys,
                 cardReissueResourceKeys;
 
@@ -81,6 +83,20 @@
 
         });
 
+        describe("has a hasDefaultCarrier function that", function () {
+
+            it("should return true when account.cardShippingCarrier.default is true", function () {
+                cardReissue.account.cardShippingCarrier.default = true;
+
+                expect(cardReissue.hasDefaultCarrier()).toBeTruthy();
+            });
+
+            it("should return false when account.cardShippingCarrier.default is false", function () {
+                cardReissue.account.cardShippingCarrier.default = false;
+
+                expect(cardReissue.hasDefaultCarrier()).toBeFalsy();
+            });
+        });
     });
 
 })();

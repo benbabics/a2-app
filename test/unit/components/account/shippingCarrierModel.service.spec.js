@@ -108,6 +108,12 @@
             });
         });
 
+        describe("has a getDisplayName function that", function () {
+
+            it("should return name", function () {
+                expect(shippingCarrier.getDisplayName()).toEqual(shippingCarrier.name);
+            });
+        });
     });
 
 })();
