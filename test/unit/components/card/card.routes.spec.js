@@ -8,28 +8,46 @@
             $rootScope,
             $state,
             mockCard,
-            CardManager;
+            mockCardReissue,
+            mockUser,
+            CardManager,
+            CardReissueManager,
+            UserManager;
 
         beforeEach(function () {
 
             module("app.shared");
             module("app.components.card");
+            module("app.components.account");
+            module("app.components.user");
             module("app.html");
 
             // mock dependencies
             CardManager = jasmine.createSpyObj("CardManager", ["fetchCard"]);
+            CardReissueManager = jasmine.createSpyObj("CardReissueManager", ["getOrCreateCardReissue"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+
             module(function ($provide) {
                 $provide.value("CardManager", CardManager);
+                $provide.value("CardReissueManager", CardReissueManager);
+                $provide.value("UserManager", UserManager);
             });
 
-            inject(function (_$injector_, _$q_, _$rootScope_, _$state_, CardModel) {
+            inject(function (_$injector_, _$q_, _$rootScope_, _$state_,
+                             CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel,
+                             UserModel, UserAccountModel) {
                 $injector = _$injector_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
 
                 mockCard = TestUtils.getRandomCard(CardModel);
+                mockCardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
+                mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
             });
+
+            //setup spies:
+            UserManager.getUser.and.returnValue(mockUser);
         });
 
         describe("has a card state that", function () {
@@ -269,6 +287,82 @@
 
             it("should respond to the URL", function () {
                 expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/changeStatus/" + mockCard.cardId + "/confirmation");
+            });
+        });
+
+        describe("has a card.reissue state that", function () {
+            var state,
+                stateName = "card.reissue";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be defined", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should be abstract", function () {
+                expect(state.abstract).toBeTruthy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/reissue/:cardId");
+            });
+
+            describe("when a child state is navigated to", function () {
+                var childStateName = "card.reissue.form",
+                    getOrCreateCardReissueDeferred;
+
+                beforeEach(function () {
+                    getOrCreateCardReissueDeferred = $q.defer();
+                    CardReissueManager.getOrCreateCardReissue.and.returnValue(getOrCreateCardReissueDeferred.promise);
+                });
+
+                beforeEach(function () {
+                    $state.go(childStateName, {cardId: mockCard.cardId});
+
+                    getOrCreateCardReissueDeferred.resolve(mockCardReissue);
+                    $rootScope.$digest();
+                });
+
+                it("should resolve the expected cardReissue", function () {
+                    $injector.invoke($state.$current.parent.resolve.cardReissue)
+                        .then(function (cardReissue) {
+                            expect(cardReissue).toEqual(mockCardReissue);
+                        });
+                });
+            });
+        });
+
+        describe("has a card.reissue.form state that", function () {
+            var state,
+                stateName = "card.reissue.form";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should not be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should not be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should use its parent's URL", function () {
+                expect(state.url).toEqual("");
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/reissue/" + mockCard.cardId);
             });
         });
     });

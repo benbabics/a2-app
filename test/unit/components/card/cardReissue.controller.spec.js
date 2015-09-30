@@ -40,7 +40,7 @@
 
                 $scope = $rootScope.$new();
 
-                mockCardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel)
+                mockCardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
 
                 ctrl = $controller("CardReissueController", {
                     $scope     : $scope,
