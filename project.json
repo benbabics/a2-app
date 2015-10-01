@@ -14,18 +14,20 @@
       "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
     "content_security_policy": "default-src * 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+    "whitelist_domains": ["*"],
     "logging_enabled": "true"
   },
   "dit": {
     "app_urls": {
-      "am_api": "http://172.28.163.78:20080",
-      "auth_api": "http://172.28.163.78:26080"
+      "am_api": "http://pwm-wex-178.wrightexpress.com:20080",
+      "auth_api": "http://pwm-wex-178.wrightexpress.com:26080"
     },
     "auth": {
       "client_id": "mobileAccountManagement",
       "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
-    "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://172.28.163.78:* 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+    "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://pwm-wex-178.wrightexpress.com:* 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+    "whitelist_domains": ["pwm-wex-178.wrightexpress.com"],
     "logging_enabled": "true"
   },
   "stage": {
@@ -38,6 +40,7 @@
       "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://uat.account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+    "whitelist_domains": ["uat.account.wexmobile.com"],
     "logging_enabled": "true"
   },
   "prod": {
@@ -50,6 +53,7 @@
       "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+    "whitelist_domains": ["account.wexmobile.com"],
     "logging_enabled": "false"
   }
 }
