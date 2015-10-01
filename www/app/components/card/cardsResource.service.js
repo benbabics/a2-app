@@ -12,6 +12,7 @@
         // Revealed Public members
         var service = {
             getCards        : getCards,
+            post            : post,
             postStatusChange: postStatusChange
         };
 
@@ -26,6 +27,10 @@
 
         function getCards(accountId, searchCriteria) {
             return $q.when(accountsResource.forAccount(accountId).getList(globals.ACCOUNT_MAINTENANCE_API.CARDS.BASE, searchCriteria));
+        }
+
+        function post(accountId, cardId, updateDetails) {
+            return $q.when(accountsResource.forAccount(accountId).doPOST(updateDetails, globals.ACCOUNT_MAINTENANCE_API.CARDS.BASE + "/" + cardId));
         }
 
         function postStatusChange(accountId, cardId, newStatus) {
