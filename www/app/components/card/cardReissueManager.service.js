@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function CardReissueManager($rootScope, $q, AccountManager, CardManager, CommonService, Logger) {
+    function CardReissueManager($rootScope, $q, AccountManager, CardManager, CardReissueModel, CommonService, Logger) {
         // Private members
         var _ = CommonService._,
             cardReissue = {};
@@ -52,6 +52,8 @@
         function initializeCardReissue(accountId, cardId) {
             return $q.all([AccountManager.fetchAccount(accountId), CardManager.fetchCard(cardId)])
                 .then(function (values) {
+                    cardReissue = new CardReissueModel();
+
                     cardReissue.account = values[0];
                     cardReissue.card = values[1];
 
@@ -65,7 +67,12 @@
                     }
                     else {
                         cardReissue.selectedShippingMethod = cardReissue.account.cardShippingCarrier.getDefaultShippingMethod();
-                        cardReissue.shippingMethods = cardReissue.account.cardShippingCarrier.shippingMethods;
+                        cardReissue.shippingMethods = cardReissue.account.cardShippingCarrier.shippingMethods.slice();
+
+                        //if the user has a default shipping carrier, also add the default WEX regular shipping method
+                        if(cardReissue.hasDefaultCarrier()) {
+                            cardReissue.shippingMethods.unshift(cardReissue.account.regularCardShippingMethod);
+                        }
                     }
 
                     cardReissue.reissueReason = "";

@@ -339,45 +339,98 @@
                         account.defaultCardShippingAddress.addressLine1 = TestUtils.getRandomStringThatIsAlphaNumeric(20);
                     });
 
-                    beforeEach(function () {
-                        CardReissueManager.initializeCardReissue(accountId, cardId)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
+                    describe("when the account has a default shipping carrier", function () {
 
-                        $rootScope.$digest();
+                        beforeEach(function () {
+                            account.cardShippingCarrier.default = true;
+
+                            CardReissueManager.initializeCardReissue(accountId, cardId)
+                                .then(resolveHandler)
+                                .catch(rejectHandler);
+
+                            $rootScope.$digest();
+                        });
+
+                        beforeEach(function () {
+                            result = CardReissueManager.getCardReissue();
+                        });
+
+                        it("should resolve with the new cardReissue object", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(result);
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
+
+                        it("should set the expected account on cardReissue", function () {
+                            expect(result.account).toEqual(account);
+                        });
+
+                        it("should set the expected card on cardReissue", function () {
+                            expect(result.card).toEqual(card);
+                        });
+
+                        it("should set the expected shippingAddress on cardReissue", function () {
+                            expect(result.shippingAddress).toEqual(account.defaultCardShippingAddress);
+                        });
+
+                        it("should set the expected selectedShippingMethod on cardReissue", function () {
+                            expect(result.selectedShippingMethod).toEqual(account.cardShippingCarrier.getDefaultShippingMethod());
+                        });
+
+                        it("should set the expected shippingMethods on cardReissue", function () {
+                            var expectedShippingMethods = [account.regularCardShippingMethod].concat(account.cardShippingCarrier.shippingMethods);
+
+                            expect(result.shippingMethods).toEqual(expectedShippingMethods);
+                        });
+
+                        it("should set the expected reissueReason on cardReissue", function () {
+                            expect(result.reissueReason).toEqual("");
+                        });
                     });
 
-                    beforeEach(function () {
-                        result = CardReissueManager.getCardReissue();
-                    });
+                    describe("when the account does NOT have a default shipping carrier", function () {
 
-                    it("should resolve with the new cardReissue object", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(result);
-                        expect(rejectHandler).not.toHaveBeenCalled();
-                    });
+                        beforeEach(function () {
+                            account.cardShippingCarrier.default = false;
 
-                    it("should set the expected account on cardReissue", function () {
-                        expect(result.account).toEqual(account);
-                    });
+                            CardReissueManager.initializeCardReissue(accountId, cardId)
+                                .then(resolveHandler)
+                                .catch(rejectHandler);
 
-                    it("should set the expected card on cardReissue", function () {
-                        expect(result.card).toEqual(card);
-                    });
+                            $rootScope.$digest();
+                        });
 
-                    it("should set the expected shippingAddress on cardReissue", function () {
-                        expect(result.shippingAddress).toEqual(account.defaultCardShippingAddress);
-                    });
+                        beforeEach(function () {
+                            result = CardReissueManager.getCardReissue();
+                        });
 
-                    it("should set the expected selectedShippingMethod on cardReissue", function () {
-                        expect(result.selectedShippingMethod).toEqual(account.cardShippingCarrier.getDefaultShippingMethod());
-                    });
+                        it("should resolve with the new cardReissue object", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(result);
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
 
-                    it("should set the expected shippingMethods on cardReissue", function () {
-                        expect(result.shippingMethods).toEqual(account.cardShippingCarrier.shippingMethods);
-                    });
+                        it("should set the expected account on cardReissue", function () {
+                            expect(result.account).toEqual(account);
+                        });
 
-                    it("should set the expected reissueReason on cardReissue", function () {
-                        expect(result.reissueReason).toEqual("");
+                        it("should set the expected card on cardReissue", function () {
+                            expect(result.card).toEqual(card);
+                        });
+
+                        it("should set the expected shippingAddress on cardReissue", function () {
+                            expect(result.shippingAddress).toEqual(account.defaultCardShippingAddress);
+                        });
+
+                        it("should set the expected selectedShippingMethod on cardReissue", function () {
+                            expect(result.selectedShippingMethod).toEqual(account.cardShippingCarrier.getDefaultShippingMethod());
+                        });
+
+                        it("should set the expected shippingMethods on cardReissue", function () {
+                            expect(result.shippingMethods).toEqual(account.cardShippingCarrier.shippingMethods);
+                        });
+
+                        it("should set the expected reissueReason on cardReissue", function () {
+                            expect(result.reissueReason).toEqual("");
+                        });
                     });
                 });
             });
@@ -452,6 +505,20 @@
                     expect(rejectHandler).toHaveBeenCalledWith("Failed to initialize card reissue: " + error);
                     expect(resolveHandler).not.toHaveBeenCalled();
                 });
+            });
+        });
+
+        describe("has a userLoggedOut event handler function that", function () {
+
+            beforeEach(function () {
+                CardReissueManager.setCardReissue(getRandomCardReissue());
+
+                $rootScope.$broadcast("userLoggedOut");
+                $rootScope.$digest();
+            });
+
+            it("should clear cardReissue", function () {
+                expect(CardReissueManager.getCardReissue()).toEqual({});
             });
         });
     });
