@@ -1,4 +1,4 @@
-<ion-view hide-nav-bar="true">
+<ion-view class="card-reissue-form-view" hide-nav-bar="true">
 
     <!-- Header bar -->
     <ion-header-bar class="bar bar-wex">
@@ -11,7 +11,7 @@
     </ion-header-bar>
 
     <ion-content>
-        <div class="payment-maintenance-form-item">
+        <div class="form-item">
             <span class="block_align black">{{::vm.config.shippingAddress}}</span>
             <div  class="right-padding float-right black">
                     <span class="wordwrap">{{vm.cardReissue.shippingAddress.firstName}} {{vm.cardReissue.shippingAddress.lastName}}</span>
@@ -23,18 +23,22 @@
             </div>
         </div>
 
-        <div class="payment-maintenance-form-item">
+        <div class="form-item">
             <span class="block_align black">{{::vm.config.shippingMethod}}</span>
-            <div ui-sref="card.reissue.shippingMethod({cardId: vm.cardReissue.card.cardId})">
-                <span class="active-link">
-                    <span ng-if="vm.cardReissue.hasDefaultCarrier()">{{vm.cardReissue.account.cardShippingCarrier.getDisplayName()}} - </span>
-                    {{vm.cardReissue.selectedShippingMethod.getDisplayName(!vm.cardReissue.hasDefaultCarrier())}}
-                </span>
-                <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
-            </div>
+            <span ng-switch="vm.cardReissue.shippingMethods.length > 1">
+                <div ng-switch-when="true"
+                     ui-sref="card.reissue.shippingMethod({cardId: vm.cardReissue.card.cardId})">
+
+                    <span class="active-link">{{vm.cardReissue.getShippingMethodDisplayName()}}</span>
+                    <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
+                </div>
+                <div ng-switch-when="false">
+                    <span class="right-padding ellipsis float-right">{{vm.cardReissue.getShippingMethodDisplayName()}}</span>
+                </div>
+            </span>
         </div>
 
-        <div class="payment-maintenance-form-item">
+        <div class="form-item">
             <span class="block_align black">{{::vm.config.reissueReason}}</span>
             <div>
                 <span class="active-link">{{::vm.config.selectReissueReason}}</span>

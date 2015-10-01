@@ -363,37 +363,6 @@ $container-background-color: #f0f0f0;
 }
 
 /**--------------------------------
-  Payment Input Page
- ----------------------------------**/
-.payment-maintenance-form-item {
-
-    @extend .item;
-    @include flexbox();
-    @include align-items(center);
-    @include justify-content(space-between);
-
-    padding: 5px 26px 0;
-
-    span {
-        font-size: 14px;
-    }
-
-    .button {
-        background-color: $inverse-font-color;
-    }
-
-    .right-padding {
-        padding-right: 28px;
-    }
-    .float-right {
-        float:right;
-    }
-    .wordwrap {
-        width:70%;
-    }
-}
-
-/**--------------------------------
   Payment Amount Input Page
  ----------------------------------**/
 .platform-ios {
@@ -549,4 +518,31 @@ $container-background-color: #f0f0f0;
 .shrink {
     dislay: inline-block;
     width: 70% !important;
+}
+
+.form-item {
+    @extend .item;
+    @include flexbox();
+    @include align-items(center);
+    @include justify-content(space-between);
+
+    padding: 5px 26px 0;
+
+    span {
+        font-size: 14px;
+    }
+
+    .button {
+        background-color: $inverse-font-color;
+    }
+
+    .right-padding {
+        padding-right: 28px;
+    }
+    .float-right {
+        float:right;
+    }
+    .wordwrap {
+        width:70%;
+    }
 }
