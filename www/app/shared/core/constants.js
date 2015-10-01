@@ -46,7 +46,10 @@
      */
     sharedGlobals.ACCOUNT_MAINTENANCE_API = {
         BASE_URL: "@@@STRING_REPLACE_APP_URL_AM_API@@@",
-        CARDS   : {
+        CARDS: {
+            "UPDATE_TYPES"       : {
+                "REISSUE": "reissue"
+            },
             "BASE"               : "cards",
             "STATUS"             : "status",
             "CHECK_STATUS_CHANGE": "checkScheduledStatusChange"

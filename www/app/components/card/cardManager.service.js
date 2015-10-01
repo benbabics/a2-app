@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function CardManager($q, $rootScope, CardModel, CardsResource, CommonService, Logger) {
+    function CardManager($q, $rootScope, globals, CardModel, CardsResource, CommonService, Logger) {
         // Private members
         var cards;
 
@@ -15,6 +15,7 @@
                 fetchCard   : fetchCard,
                 fetchCards  : fetchCards,
                 getCards    : getCards,
+                reissue     : reissue,
                 setCards    : setCards,
                 updateStatus: updateStatus
             };
@@ -90,6 +91,48 @@
 
         function getCards() {
             return cards;
+        }
+
+        function reissue(accountId, cardId, reissueReason, shippingMethodId) {
+            var params = {
+                updateType      : globals.ACCOUNT_MAINTENANCE_API.CARDS.UPDATE_TYPES.REISSUE,
+                reissueReason   : reissueReason,
+                shippingMethodId: shippingMethodId
+            };
+
+            return CardsResource.post(accountId, cardId, params)
+                .then(function (cardResponse) {
+                    if (cardResponse && cardResponse.data) {
+                        var cachedCard = _.find(cards, {cardId: cardId});
+
+                        if(cachedCard) {
+                            //update the existing card object in the cache
+                            cachedCard.set(cardResponse.data);
+                        }
+                        else {
+                            //the card should be in the cache, so log a warning
+                            Logger.warn("Reissued card was not found in the cache (this should not happen)");
+
+                            //map the data to a card model to be returned
+                            cachedCard = createCard(cardResponse.data);
+                        }
+
+                        return cachedCard;
+                    }
+                    // no data in the response
+                    else {
+                        var error = "No data in Response from reissuing the Card";
+                        Logger.error(error);
+                        throw new Error(error);
+                    }
+                })
+                .catch(function(failureResponse) {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+
+                    var error = "Reissuing Card failed: " + CommonService.getErrorMessage(failureResponse);
+                    Logger.error(error);
+                    throw new Error(error);
+                });
         }
 
         // Caution against using this as it replaces the object versus setting properties on it or extending it

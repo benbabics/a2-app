@@ -3,6 +3,7 @@
 
     var $q,
         $rootScope,
+        sharedGlobals,
         paymentId = TestUtils.getRandomStringThatIsAlphaNumeric(5),
         resolveHandler,
         rejectHandler,
@@ -19,10 +20,12 @@
             module("app.shared");
             module("app.html");
             module("app.components.card");
+            module("app.components.user");
 
             // mock dependencies
             CardsResource = jasmine.createSpyObj("CardsResource", [
                 "getCards",
+                "post",
                 "postStatusChange"
             ]);
 
@@ -30,11 +33,12 @@
                 $provide.value("CardsResource", CardsResource);
             });
 
-            inject(function (_$q_, _$rootScope_, _CardManager_, _CardModel_) {
+            inject(function (_$q_, _$rootScope_, _CardManager_, _CardModel_, _sharedGlobals_) {
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 CardManager = _CardManager_;
                 CardModel = _CardModel_;
+                sharedGlobals = _sharedGlobals_;
             });
 
             // set up spies
@@ -480,6 +484,126 @@
             });
         });
 
+        describe("has an reissue function that", function () {
+            var postDeferred,
+                accountId,
+                card,
+                reissueReason,
+                shippingMethodId,
+                originalCards;
+
+            beforeEach(function () {
+                postDeferred = $q.defer();
+                accountId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                reissueReason = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                shippingMethodId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                card = TestUtils.getRandomCard(CardModel);
+                mockCachedCardCollection.push(card);
+                originalCards = mockCachedCardCollection.slice();
+
+                CardsResource.post.and.returnValue(postDeferred.promise);
+                CardManager.setCards(originalCards);
+            });
+
+            beforeEach(function () {
+                CardManager.reissue(accountId, card.cardId, reissueReason, shippingMethodId)
+                    .then(resolveHandler)
+                    .catch(rejectHandler);
+            });
+
+            it("should call CardsResource.postStatusChange with the expected values", function () {
+                expect(CardsResource.post).toHaveBeenCalledWith(accountId, card.cardId, {
+                    updateType      : sharedGlobals.ACCOUNT_MAINTENANCE_API.CARDS.UPDATE_TYPES.REISSUE,
+                    reissueReason   : reissueReason,
+                    shippingMethodId: shippingMethodId
+                });
+            });
+
+            describe("when the reissue succeeds", function () {
+                var response = {data: {}};
+
+                describe("when there is data in the response", function () {
+
+                    describe("when the card already exists in the cached collection", function () {
+
+                        beforeEach(function () {
+                            response.data = TestUtils.getRandomCard(CardModel);
+
+                            response.data.cardId = card.cardId;
+
+                            postDeferred.resolve(response);
+                            $rootScope.$digest();
+                        });
+
+                        it("should update the cached card with the new card's fields", function () {
+                            var cachedCard = _.find(CardManager.getCards(), {cardId: card.cardId}),
+                                reissuedCard = angular.extend(new CardModel(), card, response.data);
+
+                            expect(cachedCard).toEqual(reissuedCard);
+                        });
+
+                        it("should resolve with the updated cached card", function () {
+                            var cachedCard = _.find(mockCachedCardCollection, {cardId: card.cardId});
+
+                            expect(resolveHandler).toHaveBeenCalledWith(cachedCard);
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("when the card does NOT already exist in the cached collection", function () {
+
+                        beforeEach(function () {
+                            response.data = TestUtils.getRandomCard(CardModel);
+
+                            postDeferred.resolve(response);
+                            $rootScope.$digest();
+                        });
+
+                        it("should resolve with the reissued card", function () {
+                            var reissuedCard = angular.extend(new CardModel(), response.data);
+
+                            expect(resolveHandler).toHaveBeenCalledWith(reissuedCard);
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
+
+                        it("should NOT modify cards", function () {
+                            expect(CardManager.getCards()).toEqual(originalCards);
+                        });
+                    });
+                });
+
+                describe("when there is NOT data in the response", function () {
+
+                    beforeEach(function () {
+                        delete response.data;
+
+                        postDeferred.resolve(response);
+                    });
+
+                    it("should throw an error", function () {
+                        expect($rootScope.$digest).toThrowError("No data in Response from reissuing the Card");
+                    });
+
+                    it("should NOT modify cards", function () {
+                        expect(CardManager.getCards()).toEqual(originalCards);
+                    });
+                });
+            });
+
+            describe("when the reissue does NOT succeed", function () {
+                var error;
+
+                beforeEach(function () {
+                    error = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                    postDeferred.reject(error);
+                });
+
+                it("should throw an error", function () {
+                    expect($rootScope.$digest).toThrowError("Reissuing Card failed: " + error);
+                });
+            });
+        });
     });
 
 })();
