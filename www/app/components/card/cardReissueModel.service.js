@@ -39,6 +39,19 @@
             });
         };
 
+        CardReissueModel.prototype.getShippingMethodDisplayName = function (shippingMethod) {
+            var displayName = "";
+
+            shippingMethod = shippingMethod || this.selectedShippingMethod;
+
+            if(this.hasDefaultCarrier() && shippingMethod !== this.account.regularCardShippingMethod) {
+                displayName = this.account.cardShippingCarrier.getDisplayName() + " - ";
+            }
+
+            displayName += shippingMethod.getDisplayName(!this.hasDefaultCarrier());
+            return displayName;
+        };
+
         CardReissueModel.prototype.hasDefaultCarrier = function () {
             return this.account.cardShippingCarrier.default;
         };

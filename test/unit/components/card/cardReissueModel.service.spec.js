@@ -97,6 +97,68 @@
                 expect(cardReissue.hasDefaultCarrier()).toBeFalsy();
             });
         });
+
+        describe("has a getShippingMethodDisplayName function that", function () {
+
+            describe("if a shipping method is given", function () {
+                var shippingMethod;
+
+                beforeEach(function () {
+                    shippingMethod = TestUtils.getRandomValueFromArray(cardReissue.shippingMethods);
+                });
+
+                describe("if there is a default carrier", function () {
+
+                    beforeEach(function () {
+                        cardReissue.account.cardShippingCarrier.default = true;
+                    });
+
+                    describe("if the given shipping method is the regular shipping method", function () {
+
+                        beforeEach(function () {
+                            shippingMethod = cardReissue.account.regularCardShippingMethod;
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(cardReissue.getShippingMethodDisplayName(shippingMethod)).toEqual(shippingMethod.getDisplayName(false));
+                        });
+                    });
+
+                    describe("if the given shipping method is NOT the regular shipping method", function () {
+
+                        beforeEach(function () {
+                            do {
+                                shippingMethod = TestUtils.getRandomValueFromArray(cardReissue.shippingMethods);
+                            }
+                            while(shippingMethod === cardReissue.account.regularCardShippingMethod);
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(cardReissue.getShippingMethodDisplayName(shippingMethod))
+                                .toEqual(cardReissue.account.cardShippingCarrier.getDisplayName() + " - " + shippingMethod.getDisplayName(false));
+                        });
+                    });
+                });
+
+                describe("if there is NOT a default carrier", function () {
+
+                    beforeEach(function () {
+                        cardReissue.account.cardShippingCarrier.default = false;
+                    });
+
+                    it("should return the expected value", function () {
+                        expect(cardReissue.getShippingMethodDisplayName(shippingMethod)).toEqual(shippingMethod.getDisplayName(true));
+                    });
+                });
+            });
+
+            describe("if a shipping method is NOT given", function () {
+
+                it("should use the selected shipping method", function () {
+                    expect(cardReissue.getShippingMethodDisplayName()).toEqual(cardReissue.getShippingMethodDisplayName(cardReissue.selectedShippingMethod));
+                });
+            });
+        });
     });
 
 })();
