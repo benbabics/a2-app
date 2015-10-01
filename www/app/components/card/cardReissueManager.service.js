@@ -69,10 +69,9 @@
                         cardReissue.selectedShippingMethod = cardReissue.account.cardShippingCarrier.getDefaultShippingMethod();
                         cardReissue.shippingMethods = cardReissue.account.cardShippingCarrier.shippingMethods.slice();
 
-                        //if the user has a default shipping carrier, also add the default WEX regular shipping method
-                        if(cardReissue.hasDefaultCarrier()) {
-                            cardReissue.shippingMethods.unshift(cardReissue.account.regularCardShippingMethod);
-                        }
+                        //move the Regular shipping method to the front of the array
+                        _.remove(cardReissue.shippingMethods, {id: cardReissue.account.regularCardShippingMethod.id});
+                        cardReissue.shippingMethods.unshift(cardReissue.account.regularCardShippingMethod);
                     }
 
                     cardReissue.reissueReason = "";
