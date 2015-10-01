@@ -15,7 +15,8 @@
 
             <a class="button button-block button-light"
                ng-if="vm.cardReissue.hasDefaultCarrier()"
-               ng-click="vm.confirmSelection(vm.cardReissue.account.regularCardShippingMethod)">
+               ng-click="vm.confirmSelection(vm.cardReissue.account.regularCardShippingMethod)"
+               ng-class="{disabled: vm.cardReissue.selectedShippingMethod === vm.cardReissue.account.regularCardShippingMethod}">
 
                 <span class="align_center active-link">
                     {{vm.cardReissue.account.regularCardShippingMethod.getDisplayName(showCost)}}
@@ -25,7 +26,8 @@
             <a class="button button-block button-light"
                ng-init="showCarrier = vm.cardReissue.hasDefaultCarrier()"
                ng-repeat="shippingMethod in vm.cardReissue.shippingMethods"
-               ng-click="vm.confirmSelection(shippingMethod)">
+               ng-click="vm.confirmSelection(shippingMethod)"
+               ng-class="{disabled: vm.cardReissue.selectedShippingMethod === shippingMethod}">
 
                 <span class="align_center active-link">
                     <span ng-if="showCarrier">{{vm.cardReissue.account.cardShippingCarrier.getDisplayName()}} - </span>
