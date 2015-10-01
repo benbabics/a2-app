@@ -44,7 +44,7 @@
 
             shippingMethod = shippingMethod || this.selectedShippingMethod;
 
-            if(this.hasDefaultCarrier() && shippingMethod !== this.account.regularCardShippingMethod) {
+            if(this.hasDefaultCarrier() && shippingMethod.id !== this.account.regularCardShippingMethod.id) {
                 displayName = this.account.cardShippingCarrier.getDisplayName() + " - ";
             }
 
