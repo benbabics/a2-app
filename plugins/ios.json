@@ -68,6 +68,16 @@
                         }
                     ]
                 }
+            },
+            "*-Info.plist": {
+                "parents": {
+                    "UIRequiresFullScreen": [
+                        {
+                            "xml": "<true />",
+                            "count": 1
+                        }
+                    ]
+                }
             }
         }
     },
@@ -97,6 +107,9 @@
             "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
         },
         "nl.x-services.plugins.toast": {
+            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
+        },
+        "cordova-ios-requires-fullscreen": {
             "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
         }
     },

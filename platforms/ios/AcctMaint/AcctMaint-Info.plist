@@ -189,7 +189,7 @@
     <dict>
       <key>NSExceptionDomains</key>
       <dict>
-        <key>pwm-wex-178.wrightexpress.com</key>
+        <key>uat.account.wexmobile.com</key>
         <dict>
           <key>NSIncludesSubdomains</key>
           <true/>
@@ -208,5 +208,7 @@
         </dict>
       </dict>
     </dict>
+    <key>UIRequiresFullScreen</key>
+    <true/>
   </dict>
 </plist>

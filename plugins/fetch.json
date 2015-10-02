@@ -71,5 +71,13 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-ios-requires-fullscreen": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-ios-requires-fullscreen"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

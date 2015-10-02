@@ -98,6 +98,9 @@
         },
         "nl.x-services.plugins.toast": {
             "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        },
+        "cordova-ios-requires-fullscreen": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
         }
     },
     "dependent_plugins": {}
