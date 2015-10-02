@@ -24,7 +24,13 @@
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
         },
+        "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        },
         "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+        },
+        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
         },
         "cordova-plugin-splashscreen": {
@@ -36,13 +42,7 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
         },
-        "cordova-plugin-crosswalk-webview": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
-        },
         "nl.x-services.plugins.toast": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
-        },
-        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
         }
     },

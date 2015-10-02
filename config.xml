@@ -40,7 +40,7 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
-        <preference name="StatusBarBackgroundColor" value="#424242"/>
+        <preference name="StatusBarBackgroundColor" value="#424242" />
     </platform>
     <platform name="ios">
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -82,4 +82,7 @@
     <plugin name="cordova-plugin-statusbar" spec="^1.0.1" />
     <plugin name="cordova-plugin-whitelist" spec="^1.0.0" />
     <plugin name="nl.x-services.plugins.toast" spec="/Users/jguinness/Downloads/Toast-PhoneGap-Plugin-master" />
+    <preference name="xwalkVersion" value="14+" />
+    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
+    <preference name="xwalkMode" value="embedded" />
 </widget>
