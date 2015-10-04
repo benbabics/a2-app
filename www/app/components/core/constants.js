@@ -146,6 +146,18 @@
         }
     };
 
+    appGlobals.CARD_REISSUE_CONFIRMATION = {
+        "CONFIG": {
+            "title"              : "Reissue Card Confirmation",
+            "confirmationMessage": "Your card has been reissued.",
+            "cardNumber"         : "Card Number",
+            "standardEmbossing"  : "Standard Embossing",
+            "optionalEmbossing"  : "Optional Embossing",
+            "status"             : "Status",
+            "cards"              : "Cards"
+        }
+    };
+
     appGlobals.CARD_REISSUE_INPUTS = {
         "SHIPPING_METHOD": {
             "CONFIG": {

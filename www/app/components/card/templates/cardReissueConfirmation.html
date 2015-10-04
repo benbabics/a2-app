@@ -1,7 +1,7 @@
-<ion-view view-title="Reissue Card Confirmation" wex-hide-back-button="true">
+<ion-view view-title="{{::vm.config.title}}" wex-hide-back-button="true">
     <ion-content class="padding inner-container">
         <div class="item item-divider inner-container" style="border:0px">
-            <p class="align_center padding green">Your card has been reissued.</p>
+            <p class="align_center padding green">{{::vm.config.confirmationMessage}}</p>
             <div class="padding item item-wrap arrow-align">
                 <p class="padding divider">
                     <span class="block_align black">{{::vm.config.cardNumber}}</span>
