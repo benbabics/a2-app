@@ -135,6 +135,17 @@
                 }
             }
         });
+
+        $stateProvider.state("card.reissue.confirmation", {
+            cache: false,
+            url  : "/confirmation",
+            views: {
+                "view@card": {
+                    templateUrl: "app/components/card/templates/cardReissueConfirmation.html",
+                    controller : "CardReissueConfirmationController as vm"
+                }
+            }
+        });
     }
 
     angular.module("app.components.card")
