@@ -118,13 +118,25 @@
         STATUS: {
             ACTIVE    : "active",
             SUSPENDED : "suspended",
-            TERMINATED: "terminated",
-
-            DISPLAY_MAPPINGS: {
+            TERMINATED: "terminated"
+        },
+        REISSUE_REASON  : {
+            DAMAGED: "damaged",
+            LOST   : "lost",
+            STOLEN : "stolen"
+        },
+        DISPLAY_MAPPINGS: {
+            STATUS        : {
                 ACTIVE    : "Active",
                 SUSPENDED : "Suspended",
                 TERMINATED: "Terminated",
                 UNKNOWN   : "Unknown"
+            },
+            REISSUE_REASON: {
+                DAMAGED: "Damaged",
+                LOST   : "Lost",
+                STOLEN : "Stolen",
+                UNKNOWN: "Unknown"
             }
         }
     };

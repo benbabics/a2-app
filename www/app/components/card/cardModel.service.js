@@ -4,7 +4,8 @@
     var CardModel = function (globals) {
 
         // Constants
-        var CARD_STATUS = globals.CARD.STATUS;
+        var CARD_STATUS = globals.CARD.STATUS,
+            CARD_STATUS_DISPLAY_MAPPINGS = globals.CARD.DISPLAY_MAPPINGS.STATUS;
 
         function CardModel() {
             this.cardId = "";
@@ -26,11 +27,11 @@
         CardModel.prototype.getStatusDisplayName = function () {
             var status = this.status ? this.status.toUpperCase() : null;
 
-            if (status && _.has(CARD_STATUS.DISPLAY_MAPPINGS, status)) {
-                return CARD_STATUS.DISPLAY_MAPPINGS[status];
+            if (status && _.has(CARD_STATUS_DISPLAY_MAPPINGS, status)) {
+                return CARD_STATUS_DISPLAY_MAPPINGS[status];
             }
             else {
-                return CARD_STATUS.DISPLAY_MAPPINGS.UNKNOWN;
+                return CARD_STATUS_DISPLAY_MAPPINGS.UNKNOWN;
             }
         };
 

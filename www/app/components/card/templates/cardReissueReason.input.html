@@ -1,0 +1,24 @@
+<ion-view class="payment-bank-account-input-view" hide-nav-bar="true">
+
+    <!-- Header bar -->
+    <ion-header-bar class="bar bar-wex">
+        <div class="buttons">
+            <wex-back-button>
+            </wex-back-button>
+        </div>
+
+        <h1 class="title">{{::vm.config.title}}</h1>
+    </ion-header-bar>
+
+    <ion-content>
+        <div class="padding">
+            <a class="button button-block button-light"
+               ng-repeat="reissueReason in vm.config.REISSUE_REASON"
+               ng-click="vm.confirmSelection(reissueReason)"
+               ng-class="{disabled:vm.cardReissue.reissueReason === reissueReason}">
+
+                <span class="align_center active-link">{{vm.cardReissue.getReissueReasonDisplayName(reissueReason)}}</span>
+            </a>
+        </div>
+    </ion-content>
+</ion-view>

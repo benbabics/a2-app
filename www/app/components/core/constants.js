@@ -151,6 +151,11 @@
             "CONFIG": {
                 "title": "Select Shipping Method"
             }
+        },
+        "REISSUE_REASON": {
+            "CONFIG": {
+                "title": "Select Reason"
+            }
         }
     };
 

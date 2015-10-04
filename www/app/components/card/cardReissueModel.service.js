@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    var CardReissueModel = function (AccountModel, AddressModel, CardModel, CommonService, ShippingMethodModel) {
+    var CardReissueModel = function (globals, AccountModel, AddressModel, CardModel, CommonService, ShippingMethodModel) {
         var _ = CommonService._;
 
         function CardReissueModel() {
@@ -37,6 +37,19 @@
 
                 self.shippingMethods.push(shippingMethod);
             });
+        };
+
+        CardReissueModel.prototype.getReissueReasonDisplayName = function(reissueReason) {
+            var displayMappings = globals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON;
+
+            reissueReason = (reissueReason || this.reissueReason).toUpperCase();
+
+            if(_.has(displayMappings, reissueReason)) {
+                return displayMappings[reissueReason];
+            }
+            else {
+                return displayMappings.UNKNOWN;
+            }
         };
 
         CardReissueModel.prototype.getShippingMethodDisplayName = function (shippingMethod) {

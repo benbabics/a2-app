@@ -4,6 +4,7 @@
     describe("A Card Reissue Model Service", function () {
 
         var _,
+            sharedGlobals,
             cardReissue;
 
         beforeEach(function () {
@@ -11,10 +12,13 @@
             module("app.components.account");
             module("app.components.card");
 
-            inject(function (CommonService, CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel) {
+            inject(function (CommonService, CardReissueModel, AccountModel, AddressModel, CardModel,
+                             ShippingCarrierModel, ShippingMethodModel, _sharedGlobals_) {
                 _ = CommonService._;
+                sharedGlobals = _sharedGlobals_;
 
-                cardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
+                cardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel,
+                    ShippingCarrierModel, ShippingMethodModel);
             });
         });
 
@@ -156,6 +160,91 @@
 
                 it("should use the selected shipping method", function () {
                     expect(cardReissue.getShippingMethodDisplayName()).toEqual(cardReissue.getShippingMethodDisplayName(cardReissue.selectedShippingMethod));
+                });
+            });
+        });
+
+        describe("has a getReissueReasonDisplayName function that", function () {
+
+            beforeEach(function () {
+                cardReissue.reissueReason = TestUtils.getRandomValueFromMap(sharedGlobals.CARD.REISSUE_REASON);
+            });
+
+            describe("if a reissue reason is given", function () {
+                var reissueReason;
+
+                describe("if the reissue reason is known", function () {
+
+                    beforeEach(function () {
+                        reissueReason = TestUtils.getRandomValueFromMap(sharedGlobals.CARD.REISSUE_REASON);
+                    });
+
+                    it("should return the expected display mapping", function () {
+                        var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[reissueReason.toUpperCase()];
+
+                        expect(cardReissue.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
+                    });
+                });
+
+                describe("if the reissue reason is unknown", function () {
+
+                    beforeEach(function () {
+                        reissueReason = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                    });
+
+                    it("should return unknown", function () {
+                        var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON.UNKNOWN;
+
+                        expect(cardReissue.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
+                    });
+                });
+
+                describe("if the reissue reason is null", function () {
+
+                    beforeEach(function () {
+                        reissueReason = null;
+                    });
+
+                    it("should return the display mapping for the current reissue reason", function () {
+                        var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissue.reissueReason.toUpperCase()];
+
+                        expect(cardReissue.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
+                    });
+                });
+
+                describe("if the reissue reason is undefined", function () {
+
+                    beforeEach(function () {
+                        reissueReason = undefined;
+                    });
+
+                    it("should return the display mapping for the current reissue reason", function () {
+                        var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissue.reissueReason.toUpperCase()];
+
+                        expect(cardReissue.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
+                    });
+                });
+
+                describe("if the reissue reason is empty", function () {
+
+                    beforeEach(function () {
+                        reissueReason = "";
+                    });
+
+                    it("should return the display mapping for the current reissue reason", function () {
+                        var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissue.reissueReason.toUpperCase()];
+
+                        expect(cardReissue.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
+                    });
+                });
+            });
+
+            describe("if the reissue reason is NOT given", function () {
+
+                it("should return the display mapping for the current reissue reason", function () {
+                    var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissue.reissueReason.toUpperCase()];
+
+                    expect(cardReissue.getReissueReasonDisplayName()).toEqual(expectedMapping);
                 });
             });
         });

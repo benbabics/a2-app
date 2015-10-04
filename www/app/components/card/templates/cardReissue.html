@@ -41,7 +41,8 @@
         <div class="form-item">
             <span class="block_align black">{{::vm.config.reissueReason}}</span>
             <div>
-                <span class="active-link">{{::vm.config.selectReissueReason}}</span>
+                <span class="active-link" ng-if="vm.cardReissue.reissueReason">{{vm.cardReissue.getReissueReasonDisplayName()}}</span>
+                <span class="active-link" ng-if="!vm.cardReissue.reissueReason">{{::vm.config.selectReissueReason}}</span>
                 <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
             </div>
         </div>
