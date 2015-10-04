@@ -53,7 +53,7 @@
 
         <br>
         <div class="padding align_center">
-            <button ng-disabled="!vm.isFormComplete()" class="button button-block button-submit button-width">
+            <button ng-disabled="!vm.isFormComplete()" class="button button-block button-submit button-width" ng-click="vm.promptReissue()">
                 {{::vm.config.submitButton}}
             </button>
         </div>

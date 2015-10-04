@@ -142,7 +142,12 @@
             "selectReissueReason": "Select Reason",
             "submitButton"       : "Reissue Card",
             "instructionalText"  : "Orders received after 3:00 pm Eastern Time may be processed the next business day.",
-            "poBoxText"          : "Please Note: You have a P.O. Box address listed. Your card will be delivered via regular mail."
+            "poBoxText"          : "Please Note: You have a P.O. Box address listed. Your card will be delivered via regular mail.",
+            "confirmationPopup": {
+                "content"  : "Are you sure you want to reissue this card?",
+                "yesButton": "Yes",
+                "noButton" : "No"
+            }
         }
     };
 
