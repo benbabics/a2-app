@@ -124,6 +124,17 @@
                 }
             }
         });
+
+        $stateProvider.state("card.reissue.reason", {
+            cache: false,
+            url  : "/reason",
+            views: {
+                "view@card": {
+                    templateUrl: "app/components/card/templates/cardReissueReason.input.html",
+                    controller : "CardReissueReasonInputController as vm"
+                }
+            }
+        });
     }
 
     angular.module("app.components.card")
