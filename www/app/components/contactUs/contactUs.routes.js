@@ -6,6 +6,7 @@
 
         $stateProvider.state("contactUs", {
             url  : "/contactUs",
+            cache: false,
             views: {
                 "@": {
                     templateUrl: "app/components/contactUs/templates/contactUs.html",

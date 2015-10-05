@@ -6,6 +6,7 @@
 
         $stateProvider.state("termsOfUse", {
             url  : "/termsOfUse",
+            cache: false,
             views: {
                 "@": {
                     templateUrl: "app/components/terms/templates/termsOfUse.html",
