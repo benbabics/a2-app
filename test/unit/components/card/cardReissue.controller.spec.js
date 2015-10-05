@@ -288,12 +288,6 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call $ionicHistory.nextViewOptions with disableBack set to false", function () {
-                        expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith(jasmine.objectContaining({
-                            disableBack: true
-                        }));
-                    });
-
                     it("should redirect to card.reissue.confirmation", function () {
                         expect($state.go).toHaveBeenCalledWith("card.reissue.confirmation", {cardId: updatedCard.cardId});
                     });

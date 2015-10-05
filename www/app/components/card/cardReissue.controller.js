@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function CardReissueController($scope, $state, $ionicHistory, globals, cardReissue,
+    function CardReissueController($scope, $state, globals, cardReissue,
                                    CardManager, CommonService, Logger, UserManager) {
 
         var _ = CommonService._,
@@ -35,9 +35,6 @@
 
             CardManager.reissue(accountId, vm.cardReissue.card.cardId, vm.cardReissue.reissueReason, vm.cardReissue.selectedShippingMethod.id)
                 .then(function(card) {
-                    // do not allow the user to go back from the confirmation page
-                    $ionicHistory.nextViewOptions({disableBack: true});
-
                     $state.go("card.reissue.confirmation", {cardId: card.cardId});
                 })
                 .catch(function(errorResponse) {
