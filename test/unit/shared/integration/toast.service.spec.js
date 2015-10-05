@@ -28,24 +28,27 @@
                 });
             });
 
-            module(function ($provide) {
-                $provide.value("$cordovaToast", $cordovaToast);
-            });
-
-            $window = jasmine.createSpy("$window");
-
+            $cordovaToast = jasmine.createSpyObj("$cordovaToast", ["showShortTop", "showShortCenter", "showShortBottom",
+                "showLongTop", "showLongCenter", "showLongBottom", "show"]);
             $ionicLoading = jasmine.createSpyObj("$ionicLoading", ["show"]);
 
             module(function ($provide) {
-                $provide.value("$window", $window);
                 $provide.value("$ionicLoading", $ionicLoading);
+                $provide.value("$cordovaToast", $cordovaToast);
+            });
+
+            inject(function (_$window_) {
+                $window = _$window_;
             });
         });
 
+
         describe("when Cordova plugins are available", function () {
             beforeEach(function () {
-                $window.plugins = jasmine.createSpy("plugins");
-                $window.plugins.toast = jasmine.createSpy("toast");
+                if (!$window.plugins) {
+                    $window.plugins = {};
+                }
+                $window.plugins.toast = $cordovaToast;
 
                 inject(function (ToastService) {
                     service = ToastService;
@@ -53,7 +56,7 @@
             });
 
             it("should use the Cordova toast plugin", function () {
-                expect(service).toEqual($cordovaToast);
+                expect(service).toEqual(jasmine.objectContaining($cordovaToast));
             });
         });
 

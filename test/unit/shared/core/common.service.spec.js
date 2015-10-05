@@ -69,15 +69,11 @@
                 spyOn($ionicPlatform, "registerBackButtonAction").and.callThrough();
             });
 
-            alertPromise = angular.extend({}, alertDeferred.promise, {
-                close: function () {
-                }
-            });
+            alertPromise = alertDeferred.promise;
+            alertPromise.close = jasmine.createSpy("close");
 
-            confirmPromise = angular.extend({}, confirmDeferred.promise, {
-                close: function () {
-                }
-            });
+            confirmPromise = confirmDeferred.promise;
+            confirmPromise.close = jasmine.createSpy("close");
 
             $ionicPopup.alert.and.returnValue(alertPromise);
             alertDeferred.resolve();
@@ -98,8 +94,6 @@
             describe("should NOT close an alert when none have been displayed", function () {
 
                 beforeEach(function () {
-                    spyOn(alertPromise, "close");
-
                     CommonService.closeAlert();
                 });
 
@@ -112,8 +106,6 @@
             describe("should close an alert when one has been displayed", function () {
 
                 beforeEach(function () {
-                    spyOn(alertPromise, "close");
-
                     CommonService.displayAlert();
 
                     CommonService.closeAlert();
@@ -132,8 +124,6 @@
             describe("should NOT close a confirm when none have been displayed", function () {
 
                 beforeEach(function () {
-                    spyOn(confirmPromise, "close");
-
                     CommonService.closeConfirm();
                 });
 
@@ -146,8 +136,6 @@
             describe("should close a confirm when one has been displayed", function () {
 
                 beforeEach(function () {
-                    spyOn(confirmPromise, "close");
-
                     CommonService.displayConfirm();
 
                     CommonService.closeConfirm();
@@ -166,8 +154,6 @@
             describe("should NOT close an alert when none have been displayed", function () {
 
                 beforeEach(function () {
-                    spyOn(alertPromise, "close");
-
                     CommonService.closeAlert();
                 });
 
@@ -180,8 +166,6 @@
             describe("should close an alert when one has been displayed", function () {
 
                 beforeEach(function () {
-                    spyOn(alertPromise, "close");
-
                     CommonService.displayAlert();
 
                     CommonService.closeAlert();
@@ -196,8 +180,6 @@
             describe("should NOT close a confirm when none have been displayed", function () {
 
                 beforeEach(function () {
-                    spyOn(confirmPromise, "close");
-
                     CommonService.closeConfirm();
                 });
 
@@ -210,8 +192,6 @@
             describe("should close a confirm when one has been displayed", function () {
 
                 beforeEach(function () {
-                    spyOn(confirmPromise, "close");
-
                     CommonService.displayConfirm();
 
                     CommonService.closeConfirm();
