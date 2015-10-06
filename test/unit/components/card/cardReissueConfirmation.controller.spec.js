@@ -50,7 +50,7 @@
         });
 
         it("should set card to the given card object", function () {
-            expect(ctrl.card).toEqual(mockCardReissueDetails.card);
+            expect(ctrl.reissuedCard).toEqual(mockCardReissueDetails.reissuedCard);
         });
 
         it("should set config to the expected constant values", function () {

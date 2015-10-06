@@ -9,7 +9,7 @@
 
         var vm = this;
 
-        vm.card = cardReissueDetails.card;
+        vm.reissuedCard = cardReissueDetails.reissuedCard;
         vm.config = globals.CARD_REISSUE_CONFIRMATION.CONFIG;
 
         activate();

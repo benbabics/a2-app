@@ -303,12 +303,21 @@
                 expect(state).not.toBeNull();
             });
 
+            it("should NOT be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
             it("should be abstract", function () {
                 expect(state.abstract).toBeTruthy();
             });
 
             it("should have the expected URL", function () {
                 expect(state.url).toEqual("/reissue/:cardId");
+            });
+
+            it("should define a view in the card view container", function () {
+                expect(state.views).toBeDefined();
+                expect(state.views["view@card"]).toBeDefined();
             });
 
             describe("when a child state is navigated to", function () {

@@ -42,7 +42,7 @@
         }
 
         function getOrCreateCardReissueDetails(accountId, cardId) {
-            if (!_.isEmpty(cardReissueDetails) && cardReissueDetails.account.accountId === accountId && cardReissueDetails.card.cardId === cardId) {
+            if (!_.isEmpty(cardReissueDetails) && cardReissueDetails.account.accountId === accountId && cardReissueDetails.originalCard.cardId === cardId) {
                 return $q.when(cardReissueDetails);
             }
 
@@ -55,7 +55,7 @@
                     cardReissueDetails = new CardReissueModel();
 
                     cardReissueDetails.account = values[0];
-                    cardReissueDetails.card = values[1];
+                    cardReissueDetails.originalCard = values[1];
 
                     cardReissueDetails.shippingAddress = cardReissueDetails.account.defaultCardShippingAddress;
 

@@ -106,7 +106,8 @@ var TestUtils = (function () {
 
         cardReissueDetails.set({
             account               : getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel),
-            card                  : getRandomCard(CardModel),
+            originalCard          : getRandomCard(CardModel),
+            reissuedCard          : getRandomCard(CardModel),
             shippingAddress       : getRandomAddress(AddressModel),
             selectedShippingMethod: getRandomShippingMethod(ShippingMethodModel),
             shippingMethods       : (function () {

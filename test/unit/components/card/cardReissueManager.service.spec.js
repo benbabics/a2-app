@@ -125,7 +125,7 @@
 
                     beforeEach(function () {
                         accountId = cardReissueDetails.account.accountId;
-                        cardId = cardReissueDetails.card.cardId;
+                        cardId = cardReissueDetails.originalCard.cardId;
                     });
 
                     beforeEach(function () {
@@ -179,7 +179,7 @@
                             account: jasmine.objectContaining({
                                 accountId: accountId
                             }),
-                            card   : jasmine.objectContaining({
+                            originalCard   : jasmine.objectContaining({
                                 cardId: cardId
                             })
                         }));
@@ -191,7 +191,7 @@
                             account: jasmine.objectContaining({
                                 accountId: accountId
                             }),
-                            card   : jasmine.objectContaining({
+                            originalCard   : jasmine.objectContaining({
                                 cardId: cardId
                             })
                         }));
@@ -234,7 +234,7 @@
                         account: jasmine.objectContaining({
                             accountId: accountId
                         }),
-                        card   : jasmine.objectContaining({
+                        originalCard   : jasmine.objectContaining({
                             cardId: cardId
                         })
                     }));
@@ -246,7 +246,7 @@
                         account: jasmine.objectContaining({
                             accountId: accountId
                         }),
-                        card   : jasmine.objectContaining({
+                        originalCard   : jasmine.objectContaining({
                             cardId: cardId
                         })
                     }));
@@ -312,7 +312,11 @@
                     });
 
                     it("should set the expected card on cardReissueDetails", function () {
-                        expect(result.card).toEqual(card);
+                        expect(result.originalCard).toEqual(card);
+                    });
+
+                    it("should set reissuedCard to be falsy", function () {
+                        expect(result.reissuedCard).toBeFalsy();
                     });
 
                     it("should set the expected shippingAddress on cardReissueDetails", function () {
@@ -360,8 +364,12 @@
                         expect(result.account).toEqual(account);
                     });
 
-                    it("should set the expected card on cardReissueDetails", function () {
-                        expect(result.card).toEqual(card);
+                    it("should set the expected originalCard on cardReissueDetails", function () {
+                        expect(result.originalCard).toEqual(card);
+                    });
+
+                    it("should set reissuedCard to be falsy", function () {
+                        expect(result.reissuedCard).toBeFalsy();
                     });
 
                     it("should set the expected shippingAddress on cardReissueDetails", function () {

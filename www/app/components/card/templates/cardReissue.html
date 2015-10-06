@@ -27,7 +27,7 @@
             <span class="block_align black">{{::vm.config.shippingMethod}}</span>
             <span ng-switch="vm.cardReissueDetails.shippingMethods.length > 1">
                 <div ng-switch-when="true"
-                     ui-sref="card.reissue.shippingMethod({cardId: vm.cardReissueDetails.card.cardId})">
+                     ui-sref="card.reissue.shippingMethod({cardId: vm.cardReissueDetails.originalCard.cardId})">
 
                     <span class="active-link">{{vm.cardReissueDetails.getShippingMethodDisplayName()}}</span>
                     <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
@@ -40,7 +40,7 @@
 
         <div class="form-item">
             <span class="block_align black">{{::vm.config.reissueReason}}</span>
-            <div ui-sref="card.reissue.reason({cardId: vm.cardReissueDetails.card.cardId})">
+            <div ui-sref="card.reissue.reason({cardId: vm.cardReissueDetails.originalCard.cardId})">
                 <span class="active-link" ng-if="vm.cardReissueDetails.reissueReason">{{vm.cardReissueDetails.getReissueReasonDisplayName()}}</span>
                 <span class="active-link" ng-if="!vm.cardReissueDetails.reissueReason">{{::vm.config.selectReissueReason}}</span>
                 <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>

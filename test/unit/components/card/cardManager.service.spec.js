@@ -497,9 +497,9 @@
                 accountId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 reissueReason = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 shippingMethodId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                card = TestUtils.getRandomCard(CardModel);
-                mockCachedCardCollection.push(card);
                 originalCards = mockCachedCardCollection.slice();
+                card = TestUtils.getRandomCard(CardModel);
+                originalCards.push(card);
 
                 CardsResource.post.and.returnValue(postDeferred.promise);
                 CardManager.setCards(originalCards);
@@ -543,7 +543,7 @@
                         });
 
                         it("should resolve with the updated cached card", function () {
-                            var cachedCard = _.find(mockCachedCardCollection, {cardId: card.cardId});
+                            var cachedCard = _.find(CardManager.getCards(), {cardId: card.cardId});
 
                             expect(resolveHandler).toHaveBeenCalledWith(cachedCard);
                             expect(rejectHandler).not.toHaveBeenCalled();
@@ -566,8 +566,10 @@
                             expect(rejectHandler).not.toHaveBeenCalled();
                         });
 
-                        it("should NOT modify cards", function () {
-                            expect(CardManager.getCards()).toEqual(originalCards);
+                        it("should add the reissued card to cards", function () {
+                            var reissuedCard = angular.extend(new CardModel(), response.data);
+
+                            expect(CardManager.getCards()).toContain(reissuedCard);
                         });
                     });
                 });

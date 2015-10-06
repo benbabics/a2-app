@@ -88,6 +88,7 @@
         });
 
         $stateProvider.state("card.reissue", {
+            cache: false,
             abstract: true,
             url     : "/reissue/:cardId",
             resolve : {
@@ -100,6 +101,12 @@
                     return CardReissueManager.getOrCreateCardReissueDetails(accountId, cardId)
                         .finally(CommonService.loadingComplete);
                 }
+            },
+            views: {
+                "view@card": {
+                    template: "<ion-nav-view name='view'></ion-nav-view>",
+                    controller: "CardReissueController as vm"
+                }
             }
         });
 
@@ -107,9 +114,9 @@
             cache: false,
             url  : "",
             views: {
-                "view@card": {
+                "view@card.reissue": {
                     templateUrl: "app/components/card/templates/cardReissue.html",
-                    controller : "CardReissueController as vm"
+                    controller : "CardReissueFormController as vm"
                 }
             }
         });
@@ -118,7 +125,7 @@
             cache: false,
             url  : "/shippingMethod",
             views: {
-                "view@card": {
+                "view@card.reissue": {
                     templateUrl: "app/components/card/templates/cardReissueShippingMethod.input.html",
                     controller : "CardReissueShippingMethodInputController as vm"
                 }
@@ -129,7 +136,7 @@
             cache: false,
             url  : "/reason",
             views: {
-                "view@card": {
+                "view@card.reissue": {
                     templateUrl: "app/components/card/templates/cardReissueReason.input.html",
                     controller : "CardReissueReasonInputController as vm"
                 }
@@ -140,7 +147,7 @@
             cache: false,
             url  : "/confirmation",
             views: {
-                "view@card": {
+                "view@card.reissue": {
                     templateUrl: "app/components/card/templates/cardReissueConfirmation.html",
                     controller : "CardReissueConfirmationController as vm"
                 }

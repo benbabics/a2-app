@@ -103,18 +103,16 @@
             return CardsResource.post(accountId, cardId, params)
                 .then(function (cardResponse) {
                     if (cardResponse && cardResponse.data) {
-                        var cachedCard = _.find(cards, {cardId: cardId});
+                        var cachedCard = _.find(cards, {cardId: cardResponse.data.cardId});
 
                         if(cachedCard) {
                             //update the existing card object in the cache
                             cachedCard.set(cardResponse.data);
                         }
                         else {
-                            //the card should be in the cache, so log a warning
-                            Logger.warn("Reissued card was not found in the cache (this should not happen)");
-
-                            //map the data to a card model to be returned
+                            //the reissued card has a new id, so map the data to a card model and add it to the cache
                             cachedCard = createCard(cardResponse.data);
+                            cards.push(cachedCard);
                         }
 
                         return cachedCard;

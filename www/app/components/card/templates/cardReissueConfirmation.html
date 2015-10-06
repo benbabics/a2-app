@@ -5,22 +5,22 @@
             <div class="padding item item-wrap arrow-align">
                 <div class="row divider">
                     <div class="col col-50 black">{{::vm.config.cardNumber}}</div>
-                    <div class="col col-50 black right-align">{{vm.card.embossedCardNumber | wexCardNumber}}</div>
+                    <div class="col col-50 black right-align">{{vm.reissuedCard.embossedCardNumber | wexCardNumber}}</div>
                 </div>
 
                 <div class="row divider">
                     <div class="col col-50 black wrap">{{::vm.config.standardEmbossing}}</div>
-                    <div class="col col-50 black wordwrap">{{vm.card.embossingValue2}}</div>
+                    <div class="col col-50 black wordwrap">{{vm.reissuedCard.embossingValue2}}</div>
                 </div>
 
                 <div class="row divider">
                     <div class="col col-50 black wrap">{{::vm.config.optionalEmbossing}}</div>
-                    <div class="col col-50 black wordwrap">{{vm.card.embossingValue1}}</div>
+                    <div class="col col-50 black wordwrap">{{vm.reissuedCard.embossingValue1}}</div>
                 </div>
 
                 <div class="row divider">
                     <div class="col col-50 black">{{::vm.config.status}}</div>
-                    <div class="col col-50 black wordwrap">{{vm.card.getStatusDisplayName()}}</div>
+                    <div class="col col-50 black wordwrap">{{vm.reissuedCard.getStatusDisplayName()}}</div>
                 </div>
             </div>
             <br>

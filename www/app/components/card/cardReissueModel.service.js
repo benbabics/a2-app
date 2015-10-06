@@ -6,7 +6,8 @@
 
         function CardReissueModel() {
             this.account = "";
-            this.card = "";
+            this.originalCard = "";
+            this.reissuedCard = "";
             this.shippingAddress = "";
             this.selectedShippingMethod = "";
             this.shippingMethods = "";
@@ -21,8 +22,11 @@
             this.account = new AccountModel();
             this.account.set(cardReissueResource.account);
 
-            this.card = new CardModel();
-            this.card.set(cardReissueResource.card);
+            this.originalCard = new CardModel();
+            this.originalCard.set(cardReissueResource.originalCard);
+
+            this.reissuedCard = new CardModel();
+            this.reissuedCard.set(cardReissueResource.reissuedCard);
 
             this.shippingAddress = new AddressModel();
             this.shippingAddress.set(cardReissueResource.shippingAddress);
