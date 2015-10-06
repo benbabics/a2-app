@@ -5,7 +5,7 @@
         $rootScope,
         $scope,
         CardReissueManager,
-        mockCardReissue,
+        mockCardReissueDetails,
         mockGlobals = {
             "CARD_REISSUE_CONFIRMATION": {
                 "CONFIG": {
@@ -29,7 +29,7 @@
             module("app.components.account");
 
             //mock dependencies:
-            CardReissueManager = jasmine.createSpyObj("CardReissueManager", ["clearCardReissue"]);
+            CardReissueManager = jasmine.createSpyObj("CardReissueManager", ["clearCardReissueDetails"]);
 
             inject(function ($controller, _$rootScope_, AddressModel, ShippingMethodModel,
                              CardReissueModel, AccountModel, CardModel, ShippingCarrierModel) {
@@ -37,12 +37,12 @@
 
                 $scope = $rootScope.$new();
 
-                mockCardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
+                mockCardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
 
                 ctrl = $controller("CardReissueConfirmationController", {
                     $scope            : $scope,
                     globals           : mockGlobals,
-                    cardReissue       : mockCardReissue,
+                    cardReissueDetails: mockCardReissueDetails,
                     CardReissueManager: CardReissueManager
                 });
             });
@@ -50,7 +50,7 @@
         });
 
         it("should set card to the given card object", function () {
-            expect(ctrl.card).toEqual(mockCardReissue.card);
+            expect(ctrl.card).toEqual(mockCardReissueDetails.card);
         });
 
         it("should set config to the expected constant values", function () {
@@ -63,8 +63,8 @@
                 $scope.$broadcast("$ionicView.beforeEnter");
             });
 
-            it("should call CardReissueManager.clearCardReissue", function () {
-                expect(CardReissueManager.clearCardReissue).toHaveBeenCalledWith();
+            it("should call CardReissueManager.clearCardReissueDetails", function () {
+                expect(CardReissueManager.clearCardReissueDetails).toHaveBeenCalledWith();
             });
         });
     });

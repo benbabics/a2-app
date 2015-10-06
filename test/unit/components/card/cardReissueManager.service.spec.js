@@ -60,93 +60,93 @@
             //TODO - figure out how to test this
         });
 
-        describe("has a clearCardReissue function that", function () {
+        describe("has a clearCardReissueDetails function that", function () {
 
             beforeEach(function () {
-                CardReissueManager.setCardReissue(getRandomCardReissue());
+                CardReissueManager.setCardReissueDetails(getRandomCardReissueDetails());
             });
 
             beforeEach(function () {
-                CardReissueManager.clearCardReissue();
+                CardReissueManager.clearCardReissueDetails();
             });
 
-            it("should set cardReissue to an empty object", function () {
-                expect(CardReissueManager.getCardReissue()).toEqual({});
+            it("should set cardReissueDetails to an empty object", function () {
+                expect(CardReissueManager.getCardReissueDetails()).toEqual({});
 
-                //TODO - figure out how to test without getCardReissue
+                //TODO - figure out how to test without getCardReissueDetails
             });
         });
 
-        describe("has a getCardReissue function that", function () {
+        describe("has a getCardReissueDetails function that", function () {
 
-            it("should return the cardReissue passed to setCardReissue", function () {
-                var cardReissue = getRandomCardReissue(),
+            it("should return the cardReissueDetails passed to setCardReissueDetails", function () {
+                var cardReissueDetails = getRandomCardReissueDetails(),
                     result;
 
-                CardReissueManager.setCardReissue(cardReissue);
-                result = CardReissueManager.getCardReissue();
+                CardReissueManager.setCardReissueDetails(cardReissueDetails);
+                result = CardReissueManager.getCardReissueDetails();
 
-                expect(result).toEqual(cardReissue);
+                expect(result).toEqual(cardReissueDetails);
             });
 
-            // TODO: figure out how to test this without using setCardReissue
+            // TODO: figure out how to test this without using setCardReissueDetails
         });
 
-        describe("has a setCardReissue function that", function () {
-            var cardReissue;
+        describe("has a setCardReissueDetails function that", function () {
+            var cardReissueDetails;
 
             beforeEach(function () {
-                cardReissue = getRandomCardReissue();
+                cardReissueDetails = getRandomCardReissueDetails();
 
-                CardReissueManager.setCardReissue(cardReissue);
+                CardReissueManager.setCardReissueDetails(cardReissueDetails);
             });
 
-            it("should set cardReissue to the given object", function () {
-                expect(CardReissueManager.getCardReissue()).toEqual(cardReissue);
+            it("should set cardReissueDetails to the given object", function () {
+                expect(CardReissueManager.getCardReissueDetails()).toEqual(cardReissueDetails);
 
-                //TODO - figure out how to test without getCardReissue
+                //TODO - figure out how to test without getCardReissueDetails
             });
         });
 
-        describe("has a getOrCreateCardReissue function that", function () {
+        describe("has a getOrCreateCardReissueDetails function that", function () {
             var accountId,
                 cardId;
 
-            describe("when cardReissue has already been created", function () {
-                var cardReissue;
+            describe("when cardReissueDetails has already been created", function () {
+                var cardReissueDetails;
 
                 beforeEach(function () {
-                    cardReissue = getRandomCardReissue();
+                    cardReissueDetails = getRandomCardReissueDetails();
 
-                    CardReissueManager.setCardReissue(cardReissue);
+                    CardReissueManager.setCardReissueDetails(cardReissueDetails);
                 });
 
-                describe("when the created cardReissue matches the accountId and cardId", function () {
+                describe("when the created cardReissueDetails matches the accountId and cardId", function () {
 
                     beforeEach(function () {
-                        accountId = cardReissue.account.accountId;
-                        cardId = cardReissue.card.cardId;
+                        accountId = cardReissueDetails.account.accountId;
+                        cardId = cardReissueDetails.card.cardId;
                     });
 
                     beforeEach(function () {
-                        CardReissueManager.getOrCreateCardReissue(accountId, cardId)
+                        CardReissueManager.getOrCreateCardReissueDetails(accountId, cardId)
                             .then(resolveHandler)
                             .catch(rejectHandler);
 
                         $rootScope.$digest();
                     });
 
-                    it("should resolve with the existing cardReissue", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(cardReissue);
+                    it("should resolve with the existing cardReissueDetails", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(cardReissueDetails);
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
-                    it("should NOT modify cardReissue", function () {
-                        expect(CardReissueManager.getCardReissue()).toEqual(cardReissue);
+                    it("should NOT modify cardReissueDetails", function () {
+                        expect(CardReissueManager.getCardReissueDetails()).toEqual(cardReissueDetails);
                     });
                 });
 
-                describe("when the created cardReissue does NOT match the accountId and cardId", function () {
+                describe("when the created cardReissueDetails does NOT match the accountId and cardId", function () {
                     var account,
                         card,
                         fetchAccountPromise,
@@ -167,14 +167,14 @@
                     });
 
                     beforeEach(function () {
-                        CardReissueManager.getOrCreateCardReissue(accountId, cardId)
+                        CardReissueManager.getOrCreateCardReissueDetails(accountId, cardId)
                             .then(resolveHandler)
                             .catch(rejectHandler);
 
                         $rootScope.$digest();
                     });
 
-                    it("should resolve with a new cardReissue with the specified account and card", function () {
+                    it("should resolve with a new cardReissueDetails with the specified account and card", function () {
                         expect(resolveHandler).toHaveBeenCalledWith(jasmine.objectContaining({
                             account: jasmine.objectContaining({
                                 accountId: accountId
@@ -186,8 +186,8 @@
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
-                    it("should update cardReissue", function () {
-                        expect(CardReissueManager.getCardReissue()).toEqual(jasmine.objectContaining({
+                    it("should update cardReissueDetails", function () {
+                        expect(CardReissueManager.getCardReissueDetails()).toEqual(jasmine.objectContaining({
                             account: jasmine.objectContaining({
                                 accountId: accountId
                             }),
@@ -199,14 +199,14 @@
                 });
             });
 
-            describe("when cardReissue has NOT been created", function () {
+            describe("when cardReissueDetails has NOT been created", function () {
                 var account,
                     card,
                     fetchAccountPromise,
                     fetchCardPromise;
 
                 beforeEach(function () {
-                    CardReissueManager.clearCardReissue();
+                    CardReissueManager.clearCardReissueDetails();
 
                     account = TestUtils.getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel);
                     card = TestUtils.getRandomCard(CardModel);
@@ -222,14 +222,14 @@
                 });
 
                 beforeEach(function () {
-                    CardReissueManager.getOrCreateCardReissue(accountId, cardId)
+                    CardReissueManager.getOrCreateCardReissueDetails(accountId, cardId)
                         .then(resolveHandler)
                         .catch(rejectHandler);
 
                     $rootScope.$digest();
                 });
 
-                it("should resolve with a new cardReissue with the specified account and card", function () {
+                it("should resolve with a new cardReissueDetails with the specified account and card", function () {
                     expect(resolveHandler).toHaveBeenCalledWith(jasmine.objectContaining({
                         account: jasmine.objectContaining({
                             accountId: accountId
@@ -241,8 +241,8 @@
                     expect(rejectHandler).not.toHaveBeenCalled();
                 });
 
-                it("should update cardReissue", function () {
-                    expect(CardReissueManager.getCardReissue()).toEqual(jasmine.objectContaining({
+                it("should update cardReissueDetails", function () {
+                    expect(CardReissueManager.getCardReissueDetails()).toEqual(jasmine.objectContaining({
                         account: jasmine.objectContaining({
                             accountId: accountId
                         }),
@@ -254,7 +254,7 @@
             });
         });
 
-        describe("has an initializeCardReissue function that", function () {
+        describe("has an initializeCardReissueDetails function that", function () {
             var accountId,
                 cardId,
                 fetchAccountDeferred,
@@ -291,7 +291,7 @@
                     });
 
                     beforeEach(function () {
-                        CardReissueManager.initializeCardReissue(accountId, cardId)
+                        CardReissueManager.initializeCardReissueDetails(accountId, cardId)
                             .then(resolveHandler)
                             .catch(rejectHandler);
 
@@ -299,35 +299,35 @@
                     });
 
                     beforeEach(function () {
-                        result = CardReissueManager.getCardReissue();
+                        result = CardReissueManager.getCardReissueDetails();
                     });
 
-                    it("should resolve with the new cardReissue object", function () {
+                    it("should resolve with the new cardReissueDetails object", function () {
                         expect(resolveHandler).toHaveBeenCalledWith(result);
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
-                    it("should set the expected account on cardReissue", function () {
+                    it("should set the expected account on cardReissueDetails", function () {
                         expect(result.account).toEqual(account);
                     });
 
-                    it("should set the expected card on cardReissue", function () {
+                    it("should set the expected card on cardReissueDetails", function () {
                         expect(result.card).toEqual(card);
                     });
 
-                    it("should set the expected shippingAddress on cardReissue", function () {
+                    it("should set the expected shippingAddress on cardReissueDetails", function () {
                         expect(result.shippingAddress).toEqual(account.defaultCardShippingAddress);
                     });
 
-                    it("should set the expected selectedShippingMethod on cardReissue", function () {
+                    it("should set the expected selectedShippingMethod on cardReissueDetails", function () {
                         expect(result.selectedShippingMethod).toEqual(account.regularCardShippingMethod);
                     });
 
-                    it("should set the expected shippingMethods on cardReissue", function () {
+                    it("should set the expected shippingMethods on cardReissueDetails", function () {
                         expect(result.shippingMethods).toEqual([account.regularCardShippingMethod]);
                     });
 
-                    it("should set the expected reissueReason on cardReissue", function () {
+                    it("should set the expected reissueReason on cardReissueDetails", function () {
                         expect(result.reissueReason).toEqual("");
                     });
                 });
@@ -340,7 +340,7 @@
                     });
 
                     beforeEach(function () {
-                        CardReissueManager.initializeCardReissue(accountId, cardId)
+                        CardReissueManager.initializeCardReissueDetails(accountId, cardId)
                             .then(resolveHandler)
                             .catch(rejectHandler);
 
@@ -348,27 +348,27 @@
                     });
 
                     beforeEach(function () {
-                        result = CardReissueManager.getCardReissue();
+                        result = CardReissueManager.getCardReissueDetails();
                     });
 
-                    it("should resolve with the new cardReissue object", function () {
+                    it("should resolve with the new cardReissueDetails object", function () {
                         expect(resolveHandler).toHaveBeenCalledWith(result);
                         expect(rejectHandler).not.toHaveBeenCalled();
                     });
 
-                    it("should set the expected account on cardReissue", function () {
+                    it("should set the expected account on cardReissueDetails", function () {
                         expect(result.account).toEqual(account);
                     });
 
-                    it("should set the expected card on cardReissue", function () {
+                    it("should set the expected card on cardReissueDetails", function () {
                         expect(result.card).toEqual(card);
                     });
 
-                    it("should set the expected shippingAddress on cardReissue", function () {
+                    it("should set the expected shippingAddress on cardReissueDetails", function () {
                         expect(result.shippingAddress).toEqual(account.defaultCardShippingAddress);
                     });
 
-                    it("should set the expected selectedShippingMethod on cardReissue", function () {
+                    it("should set the expected selectedShippingMethod on cardReissueDetails", function () {
                         expect(result.selectedShippingMethod).toEqual(account.cardShippingCarrier.getDefaultShippingMethod());
                     });
 
@@ -380,7 +380,7 @@
                         expect(result.shippingMethods).toEqual(expectedArray);
                     });
 
-                    it("should set the expected reissueReason on cardReissue", function () {
+                    it("should set the expected reissueReason on cardReissueDetails", function () {
                         expect(result.reissueReason).toEqual("");
                     });
                 });
@@ -397,7 +397,7 @@
                 });
 
                 beforeEach(function () {
-                    CardReissueManager.initializeCardReissue(accountId, cardId)
+                    CardReissueManager.initializeCardReissueDetails(accountId, cardId)
                         .then(resolveHandler)
                         .catch(rejectHandler);
 
@@ -405,7 +405,7 @@
                 });
 
                 it("should reject with the expected error", function () {
-                    expect(rejectHandler).toHaveBeenCalledWith("Failed to initialize card reissue: " + error);
+                    expect(rejectHandler).toHaveBeenCalledWith("Failed to initialize card reissue details: " + error);
                     expect(resolveHandler).not.toHaveBeenCalled();
                 });
             });
@@ -421,7 +421,7 @@
                 });
 
                 beforeEach(function () {
-                    CardReissueManager.initializeCardReissue(accountId, cardId)
+                    CardReissueManager.initializeCardReissueDetails(accountId, cardId)
                         .then(resolveHandler)
                         .catch(rejectHandler);
 
@@ -429,7 +429,7 @@
                 });
 
                 it("should reject with the expected error", function () {
-                    expect(rejectHandler).toHaveBeenCalledWith("Failed to initialize card reissue: " + error);
+                    expect(rejectHandler).toHaveBeenCalledWith("Failed to initialize card reissue details: " + error);
                     expect(resolveHandler).not.toHaveBeenCalled();
                 });
             });
@@ -445,7 +445,7 @@
                 });
 
                 beforeEach(function () {
-                    CardReissueManager.initializeCardReissue(accountId, cardId)
+                    CardReissueManager.initializeCardReissueDetails(accountId, cardId)
                         .then(resolveHandler)
                         .catch(rejectHandler);
 
@@ -453,7 +453,7 @@
                 });
 
                 it("should reject with the expected error", function () {
-                    expect(rejectHandler).toHaveBeenCalledWith("Failed to initialize card reissue: " + error);
+                    expect(rejectHandler).toHaveBeenCalledWith("Failed to initialize card reissue details: " + error);
                     expect(resolveHandler).not.toHaveBeenCalled();
                 });
             });
@@ -462,19 +462,19 @@
         describe("has a userLoggedOut event handler function that", function () {
 
             beforeEach(function () {
-                CardReissueManager.setCardReissue(getRandomCardReissue());
+                CardReissueManager.setCardReissueDetails(getRandomCardReissueDetails());
 
                 $rootScope.$broadcast("userLoggedOut");
                 $rootScope.$digest();
             });
 
-            it("should clear cardReissue", function () {
-                expect(CardReissueManager.getCardReissue()).toEqual({});
+            it("should clear cardReissueDetails", function () {
+                expect(CardReissueManager.getCardReissueDetails()).toEqual({});
             });
         });
     });
 
-    function getRandomCardReissue() {
-        return TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
+    function getRandomCardReissueDetails() {
+        return TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
     }
 })();

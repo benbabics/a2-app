@@ -8,7 +8,7 @@
             $rootScope,
             $state,
             mockCard,
-            mockCardReissue,
+            mockCardReissueDetails,
             mockUser,
             CardManager,
             CardReissueManager,
@@ -24,7 +24,7 @@
 
             // mock dependencies
             CardManager = jasmine.createSpyObj("CardManager", ["fetchCard"]);
-            CardReissueManager = jasmine.createSpyObj("CardReissueManager", ["getOrCreateCardReissue"]);
+            CardReissueManager = jasmine.createSpyObj("CardReissueManager", ["getOrCreateCardReissueDetails"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
             module(function ($provide) {
@@ -42,7 +42,7 @@
                 $state = _$state_;
 
                 mockCard = TestUtils.getRandomCard(CardModel);
-                mockCardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
+                mockCardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
             });
 
@@ -313,24 +313,24 @@
 
             describe("when a child state is navigated to", function () {
                 var childStateName = "card.reissue.form",
-                    getOrCreateCardReissueDeferred;
+                    getOrCreateCardReissueDetailsDeferred;
 
                 beforeEach(function () {
-                    getOrCreateCardReissueDeferred = $q.defer();
-                    CardReissueManager.getOrCreateCardReissue.and.returnValue(getOrCreateCardReissueDeferred.promise);
+                    getOrCreateCardReissueDetailsDeferred = $q.defer();
+                    CardReissueManager.getOrCreateCardReissueDetails.and.returnValue(getOrCreateCardReissueDetailsDeferred.promise);
                 });
 
                 beforeEach(function () {
                     $state.go(childStateName, {cardId: mockCard.cardId});
 
-                    getOrCreateCardReissueDeferred.resolve(mockCardReissue);
+                    getOrCreateCardReissueDetailsDeferred.resolve(mockCardReissueDetails);
                     $rootScope.$digest();
                 });
 
-                it("should resolve the expected cardReissue", function () {
-                    $injector.invoke($state.$current.parent.resolve.cardReissue)
-                        .then(function (cardReissue) {
-                            expect(cardReissue).toEqual(mockCardReissue);
+                it("should resolve the expected cardReissueDetails", function () {
+                    $injector.invoke($state.$current.parent.resolve.cardReissueDetails)
+                        .then(function (cardReissueDetails) {
+                            expect(cardReissueDetails).toEqual(mockCardReissueDetails);
                         });
                 });
             });

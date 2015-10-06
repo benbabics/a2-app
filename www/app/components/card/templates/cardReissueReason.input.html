@@ -15,9 +15,9 @@
             <a class="button button-block button-light"
                ng-repeat="reissueReason in vm.config.REISSUE_REASON"
                ng-click="vm.confirmSelection(reissueReason)"
-               ng-class="{disabled:vm.cardReissue.reissueReason === reissueReason}">
+               ng-class="{disabled:vm.cardReissueDetails.reissueReason === reissueReason}">
 
-                <span class="align_center active-link">{{vm.cardReissue.getReissueReasonDisplayName(reissueReason)}}</span>
+                <span class="align_center active-link">{{vm.cardReissueDetails.getReissueReasonDisplayName(reissueReason)}}</span>
             </a>
         </div>
     </ion-content>

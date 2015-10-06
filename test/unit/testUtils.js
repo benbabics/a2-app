@@ -11,7 +11,7 @@ var TestUtils = (function () {
             getRandomBank                    : getRandomBank,
             getRandomBoolean                 : getRandomBoolean,
             getRandomCard                    : getRandomCard,
-            getRandomCardReissue             : getRandomCardReissue,
+            getRandomCardReissueDetails      : getRandomCardReissueDetails,
             getRandomDate                    : getRandomDate,
             getRandomInteger                 : getRandomInteger,
             getRandomInvoiceSummary          : getRandomInvoiceSummary,
@@ -101,10 +101,10 @@ var TestUtils = (function () {
         return randomCard;
     }
 
-    function getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel) {
-        var cardReissue = new CardReissueModel();
+    function getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel) {
+        var cardReissueDetails = new CardReissueModel();
 
-        cardReissue.set({
+        cardReissueDetails.set({
             account               : getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel),
             card                  : getRandomCard(CardModel),
             shippingAddress       : getRandomAddress(AddressModel),
@@ -122,7 +122,7 @@ var TestUtils = (function () {
             reissueReason         : getRandomStringThatIsAlphaNumeric(10)
         });
 
-        return cardReissue;
+        return cardReissueDetails;
     }
 
     function getRandomDate(start, end) {

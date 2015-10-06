@@ -14,7 +14,7 @@
         AddressModel,
         ShippingMethodModel,
         sharedGlobals,
-        mockCardReissue,
+        mockCardReissueDetails,
         mockUser,
         mockGlobals = {
             "CARD_REISSUE": {
@@ -77,18 +77,18 @@
 
                 $scope = $rootScope.$new();
 
-                mockCardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
+                mockCardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
 
                 ctrl = $controller("CardReissueController", {
-                    $scope       : $scope,
-                    $state       : $state,
-                    $ionicHistory: $ionicHistory,
-                    globals      : mockGlobals,
-                    cardReissue  : mockCardReissue,
-                    CardManager  : CardManager,
-                    CommonService: CommonService,
-                    UserManager  : UserManager
+                    $scope            : $scope,
+                    $state            : $state,
+                    $ionicHistory     : $ionicHistory,
+                    globals           : mockGlobals,
+                    cardReissueDetails: mockCardReissueDetails,
+                    CardManager       : CardManager,
+                    CommonService     : CommonService,
+                    UserManager       : UserManager
                 });
             });
 
@@ -100,7 +100,7 @@
         });
 
         it("should set card to the given card object", function () {
-            expect(ctrl.cardReissue).toEqual(mockCardReissue);
+            expect(ctrl.cardReissueDetails).toEqual(mockCardReissueDetails);
         });
 
         it("should set config to the expected constant values", function () {
@@ -119,7 +119,7 @@
             describe("when the shipping address is null", function () {
 
                 beforeEach(function () {
-                    mockCardReissue.shippingAddress = null;
+                    mockCardReissueDetails.shippingAddress = null;
                 });
 
                 it("should return false", function () {
@@ -130,7 +130,7 @@
             describe("when the shipping address is undefined", function () {
 
                 beforeEach(function () {
-                    delete mockCardReissue.shippingAddress;
+                    delete mockCardReissueDetails.shippingAddress;
                 });
 
                 it("should return false", function () {
@@ -141,7 +141,7 @@
             describe("when the shipping address is empty", function () {
 
                 beforeEach(function () {
-                    mockCardReissue.shippingAddress = {};
+                    mockCardReissueDetails.shippingAddress = {};
                 });
 
                 it("should return false", function () {
@@ -152,7 +152,7 @@
             describe("when the selected shipping method is null", function () {
 
                 beforeEach(function () {
-                    mockCardReissue.selectedShippingMethod = null;
+                    mockCardReissueDetails.selectedShippingMethod = null;
                 });
 
                 it("should return false", function () {
@@ -163,7 +163,7 @@
             describe("when the selected shipping method is undefined", function () {
 
                 beforeEach(function () {
-                    delete mockCardReissue.selectedShippingMethod;
+                    delete mockCardReissueDetails.selectedShippingMethod;
                 });
 
                 it("should return false", function () {
@@ -174,7 +174,7 @@
             describe("when the selected shipping method is empty", function () {
 
                 beforeEach(function () {
-                    mockCardReissue.selectedShippingMethod = {};
+                    mockCardReissueDetails.selectedShippingMethod = {};
                 });
 
                 it("should return false", function () {
@@ -185,7 +185,7 @@
             describe("when the reissue reason is null", function () {
 
                 beforeEach(function () {
-                    mockCardReissue.reissueReason = null;
+                    mockCardReissueDetails.reissueReason = null;
                 });
 
                 it("should return false", function () {
@@ -196,7 +196,7 @@
             describe("when the reissue reason is undefined", function () {
 
                 beforeEach(function () {
-                    delete mockCardReissue.reissueReason;
+                    delete mockCardReissueDetails.reissueReason;
                 });
 
                 it("should return false", function () {
@@ -207,7 +207,7 @@
             describe("when the reissue reason is empty", function () {
 
                 beforeEach(function () {
-                    mockCardReissue.reissueReason = "";
+                    mockCardReissueDetails.reissueReason = "";
                 });
 
                 it("should return false", function () {
@@ -218,9 +218,9 @@
             describe("when the shipping address, selected shipping method, and reissue reason are valid", function () {
 
                 beforeEach(function () {
-                    mockCardReissue.shippingAddress = TestUtils.getRandomAddress(AddressModel);
-                    mockCardReissue.selectedShippingMethod = TestUtils.getRandomShippingMethod(ShippingMethodModel);
-                    mockCardReissue.reissueReason = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                    mockCardReissueDetails.shippingAddress = TestUtils.getRandomAddress(AddressModel);
+                    mockCardReissueDetails.selectedShippingMethod = TestUtils.getRandomShippingMethod(ShippingMethodModel);
+                    mockCardReissueDetails.reissueReason = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 });
 
                 it("should return true", function () {
@@ -269,9 +269,9 @@
                 it("should call CardManager.reissue with the expected values", function () {
                     expect(CardManager.reissue).toHaveBeenCalledWith(
                         mockUser.billingCompany.accountId,
-                        mockCardReissue.card.cardId,
-                        mockCardReissue.reissueReason,
-                        mockCardReissue.selectedShippingMethod.id
+                        mockCardReissueDetails.card.cardId,
+                        mockCardReissueDetails.reissueReason,
+                        mockCardReissueDetails.selectedShippingMethod.id
                     );
                 });
 
@@ -280,7 +280,7 @@
 
                     beforeEach(function () {
                         updatedCard = new CardModel();
-                        updatedCard.set(mockCardReissue.card);
+                        updatedCard.set(mockCardReissueDetails.card);
                     });
 
                     beforeEach(function () {

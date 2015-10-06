@@ -7,7 +7,7 @@
         $ionicHistory,
         AddressModel,
         ShippingMethodModel,
-        mockCardReissue,
+        mockCardReissueDetails,
         mockGlobals = {
             "CARD_REISSUE_INPUTS": {
                 "SHIPPING_METHOD": {
@@ -37,20 +37,20 @@
 
                 $scope = $rootScope.$new();
 
-                mockCardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
+                mockCardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
 
                 ctrl = $controller("CardReissueShippingMethodInputController", {
-                    $scope       : $scope,
-                    $ionicHistory: $ionicHistory,
-                    globals      : mockGlobals,
-                    cardReissue  : mockCardReissue
+                    $scope            : $scope,
+                    $ionicHistory     : $ionicHistory,
+                    globals           : mockGlobals,
+                    cardReissueDetails: mockCardReissueDetails
                 });
             });
 
         });
 
         it("should set card to the given card object", function () {
-            expect(ctrl.cardReissue).toEqual(mockCardReissue);
+            expect(ctrl.cardReissueDetails).toEqual(mockCardReissueDetails);
         });
 
         it("should set config to the expected constant values", function () {
@@ -73,8 +73,8 @@
                 ctrl.confirmSelection(shippingMethod);
             });
 
-            it("should set cardReissue.selectedShippingMethod to the given shipping method", function () {
-                expect(ctrl.cardReissue.selectedShippingMethod).toEqual(shippingMethod);
+            it("should set cardReissueDetails.selectedShippingMethod to the given shipping method", function () {
+                expect(ctrl.cardReissueDetails.selectedShippingMethod).toEqual(shippingMethod);
             });
 
             it("should call $ionicHistory.goBack", function () {

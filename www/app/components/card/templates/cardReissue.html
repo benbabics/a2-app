@@ -14,42 +14,42 @@
         <div class="form-item">
             <span class="block_align black">{{::vm.config.shippingAddress}}</span>
             <div  class="right-padding float-right black">
-                    <span class="wordwrap">{{vm.cardReissue.shippingAddress.firstName}} {{vm.cardReissue.shippingAddress.lastName}}</span>
-                    <span class="wordwrap">{{vm.cardReissue.shippingAddress.companyName}}</span>
-                    <span class="wordwrap">{{vm.cardReissue.shippingAddress.addressLine1}}</span>
-                    <span ng-if="!!vm.cardReissue.shippingAddress.addressLine2" class="wordwrap">{{vm.cardReissue.shippingAddress.addressLine2}}</span>
-                    <span class="wordwrap">{{vm.cardReissue.shippingAddress.city}}, {{vm.cardReissue.shippingAddress.state}} {{vm.cardReissue.shippingAddress.postalCode}}</span>
+                    <span class="wordwrap">{{vm.cardReissueDetails.shippingAddress.firstName}} {{vm.cardReissueDetails.shippingAddress.lastName}}</span>
+                    <span class="wordwrap">{{vm.cardReissueDetails.shippingAddress.companyName}}</span>
+                    <span class="wordwrap">{{vm.cardReissueDetails.shippingAddress.addressLine1}}</span>
+                    <span ng-if="!!vm.cardReissueDetails.shippingAddress.addressLine2" class="wordwrap">{{vm.cardReissueDetails.shippingAddress.addressLine2}}</span>
+                    <span class="wordwrap">{{vm.cardReissueDetails.shippingAddress.city}}, {{vm.cardReissueDetails.shippingAddress.state}} {{vm.cardReissueDetails.shippingAddress.postalCode}}</span>
 
             </div>
         </div>
 
         <div class="form-item">
             <span class="block_align black">{{::vm.config.shippingMethod}}</span>
-            <span ng-switch="vm.cardReissue.shippingMethods.length > 1">
+            <span ng-switch="vm.cardReissueDetails.shippingMethods.length > 1">
                 <div ng-switch-when="true"
-                     ui-sref="card.reissue.shippingMethod({cardId: vm.cardReissue.card.cardId})">
+                     ui-sref="card.reissue.shippingMethod({cardId: vm.cardReissueDetails.card.cardId})">
 
-                    <span class="active-link">{{vm.cardReissue.getShippingMethodDisplayName()}}</span>
+                    <span class="active-link">{{vm.cardReissueDetails.getShippingMethodDisplayName()}}</span>
                     <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
                 </div>
                 <div ng-switch-when="false">
-                    <span class="right-padding ellipsis float-right">{{vm.cardReissue.getShippingMethodDisplayName()}}</span>
+                    <span class="right-padding ellipsis float-right">{{vm.cardReissueDetails.getShippingMethodDisplayName()}}</span>
                 </div>
             </span>
         </div>
 
         <div class="form-item">
             <span class="block_align black">{{::vm.config.reissueReason}}</span>
-            <div ui-sref="card.reissue.reason({cardId: vm.cardReissue.card.cardId})">
-                <span class="active-link" ng-if="vm.cardReissue.reissueReason">{{vm.cardReissue.getReissueReasonDisplayName()}}</span>
-                <span class="active-link" ng-if="!vm.cardReissue.reissueReason">{{::vm.config.selectReissueReason}}</span>
+            <div ui-sref="card.reissue.reason({cardId: vm.cardReissueDetails.card.cardId})">
+                <span class="active-link" ng-if="vm.cardReissueDetails.reissueReason">{{vm.cardReissueDetails.getReissueReasonDisplayName()}}</span>
+                <span class="active-link" ng-if="!vm.cardReissueDetails.reissueReason">{{::vm.config.selectReissueReason}}</span>
                 <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
             </div>
         </div>
         <br>
 
         <div class="padding">{{::vm.config.instructionalText}}</div>
-        <div class="padding" ng-if="vm.cardReissue.shippingAddress.isPoBox()">{{::vm.config.poBoxText}}</div>
+        <div class="padding" ng-if="vm.cardReissueDetails.shippingAddress.isPoBox()">{{::vm.config.poBoxText}}</div>
 
         <br>
         <div class="padding align_center">

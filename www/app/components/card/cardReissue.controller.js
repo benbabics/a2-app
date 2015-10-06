@@ -5,14 +5,14 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function CardReissueController($scope, $state, globals, cardReissue,
+    function CardReissueController($scope, $state, globals, cardReissueDetails,
                                    CardManager, CommonService, Logger, UserManager) {
 
         var _ = CommonService._,
             vm = this;
 
         vm.config = globals.CARD_REISSUE.CONFIG;
-        vm.cardReissue = cardReissue;
+        vm.cardReissueDetails = cardReissueDetails;
 
         vm.isFormComplete = isFormComplete;
         vm.promptReissue = promptReissue;
@@ -33,7 +33,10 @@
 
             CommonService.loadingBegin();
 
-            CardManager.reissue(accountId, vm.cardReissue.card.cardId, vm.cardReissue.reissueReason, vm.cardReissue.selectedShippingMethod.id)
+            CardManager.reissue(accountId,
+                vm.cardReissueDetails.card.cardId,
+                vm.cardReissueDetails.reissueReason,
+                vm.cardReissueDetails.selectedShippingMethod.id)
                 .then(function(card) {
                     $state.go("card.reissue.confirmation", {cardId: card.cardId});
                 })
@@ -46,9 +49,9 @@
         }
 
         function isFormComplete() {
-            return !_.isEmpty(vm.cardReissue.shippingAddress) &&
-                !_.isEmpty(vm.cardReissue.selectedShippingMethod) &&
-                vm.cardReissue.reissueReason;
+            return !_.isEmpty(vm.cardReissueDetails.shippingAddress) &&
+                !_.isEmpty(vm.cardReissueDetails.selectedShippingMethod) &&
+                vm.cardReissueDetails.reissueReason;
         }
 
         function promptReissue() {

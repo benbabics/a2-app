@@ -6,7 +6,7 @@
         $scope,
         $ionicHistory,
         sharedGlobals,
-        mockCardReissue,
+        mockCardReissueDetails,
         mockGlobals = {
             "CARD_REISSUE_INPUTS": {
                 "REISSUE_REASON": {
@@ -35,20 +35,20 @@
 
                 $scope = $rootScope.$new();
 
-                mockCardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
+                mockCardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
 
                 ctrl = $controller("CardReissueReasonInputController", {
-                    $scope       : $scope,
-                    $ionicHistory: $ionicHistory,
-                    globals      : mockGlobals,
-                    cardReissue  : mockCardReissue
+                    $scope            : $scope,
+                    $ionicHistory     : $ionicHistory,
+                    globals           : mockGlobals,
+                    cardReissueDetails: mockCardReissueDetails
                 });
             });
 
         });
 
         it("should set card to the given card object", function () {
-            expect(ctrl.cardReissue).toEqual(mockCardReissue);
+            expect(ctrl.cardReissueDetails).toEqual(mockCardReissueDetails);
         });
 
         it("should set config to the expected constant values", function () {
@@ -71,8 +71,8 @@
                 ctrl.confirmSelection(reissueReason);
             });
 
-            it("should set cardReissue.reissueReason to the given reissue reason", function () {
-                expect(ctrl.cardReissue.reissueReason).toEqual(reissueReason);
+            it("should set cardReissueDetails.reissueReason to the given reissue reason", function () {
+                expect(ctrl.cardReissueDetails.reissueReason).toEqual(reissueReason);
             });
 
             it("should call $ionicHistory.goBack", function () {

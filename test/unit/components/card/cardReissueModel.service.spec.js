@@ -5,7 +5,7 @@
 
         var _,
             sharedGlobals,
-            cardReissue;
+            cardReissueDetails;
 
         beforeEach(function () {
             module("app.shared");
@@ -17,7 +17,7 @@
                 _ = CommonService._;
                 sharedGlobals = _sharedGlobals_;
 
-                cardReissue = TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel,
+                cardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel,
                     ShippingCarrierModel, ShippingMethodModel);
             });
         });
@@ -29,22 +29,22 @@
                 cardReissueResourceKeys;
 
             beforeEach(inject(function (CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel) {
-                cardReissue = new CardReissueModel();
+                cardReissueDetails = new CardReissueModel();
 
-                mockCardReissueResource = angular.extend(TestUtils.getRandomCardReissue(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel), {
+                mockCardReissueResource = angular.extend(TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel), {
                     newField1: TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     newField2: TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     newField3: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 });
 
                 // set all values to "default" to more easily detect any changes
-                for (var property in cardReissue) {
-                    if (_.has(cardReissue, property)) {
-                        cardReissue[property] = "default";
+                for (var property in cardReissueDetails) {
+                    if (_.has(cardReissueDetails, property)) {
+                        cardReissueDetails[property] = "default";
                     }
                 }
 
-                cardReissueModelKeys = _.keys(cardReissue);
+                cardReissueModelKeys = _.keys(cardReissueDetails);
                 cardReissueResourceKeys = _.keys(mockCardReissueResource);
             }));
 
@@ -52,11 +52,11 @@
                 var key,
                     keysIntersection = _.intersection(cardReissueModelKeys, cardReissueResourceKeys);
 
-                cardReissue.set(mockCardReissueResource);
+                cardReissueDetails.set(mockCardReissueResource);
 
                 for (var i = 0; i < keysIntersection.length; i++) {
                     key = keysIntersection[i];
-                    expect(cardReissue[key]).toEqual(mockCardReissueResource[key]);
+                    expect(cardReissueDetails[key]).toEqual(mockCardReissueResource[key]);
                 }
             });
 
@@ -64,11 +64,11 @@
                 var key,
                     keysDifference = _.difference(cardReissueModelKeys, cardReissueResourceKeys);
 
-                cardReissue.set(mockCardReissueResource);
+                cardReissueDetails.set(mockCardReissueResource);
 
                 for (var i = 0; i < keysDifference.length; i++) {
                     key = keysDifference[i];
-                    expect(cardReissue[key]).toEqual("default");
+                    expect(cardReissueDetails[key]).toEqual("default");
                 }
             });
 
@@ -76,12 +76,12 @@
                 var key,
                     keysDifference = _.difference(cardReissueResourceKeys, cardReissueModelKeys);
 
-                cardReissue.set(mockCardReissueResource);
+                cardReissueDetails.set(mockCardReissueResource);
 
                 for (var i = 0; i < keysDifference.length; i++) {
                     key = keysDifference[i];
-                    expect(_.has(cardReissue, key)).toBeTruthy();
-                    expect(cardReissue[key]).toEqual(mockCardReissueResource[key]);
+                    expect(_.has(cardReissueDetails, key)).toBeTruthy();
+                    expect(cardReissueDetails[key]).toEqual(mockCardReissueResource[key]);
                 }
             });
 
@@ -90,15 +90,15 @@
         describe("has a hasDefaultCarrier function that", function () {
 
             it("should return true when account.cardShippingCarrier.default is true", function () {
-                cardReissue.account.cardShippingCarrier.default = true;
+                cardReissueDetails.account.cardShippingCarrier.default = true;
 
-                expect(cardReissue.hasDefaultCarrier()).toBeTruthy();
+                expect(cardReissueDetails.hasDefaultCarrier()).toBeTruthy();
             });
 
             it("should return false when account.cardShippingCarrier.default is false", function () {
-                cardReissue.account.cardShippingCarrier.default = false;
+                cardReissueDetails.account.cardShippingCarrier.default = false;
 
-                expect(cardReissue.hasDefaultCarrier()).toBeFalsy();
+                expect(cardReissueDetails.hasDefaultCarrier()).toBeFalsy();
             });
         });
 
@@ -108,23 +108,23 @@
                 var shippingMethod;
 
                 beforeEach(function () {
-                    shippingMethod = TestUtils.getRandomValueFromArray(cardReissue.shippingMethods);
+                    shippingMethod = TestUtils.getRandomValueFromArray(cardReissueDetails.shippingMethods);
                 });
 
                 describe("if there is a default carrier", function () {
 
                     beforeEach(function () {
-                        cardReissue.account.cardShippingCarrier.default = true;
+                        cardReissueDetails.account.cardShippingCarrier.default = true;
                     });
 
                     describe("if the given shipping method is the regular shipping method", function () {
 
                         beforeEach(function () {
-                            shippingMethod = cardReissue.account.regularCardShippingMethod;
+                            shippingMethod = cardReissueDetails.account.regularCardShippingMethod;
                         });
 
                         it("should return the expected value", function () {
-                            expect(cardReissue.getShippingMethodDisplayName(shippingMethod)).toEqual(shippingMethod.getDisplayName(false));
+                            expect(cardReissueDetails.getShippingMethodDisplayName(shippingMethod)).toEqual(shippingMethod.getDisplayName(false));
                         });
                     });
 
@@ -132,14 +132,14 @@
 
                         beforeEach(function () {
                             do {
-                                shippingMethod = TestUtils.getRandomValueFromArray(cardReissue.shippingMethods);
+                                shippingMethod = TestUtils.getRandomValueFromArray(cardReissueDetails.shippingMethods);
                             }
-                            while(shippingMethod === cardReissue.account.regularCardShippingMethod);
+                            while(shippingMethod === cardReissueDetails.account.regularCardShippingMethod);
                         });
 
                         it("should return the expected value", function () {
-                            expect(cardReissue.getShippingMethodDisplayName(shippingMethod))
-                                .toEqual(cardReissue.account.cardShippingCarrier.getDisplayName() + " - " + shippingMethod.getDisplayName(false));
+                            expect(cardReissueDetails.getShippingMethodDisplayName(shippingMethod))
+                                .toEqual(cardReissueDetails.account.cardShippingCarrier.getDisplayName() + " - " + shippingMethod.getDisplayName(false));
                         });
                     });
                 });
@@ -147,11 +147,11 @@
                 describe("if there is NOT a default carrier", function () {
 
                     beforeEach(function () {
-                        cardReissue.account.cardShippingCarrier.default = false;
+                        cardReissueDetails.account.cardShippingCarrier.default = false;
                     });
 
                     it("should return the expected value", function () {
-                        expect(cardReissue.getShippingMethodDisplayName(shippingMethod)).toEqual(shippingMethod.getDisplayName(true));
+                        expect(cardReissueDetails.getShippingMethodDisplayName(shippingMethod)).toEqual(shippingMethod.getDisplayName(true));
                     });
                 });
             });
@@ -159,7 +159,7 @@
             describe("if a shipping method is NOT given", function () {
 
                 it("should use the selected shipping method", function () {
-                    expect(cardReissue.getShippingMethodDisplayName()).toEqual(cardReissue.getShippingMethodDisplayName(cardReissue.selectedShippingMethod));
+                    expect(cardReissueDetails.getShippingMethodDisplayName()).toEqual(cardReissueDetails.getShippingMethodDisplayName(cardReissueDetails.selectedShippingMethod));
                 });
             });
         });
@@ -167,7 +167,7 @@
         describe("has a getReissueReasonDisplayName function that", function () {
 
             beforeEach(function () {
-                cardReissue.reissueReason = TestUtils.getRandomValueFromMap(sharedGlobals.CARD.REISSUE_REASON);
+                cardReissueDetails.reissueReason = TestUtils.getRandomValueFromMap(sharedGlobals.CARD.REISSUE_REASON);
             });
 
             describe("if a reissue reason is given", function () {
@@ -182,7 +182,7 @@
                     it("should return the expected display mapping", function () {
                         var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[reissueReason.toUpperCase()];
 
-                        expect(cardReissue.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
+                        expect(cardReissueDetails.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
                     });
                 });
 
@@ -195,7 +195,7 @@
                     it("should return unknown", function () {
                         var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON.UNKNOWN;
 
-                        expect(cardReissue.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
+                        expect(cardReissueDetails.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
                     });
                 });
 
@@ -206,9 +206,9 @@
                     });
 
                     it("should return the display mapping for the current reissue reason", function () {
-                        var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissue.reissueReason.toUpperCase()];
+                        var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissueDetails.reissueReason.toUpperCase()];
 
-                        expect(cardReissue.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
+                        expect(cardReissueDetails.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
                     });
                 });
 
@@ -219,9 +219,9 @@
                     });
 
                     it("should return the display mapping for the current reissue reason", function () {
-                        var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissue.reissueReason.toUpperCase()];
+                        var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissueDetails.reissueReason.toUpperCase()];
 
-                        expect(cardReissue.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
+                        expect(cardReissueDetails.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
                     });
                 });
 
@@ -232,9 +232,9 @@
                     });
 
                     it("should return the display mapping for the current reissue reason", function () {
-                        var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissue.reissueReason.toUpperCase()];
+                        var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissueDetails.reissueReason.toUpperCase()];
 
-                        expect(cardReissue.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
+                        expect(cardReissueDetails.getReissueReasonDisplayName(reissueReason)).toEqual(expectedMapping);
                     });
                 });
             });
@@ -242,9 +242,9 @@
             describe("if the reissue reason is NOT given", function () {
 
                 it("should return the display mapping for the current reissue reason", function () {
-                    var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissue.reissueReason.toUpperCase()];
+                    var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissueDetails.reissueReason.toUpperCase()];
 
-                    expect(cardReissue.getReissueReasonDisplayName()).toEqual(expectedMapping);
+                    expect(cardReissueDetails.getReissueReasonDisplayName()).toEqual(expectedMapping);
                 });
             });
         });

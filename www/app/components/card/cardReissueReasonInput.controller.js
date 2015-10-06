@@ -5,12 +5,12 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function CardReissueReasonInputController($scope, $ionicHistory, globals, cardReissue) {
+    function CardReissueReasonInputController($scope, $ionicHistory, globals, cardReissueDetails) {
 
         var vm = this;
 
         vm.config = angular.extend({}, globals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG, globals.CARD);
-        vm.cardReissue = cardReissue;
+        vm.cardReissueDetails = cardReissueDetails;
 
         vm.confirmSelection = confirmSelection;
 
@@ -26,7 +26,7 @@
         }
 
         function confirmSelection(reissueReason) {
-            vm.cardReissue.reissueReason = reissueReason;
+            vm.cardReissueDetails.reissueReason = reissueReason;
 
             $ionicHistory.goBack();
         }

@@ -91,13 +91,13 @@
             abstract: true,
             url     : "/reissue/:cardId",
             resolve : {
-                cardReissue: function ($stateParams, CardReissueManager, CommonService, UserManager) {
+                cardReissueDetails: function ($stateParams, CardReissueManager, CommonService, UserManager) {
                     var cardId = $stateParams.cardId,
                         accountId = UserManager.getUser().billingCompany.accountId;
 
                     CommonService.loadingBegin();
 
-                    return CardReissueManager.getOrCreateCardReissue(accountId, cardId)
+                    return CardReissueManager.getOrCreateCardReissueDetails(accountId, cardId)
                         .finally(CommonService.loadingComplete);
                 }
             }

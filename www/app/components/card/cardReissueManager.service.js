@@ -8,16 +8,16 @@
     function CardReissueManager($rootScope, $q, AccountManager, CardManager, CardReissueModel, CommonService, Logger) {
         // Private members
         var _ = CommonService._,
-            cardReissue = {};
+            cardReissueDetails = {};
 
 
         // Revealed Public members
         var service = {
-            clearCardReissue      : clearCardReissue,
-            getCardReissue        : getCardReissue,
-            getOrCreateCardReissue: getOrCreateCardReissue,
-            initializeCardReissue : initializeCardReissue,
-            setCardReissue        : setCardReissue
+            clearCardReissueDetails      : clearCardReissueDetails,
+            getCardReissueDetails        : getCardReissueDetails,
+            getOrCreateCardReissueDetails: getOrCreateCardReissueDetails,
+            initializeCardReissueDetails : initializeCardReissueDetails,
+            setCardReissueDetails        : setCardReissueDetails
         };
 
         activate();
@@ -30,56 +30,56 @@
         }
 
         function clearCachedValues() {
-            clearCardReissue();
+            clearCardReissueDetails();
         }
 
-        function clearCardReissue() {
-            setCardReissue({});
+        function clearCardReissueDetails() {
+            setCardReissueDetails({});
         }
 
-        function getCardReissue() {
-            return cardReissue;
+        function getCardReissueDetails() {
+            return cardReissueDetails;
         }
 
-        function getOrCreateCardReissue(accountId, cardId) {
-            if (!_.isEmpty(cardReissue) && cardReissue.account.accountId === accountId && cardReissue.card.cardId === cardId) {
-                return $q.when(cardReissue);
+        function getOrCreateCardReissueDetails(accountId, cardId) {
+            if (!_.isEmpty(cardReissueDetails) && cardReissueDetails.account.accountId === accountId && cardReissueDetails.card.cardId === cardId) {
+                return $q.when(cardReissueDetails);
             }
 
-            return initializeCardReissue(accountId, cardId);
+            return initializeCardReissueDetails(accountId, cardId);
         }
 
-        function initializeCardReissue(accountId, cardId) {
+        function initializeCardReissueDetails(accountId, cardId) {
             return $q.all([AccountManager.fetchAccount(accountId), CardManager.fetchCard(cardId)])
                 .then(function (values) {
-                    cardReissue = new CardReissueModel();
+                    cardReissueDetails = new CardReissueModel();
 
-                    cardReissue.account = values[0];
-                    cardReissue.card = values[1];
+                    cardReissueDetails.account = values[0];
+                    cardReissueDetails.card = values[1];
 
-                    cardReissue.shippingAddress = cardReissue.account.defaultCardShippingAddress;
+                    cardReissueDetails.shippingAddress = cardReissueDetails.account.defaultCardShippingAddress;
 
                     //only allow the user to use the "regular" shipping method if they are shipping to a PO Box
                     //note: this check will have to be moved once the user is allowed to modify the selected card shipping address
-                    if(cardReissue.shippingAddress.isPoBox()) {
-                        cardReissue.selectedShippingMethod = cardReissue.account.regularCardShippingMethod;
-                        cardReissue.shippingMethods = [cardReissue.selectedShippingMethod];
+                    if(cardReissueDetails.shippingAddress.isPoBox()) {
+                        cardReissueDetails.selectedShippingMethod = cardReissueDetails.account.regularCardShippingMethod;
+                        cardReissueDetails.shippingMethods = [cardReissueDetails.selectedShippingMethod];
                     }
                     else {
-                        cardReissue.selectedShippingMethod = cardReissue.account.cardShippingCarrier.getDefaultShippingMethod();
-                        cardReissue.shippingMethods = cardReissue.account.cardShippingCarrier.shippingMethods.slice();
+                        cardReissueDetails.selectedShippingMethod = cardReissueDetails.account.cardShippingCarrier.getDefaultShippingMethod();
+                        cardReissueDetails.shippingMethods = cardReissueDetails.account.cardShippingCarrier.shippingMethods.slice();
 
                         //move the Regular shipping method to the front of the array
-                        _.remove(cardReissue.shippingMethods, {id: cardReissue.account.regularCardShippingMethod.id});
-                        cardReissue.shippingMethods.unshift(cardReissue.account.regularCardShippingMethod);
+                        _.remove(cardReissueDetails.shippingMethods, {id: cardReissueDetails.account.regularCardShippingMethod.id});
+                        cardReissueDetails.shippingMethods.unshift(cardReissueDetails.account.regularCardShippingMethod);
                     }
 
-                    cardReissue.reissueReason = "";
+                    cardReissueDetails.reissueReason = "";
 
-                    return cardReissue;
+                    return cardReissueDetails;
                 })
                 .catch(function (errorResponse) {
-                    var error = "Failed to initialize card reissue: " + errorResponse;
+                    var error = "Failed to initialize card reissue details: " + errorResponse;
                     Logger.error(error);
 
                     return $q.reject(error);
@@ -88,8 +88,8 @@
 
         // Caution against using this as it replaces the object versus setting properties on it or extending it
         // suggested use for testing only
-        function setCardReissue(cardReissueInfo) {
-            cardReissue = cardReissueInfo;
+        function setCardReissueDetails(cardReissueDetailsInfo) {
+            cardReissueDetails = cardReissueDetailsInfo;
         }
     }
 
