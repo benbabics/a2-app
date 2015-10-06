@@ -1,26 +1,26 @@
-<ion-view view-title="{{::vm.config.title}}">
+<ion-view class="card-list-view" view-title="{{::vm.config.title}}">
     <ion-content class="padding inner-container">
         <div class="item item-divider inner-container" style="border:0px">
             <div class="padding item item-wrap arrow-align">
-                <p class="padding divider">
-                    <span class="block_align black">{{::vm.config.cardNumber}}</span>
-                    <span class="content_align black">{{vm.card.embossedCardNumber | wexCardNumber}}</span>
-                </p>
+                <div class="row divider">
+                    <div class="col col-50 black">{{::vm.config.cardNumber}}</div>
+                    <div class="col col-50 black right-align">{{vm.card.embossedCardNumber | wexCardNumber}}</div>
+                </div>
 
-                <p class="padding divider">
-                    <span class="black">{{::vm.config.standardEmbossing}}</span>
-                    <span class="black wordwrap">{{vm.card.embossingValue2}}</span>
-                </p>
+                <div class="row divider">
+                    <div class="col col-50 black wrap">{{::vm.config.standardEmbossing}}</div>
+                    <div class="col col-50 black wordwrap">{{vm.card.embossingValue2}}</div>
+                </div>
 
-                <p class="padding divider">
-                    <span class="black">{{::vm.config.optionalEmbossing}}</span>
-                    <span class="black wordwrap">{{vm.card.embossingValue1}}</span>
-                </p>
+                <div class="row divider">
+                    <div class="col col-50 black wrap">{{::vm.config.optionalEmbossing}}</div>
+                    <div class="col col-50 black wordwrap">{{vm.card.embossingValue1}}</div>
+                </div>
 
-                <p class="padding divider">
-                    <span class="block_align black">{{::vm.config.status}}</span>
-                    <span class="content_align black wordwrap">{{vm.card.getStatusDisplayName()}}</span>
-                </p>
+                <div class="row divider">
+                    <div class="col col-50 black">{{::vm.config.status}}</div>
+                    <div class="col col-50 black wordwrap">{{vm.card.getStatusDisplayName()}}</div>
+                </div>
             </div>
             <br>
             <div ng-if="vm.card.isActive() || vm.card.isSuspended()">

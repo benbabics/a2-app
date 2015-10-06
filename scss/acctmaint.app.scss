@@ -68,6 +68,7 @@ $container-background-color: #f0f0f0;
 .divider {
     padding-top: 5px;
     border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 5px;
 }
 
 .arrow-align {
@@ -340,7 +341,8 @@ $container-background-color: #f0f0f0;
     }
 
     .row {
-        padding: 0;
+        padding: 5px;
+        font-size: 15px;
 
         .col {
             padding: 0;
@@ -509,7 +511,9 @@ $container-background-color: #f0f0f0;
     text-align: right;
     white-space: pre-wrap;
 }
-
+.wrap {
+    white-space: pre-wrap;
+}
 .right-align {
     text-align: right;
 }
