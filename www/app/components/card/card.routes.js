@@ -88,24 +88,36 @@
         });
 
         $stateProvider.state("card.reissue", {
-            cache: false,
+            cache   : false,
             abstract: true,
             url     : "/reissue/:cardId",
             resolve : {
-                cardReissueDetails: function ($stateParams, CardReissueManager, CommonService, UserManager) {
-                    var cardId = $stateParams.cardId,
-                        accountId = UserManager.getUser().billingCompany.accountId;
-
-                    CommonService.loadingBegin();
-
-                    return CardReissueManager.getOrCreateCardReissueDetails(accountId, cardId)
-                        .finally(CommonService.loadingComplete);
+                cardReissueDetails: function(CardReissueModel) {
+                    return new CardReissueModel();
                 }
             },
-            views: {
+            views   : {
                 "view@card": {
-                    template: "<ion-nav-view name='view'></ion-nav-view>",
-                    controller: "CardReissueController as vm"
+                    template  : "<ion-nav-view name='view'></ion-nav-view>",
+                    controller: "CardReissueController as reissueController",
+                    resolve   : {
+                        account: function (AccountManager, CommonService, UserManager) {
+                            var accountId = UserManager.getUser().billingCompany.accountId;
+
+                            CommonService.loadingBegin();
+
+                            return AccountManager.fetchAccount(accountId)
+                                .finally(CommonService.loadingComplete);
+                        },
+                        card: function ($stateParams, CardManager, CommonService) {
+                            var cardId = $stateParams.cardId;
+
+                            CommonService.loadingBegin();
+
+                            return CardManager.fetchCard(cardId)
+                                .finally(CommonService.loadingComplete);
+                        }
+                    }
                 }
             }
         });

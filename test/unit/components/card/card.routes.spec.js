@@ -8,10 +8,11 @@
             $rootScope,
             $state,
             mockCard,
-            mockCardReissueDetails,
             mockUser,
+            mockAccount,
+            AccountManager,
             CardManager,
-            CardReissueManager,
+            CardReissueModel,
             UserManager;
 
         beforeEach(function () {
@@ -24,26 +25,27 @@
 
             // mock dependencies
             CardManager = jasmine.createSpyObj("CardManager", ["fetchCard"]);
-            CardReissueManager = jasmine.createSpyObj("CardReissueManager", ["getOrCreateCardReissueDetails"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            AccountManager = jasmine.createSpyObj("AccountManager", ["fetchAccount"]);
 
             module(function ($provide) {
                 $provide.value("CardManager", CardManager);
-                $provide.value("CardReissueManager", CardReissueManager);
                 $provide.value("UserManager", UserManager);
+                $provide.value("AccountManager", AccountManager);
             });
 
             inject(function (_$injector_, _$q_, _$rootScope_, _$state_,
-                             CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel,
+                             _CardReissueModel_, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel,
                              UserModel, UserAccountModel) {
                 $injector = _$injector_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
+                CardReissueModel = _CardReissueModel_;
 
                 mockCard = TestUtils.getRandomCard(CardModel);
-                mockCardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
+                mockAccount = TestUtils.getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel);
             });
 
             //setup spies:
@@ -321,25 +323,34 @@
             });
 
             describe("when a child state is navigated to", function () {
-                var childStateName = "card.reissue.form",
-                    getOrCreateCardReissueDetailsDeferred;
+                var childStateName = "card.reissue.form";
 
                 beforeEach(function () {
-                    getOrCreateCardReissueDetailsDeferred = $q.defer();
-                    CardReissueManager.getOrCreateCardReissueDetails.and.returnValue(getOrCreateCardReissueDetailsDeferred.promise);
+                    CardManager.fetchCard.and.returnValue($q.when(mockCard));
+                    AccountManager.fetchAccount.and.returnValue($q.when(mockAccount));
                 });
 
                 beforeEach(function () {
                     $state.go(childStateName, {cardId: mockCard.cardId});
 
-                    getOrCreateCardReissueDetailsDeferred.resolve(mockCardReissueDetails);
                     $rootScope.$digest();
                 });
 
-                it("should resolve the expected cardReissueDetails", function () {
-                    $injector.invoke($state.$current.parent.resolve.cardReissueDetails)
-                        .then(function (cardReissueDetails) {
-                            expect(cardReissueDetails).toEqual(mockCardReissueDetails);
+                it("should resolve cardReissueDetails to a new CardReissueModel", function () {
+                    expect($injector.invoke($state.$current.parent.resolve.cardReissueDetails)).toEqual(new CardReissueModel());
+                });
+
+                it("should resolve account to the expected account for the view", function () {
+                    $injector.invoke($state.$current.parent.views["view@card"].resolve.account)
+                        .then(function (account) {
+                            expect(account).toEqual(mockAccount);
+                        });
+                });
+
+                it("should resolve card to the expected card for the view", function () {
+                    $injector.invoke($state.$current.parent.views["view@card"].resolve.card)
+                        .then(function (card) {
+                            expect(card).toEqual(mockCard);
                         });
                 });
             });

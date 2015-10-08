@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function CardReissueConfirmationController($scope, globals, cardReissueDetails, CardReissueManager) {
+    function CardReissueConfirmationController($scope, globals, cardReissueDetails) {
 
         var vm = this;
 
@@ -23,7 +23,6 @@
         }
 
         function beforeEnter() {
-            CardReissueManager.clearCardReissueDetails();
         }
     }
 
