@@ -32,8 +32,8 @@
                     <span class="active-link">{{vm.cardReissueDetails.getShippingMethodDisplayName()}}</span>
                     <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
                 </div>
-                <div ng-switch-when="false">
-                    <span class="right-padding">{{vm.cardReissueDetails.getShippingMethodDisplayName()}}</span>
+                <div ng-switch-when="false" id="onlyShippingMethod">
+                    <span class="right-padding black">{{vm.cardReissueDetails.getShippingMethodDisplayName()}}</span>
                 </div>
             </span>
         </div>
