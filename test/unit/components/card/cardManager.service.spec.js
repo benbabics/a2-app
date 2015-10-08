@@ -566,10 +566,8 @@
                             expect(rejectHandler).not.toHaveBeenCalled();
                         });
 
-                        it("should add the reissued card to cards", function () {
-                            var reissuedCard = angular.extend(new CardModel(), response.data);
-
-                            expect(CardManager.getCards()).toContain(reissuedCard);
+                        it("should clear the cards cache", function () {
+                            expect(CardManager.getCards()).toEqual([]);
                         });
                     });
                 });

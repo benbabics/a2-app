@@ -103,19 +103,21 @@
             return CardsResource.post(accountId, cardId, params)
                 .then(function (cardResponse) {
                     if (cardResponse && cardResponse.data) {
-                        var cachedCard = _.find(cards, {cardId: cardResponse.data.cardId});
+                        var currentCard = _.find(cards, {cardId: cardResponse.data.cardId});
 
-                        if(cachedCard) {
+                        if(currentCard) {
                             //update the existing card object in the cache
-                            cachedCard.set(cardResponse.data);
+                            currentCard.set(cardResponse.data);
                         }
                         else {
                             //the reissued card has a new id, so map the data to a card model and add it to the cache
-                            cachedCard = createCard(cardResponse.data);
-                            cards.push(cachedCard);
+                            currentCard = createCard(cardResponse.data);
+
+                            //the state of the previous card has now been changed, so we need to clear the cache
+                            clearCachedValues();
                         }
 
-                        return cachedCard;
+                        return currentCard;
                     }
                     // no data in the response
                     else {
