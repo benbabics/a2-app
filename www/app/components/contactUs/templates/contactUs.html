@@ -1,16 +1,15 @@
 <ion-view view-title="{{::vm.config.title}}"
-          class="contact-us-view"
           wex-hide-back-button="true"
           wex-back-state="landing">
     <ion-content>
-        <div class="content item main-container">
-            <p id="heading">
-                <span class="black wordwrap">{{::vm.config.contentHeading}}</span>
+        <div class="padding">
+            <p>
+                {{::vm.config.contentHeading}}
             </p>
-            <p id="content">
-                <span class="black wordwrap">{{::vm.config.content}}</span>
+            <p>
+                {{::vm.config.content}}
             </p>
-            <p id="button-area" class="align_center">
+            <p class="align_center">
                 <a class="button button-block button-submit button-width"
                    href="{{::vm.config.sendEmailLink}}">
                     <span id="sendEmail">{{::vm.config.sendEmailButton}}</span>

@@ -1,43 +1,42 @@
 <ion-view view-title="{{::vm.config.title}}"
-          class="terms-of-use-view"
           wex-hide-back-button="true"
           wex-back-state="landing">
     <ion-content>
-        <div class="content item main-container">
+        <div class="content padding">
             <p id="introduction">
-                <span class="black wordwrap" ng-bind-html="vm.config.introduction"></span>
+                <span ng-bind-html="vm.config.introduction"></span>
             </p>
             <div class="padding">
                 <p>
-                    <span class="black wordwrap">{{::vm.config.sectionOne}}</span>
+                    {{::vm.config.sectionOne}}
                 </p>
                 <p>
-                    <span class="black wordwrap">{{::vm.config.sectionTwo}}</span>
+                    {{::vm.config.sectionTwo}}
                 </p>
                 <p>
-                    <span class="black wordwrap">{{::vm.config.sectionThree}}</span>
+                    {{::vm.config.sectionThree}}
                 </p>
                 <p>
-                    <span class="black wordwrap">{{::vm.config.sectionFour}}</span>
+                    {{::vm.config.sectionFour}}
                 </p>
                 <p>
-                    <span class="black wordwrap">{{::vm.config.sectionFive}}</span>
+                    {{::vm.config.sectionFive}}
                 </p>
                 <p>
-                    <span class="black wordwrap">{{::vm.config.sectionSix}}</span>
+                    {{::vm.config.sectionSix}}
                 </p>
                 <p>
-                    <span class="black wordwrap">{{::vm.config.sectionSeven}}</span>
+                    {{::vm.config.sectionSeven}}
                 </p>
                 <p>
-                    <span class="black wordwrap">{{::vm.config.sectionEight}}</span>
+                    {{::vm.config.sectionEight}}
                 </p>
                 <p>
-                    <span class="black wordwrap">{{::vm.config.sectionNine}}</span>
+                    {{::vm.config.sectionNine}}
                 </p>
             </div>
             <p id="closing">
-                <span class="black wordwrap" ng-bind-html="vm.config.closing"></span>
+                <span ng-bind-html="vm.config.closing"></span>
             </p>
         </div>
     </ion-content>
