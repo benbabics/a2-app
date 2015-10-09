@@ -442,7 +442,10 @@ $container-background-color: #f0f0f0;
 
 /**Fix for Bug-377 **/
 
-.divider:last-child {
+/* Note: collection-repeat uses absolute positioning such that the last element in the container isn't normally the last
+ * item in the list. Until this gets fixed, we need to ignore the :last-child selector when in a collection-repeat list.
+ */
+:not(.collection-repeat-container) > .divider:last-child {
     border-bottom: none !important;
 }
 
