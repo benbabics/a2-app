@@ -378,7 +378,13 @@ $container-background-color: #f0f0f0;
         .instructions {
             text-align: center;
         }
+
+        .item p .active-link {
+            color: $link-font-color;
+        }
+
     }
+
 }
 
 /**--------------------------------
