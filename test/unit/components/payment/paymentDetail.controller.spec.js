@@ -7,7 +7,6 @@
         $state,
         ctrl,
         CommonService,
-        PaymentMaintenance,
         PaymentManager,
         UserManager,
         confirmDeferred,
@@ -59,7 +58,6 @@
             });
 
             // mock dependencies
-            PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["setPayment"]);
             $state = jasmine.createSpyObj("$state", ["go"]);
             CommonService = jasmine.createSpyObj("CommonService", ["displayConfirm"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["removePayment"]);
@@ -82,7 +80,6 @@
                     $scope            : $scope,
                     $state            : $state,
                     CommonService     : CommonService,
-                    PaymentMaintenance: PaymentMaintenance,
                     PaymentManager    : PaymentManager,
                     UserManager       : UserManager,
                     payment           : mockPayment,
@@ -197,12 +194,8 @@
                 ctrl.editPayment();
             });
 
-            it("should call PaymentMaintenance.setPayment with the expected value", function () {
-                expect(PaymentMaintenance.setPayment).toHaveBeenCalledWith(mockPayment);
-            });
-
-            it("should navigate to the payment.update flow", function () {
-                expect($state.go).toHaveBeenCalledWith("payment.update");
+            it("should navigate to the payment.update flow with the expected paymentId", function () {
+                expect($state.go).toHaveBeenCalledWith("payment.update", {paymentId: mockPayment.id});
             });
         });
 

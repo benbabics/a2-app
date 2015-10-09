@@ -8,12 +8,12 @@
             validateBeforeNavigateToPaymentAdd($state, globals, CommonService, PaymentManager, UserManager);
         });
 
-        $urlRouterProvider.when("/payment/add", function(globals, $state) {
-            goToMaintenanceState($state, "payment.maintenance.form", globals.PAYMENT_MAINTENANCE.STATES.ADD);
+        $urlRouterProvider.when("/payment/add", function(globals, $state, $stateParams) {
+            goToMaintenanceFlow(globals.PAYMENT_MAINTENANCE.STATES.ADD, $state, $stateParams);
         });
 
-        $urlRouterProvider.when("/payment/update", function(globals, $state) {
-            goToMaintenanceState($state, "payment.maintenance.form", globals.PAYMENT_MAINTENANCE.STATES.UPDATE);
+        $urlRouterProvider.when("/payment/update/:paymentId", function(globals, $state, $stateParams) {
+            goToMaintenanceFlow(globals.PAYMENT_MAINTENANCE.STATES.UPDATE, $state, $stateParams);
         });
 
         $stateProvider.state("payment", {
@@ -91,21 +91,54 @@
         });
 
         $stateProvider.state("payment.update", {
-            url: "/update"
+            url: "/update/:paymentId"
         });
 
         $stateProvider.state("payment.maintenance", {
+            cache   : false,
             abstract: true,
-            url: "/maintenance/:maintenanceState",
-            resolve: {
+            url     : "/maintenance/:maintenanceState?paymentId",
+            resolve : {
                 maintenance: function (globals, $state, $stateParams) {
                     return {
                         state: $stateParams.maintenanceState,
                         states: globals.PAYMENT_MAINTENANCE.STATES,
                         go: function(stateName, params) {
-                            goToMaintenanceState($state, stateName, $stateParams.maintenanceState, params);
+                            $state.go(stateName, angular.extend({}, $stateParams, params));
                         }
                     };
+                },
+                payment: function ($q, $stateParams, CommonService, PaymentManager, PaymentModel, globals) {
+                    var maintenanceState = $stateParams.maintenanceState,
+                        paymentId;
+
+                    if(maintenanceState === globals.PAYMENT_MAINTENANCE.STATES.UPDATE) {
+                        paymentId = $stateParams.paymentId;
+
+                        CommonService.loadingBegin();
+
+                        return PaymentManager.fetchPayment(paymentId)
+                            .finally(CommonService.loadingComplete);
+                    }
+                    else {
+                        return $q.when(new PaymentModel());
+                    }
+                }
+            },
+            views   : {
+                "view@payment": {
+                    template   : "<ion-nav-view name='view'></ion-nav-view>",
+                    controller : "PaymentMaintenanceController as maintenanceController",
+                    resolve    : {
+                        defaultBank: function (BankManager, CommonService, InvoiceManager, UserManager) {
+                            var accountId = UserManager.getUser().billingCompany.accountId;
+
+                            CommonService.loadingBegin();
+
+                            return BankManager.getDefaultBank(accountId)
+                                .finally(CommonService.loadingComplete);
+                        }
+                    }
                 }
             }
         });
@@ -114,7 +147,7 @@
             url  : "/form",
             cache: false,
             views: {
-                "view@payment": {
+                "view@payment.maintenance": {
                     templateUrl: "app/components/payment/templates/paymentMaintenanceForm.html",
                     controller : "PaymentMaintenanceFormController as vm",
                     resolve    : {
@@ -129,15 +162,6 @@
                                 .finally(function () {
                                     CommonService.loadingComplete();
                                 });
-                        },
-
-                        payment: function (CommonService, PaymentMaintenance) {
-                            CommonService.loadingBegin();
-
-                            return PaymentMaintenance.getOrCreatePaymentAdd()
-                                .finally(function () {
-                                    CommonService.loadingComplete();
-                                });
                         }
                     }
                 }
@@ -148,7 +172,7 @@
             url  : "/summary",
             cache: false,
             views: {
-                "view@payment": {
+                "view@payment.maintenance": {
                     templateUrl: "app/components/payment/templates/paymentMaintenanceSummary.html",
                     controller : "PaymentMaintenanceSummaryController as vm"
                 }
@@ -159,7 +183,7 @@
             url  : "/confirmation",
             cache: false,
             views: {
-                "view@payment": {
+                "view@payment.maintenance": {
                     templateUrl: "app/components/payment/templates/paymentMaintenanceConfirmation.html",
                     controller : "PaymentMaintenanceConfirmationController as vm"
                 }
@@ -175,14 +199,10 @@
         $stateProvider.state("payment.maintenance.input.amount", {
             url  : "/amount",
             views: {
-                "view@payment": {
+                "view@payment.maintenance": {
                     templateUrl: "app/components/payment/templates/paymentMaintenanceAmount.input.html",
                     controller : "PaymentMaintenanceAmountInputController as vm",
                     resolve    : {
-                        payment: function (PaymentMaintenance) {
-                            return PaymentMaintenance.getPayment();
-                        },
-
                         invoiceSummary: function (InvoiceManager) {
                             return InvoiceManager.getInvoiceSummary();
                         }
@@ -194,14 +214,10 @@
         $stateProvider.state("payment.maintenance.input.bankAccount", {
             url  : "/bankAccount",
             views: {
-                "view@payment": {
+                "view@payment.maintenance": {
                     templateUrl: "app/components/payment/templates/paymentMaintenanceBankAccount.input.html",
                     controller : "PaymentMaintenanceBankAccountInputController as vm",
                     resolve    : {
-                        payment: function (PaymentMaintenance) {
-                            return PaymentMaintenance.getPayment();
-                        },
-
                         bankAccounts: function (payment, BankManager, CommonService) {
                             var _ = CommonService._,
                                 activeBanks = _.sortBy(BankManager.getActiveBanks(), "name"),
@@ -222,10 +238,8 @@
             }
         });
 
-        function goToMaintenanceState($state, stateName, maintenanceState, params) {
-            params = params || {};
-
-            $state.go(stateName, angular.extend({}, { maintenanceState: maintenanceState }, params));
+        function goToMaintenanceFlow(maintenanceState, $state, $stateParams) {
+            $state.go("payment.maintenance.form", angular.extend({maintenanceState: maintenanceState}, $stateParams));
         }
 
         function validateBeforeNavigateToPaymentAdd($state, globals, CommonService, PaymentManager, UserManager) {

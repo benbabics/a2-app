@@ -30,8 +30,7 @@
             amount       : 150.00,
             bankAccount  : "bank account value",
             scheduledDate: "2015-05-26"
-        },
-        PaymentMaintenance;
+        };
 
     describe("A Payment Maintenance Confirmation Controller", function () {
 
@@ -54,9 +53,6 @@
                 });
             });
 
-            // mock dependencies
-            PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["clearPayment", "getPayment"]);
-
             inject(function ($controller, $rootScope, appGlobals, CommonService) {
 
                 _ = CommonService._;
@@ -78,12 +74,10 @@
                     $scope            : $scope,
                     $stateParams      : mockStateParams,
                     maintenance       : mockMaintenance,
-                    PaymentMaintenance: PaymentMaintenance
+                    payment           : mockPayment
                 });
 
             });
-
-            PaymentMaintenance.getPayment.and.returnValue(mockPayment);
         });
 
         it("should set the config to the expected value", function () {
@@ -99,14 +93,9 @@
                 $scope.$broadcast("$ionicView.beforeEnter");
             });
 
-            it("should set the payment", function () {
+            it("should set payment to the expected value", function () {
                 expect(ctrl.payment).toEqual(mockPayment);
             });
-
-            it("should call PaymentMaintenance.clearPayment", function () {
-                expect(PaymentMaintenance.clearPayment).toHaveBeenCalledWith();
-            });
-
         });
 
     });

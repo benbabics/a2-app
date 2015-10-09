@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function PaymentDetailController($scope, $state, globals, isPaymentEditable, payment,
-                                     CommonService, Logger, PaymentMaintenance, PaymentManager, UserManager) {
+                                     CommonService, Logger, PaymentManager, UserManager) {
 
         var vm = this;
 
@@ -62,8 +62,7 @@
         }
 
         function editPayment() {
-            PaymentMaintenance.setPayment(vm.payment);
-            $state.go("payment.update");
+            $state.go("payment.update", {paymentId: vm.payment.id});
         }
 
     }

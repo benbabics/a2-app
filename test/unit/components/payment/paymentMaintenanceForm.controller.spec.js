@@ -160,6 +160,8 @@
                 //setup an existing values to test them being modified
                 ctrl.hasAnyCards = null;
 
+                jasmine.clock().mockDate();
+
                 $scope.$broadcast("$ionicView.beforeEnter");
             });
 

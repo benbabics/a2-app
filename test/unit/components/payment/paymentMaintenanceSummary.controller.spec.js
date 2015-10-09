@@ -65,7 +65,6 @@
         moment,
         BankModel,
         InvoiceManager,
-        PaymentMaintenance,
         PaymentManager,
         PaymentModel,
         UserManager;
@@ -95,7 +94,6 @@
             $state = jasmine.createSpyObj("state", ["go"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["nextViewOptions"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
-            PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getPayment"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "updatePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
@@ -120,6 +118,18 @@
                     go    : jasmine.createSpy("go")
                 };
 
+                switch(mockMaintenance.state) {
+                    case mockMaintenance.states.ADD:
+                        mockPaymentProcess = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
+                        break;
+                    case mockMaintenance.states.UPDATE:
+                        mockPaymentProcess = TestUtils.getRandomPaymentUpdate(PaymentModel, BankModel);
+                        break;
+                    default:
+                        mockPaymentProcess = null;
+                        break;
+                }
+
                 ctrl = $controller("PaymentMaintenanceSummaryController", {
                     $scope            : $scope,
                     $state            : $state,
@@ -127,28 +137,15 @@
                     $ionicHistory     : $ionicHistory,
                     maintenance       : mockMaintenance,
                     InvoiceManager    : InvoiceManager,
-                    PaymentMaintenance: PaymentMaintenance,
                     PaymentManager    : PaymentManager,
-                    UserManager       : UserManager
+                    UserManager       : UserManager,
+                    payment           : mockPaymentProcess
                 });
 
             });
 
-            switch(mockMaintenance.state) {
-                case mockMaintenance.states.ADD:
-                    mockPaymentProcess = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
-                    break;
-                case mockMaintenance.states.UPDATE:
-                    mockPaymentProcess = TestUtils.getRandomPaymentUpdate(PaymentModel, BankModel);
-                    break;
-                default:
-                    mockPaymentProcess = null;
-                    break;
-            }
-
             mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
             InvoiceManager.getInvoiceSummary.and.returnValue(mockCurrentInvoiceSummary);
-            PaymentMaintenance.getPayment.and.returnValue(mockPaymentProcess);
             UserManager.getUser.and.returnValue(mockUser);
         });
 

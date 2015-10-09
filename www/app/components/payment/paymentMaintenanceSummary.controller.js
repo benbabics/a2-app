@@ -5,9 +5,8 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentMaintenanceSummaryController($scope, $ionicHistory, globals, maintenance, moment,
-                                                 CommonService, InvoiceManager, Logger,
-                                                 PaymentMaintenance, PaymentManager, UserManager) {
+    function PaymentMaintenanceSummaryController($scope, $ionicHistory, globals, maintenance, moment, payment,
+                                                 CommonService, InvoiceManager, Logger, PaymentManager, UserManager) {
 
         var _ = CommonService._,
             vm = this,
@@ -33,7 +32,7 @@
 
             return PaymentManager.addPayment(UserManager.getUser().billingCompany.accountId, vm.payment)
                 .then(function (paymentResponse) {
-                    PaymentMaintenance.getPayment().set(paymentResponse);
+                    vm.payment.set(paymentResponse);
 
                     goToConfirmationPage();
                 })
@@ -87,7 +86,7 @@
 
             return PaymentManager.updatePayment(UserManager.getUser().billingCompany.accountId, vm.payment)
                 .then(function (paymentResponse) {
-                    PaymentMaintenance.getPayment().set(paymentResponse);
+                    vm.payment.set(paymentResponse);
 
                     goToConfirmationPage();
                 })
@@ -104,7 +103,7 @@
         function beforeEnter() {
             var invoiceSummary = InvoiceManager.getInvoiceSummary();
 
-            vm.payment = PaymentMaintenance.getPayment();
+            vm.payment = payment;
 
             if (parseFloat(vm.payment.amount) < parseFloat(invoiceSummary.minimumPaymentDue)) {
                 vm.warnings.push(paymentMaintenanceSummary.WARNINGS.PAYMENT_AMOUNT_LESS_THAN_MINIMUM);

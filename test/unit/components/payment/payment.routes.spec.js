@@ -47,11 +47,14 @@
             BankManager,
             BankModel,
             CommonService,
-            PaymentMaintenance,
             PaymentManager,
             PaymentModel,
             InvoiceManager,
-            UserManager;
+            InvoiceSummaryModel,
+            UserManager,
+            mockDefaultBank,
+            mockHasMultipleBanks,
+            mockInvoiceSummary;
 
         beforeEach(function () {
 
@@ -59,11 +62,11 @@
             module("app.components.bank");
             module("app.components.payment");
             module("app.components.user");
+            module("app.components.invoice");
             module("app.html");
 
             // mock dependencies
-            PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getOrCreatePaymentAdd", "getPayment"]);
-            BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks"]);
+            BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks", "getDefaultBank"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayment", "fetchPaymentAddAvailability", "fetchPayments", "isPaymentEditable"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
@@ -71,12 +74,12 @@
                 $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
                 $provide.value("BankManager", BankManager);
                 $provide.value("InvoiceManager", InvoiceManager);
-                $provide.value("PaymentMaintenance", PaymentMaintenance);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
             });
 
-            inject(function (_$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _CommonService_, _PaymentModel_, UserAccountModel, UserModel) {
+            inject(function (_$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _InvoiceSummaryModel_,
+                             _CommonService_, _PaymentModel_, UserAccountModel, UserModel) {
                 $injector = _$injector_;
                 $location = _$location_;
                 $q = _$q_;
@@ -85,6 +88,7 @@
                 BankModel = _BankModel_;
                 CommonService = _CommonService_;
                 PaymentModel = _PaymentModel_;
+                InvoiceSummaryModel = _InvoiceSummaryModel_;
 
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
             });
@@ -93,9 +97,16 @@
             mockBankAccounts = getRandomBanks(BankModel);
             mockPayments = getRandomPayments(PaymentModel, BankModel);
             mockPayment = TestUtils.getRandomValueFromArray(mockPayments);
+            mockHasMultipleBanks = TestUtils.getRandomBoolean();
+            mockDefaultBank = TestUtils.getRandomBank(BankModel);
+            mockInvoiceSummary = TestUtils.getRandomInvoiceSummary(InvoiceSummaryModel);
 
             BankManager.getActiveBanks.and.returnValue(mockBankAccounts);
-            PaymentMaintenance.getPayment.and.returnValue(mockPayment);
+            BankManager.getDefaultBank.and.returnValue($q.when(mockDefaultBank));
+            PaymentManager.fetchPayment.and.returnValue($q.when(mockPayment));
+            UserManager.getUser.and.returnValue(mockUser);
+            BankManager.hasMultipleBanks.and.returnValue($q.when(mockHasMultipleBanks));
+            InvoiceManager.getInvoiceSummary.and.returnValue(mockInvoiceSummary);
 
         });
 
@@ -324,21 +335,9 @@
             });
 
             describe("when navigated to", function () {
-                var getOrFetchPaymentAddDeferred,
-                    hasMultipleBanksDeferred,
-                    mockHasMultipleBanks = TestUtils.getRandomBoolean();
 
                 beforeEach(function () {
-                    getOrFetchPaymentAddDeferred = $q.defer();
-                    PaymentMaintenance.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
-
-                    hasMultipleBanksDeferred = $q.defer();
-                    UserManager.getUser.and.returnValue(mockUser);
-                    BankManager.hasMultipleBanks.and.returnValue(hasMultipleBanksDeferred.promise);
-
-                    $state.go(stateName, {maintenanceState: getRandomMaintenanceState()});
-                    getOrFetchPaymentAddDeferred.resolve(mockPayment);
-                    hasMultipleBanksDeferred.resolve(mockHasMultipleBanks);
+                    $state.go(stateName);
                     $rootScope.$digest();
                 });
 
@@ -346,7 +345,9 @@
                     expect($state.current.name).toBe("payment.maintenance.form");
 
                     $injector.invoke(function ($stateParams) {
-                        expect($stateParams).toEqual({maintenanceState: mockGlobals.PAYMENT_MAINTENANCE.STATES.ADD});
+                        expect($stateParams).toEqual(jasmine.objectContaining({
+                            maintenanceState: mockGlobals.PAYMENT_MAINTENANCE.STATES.ADD
+                        }));
                     });
                 });
             });
@@ -370,25 +371,13 @@
             });
 
             it("should have the expected URL", function () {
-                expect(state.url).toEqual("/update");
+                expect(state.url).toEqual("/update/:paymentId");
             });
 
             describe("when navigated to", function () {
-                var getOrFetchPaymentAddDeferred,
-                    hasMultipleBanksDeferred,
-                    mockHasMultipleBanks = TestUtils.getRandomBoolean();
 
                 beforeEach(function () {
-                    getOrFetchPaymentAddDeferred = $q.defer();
-                    PaymentMaintenance.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
-
-                    hasMultipleBanksDeferred = $q.defer();
-                    UserManager.getUser.and.returnValue(mockUser);
-                    BankManager.hasMultipleBanks.and.returnValue(hasMultipleBanksDeferred.promise);
-
-                    $state.go(stateName, {maintenanceState: getRandomMaintenanceState()});
-                    getOrFetchPaymentAddDeferred.resolve(mockPayment);
-                    hasMultipleBanksDeferred.resolve(mockHasMultipleBanks);
+                    $state.go(stateName, {paymentId: mockPayment.id});
                     $rootScope.$digest();
                 });
 
@@ -396,7 +385,10 @@
                     expect($state.current.name).toBe("payment.maintenance.form");
 
                     $injector.invoke(function ($stateParams) {
-                        expect($stateParams).toEqual({maintenanceState: mockGlobals.PAYMENT_MAINTENANCE.STATES.UPDATE});
+                        expect($stateParams).toEqual(jasmine.objectContaining({
+                            maintenanceState: mockGlobals.PAYMENT_MAINTENANCE.STATES.UPDATE,
+                            paymentId: mockPayment.id
+                        }));
                     });
                 });
             });
@@ -415,12 +407,17 @@
                 expect(state).not.toBeNull();
             });
 
+            it("should NOT be cached", function () {
+                expect(state.cache).toBeDefined();
+                expect(state.cache).toBeFalsy();
+            });
+
             it("should be abstract", function () {
                 expect(state.abstract).toBeTruthy();
             });
 
             it("should have the expected URL", function () {
-                expect(state.url).toEqual("/maintenance/:maintenanceState");
+                expect(state.url).toEqual("/maintenance/:maintenanceState?paymentId");
             });
 
             describe("when a child state is navigated to", function () {
@@ -431,7 +428,10 @@
                 beforeEach(function () {
                     maintenanceState = getRandomMaintenanceState();
 
-                    $state.go(childStateName, {maintenanceState: maintenanceState});
+                    $state.go(childStateName, {
+                        maintenanceState: maintenanceState,
+                        paymentId       : mockPayment.id
+                    });
                     $rootScope.$digest();
                 });
 
@@ -441,6 +441,25 @@
                         states: mockGlobals.PAYMENT_MAINTENANCE.STATES,
                         go    : jasmine.any(Function)
                     }));
+                });
+
+                it("should resolve a payment object with the expected values", function () {
+                    $injector.invoke($state.$current.parent.resolve.payment)
+                        .then(function (payment) {
+                            if (maintenanceState === mockGlobals.PAYMENT_MAINTENANCE.STATES.UPDATE) {
+                                expect(payment).toEqual(mockPayment);
+                            }
+                            else {
+                                expect(payment).toEqual(new PaymentModel());
+                            }
+                        });
+                });
+
+                it("should resolve defaultBank to the expected bank for the view", function () {
+                    $injector.invoke($state.$current.parent.views["view@payment"].resolve.defaultBank)
+                        .then(function (defaultBank) {
+                            expect(defaultBank).toEqual(mockDefaultBank);
+                        });
                 });
 
                 describe("should resolve a maintenance object with a go function that", function () {
@@ -455,7 +474,7 @@
                         expect($state.$current.name).toEqual(mockMaintenanceState);
 
                         $injector.invoke(function ($stateParams) {
-                            expect($stateParams).toEqual({maintenanceState: maintenanceState});
+                            expect($stateParams).toEqual(angular.extend({maintenanceState: maintenanceState}, $stateParams));
                         });
                     });
                 });
@@ -487,9 +506,9 @@
                 expect(state.url).toEqual("/form");
             });
 
-            it("should define a view@payment", function () {
+            it("should define a view@payment.maintenance", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["view@payment"]).toBeDefined();
+                expect(state.views["view@payment.maintenance"]).toBeDefined();
             });
 
             it("should respond to the URL", function () {
@@ -498,26 +517,9 @@
 
             describe("when navigated to", function () {
 
-                var getOrFetchPaymentAddDeferred,
-                    hasMultipleBanksDeferred,
-                    mockHasMultipleBanks = TestUtils.getRandomBoolean();
-
                 beforeEach(function () {
-                    getOrFetchPaymentAddDeferred = $q.defer();
-                    PaymentMaintenance.getOrCreatePaymentAdd.and.returnValue(getOrFetchPaymentAddDeferred.promise);
-
-                    hasMultipleBanksDeferred = $q.defer();
-                    UserManager.getUser.and.returnValue(mockUser);
-                    BankManager.hasMultipleBanks.and.returnValue(hasMultipleBanksDeferred.promise);
-
                     $state.go(stateName, {maintenanceState: getRandomMaintenanceState()});
-                    getOrFetchPaymentAddDeferred.resolve(mockPayment);
-                    hasMultipleBanksDeferred.resolve(mockHasMultipleBanks);
                     $rootScope.$digest();
-                });
-
-                it("should call PaymentMaintenance.getOrCreatePaymentAdd", function () {
-                    expect(PaymentMaintenance.getOrCreatePaymentAdd).toHaveBeenCalledWith();
                 });
 
                 it("should call BankManager.hasMultipleBanks", function () {
@@ -557,9 +559,9 @@
                 expect(state.url).toEqual("/summary");
             });
 
-            it("should define a view@payment", function () {
+            it("should define a view@payment.maintenance", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["view@payment"]).toBeDefined();
+                expect(state.views["view@payment.maintenance"]).toBeDefined();
             });
 
             it("should respond to the URL", function () {
@@ -593,9 +595,9 @@
                 expect(state.url).toEqual("/confirmation");
             });
 
-            it("should define a view@payment", function () {
+            it("should define a view@payment.maintenance", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["view@payment"]).toBeDefined();
+                expect(state.views["view@payment.maintenance"]).toBeDefined();
             });
 
             it("should respond to the URL", function () {
@@ -655,9 +657,9 @@
                 expect(state.url).toEqual("/amount");
             });
 
-            it("should define a view on the payment view container", function () {
+            it("should define a view on the payment.maintenance view container", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["view@payment"]).toBeDefined();
+                expect(state.views["view@payment.maintenance"]).toBeDefined();
             });
 
             it("should respond to the URL", function () {
@@ -671,20 +673,12 @@
                     $rootScope.$digest();
                 });
 
-                it("should call PaymentMaintenance.getPayment", function () {
-                    expect(PaymentMaintenance.getPayment).toHaveBeenCalledWith();
-                });
-
-                it("should call InvoiceManager.getInvoiceSummary", function () {
-                    expect(InvoiceManager.getInvoiceSummary).toHaveBeenCalledWith();
-                });
-
                 it("should transition successfully", function () {
                     expect($state.current.name).toBe(stateName);
                 });
 
-                it("should resolve the payment", function () {
-                    expect($injector.invoke($state.current.views["view@payment"].resolve.payment)).toEqual(mockPayment);
+                it("should resolve invoiceSummary to the expected value", function () {
+                    expect($injector.invoke($state.current.views["view@payment.maintenance"].resolve.invoiceSummary)).toEqual(mockInvoiceSummary);
                 });
             });
         });
@@ -714,9 +708,9 @@
                 expect(state.url).toEqual("/bankAccount");
             });
 
-            it("should define a view on the payment view container", function () {
+            it("should define a view on the payment.maintenance view container", function () {
                 expect(state.views).toBeDefined();
-                expect(state.views["view@payment"]).toBeDefined();
+                expect(state.views["view@payment.maintenance"]).toBeDefined();
             });
 
             it("should respond to the URL", function () {
@@ -730,20 +724,12 @@
                     $rootScope.$digest();
                 });
 
-                it("should call PaymentMaintenance.getPayment", function () {
-                    expect(PaymentMaintenance.getPayment).toHaveBeenCalledWith();
-                });
-
                 it("should call BankManager.getActiveBanks", function () {
                     expect(BankManager.getActiveBanks).toHaveBeenCalledWith();
                 });
 
                 it("should transition successfully", function () {
                     expect($state.current.name).toBe(stateName);
-                });
-
-                it("should resolve the payment", function () {
-                    expect($injector.invoke($state.current.views["view@payment"].resolve.payment)).toEqual(mockPayment);
                 });
 
                 describe("when the payment does not have a bank account", function () {
@@ -758,7 +744,7 @@
                     it("should resolve the bankAccounts", function () {
                         var expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
 
-                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment}))
+                        expect($injector.invoke($state.current.views["view@payment.maintenance"].resolve.bankAccounts, null, {payment: mockPayment}))
                             .toEqual(expectedBankAccounts);
                     });
 
@@ -776,7 +762,7 @@
                     it("should resolve the bankAccounts", function () {
                         var expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
 
-                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment}))
+                        expect($injector.invoke($state.current.views["view@payment.maintenance"].resolve.bankAccounts, null, {payment: mockPayment}))
                             .toEqual(expectedBankAccounts);
                     });
 
@@ -800,7 +786,7 @@
 
                         expectedBankAccounts = _.sortBy(mockBankAccounts, "name");
 
-                        expect($injector.invoke($state.current.views["view@payment"].resolve.bankAccounts, null, {payment: mockPayment}))
+                        expect($injector.invoke($state.current.views["view@payment.maintenance"].resolve.bankAccounts, null, {payment: mockPayment}))
                             .toEqual(expectedBankAccounts);
                     });
 

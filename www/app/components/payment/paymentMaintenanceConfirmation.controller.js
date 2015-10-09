@@ -5,8 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentMaintenanceConfirmationController($scope, globals, maintenance,
-                                                      CommonService, Logger, PaymentMaintenance) {
+    function PaymentMaintenanceConfirmationController($scope, globals, maintenance, payment, CommonService, Logger) {
 
         var _ = CommonService._,
             vm = this,
@@ -26,10 +25,7 @@
         }
 
         function beforeEnter() {
-            vm.payment = PaymentMaintenance.getPayment();
-
-            // Clear the payment from the service so that any new add/edit flows cannot use the existing payment
-            PaymentMaintenance.clearPayment();
+            vm.payment = payment;
         }
 
         function getConfig() {
