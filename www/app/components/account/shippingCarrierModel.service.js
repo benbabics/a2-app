@@ -7,8 +7,7 @@
         function ShippingCarrierModel() {
             this.id = "";
             this.name = "";
-            this.default = "";
-            this.wexDefault = "";
+            this.accountDefault = "";
             this.shippingMethods = "";
         }
 

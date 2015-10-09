@@ -43,6 +43,10 @@
             });
         };
 
+        CardReissueModel.prototype.getDefaultShippingMethod = function () {
+            return this.account.cardShippingCarrier.getDefaultShippingMethod() || this.account.regularCardShippingMethod;
+        };
+
         CardReissueModel.prototype.getReissueReasonDisplayName = function(reissueReason) {
             var displayMappings = globals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON;
 
@@ -70,7 +74,7 @@
         };
 
         CardReissueModel.prototype.hasDefaultCarrier = function () {
-            return this.account.cardShippingCarrier.default;
+            return this.account.cardShippingCarrier.accountDefault;
         };
 
         return CardReissueModel;

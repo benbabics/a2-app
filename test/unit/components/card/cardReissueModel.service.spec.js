@@ -90,13 +90,13 @@
         describe("has a hasDefaultCarrier function that", function () {
 
             it("should return true when account.cardShippingCarrier.default is true", function () {
-                cardReissueDetails.account.cardShippingCarrier.default = true;
+                cardReissueDetails.account.cardShippingCarrier.accountDefault = true;
 
                 expect(cardReissueDetails.hasDefaultCarrier()).toBeTruthy();
             });
 
             it("should return false when account.cardShippingCarrier.default is false", function () {
-                cardReissueDetails.account.cardShippingCarrier.default = false;
+                cardReissueDetails.account.cardShippingCarrier.accountDefault = false;
 
                 expect(cardReissueDetails.hasDefaultCarrier()).toBeFalsy();
             });
@@ -114,7 +114,7 @@
                 describe("if there is a default carrier", function () {
 
                     beforeEach(function () {
-                        cardReissueDetails.account.cardShippingCarrier.default = true;
+                        cardReissueDetails.account.cardShippingCarrier.accountDefault = true;
                     });
 
                     describe("if the given shipping method is the regular shipping method", function () {
@@ -147,7 +147,7 @@
                 describe("if there is NOT a default carrier", function () {
 
                     beforeEach(function () {
-                        cardReissueDetails.account.cardShippingCarrier.default = false;
+                        cardReissueDetails.account.cardShippingCarrier.accountDefault = false;
                     });
 
                     it("should return the expected value", function () {
@@ -245,6 +245,35 @@
                     var expectedMapping = sharedGlobals.CARD.DISPLAY_MAPPINGS.REISSUE_REASON[cardReissueDetails.reissueReason.toUpperCase()];
 
                     expect(cardReissueDetails.getReissueReasonDisplayName()).toEqual(expectedMapping);
+                });
+            });
+        });
+
+        describe("has a getDefaultShippingMethod function that", function () {
+
+            beforeEach(function () {
+                _.forEach(cardReissueDetails.account.cardShippingCarrier.shippingMethods, function(shippingMethod) {
+                    shippingMethod.default = false;
+                });
+            });
+
+            describe("when there is a default shipping method", function () {
+                var defaultShippingMethod;
+
+                beforeEach(function () {
+                    defaultShippingMethod = TestUtils.getRandomValueFromArray(cardReissueDetails.account.cardShippingCarrier.shippingMethods);
+                    defaultShippingMethod.default = true;
+                });
+
+                it("should return the default shipping method", function () {
+                    expect(cardReissueDetails.getDefaultShippingMethod()).toEqual(defaultShippingMethod);
+                });
+            });
+
+            describe("when there is NOT a default shipping method", function () {
+
+                it("should return the regular shipping method", function () {
+                    expect(cardReissueDetails.getDefaultShippingMethod()).toEqual(cardReissueDetails.account.regularCardShippingMethod);
                 });
             });
         });

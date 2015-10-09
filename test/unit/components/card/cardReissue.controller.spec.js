@@ -113,7 +113,7 @@
             });
 
             it("should set the expected selectedShippingMethod on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.selectedShippingMethod).toEqual(mockAccount.cardShippingCarrier.getDefaultShippingMethod());
+                expect(mockCardReissueDetails.selectedShippingMethod).toEqual(mockCardReissueDetails.getDefaultShippingMethod());
             });
 
             it("should move the regular shipping method to the front of the shipping methods array", function () {

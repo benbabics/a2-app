@@ -30,8 +30,8 @@
                 cardReissueDetails.shippingMethods = [cardReissueDetails.selectedShippingMethod];
             }
             else {
-                cardReissueDetails.selectedShippingMethod = cardReissueDetails.account.cardShippingCarrier.getDefaultShippingMethod();
                 cardReissueDetails.shippingMethods = cardReissueDetails.account.cardShippingCarrier.shippingMethods.slice();
+                cardReissueDetails.selectedShippingMethod = cardReissueDetails.getDefaultShippingMethod();
 
                 //move the Regular shipping method to the front of the array
                 _.remove(cardReissueDetails.shippingMethods, {id: cardReissueDetails.account.regularCardShippingMethod.id});
