@@ -15,7 +15,7 @@
             <a class="button button-block button-light"
                ng-repeat="shippingMethod in vm.cardReissueDetails.shippingMethods"
                ng-click="vm.confirmSelection(shippingMethod)"
-               ng-class="{disabled: vm.cardReissueDetails.selectedShippingMethod === shippingMethod}">
+               ng-class="{disabled: vm.cardReissueDetails.selectedShippingMethod.id === shippingMethod.id}">
 
                 <span class="align_center active-link">{{vm.cardReissueDetails.getShippingMethodDisplayName(shippingMethod)}}</span>
             </a>
