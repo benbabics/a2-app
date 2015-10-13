@@ -22,7 +22,7 @@
   "overrides": {
     "ionic": {
       "dependencies": {
-        "angular": "*",
+        "angular": ">=1.4.6",
         "angular-animate": "*",
         "angular-sanitize": "*",
         "angular-ui-router": ">=0.2.15"
