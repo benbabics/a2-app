@@ -120,7 +120,7 @@
 
     appGlobals.CARD_CHANGE_STATUS_CONFIRMATION = {
         "CONFIG": {
-            "title"               : "Change Status Confirmation",
+            "title"               : "Confirmation",
             "confirmationMessages": {
                 "active"    : "Card has been activated.",
                 "terminated": "Card has been terminated."
@@ -153,7 +153,7 @@
 
     appGlobals.CARD_REISSUE_CONFIRMATION = {
         "CONFIG": {
-            "title"              : "Reissue Card Confirmation",
+            "title"              : "Confirmation",
             "confirmationMessage": "Your card has been reissued.",
             "cardNumber"         : "Card Number",
             "standardEmbossing"  : "Standard Embossing",
@@ -274,7 +274,7 @@
 
     appGlobals.PAYMENT_MAINTENANCE_CONFIRMATION = {
         "CONFIG": {
-            "title"           : "Payment Confirmation",
+            "title"           : "Confirmation",
             "confirmationText": "Your payment has been scheduled.",
             "amount"          : "Amount",
             "bankAccount"     : "Bank Account",
