@@ -110,6 +110,7 @@
                 },
                 payment: function ($q, $stateParams, CommonService, PaymentManager, PaymentModel, globals) {
                     var maintenanceState = $stateParams.maintenanceState,
+                        payment = new PaymentModel(),
                         paymentId;
 
                     if(maintenanceState === globals.PAYMENT_MAINTENANCE.STATES.UPDATE) {
@@ -118,10 +119,15 @@
                         CommonService.loadingBegin();
 
                         return PaymentManager.fetchPayment(paymentId)
+                            .then(function(paymentToUpdate) {
+                                payment.set(paymentToUpdate);
+
+                                return payment;
+                            })
                             .finally(CommonService.loadingComplete);
                     }
                     else {
-                        return $q.when(new PaymentModel());
+                        return $q.when(payment);
                     }
                 }
             },

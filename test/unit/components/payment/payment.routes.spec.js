@@ -425,56 +425,108 @@
                 var maintenanceState,
                     childStateName = "payment.maintenance.confirmation";
 
-                beforeEach(function () {
-                    maintenanceState = getRandomMaintenanceState();
-
-                    $state.go(childStateName, {
-                        maintenanceState: maintenanceState,
-                        paymentId       : mockPayment.id
-                    });
-                    $rootScope.$digest();
-                });
-
-                it("should resolve a maintenance object with the expected values", function () {
-                    expect($injector.invoke($state.$current.parent.resolve.maintenance)).toEqual(jasmine.objectContaining({
-                        state : maintenanceState,
-                        states: mockGlobals.PAYMENT_MAINTENANCE.STATES,
-                        go    : jasmine.any(Function)
-                    }));
-                });
-
-                it("should resolve a payment object with the expected values", function () {
-                    $injector.invoke($state.$current.parent.resolve.payment)
-                        .then(function (payment) {
-                            if (maintenanceState === mockGlobals.PAYMENT_MAINTENANCE.STATES.UPDATE) {
-                                expect(payment).toEqual(mockPayment);
-                            }
-                            else {
-                                expect(payment).toEqual(new PaymentModel());
-                            }
-                        });
-                });
-
-                it("should resolve defaultBank to the expected bank for the view", function () {
-                    $injector.invoke($state.$current.parent.views["view@payment"].resolve.defaultBank)
-                        .then(function (defaultBank) {
-                            expect(defaultBank).toEqual(mockDefaultBank);
-                        });
-                });
-
-                describe("should resolve a maintenance object with a go function that", function () {
-                    var mockMaintenanceState = "payment.maintenance.input.amount";
+                describe("when the maintenance state is ADD", function () {
 
                     beforeEach(function () {
-                        $injector.invoke($state.$current.parent.resolve.maintenance).go(mockMaintenanceState);
+                        maintenanceState = mockGlobals.PAYMENT_MAINTENANCE.STATES.ADD;
+
+                        $state.go(childStateName, {
+                            maintenanceState: maintenanceState,
+                            paymentId       : mockPayment.id
+                        });
                         $rootScope.$digest();
                     });
 
-                    it("should transition to the expected maintenance state", function () {
-                        expect($state.$current.name).toEqual(mockMaintenanceState);
+                    it("should resolve a maintenance object with the expected values", function () {
+                        expect($injector.invoke($state.$current.parent.resolve.maintenance)).toEqual(jasmine.objectContaining({
+                            state : maintenanceState,
+                            states: mockGlobals.PAYMENT_MAINTENANCE.STATES,
+                            go    : jasmine.any(Function)
+                        }));
+                    });
 
-                        $injector.invoke(function ($stateParams) {
-                            expect($stateParams).toEqual(angular.extend({maintenanceState: maintenanceState}, $stateParams));
+                    it("should resolve a payment object as a new PaymentModel", function () {
+                        $injector.invoke($state.$current.parent.resolve.payment)
+                            .then(function (payment) {
+                                expect(payment).toEqual(new PaymentModel());
+                            });
+                    });
+
+                    it("should resolve defaultBank to the expected bank for the view", function () {
+                        $injector.invoke($state.$current.parent.views["view@payment"].resolve.defaultBank)
+                            .then(function (defaultBank) {
+                                expect(defaultBank).toEqual(mockDefaultBank);
+                            });
+                    });
+
+                    describe("should resolve a maintenance object with a go function that", function () {
+                        var mockMaintenanceState = "payment.maintenance.input.amount";
+
+                        beforeEach(function () {
+                            $injector.invoke($state.$current.parent.resolve.maintenance).go(mockMaintenanceState);
+                            $rootScope.$digest();
+                        });
+
+                        it("should transition to the expected maintenance state", function () {
+                            expect($state.$current.name).toEqual(mockMaintenanceState);
+
+                            $injector.invoke(function ($stateParams) {
+                                expect($stateParams).toEqual(angular.extend({maintenanceState: maintenanceState}, $stateParams));
+                            });
+                        });
+                    });
+                });
+
+                describe("when the maintenance state is UPDATE", function () {
+
+                    beforeEach(function () {
+                        maintenanceState = mockGlobals.PAYMENT_MAINTENANCE.STATES.UPDATE;
+
+                        $state.go(childStateName, {
+                            maintenanceState: maintenanceState,
+                            paymentId       : mockPayment.id
+                        });
+                        $rootScope.$digest();
+                    });
+
+                    it("should resolve a maintenance object with the expected values", function () {
+                        expect($injector.invoke($state.$current.parent.resolve.maintenance)).toEqual(jasmine.objectContaining({
+                            state : maintenanceState,
+                            states: mockGlobals.PAYMENT_MAINTENANCE.STATES,
+                            go    : jasmine.any(Function)
+                        }));
+                    });
+
+                    it("should resolve a payment object as a copy of the payment to update", function () {
+                        $injector.invoke($state.$current.parent.resolve.payment)
+                            .then(function (payment) {
+                                //NOTE: we are checking that payment has the same fields as mockPayment, but they should NOT be the same object.
+                                expect(payment === mockPayment).toBeFalsy();
+                                expect(payment).toEqual(mockPayment);
+                            });
+                    });
+
+                    it("should resolve defaultBank to the expected bank for the view", function () {
+                        $injector.invoke($state.$current.parent.views["view@payment"].resolve.defaultBank)
+                            .then(function (defaultBank) {
+                                expect(defaultBank).toEqual(mockDefaultBank);
+                            });
+                    });
+
+                    describe("should resolve a maintenance object with a go function that", function () {
+                        var mockMaintenanceState = "payment.maintenance.input.amount";
+
+                        beforeEach(function () {
+                            $injector.invoke($state.$current.parent.resolve.maintenance).go(mockMaintenanceState);
+                            $rootScope.$digest();
+                        });
+
+                        it("should transition to the expected maintenance state", function () {
+                            expect($state.$current.name).toEqual(mockMaintenanceState);
+
+                            $injector.invoke(function ($stateParams) {
+                                expect($stateParams).toEqual(angular.extend({maintenanceState: maintenanceState}, $stateParams));
+                            });
                         });
                     });
                 });
