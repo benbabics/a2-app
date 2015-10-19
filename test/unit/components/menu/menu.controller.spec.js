@@ -2,6 +2,7 @@
     "use strict";
 
     var $ionicHistory,
+        $ionicSideMenuDelegate,
         ctrl,
         AuthenticationManager,
         $state,
@@ -91,13 +92,15 @@
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut"]);
             $state = jasmine.createSpyObj("state", ["go"]);
+            $ionicSideMenuDelegate = jasmine.createSpyObj("$ionicSideMenuDelegate", ["toggleRight"]);
 
             inject(function ($controller, _$ionicHistory_) {
                 $ionicHistory = _$ionicHistory_;
 
                 ctrl = $controller("MenuController", {
-                    AuthenticationManager: AuthenticationManager,
-                    $state: $state
+                    AuthenticationManager : AuthenticationManager,
+                    $state                : $state,
+                    $ionicSideMenuDelegate: $ionicSideMenuDelegate
                 });
             });
         });
@@ -113,6 +116,17 @@
 
             it("should navigate to the login page", function () {
                 expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
+            });
+        });
+
+        describe("has a closeMenu function that", function () {
+
+            beforeEach(function () {
+                ctrl.closeMenu();
+            });
+
+            it("should close the menu", function () {
+                expect($ionicSideMenuDelegate.toggleRight).toHaveBeenCalledWith(false);
             });
         });
 
