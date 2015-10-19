@@ -9,7 +9,7 @@
         AccountModel,
         UserManager,
         UsersResource,
-        mockUser = {},
+        mockUser,
         remoteUser = {};
 
     describe("A User Manager", function () {
@@ -23,7 +23,6 @@
 
             // mock dependencies
             UsersResource = jasmine.createSpyObj("UsersResource", ["getDetails"]);
-            mockUser = jasmine.createSpyObj("UserModel", ["UserModel", "set"]);
 
             module(function ($provide) {
                 $provide.value("UsersResource", UsersResource);
@@ -31,7 +30,8 @@
 
             remoteUser = jasmine.createSpyObj("UserModel", ["UserModel", "set"]);
 
-            inject(function (_$q_, _$rootScope_, _AccountModel_, globals, _UserManager_, UserModel) {
+            inject(function (_$q_, _$rootScope_, _AccountModel_, globals, _UserManager_, UserAccountModel, UserModel) {
+                mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
                 remoteUser = new UserModel();
 
                 $q = _$q_;
@@ -49,6 +49,19 @@
         describe("has an activate function that", function () {
 
             // TODO: figure out how to test this
+
+        });
+
+        describe("has a userLoggedOut event handler function that", function () {
+
+            beforeEach(function () {
+                UserManager.setUser(mockUser);
+                $rootScope.$broadcast("userLoggedOut");
+            });
+
+            it("should reset the user", function () {
+                expect(UserManager.getUser()).not.toEqual(mockUser);
+            });
 
         });
 
@@ -74,6 +87,8 @@
 
             beforeEach(function () {
                 getDetailsDeferred = $q.defer();
+
+                spyOn(mockUser, "set").and.callThrough();
 
                 UsersResource.getDetails.and.returnValue(getDetailsDeferred.promise);
 

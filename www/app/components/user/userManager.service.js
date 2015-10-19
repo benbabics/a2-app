@@ -4,7 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function UserManager(CommonService, Logger, UserModel, UsersResource) {
+    function UserManager($rootScope, CommonService, Logger, UserModel, UsersResource) {
         // Private members
         var user = {};
 
@@ -21,6 +21,12 @@
         //////////////////////
 
         function activate() {
+            $rootScope.$on("userLoggedOut", clearCachedValues);
+
+            clearCachedValues();
+        }
+
+        function clearCachedValues() {
             user = new UserModel();
         }
 

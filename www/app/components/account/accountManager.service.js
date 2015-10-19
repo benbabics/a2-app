@@ -5,7 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function AccountManager($q, CommonService, Logger, AccountModel, AccountsResource) {
+    function AccountManager($q, $rootScope, CommonService, Logger, AccountModel, AccountsResource) {
         // Private members
         var account;
 
@@ -22,6 +22,12 @@
         //////////////////////
 
         function activate() {
+            $rootScope.$on("userLoggedOut", clearCachedValues);
+
+            clearCachedValues();
+        }
+
+        function clearCachedValues() {
             account = null;
         }
 

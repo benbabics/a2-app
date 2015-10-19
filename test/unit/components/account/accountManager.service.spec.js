@@ -3,6 +3,7 @@
 
     var $q,
         $rootScope,
+        account,
         AccountManager,
         AccountsResource,
         AccountModel,
@@ -35,6 +36,8 @@
                 ShippingMethodModel = _ShippingMethodModel_;
             });
 
+            account = TestUtils.getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel);
+
             //setup spies
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
@@ -42,6 +45,19 @@
 
         describe("has an activate function that", function () {
             // TODO: figure out how to test this
+        });
+
+        describe("has a userLoggedOut event handler function that", function () {
+
+            beforeEach(function () {
+                AccountManager.setAccount(account);
+                $rootScope.$broadcast("userLoggedOut");
+            });
+
+            it("should reset the account", function () {
+                expect(AccountManager.getAccount()).toBeNull();
+            });
+
         });
 
         describe("has a fetchAccount function that", function () {
