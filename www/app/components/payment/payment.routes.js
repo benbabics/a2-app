@@ -4,8 +4,8 @@
     /* @ngInject */
     function configureRoutes($stateProvider, $urlRouterProvider) {
 
-        $urlRouterProvider.when("/payment/add/verify", function($state, globals, CommonService, PaymentManager, UserManager) {
-            validateBeforeNavigateToPaymentAdd($state, globals, CommonService, PaymentManager, UserManager);
+        $urlRouterProvider.when("/payment/add/verify", function($state, globals, CommonService, Logger, PaymentManager, UserManager) {
+            validateBeforeNavigateToPaymentAdd($state, globals, CommonService, Logger, PaymentManager, UserManager);
         });
 
         $urlRouterProvider.when("/payment/add", function(globals, $state, $stateParams) {
@@ -248,7 +248,7 @@
             $state.go("payment.maintenance.form", angular.extend({maintenanceState: maintenanceState}, $stateParams));
         }
 
-        function validateBeforeNavigateToPaymentAdd($state, globals, CommonService, PaymentManager, UserManager) {
+        function validateBeforeNavigateToPaymentAdd($state, globals, CommonService, Logger, PaymentManager, UserManager) {
             var billingAccountId;
 
             CommonService.loadingBegin();
@@ -284,6 +284,13 @@
                         // No problems we're worried about here so go to the payment add page
                         $state.go("payment.add");
                     }
+                })
+                .catch(function(errorResponse) {
+                    //TODO - What do we do here?
+
+                    Logger.error("Failed to determine payment add availability: " + errorResponse);
+
+                    $state.go("payment.list.view");
                 })
                 .finally(function () {
                     CommonService.loadingComplete();

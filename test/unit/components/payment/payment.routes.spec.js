@@ -51,6 +51,7 @@
             PaymentModel,
             InvoiceManager,
             InvoiceSummaryModel,
+            Logger,
             UserManager,
             mockDefaultBank,
             mockHasMultipleBanks,
@@ -68,12 +69,14 @@
             // mock dependencies
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks", "getDefaultBank"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayment", "fetchPaymentAddAvailability", "fetchPayments", "isPaymentEditable"]);
+            Logger = jasmine.createSpyObj("Logger", ["enabled", "error"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             module(function ($provide, sharedGlobals) {
                 $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
                 $provide.value("BankManager", BankManager);
                 $provide.value("InvoiceManager", InvoiceManager);
+                $provide.value("Logger", Logger);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
             });
@@ -1029,6 +1032,33 @@
 
                 it("should redirect to the payment add state", function () {
                     expect($state.go).toHaveBeenCalledWith(paymentAddState);
+                });
+
+            });
+
+            describe("when determining the payment add availability throws an error", function () {
+
+                var errorResponse;
+
+                beforeEach(function () {
+                    errorResponse = TestUtils.getRandomStringThatIsAlphaNumeric(20);
+
+                    fetchPaymentAddAvailabilityDeferred.reject(errorResponse);
+
+                    $location.path(paymentAddVerifyPath);
+                    $rootScope.$digest();
+                });
+
+                it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                    expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                });
+
+                it("should log the error", function () {
+                    expect(Logger.error).toHaveBeenCalledWith("Failed to determine payment add availability: " + errorResponse);
+                });
+
+                it("should redirect to the payment list", function () {
+                    expect($state.go).toHaveBeenCalledWith(paymentListState);
                 });
 
             });
