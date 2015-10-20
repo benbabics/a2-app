@@ -17,6 +17,7 @@ var TestUtils = (function () {
             getRandomInvoiceSummary          : getRandomInvoiceSummary,
             getRandomNumber                  : getRandomNumber,
             getRandomNumberWithLength        : getRandomNumberWithLength,
+            getRandomOnlineApplication       : getRandomOnlineApplication,
             getRandomPayment                 : getRandomPayment,
             getRandomPaymentAdd              : getRandomPaymentAdd,
             getRandomPaymentUpdate           : getRandomPaymentUpdate,
@@ -166,6 +167,10 @@ var TestUtils = (function () {
         return (Math.random() + 1).toString().substr(2, length);
     }
 
+    function getRandomOnlineApplication(ONLINE_APPLICATION) {
+        return getRandomValueFromMap(ONLINE_APPLICATION);
+    }
+
     function getRandomPayment(PaymentModel, BankModel) {
         var randomPayment = new PaymentModel();
 
@@ -275,15 +280,16 @@ var TestUtils = (function () {
         return result;
     }
 
-    function getRandomUser(UserModel, UserAccountModel) {
+    function getRandomUser(UserModel, UserAccountModel, ONLINE_APPLICATION) {
         var user = new UserModel();
 
         user.set({
-            email         : getRandomStringThatIsAlphaNumeric(10),
-            firstName     : getRandomStringThatIsAlphaNumeric(10),
-            username      : getRandomStringThatIsAlphaNumeric(10),
-            company       : getRandomUserAccount(UserAccountModel),
-            billingCompany: getRandomUserAccount(UserAccountModel)
+            email            : getRandomStringThatIsAlphaNumeric(10),
+            firstName        : getRandomStringThatIsAlphaNumeric(10),
+            username         : getRandomStringThatIsAlphaNumeric(10),
+            company          : getRandomUserAccount(UserAccountModel),
+            billingCompany   : getRandomUserAccount(UserAccountModel),
+            onlineApplication: getRandomOnlineApplication(ONLINE_APPLICATION)
         });
 
         return user;
@@ -293,9 +299,10 @@ var TestUtils = (function () {
         var account = new UserAccountModel();
 
         account.set({
-            accountId    : getRandomStringThatIsAlphaNumeric(10),
-            accountNumber: getRandomStringThatIsAlphaNumeric(10),
-            name         : getRandomStringThatIsAlphaNumeric(10)
+            accountId       : getRandomStringThatIsAlphaNumeric(10),
+            accountNumber   : getRandomStringThatIsAlphaNumeric(10),
+            name            : getRandomStringThatIsAlphaNumeric(10),
+            wexAccountNumber: getRandomStringThatIsAlphaNumeric(5)
         });
 
         return account;

@@ -27,7 +27,7 @@
             //restart the app history when going back to the landing page
             $ionicHistory.clearHistory();
 
-            vm.billingCompany = UserManager.getUser().billingCompany;
+            vm.user = UserManager.getUser();
 
             // the invoiceSummary object should be bound now to the object returned by fetchCurrentInvoiceSummary
             vm.invoiceSummary = currentInvoiceSummary;

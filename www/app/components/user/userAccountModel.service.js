@@ -6,6 +6,7 @@
         function UserAccountModel() {
             this.accountId = "";
             this.accountNumber = "";
+            this.wexAccountNumber = "";
             this.name = "";
         }
 

@@ -149,6 +149,13 @@
         "networkError"         : "Lost internet connection."
     };
 
+    sharedGlobals.USER = {
+        ONLINE_APPLICATION: {
+            WOL_NP : "WOL_NP",
+            CLASSIC: "CLASSIC"
+        }
+    };
+
     angular
         .module("app.shared.core")
         .constant("sharedGlobals", sharedGlobals)

@@ -8,9 +8,9 @@
 
             <div class="row header">
                 <div class="col col-100" id="companyDetails">
-                    <span>{{vm.billingCompany.name}}</span>
+                    <span>{{vm.user.billingCompany.name}}</span>
                     <br>
-                    <span class="body-text">{{vm.billingCompany.accountNumber}}</span>
+                    <span class="body-text">{{vm.user.getReadableAccountNumber()}}</span>
                 </div>
             </div>
 

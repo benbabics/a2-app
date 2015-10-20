@@ -69,8 +69,8 @@
                 $scope.$broadcast("$ionicView.beforeEnter");
             });
 
-            it("should set the billing company", function () {
-                expect(ctrl.billingCompany).toEqual(mockUser.billingCompany);
+            it("should set the user", function () {
+                expect(ctrl.user).toEqual(mockUser);
             });
 
             it("should set the invoice summary", function () {
