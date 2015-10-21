@@ -47,6 +47,16 @@
                     ]
                 }
             },
+            "*-Info.plist": {
+                "parents": {
+                    "UIRequiresFullScreen": [
+                        {
+                            "xml": "<true />",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
             "framework": {
                 "parents": {
                     "SystemConfiguration.framework": [
@@ -68,49 +78,39 @@
                         }
                     ]
                 }
-            },
-            "*-Info.plist": {
-                "parents": {
-                    "UIRequiresFullScreen": [
-                        {
-                            "xml": "<true />",
-                            "count": 1
-                        }
-                    ]
-                }
             }
         }
     },
     "installed_plugins": {
         "com.ionic.keyboard": {
-            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
-        },
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
-        },
-        "cordova-plugin-crosswalk-webview": {
-            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
-        },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
-        },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
-        },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
-        },
-        "nl.x-services.plugins.toast": {
-            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-ios-requires-fullscreen": {
-            "PACKAGE_NAME": "com.wex.wol.AccountMaintenance"
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "nl.x-services.plugins.toast": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
     "dependent_plugins": {}

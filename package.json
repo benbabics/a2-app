@@ -1,7 +1,7 @@
 {
-    "name": "acctmaint",
+    "name": "FleetSmartHub",
     "version": "1.0.0",
-    "description": "AcctMaint: An Ionic project",
+    "description": "Fleet SmartHub: An Ionic project",
     "devDependencies": {
         "bower": "^1.6.3",
         "gulp": "^3.9.0",

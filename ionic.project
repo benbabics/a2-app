@@ -1,5 +1,5 @@
 {
-  "name": "AcctMaint",
+  "name": "Fleet SmartHub",
   "app_id": "",
   "gulpStartupTasks": [
     "sass",

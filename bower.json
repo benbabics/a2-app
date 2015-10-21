@@ -1,5 +1,5 @@
 {
-  "name": "AcctMaint",
+  "name": "Fleet SmartHub",
   "private": "true",
   "dependencies": {
     "ang-accordion": "*",

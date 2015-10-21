@@ -103,7 +103,7 @@ function whiteListDomainsOnIos(rootdir, target, configObj) {
             "   <string>TLSv1.2</string>" +
             "</dict>";
 
-    var fileName = "platforms/ios/AcctMaint/AcctMaint-Info.plist",// TODO: get the project name from config.xml
+    var fileName = "platforms/ios/Fleet SmartHub/Fleet SmartHub-Info.plist",// TODO: get the project name from config.xml
         fullFileName = path.join(rootdir, fileName);
 
     if (fs.existsSync(fullFileName)) {

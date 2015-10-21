@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-packageName="com.wex.wol.accountmaintenance" android-versionCode="25" id="com.wex.wol.accountmaintenance" ios-CFBundleIdentifier="com.wex.wol.AccountMaintenance" ios-CFBundleVersion="25" version="2.0" xmlns="http://www.w3.org/ns/widgets">
-    <name>AcctMaint</name>
+<widget android-versionCode="1" id="com.wex.fleetsmarthub" ios-CFBundleVersion="1" version="1.0" xmlns="http://www.w3.org/ns/widgets">
+    <name>Fleet SmartHub</name>
     <description>
         App for managing WEX fleet accounts
     </description>
