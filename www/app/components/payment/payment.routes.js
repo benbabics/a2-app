@@ -5,7 +5,7 @@
     function configureRoutes($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.when("/payment/add/verify", function($state, globals, CommonService, Logger, PaymentManager, UserManager) {
-            validateBeforeNavigateToPaymentAdd($state, globals, CommonService, Logger, PaymentManager, UserManager);
+            validateBeforeNavigatingToPaymentAdd($state, globals, CommonService, Logger, PaymentManager, UserManager);
         });
 
         $urlRouterProvider.when("/payment/add", function(globals, $state, $stateParams) {
@@ -248,7 +248,7 @@
             $state.go("payment.maintenance.form", angular.extend({maintenanceState: maintenanceState}, $stateParams));
         }
 
-        function validateBeforeNavigateToPaymentAdd($state, globals, CommonService, Logger, PaymentManager, UserManager) {
+        function validateBeforeNavigatingToPaymentAdd($state, globals, CommonService, Logger, PaymentManager, UserManager) {
             var billingAccountId;
 
             CommonService.loadingBegin();
