@@ -14,7 +14,7 @@ var UserLoginPage = require("../../pages/userLogin.page.js");
         });
 
         it("should have a title", function () {
-            expect(browser.getTitle()).toEqual("WEX Fleet Manager");
+            expect(browser.getTitle()).toEqual("Fleet SmartHub");
         });
     });
 })();

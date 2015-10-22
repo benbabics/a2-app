@@ -36,7 +36,7 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
         });
 
         it("should have a title", function() {
-            expect(browser.getTitle()).toEqual("WEX Fleet Manager");
+            expect(browser.getTitle()).toEqual("Fleet SmartHub");
         });
 
         it("should display the Company Name", function () {

@@ -16,7 +16,7 @@
 
     appGlobals.USER_LOGIN = {
         "CONFIG": {
-            "title"       : "WEX Fleet Manager",
+            "title"       : "Fleet SmartHub",
             "userName"    : {
                 "label"    : "Username",
                 "maxLength": 30
@@ -41,7 +41,7 @@
 
     appGlobals.LANDING = {
         "CONFIG": {
-            "title"              : "WEX Fleet Manager",
+            "title"              : "Fleet SmartHub",
             "availableCredit"    : "Available",
             "billedAmount"       : "Billed",
             "unbilledAmount"     : "Unbilled",
@@ -53,20 +53,20 @@
             "cards"              : "Cards",
             "scheduledPayments"  : "Scheduled"
         },
-        "CHART": {
+        "CHART" : {
             "options": {
-                animation         : false,
+                animation            : false,
                 percentageInnerCutout: 40,
-                showTooltips      : false,
-                segmentStrokeWidth: 1,
-                scaleOverride     : true,
-                responsive        : false
+                showTooltips         : false,
+                segmentStrokeWidth   : 1,
+                scaleOverride        : true,
+                responsive           : false
             },
             "colors" : {
                 availableCreditPositive: "#39802b",
                 availableCreditNegative: "#b30308",
-                billedAmount  : "#334c5b",
-                unbilledAmount: "#3799b3"
+                billedAmount           : "#334c5b",
+                unbilledAmount         : "#3799b3"
             }
         }
     };
@@ -101,7 +101,7 @@
 
     appGlobals.CARD_CHANGE_STATUS = {
         "CONFIG": {
-            "statuses": {
+            "statuses"         : {
                 "activate" : "Activate Card",
                 "terminate": "Terminate Card"
             },
@@ -143,7 +143,7 @@
             "submitButton"       : "Reissue Card",
             "instructionalText"  : "Orders received after 3:00 pm Eastern Time may be processed the next business day.",
             "poBoxText"          : "Please Note: You have a P.O. Box address listed. Your card will be delivered via regular mail.",
-            "confirmationPopup": {
+            "confirmationPopup"  : {
                 "content"  : "Are you sure you want to reissue this card?",
                 "yesButton": "Yes",
                 "noButton" : "No"
@@ -169,7 +169,7 @@
                 "title": "Select Shipping Method"
             }
         },
-        "REISSUE_REASON": {
+        "REISSUE_REASON" : {
             "CONFIG": {
                 "title": "Select Reason"
             }
@@ -197,7 +197,7 @@
 
     appGlobals.PAYMENT_MAINTENANCE = {
         STATES: {
-            "ADD": "ADD",
+            "ADD"   : "ADD",
             "UPDATE": "UPDATE"
         }
     };
@@ -242,7 +242,7 @@
                 "title": "Make Payment"
             }
         },
-        "UPDATE"  : {
+        "UPDATE": {
             "CONFIG": {
                 "title": "Edit Payment"
             }
@@ -267,7 +267,7 @@
         "ADD"     : {
             "CONFIG": {}
         },
-        "UPDATE"    : {
+        "UPDATE"  : {
             "CONFIG": {}
         }
     };
@@ -284,7 +284,7 @@
         "ADD"   : {
             "CONFIG": {}
         },
-        "UPDATE"  : {
+        "UPDATE": {
             "CONFIG": {}
         }
     };
@@ -341,9 +341,9 @@
 
     appGlobals.TRANSACTION_LIST = {
         "CONFIG"        : {
-            "title"          : "Transaction Activity",
-            "reloadDistance" : "5%",
-            "emptyList"      : "No Records Found."
+            "title"         : "Transaction Activity",
+            "reloadDistance": "5%",
+            "emptyList"     : "No Records Found."
         },
         "SEARCH_OPTIONS": {
             "MAX_DAYS" : 60,
@@ -370,8 +370,7 @@
     };
 
     appGlobals.NAV_BAR = {
-        "CONFIG": {
-        }
+        "CONFIG": {}
     };
 
     appGlobals.MENU = {
