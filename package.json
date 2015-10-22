@@ -4,6 +4,7 @@
     "description": "Fleet SmartHub: An Ionic project",
     "devDependencies": {
         "bower": "^1.6.3",
+        "elementtree": "^0.1.6",
         "gulp": "^3.9.0",
         "gulp-angular-filesort": "^1.1.1",
         "gulp-bower-overrides": "^0.1.1",
