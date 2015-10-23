@@ -22,7 +22,7 @@
             this.billingCompany.set(userResource.billingCompany);
         };
 
-        UserModel.prototype.getReadableAccountNumber = function () {
+        UserModel.prototype.getDisplayAccountNumber = function () {
             var ONLINE_APPLICATION = globals.USER.ONLINE_APPLICATION;
 
             switch (this.onlineApplication) {

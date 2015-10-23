@@ -82,7 +82,7 @@
 
         });
 
-        describe("has a getReadableAccountNumber function that", function () {
+        describe("has a getDisplayAccountNumber function that", function () {
 
             describe("when the online application type is WOL_NP", function () {
 
@@ -91,7 +91,7 @@
                 });
 
                 it("should return the accountNumber", function () {
-                    expect(user.getReadableAccountNumber()).toEqual(user.billingCompany.accountNumber);
+                    expect(user.getDisplayAccountNumber()).toEqual(user.billingCompany.accountNumber);
                 });
             });
 
@@ -102,7 +102,7 @@
                 });
 
                 it("should return the wexAccountNumber", function () {
-                    expect(user.getReadableAccountNumber()).toEqual(user.billingCompany.wexAccountNumber);
+                    expect(user.getDisplayAccountNumber()).toEqual(user.billingCompany.wexAccountNumber);
                 });
             });
 
@@ -113,7 +113,7 @@
                 });
 
                 it("should return the accountNumber", function () {
-                    expect(user.getReadableAccountNumber()).toEqual(user.billingCompany.accountNumber);
+                    expect(user.getDisplayAccountNumber()).toEqual(user.billingCompany.accountNumber);
                 });
             });
 
@@ -124,7 +124,7 @@
                 });
 
                 it("should return the accountNumber", function () {
-                    expect(user.getReadableAccountNumber()).toEqual(user.billingCompany.accountNumber);
+                    expect(user.getDisplayAccountNumber()).toEqual(user.billingCompany.accountNumber);
                 });
             });
 
@@ -135,7 +135,7 @@
                 });
 
                 it("should return the accountNumber", function () {
-                    expect(user.getReadableAccountNumber()).toEqual(user.billingCompany.accountNumber);
+                    expect(user.getDisplayAccountNumber()).toEqual(user.billingCompany.accountNumber);
                 });
             });
 
@@ -146,7 +146,7 @@
                 });
 
                 it("should return the accountNumber", function () {
-                    expect(user.getReadableAccountNumber()).toEqual(user.billingCompany.accountNumber);
+                    expect(user.getDisplayAccountNumber()).toEqual(user.billingCompany.accountNumber);
                 });
             });
         });
