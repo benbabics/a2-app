@@ -89,13 +89,13 @@
 
         describe("has a hasDefaultCarrier function that", function () {
 
-            it("should return true when account.cardShippingCarrier.default is true", function () {
+            it("should return true when account.cardShippingCarrier.accountDefault is true", function () {
                 cardReissueDetails.account.cardShippingCarrier.accountDefault = true;
 
                 expect(cardReissueDetails.hasDefaultCarrier()).toBeTruthy();
             });
 
-            it("should return false when account.cardShippingCarrier.default is false", function () {
+            it("should return false when account.cardShippingCarrier.accountDefault is false", function () {
                 cardReissueDetails.account.cardShippingCarrier.accountDefault = false;
 
                 expect(cardReissueDetails.hasDefaultCarrier()).toBeFalsy();
