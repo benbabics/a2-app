@@ -106,7 +106,8 @@
 
             BANK_ACCOUNT_NAME_DISPLAY_OVERRIDE: {
                 DIRECT_DEBIT: "N/A",
-                CHECK       : "N/A"
+                CHECK       : "N/A",
+                UNKNOWN     : "N/A"
             }
         }
     };

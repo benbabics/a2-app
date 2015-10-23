@@ -154,8 +154,8 @@
                     payment.method = "UNKNOWN";
                 });
 
-                it("should return the bank account's display name", function () {
-                    expect(payment.getBankAccountDisplayName()).toEqual(payment.bankAccount.getDisplayName());
+                it("should return 'N/A'", function () {
+                    expect(payment.getBankAccountDisplayName()).toEqual("N/A");
                 });
             });
 
