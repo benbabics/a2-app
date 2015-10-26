@@ -3,7 +3,7 @@
 
     //TODO - Move as much logic out of here as possible
 
-    function coreRun($cordovaSplashscreen, $rootScope, $state, $ionicPlatform, globals, AuthenticationManager, CommonService) {
+    function coreRun($rootScope, $state, $ionicPlatform, globals, AuthenticationManager, CommonService) {
 
         function isExitState(stateName) {
             return "app.exit" === stateName;
@@ -44,15 +44,6 @@
         //see: http://forum.ionicframework.com/t/ion-nav-bar-top-padding-in-ios7/2488/12
         $ionicPlatform.ready(function() {
             ionic.Platform.fullScreen(true, true);
-        });
-
-        //make sure a view has loaded and that the ionic platform is ready before hiding the splash screen
-        $rootScope.$on("$ionicView.loaded", function() {
-            $ionicPlatform.ready(function() {
-                setTimeout(function() {
-                    $cordovaSplashscreen.hide();
-                }, 2000);
-            });
         });
 
         $rootScope.$on("$stateChangeStart", validateRoutePreconditions);

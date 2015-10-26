@@ -18,9 +18,16 @@
                     controller: "LoginController as vm"
                 }
             },
-            onEnter: function(AuthenticationManager) {
+            onEnter: function($cordovaSplashscreen, $ionicPlatform, $timeout, AuthenticationManager) {
                 //log out the user
                 AuthenticationManager.logOut();
+
+                //make sure the ionic platform is ready before hiding the splash screen
+                $ionicPlatform.ready(function() {
+                    $timeout(function() {
+                        $cordovaSplashscreen.hide();
+                    }, 2000);
+                });
             }
         });
     }
