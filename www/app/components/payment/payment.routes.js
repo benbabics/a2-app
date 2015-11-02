@@ -4,9 +4,7 @@
     /* @ngInject */
     function configureRoutes($stateProvider, $urlRouterProvider) {
 
-        $urlRouterProvider.when("/payment/add/verify", function($state, globals, CommonService, Logger, PaymentManager, UserManager) {
-            validateBeforeNavigatingToPaymentAdd($state, globals, CommonService, Logger, PaymentManager, UserManager);
-        });
+        $urlRouterProvider.when("/payment/add/verify", validateBeforeNavigatingToPaymentAdd);
 
         $urlRouterProvider.when("/payment/add", function(globals, $state, $stateParams) {
             goToMaintenanceFlow(globals.PAYMENT_MAINTENANCE.STATES.ADD, $state, $stateParams);
@@ -248,8 +246,9 @@
             $state.go("payment.maintenance.form", angular.extend({maintenanceState: maintenanceState}, $stateParams));
         }
 
-        function validateBeforeNavigatingToPaymentAdd($state, globals, CommonService, Logger, PaymentManager, UserManager) {
-            var billingAccountId;
+        function validateBeforeNavigatingToPaymentAdd($state, $rootScope, globals, CommonService, Logger, PaymentManager, UserManager) {
+            var billingAccountId,
+                removeListener;
 
             CommonService.loadingBegin();
 
@@ -275,9 +274,13 @@
                     if (errorMessage) {
                         $state.go("payment.list.view");
 
-                        CommonService.displayAlert({
-                            content: errorMessage,
-                            buttonCssClass: "button-submit"
+                        removeListener = $rootScope.$on("$stateChangeSuccess", function () {
+                            removeListener();
+
+                            CommonService.displayAlert({
+                                content       : errorMessage,
+                                buttonCssClass: "button-submit"
+                            });
                         });
                     }
                     else {

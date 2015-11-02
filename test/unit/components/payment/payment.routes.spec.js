@@ -867,6 +867,7 @@
 
                 spyOn($state, "go");
                 spyOn(CommonService, "displayAlert");
+                spyOn($rootScope, "$on").and.callThrough();
             });
 
             describe("when bank accounts have NOT been setup", function () {
@@ -890,15 +891,27 @@
                     expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                 });
 
-                it("should call CommonService.displayAlert", function () {
-                    expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                        content       : mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
-                        buttonCssClass: "button-submit"
-                    });
+                it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
+                    expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                 });
 
                 it("should redirect to the payment list", function () {
                     expect($state.go).toHaveBeenCalledWith(paymentListState);
+                });
+
+                describe("when the page redirect completes", function () {
+
+                    beforeEach(function () {
+                        $rootScope.$broadcast("$stateChangeSuccess");
+                        $rootScope.$digest();
+                    });
+
+                    it("should call CommonService.displayAlert", function () {
+                        expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                            content       : mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
+                            buttonCssClass: "button-submit"
+                        });
+                    });
                 });
 
             });
@@ -924,15 +937,27 @@
                     expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                 });
 
-                it("should call CommonService.displayAlert", function () {
-                    expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                        content       : mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
-                        buttonCssClass: "button-submit"
-                    });
+                it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
+                    expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                 });
 
                 it("should redirect to the payment list", function () {
                     expect($state.go).toHaveBeenCalledWith(paymentListState);
+                });
+
+                describe("when the page redirect completes", function () {
+
+                    beforeEach(function () {
+                        $rootScope.$broadcast("$stateChangeSuccess");
+                        $rootScope.$digest();
+                    });
+
+                    it("should call CommonService.displayAlert", function () {
+                        expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                            content       : mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
+                            buttonCssClass: "button-submit"
+                        });
+                    });
                 });
 
             });
@@ -958,15 +983,27 @@
                     expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                 });
 
-                it("should call CommonService.displayAlert", function () {
-                    expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                        content       : mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
-                        buttonCssClass: "button-submit"
-                    });
+                it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
+                    expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                 });
 
                 it("should redirect to the payment list", function () {
                     expect($state.go).toHaveBeenCalledWith(paymentListState);
+                });
+
+                describe("when the page redirect completes", function () {
+
+                    beforeEach(function () {
+                        $rootScope.$broadcast("$stateChangeSuccess");
+                        $rootScope.$digest();
+                    });
+
+                    it("should call CommonService.displayAlert", function () {
+                        expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                            content       : mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
+                            buttonCssClass: "button-submit"
+                        });
+                    });
                 });
 
             });
@@ -992,15 +1029,27 @@
                     expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                 });
 
-                it("should call CommonService.displayAlert", function () {
-                    expect(CommonService.displayAlert).toHaveBeenCalledWith({
-                        content       : mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
-                        buttonCssClass: "button-submit"
-                    });
+                it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
+                    expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                 });
 
                 it("should redirect to the payment list", function () {
                     expect($state.go).toHaveBeenCalledWith(paymentListState);
+                });
+
+                describe("when the page redirect completes", function () {
+
+                    beforeEach(function () {
+                        $rootScope.$broadcast("$stateChangeSuccess");
+                        $rootScope.$digest();
+                    });
+
+                    it("should call CommonService.displayAlert", function () {
+                        expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                            content       : mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
+                            buttonCssClass: "button-submit"
+                        });
+                    });
                 });
 
             });
@@ -1026,12 +1075,24 @@
                     expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                 });
 
-                it("should NOT call CommonService.displayAlert", function () {
-                    expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                it("should NOT set an event listener for $stateChangeSuccess to display the alert popup", function () {
+                    expect($rootScope.$on).not.toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                 });
 
                 it("should redirect to the payment add state", function () {
                     expect($state.go).toHaveBeenCalledWith(paymentAddState);
+                });
+
+                describe("when the page redirect completes", function () {
+
+                    beforeEach(function () {
+                        $rootScope.$broadcast("$stateChangeSuccess");
+                        $rootScope.$digest();
+                    });
+
+                    it("should NOT call CommonService.displayAlert", function () {
+                        expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                    });
                 });
 
             });
