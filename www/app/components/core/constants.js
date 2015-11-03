@@ -207,7 +207,7 @@
             "invoiceNumber"           : "Invoice Number",
             "paymentDueDate"          : "Due Date",
             "currentBalance"          : "Current Balance",
-            "minimumPayment"          : "Statement Balance",
+            "statementBalance"        : "Statement Balance",
             "enterAmount"             : "Enter Amount",
             "amount"                  : "Amount",
             "bankAccount"             : "Bank Account",
