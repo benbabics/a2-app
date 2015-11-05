@@ -62,7 +62,7 @@
             });
 
             it("should set payment.amount to the expected value", function () {
-                expect(mockPayment.amount).toEqual(mockInvoiceSummary.minimumPaymentDue);
+                expect(mockPayment.amount).toEqual(mockInvoiceSummary.statementBalance);
             });
 
             it("should set payment.scheduledDate to the expected value", function () {

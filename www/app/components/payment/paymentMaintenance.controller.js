@@ -19,7 +19,7 @@
         }
 
         function initializePaymentDetails() {
-            payment.amount = InvoiceManager.getInvoiceSummary().minimumPaymentDue;
+            payment.amount = InvoiceManager.getInvoiceSummary().statementBalance;
             payment.scheduledDate = new Date();
             payment.bankAccount = defaultBank;
         }
