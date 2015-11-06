@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    var ctrl,
+    var _,
+        ctrl,
         $rootScope,
         $scope,
         mockAccount,
@@ -16,8 +17,9 @@
             module("app.components.card");
             module("app.components.account");
 
-            inject(function (_$rootScope_, AccountModel, AddressModel, CardModel, CardReissueModel, ShippingCarrierModel, ShippingMethodModel) {
+            inject(function (_$rootScope_, AccountModel, AddressModel, CardModel, CardReissueModel, CommonService, ShippingCarrierModel, ShippingMethodModel) {
                 $rootScope = _$rootScope_;
+                _ = CommonService._;
 
                 $scope = $rootScope.$new();
 
@@ -33,44 +35,90 @@
                 mockAccount.defaultCardShippingAddress.addressLine1 = "PO Box " + TestUtils.getRandomInteger(1, 1000);
             });
 
-            beforeEach(function () {
-                inject(function ($controller) {
+            describe("when the Regular shipping method is available", function () {
 
-                    ctrl = $controller("CardReissueController", {
-                        $scope            : $scope,
-                        account           : mockAccount,
-                        card              : mockCard,
-                        cardReissueDetails: mockCardReissueDetails
+                beforeEach(function () {
+                    mockAccount.cardShippingCarrier.shippingMethods.push(mockAccount.regularCardShippingMethod);
+                });
+
+                beforeEach(function () {
+                    inject(function ($controller) {
+
+                        ctrl = $controller("CardReissueController", {
+                            $scope            : $scope,
+                            account           : mockAccount,
+                            card              : mockCard,
+                            cardReissueDetails: mockCardReissueDetails
+                        });
                     });
+                });
+
+                it("should set the expected account on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.account).toEqual(mockAccount);
+                });
+
+                it("should set the expected card on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.originalCard).toEqual(mockCard);
+                });
+
+                it("should set reissuedCard to be falsy", function () {
+                    expect(mockCardReissueDetails.reissuedCard).toBeFalsy();
+                });
+
+                it("should set the expected shippingAddress on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.shippingAddress).toEqual(mockAccount.defaultCardShippingAddress);
+                });
+
+                it("should set the expected reissueReason on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.reissueReason).toEqual("");
+                });
+
+                it("should set the expected selectedShippingMethod on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.selectedShippingMethod).toEqual(mockAccount.regularCardShippingMethod);
+                });
+
+                it("should set the expected shippingMethods on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.shippingMethods).toEqual([mockAccount.regularCardShippingMethod]);
                 });
             });
 
-            it("should set the expected account on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.account).toEqual(mockAccount);
-            });
+            describe("when the Regular shipping method is NOT available", function () {
 
-            it("should set the expected card on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.originalCard).toEqual(mockCard);
-            });
+                beforeEach(function () {
+                    _.remove(mockAccount.cardShippingCarrier.shippingMethods, {id: mockAccount.regularCardShippingMethod.id});
+                });
 
-            it("should set reissuedCard to be falsy", function () {
-                expect(mockCardReissueDetails.reissuedCard).toBeFalsy();
-            });
+                beforeEach(function () {
+                    inject(function ($controller) {
 
-            it("should set the expected shippingAddress on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.shippingAddress).toEqual(mockAccount.defaultCardShippingAddress);
-            });
+                        ctrl = $controller("CardReissueController", {
+                            $scope            : $scope,
+                            account           : mockAccount,
+                            card              : mockCard,
+                            cardReissueDetails: mockCardReissueDetails
+                        });
+                    });
+                });
 
-            it("should set the expected reissueReason on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.reissueReason).toEqual("");
-            });
+                it("should set the expected account on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.account).toEqual(mockAccount);
+                });
 
-            it("should set the expected selectedShippingMethod on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.selectedShippingMethod).toEqual(mockAccount.regularCardShippingMethod);
-            });
+                it("should set the expected card on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.originalCard).toEqual(mockCard);
+                });
 
-            it("should set the expected shippingMethods on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.shippingMethods).toEqual([mockAccount.regularCardShippingMethod]);
+                it("should set reissuedCard to be falsy", function () {
+                    expect(mockCardReissueDetails.reissuedCard).toBeFalsy();
+                });
+
+                it("should set the expected shippingAddress on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.shippingAddress).toEqual(mockAccount.defaultCardShippingAddress);
+                });
+
+                it("should set the expected reissueReason on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.reissueReason).toEqual("");
+                });
             });
         });
 
@@ -80,48 +128,98 @@
                 mockAccount.defaultCardShippingAddress.addressLine1 = TestUtils.getRandomStringThatIsAlphaNumeric(20);
             });
 
-            beforeEach(function () {
-                inject(function ($controller) {
+            describe("when the Regular shipping method is available", function () {
 
-                    ctrl = $controller("CardReissueController", {
-                        $scope            : $scope,
-                        account           : mockAccount,
-                        card              : mockCard,
-                        cardReissueDetails: mockCardReissueDetails
+                beforeEach(function () {
+                    mockAccount.cardShippingCarrier.shippingMethods.push(mockAccount.regularCardShippingMethod);
+                });
+
+                beforeEach(function () {
+                    inject(function ($controller) {
+
+                        ctrl = $controller("CardReissueController", {
+                            $scope            : $scope,
+                            account           : mockAccount,
+                            card              : mockCard,
+                            cardReissueDetails: mockCardReissueDetails
+                        });
                     });
+                });
+
+                it("should set the expected account on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.account).toEqual(mockAccount);
+                });
+
+                it("should set the expected card on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.originalCard).toEqual(mockCard);
+                });
+
+                it("should set reissuedCard to be falsy", function () {
+                    expect(mockCardReissueDetails.reissuedCard).toBeFalsy();
+                });
+
+                it("should set the expected shippingAddress on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.shippingAddress).toEqual(mockAccount.defaultCardShippingAddress);
+                });
+
+                it("should set the expected reissueReason on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.reissueReason).toEqual("");
+                });
+
+                it("should set the expected selectedShippingMethod on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.selectedShippingMethod).toEqual(mockCardReissueDetails.getDefaultShippingMethod());
+                });
+
+                it("should move the regular shipping method to the front of the shipping methods array", function () {
+                    var expectedArray = mockAccount.cardShippingCarrier.shippingMethods.slice();
+                    _.remove(expectedArray, {id: mockAccount.regularCardShippingMethod.id});
+                    expectedArray.unshift(mockAccount.regularCardShippingMethod);
+
+                    expect(mockCardReissueDetails.shippingMethods).toEqual(expectedArray);
                 });
             });
 
-            it("should set the expected account on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.account).toEqual(mockAccount);
-            });
+            describe("when the Regular shipping method is NOT available", function () {
 
-            it("should set the expected card on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.originalCard).toEqual(mockCard);
-            });
+                beforeEach(function () {
+                    _.remove(mockAccount.cardShippingCarrier.shippingMethods, {id: mockAccount.regularCardShippingMethod.id});
+                });
 
-            it("should set reissuedCard to be falsy", function () {
-                expect(mockCardReissueDetails.reissuedCard).toBeFalsy();
-            });
+                beforeEach(function () {
+                    inject(function ($controller) {
 
-            it("should set the expected shippingAddress on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.shippingAddress).toEqual(mockAccount.defaultCardShippingAddress);
-            });
+                        ctrl = $controller("CardReissueController", {
+                            $scope            : $scope,
+                            account           : mockAccount,
+                            card              : mockCard,
+                            cardReissueDetails: mockCardReissueDetails
+                        });
+                    });
+                });
 
-            it("should set the expected reissueReason on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.reissueReason).toEqual("");
-            });
+                it("should set the expected account on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.account).toEqual(mockAccount);
+                });
 
-            it("should set the expected selectedShippingMethod on cardReissueDetails", function () {
-                expect(mockCardReissueDetails.selectedShippingMethod).toEqual(mockCardReissueDetails.getDefaultShippingMethod());
-            });
+                it("should set the expected card on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.originalCard).toEqual(mockCard);
+                });
 
-            it("should move the regular shipping method to the front of the shipping methods array", function () {
-                var expectedArray = mockAccount.cardShippingCarrier.shippingMethods.slice();
-                _.remove(expectedArray, {id: mockAccount.regularCardShippingMethod.id});
-                expectedArray.unshift(mockAccount.regularCardShippingMethod);
+                it("should set reissuedCard to be falsy", function () {
+                    expect(mockCardReissueDetails.reissuedCard).toBeFalsy();
+                });
 
-                expect(mockCardReissueDetails.shippingMethods).toEqual(expectedArray);
+                it("should set the expected shippingAddress on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.shippingAddress).toEqual(mockAccount.defaultCardShippingAddress);
+                });
+
+                it("should set the expected reissueReason on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.reissueReason).toEqual("");
+                });
+
+                it("should set the expected selectedShippingMethod on cardReissueDetails", function () {
+                    expect(mockCardReissueDetails.selectedShippingMethod).toEqual(mockCardReissueDetails.getDefaultShippingMethod());
+                });
             });
         });
     });

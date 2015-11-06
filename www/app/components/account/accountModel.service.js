@@ -27,6 +27,10 @@
             this.cardShippingCarrier.set(accountResource.cardShippingCarrier);
         };
 
+        AccountModel.prototype.hasRegularShippingMethod = function () {
+            return _.find(this.cardShippingCarrier.shippingMethods, {id: this.regularCardShippingMethod.id});
+        };
+
         return AccountModel;
     };
 

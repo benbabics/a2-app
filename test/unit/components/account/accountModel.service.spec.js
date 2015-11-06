@@ -3,21 +3,25 @@
 
     describe("An Account Model Service", function () {
 
-        var _;
+        var _,
+            ShippingMethodModel,
+            account;
 
         beforeEach(function () {
             module("app.shared");
             module("app.components.account");
 
-            inject(function (CommonService) {
+            inject(function (AccountModel, AddressModel, CommonService, ShippingCarrierModel, _ShippingMethodModel_) {
                 _ = CommonService._;
+                ShippingMethodModel = _ShippingMethodModel_;
+
+                account = TestUtils.getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel);
             });
         });
 
         describe("has a set function that", function () {
 
-            var account,
-                mockAccountResource,
+            var mockAccountResource,
                 accountModelKeys,
                 accountResourceKeys;
 
@@ -78,6 +82,31 @@
                 }
             });
 
+        });
+
+        describe("has a hasRegularShippingMethod method that", function () {
+
+            describe("when the cardShippingCarrier has a Regular shipping method", function () {
+
+                beforeEach(function () {
+                    account.cardShippingCarrier.shippingMethods.push(account.regularCardShippingMethod);
+                });
+
+                it("should return true", function () {
+                    expect(account.hasRegularShippingMethod()).toBeTruthy();
+                });
+            });
+
+            describe("when the cardShippingCarrier does NOT have a Regular shipping method", function () {
+
+                beforeEach(function () {
+                    _.remove(account.cardShippingCarrier.shippingMethods, {id: account.regularCardShippingMethod.id});
+                });
+
+                it("should return false", function () {
+                    expect(account.hasRegularShippingMethod()).toBeFalsy();
+                });
+            });
         });
 
     });

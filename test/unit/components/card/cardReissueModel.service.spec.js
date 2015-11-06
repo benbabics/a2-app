@@ -4,6 +4,7 @@
     describe("A Card Reissue Model Service", function () {
 
         var _,
+            ShippingMethodModel,
             sharedGlobals,
             cardReissueDetails;
 
@@ -13,9 +14,10 @@
             module("app.components.card");
 
             inject(function (CommonService, CardReissueModel, AccountModel, AddressModel, CardModel,
-                             ShippingCarrierModel, ShippingMethodModel, _sharedGlobals_) {
+                             ShippingCarrierModel, _ShippingMethodModel_, _sharedGlobals_) {
                 _ = CommonService._;
                 sharedGlobals = _sharedGlobals_;
+                ShippingMethodModel = _ShippingMethodModel_;
 
                 cardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel,
                     ShippingCarrierModel, ShippingMethodModel);
@@ -252,7 +254,7 @@
         describe("has a getDefaultShippingMethod function that", function () {
 
             beforeEach(function () {
-                _.forEach(cardReissueDetails.account.cardShippingCarrier.shippingMethods, function(shippingMethod) {
+                _.forEach(cardReissueDetails.shippingMethods, function(shippingMethod) {
                     shippingMethod.default = false;
                 });
             });
@@ -261,7 +263,7 @@
                 var defaultShippingMethod;
 
                 beforeEach(function () {
-                    defaultShippingMethod = TestUtils.getRandomValueFromArray(cardReissueDetails.account.cardShippingCarrier.shippingMethods);
+                    defaultShippingMethod = TestUtils.getRandomValueFromArray(cardReissueDetails.shippingMethods);
                     defaultShippingMethod.default = true;
                 });
 
@@ -272,8 +274,69 @@
 
             describe("when there is NOT a default shipping method", function () {
 
-                it("should return the regular shipping method", function () {
-                    expect(cardReissueDetails.getDefaultShippingMethod()).toEqual(cardReissueDetails.account.regularCardShippingMethod);
+                describe("when there is a regular shipping method", function () {
+
+                    beforeEach(function () {
+                        cardReissueDetails.shippingMethods.push(cardReissueDetails.account.regularCardShippingMethod);
+                    });
+
+                    it("should return the regular shipping method", function () {
+                        expect(cardReissueDetails.getDefaultShippingMethod()).toEqual(cardReissueDetails.account.regularCardShippingMethod);
+                    });
+                });
+
+                describe("when there is NOT a regular shipping method", function () {
+
+                    beforeEach(function () {
+                        _.remove(cardReissueDetails.shippingMethods, {id: cardReissueDetails.account.regularCardShippingMethod.id});
+                    });
+
+                    describe("when there is at least one shipping method", function () {
+
+                        beforeEach(function () {
+                            cardReissueDetails.shippingMethods.push(TestUtils.getRandomShippingMethod(ShippingMethodModel));
+                        });
+
+                        it("should return the first shipping method", function () {
+                            expect(cardReissueDetails.getDefaultShippingMethod()).toEqual(cardReissueDetails.shippingMethods[0]);
+                        });
+                    });
+
+                    describe("when there are no shipping methods", function () {
+
+                        beforeEach(function () {
+                            cardReissueDetails.shippingMethods = [];
+                        });
+
+                        it("should return null", function () {
+                            expect(cardReissueDetails.getDefaultShippingMethod()).toEqual(null);
+                        });
+                    });
+                });
+            });
+        });
+
+        describe("has a hasRegularShippingMethod method that", function () {
+
+            describe("when there is a Regular shipping method", function () {
+
+                beforeEach(function () {
+                    cardReissueDetails.shippingMethods.push(cardReissueDetails.account.regularCardShippingMethod);
+                });
+
+                it("should return true", function () {
+                    expect(cardReissueDetails.hasRegularShippingMethod()).toBeTruthy();
+                });
+            });
+
+            describe("when there is NOT a Regular shipping method", function () {
+
+                beforeEach(function () {
+                    _.remove(cardReissueDetails.shippingMethods, {id: cardReissueDetails.account.regularCardShippingMethod.id});
+                });
+
+                it("should return false", function () {
+                    expect(cardReissueDetails.hasRegularShippingMethod()).toBeFalsy();
                 });
             });
         });

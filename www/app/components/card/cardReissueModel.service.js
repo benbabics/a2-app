@@ -44,7 +44,20 @@
         };
 
         CardReissueModel.prototype.getDefaultShippingMethod = function () {
-            return this.account.cardShippingCarrier.getDefaultShippingMethod() || this.account.regularCardShippingMethod;
+            var defaultShippingMethod = _.find(this.shippingMethods, {default: true});
+
+            if (defaultShippingMethod) {
+                return defaultShippingMethod;
+            }
+            else if (this.hasRegularShippingMethod()) {
+                return this.account.regularCardShippingMethod;
+            }
+            else if (this.shippingMethods.length > 0) {
+                return this.shippingMethods[0];
+            }
+            else {
+                return null;
+            }
         };
 
         CardReissueModel.prototype.getReissueReasonDisplayName = function(reissueReason) {
@@ -75,6 +88,10 @@
 
         CardReissueModel.prototype.hasDefaultCarrier = function () {
             return this.account.cardShippingCarrier.accountDefault;
+        };
+
+        CardReissueModel.prototype.hasRegularShippingMethod = function () {
+            return _.find(this.shippingMethods, {id: this.account.regularCardShippingMethod.id});
         };
 
         return CardReissueModel;
