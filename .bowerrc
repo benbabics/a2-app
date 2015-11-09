@@ -1,6 +1,6 @@
 {
   "directory": "./www/lib",
   "scripts": {
-    "postinstall": "wiredep -s ./www/index.html"
+    "postinstall": "wiredep -s ./www/index.html -e /angular/"
   }
 }
