@@ -113,10 +113,23 @@ var TestUtils = (function () {
             selectedShippingMethod: getRandomShippingMethod(ShippingMethodModel),
             shippingMethods       : (function () {
                 var shippingMethods = [],
-                    numMethods = getRandomInteger(1, 5);
+                    shippingMethod,
+                    numMethods = getRandomInteger(1, 5),
+                    createdDefault = false;
 
                 for (var i = 0; i < numMethods; ++i) {
-                    shippingMethods.push(getRandomShippingMethod(ShippingMethodModel));
+                    shippingMethod = getRandomShippingMethod(ShippingMethodModel);
+
+                    if(!createdDefault && getRandomBoolean()) {
+                        shippingMethod.default = true;
+
+                        createdDefault = true;
+                    }
+                    else {
+                        shippingMethod.default = false;
+                    }
+
+                    shippingMethods.push(shippingMethod);
                 }
 
                 return shippingMethods;
@@ -240,14 +253,27 @@ var TestUtils = (function () {
         shippingCarrier.set({
             id             : getRandomStringThatIsAlphaNumeric(5),
             name           : getRandomStringThatIsAlphaNumeric(10),
-            isDefault      : getRandomBoolean(),
+            default        : getRandomBoolean(),
             wexDefault     : getRandomBoolean(),
             shippingMethods: (function () {
                 var shippingMethods = [],
-                    numMethods = getRandomInteger(1, 5);
+                    shippingMethod,
+                    numMethods = getRandomInteger(1, 5),
+                    createdDefault = false;
 
                 for (var i = 0; i < numMethods; ++i) {
-                    shippingMethods.push(getRandomShippingMethod(ShippingMethodModel));
+                    shippingMethod = getRandomShippingMethod(ShippingMethodModel);
+
+                    if(!createdDefault && getRandomBoolean()) {
+                        shippingMethod.default = true;
+
+                        createdDefault = true;
+                    }
+                    else {
+                        shippingMethod.default = false;
+                    }
+
+                    shippingMethods.push(shippingMethod);
                 }
 
                 return shippingMethods;
@@ -265,7 +291,7 @@ var TestUtils = (function () {
             name        : getRandomStringThatIsAlphaNumeric(10),
             cost        : getRandomNumber(1, 10),
             poBoxAllowed: getRandomBoolean(),
-            isDefault   : getRandomBoolean()
+            default     : getRandomBoolean()
         });
 
         return shippingMethod;

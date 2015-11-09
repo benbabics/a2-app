@@ -294,7 +294,10 @@
                     describe("when there is at least one shipping method", function () {
 
                         beforeEach(function () {
-                            cardReissueDetails.shippingMethods.push(TestUtils.getRandomShippingMethod(ShippingMethodModel));
+                            var shippingMethod = TestUtils.getRandomShippingMethod(ShippingMethodModel);
+                            shippingMethod.default = false;
+
+                            cardReissueDetails.shippingMethods.push(shippingMethod);
                         });
 
                         it("should return the first shipping method", function () {

@@ -132,6 +132,7 @@
 
                 beforeEach(function () {
                     mockAccount.cardShippingCarrier.shippingMethods.push(mockAccount.regularCardShippingMethod);
+                    mockAccount.regularCardShippingMethod.default = false;
                 });
 
                 beforeEach(function () {
