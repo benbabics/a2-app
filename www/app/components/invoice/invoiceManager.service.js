@@ -21,7 +21,7 @@
         //////////////////////
 
         function activate() {
-            $rootScope.$on("userLoggedOut", clearCachedValues);
+            $rootScope.$on("app:logout", clearCachedValues);
 
             clearCachedValues();
         }

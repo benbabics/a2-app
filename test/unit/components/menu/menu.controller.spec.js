@@ -4,7 +4,7 @@
     var $ionicHistory,
         $ionicSideMenuDelegate,
         ctrl,
-        AuthenticationManager,
+        CommonService,
         $state,
         mockGlobals = {
             LOGIN_STATE: "user.auth.login",
@@ -90,7 +90,7 @@
             });
 
             // mock dependencies
-            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut"]);
+            CommonService = jasmine.createSpyObj("CommonService", ["logOut"]);
             $state = jasmine.createSpyObj("state", ["go"]);
             $ionicSideMenuDelegate = jasmine.createSpyObj("$ionicSideMenuDelegate", ["toggleRight"]);
 
@@ -98,7 +98,7 @@
                 $ionicHistory = _$ionicHistory_;
 
                 ctrl = $controller("MenuController", {
-                    AuthenticationManager : AuthenticationManager,
+                    CommonService         : CommonService,
                     $state                : $state,
                     $ionicSideMenuDelegate: $ionicSideMenuDelegate
                 });
@@ -111,7 +111,7 @@
             });
 
             it("should log out the User", function () {
-                expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                expect(CommonService.logOut).toHaveBeenCalledWith();
             });
 
             it("should navigate to the login page", function () {

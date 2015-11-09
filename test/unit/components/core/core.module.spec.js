@@ -95,7 +95,7 @@
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks"]);
             PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getOrCreatePaymentAdd"]);
-            CommonService = jasmine.createSpyObj("CommonService", ["closeAllPopups", "displayAlert", "loadingBegin", "loadingComplete"]);
+            CommonService = jasmine.createSpyObj("CommonService", ["closeAllPopups", "displayAlert", "loadingBegin", "loadingComplete", "logOut"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
@@ -124,8 +124,7 @@
 
         describe("should set a $stateChangeStart event handler that", function () {
             var landingRoute = "landing",
-                paymentAddRoute = "payment.add",
-                paymentMaintenanceFormRoute = "payment.maintenance.form";
+                paymentAddRoute = "payment.add";
 
             //TODO - the module's run block finishes before the spy can be injected into $rootScope
             //Figure out how to test this
@@ -236,6 +235,18 @@
 
             it("should redirect to the login page", function () {
                 expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
+            });
+
+        });
+
+        describe("has an app:logout event handler function that", function () {
+
+            beforeEach(function() {
+                $rootScope.$emit("app:logout");
+            });
+
+            it("should call logOut", function () {
+                expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
             });
 
         });

@@ -53,7 +53,7 @@
                     $state.go("landing");
                 })
                 .catch(function (failedAuthenticationError) {
-                    AuthenticationManager.logOut();
+                    CommonService.logOut();
                     vm.globalError = vm.config.serverErrors[failedAuthenticationError.message] || vm.config.serverErrors.DEFAULT;
                 })
                 .finally(function () {

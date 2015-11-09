@@ -57,11 +57,11 @@
 
         });
 
-        describe("has a userLoggedOut event handler function that", function () {
+        describe("has a app:logout event handler function that", function () {
 
             beforeEach(function() {
                 BankManager.setActiveBanks(mockBankCollection);
-                $rootScope.$broadcast("userLoggedOut");
+                $rootScope.$broadcast("app:logout");
             });
 
             it("should reset the active banks", function () {

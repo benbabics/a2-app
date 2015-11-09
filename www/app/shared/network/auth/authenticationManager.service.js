@@ -119,8 +119,6 @@
 
         function logOut() {
             oauth = null;
-
-            $rootScope.$broadcast("userLoggedOut");
         }
 
         function setToken(token) {

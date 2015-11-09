@@ -91,12 +91,12 @@
 
         });
 
-        describe("has a userLoggedOut event handler function that", function () {
+        describe("has a app:logout event handler function that", function () {
 
             beforeEach(function () {
                 PaymentManager.setPaymentAddAvailability(mockPaymentAddAvailability);
                 PaymentManager.setPayments(mockPaymentCollection);
-                $rootScope.$broadcast("userLoggedOut");
+                $rootScope.$broadcast("app:logout");
             });
 
             it("should reset the payment add availability", function () {

@@ -47,11 +47,11 @@
             // TODO: figure out how to test this
         });
 
-        describe("has a userLoggedOut event handler function that", function () {
+        describe("has a app:logout event handler function that", function () {
 
             beforeEach(function () {
                 AccountManager.setAccount(account);
-                $rootScope.$broadcast("userLoggedOut");
+                $rootScope.$broadcast("app:logout");
             });
 
             it("should reset the account", function () {

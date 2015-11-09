@@ -4,7 +4,8 @@
     describe("A User Auth Module Route Config", function () {
 
         var $rootScope,
-            $state;
+            $state,
+            CommonService;
 
         beforeEach(function () {
 
@@ -13,10 +14,13 @@
             module("app.components.user.auth");
             module("app.html");
 
-            inject(function (_$rootScope_, _$state_) {
+            inject(function (_$rootScope_, _$state_, _CommonService_) {
                 $rootScope = _$rootScope_;
                 $state = _$state_;
+                CommonService = _CommonService_;
             });
+
+            spyOn(CommonService, "logOut");
         });
 
         describe("has a user.auth state that", function () {
@@ -75,6 +79,12 @@
                 $state.go(stateName);
                 $rootScope.$digest();
                 expect($state.current.name).toBe(stateName);
+            });
+
+            it("should log the user out", function () {
+                $state.go(stateName);
+                $rootScope.$digest();
+                expect(CommonService.logOut).toHaveBeenCalledWith();
             });
         });
     });

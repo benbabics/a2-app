@@ -52,11 +52,11 @@
 
         });
 
-        describe("has a userLoggedOut event handler function that", function () {
+        describe("has a app:logout event handler function that", function () {
 
             beforeEach(function () {
                 UserManager.setUser(mockUser);
-                $rootScope.$broadcast("userLoggedOut");
+                $rootScope.$broadcast("app:logout");
             });
 
             it("should reset the user", function () {

@@ -11,6 +11,7 @@
         fetchCurrentUserDeferred,
         globals,
         AuthenticationManager,
+        CommonService,
         UserManager;
 
     describe("A Login Controller", function () {
@@ -31,17 +32,18 @@
             });
 
             // mock dependencies
-            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate", "logOut"]);
+            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate"]);
             UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
             $state = jasmine.createSpyObj("state", ["go"]);
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _globals_) {
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _globals_, _CommonService_) {
                 $ionicHistory = _$ionicHistory_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
                 fetchCurrentUserDeferred = $q.defer();
                 globals = _globals_;
                 $rootScope = _$rootScope_;
+                CommonService = _CommonService_;
 
                 ctrl = $controller("LoginController", {
                     $scope: $scope,
@@ -49,8 +51,11 @@
                     $stateParams: $stateParams,
                     globals: globals,
                     AuthenticationManager: AuthenticationManager,
+                    CommonService: CommonService,
                     UserManager: UserManager
                 });
+
+                spyOn(CommonService, "logOut");
 
             });
 
@@ -221,8 +226,8 @@
                         $scope.$digest();
                     });
 
-                    it("should call AuthenticationManager.logOut", function () {
-                        expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                    it("should call CommonService.logOut", function () {
+                        expect(CommonService.logOut).toHaveBeenCalledWith();
                     });
 
                     it("should have an error message", function () {
@@ -251,8 +256,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should call AuthenticationManager.logOut", function () {
-                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                it("should call CommonService.logOut", function () {
+                    expect(CommonService.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -279,8 +284,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should call AuthenticationManager.logOut", function () {
-                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                it("should call CommonService.logOut", function () {
+                    expect(CommonService.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -307,8 +312,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should call AuthenticationManager.logOut", function () {
-                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                it("should call CommonService.logOut", function () {
+                    expect(CommonService.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -335,8 +340,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should call AuthenticationManager.logOut", function () {
-                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                it("should call CommonService.logOut", function () {
+                    expect(CommonService.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -363,8 +368,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should call AuthenticationManager.logOut", function () {
-                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                it("should call CommonService.logOut", function () {
+                    expect(CommonService.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -391,8 +396,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should call AuthenticationManager.logOut", function () {
-                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                it("should call CommonService.logOut", function () {
+                    expect(CommonService.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -419,8 +424,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should call AuthenticationManager.logOut", function () {
-                    expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
+                it("should call CommonService.logOut", function () {
+                    expect(CommonService.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {

@@ -64,9 +64,6 @@
         }
 
         function authenticate() {
-            // Log out the user
-            AuthenticationManager.logOut();
-
             $state.go(globals.LOGIN_STATE, {"reason": "TOKEN_EXPIRED"});
 
             // TODO - Stretch goal - Remember what the user was trying to do and do it after auth

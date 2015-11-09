@@ -53,11 +53,11 @@
 
         });
 
-        describe("has a userLoggedOut event handler function that", function () {
+        describe("has a app:logout event handler function that", function () {
 
             beforeEach(function() {
                 InvoiceManager.setInvoiceSummary(mockInvoiceSummary);
-                $rootScope.$broadcast("userLoggedOut");
+                $rootScope.$broadcast("app:logout");
             });
 
             it("should reset the invoice summary", function () {

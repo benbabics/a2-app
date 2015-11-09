@@ -27,12 +27,17 @@
             }
         }
 
-        function pauseApplication() {
-            // log out the user
+        function handleApplicationLogOut() {
+            // clear any data in memory tied to the user
             AuthenticationManager.logOut();
         }
 
-        function resumeApplication() {
+        function handleApplicationPause() {
+            // log out the user
+            handleApplicationLogOut();
+        }
+
+        function handleApplicationResume() {
             // Close any opened popups
             CommonService.closeAllPopups();
 
@@ -47,8 +52,9 @@
         });
 
         $rootScope.$on("$stateChangeStart", validateRoutePreconditions);
-        $rootScope.$on("cordovaPause", pauseApplication);
-        $rootScope.$on("cordovaResume", resumeApplication);
+        $rootScope.$on("cordovaPause", handleApplicationPause);
+        $rootScope.$on("cordovaResume", handleApplicationResume);
+        $rootScope.$on("app:logout", handleApplicationLogOut);
 
         //make the hardware back button go to the same state as the back button by default
         $ionicPlatform.registerBackButtonAction(function (event) {

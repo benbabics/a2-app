@@ -21,8 +21,6 @@
         confirmPromise,
         navBar,
         rootNavView,
-        focusedStateOrder = ["stage", "entering", "active"],
-        unfocusedStateOrder = ["cached", "leaving", "active"],
         poBoxAcceptableValues = ["PO Box", "P O Box", "POBox", "P OBox", "P.O. Box", "P. O. Box", "P.O.Box", "P. O.Box",
             "PO. Box", "P O. Box", "PO.Box", "P OBox", "P.O Box", "P. O Box", "P.OBox", "P. OBox", "POB", "P.O.B.",
             "POST OFFICE BOX", "Post Office Box"],
@@ -571,7 +569,7 @@
             });
         });
 
-        describe("has a loadingEnd function that", function () {
+        describe("has a loadingComplete function that", function () {
             beforeEach(function () {
                 spyOn($rootScope, "$broadcast");
             });
@@ -590,6 +588,20 @@
 
                 expect($rootScope.$broadcast).toHaveBeenCalledWith("loadingComplete");
             });
+        });
+
+        describe("has a logOut function that", function () {
+
+            beforeEach(function () {
+                spyOn($rootScope, "$emit");
+
+                CommonService.logOut();
+            });
+
+            it("should emit an app:logout event", function () {
+                expect($rootScope.$emit).toHaveBeenCalledWith("app:logout");
+            });
+
         });
 
         describe("has a fieldHasError function that", function () {

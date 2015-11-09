@@ -531,17 +531,11 @@
                     access_token: "as;kv987145oihkfdp9u"
                 });
 
-                spyOn($rootScope, "$broadcast");
-
                 AuthenticationManager.logOut();
             });
 
             it("should log out the user", function () {
                 expect(AuthenticationManager.userLoggedIn()).toBeFalsy();
-            });
-
-            it("should call $rootScope.$broadcast", function () {
-                expect($rootScope.$broadcast).toHaveBeenCalledWith("userLoggedOut");
             });
 
         });

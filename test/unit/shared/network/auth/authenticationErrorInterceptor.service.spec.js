@@ -196,10 +196,6 @@
                                 $rootScope.$digest();
                             });
 
-                            it("should call AuthenticationManager.logOut", function () {
-                                expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
-                            });
-
                             it("should redirect to the login page with a TOKEN_EXPIRED reason", function () {
                                 expect($state.go).toHaveBeenCalledWith(LOGIN_STATE, LOGIN_STATE_DATA);
                             });
@@ -239,10 +235,6 @@
                         errorResult = AuthenticationErrorInterceptor.responseError(mockRejection, restangularDeferred, restangularResponseHandler);
                     });
 
-                    it("should call AuthenticationManager.logOut", function () {
-                        expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
-                    });
-
                     it("should redirect to the login page with a TOKEN_EXPIRED reason", function () {
                         expect($state.go).toHaveBeenCalledWith(LOGIN_STATE, LOGIN_STATE_DATA);
                     });
@@ -259,10 +251,6 @@
                         mockRejection.config = MOCK_FAILED_REQUEST_CONFIG;
 
                         errorResult = AuthenticationErrorInterceptor.responseError(mockRejection, restangularDeferred, restangularResponseHandler);
-                    });
-
-                    it("should call AuthenticationManager.logOut", function () {
-                        expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
                     });
 
                     it("should redirect to the login page with a TOKEN_EXPIRED reason", function () {
