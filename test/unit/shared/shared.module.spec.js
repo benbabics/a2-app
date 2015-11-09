@@ -31,13 +31,13 @@
                     var event = document.createEvent("HTMLEvents");
                     event.initEvent("pause", true, true);
 
-                    spyOn($rootScope, "$broadcast");
+                    spyOn($rootScope, "$emit");
 
                     document.dispatchEvent(event);
                 });
 
-                it("should call $rootScope.$broadcast", function () {
-                    expect($rootScope.$broadcast).toHaveBeenCalledWith("cordovaPause");
+                it("should call $rootScope.$emit", function () {
+                    expect($rootScope.$emit).toHaveBeenCalledWith("app:cordovaPause");
                 });
 
             });
@@ -50,21 +50,21 @@
                     var event = document.createEvent("HTMLEvents");
                     event.initEvent("resume", true, true);
 
-                    spyOn($rootScope, "$broadcast");
+                    spyOn($rootScope, "$emit");
 
                     document.dispatchEvent(event);
                 });
 
-                it("should call $rootScope.$broadcast", function () {
-                    expect($rootScope.$broadcast).toHaveBeenCalledWith("cordovaResume");
+                it("should call $rootScope.$emit", function () {
+                    expect($rootScope.$emit).toHaveBeenCalledWith("app:cordovaResume");
                 });
 
             });
 
-            describe("has a loadingBegin event handler function that", function () {
+            describe("has an app:loadingBegin event handler function that", function () {
 
                 beforeEach(function () {
-                    $rootScope.$broadcast("loadingBegin");
+                    $rootScope.$emit("app:loadingBegin");
                 });
 
                 it("should call $ionicLoading.show", function () {
@@ -78,10 +78,10 @@
                 });
             });
 
-            describe("has a loadingComplete event handler function that", function () {
+            describe("has an app:loadingComplete event handler function that", function () {
 
                 beforeEach(function () {
-                    $rootScope.$broadcast("loadingComplete");
+                    $rootScope.$emit("app:loadingComplete");
                 });
 
                 it("should call $ionicLoading.hide", function () {

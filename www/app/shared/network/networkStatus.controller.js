@@ -25,9 +25,16 @@
         //////////////////////
         // Controller initialization
         function activate() {
+            var deregisterCordovaNetworkOnlineListener = $rootScope.$on("$cordovaNetwork:online", _.bind(onOnline, vm)),
+                deregisterCordovaNetworkOfflineListener = $rootScope.$on("$cordovaNetwork:offline", _.bind(onOffline, vm));
+
             vm.enableModal();
-            $rootScope.$on("$cordovaNetwork:online", _.bind(onOnline, vm));
-            $rootScope.$on("$cordovaNetwork:offline", _.bind(onOffline, vm));
+
+            //deregister $rootScope listeners
+            $scope.$on("$destroy", function () {
+                deregisterCordovaNetworkOnlineListener();
+                deregisterCordovaNetworkOfflineListener();
+            });
         }
 
         function disableModal() {

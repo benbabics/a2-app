@@ -209,10 +209,10 @@
             });
         });
 
-        describe("has a cordovaPause event handler function that", function () {
+        describe("has an app:cordovaPause event handler function that", function () {
 
             beforeEach(function () {
-                $rootScope.$broadcast("cordovaPause");
+                $rootScope.$emit("app:cordovaPause");
             });
 
             it("should log out the User", function () {
@@ -221,12 +221,12 @@
 
         });
 
-        describe("has a cordovaResume event handler function that", function () {
+        describe("has an app:cordovaResume event handler function that", function () {
 
             beforeEach(function () {
                 spyOn($state, "go");
 
-                $rootScope.$broadcast("cordovaResume");
+                $rootScope.$emit("app:cordovaResume");
             });
 
             it("should close any popups", function () {

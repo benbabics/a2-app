@@ -492,7 +492,7 @@
 
         function loadingBegin() {
             if (loadingIndicatorCount === 0) {
-                $rootScope.$broadcast("loadingBegin");
+                $rootScope.$emit("app:loadingBegin");
             }
 
             loadingIndicatorCount++;
@@ -502,7 +502,7 @@
             loadingIndicatorCount--;
 
             if (loadingIndicatorCount === 0) {
-                $rootScope.$broadcast("loadingComplete");
+                $rootScope.$emit("app:loadingComplete");
             }
         }
 

@@ -18,7 +18,7 @@
         function responseError(responseObject) {
 
             if (isRemoteResponse(responseObject) && (responseObject.status === 404 || responseObject.status === 503)) {
-                $rootScope.$broadcast("serverConnectionError");
+                $rootScope.$emit("network:serverConnectionError");
             }
 
             return true;
@@ -27,7 +27,7 @@
         function response(data, responseObject) {
 
             if (isRemoteResponse(responseObject)) {
-                $rootScope.$broadcast("serverConnectionSuccess");
+                $rootScope.$emit("network:serverConnectionSuccess");
             }
 
             return data;

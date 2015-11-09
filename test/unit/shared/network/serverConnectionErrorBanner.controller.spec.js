@@ -35,11 +35,11 @@
             });
         });
 
-        describe("has a serverConnectionSuccess event handler function that", function () {
+        describe("has a network:serverConnectionSuccess event handler function that", function () {
             beforeEach(function () {
                 ctrl.isConnected = null;
 
-                $scope.$broadcast("serverConnectionSuccess");
+                $rootScope.$emit("network:serverConnectionSuccess");
             });
 
             it("should set isConnected to true", function () {
@@ -47,11 +47,11 @@
             });
         });
 
-        describe("has a serverConnectionError event handler function that", function () {
+        describe("has a network:serverConnectionError event handler function that", function () {
             beforeEach(function () {
                 ctrl.isConnected = null;
 
-                $scope.$broadcast("serverConnectionError");
+                $rootScope.$emit("network:serverConnectionError");
             });
 
             it("should set isConnected to false", function () {

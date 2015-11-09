@@ -52,8 +52,8 @@
         });
 
         $rootScope.$on("$stateChangeStart", validateRoutePreconditions);
-        $rootScope.$on("cordovaPause", handleApplicationPause);
-        $rootScope.$on("cordovaResume", handleApplicationResume);
+        $rootScope.$on("app:cordovaPause", handleApplicationPause);
+        $rootScope.$on("app:cordovaResume", handleApplicationResume);
         $rootScope.$on("app:logout", handleApplicationLogOut);
 
         //make the hardware back button go to the same state as the back button by default

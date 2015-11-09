@@ -24,7 +24,7 @@
             self.setVisible(false);
 
             $timeout(function () {
-                self.$emit("bannerClosed");
+                self.$emit("notificationBar:bannerClosed");
             });
         }
 

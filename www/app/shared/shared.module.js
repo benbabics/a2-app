@@ -33,24 +33,24 @@
                  */
                 //apply a proxy event for the cordova pause event
                 document.addEventListener("pause", function () {
-                    $rootScope.$broadcast("cordovaPause");
+                    $rootScope.$emit("app:cordovaPause");
                 }, false);
 
                 //apply a proxy event for the cordova resume event
                 document.addEventListener("resume", function () {
-                    $rootScope.$broadcast("cordovaResume");
+                    $rootScope.$emit("app:cordovaResume");
                 }, false);
 
                 /**
                  * Set up loading indicator
                  */
-                $rootScope.$on("loadingBegin", function () {
+                $rootScope.$on("app:loadingBegin", function () {
                     $ionicLoading.show({
                         template: "<ion-spinner class='spinner-light'></ion-spinner>"
                     });
                 });
 
-                $rootScope.$on("loadingComplete", function () {
+                $rootScope.$on("app:loadingComplete", function () {
                     $ionicLoading.hide();
                 });
             });

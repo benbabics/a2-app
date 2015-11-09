@@ -552,41 +552,41 @@
 
         describe("has a loadingBegin function that", function () {
             beforeEach(function () {
-                spyOn($rootScope, "$broadcast");
+                spyOn($rootScope, "$emit");
             });
 
-            it("should broadcast the loadingBegin event when the first call is made.", function () {
+            it("should broadcast the app:loadingBegin event when the first call is made.", function () {
                 CommonService.loadingBegin();
 
-                expect($rootScope.$broadcast).toHaveBeenCalledWith("loadingBegin");
+                expect($rootScope.$emit).toHaveBeenCalledWith("app:loadingBegin");
             });
 
-            it("should not broadcast the loadingBegin event when subsequent calls are made", function () {
+            it("should not emit the app:loadingBegin event when subsequent calls are made", function () {
                 CommonService.loadingBegin();
                 CommonService.loadingBegin();
 
-                expect($rootScope.$broadcast.calls.count()).toBe(1);
+                expect($rootScope.$emit.calls.count()).toBe(1);
             });
         });
 
         describe("has a loadingComplete function that", function () {
             beforeEach(function () {
-                spyOn($rootScope, "$broadcast");
+                spyOn($rootScope, "$emit");
             });
 
-            it("should not broadcast the loadingComplete event when multiple calls to loadingBegin were made", function () {
+            it("should not emit the app:loadingComplete event when multiple calls to loadingBegin were made", function () {
                 CommonService.loadingBegin();
                 CommonService.loadingBegin();
                 CommonService.loadingComplete();
 
-                expect($rootScope.$broadcast).not.toHaveBeenCalledWith("loadingComplete");
+                expect($rootScope.$emit).not.toHaveBeenCalledWith("app:loadingComplete");
             });
 
-            it("should broadcast the loadingComplete event when the number of loadingComplete calls equals the number of loadingBegin calls", function () {
+            it("should emit the app:loadingComplete event when the number of loadingComplete calls equals the number of loadingBegin calls", function () {
                 CommonService.loadingBegin();
                 CommonService.loadingComplete();
 
-                expect($rootScope.$broadcast).toHaveBeenCalledWith("loadingComplete");
+                expect($rootScope.$emit).toHaveBeenCalledWith("app:loadingComplete");
             });
         });
 

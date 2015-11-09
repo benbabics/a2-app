@@ -30,7 +30,7 @@
             });
 
             // set up spies
-            spyOn($rootScope, "$broadcast").and.callThrough();
+            spyOn($rootScope, "$emit").and.callThrough();
         });
 
         describe("has a responseError function that", function () {
@@ -52,8 +52,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should broadcast an event that a server error occurred", function () {
-                        expect($rootScope.$broadcast).toHaveBeenCalledWith("serverConnectionError");
+                    it("should emit an event that a server error occurred", function () {
+                        expect($rootScope.$emit).toHaveBeenCalledWith("network:serverConnectionError");
                     });
 
                     it("should return true", function () {
@@ -70,8 +70,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should broadcast an event that a server error occurred", function () {
-                        expect($rootScope.$broadcast).toHaveBeenCalledWith("serverConnectionError");
+                    it("should emit an event that a server error occurred", function () {
+                        expect($rootScope.$emit).toHaveBeenCalledWith("network:serverConnectionError");
                     });
 
                     it("should return true", function () {
@@ -88,8 +88,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should NOT broadcast an event that a server error occurred", function () {
-                        expect($rootScope.$broadcast).not.toHaveBeenCalledWith("serverConnectionError");
+                    it("should NOT emit an event that a server error occurred", function () {
+                        expect($rootScope.$emit).not.toHaveBeenCalledWith("network:serverConnectionError");
                     });
 
                     it("should return true", function () {
@@ -116,8 +116,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should NOT broadcast an event that a server error occurred", function () {
-                        expect($rootScope.$broadcast).not.toHaveBeenCalledWith("serverConnectionError");
+                    it("should NOT emit an event that a server error occurred", function () {
+                        expect($rootScope.$emit).not.toHaveBeenCalledWith("network:serverConnectionError");
                     });
 
                     it("should return true", function () {
@@ -134,8 +134,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should NOT broadcast an event that a server error occurred", function () {
-                        expect($rootScope.$broadcast).not.toHaveBeenCalledWith("serverConnectionError");
+                    it("should NOT emit an event that a server error occurred", function () {
+                        expect($rootScope.$emit).not.toHaveBeenCalledWith("network:serverConnectionError");
                     });
 
                     it("should return true", function () {
@@ -152,8 +152,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should NOT broadcast an event that a server error occurred", function () {
-                        expect($rootScope.$broadcast).not.toHaveBeenCalledWith("serverConnectionError");
+                    it("should NOT emit an event that a server error occurred", function () {
+                        expect($rootScope.$emit).not.toHaveBeenCalledWith("network:serverConnectionError");
                     });
 
                     it("should return true", function () {
@@ -181,8 +181,8 @@
                     passedResponse = HttpResponseReporterInterceptor.response(mockResponse.data, mockResponse);
                 });
 
-                it("should broadcast an event that a server error occurred", function () {
-                    expect($rootScope.$broadcast).toHaveBeenCalledWith("serverConnectionSuccess");
+                it("should emit an event that a server error occurred", function () {
+                    expect($rootScope.$emit).toHaveBeenCalledWith("network:serverConnectionSuccess");
                 });
 
                 it("should pass on the response object without modifying it", function () {
@@ -198,8 +198,8 @@
                     passedResponse = HttpResponseReporterInterceptor.response(mockResponse.data, mockResponse);
                 });
 
-                it("should NOT broadcast an event that a server error occurred", function () {
-                    expect($rootScope.$broadcast).not.toHaveBeenCalledWith("serverConnectionSuccess");
+                it("should NOT emit an event that a server error occurred", function () {
+                    expect($rootScope.$emit).not.toHaveBeenCalledWith("network:serverConnectionSuccess");
                 });
 
                 it("should pass on the response object without modifying it", function () {
