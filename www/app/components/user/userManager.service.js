@@ -4,6 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
+    // jshint maxparams:5
     function UserManager($rootScope, CommonService, Logger, UserModel, UsersResource) {
         // Private members
         var user = {};

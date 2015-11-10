@@ -69,6 +69,7 @@
                                 });
                         },
 
+                        // jshint maxparams:5
                         isPaymentEditable: function (globals, payment, CommonService, PaymentManager, UserManager) {
                             var billingAccountId = UserManager.getUser().billingCompany.accountId;
 
@@ -106,12 +107,13 @@
                         }
                     };
                 },
+                // jshint maxparams:6
                 payment: function ($q, $stateParams, CommonService, PaymentManager, PaymentModel, globals) {
                     var maintenanceState = $stateParams.maintenanceState,
                         payment = new PaymentModel(),
                         paymentId;
 
-                    if(maintenanceState === globals.PAYMENT_MAINTENANCE.STATES.UPDATE) {
+                    if (maintenanceState === globals.PAYMENT_MAINTENANCE.STATES.UPDATE) {
                         paymentId = $stateParams.paymentId;
 
                         CommonService.loadingBegin();

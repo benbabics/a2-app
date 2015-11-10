@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:6
     function CardListController($scope, globals, CardManager, CommonService, Logger, UserManager) {
 
         var _ = CommonService._,
@@ -34,7 +35,7 @@
         }
 
         function applySearchFilter() {
-            if(vm.searchFilter !== activeSearchFilter) {
+            if (vm.searchFilter !== activeSearchFilter) {
                 activeSearchFilter = vm.searchFilter;
 
                 resetSearch();
@@ -88,7 +89,7 @@
             var view = CommonService.getFocusedView();
 
             //this should never happen
-            if(!view) {
+            if (!view) {
                 var error = "Failed to apply search filter: Couldn't find the active view";
                 Logger.error(error);
                 throw new Error(error);
@@ -106,7 +107,7 @@
             $scope.$$postDigest(function () {
                 var infiniteList = angular.element(view[0].querySelector("ion-infinite-scroll"));
 
-                if(!infiniteList) {
+                if (!infiniteList) {
                     var error = "Failed to reset infinite scroll: No infinite scroll found";
                     Logger.error(error);
                     throw new Error(error);

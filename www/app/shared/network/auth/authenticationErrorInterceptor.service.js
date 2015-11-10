@@ -5,6 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
+    // jshint maxparams:6
     function AuthenticationErrorInterceptor($injector, $state, globals, AuthenticationManager,
                                             AuthorizationHeaderRequestInterceptor, Logger) {
 

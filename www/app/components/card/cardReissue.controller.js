@@ -5,10 +5,10 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:5
     function CardReissueController(CommonService, Logger, account, card, cardReissueDetails) {
 
-        var _ = CommonService._,
-            vm = this;
+        var _ = CommonService._;
 
         activate();
 
@@ -26,7 +26,7 @@
             if (cardReissueDetails.shippingAddress.isPoBox()) {
                 //if user is shipping to a PO Box, only allow them to use the "regular" shipping method
                 //note: this check will have to be moved once the user is allowed to modify the selected card shipping address
-                if(account.hasRegularShippingMethod()) {
+                if (account.hasRegularShippingMethod()) {
                     cardReissueDetails.selectedShippingMethod = cardReissueDetails.account.regularCardShippingMethod;
                     cardReissueDetails.shippingMethods = [cardReissueDetails.selectedShippingMethod];
                 }
@@ -41,7 +41,7 @@
                 cardReissueDetails.selectedShippingMethod = cardReissueDetails.getDefaultShippingMethod();
 
                 //move the Regular shipping method to the front of the array if there is one
-                if(account.hasRegularShippingMethod()) {
+                if (account.hasRegularShippingMethod()) {
                     _.remove(cardReissueDetails.shippingMethods, {id: cardReissueDetails.account.regularCardShippingMethod.id});
                     cardReissueDetails.shippingMethods.unshift(cardReissueDetails.account.regularCardShippingMethod);
                 }

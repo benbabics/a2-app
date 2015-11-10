@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
+    // jshint maxparams:7
     function CardManager($q, $rootScope, globals, CardModel, CardsResource, CommonService, Logger) {
         // Private members
         var cards;
@@ -147,7 +148,7 @@
                     if (cardResponse && cardResponse.data) {
                         var cachedCard = _.find(cards, {cardId: cardId});
 
-                        if(cachedCard) {
+                        if (cachedCard) {
                             //update the existing card object in the cache
                             cachedCard.set(cardResponse.data);
                         }

@@ -30,7 +30,7 @@
 
         function show(message, duration) {
             $ionicLoading.show({
-                template: '<span class="toast-message">' + message + '</span>',
+                template: "<span class=\"toast-message\">" + message + "</span>",
                 duration  : mapDurationString(duration),
                 noBackdrop: true
             });

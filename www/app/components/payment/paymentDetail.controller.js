@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:9
     function PaymentDetailController($scope, $state, globals, isPaymentEditable, payment,
                                      CommonService, Logger, PaymentManager, UserManager) {
 

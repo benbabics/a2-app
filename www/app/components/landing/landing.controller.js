@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:6
     function LandingController($scope, $ionicHistory, currentInvoiceSummary,
                                globals, scheduledPaymentsCount, UserManager) {
 

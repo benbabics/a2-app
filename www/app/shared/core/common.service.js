@@ -6,6 +6,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
+    // jshint maxparams:6
     function CommonService(_, $ionicPopup, $rootScope, $state, globals, Logger) {
 
         // Private members
@@ -181,7 +182,7 @@
             var view = getFocusedView(),
                 navBar = getFocusedNavBar();
 
-            if(view) {
+            if (view) {
                 return findBackButton(view, navBar);
             }
             else {
@@ -203,7 +204,7 @@
             backButton = view[0].querySelector(".button-wex-back");
 
             //there's no override, so look for the global back button on the nav-bar
-            if(!backButton && navBar) {
+            if (!backButton && navBar) {
                 backButton = navBar[0].querySelector(".button-wex-back");
             }
 
@@ -219,7 +220,7 @@
             var view = getUnfocusedView(),
                 navBar = getUnfocusedNavBar();
 
-            if(view) {
+            if (view) {
                 return findBackButton(view, navBar);
             }
             else {
@@ -248,7 +249,7 @@
                         var curNavBar = curNavBlock.find("ion-header-bar");
 
                         //found a matching nav-bar, so end the loop
-                        if(curNavBar.length > 0) {
+                        if (curNavBar.length > 0) {
                             navBar = curNavBar;
                             return false;
                         }
@@ -473,9 +474,9 @@
             backButton = backButton || findActiveBackButton();
 
             //if there is a back button, call its goBack function
-            if(backButton) {
+            if (backButton) {
                 backButtonScope = backButton.isolateScope();
-                if(backButtonScope) {
+                if (backButtonScope) {
                     backButtonScope.goBack();
                     return true;
                 }

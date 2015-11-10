@@ -1,6 +1,9 @@
 (function () {
     "use strict";
 
+    /* jshint -W101 */
+    // jscs:disable maximumLineLength
+
     var appGlobals = {},
         globals = function (sharedGlobals) {
             return angular.extend({}, sharedGlobals, appGlobals);

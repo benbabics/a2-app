@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:7
     function PaymentMaintenanceAmountInputController($scope, $filter, $ionicHistory, globals, payment, invoiceSummary,
                                                      CommonService) {
 

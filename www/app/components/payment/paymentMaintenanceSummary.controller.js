@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:11
     function PaymentMaintenanceSummaryController($scope, $ionicHistory, globals, maintenance, moment, payment,
                                                  CommonService, InvoiceManager, Logger, PaymentManager, UserManager) {
 
@@ -47,7 +48,7 @@
         }
 
         function getConfig() {
-            if(_.has(paymentMaintenanceSummary, maintenance.state)) {
+            if (_.has(paymentMaintenanceSummary, maintenance.state)) {
                 return paymentMaintenanceSummary[maintenance.state].CONFIG;
             }
             else {

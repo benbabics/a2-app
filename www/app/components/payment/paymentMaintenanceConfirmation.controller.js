@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:6
     function PaymentMaintenanceConfirmationController($scope, globals, maintenance, payment, CommonService, Logger) {
 
         var _ = CommonService._,
@@ -29,7 +30,7 @@
         }
 
         function getConfig() {
-            if(_.has(paymentMaintenanceConfirmation, maintenance.state)) {
+            if (_.has(paymentMaintenanceConfirmation, maintenance.state)) {
                 return paymentMaintenanceConfirmation[maintenance.state].CONFIG;
             }
             else {

@@ -6,7 +6,7 @@
     /* @ngInject */
     function FormEncoder(CommonService) {
         // Private members
-        _ = CommonService._;
+        var _ = CommonService._;
 
         // Revealed Public members
         var service = {

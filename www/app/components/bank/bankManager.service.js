@@ -4,6 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
+    // jshint maxparams:6
     function BankManager($q, $rootScope, BankModel, BanksResource, CommonService, Logger) {
 
         // Private members

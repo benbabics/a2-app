@@ -4,6 +4,7 @@
     /* jshint -W003 */
     /* jshint -W026 */ // These allow us to show the definition of the Directive above the scroll
 
+    // jshint maxparams:5
     function wexNotificationBar($rootScope, $compile, $window, $timeout, CommonService) {
         var directive = {
                 restrict: "E",

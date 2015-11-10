@@ -3,6 +3,7 @@
 
     //TODO - Move as much logic out of here as possible
 
+    // jshint maxparams:6
     function coreRun($rootScope, $state, $ionicPlatform, globals, AuthenticationManager, CommonService) {
 
         function isExitState(stateName) {

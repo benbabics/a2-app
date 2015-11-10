@@ -7,13 +7,11 @@
     /* @ngInject */
     function PaymentMaintenanceController(InvoiceManager, defaultBank, payment, maintenance) {
 
-        var vm = this;
-
         activate();
 
         // Controller initialization
         function activate() {
-            if(maintenance.state === maintenance.states.ADD) {
+            if (maintenance.state === maintenance.states.ADD) {
                 initializePaymentDetails();
             }
         }

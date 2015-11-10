@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
+    // jshint maxparams:6
     function AccountManager($q, $rootScope, CommonService, Logger, AccountModel, AccountsResource) {
         // Private members
         var account;
@@ -33,7 +34,7 @@
 
         function fetchAccount(accountId) {
             //if the account is already cached, just return it
-            if(account && account.accountId === accountId) {
+            if (account && account.accountId === accountId) {
                 return $q.when(account);
             }
 

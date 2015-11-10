@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:5
     function PaymentMaintenanceBankAccountInputController($ionicHistory, $scope, bankAccounts, globals, payment) {
 
         var vm = this,

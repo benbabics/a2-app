@@ -16,7 +16,8 @@
         "app.shared.widgets"
     ])
 
-        .run(function ($ionicPlatform, _, $rootScope, $ionicLoading, globals, Logger) {  // Services may be included here in order to force them to be instantiated at startup
+        // jshint maxparams:6
+        .run(function ($ionicPlatform, _, $rootScope, $ionicLoading, globals, Logger) { // Services may be included here in order to force them to be instantiated at startup
             $ionicPlatform.ready(function () {
 
                 /**

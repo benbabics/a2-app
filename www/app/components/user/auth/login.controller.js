@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:8
     function LoginController($ionicHistory, $scope, $state, $stateParams, globals, AuthenticationManager, CommonService, UserManager) {
 
         var _ = CommonService._,

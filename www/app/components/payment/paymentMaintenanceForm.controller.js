@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:10
     function PaymentMaintenanceFormController($scope, globals, hasMultipleBanks, maintenance, moment, payment,
                                               CommonService, InvoiceManager, Logger, UserManager) {
 
@@ -32,7 +33,7 @@
             $scope.$on("$ionicView.beforeEnter", beforeEnter);
 
             //override back to go to the landing page if we're in ADD mode
-            if(maintenance.state === maintenance.states.ADD) {
+            if (maintenance.state === maintenance.states.ADD) {
                 vm.backStateOverride = "landing";
             }
         }
@@ -47,7 +48,7 @@
         }
 
         function getConfig() {
-            if(_.has(paymentMaintenanceForm, maintenance.state)) {
+            if (_.has(paymentMaintenanceForm, maintenance.state)) {
                 return paymentMaintenanceForm[maintenance.state].CONFIG;
             }
             else {

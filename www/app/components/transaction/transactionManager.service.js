@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
+    // jshint maxparams:6
     function TransactionManager($q, $rootScope, CommonService, Logger,
                                 PostedTransactionModel, TransactionsResource) {
         // Private members
@@ -45,6 +46,7 @@
             return $q.when(_.find(postedTransactions, {transactionId: transactionId}));
         }
 
+        // jshint maxparams:5
         function fetchPostedTransactions(accountId, fromDate, toDate, pageNumber, pageSize) {
             var params = {
                 fromDate  : fromDate,
@@ -60,7 +62,7 @@
                         var fetchedTransactions = _.map(postedTransactionsResponse.data, createPostedTransaction);
 
                         //reset the cache if we're fetching the first page of results
-                        if(pageNumber === 0) {
+                        if (pageNumber === 0) {
                             postedTransactions = [];
                         }
 

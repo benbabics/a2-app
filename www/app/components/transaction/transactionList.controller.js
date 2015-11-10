@@ -5,6 +5,7 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:7
     function TransactionListController($scope, globals, moment,
                                        CommonService, Logger, TransactionManager, UserManager) {
 

@@ -1,6 +1,7 @@
 (function () {
     "use strict";
 
+    // jshint maxparams:6
     var CardReissueModel = function (globals, AccountModel, AddressModel, CardModel, CommonService, ShippingMethodModel) {
         var _ = CommonService._;
 
@@ -65,7 +66,7 @@
 
             reissueReason = (reissueReason || this.reissueReason).toUpperCase();
 
-            if(_.has(displayMappings, reissueReason)) {
+            if (_.has(displayMappings, reissueReason)) {
                 return displayMappings[reissueReason];
             }
             else {
@@ -78,7 +79,7 @@
 
             shippingMethod = shippingMethod || this.selectedShippingMethod;
 
-            if(this.hasDefaultCarrier() && shippingMethod.id !== this.account.regularCardShippingMethod.id) {
+            if (this.hasDefaultCarrier() && shippingMethod.id !== this.account.regularCardShippingMethod.id) {
                 displayName = this.account.cardShippingCarrier.getDisplayName() + " - ";
             }
 

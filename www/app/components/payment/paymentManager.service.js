@@ -4,6 +4,7 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
+    // jshint maxparams:9
     function PaymentManager($q, globals, $rootScope, moment, CommonService, Logger,
                             PaymentAddAvailabilityModel, PaymentModel, PaymentsResource) {
         // Private members
@@ -145,9 +146,9 @@
 
             return fetchPayments(accountId, searchOptions.PAGE_NUMBER, searchOptions.PAGE_SIZE)
                 .then(function(payments) {
-                    if(payments) {
+                    if (payments) {
                         return _.reduce(payments, function(scheduledPaymentsCount, payment) {
-                            if(payment.isScheduled()) {
+                            if (payment.isScheduled()) {
                                 ++scheduledPaymentsCount;
                             }
 

@@ -5,8 +5,9 @@
     /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
+    // jshint maxparams:8
     function CardReissueFormController($scope, $state, globals, cardReissueDetails,
-                                   CardManager, CommonService, Logger, UserManager) {
+                                       CardManager, CommonService, Logger, UserManager) {
 
         var _ = CommonService._,
             vm = this;
