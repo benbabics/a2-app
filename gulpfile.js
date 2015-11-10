@@ -1,7 +1,6 @@
 var gulp = require("gulp");
 var gutil = require("gulp-util");
 var bower = require("bower");
-var concat = require("gulp-concat");
 var sass = require("gulp-sass");
 var minifyCss = require("gulp-minify-css");
 var rename = require("gulp-rename");
@@ -9,6 +8,8 @@ var sh = require("shelljs");
 var wiredep = require("wiredep").stream;
 var angularFilesort = require("gulp-angular-filesort");
 var inject = require("gulp-inject");
+var jshint = require("gulp-jshint");
+var jscs = require("gulp-jscs");
 
 var sourcePaths = {
     root: {
@@ -169,3 +170,34 @@ gulp.task("ionic-prod-build-release", function () {
     sh.env["TARGET"] = "prod";
     sh.exec("ionic build --release");
 });
+
+/**
+ * Code Analysis Tasks
+ */
+gulp.task("static-code-analysis", function() {
+    log("Analyzing source with JSHint and JSCS");
+
+    return gulp
+        .src(sourcePaths.root.scripts)
+        .pipe(jshint())
+        .pipe(jshint.reporter("jshint-stylish", {verbose: true}))
+        .pipe(jshint.reporter("fail"))
+        .pipe(jscs());
+});
+
+
+/**
+ * Log a message or series of messages using chalk's blue color.
+ * Can pass in a string, object or array.
+ */
+function log(msg) {
+    if (typeof(msg) === "object") {
+        for (var item in msg) {
+            if (msg.hasOwnProperty(item)) {
+                gutil.log(gutil.colors.blue(msg[item]));
+            }
+        }
+    } else {
+        gutil.log(gutil.colors.blue(msg));
+    }
+}
