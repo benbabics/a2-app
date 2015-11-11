@@ -865,7 +865,7 @@
 
                 UserManager.getUser.and.returnValue(mockUser);
 
-                spyOn($state, "go");
+                spyOn($state, "go").and.callThrough();
                 spyOn(CommonService, "displayAlert");
                 spyOn($rootScope, "$on").and.callThrough();
             });
@@ -882,28 +882,29 @@
                     };
 
                     fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
-
-                    $location.path(paymentAddVerifyPath);
-                    $rootScope.$digest();
                 });
 
-                it("should call PaymentManager.fetchPaymentAddAvailability", function () {
-                    expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
-                });
-
-                it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
-                    expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
-                });
-
-                it("should redirect to the payment list", function () {
-                    expect($state.go).toHaveBeenCalledWith(paymentListState);
-                });
-
-                describe("when the page redirect completes", function () {
+                describe("when the user is already on the payment list page", function () {
 
                     beforeEach(function () {
-                        $rootScope.$broadcast("$stateChangeSuccess");
+                        UserManager.getUser.and.returnValue(mockUser);
+                        PaymentManager.fetchPayments.and.returnValue($q.when(mockPayments));
+
+                        $state.go(paymentListState);
                         $rootScope.$digest();
+                    });
+
+                    beforeEach(function () {
+                        $location.path(paymentAddVerifyPath);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                    });
+
+                    it("should redirect to the payment list", function () {
+                        expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
                     it("should call CommonService.displayAlert", function () {
@@ -914,6 +915,49 @@
                     });
                 });
 
+                describe("when the user is NOT already on the payment list page", function () {
+
+                    beforeEach(function () {
+                        PaymentManager.fetchPayment.and.returnValue($q.when(mockPayment));
+                        PaymentManager.isPaymentEditable.and.returnValue($q.when(TestUtils.getRandomBoolean()));
+                        UserManager.getUser.and.returnValue(mockUser);
+
+                        $state.go("payment.detail", {paymentId: mockPayment.id});
+                        $rootScope.$digest();
+                    });
+
+                    beforeEach(function () {
+                        $location.path(paymentAddVerifyPath);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                    });
+
+                    it("should redirect to the payment list", function () {
+                        expect($state.go).toHaveBeenCalledWith(paymentListState);
+                    });
+
+                    it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
+                        expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                    });
+
+                    describe("when the page redirect completes", function () {
+
+                        beforeEach(function () {
+                            $rootScope.$broadcast("$stateChangeSuccess");
+                            $rootScope.$digest();
+                        });
+
+                        it("should call CommonService.displayAlert", function () {
+                            expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                                content       : mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
+                                buttonCssClass: "button-submit"
+                            });
+                        });
+                    });
+                });
             });
 
             describe("when direct debit has been setup", function () {
@@ -928,28 +972,29 @@
                     };
 
                     fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
-
-                    $location.path(paymentAddVerifyPath);
-                    $rootScope.$digest();
                 });
 
-                it("should call PaymentManager.fetchPaymentAddAvailability", function () {
-                    expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
-                });
-
-                it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
-                    expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
-                });
-
-                it("should redirect to the payment list", function () {
-                    expect($state.go).toHaveBeenCalledWith(paymentListState);
-                });
-
-                describe("when the page redirect completes", function () {
+                describe("when the user is already on the payment list page", function () {
 
                     beforeEach(function () {
-                        $rootScope.$broadcast("$stateChangeSuccess");
+                        UserManager.getUser.and.returnValue(mockUser);
+                        PaymentManager.fetchPayments.and.returnValue($q.when(mockPayments));
+
+                        $state.go(paymentListState);
                         $rootScope.$digest();
+                    });
+
+                    beforeEach(function () {
+                        $location.path(paymentAddVerifyPath);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                    });
+
+                    it("should redirect to the payment list", function () {
+                        expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
                     it("should call CommonService.displayAlert", function () {
@@ -960,6 +1005,49 @@
                     });
                 });
 
+                describe("when the user is NOT already on the payment list page", function () {
+
+                    beforeEach(function () {
+                        PaymentManager.fetchPayment.and.returnValue($q.when(mockPayment));
+                        PaymentManager.isPaymentEditable.and.returnValue($q.when(TestUtils.getRandomBoolean()));
+                        UserManager.getUser.and.returnValue(mockUser);
+
+                        $state.go("payment.detail", {paymentId: mockPayment.id});
+                        $rootScope.$digest();
+                    });
+
+                    beforeEach(function () {
+                        $location.path(paymentAddVerifyPath);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                    });
+
+                    it("should redirect to the payment list", function () {
+                        expect($state.go).toHaveBeenCalledWith(paymentListState);
+                    });
+
+                    it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
+                        expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                    });
+
+                    describe("when the page redirect completes", function () {
+
+                        beforeEach(function () {
+                            $rootScope.$broadcast("$stateChangeSuccess");
+                            $rootScope.$digest();
+                        });
+
+                        it("should call CommonService.displayAlert", function () {
+                            expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                                content       : mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
+                                buttonCssClass: "button-submit"
+                            });
+                        });
+                    });
+                });
             });
 
             describe("when a payment has already been scheduled", function () {
@@ -974,28 +1062,29 @@
                     };
 
                     fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
-
-                    $location.path(paymentAddVerifyPath);
-                    $rootScope.$digest();
                 });
 
-                it("should call PaymentManager.fetchPaymentAddAvailability", function () {
-                    expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
-                });
-
-                it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
-                    expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
-                });
-
-                it("should redirect to the payment list", function () {
-                    expect($state.go).toHaveBeenCalledWith(paymentListState);
-                });
-
-                describe("when the page redirect completes", function () {
+                describe("when the user is already on the payment list page", function () {
 
                     beforeEach(function () {
-                        $rootScope.$broadcast("$stateChangeSuccess");
+                        UserManager.getUser.and.returnValue(mockUser);
+                        PaymentManager.fetchPayments.and.returnValue($q.when(mockPayments));
+
+                        $state.go(paymentListState);
                         $rootScope.$digest();
+                    });
+
+                    beforeEach(function () {
+                        $location.path(paymentAddVerifyPath);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                    });
+
+                    it("should redirect to the payment list", function () {
+                        expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
                     it("should call CommonService.displayAlert", function () {
@@ -1006,6 +1095,49 @@
                     });
                 });
 
+                describe("when the user is NOT already on the payment list page", function () {
+
+                    beforeEach(function () {
+                        PaymentManager.fetchPayment.and.returnValue($q.when(mockPayment));
+                        PaymentManager.isPaymentEditable.and.returnValue($q.when(TestUtils.getRandomBoolean()));
+                        UserManager.getUser.and.returnValue(mockUser);
+
+                        $state.go("payment.detail", {paymentId: mockPayment.id});
+                        $rootScope.$digest();
+                    });
+
+                    beforeEach(function () {
+                        $location.path(paymentAddVerifyPath);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                    });
+
+                    it("should redirect to the payment list", function () {
+                        expect($state.go).toHaveBeenCalledWith(paymentListState);
+                    });
+
+                    it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
+                        expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                    });
+
+                    describe("when the page redirect completes", function () {
+
+                        beforeEach(function () {
+                            $rootScope.$broadcast("$stateChangeSuccess");
+                            $rootScope.$digest();
+                        });
+
+                        it("should call CommonService.displayAlert", function () {
+                            expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                                content       : mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
+                                buttonCssClass: "button-submit"
+                            });
+                        });
+                    });
+                });
             });
 
             describe("when the current balance due message should be displayed", function () {
@@ -1020,28 +1152,29 @@
                     };
 
                     fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
-
-                    $location.path(paymentAddVerifyPath);
-                    $rootScope.$digest();
                 });
 
-                it("should call PaymentManager.fetchPaymentAddAvailability", function () {
-                    expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
-                });
-
-                it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
-                    expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
-                });
-
-                it("should redirect to the payment list", function () {
-                    expect($state.go).toHaveBeenCalledWith(paymentListState);
-                });
-
-                describe("when the page redirect completes", function () {
+                describe("when the user is already on the payment list page", function () {
 
                     beforeEach(function () {
-                        $rootScope.$broadcast("$stateChangeSuccess");
+                        UserManager.getUser.and.returnValue(mockUser);
+                        PaymentManager.fetchPayments.and.returnValue($q.when(mockPayments));
+
+                        $state.go(paymentListState);
                         $rootScope.$digest();
+                    });
+
+                    beforeEach(function () {
+                        $location.path(paymentAddVerifyPath);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                    });
+
+                    it("should redirect to the payment list", function () {
+                        expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
                     it("should call CommonService.displayAlert", function () {
@@ -1052,6 +1185,49 @@
                     });
                 });
 
+                describe("when the user is NOT already on the payment list page", function () {
+
+                    beforeEach(function () {
+                        PaymentManager.fetchPayment.and.returnValue($q.when(mockPayment));
+                        PaymentManager.isPaymentEditable.and.returnValue($q.when(TestUtils.getRandomBoolean()));
+                        UserManager.getUser.and.returnValue(mockUser);
+
+                        $state.go("payment.detail", {paymentId: mockPayment.id});
+                        $rootScope.$digest();
+                    });
+
+                    beforeEach(function () {
+                        $location.path(paymentAddVerifyPath);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                    });
+
+                    it("should redirect to the payment list", function () {
+                        expect($state.go).toHaveBeenCalledWith(paymentListState);
+                    });
+
+                    it("should set an event listener for $stateChangeSuccess to display the alert popup", function () {
+                        expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                    });
+
+                    describe("when the page redirect completes", function () {
+
+                        beforeEach(function () {
+                            $rootScope.$broadcast("$stateChangeSuccess");
+                            $rootScope.$digest();
+                        });
+
+                        it("should call CommonService.displayAlert", function () {
+                            expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                                content       : mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
+                                buttonCssClass: "button-submit"
+                            });
+                        });
+                    });
+                });
             });
 
             describe("when no messages should be displayed", function () {
@@ -1066,32 +1242,74 @@
                     };
 
                     fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
-
-                    $location.path(paymentAddVerifyPath);
-                    $rootScope.$digest();
                 });
 
-                it("should call PaymentManager.fetchPaymentAddAvailability", function () {
-                    expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
-                });
-
-                it("should NOT set an event listener for $stateChangeSuccess to display the alert popup", function () {
-                    expect($rootScope.$on).not.toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
-                });
-
-                it("should redirect to the payment add state", function () {
-                    expect($state.go).toHaveBeenCalledWith(paymentAddState);
-                });
-
-                describe("when the page redirect completes", function () {
+                describe("when the user is already on the payment list page", function () {
 
                     beforeEach(function () {
-                        $rootScope.$broadcast("$stateChangeSuccess");
+                        UserManager.getUser.and.returnValue(mockUser);
+                        PaymentManager.fetchPayments.and.returnValue($q.when(mockPayments));
+
+                        $state.go(paymentListState);
                         $rootScope.$digest();
+                    });
+
+                    beforeEach(function () {
+                        $location.path(paymentAddVerifyPath);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                    });
+
+                    it("should redirect to the payment add state", function () {
+                        expect($state.go).toHaveBeenCalledWith(paymentAddState);
                     });
 
                     it("should NOT call CommonService.displayAlert", function () {
                         expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                    });
+                });
+
+                describe("when the user is NOT already on the payment list page", function () {
+
+                    beforeEach(function () {
+                        PaymentManager.fetchPayment.and.returnValue($q.when(mockPayment));
+                        PaymentManager.isPaymentEditable.and.returnValue($q.when(TestUtils.getRandomBoolean()));
+                        UserManager.getUser.and.returnValue(mockUser);
+
+                        $state.go("payment.detail", {paymentId: mockPayment.id});
+                        $rootScope.$digest();
+                    });
+
+                    beforeEach(function () {
+                        $location.path(paymentAddVerifyPath);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                    });
+
+                    it("should NOT set an event listener for $stateChangeSuccess to display the alert popup", function () {
+                        expect($rootScope.$on).not.toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                    });
+
+                    it("should redirect to the payment add state", function () {
+                        expect($state.go).toHaveBeenCalledWith(paymentAddState);
+                    });
+
+                    describe("when the page redirect completes", function () {
+
+                        beforeEach(function () {
+                            $rootScope.$broadcast("$stateChangeSuccess");
+                            $rootScope.$digest();
+                        });
+
+                        it("should NOT call CommonService.displayAlert", function () {
+                            expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                        });
                     });
                 });
 

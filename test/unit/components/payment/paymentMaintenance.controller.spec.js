@@ -51,6 +51,8 @@
                         go    : jasmine.createSpy("go")
                     };
 
+                    jasmine.clock().mockDate();
+
                     ctrl = $controller("PaymentMaintenanceController", {
                         $scope        : $scope,
                         InvoiceManager: InvoiceManager,

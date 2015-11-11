@@ -1,6 +1,10 @@
 (function () {
     "use strict";
 
+    /* jshint -W003 */ /* jshint -W026 */
+
+    var PAYMENT_ADD_ERROR_REDIRECT_STATE = "payment.list.view";
+
     /* @ngInject */
     function configureRoutes($stateProvider, $urlRouterProvider) {
 
@@ -250,7 +254,13 @@
 
         function validateBeforeNavigatingToPaymentAdd($state, $rootScope, globals, CommonService, Logger, PaymentManager, UserManager) {
             var billingAccountId,
-                removeListener;
+                removeListener,
+                showRouteValidationError = function (errorMessage) {
+                    return CommonService.displayAlert({
+                        content       : errorMessage,
+                        buttonCssClass: "button-submit"
+                    });
+                };
 
             CommonService.loadingBegin();
 
@@ -274,16 +284,19 @@
                     }
 
                     if (errorMessage) {
-                        $state.go("payment.list.view");
+                        $state.go(PAYMENT_ADD_ERROR_REDIRECT_STATE);
 
-                        removeListener = $rootScope.$on("$stateChangeSuccess", function () {
-                            removeListener();
+                        //if already at the error redirect state then just show the alert, else finish the redirect before showing the alert
+                        if ($state.current.name === PAYMENT_ADD_ERROR_REDIRECT_STATE) {
+                            showRouteValidationError(errorMessage);
+                        }
+                        else {
+                            removeListener = $rootScope.$on("$stateChangeSuccess", function () {
+                                removeListener();
 
-                            CommonService.displayAlert({
-                                content       : errorMessage,
-                                buttonCssClass: "button-submit"
+                                showRouteValidationError(errorMessage);
                             });
-                        });
+                        }
                     }
                     else {
                         // No problems we're worried about here so go to the payment add page
