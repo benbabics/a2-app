@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
+
     function wexVehicleId() {
         var directive = {
                 restrict: "A",

@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */
-    /* jshint -W026 */ // These allow us to show the definition of the Directive above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
     /* @ngInject */
     function wexBackButton($state, $ionicHistory, $interval, CommonService) {
@@ -27,7 +26,7 @@
         }
 
         function goBack() {
-            if(this.backState) {
+            if (this.backState) {
                 $state.go(this.backState);
             }
             else {
@@ -41,7 +40,7 @@
         }
 
         function overrideBackState(backState) {
-            if(_.isString(backState)) {
+            if (_.isString(backState)) {
                 this.backState = backState;
             }
             else {
@@ -59,14 +58,14 @@
             this.hide = _.constant(hidden);
 
             //realign the header elements
-            if(headerController) {
+            if (headerController) {
                 $interval(function () {
                     headerController.align();
                 }, 35, 1);
             }
         }
 
-        function link(scope, elem, attrs) {
+        function link(scope, elem) { // args: scope, elem, attrs
             //scope objects:
             scope.backButtonElem = elem;
 

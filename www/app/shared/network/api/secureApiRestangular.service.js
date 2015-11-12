@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
-    /* jshint -W106 */ // Ignore variables with underscores that were not created by us
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
     function SecureApiRestangular(Restangular, AuthorizationHeaderRequestInterceptor,
@@ -28,11 +27,12 @@
         function setUpConfiguration(RestangularConfigurer) {
             RestangularConfigurer.setFullResponse(true);
 
-            RestangularConfigurer.addFullRequestInterceptor(function (element, operation, what, url, headers, params) {
+            // jshint maxparams:5
+            RestangularConfigurer.addFullRequestInterceptor(function (element, operation, what, url, headers) { // args: element, operation, what, url, headers, params
                 return AuthorizationHeaderRequestInterceptor.request(headers);
             });
 
-            RestangularConfigurer.addResponseInterceptor(function (data, operation, what, url, response, deferred) {
+            RestangularConfigurer.addResponseInterceptor(function (data, operation) { // args: data, operation, what, url, response, deferred
                 return DataExtractorResponseInterceptor.response(data, operation);
             });
         }

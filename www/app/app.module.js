@@ -9,4 +9,3 @@
         "app.components"
     ]);
 })();
-

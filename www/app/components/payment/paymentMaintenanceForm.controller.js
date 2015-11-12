@@ -1,11 +1,10 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */
-    /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:10
 
     /* @ngInject */
-    // jshint maxparams:10
     function PaymentMaintenanceFormController($scope, globals, hasMultipleBanks, maintenance, moment, payment,
                                               CommonService, InvoiceManager, Logger, UserManager) {
 

@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */
-    /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
     function PaymentListController($scope, globals, payments, CommonService) {

@@ -1,11 +1,11 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
+    // jshint maxparams:6
 
     /* @ngInject */
-    // jshint maxparams:6
     function AuthenticationErrorInterceptor($injector, $state, globals, AuthenticationManager,
                                             AuthorizationHeaderRequestInterceptor, Logger) {
 

@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */
-    /* jshint -W026 */ // These allow us to show the definition of the Filter above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Filter above the scroll
 
     /* Filter that takes a currency amount and divides it by 100 to allow for entering cents. */
 

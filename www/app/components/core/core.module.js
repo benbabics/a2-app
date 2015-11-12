@@ -14,7 +14,7 @@
             return globals.LOGIN_STATE === stateName;
         }
 
-        function validateRoutePreconditions(event, toState, toParams, fromState, fromParams) {
+        function validateRoutePreconditions(event, toState) { // args: event, toState, toParams, fromState, fromParams
 
             var stateName = toState.name;
 
@@ -49,6 +49,7 @@
         //app must be set to fullscreen so that ionic headers are the correct size in iOS
         //see: http://forum.ionicframework.com/t/ion-nav-bar-top-padding-in-ios7/2488/12
         $ionicPlatform.ready(function() {
+            // jshint undef:false
             ionic.Platform.fullScreen(true, true);
         });
 
@@ -58,7 +59,7 @@
         $rootScope.$on("app:logout", handleApplicationLogOut);
 
         //make the hardware back button go to the same state as the back button by default
-        $ionicPlatform.registerBackButtonAction(function (event) {
+        $ionicPlatform.registerBackButtonAction(function () { //args: event
             CommonService.goToBackState();
         }, 101);
     }

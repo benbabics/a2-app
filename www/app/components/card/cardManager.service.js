@@ -1,11 +1,10 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */
-    /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
+    // jshint maxparams:7
 
     /* @ngInject */
-    // jshint maxparams:7
     function CardManager($q, $rootScope, globals, CardModel, CardsResource, CommonService, Logger) {
         // Private members
         var cards;

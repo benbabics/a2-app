@@ -1,11 +1,10 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */
-    /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:7
 
     /* @ngInject */
-    // jshint maxparams:7
     function PaymentMaintenanceAmountInputController($scope, $filter, $ionicHistory, globals, payment, invoiceSummary,
                                                      CommonService) {
 
@@ -63,7 +62,7 @@
             return value * 100;
         }
 
-        function onInputChange(input, newValue, oldValue) {
+        function onInputChange(input) { // args: input, newValue, oldValue
 
             //reset the amount if this is the first time the user has entered a value since visiting the page
             if (firstInput) {

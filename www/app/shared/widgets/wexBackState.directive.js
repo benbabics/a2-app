@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */
-    /* jshint -W026 */ // These allow us to show the definition of the Directive above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
     /* Directive that overrides which state the active back button on the current page will redirect to.
      * Example usage:
@@ -27,7 +26,7 @@
             var backButton = CommonService.findActiveBackButton();
 
             if (backButton) {
-                if(backButton.isolateScope()) {
+                if (backButton.isolateScope()) {
                     this.backButtonScope = backButton.isolateScope();
                     this.prevState = this.backButtonScope.getOverrideBackState();
 
@@ -47,7 +46,7 @@
         }
 
         function onEnter(stateName) {
-            if(this.wexBackState && !this.stateApplied) {
+            if (this.wexBackState && !this.stateApplied) {
                 this.stateApplied = true;
                 this.activeViewState = stateName;
 
@@ -56,7 +55,7 @@
         }
 
         function onLeave(stateName) {
-            if(this.stateApplied && stateName === this.activeViewState) {
+            if (this.stateApplied && stateName === this.activeViewState) {
                 this.removeBackState();
 
                 this.stateApplied = false;
@@ -99,7 +98,7 @@
                 vm.onEnter(stateInfo.stateName);
             });
 
-            removeLeaveListener = $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams, fromState, fromParams) {
+            removeLeaveListener = $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams, fromState) { // args: event, toState, toParams, fromState, fromParams
                 //only fire this listener once
                 removeLeaveListener();
 

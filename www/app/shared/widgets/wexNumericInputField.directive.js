@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */
-    /* jshint -W026 */ // These allow us to show the definition of the Directive above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
     /* Directive that binds a numeric keyboard to a model and updates the model and its display element with user input.
      * Example of creating an input that's styled like a field on the login page:
@@ -45,7 +44,6 @@
             modelElem,
             view,
             viewContent;
-
 
         return directive;
 
@@ -166,7 +164,7 @@
             return markup.join("");
         }
 
-        function link(scope, elem, attrs) {
+        function link(scope, elem) { // args: scope, elem, attrs
             vm = scope;
 
             //private members:
@@ -202,7 +200,6 @@
             vm.onKeyPress = onKeyPress;
             vm.removeEventListeners = removeEventListeners;
             vm.closeKeypad = _.partial(vm.showKeypad, false);
-
 
             //event listeners:
             directiveElem.on("click", vm.toggleKeypad);

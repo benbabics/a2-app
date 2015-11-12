@@ -1,11 +1,10 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */
-    /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:11
 
     /* @ngInject */
-    // jshint maxparams:11
     function PaymentMaintenanceSummaryController($scope, $ionicHistory, globals, maintenance, moment, payment,
                                                  CommonService, InvoiceManager, Logger, PaymentManager, UserManager) {
 

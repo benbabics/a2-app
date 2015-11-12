@@ -8,11 +8,12 @@
             /**
              * Set up Global Restangular Configuration
              */
-            Restangular.addResponseInterceptor(function (data, operation, what, url, response, deferred) {
+            // jshint maxparams:6
+            Restangular.addResponseInterceptor(function (data, operation, what, url, response) { // args: data, operation, what, url, response, deferred
                 return HttpResponseReporterInterceptor.response(data, response);
             });
 
-            Restangular.addErrorInterceptor(function(response, deferred, responseHandler) {
+            Restangular.addErrorInterceptor(function(response) { // args: response, deferred, responseHandler
                 return HttpResponseReporterInterceptor.responseError(response);
             });
 

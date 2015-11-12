@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
+
     //Using the Ionic directive nav-transition set to "none" causes a bug with the header title
     //(see https://github.com/driftyco/ionic/issues/2966).
     //TODO remove and replace uses of this directive with nav-transition="none" once the above bug is fixed in Ionic

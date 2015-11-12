@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */
-    /* jshint -W026 */ // These allow us to show the definition of the Directive above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
     /* Directive that takes in a reload callback that is called each time the user nears the end of the list, until all
      * data has been loaded. Example usage:
@@ -52,7 +51,7 @@
             return this.allDataLoaded;
         }
 
-        function link(scope, elem, attrs) {
+        function link(scope) { // args: scope, elem, attrs
             //scope objects:
             scope.reloadDistance = scope.reloadDistance || DEFAULT_RELOAD_DISTANCE;
             scope.loadingComplete = scope.loadingComplete || _.bind(allDataLoaded, scope);

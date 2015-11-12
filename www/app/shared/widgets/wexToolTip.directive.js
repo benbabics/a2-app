@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Directive above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
     /* @ngInject */
     function wexToolTip($ionicModal, CommonService) {
@@ -31,7 +31,7 @@
 
         return directive;
 
-        function link(scope, element, attrs) {
+        function link(scope) { // args: scope, element, attrs
 
             // Set up the Tool Tip options
             if (!_.isEmpty(scope.options)) {

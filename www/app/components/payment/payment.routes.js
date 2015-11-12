@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */ /* jshint -W026 */
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Routes above the scroll
+    /* jshint -W072 */ // Not sure why, but maxparams:7 did not seem to work but this does
 
     var PAYMENT_ADD_ERROR_REDIRECT_STATE = "payment.list.view";
 

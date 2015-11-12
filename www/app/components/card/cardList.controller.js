@@ -1,11 +1,10 @@
 (function () {
     "use strict";
 
-    /* jshint -W003 */
-    /* jshint -W026 */ // These allow us to show the definition of the Controller above the scroll
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:6
 
     /* @ngInject */
-    // jshint maxparams:6
     function CardListController($scope, globals, CardManager, CommonService, Logger, UserManager) {
 
         var _ = CommonService._,

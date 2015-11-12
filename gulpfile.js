@@ -1,3 +1,7 @@
+"use strict";
+
+/* jshint -W003 */
+
 var gulp = require("gulp");
 var gutil = require("gulp-util");
 var bower = require("bower");
@@ -102,72 +106,72 @@ gulp.task("ionic-serve-lab", function () {
 });
 
 gulp.task("ionic-dev-build", function () {
-    sh.env["TARGET"] = "dev";
+    sh.env.TARGET = "dev";
     sh.exec("ionic build");
 });
 
 gulp.task("ionic-dev-build-browser", function () {
-    sh.env["TARGET"] = "dev";
+    sh.env.TARGET = "dev";
     sh.exec("ionic build browser");
 });
 
 gulp.task("ionic-dit-build", function () {
-    sh.env["TARGET"] = "dit";
+    sh.env.TARGET = "dit";
     sh.exec("ionic build");
 });
 
 gulp.task("ionic-dit-build-browser", function () {
-    sh.env["TARGET"] = "dit";
+    sh.env.TARGET = "dit";
     sh.exec("ionic build browser");
 });
 
 gulp.task("ionic-dit-emulate-ios", function () {
-    sh.env["TARGET"] = "dit";
+    sh.env.TARGET = "dit";
     sh.exec("ionic emulate ios");
 });
 
 gulp.task("ionic-stage-build", function () {
-    sh.env["TARGET"] = "stage";
+    sh.env.TARGET = "stage";
     sh.exec("ionic build");
 });
 
 gulp.task("ionic-stage-build-browser", function () {
-    sh.env["TARGET"] = "stage";
+    sh.env.TARGET = "stage";
     sh.exec("ionic build browser");
 });
 
 gulp.task("ionic-stage-build-release-android", function () {
-    sh.env["TARGET"] = "stage";
+    sh.env.TARGET = "stage";
     sh.exec("ionic build android --release");
 });
 
 gulp.task("ionic-stage-emulate-android", function () {
-    sh.env["TARGET"] = "stage";
+    sh.env.TARGET = "stage";
     sh.exec("ionic emulate android");
 });
 
 gulp.task("ionic-stage-emulate-ios", function () {
-    sh.env["TARGET"] = "stage";
+    sh.env.TARGET = "stage";
     sh.exec("ionic emulate ios");
 });
 
 gulp.task("ionic-stage-run-android", function () {
-    sh.env["TARGET"] = "stage";
+    sh.env.TARGET = "stage";
     sh.exec("ionic run android");
 });
 
 gulp.task("ionic-stage-run-ios", function () {
-    sh.env["TARGET"] = "stage";
+    sh.env.TARGET = "stage";
     sh.exec("ionic run ios --device");
 });
 
 gulp.task("ionic-prod-build", function () {
-    sh.env["TARGET"] = "prod";
+    sh.env.TARGET = "prod";
     sh.exec("ionic build");
 });
 
 gulp.task("ionic-prod-build-release", function () {
-    sh.env["TARGET"] = "prod";
+    sh.env.TARGET = "prod";
     sh.exec("ionic build --release");
 });
 
@@ -184,7 +188,6 @@ gulp.task("static-code-analysis", function() {
         .pipe(jshint.reporter("fail"))
         .pipe(jscs());
 });
-
 
 /**
  * Log a message or series of messages using chalk's blue color.

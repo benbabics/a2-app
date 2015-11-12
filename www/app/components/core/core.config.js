@@ -7,7 +7,6 @@
         $urlRouterProvider.otherwise(appGlobals.DEFAULT_ROUTE);
     };
 
-
     var ionicConfig = function ($ionicConfigProvider) {
 
         // clear the default text from the back button
