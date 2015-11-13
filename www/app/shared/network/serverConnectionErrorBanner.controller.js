@@ -20,7 +20,7 @@
                 deregisterServerConnectionSuccessListener = $rootScope.$on("network:serverConnectionSuccess", _.bind(hide, vm)),
                 deregisterServerConnectionErrorListener = $rootScope.$on("network:serverConnectionError", _.bind(show, vm));
 
-            $scope.$on("notificationBar:bannerClosed", _.bind(hide, vm));
+            $scope.$on("notificationBar:closed", _.bind(hide, vm));
 
             // deregister $rootScope listeners
             $scope.$on("$destroy", function () {
