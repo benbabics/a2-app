@@ -100,7 +100,7 @@
                 shippingMethodId: shippingMethodId
             };
 
-            return CardsResource.post(accountId, cardId, params)
+            return CardsResource.postUpdate(accountId, cardId, params)
                 .then(function (cardResponse) {
                     if (cardResponse && cardResponse.data) {
                         var currentCard = _.find(cards, {cardId: cardResponse.data.cardId});

@@ -25,7 +25,7 @@
             // mock dependencies
             CardsResource = jasmine.createSpyObj("CardsResource", [
                 "getCards",
-                "post",
+                "postUpdate",
                 "postStatusChange"
             ]);
 
@@ -501,7 +501,7 @@
                 card = TestUtils.getRandomCard(CardModel);
                 originalCards.push(card);
 
-                CardsResource.post.and.returnValue(postDeferred.promise);
+                CardsResource.postUpdate.and.returnValue(postDeferred.promise);
                 CardManager.setCards(originalCards);
             });
 
@@ -511,8 +511,8 @@
                     .catch(rejectHandler);
             });
 
-            it("should call CardsResource.postStatusChange with the expected values", function () {
-                expect(CardsResource.post).toHaveBeenCalledWith(accountId, card.cardId, {
+            it("should call CardsResource.postUpdate with the expected values", function () {
+                expect(CardsResource.postUpdate).toHaveBeenCalledWith(accountId, card.cardId, {
                     updateType      : sharedGlobals.ACCOUNT_MAINTENANCE_API.CARDS.UPDATE_TYPES.REISSUE,
                     reissueReason   : reissueReason,
                     shippingMethodId: shippingMethodId

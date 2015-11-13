@@ -10,8 +10,8 @@
         // Revealed Public members
         var service = {
             getCards        : getCards,
-            post            : post,
-            postStatusChange: postStatusChange
+            postStatusChange: postStatusChange,
+            postUpdate      : postUpdate
         };
 
         activate();
@@ -27,13 +27,13 @@
             return $q.when(accountsResource.forAccount(accountId).getList(globals.ACCOUNT_MAINTENANCE_API.CARDS.BASE, searchCriteria));
         }
 
-        function post(accountId, cardId, updateDetails) {
-            return $q.when(accountsResource.forAccount(accountId).doPOST(updateDetails, globals.ACCOUNT_MAINTENANCE_API.CARDS.BASE + "/" + cardId));
-        }
-
         function postStatusChange(accountId, cardId, newStatus) {
             return $q.when(accountsResource.forAccount(accountId)
                 .doPOST(null, globals.ACCOUNT_MAINTENANCE_API.CARDS.BASE + "/" + cardId + "/" + globals.ACCOUNT_MAINTENANCE_API.CARDS.STATUS, {newStatus: newStatus}));
+        }
+
+        function postUpdate(accountId, cardId, updateDetails) {
+            return $q.when(accountsResource.forAccount(accountId).doPOST(updateDetails, globals.ACCOUNT_MAINTENANCE_API.CARDS.BASE + "/" + cardId));
         }
 
     }
