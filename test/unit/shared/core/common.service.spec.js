@@ -13,7 +13,8 @@
                 ERRORS: {
                     "UNKNOWN_EXCEPTION": "ERROR: cause unknown."
                 }
-            }
+            },
+            LOGIN_STATE: TestUtils.getRandomStringThatIsAlphaNumeric(10)
         },
         alertDeferred,
         confirmDeferred,
@@ -37,10 +38,14 @@
 
             module(function ($provide) {
                 $provide.value("$ionicPopup", $ionicPopup);
-                $provide.value("globals", globals);
+                $provide.constant("globals", globals);
             });
 
             module("app.shared");
+
+            module(function ($provide, sharedGlobals) {
+                $provide.constant("globals", angular.extend({}, sharedGlobals, globals));
+            });
 
             inject(function ($q, _CommonService_, _$rootScope_, _$compile_, _$state_, _$ionicPlatform_) {
                 $rootScope = _$rootScope_;
@@ -2194,6 +2199,148 @@
                 var string = TestUtils.getRandomInteger(1, 1000) + TestUtils.getRandomStringThatIsAlphaNumeric(50);
 
                 expect(CommonService.isPoBox(string)).toBeFalsy();
+            });
+        });
+
+        describe("has an exitApp function that", function () {
+
+            beforeEach(function () {
+                $state.go.and.stub();
+            });
+
+            describe("when on a platform that supports app self-termination", function () {
+
+                beforeEach(function () {
+                    navigator.app = jasmine.createSpyObj("navigator.app", ["exitApp"]);
+                });
+
+                beforeEach(function () {
+                    CommonService.exitApp();
+                });
+
+                it("should call navigator.app.exitApp()", function () {
+                    expect(navigator.app.exitApp).toHaveBeenCalledWith();
+                });
+
+                it("should redirect to the login state", function () {
+                    expect($state.go).toHaveBeenCalledWith(globals.LOGIN_STATE);
+                });
+            });
+
+            describe("when NOT on a platform that supports app self-termination", function () {
+
+                beforeEach(function () {
+                    delete navigator.app;
+                });
+
+                beforeEach(function () {
+                    CommonService.exitApp();
+                });
+
+                it("should redirect to the login state", function () {
+                    expect($state.go).toHaveBeenCalledWith(globals.LOGIN_STATE);
+                });
+            });
+        });
+
+        describe("has a goToBackState function that", function () {
+            var backButton,
+                isolateScope,
+                result;
+
+            beforeEach(function () {
+                backButton = jasmine.createSpyObj("BackButton", ["isolateScope"]);
+                isolateScope = jasmine.createSpyObj("IsolateScope", ["goBack"]);
+            });
+
+            describe("when given a back button", function () {
+
+                describe("when the given back button is valid", function () {
+
+                    describe("when the given back button has an isolate scope", function () {
+
+                        beforeEach(function () {
+                            backButton.isolateScope.and.returnValue(isolateScope);
+                        });
+
+                        beforeEach(function () {
+                            result = CommonService.goToBackState(backButton);
+                        });
+
+                        it("should call the back button's goBack function", function () {
+                            expect(isolateScope.goBack).toHaveBeenCalledWith();
+                        });
+
+                        it("should return true", function () {
+                            expect(result).toBeTruthy();
+                        });
+                    });
+
+                    describe("when the given back button does NOT have an isolate scope", function () {
+
+                        it("should throw an error", function () {
+                            expect(function () {
+                                CommonService.goToBackState(backButton)
+                            }).toThrowError("Couldn't find the back button to go the back state");
+                        });
+                    });
+                });
+
+                describe("when the given back button is NOT valid", function () {
+
+                    beforeEach(function () {
+                        backButton = null;
+                    });
+
+                    it("should throw an error", function () {
+                        expect(function () {
+                            CommonService.goToBackState(backButton)
+                        }).toThrowError("Couldn't find the back button to go the back state");
+                    });
+                });
+            });
+
+            describe("when NOT given a back button", function () {
+
+                xdescribe("when an active back button is found", function () {
+
+                    beforeEach(function () {
+                        //TODO - figure out how to set this test up
+                    });
+
+                    describe("when the active back button has an accessible isolate scope", function () {
+
+                        beforeEach(function () {
+                            backButton.isolateScope.and.returnValue(isolateScope);
+                        });
+
+                        beforeEach(function () {
+                            result = CommonService.goToBackState();
+                        });
+
+                        it("should call the back button's goBack function", function () {
+                            expect(isolateScope.goBack).toHaveBeenCalledWith();
+                        });
+
+                        it("should return true", function () {
+                            expect(result).toBeTruthy();
+                        });
+                    });
+
+                    describe("when the active back button does NOT have an accessible isolate scope", function () {
+
+                        it("should throw an error", function () {
+                            expect(CommonService.goToBackState).toThrowError("Couldn't find the back button to go the back state");
+                        });
+                    });
+                });
+
+                describe("when an active back button is NOT found", function () {
+
+                    it("should throw an error", function () {
+                        expect(CommonService.goToBackState).toThrowError("Couldn't find the back button to go the back state");
+                    });
+                });
             });
         });
     });

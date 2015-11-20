@@ -95,7 +95,14 @@
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks"]);
             PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getOrCreatePaymentAdd"]);
-            CommonService = jasmine.createSpyObj("CommonService", ["closeAllPopups", "displayAlert", "loadingBegin", "loadingComplete", "logOut"]);
+            CommonService = jasmine.createSpyObj("CommonService", [
+                "closeAllPopups",
+                "displayAlert",
+                "exitApp",
+                "loadingBegin",
+                "loadingComplete",
+                "logOut"
+            ]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
@@ -150,6 +157,18 @@
                     });
                 });
 
+                describe("when the user is navigating to the exit state", function () {
+
+                    beforeEach(function () {
+                        $state.go("app.exit");
+                        $rootScope.$digest();
+                    });
+
+                    it("should continue to the state", function () {
+                        expect($state.current.name).toEqual("app.exit");
+                    });
+                });
+
                 describe("when the user is navigating to the landing page", function () {
 
                     beforeEach(function () {
@@ -180,6 +199,18 @@
 
                     it("should continue to the page", function () {
                         expect($state.current.name).toEqual(mockGlobals.LOGIN_STATE);
+                    });
+                });
+
+                describe("when the user is navigating to the exit state", function () {
+
+                    beforeEach(function () {
+                        $state.go("app.exit");
+                        $rootScope.$digest();
+                    });
+
+                    it("should continue to the state", function () {
+                        expect($state.current.name).toEqual("app.exit");
                     });
                 });
 
@@ -249,6 +280,25 @@
                 expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
             });
 
+        });
+
+        describe("has a hardware back button action that", function () {
+
+            xit("should be registered with $ionicPlatform.registerBackButtonAction with the expected priority", function () {
+                //TODO - figure out how to test this
+                expect($ionicPlatform.registerBackButtonAction).toHaveBeenCalledWith(jasmine.any(Function), 101);
+            });
+
+            describe("when the hardware back button is pressed", function () {
+
+                beforeEach(function () {
+                    //TODO - figure out how to test this
+                });
+
+                xit("should call CommonService.goToBackState", function () {
+                    expect(CommonService.goToBackState).toHaveBeenCalledWith();
+                });
+            });
         });
     });
 })();
