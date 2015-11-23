@@ -61,14 +61,14 @@
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleVersion</key>
-    <string>7</string>
+    <string>8</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
     <dict>
       <key>NSExceptionDomains</key>
       <dict>
-        <key>uat.account.wexmobile.com</key>
+        <key>account.wexmobile.com</key>
         <dict>
           <key>NSIncludesSubdomains</key>
           <true/>
@@ -88,9 +88,9 @@
       </dict>
     </dict>
     <key>NSMainNibFile</key>
-    <string></string>
+    <string/>
     <key>NSMainNibFile~ipad</key>
-    <string></string>
+    <string/>
     <key>UIInterfaceOrientation</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>
