@@ -22,9 +22,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
@@ -35,6 +32,9 @@
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "nl.x-services.plugins.toast": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
