@@ -198,8 +198,6 @@
         <string>{768, 1024}</string>
       </dict>
     </array>
-    <key>UIRequiresFullScreen</key>
-    <true/>
     <key>UISupportedInterfaceOrientations</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>
@@ -210,5 +208,7 @@
       <string>UIInterfaceOrientationPortrait</string>
       <string>UIInterfaceOrientationPortraitUpsideDown</string>
     </array>
+    <key>UIRequiresFullScreen</key>
+    <true/>
   </dict>
 </plist>

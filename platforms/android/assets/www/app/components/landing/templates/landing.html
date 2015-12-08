@@ -1,0 +1,122 @@
+<ion-view view-title="{{::vm.config.title}}" class="landing-view" wex-hide-back-button="true" wex-back-state="user.auth.login">
+    <ion-nav-title>
+        <wex-scalable-img src="img/fleet_smarthub_logo_small.png"></wex-scalable-img>
+    </ion-nav-title>
+
+    <ion-content>
+        <div class="content item item-divider main-container">
+
+            <div class="row header">
+                <div class="col col-100" id="companyDetails">
+                    <span>{{vm.user.billingCompany.name}}</span>
+                    <br>
+                    <span class="body-text">{{vm.user.getDisplayAccountNumber()}}</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-50">
+                    <canvas id="doughnut"
+                            width="125"
+                            height="125"
+                            class="chart chart-doughnut"
+                            chart-options="vm.chart.options"
+                            chart-data="vm.chart.data"
+                            chart-colours="vm.chart.colors"
+                            chart-labels="vm.chart.labels">
+                    </canvas>
+                </div>
+
+                <div class="col content_align">
+                    <div wex-colored-currency
+                         ng-model="vm.invoiceSummary.availableCredit"
+                         id="availableCredit"
+                         class="graph-amounts">
+                        <span class="label">{{::vm.config.availableCredit}}</span>
+                        <br>
+                        <span class="value">{{vm.invoiceSummary.availableCredit | currency}}</span>
+                    </div>
+                    <div id="billedAmount"
+                         class="graph-amounts">
+                        <span class="label">{{::vm.config.billedAmount}}</span>
+                        <br>
+                        <span class="value">{{vm.invoiceSummary.billedAmount | currency}}</span>
+                    </div>
+                    <div id="unbilledAmount"
+                         class="graph-amounts">
+                        <span class="label">{{::vm.config.unbilledAmount}}</span>
+                        <br>
+                        <span class="value">{{vm.invoiceSummary.unbilledAmount | currency}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inner-container">
+                <div class="row invoice-divider current-balance">
+                    <div class="col col-50 label">{{::vm.config.currentBalance}}</div>
+                    <div class="col col-50 content_align value">
+                        {{vm.invoiceSummary.currentBalance | currency}}
+                    </div>
+                </div>
+                <div class="row invoice-divider">
+                    <div class="col col-50 label">{{::vm.config.statementBalance}}</div>
+                    <div class="col col-50 content_align value">
+                        {{vm.invoiceSummary.statementBalance | currency}}
+                    </div>
+                </div>
+
+                <div class="row invoice-divider">
+                    <div class="col col-50 label">{{::vm.config.paymentDueDate}}</div>
+                    <div class="col col-50 content_align value">
+                        {{vm.invoiceSummary.paymentDueDate | wexDefaultDateFormat}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="padding button-container">
+                <div>
+                    <a class="button button-block button-stable item item-icon-right button-divider"
+                       href="#/payment/add/verify">
+                        <div class="row">
+                            <div class="col col-50">
+                                <span class="btn_align">{{::vm.config.makePayment}}</span>
+                            </div>
+                            <div class="col col-50 content_align">
+                                <i class="icon ion-chevron-right"></i>
+                                <span class="badge" ng-if="vm.scheduledPaymentsCount > 0">
+                                    {{vm.scheduledPaymentsCount}} {{::vm.config.scheduledPayments}}
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="button button-block button-stable item item-icon-right"
+                       ui-sref="transaction.list">
+                        <div class="row">
+                            <div class="col col-50">
+                                <span id="transactionActivityButton" class="btn_align">{{::vm.config.transactionActivity}}</span>
+                            </div>
+                            <div class="col col-50 content_align">
+                                <i class="icon ion-chevron-right"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="button-group">
+                    <a class="button button-block button-light item item-icon-right"
+                            ui-sref="card.list">
+                        <div class="row">
+                            <div class="col col-50">
+                                <span id="cardsButton" class="btn_align black">{{::vm.config.cards}}</span>
+                            </div>
+                            <div class="col col-50 content_align">
+                                <i class="icon ion-chevron-right"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

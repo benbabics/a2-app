@@ -1,0 +1,25 @@
+{
+  "name": "ionic-datepicker-widget",
+  "version": "1.1.1",
+  "description": "A datepicker widget for Ionic framework",
+  "authors": [
+    "https://github.com/rajeshwarpatlolla, rajeshwar.patlolla@gmail.com",
+    "Marko Marković <okram@civokram.com>"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/markomarkovic/ionic-datepicker-widget.git"
+  },
+  "devDependencies": {
+    "gulp": "~3.8.11",
+    "gulp-clean": "^0.3.1",
+    "gulp-concat": "~2.5.2",
+    "gulp-jshint": "^1.10.0",
+    "gulp-minify-html": "~1.0.2",
+    "gulp-ng-html2js": "~0.2.0",
+    "gulp-uglify": "~1.2.0",
+    "jshint-stylish": "^1.0.2",
+    "merge-stream": "^0.1.7"
+  }
+}

@@ -1,8 +1,24 @@
 {
+    "cordova-plugin-x-toast": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-x-toast"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
     "com.ionic.keyboard": {
         "source": {
             "type": "registry",
             "id": "com.ionic.keyboard@^1.0.4"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-ios-requires-fullscreen": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-ios-requires-fullscreen"
         },
         "is_top_level": true,
         "variables": {}
@@ -68,14 +84,6 @@
             "type": "git",
             "url": "https://github.com/Telerik-Verified-Plugins/Toast",
             "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-ios-requires-fullscreen": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-ios-requires-fullscreen"
         },
         "is_top_level": true,
         "variables": {}

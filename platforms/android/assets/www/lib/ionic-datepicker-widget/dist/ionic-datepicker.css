@@ -1,0 +1,33 @@
+/**
+ * Optional, but makes everything look better.
+ * Customize to your liking.
+ */
+.datepicker .calendar {
+	height: 210px;
+}
+.datepicker .weekDays {
+	font-weight: bold;
+}
+.datepicker .day {
+	padding: 5px;
+	white-space: nowrap;
+}
+.datepicker .day:hover {
+	background-color: rgba(56, 126, 245, .5); /* Half-transparent $positive bg */
+	cursor: pointer;
+}
+.datepicker .day:active {
+	background-color: rgba(56, 126, 245, 1); /* Opaque $positive bg */
+	cursor: pointer;
+}
+.datepicker .selected {
+	background-color: rgba(56, 126, 245, 1) !important; /* Opaque $positive bg */
+}
+.datepicker .today {
+	background-color: rgba(178, 178, 178, 1); /* Opaque $stable bg */
+}
+.datepicker .disabled {
+	background-color: rgba(248, 248, 248, .5) !important; /* Half-transparent $stable bg */
+	color: rgba(178, 178, 178, 1)  !important; /* Opaque $stable text */
+	cursor: default !important;
+}

@@ -1,0 +1,42 @@
+<ion-view view-title="{{::vm.config.title}}">
+    <ion-content class="padding inner-container">
+        <div class="item item-divider inner-container" style="border:0px">
+            <div class="padding item item-wrap arrow-align">
+                <p class="padding divider">
+                    <span id="paymentAmountLabel" class="block_align black">{{::vm.config.amount}}</span>
+                    <span id="paymentAmount" class="content_align black">{{vm.payment.amount | currency}}</span>
+                </p>
+                <p class="padding divider">
+                    <span id="scheduledDateLabel" class="block_align black">{{vm.payment.isScheduled() ? vm.config.scheduledDate : vm.config.postedDate}}</span>
+                    <span id="scheduledDate" class="content_align black">{{vm.payment.isPending() ? vm.config.inProcess : (vm.payment.scheduledDate | wexDefaultDateFormat)}}</span>
+                </p>
+                <p class="padding divider">
+                    <span id="paymentMethodLabel" class="block_align black">{{::vm.config.method}}</span>
+                    <span id="paymentMethod" class="content_align black">{{vm.payment.getMethodDisplayName()}}</span>
+                </p>
+                <p class="padding divider">
+                    <span id="bankAccountLabel" class="black">{{::vm.config.bankAccount}}</span>
+                    <span id="bankAccount" class="black wordwrap">{{vm.payment.getBankAccountDisplayName()}}</span>
+                </p>
+            </div>
+            <br>
+
+            <div ng-if="vm.payment.isScheduled()">
+                <div ng-click="vm.displayCancelPaymentPopup()">
+                    <button class="button button-block button-light item item-icon-right black">
+                        <i class="icon ion-chevron-right"></i>
+                        <span id="cancelButton" class="btn_align">{{::vm.config.cancelButton}}</span>
+                    </button>
+                 </div>
+
+                <div ng-if="vm.isPaymentEditable"
+                     ng-click="vm.editPayment()">
+                    <button class="button button-block button-light item item-icon-right black">
+                        <i class="icon ion-chevron-right"></i>
+                        <span id="editButton" class="btn_align">{{::vm.config.editButton}}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>>

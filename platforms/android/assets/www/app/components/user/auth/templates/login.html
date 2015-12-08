@@ -1,0 +1,44 @@
+<ion-view view-title="{{::vm.config.title}}" hide-nav-bar="true" class="user-login-view" wex-back-state="app.exit">
+    <ion-content>
+        <div class="padding header-login">
+            <h2>{{::vm.config.title}}</h2>
+        </div>
+
+        <div class="card card-error padding"
+             id="errorMessage"
+             ng-if="vm.globalError">
+            {{vm.globalError}}
+        </div>
+
+        <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.authenticateUser()">
+            <div class="list">
+                <div class="padding">
+                    <span class="item item-input item-user-name">
+                        <input ng-model="vm.user.username"
+                               name="userName"
+                               type="text"
+                               required
+                               placeholder="{{::vm.config.userName.label}}"
+                               wex-max-length="{{::vm.config.userName.maxLength}}">
+                    </span>
+                </div>
+
+                <div class="padding">
+                    <span class="item item-input item-password">
+                        <input ng-model="vm.user.password"
+                               name="password"
+                               type="password"
+                               required
+                               placeholder="{{::vm.config.password.label}}"
+                               wex-max-length="{{::vm.config.password.maxLength}}">
+                    </span>
+                </div>
+
+                <div class="padding align_center">
+                    <wex-required-submit class="button-width" text="{{::vm.config.submitButton}}"></wex-required-submit>
+                </div>
+
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

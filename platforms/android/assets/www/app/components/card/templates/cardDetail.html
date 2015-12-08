@@ -1,0 +1,41 @@
+<ion-view class="card-list-view" view-title="{{::vm.config.title}}">
+    <ion-content class="padding inner-container">
+        <div class="item item-divider inner-container" style="border:0px">
+            <div class="padding item item-wrap arrow-align">
+                <div class="row divider">
+                    <div class="col col-50 black">{{::vm.config.cardNumber}}</div>
+                    <div class="col col-50 black right-align">{{vm.card.embossedCardNumber | wexCardNumber}}</div>
+                </div>
+
+                <div class="row divider">
+                    <div class="col col-50 black wrap">{{::vm.config.standardEmbossing}}</div>
+                    <div class="col col-50 black wordwrap">{{vm.card.embossingValue2}}</div>
+                </div>
+
+                <div class="row divider">
+                    <div class="col col-50 black wrap">{{::vm.config.optionalEmbossing}}</div>
+                    <div class="col col-50 black wordwrap">{{vm.card.embossingValue1}}</div>
+                </div>
+
+                <div class="row divider">
+                    <div class="col col-50 black">{{::vm.config.status}}</div>
+                    <div class="col col-50 black wordwrap">{{vm.card.getStatusDisplayName()}}</div>
+                </div>
+            </div>
+            <br>
+            <div ng-if="vm.card.isActive() || vm.card.isSuspended()">
+                <button class="button button-block button-light item item-icon-right"
+                        ui-sref="card.changeStatus.form({cardId: vm.card.cardId})">
+                    <i class="icon ion-chevron-right"></i>
+                    <span class="btn_align black">{{::vm.config.changeStatusButton}}</span>
+                </button>
+                <button class="button button-block button-light item item-icon-right"
+                        ng-if="vm.card.isActive()"
+                        ui-sref="card.reissue.form({cardId: vm.card.cardId})">
+                    <i class="icon ion-chevron-right"></i>
+                    <span class="btn_align black">{{::vm.config.reissueCardButton}}</span>
+                </button>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>>

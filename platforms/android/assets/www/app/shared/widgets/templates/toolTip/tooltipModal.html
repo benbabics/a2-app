@@ -1,0 +1,11 @@
+<ion-modal-view class="modal-tooltip transparent">
+    <ion-pane class="transparent">
+        <div class="pane-tooltip">
+            <h5 class="header-tooltip">{{title}}</h5>
+            <div class="contents-tooltip">
+                <span ng-bind-html="body"></span>
+                <button class="button button-block button-submit" ng-click="closeToolTip()">{{closeButton}}</button>
+            </div>
+        </div>
+    </ion-pane>
+</ion-modal-view>

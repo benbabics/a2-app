@@ -19,34 +19,34 @@
     },
     "installed_plugins": {
         "com.ionic.keyboard": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
-        },
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
-        },
-        "cordova-plugin-crosswalk-webview": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
-        },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
-        },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
-        },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
-        },
-        "nl.x-services.plugins.toast": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-ios-requires-fullscreen": {
-            "PACKAGE_NAME": "com.wex.wol.accountmaintenance"
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "nl.x-services.plugins.toast": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
     "dependent_plugins": {}

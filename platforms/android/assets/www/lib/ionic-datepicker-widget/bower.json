@@ -1,0 +1,33 @@
+{
+  "name": "ionic-datepicker-widget",
+  "version": "1.1.1",
+  "description": "A datepicker widget for Ionic framework",
+  "authors": [
+    "rajeshwarpatlolla <rajeshwar.patlolla@gmail.com>",
+    "Marko Marković <okram@civokram.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/markomarkovic/ionic-datepicker-widget",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/markomarkovic/ionic-datepicker-widget.git"
+  },
+  "main": [
+    "dist/ionic-datepicker.css",
+    "dist/ionic-datepicker.min.js"
+  ],
+  "keywords": [
+    "ionic-datepicker",
+    "ionic-datepicker-widget",
+    "ionic",
+    "datepicker",
+    "widget"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

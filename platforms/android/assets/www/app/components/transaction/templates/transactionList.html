@@ -1,0 +1,26 @@
+<ion-view view-title="{{::vm.config.title}}" wex-back-state="landing">
+    <ion-content class="padding">
+        <wex-infinite-list on-reload="vm.loadNextPage"
+                           on-page-loaded="vm.pageLoaded"
+                           reload-distance="::vm.config.reloadDistance">
+            <div ng-switch="vm.postedTransactions.length > 0">
+                <div ng-switch-when="true"
+                     class="row divider"
+                     collection-repeat="transaction in vm.postedTransactions"
+                     ui-sref="transaction.posted.detail({transactionId: transaction.transactionId})">
+
+                    <div class="col col-25 ellipsis">{{transaction.embossedCardNumber | wexCardNumber}}<br>{{transaction.driverLastName}}, {{transaction.driverFirstName}}<br>{{transaction.customVehicleId}}</div>
+                    <div class="col col-39 body-text ellipsis">{{transaction.merchantName}}<br>{{transaction.merchantCity}}, {{transaction.merchantState}}<br>{{transaction.productDescription}}</div>
+                    <div class="col col-26 right-align">{{transaction.netCost | currency}}<br>&nbsp;<br><span class="body-text">{{transaction.transactionDate | wexDefaultDateFormat}}</span></div>
+                    <div class="col col-10">
+                        <span class="button button-icon icon ion-ios-arrow-forward"
+                              style="margin-top:10px">
+                        </span>
+                    </div>
+                </div>
+
+                <div ng-switch-when="false" ng-if="vm.firstPageLoaded" class="no-transactions">{{::vm.config.emptyList}}</div>
+            </div>
+        </wex-infinite-list>
+    </ion-content>
+</ion-view>

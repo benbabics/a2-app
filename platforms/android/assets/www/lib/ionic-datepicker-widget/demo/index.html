@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title>Datepicker demo</title>
+
+	<!-- Ionic -->
+	<link href="http://code.ionicframework.com/1.0.0/css/ionic.min.css" rel="stylesheet">
+	<script src="http://code.ionicframework.com/1.0.0/js/ionic.bundle.min.js"></script>
+
+	<!-- Datepicker -->
+	<script src="http://cdn.rawgit.com/markomarkovic/ionic-datepicker-widget/1.1.1/dist/ionic-datepicker.min.js"></script>
+	<!-- CSS is optional, but makes everything look better. -->
+	<link href="http://cdn.rawgit.com/markomarkovic/ionic-datepicker-widget/1.1.1/dist/ionic-datepicker.css" rel="stylesheet">
+
+	<!-- App -->
+	<script>
+'use strict';
+angular.module('starter', ['ionic', 'ionic-datepicker'])
+.controller('SomeController', ['$scope', function ($scope) {
+	// First picker
+	$scope.item1 = {};
+	// Second picker
+	var now = new Date();
+	var oneMonthAgo = new Date();
+	var inOneWeek = new Date();
+	oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+	inOneWeek.setDate(inOneWeek.getDate() + 7);
+	$scope.item2 = {
+		date: now,
+		min: oneMonthAgo,
+		max: inOneWeek
+	};
+	// Third picker
+	$scope.item3 = {
+		weekDayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+		monthNames: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
+	};
+}]);
+	</script>
+</head>
+<body ng-app="starter" ng-controller="SomeController">
+	<ion-pane>
+		<ion-header-bar class="bar-stable">
+			<h1 class="title">Datepicker demo</h1>
+			<a href="https://github.com/markomarkovic/ionic-datepicker-widget"><button class="button icon-left ion-social-github">Source</button></a>
+		</ion-header-bar>
+		<ion-content>
+			<div class="list card">
+				<div class="item item-divider">
+					Just the picker.
+				</div>
+				<div class="item">
+					<ionic-datepicker value="item1.date">
+						<button class="button button-block button-positive icon-left ion-calendar">{{ item1.date | date:'yyyy-MM-dd' }}</button>
+					</ionic-datepicker>
+				</div>
+			</div>
+			<div class="list card">
+				<div class="item item-divider">
+					Default date, begins on monday and minimum and maxumum date.
+				</div>
+				<div class="item">
+					<ionic-datepicker value="item2.date" week-begins-on-monday="true" min="item2.min" max="item2.max">
+						<button class="button button-block button-positive icon-left ion-calendar">{{ item2.date | date:'yyyy-MM-dd' }}</button>
+					</ionic-datepicker>
+				</div>
+			</div>
+			<div class="list card">
+				<div class="item item-divider">
+					Localized to german.
+				</div>
+				<div class="item">
+					<ionic-datepicker
+						value="item3.date"
+						week-day-names="item3.weekDayNames"
+						month-names="item3.monthNames"
+						today-text="'Heute'"
+						title="'Wählen Sie einen Datum aus'">
+							<button class="button button-block button-positive icon-left ion-calendar">{{ item3.date | date:'dd.MM.yyyy' }}</button>
+					</ionic-datepicker>
+				</div>
+			</div>
+		</ion-content>
+	</ion-pane>
+</body>
+</html>
