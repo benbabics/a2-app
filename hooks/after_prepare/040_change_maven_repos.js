@@ -66,7 +66,7 @@ if (rootdir) {
         changeMavenRepo(rootdir, "platforms/android/build.gradle");
         changeMavenRepo(rootdir, "platforms/android/CordovaLib/build.gradle");
 
-        changeMavenURL(rootdir, "platforms/android/cordova-plugin-crosswalk-webview/accountmaintenance-xwalk.gradle", "url 'https://download.01.org/crosswalk/releases/crosswalk/android/maven2'");
+        changeMavenURL(rootdir, "platforms/android/cordova-plugin-crosswalk-webview/fleetsmarthub-xwalk.gradle", "url 'https://download.01.org/crosswalk/releases/crosswalk/android/maven2'");
 
     } catch(e) {
         console.log(e);
