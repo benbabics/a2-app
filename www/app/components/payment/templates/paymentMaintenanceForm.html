@@ -4,7 +4,7 @@
             <div class="padding">
                 <p class="padding-top divider">
                     <span id="invoiceNumberLabel" class="block_align">{{::vm.config.invoiceNumber}}</span>
-                    <span id="invoiceNumber" class="content_align">{{vm.invoiceSummary.invoiceNumber}}</span>
+                    <span id="invoiceNumber" class="content_align">{{vm.invoiceSummary.invoiceNumber ? vm.invoiceSummary.invoiceNumber : vm.config.invoiceNumberNotAvailable}}</span>
                 </p>
 
                 <br>

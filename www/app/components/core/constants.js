@@ -207,16 +207,17 @@
 
     appGlobals.PAYMENT_MAINTENANCE_FORM = {
         "CONFIG": {
-            "invoiceNumber"           : "Invoice Number",
-            "paymentDueDate"          : "Due Date",
-            "currentBalance"          : "Current Balance",
-            "statementBalance"        : "Statement Balance",
-            "enterAmount"             : "Enter Amount",
-            "amount"                  : "Amount",
-            "bankAccount"             : "Bank Account",
-            "scheduledDate"           : "Date",
-            "scheduledDatePickerTitle": "Select Date",
-            "submitButton"            : "Next"
+            "invoiceNumber"            : "Invoice Number",
+            "invoiceNumberNotAvailable": "N/A",
+            "paymentDueDate"           : "Due Date",
+            "currentBalance"           : "Current Balance",
+            "statementBalance"         : "Statement Balance",
+            "enterAmount"              : "Enter Amount",
+            "amount"                   : "Amount",
+            "bankAccount"              : "Bank Account",
+            "scheduledDate"            : "Date",
+            "scheduledDatePickerTitle" : "Select Date",
+            "submitButton"             : "Next"
         },
         "INPUTS": {
             "AMOUNT"      : {
