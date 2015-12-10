@@ -256,8 +256,7 @@
     appGlobals.PAYMENT_MAINTENANCE_SUMMARY = {
         "CONFIG"  : {
             "title"                : "Payment Summary",
-            "afternoonWarning"     : "Payments received after 3:30 pm Eastern Time may not be posted to your account until the next business day.",
-            "weekendHolidayWarning": "Scheduled payments will be processed on the date selected. Payments scheduled for weekends/holidays will be posted the next business day.",
+            "processingWarning"    : "Payments scheduled after 3:30PM Eastern Time, on a weekend, or on a holiday will be processed on the NEXT business day.",
             "amount"               : "Amount",
             "bankAccount"          : "Bank Account",
             "scheduledDate"        : "Date",

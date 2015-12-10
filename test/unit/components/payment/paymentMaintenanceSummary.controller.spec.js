@@ -14,8 +14,7 @@
             PAYMENT_MAINTENANCE_SUMMARY: {
                 "CONFIG"  : {
                     "title"                : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "afternoonWarning"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "weekendHolidayWarning": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "processingWarning"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "amount"               : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "bankAccount"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "scheduledDate"        : TestUtils.getRandomDate(),
