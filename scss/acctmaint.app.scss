@@ -316,16 +316,17 @@ $container-background-color: #f0f0f0;
         padding-right: 0;
     }
 
-    .list-header {
-        background-color: $wex-blue;
-        color: #fff;
-        font-weight: bold;
-        margin-top: 0;
-    }
-
     .row {
         padding: 5px;
         font-size: 15px;
+
+        &.list-header {
+            background-color: $wex-blue;
+            color: #fff;
+            font-weight: bold;
+            margin-top: 0;
+            padding: 10px 5px 10px 5px;
+        }
 
         .col {
             padding: 0;
