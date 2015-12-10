@@ -30,7 +30,7 @@
             },
             "submitButton": "Log In",
             "serverErrors": {
-                "AUTHORIZATION_FAILED"              : "Your account is not able to be managed via the mobile application at this time.",
+                "AUTHORIZATION_FAILED"              : "We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.",
                 "DEFAULT"                           : "Invalid login information. Please check your username and password or go online to set up or recover your username and password.",
                 "PASSWORD_EXPIRED"                  : "Invalid login information. Go online to set up or recover your username and password.",
                 "TOKEN_EXPIRED"                     : "Your session has expired. Please login again.",
