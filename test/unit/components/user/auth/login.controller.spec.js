@@ -429,7 +429,7 @@
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual("Your account is not able to be managed via the mobile application at this time.");
+                    expect(ctrl.globalError).toEqual("We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.");
                 });
 
                 it("should NOT navigate away from the login page", function () {
