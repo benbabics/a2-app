@@ -52,6 +52,11 @@
 		49F2F4B0E45D4B008BE982C9 /* Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 7550D9AAA306464A98AEB55F /* Toast.m */; };
 		7DE4F2B17E96412C88403DBD /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9397B2955A455FBB2DE8E8 /* CDVConnection.m */; };
 		6FFAD8697BDC48399E0EC305 /* CDVReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 0371044721C34BC9B07058DE /* CDVReachability.m */; };
+		55ADFABE726843F29A75CFD1 /* UniversalAnalyticsPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = D99FAE803050419CAFD69E4B /* UniversalAnalyticsPlugin.m */; };
+		7E44FF668DBA4B949EF4A0C7 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F83F7695BC5F4E84A4D62DEC /* libGoogleAnalyticsServices.a */; };
+		3213387603B7472B83D195CB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78D416F4EDF497483CF0D73 /* CoreData.framework */; };
+		BCCEE82D131445A597D07912 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD88CAE37E5042128082E885 /* libz.dylib */; };
+		2498AC6472FC412B98784359 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F951E0F8C70A4E1890E81833 /* libsqlite3.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +144,22 @@
 		0371044721C34BC9B07058DE /* CDVReachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVReachability.m"; path = "cordova-plugin-network-information/CDVReachability.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		4E9A1B9DD57746658DF6FEB7 /* CDVConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVConnection.h"; path = "cordova-plugin-network-information/CDVConnection.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		8C6A9972AE544359B93EDF65 /* CDVReachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVReachability.h"; path = "cordova-plugin-network-information/CDVReachability.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		D99FAE803050419CAFD69E4B /* UniversalAnalyticsPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UniversalAnalyticsPlugin.m"; path = "cordova-plugin-google-analytics/UniversalAnalyticsPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		F83F7695BC5F4E84A4D62DEC /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGoogleAnalyticsServices.a"; path = "Fleet SmartHub/Plugins/cordova-plugin-google-analytics/libGoogleAnalyticsServices.a"; sourceTree = "<group>"; fileEncoding = 4; };
+		F0A1B6442AC9466882E6C12C /* UniversalAnalyticsPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UniversalAnalyticsPlugin.h"; path = "cordova-plugin-google-analytics/UniversalAnalyticsPlugin.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		5E63E4F15C344EE3B202CCEB /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAIDictionaryBuilder.h"; path = "cordova-plugin-google-analytics/GAIDictionaryBuilder.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		6D12C0C760B1462B92B6CB2A /* GAIFields.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAIFields.h"; path = "cordova-plugin-google-analytics/GAIFields.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		36760D5EC4AA4BCBAEB45EE0 /* GAILogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAILogger.h"; path = "cordova-plugin-google-analytics/GAILogger.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		0AB7CC337F7C43889DBA0385 /* GAITrackedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAITrackedViewController.h"; path = "cordova-plugin-google-analytics/GAITrackedViewController.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		4CD0D341024547EEA34236EA /* GAI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAI.h"; path = "cordova-plugin-google-analytics/GAI.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		945C9D870F48428C89F6A64D /* GAITracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAITracker.h"; path = "cordova-plugin-google-analytics/GAITracker.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		EBC8AD4EAA0043139038E5C1 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAIEcommerceFields.h"; path = "cordova-plugin-google-analytics/GAIEcommerceFields.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		D21027BECC3E4DA782A594F6 /* GAIEcommerceProduct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAIEcommerceProduct.h"; path = "cordova-plugin-google-analytics/GAIEcommerceProduct.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		6E19C1BF580A48E4B52622E9 /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAIEcommerceProductAction.h"; path = "cordova-plugin-google-analytics/GAIEcommerceProductAction.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		5E60A14133EF4B629A3C2DCF /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAIEcommercePromotion.h"; path = "cordova-plugin-google-analytics/GAIEcommercePromotion.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		A78D416F4EDF497483CF0D73 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CoreData.framework"; path = "System/Library/Frameworks/CoreData.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
+		DD88CAE37E5042128082E885 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libz.dylib"; path = "usr/lib/libz.dylib"; sourceTree = SDKROOT; fileEncoding = 4; };
+		F951E0F8C70A4E1890E81833 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsqlite3.dylib"; path = "usr/lib/libsqlite3.dylib"; sourceTree = SDKROOT; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +173,10 @@
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
 				276033955606432EBC15F290 /* SystemConfiguration.framework in Frameworks */,
 				AFA3E11EF70248998B6DF516 /* QuartzCore.framework in Frameworks */,
+				7E44FF668DBA4B949EF4A0C7 /* libGoogleAnalyticsServices.a in Frameworks */,
+				3213387603B7472B83D195CB /* CoreData.framework in Frameworks */,
+				BCCEE82D131445A597D07912 /* libz.dylib in Frameworks */,
+				2498AC6472FC412B98784359 /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +251,10 @@
 				305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */,
 				2CF9CE2A2A3341FF90093BBC /* SystemConfiguration.framework */,
 				241D035E920F4C50ABFC220C /* QuartzCore.framework */,
+				F83F7695BC5F4E84A4D62DEC /* libGoogleAnalyticsServices.a */,
+				A78D416F4EDF497483CF0D73 /* CoreData.framework */,
+				DD88CAE37E5042128082E885 /* libz.dylib */,
+				F951E0F8C70A4E1890E81833 /* libsqlite3.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -263,6 +292,18 @@
 				0371044721C34BC9B07058DE /* CDVReachability.m */,
 				4E9A1B9DD57746658DF6FEB7 /* CDVConnection.h */,
 				8C6A9972AE544359B93EDF65 /* CDVReachability.h */,
+				D99FAE803050419CAFD69E4B /* UniversalAnalyticsPlugin.m */,
+				F0A1B6442AC9466882E6C12C /* UniversalAnalyticsPlugin.h */,
+				5E63E4F15C344EE3B202CCEB /* GAIDictionaryBuilder.h */,
+				6D12C0C760B1462B92B6CB2A /* GAIFields.h */,
+				36760D5EC4AA4BCBAEB45EE0 /* GAILogger.h */,
+				0AB7CC337F7C43889DBA0385 /* GAITrackedViewController.h */,
+				4CD0D341024547EEA34236EA /* GAI.h */,
+				945C9D870F48428C89F6A64D /* GAITracker.h */,
+				EBC8AD4EAA0043139038E5C1 /* GAIEcommerceFields.h */,
+				D21027BECC3E4DA782A594F6 /* GAIEcommerceProduct.h */,
+				6E19C1BF580A48E4B52622E9 /* GAIEcommerceProductAction.h */,
+				5E60A14133EF4B629A3C2DCF /* GAIEcommercePromotion.h */,
 			);
 			name = Plugins;
 			path = "Fleet SmartHub/Plugins";
@@ -458,6 +499,7 @@
 				49F2F4B0E45D4B008BE982C9 /* Toast.m in Sources */,
 				7DE4F2B17E96412C88403DBD /* CDVConnection.m in Sources */,
 				6FFAD8697BDC48399E0EC305 /* CDVReachability.m in Sources */,
+				55ADFABE726843F29A75CFD1 /* UniversalAnalyticsPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +543,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.wex.fleetsmarthub;
 				PRODUCT_NAME = "Fleet SmartHub";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Fleet SmartHub/Plugins/cordova-plugin-google-analytics\"",
+				);
 			};
 			name = Debug;
 		};
@@ -531,6 +577,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.wex.fleetsmarthub;
 				PRODUCT_NAME = "Fleet SmartHub";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Fleet SmartHub/Plugins/cordova-plugin-google-analytics\"",
+				);
 			};
 			name = Release;
 		};
