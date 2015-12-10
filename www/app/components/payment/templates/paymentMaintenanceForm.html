@@ -1,4 +1,4 @@
-<ion-view view-title="{{::vm.config.title}}" wex-back-state="{{::vm.backStateOverride}}">
+<ion-view class="payment-maintenance-form" view-title="{{::vm.config.title}}" wex-back-state="{{::vm.backStateOverride}}">
     <ion-content>
         <div class="item item-divider inner-container">
             <div class="padding">
@@ -61,7 +61,7 @@
                 {{::vm.config.bankAccount}}
             </span>
 
-            <div ng-if="!vm.hasMultipleBanks" class="shrink">
+            <div ng-if="!vm.hasMultipleBanks" class="shrink single-value">
                 <span class="button right-padding ellipsis float-right">
                     {{vm.payment.bankAccount.getDisplayName()}}
                 </span>

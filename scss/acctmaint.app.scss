@@ -349,6 +349,17 @@ $container-background-color: #f0f0f0;
 }
 
 /**--------------------------------
+  Payment Maintenance Page
+ ----------------------------------**/
+.payment-maintenance-form {
+    .single-value {
+        .ellipsis {
+            width: 80%;
+        }
+    }
+}
+
+/**--------------------------------
   Payment Amount Input Page
  ----------------------------------**/
 .platform-ios {
