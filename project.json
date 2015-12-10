@@ -15,6 +15,7 @@
     },
     "content_security_policy": "default-src * 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "whitelist_domains": ["*"],
+    "google_analytics_tracking_id": "UA-71223382-2",
     "logging_enabled": "true"
   },
   "dit": {
@@ -28,6 +29,7 @@
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://pwm-wex-178.wrightexpress.com:* 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "whitelist_domains": ["pwm-wex-178.wrightexpress.com"],
+    "google_analytics_tracking_id": "UA-71223382-2",
     "logging_enabled": "true"
   },
   "stage": {
@@ -41,6 +43,7 @@
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://uat.account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "whitelist_domains": ["uat.account.wexmobile.com"],
+    "google_analytics_tracking_id": "UA-71223382-1",
     "logging_enabled": "true"
   },
   "prod": {
@@ -54,6 +57,7 @@
     },
     "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://account.wexmobile.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
     "whitelist_domains": ["account.wexmobile.com"],
+    "google_analytics_tracking_id": "UA-4082503-34",
     "logging_enabled": "false"
   }
 }

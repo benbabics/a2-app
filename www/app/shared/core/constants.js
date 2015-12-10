@@ -21,6 +21,13 @@
     };
 
     /**
+     * Google Analytics
+     */
+    sharedGlobals.GOOGLE_ANALYTICS = {
+        TRACKING_ID: "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID@@@"
+    };
+
+    /**
      * Logging
      */
     sharedGlobals.LOGGING = {

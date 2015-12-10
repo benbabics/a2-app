@@ -164,6 +164,8 @@ var platformConfig = (function () {
                 this.replaceStringInFile(targetFile, "@@@STRING_REPLACE_AUTH_CLIENT_ID@@@", properties.auth.client_id);
                 this.replaceStringInFile(targetFile, "@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@", properties.auth.client_secret);
 
+                this.replaceStringInFile(targetFile, "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID@@@", properties.google_analytics_tracking_id);
+
                 this.replaceStringInFile(targetFile, "@@@STRING_REPLACE_LOGGING_ENABLED@@@", properties.logging_enabled);
 
             } else {
