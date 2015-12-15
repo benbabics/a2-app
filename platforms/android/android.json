@@ -9,10 +9,6 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"com.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<preference name=\"webView\" value=\"org.crosswalk.engine.XWalkWebViewEngine\" />",
                             "count": 1
                         },
@@ -33,23 +29,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
+                            "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"com.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
                         {
@@ -57,7 +37,27 @@
                             "count": 1
                         },
                         {
+                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
                             "xml": "<feature name=\"UniversalAnalytics\"><param name=\"android-package\" value=\"com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -102,9 +102,6 @@
         }
     },
     "installed_plugins": {
-        "com.ionic.keyboard": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
         "cordova-ios-requires-fullscreen": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
@@ -114,25 +111,28 @@
         "cordova-plugin-crosswalk-webview": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "nl.x-services.plugins.toast": {
+        "com.ionic.keyboard": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
+        "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
         "cordova-plugin-google-analytics": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
@@ -144,43 +144,6 @@
             "clobbers": [
                 "cordova.plugins.Keyboard"
             ]
-        },
-        {
-            "file": "plugins/cordova-plugin-device/www/device.js",
-            "id": "cordova-plugin-device.device",
-            "clobbers": [
-                "device"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-            "id": "cordova-plugin-splashscreen.SplashScreen",
-            "clobbers": [
-                "navigator.splashscreen"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-            "id": "cordova-plugin-statusbar.statusbar",
-            "clobbers": [
-                "window.StatusBar"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-whitelist/whitelist.js",
-            "id": "cordova-plugin-whitelist.whitelist",
-            "runs": true
-        },
-        {
-            "file": "plugins/nl.x-services.plugins.toast/www/Toast.js",
-            "id": "nl.x-services.plugins.toast.Toast",
-            "clobbers": [
-                "window.plugins.toast"
-            ]
-        },
-        {
-            "file": "plugins/nl.x-services.plugins.toast/test/tests.js",
-            "id": "nl.x-services.plugins.toast.tests"
         },
         {
             "file": "plugins/cordova-plugin-network-information/www/network.js",
@@ -198,10 +161,47 @@
             ]
         },
         {
+            "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+            "id": "cordova-plugin-x-toast.Toast",
+            "clobbers": [
+                "window.plugins.toast"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+            "id": "cordova-plugin-x-toast.tests"
+        },
+        {
+            "file": "plugins/cordova-plugin-whitelist/whitelist.js",
+            "id": "cordova-plugin-whitelist.whitelist",
+            "runs": true
+        },
+        {
             "file": "plugins/cordova-plugin-google-analytics/www/analytics.js",
             "id": "cordova-plugin-google-analytics.UniversalAnalytics",
             "clobbers": [
                 "analytics"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+            "id": "cordova-plugin-statusbar.statusbar",
+            "clobbers": [
+                "window.StatusBar"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+            "id": "cordova-plugin-splashscreen.SplashScreen",
+            "clobbers": [
+                "navigator.splashscreen"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device/www/device.js",
+            "id": "cordova-plugin-device.device",
+            "clobbers": [
+                "device"
             ]
         }
     ]
