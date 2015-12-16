@@ -1,12 +1,9 @@
-<ion-view view-title="{{::vm.config.title}}" hide-nav-bar="true" class="user-login-view" wex-back-state="app.exit">
-    <ion-content>
-        <div class="padding header-login">
-            <h2>{{::vm.config.title}}</h2>
-        </div>
+<ion-view view-title="{{::vm.config.title}}" hide-nav-bar="true" class="user-login-view img-scalable" wex-back-state="app.exit">
+    <ion-content scroll="false">
 
         <div class="card card-error padding"
              id="errorMessage"
-             ng-if="vm.globalError">
+             ng-if="vm.globalError && !vm.keyboardIsVisible()">
             {{vm.globalError}}
         </div>
 

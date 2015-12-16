@@ -2343,6 +2343,31 @@
                 });
             });
         });
+
+        describe("has a plastformHasCordova function that", function () {
+
+            describe("when Cordova is available on the window", function () {
+
+                beforeEach(function () {
+                    window.cordova = {};
+                });
+
+                it("should return true", function () {
+                    expect(CommonService.platformHasCordova()).toBeTruthy();
+                });
+            });
+
+            describe("when Cordova is NOT available on the window", function () {
+
+                beforeEach(function () {
+                    delete window.cordova;
+                });
+
+                it("should return false", function () {
+                    expect(CommonService.platformHasCordova()).toBeFalsy();
+                });
+            });
+        });
     });
 
     function createNavView(state) {

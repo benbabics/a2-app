@@ -2,16 +2,18 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:8
+    // jshint maxparams:9
 
     /* @ngInject */
-    function LoginController($ionicHistory, $scope, $state, $stateParams, globals, AuthenticationManager, CommonService, UserManager) {
+    function LoginController($ionicHistory, $scope, $state, $stateParams, $cordovaKeyboard,
+                             globals, AuthenticationManager, CommonService, UserManager) {
 
         var _ = CommonService._,
             vm = this;
         vm.config = globals.USER_LOGIN.CONFIG;
         vm.user = {};
         vm.authenticateUser = authenticateUser;
+        vm.keyboardIsVisible = keyboardIsVisible;
 
         activate();
 
@@ -64,6 +66,10 @@
         function clearErrorMessage() {
             //clear any previous error
             vm.globalError = false;
+        }
+
+        function keyboardIsVisible() {
+            return CommonService.platformHasCordova() && $cordovaKeyboard.isVisible();
         }
     }
 

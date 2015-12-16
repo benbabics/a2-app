@@ -50,7 +50,8 @@
             "loadingComplete"          : loadingComplete,
             "logOut"                   : logOut,
             "maskAccountNumber"        : maskAccountNumber,
-            "pageHasNavBar"            : pageHasNavBar
+            "pageHasNavBar"            : pageHasNavBar,
+            "platformHasCordova"       : platformHasCordova
         };
 
         return service;
@@ -564,6 +565,9 @@
             return false;
         }
 
+        function platformHasCordova() {
+            return !!window.cordova;
+        }
     }
 
     angular

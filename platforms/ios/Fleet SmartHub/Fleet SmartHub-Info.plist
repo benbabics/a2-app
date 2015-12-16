@@ -86,8 +86,6 @@
           <string>TLSv1.2</string>
         </dict>
       </dict>
-      <key>NSAllowsArbitraryLoads</key>
-      <true/>
     </dict>
     <key>NSMainNibFile</key>
     <string/>

@@ -4,29 +4,50 @@
 @import "includes/wex-mixins";
 @import "includes/wex-styles";
 
+$container-background-color: #f0f0f0;
+
 /**------------------------------------------------------
  User Login Page
  ------------------------------------------------------**/
-$user-login-gradient-top: #7f7f7f;
-$user-login-gradient-bottom: #414141;
-$container-background-color: #f0f0f0;
+$user-login-image-header-offset: 30%;
+$user-login-image-form-offset: 40%;
+$user-login-error-message-animation: all linear 0.5s;
 
 .user-login-view {
-    background: -webkit-linear-gradient($user-login-gradient-top, $user-login-gradient-bottom);
-    background: linear-gradient($user-login-gradient-top, $user-login-gradient-bottom);
 
     color: $inverse-font-color;
+    background: url("../img/login_bkg.png") no-repeat center $user-login-image-header-offset fixed;
+    background-size: cover;
 
-    form .list {
-        background: none;
+    #errorMessage {
+        position: absolute;
+
+        &.ng-enter, &.ng-leave {
+            -webkit-transition: $user-login-error-message-animation;
+            transition: $user-login-error-message-animation;
+        }
+
+        &, &.ng-leave, &.ng-enter.ng-enter-active,  {
+            top: 0;
+            opacity: 1;
+        }
+
+        &.ng-enter, &.ng-leave.ng-leave-active {
+            top: -100%;
+            opacity: 0;
+        }
     }
 
-    .header-login {
-        height: $input-height-base * 2;
+    form {
+        position: absolute;
+        top: $user-login-image-form-offset;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
 
-        h2 {
-            text-align: center;
-            color: #fff;
+        .list {
+            background: none;
         }
     }
 }

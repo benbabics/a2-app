@@ -6,6 +6,7 @@
         $scope,
         $state,
         $stateParams = {},
+        $cordovaKeyboard,
         authenticateDeferred,
         ctrl,
         fetchCurrentUserDeferred,
@@ -35,6 +36,7 @@
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate"]);
             UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
             $state = jasmine.createSpyObj("state", ["go"]);
+            $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
 
             inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _globals_, _CommonService_) {
                 $ionicHistory = _$ionicHistory_;
@@ -49,6 +51,7 @@
                     $scope: $scope,
                     $state: $state,
                     $stateParams: $stateParams,
+                    $cordovaKeyboard: $cordovaKeyboard,
                     globals: globals,
                     AuthenticationManager: AuthenticationManager,
                     CommonService: CommonService,
@@ -438,6 +441,49 @@
 
             });
 
+        });
+
+        describe("has a keyboardIsVisible function that", function () {
+
+            describe("when Cordova is available", function () {
+
+                beforeEach(function () {
+                    spyOn(CommonService, "platformHasCordova").and.returnValue(true);
+                });
+
+                describe("when the keyboard is visible", function () {
+
+                    beforeEach(function () {
+                        $cordovaKeyboard.isVisible.and.returnValue(true);
+                    });
+
+                    it("should return true", function () {
+                        expect(ctrl.keyboardIsVisible()).toBeTruthy();
+                    });
+                });
+
+                describe("when the keyboard is NOT visible", function () {
+
+                    beforeEach(function () {
+                        $cordovaKeyboard.isVisible.and.returnValue(false);
+                    });
+
+                    it("should return false", function () {
+                        expect(ctrl.keyboardIsVisible()).toBeFalsy();
+                    });
+                });
+            });
+
+            describe("when Cordova is NOT available", function () {
+
+                beforeEach(function () {
+                    spyOn(CommonService, "platformHasCordova").and.returnValue(false);
+                });
+
+                it("should return false", function () {
+                    expect(ctrl.keyboardIsVisible()).toBeFalsy();
+                });
+            });
         });
 
     });
