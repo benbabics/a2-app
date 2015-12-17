@@ -2,8 +2,32 @@
     "use strict";
 
     var $scope,
+        $cordovaGoogleAnalytics,
         ctrl,
-        mockPostedTransaction;
+        mockPostedTransaction,
+        mockGlobals = {
+            "POSTED_TRANSACTION_DETAIL": {
+                "CONFIG": {
+                    "ANALYTICS"           : {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
+                    "cardNumber"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "customVehicleAssetId": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "driverFirstName"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "driverLastName"      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "grossCost"           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "merchantName"        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "merchantCityState"   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "netCost"             : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "postedDate"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "productDescription"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "title"               : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "transactionDate"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "transactionId"       : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                }
+            }
+        },
+        mockConfig = mockGlobals.POSTED_TRANSACTION_DETAIL.CONFIG;
 
     describe("A Posted Transaction Detail Controller", function () {
 
@@ -22,7 +46,10 @@
                 });
             });
 
-            inject(function ($controller, $rootScope, PostedTransactionModel) {
+            //mock dependencies:
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
+
+            inject(function ($controller, $rootScope, $q, PostedTransactionModel, CommonService) {
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
@@ -30,8 +57,16 @@
                 mockPostedTransaction = TestUtils.getRandomPostedTransaction(PostedTransactionModel);
 
                 ctrl = $controller("PostedTransactionDetailController", {
-                    $scope           : $scope,
-                    postedTransaction: mockPostedTransaction
+                    $scope                 : $scope,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    postedTransaction      : mockPostedTransaction,
+                    globals                : mockGlobals
+                });
+
+                //setup spies:
+                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                    //just execute the callback directly
+                    return $q.when((callback || function() {})());
                 });
 
             });
@@ -46,6 +81,10 @@
 
             it("should set the posted transaction", function () {
                 expect(ctrl.postedTransaction).toEqual(mockPostedTransaction);
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
 
         });

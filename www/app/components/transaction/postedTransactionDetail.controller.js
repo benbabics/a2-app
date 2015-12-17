@@ -2,9 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:5
 
     /* @ngInject */
-    function PostedTransactionDetailController($scope, globals, postedTransaction) {
+    function PostedTransactionDetailController($cordovaGoogleAnalytics, $scope, globals, postedTransaction, CommonService) {
 
         var vm = this;
 
@@ -23,6 +24,10 @@
 
         function beforeEnter() {
             vm.postedTransaction = postedTransaction;
+
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
     }

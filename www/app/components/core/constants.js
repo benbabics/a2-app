@@ -470,6 +470,9 @@
 
     appGlobals.POSTED_TRANSACTION_DETAIL = {
         "CONFIG": {
+            "ANALYTICS": {
+                "pageName": "TransactionDetails"
+            },
             "cardNumber"          : "Card Number",
             "customVehicleAssetId": "Asset ID",
             "driverFirstName"     : "Driver First Name",
