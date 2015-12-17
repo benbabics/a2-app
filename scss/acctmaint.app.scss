@@ -394,7 +394,7 @@ $user-login-error-message-animation: all linear 0.5s;
 
 .payment-amount-input-view {
 
-    .scroll-content {
+    .scroll-content, .scroll {
         @include flexbox();
         @include align-items(center);
         @include justify-content(center);
