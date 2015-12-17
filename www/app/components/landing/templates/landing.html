@@ -76,7 +76,8 @@
             <div class="padding button-container">
                 <div>
                     <a class="button button-block button-stable item item-icon-right button-divider"
-                       href="#/payment/add/verify">
+                       href="#/payment/add/verify"
+                       wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink">
                         <div class="row">
                             <div class="col col-50">
                                 <span class="btn_align">{{::vm.config.makePayment}}</span>
@@ -91,7 +92,8 @@
                     </a>
 
                     <a class="button button-block button-stable item item-icon-right"
-                       ui-sref="transaction.list">
+                       ui-sref="transaction.list"
+                       wex-analytics-track-event="vm.config.ANALYTICS.events.transactionActivityLink">
                         <div class="row">
                             <div class="col col-50">
                                 <span id="transactionActivityButton" class="btn_align">{{::vm.config.transactionActivity}}</span>
@@ -105,7 +107,8 @@
 
                 <div class="button-group">
                     <a class="button button-block button-light item item-icon-right"
-                            ui-sref="card.list">
+                            ui-sref="card.list"
+                            wex-analytics-track-event="vm.config.ANALYTICS.events.cardsLink">
                         <div class="row">
                             <div class="col col-50">
                                 <span id="cardsButton" class="btn_align black">{{::vm.config.cards}}</span>

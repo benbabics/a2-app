@@ -5,19 +5,23 @@
             {{::vm.config.options.home}}
         </ion-item>
         <ion-item id="option-add-payment"
-                  href="#/payment/add/verify">
+                  href="#/payment/add/verify"
+                  wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink">
             {{::vm.config.options.addPayment}}
         </ion-item>
         <ion-item id="option-payments"
-                  ui-sref="payment.list.view">
+                  ui-sref="payment.list.view"
+                  wex-analytics-track-event="vm.config.ANALYTICS.events.paymentActivityLink">
             {{::vm.config.options.payments}}
         </ion-item>
         <ion-item id="option-transaction-activity"
-                  ui-sref="transaction.list">
+                  ui-sref="transaction.list"
+                  wex-analytics-track-event="vm.config.ANALYTICS.events.transactionActivityLink">
             {{::vm.config.options.transactionActivity}}
         </ion-item>
         <ion-item id="option-cards"
-                  ui-sref="card.list">
+                  ui-sref="card.list"
+                  wex-analytics-track-event="vm.config.ANALYTICS.events.cardsLink">
             {{::vm.config.options.cards}}
         </ion-item>
         <ion-item id="option-contact-us"

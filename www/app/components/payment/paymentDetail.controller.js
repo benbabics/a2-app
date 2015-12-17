@@ -8,7 +8,8 @@
     function PaymentDetailController($cordovaGoogleAnalytics, $scope, $state, globals, isPaymentEditable, payment,
                                      CommonService, Logger, PaymentManager, UserManager) {
 
-        var vm = this;
+        var vm = this,
+            _ = CommonService._;
 
         vm.config = globals.PAYMENT_VIEW.CONFIG;
 
@@ -58,6 +59,10 @@
                 .then(function (result) {
                     if (result) {
                         confirmPaymentCancel();
+
+                        CommonService.waitForCordovaPlatform(function () {
+                            _.spread($cordovaGoogleAnalytics.trackEvent)(vm.config.ANALYTICS.events.confirmPaymentCancel);
+                        });
                     }
                     else {
                         //close the popup

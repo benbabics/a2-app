@@ -19,7 +19,13 @@
             CARD_LIST: {
                 "CONFIG"        : {
                     "ANALYTICS"         : {
-                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "events": {
+                            "searchSubmitted": [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ]
+                        }
                     },
                     "title"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "reloadDistance": TestUtils.getRandomStringThatIsAlphaNumeric(10)
@@ -52,7 +58,7 @@
             //mock dependencies:
             CardManager = jasmine.createSpyObj("CardManager", ["fetchCards"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackEvent", "trackView"]);
 
             inject(function (_$rootScope_, _$q_, $controller,
                              _CommonService_, _UserModel_, _UserAccountModel_, _CardModel_) {
@@ -207,6 +213,10 @@
 
                     expect(infiniteListController.checkBounds).toHaveBeenCalledWith();
                 });
+
+                it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                    verifyEventTracked(mockConfig.ANALYTICS.events.searchSubmitted);
+                });
             });
         });
 
@@ -347,5 +357,9 @@
         });
 
     });
+
+    function verifyEventTracked(event) {
+        expect($cordovaGoogleAnalytics.trackEvent.calls.mostRecent().args).toEqual(event);
+    }
 
 }());

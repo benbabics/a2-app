@@ -123,7 +123,7 @@
 
             alertPopup = $ionicPopup.alert(mappedOptions);
 
-            alertPopup.then(function () { // args: resolution
+            return alertPopup.then(function () { // args: resolution
                 // close popup
             });
         }

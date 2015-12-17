@@ -8,6 +8,7 @@
             $q,
             $rootScope,
             $state,
+            $cordovaGoogleAnalytics,
             mockBankAccounts,
             mockGlobals = {
                 PAYMENT_MAINTENANCE: {
@@ -18,6 +19,34 @@
                 },
 
                 PAYMENT_LIST: {
+                    "CONFIG"        : {
+                        "ANALYTICS"                 : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "events": {
+                                "paymentAddBankAccountsNotSetup"   : [
+                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                ],
+                                "paymentAddDirectDebitSetup"       : [
+                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                ],
+                                "paymentAddNoBalanceDue"           : [
+                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                ],
+                                "paymentAddPaymentAlreadyScheduled": [
+                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                ]
+                            }
+                        },
+                        "title"                     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "scheduledPaymentsHeading"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "noScheduledPaymentsMessage": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "completedPaymentsHeading"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "noCompletedPaymentsMessage": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
                     "SEARCH_OPTIONS": {
                         "PAGE_NUMBER": TestUtils.getRandomInteger(0, 20),
                         "PAGE_SIZE"  : TestUtils.getRandomInteger(10, 100)
@@ -72,6 +101,7 @@
             Logger = jasmine.createSpyObj("Logger", ["enabled", "error"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackEvent"]);
             module(function ($provide, sharedGlobals) {
                 $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
                 $provide.value("BankManager", BankManager);
@@ -79,6 +109,7 @@
                 $provide.value("Logger", Logger);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
+                $provide.value("$cordovaGoogleAnalytics", $cordovaGoogleAnalytics);
             });
 
             inject(function (_$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _InvoiceSummaryModel_,
@@ -110,6 +141,12 @@
             UserManager.getUser.and.returnValue(mockUser);
             BankManager.hasMultipleBanks.and.returnValue($q.when(mockHasMultipleBanks));
             InvoiceManager.getInvoiceSummary.and.returnValue(mockInvoiceSummary);
+
+            //setup spies:
+            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                //just execute the callback directly
+                return $q.when((callback || function() {})());
+            });
 
         });
 
@@ -866,7 +903,7 @@
                 UserManager.getUser.and.returnValue(mockUser);
 
                 spyOn($state, "go").and.callThrough();
-                spyOn(CommonService, "displayAlert");
+                spyOn(CommonService, "displayAlert").and.returnValue($q.resolve());
                 spyOn($rootScope, "$on").and.callThrough();
             });
 
@@ -913,6 +950,10 @@
                             buttonCssClass: "button-submit"
                         });
                     });
+
+                    it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                        verifyEventTracked(mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddBankAccountsNotSetup);
+                    });
                 });
 
                 describe("when the user is NOT already on the payment list page", function () {
@@ -955,6 +996,10 @@
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
+                        });
+
+                        it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                            verifyEventTracked(mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddBankAccountsNotSetup);
                         });
                     });
                 });
@@ -1003,6 +1048,10 @@
                             buttonCssClass: "button-submit"
                         });
                     });
+
+                    it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                        verifyEventTracked(mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddDirectDebitSetup);
+                    });
                 });
 
                 describe("when the user is NOT already on the payment list page", function () {
@@ -1045,6 +1094,10 @@
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
+                        });
+
+                        it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                            verifyEventTracked(mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddDirectDebitSetup);
                         });
                     });
                 });
@@ -1093,6 +1146,10 @@
                             buttonCssClass: "button-submit"
                         });
                     });
+
+                    it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                        verifyEventTracked(mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddPaymentAlreadyScheduled);
+                    });
                 });
 
                 describe("when the user is NOT already on the payment list page", function () {
@@ -1135,6 +1192,10 @@
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
                                 buttonCssClass: "button-submit"
                             });
+                        });
+
+                        it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                            verifyEventTracked(mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddPaymentAlreadyScheduled);
                         });
                     });
                 });
@@ -1183,6 +1244,10 @@
                             buttonCssClass: "button-submit"
                         });
                     });
+
+                    it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                        verifyEventTracked(mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddNoBalanceDue);
+                    });
                 });
 
                 describe("when the user is NOT already on the payment list page", function () {
@@ -1225,6 +1290,10 @@
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
                                 buttonCssClass: "button-submit"
                             });
+                        });
+
+                        it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                            verifyEventTracked(mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddNoBalanceDue);
                         });
                     });
                 });
@@ -1270,6 +1339,10 @@
                     it("should NOT call CommonService.displayAlert", function () {
                         expect(CommonService.displayAlert).not.toHaveBeenCalled();
                     });
+
+                    it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
+                        expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                    });
                 });
 
                 describe("when the user is NOT already on the payment list page", function () {
@@ -1309,6 +1382,10 @@
 
                         it("should NOT call CommonService.displayAlert", function () {
                             expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                        });
+
+                        it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
+                            expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
                         });
                     });
                 });
@@ -1374,6 +1451,10 @@
             }
 
             return mockPaymentCollection;
+        }
+
+        function verifyEventTracked(event) {
+            expect($cordovaGoogleAnalytics.trackEvent.calls.mostRecent().args).toEqual(event);
         }
     });
 

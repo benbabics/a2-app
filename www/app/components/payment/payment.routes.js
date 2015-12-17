@@ -253,14 +253,18 @@
             $state.go("payment.maintenance.form", angular.extend({maintenanceState: maintenanceState}, $stateParams));
         }
 
-        function validateBeforeNavigatingToPaymentAdd($state, $rootScope, globals, CommonService, Logger, PaymentManager, UserManager) {
-            var billingAccountId,
+        function validateBeforeNavigatingToPaymentAdd($cordovaGoogleAnalytics, $state, $rootScope,
+                                                      globals, CommonService, Logger, PaymentManager, UserManager) {
+            var _ = CommonService._,
+                billingAccountId,
                 removeListener,
-                showRouteValidationError = function (errorMessage) {
+                showRouteValidationError = function (errorMessage, trackEvent) {
                     return CommonService.displayAlert({
                         content       : errorMessage,
                         buttonCssClass: "button-submit"
-                    });
+                    })
+                        .then(CommonService.waitForCordovaPlatform)
+                        .then(_.partial(_.spread($cordovaGoogleAnalytics.trackEvent), trackEvent));
                 };
 
             CommonService.loadingBegin();
@@ -269,19 +273,24 @@
 
             PaymentManager.fetchPaymentAddAvailability(billingAccountId)
                 .then(function (paymentAddAvailability) {
-                    var errorMessage;
+                    var errorMessage,
+                        trackEvent;
 
                     if (paymentAddAvailability.shouldDisplayBankAccountSetupMessage) {
                         errorMessage = globals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP;
+                        trackEvent = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddBankAccountsNotSetup;
                     }
                     else if (paymentAddAvailability.shouldDisplayDirectDebitEnabledMessage) {
                         errorMessage = globals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP;
+                        trackEvent = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddDirectDebitSetup;
                     }
                     else if (paymentAddAvailability.shouldDisplayOutstandingPaymentMessage) {
                         errorMessage = globals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED;
+                        trackEvent = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddPaymentAlreadyScheduled;
                     }
                     else if (paymentAddAvailability.shouldDisplayCurrentBalanceDueMessage) {
                         errorMessage = globals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE;
+                        trackEvent = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddNoBalanceDue;
                     }
 
                     if (errorMessage) {
@@ -289,13 +298,13 @@
 
                         //if already at the error redirect state then just show the alert, else finish the redirect before showing the alert
                         if ($state.current.name === PAYMENT_ADD_ERROR_REDIRECT_STATE) {
-                            showRouteValidationError(errorMessage);
+                            showRouteValidationError(errorMessage, trackEvent);
                         }
                         else {
                             removeListener = $rootScope.$on("$stateChangeSuccess", function () {
                                 removeListener();
 
-                                showRouteValidationError(errorMessage);
+                                showRouteValidationError(errorMessage, trackEvent);
                             });
                         }
                     }

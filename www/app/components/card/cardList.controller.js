@@ -38,6 +38,10 @@
                 activeSearchFilter = vm.searchFilter;
 
                 resetSearch();
+
+                CommonService.waitForCordovaPlatform(function () {
+                    _.spread($cordovaGoogleAnalytics.trackEvent)(vm.config.ANALYTICS.events.searchSubmitted);
+                });
             }
         }
 

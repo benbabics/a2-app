@@ -19,7 +19,21 @@
             PAYMENT_VIEW: {
                 "CONFIG": {
                     "ANALYTICS"   : {
-                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "events": {
+                            "cancelPaymentLink"   : [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "editPaymentLink"     : [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "confirmPaymentCancel": [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ]
+                        }
                     },
                     "title"               : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "amount"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
@@ -64,16 +78,16 @@
 
             // mock dependencies
             $state = jasmine.createSpyObj("$state", ["go"]);
-            CommonService = jasmine.createSpyObj("CommonService", ["displayConfirm", "waitForCordovaPlatform"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["removePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackEvent", "trackView"]);
 
             inject(function (_$rootScope_, _CommonService_, $controller, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
 
                 $rootScope = _$rootScope_;
                 $q = _$q_;
-                _ = _CommonService_._;
+                CommonService = _CommonService_;
+                _ = CommonService._;
                 confirmDeferred = $q.defer();
                 removePaymentDeferred = $q.defer();
 
@@ -87,7 +101,6 @@
                     $scope                 : $scope,
                     $state                 : $state,
                     $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    CommonService          : CommonService,
                     PaymentManager         : PaymentManager,
                     UserManager            : UserManager,
                     payment                : mockPayment,
@@ -95,10 +108,13 @@
                 });
             });
 
-            CommonService.displayConfirm.and.returnValue(confirmDeferred.promise);
+            //setup mocks:
             UserManager.getUser.and.returnValue(mockUser);
             PaymentManager.removePayment.and.returnValue(removePaymentDeferred.promise);
-            CommonService.waitForCordovaPlatform.and.callFake(function(callback) {
+
+            //setup spies:
+            spyOn(CommonService, "displayConfirm").and.returnValue(confirmDeferred.promise);
+            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
                 //just execute the callback directly
                 return $q.when((callback || function() {})());
             });
@@ -160,6 +176,10 @@
                     );
                 });
 
+                it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                    verifyEventTracked(mockConfig.ANALYTICS.events.confirmPaymentCancel);
+                });
+
                 describe("when removing the payment is successful", function () {
 
                     beforeEach(function () {
@@ -216,5 +236,9 @@
         });
 
     });
+
+    function verifyEventTracked(event) {
+        expect($cordovaGoogleAnalytics.trackEvent.calls.mostRecent().args).toEqual(event);
+    }
 
 }());

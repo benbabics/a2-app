@@ -22,7 +22,8 @@
             <br>
 
             <div ng-if="vm.payment.isScheduled()">
-                <div ng-click="vm.displayCancelPaymentPopup()">
+                <div ng-click="vm.displayCancelPaymentPopup()"
+                     wex-analytics-track-event="vm.config.ANALYTICS.events.cancelPaymentLink">
                     <button class="button button-block button-light item item-icon-right black">
                         <i class="icon ion-chevron-right"></i>
                         <span id="cancelButton" class="btn_align">{{::vm.config.cancelButton}}</span>
@@ -30,7 +31,8 @@
                  </div>
 
                 <div ng-if="vm.isPaymentEditable"
-                     ng-click="vm.editPayment()">
+                     ng-click="vm.editPayment()"
+                     wex-analytics-track-event="vm.config.ANALYTICS.events.editPaymentLink">
                     <button class="button button-block button-light item item-icon-right black">
                         <i class="icon ion-chevron-right"></i>
                         <span id="editButton" class="btn_align">{{::vm.config.editButton}}</span>
@@ -39,4 +41,4 @@
             </div>
         </div>
     </ion-content>
-</ion-view>>
+</ion-view>

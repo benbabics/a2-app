@@ -48,7 +48,12 @@
     appGlobals.LANDING = {
         "CONFIG": {
             "ANALYTICS"   : {
-                "pageName": "Home"
+                "pageName": "Home",
+                "events": {
+                    "makePaymentLink"        : ["Payment", "MakePaymentLinkHome"],
+                    "cardsLink"              : ["Cards", "CardsLinkHome"],
+                    "transactionActivityLink": ["Transaction", "TransactionActivityLinkHome"]
+                }
             },
             "title"              : "Fleet SmartHub",
             "availableCredit"    : "Available",
@@ -98,7 +103,10 @@
     appGlobals.CARD_LIST = {
         "CONFIG"        : {
             "ANALYTICS"        : {
-                "pageName": "Cards"
+                "pageName": "Cards",
+                "events": {
+                    "searchSubmitted": ["Cards", "SearchCardLink"]
+                }
             },
             "title"            : "Cards",
             "searchPlaceholder": "Search Card No & Embossing",
@@ -359,14 +367,20 @@
         "ADD"   : {
             "CONFIG": {
                 "ANALYTICS": {
-                    "pageName": "PaymentConfirmationInitial"
+                    "pageName": "PaymentConfirmationInitial",
+                    "events": {
+                        "paymentActivityLink": ["Payment", "PaymentActivityLinkConfirmation"]
+                    }
                 }
             }
         },
         "UPDATE": {
             "CONFIG": {
                 "ANALYTICS": {
-                    "pageName": "PaymentConfirmationEdit"
+                    "pageName": "PaymentConfirmationEdit",
+                    "events": {
+                        "paymentActivityLink": ["Payment", "PaymentActivityLinkConfirmation"]
+                    }
                 }
             }
         }
@@ -375,7 +389,12 @@
     appGlobals.PAYMENT_VIEW = {
         "CONFIG": {
             "ANALYTICS"           : {
-                "pageName": "PaymentDetails"
+                "pageName": "PaymentDetails",
+                "events": {
+                    "cancelPaymentLink"   : ["Payment", "CancelPaymentLink"],
+                    "editPaymentLink"     : ["Payment", "EditPaymentLink"],
+                    "confirmPaymentCancel": ["Payment", "YESCancelPaymentLink"]
+                }
             },
             "title"               : "Payment Details",
             "amount"              : "Amount",
@@ -397,7 +416,13 @@
     appGlobals.PAYMENT_LIST = {
         "CONFIG"        : {
             "ANALYTICS"                 : {
-                "pageName": "PaymentActivity"
+                "pageName": "PaymentActivity",
+                "events": {
+                    "paymentAddBankAccountsNotSetup"   : ["Payment", "OKNoBankAccountLink"],
+                    "paymentAddDirectDebitSetup"       : ["Payment", "OKDirectDebitSetupLink"],
+                    "paymentAddNoBalanceDue"           : ["Payment", "OKNoBalanceDueLink"],
+                    "paymentAddPaymentAlreadyScheduled": ["Payment", "OKPaymentScheduledLink"]
+                }
             },
             "title"                     : "Payment Activity",
             "scheduledPaymentsHeading"  : "Scheduled Payments",
@@ -467,6 +492,14 @@
 
     appGlobals.MENU = {
         "CONFIG": {
+            "ANALYTICS": {
+                "events": {
+                    "makePaymentLink"        : ["Payment", "MakePaymentLinkMenu"],
+                    "paymentActivityLink"    : ["Payment", "PaymentActivityLinkMenu"],
+                    "transactionActivityLink": ["Transaction", "TransactionActivityLinkMenu"],
+                    "cardsLink"              : ["Cards", "CardsLinkMenu"]
+                }
+            },
             "options": {
                 "home"               : "Home",
                 "addPayment"         : "Make Payment",

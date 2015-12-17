@@ -21,11 +21,12 @@
             <br>
             <div>
                 <button class="button button-block button-light item item-icon-right"
-                        ui-sref="payment.list.view">
+                        ui-sref="payment.list.view"
+                        wex-analytics-track-event="vm.config.ANALYTICS.events.paymentActivityLink">
                     <i class="icon ion-chevron-right"></i>
                     <span id="activityButton" class="btn_align black">{{::vm.config.activityButton}}</span>
                 </button>
             </div>
         </div>
     </ion-content>
-</ion-view>>
+</ion-view>
