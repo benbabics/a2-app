@@ -6,6 +6,7 @@
         $scope,
         $state,
         $ionicHistory,
+        $cordovaGoogleAnalytics,
         ctrl,
         mockMaintenanceState,
         mockStateParams,
@@ -26,10 +27,18 @@
                     "PAYMENT_DATE_PAST_DUE_DATE"      : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 },
                 "ADD"     : {
-                    "CONFIG": {}
+                    "CONFIG": {
+                        "ANALYTICS"                 : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    }
                 },
                 "UPDATE"  : {
-                    "CONFIG": {}
+                    "CONFIG": {
+                        "ANALYTICS"                 : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    }
                 }
             }
         },
@@ -95,6 +104,7 @@
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "updatePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
             inject(function ($controller, _$q_, $rootScope, _moment_, _BankModel_, appGlobals, CommonService, _PaymentModel_) {
 
@@ -117,7 +127,7 @@
                     go    : jasmine.createSpy("go")
                 };
 
-                switch(mockMaintenance.state) {
+                switch (mockMaintenance.state) {
                     case mockMaintenance.states.ADD:
                         mockPaymentProcess = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
                         break;
@@ -134,11 +144,19 @@
                     $state            : $state,
                     $stateParams      : mockStateParams,
                     $ionicHistory     : $ionicHistory,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
                     maintenance       : mockMaintenance,
                     InvoiceManager    : InvoiceManager,
                     PaymentManager    : PaymentManager,
                     UserManager       : UserManager,
-                    payment           : mockPaymentProcess
+                    payment           : mockPaymentProcess,
+                    globals: mockGlobals
+                });
+
+                //setup spies:
+                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                    //just execute the callback directly
+                    return $q.when((callback || function() {})());
                 });
 
             });
@@ -161,6 +179,12 @@
                 $scope.$broadcast("$ionicView.beforeEnter");
 
                 expect(ctrl.payment).toEqual(mockPaymentProcess);
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                $scope.$broadcast("$ionicView.beforeEnter");
+
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(getConfig(mockMaintenance).ANALYTICS.pageName);
             });
 
             describe("when payment details meet expectations", function () {

@@ -2,10 +2,11 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:10
+    // jshint maxparams:11
 
     /* @ngInject */
-    function PaymentMaintenanceFormController($scope, globals, hasMultipleBanks, maintenance, moment, payment,
+    function PaymentMaintenanceFormController($cordovaGoogleAnalytics, $scope,
+                                              globals, hasMultipleBanks, maintenance, moment, payment,
                                               CommonService, InvoiceManager, Logger, UserManager) {
 
         var _ = CommonService._,
@@ -44,6 +45,10 @@
             vm.payment = payment;
             vm.minDate = moment().subtract(1, "days").toDate();
             vm.maxDate = moment().add(paymentMaintenanceForm.INPUTS.DATE.CONFIG.maxFutureDays, "days").toDate();
+
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
         function getConfig() {

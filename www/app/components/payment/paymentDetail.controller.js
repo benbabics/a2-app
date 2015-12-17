@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:9
+    // jshint maxparams:10
 
     /* @ngInject */
-    function PaymentDetailController($scope, $state, globals, isPaymentEditable, payment,
+    function PaymentDetailController($cordovaGoogleAnalytics, $scope, $state, globals, isPaymentEditable, payment,
                                      CommonService, Logger, PaymentManager, UserManager) {
 
         var vm = this;
@@ -30,6 +30,10 @@
         function beforeEnter() {
             vm.isPaymentEditable = isPaymentEditable;
             vm.payment = payment;
+
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
         function confirmPaymentCancel() {

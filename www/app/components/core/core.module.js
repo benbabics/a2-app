@@ -63,7 +63,9 @@
             CommonService.goToBackState();
         }, 101);
 
-        $cordovaGoogleAnalytics.startTrackerWithId(globals.GOOGLE_ANALYTICS.TRACKING_ID);
+        CommonService.waitForCordovaPlatform(function () {
+            $cordovaGoogleAnalytics.startTrackerWithId(globals.GOOGLE_ANALYTICS.TRACKING_ID);
+        });
     }
 
     angular.module("app.components.core", [])

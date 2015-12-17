@@ -6,6 +6,7 @@
         $scope,
         $q,
         $state,
+        $cordovaGoogleAnalytics,
         CardManager,
         CardModel,
         CommonService,
@@ -14,6 +15,9 @@
         mockGlobals = {
             "CARD_CHANGE_STATUS": {
                 "CONFIG": {
+                    "ANALYTICS": {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
                     "statuses"         : {
                         "activate" : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                         "terminate": TestUtils.getRandomStringThatIsAlphaNumeric(10)
@@ -52,7 +56,8 @@
             CommonService = jasmine.createSpyObj("CommonService", [
                 "displayConfirm",
                 "loadingBegin",
-                "loadingComplete"
+                "loadingComplete",
+                "waitForCordovaPlatform"
             ]);
 
             UserManager = jasmine.createSpyObj("UserManager", [
@@ -61,6 +66,10 @@
 
             $state = jasmine.createSpyObj("$state", [
                 "go"
+            ]);
+
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", [
+                "trackView"
             ]);
 
             inject(function ($controller, _$rootScope_, _$q_, sharedGlobals, UserAccountModel, _CardModel_, UserModel) {
@@ -75,18 +84,23 @@
                 mockGlobals.CARD = sharedGlobals.CARD;
 
                 ctrl = $controller("CardChangeStatusController", {
-                    $scope       : $scope,
-                    $state       : $state,
-                    globals      : mockGlobals,
-                    card         : mockCard,
-                    CardManager  : CardManager,
-                    CommonService: CommonService,
-                    UserManager  : UserManager
+                    $scope                 : $scope,
+                    $state                 : $state,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    globals                : mockGlobals,
+                    card                   : mockCard,
+                    CardManager            : CardManager,
+                    CommonService          : CommonService,
+                    UserManager            : UserManager
                 });
             });
 
             //setup mocks
             UserManager.getUser.and.returnValue(mockUser);
+            CommonService.waitForCordovaPlatform.and.callFake(function(callback) {
+                //just execute the callback directly
+                return $q.when((callback || function() {})());
+            });
         });
 
         it("should set card to the given card object", function () {
@@ -105,6 +119,10 @@
 
             beforeEach(function () {
                 $scope.$broadcast("$ionicView.beforeEnter");
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
         });
 

@@ -3,6 +3,7 @@
 
     var _,
         $scope,
+        $cordovaGoogleAnalytics,
         ctrl,
         BankManager,
         BankModel,
@@ -33,11 +34,17 @@
                 },
                 "ADD"   : {
                     "CONFIG": {
+                        "ANALYTICS"                 : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
                         "title": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     }
                 },
                 "UPDATE": {
                     "CONFIG": {
+                        "ANALYTICS"                 : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
                         "title": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     }
                 }
@@ -103,13 +110,9 @@
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            module(function ($provide) {
-                $provide.value("BankManager", BankManager);
-                $provide.value("InvoiceManager", InvoiceManager);
-                $provide.value("UserManager", UserManager);
-            });
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
-            inject(function ($controller, $rootScope, _moment_, _BankModel_, appGlobals, CommonService) {
+            inject(function ($controller, $rootScope, $q, _moment_, _BankModel_, appGlobals, CommonService) {
 
                 _ = CommonService._;
                 moment = _moment_;
@@ -129,13 +132,22 @@
                 };
 
                 ctrl = $controller("PaymentMaintenanceFormController", {
-                    $scope          : $scope,
-                    $stateParams    : mockStateParams,
-                    hasMultipleBanks: mockHasMultipleBanks,
-                    maintenance     : mockMaintenance,
-                    payment         : mockPayment,
-                    InvoiceManager  : InvoiceManager,
-                    UserManager     : UserManager
+                    $scope                 : $scope,
+                    $stateParams           : mockStateParams,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    hasMultipleBanks       : mockHasMultipleBanks,
+                    maintenance            : mockMaintenance,
+                    payment                : mockPayment,
+                    globals                : mockGlobals,
+                    BankManager            : BankManager,
+                    InvoiceManager         : InvoiceManager,
+                    UserManager            : UserManager
+                });
+
+                //setup spies:
+                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                    //just execute the callback directly
+                    return $q.when((callback || function() {})());
                 });
             });
 
@@ -189,12 +201,16 @@
                 expect(ctrl.invoiceSummary).toEqual(mockCurrentInvoiceSummary);
             });
 
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(getConfig(mockMaintenance).ANALYTICS.pageName);
+            });
+
         });
 
     });
 
     function getBackStateOverride(maintenance) {
-        if(maintenance.state === maintenance.states.ADD) {
+        if (maintenance.state === maintenance.states.ADD) {
             return "landing";
         }
 

@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:7
 
     /* @ngInject */
-    function CardListController($scope, globals, CardManager, CommonService, Logger, UserManager) {
+    function CardListController($cordovaGoogleAnalytics, $scope, globals, CardManager, CommonService, Logger, UserManager) {
 
         var _ = CommonService._,
             vm = this,
@@ -42,6 +42,9 @@
         }
 
         function beforeEnter() {
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
         function getActiveSearchFilter() {

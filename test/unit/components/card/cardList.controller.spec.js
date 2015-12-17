@@ -4,6 +4,7 @@
     var $rootScope,
         $scope,
         $q,
+        $cordovaGoogleAnalytics,
         CommonService,
         CardManager,
         UserManager,
@@ -17,6 +18,9 @@
         mockGlobals = {
             CARD_LIST: {
                 "CONFIG"        : {
+                    "ANALYTICS"         : {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
                     "title"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "reloadDistance": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 },
@@ -25,7 +29,8 @@
                     "STATUSES": TestUtils.getRandomStringThatIsAlphaNumeric(50)
                 }
             }
-        };
+        },
+        mockConfig = mockGlobals.CARD_LIST.CONFIG;
 
     describe("A Card List Controller", function () {
 
@@ -47,6 +52,7 @@
             //mock dependencies:
             CardManager = jasmine.createSpyObj("CardManager", ["fetchCards"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
             inject(function (_$rootScope_, _$q_, $controller,
                              _CommonService_, _UserModel_, _UserAccountModel_, _CardModel_) {
@@ -61,11 +67,12 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("CardListController", {
-                    $scope       : $scope,
-                    globals      : mockGlobals,
-                    CardManager  : CardManager,
-                    CommonService: CommonService,
-                    UserManager  : UserManager
+                    $scope                 : $scope,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    globals                : mockGlobals,
+                    CardManager            : CardManager,
+                    CommonService          : CommonService,
+                    UserManager            : UserManager
                 });
 
             });
@@ -73,6 +80,10 @@
             //setup spies
             spyOn(CommonService, "loadingBegin");
             spyOn(CommonService, "loadingComplete");
+            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                //just execute the callback directly
+                return $q.when((callback || function() {})());
+            });
 
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
@@ -88,7 +99,9 @@
                 $scope.$broadcast("$ionicView.beforeEnter");
             });
 
-            // Doesn't do anything yet
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
+            });
 
         });
 

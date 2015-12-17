@@ -2,10 +2,11 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:7
 
     /* @ngInject */
-    function PaymentMaintenanceConfirmationController($scope, globals, maintenance, payment, CommonService, Logger) {
+    function PaymentMaintenanceConfirmationController($cordovaGoogleAnalytics, $scope,
+                                                      globals, maintenance, payment, CommonService, Logger) {
 
         var _ = CommonService._,
             vm = this,
@@ -26,6 +27,10 @@
 
         function beforeEnter() {
             vm.payment = payment;
+
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
         function getConfig() {

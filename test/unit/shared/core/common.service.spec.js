@@ -7,7 +7,9 @@
         $compile,
         $rootScope,
         $state,
+        $q,
         CommonService,
+        Logger,
         globals = {
             GENERAL: {
                 ERRORS: {
@@ -25,32 +27,43 @@
         poBoxAcceptableValues = ["PO Box", "P O Box", "POBox", "P OBox", "P.O. Box", "P. O. Box", "P.O.Box", "P. O.Box",
             "PO. Box", "P O. Box", "PO.Box", "P OBox", "P.O Box", "P. O Box", "P.OBox", "P. OBox", "POB", "P.O.B.",
             "POST OFFICE BOX", "Post Office Box"],
-        poBoxUnacceptableValues = ["P Box", "P Box", "PBox", "Pb", "PB", "pB", "pb", "Po", "PO", "pO", "po"];
+        poBoxUnacceptableValues = ["P Box", "P Box", "PBox", "Pb", "PB", "pB", "pb", "Po", "PO", "pO", "po"],
+        rejectHandler,
+        resolveHandler;
 
     describe("A Common Service", function () {
 
         beforeEach(function () {
 
             module("app.shared.dependencies");
+            module("app.shared.logger");
 
             // mock dependencies
             $ionicPopup = jasmine.createSpyObj("$ionicPopup", ["alert", "confirm"]);
+            Logger = jasmine.createSpyObj("Logger", ["debug", "error"]);
 
             module(function ($provide) {
                 $provide.value("$ionicPopup", $ionicPopup);
+                $provide.value("Logger", Logger);
                 $provide.constant("globals", globals);
             });
 
-            module("app.shared");
+            module("app.shared.core");
+            module("app.shared.network");
+            module("app.shared.auth");
+            module("app.shared.api");
+            module("app.shared.integration");
+            module("app.shared.widgets");
 
             module(function ($provide, sharedGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, globals));
             });
 
-            inject(function ($q, _CommonService_, _$rootScope_, _$compile_, _$state_, _$ionicPlatform_) {
+            inject(function (_$q_, _CommonService_, _$rootScope_, _$compile_, _$state_, _$ionicPlatform_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
                 $state = _$state_;
+                $q = _$q_;
                 $ionicPlatform = _$ionicPlatform_;
                 alertDeferred = $q.defer();
                 confirmDeferred = $q.defer();
@@ -70,6 +83,8 @@
                 // spies
                 spyOn($state, "go").and.callThrough();
                 spyOn($ionicPlatform, "registerBackButtonAction").and.callThrough();
+                resolveHandler = jasmine.createSpy("resolveHandler");
+                rejectHandler = jasmine.createSpy("rejectHandler");
             });
 
             alertPromise = alertDeferred.promise;
@@ -2344,7 +2359,7 @@
             });
         });
 
-        describe("has a plastformHasCordova function that", function () {
+        describe("has a platformHasCordova function that", function () {
 
             describe("when Cordova is available on the window", function () {
 
@@ -2365,6 +2380,172 @@
 
                 it("should return false", function () {
                     expect(CommonService.platformHasCordova()).toBeFalsy();
+                });
+            });
+        });
+
+        describe("has a waitForCordovaPlatform function that", function () {
+
+            describe("when Ionic is ready", function () {
+
+                beforeEach(function () {
+                    spyOn($ionicPlatform, "ready").and.returnValue($q.resolve());
+                });
+
+                describe("when the current platform has Cordova", function () {
+
+                    beforeEach(function () {
+                        window.cordova = {};
+                    });
+
+                    describe("when a callback is given", function () {
+                        var callback;
+
+                        describe("when the callback is a function", function () {
+                            var value;
+
+                            beforeEach(function () {
+                                callback = jasmine.createSpy("callback");
+                                value = TestUtils.getRandomInteger(1, 100);
+
+                                callback.and.returnValue(value);
+                            });
+
+                            beforeEach(function () {
+                                CommonService.waitForCordovaPlatform(callback)
+                                    .then(resolveHandler)
+                                    .catch(rejectHandler);
+
+                                $rootScope.$digest();
+                            });
+
+                            it("should call the callback", function () {
+                                expect(callback).toHaveBeenCalledWith();
+                            });
+
+                            it("should resolve the promise with the return value from the callback", function () {
+                                expect(resolveHandler).toHaveBeenCalledWith(value);
+                                expect(rejectHandler).not.toHaveBeenCalled();
+                            });
+                        });
+
+                        describe("when the callback is not a function", function () {
+
+                            beforeEach(function () {
+                                callback = TestUtils.getRandomStringThatIsAlphaNumeric(1, 10);
+                            });
+
+                            beforeEach(function () {
+                                CommonService.waitForCordovaPlatform(callback)
+                                    .then(resolveHandler)
+                                    .catch(rejectHandler);
+
+                                $rootScope.$digest();
+                            });
+
+                            it("should resolve the promise", function () {
+                                expect(resolveHandler).toHaveBeenCalledWith(undefined);
+                                expect(rejectHandler).not.toHaveBeenCalled();
+                            });
+                        });
+                    });
+
+                    describe("when a callback is NOT given", function () {
+
+                        beforeEach(function () {
+                            CommonService.waitForCordovaPlatform()
+                                .then(resolveHandler)
+                                .catch(rejectHandler);
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should resolve the promise", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(undefined);
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+
+                describe("when the current platform does NOT have Cordova", function () {
+
+                    beforeEach(function () {
+                        delete window.cordova;
+                    });
+
+                    describe("when a callback is given", function () {
+                        var callback,
+                            value;
+
+                        beforeEach(function () {
+                            callback = jasmine.createSpy("callback");
+                            value = TestUtils.getRandomInteger(1, 100);
+
+                            callback.and.returnValue(value);
+                        });
+
+                        beforeEach(function () {
+                            CommonService.waitForCordovaPlatform(callback)
+                                .then(resolveHandler)
+                                .catch(rejectHandler);
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should NOT call the callback", function () {
+                            expect(callback).not.toHaveBeenCalled();
+                        });
+
+                        it("should reject the promise", function () {
+                            expect(resolveHandler).not.toHaveBeenCalled();
+                            expect(rejectHandler).toHaveBeenCalledWith(undefined);
+                        });
+
+                        it("should log the expected debug message", function () {
+                            expect(Logger.debug).toHaveBeenCalledWith(
+                                "waitForCordovaPlatform callback function skipped: Cordova is not available on this platform. " +
+                                "Note: All future callbacks will also be skipped."
+                            );
+                        });
+
+                        describe("when waitForCordovaPlatform is called an additional time", function () {
+
+                            beforeEach(function () {
+                                CommonService.waitForCordovaPlatform();
+                            });
+
+                            it("should NOT log the expected debug message again", function () {
+                                expect(Logger.debug).toHaveBeenCalledTimes(1);
+                            });
+                        });
+                    });
+
+                    describe("when a callback is NOT given", function () {
+
+                        beforeEach(function () {
+                            CommonService.waitForCordovaPlatform()
+                                .then(resolveHandler)
+                                .catch(rejectHandler);
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should reject the promise", function () {
+                            expect(resolveHandler).not.toHaveBeenCalled();
+                            expect(rejectHandler).toHaveBeenCalledWith(undefined);
+                        });
+
+                        describe("when waitForCordovaPlatform is called an additional time", function () {
+
+                            beforeEach(function () {
+                                CommonService.waitForCordovaPlatform();
+                            });
+
+                            it("should NOT log the expected debug message again", function () {
+                                expect(Logger.debug).toHaveBeenCalledTimes(1);
+                            });
+                        });
+                    });
                 });
             });
         });

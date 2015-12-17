@@ -101,7 +101,8 @@
                 "exitApp",
                 "loadingBegin",
                 "loadingComplete",
-                "logOut"
+                "logOut",
+                "waitForCordovaPlatform"
             ]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
@@ -127,6 +128,10 @@
 
         it("should set the app to fullscreen with a status bar", function () {
             expect(ionic.Platform.fullScreen).toHaveBeenCalledWith(true, true);
+        });
+
+        it("should call $cordovaGoogleAnalytics.startTrackerWithId with the expected tracking ID", function () {
+            //TODO - figure out how to test this
         });
 
         describe("should set a $stateChangeStart event handler that", function () {

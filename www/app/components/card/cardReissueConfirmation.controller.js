@@ -2,9 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:5
 
     /* @ngInject */
-    function CardReissueConfirmationController($scope, globals, cardReissueDetails) {
+    function CardReissueConfirmationController($cordovaGoogleAnalytics, $scope, globals, cardReissueDetails, CommonService) {
 
         var vm = this;
 
@@ -22,6 +23,9 @@
         }
 
         function beforeEnter() {
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
     }
 

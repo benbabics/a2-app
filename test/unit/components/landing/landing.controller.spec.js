@@ -3,6 +3,7 @@
 
     var $scope,
         $ionicHistory,
+        $cordovaGoogleAnalytics,
         ctrl,
         mockCurrentInvoiceSummary,
         mockUser,
@@ -10,7 +11,44 @@
         UserAccountModel,
         InvoiceSummaryModel,
         UserManager,
-        UserModel;
+        UserModel,
+        mockGlobals = {
+            "LANDING": {
+                "CONFIG": {
+                    "ANALYTICS"          : {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
+                    "title"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "availableCredit"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "billedAmount"       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "unbilledAmount"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "paymentDueDate"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "currentBalance"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "statementBalance"   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "makePayment"        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "transactionActivity": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "cards"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "scheduledPayments"  : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                },
+                "CHART" : {
+                    "options": {
+                        animation            : TestUtils.getRandomBoolean(),
+                        percentageInnerCutout: TestUtils.getRandomInteger(1, 50),
+                        showTooltips         : TestUtils.getRandomBoolean(),
+                        segmentStrokeWidth   : TestUtils.getRandomInteger(1, 10),
+                        scaleOverride        : TestUtils.getRandomBoolean(),
+                        responsive           : TestUtils.getRandomBoolean()
+                    },
+                    "colors" : {
+                        availableCreditPositive: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        availableCreditNegative: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        billedAmount           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        unbilledAmount         : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    }
+                }
+            }
+        },
+        mockConfig = mockGlobals.LANDING.CONFIG;
 
     describe("A Landing Controller", function () {
 
@@ -33,8 +71,9 @@
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearHistory"]);
             mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
-            inject(function ($controller, $rootScope, _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_) {
+            inject(function ($controller, $rootScope, $q, _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, CommonService) {
 
                 UserAccountModel = _UserAccountModel_;
                 InvoiceSummaryModel = _InvoiceSummaryModel_;
@@ -45,15 +84,23 @@
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
                 UserManager.getUser.and.returnValue(mockUser);
 
+                //setup spies
+                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                    //just execute the callback directly
+                    return $q.when((callback || function() {})());
+                });
+
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("LandingController", {
-                    $scope                : $scope,
-                    $ionicHistory         : $ionicHistory,
-                    UserManager           : UserManager,
-                    currentInvoiceSummary : mockCurrentInvoiceSummary,
-                    scheduledPaymentsCount: mockScheduledPaymentCount
+                    $scope                 : $scope,
+                    $ionicHistory          : $ionicHistory,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    UserManager            : UserManager,
+                    currentInvoiceSummary  : mockCurrentInvoiceSummary,
+                    scheduledPaymentsCount : mockScheduledPaymentCount,
+                    globals                : mockGlobals
                 });
             });
         });
@@ -167,6 +214,10 @@
 
                 });
 
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
 
         });

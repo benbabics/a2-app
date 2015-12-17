@@ -4,6 +4,7 @@
     var $rootScope,
         $scope,
         $q,
+        $cordovaGoogleAnalytics,
         moment,
         CommonService,
         TransactionManager,
@@ -18,6 +19,9 @@
         mockGlobals = {
             TRANSACTION_LIST: {
                 "CONFIG"        : {
+                    "ANALYTICS"                 : {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
                     "title"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "reloadDistance" : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 },
@@ -26,7 +30,8 @@
                     "PAGE_SIZE": TestUtils.getRandomInteger(1, 100)
                 }
             }
-        };
+        },
+        mockConfig = mockGlobals.TRANSACTION_LIST.CONFIG;
 
     describe("A Transaction List Controller", function () {
 
@@ -48,6 +53,7 @@
             //mock dependencies:
             TransactionManager = jasmine.createSpyObj("TransactionManager", ["fetchPostedTransactions"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
             inject(function (_$rootScope_, _$q_, _moment_,
                              _CommonService_, _UserModel_, _UserAccountModel_, _PostedTransactionModel_, $controller) {
@@ -63,11 +69,12 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("TransactionListController", {
-                    $scope            : $scope,
-                    globals           : mockGlobals,
-                    CommonService     : CommonService,
-                    TransactionManager: TransactionManager,
-                    UserManager       : UserManager
+                    $scope                 : $scope,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    globals                : mockGlobals,
+                    CommonService          : CommonService,
+                    TransactionManager     : TransactionManager,
+                    UserManager            : UserManager
                 });
 
             });
@@ -75,6 +82,10 @@
             //setup spies
             spyOn(CommonService, "loadingBegin");
             spyOn(CommonService, "loadingComplete");
+            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                //just execute the callback directly
+                return $q.when((callback || function() {})());
+            });
 
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
@@ -90,7 +101,9 @@
                 $scope.$broadcast("$ionicView.beforeEnter");
             });
 
-            // Doesn't do anything yet
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
+            });
 
         });
 

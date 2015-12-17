@@ -2,9 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:5
 
     /* @ngInject */
-    function PaymentListController($scope, globals, payments, CommonService) {
+    function PaymentListController($cordovaGoogleAnalytics, $scope, globals, payments, CommonService) {
 
         var _ = CommonService._,
             vm = this;
@@ -43,6 +44,10 @@
 
             // Sort the rest of the payments by scheduled date descending
             vm.completedPayments = _.sortByOrder(unsortedCompletedPayments, ["scheduledDate"], ["desc"]);
+
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
     }

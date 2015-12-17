@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:8
+    // jshint maxparams:9
 
     /* @ngInject */
-    function CardChangeStatusController($scope, $state, globals, card,
+    function CardChangeStatusController($cordovaGoogleAnalytics, $scope, $state, globals, card,
                                         CardManager, CommonService, Logger, UserManager) {
 
         var vm = this;
@@ -27,6 +27,9 @@
         }
 
         function beforeEnter() {
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
         function confirmStatusChange(newStatus) {

@@ -7,13 +7,43 @@
         $state,
         $stateParams = {},
         $cordovaKeyboard,
+        $cordovaGoogleAnalytics,
         authenticateDeferred,
         ctrl,
         fetchCurrentUserDeferred,
-        globals,
         AuthenticationManager,
         CommonService,
-        UserManager;
+        UserManager,
+        mockGlobals = {
+            "USER_LOGIN": {
+                "CONFIG": {
+                    "ANALYTICS"   : {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
+                    "title"       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "userName"    : {
+                        "label"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "maxLength": TestUtils.getRandomInteger(1, 100)
+                    },
+                    "password"    : {
+                        "label"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "maxLength": TestUtils.getRandomInteger(1, 100)
+                    },
+                    "submitButton": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "serverErrors": {
+                        "AUTHORIZATION_FAILED"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "DEFAULT"                           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "PASSWORD_EXPIRED"                  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "TOKEN_EXPIRED"                     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "USER_LOCKED"                       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "USER_MUST_ACCEPT_TERMS"            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "USER_MUST_SETUP_SECURITY_QUESTIONS": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "USER_NOT_ACTIVE"                   : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    }
+                }
+            }
+        },
+        mockConfig = mockGlobals.USER_LOGIN.CONFIG;
 
     describe("A Login Controller", function () {
 
@@ -37,28 +67,34 @@
             UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
             $state = jasmine.createSpyObj("state", ["go"]);
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _globals_, _CommonService_) {
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _CommonService_) {
                 $ionicHistory = _$ionicHistory_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
                 fetchCurrentUserDeferred = $q.defer();
-                globals = _globals_;
                 $rootScope = _$rootScope_;
                 CommonService = _CommonService_;
 
                 ctrl = $controller("LoginController", {
-                    $scope: $scope,
-                    $state: $state,
-                    $stateParams: $stateParams,
-                    $cordovaKeyboard: $cordovaKeyboard,
-                    globals: globals,
-                    AuthenticationManager: AuthenticationManager,
-                    CommonService: CommonService,
-                    UserManager: UserManager
+                    $scope                 : $scope,
+                    $state                 : $state,
+                    $stateParams           : $stateParams,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    $cordovaKeyboard       : $cordovaKeyboard,
+                    globals                : mockGlobals,
+                    AuthenticationManager  : AuthenticationManager,
+                    CommonService          : CommonService,
+                    UserManager            : UserManager
                 });
 
+                //setup spies:
                 spyOn(CommonService, "logOut");
+                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                    //just execute the callback directly
+                    return $q.when((callback || function() {})());
+                });
 
             });
 
@@ -71,6 +107,12 @@
 
                 //setup an existing values to test them being modified
                 ctrl.globalError = "This is a previous error";
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                $scope.$broadcast("$ionicView.beforeEnter");
+
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
 
             describe("when $stateParams.reason is TOKEN_EXPIRED", function () {
@@ -86,7 +128,7 @@
                 });
 
                 it("should set the error", function () {
-                    expect(ctrl.globalError).toEqual("Your session has expired. Please login again.");
+                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.TOKEN_EXPIRED);
                 });
 
             });
@@ -234,7 +276,7 @@
                     });
 
                     it("should have an error message", function () {
-                        expect(ctrl.globalError).toEqual("Invalid login information. Please check your username and password or go online to set up or recover your username and password.");
+                        expect(ctrl.globalError).toEqual(mockConfig.serverErrors.DEFAULT);
                     });
 
                     it("should NOT navigate away from the login page", function () {
@@ -264,7 +306,7 @@
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual("Invalid login information. Please check your username and password or go online to set up or recover your username and password.");
+                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.DEFAULT);
                 });
 
                 it("should NOT navigate away from the login page", function () {
@@ -292,7 +334,7 @@
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual("Invalid login information. Go online to set up or recover your username and password.");
+                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.USER_NOT_ACTIVE);
                 });
 
                 it("should NOT navigate away from the login page", function () {
@@ -320,7 +362,7 @@
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual("Invalid login information. Go online to set up or recover your username and password.");
+                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.USER_MUST_ACCEPT_TERMS);
                 });
 
                 it("should NOT navigate away from the login page", function () {
@@ -348,7 +390,7 @@
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual("Invalid login information. Go online to set up or recover your username and password.");
+                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.USER_MUST_SETUP_SECURITY_QUESTIONS);
                 });
 
                 it("should NOT navigate away from the login page", function () {
@@ -376,7 +418,7 @@
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual("Invalid login information. Go online to set up or recover your username and password.");
+                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.PASSWORD_EXPIRED);
                 });
 
                 it("should NOT navigate away from the login page", function () {
@@ -404,7 +446,7 @@
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual("You have exceeded the number of allowable login attempts. You will need to access your online account to retrieve your username and password.");
+                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.USER_LOCKED);
                 });
 
                 it("should NOT navigate away from the login page", function () {
@@ -432,7 +474,7 @@
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual("We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.");
+                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.AUTHORIZATION_FAILED);
                 });
 
                 it("should NOT navigate away from the login page", function () {

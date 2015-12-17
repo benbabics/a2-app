@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:7
+    // jshint maxparams:8
 
     /* @ngInject */
-    function TransactionListController($scope, globals, moment,
+    function TransactionListController($cordovaGoogleAnalytics, $scope, globals, moment,
                                        CommonService, Logger, TransactionManager, UserManager) {
 
         var _ = CommonService._,
@@ -30,6 +30,9 @@
         }
 
         function beforeEnter() {
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
         function loadNextPage() {

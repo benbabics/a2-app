@@ -19,17 +19,20 @@
 
     appGlobals.USER_LOGIN = {
         "CONFIG": {
-            "title"       : "Fleet SmartHub",
-            "userName"    : {
+            "ANALYTICS": {
+                "pageName": "Login"
+            },
+            "title"           : "Fleet SmartHub",
+            "userName"        : {
                 "label"    : "Username",
                 "maxLength": 30
             },
-            "password"    : {
+            "password"        : {
                 "label"    : "Password",
                 "maxLength": 30
             },
-            "submitButton": "Log In",
-            "serverErrors": {
+            "submitButton"    : "Log In",
+            "serverErrors"    : {
                 "AUTHORIZATION_FAILED"              : "We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.",
                 "DEFAULT"                           : "Invalid login information. Please check your username and password or go online to set up or recover your username and password.",
                 "PASSWORD_EXPIRED"                  : "Invalid login information. Go online to set up or recover your username and password.",
@@ -44,6 +47,9 @@
 
     appGlobals.LANDING = {
         "CONFIG": {
+            "ANALYTICS"   : {
+                "pageName": "Home"
+            },
             "title"              : "Fleet SmartHub",
             "availableCredit"    : "Available",
             "billedAmount"       : "Billed",
@@ -76,6 +82,9 @@
 
     appGlobals.CARD_DETAIL = {
         "CONFIG": {
+            "ANALYTICS"         : {
+                "pageName": "CardDetails"
+            },
             "title"             : "Card Details",
             "cardNumber"        : "Card Number",
             "standardEmbossing" : "Standard Embossing",
@@ -88,6 +97,9 @@
 
     appGlobals.CARD_LIST = {
         "CONFIG"        : {
+            "ANALYTICS"        : {
+                "pageName": "Cards"
+            },
             "title"            : "Cards",
             "searchPlaceholder": "Search Card No & Embossing",
             "cardNumber"       : "Card No",
@@ -104,6 +116,9 @@
 
     appGlobals.CARD_CHANGE_STATUS = {
         "CONFIG": {
+            "ANALYTICS"        : {
+                "pageName": "ChangeStatus"
+            },
             "statuses"         : {
                 "activate" : "Activate Card",
                 "terminate": "Terminate Card"
@@ -123,6 +138,9 @@
 
     appGlobals.CARD_CHANGE_STATUS_CONFIRMATION = {
         "CONFIG": {
+            "ANALYTICS"           : {
+                "pageName": "ChangeStatusConfirmation"
+            },
             "title"               : "Confirmation",
             "confirmationMessages": {
                 "active"    : "Card has been activated.",
@@ -138,6 +156,9 @@
 
     appGlobals.CARD_REISSUE = {
         "CONFIG": {
+            "ANALYTICS"          : {
+                "pageName": "ReissueCard"
+            },
             "title"              : "Reissue Card",
             "shippingAddress"    : "Shipping Address",
             "shippingMethod"     : "Shipping Method",
@@ -156,6 +177,9 @@
 
     appGlobals.CARD_REISSUE_CONFIRMATION = {
         "CONFIG": {
+            "ANALYTICS"          : {
+                "pageName": "ReissueCardConfirmation"
+            },
             "title"              : "Confirmation",
             "confirmationMessage": "Your card has been reissued.",
             "cardNumber"         : "Card Number",
@@ -169,12 +193,18 @@
     appGlobals.CARD_REISSUE_INPUTS = {
         "SHIPPING_METHOD": {
             "CONFIG": {
-                "title": "Select Shipping Method"
+                "ANALYTICS": {
+                    "pageName": "SelectShippingMethod"
+                },
+                "title"    : "Select Shipping Method"
             }
         },
         "REISSUE_REASON" : {
             "CONFIG": {
-                "title": "Select Reason"
+                "ANALYTICS": {
+                    "pageName": "SelectReason"
+                },
+                "title"    : "Select Reason"
             }
         }
     };
@@ -227,6 +257,20 @@
                 "ERRORS": {
                     "zeroPayment"    : "The amount entered cannot be \"0.00\".",
                     "paymentTooLarge": "The amount entered cannot be greater than the Current Balance."
+                },
+                "ADD"   : {
+                    "CONFIG": {
+                        "ANALYTICS": {
+                            "pageName": "EnterAmountInitial"
+                        }
+                    }
+                },
+                "UPDATE": {
+                    "CONFIG": {
+                        "ANALYTICS": {
+                            "pageName": "EnterAmountEdit"
+                        }
+                    }
                 }
             },
             "DATE"        : {
@@ -238,17 +282,37 @@
                 "CONFIG": {
                     "title"            : "Select Bank Account",
                     "instructionalText": "Please Note: Managing bank accounts can only be completed on the web from the desktop application version."
+                },
+                "ADD"   : {
+                    "CONFIG": {
+                        "ANALYTICS": {
+                            "pageName": "SelectBankAccountInitial"
+                        }
+                    }
+                },
+                "UPDATE": {
+                    "CONFIG": {
+                        "ANALYTICS": {
+                            "pageName": "SelectBankAccountEdit"
+                        }
+                    }
                 }
             }
         },
         "ADD"   : {
             "CONFIG": {
-                "title": "Make Payment"
+                "ANALYTICS": {
+                    "pageName": "MakePaymentInitial"
+                },
+                "title"           : "Make Payment"
             }
         },
         "UPDATE": {
             "CONFIG": {
-                "title": "Edit Payment"
+                "ANALYTICS": {
+                    "pageName": "MakePaymentEdit"
+                },
+                "title"           : "Edit Payment"
             }
         }
     };
@@ -267,11 +331,19 @@
             "PAYMENT_AMOUNT_LESS_THAN_MINIMUM": "This amount is less than the Statement Balance.",
             "PAYMENT_DATE_PAST_DUE_DATE"      : "The date selected for payment is past the Due Date."
         },
-        "ADD"     : {
-            "CONFIG": {}
+        "ADD"   : {
+            "CONFIG": {
+                "ANALYTICS": {
+                    "pageName": "PaymentSummaryInitial"
+                }
+            }
         },
-        "UPDATE"  : {
-            "CONFIG": {}
+        "UPDATE": {
+            "CONFIG": {
+                "ANALYTICS": {
+                    "pageName": "PaymentSummaryEdit"
+                }
+            }
         }
     };
 
@@ -285,15 +357,26 @@
             "activityButton"  : "Payment Activity"
         },
         "ADD"   : {
-            "CONFIG": {}
+            "CONFIG": {
+                "ANALYTICS": {
+                    "pageName": "PaymentConfirmationInitial"
+                }
+            }
         },
         "UPDATE": {
-            "CONFIG": {}
+            "CONFIG": {
+                "ANALYTICS": {
+                    "pageName": "PaymentConfirmationEdit"
+                }
+            }
         }
     };
 
     appGlobals.PAYMENT_VIEW = {
         "CONFIG": {
+            "ANALYTICS"           : {
+                "pageName": "PaymentDetails"
+            },
             "title"               : "Payment Details",
             "amount"              : "Amount",
             "bankAccount"         : "Bank Account",
@@ -313,6 +396,9 @@
 
     appGlobals.PAYMENT_LIST = {
         "CONFIG"        : {
+            "ANALYTICS"                 : {
+                "pageName": "PaymentActivity"
+            },
             "title"                     : "Payment Activity",
             "scheduledPaymentsHeading"  : "Scheduled Payments",
             "noScheduledPaymentsMessage": "There are currently no payments scheduled.",
@@ -344,6 +430,9 @@
 
     appGlobals.TRANSACTION_LIST = {
         "CONFIG"        : {
+            "ANALYTICS"     : {
+                "pageName": "TransactionActivity"
+            },
             "title"         : "Transaction Activity",
             "reloadDistance": "5%",
             "emptyList"     : "No Records Found."

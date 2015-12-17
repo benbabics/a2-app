@@ -4,10 +4,14 @@
     var ctrl,
         $rootScope,
         $scope,
+        $cordovaGoogleAnalytics,
         mockCardReissueDetails,
         mockGlobals = {
             "CARD_REISSUE_CONFIRMATION": {
                 "CONFIG": {
+                    "ANALYTICS"         : {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
                     "title"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "confirmationMessage": TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "cardNumber"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
@@ -17,7 +21,8 @@
                     "cards"              : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 }
             }
-        };
+        },
+        mockConfig = mockGlobals.CARD_REISSUE_CONFIRMATION.CONFIG;
 
     describe("A Card Reissue Confirmation Controller", function () {
 
@@ -27,8 +32,11 @@
             module("app.components.card");
             module("app.components.account");
 
-            inject(function ($controller, _$rootScope_, AddressModel, ShippingMethodModel,
-                             CardReissueModel, AccountModel, CardModel, ShippingCarrierModel) {
+            //mock dependencies:
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
+
+            inject(function ($controller, _$rootScope_, $q, AddressModel, ShippingMethodModel,
+                             CardReissueModel, CommonService, AccountModel, CardModel, ShippingCarrierModel) {
                 $rootScope = _$rootScope_;
 
                 $scope = $rootScope.$new();
@@ -36,9 +44,16 @@
                 mockCardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
 
                 ctrl = $controller("CardReissueConfirmationController", {
-                    $scope            : $scope,
-                    globals           : mockGlobals,
-                    cardReissueDetails: mockCardReissueDetails
+                    $scope                 : $scope,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    globals                : mockGlobals,
+                    cardReissueDetails     : mockCardReissueDetails
+                });
+
+                //setup spies
+                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                    //just execute the callback directly
+                    return $q.when((callback || function() {})());
                 });
             });
 
@@ -56,6 +71,10 @@
 
             beforeEach(function () {
                 $scope.$broadcast("$ionicView.beforeEnter");
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
         });
     });

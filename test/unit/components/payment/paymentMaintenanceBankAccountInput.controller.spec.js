@@ -4,6 +4,7 @@
     var ctrl,
         scope,
         $ionicHistory,
+        $cordovaGoogleAnalytics,
         bankModel1,
         bankModel2,
         bankModel3,
@@ -16,6 +17,20 @@
                         "CONFIG": {
                             "title"            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                             "instructionalText": TestUtils.getRandomStringThatIsAlphaNumeric(30)
+                        },
+                        "ADD": {
+                            "CONFIG": {
+                                "ANALYTICS": {
+                                    "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                }
+                            }
+                        },
+                        "UPDATE": {
+                            "CONFIG": {
+                                "ANALYTICS": {
+                                    "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                }
+                            }
                         }
                     }
                 }
@@ -27,6 +42,9 @@
                 }
             }
         },
+        mockMaintenanceState,
+        mockStateParams,
+        mockMaintenance,
         BankModel;
 
     describe("A Payment Maintenance Bank Account Input Controller", function () {
@@ -52,8 +70,9 @@
 
             //mock dependencies:
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
-            inject(function ($rootScope, $controller, $filter, globals, _BankModel_, PaymentModel) {
+            inject(function ($rootScope, $controller, $filter, $q, _BankModel_, PaymentModel, appGlobals, CommonService) {
 
                 scope = $rootScope.$new();
 
@@ -70,15 +89,40 @@
                 mockBankAccounts[bankModel2.id] = bankModel2;
                 mockBankAccounts[bankModel3.id] = bankModel3;
 
+                mockMaintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
+                mockStateParams = {
+                    maintenanceState: mockMaintenanceState
+                };
+                mockMaintenance = {
+                    state : mockMaintenanceState,
+                    states: appGlobals.PAYMENT_MAINTENANCE.STATES,
+                    go    : jasmine.createSpy("go")
+                };
+
                 ctrl = $controller("PaymentMaintenanceBankAccountInputController", {
-                    $ionicHistory: $ionicHistory,
-                    $scope       : scope,
-                    bankAccounts : mockBankAccounts,
-                    globals      : globals,
-                    payment      : mockPayment
+                    $ionicHistory          : $ionicHistory,
+                    $scope                 : scope,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    bankAccounts           : mockBankAccounts,
+                    globals                : mockGlobals,
+                    maintenance            : mockMaintenance,
+                    payment                : mockPayment
+                });
+
+                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                    //just execute the callback directly
+                    return $q.when((callback || function() {})());
                 });
 
             });
+        });
+
+        it("should set the config to the expected value", function () {
+            expect(ctrl.config).toEqual(angular.extend({},
+                mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT.CONFIG,
+                mockGlobals.BUTTONS.CONFIG,
+                getConfig(mockMaintenance)
+            ));
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -89,6 +133,10 @@
 
             it("should set the bank accounts", function () {
                 expect(ctrl.bankAccounts).toEqual(mockBankAccounts);
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(getConfig(mockMaintenance).ANALYTICS.pageName);
             });
         });
 
@@ -117,5 +165,16 @@
         });
 
     });
+
+    function getConfig(maintenance) {
+        switch (maintenance.state) {
+            case maintenance.states.ADD:
+                return mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT.ADD.CONFIG;
+            case maintenance.states.UPDATE:
+                return mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT.UPDATE.CONFIG;
+            default:
+                return null;
+        }
+    }
 
 }());

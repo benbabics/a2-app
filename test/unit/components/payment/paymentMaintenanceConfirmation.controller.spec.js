@@ -3,6 +3,7 @@
 
     var _,
         $scope,
+        $cordovaGoogleAnalytics,
         ctrl,
         mockMaintenanceState,
         mockStateParams,
@@ -18,11 +19,19 @@
                     "activityButton"  : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 },
                 "ADD"   : {
-                    "CONFIG": {}
+                    "CONFIG": {
+                        "ANALYTICS"                 : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    }
                 },
 
                 "UPDATE": {
-                    "CONFIG": {}
+                    "CONFIG": {
+                        "ANALYTICS"                 : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    }
                 }
             }
         },
@@ -53,7 +62,10 @@
                 });
             });
 
-            inject(function ($controller, $rootScope, appGlobals, CommonService) {
+            //mock dependencies:
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
+
+            inject(function ($controller, $rootScope, $q, appGlobals, CommonService) {
 
                 _ = CommonService._;
 
@@ -71,10 +83,18 @@
                 };
 
                 ctrl = $controller("PaymentMaintenanceConfirmationController", {
-                    $scope            : $scope,
-                    $stateParams      : mockStateParams,
-                    maintenance       : mockMaintenance,
-                    payment           : mockPayment
+                    $scope                 : $scope,
+                    $stateParams           : mockStateParams,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    maintenance            : mockMaintenance,
+                    payment                : mockPayment,
+                    globals                : mockGlobals
+                });
+
+                //setup spies:
+                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                    //just execute the callback directly
+                    return $q.when((callback || function() {})());
                 });
 
             });
@@ -95,6 +115,10 @@
 
             it("should set payment to the expected value", function () {
                 expect(ctrl.payment).toEqual(mockPayment);
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(getConfig(mockMaintenance).ANALYTICS.pageName);
             });
         });
 

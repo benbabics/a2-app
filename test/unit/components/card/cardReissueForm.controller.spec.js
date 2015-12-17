@@ -7,6 +7,7 @@
         $q,
         $state,
         $ionicHistory,
+        $cordovaGoogleAnalytics,
         CardManager,
         CardModel,
         CommonService,
@@ -19,6 +20,9 @@
         mockGlobals = {
             "CARD_REISSUE": {
                 "CONFIG": {
+                    "ANALYTICS"         : {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
                     "title"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "shippingAddress"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "shippingMethod"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
@@ -64,6 +68,10 @@
                 "nextViewOptions"
             ]);
 
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", [
+                "trackView"
+            ]);
+
             inject(function ($controller, _$rootScope_, _$q_, _sharedGlobals_, _AddressModel_, _ShippingMethodModel_,
                              CardReissueModel, _CommonService_, AccountModel, _CardModel_, ShippingCarrierModel, UserModel,
                              UserAccountModel) {
@@ -81,14 +89,15 @@
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
 
                 ctrl = $controller("CardReissueFormController", {
-                    $scope            : $scope,
-                    $state            : $state,
-                    $ionicHistory     : $ionicHistory,
-                    globals           : mockGlobals,
-                    cardReissueDetails: mockCardReissueDetails,
-                    CardManager       : CardManager,
-                    CommonService     : CommonService,
-                    UserManager       : UserManager
+                    $scope                 : $scope,
+                    $state                 : $state,
+                    $ionicHistory          : $ionicHistory,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    globals                : mockGlobals,
+                    cardReissueDetails     : mockCardReissueDetails,
+                    CardManager            : CardManager,
+                    CommonService          : CommonService,
+                    UserManager            : UserManager
                 });
             });
 
@@ -97,6 +106,10 @@
             spyOn(CommonService, "displayConfirm");
             spyOn(CommonService, "loadingBegin");
             spyOn(CommonService, "loadingComplete");
+            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                //just execute the callback directly
+                return $q.when((callback || function() {})());
+            });
         });
 
         it("should set card to the given card object", function () {
@@ -111,6 +124,10 @@
 
             beforeEach(function () {
                 $scope.$broadcast("$ionicView.beforeEnter");
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
         });
 

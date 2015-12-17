@@ -2,10 +2,11 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:11
+    // jshint maxparams:12
 
     /* @ngInject */
-    function PaymentMaintenanceSummaryController($scope, $ionicHistory, globals, maintenance, moment, payment,
+    function PaymentMaintenanceSummaryController($cordovaGoogleAnalytics, $scope, $ionicHistory,
+                                                 globals, maintenance, moment, payment,
                                                  CommonService, InvoiceManager, Logger, PaymentManager, UserManager) {
 
         var _ = CommonService._,
@@ -111,6 +112,10 @@
             if (moment(vm.payment.scheduledDate).isAfter(invoiceSummary.paymentDueDate)) {
                 vm.warnings.push(paymentMaintenanceSummary.WARNINGS.PAYMENT_DATE_PAST_DUE_DATE);
             }
+
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
     }

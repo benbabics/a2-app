@@ -5,6 +5,8 @@
         $rootScope,
         $scope,
         $state,
+        $cordovaGoogleAnalytics,
+        $q,
         ctrl,
         CommonService,
         PaymentManager,
@@ -16,6 +18,9 @@
         mockGlobals = {
             PAYMENT_VIEW: {
                 "CONFIG": {
+                    "ANALYTICS"   : {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
                     "title"               : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "amount"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "bankAccount"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
@@ -59,13 +64,15 @@
 
             // mock dependencies
             $state = jasmine.createSpyObj("$state", ["go"]);
-            CommonService = jasmine.createSpyObj("CommonService", ["displayConfirm"]);
+            CommonService = jasmine.createSpyObj("CommonService", ["displayConfirm", "waitForCordovaPlatform"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["removePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
-            inject(function (_$rootScope_, _CommonService_, $controller, $q, BankModel, PaymentModel, UserAccountModel, UserModel) {
+            inject(function (_$rootScope_, _CommonService_, $controller, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
 
                 $rootScope = _$rootScope_;
+                $q = _$q_;
                 _ = _CommonService_._;
                 confirmDeferred = $q.defer();
                 removePaymentDeferred = $q.defer();
@@ -77,19 +84,24 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("PaymentDetailController", {
-                    $scope            : $scope,
-                    $state            : $state,
-                    CommonService     : CommonService,
-                    PaymentManager    : PaymentManager,
-                    UserManager       : UserManager,
-                    payment           : mockPayment,
-                    isPaymentEditable : mockIsPaymentEditable
+                    $scope                 : $scope,
+                    $state                 : $state,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    CommonService          : CommonService,
+                    PaymentManager         : PaymentManager,
+                    UserManager            : UserManager,
+                    payment                : mockPayment,
+                    isPaymentEditable      : mockIsPaymentEditable
                 });
             });
 
             CommonService.displayConfirm.and.returnValue(confirmDeferred.promise);
             UserManager.getUser.and.returnValue(mockUser);
             PaymentManager.removePayment.and.returnValue(removePaymentDeferred.promise);
+            CommonService.waitForCordovaPlatform.and.callFake(function(callback) {
+                //just execute the callback directly
+                return $q.when((callback || function() {})());
+            });
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -108,6 +120,10 @@
 
             it("should set the is payment editable indicator", function () {
                 expect(ctrl.isPaymentEditable).toEqual(mockIsPaymentEditable);
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
 
         });

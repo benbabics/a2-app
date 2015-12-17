@@ -5,17 +5,22 @@
         $rootScope,
         $scope,
         $ionicHistory,
+        $cordovaGoogleAnalytics,
         sharedGlobals,
         mockCardReissueDetails,
         mockGlobals = {
             "CARD_REISSUE_INPUTS": {
                 "REISSUE_REASON": {
                     "CONFIG": {
+                        "ANALYTICS"         : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
                         "title": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     }
                 }
             }
-        };
+        },
+        mockConfig = mockGlobals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG;
 
     describe("A Card Reissue Reason Input Controller", function () {
 
@@ -27,9 +32,10 @@
 
             //mock dependencies:
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
-            inject(function ($controller, _$rootScope_, _sharedGlobals_, AddressModel, ShippingMethodModel,
-                             CardReissueModel, AccountModel, CardModel, ShippingCarrierModel) {
+            inject(function ($controller, _$rootScope_, _sharedGlobals_, $q, AddressModel, ShippingMethodModel,
+                             CardReissueModel, CommonService, AccountModel, CardModel, ShippingCarrierModel) {
                 $rootScope = _$rootScope_;
                 sharedGlobals = _sharedGlobals_;
 
@@ -38,10 +44,17 @@
                 mockCardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
 
                 ctrl = $controller("CardReissueReasonInputController", {
-                    $scope            : $scope,
-                    $ionicHistory     : $ionicHistory,
-                    globals           : mockGlobals,
-                    cardReissueDetails: mockCardReissueDetails
+                    $scope                 : $scope,
+                    $ionicHistory          : $ionicHistory,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    globals                : mockGlobals,
+                    cardReissueDetails     : mockCardReissueDetails
+                });
+
+                //setup spies
+                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                    //just execute the callback directly
+                    return $q.when((callback || function() {})());
                 });
             });
 
@@ -59,6 +72,10 @@
 
             beforeEach(function () {
                 $scope.$broadcast("$ionicView.beforeEnter");
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
         });
 

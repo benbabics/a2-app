@@ -3,10 +3,10 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
-    // jshint maxparams:6
+    // jshint maxparams:8
 
     /* @ngInject */
-    function CommonService(_, $ionicPopup, $rootScope, $state, globals, Logger) {
+    function CommonService(_, $ionicPlatform, $ionicPopup, $q, $rootScope, $state, globals, Logger) {
 
         // Private members
         var POBOX_REGEX = new RegExp("([\\w\\s*\\W]*(P(OST)?(\\.)?\\s*O(FF(ICE)?)?(\\.)?\\s*B(OX)?))[\\w\\s*\\W]*"),
@@ -14,7 +14,13 @@
             alertPopup,
             confirmPopup,
             focusedStateOrder = ["stage", "entering", "active"],
-            unfocusedStateOrder = ["cached", "leaving", "active"];
+            unfocusedStateOrder = ["cached", "leaving", "active"],
+            logCordovaPlatformWarning = _.once(function () {
+                Logger.debug(
+                    "waitForCordovaPlatform callback function skipped: Cordova is not available on this platform. " +
+                    "Note: All future callbacks will also be skipped."
+                );
+            });
 
         // Revealed Public members
         var service = {
@@ -51,7 +57,8 @@
             "logOut"                   : logOut,
             "maskAccountNumber"        : maskAccountNumber,
             "pageHasNavBar"            : pageHasNavBar,
-            "platformHasCordova"       : platformHasCordova
+            "platformHasCordova"       : platformHasCordova,
+            "waitForCordovaPlatform"   : waitForCordovaPlatform
         };
 
         return service;
@@ -568,6 +575,33 @@
         function platformHasCordova() {
             return !!window.cordova;
         }
+
+        /**
+         * Convenience function that executes a callback once Cordova/Ionic are ready and Cordova is available on the platform.
+         *
+         * @param {Function} [callback] A callback to execute when Cordova is ready and available.
+         *
+         * @return {Promise} a promise that will resolve when Cordova is ready and available, or reject if Cordova is not
+         * available on the current platform. If a callback is given, the promise will resolve with the result of the callback.
+         */
+        function waitForCordovaPlatform(callback) {
+            return $ionicPlatform.ready()
+                .then(function () {
+                    if (platformHasCordova()) {
+                        //cordova is available, so execute the callback (if given)
+                        if (_.isFunction(callback)) {
+                            return callback();
+                        }
+                    }
+                    else {
+                        //Log the warning message (this only happens once per session)
+                        logCordovaPlatformWarning();
+
+                        return $q.reject();
+                    }
+                });
+        }
+
     }
 
     angular

@@ -2,11 +2,11 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:7
+    // jshint maxparams:10
 
     /* @ngInject */
-    function PaymentMaintenanceAmountInputController($scope, $filter, $ionicHistory, globals, payment, invoiceSummary,
-                                                     CommonService) {
+    function PaymentMaintenanceAmountInputController($cordovaGoogleAnalytics, $scope, $filter, $ionicHistory,
+                                                     globals, maintenance, payment, invoiceSummary, CommonService, Logger) {
 
         var DEFAULT_VALUE = 0,
             vm = this,
@@ -14,7 +14,7 @@
             firstInput = true;
 
         //public members:
-        vm.config = angular.extend({}, paymentMaintenanceAmountInput.CONFIG, globals.BUTTONS.CONFIG);
+        vm.config = angular.extend({}, paymentMaintenanceAmountInput.CONFIG, globals.BUTTONS.CONFIG, getConfig());
         vm.errors = paymentMaintenanceAmountInput.ERRORS;
         vm.amount = getDisplayAmount(DEFAULT_VALUE);
 
@@ -32,6 +32,10 @@
 
         function beforeEnter() {
             vm.amount = getDisplayAmount(payment.amount);
+
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
         function clearInput() {
@@ -56,6 +60,18 @@
 
         function getActualAmount(value) {
             return $filter("wexPaymentAmount")(value);
+        }
+
+        function getConfig() {
+            if (_.has(paymentMaintenanceAmountInput, maintenance.state)) {
+                return paymentMaintenanceAmountInput[maintenance.state].CONFIG;
+            }
+            else {
+                var error = "Unrecognized payment maintenance state: " + maintenance.state;
+
+                Logger.error(error);
+                throw new Error(error);
+            }
         }
 
         function getDisplayAmount(value) {

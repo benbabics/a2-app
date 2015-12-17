@@ -4,11 +4,15 @@
     var ctrl,
         $rootScope,
         $scope,
+        $cordovaGoogleAnalytics,
         sharedGlobals,
         mockCard,
         mockGlobals = {
             "CARD_CHANGE_STATUS_CONFIRMATION": {
                 "CONFIG": {
+                    "ANALYTICS": {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
                     "title"               : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "confirmationMessages": {
                         "active"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
@@ -21,7 +25,8 @@
                     "cards"               : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 }
             }
-        };
+        },
+        mockConfig = mockGlobals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG;
 
     describe("A CardChangeStatusConfirmationController", function () {
 
@@ -30,7 +35,10 @@
             module("app.shared");
             module("app.components.card");
 
-            inject(function ($controller, _$rootScope_, _sharedGlobals_, CardModel) {
+            //setup mocks:
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
+
+            inject(function ($controller, _$rootScope_, $q, _sharedGlobals_, CardModel, CommonService) {
                 $rootScope = _$rootScope_;
                 sharedGlobals = _sharedGlobals_;
 
@@ -39,9 +47,16 @@
                 mockCard = TestUtils.getRandomCard(CardModel);
 
                 ctrl = $controller("CardChangeStatusConfirmationController", {
-                    $scope : $scope,
-                    globals: mockGlobals,
-                    card   : mockCard
+                    $scope                 : $scope,
+                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    globals                : mockGlobals,
+                    card                   : mockCard
+                });
+
+                //setup mocks:
+                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                    //just execute the callback directly
+                    return $q.when((callback || function() {})());
                 });
             });
 
@@ -52,13 +67,17 @@
         });
 
         it("should set config to the expected constant values", function () {
-            expect(ctrl.config).toEqual(mockGlobals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG);
+            expect(ctrl.config).toEqual(mockConfig);
         });
 
         describe("has a beforeEnter function that", function () {
 
             beforeEach(function () {
                 $scope.$broadcast("$ionicView.beforeEnter");
+            });
+
+            it("should call $cordovaGoogleAnalytics.trackView", function () {
+                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
         });
 
@@ -71,9 +90,7 @@
                 });
 
                 it("should return the expected message", function () {
-                    expect(ctrl.getConfirmationMessage()).toEqual(
-                        mockGlobals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG.confirmationMessages.active
-                    );
+                    expect(ctrl.getConfirmationMessage()).toEqual(mockConfig.confirmationMessages.active);
                 });
             });
 
@@ -84,9 +101,7 @@
                 });
 
                 it("should return the expected message", function () {
-                    expect(ctrl.getConfirmationMessage()).toEqual(
-                        mockGlobals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG.confirmationMessages.terminated
-                    );
+                    expect(ctrl.getConfirmationMessage()).toEqual(mockConfig.confirmationMessages.terminated);
                 });
             });
 

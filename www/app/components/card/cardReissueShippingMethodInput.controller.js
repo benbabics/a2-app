@@ -2,9 +2,11 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:6
 
     /* @ngInject */
-    function CardReissueShippingMethodInputController($scope, $ionicHistory, globals, cardReissueDetails) {
+    function CardReissueShippingMethodInputController($cordovaGoogleAnalytics, $scope, $ionicHistory,
+                                                      globals, cardReissueDetails, CommonService) {
 
         var vm = this;
 
@@ -22,6 +24,9 @@
         }
 
         function beforeEnter() {
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
         function confirmSelection(shippingMethod) {

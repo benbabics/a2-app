@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:9
+    // jshint maxparams:10
 
     /* @ngInject */
-    function LoginController($ionicHistory, $scope, $state, $stateParams, $cordovaKeyboard,
+    function LoginController($cordovaGoogleAnalytics, $cordovaKeyboard, $ionicHistory, $scope, $state, $stateParams,
                              globals, AuthenticationManager, CommonService, UserManager) {
 
         var _ = CommonService._,
@@ -32,6 +32,10 @@
             if (_.has($stateParams, "reason") && _.isString($stateParams.reason)) {
                 vm.globalError = vm.config.serverErrors[$stateParams.reason];
             }
+
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
+            });
         }
 
         function authenticateUser() {
