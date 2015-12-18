@@ -16,7 +16,7 @@ $user-login-error-message-animation: all linear 0.5s;
 .user-login-view {
 
     color: $inverse-font-color;
-    background: url("../img/login_bkg.png") no-repeat center $user-login-image-header-offset fixed;
+    background: url("../img/login_background.png") no-repeat center $user-login-image-header-offset fixed;
     background-size: cover;
 
     #errorMessage {
