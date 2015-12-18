@@ -19,20 +19,34 @@
 
     appGlobals.USER_LOGIN = {
         "CONFIG": {
-            "ANALYTICS": {
-                "pageName": "Login"
+            "ANALYTICS"   : {
+                "pageName"   : "Login",
+                "events"     : {
+                    "inactiveStatus"        : ["Login", "InactiveStatus"],
+                    "accountNotReadyStatus" : ["Login", "AccountNotReadyStatus"],
+                    "wrongCredentialsStatus": ["Login", "WrongCredentialsStatus"],
+                    "lockedPasswordStatus"  : ["Login", "LockedPasswordStatus"]
+                },
+                "errorEvents": {
+                    "USER_MUST_ACCEPT_TERMS"            : "inactiveStatus",
+                    "USER_MUST_SETUP_SECURITY_QUESTIONS": "inactiveStatus",
+                    "USER_NOT_ACTIVE"                   : "inactiveStatus",
+                    "AUTHORIZATION_FAILED"              : "accountNotReadyStatus",
+                    "DEFAULT"                           : "wrongCredentialsStatus",
+                    "USER_LOCKED"                       : "lockedPasswordStatus"
+                }
             },
-            "title"           : "Fleet SmartHub",
-            "userName"        : {
+            "title"       : "Fleet SmartHub",
+            "userName"    : {
                 "label"    : "Username",
                 "maxLength": 30
             },
-            "password"        : {
+            "password"    : {
                 "label"    : "Password",
                 "maxLength": 30
             },
-            "submitButton"    : "Log In",
-            "serverErrors"    : {
+            "submitButton": "Log In",
+            "serverErrors": {
                 "AUTHORIZATION_FAILED"              : "We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.",
                 "DEFAULT"                           : "Invalid login information. Please check your username and password or go online to set up or recover your username and password.",
                 "PASSWORD_EXPIRED"                  : "Invalid login information. Go online to set up or recover your username and password.",

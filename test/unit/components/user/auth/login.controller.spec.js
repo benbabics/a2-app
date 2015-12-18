@@ -18,7 +18,25 @@
             "USER_LOGIN": {
                 "CONFIG": {
                     "ANALYTICS"   : {
-                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "events"     : {
+                            "inactiveStatus"        : [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "accountNotReadyStatus" : [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "wrongCredentialsStatus": [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "lockedPasswordStatus"  : [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ]
+                        }
                     },
                     "title"       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "userName"    : {
@@ -67,15 +85,17 @@
             UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
             $state = jasmine.createSpyObj("state", ["go"]);
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackEvent", "trackView"]);
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _CommonService_) {
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _CommonService_, globals) {
                 $ionicHistory = _$ionicHistory_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
                 fetchCurrentUserDeferred = $q.defer();
                 $rootScope = _$rootScope_;
                 CommonService = _CommonService_;
+
+                mockConfig.ANALYTICS.errorEvents = globals.USER_LOGIN.CONFIG.ANALYTICS.errorEvents;
 
                 ctrl = $controller("LoginController", {
                     $scope                 : $scope,
@@ -131,6 +151,10 @@
                     expect(ctrl.globalError).toEqual(mockConfig.serverErrors.TOKEN_EXPIRED);
                 });
 
+                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
+                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                });
+
             });
 
             describe("when $stateParams.reason is an object", function () {
@@ -152,6 +176,10 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
+                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
+                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                });
+
             });
 
             describe("when $stateParams.reason is empty string", function () {
@@ -168,6 +196,10 @@
 
                 it("should clear previous error", function () {
                     expect(ctrl.globalError).toBeFalsy();
+                });
+
+                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
+                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -188,6 +220,10 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
+                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
+                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                });
+
             });
 
             describe("when $stateParams.reason is undefined", function () {
@@ -204,6 +240,10 @@
 
                 it("should clear previous error", function () {
                     expect(ctrl.globalError).toBeFalsy();
+                });
+
+                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
+                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -283,6 +323,10 @@
                         expect($state.go).not.toHaveBeenCalled();
                     });
 
+                    it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                        verifyEventTracked(mockConfig.ANALYTICS.events.wrongCredentialsStatus);
+                    });
+
                 });
 
             });
@@ -313,6 +357,10 @@
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
+                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                    verifyEventTracked(mockConfig.ANALYTICS.events.wrongCredentialsStatus);
+                });
+
             });
 
             describe("when the User is NOT Authenticated successfully with a USER_NOT_ACTIVE error", function () {
@@ -339,6 +387,10 @@
 
                 it("should NOT navigate away from the login page", function () {
                     expect($state.go).not.toHaveBeenCalled();
+                });
+
+                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                    verifyEventTracked(mockConfig.ANALYTICS.events.inactiveStatus);
                 });
 
             });
@@ -369,6 +421,10 @@
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
+                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                    verifyEventTracked(mockConfig.ANALYTICS.events.inactiveStatus);
+                });
+
             });
 
             describe("when the User is NOT Authenticated successfully with a USER_MUST_SETUP_SECURITY_QUESTIONS error", function () {
@@ -395,6 +451,10 @@
 
                 it("should NOT navigate away from the login page", function () {
                     expect($state.go).not.toHaveBeenCalled();
+                });
+
+                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                    verifyEventTracked(mockConfig.ANALYTICS.events.inactiveStatus);
                 });
 
             });
@@ -425,6 +485,10 @@
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
+                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
+                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                });
+
             });
 
             describe("when the User is NOT Authenticated successfully with a USER_LOCKED error", function () {
@@ -453,6 +517,10 @@
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
+                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                    verifyEventTracked(mockConfig.ANALYTICS.events.lockedPasswordStatus);
+                });
+
             });
 
             describe("when the User is NOT Authenticated successfully with a AUTHORIZATION_FAILED error", function () {
@@ -479,6 +547,10 @@
 
                 it("should NOT navigate away from the login page", function () {
                     expect($state.go).not.toHaveBeenCalled();
+                });
+
+                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                    verifyEventTracked(mockConfig.ANALYTICS.events.accountNotReadyStatus);
                 });
 
             });
@@ -529,5 +601,9 @@
         });
 
     });
+
+    function verifyEventTracked(event) {
+        expect($cordovaGoogleAnalytics.trackEvent.calls.mostRecent().args).toEqual(event);
+    }
 
 }());

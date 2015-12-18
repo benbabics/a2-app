@@ -31,6 +31,8 @@
 
             if (_.has($stateParams, "reason") && _.isString($stateParams.reason)) {
                 vm.globalError = vm.config.serverErrors[$stateParams.reason];
+
+                trackErrorEvent($stateParams.reason);
             }
 
             CommonService.waitForCordovaPlatform(function () {
@@ -44,9 +46,7 @@
             CommonService.loadingBegin();
 
             return AuthenticationManager.authenticate(vm.user.username, vm.user.password)
-                .then(function () {
-                    return UserManager.fetchCurrentUserDetails();
-                })
+                .then(UserManager.fetchCurrentUserDetails)
                 .then(function() {
                     // Do not allow backing up to the login page.
                     $ionicHistory.nextViewOptions(
@@ -59,12 +59,17 @@
                     $state.go("landing");
                 })
                 .catch(function (failedAuthenticationError) {
+                    var errorReason = "DEFAULT";
+                    if (_.has(vm.config.serverErrors, failedAuthenticationError.message)) {
+                        errorReason = failedAuthenticationError.message;
+                    }
+
+                    vm.globalError = vm.config.serverErrors[errorReason];
+
                     CommonService.logOut();
-                    vm.globalError = vm.config.serverErrors[failedAuthenticationError.message] || vm.config.serverErrors.DEFAULT;
+                    trackErrorEvent(errorReason);
                 })
-                .finally(function () {
-                    CommonService.loadingComplete();
-                });
+                .finally(CommonService.loadingComplete);
         }
 
         function clearErrorMessage() {
@@ -74,6 +79,17 @@
 
         function keyboardIsVisible() {
             return CommonService.platformHasCordova() && $cordovaKeyboard.isVisible();
+        }
+
+        function trackErrorEvent(errorReason) {
+            CommonService.waitForCordovaPlatform(function () {
+                var errorEvent;
+                if (_.has(vm.config.ANALYTICS.errorEvents, errorReason)) {
+                    errorEvent = vm.config.ANALYTICS.errorEvents[errorReason];
+
+                    _.spread($cordovaGoogleAnalytics.trackEvent)(vm.config.ANALYTICS.events[errorEvent]);
+                }
+            });
         }
     }
 
