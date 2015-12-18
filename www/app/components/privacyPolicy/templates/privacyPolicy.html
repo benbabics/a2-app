@@ -1,0 +1,49 @@
+<ion-view view-title="{{::vm.config.title}}"
+          wex-hide-back-button="true"
+          wex-back-state="landing">
+    <ion-content>
+        <div class="content padding">
+            <div class="padding">
+                <p>
+                    {{::vm.config.introduction}}
+                </p>
+                <h3>{{::vm.config.sectionOneHeader}}</h3>
+                <p>
+                    {{::vm.config.sectionOne}}
+                </p>
+                <h3>{{::vm.config.sectionTwoHeader}}</h3>
+                <p>
+                    {{::vm.config.sectionTwoPt1}}
+                </p>
+                <p>
+                    {{::vm.config.sectionTwoPt2}}
+                </p>
+                <p ng-bind-html="vm.config.sectionTwoPt3"></p>
+                <h3>{{::vm.config.sectionThreeHeader}}</h3>
+                <p>
+                    {{::vm.config.sectionThree}}
+                </p>
+                <h3>{{::vm.config.sectionFourHeader}}</h3>
+                <p>
+                    {{::vm.config.sectionFour}}
+                </p>
+                <h3>{{::vm.config.sectionFiveHeader}}</h3>
+                <p>
+                    {{::vm.config.sectionFivePt1}}
+                </p>
+                <p>
+                    {{::vm.config.sectionFivePt2}}
+                </p>
+                <p ng-bind-html="vm.config.sectionFivePt3"></p>
+                <h3>{{::vm.config.sectionSixHeader}}</h3>
+                <p>
+                    {{::vm.config.sectionSix}}
+                </p>
+                <h3>{{::vm.config.sectionSevenHeader}}</h3>
+                <p>
+                    {{::vm.config.sectionSeven}}
+                </p>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
