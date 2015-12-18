@@ -32,6 +32,10 @@
                   ui-sref="termsOfUse">
             {{::vm.config.options.terms}}
         </ion-item>
+        <ion-item id="option-privacy-policy"
+                  ui-sref="privacyPolicy">
+            {{::vm.config.options.privacyPolicy}}
+        </ion-item>
         <ion-item id="option-log-out"
                   ng-click="vm.logOut()">
             {{::vm.config.options.logOut}}

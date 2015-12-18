@@ -62,6 +62,11 @@ var FetchCurrentInvoiceSummaryRequestSuccessMock = require("../../mocks/fetchCur
             expect(this.page.sideMenuTerms.getInnerHtml()).toMatch("Terms and Policies");
         });
 
+        it("should have a 'Privacy Policy' option", function() {
+            expect(this.page.sideMenuPrivacyPolicy.isPresent()).toBeTruthy();
+            expect(this.page.sideMenuPrivacyPolicy.getInnerHtml()).toMatch("Privacy Policy");
+        });
+
         it("should have a 'Log Out' option", function() {
             expect(this.page.sideMenuLogOut.isPresent()).toBeTruthy();
             expect(this.page.sideMenuLogOut.getInnerHtml()).toMatch("Log Out");

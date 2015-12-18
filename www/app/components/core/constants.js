@@ -550,6 +550,7 @@
                 "cards"              : "Cards",
                 "contactUs"          : "Contact Us",
                 "terms"              : "Terms of Use",
+                "privacyPolicy"      : "Privacy Policy",
                 "logOut"             : "Log Out"
             }
         }

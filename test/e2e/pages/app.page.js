@@ -13,6 +13,7 @@ var AppPage = (function () {
         this.sideMenuTransactionActivity = this.sideMenu.element(by.id("option-transaction-activity"));
         this.sideMenuCards               = this.sideMenu.element(by.id("option-cards"));
         this.sideMenuTerms               = this.sideMenu.element(by.id("option-terms"));
+        this.sideMenuPrivacyPolicy       = this.sideMenu.element(by.id("option-privacy-policy"));
         this.sideMenuLogOut              = this.sideMenu.element(by.id("option-log-out"));
     }
 
@@ -46,6 +47,10 @@ var AppPage = (function () {
 
     AppPage.prototype.clickSideMenuTerms = function () {
         return this.sideMenuTerms.click();
+    };
+
+    AppPage.prototype.clickSideMenuPrivacyPolicy = function () {
+        return this.sideMenuPrivacyPolicy.click();
     };
 
     AppPage.prototype.clickSideMenuLogOut = function () {
