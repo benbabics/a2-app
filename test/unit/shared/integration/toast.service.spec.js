@@ -1,33 +1,23 @@
 (function () {
     "use strict";
 
-    var service,
+    var ToastService,
         $window,
         $ionicLoading,
-        $cordovaToast = {},
-        mockMessage = "Mock text";
+        $cordovaToast,
+        CommonService,
+        mockMessage = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
     describe("A Toast Service", function () {
 
         beforeEach(function () {
 
+            module("app.shared.core");
+            module("app.shared.dependencies");
+            module("app.shared.logger");
             module("app.shared.integration");
 
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
-            });
-
-            module(function ($provide) {
-                $provide.value("CommonService", {
-                    "_": _
-                });
-            });
-
+            //mock dependencies:
             $cordovaToast = jasmine.createSpyObj("$cordovaToast", ["showShortTop", "showShortCenter", "showShortBottom",
                 "showLongTop", "showLongCenter", "showLongBottom", "show"]);
             $ionicLoading = jasmine.createSpyObj("$ionicLoading", ["show"]);
@@ -37,35 +27,34 @@
                 $provide.value("$cordovaToast", $cordovaToast);
             });
 
-            inject(function (_$window_) {
+            inject(function (_$window_, _CommonService_) {
                 $window = _$window_;
+                CommonService = _CommonService_;
             });
         });
 
-
         describe("when Cordova plugins are available", function () {
-            beforeEach(function () {
-                if (!$window.plugins) {
-                    $window.plugins = {};
-                }
-                $window.plugins.toast = $cordovaToast;
 
-                inject(function (ToastService) {
-                    service = ToastService;
+            beforeEach(function () {
+                spyOn(CommonService, "platformHasCordova").and.returnValue(true);
+
+                inject(function (_ToastService_) {
+                    ToastService = _ToastService_;
                 });
             });
 
             it("should use the Cordova toast plugin", function () {
-                expect(service).toEqual(jasmine.objectContaining($cordovaToast));
+                expect(ToastService).toEqual(jasmine.objectContaining($cordovaToast));
             });
         });
 
         describe("when Cordova plugins are not available", function () {
-            beforeEach(function () {
-                delete $window.plugins;
 
-                inject(function (ToastService) {
-                    service = ToastService;
+            beforeEach(function () {
+                spyOn(CommonService, "platformHasCordova").and.returnValue(false);
+
+                inject(function (_ToastService_) {
+                    ToastService = _ToastService_;
                 });
             });
 
@@ -77,7 +66,7 @@
                     beforeEach(function () {
                         duration = "short";
 
-                        service.show(mockMessage, duration);
+                        ToastService.show(mockMessage, duration);
                     });
 
                     it("should call $ionicLoading.show with the expected values", function () {
@@ -96,7 +85,7 @@
                     beforeEach(function () {
                         duration = "long";
 
-                        service.show(mockMessage, duration);
+                        ToastService.show(mockMessage, duration);
                     });
 
                     it("should call $ionicLoading.show with the expected values", function () {
@@ -115,7 +104,7 @@
                     beforeEach(function () {
                         duration = "invalid duration string";
 
-                        service.show(mockMessage, duration);
+                        ToastService.show(mockMessage, duration);
                     });
 
                     it("should call $ionicLoading.show with the expected values", function () {
@@ -134,7 +123,7 @@
 
                 beforeEach(function () {
                     duration = "short";
-                    service.showShortTop(mockMessage);
+                    ToastService.showShortTop(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
@@ -152,7 +141,7 @@
 
                 beforeEach(function () {
                     duration = "short";
-                    service.showShortCenter(mockMessage);
+                    ToastService.showShortCenter(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
@@ -170,7 +159,7 @@
 
                 beforeEach(function () {
                     duration = "short";
-                    service.showShortBottom(mockMessage);
+                    ToastService.showShortBottom(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
@@ -188,7 +177,7 @@
 
                 beforeEach(function () {
                     duration = "long";
-                    service.showLongTop(mockMessage);
+                    ToastService.showLongTop(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
@@ -206,7 +195,7 @@
 
                 beforeEach(function () {
                     duration = "long";
-                    service.showLongCenter(mockMessage);
+                    ToastService.showLongCenter(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
@@ -224,7 +213,7 @@
 
                 beforeEach(function () {
                     duration = "long";
-                    service.showLongBottom(mockMessage);
+                    ToastService.showLongBottom(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
@@ -249,6 +238,6 @@
     }
 
     function getExpectedToastTemplate(message) {
-        return '<span class="toast-message">' + message + '</span>';
+        return "<span class=\"toast-message\">" + message + "</span>";
     }
 }());

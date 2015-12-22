@@ -18,15 +18,15 @@
                     controller: "LoginController as vm"
                 }
             },
-            onEnter: function($cordovaSplashscreen, $ionicPlatform, $timeout, CommonService) {
+            onEnter: function($cordovaSplashscreen, $interval, CommonService) {
                 //log out the user
                 CommonService.logOut();
 
                 //make sure the ionic platform is ready before hiding the splash screen
-                $ionicPlatform.ready(function() {
-                    $timeout(function() {
+                CommonService.waitForCordovaPlatform(function() {
+                    $interval(function() {
                         $cordovaSplashscreen.hide();
-                    }, 2000);
+                    }, 2000, 1);
                 });
             }
         });

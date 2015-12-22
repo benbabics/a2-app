@@ -5,11 +5,11 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function ToastService($window, $ionicLoading, $cordovaToast, CommonService) {
+    function ToastService($ionicLoading, $cordovaToast, CommonService) {
         var toast,
             _ = CommonService._;
 
-        if ($window.plugins) {
+        if (CommonService.platformHasCordova()) {
             //if Cordova is available to use, use the Cordova toast plugin
             toast = $cordovaToast;
         }

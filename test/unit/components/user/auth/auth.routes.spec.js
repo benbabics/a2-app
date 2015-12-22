@@ -5,6 +5,9 @@
 
         var $rootScope,
             $state,
+            $q,
+            $cordovaSplashscreen,
+            $interval,
             CommonService;
 
         beforeEach(function () {
@@ -14,13 +17,27 @@
             module("app.components.user.auth");
             module("app.html");
 
-            inject(function (_$rootScope_, _$state_, _CommonService_) {
+            //mock dependencies:
+            $cordovaSplashscreen = jasmine.createSpyObj("$cordovaSplashscreen", ["hide"]);
+
+            module(function ($provide) {
+                $provide.value("$cordovaSplashscreen", $cordovaSplashscreen);
+            });
+
+            inject(function (_$rootScope_, _$state_, _$q_, _$interval_, _CommonService_) {
                 $rootScope = _$rootScope_;
                 $state = _$state_;
+                $q = _$q_;
+                $interval = _$interval_;
                 CommonService = _CommonService_;
             });
 
+            //setup spies:
             spyOn(CommonService, "logOut");
+            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                //just execute the callback directly
+                return $q.when((callback || function() {})());
+            });
         });
 
         describe("has a user.auth state that", function () {
@@ -75,16 +92,36 @@
                 expect($state.href(stateName)).toEqual("#/user/auth/login");
             });
 
-            it("should transition successfully", function () {
-                $state.go(stateName);
-                $rootScope.$digest();
-                expect($state.current.name).toBe(stateName);
-            });
+            describe("when navigated to", function () {
 
-            it("should log the user out", function () {
-                $state.go(stateName);
-                $rootScope.$digest();
-                expect(CommonService.logOut).toHaveBeenCalledWith();
+                beforeEach(function () {
+                    $state.go(stateName);
+                    $rootScope.$digest();
+                });
+
+                it("should transition successfully", function () {
+                    expect($state.current.name).toBe(stateName);
+                });
+
+                it("should log the user out", function () {
+                    expect(CommonService.logOut).toHaveBeenCalledWith();
+                });
+
+                it("should NOT call $cordovaSplashscreen.hide", function () {
+                    expect($cordovaSplashscreen.hide).not.toHaveBeenCalled();
+                });
+
+                describe("after 2000ms have passed", function () {
+
+                    beforeEach(function () {
+                        $interval.flush(2000);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call $cordovaSplashscreen.hide", function () {
+                        expect($cordovaSplashscreen.hide).toHaveBeenCalledWith();
+                    });
+                });
             });
         });
     });
