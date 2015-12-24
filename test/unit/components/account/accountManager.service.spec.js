@@ -47,11 +47,11 @@
             // TODO: figure out how to test this
         });
 
-        describe("has a app:logout event handler function that", function () {
+        describe("has a clearCachedValues function that", function () {
 
             beforeEach(function () {
                 AccountManager.setAccount(account);
-                $rootScope.$broadcast("app:logout");
+                AccountManager.clearCachedValues();
             });
 
             it("should reset the account", function () {

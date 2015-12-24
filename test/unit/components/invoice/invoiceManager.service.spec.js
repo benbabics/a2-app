@@ -53,11 +53,11 @@
 
         });
 
-        describe("has a app:logout event handler function that", function () {
+        describe("has a clearCachedValues function that", function () {
 
-            beforeEach(function() {
+            beforeEach(function () {
                 InvoiceManager.setInvoiceSummary(mockInvoiceSummary);
-                $rootScope.$broadcast("app:logout");
+                InvoiceManager.clearCachedValues();
             });
 
             it("should reset the invoice summary", function () {

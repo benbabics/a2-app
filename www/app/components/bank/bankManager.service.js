@@ -5,7 +5,7 @@
     // jshint maxparams:6
 
     /* @ngInject */
-    function BankManager($q, $rootScope, BankModel, BanksResource, CommonService, Logger) {
+    function BankManager($q, BankModel, BanksResource, CommonService, Logger) {
 
         // Private members
         var _ = CommonService._,
@@ -13,13 +13,14 @@
 
         // Revealed Public members
         var service = {
-                fetchActiveBanks     : fetchActiveBanks,
-                getActiveBanks       : getActiveBanks,
-                getOrFetchActiveBanks: getOrFetchActiveBanks,
-                getDefaultBank       : getDefaultBank,
-                hasMultipleBanks     : hasMultipleBanks,
-                setActiveBanks       : setActiveBanks
-            };
+            clearCachedValues    : clearCachedValues,
+            fetchActiveBanks     : fetchActiveBanks,
+            getActiveBanks       : getActiveBanks,
+            getOrFetchActiveBanks: getOrFetchActiveBanks,
+            getDefaultBank       : getDefaultBank,
+            hasMultipleBanks     : hasMultipleBanks,
+            setActiveBanks       : setActiveBanks
+        };
 
         activate();
 
@@ -27,8 +28,6 @@
         //////////////////////
 
         function activate() {
-            $rootScope.$on("app:logout", clearCachedValues);
-
             clearCachedValues();
         }
 

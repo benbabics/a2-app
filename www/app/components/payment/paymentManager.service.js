@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:9
+    // jshint maxparams:8
 
     /* @ngInject */
-    function PaymentManager($q, globals, $rootScope, moment, CommonService, Logger,
+    function PaymentManager($q, globals, moment, CommonService, Logger,
                             PaymentAddAvailabilityModel, PaymentModel, PaymentsResource) {
         // Private members
         var paymentAddAvailability = {},
@@ -15,6 +15,7 @@
         var _ = CommonService._,
             service = {
             addPayment                 : addPayment,
+            clearCachedValues          : clearCachedValues,
             fetchPayment               : fetchPayment,
             fetchPaymentAddAvailability: fetchPaymentAddAvailability,
             fetchPayments              : fetchPayments,
@@ -34,8 +35,6 @@
         //////////////////////
 
         function activate() {
-            $rootScope.$on("app:logout", clearCachedValues);
-
             clearCachedValues();
         }
 

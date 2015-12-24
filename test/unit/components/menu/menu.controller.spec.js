@@ -73,8 +73,8 @@
 
             module("app.shared");
 
-            module(function ($provide) {
-                $provide.constant("globals", mockGlobals);
+            module(function ($provide, sharedGlobals) {
+                $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
             module("app.components");

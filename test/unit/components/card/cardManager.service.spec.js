@@ -67,11 +67,11 @@
 
         });
 
-        describe("has a app:logout event handler function that", function () {
+        describe("has a clearCachedValues function that", function () {
 
             beforeEach(function () {
                 CardManager.setCards(mockCardCollection);
-                $rootScope.$broadcast("app:logout");
+                CardManager.clearCachedValues();
             });
 
             it("should reset the cards", function () {

@@ -57,11 +57,11 @@
 
         });
 
-        describe("has a app:logout event handler function that", function () {
+        describe("has a clearCachedValues function that", function () {
 
-            beforeEach(function() {
+            beforeEach(function () {
                 BankManager.setActiveBanks(mockBankCollection);
-                $rootScope.$broadcast("app:logout");
+                BankManager.clearCachedValues();
             });
 
             it("should reset the active banks", function () {

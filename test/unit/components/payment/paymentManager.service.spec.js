@@ -91,12 +91,12 @@
 
         });
 
-        describe("has a app:logout event handler function that", function () {
+        describe("has a clearCachedValues function that", function () {
 
             beforeEach(function () {
                 PaymentManager.setPaymentAddAvailability(mockPaymentAddAvailability);
                 PaymentManager.setPayments(mockPaymentCollection);
-                $rootScope.$broadcast("app:logout");
+                PaymentManager.clearCachedValues();
             });
 
             it("should reset the payment add availability", function () {

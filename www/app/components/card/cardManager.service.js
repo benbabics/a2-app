@@ -2,22 +2,23 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:7
+    // jshint maxparams:6
 
     /* @ngInject */
-    function CardManager($q, $rootScope, globals, CardModel, CardsResource, CommonService, Logger) {
+    function CardManager($q, globals, CardModel, CardsResource, CommonService, Logger) {
         // Private members
         var cards;
 
         // Revealed Public members
         var _ = CommonService._,
             service = {
-                fetchCard   : fetchCard,
-                fetchCards  : fetchCards,
-                getCards    : getCards,
-                reissue     : reissue,
-                setCards    : setCards,
-                updateStatus: updateStatus
+                clearCachedValues: clearCachedValues,
+                fetchCard        : fetchCard,
+                fetchCards       : fetchCards,
+                getCards         : getCards,
+                reissue          : reissue,
+                setCards         : setCards,
+                updateStatus     : updateStatus
             };
 
         activate();
@@ -26,8 +27,6 @@
         //////////////////////
 
         function activate() {
-            $rootScope.$on("app:logout", clearCachedValues);
-
             clearCachedValues();
         }
 

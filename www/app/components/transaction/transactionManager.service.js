@@ -2,17 +2,17 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:5
 
     /* @ngInject */
-    function TransactionManager($q, $rootScope, CommonService, Logger,
-                                PostedTransactionModel, TransactionsResource) {
+    function TransactionManager($q, CommonService, Logger, PostedTransactionModel, TransactionsResource) {
         // Private members
         var postedTransactions;
 
         // Revealed Public members
         var _ = CommonService._,
             service = {
+                clearCachedValues      : clearCachedValues,
                 fetchPostedTransaction : fetchPostedTransaction,
                 fetchPostedTransactions: fetchPostedTransactions,
                 getPostedTransactions  : getPostedTransactions,
@@ -25,8 +25,6 @@
         //////////////////////
 
         function activate() {
-            $rootScope.$on("app:logout", clearCachedValues);
-
             clearCachedValues();
         }
 

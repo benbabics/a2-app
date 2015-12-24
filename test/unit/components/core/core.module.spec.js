@@ -84,8 +84,8 @@
 
             module("app.components");
 
-            module(function ($provide, globals, appGlobals) {
-                $provide.constant("globals", angular.extend({}, appGlobals, globals));
+            module(function ($provide, globals, appGlobals, sharedGlobals) {
+                $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, globals));
             });
 
             module("app.shared");
@@ -93,7 +93,7 @@
 
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
-            BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks"]);
+            BankManager = jasmine.createSpyObj("BankManager", ["clearCachedValues", "getActiveBanks", "hasMultipleBanks"]);
             PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getOrCreatePaymentAdd"]);
             CommonService = jasmine.createSpyObj("CommonService", [
                 "closeAllPopups",
@@ -104,7 +104,7 @@
                 "logOut",
                 "waitForCordovaPlatform"
             ]);
-            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPaymentAddAvailability"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["clearCachedValues", "fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
             module(function ($provide) {

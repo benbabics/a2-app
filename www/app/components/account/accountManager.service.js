@@ -2,18 +2,19 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:5
 
     /* @ngInject */
-    function AccountManager($q, $rootScope, CommonService, Logger, AccountModel, AccountsResource) {
+    function AccountManager($q, CommonService, Logger, AccountModel, AccountsResource) {
         // Private members
         var account;
 
         // Revealed Public members
         var service = {
-            fetchAccount: fetchAccount,
-            getAccount  : getAccount,
-            setAccount  : setAccount
+            clearCachedValues: clearCachedValues,
+            fetchAccount     : fetchAccount,
+            getAccount       : getAccount,
+            setAccount       : setAccount
         };
 
         activate();
@@ -22,8 +23,6 @@
         //////////////////////
 
         function activate() {
-            $rootScope.$on("app:logout", clearCachedValues);
-
             clearCachedValues();
         }
 

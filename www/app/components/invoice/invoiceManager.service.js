@@ -2,15 +2,16 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:5
+    // jshint maxparams:4
 
     /* @ngInject */
-    function InvoiceManager($rootScope, CommonService, InvoiceSummaryModel, InvoicesResource, Logger) {
+    function InvoiceManager(CommonService, InvoiceSummaryModel, InvoicesResource, Logger) {
         // Private members
         var invoiceSummary = {};
 
         // Revealed Public members
         var service = {
+            clearCachedValues         : clearCachedValues,
             fetchCurrentInvoiceSummary: fetchCurrentInvoiceSummary,
             getInvoiceSummary         : getInvoiceSummary,
             setInvoiceSummary         : setInvoiceSummary
@@ -22,8 +23,6 @@
         //////////////////////
 
         function activate() {
-            $rootScope.$on("app:logout", clearCachedValues);
-
             clearCachedValues();
         }
 

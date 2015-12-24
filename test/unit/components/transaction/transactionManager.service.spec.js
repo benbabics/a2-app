@@ -57,11 +57,11 @@
             // TODO: figure out how to test this
         });
 
-        describe("has a app:logout event handler function that", function () {
+        describe("has a clearCachedValues function that", function () {
 
             beforeEach(function () {
                 TransactionManager.setPostedTransactions(mockPostedTransactionsCollection);
-                $rootScope.$broadcast("app:logout");
+                TransactionManager.clearCachedValues();
             });
 
             it("should reset the cached posted transactions", function () {
