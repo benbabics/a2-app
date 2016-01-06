@@ -48,6 +48,8 @@
             return AuthenticationManager.authenticate(vm.user.username, vm.user.password)
                 .then(UserManager.fetchCurrentUserDetails)
                 .then(function() {
+                    trackSuccessEvent();
+
                     // Do not allow backing up to the login page.
                     $ionicHistory.nextViewOptions(
                         {
@@ -89,6 +91,12 @@
 
                     _.spread($cordovaGoogleAnalytics.trackEvent)(vm.config.ANALYTICS.events[errorEvent]);
                 }
+            });
+        }
+
+        function trackSuccessEvent() {
+            CommonService.waitForCordovaPlatform(function () {
+                _.spread($cordovaGoogleAnalytics.trackEvent)(vm.config.ANALYTICS.events.successfulLogin);
             });
         }
     }

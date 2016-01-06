@@ -22,6 +22,7 @@
             "ANALYTICS"   : {
                 "pageName"   : "Login",
                 "events"     : {
+                    "successfulLogin"       : ["Login", "LoginSuccessful"],
                     "inactiveStatus"        : ["Login", "InactiveStatus"],
                     "accountNotReadyStatus" : ["Login", "AccountNotReadyStatus"],
                     "wrongCredentialsStatus": ["Login", "WrongCredentialsStatus"],

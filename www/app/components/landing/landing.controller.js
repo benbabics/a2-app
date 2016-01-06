@@ -49,7 +49,7 @@
                     options: globals.LANDING.CHART.options,
                     labels : [vm.config.availableCredit],
                     colors : [globals.LANDING.CHART.colors.availableCreditNegative],
-                    data   : [vm.invoiceSummary.availableCredit]
+                    data   : [1]
                 };
             }
 

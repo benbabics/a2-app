@@ -1,10 +1,10 @@
 <ion-view class="card-list-view" view-title="{{::vm.config.title}}" wex-back-state="landing">
     <ion-header class="bar bar-subheader item-input-inset">
         <form novalidate name="vm.searchFilterForm" ng-submit="vm.applySearchFilter()">
-            <label class="item-input-wrapper">
+            <ion-input class="item-input-wrapper">
                 <i class="icon icon-search placeholder-icon"></i>
                 <input type="search" name="searchFilter" ng-model="vm.searchFilter" placeholder="{{::vm.config.searchPlaceholder}}">
-            </label>
+            </ion-input>
         </form>
     </ion-header>
     <ion-content class="has-subheader">

@@ -312,6 +312,7 @@ var TestUtils = (function () {
         user.set({
             email            : getRandomStringThatIsAlphaNumeric(10),
             firstName        : getRandomStringThatIsAlphaNumeric(10),
+            id               : getRandomStringThatIsAlphaNumeric(10),
             username         : getRandomStringThatIsAlphaNumeric(10),
             company          : getRandomUserAccount(UserAccountModel),
             billingCompany   : getRandomUserAccount(UserAccountModel),

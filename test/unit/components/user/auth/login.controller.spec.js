@@ -20,6 +20,10 @@
                     "ANALYTICS"   : {
                         "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
                         "events"     : {
+                            "successfulLogin"       : [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
                             "inactiveStatus"        : [
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10),
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10)
@@ -297,6 +301,10 @@
 
                     it("should navigate to the landing page", function () {
                         expect($state.go).toHaveBeenCalledWith("landing");
+                    });
+
+                    it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                        verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
                     });
 
                 });

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="9" id="com.wex.fleetsmarthub" ios-CFBundleVersion="9" version="1.1" xmlns="http://www.w3.org/ns/widgets">
+<widget android-versionCode="12" id="com.wex.fleetsmarthub" ios-CFBundleVersion="12" version="1.1" xmlns="http://www.w3.org/ns/widgets">
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="false" />
@@ -97,4 +97,12 @@
     <preference name="xwalkVersion" value="14+" />
     <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
     <preference name="xwalkMode" value="embedded" />
+    <preference name="xwalkMultipleApk" value="true" />
+    <hook src="scripts/initDirectories.js" type="before_platform_add" />
+    <hook src="scripts/addExecutePermissions.js" type="before_build" />
+    <hook src="scripts/addPlatformClass.js" type="after_prepare" />
+    <hook src="scripts/removeSassFromPlatforms.js" type="after_prepare" />
+    <hook src="scripts/setEnvironment.js" type="after_prepare" />
+    <hook src="scripts/setCommonConstants.js" type="after_prepare" />
+    <hook src="scripts/changeMavenRepos.js" type="after_prepare" />
 </widget>

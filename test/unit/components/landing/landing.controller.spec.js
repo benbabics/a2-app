@@ -153,7 +153,7 @@
                             },
                             labels : ["Available"],
                             colors : ["#b30308"],
-                            data   : [mockCurrentInvoiceSummary.availableCredit]
+                            data   : [1]
                         });
 
                     });

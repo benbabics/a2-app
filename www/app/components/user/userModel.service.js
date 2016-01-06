@@ -6,6 +6,7 @@
         function UserModel() {
             this.email = "";
             this.firstName = "";
+            this.id = "";
             this.username = "";
             this.company = "";
             this.billingCompany = "";

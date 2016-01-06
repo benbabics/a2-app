@@ -1,0 +1,9 @@
+<div class="wex-input-field">
+    <ion-label ng-class="{'error-text':fieldHasAnyErrors()}">
+        {{label}}
+        <wex-tool-tip ng-if="toolTip" options="{{toolTipOptions}}"></wex-tool-tip>
+    </ion-label>
+
+    <ion-input class="item item-input" ng-class="{'error-field':fieldHasAnyErrors()}" ng-transclude>
+    </ion-input>
+</div>
