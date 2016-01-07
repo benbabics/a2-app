@@ -95,6 +95,13 @@ gulp.task("index", function () {
 });
 
 /**
+ * Cordova Tasks
+ */
+gulp.task("cordova-prepare", function () {
+    sh.exec("cordova prepare");
+});
+
+/**
  * Ionic Tasks
  */
 gulp.task("ionic-serve", function () {
