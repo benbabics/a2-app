@@ -9,7 +9,6 @@
     </author>
 
     <hook type="before_platform_add" src="scripts/initDirectories.js" />
-    <hook type="after_platform_add" src="scripts/createUserSchemes.js" />
     <hook type="before_build" src="scripts/addExecutePermissions.js" />
     <hook type="after_prepare" src="scripts/addPlatformClass.js" />
     <hook type="after_prepare" src="scripts/removeSassFromPlatforms.js" />
