@@ -80,14 +80,13 @@ module.exports = function(context) {
 
     if (rootdir) {
 
-        // go through each of the platform directories that have been prepared
-        var platforms = (context.opts.platforms ? _.words(context.opts.platforms) : []);
-
-        for (var x = 0; x < platforms.length; x++) {
+        // go through each of the platforms requested in the build
+        _.each(context.opts.platforms, function (platform) {
             // open up the index.html file at the www root
             try {
-                var platform = platforms[x].trim().toLowerCase();
                 var indexPath;
+
+                platform = platform.trim().toLowerCase();
 
                 if (platform === "android") {
                     indexPath = path.join("platforms", platform, "assets", "www", "index.html");
@@ -102,7 +101,7 @@ module.exports = function(context) {
             } catch (e) {
                 console.log(LOG_PREFIX + e);
             }
-        }
+        });
 
     }
 };

@@ -16,12 +16,10 @@ module.exports = function(context) {
 
     //if on os x or linux
     if (os.platform() === "linux" || os.platform() === "darwin") {
-        // go through each of the platform directories that have been prepared
-        var platforms = (context.opts.platforms ? _.words(context.opts.platforms) : []);
-
-        for (var x = 0; x < platforms.length; x++) {
+        // go through each of the platforms requested in the build
+        _.each(context.opts.platforms, function (platform) {
             try {
-                var platformToBuild = platforms[x].trim().toLowerCase(),
+                var platformToBuild = platform.trim().toLowerCase(),
                     platformBuildToolsDir = path.join(rootdir, "platforms", platformToBuild, "cordova");
 
                 if (fs.existsSync(platformBuildToolsDir)) {
@@ -33,6 +31,6 @@ module.exports = function(context) {
             } catch (e) {
                 console.log(LOG_PREFIX + e);
             }
-        }
+        });
     }
 };

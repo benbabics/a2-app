@@ -257,10 +257,8 @@ module.exports = function(context) {
 
             console.log(LOG_PREFIX + "Build Target set to: " + targetEnv);
 
-            // go through each of the platforms
-            var platforms = (context.opts.platforms ? _.words(context.opts.platforms) : []);
-
-            _.each(platforms, function (platform) {
+            // go through each of the platforms requested in the build
+            _.each(context.opts.platforms, function (platform) {
                 try {
                     platform = platform.trim().toLowerCase();
                     platformConfig.updatePlatformConfig(platform, targetEnv);
