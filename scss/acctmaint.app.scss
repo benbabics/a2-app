@@ -9,15 +9,27 @@ $container-background-color: #f0f0f0;
 /**------------------------------------------------------
  User Login Page
  ------------------------------------------------------**/
-$user-login-image-header-offset: 30%;
-$user-login-image-form-offset: 40%;
+$user-login-image-header-offset-ios: -8%;
+$user-login-image-header-offset-android: 22%;
+$user-login-image-form-offset: 27%;
 $user-login-error-message-animation: all linear 0.5s;
 
 .user-login-view {
 
     color: $inverse-font-color;
-    background: url("../img/login_background.png") no-repeat center $user-login-image-header-offset fixed;
+    background: url("../img/login_background.jpg") no-repeat center 0 scroll;
     background-size: cover;
+
+    @at-root .platform-ios.keyboard-open & {
+        position: absolute;
+        top: $user-login-image-header-offset-ios;
+        bottom: 100% + $user-login-image-header-offset-ios;
+        width: 100%;
+    }
+
+    @at-root .platform-android.keyboard-open & {
+        background-position: center $user-login-image-header-offset-android;
+    }
 
     #errorMessage {
         position: absolute;
@@ -27,7 +39,7 @@ $user-login-error-message-animation: all linear 0.5s;
             transition: $user-login-error-message-animation;
         }
 
-        &, &.ng-leave, &.ng-enter.ng-enter-active,  {
+        &, &.ng-leave, &.ng-enter.ng-enter-active {
             top: 0;
             opacity: 1;
         }

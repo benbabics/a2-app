@@ -46,10 +46,10 @@
       "id": "cordova-plugin-x-toast"
     },
     "cordova-plugin-whitelist",
-    "cordova-plugin-google-analytics",
     "cordova-plugin-statusbar",
     "cordova-plugin-splashscreen",
-    "cordova-plugin-device"
+    "cordova-plugin-device",
+    "cordova-plugin-google-analytics"
   ],
   "cordovaPlatforms": [
     {

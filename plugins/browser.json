@@ -39,9 +39,6 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "cordova-plugin-google-analytics": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
@@ -49,6 +46,12 @@
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-google-analytics": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },

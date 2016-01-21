@@ -34,16 +34,6 @@
 
         });
 
-        describe("has an $ionicView.beforeEnter event handler function that", function () {
-
-            beforeEach(function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
-            });
-
-            // Doesn't do anything
-
-        });
-
     });
 
 }());

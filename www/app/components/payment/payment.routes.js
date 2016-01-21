@@ -255,7 +255,9 @@
 
         function validateBeforeNavigatingToPaymentAdd($cordovaGoogleAnalytics, $state, $rootScope,
                                                       globals, CommonService, Logger, PaymentManager, UserManager) {
-            var _ = CommonService._,
+            var WARNINGS = globals.PAYMENT_ADD.WARNINGS,
+                ANALYTICS_EVENTS = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events,
+                _ = CommonService._,
                 billingAccountId,
                 removeListener,
                 showRouteValidationError = function (errorMessage, trackEvent) {
@@ -277,20 +279,20 @@
                         trackEvent;
 
                     if (paymentAddAvailability.shouldDisplayBankAccountSetupMessage) {
-                        errorMessage = globals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP;
-                        trackEvent = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddBankAccountsNotSetup;
+                        errorMessage = WARNINGS.BANK_ACCOUNTS_NOT_SETUP;
+                        trackEvent = ANALYTICS_EVENTS.paymentAddBankAccountsNotSetup;
                     }
                     else if (paymentAddAvailability.shouldDisplayDirectDebitEnabledMessage) {
-                        errorMessage = globals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP;
-                        trackEvent = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddDirectDebitSetup;
+                        errorMessage = WARNINGS.DIRECT_DEBIT_SETUP;
+                        trackEvent = ANALYTICS_EVENTS.paymentAddDirectDebitSetup;
                     }
                     else if (paymentAddAvailability.shouldDisplayOutstandingPaymentMessage) {
-                        errorMessage = globals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED;
-                        trackEvent = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddPaymentAlreadyScheduled;
+                        errorMessage = WARNINGS.PAYMENT_ALREADY_SCHEDULED;
+                        trackEvent = ANALYTICS_EVENTS.paymentAddPaymentAlreadyScheduled;
                     }
                     else if (paymentAddAvailability.shouldDisplayCurrentBalanceDueMessage) {
-                        errorMessage = globals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE;
-                        trackEvent = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddNoBalanceDue;
+                        errorMessage = WARNINGS.NO_BALANCE_DUE;
+                        trackEvent = ANALYTICS_EVENTS.paymentAddNoBalanceDue;
                     }
 
                     if (errorMessage) {

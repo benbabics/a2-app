@@ -2,6 +2,7 @@
     "use strict";
 
     var $scope,
+        $cordovaInAppBrowser,
         ctrl;
 
     describe("A Privacy Policy Controller", function () {
@@ -21,27 +22,39 @@
                 });
             });
 
+            // mock dependencies
+            $cordovaInAppBrowser = jasmine.createSpyObj("$cordovaInAppBrowser", ["open"]);
+
             inject(function ($controller, $rootScope) {
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("PrivacyPolicyController", {
-                    $scope: $scope
+                    $scope              : $scope,
+                    $cordovaInAppBrowser: $cordovaInAppBrowser
                 });
 
             });
 
         });
 
-        describe("has an $ionicView.beforeEnter event handler function that", function () {
+        describe("has an openUrl function that", function () {
+
+            var mockUrl;
 
             beforeEach(function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
+                mockUrl = TestUtils.getRandomStringThatIsAlphaNumeric(50);
+
+                ctrl.openUrl(mockUrl);
             });
 
-            // Doesn't do anything
-
+            it("should call $cordovaInAppBrowser.open with the expected values", function () {
+                expect($cordovaInAppBrowser.open).toHaveBeenCalledWith(
+                    mockUrl,
+                    "_system"
+                );
+            });
         });
 
     });

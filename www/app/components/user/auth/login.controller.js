@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:10
+    // jshint maxparams:11
 
     /* @ngInject */
-    function LoginController($cordovaGoogleAnalytics, $cordovaKeyboard, $ionicHistory, $scope, $state, $stateParams,
+    function LoginController($cordovaGoogleAnalytics, $cordovaKeyboard, $ionicHistory, $rootScope, $scope, $state, $stateParams,
                              globals, AuthenticationManager, CommonService, UserManager) {
 
         var _ = CommonService._,
@@ -22,6 +22,18 @@
         function activate() {
             // set event listeners
             $scope.$on("$ionicView.beforeEnter", beforeEnter);
+
+            //note: Ionic adds and removes this class by default, but it adds a 400ms delay first which is unacceptable here.
+            //see http://ionicframework.com/docs/api/page/keyboard/
+            var removeKeyboardShowListener = $rootScope.$on("$cordovaKeyboard:show", addKeyboardOpenClass);
+            var removeKeyboardHideListener = $rootScope.$on("$cordovaKeyboard:hide", removeKeyboardOpenClass);
+
+            $scope.$on("$destroy", removeKeyboardShowListener);
+            $scope.$on("$destroy", removeKeyboardHideListener);
+        }
+
+        function addKeyboardOpenClass() {
+            document.body.classList.add("keyboard-open");
         }
 
         function beforeEnter() {
@@ -47,7 +59,10 @@
 
             return AuthenticationManager.authenticate(vm.user.username, vm.user.password)
                 .then(UserManager.fetchCurrentUserDetails)
-                .then(function() {
+                .then(function (userDetails) {
+                    // track all events with the user's ID
+                    setTrackerUserId(userDetails.id);
+
                     trackSuccessEvent();
 
                     // Do not allow backing up to the login page.
@@ -81,6 +96,16 @@
 
         function keyboardIsVisible() {
             return CommonService.platformHasCordova() && $cordovaKeyboard.isVisible();
+        }
+
+        function removeKeyboardOpenClass() {
+            document.body.classList.remove("keyboard-open");
+        }
+
+        function setTrackerUserId(userId) {
+            CommonService.waitForCordovaPlatform(function () {
+                $cordovaGoogleAnalytics.setUserId(userId);
+            });
         }
 
         function trackErrorEvent(errorReason) {

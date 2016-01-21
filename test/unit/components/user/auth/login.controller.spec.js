@@ -65,7 +65,8 @@
                 }
             }
         },
-        mockConfig = mockGlobals.USER_LOGIN.CONFIG;
+        mockConfig = mockGlobals.USER_LOGIN.CONFIG,
+        userDetails;
 
     describe("A Login Controller", function () {
 
@@ -89,9 +90,10 @@
             UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
             $state = jasmine.createSpyObj("state", ["go"]);
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackEvent", "trackView"]);
+            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["setUserId", "trackEvent", "trackView"]);
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _CommonService_, globals) {
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _CommonService_, UserAccountModel, UserModel,
+                             globals) {
                 $ionicHistory = _$ionicHistory_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
@@ -100,6 +102,7 @@
                 CommonService = _CommonService_;
 
                 mockConfig.ANALYTICS.errorEvents = globals.USER_LOGIN.CONFIG.ANALYTICS.errorEvents;
+                userDetails = TestUtils.getRandomUser(UserModel, UserAccountModel, globals.USER.ONLINE_APPLICATION);
 
                 ctrl = $controller("LoginController", {
                     $scope                 : $scope,
@@ -254,7 +257,39 @@
 
         });
 
-        describe("has a authenticateUser function that", function () {
+        describe("has a $cordovaKeyboard:show event handler function that", function () {
+
+            beforeEach(function () {
+                document.body.classList.remove("keyboard-open");
+            });
+
+            beforeEach(function () {
+                $rootScope.$broadcast("$cordovaKeyboard:show");
+                $rootScope.$digest();
+            });
+
+            it("should add the 'keyboard-open' class to the body", function () {
+                expect(document.body.classList.contains("keyboard-open")).toBeTruthy();
+            });
+        });
+
+        describe("has a $cordovaKeyboard:hide event handler function that", function () {
+
+            beforeEach(function () {
+                document.body.classList.add("keyboard-open");
+            });
+
+            beforeEach(function () {
+                $rootScope.$broadcast("$cordovaKeyboard:hide");
+                $rootScope.$digest();
+            });
+
+            it("should remove the 'keyboard-open' class from the body", function () {
+                expect(document.body.classList.contains("keyboard-open")).toBeFalsy();
+            });
+        });
+
+        describe("has an authenticateUser function that", function () {
 
             var mockUser = {
                 username: "someusername",
@@ -287,8 +322,12 @@
                         spyOn($ionicHistory, "nextViewOptions");
 
                         //return a promise object and resolve it
-                        fetchCurrentUserDeferred.resolve();
+                        fetchCurrentUserDeferred.resolve(userDetails);
                         $scope.$digest();
+                    });
+
+                    it("should call $cordovaGoogleAnalytics.setUserId with the correct User ID", function () {
+                        expect($cordovaGoogleAnalytics.setUserId).toHaveBeenCalledWith(userDetails.id);
                     });
 
                     it("should call disable backing up to the login page", function () {
