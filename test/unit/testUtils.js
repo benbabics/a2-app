@@ -310,6 +310,7 @@ var TestUtils = (function () {
         var user = new UserModel();
 
         user.set({
+            brand            : getRandomStringThatIsAlphaNumeric(10),
             email            : getRandomStringThatIsAlphaNumeric(10),
             firstName        : getRandomStringThatIsAlphaNumeric(10),
             id               : getRandomStringThatIsAlphaNumeric(10),

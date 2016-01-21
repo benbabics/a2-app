@@ -4,17 +4,22 @@
     var UserModel = function (globals, UserAccountModel) {
 
         function UserModel() {
+            this.billingCompany = "";
+            this.brand = "";
+            this.company = "";
             this.email = "";
             this.firstName = "";
             this.id = "";
-            this.username = "";
-            this.company = "";
-            this.billingCompany = "";
             this.onlineApplication = "";
+            this.username = "";
         }
 
         UserModel.prototype.set = function (userResource) {
             angular.extend(this, userResource);
+
+            if (!userResource.brand) {
+                this.brand = "generic";
+            }
 
             this.company = new UserAccountModel();
             this.company.set(userResource.company);

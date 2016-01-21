@@ -80,6 +80,30 @@
                 }
             });
 
+            it("should set the UserModel brand with 'generic' when the passed in userResource object is empty", function () {
+                userResource.brand = "";
+
+                user.set(userResource);
+
+                expect(user.brand).toEqual("generic");
+            });
+
+            it("should set the UserModel brand with 'generic' when the passed in userResource object is null", function () {
+                userResource.brand = null;
+
+                user.set(userResource);
+
+                expect(user.brand).toEqual("generic");
+            });
+
+            it("should set the UserModel brand with 'generic' when the passed in userResource object is undefined", function () {
+                delete userResource.brand;
+
+                user.set(userResource);
+
+                expect(user.brand).toEqual("generic");
+            });
+
         });
 
         describe("has a getDisplayAccountNumber function that", function () {
