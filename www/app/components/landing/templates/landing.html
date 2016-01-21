@@ -7,10 +7,13 @@
         <div class="content item item-divider main-container">
 
             <div class="row header">
-                <div class="col col-100" id="companyDetails">
+                <div class="col col-80" id="companyDetails">
                     <span>{{vm.user.billingCompany.name}}</span>
                     <br>
                     <span class="body-text">{{vm.user.getDisplayAccountNumber()}}</span>
+                </div>
+                <div class="col col-20">
+                    <span style="float:right">{{vm.user.brand}}</span>
                 </div>
             </div>
 
