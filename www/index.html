@@ -90,15 +90,15 @@
         <script src="cordova.js"></script>
 
         <!-- inject:js -->
+        <script src="app/shared/network/api/api.module.js"></script>
+        <script src="app/shared/network/api/secureApiRestangular.service.js"></script>
+        <script src="app/shared/network/api/authApiRestangular.service.js"></script>
+        <script src="app/shared/network/api/accountMaintenanceRestangular.service.js"></script>
         <script src="app/shared/network/auth/auth.module.js"></script>
         <script src="app/shared/network/auth/authorizationHeaderRequestInterceptor.service.js"></script>
         <script src="app/shared/network/auth/authenticationResource.service.js"></script>
         <script src="app/shared/network/auth/authenticationManager.service.js"></script>
         <script src="app/shared/network/auth/authenticationErrorInterceptor.service.js"></script>
-        <script src="app/shared/network/api/api.module.js"></script>
-        <script src="app/shared/network/api/secureApiRestangular.service.js"></script>
-        <script src="app/shared/network/api/authApiRestangular.service.js"></script>
-        <script src="app/shared/network/api/accountMaintenanceRestangular.service.js"></script>
         <script src="app/components/user/auth/auth.module.js"></script>
         <script src="app/components/user/auth/login.controller.js"></script>
         <script src="app/components/user/auth/auth.routes.js"></script>
@@ -130,6 +130,8 @@
         <script src="app/shared/widgets/wexAnalyticsTrackEvent.directive.js"></script>
         <script src="app/shared/widgets/wexAccountNumber.filter.js"></script>
         <script src="app/shared/widgets/validateEmail.directive.js"></script>
+        <script src="app/shared/util/util.module.js"></script>
+        <script src="app/shared/util/analyticsUtil.service.js"></script>
         <script src="app/shared/network/network.module.js"></script>
         <script src="app/shared/network/serverConnectionErrorBanner.controller.js"></script>
         <script src="app/shared/network/networkStatus.controller.js"></script>
@@ -184,11 +186,11 @@
         <script src="app/components/payment/payment.routes.js"></script>
         <script src="app/components/navBar/navBar.module.js"></script>
         <script src="app/components/navBar/navBar.controller.js"></script>
-        <script src="app/components/menu/menu.module.js"></script>
-        <script src="app/components/menu/menu.controller.js"></script>
         <script src="app/components/landing/landing.module.js"></script>
         <script src="app/components/landing/landing.routes.js"></script>
         <script src="app/components/landing/landing.controller.js"></script>
+        <script src="app/components/menu/menu.module.js"></script>
+        <script src="app/components/menu/menu.controller.js"></script>
         <script src="app/components/invoice/invoice.module.js"></script>
         <script src="app/components/invoice/invoicesResource.service.js"></script>
         <script src="app/components/invoice/invoiceSummaryModel.service.js"></script>
@@ -196,6 +198,9 @@
         <script src="app/components/core/core.module.js"></script>
         <script src="app/components/core/core.config.js"></script>
         <script src="app/components/core/constants.js"></script>
+        <script src="app/components/contactUs/contactUs.module.js"></script>
+        <script src="app/components/contactUs/contactUs.routes.js"></script>
+        <script src="app/components/contactUs/contactUs.controller.js"></script>
         <script src="app/components/card/card.module.js"></script>
         <script src="app/components/card/cardsResource.service.js"></script>
         <script src="app/components/card/cardReissueShippingMethodInput.controller.js"></script>
@@ -211,9 +216,6 @@
         <script src="app/components/card/cardChangeStatusConfirmation.controller.js"></script>
         <script src="app/components/card/cardChangeStatus.controller.js"></script>
         <script src="app/components/card/card.routes.js"></script>
-        <script src="app/components/contactUs/contactUs.module.js"></script>
-        <script src="app/components/contactUs/contactUs.routes.js"></script>
-        <script src="app/components/contactUs/contactUs.controller.js"></script>
         <script src="app/components/bank/bank.module.js"></script>
         <script src="app/components/bank/banksResource.service.js"></script>
         <script src="app/components/bank/bankModel.service.js"></script>
