@@ -49,8 +49,6 @@
 		DDBF4139653A46F78D60D6B3 /* UIWebViewExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 7957310C79E3453F8589DDD3 /* UIWebViewExtension.m */; };
 		4696B4EA92124474A5E8D611 /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B764171DF14D3995E970E0 /* CDVConnection.m */; };
 		7F655899642640F0AD6A9E17 /* CDVReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F098120CD84103A9EEC758 /* CDVReachability.m */; };
-		B052ED442B574178B38650DB /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D5BE757184D5ABBBBCBBC /* Toast+UIView.m */; };
-		5F253A07B9E2415FBA10B0DB /* Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 927C206288D348D9B8944CD1 /* Toast.m */; };
 		2C6C5054D38A47C8A2016992 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8809DCFE3C664DDCB38AFC23 /* CDVStatusBar.m */; };
 		B7A0327652744319B2A40A48 /* CDVSplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = DB73C644527F417C8C5C669E /* CDVSplashScreen.m */; };
 		6D00FF3E580740429A152FAA /* CDVViewController+SplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = E1E9832DC5BC4CF2A74AC8C1 /* CDVViewController+SplashScreen.m */; };
@@ -58,6 +56,8 @@
 		D60F75AC325A40C7963B9875 /* CDVInAppBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CC3320292894B6399486DF0 /* CDVInAppBrowser.m */; };
 		C3190787C8C24696BAAABC51 /* UniversalAnalyticsPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 77BCC917A4DF4BA3BA5AB37B /* UniversalAnalyticsPlugin.m */; };
 		C26A223758384F8BA256BE78 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5A875EB835D4629AFA7F8E8 /* libGoogleAnalyticsServices.a */; };
+		5291A1DE0C6D4EA890DECDA8 /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFF04ED13A04075BB65620C /* Toast+UIView.m */; };
+		C73A8E3EBE27481FAADE2394 /* Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A79AE43ECA8481182A9CCEE /* Toast.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,10 +136,6 @@
 		85F098120CD84103A9EEC758 /* CDVReachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVReachability.m"; path = "cordova-plugin-network-information/CDVReachability.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		4705A599D4F9432B8B956A4E /* CDVConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVConnection.h"; path = "cordova-plugin-network-information/CDVConnection.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		6BF2CF35FF614B71BE8831D7 /* CDVReachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVReachability.h"; path = "cordova-plugin-network-information/CDVReachability.h"; sourceTree = "<group>"; fileEncoding = 4; };
-		F28D5BE757184D5ABBBBCBBC /* Toast+UIView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Toast+UIView.m"; path = "cordova-plugin-x-toast/Toast+UIView.m"; sourceTree = "<group>"; fileEncoding = 4; };
-		927C206288D348D9B8944CD1 /* Toast.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Toast.m"; path = "cordova-plugin-x-toast/Toast.m"; sourceTree = "<group>"; fileEncoding = 4; };
-		5A375D668E6F443A9B4C4E72 /* Toast+UIView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Toast+UIView.h"; path = "cordova-plugin-x-toast/Toast+UIView.h"; sourceTree = "<group>"; fileEncoding = 4; };
-		6D5C4A9AE32845DBA606FAD6 /* Toast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Toast.h"; path = "cordova-plugin-x-toast/Toast.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		8809DCFE3C664DDCB38AFC23 /* CDVStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVStatusBar.m"; path = "cordova-plugin-statusbar/CDVStatusBar.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		99EBBA4D74874D9AAB4E23A9 /* CDVStatusBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVStatusBar.h"; path = "cordova-plugin-statusbar/CDVStatusBar.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		DB73C644527F417C8C5C669E /* CDVSplashScreen.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVSplashScreen.m"; path = "cordova-plugin-splashscreen/CDVSplashScreen.m"; sourceTree = "<group>"; fileEncoding = 4; };
@@ -163,6 +159,10 @@
 		62B4A7152AEC44FE9B233BBB /* GAIEcommerceProduct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAIEcommerceProduct.h"; path = "cordova-plugin-google-analytics/GAIEcommerceProduct.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		375F1E4A558E4BBE8CACEDA3 /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAIEcommerceProductAction.h"; path = "cordova-plugin-google-analytics/GAIEcommerceProductAction.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		A669EE3906174C34AB62059C /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAIEcommercePromotion.h"; path = "cordova-plugin-google-analytics/GAIEcommercePromotion.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		BBFF04ED13A04075BB65620C /* Toast+UIView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Toast+UIView.m"; path = "cordova-plugin-x-toast/Toast+UIView.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		6A79AE43ECA8481182A9CCEE /* Toast.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Toast.m"; path = "cordova-plugin-x-toast/Toast.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		160AE64AF21E477894BD56DC /* Toast+UIView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Toast+UIView.h"; path = "cordova-plugin-x-toast/Toast+UIView.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		DB56839AA1D94F78B1A2B75C /* Toast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Toast.h"; path = "cordova-plugin-x-toast/Toast.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -283,10 +283,6 @@
 				85F098120CD84103A9EEC758 /* CDVReachability.m */,
 				4705A599D4F9432B8B956A4E /* CDVConnection.h */,
 				6BF2CF35FF614B71BE8831D7 /* CDVReachability.h */,
-				F28D5BE757184D5ABBBBCBBC /* Toast+UIView.m */,
-				927C206288D348D9B8944CD1 /* Toast.m */,
-				5A375D668E6F443A9B4C4E72 /* Toast+UIView.h */,
-				6D5C4A9AE32845DBA606FAD6 /* Toast.h */,
 				8809DCFE3C664DDCB38AFC23 /* CDVStatusBar.m */,
 				99EBBA4D74874D9AAB4E23A9 /* CDVStatusBar.h */,
 				DB73C644527F417C8C5C669E /* CDVSplashScreen.m */,
@@ -309,6 +305,10 @@
 				62B4A7152AEC44FE9B233BBB /* GAIEcommerceProduct.h */,
 				375F1E4A558E4BBE8CACEDA3 /* GAIEcommerceProductAction.h */,
 				A669EE3906174C34AB62059C /* GAIEcommercePromotion.h */,
+				BBFF04ED13A04075BB65620C /* Toast+UIView.m */,
+				6A79AE43ECA8481182A9CCEE /* Toast.m */,
+				160AE64AF21E477894BD56DC /* Toast+UIView.h */,
+				DB56839AA1D94F78B1A2B75C /* Toast.h */,
 			);
 			name = Plugins;
 			path = "Fleet SmartHub/Plugins";
@@ -498,14 +498,14 @@
 				DDBF4139653A46F78D60D6B3 /* UIWebViewExtension.m in Sources */,
 				4696B4EA92124474A5E8D611 /* CDVConnection.m in Sources */,
 				7F655899642640F0AD6A9E17 /* CDVReachability.m in Sources */,
-				B052ED442B574178B38650DB /* Toast+UIView.m in Sources */,
-				5F253A07B9E2415FBA10B0DB /* Toast.m in Sources */,
 				2C6C5054D38A47C8A2016992 /* CDVStatusBar.m in Sources */,
 				B7A0327652744319B2A40A48 /* CDVSplashScreen.m in Sources */,
 				6D00FF3E580740429A152FAA /* CDVViewController+SplashScreen.m in Sources */,
 				1F04A9FA5F9443E0BA364547 /* CDVDevice.m in Sources */,
 				D60F75AC325A40C7963B9875 /* CDVInAppBrowser.m in Sources */,
 				C3190787C8C24696BAAABC51 /* UniversalAnalyticsPlugin.m in Sources */,
+				5291A1DE0C6D4EA890DECDA8 /* Toast+UIView.m in Sources */,
+				C73A8E3EBE27481FAADE2394 /* Toast.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

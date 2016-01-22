@@ -110,7 +110,7 @@
     <plugin name="cordova-plugin-crosswalk-webview" spec="~1.4.0" />
     <plugin name="cordova-plugin-whitelist" spec="~1.2.0" />
     <plugin name="cordova-plugin-google-analytics" spec="~0.8.1" />
-    <plugin name="nl.x-services.plugins.toast" spec="https://github.com/Telerik-Verified-Plugins/Toast" />
+    <plugin name="cordova-plugin-x-toast" spec="https://github.com/Telerik-Verified-Plugins/Toast" />
 
     <engine name="android" spec="~5.0.0" />
     <engine name="ios" spec="~3.9.2" />

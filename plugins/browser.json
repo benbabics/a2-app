@@ -33,9 +33,6 @@
         "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "cordova-plugin-x-toast": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
@@ -52,6 +49,9 @@
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-google-analytics": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
