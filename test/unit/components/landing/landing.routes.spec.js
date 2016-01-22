@@ -36,9 +36,46 @@
                     name         : "billing company name value"
                 }
             },
+            mockGlobals = {
+                "LANDING": {
+                    "CONFIG": {
+                        "ANALYTICS"          : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "title"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "availableCredit"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "billedAmount"       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "unbilledAmount"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "paymentDueDate"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "currentBalance"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "statementBalance"   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "makePayment"        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "transactionActivity": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "cards"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "scheduledPayments"  : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
+                    "CHART" : {
+                        "options": {
+                            animation            : TestUtils.getRandomBoolean(),
+                            percentageInnerCutout: TestUtils.getRandomInteger(1, 50),
+                            showTooltips         : TestUtils.getRandomBoolean(),
+                            segmentStrokeWidth   : TestUtils.getRandomInteger(1, 10),
+                            scaleOverride        : TestUtils.getRandomBoolean(),
+                            responsive           : TestUtils.getRandomBoolean()
+                        },
+                        "colors" : {
+                            availableCreditPositive: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            availableCreditNegative: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            billedAmount           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            unbilledAmount         : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    }
+                }
+            },
             InvoiceManager,
             PaymentManager,
-            UserManager;
+            UserManager,
+            AnalyticsUtil;
 
         beforeEach(function () {
 
@@ -50,12 +87,15 @@
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["fetchCurrentInvoiceSummary"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchScheduledPaymentsCount"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
+
             module(function($provide, sharedGlobals) {
+                $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
                 $provide.value("accountId", mockUser.billingCompany.accountId);
-                $provide.value("globals", sharedGlobals);
                 $provide.value("InvoiceManager", InvoiceManager);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
             });
 
             inject(function (_$injector_, _$q_, _$rootScope_, _$state_) {
@@ -142,6 +182,10 @@
                         .then(function (scheduledPaymentCount) {
                             expect(scheduledPaymentCount).toEqual(mockScheduledPaymentCount);
                         });
+                });
+
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.LANDING.CONFIG.ANALYTICS.pageName);
                 });
 
             });

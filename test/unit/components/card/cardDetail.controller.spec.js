@@ -2,7 +2,6 @@
     "use strict";
 
     var $scope,
-        $cordovaGoogleAnalytics,
         ctrl,
         mockCard,
         mockGlobals = {
@@ -40,9 +39,6 @@
                 });
             });
 
-            //setup mocks:
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
-
             inject(function ($controller, $rootScope, $q, CommonService, CardModel) {
 
                 // create a scope object for us to use.
@@ -51,16 +47,9 @@
                 mockCard = TestUtils.getRandomCard(CardModel);
 
                 ctrl = $controller("CardDetailController", {
-                    $scope                 : $scope,
-                    card                   : mockCard,
-                    globals                : mockGlobals,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics
-                });
-
-                //setup mocks:
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
+                    $scope : $scope,
+                    card   : mockCard,
+                    globals: mockGlobals
                 });
 
             });
@@ -75,10 +64,6 @@
 
             it("should set the card", function () {
                 expect(ctrl.card).toEqual(mockCard);
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
 
         });

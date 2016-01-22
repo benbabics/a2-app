@@ -5,7 +5,6 @@
         scope,
         CommonService,
         $ionicHistory,
-        $cordovaGoogleAnalytics,
         mockPayment = {
             amount: TestUtils.getRandomNumber(1, 999)
         },
@@ -48,7 +47,6 @@
                 }
             }
         },
-        mockMaintenanceState,
         mockStateParams,
         mockMaintenance;
 
@@ -76,49 +74,31 @@
             //mock dependencies:
             CommonService = jasmine.createSpyObj("CommonService", ["displayAlert", "waitForCordovaPlatform"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
-            inject(function ($rootScope, $controller, $filter, $q, appGlobals) {
+            inject(function ($rootScope, $controller, $filter, $q, appGlobals, PaymentMaintenanceDetailsModel) {
 
                 scope = $rootScope.$new();
 
-                mockMaintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
+                mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, appGlobals.PAYMENT_MAINTENANCE.STATES);
                 mockStateParams = {
-                    maintenanceState: mockMaintenanceState
-                };
-                mockMaintenance = {
-                    state : mockMaintenanceState,
-                    states: appGlobals.PAYMENT_MAINTENANCE.STATES,
-                    go    : jasmine.createSpy("go")
+                    maintenanceState: mockMaintenance.state
                 };
 
                 ctrl = $controller("PaymentMaintenanceAmountInputController", {
-                    $scope                 : scope,
-                    $filter                : $filter,
-                    $ionicHistory          : $ionicHistory,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    globals                : mockGlobals,
-                    maintenance            : mockMaintenance,
-                    payment                : mockPayment,
-                    invoiceSummary         : mockInvoiceSumary,
-                    CommonService          : CommonService
+                    $scope            : scope,
+                    $filter           : $filter,
+                    $ionicHistory     : $ionicHistory,
+                    globals           : mockGlobals,
+                    maintenanceDetails: mockMaintenance,
+                    payment           : mockPayment,
+                    invoiceSummary    : mockInvoiceSumary,
+                    CommonService     : CommonService
                 });
-
-                //setup mocks:
-                CommonService.waitForCordovaPlatform.and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
-                });
-
             });
         });
 
         it("should set the config to the expected value", function () {
-            expect(ctrl.config).toEqual(angular.extend({},
-                mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT.CONFIG,
-                mockGlobals.BUTTONS.CONFIG,
-                getConfig(mockMaintenance)
-            ));
+            expect(ctrl.config).toEqual(angular.extend({}, mockGlobals.BUTTONS.CONFIG, getConfig(mockMaintenance)));
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -129,10 +109,6 @@
 
             it("should set the amount to the display payment amount", function () {
                 expect(ctrl.amount).toEqual(getDisplayAmount(mockPayment.amount));
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(getConfig(mockMaintenance).ANALYTICS.pageName);
             });
         });
 
@@ -255,13 +231,13 @@
     });
 
     function getConfig(maintenance) {
-        switch (maintenance.state) {
-            case maintenance.states.ADD:
-                return mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT.ADD.CONFIG;
-            case maintenance.states.UPDATE:
-                return mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT.UPDATE.CONFIG;
-            default:
-                return null;
+        var constants = mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT;
+
+        if (_.has(constants, maintenance.state)) {
+            return angular.extend({}, constants.CONFIG, constants[maintenance.state].CONFIG);
+        }
+        else {
+            return constants.CONFIG;
         }
     }
 

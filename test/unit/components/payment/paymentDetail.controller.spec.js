@@ -5,7 +5,7 @@
         $rootScope,
         $scope,
         $state,
-        $cordovaGoogleAnalytics,
+        AnalyticsUtil,
         $q,
         ctrl,
         CommonService,
@@ -80,7 +80,7 @@
             $state = jasmine.createSpyObj("$state", ["go"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["removePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackEvent", "trackView"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackEvent"]);
 
             inject(function (_$rootScope_, _CommonService_, $controller, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
 
@@ -98,13 +98,13 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("PaymentDetailController", {
-                    $scope                 : $scope,
-                    $state                 : $state,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    PaymentManager         : PaymentManager,
-                    UserManager            : UserManager,
-                    payment                : mockPayment,
-                    isPaymentEditable      : mockIsPaymentEditable
+                    $scope           : $scope,
+                    $state           : $state,
+                    AnalyticsUtil    : AnalyticsUtil,
+                    PaymentManager   : PaymentManager,
+                    UserManager      : UserManager,
+                    payment          : mockPayment,
+                    isPaymentEditable: mockIsPaymentEditable
                 });
             });
 
@@ -114,10 +114,6 @@
 
             //setup spies:
             spyOn(CommonService, "displayConfirm").and.returnValue(confirmDeferred.promise);
-            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                //just execute the callback directly
-                return $q.when((callback || function() {})());
-            });
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -136,10 +132,6 @@
 
             it("should set the is payment editable indicator", function () {
                 expect(ctrl.isPaymentEditable).toEqual(mockIsPaymentEditable);
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
 
         });
@@ -176,7 +168,7 @@
                     );
                 });
 
-                it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                it("should call AnalyticsUtil.trackEvent", function () {
                     verifyEventTracked(mockConfig.ANALYTICS.events.confirmPaymentCancel);
                 });
 
@@ -238,7 +230,7 @@
     });
 
     function verifyEventTracked(event) {
-        expect($cordovaGoogleAnalytics.trackEvent.calls.mostRecent().args).toEqual(event);
+        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
     }
 
 }());

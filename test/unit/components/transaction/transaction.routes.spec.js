@@ -8,7 +8,37 @@
             $rootScope,
             $state,
             mockPostedTransaction,
-            TransactionManager;
+            TransactionManager,
+            AnalyticsUtil,
+            mockGlobals = {
+                TRANSACTION_LIST: {
+                    "CONFIG": {
+                        "ANALYTICS": {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    }
+                },
+                POSTED_TRANSACTION_DETAIL: {
+                    "CONFIG": {
+                        "ANALYTICS"           : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "cardNumber"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "customVehicleAssetId": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "driverFirstName"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "driverLastName"      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "grossCost"           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "merchantName"        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "merchantCityState"   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "netCost"             : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "postedDate"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "productDescription"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "title"               : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "transactionDate"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "transactionId"       : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    }
+                }
+            };
 
         beforeEach(function () {
 
@@ -18,8 +48,12 @@
 
             // mock dependencies
             TransactionManager = jasmine.createSpyObj("TransactionManager", ["fetchPostedTransaction"]);
-            module(function ($provide) {
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
+
+            module(function ($provide, sharedGlobals) {
                 $provide.value("TransactionManager", TransactionManager);
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
+                $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
             inject(function (_$injector_, _$q_, _$rootScope_, _$state_, PostedTransactionModel) {
@@ -97,6 +131,10 @@
 
                 it("should transition successfully", function () {
                     expect($state.current.name).toBe(stateName);
+                });
+
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.TRANSACTION_LIST.CONFIG.ANALYTICS.pageName);
                 });
 
             });
@@ -192,6 +230,10 @@
                         .then(function (postedTransaction) {
                             expect(postedTransaction).toEqual(mockPostedTransaction);
                         });
+                });
+
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.POSTED_TRANSACTION_DETAIL.CONFIG.ANALYTICS.pageName);
                 });
 
             });

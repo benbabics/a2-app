@@ -13,7 +13,133 @@
             AccountManager,
             CardManager,
             CardReissueModel,
-            UserManager;
+            UserManager,
+            AnalyticsUtil,
+            mockGlobals = {
+                "CARD_CHANGE_STATUS": {
+                    "CONFIG": {
+                        "ANALYTICS": {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "statuses"         : {
+                            "activate" : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "terminate": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "title"            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "card"             : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "confirmationPopup": {
+                            "contentMessages": {
+                                "active"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                "terminated": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            },
+                            "yesButton"      : TestUtils.getRandomStringThatIsAlphaNumeric(5),
+                            "noButton"       : TestUtils.getRandomStringThatIsAlphaNumeric(5)
+                        }
+                    }
+                },
+                "CARD_CHANGE_STATUS_CONFIRMATION": {
+                    "CONFIG": {
+                        "ANALYTICS": {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "title"               : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "confirmationMessages": {
+                            "active"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "terminated": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "cardNumber"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "standardEmbossing"   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "optionalEmbossing"   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "status"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "cards"               : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    }
+                },
+                "CARD_DETAIL": {
+                    "CONFIG": {
+                        "ANALYTICS"         : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "title"             : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "cardNumber"        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "standardEmbossing" : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "optionalEmbossing" : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "status"            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "changeStatusButton": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "reissueCardButton" : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    }
+                },
+                CARD_LIST: {
+                    "CONFIG"        : {
+                        "ANALYTICS"         : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "events": {
+                                "searchSubmitted": [
+                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                ]
+                            }
+                        },
+                        "title"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "reloadDistance": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
+                    "SEARCH_OPTIONS": {
+                        "PAGE_SIZE": TestUtils.getRandomInteger(1, 100),
+                        "STATUSES": TestUtils.getRandomStringThatIsAlphaNumeric(50)
+                    }
+                },
+                "CARD_REISSUE": {
+                    "CONFIG": {
+                        "ANALYTICS"         : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "title"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "shippingAddress"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "shippingMethod"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "reissueReason"      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "selectReissueReason": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "submitButton"       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "instructionalText"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "poBoxText"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "confirmationPopup": {
+                            "content"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "yesButton": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "noButton" : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    }
+                },
+                "CARD_REISSUE_CONFIRMATION": {
+                    "CONFIG": {
+                        "ANALYTICS"         : {
+                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "title"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "confirmationMessage": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "cardNumber"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "standardEmbossing"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "optionalEmbossing"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "status"             : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "cards"              : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    }
+                },
+                "CARD_REISSUE_INPUTS": {
+                    "REISSUE_REASON": {
+                        "CONFIG": {
+                            "ANALYTICS"         : {
+                                "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            },
+                            "title": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    },
+                    "SHIPPING_METHOD": {
+                        "CONFIG": {
+                            "ANALYTICS"         : {
+                                "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            },
+                            "title": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    }
+                }
+            };
 
         beforeEach(function () {
 
@@ -27,11 +153,14 @@
             CardManager = jasmine.createSpyObj("CardManager", ["fetchCard"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AccountManager = jasmine.createSpyObj("AccountManager", ["fetchAccount"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
 
-            module(function ($provide) {
+            module(function ($provide, sharedGlobals) {
+                $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
                 $provide.value("CardManager", CardManager);
                 $provide.value("UserManager", UserManager);
                 $provide.value("AccountManager", AccountManager);
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
             });
 
             inject(function (_$injector_, _$q_, _$rootScope_, _$state_,
@@ -119,6 +248,10 @@
                     expect($state.current.name).toBe(stateName);
                 });
 
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_LIST.CONFIG.ANALYTICS.pageName);
+                });
+
             });
 
         });
@@ -180,6 +313,10 @@
                         .then(function (card) {
                             expect(card).toEqual(mockCard);
                         });
+                });
+
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_DETAIL.CONFIG.ANALYTICS.pageName);
                 });
 
             });
@@ -260,6 +397,29 @@
             it("should respond to the URL", function () {
                 expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/changeStatus/" + mockCard.cardId);
             });
+
+            describe("when navigated to", function () {
+                var fetchCardDeferred,
+                    mockCardId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                beforeEach(function () {
+                    fetchCardDeferred = $q.defer();
+                    CardManager.fetchCard.and.returnValue(fetchCardDeferred.promise);
+
+                    $state.go(stateName, {cardId: mockCardId});
+
+                    fetchCardDeferred.resolve(mockCard);
+                    $rootScope.$digest();
+                });
+
+                it("should transition successfully", function () {
+                    expect($state.current.name).toBe(stateName);
+                });
+
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_CHANGE_STATUS.CONFIG.ANALYTICS.pageName);
+                });
+            });
         });
 
         describe("has a card.changeStatus.confirmation state that", function () {
@@ -289,6 +449,29 @@
 
             it("should respond to the URL", function () {
                 expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/changeStatus/" + mockCard.cardId + "/confirmation");
+            });
+
+            describe("when navigated to", function () {
+                var fetchCardDeferred,
+                    mockCardId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                beforeEach(function () {
+                    fetchCardDeferred = $q.defer();
+                    CardManager.fetchCard.and.returnValue(fetchCardDeferred.promise);
+
+                    $state.go(stateName, {cardId: mockCardId});
+
+                    fetchCardDeferred.resolve(mockCard);
+                    $rootScope.$digest();
+                });
+
+                it("should transition successfully", function () {
+                    expect($state.current.name).toBe(stateName);
+                });
+
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG.ANALYTICS.pageName);
+                });
             });
         });
 
@@ -384,6 +567,24 @@
             it("should respond to the URL", function () {
                 expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/reissue/" + mockCard.cardId);
             });
+
+            describe("when navigated to", function () {
+
+                beforeEach(function () {
+                    CardManager.fetchCard.and.returnValue($q.when(mockCard));
+                    AccountManager.fetchAccount.and.returnValue($q.when(mockAccount));
+                });
+
+                beforeEach(function () {
+                    $state.go(stateName, {cardId: mockCard.cardId});
+
+                    $rootScope.$digest();
+                });
+
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE.CONFIG.ANALYTICS.pageName);
+                });
+            });
         });
 
         describe("has a card.reissue.shippingMethod state that", function () {
@@ -413,6 +614,24 @@
 
             it("should respond to the URL", function () {
                 expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/reissue/" + mockCard.cardId + "/shippingMethod");
+            });
+
+            describe("when navigated to", function () {
+
+                beforeEach(function () {
+                    CardManager.fetchCard.and.returnValue($q.when(mockCard));
+                    AccountManager.fetchAccount.and.returnValue($q.when(mockAccount));
+                });
+
+                beforeEach(function () {
+                    $state.go(stateName, {cardId: mockCard.cardId});
+
+                    $rootScope.$digest();
+                });
+
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_INPUTS.SHIPPING_METHOD.CONFIG.ANALYTICS.pageName);
+                });
             });
         });
 
@@ -444,6 +663,24 @@
             it("should respond to the URL", function () {
                 expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/reissue/" + mockCard.cardId + "/reason");
             });
+
+            describe("when navigated to", function () {
+
+                beforeEach(function () {
+                    CardManager.fetchCard.and.returnValue($q.when(mockCard));
+                    AccountManager.fetchAccount.and.returnValue($q.when(mockAccount));
+                });
+
+                beforeEach(function () {
+                    $state.go(stateName, {cardId: mockCard.cardId});
+
+                    $rootScope.$digest();
+                });
+
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG.ANALYTICS.pageName);
+                });
+            });
         });
 
         describe("has a card.reissue.confirmation state that", function () {
@@ -473,6 +710,24 @@
 
             it("should respond to the URL", function () {
                 expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/reissue/" + mockCard.cardId + "/confirmation");
+            });
+
+            describe("when navigated to", function () {
+
+                beforeEach(function () {
+                    CardManager.fetchCard.and.returnValue($q.when(mockCard));
+                    AccountManager.fetchAccount.and.returnValue($q.when(mockAccount));
+                });
+
+                beforeEach(function () {
+                    $state.go(stateName, {cardId: mockCard.cardId});
+
+                    $rootScope.$digest();
+                });
+
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_CONFIRMATION.CONFIG.ANALYTICS.pageName);
+                });
             });
         });
     });

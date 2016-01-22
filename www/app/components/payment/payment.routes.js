@@ -52,6 +52,9 @@
                             CommonService.loadingComplete();
                         });
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.PAYMENT_LIST.CONFIG.ANALYTICS.pageName);
             }
         });
 
@@ -87,6 +90,9 @@
                         }
                     }
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.PAYMENT_VIEW.CONFIG.ANALYTICS.pageName);
             }
         });
 
@@ -103,14 +109,11 @@
             abstract: true,
             url     : "/maintenance/:maintenanceState?paymentId",
             resolve : {
-                maintenance: function (globals, $state, $stateParams) {
-                    return {
-                        state: $stateParams.maintenanceState,
-                        states: globals.PAYMENT_MAINTENANCE.STATES,
-                        go: function(stateName, params) {
-                            $state.go(stateName, angular.extend({}, $stateParams, params));
-                        }
-                    };
+                maintenanceDetails: function ($stateParams, PaymentMaintenanceDetailsModel) {
+                    var maintenanceDetails = new PaymentMaintenanceDetailsModel();
+
+                    maintenanceDetails.state = $stateParams.maintenanceState;
+                    return maintenanceDetails;
                 },
                 // jshint maxparams:6
                 payment: function ($q, $stateParams, CommonService, PaymentManager, PaymentModel, globals) {
@@ -176,6 +179,9 @@
                         }
                     }
                 }
+            },
+            onEnter: function(globals, maintenanceDetails, AnalyticsUtil) {
+                AnalyticsUtil.trackView(maintenanceDetails.getConfig(globals.PAYMENT_MAINTENANCE_FORM).ANALYTICS.pageName);
             }
         });
 
@@ -187,6 +193,9 @@
                     templateUrl: "app/components/payment/templates/paymentMaintenanceSummary.html",
                     controller : "PaymentMaintenanceSummaryController as vm"
                 }
+            },
+            onEnter: function(globals, maintenanceDetails, AnalyticsUtil) {
+                AnalyticsUtil.trackView(maintenanceDetails.getConfig(globals.PAYMENT_MAINTENANCE_SUMMARY).ANALYTICS.pageName);
             }
         });
 
@@ -198,6 +207,9 @@
                     templateUrl: "app/components/payment/templates/paymentMaintenanceConfirmation.html",
                     controller : "PaymentMaintenanceConfirmationController as vm"
                 }
+            },
+            onEnter: function(globals, maintenanceDetails, AnalyticsUtil) {
+                AnalyticsUtil.trackView(maintenanceDetails.getConfig(globals.PAYMENT_MAINTENANCE_CONFIRMATION).ANALYTICS.pageName);
             }
         });
 
@@ -219,6 +231,9 @@
                         }
                     }
                 }
+            },
+            onEnter: function(globals, maintenanceDetails, AnalyticsUtil) {
+                AnalyticsUtil.trackView(maintenanceDetails.getConfig(globals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT).ANALYTICS.pageName);
             }
         });
 
@@ -246,6 +261,9 @@
                         }
                     }
                 }
+            },
+            onEnter: function(globals, maintenanceDetails, AnalyticsUtil) {
+                AnalyticsUtil.trackView(maintenanceDetails.getConfig(globals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT).ANALYTICS.pageName);
             }
         });
 
@@ -253,8 +271,8 @@
             $state.go("payment.maintenance.form", angular.extend({maintenanceState: maintenanceState}, $stateParams));
         }
 
-        function validateBeforeNavigatingToPaymentAdd($cordovaGoogleAnalytics, $state, $rootScope,
-                                                      globals, CommonService, Logger, PaymentManager, UserManager) {
+        function validateBeforeNavigatingToPaymentAdd($state, $rootScope, globals,
+                                                      AnalyticsUtil, CommonService, Logger, PaymentManager, UserManager) {
             var WARNINGS = globals.PAYMENT_ADD.WARNINGS,
                 ANALYTICS_EVENTS = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events,
                 _ = CommonService._,
@@ -265,8 +283,7 @@
                         content       : errorMessage,
                         buttonCssClass: "button-submit"
                     })
-                        .then(CommonService.waitForCordovaPlatform)
-                        .then(_.partial(_.spread($cordovaGoogleAnalytics.trackEvent), trackEvent));
+                        .then(_.partial(_.spread(AnalyticsUtil.trackEvent), trackEvent));
                 };
 
             CommonService.loadingBegin();

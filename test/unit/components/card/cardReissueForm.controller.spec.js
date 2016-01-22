@@ -7,7 +7,6 @@
         $q,
         $state,
         $ionicHistory,
-        $cordovaGoogleAnalytics,
         CardManager,
         CardModel,
         CommonService,
@@ -68,10 +67,6 @@
                 "nextViewOptions"
             ]);
 
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", [
-                "trackView"
-            ]);
-
             inject(function ($controller, _$rootScope_, _$q_, _sharedGlobals_, _AddressModel_, _ShippingMethodModel_,
                              CardReissueModel, _CommonService_, AccountModel, _CardModel_, ShippingCarrierModel, UserModel,
                              UserAccountModel) {
@@ -89,15 +84,14 @@
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
 
                 ctrl = $controller("CardReissueFormController", {
-                    $scope                 : $scope,
-                    $state                 : $state,
-                    $ionicHistory          : $ionicHistory,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    globals                : mockGlobals,
-                    cardReissueDetails     : mockCardReissueDetails,
-                    CardManager            : CardManager,
-                    CommonService          : CommonService,
-                    UserManager            : UserManager
+                    $scope            : $scope,
+                    $state            : $state,
+                    $ionicHistory     : $ionicHistory,
+                    globals           : mockGlobals,
+                    cardReissueDetails: mockCardReissueDetails,
+                    CardManager       : CardManager,
+                    CommonService     : CommonService,
+                    UserManager       : UserManager
                 });
             });
 
@@ -106,10 +100,6 @@
             spyOn(CommonService, "displayConfirm");
             spyOn(CommonService, "loadingBegin");
             spyOn(CommonService, "loadingComplete");
-            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                //just execute the callback directly
-                return $q.when((callback || function() {})());
-            });
         });
 
         it("should set card to the given card object", function () {
@@ -118,17 +108,6 @@
 
         it("should set config to the expected constant values", function () {
             expect(ctrl.config).toEqual(mockGlobals.CARD_REISSUE.CONFIG);
-        });
-
-        describe("has a beforeEnter function that", function () {
-
-            beforeEach(function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
-            });
         });
 
         describe("has an isFormComplete function that", function () {

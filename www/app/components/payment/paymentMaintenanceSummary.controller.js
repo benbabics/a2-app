@@ -2,18 +2,16 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:12
+    // jshint maxparams:11
 
     /* @ngInject */
-    function PaymentMaintenanceSummaryController($cordovaGoogleAnalytics, $scope, $ionicHistory,
-                                                 globals, maintenance, moment, payment,
+    function PaymentMaintenanceSummaryController($scope, $ionicHistory, globals, maintenanceDetails, moment, payment,
                                                  CommonService, InvoiceManager, Logger, PaymentManager, UserManager) {
 
-        var _ = CommonService._,
-            vm = this,
+        var vm = this,
             paymentMaintenanceSummary = globals.PAYMENT_MAINTENANCE_SUMMARY;
 
-        vm.config = angular.extend({}, paymentMaintenanceSummary.CONFIG, getConfig());
+        vm.config = maintenanceDetails.getConfig(paymentMaintenanceSummary);
 
         vm.processPayment = processPayment;
         vm.payment = {};
@@ -47,35 +45,25 @@
 
         }
 
-        function getConfig() {
-            if (_.has(paymentMaintenanceSummary, maintenance.state)) {
-                return paymentMaintenanceSummary[maintenance.state].CONFIG;
-            }
-            else {
-                var error = "Unrecognized payment maintenance state: " + maintenance.state;
-
-                Logger.error(error);
-                throw new Error(error);
-            }
-        }
-
         function goToConfirmationPage() {
             // do not allow backing up to the summary page
             $ionicHistory.nextViewOptions({disableBack: true});
 
             // transition to the confirmation page
-            maintenance.go("payment.maintenance.confirmation");
+            maintenanceDetails.go("payment.maintenance.confirmation");
         }
 
         function processPayment() {
+            var maintenanceStates = maintenanceDetails.getStates();
+
             // call the function that corresponds to the current state
-            switch (maintenance.state) {
-                case maintenance.states.ADD:
+            switch (maintenanceDetails.state) {
+                case maintenanceStates.ADD:
                     return addPayment();
-                case maintenance.states.UPDATE:
+                case maintenanceStates.UPDATE:
                     return updatePayment();
                 default:
-                    var error = "Unrecognized payment maintenance state: " + maintenance.state;
+                    var error = "Unrecognized payment maintenance state: " + maintenanceDetails.state;
 
                     Logger.error(error);
                     throw new Error(error);
@@ -112,10 +100,6 @@
             if (moment(vm.payment.scheduledDate).isAfter(invoiceSummary.paymentDueDate)) {
                 vm.warnings.push(paymentMaintenanceSummary.WARNINGS.PAYMENT_DATE_PAST_DUE_DATE);
             }
-
-            CommonService.waitForCordovaPlatform(function () {
-                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
-            });
         }
 
     }

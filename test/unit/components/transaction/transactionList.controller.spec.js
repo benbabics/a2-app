@@ -4,7 +4,6 @@
     var $rootScope,
         $scope,
         $q,
-        $cordovaGoogleAnalytics,
         moment,
         CommonService,
         TransactionManager,
@@ -53,7 +52,6 @@
             //mock dependencies:
             TransactionManager = jasmine.createSpyObj("TransactionManager", ["fetchPostedTransactions"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
             inject(function (_$rootScope_, _$q_, _moment_,
                              _CommonService_, _UserModel_, _UserAccountModel_, _PostedTransactionModel_, $controller) {
@@ -70,7 +68,6 @@
 
                 ctrl = $controller("TransactionListController", {
                     $scope                 : $scope,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
                     globals                : mockGlobals,
                     CommonService          : CommonService,
                     TransactionManager     : TransactionManager,
@@ -82,10 +79,6 @@
             //setup spies
             spyOn(CommonService, "loadingBegin");
             spyOn(CommonService, "loadingComplete");
-            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                //just execute the callback directly
-                return $q.when((callback || function() {})());
-            });
 
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
@@ -93,18 +86,6 @@
             //setup mocks
             mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
             UserManager.getUser.and.returnValue(mockUser);
-        });
-
-        describe("has an $ionicView.beforeEnter event handler function that", function () {
-
-            beforeEach(function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
-            });
-
         });
 
         describe("has a loadNextPage function that", function () {

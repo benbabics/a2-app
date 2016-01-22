@@ -10,12 +10,12 @@
             url: "http://somedomain.com/someendpoint"
         },
         mockGlobals = {
-            LOGIN_STATE: "user.auth.login",
-            AUTH_API: {
-                BASE_URL: "/someUrl",
-                AUTH: {
+            LOGIN_STATE            : "user.auth.login",
+            AUTH_API               : {
+                BASE_URL          : "/someUrl",
+                AUTH              : {
                     TOKENS: "uaa/oauth/token",
-                    ME: "uaa/me"
+                    ME    : "uaa/me"
                 },
                 CLIENT_CREDENTIALS: {
                     CLIENT_ID    : "Some_Client_Id",
@@ -24,15 +24,15 @@
             },
             ACCOUNT_MAINTENANCE_API: {
                 BASE_URL: "/someAMRestUrl",
-                CARDS: {
-                    BASE: "Cards_Base",
-                    STATUS: "Status",
+                CARDS   : {
+                    BASE               : "Cards_Base",
+                    STATUS             : "Status",
                     CHECK_STATUS_CHANGE: "Status_Change"
                 },
                 ACCOUNTS: {
                     BASE: "Accounts_Base"
                 },
-                BANKS: {
+                BANKS   : {
                     ACTIVE_BANKS: "Active_Banks"
                 },
                 INVOICES: {
@@ -46,16 +46,48 @@
                     CURRENT: "Current_User"
                 }
             },
-            LOGGING: {
+            LOGGING                : {
                 ENABLED: false
             },
-            PAYMENT: {
+            PAYMENT                : {
                 STATUS: {
                     "CANCELLED": "CANCELLED",
                     "COMPLETE" : "COMPLETE",
                     "SCHEDULED": "SCHEDULED",
                     "PENDING"  : "PENDING",
                     "UNKNOWN"  : "UNKNOWN"
+                }
+            },
+            GOOGLE_ANALYTICS       : {
+                TRACKING_ID: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+            },
+            "USER_LOGIN"           : {
+                "CONFIG": {
+                    "ANALYTICS": {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "events"  : {
+                            "successfulLogin"       : [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "inactiveStatus"        : [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "accountNotReadyStatus" : [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "wrongCredentialsStatus": [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "lockedPasswordStatus"  : [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ]
+                        }
+                    }
                 }
             }
         },

@@ -5,8 +5,8 @@
     // jshint maxparams:10
 
     /* @ngInject */
-    function PaymentDetailController($cordovaGoogleAnalytics, $scope, $state, globals, isPaymentEditable, payment,
-                                     CommonService, Logger, PaymentManager, UserManager) {
+    function PaymentDetailController($scope, $state, globals, isPaymentEditable, payment,
+                                     AnalyticsUtil, CommonService, Logger, PaymentManager, UserManager) {
 
         var vm = this,
             _ = CommonService._;
@@ -31,10 +31,6 @@
         function beforeEnter() {
             vm.isPaymentEditable = isPaymentEditable;
             vm.payment = payment;
-
-            CommonService.waitForCordovaPlatform(function () {
-                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
-            });
         }
 
         function confirmPaymentCancel() {
@@ -60,9 +56,7 @@
                     if (result) {
                         confirmPaymentCancel();
 
-                        CommonService.waitForCordovaPlatform(function () {
-                            _.spread($cordovaGoogleAnalytics.trackEvent)(vm.config.ANALYTICS.events.confirmPaymentCancel);
-                        });
+                        _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events.confirmPaymentCancel);
                     }
                     else {
                         //close the popup

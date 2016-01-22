@@ -6,9 +6,7 @@
         $scope,
         $state,
         $ionicHistory,
-        $cordovaGoogleAnalytics,
         ctrl,
-        mockMaintenanceState,
         mockStateParams,
         mockMaintenance,
         mockGlobals = {
@@ -40,7 +38,9 @@
                         }
                     }
                 }
-            }
+            },
+            LOGIN_STATE: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+
         },
         mockCurrentInvoiceSummary = {
             accountNumber     : "account number value",
@@ -104,9 +104,17 @@
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "updatePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
-            inject(function ($controller, _$q_, $rootScope, _moment_, _BankModel_, appGlobals, CommonService, _PaymentModel_) {
+            module(function ($provide) {
+                $provide.value("$state", $state);
+                $provide.value("$ionicHistory", $ionicHistory);
+                $provide.value("InvoiceManager", InvoiceManager);
+                $provide.value("PaymentManager", PaymentManager);
+                $provide.value("UserManager", UserManager);
+            });
+
+            inject(function ($controller, _$q_, $rootScope, _moment_, _BankModel_, appGlobals,
+                             CommonService, _PaymentModel_, PaymentMaintenanceDetailsModel) {
 
                 _ = CommonService._;
                 $q = _$q_;
@@ -117,21 +125,16 @@
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
-                mockMaintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
+                mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, appGlobals.PAYMENT_MAINTENANCE.STATES);
                 mockStateParams = {
-                    maintenanceState: mockMaintenanceState
-                };
-                mockMaintenance = {
-                    state : mockMaintenanceState,
-                    states: appGlobals.PAYMENT_MAINTENANCE.STATES,
-                    go    : jasmine.createSpy("go")
+                    maintenanceState: mockMaintenance.state
                 };
 
                 switch (mockMaintenance.state) {
-                    case mockMaintenance.states.ADD:
+                    case appGlobals.PAYMENT_MAINTENANCE.STATES.ADD:
                         mockPaymentProcess = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
                         break;
-                    case mockMaintenance.states.UPDATE:
+                    case appGlobals.PAYMENT_MAINTENANCE.STATES.UPDATE:
                         mockPaymentProcess = TestUtils.getRandomPaymentUpdate(PaymentModel, BankModel);
                         break;
                     default:
@@ -144,26 +147,22 @@
                     $state            : $state,
                     $stateParams      : mockStateParams,
                     $ionicHistory     : $ionicHistory,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    maintenance       : mockMaintenance,
+                    maintenanceDetails: mockMaintenance,
                     InvoiceManager    : InvoiceManager,
                     PaymentManager    : PaymentManager,
                     UserManager       : UserManager,
                     payment           : mockPaymentProcess,
-                    globals: mockGlobals
-                });
-
-                //setup spies:
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
+                    globals           : mockGlobals
                 });
 
             });
 
+            //setup spies:
             mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
             InvoiceManager.getInvoiceSummary.and.returnValue(mockCurrentInvoiceSummary);
             UserManager.getUser.and.returnValue(mockUser);
+
+            spyOn(mockMaintenance, "go");
         });
 
         it("should set the config to the expected value", function () {
@@ -179,12 +178,6 @@
                 $scope.$broadcast("$ionicView.beforeEnter");
 
                 expect(ctrl.payment).toEqual(mockPaymentProcess);
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
-
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(getConfig(mockMaintenance).ANALYTICS.pageName);
             });
 
             describe("when payment details meet expectations", function () {
@@ -338,21 +331,23 @@
     });
 
     function getConfig(maintenance) {
-        switch (maintenance.state) {
-            case maintenance.states.ADD:
-                return mockGlobals.PAYMENT_MAINTENANCE_SUMMARY.ADD.CONFIG;
-            case maintenance.states.UPDATE:
-                return mockGlobals.PAYMENT_MAINTENANCE_SUMMARY.UPDATE.CONFIG;
-            default:
-                return null;
+        var constants = mockGlobals.PAYMENT_MAINTENANCE_SUMMARY;
+
+        if (_.has(constants, maintenance.state)) {
+            return angular.extend({}, constants.CONFIG, constants[maintenance.state].CONFIG);
+        }
+        else {
+            return constants.CONFIG;
         }
     }
 
     function getPaymentProcessFunction(maintenance, PaymentManager) {
+        var maintenanceStates = maintenance.getStates();
+
         switch (maintenance.state) {
-            case maintenance.states.ADD:
+            case maintenanceStates.ADD:
                 return PaymentManager.addPayment;
-            case maintenance.states.UPDATE:
+            case maintenanceStates.UPDATE:
                 return PaymentManager.updatePayment;
             default:
                 return null;

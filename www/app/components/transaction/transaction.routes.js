@@ -22,6 +22,9 @@
                     templateUrl: "app/components/transaction/templates/transactionList.html",
                     controller : "TransactionListController as vm"
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.TRANSACTION_LIST.CONFIG.ANALYTICS.pageName);
             }
         });
 
@@ -51,6 +54,9 @@
                             CommonService.loadingComplete();
                         });
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.POSTED_TRANSACTION_DETAIL.CONFIG.ANALYTICS.pageName);
             }
         });
 

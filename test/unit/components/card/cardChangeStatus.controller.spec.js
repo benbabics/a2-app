@@ -6,7 +6,6 @@
         $scope,
         $q,
         $state,
-        $cordovaGoogleAnalytics,
         CardManager,
         CardModel,
         CommonService,
@@ -68,10 +67,6 @@
                 "go"
             ]);
 
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", [
-                "trackView"
-            ]);
-
             inject(function ($controller, _$rootScope_, _$q_, sharedGlobals, UserAccountModel, _CardModel_, UserModel) {
                 $rootScope = _$rootScope_;
                 $q = _$q_;
@@ -84,23 +79,18 @@
                 mockGlobals.CARD = sharedGlobals.CARD;
 
                 ctrl = $controller("CardChangeStatusController", {
-                    $scope                 : $scope,
-                    $state                 : $state,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    globals                : mockGlobals,
-                    card                   : mockCard,
-                    CardManager            : CardManager,
-                    CommonService          : CommonService,
-                    UserManager            : UserManager
+                    $scope       : $scope,
+                    $state       : $state,
+                    globals      : mockGlobals,
+                    card         : mockCard,
+                    CardManager  : CardManager,
+                    CommonService: CommonService,
+                    UserManager  : UserManager
                 });
             });
 
             //setup mocks
             UserManager.getUser.and.returnValue(mockUser);
-            CommonService.waitForCordovaPlatform.and.callFake(function(callback) {
-                //just execute the callback directly
-                return $q.when((callback || function() {})());
-            });
         });
 
         it("should set card to the given card object", function () {
@@ -113,17 +103,6 @@
 
         it("should set config to the expected constant values", function () {
             expect(ctrl.config).toEqual(mockConfig);
-        });
-
-        describe("has a beforeEnter function that", function () {
-
-            beforeEach(function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
-            });
         });
 
         describe("has a promptStatusChange function that", function () {

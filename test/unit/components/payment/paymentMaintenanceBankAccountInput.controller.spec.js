@@ -4,7 +4,6 @@
     var ctrl,
         scope,
         $ionicHistory,
-        $cordovaGoogleAnalytics,
         bankModel1,
         bankModel2,
         bankModel3,
@@ -42,7 +41,6 @@
                 }
             }
         },
-        mockMaintenanceState,
         mockStateParams,
         mockMaintenance,
         BankModel;
@@ -70,9 +68,8 @@
 
             //mock dependencies:
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
-            inject(function ($rootScope, $controller, $filter, $q, _BankModel_, PaymentModel, appGlobals, CommonService) {
+            inject(function ($rootScope, $controller, $filter, $q, _BankModel_, PaymentModel, appGlobals, PaymentMaintenanceDetailsModel) {
 
                 scope = $rootScope.$new();
 
@@ -89,29 +86,18 @@
                 mockBankAccounts[bankModel2.id] = bankModel2;
                 mockBankAccounts[bankModel3.id] = bankModel3;
 
-                mockMaintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
+                mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, appGlobals.PAYMENT_MAINTENANCE.STATES);
                 mockStateParams = {
-                    maintenanceState: mockMaintenanceState
-                };
-                mockMaintenance = {
-                    state : mockMaintenanceState,
-                    states: appGlobals.PAYMENT_MAINTENANCE.STATES,
-                    go    : jasmine.createSpy("go")
+                    maintenanceState: mockMaintenance.state
                 };
 
                 ctrl = $controller("PaymentMaintenanceBankAccountInputController", {
-                    $ionicHistory          : $ionicHistory,
-                    $scope                 : scope,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    bankAccounts           : mockBankAccounts,
-                    globals                : mockGlobals,
-                    maintenance            : mockMaintenance,
-                    payment                : mockPayment
-                });
-
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
+                    $ionicHistory     : $ionicHistory,
+                    $scope            : scope,
+                    bankAccounts      : mockBankAccounts,
+                    globals           : mockGlobals,
+                    maintenanceDetails: mockMaintenance,
+                    payment           : mockPayment
                 });
 
             });
@@ -133,10 +119,6 @@
 
             it("should set the bank accounts", function () {
                 expect(ctrl.bankAccounts).toEqual(mockBankAccounts);
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(getConfig(mockMaintenance).ANALYTICS.pageName);
             });
         });
 
@@ -167,13 +149,13 @@
     });
 
     function getConfig(maintenance) {
-        switch (maintenance.state) {
-            case maintenance.states.ADD:
-                return mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT.ADD.CONFIG;
-            case maintenance.states.UPDATE:
-                return mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT.UPDATE.CONFIG;
-            default:
-                return null;
+        var constants = mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT;
+
+        if (_.has(constants, maintenance.state)) {
+            return angular.extend({}, constants.CONFIG, constants[maintenance.state].CONFIG);
+        }
+        else {
+            return constants.CONFIG;
         }
     }
 

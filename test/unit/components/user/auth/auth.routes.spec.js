@@ -5,10 +5,20 @@
 
         var $rootScope,
             $state,
+            AnalyticsUtil,
+            CommonService,
             $q,
             $cordovaSplashscreen,
             $interval,
-            CommonService;
+            mockGlobals = {
+                USER_LOGIN: {
+                    CONFIG: {
+                        ANALYTICS: {
+                            pageName: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    }
+                }
+            };
 
         beforeEach(function () {
 
@@ -18,10 +28,13 @@
             module("app.html");
 
             //mock dependencies:
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
             $cordovaSplashscreen = jasmine.createSpyObj("$cordovaSplashscreen", ["hide"]);
 
-            module(function ($provide) {
+            module(function($provide, sharedGlobals) {
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("$cordovaSplashscreen", $cordovaSplashscreen);
+                $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
             inject(function (_$rootScope_, _$state_, _$q_, _$interval_, _CommonService_) {
@@ -97,6 +110,10 @@
                 beforeEach(function () {
                     $state.go(stateName);
                     $rootScope.$digest();
+                });
+
+                it("should call AnalyticsUtil.trackView", function () {
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.USER_LOGIN.CONFIG.ANALYTICS.pageName);
                 });
 
                 it("should transition successfully", function () {

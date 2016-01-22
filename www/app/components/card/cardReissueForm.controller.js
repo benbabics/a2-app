@@ -2,11 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:9
+    // jshint maxparams:7
 
     /* @ngInject */
-    function CardReissueFormController($cordovaGoogleAnalytics, $scope, $state, globals, cardReissueDetails,
-                                       CardManager, CommonService, Logger, UserManager) {
+    function CardReissueFormController($state, globals, cardReissueDetails, CardManager, CommonService, Logger, UserManager) {
 
         var _ = CommonService._,
             vm = this;
@@ -21,14 +20,6 @@
 
         // Controller initialization
         function activate() {
-            // set event listeners
-            $scope.$on("$ionicView.beforeEnter", beforeEnter);
-        }
-
-        function beforeEnter() {
-            CommonService.waitForCordovaPlatform(function () {
-                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
-            });
         }
 
         function confirmReissue() {

@@ -2,7 +2,6 @@
     "use strict";
 
     var $scope,
-        $cordovaGoogleAnalytics,
         ctrl,
         mockPostedTransaction,
         mockGlobals = {
@@ -46,9 +45,6 @@
                 });
             });
 
-            //mock dependencies:
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
-
             inject(function ($controller, $rootScope, $q, PostedTransactionModel, CommonService) {
 
                 // create a scope object for us to use.
@@ -58,15 +54,8 @@
 
                 ctrl = $controller("PostedTransactionDetailController", {
                     $scope                 : $scope,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
                     postedTransaction      : mockPostedTransaction,
                     globals                : mockGlobals
-                });
-
-                //setup spies:
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
                 });
 
             });
@@ -81,10 +70,6 @@
 
             it("should set the posted transaction", function () {
                 expect(ctrl.postedTransaction).toEqual(mockPostedTransaction);
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
 
         });

@@ -4,7 +4,7 @@
     var $rootScope,
         $scope,
         $q,
-        $cordovaGoogleAnalytics,
+        AnalyticsUtil,
         CommonService,
         CardManager,
         UserManager,
@@ -58,7 +58,7 @@
             //mock dependencies:
             CardManager = jasmine.createSpyObj("CardManager", ["fetchCards"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackEvent", "trackView"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackEvent", "trackView"]);
 
             inject(function (_$rootScope_, _$q_, $controller,
                              _CommonService_, _UserModel_, _UserAccountModel_, _CardModel_) {
@@ -73,12 +73,12 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("CardListController", {
-                    $scope                 : $scope,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    globals                : mockGlobals,
-                    CardManager            : CardManager,
-                    CommonService          : CommonService,
-                    UserManager            : UserManager
+                    $scope       : $scope,
+                    AnalyticsUtil: AnalyticsUtil,
+                    globals      : mockGlobals,
+                    CardManager  : CardManager,
+                    CommonService: CommonService,
+                    UserManager  : UserManager
                 });
 
             });
@@ -86,10 +86,6 @@
             //setup spies
             spyOn(CommonService, "loadingBegin");
             spyOn(CommonService, "loadingComplete");
-            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                //just execute the callback directly
-                return $q.when((callback || function() {})());
-            });
 
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
@@ -97,18 +93,6 @@
             //setup mocks
             mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
             UserManager.getUser.and.returnValue(mockUser);
-        });
-
-        describe("has an $ionicView.beforeEnter event handler function that", function () {
-
-            beforeEach(function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
-            });
-
         });
 
         describe("has an applySearchFilter function that", function () {
@@ -131,10 +115,10 @@
 
             beforeEach(function () {
                 view.querySelector.and.callFake(function (query) {
-                    if(query === ".card-list") {
+                    if (query === ".card-list") {
                         return cardList;
                     }
-                    else if(query === "ion-infinite-scroll") {
+                    else if (query === "ion-infinite-scroll") {
                         return infiniteListElem;
                     }
                 });
@@ -214,7 +198,7 @@
                     expect(infiniteListController.checkBounds).toHaveBeenCalledWith();
                 });
 
-                it("should call $cordovaGoogleAnalytics.trackEvent", function () {
+                it("should call AnalyticsUtil.trackEvent", function () {
                     verifyEventTracked(mockConfig.ANALYTICS.events.searchSubmitted);
                 });
             });
@@ -359,7 +343,7 @@
     });
 
     function verifyEventTracked(event) {
-        expect($cordovaGoogleAnalytics.trackEvent.calls.mostRecent().args).toEqual(event);
+        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
     }
 
 }());

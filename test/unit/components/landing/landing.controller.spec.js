@@ -3,7 +3,6 @@
 
     var $scope,
         $ionicHistory,
-        $cordovaGoogleAnalytics,
         ctrl,
         mockCurrentInvoiceSummary,
         mockUser,
@@ -71,7 +70,6 @@
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearHistory"]);
             mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
             inject(function ($controller, $rootScope, $q, _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, CommonService) {
 
@@ -94,13 +92,12 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("LandingController", {
-                    $scope                 : $scope,
-                    $ionicHistory          : $ionicHistory,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    UserManager            : UserManager,
-                    currentInvoiceSummary  : mockCurrentInvoiceSummary,
-                    scheduledPaymentsCount : mockScheduledPaymentCount,
-                    globals                : mockGlobals
+                    $scope                : $scope,
+                    $ionicHistory         : $ionicHistory,
+                    UserManager           : UserManager,
+                    currentInvoiceSummary : mockCurrentInvoiceSummary,
+                    scheduledPaymentsCount: mockScheduledPaymentCount,
+                    globals               : mockGlobals
                 });
             });
         });
@@ -214,10 +211,6 @@
 
                 });
 
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
 
         });

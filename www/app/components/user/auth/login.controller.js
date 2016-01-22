@@ -5,8 +5,8 @@
     // jshint maxparams:11
 
     /* @ngInject */
-    function LoginController($cordovaGoogleAnalytics, $cordovaKeyboard, $ionicHistory, $rootScope, $scope, $state, $stateParams,
-                             globals, AuthenticationManager, CommonService, UserManager) {
+    function LoginController($cordovaKeyboard, $ionicHistory, $rootScope, $scope, $state, $stateParams,
+                             globals, AnalyticsUtil, AuthenticationManager, CommonService, UserManager) {
 
         var _ = CommonService._,
             vm = this;
@@ -46,10 +46,6 @@
 
                 trackErrorEvent($stateParams.reason);
             }
-
-            CommonService.waitForCordovaPlatform(function () {
-                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
-            });
         }
 
         function authenticateUser() {
@@ -61,7 +57,7 @@
                 .then(UserManager.fetchCurrentUserDetails)
                 .then(function (userDetails) {
                     // track all events with the user's ID
-                    setTrackerUserId(userDetails.id);
+                    AnalyticsUtil.setUserId(userDetails.id);
 
                     trackSuccessEvent();
 
@@ -102,27 +98,17 @@
             document.body.classList.remove("keyboard-open");
         }
 
-        function setTrackerUserId(userId) {
-            CommonService.waitForCordovaPlatform(function () {
-                $cordovaGoogleAnalytics.setUserId(userId);
-            });
-        }
-
         function trackErrorEvent(errorReason) {
-            CommonService.waitForCordovaPlatform(function () {
-                var errorEvent;
-                if (_.has(vm.config.ANALYTICS.errorEvents, errorReason)) {
-                    errorEvent = vm.config.ANALYTICS.errorEvents[errorReason];
+            var errorEvent;
+            if (_.has(vm.config.ANALYTICS.errorEvents, errorReason)) {
+                errorEvent = vm.config.ANALYTICS.errorEvents[errorReason];
 
-                    _.spread($cordovaGoogleAnalytics.trackEvent)(vm.config.ANALYTICS.events[errorEvent]);
-                }
-            });
+                _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events[errorEvent]);
+            }
         }
 
         function trackSuccessEvent() {
-            CommonService.waitForCordovaPlatform(function () {
-                _.spread($cordovaGoogleAnalytics.trackEvent)(vm.config.ANALYTICS.events.successfulLogin);
-            });
+            _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events.successfulLogin);
         }
     }
 

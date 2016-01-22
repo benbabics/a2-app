@@ -7,7 +7,7 @@
         $state,
         $stateParams = {},
         $cordovaKeyboard,
-        $cordovaGoogleAnalytics,
+        AnalyticsUtil,
         authenticateDeferred,
         ctrl,
         fetchCurrentUserDeferred,
@@ -90,7 +90,7 @@
             UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
             $state = jasmine.createSpyObj("state", ["go"]);
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["setUserId", "trackEvent", "trackView"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["setUserId", "trackEvent", "trackView"]);
 
             inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _CommonService_, UserAccountModel, UserModel,
                              globals) {
@@ -108,7 +108,7 @@
                     $scope                 : $scope,
                     $state                 : $state,
                     $stateParams           : $stateParams,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
+                    AnalyticsUtil          : AnalyticsUtil,
                     $cordovaKeyboard       : $cordovaKeyboard,
                     globals                : mockGlobals,
                     AuthenticationManager  : AuthenticationManager,
@@ -118,10 +118,6 @@
 
                 //setup spies:
                 spyOn(CommonService, "logOut");
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
-                });
 
             });
 
@@ -134,12 +130,6 @@
 
                 //setup an existing values to test them being modified
                 ctrl.globalError = "This is a previous error";
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
-
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
 
             describe("when $stateParams.reason is TOKEN_EXPIRED", function () {
@@ -158,8 +148,8 @@
                     expect(ctrl.globalError).toEqual(mockConfig.serverErrors.TOKEN_EXPIRED);
                 });
 
-                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
-                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call AnalyticsUtil.trackEvent", function () {
+                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -183,8 +173,8 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
-                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
-                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call AnalyticsUtil.trackEvent", function () {
+                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -205,8 +195,8 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
-                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
-                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call AnalyticsUtil.trackEvent", function () {
+                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -227,8 +217,8 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
-                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
-                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call AnalyticsUtil.trackEvent", function () {
+                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -249,8 +239,8 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
-                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
-                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call AnalyticsUtil.trackEvent", function () {
+                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -326,8 +316,8 @@
                         $scope.$digest();
                     });
 
-                    it("should call $cordovaGoogleAnalytics.setUserId with the correct User ID", function () {
-                        expect($cordovaGoogleAnalytics.setUserId).toHaveBeenCalledWith(userDetails.id);
+                    it("should call AnalyticsUtil.setUserId with the correct User ID", function () {
+                        expect(AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
                     });
 
                     it("should call disable backing up to the login page", function () {
@@ -342,7 +332,7 @@
                         expect($state.go).toHaveBeenCalledWith("landing");
                     });
 
-                    it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                    it("should call AnalyticsUtil.trackEvent with the expected event", function () {
                         verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
                     });
 
@@ -370,7 +360,7 @@
                         expect($state.go).not.toHaveBeenCalled();
                     });
 
-                    it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                    it("should call AnalyticsUtil.trackEvent with the expected event", function () {
                         verifyEventTracked(mockConfig.ANALYTICS.events.wrongCredentialsStatus);
                     });
 
@@ -404,7 +394,7 @@
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
                     verifyEventTracked(mockConfig.ANALYTICS.events.wrongCredentialsStatus);
                 });
 
@@ -436,7 +426,7 @@
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
                     verifyEventTracked(mockConfig.ANALYTICS.events.inactiveStatus);
                 });
 
@@ -468,7 +458,7 @@
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
                     verifyEventTracked(mockConfig.ANALYTICS.events.inactiveStatus);
                 });
 
@@ -500,7 +490,7 @@
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
                     verifyEventTracked(mockConfig.ANALYTICS.events.inactiveStatus);
                 });
 
@@ -532,8 +522,8 @@
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
-                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call AnalyticsUtil.trackEvent", function () {
+                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -564,7 +554,7 @@
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
                     verifyEventTracked(mockConfig.ANALYTICS.events.lockedPasswordStatus);
                 });
 
@@ -596,7 +586,7 @@
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call $cordovaGoogleAnalytics.trackEvent with the expected event", function () {
+                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
                     verifyEventTracked(mockConfig.ANALYTICS.events.accountNotReadyStatus);
                 });
 
@@ -650,7 +640,7 @@
     });
 
     function verifyEventTracked(event) {
-        expect($cordovaGoogleAnalytics.trackEvent.calls.mostRecent().args).toEqual(event);
+        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
     }
 
 }());

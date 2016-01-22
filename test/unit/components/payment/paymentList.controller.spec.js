@@ -3,7 +3,6 @@
 
     var _,
         $scope,
-        $cordovaGoogleAnalytics,
         CommonService,
         ctrl,
         mockCompletedPayments,
@@ -55,22 +54,14 @@
                 mockCompletedPayments = getRandomNotScheduledPayments(PaymentModel, BankModel);
                 mockScheduledPayments = getRandomScheduledPayments(PaymentModel, BankModel);
                 mockPayments = _.union(mockCompletedPayments, mockScheduledPayments);
-                $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("PaymentListController", {
-                    $scope                 : $scope,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    payments               : mockPayments,
-                    globals                : mockGlobals
-                });
-
-                //setup spies:
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
+                    $scope  : $scope,
+                    payments: mockPayments,
+                    globals : mockGlobals
                 });
 
             });
@@ -89,10 +80,6 @@
 
             it("should set the scheduled payments", function () {
                 expect(ctrl.scheduledPayments).toEqual(_.sortByOrder(mockScheduledPayments, ["scheduledDate"], ["asc"]));
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
             });
 
         });

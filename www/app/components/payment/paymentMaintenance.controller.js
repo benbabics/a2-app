@@ -2,15 +2,16 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:5
 
     /* @ngInject */
-    function PaymentMaintenanceController(InvoiceManager, defaultBank, payment, maintenance) {
+    function PaymentMaintenanceController(InvoiceManager, defaultBank, payment, maintenanceDetails) {
 
         activate();
 
         // Controller initialization
         function activate() {
-            if (maintenance.state === maintenance.states.ADD) {
+            if (maintenanceDetails.state === maintenanceDetails.getStates().ADD) {
                 initializePaymentDetails();
             }
         }

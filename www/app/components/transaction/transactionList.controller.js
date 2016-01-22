@@ -2,11 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:8
+    // jshint maxparams:6
 
     /* @ngInject */
-    function TransactionListController($cordovaGoogleAnalytics, $scope, globals, moment,
-                                       CommonService, Logger, TransactionManager, UserManager) {
+    function TransactionListController(globals, moment, CommonService, Logger, TransactionManager, UserManager) {
 
         var _ = CommonService._,
             vm = this,
@@ -25,14 +24,6 @@
         //////////////////////
         // Controller initialization
         function activate() {
-            // set event listeners
-            $scope.$on("$ionicView.beforeEnter", beforeEnter);
-        }
-
-        function beforeEnter() {
-            CommonService.waitForCordovaPlatform(function () {
-                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
-            });
         }
 
         function loadNextPage() {

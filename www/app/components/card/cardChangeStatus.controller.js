@@ -2,11 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:9
+    // jshint maxparams:7
 
     /* @ngInject */
-    function CardChangeStatusController($cordovaGoogleAnalytics, $scope, $state, globals, card,
-                                        CardManager, CommonService, Logger, UserManager) {
+    function CardChangeStatusController($state, globals, card, CardManager, CommonService, Logger, UserManager) {
 
         var vm = this;
 
@@ -22,14 +21,6 @@
 
         // Controller initialization
         function activate() {
-            // set event listeners
-            $scope.$on("$ionicView.beforeEnter", beforeEnter);
-        }
-
-        function beforeEnter() {
-            CommonService.waitForCordovaPlatform(function () {
-                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
-            });
         }
 
         function confirmStatusChange(newStatus) {

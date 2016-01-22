@@ -6,29 +6,30 @@ var TestUtils = (function () {
 
     var ALPHANUMERIC_CHARACTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
         TestUtils = {
-            getRandomAccount                 : getRandomAccount,
-            getRandomAddress                 : getRandomAddress,
-            getRandomBank                    : getRandomBank,
-            getRandomBoolean                 : getRandomBoolean,
-            getRandomCard                    : getRandomCard,
-            getRandomCardReissueDetails      : getRandomCardReissueDetails,
-            getRandomDate                    : getRandomDate,
-            getRandomInteger                 : getRandomInteger,
-            getRandomInvoiceSummary          : getRandomInvoiceSummary,
-            getRandomNumber                  : getRandomNumber,
-            getRandomNumberWithLength        : getRandomNumberWithLength,
-            getRandomOnlineApplication       : getRandomOnlineApplication,
-            getRandomPayment                 : getRandomPayment,
-            getRandomPaymentAdd              : getRandomPaymentAdd,
-            getRandomPaymentUpdate           : getRandomPaymentUpdate,
-            getRandomPostedTransaction       : getRandomPostedTransaction,
-            getRandomShippingCarrier         : getRandomShippingCarrier,
-            getRandomShippingMethod          : getRandomShippingMethod,
-            getRandomStringThatIsAlphaNumeric: getRandomStringThatIsAlphaNumeric,
-            getRandomUser                    : getRandomUser,
-            getRandomUserAccount             : getRandomUserAccount,
-            getRandomValueFromArray          : getRandomValueFromArray,
-            getRandomValueFromMap            : getRandomValueFromMap
+            getRandomAccount                  : getRandomAccount,
+            getRandomAddress                  : getRandomAddress,
+            getRandomBank                     : getRandomBank,
+            getRandomBoolean                  : getRandomBoolean,
+            getRandomCard                     : getRandomCard,
+            getRandomCardReissueDetails       : getRandomCardReissueDetails,
+            getRandomDate                     : getRandomDate,
+            getRandomInteger                  : getRandomInteger,
+            getRandomInvoiceSummary           : getRandomInvoiceSummary,
+            getRandomPaymentMaintenanceDetails: getRandomPaymentMaintenanceDetails,
+            getRandomNumber                   : getRandomNumber,
+            getRandomNumberWithLength         : getRandomNumberWithLength,
+            getRandomOnlineApplication        : getRandomOnlineApplication,
+            getRandomPayment                  : getRandomPayment,
+            getRandomPaymentAdd               : getRandomPaymentAdd,
+            getRandomPaymentUpdate            : getRandomPaymentUpdate,
+            getRandomPostedTransaction        : getRandomPostedTransaction,
+            getRandomShippingCarrier          : getRandomShippingCarrier,
+            getRandomShippingMethod           : getRandomShippingMethod,
+            getRandomStringThatIsAlphaNumeric : getRandomStringThatIsAlphaNumeric,
+            getRandomUser                     : getRandomUser,
+            getRandomUserAccount              : getRandomUserAccount,
+            getRandomValueFromArray           : getRandomValueFromArray,
+            getRandomValueFromMap             : getRandomValueFromMap
         };
 
     return TestUtils;
@@ -206,6 +207,16 @@ var TestUtils = (function () {
         randomPaymentAdd.bankAccount = getRandomBank(BankModel).name;
 
         return randomPaymentAdd;
+    }
+
+    function getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, STATES) {
+        var paymentMaintenanceDetails = new PaymentMaintenanceDetailsModel();
+
+        paymentMaintenanceDetails.set({
+            state: getRandomValueFromMap(STATES)
+        });
+
+        return paymentMaintenanceDetails;
     }
 
     function getRandomPaymentUpdate(PaymentModel, BankModel) {

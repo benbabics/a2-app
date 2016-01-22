@@ -36,6 +36,9 @@
                         }
                     }
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.LANDING.CONFIG.ANALYTICS.pageName);
             }
         });
     }

@@ -64,6 +64,9 @@
                     options: {
                     }
                 }
+            },
+            GOOGLE_ANALYTICS: {
+                TRACKING_ID: TestUtils.getRandomStringThatIsAlphaNumeric(10)
             }
         };
 

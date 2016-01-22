@@ -3,12 +3,10 @@
 
     var _,
         $scope,
-        $cordovaGoogleAnalytics,
         ctrl,
         BankManager,
         BankModel,
         InvoiceManager,
-        mockMaintenanceState,
         mockStateParams,
         mockMaintenance,
         mockGlobals = {
@@ -110,9 +108,8 @@
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
-            inject(function ($controller, $rootScope, $q, _moment_, _BankModel_, appGlobals, CommonService) {
+            inject(function ($controller, $rootScope, $q, _moment_, _BankModel_, appGlobals, CommonService, PaymentMaintenanceDetailsModel) {
 
                 _ = CommonService._;
                 moment = _moment_;
@@ -121,33 +118,21 @@
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
-                mockMaintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
+                mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, appGlobals.PAYMENT_MAINTENANCE.STATES);
                 mockStateParams = {
-                    maintenanceState: mockMaintenanceState
-                };
-                mockMaintenance = {
-                    state : mockMaintenanceState,
-                    states: appGlobals.PAYMENT_MAINTENANCE.STATES,
-                    go    : jasmine.createSpy("go")
+                    maintenanceState: mockMaintenance.state
                 };
 
                 ctrl = $controller("PaymentMaintenanceFormController", {
-                    $scope                 : $scope,
-                    $stateParams           : mockStateParams,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    hasMultipleBanks       : mockHasMultipleBanks,
-                    maintenance            : mockMaintenance,
-                    payment                : mockPayment,
-                    globals                : mockGlobals,
-                    BankManager            : BankManager,
-                    InvoiceManager         : InvoiceManager,
-                    UserManager            : UserManager
-                });
-
-                //setup spies:
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
+                    $scope            : $scope,
+                    $stateParams      : mockStateParams,
+                    hasMultipleBanks  : mockHasMultipleBanks,
+                    maintenanceDetails: mockMaintenance,
+                    payment           : mockPayment,
+                    globals           : mockGlobals,
+                    BankManager       : BankManager,
+                    InvoiceManager    : InvoiceManager,
+                    UserManager       : UserManager
                 });
             });
 
@@ -156,10 +141,7 @@
         });
 
         it("should set the config to the expected value", function () {
-            expect(ctrl.config).toEqual(angular.extend({},
-                mockGlobals.PAYMENT_MAINTENANCE_FORM.CONFIG,
-                getConfig(mockMaintenance)
-            ));
+            expect(ctrl.config).toEqual(getConfig(mockMaintenance));
         });
 
         it("should set backStateOverride to the expected value", function () {
@@ -201,16 +183,12 @@
                 expect(ctrl.invoiceSummary).toEqual(mockCurrentInvoiceSummary);
             });
 
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(getConfig(mockMaintenance).ANALYTICS.pageName);
-            });
-
         });
 
     });
 
     function getBackStateOverride(maintenance) {
-        if (maintenance.state === maintenance.states.ADD) {
+        if (maintenance.state === maintenance.getStates().ADD) {
             return "landing";
         }
 
@@ -218,13 +196,13 @@
     }
 
     function getConfig(maintenance) {
-        switch (maintenance.state) {
-            case maintenance.states.ADD:
-                return mockGlobals.PAYMENT_MAINTENANCE_FORM.ADD.CONFIG;
-            case maintenance.states.UPDATE:
-                return mockGlobals.PAYMENT_MAINTENANCE_FORM.UPDATE.CONFIG;
-            default:
-                return null;
+        var constants = mockGlobals.PAYMENT_MAINTENANCE_FORM;
+
+        if (_.has(constants, maintenance.state)) {
+            return angular.extend({}, constants.CONFIG, constants[maintenance.state].CONFIG);
+        }
+        else {
+            return constants.CONFIG;
         }
     }
 

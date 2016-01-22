@@ -22,6 +22,9 @@
                     templateUrl: "app/components/card/templates/cardList.html",
                     controller : "CardListController as vm"
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.CARD_LIST.CONFIG.ANALYTICS.pageName);
             }
         });
 
@@ -45,6 +48,9 @@
                         }
                     }
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.CARD_DETAIL.CONFIG.ANALYTICS.pageName);
             }
         });
 
@@ -62,6 +68,9 @@
                             CommonService.loadingComplete();
                         });
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.CARD_CHANGE_STATUS.CONFIG.ANALYTICS.pageName);
             }
         });
 
@@ -84,6 +93,9 @@
                     templateUrl: "app/components/card/templates/cardChangeStatusConfirmation.html",
                     controller : "CardChangeStatusConfirmationController as vm"
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG.ANALYTICS.pageName);
             }
         });
 
@@ -130,6 +142,9 @@
                     templateUrl: "app/components/card/templates/cardReissue.html",
                     controller : "CardReissueFormController as vm"
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.CARD_REISSUE.CONFIG.ANALYTICS.pageName);
             }
         });
 
@@ -141,6 +156,9 @@
                     templateUrl: "app/components/card/templates/cardReissueShippingMethod.input.html",
                     controller : "CardReissueShippingMethodInputController as vm"
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.CARD_REISSUE_INPUTS.SHIPPING_METHOD.CONFIG.ANALYTICS.pageName);
             }
         });
 
@@ -152,6 +170,9 @@
                     templateUrl: "app/components/card/templates/cardReissueReason.input.html",
                     controller : "CardReissueReasonInputController as vm"
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG.ANALYTICS.pageName);
             }
         });
 
@@ -163,6 +184,9 @@
                     templateUrl: "app/components/card/templates/cardReissueConfirmation.html",
                     controller : "CardReissueConfirmationController as vm"
                 }
+            },
+            onEnter: function(globals, AnalyticsUtil) {
+                AnalyticsUtil.trackView(globals.CARD_REISSUE_CONFIRMATION.CONFIG.ANALYTICS.pageName);
             }
         });
     }

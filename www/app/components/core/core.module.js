@@ -4,7 +4,7 @@
     //TODO - Move as much logic out of here as possible
 
     // jshint maxparams:7
-    function coreRun($cordovaGoogleAnalytics, $rootScope, $state, $ionicPlatform, globals, AuthenticationManager, CommonService) {
+    function coreRun($rootScope, $state, $ionicPlatform, globals, AnalyticsUtil, AuthenticationManager, CommonService) {
 
         function isExitState(stateName) {
             return "app.exit" === stateName;
@@ -63,9 +63,7 @@
             CommonService.goToBackState();
         }, 101);
 
-        CommonService.waitForCordovaPlatform(function () {
-            $cordovaGoogleAnalytics.startTrackerWithId(globals.GOOGLE_ANALYTICS.TRACKING_ID);
-        });
+        AnalyticsUtil.startTrackerWithId(globals.GOOGLE_ANALYTICS.TRACKING_ID);
     }
 
     angular.module("app.components.core", [])

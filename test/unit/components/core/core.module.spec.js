@@ -63,6 +63,9 @@
                         NO_BALANCE_DUE           : "No Current Balance",
                         PAYMENT_ALREADY_SCHEDULED: "Payment Already Scheduled"
                     }
+                },
+                GOOGLE_ANALYTICS: {
+                    TRACKING_ID: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 }
             },
             AuthenticationManager,

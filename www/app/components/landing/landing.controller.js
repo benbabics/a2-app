@@ -2,11 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:8
+    // jshint maxparams:6
 
     /* @ngInject */
-    function LandingController($scope, $ionicHistory, currentInvoiceSummary, $cordovaGoogleAnalytics,
-                               globals, scheduledPaymentsCount, CommonService, UserManager) {
+    function LandingController($scope, $ionicHistory, currentInvoiceSummary, globals, scheduledPaymentsCount, UserManager) {
 
         var vm = this;
         vm.config = globals.LANDING.CONFIG;
@@ -36,10 +35,6 @@
             vm.scheduledPaymentsCount = scheduledPaymentsCount;
 
             vm.chart = getChartConfiguration();
-
-            CommonService.waitForCordovaPlatform(function () {
-                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
-            });
         }
 
         function getChartConfiguration() {

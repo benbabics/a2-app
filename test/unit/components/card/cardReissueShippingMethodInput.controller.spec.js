@@ -5,7 +5,6 @@
         $rootScope,
         $scope,
         $ionicHistory,
-        $cordovaGoogleAnalytics,
         AddressModel,
         ShippingMethodModel,
         mockCardReissueDetails,
@@ -33,7 +32,6 @@
 
             //mock dependencies:
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
 
             inject(function ($controller, _$rootScope_, _AddressModel_, _ShippingMethodModel_, $q,
                              CardReissueModel, CommonService, AccountModel, CardModel, ShippingCarrierModel) {
@@ -46,17 +44,10 @@
                 mockCardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
 
                 ctrl = $controller("CardReissueShippingMethodInputController", {
-                    $scope                 : $scope,
-                    $ionicHistory          : $ionicHistory,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    globals                : mockGlobals,
-                    cardReissueDetails     : mockCardReissueDetails
-                });
-
-                //setup spies
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
+                    $scope            : $scope,
+                    $ionicHistory     : $ionicHistory,
+                    globals           : mockGlobals,
+                    cardReissueDetails: mockCardReissueDetails
                 });
             });
 
@@ -68,17 +59,6 @@
 
         it("should set config to the expected constant values", function () {
             expect(ctrl.config).toEqual(mockGlobals.CARD_REISSUE_INPUTS.SHIPPING_METHOD.CONFIG);
-        });
-
-        describe("has a beforeEnter function that", function () {
-
-            beforeEach(function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
-            });
         });
 
         describe("has a confirmSelection function that", function () {

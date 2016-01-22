@@ -18,7 +18,7 @@
      */
 
     /* @ngInject */
-    function wexAnalyticsTrackEvent($cordovaGoogleAnalytics, CommonService) {
+    function wexAnalyticsTrackEvent(AnalyticsUtil, CommonService) {
         var directive = {
                 restrict: "A",
                 link    : link
@@ -28,17 +28,11 @@
         return directive;
         //////////////////////
 
-        function trackEvent(category, action, label, value) {
-            CommonService.waitForCordovaPlatform(function () {
-                $cordovaGoogleAnalytics.trackEvent(category, action, label, value);
-            });
-        }
-
         function link(scope, elem, attrs) {
             var eventArgs = attrs.wexAnalyticsTrackEvent ? scope.$eval(attrs.wexAnalyticsTrackEvent) : null;
 
             if (_.isArray(eventArgs) && _.size(eventArgs) >= 2) {
-                elem.on("click", _.partial(_.spread(trackEvent), eventArgs));
+                elem.on("click", _.partial(_.spread(AnalyticsUtil.trackEvent), eventArgs));
             }
             else {
                 throw new Error("Malformed analytics tracking event arguments: " + eventArgs);

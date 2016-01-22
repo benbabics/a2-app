@@ -4,7 +4,6 @@
     var ctrl,
         $rootScope,
         $scope,
-        $cordovaGoogleAnalytics,
         mockCardReissueDetails,
         mockGlobals = {
             "CARD_REISSUE_CONFIRMATION": {
@@ -32,9 +31,6 @@
             module("app.components.card");
             module("app.components.account");
 
-            //mock dependencies:
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
-
             inject(function ($controller, _$rootScope_, $q, AddressModel, ShippingMethodModel,
                              CardReissueModel, CommonService, AccountModel, CardModel, ShippingCarrierModel) {
                 $rootScope = _$rootScope_;
@@ -44,16 +40,9 @@
                 mockCardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
 
                 ctrl = $controller("CardReissueConfirmationController", {
-                    $scope                 : $scope,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    globals                : mockGlobals,
-                    cardReissueDetails     : mockCardReissueDetails
-                });
-
-                //setup spies
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
+                    $scope            : $scope,
+                    globals           : mockGlobals,
+                    cardReissueDetails: mockCardReissueDetails
                 });
             });
 
@@ -65,17 +54,6 @@
 
         it("should set config to the expected constant values", function () {
             expect(ctrl.config).toEqual(mockGlobals.CARD_REISSUE_CONFIRMATION.CONFIG);
-        });
-
-        describe("has a beforeEnter function that", function () {
-
-            beforeEach(function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
-            });
         });
     });
 })();

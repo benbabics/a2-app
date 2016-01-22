@@ -30,12 +30,12 @@
             <span class="block_align black">
                 {{::vm.config.amount}}
             </span>
-            <div ng-click="vm.maintenance.go('payment.maintenance.input.amount')">
+            <div ng-click="vm.maintenanceDetails.go('payment.maintenance.input.amount')">
                 <span class="active-link">
                     {{vm.payment.amount <= 0 ? vm.config.enterAmount : (vm.payment.amount | currency)}}
                 </span>
                 <span class="button button-icon icon ion-ios-arrow-forward chevron_align"
-                      ng-click="vm.maintenance.go('payment.maintenance.input.amount')">
+                      ng-click="vm.maintenanceDetails.go('payment.maintenance.input.amount')">
                 </span>
             </div>
         </div>
@@ -67,7 +67,7 @@
                 </span>
             </div>
             <div ng-if="vm.hasMultipleBanks" class="right-align shrink"
-                 ng-click="vm.maintenance.go('payment.maintenance.input.bankAccount')">
+                 ng-click="vm.maintenanceDetails.go('payment.maintenance.input.bankAccount')">
                 <span class="active-link ellipsis">
                     {{vm.payment.bankAccount.getDisplayName()}}
                 </span>
@@ -80,7 +80,7 @@
             <button id="makePaymentButton"
                     class="button button-block button-submit button-width"
                     ng-disabled="vm.payment.amount <= 0"
-                    ng-click="vm.maintenance.go('payment.maintenance.summary')">{{::vm.config.submitButton}}</button>
+                    ng-click="vm.maintenanceDetails.go('payment.maintenance.summary')">{{::vm.config.submitButton}}</button>
         </div>
     </ion-content>
 </ion-view>

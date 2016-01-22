@@ -43,22 +43,18 @@
         describe("when the maintenance state is ADD", function () {
 
             beforeEach(function () {
-                inject(function($controller, globals) {
-                    mockMaintenanceState = globals.PAYMENT_MAINTENANCE.STATES.ADD;
-                    mockMaintenance = {
-                        state : mockMaintenanceState,
-                        states: globals.PAYMENT_MAINTENANCE.STATES,
-                        go    : jasmine.createSpy("go")
-                    };
+                inject(function($controller, globals, PaymentMaintenanceDetailsModel) {
+                    mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, globals.PAYMENT_MAINTENANCE.STATES);
+                    mockMaintenance.state = mockMaintenanceState = globals.PAYMENT_MAINTENANCE.STATES.ADD;
 
                     jasmine.clock().mockDate();
 
                     ctrl = $controller("PaymentMaintenanceController", {
-                        $scope        : $scope,
-                        InvoiceManager: InvoiceManager,
-                        defaultBank   : mockBank,
-                        payment       : mockPayment,
-                        maintenance   : mockMaintenance
+                        $scope            : $scope,
+                        InvoiceManager    : InvoiceManager,
+                        defaultBank       : mockBank,
+                        payment           : mockPayment,
+                        maintenanceDetails: mockMaintenance
                     });
                 });
             });
@@ -80,23 +76,19 @@
             var originalPayment;
 
             beforeEach(function () {
-                inject(function ($controller, globals, PaymentModel) {
+                inject(function ($controller, globals, PaymentMaintenanceDetailsModel, PaymentModel) {
                     originalPayment = new PaymentModel();
                     originalPayment.set(mockPayment);
 
-                    mockMaintenanceState = globals.PAYMENT_MAINTENANCE.STATES.UPDATE;
-                    mockMaintenance = {
-                        state : mockMaintenanceState,
-                        states: globals.PAYMENT_MAINTENANCE.STATES,
-                        go    : jasmine.createSpy("go")
-                    };
+                    mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, globals.PAYMENT_MAINTENANCE.STATES);
+                    mockMaintenance.state = mockMaintenanceState = globals.PAYMENT_MAINTENANCE.STATES.UPDATE;
 
                     ctrl = $controller("PaymentMaintenanceController", {
-                        $scope        : $scope,
-                        InvoiceManager: InvoiceManager,
-                        defaultBank   : mockBank,
-                        payment       : mockPayment,
-                        maintenance   : mockMaintenance
+                        $scope            : $scope,
+                        InvoiceManager    : InvoiceManager,
+                        defaultBank       : mockBank,
+                        payment           : mockPayment,
+                        maintenanceDetails: mockMaintenance
                     });
                 });
             });

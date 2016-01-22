@@ -3,9 +3,7 @@
 
     var _,
         $scope,
-        $cordovaGoogleAnalytics,
         ctrl,
-        mockMaintenanceState,
         mockStateParams,
         mockMaintenance,
         mockGlobals = {
@@ -62,49 +60,31 @@
                 });
             });
 
-            //mock dependencies:
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
-
-            inject(function ($controller, $rootScope, $q, appGlobals, CommonService) {
+            inject(function ($controller, $rootScope, $q, appGlobals, CommonService, PaymentMaintenanceDetailsModel) {
 
                 _ = CommonService._;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
-                mockMaintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
+                mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, appGlobals.PAYMENT_MAINTENANCE.STATES);
                 mockStateParams = {
-                    maintenanceState: mockMaintenanceState
-                };
-                mockMaintenance = {
-                    state : mockMaintenanceState,
-                    states: appGlobals.PAYMENT_MAINTENANCE.STATES,
-                    go    : jasmine.createSpy("go")
+                    maintenanceState: mockMaintenance.state
                 };
 
                 ctrl = $controller("PaymentMaintenanceConfirmationController", {
-                    $scope                 : $scope,
-                    $stateParams           : mockStateParams,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    maintenance            : mockMaintenance,
-                    payment                : mockPayment,
-                    globals                : mockGlobals
-                });
-
-                //setup spies:
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
+                    $scope            : $scope,
+                    $stateParams      : mockStateParams,
+                    maintenanceDetails: mockMaintenance,
+                    payment           : mockPayment,
+                    globals           : mockGlobals
                 });
 
             });
         });
 
         it("should set the config to the expected value", function () {
-            expect(ctrl.config).toEqual(angular.extend({},
-                mockGlobals.PAYMENT_MAINTENANCE_CONFIRMATION.CONFIG,
-                getConfig(mockMaintenance)
-            ));
+            expect(ctrl.config).toEqual(getConfig(mockMaintenance));
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -116,22 +96,18 @@
             it("should set payment to the expected value", function () {
                 expect(ctrl.payment).toEqual(mockPayment);
             });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(getConfig(mockMaintenance).ANALYTICS.pageName);
-            });
         });
 
     });
 
     function getConfig(maintenance) {
-        switch (maintenance.state) {
-            case maintenance.states.ADD:
-                return mockGlobals.PAYMENT_MAINTENANCE_CONFIRMATION.ADD.CONFIG;
-            case maintenance.states.UPDATE:
-                return mockGlobals.PAYMENT_MAINTENANCE_CONFIRMATION.UPDATE.CONFIG;
-            default:
-                return null;
+        var constants = mockGlobals.PAYMENT_MAINTENANCE_CONFIRMATION;
+
+        if (_.has(constants, maintenance.state)) {
+            return angular.extend({}, constants.CONFIG, constants[maintenance.state].CONFIG);
+        }
+        else {
+            return constants.CONFIG;
         }
     }
 

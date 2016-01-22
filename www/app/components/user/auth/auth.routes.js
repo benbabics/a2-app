@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    // jshint maxparams:5
+
     /* @ngInject */
     function configureRoutes($stateProvider) {
 
@@ -18,7 +20,7 @@
                     controller: "LoginController as vm"
                 }
             },
-            onEnter: function($cordovaSplashscreen, $interval, CommonService) {
+            onEnter: function($cordovaSplashscreen, $interval, globals, AnalyticsUtil, CommonService) {
                 //log out the user
                 CommonService.logOut();
 
@@ -28,6 +30,8 @@
                         $cordovaSplashscreen.hide();
                     }, 2000, 1);
                 });
+
+                AnalyticsUtil.trackView(globals.USER_LOGIN.CONFIG.ANALYTICS.pageName);
             }
         });
     }

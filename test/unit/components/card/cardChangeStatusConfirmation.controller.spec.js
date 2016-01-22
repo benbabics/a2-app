@@ -4,7 +4,6 @@
     var ctrl,
         $rootScope,
         $scope,
-        $cordovaGoogleAnalytics,
         sharedGlobals,
         mockCard,
         mockGlobals = {
@@ -35,9 +34,6 @@
             module("app.shared");
             module("app.components.card");
 
-            //setup mocks:
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackView"]);
-
             inject(function ($controller, _$rootScope_, $q, _sharedGlobals_, CardModel, CommonService) {
                 $rootScope = _$rootScope_;
                 sharedGlobals = _sharedGlobals_;
@@ -47,17 +43,11 @@
                 mockCard = TestUtils.getRandomCard(CardModel);
 
                 ctrl = $controller("CardChangeStatusConfirmationController", {
-                    $scope                 : $scope,
-                    $cordovaGoogleAnalytics: $cordovaGoogleAnalytics,
-                    globals                : mockGlobals,
-                    card                   : mockCard
+                    $scope : $scope,
+                    globals: mockGlobals,
+                    card   : mockCard
                 });
 
-                //setup mocks:
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                    //just execute the callback directly
-                    return $q.when((callback || function() {})());
-                });
             });
 
         });
@@ -68,17 +58,6 @@
 
         it("should set config to the expected constant values", function () {
             expect(ctrl.config).toEqual(mockConfig);
-        });
-
-        describe("has a beforeEnter function that", function () {
-
-            beforeEach(function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
-            });
-
-            it("should call $cordovaGoogleAnalytics.trackView", function () {
-                expect($cordovaGoogleAnalytics.trackView).toHaveBeenCalledWith(mockConfig.ANALYTICS.pageName);
-            });
         });
 
         describe("has a getConfirmationMessage function that", function () {

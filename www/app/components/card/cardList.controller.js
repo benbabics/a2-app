@@ -5,7 +5,7 @@
     // jshint maxparams:7
 
     /* @ngInject */
-    function CardListController($cordovaGoogleAnalytics, $scope, globals, CardManager, CommonService, Logger, UserManager) {
+    function CardListController($scope, globals, AnalyticsUtil, CardManager, CommonService, Logger, UserManager) {
 
         var _ = CommonService._,
             vm = this,
@@ -29,8 +29,6 @@
         //////////////////////
         // Controller initialization
         function activate() {
-            // set event listeners
-            $scope.$on("$ionicView.beforeEnter", beforeEnter);
         }
 
         function applySearchFilter() {
@@ -39,16 +37,8 @@
 
                 resetSearch();
 
-                CommonService.waitForCordovaPlatform(function () {
-                    _.spread($cordovaGoogleAnalytics.trackEvent)(vm.config.ANALYTICS.events.searchSubmitted);
-                });
+                _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events.searchSubmitted);
             }
-        }
-
-        function beforeEnter() {
-            CommonService.waitForCordovaPlatform(function () {
-                $cordovaGoogleAnalytics.trackView(vm.config.ANALYTICS.pageName);
-            });
         }
 
         function getActiveSearchFilter() {
