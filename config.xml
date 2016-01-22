@@ -19,10 +19,6 @@
     <content src="index.html" />
     <access origin="*" />
 
-    <!-- Allow links to web pages to open in a browser -->
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-
     <!-- Allow links to open mail -->
     <allow-intent href="mailto:*" />
 

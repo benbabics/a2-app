@@ -72,8 +72,6 @@
     <hook src="scripts/changeMavenRepos.js" type="after_prepare" />
     <content src="index.html" />
     <access origin="*" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
     <allow-intent href="mailto:*" />
     <preference name="Orientation" value="portrait" />
     <preference name="webviewbounce" value="false" />
