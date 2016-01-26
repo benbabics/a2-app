@@ -86,6 +86,13 @@
     };
 
     /**
+     * Configuration API
+     */
+    sharedGlobals.CONFIGURATION_API = {
+        BASE_URL: "@@@STRING_REPLACE_APP_URL_CONFIGURATION_API@@@"
+    };
+
+    /**
      * Payment Constants
      */
     sharedGlobals.PAYMENT = {

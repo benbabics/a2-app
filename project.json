@@ -1,63 +1,67 @@
 {
-  "all": {
-    "auth": {
-      "login_state": "user.auth.login"
+    "all": {
+        "auth": {
+            "login_state": "user.auth.login"
+        }
+    },
+    "dev": {
+        "app_urls": {
+            "am_api": "http://127.0.0.1:20080",
+            "auth_api": "http://127.0.0.1:26080",
+            "configuration_api": "http://127.0.0.1:29080"
+        },
+        "auth": {
+            "client_id": "mobileAccountManagement",
+            "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+        },
+        "content_security_policy": "default-src * 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+        "whitelist_domains": ["*"],
+        "google_analytics_tracking_id": "UA-71223382-2",
+        "logging_enabled": "true"
+    },
+    "dit": {
+        "app_urls": {
+            "am_api": "http://pwm-wex-178.wrightexpress.com:20080",
+            "auth_api": "http://pwm-wex-178.wrightexpress.com:26080",
+            "configuration_api": "http://pwm-wex-178.wrightexpress.com:29080"
+        },
+        "auth": {
+            "client_id": "mobileAccountManagement",
+            "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+        },
+        "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://pwm-wex-178.wrightexpress.com:* https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+        "whitelist_domains": ["pwm-wex-178.wrightexpress.com", "www.google.com"],
+        "google_analytics_tracking_id": "UA-71223382-2",
+        "logging_enabled": "true"
+    },
+    "stage": {
+        "app_urls": {
+            "am_api": "https://uat.account.wexmobile.com/maintenance",
+            "auth_api": "https://uat.account.wexmobile.com/authAPI",
+            "configuration_api": "https://uat.account.wexmobile.com/configurationAPI"
+        },
+        "auth": {
+            "client_id": "mobileAccountManagement",
+            "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+        },
+        "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://uat.account.wexmobile.com https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+        "whitelist_domains": ["uat.account.wexmobile.com", "www.google.com"],
+        "google_analytics_tracking_id": "UA-71223382-1",
+        "logging_enabled": "true"
+    },
+    "prod": {
+        "app_urls": {
+            "am_api": "https://account.wexmobile.com/maintenance",
+            "auth_api": "https://account.wexmobile.com/authAPI",
+            "configuration_api": "https://account.wexmobile.com/configurationAPI"
+        },
+        "auth": {
+            "client_id": "mobileAccountManagement",
+            "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+        },
+        "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://account.wexmobile.com https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+        "whitelist_domains": ["account.wexmobile.com", "www.google.com"],
+        "google_analytics_tracking_id": "UA-4082503-34",
+        "logging_enabled": "false"
     }
-  },
-  "dev": {
-    "app_urls": {
-      "am_api": "http://127.0.0.1:20080",
-      "auth_api": "http://127.0.0.1:26080"
-    },
-    "auth": {
-      "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
-    },
-    "content_security_policy": "default-src * 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
-    "whitelist_domains": ["*"],
-    "google_analytics_tracking_id": "UA-71223382-2",
-    "logging_enabled": "true"
-  },
-  "dit": {
-    "app_urls": {
-      "am_api": "http://pwm-wex-178.wrightexpress.com:20080",
-      "auth_api": "http://pwm-wex-178.wrightexpress.com:26080"
-    },
-    "auth": {
-      "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
-    },
-    "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://pwm-wex-178.wrightexpress.com:* https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
-    "whitelist_domains": ["pwm-wex-178.wrightexpress.com", "www.google.com"],
-    "google_analytics_tracking_id": "UA-71223382-2",
-    "logging_enabled": "true"
-  },
-  "stage": {
-    "app_urls": {
-      "am_api": "https://uat.account.wexmobile.com/maintenance",
-      "auth_api": "https://uat.account.wexmobile.com/authAPI"
-    },
-    "auth": {
-      "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
-    },
-    "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://uat.account.wexmobile.com https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
-    "whitelist_domains": ["uat.account.wexmobile.com", "www.google.com"],
-    "google_analytics_tracking_id": "UA-71223382-1",
-    "logging_enabled": "true"
-  },
-  "prod": {
-    "app_urls": {
-      "am_api": "https://account.wexmobile.com/maintenance",
-      "auth_api": "https://account.wexmobile.com/authAPI"
-    },
-    "auth": {
-      "client_id": "mobileAccountManagement",
-      "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
-    },
-    "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://account.wexmobile.com https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
-    "whitelist_domains": ["account.wexmobile.com", "www.google.com"],
-    "google_analytics_tracking_id": "UA-4082503-34",
-    "logging_enabled": "false"
-  }
 }

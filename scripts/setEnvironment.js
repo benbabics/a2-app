@@ -164,6 +164,9 @@ module.exports = function(context) {
                     console.log(LOG_PREFIX + "In " + targetFile + " - setting AUTH_API URL to: " + properties.app_urls.auth_api);
                     this.replaceStringInFile(targetFile, "@@@STRING_REPLACE_APP_URL_AUTH_API@@@", properties.app_urls.auth_api);
 
+                    console.log(LOG_PREFIX + "In " + targetFile + " - setting CONFIGURATION_API URL to: " + properties.app_urls.configuration_api);
+                    this.replaceStringInFile(targetFile, "@@@STRING_REPLACE_APP_URL_CONFIGURATION_API@@@", properties.app_urls.configuration_api);
+
                     console.log(LOG_PREFIX + "In " + targetFile + " - setting Client ID to: " + properties.auth.client_id);
                     this.replaceStringInFile(targetFile, "@@@STRING_REPLACE_AUTH_CLIENT_ID@@@", properties.auth.client_id);
                     this.replaceStringInFile(targetFile, "@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@", properties.auth.client_secret);
