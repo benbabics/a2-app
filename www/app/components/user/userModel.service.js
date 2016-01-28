@@ -18,7 +18,7 @@
             angular.extend(this, userResource);
 
             if (!userResource.brand) {
-                this.brand = "generic";
+                this.brand = globals.BRAND.GENERIC;
             }
 
             this.company = new UserAccountModel();

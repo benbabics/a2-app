@@ -89,7 +89,19 @@
      * Configuration API
      */
     sharedGlobals.CONFIGURATION_API = {
-        BASE_URL: "@@@STRING_REPLACE_APP_URL_CONFIGURATION_API@@@"
+        BASE_URL: "@@@STRING_REPLACE_APP_URL_CONFIGURATION_API@@@",
+        BRANDS  : {
+            "BASE"  : "brands",
+            "ASSETS": "assets"
+        }
+    };
+
+    /**
+     * Brand Constants
+     */
+    sharedGlobals.BRAND = {
+        GENERIC: "GENERIC",
+        WEX    : "WEX"
     };
 
     /**

@@ -5,6 +5,7 @@
 
         var _,
             user,
+            BRAND,
             ONLINE_APPLICATION;
 
         beforeEach(function () {
@@ -14,6 +15,7 @@
 
             inject(function (sharedGlobals, CommonService, UserModel) {
                 _ = CommonService._;
+                BRAND = sharedGlobals.BRAND;
                 ONLINE_APPLICATION = sharedGlobals.USER.ONLINE_APPLICATION;
                 user = new UserModel();
             });
@@ -80,28 +82,28 @@
                 }
             });
 
-            it("should set the UserModel brand with 'generic' when the passed in userResource object is empty", function () {
+            it("should set the UserModel brand with 'GENERIC' when the passed in userResource object is empty", function () {
                 userResource.brand = "";
 
                 user.set(userResource);
 
-                expect(user.brand).toEqual("generic");
+                expect(user.brand).toEqual(BRAND.GENERIC);
             });
 
-            it("should set the UserModel brand with 'generic' when the passed in userResource object is null", function () {
+            it("should set the UserModel brand with 'GENERIC' when the passed in userResource object is null", function () {
                 userResource.brand = null;
 
                 user.set(userResource);
 
-                expect(user.brand).toEqual("generic");
+                expect(user.brand).toEqual(BRAND.GENERIC);
             });
 
-            it("should set the UserModel brand with 'generic' when the passed in userResource object is undefined", function () {
+            it("should set the UserModel brand with 'GENERIC' when the passed in userResource object is undefined", function () {
                 delete userResource.brand;
 
                 user.set(userResource);
 
-                expect(user.brand).toEqual("generic");
+                expect(user.brand).toEqual(BRAND.GENERIC);
             });
 
         });
