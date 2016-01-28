@@ -9,9 +9,12 @@
         $cordovaKeyboard,
         AnalyticsUtil,
         authenticateDeferred,
+        brandAssets,
         ctrl,
+        fetchBrandAssetsDeferred,
         fetchCurrentUserDeferred,
         AuthenticationManager,
+        BrandManager,
         CommonService,
         UserManager,
         mockGlobals = {
@@ -87,22 +90,25 @@
 
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate"]);
+            BrandManager = jasmine.createSpyObj("BrandManager", ["fetchBrandAssets"]);
             UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
             $state = jasmine.createSpyObj("state", ["go"]);
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["setUserId", "trackEvent", "trackView"]);
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _CommonService_, UserAccountModel, UserModel,
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _CommonService_, BrandAssetModel, UserAccountModel, UserModel,
                              globals) {
                 $ionicHistory = _$ionicHistory_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
                 fetchCurrentUserDeferred = $q.defer();
+                fetchBrandAssetsDeferred = $q.defer();
                 $rootScope = _$rootScope_;
                 CommonService = _CommonService_;
 
                 mockConfig.ANALYTICS.errorEvents = globals.USER_LOGIN.CONFIG.ANALYTICS.errorEvents;
                 userDetails = TestUtils.getRandomUser(UserModel, UserAccountModel, globals.USER.ONLINE_APPLICATION);
+                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
 
                 ctrl = $controller("LoginController", {
                     $scope                 : $scope,
@@ -112,6 +118,7 @@
                     $cordovaKeyboard       : $cordovaKeyboard,
                     globals                : mockGlobals,
                     AuthenticationManager  : AuthenticationManager,
+                    BrandManager           : BrandManager,
                     CommonService          : CommonService,
                     UserManager            : UserManager
                 });
@@ -309,7 +316,7 @@
                 describe("when the User Details is fetched successfully", function () {
 
                     beforeEach(function () {
-                        spyOn($ionicHistory, "nextViewOptions");
+                        BrandManager.fetchBrandAssets.and.returnValue(fetchBrandAssetsDeferred.promise);
 
                         //return a promise object and resolve it
                         fetchCurrentUserDeferred.resolve(userDetails);
@@ -320,20 +327,60 @@
                         expect(AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
                     });
 
-                    it("should call disable backing up to the login page", function () {
-                        expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
-                    });
-
-                    it("should NOT have an error message", function () {
-                        expect(ctrl.globalError).toBeFalsy();
-                    });
-
-                    it("should navigate to the landing page", function () {
-                        expect($state.go).toHaveBeenCalledWith("landing");
-                    });
-
                     it("should call AnalyticsUtil.trackEvent with the expected event", function () {
                         verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
+                    });
+
+                    describe("when the Brand Assets are fetched successfully", function () {
+
+                        beforeEach(function () {
+                            spyOn($ionicHistory, "nextViewOptions");
+
+                            //resolve the promise
+                            fetchBrandAssetsDeferred.resolve(brandAssets);
+                            $scope.$digest();
+                        });
+
+                        it("should call BrandManager.fetchBrandAssets", function () {
+                            expect(BrandManager.fetchBrandAssets).toHaveBeenCalledWith(userDetails.brand);
+                        });
+
+                        it("should call disable backing up to the login page", function () {
+                            expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
+                        });
+
+                        it("should NOT have an error message", function () {
+                            expect(ctrl.globalError).toBeFalsy();
+                        });
+
+                        it("should navigate to the landing page", function () {
+                            expect($state.go).toHaveBeenCalledWith("landing");
+                        });
+
+                    });
+
+                    describe("when the Brand Assets are NOT fetched successfully", function () {
+
+                        var errorObjectArg = new Error("Something bad happened");
+
+                        beforeEach(function () {
+                            //reject with an error message
+                            fetchBrandAssetsDeferred.reject(errorObjectArg);
+                            $scope.$digest();
+                        });
+
+                        it("should call CommonService.logOut", function () {
+                            expect(CommonService.logOut).toHaveBeenCalledWith();
+                        });
+
+                        it("should have an error message", function () {
+                            expect(ctrl.globalError).toEqual(mockConfig.serverErrors.DEFAULT);
+                        });
+
+                        it("should NOT navigate away from the login page", function () {
+                            expect($state.go).not.toHaveBeenCalled();
+                        });
+
                     });
 
                 });
@@ -346,6 +393,10 @@
                         //reject with an error message
                         fetchCurrentUserDeferred.reject(errorObjectArg);
                         $scope.$digest();
+                    });
+
+                    it("should NOT call BrandManager.fetchBrandAssets", function () {
+                        expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
                     });
 
                     it("should call CommonService.logOut", function () {
@@ -382,6 +433,10 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
+                it("should NOT call BrandManager.fetchBrandAssets", function () {
+                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                });
+
                 it("should call CommonService.logOut", function () {
                     expect(CommonService.logOut).toHaveBeenCalledWith();
                 });
@@ -412,6 +467,10 @@
 
                 it("should NOT call UserManager.fetchCurrentUserDetails", function () {
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
+                });
+
+                it("should NOT call BrandManager.fetchBrandAssets", function () {
+                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
                 });
 
                 it("should call CommonService.logOut", function () {
@@ -446,6 +505,10 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
+                it("should NOT call BrandManager.fetchBrandAssets", function () {
+                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                });
+
                 it("should call CommonService.logOut", function () {
                     expect(CommonService.logOut).toHaveBeenCalledWith();
                 });
@@ -476,6 +539,10 @@
 
                 it("should NOT call UserManager.fetchCurrentUserDetails", function () {
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
+                });
+
+                it("should NOT call BrandManager.fetchBrandAssets", function () {
+                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
                 });
 
                 it("should call CommonService.logOut", function () {
@@ -510,6 +577,10 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
+                it("should NOT call BrandManager.fetchBrandAssets", function () {
+                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                });
+
                 it("should call CommonService.logOut", function () {
                     expect(CommonService.logOut).toHaveBeenCalledWith();
                 });
@@ -542,6 +613,10 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
+                it("should NOT call BrandManager.fetchBrandAssets", function () {
+                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                });
+
                 it("should call CommonService.logOut", function () {
                     expect(CommonService.logOut).toHaveBeenCalledWith();
                 });
@@ -572,6 +647,10 @@
 
                 it("should NOT call UserManager.fetchCurrentUserDetails", function () {
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
+                });
+
+                it("should NOT call BrandManager.fetchBrandAssets", function () {
+                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
                 });
 
                 it("should call CommonService.logOut", function () {
