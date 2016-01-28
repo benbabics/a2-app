@@ -1,6 +1,7 @@
 "use strict";
 
 /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Service above the scroll
+// jshint maxparams:6
 
 var TestUtils = (function () {
 
@@ -10,6 +11,8 @@ var TestUtils = (function () {
             getRandomAddress                  : getRandomAddress,
             getRandomBank                     : getRandomBank,
             getRandomBoolean                  : getRandomBoolean,
+            getRandomBrandAsset               : getRandomBrandAsset,
+            getRandomBrandAssets              : getRandomBrandAssets,
             getRandomCard                     : getRandomCard,
             getRandomCardReissueDetails       : getRandomCardReissueDetails,
             getRandomDate                     : getRandomDate,
@@ -83,6 +86,27 @@ var TestUtils = (function () {
         return randomBank;
     }
 
+    function getRandomBrandAsset(BrandAssetModel) {
+        var randomBrandAsset = new BrandAssetModel();
+
+        randomBrandAsset.assetSubtypeId = getRandomStringThatIsAlphaNumeric(5);
+        randomBrandAsset.assetTypeId = getRandomStringThatIsAlphaNumeric(5);
+        randomBrandAsset.assetValue = getRandomStringThatIsAlphaNumeric(15);
+
+        return randomBrandAsset;
+    }
+
+    function getRandomBrandAssets(BrandAssetModel) {
+        var brandAssets = [],
+            numBrandAssets = getRandomInteger(1, 20);
+
+        for (var i = 0; i < numBrandAssets; ++i) {
+            brandAssets.push(getRandomBrandAsset(BrandAssetModel));
+        }
+
+        return brandAssets;
+    }
+
     function getRandomBoolean() {
         return Math.random() >= 0.5;
     }
@@ -121,7 +145,7 @@ var TestUtils = (function () {
                 for (var i = 0; i < numMethods; ++i) {
                     shippingMethod = getRandomShippingMethod(ShippingMethodModel);
 
-                    if(!createdDefault && getRandomBoolean()) {
+                    if (!createdDefault && getRandomBoolean()) {
                         shippingMethod.default = true;
 
                         createdDefault = true;
@@ -275,7 +299,7 @@ var TestUtils = (function () {
                 for (var i = 0; i < numMethods; ++i) {
                     shippingMethod = getRandomShippingMethod(ShippingMethodModel);
 
-                    if(!createdDefault && getRandomBoolean()) {
+                    if (!createdDefault && getRandomBoolean()) {
                         shippingMethod.default = true;
 
                         createdDefault = true;
