@@ -60,11 +60,16 @@
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
                     //TODO - Handle (hopefully) unlikely event that getting the GENERIC brand gets a 422 status and getting the WEX brand gets a 400 status resulting in an infinite loop
+
+                    // A 400 status code means that an illegal brand was requested so we should use the "GENERIC" brand as we do not want to show the WEX logo inappropriately
                     if (failureResponse.status === 400 && brandId !== globals.BRAND.GENERIC) {
                         Logger.warn("There was an error getting the brand assets for brandId: " + brandId + " trying GENERIC");
 
                         return fetchBrandAssets(globals.BRAND.GENERIC);
                     }
+
+                    // A 422 status code means that the brand does not have any assets so we should use the "WEX" brand
+                    // All brands that should not use the "WEX" brand must be mapped to use the "GENERIC" brand in the configuration services
                     if (failureResponse.status === 422 && brandId !== globals.BRAND.WEX) {
                         Logger.warn("There was an error getting the brand assets for brandId: " + brandId + " trying WEX");
 
