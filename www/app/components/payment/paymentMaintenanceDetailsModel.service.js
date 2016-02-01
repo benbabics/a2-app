@@ -1,7 +1,6 @@
 (function () {
     "use strict";
 
-    // jshint maxparams:4
     var PaymentMaintenanceDetailsModel = function ($state, appGlobals, CommonService, Logger) {
         var _ = CommonService._;
 
