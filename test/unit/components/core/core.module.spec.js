@@ -133,7 +133,7 @@
             expect(ionic.Platform.fullScreen).toHaveBeenCalledWith(true, true);
         });
 
-        it("should call $cordovaGoogleAnalytics.startTrackerWithId with the expected tracking ID", function () {
+        it("should call AnalyticsUtil.startTracker with the expected tracking ID", function () {
             //TODO - figure out how to test this
         });
 

@@ -280,7 +280,7 @@
             Logger = jasmine.createSpyObj("Logger", ["debug", "enabled", "error"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTrackerWithId", "trackView", "trackEvent"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTracker", "trackView", "trackEvent"]);
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             module(function ($provide, sharedGlobals) {
                 $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));

@@ -63,7 +63,7 @@
             CommonService.goToBackState();
         }, 101);
 
-        AnalyticsUtil.startTrackerWithId(globals.GOOGLE_ANALYTICS.TRACKING_ID);
+        AnalyticsUtil.startTracker(globals.GOOGLE_ANALYTICS.TRACKING_ID);
     }
 
     angular.module("app.components.core", [])

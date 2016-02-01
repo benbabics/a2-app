@@ -54,13 +54,13 @@
             });
         });
 
-        describe("has a startTrackerWithId function that", function () {
+        describe("has a startTracker function that", function () {
             var trackingId;
 
             beforeEach(function () {
                 trackingId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
-                AnalyticsUtil.startTrackerWithId(trackingId);
+                AnalyticsUtil.startTracker(trackingId);
             });
 
             it("should call CommonService.waitForCordovaPlatform", function () {

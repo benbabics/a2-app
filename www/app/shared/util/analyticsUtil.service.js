@@ -13,10 +13,10 @@
 
         // Revealed Public members
         var service = {
-            "setUserId"         : setUserId,
-            "startTrackerWithId": startTrackerWithId,
-            "trackEvent"        : trackEvent,
-            "trackView"         : trackView
+            "setUserId"   : setUserId,
+            "startTracker": startTracker,
+            "trackEvent"  : trackEvent,
+            "trackView"   : trackView
         };
 
         return service;
@@ -28,7 +28,7 @@
             });
         }
 
-        function startTrackerWithId(trackingId) {
+        function startTracker(trackingId) {
             CommonService.waitForCordovaPlatform(function () {
                 $cordovaGoogleAnalytics.startTrackerWithId(trackingId);
             });
