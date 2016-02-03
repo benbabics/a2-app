@@ -14,7 +14,7 @@
         BrandAssetModel,
         BrandsResource;
 
-    describe("A Bank Manager", function () {
+    describe("A Brand Manager", function () {
 
         beforeEach(function () {
 
