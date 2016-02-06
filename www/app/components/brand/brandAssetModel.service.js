@@ -7,6 +7,10 @@
             this.assetSubtypeId = "";
             this.assetTypeId = "";
             this.assetValue = "";
+            this.clientBrandId = "";
+            this.clientBrandName = "";
+            this.endDate = "";
+            this.startDate = "";
         }
 
         BrandAssetModel.prototype.set = function (brandAssetResource) {

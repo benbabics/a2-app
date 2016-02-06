@@ -92,6 +92,10 @@ var TestUtils = (function () {
         randomBrandAsset.assetSubtypeId = getRandomStringThatIsAlphaNumeric(5);
         randomBrandAsset.assetTypeId = getRandomStringThatIsAlphaNumeric(5);
         randomBrandAsset.assetValue = getRandomStringThatIsAlphaNumeric(15);
+        randomBrandAsset.clientBrandId = getRandomStringThatIsAlphaNumeric(15);
+        randomBrandAsset.clientBrandName = getRandomStringThatIsAlphaNumeric(15);
+        randomBrandAsset.endDate = getRandomDate();
+        randomBrandAsset.startDate = getRandomDate();
 
         return randomBrandAsset;
     }
