@@ -39,9 +39,6 @@
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
