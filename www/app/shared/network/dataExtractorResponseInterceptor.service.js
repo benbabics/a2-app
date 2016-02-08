@@ -4,11 +4,12 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function DataExtractorResponseInterceptor() {
+    function DataExtractorResponseInterceptor(CommonService) {
         // Revealed Public members
         var service = {
-            response: response
-        };
+                response: response
+            },
+            _ = CommonService._;
 
         return service;
         //////////////////////
@@ -19,18 +20,25 @@
 
             if (!_.isEmpty(responseData)) {
 
-                if (_.has(responseData, "data")) {
-                    extractedData = responseData.data;
+                if (_.isObject(responseData)) {
 
-                    if (_.has(responseData, "totalResults")) {
-                        extractedData.totalResults = responseData.totalResults;
+                    if (_.has(responseData, "data")) {
+                        extractedData = responseData.data;
+
+                        if (_.has(responseData, "totalResults")) {
+                            extractedData.totalResults = responseData.totalResults;
+                        }
                     }
+                    else {
+                        extractedData = responseData;
+                    }
+
+                    extractedData.message = responseData.message || null;
                 }
                 else {
                     extractedData = responseData;
                 }
 
-                extractedData.message = responseData.message || null;
             }
 
             return extractedData;
