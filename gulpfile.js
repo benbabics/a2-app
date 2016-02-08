@@ -14,6 +14,7 @@ var angularFilesort = require("gulp-angular-filesort");
 var inject = require("gulp-inject");
 var jshint = require("gulp-jshint");
 var jscs = require("gulp-jscs");
+var webserver = require("gulp-webserver");
 
 var sourcePaths = {
     root: {
@@ -22,13 +23,21 @@ var sourcePaths = {
         cssMin: ["./www/css/**/*min.css"],
         scripts: ["./www/app/**/*.js"],
         indexPage: ["./www/index.html"]
-    }
+    },
+    browser: ["./platforms/browser/www"]
 };
 
 var destPaths = {
     root: {
         root: "./www/",
         css: "./www/css/"
+    }
+};
+
+var config = {
+    webserver: {
+        port: 8100,
+        open: true
     }
 };
 
@@ -122,6 +131,14 @@ gulp.task("ionic-dev-build-browser", function () {
     sh.exec("ionic build browser");
 });
 
+gulp.task("ionic-dev-run-browser", function () {
+    sh.env.TARGET = "dev";
+    sh.exec("ionic build browser");
+
+    gulp.src(sourcePaths.browser)
+        .pipe(webserver(config.webserver));
+});
+
 gulp.task("ionic-dit-build", function () {
     sh.env.TARGET = "dit";
     sh.exec("ionic build");
@@ -130,6 +147,14 @@ gulp.task("ionic-dit-build", function () {
 gulp.task("ionic-dit-build-browser", function () {
     sh.env.TARGET = "dit";
     sh.exec("ionic build browser");
+});
+
+gulp.task("ionic-dit-run-browser", function () {
+    sh.env.TARGET = "dit";
+    sh.exec("ionic build browser");
+
+    gulp.src(sourcePaths.browser)
+        .pipe(webserver(config.webserver));
 });
 
 gulp.task("ionic-dit-emulate-ios", function () {
@@ -165,6 +190,14 @@ gulp.task("ionic-stage-emulate-ios", function () {
 gulp.task("ionic-stage-run-android", function () {
     sh.env.TARGET = "stage";
     sh.exec("ionic run android");
+});
+
+gulp.task("ionic-stage-run-browser", function () {
+    sh.env.TARGET = "stage";
+    sh.exec("ionic build browser");
+
+    gulp.src(sourcePaths.browser)
+        .pipe(webserver(config.webserver));
 });
 
 gulp.task("ionic-stage-run-ios", function () {
