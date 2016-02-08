@@ -4,16 +4,22 @@
     describe("A BrandAsset Model Service", function () {
 
         var _,
-            brandAsset;
+            brandAsset,
+            HateoasResource;
 
         beforeEach(function () {
             module("app.shared");
             module("app.components.brand");
 
-            inject(function (BrandAssetModel, CommonService) {
+            inject(function (BrandAssetModel, CommonService, _HateoasResource_) {
+                HateoasResource = _HateoasResource_;
                 _ = CommonService._;
                 brandAsset = new BrandAssetModel();
             });
+        });
+
+        it("should extend HateoasResource", function () {
+            expect(brandAsset instanceof HateoasResource).toBeTruthy();
         });
 
         describe("has a set function that", function () {

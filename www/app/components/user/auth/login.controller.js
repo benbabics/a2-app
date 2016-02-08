@@ -2,11 +2,11 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:12
+    // jshint maxparams:11
 
     /* @ngInject */
     function LoginController($cordovaKeyboard, $ionicHistory, $rootScope, $scope, $state, $stateParams,
-                             globals, AnalyticsUtil, AuthenticationManager, BrandManager, CommonService, UserManager) {
+                             globals, AnalyticsUtil, AuthenticationManager, CommonService, UserManager) {
 
         var _ = CommonService._,
             vm = this;
@@ -61,7 +61,7 @@
 
                     trackSuccessEvent();
 
-                    return BrandManager.fetchBrandAssets(userDetails.brand);
+                    return userDetails.fetchBrandAssets();
                 })
                 .then(function () {
                     // Do not allow backing up to the login page.

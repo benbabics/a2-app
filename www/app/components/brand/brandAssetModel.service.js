@@ -1,9 +1,11 @@
 (function () {
     "use strict";
 
-    var BrandAssetModel = function () {
+    var BrandAssetModel = function (HateoasResource) {
 
         function BrandAssetModel() {
+            HateoasResource.call(this);
+
             this.assetSubtypeId = "";
             this.assetTypeId = "";
             this.assetValue = "";
@@ -12,6 +14,8 @@
             this.endDate = "";
             this.startDate = "";
         }
+
+        BrandAssetModel.prototype = Object.create(HateoasResource.prototype);
 
         BrandAssetModel.prototype.set = function (brandAssetResource) {
             angular.extend(this, brandAssetResource);

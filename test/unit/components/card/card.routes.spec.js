@@ -147,6 +147,7 @@
             module("app.components.card");
             module("app.components.account");
             module("app.components.user");
+            module("app.components.brand");
             module("app.html");
 
             // mock dependencies

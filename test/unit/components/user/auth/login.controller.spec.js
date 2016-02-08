@@ -14,7 +14,6 @@
         fetchBrandAssetsDeferred,
         fetchCurrentUserDeferred,
         AuthenticationManager,
-        BrandManager,
         CommonService,
         UserManager,
         mockGlobals = {
@@ -90,7 +89,6 @@
 
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate"]);
-            BrandManager = jasmine.createSpyObj("BrandManager", ["fetchBrandAssets"]);
             UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
             $state = jasmine.createSpyObj("state", ["go"]);
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
@@ -118,13 +116,13 @@
                     $cordovaKeyboard       : $cordovaKeyboard,
                     globals                : mockGlobals,
                     AuthenticationManager  : AuthenticationManager,
-                    BrandManager           : BrandManager,
                     CommonService          : CommonService,
                     UserManager            : UserManager
                 });
 
                 //setup spies:
                 spyOn(CommonService, "logOut");
+                spyOn(userDetails, "fetchBrandAssets");
 
             });
 
@@ -316,7 +314,7 @@
                 describe("when the User Details is fetched successfully", function () {
 
                     beforeEach(function () {
-                        BrandManager.fetchBrandAssets.and.returnValue(fetchBrandAssetsDeferred.promise);
+                        userDetails.fetchBrandAssets.and.returnValue(fetchBrandAssetsDeferred.promise);
 
                         //return a promise object and resolve it
                         fetchCurrentUserDeferred.resolve(userDetails);
@@ -341,8 +339,8 @@
                             $scope.$digest();
                         });
 
-                        it("should call BrandManager.fetchBrandAssets", function () {
-                            expect(BrandManager.fetchBrandAssets).toHaveBeenCalledWith(userDetails.brand);
+                        it("should call userDetails.fetchBrandAssets", function () {
+                            expect(userDetails.fetchBrandAssets).toHaveBeenCalledWith();
                         });
 
                         it("should call disable backing up to the login page", function () {
@@ -395,8 +393,8 @@
                         $scope.$digest();
                     });
 
-                    it("should NOT call BrandManager.fetchBrandAssets", function () {
-                        expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                    it("should NOT call userDetails.fetchBrandAssets", function () {
+                        expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
                     });
 
                     it("should call CommonService.logOut", function () {
@@ -433,8 +431,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should NOT call BrandManager.fetchBrandAssets", function () {
-                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                it("should NOT call userDetails.fetchBrandAssets", function () {
+                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
                 });
 
                 it("should call CommonService.logOut", function () {
@@ -469,8 +467,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should NOT call BrandManager.fetchBrandAssets", function () {
-                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                it("should NOT call userDetails.fetchBrandAssets", function () {
+                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
                 });
 
                 it("should call CommonService.logOut", function () {
@@ -505,8 +503,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should NOT call BrandManager.fetchBrandAssets", function () {
-                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                it("should NOT call userDetails.fetchBrandAssets", function () {
+                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
                 });
 
                 it("should call CommonService.logOut", function () {
@@ -541,8 +539,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should NOT call BrandManager.fetchBrandAssets", function () {
-                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                it("should NOT call userDetails.fetchBrandAssets", function () {
+                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
                 });
 
                 it("should call CommonService.logOut", function () {
@@ -577,8 +575,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should NOT call BrandManager.fetchBrandAssets", function () {
-                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                it("should NOT call userDetails.fetchBrandAssets", function () {
+                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
                 });
 
                 it("should call CommonService.logOut", function () {
@@ -613,8 +611,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should NOT call BrandManager.fetchBrandAssets", function () {
-                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                it("should NOT call userDetails.fetchBrandAssets", function () {
+                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
                 });
 
                 it("should call CommonService.logOut", function () {
@@ -649,8 +647,8 @@
                     expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
                 });
 
-                it("should NOT call BrandManager.fetchBrandAssets", function () {
-                    expect(BrandManager.fetchBrandAssets).not.toHaveBeenCalled();
+                it("should NOT call userDetails.fetchBrandAssets", function () {
+                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
                 });
 
                 it("should call CommonService.logOut", function () {

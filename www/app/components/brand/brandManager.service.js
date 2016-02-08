@@ -16,6 +16,7 @@
             clearCachedValues    : clearCachedValues,
             fetchBrandAssets     : fetchBrandAssets,
             getBrandAssets       : getBrandAssets,
+            getBrandAssetsByBrand: getBrandAssetsByBrand,
             setBrandAssets       : setBrandAssets
         };
 
@@ -29,7 +30,7 @@
         }
 
         function clearCachedValues() {
-            brandAssets = [];
+            brandAssets = {};
         }
 
         function createBrandAsset(brandAssetResource) {
@@ -45,9 +46,9 @@
                 .then(function (brandAssetsResponse) {
                     if (brandAssetsResponse && brandAssetsResponse.data) {
                         // map the brand assets data to model objects
-                        brandAssets = _.map(brandAssetsResponse.data, createBrandAsset);
+                        brandAssets[brandId] = _.map(brandAssetsResponse.data, createBrandAsset);
 
-                        return brandAssets;
+                        return brandAssets[brandId];
                     }
                     // no data in the response
                     else {
@@ -65,7 +66,13 @@
                     if (failureResponse.status === 400 && brandId !== globals.BRAND.GENERIC) {
                         Logger.warn("There was an error getting the brand assets for brandId: " + brandId + " trying GENERIC");
 
-                        return fetchBrandAssets(globals.BRAND.GENERIC);
+                        return fetchBrandAssets(globals.BRAND.GENERIC)
+                            .then(function (fetchedBrandAssets) {
+                                //cache the Generic brand for this brand id
+                                brandAssets[brandId] = fetchedBrandAssets;
+
+                                return fetchedBrandAssets;
+                            });
                     }
 
                     // A 422 status code means that the brand does not have any assets so we should use the "WEX" brand
@@ -73,7 +80,13 @@
                     if (failureResponse.status === 422 && brandId !== globals.BRAND.WEX) {
                         Logger.warn("There was an error getting the brand assets for brandId: " + brandId + " trying WEX");
 
-                        return fetchBrandAssets(globals.BRAND.WEX);
+                        return fetchBrandAssets(globals.BRAND.WEX)
+                            .then(function (fetchedBrandAssets) {
+                                //cache the WEX brand for this brand id
+                                brandAssets[brandId] = fetchedBrandAssets;
+
+                                return fetchedBrandAssets;
+                            });
                     }
 
                     // There was some unknown problem
@@ -87,6 +100,15 @@
 
         function getBrandAssets() {
             return brandAssets;
+        }
+
+        function getBrandAssetsByBrand(brandId) {
+            if (_.has(brandAssets, brandId)) {
+                return brandAssets[brandId];
+            }
+            else {
+                return null;
+            }
         }
 
         // Caution against using this as it replaces the collection versus setting properties or extending

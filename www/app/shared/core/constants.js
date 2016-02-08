@@ -101,7 +101,14 @@
      */
     sharedGlobals.BRAND = {
         GENERIC: "GENERIC",
-        WEX    : "WEX"
+        WEX    : "WEX",
+
+        ASSET_TYPES: {
+            "FILE": "FILE"
+        },
+        ASSET_SUBTYPES: {
+            "BRAND_LOGO": "BRAND_LOGO"
+        }
     };
 
     /**
