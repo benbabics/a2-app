@@ -17,6 +17,7 @@
         "app.components.privacyPolicy",
         "app.components.transaction",
         "app.components.terms",
-        "app.components.user"
+        "app.components.user",
+        "app.components.util"
     ]);
 })();
