@@ -157,7 +157,9 @@
                     return FileUtil.writeFile(resourcePath, resourceData, true);
                 })
                 .catch(function (error) {
-                    throw new Error("Failed to store brand asset resource file '" + resourcePath + "': " + error.message);
+                    if (error) {
+                        throw new Error("Failed to store brand asset resource file '" + resourcePath + "': " + error.message);
+                    }
                 });
         }
     }
