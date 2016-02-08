@@ -59,7 +59,12 @@
         }
 
         function getDefaultDirectory() {
-            return cordova.file.dataDirectory;
+            if (_.has(window, "cordova.file.dataDirectory")) {
+                return cordova.file.dataDirectory;
+            }
+            else {
+                return "cdvfile:///";
+            }
         }
 
         function makeValidDirectory(directory) {
