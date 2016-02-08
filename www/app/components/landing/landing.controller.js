@@ -2,15 +2,17 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:7
 
     /* @ngInject */
-    function LandingController($scope, $ionicHistory, currentInvoiceSummary, globals, scheduledPaymentsCount, UserManager) {
+    function LandingController($scope, $ionicHistory, currentInvoiceSummary, brandLogo, globals, scheduledPaymentsCount,
+                               UserManager) {
 
         var vm = this;
         vm.config = globals.LANDING.CONFIG;
         vm.invoiceSummary = {};
         vm.billingCompany = {};
+        vm.branding = {};
         vm.scheduledPaymentsCount = 0;
 
         activate();
@@ -35,6 +37,8 @@
             vm.scheduledPaymentsCount = scheduledPaymentsCount;
 
             vm.chart = getChartConfiguration();
+
+            vm.branding.logo = brandLogo;
         }
 
         function getChartConfiguration() {

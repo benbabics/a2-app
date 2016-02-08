@@ -9,7 +9,7 @@
                     <span class="body-text">{{vm.user.getDisplayAccountNumber()}}</span>
                 </div>
                 <div class="col col-20">
-                    <span style="float:right">{{vm.user.brand}}</span>
+                    <div class="brand-logo" ng-bind-html="vm.branding.logo | wexTrustedHtml"></div>
                 </div>
             </div>
 

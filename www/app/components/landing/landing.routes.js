@@ -16,6 +16,13 @@
                             return UserManager.getUser().billingCompany.accountId;
                         },
 
+                        brandLogo: function(globals, BrandUtil, CommonService) {
+                            CommonService.loadingBegin();
+
+                            return BrandUtil.getAssetResourceDataBySubtype(globals.BRAND.ASSET_SUBTYPES.BRAND_LOGO)
+                                .finally(CommonService.loadingComplete);
+                        },
+
                         currentInvoiceSummary: function (accountId, CommonService, InvoiceManager) {
                             CommonService.loadingBegin();
 
