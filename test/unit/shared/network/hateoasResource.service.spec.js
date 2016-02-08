@@ -84,10 +84,14 @@
                             result = hateoasModel.fetchResource(resourceType);
                         });
 
-                        it("should return a promise that resolves with the resource data", function () {
+                        it("should return a promise that resolves with the resource data", function (done) {
                             result.then(function (data) {
                                 expect(data).toEqual(response.data);
+
+                                done();
                             });
+
+                            $rootScope.$digest();
                         });
                     });
 
@@ -164,10 +168,14 @@
                             result = hateoasModel.fetchResource(defaultResourceType);
                         });
 
-                        it("should return a promise that resolves with the resource data", function () {
+                        it("should return a promise that resolves with the resource data", function (done) {
                             result.then(function (data) {
                                 expect(data).toEqual(response.data);
+
+                                done();
                             });
+
+                            $rootScope.$digest();
                         });
                     });
 
