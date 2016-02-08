@@ -42,6 +42,9 @@
         },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
     "dependent_plugins": {}
