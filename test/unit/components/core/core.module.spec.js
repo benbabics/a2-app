@@ -137,6 +137,13 @@
             //TODO - figure out how to test this
         });
 
+        describe("when running the app from Chrome", function () {
+
+            it("should call webkitRequestFileSystem with the expected values", function () {
+                //TODO - Figure out how to test this
+            });
+        });
+
         describe("should set a $stateChangeStart event handler that", function () {
             var landingRoute = "landing",
                 paymentAddRoute = "payment.add";

@@ -3,8 +3,9 @@
 
     //TODO - Move as much logic out of here as possible
 
-    // jshint maxparams:7
-    function coreRun($rootScope, $state, $ionicPlatform, globals, AnalyticsUtil, AuthenticationManager, CommonService) {
+    // jshint maxparams:9
+    function coreRun($cordovaDevice, $rootScope, $state, $ionicPlatform, $window,
+                     globals, AnalyticsUtil, AuthenticationManager, CommonService) {
 
         function isExitState(stateName) {
             return "app.exit" === stateName;
@@ -62,6 +63,17 @@
         $ionicPlatform.registerBackButtonAction(function () { //args: event
             CommonService.goToBackState();
         }, 101);
+
+        //we need to request a persistent FS in Chrome in order for cordova-plugin-file to work
+        CommonService.waitForCordovaPlatform(function () {
+            var MAX_FILE_SYSTEM_SIZE_CHROME = 5242880, //bytes
+                _ = CommonService._,
+                requestFileSystem = $window.webkitRequestFileSystem;
+
+            if (requestFileSystem && $cordovaDevice.getPlatform() === "browser") {
+                requestFileSystem($window.PERSISTENT, MAX_FILE_SYSTEM_SIZE_CHROME, _.noop, _.noop);
+            }
+        });
 
         AnalyticsUtil.startTracker(globals.GOOGLE_ANALYTICS.TRACKING_ID);
     }

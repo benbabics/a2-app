@@ -1,6 +1,10 @@
 (function () {
     "use strict";
 
+    var angularConfig = function ($compileProvider) {
+        $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image\//);
+    };
+
     var urlConfig = function ($urlRouterProvider, appGlobals) {
 
         //set default route
@@ -23,6 +27,7 @@
 
     angular
         .module("app.components.core")
+        .config(angularConfig)
         .config(urlConfig)
         .config(ionicConfig)
         .config(ngStorageConfig);

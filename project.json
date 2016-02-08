@@ -29,7 +29,7 @@
             "client_id": "mobileAccountManagement",
             "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
         },
-        "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://pwm-wex-178.wrightexpress.com:* https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+        "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://pwm-wex-178.wrightexpress.com:* https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: filesystem: cdvfile:;",
         "whitelist_domains": ["pwm-wex-178.wrightexpress.com", "www.google.com"],
         "google_analytics_tracking_id": "UA-71223382-2",
         "logging_enabled": "true"
