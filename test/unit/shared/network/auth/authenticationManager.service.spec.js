@@ -20,7 +20,12 @@
             AUTH_API: {
                 BASE_URL: "mock base url",
                 AUTH: {
-                    TOKENS: "mock token url"
+                    TOKENS: "mock token url",
+                    GRANT_TYPE: {
+                        PASSWORD: "password",
+                        REFRESH: "refresh_token"
+                    },
+                    SCOPE: "brand_assets"
                 },
                 CLIENT_CREDENTIALS: {
                     CLIENT_ID: "mock client id",
@@ -90,10 +95,10 @@
 
             beforeEach(function () {
                 rawParams = {
-                    "grant_type": "password",
+                    "grant_type": globals.AUTH_API.AUTH.GRANT_TYPE.PASSWORD,
                     "username": mockUser.username,
                     "password": mockUser.password,
-                    "scope": "read"
+                    "scope": globals.AUTH_API.AUTH.SCOPE
                 };
                 encodedParams = "grant_type=" + rawParams.grant_type +
                     "&username=" + rawParams.username +

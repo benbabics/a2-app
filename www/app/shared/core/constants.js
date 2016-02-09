@@ -40,7 +40,12 @@
     sharedGlobals.AUTH_API = {
         BASE_URL          : "@@@STRING_REPLACE_APP_URL_AUTH_API@@@",
         AUTH              : {
-            TOKENS: "uaa/oauth/token"
+            TOKENS: "uaa/oauth/token",
+            GRANT_TYPE: {
+                PASSWORD: "password",
+                REFRESH: "refresh_token"
+            },
+            SCOPE: "brand_assets"
         },
         CLIENT_CREDENTIALS: {
             CLIENT_ID    : "@@@STRING_REPLACE_AUTH_CLIENT_ID@@@",

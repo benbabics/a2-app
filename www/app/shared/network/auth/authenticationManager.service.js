@@ -5,10 +5,11 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function AuthenticationManager(FormEncoder, AuthenticationResource, CommonService, Logger) {
+    function AuthenticationManager(FormEncoder, AuthenticationResource, CommonService, Logger, globals) {
 
         // Private members
-        var _ = CommonService._,
+        var CONSTANTS = globals.AUTH_API,
+            _ = CommonService._,
             oauth,
             tokenUsername;
 
@@ -32,10 +33,10 @@
         function authenticate(username, password) {
 
             var data = FormEncoder.encode({
-                "grant_type": "password",
+                "grant_type": CONSTANTS.AUTH.GRANT_TYPE.PASSWORD,
                 "username": username,
                 "password": password,
-                "scope": "read"
+                "scope": CONSTANTS.AUTH.SCOPE
             });
 
             // Get a new token
@@ -54,7 +55,7 @@
             var data;
 
             data = FormEncoder.encode({
-                "grant_type": "refresh_token",
+                "grant_type": CONSTANTS.AUTH.GRANT_TYPE.REFRESH,
                 "refresh_token": oauth.refresh_token || null
             });
 
