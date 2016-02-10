@@ -1,9 +1,9 @@
-<ion-view view-title="{{::vm.config.title}}" class="landing-view" wex-hide-back-button="true" wex-back-state="user.auth.login">
+  <ion-view view-title="{{::vm.config.title}}" class="landing-view" wex-hide-back-button="true" wex-back-state="user.auth.login">
     <ion-content>
         <div class="content item item-divider main-container">
 
             <div class="row header">
-                <div class="col col-80" id="companyDetails">
+                <div class="col col-80 ellipsis" id="companyDetails">
                     <span>{{vm.user.billingCompany.name}}</span>
                     <br>
                     <span class="body-text">{{vm.user.getDisplayAccountNumber()}}</span>
