@@ -3,6 +3,7 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
+    /* jshint maxparams: 5 */
 
     /* @ngInject */
     function AuthenticationManager(FormEncoder, AuthenticationResource, CommonService, Logger, globals) {
