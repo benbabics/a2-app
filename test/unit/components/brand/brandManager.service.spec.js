@@ -429,6 +429,8 @@
                 it("should return the brand assets for the given brandId", function () {
                     expect(BrandManager.getBrandAssetsByBrand(brandId)).toEqual(mockBrandAssetCollection[brandId]);
                 });
+
+                // TODO: figure out how to test this without using getBrandAssetsByBrand
             });
 
             describe("when there are NOT brand assets for the given brandId", function () {
@@ -440,7 +442,27 @@
                 it("should return null", function () {
                     expect(BrandManager.getBrandAssetsByBrand(brandId)).toBeNull();
                 });
+
+                // TODO: figure out how to test this without using getBrandAssetsByBrand
             });
+        });
+
+        describe("has a storeBrandAssets function that", function () {
+            var brandId,
+                brandAssets;
+
+            beforeEach(function () {
+                brandId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+
+                BrandManager.storeBrandAssets(brandId, brandAssets);
+            });
+
+            it("should store the brand assets in the cache", function () {
+                expect(BrandManager.getBrandAssetsByBrand(brandId)).toEqual(brandAssets);
+            });
+
+            // TODO: figure out how to test this without using getBrandAssetsByBrand
         });
 
     });

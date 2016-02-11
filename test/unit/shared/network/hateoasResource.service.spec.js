@@ -129,7 +129,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "HATEOAS resource type not found: " + resourceType;
+                        var expectedError = "HATEOAS resource link not found for type: " + resourceType;
 
                         expect(function () {
                             hateoasModel.fetchResource(resourceType);
@@ -213,11 +213,78 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "HATEOAS resource type not found: " + defaultResourceType;
+                        var expectedError = "HATEOAS resource link not found for type: " + defaultResourceType;
 
                         expect(function () {
                             hateoasModel.fetchResource(defaultResourceType);
                         }).toThrowError(expectedError);
+                    });
+                });
+            });
+        });
+
+        describe("has a getResourceLink function that", function () {
+
+            describe("when given a resource type", function () {
+                var resourceType;
+
+                beforeEach(function () {
+                    resourceType = TestUtils.getRandomStringThatIsAlphaNumeric(10).toLowerCase();
+                });
+
+                describe("when a URL for the given resource type is found", function () {
+                    var link;
+
+                    beforeEach(function () {
+                        link = hateoasModel.links[resourceType] = {
+                            rel: resourceType,
+                            href: TestUtils.getRandomStringThatIsAlphaNumeric(15)
+                        };
+                    });
+
+                    it("should return the link's href", function () {
+                        expect(hateoasModel.getResourceLink(resourceType)).toEqual(link.href);
+                    });
+                });
+
+                describe("when a URL for the given resource type is NOT found", function () {
+
+                    beforeEach(function () {
+                        delete hateoasModel.links[resourceType];
+                    });
+
+                    it("should return null", function () {
+                        expect(hateoasModel.getResourceLink(resourceType)).toBeNull();
+                    });
+                });
+            });
+
+            describe("when NOT given a resourceType", function () {
+                var defaultResourceType = "self";
+
+                describe("when a URL is found", function () {
+                    var link;
+
+                    beforeEach(function () {
+                        link = hateoasModel.links[defaultResourceType] = {
+                            rel: defaultResourceType,
+                            href: TestUtils.getRandomStringThatIsAlphaNumeric(15)
+                        };
+                    });
+
+                    it("should return the link's href", function () {
+                        expect(hateoasModel.getResourceLink()).toEqual(link.href);
+                    });
+                });
+
+                describe("when a URL is NOT found", function () {
+
+                    beforeEach(function () {
+                        delete hateoasModel.links[defaultResourceType];
+                    });
+
+                    it("should return null", function () {
+                        expect(hateoasModel.getResourceLink()).toBeNull();
                     });
                 });
             });

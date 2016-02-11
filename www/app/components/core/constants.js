@@ -542,6 +542,24 @@
         }
     };
 
+    appGlobals.BRANDS = {
+        "GENERIC": [],
+        "WEX"    : [
+            {
+                "assetSubtypeId" : "BRAND_LOGO",
+                "assetTypeId"    : "FILE",
+                "assetValue"     : "wex_logo.svg",
+                "clientBrandName": "WEX",
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "img/brands/wexinc/brand_logo/wex_logo.svg"
+                    }
+                ]
+            }
+        ]
+    };
+
     angular
         .module("app.components.core")
         .constant("appGlobals", appGlobals)

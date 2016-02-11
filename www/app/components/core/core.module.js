@@ -3,9 +3,10 @@
 
     //TODO - Move as much logic out of here as possible
 
-    // jshint maxparams:9
+    // jshint maxparams:10
     function coreRun($cordovaDevice, $rootScope, $state, $ionicPlatform, $window,
-                     globals, AnalyticsUtil, AuthenticationManager, CommonService) {
+                     globals, AnalyticsUtil, AuthenticationManager, BrandUtil, CommonService) {
+        var _ = CommonService._;
 
         function isExitState(stateName) {
             return "app.exit" === stateName;
@@ -47,6 +48,23 @@
             $state.go(globals.LOGIN_STATE);
         }
 
+        function loadBundledBrands() {
+            _.forOwn(globals.BRANDS, function (brandResource, brandId) {
+
+                BrandUtil.loadBundledBrand(brandId, brandResource);
+            });
+        }
+
+        function requestChromeFileSystem() {
+            var MAX_FILE_SYSTEM_SIZE_CHROME = 5242880, //bytes
+                requestFileSystem = $window.webkitRequestFileSystem;
+
+            //we need to request a persistent FS while running in Chrome in order for cordova-plugin-file to work
+            if (requestFileSystem && $cordovaDevice.getPlatform() === "browser") {
+                requestFileSystem($window.PERSISTENT, MAX_FILE_SYSTEM_SIZE_CHROME, _.noop, _.noop);
+            }
+        }
+
         //app must be set to fullscreen so that ionic headers are the correct size in iOS
         //see: http://forum.ionicframework.com/t/ion-nav-bar-top-padding-in-ios7/2488/12
         $ionicPlatform.ready(function() {
@@ -64,16 +82,9 @@
             CommonService.goToBackState();
         }, 101);
 
-        //we need to request a persistent FS in Chrome in order for cordova-plugin-file to work
-        CommonService.waitForCordovaPlatform(function () {
-            var MAX_FILE_SYSTEM_SIZE_CHROME = 5242880, //bytes
-                _ = CommonService._,
-                requestFileSystem = $window.webkitRequestFileSystem;
-
-            if (requestFileSystem && $cordovaDevice.getPlatform() === "browser") {
-                requestFileSystem($window.PERSISTENT, MAX_FILE_SYSTEM_SIZE_CHROME, _.noop, _.noop);
-            }
-        });
+        CommonService.waitForCordovaPlatform()
+            .then(loadBundledBrands)
+            .then(requestChromeFileSystem);
 
         AnalyticsUtil.startTracker(globals.GOOGLE_ANALYTICS.TRACKING_ID);
     }

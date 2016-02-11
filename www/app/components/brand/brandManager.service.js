@@ -17,7 +17,8 @@
             fetchBrandAssets     : fetchBrandAssets,
             getBrandAssets       : getBrandAssets,
             getBrandAssetsByBrand: getBrandAssetsByBrand,
-            setBrandAssets       : setBrandAssets
+            setBrandAssets       : setBrandAssets,
+            storeBrandAssets     : storeBrandAssets
         };
 
         activate();
@@ -115,6 +116,10 @@
         // each of the models in the collections
         function setBrandAssets(brandAssetsInfo) {
             brandAssets = brandAssetsInfo;
+        }
+
+        function storeBrandAssets(brandId, brandAssetsForBrand) {
+            brandAssets[brandId] = brandAssetsForBrand;
         }
 
     }
