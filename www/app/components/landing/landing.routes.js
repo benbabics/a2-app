@@ -16,11 +16,20 @@
                             return UserManager.getUser().billingCompany.accountId;
                         },
 
-                        brandLogo: function(globals, BrandUtil, CommonService) {
-                            CommonService.loadingBegin();
+                        brandLogo: function(globals, CommonService, BrandUtil, UserManager) {
+                            var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
+                                brandLogoAsset = UserManager.getUser().getBrandAssetBySubtype(ASSET_SUBTYPES.BRAND_LOGO);
 
-                            return BrandUtil.getAssetResourceDataBySubtype(globals.BRAND.ASSET_SUBTYPES.BRAND_LOGO)
-                                .finally(CommonService.loadingComplete);
+                            //if this brand has a logo associated with it then get its data
+                            if (brandLogoAsset) {
+                                CommonService.loadingBegin();
+
+                                return BrandUtil.getAssetResourceData(brandLogoAsset)
+                                    .finally(CommonService.loadingComplete);
+                            }
+                            else {
+                                return "";
+                            }
                         },
 
                         currentInvoiceSummary: function (accountId, CommonService, InvoiceManager) {

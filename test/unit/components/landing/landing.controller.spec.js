@@ -7,6 +7,7 @@
         mockCurrentInvoiceSummary,
         mockUser,
         mockScheduledPaymentCount,
+        mockBrandLogo,
         UserAccountModel,
         InvoiceSummaryModel,
         UserManager,
@@ -81,6 +82,7 @@
                 mockCurrentInvoiceSummary = TestUtils.getRandomInvoiceSummary(InvoiceSummaryModel);
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
                 UserManager.getUser.and.returnValue(mockUser);
+                mockBrandLogo = TestUtils.getRandomStringThatIsAlphaNumeric(50);
 
                 //setup spies
                 spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
@@ -97,7 +99,8 @@
                     UserManager           : UserManager,
                     currentInvoiceSummary : mockCurrentInvoiceSummary,
                     scheduledPaymentsCount: mockScheduledPaymentCount,
-                    globals               : mockGlobals
+                    globals               : mockGlobals,
+                    brandLogo             : mockBrandLogo
                 });
             });
         });
@@ -127,6 +130,12 @@
 
             it("should clear the navigation history", function () {
                 expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+            });
+
+            it("should set the branding", function () {
+                expect(ctrl.branding).toEqual({
+                    logo: mockBrandLogo
+                });
             });
 
             it("should set the chart options", function () {

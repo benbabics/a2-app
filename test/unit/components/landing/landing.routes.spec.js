@@ -7,35 +7,8 @@
             $q,
             $rootScope,
             $state,
-            mockInvoiceSummary = {
-                accountNumber     : "account number value",
-                availableCredit   : "available credit value",
-                closingDate       : "closing date value",
-                currentBalance    : "current balance value",
-                currentBalanceAsOf: "current balance as of value",
-                invoiceId         : "invoice id value",
-                invoiceNumber     : "invoice number value",
-                minimumPaymentDue : "minimum payment due value",
-                paymentDueDate    : "payment due date value"
-            },
-            mockUser = {
-                newField1: "some value",
-                newField2: "some other value",
-                newField3: "yet another value",
-                email    : "email address value",
-                firstName: "first name value",
-                username : "username value",
-                company  : {
-                    accountId    : "company account id value",
-                    accountNumber: "company account number value",
-                    name         : "company name value"
-                },
-                billingCompany: {
-                    accountId    : "billing company account id value",
-                    accountNumber: "billing company account number value",
-                    name         : "billing company name value"
-                }
-            },
+            mockInvoiceSummary,
+            mockUser,
             mockGlobals = {
                 "LANDING": {
                     "CONFIG": {
@@ -72,15 +45,22 @@
                     }
                 }
             },
+            ASSET_SUBTYPES,
             InvoiceManager,
             PaymentManager,
             UserManager,
-            AnalyticsUtil;
+            AnalyticsUtil,
+            BrandUtil,
+            mockAccountId,
+            BrandAssetModel;
 
         beforeEach(function () {
 
             module("app.shared");
             module("app.components.landing");
+            module("app.components.brand");
+            module("app.components.invoice");
+            module("app.components.user");
             module("app.html");
 
             // mock dependencies
@@ -88,23 +68,34 @@
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchScheduledPaymentsCount"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
+            BrandUtil = jasmine.createSpyObj("BrandUtil", ["getAssetResourceData"]);
 
             module(function($provide, sharedGlobals) {
                 $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
-                $provide.value("accountId", mockUser.billingCompany.accountId);
+                $provide.value("accountId", mockAccountId);
                 $provide.value("InvoiceManager", InvoiceManager);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
+                $provide.value("BrandUtil", BrandUtil);
             });
 
-            inject(function (_$injector_, _$q_, _$rootScope_, _$state_) {
+            inject(function (_$injector_, _$q_, _$rootScope_, _$state_, globals,
+                             _BrandAssetModel_, InvoiceSummaryModel, UserAccountModel, UserModel) {
                 $injector = _$injector_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
+                BrandAssetModel = _BrandAssetModel_;
+                ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES;
+
+                mockInvoiceSummary = TestUtils.getRandomInvoiceSummary(InvoiceSummaryModel);
+                mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel, globals.ONLINE_APPLICATION);
+                mockAccountId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                mockUser.billingCompany.accountId = mockAccountId;
             });
 
+            spyOn(mockUser, "getBrandAssetBySubtype");
             UserManager.getUser.and.returnValue(mockUser);
         });
 
@@ -142,9 +133,11 @@
 
                 var fetchCurrentInvoiceSummaryDeferred,
                     fetchScheduledPaymentsCountDeferred,
-                    mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
+                    mockScheduledPaymentCount;
 
                 beforeEach(function () {
+                    mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
+
                     fetchCurrentInvoiceSummaryDeferred = $q.defer();
                     InvoiceManager.fetchCurrentInvoiceSummary.and.returnValue(fetchCurrentInvoiceSummaryDeferred.promise);
 
@@ -155,22 +148,29 @@
 
                     fetchCurrentInvoiceSummaryDeferred.resolve(mockInvoiceSummary);
                     fetchScheduledPaymentsCountDeferred.resolve(mockScheduledPaymentCount);
-                    $rootScope.$digest();
                 });
 
                 it("should call InvoiceManager.fetchCurrentInvoiceSummary with the correct account id", function () {
+                    $rootScope.$digest();
+
                     expect(InvoiceManager.fetchCurrentInvoiceSummary).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                 });
 
                 it("should call PaymentManager.fetchScheduledPaymentsCount with the correct account id", function () {
+                    $rootScope.$digest();
+
                     expect(PaymentManager.fetchScheduledPaymentsCount).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                 });
 
                 it("should transition successfully", function () {
+                    $rootScope.$digest();
+
                     expect($state.current.name).toBe(stateName);
                 });
 
                 it("should resolve the currentInvoiceSummary", function () {
+                    $rootScope.$digest();
+
                     $injector.invoke($state.current.views["@"].resolve.currentInvoiceSummary)
                         .then(function (currentInvoiceSummary) {
                             expect(currentInvoiceSummary).toEqual(mockInvoiceSummary);
@@ -178,6 +178,8 @@
                 });
 
                 it("should resolve the scheduledPaymentsCount", function () {
+                    $rootScope.$digest();
+
                     $injector.invoke($state.current.views["@"].resolve.scheduledPaymentsCount)
                         .then(function (scheduledPaymentCount) {
                             expect(scheduledPaymentCount).toEqual(mockScheduledPaymentCount);
@@ -185,9 +187,84 @@
                 });
 
                 it("should call AnalyticsUtil.trackView", function () {
+                    $rootScope.$digest();
+
                     expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.LANDING.CONFIG.ANALYTICS.pageName);
                 });
 
+                describe("when the user has a brand with a logo", function () {
+                    var brandLogoAsset,
+                        getAssetResourceDataDeferred;
+
+                    beforeEach(function () {
+                        brandLogoAsset = TestUtils.getRandomBrandAsset(BrandAssetModel);
+                        getAssetResourceDataDeferred = $q.defer();
+
+                        mockUser.getBrandAssetBySubtype.and.returnValue(brandLogoAsset);
+                        BrandUtil.getAssetResourceData.and.returnValue(getAssetResourceDataDeferred.promise);
+
+                        $rootScope.$digest();
+                    });
+
+                    it("should call user.getBrandAssetBySubtype with the expected value", function () {
+                        expect(mockUser.getBrandAssetBySubtype).toHaveBeenCalledWith(ASSET_SUBTYPES.BRAND_LOGO);
+                    });
+
+                    it("should call BrandUtil.getAssetResourceData with the expected value", function () {
+                        expect(BrandUtil.getAssetResourceData).toHaveBeenCalledWith(brandLogoAsset);
+                    });
+
+                    describe("when BrandUtil.getAssetResourceData resolves with the data", function () {
+                        var data,
+                            resolveHandler;
+
+                        beforeEach(function () {
+                            data = TestUtils.getRandomStringThatIsAlphaNumeric(50);
+                            resolveHandler = jasmine.createSpy("resolveHandler");
+
+                            getAssetResourceDataDeferred.resolve(data);
+                            $rootScope.$digest();
+
+                            $injector.invoke($state.current.views["@"].resolve.brandLogo)
+                                .then(resolveHandler);
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should resolve the brandLogo to the data", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(data);
+                        });
+                    });
+
+                    describe("when BrandUtil.getAssetResourceData rejects", function () {
+
+                        beforeEach(function () {
+                            getAssetResourceDataDeferred.reject();
+                            $rootScope.$digest();
+                        });
+
+                        it("should reject the transition", function () {
+                            expect($state.current.name).not.toEqual(stateName);
+                        });
+                    });
+                });
+
+                describe("when the user does NOT have a brand with a logo", function () {
+
+                    beforeEach(function () {
+                        mockUser.getBrandAssetBySubtype.and.returnValue(null);
+
+                        $rootScope.$digest();
+                    });
+
+                    it("should call user.getBrandAssetBySubtype with the expected value", function () {
+                        expect(mockUser.getBrandAssetBySubtype).toHaveBeenCalledWith(ASSET_SUBTYPES.BRAND_LOGO);
+                    });
+
+                    it("should resolve the brandLogo to be falsy", function () {
+                        expect($injector.invoke($state.current.views["@"].resolve.brandLogo)).toBeFalsy();
+                    });
+                });
             });
         });
     });
