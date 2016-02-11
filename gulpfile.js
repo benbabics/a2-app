@@ -91,7 +91,8 @@ gulp.task("watch", function () {
 gulp.task("bower", function () {
     gulp.src(sourcePaths.root.indexPage)
         .pipe(wiredep({
-            exclude: ["ionic.css", "ionic.min.css"]
+            src: "./www/index.html",
+            exclude: "/angular/"
         }))
         .pipe(gulp.dest(destPaths.root.root));
 });
