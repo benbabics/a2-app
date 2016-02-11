@@ -3,23 +3,24 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
-    // jshint maxparams:7
+    // jshint maxparams:8
 
     /* @ngInject */
-    function BrandUtil($q, $window, globals, BrandManager, CommonService, FileUtil, UserManager) {
+    function BrandUtil($q, $window, globals, BrandAssetModel, BrandManager, CommonService, FileUtil, Logger) {
         // Private members
         var _ = CommonService._;
 
         // Revealed Public members
         var service = {
             "fetchAssetResourceData"           : fetchAssetResourceData,
+            "getAssetBySubtype"                : getAssetBySubtype,
             "getAssetResourceData"             : getAssetResourceData,
-            "getAssetResourceDataBySubtype"    : getAssetResourceDataBySubtype,
             "getAssetResourceDirectory"        : getAssetResourceDirectory,
             "getAssetResourceFile"             : getAssetResourceFile,
-            "getAssetResourceFileBySubtype"    : getAssetResourceFileBySubtype,
             "getAssetResourceFilePath"         : getAssetResourceFilePath,
-            "getAssetResourceFilePathBySubtype": getAssetResourceFilePathBySubtype,
+            "getGenericBrandAssets"            : getGenericBrandAssets,
+            "getWexBrandAssets"                : getWexBrandAssets,
+            "loadBundledBrand"                 : loadBundledBrand,
             "storeAssetResourceFile"           : storeAssetResourceFile
         };
 
@@ -28,29 +29,24 @@
 
         function fetchAssetResourceData (brandAsset, binary) {
             return brandAsset.fetchResource()
-                .catch(function () {
-                    return fetchGenericAssetResource(brandAsset, binary);
-                })
                 .then(function (resourceData) {
                     return storeAssetResourceFile(brandAsset, resourceData)
                         .then(function () {
                             return resourceData;
                         });
+                })
+                .catch(function () {
+                    return getGenericAssetResource(brandAsset, binary);
                 });
         }
 
-        function fetchGenericAssetResource(brandAsset, binary) {
-            return BrandManager.fetchBrandAssets(globals.BRAND.GENERIC)
-                .then(function (genericBrandAssets) {
-                    var genericAsset = _.find(genericBrandAssets, {assetSubtypeId: brandAsset.assetSubtypeId});
-
-                    if (genericAsset) {
-                        return getAssetResourceData(genericAsset, binary);
-                    }
-                    else {
-                        throw new Error("Failed to find generic brand asset resource for asset subtype '" + brandAsset.assetSubtypeId + "'");
-                    }
-                });
+        function getAssetBySubtype(brandAssets, assetSubtypeId) {
+            if (brandAssets) {
+                return _.find(brandAssets, {assetSubtypeId: assetSubtypeId}) || null;
+            }
+            else {
+                return null;
+            }
         }
 
         function getAssetResourceData (brandAsset, binary) {
@@ -63,34 +59,22 @@
                 });
         }
 
-        function getAssetResourceDataBySubtype (assetSubtypeId, binary) {
-            var user = UserManager.getUser(),
-                brandAsset;
-
-            if (user) {
-                brandAsset = user.getBrandAssetBySubtype(assetSubtypeId);
-
-                if (brandAsset) {
-                    return getAssetResourceData(brandAsset, binary);
-                }
-            }
-
-            throw new Error("Failed to get brand asset resource data from asset subtype: '" + assetSubtypeId + "'");
-        }
-
-        function getAssetResourceDirectory() {
-            var user = UserManager.getUser();
-
-            if (user) {
-                return user.brand + "/";
+        function getAssetResourceDirectory(brandAsset) {
+            if (brandAsset) {
+                return brandAsset.clientBrandName + "/";
             }
             else {
-                throw new Error("Failed to get brand asset resource directory. User must be logged in.");
+                throw new Error("Failed to get brand asset resource directory.");
             }
         }
 
         function getAssetResourceSubPath(brandAsset) {
-            return getAssetResourceDirectory() + brandAsset.assetValue;
+            if (brandAsset) {
+                return getAssetResourceDirectory(brandAsset) + brandAsset.assetValue;
+            }
+            else {
+                throw new Error("Failed to get brand asset resource sub-path.");
+            }
         }
 
         function getAssetResourceFile(brandAsset, binary) {
@@ -101,23 +85,8 @@
                     return FileUtil.readFile(resourcePath, binary);
                 })
                 .catch(function (error) {
-                    throw new Error("Failed to get brand asset resource file '" + resourcePath + "': " + error.message);
+                    throw new Error("Failed to get brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error));
                 });
-        }
-
-        function getAssetResourceFileBySubtype(assetSubtypeId, binary) {
-            var user = UserManager.getUser(),
-                brandAsset;
-
-            if (user) {
-                brandAsset = user.getBrandAssetBySubtype(assetSubtypeId);
-
-                if (brandAsset) {
-                    return getAssetResourceFile(brandAsset, binary);
-                }
-            }
-
-            throw new Error("Failed to get brand asset resource file path from asset subtype: '" + assetSubtypeId + "'");
         }
 
         function getAssetResourceFilePath(brandAsset) {
@@ -130,23 +99,96 @@
             return deferred.promise;
         }
 
-        function getAssetResourceFilePathBySubtype(assetSubtypeId) {
-            var user = UserManager.getUser(),
-                brandAsset;
+        function getDefaultBundledBrandPath() {
+            if (_.has(window, "cordova.file.applicationDirectory")) {
+                return cordova.file.applicationDirectory + "www/";
+            }
+            else {
+                return "cdvfile:///www/";
+            }
+        }
 
-            if (user) {
-                brandAsset = user.getBrandAssetBySubtype(assetSubtypeId);
+        function getGenericAssetResource(brandAsset, binary) {
+            var genericBrandAssets = getGenericBrandAssets(),
+                genericAsset;
 
-                if (brandAsset) {
-                    return getAssetResourceFilePath(brandAsset);
+            if (genericBrandAssets) {
+                genericAsset = getAssetBySubtype(genericBrandAssets, brandAsset.assetSubtypeId);
+
+                if (genericAsset && genericAsset !== brandAsset) {
+                    return getAssetResourceData(genericAsset, binary);
                 }
             }
 
-            throw new Error("Failed to get brand asset resource file path from asset subtype: '" + assetSubtypeId + "'");
+            return $q.reject("Failed to find generic equivalent for brand asset: " + brandAsset.assetSubtypeId);
+        }
+
+        function getGenericBrandAssets() {
+            return BrandManager.getBrandAssetsByBrand(globals.BRAND.GENERIC);
+        }
+
+        function getWexBrandAssets() {
+            return BrandManager.getBrandAssetsByBrand(globals.BRAND.WEX);
+        }
+
+        function loadBundledAsset(brandAsset, bundledAssetDirectory) {
+            //first check to see if the bundled file resource can be opened on the file system
+            return FileUtil.checkFileExists(brandAsset.getResourceLink(), bundledAssetDirectory)
+                .then(function () {
+                    //the bundled resource exists so open it and read it
+                    return FileUtil.readFile(brandAsset.getResourceLink(), true, bundledAssetDirectory);
+                })
+                .catch(function () {
+                    //something happened while trying to read the resource so we need to fetch it instead
+                    return brandAsset.fetchResource();
+                })
+                .then(function (resourceData) {
+                    //cache the bundled resource
+                    return storeAssetResourceFile(brandAsset, resourceData)
+                        .then(function () {
+                            return resourceData;
+                        });
+                })
+                .catch(function (error) {
+                    var logError = "Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "': " + CommonService.getErrorMessage(error);
+
+                    Logger.error(logError);
+                    return $q.reject(logError);
+                });
+        }
+
+        function loadBundledBrand(brandId, brandResource) {
+            var brandAssets = [],
+                promises = [];
+
+            _.forEach(brandResource, function (brandAssetResource) {
+                var brandAsset = new BrandAssetModel(),
+                    bundledAssetDirectory = getDefaultBundledBrandPath();
+
+                brandAsset.set(brandAssetResource);
+
+                //if the current asset is a file asset we need to load it
+                if (brandAsset.assetTypeId === globals.BRAND.ASSET_TYPES.FILE) {
+                    promises.push(loadBundledAsset(brandAsset, bundledAssetDirectory));
+                }
+
+                brandAssets.push(brandAsset);
+            });
+
+            //cache the asset list
+            BrandManager.storeBrandAssets(brandId, brandAssets);
+
+            return $q.all(promises)
+                .catch(function (error) {
+                    var logError = "Failed to load bundled brand '" + brandId + "': " + CommonService.getErrorMessage(error);
+
+                    Logger.error(logError);
+                    return $q.reject(logError);
+                });
         }
 
         function storeAssetResourceFile(brandAsset, resourceData) {
-            var resourceDirectory = getAssetResourceDirectory(),
+            var resourceDirectory = getAssetResourceDirectory(brandAsset),
                 resourcePath = getAssetResourceSubPath(brandAsset);
 
             return FileUtil.checkDirectoryExists(resourceDirectory)
@@ -158,7 +200,7 @@
                 })
                 .catch(function (error) {
                     if (error) {
-                        throw new Error("Failed to store brand asset resource file '" + resourcePath + "': " + error.message);
+                        throw new Error("Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error));
                     }
                 });
         }

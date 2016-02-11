@@ -400,7 +400,7 @@
             else if (_.has(errorObject, "message")) {
                 errorMessage = errorObject.message;
             }
-            else if (_.isObject(errorObject.data)) {
+            else if (_.has(errorObject, "data") && _.isObject(errorObject.data)) {
                 errorMessage += errorObject.data.error ? errorObject.data.error + ": " : "";
                 errorMessage += errorObject.data.error_description || "";
             }

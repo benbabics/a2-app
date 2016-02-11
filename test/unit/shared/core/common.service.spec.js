@@ -788,6 +788,34 @@
 
             });
 
+            describe("when the error object param is null", function () {
+
+                beforeEach(function () {
+                    errorObjectArg = null;
+
+                    errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
+                });
+
+                it("should return an Unknown Exception error message", function () {
+                    expect(errorMessageResult).toEqual("ERROR: cause unknown.");
+                });
+
+            });
+
+            describe("when the error object param is undefined", function () {
+
+                beforeEach(function () {
+                    errorObjectArg = undefined;
+
+                    errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
+                });
+
+                it("should return an Unknown Exception error message", function () {
+                    expect(errorMessageResult).toEqual("ERROR: cause unknown.");
+                });
+
+            });
+
         });
 
         describe("has a pageHasNavBar function that", function () {

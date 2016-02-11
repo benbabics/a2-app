@@ -9,8 +9,21 @@
         file,
         directory,
         parentDirectory,
-        promise,
-        defaultDirectory = "cdvfile:///";
+        defaultDirectory = "cdvfile:///",
+        resolveHandler,
+        rejectHandler,
+        writeExistingFileDeferred,
+        checkDirDeferred,
+        checkFileDeferred,
+        createDirDeferred,
+        createFileDeferred,
+        readAsBinaryStringDeferred,
+        readAsTextDeferred,
+        readAsDataURLDeferred,
+        removeRecursivelyDeferred,
+        removeDirDeferred,
+        removeFileDeferred,
+        writeFileDeferred;
 
     describe("A File Util service", function () {
 
@@ -50,6 +63,8 @@
                 //just execute the callback directly
                 return $q.when((callback || function() {})());
             });
+            resolveHandler = jasmine.createSpy("resolveHandler");
+            rejectHandler = jasmine.createSpy("rejectHandler");
 
             window.cordova = {
                 file: {
@@ -59,16 +74,36 @@
             file = TestUtils.getRandomStringThatIsAlphaNumeric(15);
             directory = TestUtils.getRandomStringThatIsAlphaNumeric(10) + "/";
             parentDirectory = TestUtils.getRandomStringThatIsAlphaNumeric(10) + "/";
-            promise = $q.resolve();
+            writeExistingFileDeferred = $q.defer();
+            checkDirDeferred = $q.defer();
+            checkFileDeferred = $q.defer();
+            createDirDeferred = $q.defer();
+            createFileDeferred = $q.defer();
+            readAsBinaryStringDeferred = $q.defer();
+            readAsTextDeferred = $q.defer();
+            readAsDataURLDeferred = $q.defer();
+            removeRecursivelyDeferred = $q.defer();
+            removeDirDeferred = $q.defer();
+            removeFileDeferred = $q.defer();
+            writeFileDeferred = $q.defer();
+
+            //setup mocks:
+            $cordovaFile.writeExistingFile.and.returnValue(writeExistingFileDeferred.promise);
+            $cordovaFile.checkDir.and.returnValue(checkDirDeferred.promise);
+            $cordovaFile.checkFile.and.returnValue(checkFileDeferred.promise);
+            $cordovaFile.createDir.and.returnValue(createDirDeferred.promise);
+            $cordovaFile.createFile.and.returnValue(createFileDeferred.promise);
+            $cordovaFile.readAsBinaryString.and.returnValue(readAsBinaryStringDeferred.promise);
+            $cordovaFile.readAsText.and.returnValue(readAsTextDeferred.promise);
+            $cordovaFile.readAsDataURL.and.returnValue(readAsDataURLDeferred.promise);
+            $cordovaFile.removeRecursively.and.returnValue(removeRecursivelyDeferred.promise);
+            $cordovaFile.removeDir.and.returnValue(removeDirDeferred.promise);
+            $cordovaFile.removeFile.and.returnValue(removeFileDeferred.promise);
+            $cordovaFile.writeFile.and.returnValue(writeFileDeferred.promise);
         });
 
         describe("has an appendFile function that", function () {
-            var result,
-                data;
-
-            beforeEach(function () {
-                $cordovaFile.writeExistingFile.and.returnValue(promise);
-            });
+            var data;
 
             beforeEach(function () {
                 data = TestUtils.getRandomStringThatIsAlphaNumeric(20);
@@ -77,7 +112,10 @@
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.appendFile(file, data, parentDirectory);
+                    FileUtil.appendFile(file, data, parentDirectory)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+
                     $rootScope.$digest();
                 });
 
@@ -89,15 +127,46 @@
                     expect($cordovaFile.writeExistingFile).toHaveBeenCalledWith(parentDirectory, file, data);
                 });
 
-                it("should return the promise returned by $cordovaFile.writeExistingFile", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.writeExistingFile resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        writeExistingFileDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.writeExistingFile rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        writeExistingFileDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
 
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.appendFile(file, data);
+                    FileUtil.appendFile(file, data)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -109,23 +178,49 @@
                     expect($cordovaFile.writeExistingFile).toHaveBeenCalledWith(defaultDirectory, file, data);
                 });
 
-                it("should return the promise returned by $cordovaFile.writeExistingFile", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.writeExistingFile resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        writeExistingFileDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.writeExistingFile rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        writeExistingFileDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
         });
 
         describe("has a checkDirectoryExists function that", function () {
-            var result;
-
-            beforeEach(function () {
-                $cordovaFile.checkDir.and.returnValue(promise);
-            });
 
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.checkDirectoryExists(directory, parentDirectory);
+                    FileUtil.checkDirectoryExists(directory, parentDirectory)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -137,15 +232,40 @@
                     expect($cordovaFile.checkDir).toHaveBeenCalledWith(parentDirectory, directory);
                 });
 
-                it("should return the promise returned by $cordovaFile.checkDir", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.checkDir resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        checkDirDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.checkDir rejects", function () {
+
+                    beforeEach(function () {
+                        checkDirDeferred.reject();
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that rejects", function () {
+                        expect(rejectHandler).toHaveBeenCalled();
+                    });
                 });
             });
 
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.checkDirectoryExists(directory);
+                    FileUtil.checkDirectoryExists(directory)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -157,23 +277,43 @@
                     expect($cordovaFile.checkDir).toHaveBeenCalledWith(defaultDirectory, directory);
                 });
 
-                it("should return the promise returned by $cordovaFile.checkDir", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.checkDir resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        checkDirDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.checkDir rejects", function () {
+
+                    beforeEach(function () {
+                        checkDirDeferred.reject();
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that rejects", function () {
+                        expect(rejectHandler).toHaveBeenCalled();
+                    });
                 });
             });
         });
 
         describe("has a checkFileExists function that", function () {
-            var result;
-
-            beforeEach(function () {
-                $cordovaFile.checkFile.and.returnValue(promise);
-            });
 
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.checkFileExists(file, parentDirectory);
+                    FileUtil.checkFileExists(file, parentDirectory)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -185,15 +325,40 @@
                     expect($cordovaFile.checkFile).toHaveBeenCalledWith(parentDirectory, file);
                 });
 
-                it("should return the promise returned by $cordovaFile.checkFile", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.checkFile resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        checkFileDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.checkFile rejects", function () {
+
+                    beforeEach(function () {
+                        checkFileDeferred.reject();
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that rejects", function () {
+                        expect(rejectHandler).toHaveBeenCalled();
+                    });
                 });
             });
 
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.checkFileExists(file);
+                    FileUtil.checkFileExists(file)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -205,26 +370,48 @@
                     expect($cordovaFile.checkFile).toHaveBeenCalledWith(defaultDirectory, file);
                 });
 
-                it("should return the promise returned by $cordovaFile.checkFile", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.checkFile resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        checkFileDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.checkFile rejects", function () {
+
+                    beforeEach(function () {
+                        checkFileDeferred.reject();
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that rejects", function () {
+                        expect(rejectHandler).toHaveBeenCalled();
+                    });
                 });
             });
         });
 
         describe("has a createDirectory function that", function () {
-            var result,
-                replaceIfExists;
+            var replaceIfExists;
 
             beforeEach(function () {
                 replaceIfExists = TestUtils.getRandomBoolean();
-
-                $cordovaFile.createDir.and.returnValue(promise);
             });
 
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.createDirectory(directory, replaceIfExists, parentDirectory);
+                    FileUtil.createDirectory(directory, replaceIfExists, parentDirectory)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -236,15 +423,46 @@
                     expect($cordovaFile.createDir).toHaveBeenCalledWith(parentDirectory, directory, replaceIfExists);
                 });
 
-                it("should return the promise returned by $cordovaFile.createDir", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.createDir resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        createDirDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.createDir rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        createDirDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
 
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.createDirectory(directory, replaceIfExists);
+                    FileUtil.createDirectory(directory, replaceIfExists)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -256,26 +474,54 @@
                     expect($cordovaFile.createDir).toHaveBeenCalledWith(defaultDirectory, directory, replaceIfExists);
                 });
 
-                it("should return the promise returned by $cordovaFile.createDir", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.createDir resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        createDirDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.createDir rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        createDirDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
         });
 
         describe("has a createFile function that", function () {
-            var result,
-                replaceIfExists;
+            var replaceIfExists;
 
             beforeEach(function () {
                 replaceIfExists = TestUtils.getRandomBoolean();
-
-                $cordovaFile.createFile.and.returnValue(promise);
             });
 
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.createFile(file, replaceIfExists, parentDirectory);
+                    FileUtil.createFile(file, replaceIfExists, parentDirectory)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -287,15 +533,46 @@
                     expect($cordovaFile.createFile).toHaveBeenCalledWith(parentDirectory, file, replaceIfExists);
                 });
 
-                it("should return the promise returned by $cordovaFile.createFile", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.createFile resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        createFileDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.createFile rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        createFileDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
 
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.createFile(file, replaceIfExists);
+                    FileUtil.createFile(file, replaceIfExists)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -307,20 +584,43 @@
                     expect($cordovaFile.createFile).toHaveBeenCalledWith(defaultDirectory, file, replaceIfExists);
                 });
 
-                it("should return the promise returned by $cordovaFile.createFile", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.createFile resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        createFileDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.createFile rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        createFileDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
         });
 
         describe("has a readFile function that", function () {
-            var result,
-                binary;
-
-            beforeEach(function () {
-                $cordovaFile.readAsBinaryString.and.returnValue(promise);
-                $cordovaFile.readAsText.and.returnValue(promise);
-            });
+            var binary;
 
             describe("when binary is true", function () {
 
@@ -331,7 +631,9 @@
                 describe("when given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        result = FileUtil.readFile(file, binary, parentDirectory);
+                        FileUtil.readFile(file, binary, parentDirectory)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
                         $rootScope.$digest();
                     });
 
@@ -343,15 +645,46 @@
                         expect($cordovaFile.readAsBinaryString).toHaveBeenCalledWith(parentDirectory, file);
                     });
 
-                    it("should return the promise returned by $cordovaFile.readAsBinaryString", function () {
-                        expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                    describe("when $cordovaFile.readAsBinaryString resolves with a value", function () {
+                        var resolveValue;
+
+                        beforeEach(function () {
+                            resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            readAsBinaryStringDeferred.resolve(resolveValue);
+                            $rootScope.$digest();
+                        });
+
+                        it("should return a promise that resolves with the same value", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        });
+                    });
+
+                    describe("when $cordovaFile.readAsBinaryString rejects with an error", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = {
+                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+
+                            readAsBinaryStringDeferred.reject(error);
+                        });
+
+                        it("should throw an error", function () {
+                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                            expect($rootScope.$digest).toThrowError(expectedError);
+                        });
                     });
                 });
 
                 describe("when NOT given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        result = FileUtil.readFile(file, binary);
+                        FileUtil.readFile(file, binary)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
                         $rootScope.$digest();
                     });
 
@@ -363,8 +696,37 @@
                         expect($cordovaFile.readAsBinaryString).toHaveBeenCalledWith(defaultDirectory, file);
                     });
 
-                    it("should return the promise returned by $cordovaFile.readAsBinaryString", function () {
-                        expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                    describe("when $cordovaFile.readAsBinaryString resolves with a value", function () {
+                        var resolveValue;
+
+                        beforeEach(function () {
+                            resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            readAsBinaryStringDeferred.resolve(resolveValue);
+                            $rootScope.$digest();
+                        });
+
+                        it("should return a promise that resolves with the same value", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        });
+                    });
+
+                    describe("when $cordovaFile.readAsBinaryString rejects with an error", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = {
+                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+
+                            readAsBinaryStringDeferred.reject(error);
+                        });
+
+                        it("should throw an error", function () {
+                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                            expect($rootScope.$digest).toThrowError(expectedError);
+                        });
                     });
                 });
             });
@@ -378,7 +740,9 @@
                 describe("when given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        result = FileUtil.readFile(file, binary, parentDirectory);
+                        FileUtil.readFile(file, binary, parentDirectory)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
                         $rootScope.$digest();
                     });
 
@@ -390,15 +754,46 @@
                         expect($cordovaFile.readAsText).toHaveBeenCalledWith(parentDirectory, file);
                     });
 
-                    it("should return the promise returned by $cordovaFile.readAsText", function () {
-                        expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                    describe("when $cordovaFile.readAsText resolves with a value", function () {
+                        var resolveValue;
+
+                        beforeEach(function () {
+                            resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            readAsTextDeferred.resolve(resolveValue);
+                            $rootScope.$digest();
+                        });
+
+                        it("should return a promise that resolves with the same value", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        });
+                    });
+
+                    describe("when $cordovaFile.readAsText rejects with an error", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = {
+                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+
+                            readAsTextDeferred.reject(error);
+                        });
+
+                        it("should throw an error", function () {
+                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                            expect($rootScope.$digest).toThrowError(expectedError);
+                        });
                     });
                 });
 
                 describe("when NOT given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        result = FileUtil.readFile(file, binary);
+                        FileUtil.readFile(file, binary)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
                         $rootScope.$digest();
                     });
 
@@ -410,24 +805,50 @@
                         expect($cordovaFile.readAsText).toHaveBeenCalledWith(defaultDirectory, file);
                     });
 
-                    it("should return the promise returned by $cordovaFile.readAsText", function () {
-                        expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                    describe("when $cordovaFile.readAsText resolves with a value", function () {
+                        var resolveValue;
+
+                        beforeEach(function () {
+                            resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            readAsTextDeferred.resolve(resolveValue);
+                            $rootScope.$digest();
+                        });
+
+                        it("should return a promise that resolves with the same value", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        });
+                    });
+
+                    describe("when $cordovaFile.readAsText rejects with an error", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = {
+                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+
+                            readAsTextDeferred.reject(error);
+                        });
+
+                        it("should throw an error", function () {
+                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                            expect($rootScope.$digest).toThrowError(expectedError);
+                        });
                     });
                 });
             });
         });
 
         describe("has a readFileAsDataUrl function that", function () {
-            var result;
-
-            beforeEach(function () {
-                $cordovaFile.readAsDataURL.and.returnValue(promise);
-            });
 
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.readFileAsDataUrl(file, parentDirectory);
+                    FileUtil.readFileAsDataUrl(file, parentDirectory)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -439,15 +860,46 @@
                     expect($cordovaFile.readAsDataURL).toHaveBeenCalledWith(parentDirectory, file);
                 });
 
-                it("should return the promise returned by $cordovaFile.readAsDataURL", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.readAsDataURL resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        readAsDataURLDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.readAsDataURL rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        readAsDataURLDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
 
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.readFileAsDataUrl(file);
+                    FileUtil.readFileAsDataUrl(file)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -459,20 +911,43 @@
                     expect($cordovaFile.readAsDataURL).toHaveBeenCalledWith(defaultDirectory, file);
                 });
 
-                it("should return the promise returned by $cordovaFile.readAsDataURL", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.readAsDataURL resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        readAsDataURLDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.readAsDataURL rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        readAsDataURLDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
         });
 
         describe("has a removeDirectory function that", function () {
-            var result,
-                recursive;
-
-            beforeEach(function () {
-                $cordovaFile.removeRecursively.and.returnValue(promise);
-                $cordovaFile.removeDir.and.returnValue(promise);
-            });
+            var recursive;
 
             describe("when recursive is true", function () {
 
@@ -483,7 +958,9 @@
                 describe("when given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        result = FileUtil.removeDirectory(directory, recursive, parentDirectory);
+                        FileUtil.removeDirectory(directory, recursive, parentDirectory)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
                         $rootScope.$digest();
                     });
 
@@ -495,15 +972,46 @@
                         expect($cordovaFile.removeRecursively).toHaveBeenCalledWith(parentDirectory, directory);
                     });
 
-                    it("should return the promise returned by $cordovaFile.removeRecursively", function () {
-                        expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                    describe("when $cordovaFile.removeRecursively resolves with a value", function () {
+                        var resolveValue;
+
+                        beforeEach(function () {
+                            resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            removeRecursivelyDeferred.resolve(resolveValue);
+                            $rootScope.$digest();
+                        });
+
+                        it("should return a promise that resolves with the same value", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        });
+                    });
+
+                    describe("when $cordovaFile.removeRecursively rejects with an error", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = {
+                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+
+                            removeRecursivelyDeferred.reject(error);
+                        });
+
+                        it("should throw an error", function () {
+                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                            expect($rootScope.$digest).toThrowError(expectedError);
+                        });
                     });
                 });
 
                 describe("when NOT given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        result = FileUtil.removeDirectory(directory, recursive);
+                        FileUtil.removeDirectory(directory, recursive)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
                         $rootScope.$digest();
                     });
 
@@ -515,8 +1023,37 @@
                         expect($cordovaFile.removeRecursively).toHaveBeenCalledWith(defaultDirectory, directory);
                     });
 
-                    it("should return the promise returned by $cordovaFile.removeRecursively", function () {
-                        expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                    describe("when $cordovaFile.removeRecursively resolves with a value", function () {
+                        var resolveValue;
+
+                        beforeEach(function () {
+                            resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            removeRecursivelyDeferred.resolve(resolveValue);
+                            $rootScope.$digest();
+                        });
+
+                        it("should return a promise that resolves with the same value", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        });
+                    });
+
+                    describe("when $cordovaFile.removeRecursively rejects with an error", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = {
+                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+
+                            removeRecursivelyDeferred.reject(error);
+                        });
+
+                        it("should throw an error", function () {
+                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                            expect($rootScope.$digest).toThrowError(expectedError);
+                        });
                     });
                 });
             });
@@ -530,7 +1067,9 @@
                 describe("when given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        result = FileUtil.removeDirectory(directory, recursive, parentDirectory);
+                        FileUtil.removeDirectory(directory, recursive, parentDirectory)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
                         $rootScope.$digest();
                     });
 
@@ -542,15 +1081,46 @@
                         expect($cordovaFile.removeDir).toHaveBeenCalledWith(parentDirectory, directory);
                     });
 
-                    it("should return the promise returned by $cordovaFile.removeDir", function () {
-                        expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                    describe("when $cordovaFile.removeDir resolves with a value", function () {
+                        var resolveValue;
+
+                        beforeEach(function () {
+                            resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            removeDirDeferred.resolve(resolveValue);
+                            $rootScope.$digest();
+                        });
+
+                        it("should return a promise that resolves with the same value", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        });
+                    });
+
+                    describe("when $cordovaFile.removeDir rejects with an error", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = {
+                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+
+                            removeDirDeferred.reject(error);
+                        });
+
+                        it("should throw an error", function () {
+                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                            expect($rootScope.$digest).toThrowError(expectedError);
+                        });
                     });
                 });
 
                 describe("when NOT given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        result = FileUtil.removeDirectory(directory, recursive);
+                        FileUtil.removeDirectory(directory, recursive)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
                         $rootScope.$digest();
                     });
 
@@ -562,24 +1132,50 @@
                         expect($cordovaFile.removeDir).toHaveBeenCalledWith(defaultDirectory, directory);
                     });
 
-                    it("should return the promise returned by $cordovaFile.removeDir", function () {
-                        expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                    describe("when $cordovaFile.removeDir resolves with a value", function () {
+                        var resolveValue;
+
+                        beforeEach(function () {
+                            resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            removeDirDeferred.resolve(resolveValue);
+                            $rootScope.$digest();
+                        });
+
+                        it("should return a promise that resolves with the same value", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        });
+                    });
+
+                    describe("when $cordovaFile.removeDir rejects with an error", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = {
+                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+
+                            removeDirDeferred.reject(error);
+                        });
+
+                        it("should throw an error", function () {
+                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                            expect($rootScope.$digest).toThrowError(expectedError);
+                        });
                     });
                 });
             });
         });
 
         describe("has a removeFile function that", function () {
-            var result;
-
-            beforeEach(function () {
-                $cordovaFile.removeFile.and.returnValue(promise);
-            });
 
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.removeFile(file, parentDirectory);
+                    FileUtil.removeFile(file, parentDirectory)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -591,15 +1187,46 @@
                     expect($cordovaFile.removeFile).toHaveBeenCalledWith(parentDirectory, file);
                 });
 
-                it("should return the promise returned by $cordovaFile.removeFile", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.removeFile resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        removeFileDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.removeFile rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        removeFileDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
 
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.removeFile(file);
+                    FileUtil.removeFile(file)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -611,28 +1238,56 @@
                     expect($cordovaFile.removeFile).toHaveBeenCalledWith(defaultDirectory, file);
                 });
 
-                it("should return the promise returned by $cordovaFile.removeFile", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.removeFile resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        removeFileDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.removeFile rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        removeFileDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
         });
 
         describe("has a writeFile function that", function () {
-            var result,
-                data,
+            var data,
                 replaceIfExists;
 
             beforeEach(function () {
                 data = TestUtils.getRandomStringThatIsAlphaNumeric(20);
                 replaceIfExists = TestUtils.getRandomBoolean();
-
-                $cordovaFile.writeFile.and.returnValue(promise);
             });
 
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.writeFile(file, data, replaceIfExists, parentDirectory);
+                    FileUtil.writeFile(file, data, replaceIfExists, parentDirectory)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -644,15 +1299,46 @@
                     expect($cordovaFile.writeFile).toHaveBeenCalledWith(parentDirectory, file, data, replaceIfExists);
                 });
 
-                it("should return the promise returned by $cordovaFile.writeFile", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.writeFile resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        writeFileDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.writeFile rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        writeFileDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
 
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    result = FileUtil.writeFile(file, data, replaceIfExists);
+                    FileUtil.writeFile(file, data, replaceIfExists)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
                     $rootScope.$digest();
                 });
 
@@ -664,8 +1350,37 @@
                     expect($cordovaFile.writeFile).toHaveBeenCalledWith(defaultDirectory, file, data, replaceIfExists);
                 });
 
-                it("should return the promise returned by $cordovaFile.writeFile", function () {
-                    expect(result).toEqual(jasmine.objectContaining({$$state: promise.$$state}));
+                describe("when $cordovaFile.writeFile resolves with a value", function () {
+                    var resolveValue;
+
+                    beforeEach(function () {
+                        resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        writeFileDeferred.resolve(resolveValue);
+                        $rootScope.$digest();
+                    });
+
+                    it("should return a promise that resolves with the same value", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                    });
+                });
+
+                describe("when $cordovaFile.writeFile rejects with an error", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        writeFileDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
                 });
             });
         });
