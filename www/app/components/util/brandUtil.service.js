@@ -36,7 +36,8 @@
                         });
                 })
                 .catch(function () {
-                    return getGenericAssetResource(brandAsset, binary);
+                    //fetching the resource failed, so try to get a generic equivalent instead
+                    return getGenericAssetResourceData(brandAsset, binary);
                 });
         }
 
@@ -52,9 +53,11 @@
         function getAssetResourceData (brandAsset, binary) {
             return FileUtil.checkFileExists(getAssetResourceSubPath(brandAsset))
                 .then(function () {
+                    //get the resource data from the cached file if it exists
                     return getAssetResourceFile(brandAsset, binary);
                 })
                 .catch(function () {
+                    //resource data hasn't been cached yet so we need to go and fetch the resource data
                     return fetchAssetResourceData(brandAsset, binary);
                 });
         }
@@ -108,11 +111,12 @@
             }
         }
 
-        function getGenericAssetResource(brandAsset, binary) {
+        function getGenericAssetResourceData(brandAsset, binary) {
             var genericBrandAssets = getGenericBrandAssets(),
                 genericAsset;
 
             if (genericBrandAssets) {
+                //find an equivalent generic brand asset
                 genericAsset = getAssetBySubtype(genericBrandAssets, brandAsset.assetSubtypeId);
 
                 if (genericAsset && genericAsset !== brandAsset) {
