@@ -3,8 +3,8 @@
 
     //TODO - Move as much logic out of here as possible
 
-    // jshint maxparams:10
-    function coreRun($cordovaDevice, $rootScope, $state, $ionicPlatform, $window,
+    // jshint maxparams:11
+    function coreRun($cordovaDevice, $q, $rootScope, $state, $ionicPlatform, $window,
                      globals, AnalyticsUtil, AuthenticationManager, BrandUtil, CommonService) {
         var _ = CommonService._;
 
@@ -57,12 +57,18 @@
 
         function requestChromeFileSystem() {
             var MAX_FILE_SYSTEM_SIZE_CHROME = 5242880, //bytes
-                requestFileSystem = $window.webkitRequestFileSystem;
+                requestFileSystem = $window.webkitRequestFileSystem,
+                deferred = $q.defer();
 
             //we need to request a persistent FS while running in Chrome in order for cordova-plugin-file to work
             if (requestFileSystem && $cordovaDevice.getPlatform() === "browser") {
-                requestFileSystem($window.PERSISTENT, MAX_FILE_SYSTEM_SIZE_CHROME, _.noop, _.noop);
+                requestFileSystem($window.PERSISTENT, MAX_FILE_SYSTEM_SIZE_CHROME, deferred.resolve, deferred.reject);
             }
+            else {
+                deferred.resolve();
+            }
+
+            return deferred.promise;
         }
 
         //app must be set to fullscreen so that ionic headers are the correct size in iOS
@@ -83,8 +89,8 @@
         }, 101);
 
         CommonService.waitForCordovaPlatform()
-            .then(loadBundledBrands)
-            .then(requestChromeFileSystem);
+            .then(requestChromeFileSystem)
+            .then(loadBundledBrands);
 
         AnalyticsUtil.startTracker(globals.GOOGLE_ANALYTICS.TRACKING_ID);
     }
