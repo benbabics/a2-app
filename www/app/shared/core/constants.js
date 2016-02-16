@@ -199,14 +199,19 @@
      * App Database Configuration
      */
     sharedGlobals.DATASTORE = {
-        "APP_CONTEXT"    : "acctMaint",
+        "APP_CONTEXT"    : "fleetManager",
         "DATABASE" : {
-            "NAME" : "brandAssetsCollection",
-            "COLLECTION" : {
-                "name"  : "brandAssets",
-                "unique": "brandAssetId",
-                "index" : "clientBrandId"
-            }
+            "NAME" : "fleetManagerCollections"
+        }
+    };
+
+    /**
+     * Brand Asset Collection
+     */
+    sharedGlobals.BRAND_ASSET_COLLECTIOM = {
+        "NAME"      : "brandAssetsCollection",
+        "OPTIONS": {
+            "unique": "brandAssetId"
         }
     };
 
