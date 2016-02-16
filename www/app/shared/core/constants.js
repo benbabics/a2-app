@@ -195,6 +195,21 @@
         }
     };
 
+    /**
+     * App Database Configuration
+     */
+    sharedGlobals.DATASTORE = {
+        "APP_CONTEXT"    : "acctMaint",
+        "DATABASE" : {
+            "NAME" : "brandAssetsCollection",
+            "COLLECTION" : {
+                "name"  : "brandAssets",
+                "unique": "brandAssetId",
+                "index" : "clientBrandId"
+            }
+        }
+    };
+
     angular
         .module("app.shared.core")
         .constant("sharedGlobals", sharedGlobals)

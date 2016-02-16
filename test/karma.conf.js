@@ -36,6 +36,9 @@ module.exports = function(config) {
             "lib/Chart.js/Chart.js",
             "lib/angular-chart.js/dist/angular-chart.js",
             "lib/ngstorage/ngStorage.js",
+            "lib/lokijs/src/lokijs.js",
+            "lib/lokijs/src/loki-angular.js",
+            "lib/lokijs/src/loki-indexed-adapter.js",
 
             // Test libraries
             "../test/lib/**/*.js",

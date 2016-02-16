@@ -14,7 +14,8 @@
         "app.shared.integration",
         "app.shared.logger",
         "app.shared.util",
-        "app.shared.widgets"
+        "app.shared.widgets",
+        "app.shared.db",
     ])
 
         // jshint maxparams:6
