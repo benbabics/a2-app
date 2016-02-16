@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    fdescribe("A WEX Trusted HTML filter", function () {
+    describe("A WEX Trusted HTML filter", function () {
         var filter,
             $sce,
             html;
