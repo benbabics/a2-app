@@ -8,6 +8,9 @@
             if (resource) {
                 angular.extend(this, resource);
             }
+            else {
+                this.links = "";
+            }
         }
 
         HateoasResource.prototype.fetchResource = function (resourceType) {

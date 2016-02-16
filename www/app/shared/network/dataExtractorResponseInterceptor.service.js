@@ -5,11 +5,13 @@
 
     /* @ngInject */
     function DataExtractorResponseInterceptor(CommonService) {
+        // Private members
+        var _ = CommonService._;
+
         // Revealed Public members
         var service = {
-                response: response
-            },
-            _ = CommonService._;
+            response: response
+        };
 
         return service;
         //////////////////////
