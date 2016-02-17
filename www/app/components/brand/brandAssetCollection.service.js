@@ -10,23 +10,14 @@
                 getCollection: getCollection
             };
 
-        activate();
-
         return service;
         //////////////////////
 
-        function activate() {
-            loadCollection();
-        }
-
-        function loadCollection() {
+        function getCollection() {
             collection = IndexedDatabase.getCollection(globals.BRAND_ASSET_COLLECTIOM);
             if (collection === null) {
                 collection = IndexedDatabase.addCollection(globals.BRAND_ASSET_COLLECTIOM);
             }
-        }
-
-        function getCollection() {
             return collection;
         }
 

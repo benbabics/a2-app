@@ -6,6 +6,7 @@
     /* @ngInject */
     function IndexedDatabase(Loki, globals, CommonService) {
         var _ = CommonService._,
+            collections = [],
             dataStore = globals.DATASTORE,
             db,
             service = {
@@ -21,24 +22,30 @@
         function activate() {
             var adapter = new LokiIndexedAdapter(dataStore.APP_CONTEXT);
             db = new Loki(dataStore.DATABASE.NAME, {
-                autosave        : true,
-                autosaveInterval: 10000,
-                adapter         : adapter
+                autoload         : true,
+                autoloadCallback : loadHandler,
+                autosave         : true,
+                autosaveInterval : 10000,
+                adapter          : adapter
+            });
+        }
+        function loadHandler() {
+            collections = _.map(db.listCollections(), function (coll) {
+                return db.getCollection(coll.name);
             });
         }
 
         function addCollection(collection) {
             if (collection && collection.NAME) {
-
-                var options = configurationOptions(collection);
-                return db.addCollection(collection.NAME, options);
+                return db.addCollection(collection.NAME, configurationOptions(collection));
             }
             return null;
         }
 
         function getCollection(collection) {
             if (collection && collection.NAME) {
-                return db.getCollection(collection.NAME);
+                var foundCollection =  _.find(collections, {name : collection.NAME});
+                return foundCollection === undefined ? null : foundCollection;
             }
             return null;
         }
