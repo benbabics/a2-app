@@ -8,14 +8,12 @@
         $stateParams = {},
         $cordovaKeyboard,
         AnalyticsUtil,
+        LoginManager,
         authenticateDeferred,
-        brandAssets,
         ctrl,
-        fetchBrandAssetsDeferred,
-        fetchCurrentUserDeferred,
+        logInDeferred,
         AuthenticationManager,
         CommonService,
-        UserManager,
         mockGlobals = {
             "USER_LOGIN": {
                 "CONFIG": {
@@ -67,8 +65,7 @@
                 }
             }
         },
-        mockConfig = mockGlobals.USER_LOGIN.CONFIG,
-        userDetails;
+        mockConfig = mockGlobals.USER_LOGIN.CONFIG;
 
     describe("A Login Controller", function () {
 
@@ -89,24 +86,20 @@
 
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["fetchCurrentUserDetails"]);
             $state = jasmine.createSpyObj("state", ["go"]);
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["setUserId", "trackEvent", "trackView"]);
+            LoginManager = jasmine.createSpyObj("LoginManager", ["logIn", "logOut", "waitForCompletedLogin"]);
 
             inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _CommonService_, BrandAssetModel, UserAccountModel, UserModel,
                              globals) {
                 $ionicHistory = _$ionicHistory_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
-                fetchCurrentUserDeferred = $q.defer();
-                fetchBrandAssetsDeferred = $q.defer();
                 $rootScope = _$rootScope_;
                 CommonService = _CommonService_;
 
                 mockConfig.ANALYTICS.errorEvents = globals.USER_LOGIN.CONFIG.ANALYTICS.errorEvents;
-                userDetails = TestUtils.getRandomUser(UserModel, UserAccountModel, globals.USER.ONLINE_APPLICATION);
-                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
 
                 ctrl = $controller("LoginController", {
                     $scope                 : $scope,
@@ -117,13 +110,14 @@
                     globals                : mockGlobals,
                     AuthenticationManager  : AuthenticationManager,
                     CommonService          : CommonService,
-                    UserManager            : UserManager
+                    LoginManager           : LoginManager
                 });
 
                 //setup spies:
-                spyOn(CommonService, "logOut");
-                spyOn(userDetails, "fetchBrandAssets");
+                logInDeferred = $q.defer();
 
+                //setup mocks:
+                LoginManager.logIn.and.returnValue(logInDeferred.promise);
             });
 
         });
@@ -305,100 +299,54 @@
             describe("when the User is Authenticated successfully", function () {
 
                 beforeEach(function () {
-                    UserManager.fetchCurrentUserDetails.and.returnValue(fetchCurrentUserDeferred.promise);
-
                     //return a promise object and resolve it
                     authenticateDeferred.resolve();
+                    $rootScope.$digest();
                 });
 
-                describe("when the User Details is fetched successfully", function () {
+                it("should call LoginManager.logIn", function () {
+                    expect(LoginManager.logIn).toHaveBeenCalled();
+                });
+
+                describe("when the login completes successfully", function () {
 
                     beforeEach(function () {
-                        userDetails.fetchBrandAssets.and.returnValue(fetchBrandAssetsDeferred.promise);
+                        spyOn($ionicHistory, "nextViewOptions");
 
-                        //return a promise object and resolve it
-                        fetchCurrentUserDeferred.resolve(userDetails);
+                        logInDeferred.resolve();
                         $scope.$digest();
-                    });
-
-                    it("should call AnalyticsUtil.setUserId with the correct User ID", function () {
-                        expect(AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
                     });
 
                     it("should call AnalyticsUtil.trackEvent with the expected event", function () {
                         verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
                     });
 
-                    describe("when the Brand Assets are fetched successfully", function () {
-
-                        beforeEach(function () {
-                            spyOn($ionicHistory, "nextViewOptions");
-
-                            //resolve the promise
-                            fetchBrandAssetsDeferred.resolve(brandAssets);
-                            $scope.$digest();
-                        });
-
-                        it("should call userDetails.fetchBrandAssets", function () {
-                            expect(userDetails.fetchBrandAssets).toHaveBeenCalledWith();
-                        });
-
-                        it("should call disable backing up to the login page", function () {
-                            expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
-                        });
-
-                        it("should NOT have an error message", function () {
-                            expect(ctrl.globalError).toBeFalsy();
-                        });
-
-                        it("should navigate to the landing page", function () {
-                            expect($state.go).toHaveBeenCalledWith("landing");
-                        });
-
+                    it("should call disable backing up to the login page", function () {
+                        expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
                     });
 
-                    describe("when the Brand Assets are NOT fetched successfully", function () {
+                    it("should NOT have an error message", function () {
+                        expect(ctrl.globalError).toBeFalsy();
+                    });
 
-                        var errorObjectArg = new Error("Something bad happened");
-
-                        beforeEach(function () {
-                            //reject with an error message
-                            fetchBrandAssetsDeferred.reject(errorObjectArg);
-                            $scope.$digest();
-                        });
-
-                        it("should call CommonService.logOut", function () {
-                            expect(CommonService.logOut).toHaveBeenCalledWith();
-                        });
-
-                        it("should have an error message", function () {
-                            expect(ctrl.globalError).toEqual(mockConfig.serverErrors.DEFAULT);
-                        });
-
-                        it("should NOT navigate away from the login page", function () {
-                            expect($state.go).not.toHaveBeenCalled();
-                        });
-
+                    it("should navigate to the landing page", function () {
+                        expect($state.go).toHaveBeenCalledWith("landing");
                     });
 
                 });
 
-                describe("when the User Details is NOT fetched successfully", function () {
+                describe("when the login does NOT complete successfully", function () {
 
                     var errorObjectArg = new Error("Something bad happened");
 
                     beforeEach(function () {
                         //reject with an error message
-                        fetchCurrentUserDeferred.reject(errorObjectArg);
+                        logInDeferred.reject(errorObjectArg);
                         $scope.$digest();
                     });
 
-                    it("should NOT call userDetails.fetchBrandAssets", function () {
-                        expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
-                    });
-
-                    it("should call CommonService.logOut", function () {
-                        expect(CommonService.logOut).toHaveBeenCalledWith();
+                    it("should call LoginManager.logOut", function () {
+                        expect(LoginManager.logOut).toHaveBeenCalledWith();
                     });
 
                     it("should have an error message", function () {
@@ -427,16 +375,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
-                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
-                });
-
-                it("should NOT call userDetails.fetchBrandAssets", function () {
-                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
-                });
-
-                it("should call CommonService.logOut", function () {
-                    expect(CommonService.logOut).toHaveBeenCalledWith();
+                it("should call LoginManager.logOut", function () {
+                    expect(LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -463,16 +403,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
-                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
-                });
-
-                it("should NOT call userDetails.fetchBrandAssets", function () {
-                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
-                });
-
-                it("should call CommonService.logOut", function () {
-                    expect(CommonService.logOut).toHaveBeenCalledWith();
+                it("should call LoginManager.logOut", function () {
+                    expect(LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -499,16 +431,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
-                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
-                });
-
-                it("should NOT call userDetails.fetchBrandAssets", function () {
-                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
-                });
-
-                it("should call CommonService.logOut", function () {
-                    expect(CommonService.logOut).toHaveBeenCalledWith();
+                it("should call LoginManager.logOut", function () {
+                    expect(LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -535,16 +459,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
-                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
-                });
-
-                it("should NOT call userDetails.fetchBrandAssets", function () {
-                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
-                });
-
-                it("should call CommonService.logOut", function () {
-                    expect(CommonService.logOut).toHaveBeenCalledWith();
+                it("should call LoginManager.logOut", function () {
+                    expect(LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -571,16 +487,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
-                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
-                });
-
-                it("should NOT call userDetails.fetchBrandAssets", function () {
-                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
-                });
-
-                it("should call CommonService.logOut", function () {
-                    expect(CommonService.logOut).toHaveBeenCalledWith();
+                it("should call LoginManager.logOut", function () {
+                    expect(LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -607,16 +515,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
-                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
-                });
-
-                it("should NOT call userDetails.fetchBrandAssets", function () {
-                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
-                });
-
-                it("should call CommonService.logOut", function () {
-                    expect(CommonService.logOut).toHaveBeenCalledWith();
+                it("should call LoginManager.logOut", function () {
+                    expect(LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
@@ -643,16 +543,8 @@
                     $scope.$digest();
                 });
 
-                it("should NOT call UserManager.fetchCurrentUserDetails", function () {
-                    expect(UserManager.fetchCurrentUserDetails).not.toHaveBeenCalled();
-                });
-
-                it("should NOT call userDetails.fetchBrandAssets", function () {
-                    expect(userDetails.fetchBrandAssets).not.toHaveBeenCalled();
-                });
-
-                it("should call CommonService.logOut", function () {
-                    expect(CommonService.logOut).toHaveBeenCalledWith();
+                it("should call LoginManager.logOut", function () {
+                    expect(LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {

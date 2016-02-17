@@ -266,7 +266,8 @@
             mockHasMultipleBanks,
             mockInvoiceSummary,
             AnalyticsUtil,
-            AuthenticationManager;
+            AuthenticationManager,
+            LoginManager;
 
         beforeEach(function () {
 
@@ -282,6 +283,8 @@
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTracker", "trackView", "trackEvent"]);
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
+            LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
+
             module(function ($provide, sharedGlobals) {
                 $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
                 $provide.value("BankManager", BankManager);
@@ -291,6 +294,7 @@
                 $provide.value("UserManager", UserManager);
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("AuthenticationManager", AuthenticationManager);
+                $provide.value("LoginManager", LoginManager);
             });
 
             inject(function (_$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _InvoiceSummaryModel_,
@@ -324,7 +328,6 @@
             BankManager.hasMultipleBanks.and.returnValue($q.when(mockHasMultipleBanks));
             InvoiceManager.getInvoiceSummary.and.returnValue(mockInvoiceSummary);
             AuthenticationManager.userLoggedIn.and.returnValue(true);
-            spyOn(CommonService, "logOut").and.stub();
 
         });
 

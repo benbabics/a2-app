@@ -74,7 +74,8 @@
             CommonService,
             PaymentManager,
             UserManager,
-            AnalyticsUtil;
+            AnalyticsUtil,
+            LoginManager;
 
         beforeEach(function () {
 
@@ -102,6 +103,7 @@
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["clearCachedValues", "fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTracker", "trackView"]);
+            LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
 
             module(function ($provide) {
                 $provide.value("AuthenticationManager", AuthenticationManager);
@@ -110,6 +112,7 @@
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
+                $provide.value("LoginManager", LoginManager);
             });
 
             inject(function (_$q_, _$rootScope_, _$state_, _CommonService_) {
@@ -127,7 +130,6 @@
             spyOn(CommonService, "exitApp");
             spyOn(CommonService, "loadingBegin");
             spyOn(CommonService, "loadingComplete");
-            spyOn(CommonService, "logOut");
             spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function (callback) {
                 return $q.resolve((callback || _.noop)());
             });

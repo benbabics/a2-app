@@ -1,8 +1,6 @@
 (function () {
     "use strict";
 
-    // jshint maxparams:5
-
     /* @ngInject */
     function configureRoutes($stateProvider) {
 
@@ -20,9 +18,10 @@
                     controller: "LoginController as vm"
                 }
             },
-            onEnter: function($cordovaSplashscreen, $interval, globals, AnalyticsUtil, CommonService) {
+            // jshint maxparams:6
+            onEnter: function($cordovaSplashscreen, $interval, globals, AnalyticsUtil, LoginManager, CommonService) {
                 //log out the user
-                CommonService.logOut();
+                LoginManager.logOut();
 
                 //make sure the ionic platform is ready before hiding the splash screen
                 CommonService.waitForCordovaPlatform(function() {

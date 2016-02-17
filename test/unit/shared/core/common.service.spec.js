@@ -610,20 +610,6 @@
             });
         });
 
-        describe("has a logOut function that", function () {
-
-            beforeEach(function () {
-                spyOn($rootScope, "$emit");
-
-                CommonService.logOut();
-            });
-
-            it("should emit an app:logout event", function () {
-                expect($rootScope.$emit).toHaveBeenCalledWith("app:logout");
-            });
-
-        });
-
         describe("has a fieldHasError function that", function () {
 
             describe("when the field is not defined", function () {

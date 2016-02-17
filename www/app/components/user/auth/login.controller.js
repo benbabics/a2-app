@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function LoginController($cordovaKeyboard, $ionicHistory, $rootScope, $scope, $state, $stateParams,
-                             globals, AnalyticsUtil, AuthenticationManager, CommonService, UserManager) {
+                             globals, AnalyticsUtil, AuthenticationManager, CommonService, LoginManager) {
 
         var _ = CommonService._,
             vm = this;
@@ -54,16 +54,10 @@
             CommonService.loadingBegin();
 
             return AuthenticationManager.authenticate(vm.user.username, vm.user.password)
-                .then(UserManager.fetchCurrentUserDetails)
-                .then(function (userDetails) {
-                    // track all events with the user's ID
-                    AnalyticsUtil.setUserId(userDetails.id);
-
+                .then(LoginManager.logIn)
+                .then(function () {
                     trackSuccessEvent();
 
-                    return userDetails.fetchBrandAssets();
-                })
-                .then(function () {
                     // Do not allow backing up to the login page.
                     $ionicHistory.nextViewOptions(
                         {
@@ -76,13 +70,15 @@
                 })
                 .catch(function (failedAuthenticationError) {
                     var errorReason = "DEFAULT";
+
+                    //use the more specific error code if it is a trackable error
                     if (_.has(vm.config.serverErrors, failedAuthenticationError.message)) {
                         errorReason = failedAuthenticationError.message;
                     }
 
                     vm.globalError = vm.config.serverErrors[errorReason];
 
-                    CommonService.logOut();
+                    LoginManager.logOut();
                     trackErrorEvent(errorReason);
                 })
                 .finally(CommonService.loadingComplete);

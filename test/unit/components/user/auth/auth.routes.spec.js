@@ -7,6 +7,7 @@
             $state,
             AnalyticsUtil,
             CommonService,
+            LoginManager,
             $q,
             $cordovaSplashscreen,
             $interval,
@@ -30,10 +31,12 @@
             //mock dependencies:
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
             $cordovaSplashscreen = jasmine.createSpyObj("$cordovaSplashscreen", ["hide"]);
+            LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
 
             module(function($provide, sharedGlobals) {
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("$cordovaSplashscreen", $cordovaSplashscreen);
+                $provide.value("LoginManager", LoginManager);
                 $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
@@ -46,7 +49,6 @@
             });
 
             //setup spies:
-            spyOn(CommonService, "logOut");
             spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
                 //just execute the callback directly
                 return $q.when((callback || function() {})());
@@ -121,7 +123,7 @@
                 });
 
                 it("should log the user out", function () {
-                    expect(CommonService.logOut).toHaveBeenCalledWith();
+                    expect(LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should NOT call $cordovaSplashscreen.hide", function () {

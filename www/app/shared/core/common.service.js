@@ -54,7 +54,6 @@
             "isPoBox"                  : isPoBox,
             "loadingBegin"             : loadingBegin,
             "loadingComplete"          : loadingComplete,
-            "logOut"                   : logOut,
             "maskAccountNumber"        : maskAccountNumber,
             "pageHasNavBar"            : pageHasNavBar,
             "platformHasCordova"       : platformHasCordova,
@@ -512,10 +511,6 @@
             if (loadingIndicatorCount === 0) {
                 $rootScope.$emit("app:loadingComplete");
             }
-        }
-
-        function logOut() {
-            $rootScope.$emit("app:logout");
         }
 
         function mapCommonPopupOptions(options) {

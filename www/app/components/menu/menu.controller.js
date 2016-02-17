@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function MenuController($state, $ionicSideMenuDelegate, globals, CommonService) {
+    function MenuController($state, $ionicSideMenuDelegate, globals, LoginManager) {
 
         var vm = this;
         vm.config = globals.MENU.CONFIG;
@@ -17,7 +17,7 @@
         }
 
         function logOut() {
-            CommonService.logOut();
+            LoginManager.logOut();
 
             $state.go(globals.LOGIN_STATE);
         }
