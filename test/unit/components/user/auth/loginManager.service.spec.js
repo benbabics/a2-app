@@ -106,7 +106,7 @@
                         });
 
                         it("should call BrandUtil.updateBrandCache with the expected values", function () {
-                            expect(BrandUtil.updateBrandCache).toHaveBeenCalledWith(brandAssets);
+                            expect(BrandUtil.updateBrandCache).toHaveBeenCalledWith(userDetails.brand, brandAssets);
                         });
 
                         describe("when BrandUtil.updateBrandCache succeeds", function () {

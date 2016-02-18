@@ -54,12 +54,20 @@
                     // track all events with the user's ID
                     AnalyticsUtil.setUserId(userDetails.id);
 
-                    return userDetails.fetchBrandAssets();
+                    return updateBrandCache(userDetails);
                 })
-                .then(BrandUtil.updateBrandCache)
                 .then(initializationCompletedDeferred.resolve)
                 .catch(function (error) {
                     throw new Error("Failed to complete login initialization: " + CommonService.getErrorMessage(error));
+                });
+        }
+
+        function updateBrandCache(userDetails) {
+            var brandName = userDetails.brand;
+
+            return userDetails.fetchBrandAssets()
+                .then(function (brandAssets) {
+                    return BrandUtil.updateBrandCache(brandName, brandAssets);
                 });
         }
     }

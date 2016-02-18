@@ -3,12 +3,14 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
-    // jshint maxparams:8
+    // jshint maxparams:10
 
     /* @ngInject */
-    function BrandUtil($q, $window, globals, BrandAssetModel, BrandManager, CommonService, FileUtil, Logger) {
+    function BrandUtil($localStorage, $q, $window, globals, moment,
+                       BrandAssetModel, BrandManager, CommonService, FileUtil, Logger) {
         // Private members
-        var _ = CommonService._;
+        var LAST_BRAND_UPDATE_DATE = globals.LOCALSTORAGE.KEYS.LAST_BRAND_UPDATE_DATE,
+            _ = CommonService._;
 
         // Revealed Public members
         var service = {
@@ -19,8 +21,10 @@
             "getAssetResourceFile"             : getAssetResourceFile,
             "getAssetResourceFilePath"         : getAssetResourceFilePath,
             "getGenericBrandAssets"            : getGenericBrandAssets,
+            "getLastBrandUpdateDate"           : getLastBrandUpdateDate,
             "getWexBrandAssets"                : getWexBrandAssets,
             "loadBundledBrand"                 : loadBundledBrand,
+            "setLastBrandUpdateDate"           : setLastBrandUpdateDate,
             "storeAssetResourceFile"           : storeAssetResourceFile,
             "updateBrandCache"                 : updateBrandCache
         };
@@ -143,6 +147,20 @@
             return BrandManager.getBrandAssetsByBrand(globals.BRAND.GENERIC);
         }
 
+        function getLastBrandUpdateDate(brandName) {
+            var updateDates;
+
+            if (_.has($localStorage, LAST_BRAND_UPDATE_DATE)) {
+                updateDates = $localStorage[LAST_BRAND_UPDATE_DATE];
+
+                if (_.has(updateDates, brandName)) {
+                    return updateDates[brandName];
+                }
+            }
+
+            return null;
+        }
+
         function getWexBrandAssets() {
             return BrandManager.getBrandAssetsByBrand(globals.BRAND.WEX);
         }
@@ -173,7 +191,7 @@
                 });
         }
 
-        function loadBundledBrand(brandId, brandResource) {
+        function loadBundledBrand(brandName, brandResource) {
             var brandAssets = [],
                 promises = [];
 
@@ -192,15 +210,25 @@
             });
 
             //cache the asset list
-            BrandManager.storeBrandAssets(brandId, brandAssets);
+            BrandManager.storeBrandAssets(brandName, brandAssets);
 
             return $q.all(promises)
                 .catch(function (error) {
-                    var logError = "Failed to load bundled brand '" + brandId + "': " + CommonService.getErrorMessage(error);
+                    var logError = "Failed to load bundled brand '" + brandName + "': " + CommonService.getErrorMessage(error);
 
                     Logger.error(logError);
                     return $q.reject(logError);
                 });
+        }
+
+        function setLastBrandUpdateDate(brandName, date) {
+            date = date || moment().toDate();
+
+            if (!_.has($localStorage, LAST_BRAND_UPDATE_DATE)) {
+                $localStorage[LAST_BRAND_UPDATE_DATE] = {};
+            }
+
+            $localStorage[LAST_BRAND_UPDATE_DATE][brandName] = date;
         }
 
         function storeAssetResourceFile(brandAsset, resourceData) {
@@ -221,7 +249,7 @@
                 });
         }
 
-        function updateBrandCache(brandAssets, forceUpdate) {
+        function updateBrandCache(brandName, brandAssets, forceUpdate) {
             var promises = [];
 
             forceUpdate = _.isUndefined(forceUpdate) ? false : forceUpdate;
@@ -235,6 +263,10 @@
             });
 
             return $q.all(promises)
+                .then(function () {
+                    //update the last brand update date
+                    setLastBrandUpdateDate(brandName);
+                })
                 .catch(function (error) {
                     throw new Error("Failed to update brand cache: " + CommonService.getErrorMessage(error));
                 });

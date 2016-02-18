@@ -10,6 +10,7 @@
         $q,
         $rootScope,
         $window,
+        $localStorage,
         brandAssets,
         brandAsset,
         binary,
@@ -23,13 +24,15 @@
         checkDirectoryExistsDeferred,
         checkFileExistsDeferred,
         readFileDeferred,
-        createDirectoryDeferred;
+        createDirectoryDeferred,
+        LAST_BRAND_UPDATE_DATE;
 
     describe("A Brand Util service", function () {
 
         beforeEach(function () {
 
             module("app.shared");
+            module("app.components.core");
             module("app.components.brand");
             module("app.components.util");
             module("app.html");
@@ -49,14 +52,17 @@
                 $provide.value("FileUtil", FileUtil);
             });
 
-            inject(function (_$rootScope_, _$q_, _$window_, _globals_, _BrandAssetModel_, _BrandUtil_, _CommonService_) {
+            inject(function (_$localStorage_, _$rootScope_, _$q_, _$window_, _globals_, _BrandAssetModel_, _BrandUtil_, _CommonService_) {
                 BrandUtil = _BrandUtil_;
                 CommonService = _CommonService_;
                 BrandAssetModel = _BrandAssetModel_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $window = _$window_;
+                $localStorage = _$localStorage_;
                 globals = _globals_;
+
+                LAST_BRAND_UPDATE_DATE = globals.LOCALSTORAGE.KEYS.LAST_BRAND_UPDATE_DATE;
 
                 brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
                 brandAsset = TestUtils.getRandomValueFromArray(brandAssets);
@@ -588,11 +594,11 @@
         });
 
         describe("has a loadBundledBrand function that", function () {
-            var brandId,
+            var brandName,
                 brandResource;
 
             beforeEach(function () {
-                brandId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 brandResource = TestUtils.getRandomBrandAssets(BrandAssetModel);
             });
 
@@ -620,13 +626,13 @@
                 });
 
                 beforeEach(function () {
-                    BrandUtil.loadBundledBrand(brandId, brandResource)
+                    BrandUtil.loadBundledBrand(brandName, brandResource)
                         .then(resolveHandler)
                         .catch(rejectHandler);
                 });
 
                 it("should call BrandManager.storeBrandAssets with the expected values", function () {
-                    expect(BrandManager.storeBrandAssets).toHaveBeenCalledWith(brandId, brandResource);
+                    expect(BrandManager.storeBrandAssets).toHaveBeenCalledWith(brandName, brandResource);
                 });
 
                 describe("when loading a FILE asset", function () {
@@ -857,7 +863,7 @@
                 });
 
                 beforeEach(function () {
-                    BrandUtil.loadBundledBrand(brandId, brandResource)
+                    BrandUtil.loadBundledBrand(brandName, brandResource)
                         .then(resolveHandler)
                         .catch(rejectHandler);
 
@@ -865,7 +871,7 @@
                 });
 
                 it("should call BrandManager.storeBrandAssets with the expected values", function () {
-                    expect(BrandManager.storeBrandAssets).toHaveBeenCalledWith(brandId, brandResource);
+                    expect(BrandManager.storeBrandAssets).toHaveBeenCalledWith(brandName, brandResource);
                 });
 
                 it("should return a promise that resolves", function () {
@@ -974,6 +980,15 @@
         });
 
         describe("has a updateBrandCache function that", function () {
+            var brandName,
+                currentDate;
+
+            beforeEach(function () {
+                brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                currentDate = TestUtils.getRandomDate();
+
+                jasmine.clock().mockDate(currentDate);
+            });
 
             describe("when forceUpdate is true", function () {
 
@@ -989,7 +1004,7 @@
                     });
 
                     beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandAssets, true)
+                        BrandUtil.updateBrandCache(brandName, brandAssets, true)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                         $rootScope.$digest();
@@ -1018,6 +1033,10 @@
                                 $rootScope.$digest();
                             });
 
+                            it("should update the last update date", function () {
+                                expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                            });
+
                             it("should resolve", function () {
                                 expect(resolveHandler).toHaveBeenCalled();
                             });
@@ -1032,6 +1051,11 @@
                                 };
 
                                 writeFileDeferred.reject(error);
+                            });
+
+                            it("should NOT update the last update date", function () {
+                                expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
+                                    .toBeFalsy();
                             });
 
                             it("should throw an error", function () {
@@ -1053,6 +1077,11 @@
                             fetchResourceDeferred.reject(error);
                         });
 
+                        it("should NOT update the last update date", function () {
+                            expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
+                                .toBeFalsy();
+                        });
+
                         it("should throw an error", function () {
                             var expectedError = "Failed to update brand cache: " + CommonService.getErrorMessage(error);
 
@@ -1068,10 +1097,14 @@
                     });
 
                     beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandAssets, true)
+                        BrandUtil.updateBrandCache(brandName, brandAssets, true)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                         $rootScope.$digest();
+                    });
+
+                    it("should update the last update date", function () {
+                        expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
                     });
 
                     it("should resolve", function () {
@@ -1094,7 +1127,7 @@
                     });
 
                     beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandAssets, false)
+                        BrandUtil.updateBrandCache(brandName, brandAssets, false)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                         $rootScope.$digest();
@@ -1113,6 +1146,10 @@
 
                         it("should NOT store the asset resource data", function () {
                             expect(FileUtil.writeFile).not.toHaveBeenCalled();
+                        });
+
+                        it("should update the last update date", function () {
+                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
                         });
                     });
 
@@ -1146,6 +1183,10 @@
                                     $rootScope.$digest();
                                 });
 
+                                it("should update the last update date", function () {
+                                    expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                                });
+
                                 it("should resolve", function () {
                                     expect(resolveHandler).toHaveBeenCalled();
                                 });
@@ -1160,6 +1201,11 @@
                                     };
 
                                     writeFileDeferred.reject(error);
+                                });
+
+                                it("should NOT update the last update date", function () {
+                                    expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
+                                        .toBeFalsy();
                                 });
 
                                 it("should throw an error", function () {
@@ -1181,6 +1227,11 @@
                                 fetchResourceDeferred.reject(error);
                             });
 
+                            it("should NOT update the last update date", function () {
+                                expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
+                                    .toBeFalsy();
+                            });
+
                             it("should throw an error", function () {
                                 var expectedError = "Failed to update brand cache: " + CommonService.getErrorMessage(error);
 
@@ -1197,10 +1248,14 @@
                     });
 
                     beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandAssets, false)
+                        BrandUtil.updateBrandCache(brandName, brandAssets, false)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                         $rootScope.$digest();
+                    });
+
+                    it("should update the last update date", function () {
+                        expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
                     });
 
                     it("should resolve", function () {
@@ -1223,7 +1278,7 @@
                     });
 
                     beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandAssets)
+                        BrandUtil.updateBrandCache(brandName, brandAssets)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                         $rootScope.$digest();
@@ -1242,6 +1297,10 @@
 
                         it("should NOT store the asset resource data", function () {
                             expect(FileUtil.writeFile).not.toHaveBeenCalled();
+                        });
+
+                        it("should update the last update date", function () {
+                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
                         });
                     });
 
@@ -1275,6 +1334,10 @@
                                     $rootScope.$digest();
                                 });
 
+                                it("should update the last update date", function () {
+                                    expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                                });
+
                                 it("should resolve", function () {
                                     expect(resolveHandler).toHaveBeenCalled();
                                 });
@@ -1289,6 +1352,11 @@
                                     };
 
                                     writeFileDeferred.reject(error);
+                                });
+
+                                it("should NOT update the last update date", function () {
+                                    expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
+                                        .toBeFalsy();
                                 });
 
                                 it("should throw an error", function () {
@@ -1310,6 +1378,11 @@
                                 fetchResourceDeferred.reject(error);
                             });
 
+                            it("should NOT update the last update date", function () {
+                                expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
+                                    .toBeFalsy();
+                            });
+
                             it("should throw an error", function () {
                                 var expectedError = "Failed to update brand cache: " + CommonService.getErrorMessage(error);
 
@@ -1326,14 +1399,217 @@
                     });
 
                     beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandAssets)
+                        BrandUtil.updateBrandCache(brandName, brandAssets)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                         $rootScope.$digest();
                     });
 
+                    it("should update the last update date", function () {
+                        expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                    });
+
                     it("should resolve", function () {
                         expect(resolveHandler).toHaveBeenCalled();
+                    });
+                });
+            });
+        });
+
+        describe("has a getLastBrandUpdateDate function that", function () {
+            var brandName;
+
+            beforeEach(function () {
+                brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+            });
+
+            describe("when there is already a list of last update dates", function () {
+
+                beforeEach(function () {
+                    $localStorage[LAST_BRAND_UPDATE_DATE] = {};
+                });
+
+                describe("when the given brand is in the list of last update dates", function () {
+                    var expectedDate;
+
+                    beforeEach(function () {
+                        expectedDate = TestUtils.getRandomDate();
+
+                        $localStorage[LAST_BRAND_UPDATE_DATE][brandName] = expectedDate;
+                    });
+
+                    it("should return the last update date for the given brand", function () {
+                        expect(BrandUtil.getLastBrandUpdateDate(brandName)).toEqual(expectedDate);
+                    });
+                });
+
+                describe("when the given brand is NOT in the list of last update dates", function () {
+
+                    beforeEach(function () {
+                        delete $localStorage[LAST_BRAND_UPDATE_DATE][brandName];
+                    });
+
+                    it("should return null", function () {
+                        expect(BrandUtil.getLastBrandUpdateDate(brandName)).toBeNull();
+                    });
+                });
+            });
+
+            describe("when there is NOT already a list of last update dates", function () {
+
+                beforeEach(function () {
+                    delete $localStorage[LAST_BRAND_UPDATE_DATE];
+                });
+
+                it("should return null", function () {
+                    expect(BrandUtil.getLastBrandUpdateDate(brandName)).toBeNull();
+                });
+            });
+        });
+
+        describe("has a setLastBrandUpdateDate function that", function () {
+            var brandName;
+
+            beforeEach(function () {
+                brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+            });
+
+            describe("when given a date", function () {
+                var date;
+
+                beforeEach(function () {
+                    date = TestUtils.getRandomDate();
+                });
+
+                describe("when there is already a list of last update dates", function () {
+
+                    beforeEach(function () {
+                        $localStorage[LAST_BRAND_UPDATE_DATE] = {};
+                    });
+
+                    describe("when the given brand is in the list of last update dates", function () {
+                        var oldDate;
+
+                        beforeEach(function () {
+                            oldDate = TestUtils.getRandomDate();
+
+                            $localStorage[LAST_BRAND_UPDATE_DATE][brandName] = oldDate;
+                        });
+
+                        beforeEach(function () {
+                            BrandUtil.setLastBrandUpdateDate(brandName, date);
+                        });
+
+                        it("should update the entry with the given date", function () {
+                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(date);
+                        });
+                    });
+
+                    describe("when the given brand is NOT in the list of last update dates", function () {
+
+                        beforeEach(function () {
+                            delete $localStorage[LAST_BRAND_UPDATE_DATE][brandName];
+                        });
+
+                        beforeEach(function () {
+                            BrandUtil.setLastBrandUpdateDate(brandName, date);
+                        });
+
+                        it("should add the entry with the given date", function () {
+                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(date);
+                        });
+                    });
+                });
+
+                describe("when there is NOT already a list of last update dates", function () {
+
+                    beforeEach(function () {
+                        delete $localStorage[LAST_BRAND_UPDATE_DATE];
+                    });
+
+                    beforeEach(function () {
+                        BrandUtil.setLastBrandUpdateDate(brandName, date);
+                    });
+
+                    it("should create a list of last update dates", function () {
+                        expect($localStorage[LAST_BRAND_UPDATE_DATE]).toBeDefined();
+                    });
+
+                    it("should add the entry with the given date", function () {
+                        expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(date);
+                    });
+                });
+            });
+
+            describe("when NOT given a date", function () {
+                var currentDate;
+
+                beforeEach(function () {
+                    currentDate = TestUtils.getRandomDate();
+                });
+
+                describe("when there is already a list of last update dates", function () {
+
+                    beforeEach(function () {
+                        $localStorage[LAST_BRAND_UPDATE_DATE] = {};
+                    });
+
+                    describe("when the given brand is in the list of last update dates", function () {
+                        var oldDate;
+
+                        beforeEach(function () {
+                            oldDate = TestUtils.getRandomDate();
+
+                            $localStorage[LAST_BRAND_UPDATE_DATE][brandName] = oldDate;
+                        });
+
+                        beforeEach(function () {
+                            jasmine.clock().mockDate(currentDate);
+
+                            BrandUtil.setLastBrandUpdateDate(brandName);
+                        });
+
+                        it("should update the entry with the current date", function () {
+                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                        });
+                    });
+
+                    describe("when the given brand is NOT in the list of last update dates", function () {
+
+                        beforeEach(function () {
+                            delete $localStorage[LAST_BRAND_UPDATE_DATE][brandName];
+                        });
+
+                        beforeEach(function () {
+                            jasmine.clock().mockDate(currentDate);
+
+                            BrandUtil.setLastBrandUpdateDate(brandName);
+                        });
+
+                        it("should add the entry with the current date", function () {
+                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                        });
+                    });
+                });
+
+                describe("when there is NOT already a list of last update dates", function () {
+
+                    beforeEach(function () {
+                        delete $localStorage[LAST_BRAND_UPDATE_DATE];
+                    });
+
+                    beforeEach(function () {
+                        jasmine.clock().mockDate(currentDate);
+
+                        BrandUtil.setLastBrandUpdateDate(brandName);
+                    });
+
+                    it("should create a list of last update dates", function () {
+                        expect($localStorage[LAST_BRAND_UPDATE_DATE]).toBeDefined();
+                    });
+
+                    it("should add the entry with the current date", function () {
+                        expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
                     });
                 });
             });
