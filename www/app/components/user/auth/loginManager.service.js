@@ -29,6 +29,8 @@
         }
 
         function logIn() {
+            clearCachedValues();
+
             $rootScope.$emit("app:login");
 
             return waitForCompletedLogin();
@@ -49,6 +51,8 @@
         }
 
         function doLoginInitialization() {
+            CommonService.loadingBegin();
+
             UserManager.fetchCurrentUserDetails()
                 .then(function (userDetails) {
                     // track all events with the user's ID
@@ -58,8 +62,11 @@
                 })
                 .then(initializationCompletedDeferred.resolve)
                 .catch(function (error) {
+                    initializationCompletedDeferred.reject(error);
+
                     throw new Error("Failed to complete login initialization: " + CommonService.getErrorMessage(error));
-                });
+                })
+                .finally(CommonService.loadingComplete);
         }
 
         function updateBrandCache(userDetails) {

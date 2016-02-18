@@ -68,12 +68,12 @@
                     // transition to the landing page
                     $state.go("landing");
                 })
-                .catch(function (failedAuthenticationError) {
+                .catch(function (loginError) {
                     var errorReason = "DEFAULT";
 
                     //use the more specific error code if it is a trackable error
-                    if (_.has(vm.config.serverErrors, failedAuthenticationError.message)) {
-                        errorReason = failedAuthenticationError.message;
+                    if (_.has(loginError, "message") && _.has(vm.config.serverErrors, loginError.message)) {
+                        errorReason = loginError.message;
                     }
 
                     vm.globalError = vm.config.serverErrors[errorReason];

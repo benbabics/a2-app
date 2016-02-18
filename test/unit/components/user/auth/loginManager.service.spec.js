@@ -57,6 +57,8 @@
             updateBrandCacheDeferred = $q.defer();
             spyOn(userDetails, "fetchBrandAssets").and.returnValue(fetchBrandAssetsDeferred.promise);
             spyOn(UserManager, "fetchCurrentUserDetails").and.returnValue(fetchCurrentUserDetailsDeferred.promise);
+            spyOn(CommonService, "loadingBegin");
+            spyOn(CommonService, "loadingComplete");
 
             //setup mocks
             UserManager.fetchCurrentUserDetails.and.returnValue(fetchCurrentUserDetailsDeferred.promise);
@@ -74,6 +76,10 @@
                 beforeEach(function () {
                     $rootScope.$emit("app:login");
                     $rootScope.$digest();
+                });
+
+                it("should call CommonService.loadingBegin", function () {
+                    expect(CommonService.loadingBegin).toHaveBeenCalledWith();
                 });
 
                 it("should call UserManager.fetchCurrentUserDetails", function () {
@@ -124,11 +130,21 @@
                                 expect(resolveHandler).toHaveBeenCalled();
                             });
 
+                            it("should call CommonService.loadingComplete", function () {
+                                expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                            });
+
                             //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
                         });
 
                         describe("when BrandUtil.updateBrandCache fails", function () {
                             var error;
+
+                            beforeEach(function () {
+                                LoginManager.waitForCompletedLogin()
+                                    .then(resolveHandler)
+                                    .catch(rejectHandler);
+                            });
 
                             beforeEach(function () {
                                 error = {
@@ -143,11 +159,27 @@
 
                                 expect($rootScope.$digest).toThrowError(expectedError);
                             });
+
+                            it("should reject the initialization promise", function () {
+                                //TODO: figure out how to test this before the error gets thrown in $digest
+                            });
+
+                            it("should call CommonService.loadingComplete", function () {
+                                //TODO: figure out how to test this after the error gets thrown in $digest
+                            });
+
+                            //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
                         });
                     });
 
                     describe("when userDetails.fetchBrandAssets fails", function () {
                         var error;
+
+                        beforeEach(function () {
+                            LoginManager.waitForCompletedLogin()
+                                .then(resolveHandler)
+                                .catch(rejectHandler);
+                        });
 
                         beforeEach(function () {
                             error = {
@@ -162,11 +194,27 @@
 
                             expect($rootScope.$digest).toThrowError(expectedError);
                         });
+
+                        it("should reject the initialization promise", function () {
+                            //TODO: figure out how to test this before the error gets thrown in $digest
+                        });
+
+                        it("should call CommonService.loadingComplete", function () {
+                            //TODO: figure out how to test this after the error gets thrown in $digest
+                        });
+
+                        //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
                     });
                 });
 
                 describe("when UserManager.fetchCurrentUserDetails fails", function () {
                     var error;
+
+                    beforeEach(function () {
+                        LoginManager.waitForCompletedLogin()
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -181,6 +229,16 @@
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
+
+                    it("should reject the initialization promise", function () {
+                        //TODO: figure out how to test this before the error gets thrown in $digest
+                    });
+
+                    it("should call CommonService.loadingComplete", function () {
+                        //TODO: figure out how to test this after the error gets thrown in $digest
+                    });
+
+                    //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
                 });
             });
         });
