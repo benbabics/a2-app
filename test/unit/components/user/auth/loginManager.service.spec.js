@@ -8,9 +8,12 @@
         AnalyticsUtil,
         CommonService,
         UserManager,
+        BrandUtil,
+        BrandAssetModel,
         userDetails,
         fetchCurrentUserDetailsDeferred,
         fetchBrandAssetsDeferred,
+        updateBrandCacheDeferred,
         rejectHandler,
         resolveHandler;
 
@@ -25,18 +28,22 @@
 
             //mock dependencies
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["setUserId"]);
+            BrandUtil = jasmine.createSpyObj("BrandUtil", ["updateBrandCache"]);
+
             module(function ($provide) {
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
+                $provide.value("BrandUtil", BrandUtil);
             });
 
             inject(function (_$q_, _$rootScope_, globals,
-                             _CommonService_, _LoginManager_, UserAccountModel, _UserManager_, UserModel) {
+                             _BrandAssetModel_, _CommonService_, _LoginManager_, UserAccountModel, _UserManager_, UserModel) {
                 _ = _CommonService_._;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 CommonService = _CommonService_;
                 LoginManager = _LoginManager_;
                 UserManager = _UserManager_;
+                BrandAssetModel = _BrandAssetModel_;
 
                 userDetails = TestUtils.getRandomUser(UserModel, UserAccountModel, globals.USER.ONLINE_APPLICATION);
             });
@@ -46,11 +53,13 @@
             rejectHandler = jasmine.createSpy("rejectHandler");
             fetchCurrentUserDetailsDeferred = $q.defer();
             fetchBrandAssetsDeferred = $q.defer();
+            updateBrandCacheDeferred = $q.defer();
             spyOn(userDetails, "fetchBrandAssets").and.returnValue(fetchBrandAssetsDeferred.promise);
             spyOn(UserManager, "fetchCurrentUserDetails").and.returnValue(fetchCurrentUserDetailsDeferred.promise);
 
             //setup mocks
             UserManager.fetchCurrentUserDetails.and.returnValue(fetchCurrentUserDetailsDeferred.promise);
+            BrandUtil.updateBrandCache.and.returnValue(updateBrandCacheDeferred.promise);
         });
 
         describe("has an activate function that", function () {
@@ -86,21 +95,54 @@
                     });
 
                     describe("when userDetails.fetchBrandAssets succeeds", function () {
+                        var brandAssets;
 
                         beforeEach(function () {
-                            LoginManager.waitForCompletedLogin()
-                                .then(resolveHandler)
-                                .catch(rejectHandler);
+                            brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
 
-                            fetchBrandAssetsDeferred.resolve();
+                            fetchBrandAssetsDeferred.resolve(brandAssets);
                             $rootScope.$digest();
                         });
 
-                        it("should resolve the initialization promise", function () {
-                            expect(resolveHandler).toHaveBeenCalled();
+                        it("should call BrandUtil.updateBrandCache with the expected values", function () {
+                            expect(BrandUtil.updateBrandCache).toHaveBeenCalledWith(brandAssets);
                         });
 
-                        //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
+                        describe("when BrandUtil.updateBrandCache succeeds", function () {
+
+                            beforeEach(function () {
+                                LoginManager.waitForCompletedLogin()
+                                    .then(resolveHandler)
+                                    .catch(rejectHandler);
+
+                                updateBrandCacheDeferred.resolve();
+                                $rootScope.$digest();
+                            });
+
+                            it("should resolve the initialization promise", function () {
+                                expect(resolveHandler).toHaveBeenCalled();
+                            });
+
+                            //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
+                        });
+
+                        describe("when BrandUtil.updateBrandCache fails", function () {
+                            var error;
+
+                            beforeEach(function () {
+                                error = {
+                                    message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                };
+
+                                updateBrandCacheDeferred.reject(error);
+                            });
+
+                            it("should throw an error", function () {
+                                var expectedError = "Failed to complete login initialization: " + CommonService.getErrorMessage(error);
+
+                                expect($rootScope.$digest).toThrowError(expectedError);
+                            });
+                        });
                     });
 
                     describe("when userDetails.fetchBrandAssets fails", function () {
@@ -178,6 +220,7 @@
                     beforeEach(function () {
                         fetchCurrentUserDetailsDeferred.resolve(userDetails);
                         fetchBrandAssetsDeferred.resolve();
+                        updateBrandCacheDeferred.resolve();
                         $rootScope.$digest();
                     });
 
@@ -265,6 +308,7 @@
                     beforeEach(function () {
                         fetchCurrentUserDetailsDeferred.resolve(userDetails);
                         fetchBrandAssetsDeferred.resolve();
+                        updateBrandCacheDeferred.resolve();
                         $rootScope.$digest();
                     });
 

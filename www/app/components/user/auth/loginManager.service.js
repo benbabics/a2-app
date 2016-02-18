@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:5
+    // jshint maxparams:6
 
     /* @ngInject */
-    function LoginManager($q, $rootScope, AnalyticsUtil, CommonService, UserManager) {
+    function LoginManager($q, $rootScope, AnalyticsUtil, BrandUtil, CommonService, UserManager) {
         // Private members
         var initializationCompletedDeferred;
 
@@ -56,6 +56,7 @@
 
                     return userDetails.fetchBrandAssets();
                 })
+                .then(BrandUtil.updateBrandCache)
                 .then(initializationCompletedDeferred.resolve)
                 .catch(function (error) {
                     throw new Error("Failed to complete login initialization: " + CommonService.getErrorMessage(error));

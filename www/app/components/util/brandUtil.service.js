@@ -21,23 +21,29 @@
             "getGenericBrandAssets"            : getGenericBrandAssets,
             "getWexBrandAssets"                : getWexBrandAssets,
             "loadBundledBrand"                 : loadBundledBrand,
-            "storeAssetResourceFile"           : storeAssetResourceFile
+            "storeAssetResourceFile"           : storeAssetResourceFile,
+            "updateBrandCache"                 : updateBrandCache
         };
 
         return service;
         //////////////////////
 
-        function fetchAssetResourceData (brandAsset, binary) {
+        function cacheAssetResourceData(brandAsset, forceUpdate) {
+            var checkFileExists = forceUpdate ? $q.reject() : FileUtil.checkFileExists(getAssetResourceSubPath(brandAsset));
+
+            return checkFileExists.catch(function () {
+                //fetch and cache the current asset resource
+                return fetchAssetResourceData(brandAsset);
+            });
+        }
+
+        function fetchAssetResourceData(brandAsset) {
             return brandAsset.fetchResource()
                 .then(function (resourceData) {
                     return storeAssetResourceFile(brandAsset, resourceData)
                         .then(function () {
                             return resourceData;
                         });
-                })
-                .catch(function () {
-                    //fetching the resource failed, so try to get a generic equivalent instead
-                    return getGenericAssetResourceData(brandAsset, binary);
                 });
         }
 
@@ -50,7 +56,7 @@
             }
         }
 
-        function getAssetResourceData (brandAsset, binary) {
+        function getAssetResourceData(brandAsset, binary) {
             return FileUtil.checkFileExists(getAssetResourceSubPath(brandAsset))
                 .then(function () {
                     //get the resource data from the cached file if it exists
@@ -58,7 +64,13 @@
                 })
                 .catch(function () {
                     //resource data hasn't been cached yet so we need to go and fetch the resource data
-                    return fetchAssetResourceData(brandAsset, binary);
+                    return fetchAssetResourceData(brandAsset);
+                })
+                .catch(function () {
+                    //TODO - check for 400/422/500 responses and correctly handle each status
+
+                    //fetching the resource failed, so try to get a generic equivalent instead
+                    return getGenericAssetResourceData(brandAsset, binary);
                 });
         }
 
@@ -171,8 +183,8 @@
 
                 brandAsset.set(brandAssetResource);
 
-                //if the current asset is a file asset we need to load it
-                if (brandAsset.assetTypeId === globals.BRAND.ASSET_TYPES.FILE) {
+                //if the current asset has a resource then we need to load it
+                if (brandAsset.hasResource()) {
                     promises.push(loadBundledAsset(brandAsset, bundledAssetDirectory));
                 }
 
@@ -206,6 +218,25 @@
                     if (error) {
                         throw new Error("Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error));
                     }
+                });
+        }
+
+        function updateBrandCache(brandAssets, forceUpdate) {
+            var promises = [];
+
+            forceUpdate = _.isUndefined(forceUpdate) ? false : forceUpdate;
+
+            _.forEach(brandAssets, function (brandAsset) {
+
+                //cache any missing asset resources
+                if (brandAsset.hasResource()) {
+                    promises.push(cacheAssetResourceData(brandAsset, forceUpdate));
+                }
+            });
+
+            return $q.all(promises)
+                .catch(function (error) {
+                    throw new Error("Failed to update brand cache: " + CommonService.getErrorMessage(error));
                 });
         }
     }

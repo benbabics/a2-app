@@ -89,7 +89,7 @@
         describe("has a fetchAssetResourceData function that", function () {
 
             beforeEach(function () {
-                BrandUtil.fetchAssetResourceData(brandAsset, binary)
+                BrandUtil.fetchAssetResourceData(brandAsset)
                     .then(resolveHandler)
                     .catch(rejectHandler);
             });
@@ -137,124 +137,6 @@
                         var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
-                    });
-                });
-            });
-
-            describe("when the asset resource is NOT successfully fetched", function () {
-                var genericBrandAssets;
-
-                beforeEach(function () {
-                    genericBrandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
-                    BrandManager.getBrandAssetsByBrand.and.returnValue(genericBrandAssets);
-                });
-
-                describe("when an equivalent generic asset is found", function () {
-                    var equivalentGenericAsset,
-                        genericAssetFetchResourceDeferred;
-
-                    beforeEach(function () {
-                        equivalentGenericAsset = TestUtils.getRandomValueFromArray(genericBrandAssets);
-                        equivalentGenericAsset.assetSubtypeId = brandAsset.assetSubtypeId;
-
-                        genericAssetFetchResourceDeferred = $q.defer();
-                        spyOn(equivalentGenericAsset, "fetchResource").and.returnValue(genericAssetFetchResourceDeferred.promise);
-                    });
-
-                    beforeEach(function () {
-                        fetchResourceDeferred.reject();
-                        $rootScope.$digest();
-                    });
-
-                    describe("when the resource data file already exists", function () {
-
-                        beforeEach(function () {
-                            checkFileExistsDeferred.resolve();
-                            $rootScope.$digest();
-                        });
-
-                        describe("when reading the file is successful", function () {
-
-                            beforeEach(function () {
-                                readFileDeferred.resolve(data);
-                                $rootScope.$digest();
-                            });
-
-                            it("should return a promise resolving with the resource data", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(data);
-                            });
-                        });
-
-                        describe("when reading the file is NOT successful", function () {
-                            var error;
-
-                            beforeEach(function () {
-                                error = {
-                                    message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                };
-
-                                readFileDeferred.reject(error);
-                            });
-
-                            it("should throw an error", function () {
-                                var expectedError = "Failed to get brand asset resource file '" +
-                                    getAssetResourceSubPath(equivalentGenericAsset) +
-                                    "': " + CommonService.getErrorMessage(error);
-
-                                expect($rootScope.$digest).toThrowError(expectedError);
-                            });
-                        });
-                    });
-
-                    describe("when the resource data file does NOT already exist", function () {
-
-                        beforeEach(function () {
-                            checkFileExistsDeferred.reject();
-                            $rootScope.$digest();
-                        });
-
-                        describe("when the asset resource is successfully fetched", function () {
-
-                            beforeEach(function () {
-                                genericAssetFetchResourceDeferred.resolve(data);
-                                checkDirectoryExistsDeferred.resolve();
-                                writeFileDeferred.resolve();
-                                $rootScope.$digest();
-                            });
-
-                            it("should return a promise resolving with the resource data", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(data);
-                            });
-                        });
-
-                        describe("when the asset resource is NOT successfully fetched", function () {
-
-                            beforeEach(function () {
-                                genericAssetFetchResourceDeferred.reject();
-                                fetchResourceDeferred.reject();
-                                $rootScope.$digest();
-                            });
-
-                            it("should return a promise rejecting with the error", function () {
-                                var expectedError = "Failed to find generic equivalent for brand asset: " + brandAsset.assetSubtypeId;
-
-                                expect(rejectHandler).toHaveBeenCalledWith(expectedError);
-                            });
-                        });
-                    });
-                });
-
-                describe("when an equivalent generic asset is NOT found", function () {
-
-                    beforeEach(function () {
-                        fetchResourceDeferred.reject();
-                        $rootScope.$digest();
-                    });
-
-                    it("should return a promise rejecting with the expected error", function () {
-                        var expectedError = "Failed to find generic equivalent for brand asset: " + brandAsset.assetSubtypeId;
-
-                        expect(rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -336,16 +218,118 @@
                 });
 
                 describe("when the asset resource is NOT successfully fetched", function () {
+                    var genericBrandAssets;
 
                     beforeEach(function () {
-                        fetchResourceDeferred.reject();
-                        $rootScope.$digest();
+                        genericBrandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                        BrandManager.getBrandAssetsByBrand.and.returnValue(genericBrandAssets);
                     });
 
-                    it("should return a promise rejecting with the error", function () {
-                        var expectedError = "Failed to find generic equivalent for brand asset: " + brandAsset.assetSubtypeId;
+                    describe("when an equivalent generic asset is found", function () {
+                        var equivalentGenericAsset,
+                            genericAssetFetchResourceDeferred;
 
-                        expect(rejectHandler).toHaveBeenCalledWith(expectedError);
+                        beforeEach(function () {
+                            equivalentGenericAsset = TestUtils.getRandomValueFromArray(genericBrandAssets);
+                            equivalentGenericAsset.assetSubtypeId = brandAsset.assetSubtypeId;
+
+                            genericAssetFetchResourceDeferred = $q.defer();
+                            spyOn(equivalentGenericAsset, "fetchResource").and.returnValue(genericAssetFetchResourceDeferred.promise);
+                        });
+
+                        beforeEach(function () {
+                            fetchResourceDeferred.reject();
+                        });
+
+                        describe("when the resource data file already exists", function () {
+
+                            beforeEach(function () {
+                                FileUtil.checkFileExists.and.returnValue($q.resolve());
+                            });
+
+                            describe("when reading the file is successful", function () {
+
+                                beforeEach(function () {
+                                    readFileDeferred.resolve(data);
+                                    $rootScope.$digest();
+                                });
+
+                                it("should resolve", function () {
+                                    expect(resolveHandler).toHaveBeenCalled();
+                                });
+                            });
+
+                            describe("when reading the file is NOT successful", function () {
+                                var error;
+
+                                beforeEach(function () {
+                                    error = {
+                                        message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                    };
+
+                                    readFileDeferred.reject(error);
+                                });
+
+                                it("should throw an error", function () {
+                                    var expectedError = "Failed to get brand asset resource file '" +
+                                        getAssetResourceSubPath(equivalentGenericAsset) +
+                                        "': " + CommonService.getErrorMessage(error);
+
+                                    expect($rootScope.$digest).toThrowError(expectedError);
+                                });
+                            });
+                        });
+
+                        describe("when the resource data file does NOT already exist", function () {
+
+                            beforeEach(function () {
+                                checkFileExistsDeferred.reject();
+                                $rootScope.$digest();
+                            });
+
+                            describe("when the asset resource is successfully fetched", function () {
+
+                                beforeEach(function () {
+                                    genericAssetFetchResourceDeferred.resolve(data);
+                                    checkDirectoryExistsDeferred.resolve();
+                                    writeFileDeferred.resolve();
+                                    $rootScope.$digest();
+                                });
+
+                                it("should return a promise resolving with the resource data", function () {
+                                    expect(resolveHandler).toHaveBeenCalledWith(data);
+                                });
+                            });
+
+                            describe("when the asset resource is NOT successfully fetched", function () {
+
+                                beforeEach(function () {
+                                    genericAssetFetchResourceDeferred.reject();
+                                    fetchResourceDeferred.reject();
+                                    $rootScope.$digest();
+                                });
+
+                                it("should return a promise rejecting with the error", function () {
+                                    var expectedError = "Failed to find generic equivalent for brand asset: " + brandAsset.assetSubtypeId;
+
+                                    expect(rejectHandler).toHaveBeenCalledWith(expectedError);
+                                });
+                            });
+                        });
+                    });
+
+                    describe("when an equivalent generic asset is NOT found", function () {
+
+                        beforeEach(function () {
+                            fetchResourceDeferred.reject();
+                            $rootScope.$digest();
+                        });
+
+                        it("should return a promise rejecting with the expected error", function () {
+                            var expectedError = "Failed to find generic equivalent for brand asset: " + brandAsset.assetSubtypeId;
+
+                            expect(rejectHandler).toHaveBeenCalledWith(expectedError);
+                        });
                     });
                 });
             });
@@ -620,6 +604,12 @@
                 beforeEach(function () {
                     fileAsset = TestUtils.getRandomBrandAsset(BrandAssetModel);
                     fileAsset.assetTypeId = globals.BRAND.ASSET_TYPES.FILE;
+                    fileAsset.links = [
+                        {
+                            rel: "self",
+                            href: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    ];
 
                     fileAssetFetchResourceDeferred = $q.defer();
                     spyOn(fileAsset, "fetchResource").and.returnValue(fileAssetFetchResourceDeferred.promise);
@@ -979,6 +969,372 @@
 
                 it("should return null", function () {
                     expect(BrandUtil.getWexBrandAssets()).toBeNull();
+                });
+            });
+        });
+
+        describe("has a updateBrandCache function that", function () {
+
+            describe("when forceUpdate is true", function () {
+
+                describe("when there is a brand asset with a resource", function () {
+
+                    beforeEach(function () {
+                        brandAsset.links = [
+                            {
+                                rel: "self",
+                                href: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            }
+                        ];
+                    });
+
+                    beforeEach(function () {
+                        BrandUtil.updateBrandCache(brandAssets, true)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call brandAsset.fetchResource", function () {
+                        expect(brandAsset.fetchResource).toHaveBeenCalledWith();
+                    });
+
+                    describe("when the asset resource is successfully fetched", function () {
+
+                        beforeEach(function () {
+                            fetchResourceDeferred.resolve(data);
+                            checkDirectoryExistsDeferred.resolve();
+                            $rootScope.$digest();
+                        });
+
+                        it("should store the asset resource data", function () {
+                            expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                        });
+
+                        describe("when the asset resource data is successfully stored", function () {
+
+                            beforeEach(function () {
+                                writeFileDeferred.resolve();
+                                $rootScope.$digest();
+                            });
+
+                            it("should resolve", function () {
+                                expect(resolveHandler).toHaveBeenCalled();
+                            });
+                        });
+
+                        describe("when the asset resource data is NOT successfully stored", function () {
+                            var error;
+
+                            beforeEach(function () {
+                                error = {
+                                    message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                };
+
+                                writeFileDeferred.reject(error);
+                            });
+
+                            it("should throw an error", function () {
+                                var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
+
+                                expect($rootScope.$digest).toThrowError(expectedError);
+                            });
+                        });
+                    });
+
+                    describe("when the asset resource is NOT successfully fetched", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = {
+                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+
+                            fetchResourceDeferred.reject(error);
+                        });
+
+                        it("should throw an error", function () {
+                            var expectedError = "Failed to update brand cache: " + CommonService.getErrorMessage(error);
+
+                            expect($rootScope.$digest).toThrowError(expectedError);
+                        });
+                    });
+                });
+
+                describe("when there is NOT a brand asset with a resource", function () {
+
+                    beforeEach(function () {
+                        _.remove(brandAssets, {assetTypeId: globals.BRAND.ASSET_TYPES.FILE});
+                    });
+
+                    beforeEach(function () {
+                        BrandUtil.updateBrandCache(brandAssets, true)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                        $rootScope.$digest();
+                    });
+
+                    it("should resolve", function () {
+                        expect(resolveHandler).toHaveBeenCalled();
+                    });
+                });
+            });
+
+            describe("when forceUpdate is false", function () {
+
+                describe("when there is a brand asset with a resource", function () {
+
+                    beforeEach(function () {
+                        brandAsset.links = [
+                            {
+                                rel: "self",
+                                href: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            }
+                        ];
+                    });
+
+                    beforeEach(function () {
+                        BrandUtil.updateBrandCache(brandAssets, false)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                        $rootScope.$digest();
+                    });
+
+                    describe("if the resource is already cached", function () {
+
+                        beforeEach(function () {
+                            checkFileExistsDeferred.resolve();
+                            $rootScope.$digest();
+                        });
+
+                        it("should NOT call brandAsset.fetchResource", function () {
+                            expect(brandAsset.fetchResource).not.toHaveBeenCalled();
+                        });
+
+                        it("should NOT store the asset resource data", function () {
+                            expect(FileUtil.writeFile).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("if the resource is NOT already cached", function () {
+
+                        beforeEach(function () {
+                            checkFileExistsDeferred.reject();
+                            $rootScope.$digest();
+                        });
+
+                        it("should call brandAsset.fetchResource", function () {
+                            expect(brandAsset.fetchResource).toHaveBeenCalledWith();
+                        });
+
+                        describe("when the asset resource is successfully fetched", function () {
+
+                            beforeEach(function () {
+                                fetchResourceDeferred.resolve(data);
+                                checkDirectoryExistsDeferred.resolve();
+                                $rootScope.$digest();
+                            });
+
+                            it("should store the asset resource data", function () {
+                                expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                            });
+
+                            describe("when the asset resource data is successfully stored", function () {
+
+                                beforeEach(function () {
+                                    writeFileDeferred.resolve();
+                                    $rootScope.$digest();
+                                });
+
+                                it("should resolve", function () {
+                                    expect(resolveHandler).toHaveBeenCalled();
+                                });
+                            });
+
+                            describe("when the asset resource data is NOT successfully stored", function () {
+                                var error;
+
+                                beforeEach(function () {
+                                    error = {
+                                        message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                    };
+
+                                    writeFileDeferred.reject(error);
+                                });
+
+                                it("should throw an error", function () {
+                                    var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
+
+                                    expect($rootScope.$digest).toThrowError(expectedError);
+                                });
+                            });
+                        });
+
+                        describe("when the asset resource is NOT successfully fetched", function () {
+                            var error;
+
+                            beforeEach(function () {
+                                error = {
+                                    message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                };
+
+                                fetchResourceDeferred.reject(error);
+                            });
+
+                            it("should throw an error", function () {
+                                var expectedError = "Failed to update brand cache: " + CommonService.getErrorMessage(error);
+
+                                expect($rootScope.$digest).toThrowError(expectedError);
+                            });
+                        });
+                    });
+                });
+
+                describe("when there is NOT a brand asset with a resource", function () {
+
+                    beforeEach(function () {
+                        _.remove(brandAssets, {assetTypeId: globals.BRAND.ASSET_TYPES.FILE});
+                    });
+
+                    beforeEach(function () {
+                        BrandUtil.updateBrandCache(brandAssets, false)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                        $rootScope.$digest();
+                    });
+
+                    it("should resolve", function () {
+                        expect(resolveHandler).toHaveBeenCalled();
+                    });
+                });
+            });
+
+            describe("when forceUpdate is not specified", function () {
+
+                describe("when there is a brand asset with a resource", function () {
+
+                    beforeEach(function () {
+                        brandAsset.links = [
+                            {
+                                rel: "self",
+                                href: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            }
+                        ];
+                    });
+
+                    beforeEach(function () {
+                        BrandUtil.updateBrandCache(brandAssets)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                        $rootScope.$digest();
+                    });
+
+                    describe("if the resource is already cached", function () {
+
+                        beforeEach(function () {
+                            checkFileExistsDeferred.resolve();
+                            $rootScope.$digest();
+                        });
+
+                        it("should NOT call brandAsset.fetchResource", function () {
+                            expect(brandAsset.fetchResource).not.toHaveBeenCalled();
+                        });
+
+                        it("should NOT store the asset resource data", function () {
+                            expect(FileUtil.writeFile).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("if the resource is NOT already cached", function () {
+
+                        beforeEach(function () {
+                            checkFileExistsDeferred.reject();
+                            $rootScope.$digest();
+                        });
+
+                        it("should call brandAsset.fetchResource", function () {
+                            expect(brandAsset.fetchResource).toHaveBeenCalledWith();
+                        });
+
+                        describe("when the asset resource is successfully fetched", function () {
+
+                            beforeEach(function () {
+                                fetchResourceDeferred.resolve(data);
+                                checkDirectoryExistsDeferred.resolve();
+                                $rootScope.$digest();
+                            });
+
+                            it("should store the asset resource data", function () {
+                                expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                            });
+
+                            describe("when the asset resource data is successfully stored", function () {
+
+                                beforeEach(function () {
+                                    writeFileDeferred.resolve();
+                                    $rootScope.$digest();
+                                });
+
+                                it("should resolve", function () {
+                                    expect(resolveHandler).toHaveBeenCalled();
+                                });
+                            });
+
+                            describe("when the asset resource data is NOT successfully stored", function () {
+                                var error;
+
+                                beforeEach(function () {
+                                    error = {
+                                        message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                    };
+
+                                    writeFileDeferred.reject(error);
+                                });
+
+                                it("should throw an error", function () {
+                                    var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
+
+                                    expect($rootScope.$digest).toThrowError(expectedError);
+                                });
+                            });
+                        });
+
+                        describe("when the asset resource is NOT successfully fetched", function () {
+                            var error;
+
+                            beforeEach(function () {
+                                error = {
+                                    message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                };
+
+                                fetchResourceDeferred.reject(error);
+                            });
+
+                            it("should throw an error", function () {
+                                var expectedError = "Failed to update brand cache: " + CommonService.getErrorMessage(error);
+
+                                expect($rootScope.$digest).toThrowError(expectedError);
+                            });
+                        });
+                    });
+                });
+
+                describe("when there is NOT a brand asset with a resource", function () {
+
+                    beforeEach(function () {
+                        _.remove(brandAssets, {assetTypeId: globals.BRAND.ASSET_TYPES.FILE});
+                    });
+
+                    beforeEach(function () {
+                        BrandUtil.updateBrandCache(brandAssets)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                        $rootScope.$digest();
+                    });
+
+                    it("should resolve", function () {
+                        expect(resolveHandler).toHaveBeenCalled();
+                    });
                 });
             });
         });

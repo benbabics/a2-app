@@ -21,6 +21,10 @@
             angular.extend(this, brandAssetResource);
         };
 
+        BrandAssetModel.prototype.hasResource = function () {
+            return !!this.getResourceLink();
+        };
+
         return BrandAssetModel;
     };
 

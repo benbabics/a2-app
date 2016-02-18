@@ -85,6 +85,36 @@
 
         });
 
+        describe("has a hasResource function that", function () {
+
+            describe("when brandAsset has a 'self' resource link", function () {
+
+                beforeEach(function () {
+                    brandAsset.links = [
+                        {
+                            rel: "self",
+                            href: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    ];
+                });
+
+                it("should return true", function () {
+                    expect(brandAsset.hasResource()).toBeTruthy();
+                });
+            });
+
+            describe("when brandAsset does NOT have a 'self' resource link", function () {
+
+                beforeEach(function () {
+                    brandAsset.links = [];
+                });
+
+                it("should return false", function () {
+                    expect(brandAsset.hasResource()).toBeFalsy();
+                });
+            });
+        });
+
     });
 
 })();
