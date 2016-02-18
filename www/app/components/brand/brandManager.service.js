@@ -2,18 +2,17 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:5
+    // jshint maxparams:6
 
     /* @ngInject */
-    function BrandManager(globals, BrandAssetModel, BrandsResource, CommonService, Logger) {
+    function BrandManager(globals, BrandAssetModel, BrandsResource, CommonService, Logger, BrandAssetCollection) {
 
         // Private members
         var _ = CommonService._,
-            brandAssets = {};
+            brandAssets = null;
 
         // Revealed Public members
         var service = {
-            clearCachedValues    : clearCachedValues,
             fetchBrandAssets     : fetchBrandAssets,
             getBrandAssets       : getBrandAssets,
             getBrandAssetsByBrand: getBrandAssetsByBrand,
@@ -21,18 +20,9 @@
             storeBrandAssets     : storeBrandAssets
         };
 
-        activate();
-
         return service;
         //////////////////////
 
-        function activate() {
-            clearCachedValues();
-        }
-
-        function clearCachedValues() {
-            brandAssets = {};
-        }
 
         function createBrandAsset(brandAssetResource) {
             var brandAssetModel = new BrandAssetModel();
@@ -46,10 +36,7 @@
             return BrandsResource.getBrandAssets(brandId)
                 .then(function (brandAssetsResponse) {
                     if (brandAssetsResponse && brandAssetsResponse.data) {
-                        // map the brand assets data to model objects
-                        brandAssets[brandId] = _.map(brandAssetsResponse.data, createBrandAsset);
-
-                        return brandAssets[brandId];
+                        return storeBrandAssets(brandId, brandAssetsResponse.data);
                     }
                     // no data in the response
                     else {
@@ -70,9 +57,7 @@
                         return fetchBrandAssets(globals.BRAND.GENERIC)
                             .then(function (fetchedBrandAssets) {
                                 //cache the Generic brand for this brand id
-                                brandAssets[brandId] = fetchedBrandAssets;
-
-                                return fetchedBrandAssets;
+                                return storeBrandAssets(brandId, createBrandAsset(fetchedBrandAssets));
                             });
                     }
 
@@ -84,9 +69,7 @@
                         return fetchBrandAssets(globals.BRAND.WEX)
                             .then(function (fetchedBrandAssets) {
                                 //cache the WEX brand for this brand id
-                                brandAssets[brandId] = fetchedBrandAssets;
-
-                                return fetchedBrandAssets;
+                                return storeBrandAssets(brandId, createBrandAsset(fetchedBrandAssets));
                             });
                     }
 
@@ -100,16 +83,16 @@
         }
 
         function getBrandAssets() {
+            if (brandAssets === null) {
+                brandAssets = BrandAssetCollection.getCollection();
+            }
             return brandAssets;
         }
 
         function getBrandAssetsByBrand(brandId) {
-            if (_.has(brandAssets, brandId)) {
-                return brandAssets[brandId];
-            }
-            else {
-                return null;
-            }
+            // for case-insensitive searching
+            var searchRegex = new RegExp(brandId, "i");
+            return getBrandAssets().find({"clientBrandName" :{"$regex" : searchRegex}});
         }
 
         // Caution against using this as it replaces the collection versus setting properties or extending
@@ -119,9 +102,27 @@
         }
 
         function storeBrandAssets(brandId, brandAssetsForBrand) {
-            brandAssets[brandId] = brandAssetsForBrand;
+            if (_.size(brandAssetsForBrand)) {
+                // map the brand assets data to model objects and insert them into the collection
+                _.forEach(_.map(brandAssetsForBrand, createBrandAsset), function (fetchedAsset) {
+                    storeBrandAsset(fetchedAsset);
+                });
+            }
+            else {
+                storeBrandAsset(brandAssetsForBrand);
+            }
+
+            return getBrandAssetsByBrand(brandId);
         }
 
+        function storeBrandAsset(brandAsset) {
+            try {
+                getBrandAssets().insert(brandAsset);
+            }
+            catch (err) {
+                // TODO: Figure out what to do, as the brandAsset (per brandAssetId) is already in the document
+            }
+        }
     }
 
     angular
