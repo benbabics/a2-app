@@ -9,6 +9,7 @@
             this.assetSubtypeId = "";
             this.assetTypeId = "";
             this.assetValue = "";
+            this.brandAssetId ="";
             this.clientBrandId = "";
             this.clientBrandName = "";
             this.endDate = "";
