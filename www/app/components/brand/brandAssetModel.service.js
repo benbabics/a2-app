@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    var BrandAssetModel = function (HateoasResource) {
+    var BrandAssetModel = function (globals, HateoasResource) {
 
         function BrandAssetModel() {
             HateoasResource.call(this);
@@ -23,7 +23,7 @@
         };
 
         BrandAssetModel.prototype.hasResource = function () {
-            return !!this.getResourceLink();
+            return !!this.getResourceLink() && this.assetTypeId === globals.BRAND.ASSET_TYPES.FILE;
         };
 
         return BrandAssetModel;
