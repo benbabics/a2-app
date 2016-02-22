@@ -7,6 +7,14 @@
         mockStateParams,
         mockMaintenance,
         mockGlobals = {
+            LOCALSTORAGE : {
+                "CONFIG": {
+                    "keyPrefix": "FLEET_MANAGER-"
+                },
+                "KEYS": {
+                    "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE"
+                }
+            },
             PAYMENT_MAINTENANCE_CONFIRMATION: {
                 "CONFIG": {
                     "title"           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
@@ -39,8 +47,7 @@
             scheduledDate: "2015-05-26"
         };
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Payment Maintenance Confirmation Controller", function () {
+    describe("A Payment Maintenance Confirmation Controller", function () {
 
         beforeEach(function () {
 

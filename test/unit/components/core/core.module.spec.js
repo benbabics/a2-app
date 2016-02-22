@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Core Module run block", function () {
+    describe("A Core Module run block", function () {
 
         var $q,
             $rootScope,

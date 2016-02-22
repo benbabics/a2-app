@@ -16,6 +16,14 @@
         mockPayment,
         mockIsPaymentEditable = TestUtils.getRandomBoolean(),
         mockGlobals = {
+            LOCALSTORAGE : {
+                "CONFIG": {
+                    "keyPrefix": "FLEET_MANAGER-"
+                },
+                "KEYS": {
+                    "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE"
+                }
+            },
             PAYMENT_VIEW: {
                 "CONFIG": {
                     "ANALYTICS"   : {
@@ -55,8 +63,7 @@
         mockConfig = mockGlobals.PAYMENT_VIEW.CONFIG,
         mockUser;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Payment View Controller", function () {
+    describe("A Payment View Controller", function () {
 
         beforeEach(function () {
 

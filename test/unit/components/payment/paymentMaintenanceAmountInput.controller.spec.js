@@ -12,6 +12,14 @@
             currentBalance: TestUtils.getRandomNumber(1000, 10000)
         },
         mockGlobals = {
+            LOCALSTORAGE : {
+                "CONFIG": {
+                    "keyPrefix": "FLEET_MANAGER-"
+                },
+                "KEYS": {
+                    "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE"
+                }
+            },
             PAYMENT_MAINTENANCE_FORM: {
                 "INPUTS": {
                     "AMOUNT": {
@@ -50,8 +58,7 @@
         mockStateParams,
         mockMaintenance;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Payment Maintenance Amount Input Controller", function () {
+    describe("A Payment Maintenance Amount Input Controller", function () {
 
         beforeEach(function () {
 

@@ -10,6 +10,14 @@
             url: "http://somedomain.com/someendpoint"
         },
         mockGlobals = {
+            LOCALSTORAGE : {
+                "CONFIG": {
+                    "keyPrefix": "FLEET_MANAGER-"
+                },
+                "KEYS": {
+                    "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE"
+                }
+            },
             LOGIN_STATE            : "user.auth.login",
             AUTH_API               : {
                 BASE_URL          : "/someUrl",
@@ -106,8 +114,7 @@
         restangularDeferred,
         restangularResponseHandler;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("An Authentication Error Interceptor", function () {
+    describe("An Authentication Error Interceptor", function () {
 
         beforeEach(function () {
 

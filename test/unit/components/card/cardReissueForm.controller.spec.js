@@ -40,8 +40,7 @@
         },
         mockConfig = mockGlobals.CARD_REISSUE.CONFIG;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Card Reissue Form Controller", function () {
+    describe("A Card Reissue Form Controller", function () {
 
         beforeEach(function () {
 

@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Card Module Route Config", function () {
+    describe("A Card Module Route Config", function () {
 
         var $injector,
             $q,

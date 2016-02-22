@@ -10,6 +10,14 @@
         mockBankAccounts,
         mockPayment,
         mockGlobals = {
+            LOCALSTORAGE : {
+                "CONFIG": {
+                    "keyPrefix": "FLEET_MANAGER-"
+                },
+                "KEYS": {
+                    "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE"
+                }
+            },
             PAYMENT_MAINTENANCE_FORM: {
                 "INPUTS": {
                     "BANK_ACCOUNT": {
@@ -45,8 +53,7 @@
         mockMaintenance,
         BankModel;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Payment Maintenance Bank Account Input Controller", function () {
+    describe("A Payment Maintenance Bank Account Input Controller", function () {
 
         beforeEach(function () {
 

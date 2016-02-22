@@ -22,8 +22,7 @@
         },
         mockConfig = mockGlobals.CARD_DETAIL.CONFIG;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Card Detail Controller", function () {
+    describe("A Card Detail Controller", function () {
 
         beforeEach(function () {
 

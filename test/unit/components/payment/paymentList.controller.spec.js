@@ -28,8 +28,7 @@
         },
         mockConfig = mockGlobals.PAYMENT_LIST.CONFIG;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Payment List Controller", function () {
+    describe("A Payment List Controller", function () {
 
         beforeEach(function () {
 

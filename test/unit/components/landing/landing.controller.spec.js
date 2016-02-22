@@ -50,8 +50,7 @@
         },
         mockConfig = mockGlobals.LANDING.CONFIG;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Landing Controller", function () {
+    describe("A Landing Controller", function () {
 
         beforeEach(function () {
 

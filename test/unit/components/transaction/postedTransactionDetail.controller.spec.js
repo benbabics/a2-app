@@ -28,8 +28,7 @@
         },
         mockConfig = mockGlobals.POSTED_TRANSACTION_DETAIL.CONFIG;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Posted Transaction Detail Controller", function () {
+    describe("A Posted Transaction Detail Controller", function () {
 
         beforeEach(function () {
 

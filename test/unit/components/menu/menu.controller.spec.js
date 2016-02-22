@@ -19,6 +19,14 @@
                     CLIENT_SECRET: "Some_Client_Secret"
                 }
             },
+            LOCALSTORAGE : {
+                "CONFIG": {
+                    "keyPrefix": "FLEET_MANAGER-"
+                },
+                "KEYS": {
+                    "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE"
+                }
+            },
             ACCOUNT_MAINTENANCE_API: {
                 BASE_URL: "/someAMRestUrl",
                 CARDS: {
@@ -70,8 +78,7 @@
             }
         };
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Menu Controller", function () {
+    describe("A Menu Controller", function () {
 
         beforeEach(function () {
 

@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Payment Maintenance Details Model Service", function () {
+    describe("A Payment Maintenance Details Model Service", function () {
         var _,
             $rootScope,
             $state,

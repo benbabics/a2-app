@@ -37,8 +37,7 @@
         mockConfig = mockGlobals.CARD_CHANGE_STATUS.CONFIG,
         mockUser;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Card Change Status Controller", function () {
+    describe("A Card Change Status Controller", function () {
 
         beforeEach(function () {
 

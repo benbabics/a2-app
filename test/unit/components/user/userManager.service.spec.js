@@ -12,8 +12,7 @@
         mockUser,
         remoteUser = {};
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A User Manager", function () {
+    describe("A User Manager", function () {
 
         beforeEach(function () {
 

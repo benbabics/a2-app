@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Payment Module Route Config", function () {
+    describe("A Payment Module Route Config", function () {
 
         var _,
             $injector,
@@ -18,7 +17,14 @@
                         "UPDATE": "update"
                     }
                 },
-
+                LOCALSTORAGE : {
+                    "CONFIG": {
+                        "keyPrefix": "FLEET_MANAGER-"
+                    },
+                    "KEYS": {
+                        "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE"
+                    }
+                },
                 PAYMENT_MAINTENANCE_FORM: {
                     "CONFIG": {
                         "invoiceNumber"            : TestUtils.getRandomStringThatIsAlphaNumeric(10),

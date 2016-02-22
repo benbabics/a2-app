@@ -12,8 +12,7 @@
         mockMaintenanceState,
         mockMaintenance;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Payment Maintenance Controller", function () {
+    describe("A Payment Maintenance Controller", function () {
 
         beforeEach(function () {
 

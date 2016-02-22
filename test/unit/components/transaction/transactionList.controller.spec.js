@@ -32,8 +32,7 @@
         },
         mockConfig = mockGlobals.TRANSACTION_LIST.CONFIG;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Transaction List Controller", function () {
+    describe("A Transaction List Controller", function () {
 
         beforeEach(function () {
 

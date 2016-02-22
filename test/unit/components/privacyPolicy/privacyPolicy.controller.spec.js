@@ -5,8 +5,7 @@
         $cordovaInAppBrowser,
         ctrl;
 
-    // TODO: Fix this test by mocking indexedDB
-    xdescribe("A Privacy Policy Controller", function () {
+    describe("A Privacy Policy Controller", function () {
 
         beforeEach(function () {
 
