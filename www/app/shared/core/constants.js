@@ -45,7 +45,8 @@
                 PASSWORD: "password",
                 REFRESH: "refresh_token"
             },
-            SCOPE: "brand_assets"
+            // Per the Spring OAuth2 spec it expects a list of scopes to be delimited by spaces
+            SCOPE: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted"
         },
         CLIENT_CREDENTIALS: {
             CLIENT_ID    : "@@@STRING_REPLACE_AUTH_CLIENT_ID@@@",

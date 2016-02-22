@@ -25,7 +25,7 @@
                         PASSWORD: "password",
                         REFRESH: "refresh_token"
                     },
-                    SCOPE: "brand_assets"
+                    SCOPE: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted"
                 },
                 CLIENT_CREDENTIALS: {
                     CLIENT_ID: "mock client id",
