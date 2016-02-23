@@ -23,7 +23,7 @@
         };
 
         BrandAssetModel.prototype.hasResource = function () {
-            return !!this.getResourceLink() && this.assetTypeId === globals.BRAND.ASSET_TYPES.FILE;
+            return this.assetTypeId === globals.BRAND.ASSET_TYPES.FILE;
         };
 
         return BrandAssetModel;

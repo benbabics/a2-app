@@ -10,9 +10,9 @@
         UserManager,
         BrandUtil,
         BrandAssetModel,
+        Logger,
         userDetails,
         fetchCurrentUserDetailsDeferred,
-        fetchBrandAssetsDeferred,
         updateBrandCacheDeferred,
         rejectHandler,
         resolveHandler;
@@ -36,7 +36,7 @@
             });
 
             inject(function (_$q_, _$rootScope_, globals,
-                             _BrandAssetModel_, _CommonService_, _LoginManager_, UserAccountModel, _UserManager_, UserModel) {
+                             _BrandAssetModel_, _CommonService_, _Logger_, _LoginManager_, UserAccountModel, _UserManager_, UserModel) {
                 _ = _CommonService_._;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
@@ -44,6 +44,7 @@
                 LoginManager = _LoginManager_;
                 UserManager = _UserManager_;
                 BrandAssetModel = _BrandAssetModel_;
+                Logger = _Logger_;
 
                 userDetails = TestUtils.getRandomUser(UserModel, UserAccountModel, globals.USER.ONLINE_APPLICATION);
             });
@@ -52,12 +53,11 @@
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
             fetchCurrentUserDetailsDeferred = $q.defer();
-            fetchBrandAssetsDeferred = $q.defer();
             updateBrandCacheDeferred = $q.defer();
-            spyOn(userDetails, "fetchBrandAssets").and.returnValue(fetchBrandAssetsDeferred.promise);
             spyOn(UserManager, "fetchCurrentUserDetails").and.returnValue(fetchCurrentUserDetailsDeferred.promise);
             spyOn(CommonService, "loadingBegin");
             spyOn(CommonService, "loadingComplete");
+            spyOn(Logger, "error");
 
             //setup mocks
             UserManager.fetchCurrentUserDetails.and.returnValue(fetchCurrentUserDetailsDeferred.promise);
@@ -96,82 +96,33 @@
                         expect(AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
                     });
 
-                    it("should call userDetails.fetchBrandAssets", function () {
-                        expect(userDetails.fetchBrandAssets).toHaveBeenCalledWith();
+                    it("should call BrandUtil.updateBrandCache with the expected value", function () {
+                        expect(BrandUtil.updateBrandCache).toHaveBeenCalledWith(userDetails.brand);
                     });
 
-                    describe("when userDetails.fetchBrandAssets succeeds", function () {
-                        var brandAssets;
+                    describe("when BrandUtil.updateBrandCache succeeds", function () {
 
                         beforeEach(function () {
-                            brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                            LoginManager.waitForCompletedLogin()
+                                .then(resolveHandler)
+                                .catch(rejectHandler);
 
-                            fetchBrandAssetsDeferred.resolve(brandAssets);
+                            updateBrandCacheDeferred.resolve();
                             $rootScope.$digest();
                         });
 
-                        it("should call BrandUtil.updateBrandCache with the expected values", function () {
-                            expect(BrandUtil.updateBrandCache).toHaveBeenCalledWith(userDetails.brand, brandAssets);
+                        it("should resolve the initialization promise", function () {
+                            expect(resolveHandler).toHaveBeenCalled();
                         });
 
-                        describe("when BrandUtil.updateBrandCache succeeds", function () {
-
-                            beforeEach(function () {
-                                LoginManager.waitForCompletedLogin()
-                                    .then(resolveHandler)
-                                    .catch(rejectHandler);
-
-                                updateBrandCacheDeferred.resolve();
-                                $rootScope.$digest();
-                            });
-
-                            it("should resolve the initialization promise", function () {
-                                expect(resolveHandler).toHaveBeenCalled();
-                            });
-
-                            it("should call CommonService.loadingComplete", function () {
-                                expect(CommonService.loadingComplete).toHaveBeenCalledWith();
-                            });
-
-                            //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
+                        it("should call CommonService.loadingComplete", function () {
+                            expect(CommonService.loadingComplete).toHaveBeenCalledWith();
                         });
 
-                        describe("when BrandUtil.updateBrandCache fails", function () {
-                            var error;
-
-                            beforeEach(function () {
-                                LoginManager.waitForCompletedLogin()
-                                    .then(resolveHandler)
-                                    .catch(rejectHandler);
-                            });
-
-                            beforeEach(function () {
-                                error = {
-                                    message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                };
-
-                                updateBrandCacheDeferred.reject(error);
-                            });
-
-                            it("should throw an error", function () {
-                                var expectedError = "Failed to complete login initialization: " + CommonService.getErrorMessage(error);
-
-                                expect($rootScope.$digest).toThrowError(expectedError);
-                            });
-
-                            it("should reject the initialization promise", function () {
-                                //TODO: figure out how to test this before the error gets thrown in $digest
-                            });
-
-                            it("should call CommonService.loadingComplete", function () {
-                                //TODO: figure out how to test this after the error gets thrown in $digest
-                            });
-
-                            //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
-                        });
+                        //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
                     });
 
-                    describe("when userDetails.fetchBrandAssets fails", function () {
+                    describe("when BrandUtil.updateBrandCache fails", function () {
                         var error;
 
                         beforeEach(function () {
@@ -185,21 +136,20 @@
                                 message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                             };
 
-                            fetchBrandAssetsDeferred.reject(error);
+                            updateBrandCacheDeferred.reject(error);
+                            TestUtils.digestError($rootScope);
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "Failed to complete login initialization: " + CommonService.getErrorMessage(error);
-
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                        it("should log the error", function () {
+                            expect(Logger.error).toHaveBeenCalledWith(error);
                         });
 
-                        it("should reject the initialization promise", function () {
-                            //TODO: figure out how to test this before the error gets thrown in $digest
+                        it("should resolve the initialization promise", function () {
+                            expect(resolveHandler).toHaveBeenCalled();
                         });
 
                         it("should call CommonService.loadingComplete", function () {
-                            //TODO: figure out how to test this after the error gets thrown in $digest
+                            expect(CommonService.loadingComplete).toHaveBeenCalledWith();
                         });
 
                         //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
@@ -277,7 +227,6 @@
 
                     beforeEach(function () {
                         fetchCurrentUserDetailsDeferred.resolve(userDetails);
-                        fetchBrandAssetsDeferred.resolve();
                         updateBrandCacheDeferred.resolve();
                         $rootScope.$digest();
                     });
@@ -296,7 +245,6 @@
                         };
 
                         fetchCurrentUserDetailsDeferred.reject(error);
-                        fetchBrandAssetsDeferred.reject(error);
                     });
 
                     it("should throw an error", function () {
@@ -365,7 +313,6 @@
 
                     beforeEach(function () {
                         fetchCurrentUserDetailsDeferred.resolve(userDetails);
-                        fetchBrandAssetsDeferred.resolve();
                         updateBrandCacheDeferred.resolve();
                         $rootScope.$digest();
                     });
@@ -384,7 +331,6 @@
                         };
 
                         fetchCurrentUserDetailsDeferred.reject(error);
-                        fetchBrandAssetsDeferred.reject(error);
                     });
 
                     it("should throw an error", function () {

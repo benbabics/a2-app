@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:7
 
     /* @ngInject */
-    function LoginManager($q, $rootScope, AnalyticsUtil, BrandUtil, CommonService, UserManager) {
+    function LoginManager($q, $rootScope, AnalyticsUtil, BrandUtil, CommonService, Logger, UserManager) {
         // Private members
         var initializationCompletedDeferred;
 
@@ -58,7 +58,12 @@
                     // track all events with the user's ID
                     AnalyticsUtil.setUserId(userDetails.id);
 
-                    return updateBrandCache(userDetails);
+                    return BrandUtil.updateBrandCache(userDetails.brand)
+                        .catch(function (error) {
+                            Logger.error(error);
+
+                            //eat the error
+                        });
                 })
                 .then(initializationCompletedDeferred.resolve)
                 .catch(function (error) {
@@ -67,15 +72,6 @@
                     throw new Error("Failed to complete login initialization: " + CommonService.getErrorMessage(error));
                 })
                 .finally(CommonService.loadingComplete);
-        }
-
-        function updateBrandCache(userDetails) {
-            var brandName = userDetails.brand;
-
-            return userDetails.fetchBrandAssets()
-                .then(function (brandAssets) {
-                    return BrandUtil.updateBrandCache(brandName, brandAssets);
-                });
         }
     }
 

@@ -5,15 +5,18 @@
 
         var _,
             brandAsset,
-            HateoasResource;
+            HateoasResource,
+            globals;
 
         beforeEach(function () {
             module("app.shared");
             module("app.components.brand");
 
-            inject(function (BrandAssetModel, CommonService, _HateoasResource_) {
+            inject(function (_globals_, BrandAssetModel, CommonService, _HateoasResource_) {
                 HateoasResource = _HateoasResource_;
                 _ = CommonService._;
+                globals = _globals_;
+
                 brandAsset = new BrandAssetModel();
             });
         });
@@ -87,15 +90,10 @@
 
         describe("has a hasResource function that", function () {
 
-            describe("when brandAsset has a 'self' resource link", function () {
+            describe("when assetTypeId is FILE", function () {
 
                 beforeEach(function () {
-                    brandAsset.links = [
-                        {
-                            rel: "self",
-                            href: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                        }
-                    ];
+                    brandAsset.assetTypeId = globals.BRAND.ASSET_TYPES.FILE;
                 });
 
                 it("should return true", function () {
@@ -103,10 +101,32 @@
                 });
             });
 
-            describe("when brandAsset does NOT have a 'self' resource link", function () {
+            describe("when assetTypeId is unrecognized", function () {
 
                 beforeEach(function () {
-                    brandAsset.links = [];
+                    brandAsset.assetTypeId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                });
+
+                it("should return false", function () {
+                    expect(brandAsset.hasResource()).toBeFalsy();
+                });
+            });
+
+            describe("when assetTypeId is null", function () {
+
+                beforeEach(function () {
+                    brandAsset.assetTypeId = null;
+                });
+
+                it("should return false", function () {
+                    expect(brandAsset.hasResource()).toBeFalsy();
+                });
+            });
+
+            describe("when assetTypeId is undefined", function () {
+
+                beforeEach(function () {
+                    brandAsset.assetTypeId = undefined;
                 });
 
                 it("should return false", function () {

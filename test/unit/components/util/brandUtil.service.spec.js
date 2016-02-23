@@ -25,7 +25,9 @@
         checkFileExistsDeferred,
         readFileDeferred,
         createDirectoryDeferred,
-        LAST_BRAND_UPDATE_DATE;
+        fetchBrandAssetsDeferred,
+        LAST_BRAND_UPDATE_DATE,
+        BRAND;
 
     describe("A Brand Util service", function () {
 
@@ -38,7 +40,7 @@
             module("app.html");
 
             //mock dependencies:
-            BrandManager = jasmine.createSpyObj("BrandManager", ["getBrandAssetsByBrand", "storeBrandAssets"]);
+            BrandManager = jasmine.createSpyObj("BrandManager", ["fetchBrandAssets", "getBrandAssetsByBrand", "storeBrandAssets"]);
             FileUtil = jasmine.createSpyObj("FileUtil", [
                 "checkFileExists",
                 "checkDirectoryExists",
@@ -63,6 +65,7 @@
                 globals = _globals_;
 
                 LAST_BRAND_UPDATE_DATE = globals.LOCALSTORAGE.KEYS.LAST_BRAND_UPDATE_DATE;
+                BRAND = globals.BRAND;
 
                 brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
                 brandAsset = TestUtils.getRandomValueFromArray(brandAssets);
@@ -79,12 +82,14 @@
             checkFileExistsDeferred = $q.defer();
             readFileDeferred = $q.defer();
             createDirectoryDeferred = $q.defer();
+            fetchBrandAssetsDeferred = $q.defer();
 
             FileUtil.writeFile.and.returnValue(writeFileDeferred.promise);
             FileUtil.checkDirectoryExists.and.returnValue(checkDirectoryExistsDeferred.promise);
             FileUtil.checkFileExists.and.returnValue(checkFileExistsDeferred.promise);
             FileUtil.readFile.and.returnValue(readFileDeferred.promise);
             FileUtil.createDirectory.and.returnValue(createDirectoryDeferred.promise);
+            BrandManager.fetchBrandAssets.and.returnValue(fetchBrandAssetsDeferred.promise);
 
             //setup spies:
             rejectHandler = jasmine.createSpy("rejectHandler");
@@ -990,209 +995,277 @@
                 jasmine.clock().mockDate(currentDate);
             });
 
-            describe("when forceUpdate is true", function () {
+            describe("when there is a last update date", function () {
+                var lastUpdateDate;
 
-                describe("when there is a brand asset with a resource", function () {
+                beforeEach(function () {
+                    lastUpdateDate = TestUtils.getRandomDate();
 
-                    beforeEach(function () {
-                        brandAsset.links = [
-                            {
-                                rel: "self",
-                                href: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            }
-                        ];
-                    });
+                    $localStorage[LAST_BRAND_UPDATE_DATE] = {};
+                    $localStorage[LAST_BRAND_UPDATE_DATE][brandName] = lastUpdateDate;
+                });
 
-                    beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandName, brandAssets, true)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
-                    });
+                beforeEach(function () {
+                    BrandUtil.updateBrandCache(brandName)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                });
 
-                    it("should call brandAsset.fetchResource", function () {
-                        expect(brandAsset.fetchResource).toHaveBeenCalledWith();
-                    });
+                it("should call BrandManager.fetchBrandAssets with the expected values", function () {
+                    expect(BrandManager.fetchBrandAssets).toHaveBeenCalledWith(brandName, lastUpdateDate);
+                });
 
-                    describe("when the asset resource is successfully fetched", function () {
+                describe("when fetching the brand assets succeeds", function () {
+
+                    describe("when there is a brand asset with a resource", function () {
 
                         beforeEach(function () {
-                            fetchResourceDeferred.resolve(data);
-                            checkDirectoryExistsDeferred.resolve();
+                            brandAsset.assetTypeId = BRAND.ASSET_TYPES.FILE;
+                        });
+
+                        beforeEach(function () {
+                            fetchBrandAssetsDeferred.resolve(brandAssets);
                             $rootScope.$digest();
                         });
 
-                        it("should store the asset resource data", function () {
-                            expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                        it("should call brandAsset.fetchResource", function () {
+                            expect(brandAsset.fetchResource).toHaveBeenCalledWith();
                         });
 
-                        describe("when the asset resource data is successfully stored", function () {
+                        describe("when the asset resource is successfully fetched", function () {
 
                             beforeEach(function () {
-                                writeFileDeferred.resolve();
+                                fetchResourceDeferred.resolve(data);
+                                checkDirectoryExistsDeferred.resolve();
                                 $rootScope.$digest();
+                            });
+
+                            it("should store the asset resource data", function () {
+                                expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                            });
+
+                            describe("when the asset resource data is successfully stored", function () {
+
+                                beforeEach(function () {
+                                    writeFileDeferred.resolve();
+                                    $rootScope.$digest();
+                                });
+
+                                it("should update the last update date", function () {
+                                    expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                                });
+
+                                it("should resolve", function () {
+                                    expect(resolveHandler).toHaveBeenCalled();
+                                });
+                            });
+
+                            describe("when the asset resource data is NOT successfully stored", function () {
+                                var error;
+
+                                beforeEach(function () {
+                                    error = {
+                                        message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                    };
+
+                                    writeFileDeferred.reject(error);
+                                });
+
+                                it("should NOT update the last update date and throw an error", function () {
+                                    var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + CommonService.getErrorMessage(error) + ".*?$");
+
+                                    expect(function () {
+                                        TestUtils.digestError($rootScope);
+                                    }).toThrowError(expectedError);
+
+                                    expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
+                                        .toEqual(lastUpdateDate);
+                                });
+                            });
+                        });
+
+                        describe("when the asset resource is NOT successfully fetched", function () {
+                            var error;
+
+                            beforeEach(function () {
+                                error = {
+                                    message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                };
+
+                                fetchResourceDeferred.reject(error);
+                            });
+
+                            it("should NOT update the last update date and throw an error", function () {
+                                var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + CommonService.getErrorMessage(error) + ".*?$");
+
+                                expect(function () {
+                                    $rootScope.$digest();
+                                }).toThrowError(expectedError);
+
+                                expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
+                                    .toEqual(lastUpdateDate);
+                            });
+                        });
+                    });
+
+                    describe("when there is NOT a brand asset with a resource", function () {
+
+                        beforeEach(function () {
+                            _.remove(brandAssets, {assetTypeId: globals.BRAND.ASSET_TYPES.FILE});
+                        });
+
+                        beforeEach(function () {
+                            fetchBrandAssetsDeferred.resolve(brandAssets);
+                            $rootScope.$digest();
+                        });
+
+                        it("should update the last update date", function () {
+                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                        });
+
+                        it("should resolve", function () {
+                            expect(resolveHandler).toHaveBeenCalled();
+                        });
+                    });
+                });
+
+                describe("when fetching the brand assets fails", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        fetchBrandAssetsDeferred.reject(error);
+                    });
+
+                    it("should NOT update the last update date and throw an error", function () {
+                        var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + CommonService.getErrorMessage(error) + ".*?$");
+
+                        expect(function () {
+                            $rootScope.$digest();
+                        }).toThrowError(expectedError);
+
+                        expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
+                            .toEqual(lastUpdateDate);
+                    });
+                });
+            });
+
+            describe("when there is NOT a last update date", function () {
+
+                beforeEach(function () {
+                    delete $localStorage[LAST_BRAND_UPDATE_DATE];
+                });
+
+                beforeEach(function () {
+                    BrandUtil.updateBrandCache(brandName)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                });
+
+                it("should call BrandManager.fetchBrandAssets with the expected values", function () {
+                    expect(BrandManager.fetchBrandAssets).toHaveBeenCalledWith(brandName);
+                });
+
+                describe("when fetching the brand assets succeeds", function () {
+
+                    describe("when there is a brand asset with a resource", function () {
+
+                        beforeEach(function () {
+                            brandAsset.assetTypeId = BRAND.ASSET_TYPES.FILE;
+                        });
+
+                        beforeEach(function () {
+                            fetchBrandAssetsDeferred.resolve(brandAssets);
+                            $rootScope.$digest();
+                        });
+
+                        describe("if the resource is already cached", function () {
+
+                            beforeEach(function () {
+                                checkFileExistsDeferred.resolve();
+                                $rootScope.$digest();
+                            });
+
+                            it("should NOT call brandAsset.fetchResource", function () {
+                                expect(brandAsset.fetchResource).not.toHaveBeenCalled();
+                            });
+
+                            it("should NOT store the asset resource data", function () {
+                                expect(FileUtil.writeFile).not.toHaveBeenCalled();
                             });
 
                             it("should update the last update date", function () {
                                 expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
                             });
-
-                            it("should resolve", function () {
-                                expect(resolveHandler).toHaveBeenCalled();
-                            });
                         });
 
-                        describe("when the asset resource data is NOT successfully stored", function () {
-                            var error;
+                        describe("if the resource is NOT already cached", function () {
 
                             beforeEach(function () {
-                                error = {
-                                    message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                };
-
-                                writeFileDeferred.reject(error);
-                            });
-
-                            it("should NOT update the last update date", function () {
-                                expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
-                                    .toBeFalsy();
-                            });
-
-                            it("should throw an error", function () {
-                                var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
-
-                                expect($rootScope.$digest).toThrowError(expectedError);
-                            });
-                        });
-                    });
-
-                    describe("when the asset resource is NOT successfully fetched", function () {
-                        var error;
-
-                        beforeEach(function () {
-                            error = {
-                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            };
-
-                            fetchResourceDeferred.reject(error);
-                        });
-
-                        it("should NOT update the last update date", function () {
-                            expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
-                                .toBeFalsy();
-                        });
-
-                        it("should throw an error", function () {
-                            var expectedError = "Failed to update brand cache: " + CommonService.getErrorMessage(error);
-
-                            expect($rootScope.$digest).toThrowError(expectedError);
-                        });
-                    });
-                });
-
-                describe("when there is NOT a brand asset with a resource", function () {
-
-                    beforeEach(function () {
-                        _.remove(brandAssets, {assetTypeId: globals.BRAND.ASSET_TYPES.FILE});
-                    });
-
-                    beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandName, brandAssets, true)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
-                    });
-
-                    it("should update the last update date", function () {
-                        expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
-                    });
-
-                    it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalled();
-                    });
-                });
-            });
-
-            describe("when forceUpdate is false", function () {
-
-                describe("when there is a brand asset with a resource", function () {
-
-                    beforeEach(function () {
-                        brandAsset.links = [
-                            {
-                                rel: "self",
-                                href: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            }
-                        ];
-                    });
-
-                    beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandName, brandAssets, false)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
-                    });
-
-                    describe("if the resource is already cached", function () {
-
-                        beforeEach(function () {
-                            checkFileExistsDeferred.resolve();
-                            $rootScope.$digest();
-                        });
-
-                        it("should NOT call brandAsset.fetchResource", function () {
-                            expect(brandAsset.fetchResource).not.toHaveBeenCalled();
-                        });
-
-                        it("should NOT store the asset resource data", function () {
-                            expect(FileUtil.writeFile).not.toHaveBeenCalled();
-                        });
-
-                        it("should update the last update date", function () {
-                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
-                        });
-                    });
-
-                    describe("if the resource is NOT already cached", function () {
-
-                        beforeEach(function () {
-                            checkFileExistsDeferred.reject();
-                            $rootScope.$digest();
-                        });
-
-                        it("should call brandAsset.fetchResource", function () {
-                            expect(brandAsset.fetchResource).toHaveBeenCalledWith();
-                        });
-
-                        describe("when the asset resource is successfully fetched", function () {
-
-                            beforeEach(function () {
-                                fetchResourceDeferred.resolve(data);
-                                checkDirectoryExistsDeferred.resolve();
+                                checkFileExistsDeferred.reject();
                                 $rootScope.$digest();
                             });
 
-                            it("should store the asset resource data", function () {
-                                expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                            it("should call brandAsset.fetchResource", function () {
+                                expect(brandAsset.fetchResource).toHaveBeenCalledWith();
                             });
 
-                            describe("when the asset resource data is successfully stored", function () {
+                            describe("when the asset resource is successfully fetched", function () {
 
                                 beforeEach(function () {
-                                    writeFileDeferred.resolve();
+                                    fetchResourceDeferred.resolve(data);
+                                    checkDirectoryExistsDeferred.resolve();
                                     $rootScope.$digest();
                                 });
 
-                                it("should update the last update date", function () {
-                                    expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                                it("should store the asset resource data", function () {
+                                    expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
                                 });
 
-                                it("should resolve", function () {
-                                    expect(resolveHandler).toHaveBeenCalled();
+                                describe("when the asset resource data is successfully stored", function () {
+
+                                    beforeEach(function () {
+                                        writeFileDeferred.resolve();
+                                        $rootScope.$digest();
+                                    });
+
+                                    it("should update the last update date", function () {
+                                        expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                                    });
+
+                                    it("should resolve", function () {
+                                        expect(resolveHandler).toHaveBeenCalled();
+                                    });
+                                });
+
+                                describe("when the asset resource data is NOT successfully stored", function () {
+                                    var error;
+
+                                    beforeEach(function () {
+                                        error = {
+                                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                        };
+
+                                        writeFileDeferred.reject(error);
+                                    });
+
+                                    it("should NOT update the last update date and throw an error", function () {
+                                        var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + CommonService.getErrorMessage(error) + ".*?$");
+
+                                        expect(function () {
+                                            TestUtils.digestError($rootScope);
+                                        }).toThrowError(expectedError);
+
+                                        expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
+                                            .toBeFalsy();
+                                    });
                                 });
                             });
 
-                            describe("when the asset resource data is NOT successfully stored", function () {
+                            describe("when the asset resource is NOT successfully fetched", function () {
                                 var error;
 
                                 beforeEach(function () {
@@ -1200,217 +1273,64 @@
                                         message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                                     };
 
-                                    writeFileDeferred.reject(error);
+                                    fetchResourceDeferred.reject(error);
                                 });
 
-                                it("should NOT update the last update date", function () {
+                                it("should NOT update the last update date and throw an error", function () {
+                                    var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + CommonService.getErrorMessage(error) + ".*?$");
+
+                                    expect(function () {
+                                        $rootScope.$digest();
+                                    }).toThrowError(expectedError);
+
                                     expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
                                         .toBeFalsy();
                                 });
-
-                                it("should throw an error", function () {
-                                    var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
-
-                                    expect($rootScope.$digest).toThrowError(expectedError);
-                                });
-                            });
-                        });
-
-                        describe("when the asset resource is NOT successfully fetched", function () {
-                            var error;
-
-                            beforeEach(function () {
-                                error = {
-                                    message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                };
-
-                                fetchResourceDeferred.reject(error);
-                            });
-
-                            it("should NOT update the last update date", function () {
-                                expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
-                                    .toBeFalsy();
-                            });
-
-                            it("should throw an error", function () {
-                                var expectedError = "Failed to update brand cache: " + CommonService.getErrorMessage(error);
-
-                                expect($rootScope.$digest).toThrowError(expectedError);
                             });
                         });
                     });
-                });
 
-                describe("when there is NOT a brand asset with a resource", function () {
-
-                    beforeEach(function () {
-                        _.remove(brandAssets, {assetTypeId: globals.BRAND.ASSET_TYPES.FILE});
-                    });
-
-                    beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandName, brandAssets, false)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
-                    });
-
-                    it("should update the last update date", function () {
-                        expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
-                    });
-
-                    it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalled();
-                    });
-                });
-            });
-
-            describe("when forceUpdate is not specified", function () {
-
-                describe("when there is a brand asset with a resource", function () {
-
-                    beforeEach(function () {
-                        brandAsset.links = [
-                            {
-                                rel: "self",
-                                href: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            }
-                        ];
-                    });
-
-                    beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandName, brandAssets)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
-                    });
-
-                    describe("if the resource is already cached", function () {
+                    describe("when there is NOT a brand asset with a resource", function () {
 
                         beforeEach(function () {
-                            checkFileExistsDeferred.resolve();
+                            _.remove(brandAssets, {assetTypeId: globals.BRAND.ASSET_TYPES.FILE});
+                        });
+
+                        beforeEach(function () {
+                            fetchBrandAssetsDeferred.resolve(brandAssets);
                             $rootScope.$digest();
-                        });
-
-                        it("should NOT call brandAsset.fetchResource", function () {
-                            expect(brandAsset.fetchResource).not.toHaveBeenCalled();
-                        });
-
-                        it("should NOT store the asset resource data", function () {
-                            expect(FileUtil.writeFile).not.toHaveBeenCalled();
                         });
 
                         it("should update the last update date", function () {
                             expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
                         });
-                    });
 
-                    describe("if the resource is NOT already cached", function () {
-
-                        beforeEach(function () {
-                            checkFileExistsDeferred.reject();
-                            $rootScope.$digest();
-                        });
-
-                        it("should call brandAsset.fetchResource", function () {
-                            expect(brandAsset.fetchResource).toHaveBeenCalledWith();
-                        });
-
-                        describe("when the asset resource is successfully fetched", function () {
-
-                            beforeEach(function () {
-                                fetchResourceDeferred.resolve(data);
-                                checkDirectoryExistsDeferred.resolve();
-                                $rootScope.$digest();
-                            });
-
-                            it("should store the asset resource data", function () {
-                                expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
-                            });
-
-                            describe("when the asset resource data is successfully stored", function () {
-
-                                beforeEach(function () {
-                                    writeFileDeferred.resolve();
-                                    $rootScope.$digest();
-                                });
-
-                                it("should update the last update date", function () {
-                                    expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
-                                });
-
-                                it("should resolve", function () {
-                                    expect(resolveHandler).toHaveBeenCalled();
-                                });
-                            });
-
-                            describe("when the asset resource data is NOT successfully stored", function () {
-                                var error;
-
-                                beforeEach(function () {
-                                    error = {
-                                        message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                    };
-
-                                    writeFileDeferred.reject(error);
-                                });
-
-                                it("should NOT update the last update date", function () {
-                                    expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
-                                        .toBeFalsy();
-                                });
-
-                                it("should throw an error", function () {
-                                    var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
-
-                                    expect($rootScope.$digest).toThrowError(expectedError);
-                                });
-                            });
-                        });
-
-                        describe("when the asset resource is NOT successfully fetched", function () {
-                            var error;
-
-                            beforeEach(function () {
-                                error = {
-                                    message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                };
-
-                                fetchResourceDeferred.reject(error);
-                            });
-
-                            it("should NOT update the last update date", function () {
-                                expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
-                                    .toBeFalsy();
-                            });
-
-                            it("should throw an error", function () {
-                                var expectedError = "Failed to update brand cache: " + CommonService.getErrorMessage(error);
-
-                                expect($rootScope.$digest).toThrowError(expectedError);
-                            });
+                        it("should resolve", function () {
+                            expect(resolveHandler).toHaveBeenCalled();
                         });
                     });
                 });
 
-                describe("when there is NOT a brand asset with a resource", function () {
+                describe("when fetching the brand assets fails", function () {
+                    var error;
 
                     beforeEach(function () {
-                        _.remove(brandAssets, {assetTypeId: globals.BRAND.ASSET_TYPES.FILE});
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        fetchBrandAssetsDeferred.reject(error);
                     });
 
-                    beforeEach(function () {
-                        BrandUtil.updateBrandCache(brandName, brandAssets)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
-                    });
+                    it("should NOT update the last update date and throw an error", function () {
+                        var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + CommonService.getErrorMessage(error) + ".*?$");
 
-                    it("should update the last update date", function () {
-                        expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
-                    });
+                        expect(function () {
+                            $rootScope.$digest();
+                        }).toThrowError(expectedError);
 
-                    it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalled();
+                        expect($localStorage[LAST_BRAND_UPDATE_DATE] && $localStorage[LAST_BRAND_UPDATE_DATE][brandName])
+                            .toBeFalsy();
                     });
                 });
             });

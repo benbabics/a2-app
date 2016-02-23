@@ -249,7 +249,7 @@
                 });
         }
 
-        function updateBrandCache(brandName, brandAssets, forceUpdate) {
+        function updateBrandAssetResourcesCache(brandAssets, forceUpdate) {
             var promises = [];
 
             forceUpdate = _.isUndefined(forceUpdate) ? false : forceUpdate;
@@ -262,7 +262,26 @@
                 }
             });
 
-            return $q.all(promises)
+            return $q.all(promises);
+        }
+
+        function updateBrandCache(brandName) {
+            var lastUpdateDate = getLastBrandUpdateDate(brandName),
+                fetchBrandAssets = function () {
+                    if (lastUpdateDate) {
+                        return BrandManager.fetchBrandAssets(brandName, lastUpdateDate);
+                    }
+                    else {
+                        return BrandManager.fetchBrandAssets(brandName);
+                    }
+                },
+                updateBrandAssetResources = function (brandAssets) {
+                    //force updates if we're updating existing resources
+                    return updateBrandAssetResourcesCache(brandAssets, !!lastUpdateDate);
+                };
+
+            return fetchBrandAssets()
+                .then(updateBrandAssetResources)
                 .then(function () {
                     //update the last brand update date
                     setLastBrandUpdateDate(brandName);

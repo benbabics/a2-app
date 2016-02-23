@@ -7,6 +7,7 @@ var TestUtils = (function () {
 
     var ALPHANUMERIC_CHARACTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
         TestUtils = {
+            digestError                       : digestError,
             getRandomAccount                  : getRandomAccount,
             getRandomAddress                  : getRandomAddress,
             getRandomBank                     : getRandomBank,
@@ -38,6 +39,18 @@ var TestUtils = (function () {
     return TestUtils;
 
     //////////////////////
+
+    /* Normally, an error thrown inside a catch statement causes Angular to continue to the rejection of the promise up the chain.
+     * During testing, the error causes Angular's digest cycle to stop midway through, making it impossible to trigger any
+     * additional digest cycles (which means we can't test async code that responds to the rejection of that promise).
+     *
+     * TODO: Remove this hack once this issue has been fixed.
+     */
+    function digestError(scope) {
+        expect(scope.$digest).toThrow();
+        delete scope.$$phase;
+        scope.$digest();
+    }
 
     function getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel) {
         var account = new AccountModel();

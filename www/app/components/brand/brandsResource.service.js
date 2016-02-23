@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function BrandsResource($q, globals, ConfigurationApiRestangular) {
+    function BrandsResource($q, globals, moment, ConfigurationApiRestangular) {
 
         // Private members
         var brandsResource;
@@ -27,8 +27,15 @@
             return brandsResource.one(brandId);
         }
 
-        function getBrandAssets(brandId) {
-            return $q.when(forBrand(brandId).getList(globals.CONFIGURATION_API.BRANDS.ASSETS));
+        function getBrandAssets(brandId, ifModifiedSinceDate) {
+            var headers = {};
+
+            if (ifModifiedSinceDate) {
+                //we need to format the date into a format that the server expects
+                headers["If-Modified-Since"] = moment(ifModifiedSinceDate).tz(moment.tz.guess()).format("ddd, DD MMM YYYY HH:mm:ss z");
+            }
+
+            return $q.when(forBrand(brandId).getList(globals.CONFIGURATION_API.BRANDS.ASSETS, {}, headers));
         }
 
     }

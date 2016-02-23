@@ -17,7 +17,8 @@
             getBrandAssets       : getBrandAssets,
             getBrandAssetsByBrand: getBrandAssetsByBrand,
             setBrandAssets       : setBrandAssets,
-            storeBrandAssets     : storeBrandAssets
+            storeBrandAssets     : storeBrandAssets,
+            updateBrandAssets    : updateBrandAssets
         };
 
         return service;
@@ -31,12 +32,13 @@
             return brandAssetModel;
         }
 
-        function fetchBrandAssets(brandId) {
+        function fetchBrandAssets(brandId, ifModifiedSinceDate) {
 
-            return BrandsResource.getBrandAssets(brandId)
+            return BrandsResource.getBrandAssets(brandId, ifModifiedSinceDate)
                 .then(function (brandAssetsResponse) {
                     if (brandAssetsResponse && brandAssetsResponse.data) {
-                        return storeBrandAssets(brandId, brandAssetsResponse.data);
+                        // map the brand assets data to model objects and update the collection
+                        return updateBrandAssets(_.map(brandAssetsResponse.data, createBrandAsset));
                     }
                     // no data in the response
                     else {
@@ -54,11 +56,7 @@
                     if (failureResponse.status === 400 && brandId !== globals.BRAND.GENERIC) {
                         Logger.warn("There was an error getting the brand assets for brandId: " + brandId + " trying GENERIC");
 
-                        return fetchBrandAssets(globals.BRAND.GENERIC)
-                            .then(function (fetchedBrandAssets) {
-                                //cache the Generic brand for this brand id
-                                return storeBrandAssets(brandId, createBrandAsset(fetchedBrandAssets));
-                            });
+                        return fetchBrandAssets(globals.BRAND.GENERIC);
                     }
 
                     // A 422 status code means that the brand does not have any assets so we should use the "WEX" brand
@@ -66,19 +64,18 @@
                     if (failureResponse.status === 422 && brandId !== globals.BRAND.WEX) {
                         Logger.warn("There was an error getting the brand assets for brandId: " + brandId + " trying WEX");
 
-                        return fetchBrandAssets(globals.BRAND.WEX)
-                            .then(function (fetchedBrandAssets) {
-                                //cache the WEX brand for this brand id
-                                return storeBrandAssets(brandId, createBrandAsset(fetchedBrandAssets));
-                            });
+                        return fetchBrandAssets(globals.BRAND.WEX);
                     }
 
-                    // There was some unknown problem
-                    var error = "There was an error getting the brand assets for brandId: " + brandId +
-                        " - " + CommonService.getErrorMessage(failureResponse);
+                    // A status of 304 means there are no updated assets, so don't throw an error for it
+                    if (failureResponse.status !== 304) {
+                        // There was some unknown problem
+                        var error = "There was an error getting the brand assets for brandId: " + brandId +
+                            " - " + CommonService.getErrorMessage(failureResponse);
 
-                    Logger.error(error);
-                    throw new Error(error);
+                        Logger.error(error);
+                        throw new Error(error);
+                    }
                 });
         }
 
@@ -91,8 +88,11 @@
 
         function getBrandAssetsByBrand(brandId) {
             // for case-insensitive searching
-            var searchRegex = new RegExp(brandId, "i");
-            return getBrandAssets().find({"clientBrandName" :{"$regex" : searchRegex}});
+            var searchRegex = new RegExp(brandId, "i"),
+                results = getBrandAssets().find({"clientBrandName" :{"$regex" : searchRegex}});
+
+            //map each result resource to a BrandAssetModel
+            return _.map(results, createBrandAsset);
         }
 
         // Caution against using this as it replaces the collection versus setting properties or extending
@@ -103,8 +103,7 @@
 
         function storeBrandAssets(brandId, brandAssetsForBrand) {
             if (_.size(brandAssetsForBrand)) {
-                // map the brand assets data to model objects and insert them into the collection
-                _.forEach(_.map(brandAssetsForBrand, createBrandAsset), function (fetchedAsset) {
+                _.forEach(brandAssetsForBrand, function (fetchedAsset) {
                     storeBrandAsset(fetchedAsset);
                 });
             }
@@ -121,6 +120,31 @@
             }
             catch (err) {
                 // TODO: Figure out what to do, as the brandAsset (per brandAssetId) is already in the document
+            }
+        }
+
+        function updateBrandAssets(brandAssetsForBrand) {
+            if (_.size(brandAssetsForBrand)) {
+                _.forEach(brandAssetsForBrand, function (brandAsset) {
+                    updateBrandAsset(brandAsset);
+                });
+            }
+            else {
+                updateBrandAsset(brandAssetsForBrand);
+            }
+
+            return brandAssetsForBrand;
+        }
+
+        function updateBrandAsset(brandAsset) {
+            var existingAsset = getBrandAssets().by("brandAssetId", brandAsset.brandAssetId);
+
+            if (existingAsset) {
+                angular.extend(existingAsset, brandAsset);
+                getBrandAssets().update(existingAsset);
+            }
+            else {
+                getBrandAssets().insert(brandAsset);
             }
         }
     }
