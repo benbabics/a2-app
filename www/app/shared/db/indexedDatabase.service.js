@@ -10,8 +10,9 @@
             dataStore = globals.DATASTORE,
             db,
             service = {
-                addCollection : addCollection,
-                getCollection : getCollection
+                addCollection       : addCollection,
+                getCollection       : getCollection,
+                setStoredCollections: setStoredCollections
             };
 
         activate();
@@ -80,6 +81,11 @@
             }
 
             return options;
+        }
+
+        // This is only here for testing purposes
+        function setStoredCollections(colls) {
+            collections = colls;
         }
     }
 
