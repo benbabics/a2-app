@@ -58,9 +58,11 @@
                     // track all events with the user's ID
                     AnalyticsUtil.setUserId(userDetails.id);
 
+                    BrandUtil.removeExpiredAssets(userDetails.brand);
+
                     return BrandUtil.updateBrandCache(userDetails.brand)
                         .catch(function (error) {
-                            Logger.error(error);
+                            Logger.error(CommonService.getErrorMessage(error));
 
                             //eat the error
                         });

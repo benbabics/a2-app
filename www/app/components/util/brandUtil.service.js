@@ -24,6 +24,8 @@
             "getLastBrandUpdateDate"           : getLastBrandUpdateDate,
             "getWexBrandAssets"                : getWexBrandAssets,
             "loadBundledBrand"                 : loadBundledBrand,
+            "removeAssetResourceFile"          : removeAssetResourceFile,
+            "removeExpiredAssets"              : removeExpiredAssets,
             "setLastBrandUpdateDate"           : setLastBrandUpdateDate,
             "storeAssetResourceFile"           : storeAssetResourceFile,
             "updateBrandCache"                 : updateBrandCache
@@ -219,6 +221,32 @@
                     Logger.error(logError);
                     return $q.reject(logError);
                 });
+        }
+
+        function removeAssetResourceFile(brandAsset) {
+            var resourcePath = getAssetResourceSubPath(brandAsset);
+
+            return FileUtil.checkFileExists(resourcePath)
+                .then(function () {
+                    return FileUtil.removeFile(resourcePath);
+                })
+                .catch(function (error) {
+                    throw new Error("Failed to remove asset resource file " + resourcePath + ": " + CommonService.getErrorMessage(error));
+                });
+        }
+
+        function removeExpiredAssets(brandName) {
+            return $q.all(_.map(BrandManager.getBrandAssetsByBrand(brandName), function (brandAsset) {
+
+                if (brandAsset.isExpired()) {
+                    return removeAssetResourceFile(brandAsset)
+                        .then(function () {
+                            BrandManager.removeBrandAsset(brandAsset);
+                        });
+                }
+
+                return $q.resolve();
+            }));
         }
 
         function setLastBrandUpdateDate(brandName, date) {

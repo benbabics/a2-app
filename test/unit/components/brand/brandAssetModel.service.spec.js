@@ -6,16 +6,18 @@
         var _,
             brandAsset,
             HateoasResource,
+            moment,
             globals;
 
         beforeEach(function () {
             module("app.shared");
             module("app.components.brand");
 
-            inject(function (_globals_, BrandAssetModel, CommonService, _HateoasResource_) {
+            inject(function (_globals_, _moment_, BrandAssetModel, CommonService, _HateoasResource_) {
                 HateoasResource = _HateoasResource_;
                 _ = CommonService._;
                 globals = _globals_;
+                moment = _moment_;
 
                 brandAsset = new BrandAssetModel();
             });
@@ -131,6 +133,53 @@
 
                 it("should return false", function () {
                     expect(brandAsset.hasResource()).toBeFalsy();
+                });
+            });
+        });
+
+        describe("has an isExpired function that", function () {
+
+            describe("when the endDate is before the current date", function () {
+
+                beforeEach(function () {
+                    brandAsset.endDate = moment().subtract(1, "days").toDate();
+                });
+
+                it("should return true", function () {
+                    expect(brandAsset.isExpired()).toBeTruthy();
+                });
+            });
+
+            describe("when the endDate is after the current date", function () {
+
+                beforeEach(function () {
+                    brandAsset.endDate = moment().add(1, "days").toDate();
+                });
+
+                it("should return false", function () {
+                    expect(brandAsset.isExpired()).toBeFalsy();
+                });
+            });
+
+            describe("when the endDate is null", function () {
+
+                beforeEach(function () {
+                    brandAsset.endDate = null;
+                });
+
+                it("should return false", function () {
+                    expect(brandAsset.isExpired()).toBeFalsy();
+                });
+            });
+
+            describe("when the endDate is undefined", function () {
+
+                beforeEach(function () {
+                    delete brandAsset.endDate;
+                });
+
+                it("should return false", function () {
+                    expect(brandAsset.isExpired()).toBeFalsy();
                 });
             });
         });

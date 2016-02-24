@@ -6,6 +6,7 @@
         BrandAssetModel,
         FileUtil,
         CommonService,
+        moment,
         globals,
         $q,
         $rootScope,
@@ -26,6 +27,7 @@
         readFileDeferred,
         createDirectoryDeferred,
         fetchBrandAssetsDeferred,
+        removeFileDeferred,
         LAST_BRAND_UPDATE_DATE,
         BRAND;
 
@@ -40,12 +42,17 @@
             module("app.html");
 
             //mock dependencies:
-            BrandManager = jasmine.createSpyObj("BrandManager", ["fetchBrandAssets", "getBrandAssetsByBrand", "storeBrandAssets"]);
+            BrandManager = jasmine.createSpyObj("BrandManager", [
+                "fetchBrandAssets",
+                "getBrandAssetsByBrand",
+                "removeBrandAsset",
+                "storeBrandAssets"]);
             FileUtil = jasmine.createSpyObj("FileUtil", [
                 "checkFileExists",
                 "checkDirectoryExists",
                 "createDirectory",
                 "readFile",
+                "removeFile",
                 "writeFile"
             ]);
 
@@ -54,7 +61,7 @@
                 $provide.value("FileUtil", FileUtil);
             });
 
-            inject(function (_$localStorage_, _$rootScope_, _$q_, _$window_, _globals_, _BrandAssetModel_, _BrandUtil_, _CommonService_) {
+            inject(function (_$localStorage_, _$rootScope_, _$q_, _$window_, _globals_, _moment_, _BrandAssetModel_, _BrandUtil_, _CommonService_) {
                 BrandUtil = _BrandUtil_;
                 CommonService = _CommonService_;
                 BrandAssetModel = _BrandAssetModel_;
@@ -63,6 +70,7 @@
                 $window = _$window_;
                 $localStorage = _$localStorage_;
                 globals = _globals_;
+                moment = _moment_;
 
                 LAST_BRAND_UPDATE_DATE = globals.LOCALSTORAGE.KEYS.LAST_BRAND_UPDATE_DATE;
                 BRAND = globals.BRAND;
@@ -83,12 +91,14 @@
             readFileDeferred = $q.defer();
             createDirectoryDeferred = $q.defer();
             fetchBrandAssetsDeferred = $q.defer();
+            removeFileDeferred = $q.defer();
 
             FileUtil.writeFile.and.returnValue(writeFileDeferred.promise);
             FileUtil.checkDirectoryExists.and.returnValue(checkDirectoryExistsDeferred.promise);
             FileUtil.checkFileExists.and.returnValue(checkFileExistsDeferred.promise);
             FileUtil.readFile.and.returnValue(readFileDeferred.promise);
             FileUtil.createDirectory.and.returnValue(createDirectoryDeferred.promise);
+            FileUtil.removeFile.and.returnValue(removeFileDeferred.promise);
             BrandManager.fetchBrandAssets.and.returnValue(fetchBrandAssetsDeferred.promise);
 
             //setup spies:
@@ -1531,6 +1541,270 @@
                     it("should add the entry with the current date", function () {
                         expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
                     });
+                });
+            });
+        });
+
+        describe("has a removeAssetResourceFile function that", function () {
+
+            beforeEach(function () {
+                BrandUtil.removeAssetResourceFile(brandAsset)
+                    .then(resolveHandler)
+                    .catch(rejectHandler);
+            });
+
+            it("should call FileUtil.checkFileExists with the expected values", function () {
+                expect(FileUtil.checkFileExists).toHaveBeenCalledWith(resourcePath);
+            });
+
+            describe("when the resource file exists", function () {
+
+                beforeEach(function () {
+                    checkFileExistsDeferred.resolve();
+                    $rootScope.$digest();
+                });
+
+                it("should call FileUtil.removeFile with the expected value", function () {
+                    expect(FileUtil.removeFile).toHaveBeenCalledWith(resourcePath);
+                });
+
+                describe("when FileUtil.removeFile succeeds", function () {
+
+                    beforeEach(function () {
+                        removeFileDeferred.resolve();
+                        $rootScope.$digest();
+                    });
+
+                    it("should resolve", function () {
+                        expect(resolveHandler).toHaveBeenCalled();
+                    });
+                });
+
+                describe("when FileUtil.removeFile fails", function () {
+                    var error,
+                        expectedError;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        expectedError = "Failed to remove asset resource file " + resourcePath + ": " + CommonService.getErrorMessage(error);
+
+                        removeFileDeferred.reject(error);
+                    });
+
+                    it("should throw the expected error", function () {
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
+
+                    it("should reject with the expected error", function () {
+                        TestUtils.digestError($rootScope);
+
+                        expect(rejectHandler).toHaveBeenCalledWith(new Error(expectedError));
+                    });
+                });
+            });
+
+            describe("when the resource file does NOT exist", function () {
+                var error;
+
+                beforeEach(function () {
+                    error = {
+                        message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    };
+
+                    checkFileExistsDeferred.reject(error);
+                });
+
+                it("should throw an error", function () {
+                    var expectedError = "Failed to remove asset resource file " + resourcePath + ": " + CommonService.getErrorMessage(error);
+
+                    expect($rootScope.$digest).toThrowError(expectedError);
+                });
+            });
+        });
+
+        describe("has a removeExpiredAssets function that", function () {
+            var brandName;
+
+            beforeEach(function () {
+                brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+            });
+
+            describe("when there is an expired asset", function () {
+
+                beforeEach(function () {
+                    //make brandAsset the only asset that's expired
+                    _.forEach(brandAssets, function (brandAsset) {
+                        brandAsset.endDate = moment().add(1, "days").toDate();
+                    });
+
+                    brandAsset.endDate = moment().subtract(1, "days").toDate();
+                });
+
+                beforeEach(function () {
+                    BrandManager.getBrandAssetsByBrand.and.returnValue(brandAssets);
+
+                    BrandUtil.removeExpiredAssets(brandName)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                    $rootScope.$digest();
+                });
+
+                it("should call FileUtil.checkFileExists with the expected values", function () {
+                    expect(FileUtil.checkFileExists).toHaveBeenCalledWith(resourcePath);
+                });
+
+                describe("when the resource file exists", function () {
+
+                    beforeEach(function () {
+                        checkFileExistsDeferred.resolve();
+                        $rootScope.$digest();
+                    });
+
+                    it("should call FileUtil.removeFile with the expected value", function () {
+                        expect(FileUtil.removeFile).toHaveBeenCalledWith(resourcePath);
+                    });
+
+                    describe("when FileUtil.removeFile succeeds", function () {
+
+                        beforeEach(function () {
+                            removeFileDeferred.resolve();
+                        });
+
+                        describe("when BrandManager.removeBrandAsset throws an error", function () {
+                            var error;
+
+                            beforeEach(function () {
+                                error = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                                BrandManager.removeBrandAsset.and.throwError(error);
+
+                                TestUtils.digestError($rootScope);
+                            });
+
+                            it("should call BrandManager.removeBrandAsset with the expected value", function () {
+                                expect(BrandManager.removeBrandAsset).toHaveBeenCalledWith(brandAsset);
+                            });
+
+                            it("should reject the promise with the expected error", function () {
+                                expect(rejectHandler).toHaveBeenCalledWith(new Error(error));
+                            });
+                        });
+
+                        describe("when BrandManager.removeBrandAsset does NOT throw an error", function () {
+
+                            beforeEach(function () {
+                                $rootScope.$digest();
+                            });
+
+                            it("should call BrandManager.removeBrandAsset with the expected value", function () {
+                                expect(BrandManager.removeBrandAsset).toHaveBeenCalledWith(brandAsset);
+                            });
+
+                            it("should resolve the promise", function () {
+                                expect(resolveHandler).toHaveBeenCalled();
+                            });
+                        });
+                    });
+
+                    describe("when FileUtil.removeFile fails", function () {
+                        var error,
+                            expectedError;
+
+                        beforeEach(function () {
+                            error = {
+                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+
+                            expectedError = "Failed to remove asset resource file " + resourcePath + ": " + CommonService.getErrorMessage(error);
+
+                            removeFileDeferred.reject(error);
+                        });
+
+                        it("should throw the expected error", function () {
+                            expect($rootScope.$digest).toThrowError(expectedError);
+                        });
+
+                        it("should reject with the expected error", function () {
+                            TestUtils.digestError($rootScope);
+
+                            expect(rejectHandler).toHaveBeenCalledWith(new Error(expectedError));
+                        });
+                    });
+                });
+
+                describe("when the resource file does NOT exist", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+
+                        checkFileExistsDeferred.reject(error);
+                    });
+
+                    it("should throw an error", function () {
+                        var expectedError = "Failed to remove asset resource file " + resourcePath + ": " + CommonService.getErrorMessage(error);
+
+                        expect($rootScope.$digest).toThrowError(expectedError);
+                    });
+                });
+            });
+
+            describe("when there is NOT an expired asset", function () {
+
+                beforeEach(function () {
+                    _.forEach(brandAssets, function (brandAsset) {
+                        brandAsset.endDate = moment().add(1, "days").toDate();
+                    });
+                });
+
+                beforeEach(function () {
+                    BrandManager.getBrandAssetsByBrand.and.returnValue(brandAssets);
+
+                    BrandUtil.removeExpiredAssets(brandName)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                    $rootScope.$digest();
+                });
+
+                it("should resolve", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
+                });
+            });
+
+            describe("when the asset list is empty", function () {
+
+                beforeEach(function () {
+                    BrandManager.getBrandAssetsByBrand.and.returnValue([]);
+
+                    BrandUtil.removeExpiredAssets(brandName)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                    $rootScope.$digest();
+                });
+
+                it("should resolve", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
+                });
+            });
+
+            describe("when there are no assets for the brand", function () {
+
+                beforeEach(function () {
+                    BrandManager.getBrandAssetsByBrand.and.returnValue(null);
+
+                    BrandUtil.removeExpiredAssets(brandName)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                    $rootScope.$digest();
+                });
+
+                it("should resolve", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
                 });
             });
         });

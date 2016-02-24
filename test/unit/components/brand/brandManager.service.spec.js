@@ -466,6 +466,16 @@
             // TODO: figure out how to test this without using getBrandAssetsByBrand
         });
 
+        describe("has a updateBrandAssets function that", function () {
+
+            //TODO: Add these tests
+        });
+
+        describe("has a removeBrandAsset function that", function () {
+
+            //TODO: Add these tests
+        });
+
     });
 
 })();

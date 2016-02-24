@@ -16,6 +16,7 @@
             fetchBrandAssets     : fetchBrandAssets,
             getBrandAssets       : getBrandAssets,
             getBrandAssetsByBrand: getBrandAssetsByBrand,
+            removeBrandAsset     : removeBrandAsset,
             setBrandAssets       : setBrandAssets,
             storeBrandAssets     : storeBrandAssets,
             updateBrandAssets    : updateBrandAssets
@@ -93,6 +94,17 @@
 
             //map each result resource to a BrandAssetModel
             return _.map(results, createBrandAsset);
+        }
+
+        function removeBrandAsset(brandAsset) {
+            var existingAsset = getBrandAssets().by("brandAssetId", brandAsset.brandAssetId);
+
+            if (existingAsset) {
+                getBrandAssets().remove(existingAsset);
+            }
+            else {
+                throw new Error("Failed to remove brand asset: " + brandAsset.asset + " not found");
+            }
         }
 
         // Caution against using this as it replaces the collection versus setting properties or extending
