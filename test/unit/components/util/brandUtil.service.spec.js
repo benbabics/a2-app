@@ -6,11 +6,13 @@
         BrandAssetModel,
         FileUtil,
         CommonService,
+        UserManager,
         moment,
         globals,
         $q,
         $rootScope,
         $window,
+        $state,
         $localStorage,
         brandAssets,
         brandAsset,
@@ -18,6 +20,7 @@
         data,
         bundledAssetDirectory,
         resourcePath,
+        user,
         fetchResourceDeferred,
         resolveHandler,
         rejectHandler,
@@ -39,6 +42,7 @@
             module("app.components.core");
             module("app.components.brand");
             module("app.components.util");
+            module("app.components.user");
             module("app.html");
 
             //mock dependencies:
@@ -55,13 +59,17 @@
                 "removeFile",
                 "writeFile"
             ]);
+            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
             module(function ($provide) {
                 $provide.value("BrandManager", BrandManager);
                 $provide.value("FileUtil", FileUtil);
+                $provide.value("UserManager", UserManager);
             });
 
-            inject(function (_$localStorage_, _$rootScope_, _$q_, _$window_, _globals_, _moment_, _BrandAssetModel_, _BrandUtil_, _CommonService_) {
+            inject(function (_$localStorage_, _$rootScope_, _$state_, _$q_, _$window_, _globals_, _moment_,
+                             _BrandAssetModel_, _BrandUtil_, _CommonService_, UserModel, UserAccountModel) {
+
                 BrandUtil = _BrandUtil_;
                 CommonService = _CommonService_;
                 BrandAssetModel = _BrandAssetModel_;
@@ -69,6 +77,7 @@
                 $rootScope = _$rootScope_;
                 $window = _$window_;
                 $localStorage = _$localStorage_;
+                $state = _$state_;
                 globals = _globals_;
                 moment = _moment_;
 
@@ -81,6 +90,7 @@
                 data = TestUtils.getRandomStringThatIsAlphaNumeric(20);
                 resourcePath = getAssetResourceSubPath(brandAsset);
                 bundledAssetDirectory = getDefaultBundledBrandPath();
+                user = TestUtils.getRandomUser(UserModel, UserAccountModel, globals.USER.ONLINE_APPLICATION);
             });
 
             //setup mocks:
@@ -100,11 +110,13 @@
             FileUtil.createDirectory.and.returnValue(createDirectoryDeferred.promise);
             FileUtil.removeFile.and.returnValue(removeFileDeferred.promise);
             BrandManager.fetchBrandAssets.and.returnValue(fetchBrandAssetsDeferred.promise);
+            UserManager.getUser.and.returnValue(user);
 
             //setup spies:
             rejectHandler = jasmine.createSpy("rejectHandler");
             resolveHandler = jasmine.createSpy("resolveHandler");
             spyOn(brandAsset, "fetchResource").and.returnValue(fetchResourceDeferred.promise);
+            spyOn($state, "transitionTo");
         });
 
         describe("has a fetchAssetResourceData function that", function () {
@@ -1805,6 +1817,90 @@
 
                 it("should resolve", function () {
                     expect(resolveHandler).toHaveBeenCalled();
+                });
+            });
+        });
+
+        describe("has a getUserBrandAssets function that", function () {
+
+            beforeEach(function () {
+                BrandManager.getBrandAssetsByBrand.and.returnValue(brandAssets);
+            });
+
+            describe("when the user is logged in", function () {
+
+                beforeEach(function () {
+                    UserManager.getUser.and.returnValue(user);
+                });
+
+                it("should return that assets", function () {
+                    expect(BrandUtil.getUserBrandAssets()).toEqual(brandAssets);
+                });
+            });
+
+            describe("when the user is NOT logged in", function () {
+
+                beforeEach(function () {
+                    UserManager.getUser.and.returnValue(null);
+                });
+
+                it("should throw an error", function () {
+                    var expectedError = "User must be logged in to get user brand assets";
+
+                    expect(BrandUtil.getUserBrandAssets).toThrowError(expectedError);
+                });
+            });
+        });
+
+        describe("has a getUserBrandAssetBySubtype function that", function () {
+            var assetSubtypeId;
+
+            beforeEach(function () {
+                BrandManager.getBrandAssetsByBrand.and.returnValue(brandAssets);
+            });
+
+            describe("when the user is logged in", function () {
+
+                beforeEach(function () {
+                    UserManager.getUser.and.returnValue(user);
+                });
+
+                describe("when the given brandAssets contain an asset with the given subtype", function () {
+
+                    beforeEach(function () {
+                        assetSubtypeId = brandAsset.assetSubtypeId;
+                    });
+
+                    it("should return that asset", function () {
+                        expect(BrandUtil.getUserBrandAssetBySubtype(assetSubtypeId)).toEqual(brandAsset);
+                    });
+                });
+
+                describe("when the given brandAssets do NOT contain an asset with the given subtype", function () {
+
+                    beforeEach(function () {
+                        do {
+                            assetSubtypeId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                        }
+                        while (!!_.find(brandAssets, {assetSubtypeId: assetSubtypeId}));
+                    });
+
+                    it("should return null", function () {
+                        expect(BrandUtil.getUserBrandAssetBySubtype(assetSubtypeId)).toBeNull();
+                    });
+                });
+            });
+
+            describe("when the user is NOT logged in", function () {
+
+                beforeEach(function () {
+                    UserManager.getUser.and.returnValue(null);
+                });
+
+                it("should throw an error", function () {
+                    var expectedError = "User must be logged in to get user brand assets";
+
+                    expect(BrandUtil.getUserBrandAssetBySubtype).toThrowError(expectedError);
                 });
             });
         });

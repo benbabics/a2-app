@@ -3,11 +3,11 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
-    // jshint maxparams:10
+    // jshint maxparams:11
 
     /* @ngInject */
     function BrandUtil($localStorage, $q, $window, globals, moment,
-                       BrandAssetModel, BrandManager, CommonService, FileUtil, Logger) {
+                       BrandAssetModel, BrandManager, CommonService, FileUtil, Logger, UserManager) {
         // Private members
         var LAST_BRAND_UPDATE_DATE = globals.LOCALSTORAGE.KEYS.LAST_BRAND_UPDATE_DATE,
             _ = CommonService._;
@@ -22,6 +22,8 @@
             "getAssetResourceFilePath"         : getAssetResourceFilePath,
             "getGenericBrandAssets"            : getGenericBrandAssets,
             "getLastBrandUpdateDate"           : getLastBrandUpdateDate,
+            "getUserBrandAssetBySubtype"       : getUserBrandAssetBySubtype,
+            "getUserBrandAssets"               : getUserBrandAssets,
             "getWexBrandAssets"                : getWexBrandAssets,
             "loadBundledBrand"                 : loadBundledBrand,
             "removeAssetResourceFile"          : removeAssetResourceFile,
@@ -147,6 +149,21 @@
 
         function getGenericBrandAssets() {
             return BrandManager.getBrandAssetsByBrand(globals.BRAND.GENERIC);
+        }
+
+        function getUserBrandAssetBySubtype(assetSubtypeId) {
+            return getAssetBySubtype(getUserBrandAssets(), assetSubtypeId);
+        }
+
+        function getUserBrandAssets() {
+            var user = UserManager.getUser();
+
+            if (user) {
+                return BrandManager.getBrandAssetsByBrand(user.brand);
+            }
+            else {
+                throw new Error("User must be logged in to get user brand assets");
+            }
         }
 
         function getLastBrandUpdateDate(brandName) {

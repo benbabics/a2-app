@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    var UserModel = function ($q, globals, BrandManager, UserAccountModel) {
+    var UserModel = function ($q, globals, UserAccountModel) {
 
         function UserModel() {
             this.billingCompany = "";
@@ -26,33 +26,6 @@
 
             this.billingCompany = new UserAccountModel();
             this.billingCompany.set(userResource.billingCompany);
-        };
-
-        UserModel.prototype.fetchBrandAssets = function () {
-            if (this.brand) {
-                return BrandManager.fetchBrandAssets(this.brand);
-            }
-            else {
-                return $q.reject("User does not have any brand assets");
-            }
-        };
-
-        UserModel.prototype.getBrandAssetBySubtype = function (assetSubtypeId) {
-            if (this.brand) {
-                return _.find(this.getBrandAssets(), {assetSubtypeId: assetSubtypeId});
-            }
-            else {
-                return null;
-            }
-        };
-
-        UserModel.prototype.getBrandAssets = function () {
-            if (this.brand) {
-                return BrandManager.getBrandAssetsByBrand(this.brand);
-            }
-            else {
-                return null;
-            }
         };
 
         UserModel.prototype.getDisplayAccountNumber = function () {

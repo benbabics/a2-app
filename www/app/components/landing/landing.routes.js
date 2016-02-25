@@ -16,10 +16,9 @@
                             return UserManager.getUser().billingCompany.accountId;
                         },
 
-                        //jshint maxparams:5
-                        brandLogo: function($q, globals, CommonService, BrandUtil, UserManager) {
+                        brandLogo: function($q, globals, CommonService, BrandUtil) {
                             var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
-                                brandLogoAsset = UserManager.getUser().getBrandAssetBySubtype(ASSET_SUBTYPES.BRAND_LOGO);
+                                brandLogoAsset = BrandUtil.getUserBrandAssetBySubtype(ASSET_SUBTYPES.BRAND_LOGO);
 
                             //if this brand has a logo associated with it then get its data
                             if (brandLogoAsset) {

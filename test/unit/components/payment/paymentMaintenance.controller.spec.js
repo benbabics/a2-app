@@ -23,6 +23,7 @@
             module("app.components.invoice");
             module("app.components.brand");
             module("app.components.util");
+            module("app.components.user");
 
             //mock dependencies:
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
