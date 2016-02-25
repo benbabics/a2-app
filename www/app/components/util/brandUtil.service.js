@@ -212,7 +212,7 @@
             });
 
             //cache the asset list
-            BrandManager.storeBrandAssets(brandName, brandAssets);
+            BrandManager.storeBrandAssets(brandAssets);
 
             return $q.all(promises)
                 .catch(function (error) {

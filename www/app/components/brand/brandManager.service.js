@@ -18,8 +18,7 @@
             getBrandAssetsByBrand: getBrandAssetsByBrand,
             removeBrandAsset     : removeBrandAsset,
             setBrandAssets       : setBrandAssets,
-            storeBrandAssets     : storeBrandAssets,
-            updateBrandAssets    : updateBrandAssets
+            storeBrandAssets     : storeBrandAssets
         };
 
         return service;
@@ -39,7 +38,7 @@
                 .then(function (brandAssetsResponse) {
                     if (brandAssetsResponse && brandAssetsResponse.data) {
                         // map the brand assets data to model objects and update the collection
-                        return updateBrandAssets(_.map(brandAssetsResponse.data, createBrandAsset));
+                        return storeBrandAssets(_.map(brandAssetsResponse.data, createBrandAsset));
                     }
                     // no data in the response
                     else {
@@ -113,37 +112,10 @@
             brandAssets = brandAssetsInfo;
         }
 
-        function storeBrandAssets(brandId, brandAssetsForBrand) {
-            if (_.size(brandAssetsForBrand)) {
-                _.forEach(brandAssetsForBrand, function (fetchedAsset) {
-                    storeBrandAsset(fetchedAsset);
-                });
-            }
-            else {
-                storeBrandAsset(brandAssetsForBrand);
-            }
-
-            return getBrandAssetsByBrand(brandId);
-        }
-
-        function storeBrandAsset(brandAsset) {
-            try {
-                getBrandAssets().insert(brandAsset);
-            }
-            catch (err) {
-                // TODO: Figure out what to do, as the brandAsset (per brandAssetId) is already in the document
-            }
-        }
-
-        function updateBrandAssets(brandAssetsForBrand) {
-            if (_.size(brandAssetsForBrand)) {
-                _.forEach(brandAssetsForBrand, function (brandAsset) {
-                    updateBrandAsset(brandAsset);
-                });
-            }
-            else {
-                updateBrandAsset(brandAssetsForBrand);
-            }
+        function storeBrandAssets(brandAssetsForBrand) {
+            _.forEach(brandAssetsForBrand, function (brandAsset) {
+                updateBrandAsset(brandAsset);
+            });
 
             return brandAssetsForBrand;
         }
@@ -151,7 +123,7 @@
         function updateBrandAsset(brandAsset) {
             var existingAsset = getBrandAssets().by("brandAssetId", brandAsset.brandAssetId);
 
-            if (existingAsset) {
+            if (existingAsset && _.has(existingAsset, "brandAssetId")) {
                 angular.extend(existingAsset, brandAsset);
                 getBrandAssets().update(existingAsset);
             }

@@ -647,7 +647,7 @@
                 });
 
                 it("should call BrandManager.storeBrandAssets with the expected values", function () {
-                    expect(BrandManager.storeBrandAssets).toHaveBeenCalledWith(brandName, brandResource);
+                    expect(BrandManager.storeBrandAssets).toHaveBeenCalledWith(brandResource);
                 });
 
                 describe("when loading a FILE asset", function () {
@@ -886,7 +886,7 @@
                 });
 
                 it("should call BrandManager.storeBrandAssets with the expected values", function () {
-                    expect(BrandManager.storeBrandAssets).toHaveBeenCalledWith(brandName, brandResource);
+                    expect(BrandManager.storeBrandAssets).toHaveBeenCalledWith(brandResource);
                 });
 
                 it("should return a promise that resolves", function () {
