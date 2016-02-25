@@ -115,8 +115,8 @@
                     maintenanceDetails.state = $stateParams.maintenanceState;
                     return maintenanceDetails;
                 },
-                // jshint maxparams:6
-                payment: function ($q, $stateParams, CommonService, PaymentManager, PaymentModel, globals) {
+                // jshint maxparams:7
+                payment: function ($q, $state, $stateParams, CommonService, PaymentManager, PaymentModel, globals) {
                     var maintenanceState = $stateParams.maintenanceState,
                         payment = new PaymentModel(),
                         paymentId;
@@ -132,6 +132,13 @@
 
                                 return payment;
                             })
+                            .catch(function () {
+                                //there was an error fetching the payment, so we need to cancel
+                                $state.go(PAYMENT_ADD_ERROR_REDIRECT_STATE);
+                                return $q.resolve();
+
+                                //TODO: Show the user an error if this happens?
+                            })
                             .finally(CommonService.loadingComplete);
                     }
                     else {
@@ -144,12 +151,20 @@
                     template   : "<ion-nav-view name='view'></ion-nav-view>",
                     controller : "PaymentMaintenanceController as maintenanceController",
                     resolve    : {
-                        defaultBank: function (BankManager, CommonService, InvoiceManager, UserManager) {
+                        //jshint maxparams:6
+                        defaultBank: function ($q, $state, BankManager, CommonService, InvoiceManager, UserManager) {
                             var accountId = UserManager.getUser().billingCompany.accountId;
 
                             CommonService.loadingBegin();
 
                             return BankManager.getDefaultBank(accountId)
+                                .catch(function () {
+                                    //there was an error getting the default bank, so we need to cancel
+                                    $state.go(PAYMENT_ADD_ERROR_REDIRECT_STATE);
+                                    return $q.resolve();
+
+                                    //TODO: Show the user an error if this happens?
+                                })
                                 .finally(CommonService.loadingComplete);
                         }
                     }

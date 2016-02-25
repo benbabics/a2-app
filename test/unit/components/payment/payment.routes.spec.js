@@ -686,11 +686,35 @@
                             });
                     });
 
-                    it("should resolve defaultBank to the expected bank for the view", function () {
-                        $injector.invoke($state.$current.parent.views["view@payment"].resolve.defaultBank)
-                            .then(function (defaultBank) {
-                                expect(defaultBank).toEqual(mockDefaultBank);
-                            });
+                    describe("when the defaultBank is able to be resolved", function () {
+
+                        beforeEach(function () {
+                            BankManager.getDefaultBank.and.returnValue($q.when(mockDefaultBank));
+                        });
+
+                        it("should resolve defaultBank to the expected bank for the view", function () {
+                            $injector.invoke($state.$current.parent.views["view@payment"].resolve.defaultBank)
+                                .then(function (defaultBank) {
+                                    expect(defaultBank).toEqual(mockDefaultBank);
+                                });
+                        });
+                    });
+
+                    describe("when the defaultBank is NOT able to be resolved", function () {
+                        var paymentListState = "payment.list.view";
+
+                        beforeEach(function () {
+                            spyOn($state, "go");
+
+                            BankManager.getDefaultBank.and.returnValue($q.reject());
+
+                            $injector.invoke($state.$current.parent.views["view@payment"].resolve.defaultBank);
+                            $rootScope.$digest();
+                        });
+
+                        it("should redirect to the payment list", function () {
+                            expect($state.go).toHaveBeenCalledWith(paymentListState);
+                        });
                     });
                 });
 
@@ -712,20 +736,66 @@
                         }));
                     });
 
-                    it("should resolve a payment object as a copy of the payment to update", function () {
-                        $injector.invoke($state.$current.parent.resolve.payment)
-                            .then(function (payment) {
-                                //NOTE: we are checking that payment has the same fields as mockPayment, but they should NOT be the same object.
-                                expect(payment === mockPayment).toBeFalsy();
-                                expect(payment).toEqual(mockPayment);
-                            });
+                    describe("when the payment is able to be resolved", function () {
+
+                        beforeEach(function () {
+                            PaymentManager.fetchPayment.and.returnValue($q.when(mockPayment));
+                        });
+
+                        it("should resolve a payment object as a new PaymentModel", function () {
+                            $injector.invoke($state.$current.parent.resolve.payment)
+                                .then(function (payment) {
+                                    expect(payment).toEqual(new PaymentModel());
+                                });
+                        });
                     });
 
-                    it("should resolve defaultBank to the expected bank for the view", function () {
-                        $injector.invoke($state.$current.parent.views["view@payment"].resolve.defaultBank)
-                            .then(function (defaultBank) {
-                                expect(defaultBank).toEqual(mockDefaultBank);
-                            });
+                    describe("when the payment is NOT able to be resolved", function () {
+                        var paymentListState = "payment.list.view";
+
+                        beforeEach(function () {
+                            spyOn($state, "go");
+
+                            PaymentManager.fetchPayment.and.returnValue($q.reject());
+
+                            $injector.invoke($state.$current.parent.resolve.payment);
+                            $rootScope.$digest();
+                        });
+
+                        it("should redirect to the payment list", function () {
+                            expect($state.go).toHaveBeenCalledWith(paymentListState);
+                        });
+                    });
+
+                    describe("when the defaultBank is able to be resolved", function () {
+
+                        beforeEach(function () {
+                            BankManager.getDefaultBank.and.returnValue($q.when(mockDefaultBank));
+                        });
+
+                        it("should resolve defaultBank to the expected bank for the view", function () {
+                            $injector.invoke($state.$current.parent.views["view@payment"].resolve.defaultBank)
+                                .then(function (defaultBank) {
+                                    expect(defaultBank).toEqual(mockDefaultBank);
+                                });
+                        });
+                    });
+
+                    describe("when the defaultBank is NOT able to be resolved", function () {
+                        var paymentListState = "payment.list.view";
+
+                        beforeEach(function () {
+                            spyOn($state, "go");
+
+                            BankManager.getDefaultBank.and.returnValue($q.reject());
+
+                            $injector.invoke($state.$current.parent.views["view@payment"].resolve.defaultBank);
+                            $rootScope.$digest();
+                        });
+
+                        it("should redirect to the payment list", function () {
+                            expect($state.go).toHaveBeenCalledWith(paymentListState);
+                        });
                     });
                 });
             });
