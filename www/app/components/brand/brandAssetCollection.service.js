@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function BrandAssetCollection(IndexedDatabase, globals) {
+    function BrandAssetCollection(globals, DataStore) {
         var collection,
             service = {
                 getCollection: getCollection
@@ -14,9 +14,9 @@
         //////////////////////
 
         function getCollection() {
-            collection = IndexedDatabase.getCollection(globals.BRAND_ASSET_COLLECTIOM);
+            collection = DataStore.getCollection(globals.BRAND_ASSET_COLLECTIOM);
             if (collection === null) {
-                collection = IndexedDatabase.addCollection(globals.BRAND_ASSET_COLLECTIOM);
+                collection = DataStore.addCollection(globals.BRAND_ASSET_COLLECTIOM);
             }
             return collection;
         }

@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    var IndexedDatabase,
+    var DataStore,
         collection,
         collections = [
             {
@@ -15,13 +15,13 @@
         ],
         Loki;
 
-    describe("A IndexedDatabase", function () {
+    describe("A DataStore", function () {
 
         beforeEach(function () {
             module("app.shared");
 
-            inject(function (_IndexedDatabase_, _Loki_, globals, _CommonService_) {
-                IndexedDatabase = _IndexedDatabase_;
+            inject(function (_DataStore_, _Loki_) {
+                DataStore = _DataStore_;
                 Loki = _Loki_;
             });
         });
@@ -31,14 +31,14 @@
             describe("when passed a null collection", function () {
 
                 it("should return null", function () {
-                    expect(IndexedDatabase.addCollection(null)).toBeNull();
+                    expect(DataStore.addCollection(null)).toBeNull();
                 });
             });
 
             describe("when passed a collection with no name property", function () {
 
                 it("should return null", function () {
-                    expect(IndexedDatabase.addCollection({})).toBeNull();
+                    expect(DataStore.addCollection({})).toBeNull();
                 });
             });
 
@@ -61,20 +61,20 @@
 
         describe("has a getCollection function that", function () {
             beforeEach(function () {
-                IndexedDatabase.setStoredCollections(collections);
+                DataStore.setStoredCollections(collections);
             });
 
             describe("when passed a null collection", function () {
 
                 it("should return null.", function () {
-                    expect(IndexedDatabase.getCollection(null)).toBeNull();
+                    expect(DataStore.getCollection(null)).toBeNull();
                 });
             });
 
             describe("when passed a collection with no name property", function () {
 
                 it("should return null.", function () {
-                    expect(IndexedDatabase.getCollection({})).toBeNull();
+                    expect(DataStore.getCollection({})).toBeNull();
                 });
             });
 
@@ -86,7 +86,7 @@
                 });
 
                 it("should return null.", function () {
-                    expect(IndexedDatabase.getCollection(collection)).toBeNull();
+                    expect(DataStore.getCollection(collection)).toBeNull();
                 });
             });
 
@@ -98,7 +98,7 @@
                 });
 
                 it("should return some collection.", function () {
-                    expect(IndexedDatabase.getCollection(collection)).toEqual(collections[0]);
+                    expect(DataStore.getCollection(collection)).toEqual(collections[0]);
                 });
             });
         });

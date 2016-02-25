@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function IndexedDatabase(Loki, globals, CommonService) {
+    function DataStore(globals, CommonService, Loki) {
         var _ = CommonService._,
             collections = [],
             dataStore = globals.DATASTORE,
@@ -28,23 +28,10 @@
                 autosaveInterval : 10000
             });
         }
-        function loadHandler() {
-            collections = _.map(db.listCollections(), function (coll) {
-                return db.getCollection(coll.name);
-            });
-        }
 
         function addCollection(collection) {
             if (collection && collection.NAME) {
                 return db.addCollection(collection.NAME, configurationOptions(collection));
-            }
-            return null;
-        }
-
-        function getCollection(collection) {
-            if (collection && collection.NAME) {
-                var foundCollection =  _.find(collections, {name : collection.NAME});
-                return foundCollection === undefined ? null : foundCollection;
             }
             return null;
         }
@@ -81,6 +68,20 @@
             return options;
         }
 
+        function getCollection(collection) {
+            if (collection && collection.NAME) {
+                var foundCollection =  _.find(collections, {name : collection.NAME});
+                return foundCollection === undefined ? null : foundCollection;
+            }
+            return null;
+        }
+
+        function loadHandler() {
+            collections = _.map(db.listCollections(), function (coll) {
+                return db.getCollection(coll.name);
+            });
+        }
+
         // This is only here for testing purposes
         function setStoredCollections(colls) {
             collections = colls;
@@ -89,5 +90,5 @@
 
     angular
         .module("app.shared.db")
-        .factory("IndexedDatabase", IndexedDatabase);
+        .factory("DataStore", DataStore);
 })();
