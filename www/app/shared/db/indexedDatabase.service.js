@@ -21,13 +21,11 @@
         //////////////////////
 
         function activate() {
-            var adapter = new LokiIndexedAdapter(dataStore.APP_CONTEXT);
             db = new Loki(dataStore.DATABASE.NAME, {
                 autoload         : true,
                 autoloadCallback : loadHandler,
                 autosave         : true,
-                autosaveInterval : 10000,
-                adapter          : adapter
+                autosaveInterval : 10000
             });
         }
         function loadHandler() {
