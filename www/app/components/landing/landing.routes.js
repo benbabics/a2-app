@@ -16,7 +16,8 @@
                             return UserManager.getUser().billingCompany.accountId;
                         },
 
-                        brandLogo: function(globals, CommonService, BrandUtil, UserManager) {
+                        //jshint maxparams:5
+                        brandLogo: function($q, globals, CommonService, BrandUtil, UserManager) {
                             var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
                                 brandLogoAsset = UserManager.getUser().getBrandAssetBySubtype(ASSET_SUBTYPES.BRAND_LOGO);
 
@@ -25,6 +26,10 @@
                                 CommonService.loadingBegin();
 
                                 return BrandUtil.getAssetResourceData(brandLogoAsset)
+                                    .catch(function () {
+                                        //we couldn't get the brand logo file data, so just resolve with no logo
+                                        return $q.resolve("");
+                                    })
                                     .finally(CommonService.loadingComplete);
                             }
                             else {
