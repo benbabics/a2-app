@@ -339,13 +339,12 @@
                                 beforeEach(function () {
                                     genericAssetFetchResourceDeferred.reject();
                                     fetchResourceDeferred.reject();
-                                    $rootScope.$digest();
                                 });
 
-                                it("should return a promise rejecting with the error", function () {
+                                it("should throw an error", function () {
                                     var expectedError = "Failed to find generic equivalent for brand asset: " + brandAsset.assetSubtypeId;
 
-                                    expect(rejectHandler).toHaveBeenCalledWith(expectedError);
+                                    expect($rootScope.$digest).toThrowError(expectedError);
                                 });
                             });
                         });
@@ -355,13 +354,12 @@
 
                         beforeEach(function () {
                             fetchResourceDeferred.reject();
-                            $rootScope.$digest();
                         });
 
-                        it("should return a promise rejecting with the expected error", function () {
+                        it("should throw an error", function () {
                             var expectedError = "Failed to find generic equivalent for brand asset: " + brandAsset.assetSubtypeId;
 
-                            expect(rejectHandler).toHaveBeenCalledWith(expectedError);
+                            expect($rootScope.$digest).toThrowError(expectedError);
                         });
                     });
                 });
@@ -715,11 +713,11 @@
                                 });
 
                                 it("should throw an error", function () {
-                                    var expectedError = "Failed to store brand asset resource file '" +
-                                        getAssetResourceSubPath(fileAsset) +
-                                        "': " + CommonService.getErrorMessage(error);
+                                    var expectedError = new RegExp("Failed to load bundled brand asset with subtype '" + fileAsset.assetSubtypeId + "':.+");
 
-                                    expect($rootScope.$digest).toThrowError(expectedError);
+                                    expect(function () {
+                                        TestUtils.digestError($rootScope);
+                                    }).toThrowError(expectedError);
                                 });
                             });
                         });
@@ -789,15 +787,14 @@
                                     };
 
                                     fileAssetFetchResourceDeferred.reject(error);
-                                    $rootScope.$digest();
                                 });
 
-                                it("should return a promise that rejects with an array containing the error", function () {
-                                    var expectedError = "Failed to load bundled brand asset with subtype '" +
-                                        fileAsset.assetSubtypeId +
-                                        "': " + CommonService.getErrorMessage(error);
+                                it("should throw an error", function () {
+                                    var expectedError = new RegExp("Failed to load bundled brand '" + brandName + "':.+");
 
-                                    expect(rejectHandler).toHaveBeenCalledWith(jasmine.arrayContaining([expectedError]));
+                                    expect(function () {
+                                        TestUtils.digestError($rootScope);
+                                    }).toThrowError(expectedError);
                                 });
                             });
                         });
@@ -868,15 +865,14 @@
                                 };
 
                                 fileAssetFetchResourceDeferred.reject(error);
-                                $rootScope.$digest();
                             });
 
-                            it("should return a promise that rejects with an array containing the error", function () {
-                                var expectedError = "Failed to load bundled brand asset with subtype '" +
-                                    fileAsset.assetSubtypeId +
-                                    "': " + CommonService.getErrorMessage(error);
+                            it("should throw an error", function () {
+                                var expectedError = new RegExp("Failed to load bundled brand '" + brandName + "':.+");
 
-                                expect(rejectHandler).toHaveBeenCalledWith(jasmine.arrayContaining([expectedError]));
+                                expect(function () {
+                                    TestUtils.digestError($rootScope);
+                                }).toThrowError(expectedError);
                             });
                         });
                     });
@@ -1188,7 +1184,7 @@
                 });
 
                 it("should call BrandManager.fetchBrandAssets with the expected values", function () {
-                    expect(BrandManager.fetchBrandAssets).toHaveBeenCalledWith(brandName);
+                    expect(BrandManager.fetchBrandAssets).toHaveBeenCalledWith(brandName, null);
                 });
 
                 describe("when fetching the brand assets succeeds", function () {

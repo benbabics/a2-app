@@ -3,11 +3,11 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
-    // jshint maxparams:11
+    // jshint maxparams:10
 
     /* @ngInject */
     function BrandUtil($localStorage, $q, $window, globals, moment,
-                       BrandAssetModel, BrandManager, CommonService, FileUtil, Logger, UserManager) {
+                       BrandAssetModel, BrandManager, CommonService, FileUtil, UserManager) {
         // Private members
         var LAST_BRAND_UPDATE_DATE = globals.LOCALSTORAGE.KEYS.LAST_BRAND_UPDATE_DATE,
             _ = CommonService._;
@@ -141,7 +141,7 @@
                 }
             }
 
-            return $q.reject("Failed to find generic equivalent for brand asset: " + brandAsset.assetSubtypeId);
+            throw new Error("Failed to find generic equivalent for brand asset: " + brandAsset.assetSubtypeId);
         }
 
         function getGenericBrandAssets() {
@@ -197,10 +197,7 @@
                     return storeAssetResourceFile(brandAsset, resourceData);
                 })
                 .catch(function (error) {
-                    var logError = "Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "': " + CommonService.getErrorMessage(error);
-
-                    Logger.error(logError);
-                    return $q.reject(logError);
+                    throw new Error("Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "': " + CommonService.getErrorMessage(error));
                 });
         }
 
@@ -227,10 +224,7 @@
 
             return $q.all(promises)
                 .catch(function (error) {
-                    var logError = "Failed to load bundled brand '" + brandName + "': " + CommonService.getErrorMessage(error);
-
-                    Logger.error(logError);
-                    return $q.reject(logError);
+                    throw new Error("Failed to load bundled brand '" + brandName + "': " + CommonService.getErrorMessage(error));
                 });
         }
 
@@ -310,12 +304,7 @@
         function updateBrandCache(brandName) {
             var lastUpdateDate = getLastBrandUpdateDate(brandName),
                 fetchBrandAssets = function () {
-                    if (lastUpdateDate) {
-                        return BrandManager.fetchBrandAssets(brandName, lastUpdateDate);
-                    }
-                    else {
-                        return BrandManager.fetchBrandAssets(brandName);
-                    }
+                    return BrandManager.fetchBrandAssets(brandName, lastUpdateDate);
                 },
                 updateBrandAssetResources = function (brandAssets) {
                     //force updates if we're updating existing resources

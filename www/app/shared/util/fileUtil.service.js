@@ -7,7 +7,7 @@
     // NOTE: This service will only work on platforms with Cordova.
 
     /* @ngInject */
-    function FileUtil($cordovaFile, $q, CommonService) {
+    function FileUtil($cordovaFile, CommonService) {
         // Private members
         var _ = CommonService._;
 
@@ -31,36 +31,31 @@
         function appendFile(file, data, parentDirectory) {
             return CommonService.waitForCordovaPlatform(
                 _.partial($cordovaFile.writeExistingFile, makeValidDirectory(parentDirectory), file, data)
-            )
-                .catch(handleFileError);
+            ).catch(handleFileError);
         }
 
         function checkDirectoryExists(directory, parentDirectory) {
             return CommonService.waitForCordovaPlatform(
                 _.partial($cordovaFile.checkDir, makeValidDirectory(parentDirectory), directory)
-            )
-                .catch($q.reject);
+            );
         }
 
         function checkFileExists(file, parentDirectory) {
             return CommonService.waitForCordovaPlatform(
                 _.partial($cordovaFile.checkFile, makeValidDirectory(parentDirectory), file)
-            )
-                .catch($q.reject);
+            );
         }
 
         function createDirectory(directory, replaceIfExists, parentDirectory) {
             return CommonService.waitForCordovaPlatform(
                 _.partial($cordovaFile.createDir, makeValidDirectory(parentDirectory), directory, replaceIfExists)
-            )
-                .catch(handleFileError);
+            ).catch(handleFileError);
         }
 
         function createFile(file, replaceIfExists, parentDirectory) {
             return CommonService.waitForCordovaPlatform(
                 _.partial($cordovaFile.createFile, makeValidDirectory(parentDirectory), file, replaceIfExists)
-            )
-                .catch(handleFileError);
+            ).catch(handleFileError);
         }
 
         function getDefaultDirectory() {
@@ -94,15 +89,13 @@
 
             return CommonService.waitForCordovaPlatform(
                 _.partial(operation, makeValidDirectory(parentDirectory), file)
-            )
-                .catch(handleFileError);
+            ).catch(handleFileError);
         }
 
         function readFileAsDataUrl(file, parentDirectory) {
             return CommonService.waitForCordovaPlatform(
                 _.partial($cordovaFile.readAsDataURL, makeValidDirectory(parentDirectory), file)
-            )
-                .catch(handleFileError);
+            ).catch(handleFileError);
         }
 
         function removeDirectory(directory, recursive, parentDirectory) {
@@ -112,22 +105,19 @@
 
             return CommonService.waitForCordovaPlatform(
                 _.partial(operation, makeValidDirectory(parentDirectory), directory)
-            )
-                .catch(handleFileError);
+            ).catch(handleFileError);
         }
 
         function removeFile(file, parentDirectory) {
             return CommonService.waitForCordovaPlatform(
                 _.partial($cordovaFile.removeFile, makeValidDirectory(parentDirectory), file)
-            )
-                .catch(handleFileError);
+            ).catch(handleFileError);
         }
 
         function writeFile(file, data, replaceIfExists, parentDirectory) {
             return CommonService.waitForCordovaPlatform(
                 _.partial($cordovaFile.writeFile, makeValidDirectory(parentDirectory), file, data, replaceIfExists)
-            )
-                .catch(handleFileError);
+            ).catch(handleFileError);
         }
     }
 
