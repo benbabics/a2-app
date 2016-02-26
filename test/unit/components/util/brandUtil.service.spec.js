@@ -34,7 +34,7 @@
         LAST_BRAND_UPDATE_DATE,
         BRAND;
 
-    describe("A Brand Util service", function () {
+    fdescribe("A Brand Util service", function () {
 
         beforeEach(function () {
 
@@ -523,8 +523,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should return a promise that resolves", function () {
-                        expect(resolveHandler).toHaveBeenCalled();
+                    it("should return a promise that resolves with the data", function () {
+                        expect(resolveHandler).toHaveBeenCalledWith(data);
                     });
                 });
 

@@ -48,10 +48,7 @@
         function fetchAssetResourceData(brandAsset) {
             return brandAsset.fetchResource()
                 .then(function (resourceData) {
-                    return storeAssetResourceFile(brandAsset, resourceData)
-                        .then(function () {
-                            return resourceData;
-                        });
+                    return storeAssetResourceFile(brandAsset, resourceData);
                 });
         }
 
@@ -197,10 +194,7 @@
                 })
                 .then(function (resourceData) {
                     //cache the bundled resource
-                    return storeAssetResourceFile(brandAsset, resourceData)
-                        .then(function () {
-                            return resourceData;
-                        });
+                    return storeAssetResourceFile(brandAsset, resourceData);
                 })
                 .catch(function (error) {
                     var logError = "Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "': " + CommonService.getErrorMessage(error);
@@ -286,6 +280,9 @@
                 })
                 .then(function () {
                     return FileUtil.writeFile(resourcePath, resourceData, true);
+                })
+                .then(function () {
+                    return resourceData;
                 })
                 .catch(function (error) {
                     if (error) {
