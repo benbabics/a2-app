@@ -34,7 +34,7 @@
         LAST_BRAND_UPDATE_DATE,
         BRAND;
 
-    fdescribe("A Brand Util service", function () {
+    describe("A Brand Util service", function () {
 
         beforeEach(function () {
 
