@@ -8,13 +8,12 @@
         AnalyticsUtil,
         CommonService,
         UserManager,
-        BrandUtil,
+        BrandManager,
         BrandAssetModel,
         Logger,
         userDetails,
         fetchCurrentUserDetailsDeferred,
         updateBrandCacheDeferred,
-        removeExpiredAssetsDeferred,
         rejectHandler,
         resolveHandler;
 
@@ -29,11 +28,11 @@
 
             //mock dependencies
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["setUserId"]);
-            BrandUtil = jasmine.createSpyObj("BrandUtil", ["removeExpiredAssets", "updateBrandCache"]);
+            BrandManager = jasmine.createSpyObj("BrandManager", ["updateBrandCache"]);
 
             module(function ($provide) {
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
-                $provide.value("BrandUtil", BrandUtil);
+                $provide.value("BrandManager", BrandManager);
             });
 
             inject(function (_$q_, _$rootScope_, globals,
@@ -55,7 +54,6 @@
             rejectHandler = jasmine.createSpy("rejectHandler");
             fetchCurrentUserDetailsDeferred = $q.defer();
             updateBrandCacheDeferred = $q.defer();
-            removeExpiredAssetsDeferred = $q.defer();
             spyOn(UserManager, "fetchCurrentUserDetails").and.returnValue(fetchCurrentUserDetailsDeferred.promise);
             spyOn(CommonService, "loadingBegin");
             spyOn(CommonService, "loadingComplete");
@@ -63,8 +61,7 @@
 
             //setup mocks
             UserManager.fetchCurrentUserDetails.and.returnValue(fetchCurrentUserDetailsDeferred.promise);
-            BrandUtil.updateBrandCache.and.returnValue(updateBrandCacheDeferred.promise);
-            BrandUtil.removeExpiredAssets.and.returnValue(removeExpiredAssetsDeferred.promise);
+            BrandManager.updateBrandCache.and.returnValue(updateBrandCacheDeferred.promise);
         });
 
         describe("has an activate function that", function () {
@@ -100,19 +97,13 @@
                         expect(AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
                     });
 
-                    it("should call BrandUtil.removeExpiredAssets with the expected value", function () {
+                    it("should call BrandManager.updateBrandCache with the expected value", function () {
                         $rootScope.$digest();
 
-                        expect(BrandUtil.removeExpiredAssets).toHaveBeenCalledWith(userDetails.brand);
+                        expect(BrandManager.updateBrandCache).toHaveBeenCalledWith(userDetails.brand);
                     });
 
-                    it("should call BrandUtil.updateBrandCache with the expected value", function () {
-                        $rootScope.$digest();
-
-                        expect(BrandUtil.updateBrandCache).toHaveBeenCalledWith(userDetails.brand);
-                    });
-
-                    describe("when BrandUtil.updateBrandCache succeeds", function () {
+                    describe("when BrandManager.updateBrandCache succeeds", function () {
 
                         beforeEach(function () {
                             LoginManager.waitForCompletedLogin()
@@ -134,7 +125,7 @@
                         //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
                     });
 
-                    describe("when BrandUtil.updateBrandCache fails", function () {
+                    describe("when BrandManager.updateBrandCache fails", function () {
                         var error;
 
                         beforeEach(function () {
@@ -162,31 +153,6 @@
 
                         it("should call CommonService.loadingComplete", function () {
                             expect(CommonService.loadingComplete).toHaveBeenCalledWith();
-                        });
-
-                        //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin
-                    });
-
-                    describe("when BrandUtil.removeExpiredAssets fails", function () {
-                        var error;
-
-                        beforeEach(function () {
-                            LoginManager.waitForCompletedLogin()
-                                .then(resolveHandler)
-                                .catch(rejectHandler);
-                        });
-
-                        beforeEach(function () {
-                            error = {
-                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            };
-
-                            removeExpiredAssetsDeferred.reject(error);
-                            TestUtils.digestError($rootScope);
-                        });
-
-                        it("should not reject the initialization promise", function () {
-                            expect(rejectHandler).not.toHaveBeenCalled();
                         });
 
                         //TODO: Figure out how to test this without using LoginManager.waitForCompletedLogin

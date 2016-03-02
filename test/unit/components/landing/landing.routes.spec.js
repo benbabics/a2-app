@@ -51,6 +51,7 @@
             UserManager,
             AnalyticsUtil,
             BrandUtil,
+            BrandManager,
             mockAccountId,
             BrandAssetModel;
 
@@ -68,7 +69,8 @@
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchScheduledPaymentsCount"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
-            BrandUtil = jasmine.createSpyObj("BrandUtil", ["getAssetResourceData", "getUserBrandAssetBySubtype"]);
+            BrandUtil = jasmine.createSpyObj("BrandUtil", ["getAssetResourceData"]);
+            BrandManager = jasmine.createSpyObj("BrandManager ", ["getUserBrandAssetBySubtype"]);
 
             module(function($provide, sharedGlobals) {
                 $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
@@ -78,6 +80,7 @@
                 $provide.value("UserManager", UserManager);
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("BrandUtil", BrandUtil);
+                $provide.value("BrandManager", BrandManager);
             });
 
             inject(function (_$injector_, _$q_, _$rootScope_, _$state_, globals,
@@ -199,14 +202,14 @@
                         brandLogoAsset = TestUtils.getRandomBrandAsset(BrandAssetModel);
                         getAssetResourceDataDeferred = $q.defer();
 
-                        BrandUtil.getUserBrandAssetBySubtype.and.returnValue(brandLogoAsset);
+                        BrandManager.getUserBrandAssetBySubtype.and.returnValue(brandLogoAsset);
                         BrandUtil.getAssetResourceData.and.returnValue(getAssetResourceDataDeferred.promise);
 
                         $rootScope.$digest();
                     });
 
-                    it("should call BrandUtil.getUserBrandAssetBySubtype with the expected value", function () {
-                        expect(BrandUtil.getUserBrandAssetBySubtype).toHaveBeenCalledWith(ASSET_SUBTYPES.BRAND_LOGO);
+                    it("should call BrandManager.getUserBrandAssetBySubtype with the expected value", function () {
+                        expect(BrandManager.getUserBrandAssetBySubtype).toHaveBeenCalledWith(ASSET_SUBTYPES.BRAND_LOGO);
                     });
 
                     it("should call BrandUtil.getAssetResourceData with the expected value", function () {
@@ -259,13 +262,13 @@
                 describe("when the user does NOT have a brand with a logo", function () {
 
                     beforeEach(function () {
-                        BrandUtil.getUserBrandAssetBySubtype.and.returnValue(null);
+                        BrandManager.getUserBrandAssetBySubtype.and.returnValue(null);
 
                         $rootScope.$digest();
                     });
 
-                    it("should call BrandUtil.getUserBrandAssetBySubtype with the expected value", function () {
-                        expect(BrandUtil.getUserBrandAssetBySubtype).toHaveBeenCalledWith(ASSET_SUBTYPES.BRAND_LOGO);
+                    it("should call BrandManager.getUserBrandAssetBySubtype with the expected value", function () {
+                        expect(BrandManager.getUserBrandAssetBySubtype).toHaveBeenCalledWith(ASSET_SUBTYPES.BRAND_LOGO);
                     });
 
                     it("should resolve the brandLogo to be falsy", function () {

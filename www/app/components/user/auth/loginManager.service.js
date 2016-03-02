@@ -5,7 +5,7 @@
     // jshint maxparams:7
 
     /* @ngInject */
-    function LoginManager($q, $rootScope, AnalyticsUtil, BrandUtil, CommonService, Logger, UserManager) {
+    function LoginManager($q, $rootScope, AnalyticsUtil, BrandManager, CommonService, Logger, UserManager) {
         // Private members
         var initializationCompletedDeferred;
 
@@ -58,9 +58,7 @@
                     // track all events with the user's ID
                     AnalyticsUtil.setUserId(userDetails.id);
 
-                    BrandUtil.removeExpiredAssets(userDetails.brand);
-
-                    return BrandUtil.updateBrandCache(userDetails.brand)
+                    return BrandManager.updateBrandCache(userDetails.brand)
                         .catch(function (error) {
                             Logger.error(CommonService.getErrorMessage(error));
 

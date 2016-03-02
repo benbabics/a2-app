@@ -2,10 +2,11 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:10
 
     /* @ngInject */
-    function BrandManager(globals, BrandAssetModel, BrandsResource, CommonService, Logger, BrandAssetCollection) {
+    function BrandManager($q, globals, BrandAssetModel, BrandAssetCollection, BrandUtil, BrandsResource,
+                          CommonService, Logger, PromiseUtil, UserManager) {
 
         // Private members
         var _ = CommonService._,
@@ -13,17 +14,41 @@
 
         // Revealed Public members
         var service = {
-            fetchBrandAssets     : fetchBrandAssets,
-            getBrandAssets       : getBrandAssets,
-            getBrandAssetsByBrand: getBrandAssetsByBrand,
-            removeBrandAsset     : removeBrandAsset,
-            setBrandAssets       : setBrandAssets,
-            storeBrandAssets     : storeBrandAssets
+            fetchBrandAssets          : fetchBrandAssets,
+            getBrandAssets            : getBrandAssets,
+            getBrandAssetsByBrand     : getBrandAssetsByBrand,
+            getGenericBrandAssets     : getGenericBrandAssets,
+            getUserBrandAssetBySubtype: getUserBrandAssetBySubtype,
+            getUserBrandAssets        : getUserBrandAssets,
+            getWexBrandAssets         : getWexBrandAssets,
+            loadBundledBrand          : loadBundledBrand,
+            removeBrandAsset          : removeBrandAsset,
+            removeExpiredBrandAssets  : removeExpiredBrandAssets,
+            setBrandAssets            : setBrandAssets,
+            storeBrandAssets          : storeBrandAssets,
+            updateBrandCache          : updateBrandCache
         };
 
         return service;
         //////////////////////
 
+        function cacheBrandAssetResource(brandAsset, forceUpdate) {
+            return BrandUtil.cacheAssetResourceData(brandAsset, forceUpdate)
+                .catch(function (error) {
+                    var genericEquivalent = getGenericBrandAssetEquivalent(brandAsset.assetSubtypeId),
+                        promise;
+
+                    //TODO - check for 400/422/500 responses and correctly handle each status
+
+                    //caching the resource failed, so try to cache a generic equivalent instead
+                    if (genericEquivalent) {
+                        promise = BrandUtil.cacheAssetResourceData(genericEquivalent, true);
+                    }
+
+                    //pass the rejection up the chain since caching failed
+                    return PromiseUtil.rejectAfter(promise, error);
+                });
+        }
 
         function createBrandAsset(brandAssetResource) {
             var brandAssetModel = new BrandAssetModel();
@@ -91,8 +116,65 @@
             var searchRegex = new RegExp(brandId, "i"),
                 results = getBrandAssets().find({"clientBrandName" :{"$regex" : searchRegex}});
 
-            //map each result resource to a BrandAssetModel
-            return _.map(results, createBrandAsset);
+            if (results) {
+                //map each result resource to a BrandAssetModel
+                return _.map(results, createBrandAsset);
+            }
+
+            return null;
+        }
+
+        function getGenericBrandAssetEquivalent(assetSubtypeId) {
+            return BrandUtil.getAssetBySubtype(getGenericBrandAssets(), assetSubtypeId);
+        }
+
+        function getGenericBrandAssets() {
+            return getBrandAssetsByBrand(globals.BRAND.GENERIC);
+        }
+
+        function getUserBrandAssetBySubtype(assetSubtypeId) {
+            return BrandUtil.getAssetBySubtype(getUserBrandAssets(), assetSubtypeId) || getGenericBrandAssetEquivalent(assetSubtypeId);
+        }
+
+        function getUserBrandAssets() {
+            var user = UserManager.getUser();
+
+            if (user) {
+                return getBrandAssetsByBrand(user.brand);
+            }
+            else {
+                throw new Error("User must be logged in to get user brand assets");
+            }
+        }
+
+        function getWexBrandAssets() {
+            return getBrandAssetsByBrand(globals.BRAND.WEX);
+        }
+
+        function loadBundledBrand(brandName, brandResource) {
+            var brandAssets = [],
+                promises = [];
+
+            _.forEach(brandResource, function (brandAssetResource) {
+                var brandAsset = new BrandAssetModel();
+
+                brandAsset.set(brandAssetResource);
+
+                //if the current asset has a resource then we need to load it
+                if (brandAsset.hasResource()) {
+                    promises.push(BrandUtil.loadBundledAsset(brandAsset));
+                }
+
+                brandAssets.push(brandAsset);
+            });
+
+            //cache the asset list
+            storeBrandAssets(brandAssets);
+
+            return $q.all(promises)
+                .catch(function (error) {
+                    throw new Error("Failed to load bundled brand '" + brandName + "': " + CommonService.getErrorMessage(error));
+                });
         }
 
         function removeBrandAsset(brandAsset) {
@@ -104,6 +186,20 @@
             else {
                 throw new Error("Failed to remove brand asset: " + brandAsset.asset + " not found");
             }
+        }
+
+        function removeExpiredBrandAssets(brandName) {
+            return $q.all(_.map(getBrandAssetsByBrand(brandName), function (brandAsset) {
+
+                if (brandAsset.isExpired()) {
+                    return BrandUtil.removeAssetResourceFile(brandAsset)
+                        .then(function () {
+                            removeBrandAsset(brandAsset);
+                        });
+                }
+
+                return $q.resolve();
+            }));
         }
 
         // Caution against using this as it replaces the collection versus setting properties or extending
@@ -130,6 +226,37 @@
             else {
                 getBrandAssets().insert(brandAsset);
             }
+        }
+
+        function updateBrandAssetResourcesCache(brandAssets, forceUpdate) {
+            return PromiseUtil.allFinished(_.map(brandAssets, function (brandAsset) {
+
+                if (brandAsset.hasResource()) {
+                    return cacheBrandAssetResource(brandAsset, forceUpdate);
+                }
+                else {
+                    return $q.resolve();
+                }
+            }));
+        }
+
+        function updateBrandCache(brandName) {
+            var lastUpdateDate = BrandUtil.getLastBrandUpdateDate(brandName);
+
+            removeExpiredBrandAssets(brandName);
+
+            return fetchBrandAssets(brandName, lastUpdateDate)
+                .then(function (brandAssets) {
+                    //force updates if we're updating existing resources
+                    return updateBrandAssetResourcesCache(brandAssets, !!lastUpdateDate);
+                })
+                .then(function () {
+                    //update the last brand update date on successful cache update
+                    BrandUtil.setLastBrandUpdateDate(brandName);
+                })
+                .catch(function (error) {
+                    throw new Error("Failed to update brand cache: " + CommonService.getErrorMessage(error));
+                });
         }
     }
 

@@ -5,7 +5,7 @@
 
     // jshint maxparams:11
     function coreRun($cordovaDevice, $q, $rootScope, $state, $ionicPlatform, $window,
-                     globals, AnalyticsUtil, AuthenticationManager, BrandUtil, CommonService) {
+                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, CommonService) {
         var _ = CommonService._;
 
         function isExitState(stateName) {
@@ -51,7 +51,7 @@
         function loadBundledBrands() {
             _.forOwn(globals.BRANDS, function (brandResource, brandId) {
 
-                BrandUtil.loadBundledBrand(brandId, brandResource);
+                BrandManager.loadBundledBrand(brandId, brandResource);
             });
         }
 

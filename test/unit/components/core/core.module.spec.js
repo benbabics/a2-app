@@ -152,7 +152,7 @@
 
         describe("when there are bundled brand assets", function () {
 
-            it("should call BrandUtil.loadBundledBrand for each bundled brand", function () {
+            it("should call BrandManager.loadBundledBrand for each bundled brand", function () {
                 //TODO - Figure out how to test this
             });
         });
