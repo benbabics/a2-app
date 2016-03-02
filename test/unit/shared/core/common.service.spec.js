@@ -676,6 +676,27 @@
             var errorObjectArg,
                 errorMessageResult;
 
+            describe("when the error object param is an array", function () {
+
+                beforeEach(function () {
+                    errorObjectArg = _.times(TestUtils.getRandomInteger(1, 10), function () {
+                        return {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+                    });
+
+                    errorMessageResult = CommonService.getErrorMessage(errorObjectArg);
+                });
+
+                it("should return the expected message", function () {
+                    var expectedError = _.reduce(errorObjectArg, function (message, error) {
+                        return message + "\n- " + CommonService.getErrorMessage(error);
+                    }, "");
+
+                    expect(errorMessageResult).toEqual(expectedError);
+                });
+            });
+
             describe("when the error object param is a string", function () {
 
                 beforeEach(function () {

@@ -392,7 +392,12 @@
 
             var errorMessage = "";
 
-            if (_.isString(errorObject)) {
+            if (_.isArray(errorObject)) {
+                errorMessage = _.reduce(errorObject, function (message, error) {
+                    return message + "\n- " + getErrorMessage(error);
+                }, "");
+            }
+            else if (_.isString(errorObject)) {
                 errorMessage = errorObject;
             }
             // if an Error class object
