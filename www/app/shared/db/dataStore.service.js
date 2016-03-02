@@ -71,20 +71,20 @@
         function getCollection(collection) {
             if (collection && collection.NAME) {
                 var foundCollection =  _.find(collections, {name : collection.NAME});
-                return foundCollection === undefined ? null : foundCollection;
+                return _.isUndefined(foundCollection) ? null : foundCollection;
             }
             return null;
         }
 
         function loadHandler() {
-            collections = _.map(db.listCollections(), function (coll) {
-                return db.getCollection(coll.name);
+            collections = _.map(db.listCollections(), function (collection) {
+                return db.getCollection(collection.name);
             });
         }
 
         // This is only here for testing purposes
-        function setStoredCollections(colls) {
-            collections = colls;
+        function setStoredCollections(updatedCollections) {
+            collections = updatedCollections;
         }
     }
 
