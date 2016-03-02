@@ -18,6 +18,7 @@
         "angAccordion",               // From https://github.com/sherwaniusman/angular-accordion
         "ngStorage",                  // From https://github.com/gsklee/ngStorage
         "chart.js",                   // From http://jtblin.github.io/angular-chart.js/
-        "lokijs"                      // From https://github.com/techfort/LokiJS/
+        "lokijs",                     // From https://github.com/techfort/LokiJS/
+        "ngPromiseExtras"             // From https://github.com/ohjames/angular-promise-extras
     ]);
 })();

@@ -38,6 +38,7 @@ module.exports = function(config) {
             "lib/ngstorage/ngStorage.js",
             "lib/lokijs/src/lokijs.js",
             "lib/lokijs/src/loki-angular.js",
+            "lib/angular-promise-extras/angular-promise-extras.js",
 
             // Test libraries
             "../test/lib/**/*.js",
