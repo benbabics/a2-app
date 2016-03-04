@@ -64,8 +64,37 @@
                         PAYMENT_ALREADY_SCHEDULED: "Payment Already Scheduled"
                     }
                 },
-                GOOGLE_ANALYTICS: {
-                    TRACKING_ID: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                BRANDS: {
+                    "GENERIC": [
+                        {
+                            "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
+                            "assetTypeId"    : "TEXT",
+                            "assetValue"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "clientBrandName": "GENERIC",
+                            "links": []
+                        }
+                    ],
+                    "WEX"    : [
+                        {
+                            "assetSubtypeId" : "BRAND_LOGO",
+                            "assetTypeId"    : "FILE",
+                            "assetValue"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "clientBrandName": "WEX",
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "href": TestUtils.getRandomStringThatIsAlphaNumeric(15)
+                                }
+                            ]
+                        },
+                        {
+                            "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
+                            "assetTypeId"    : "TEXT",
+                            "assetValue"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "clientBrandName": "WEX",
+                            "links": []
+                        }
+                    ]
                 }
             },
             AuthenticationManager,
@@ -75,28 +104,17 @@
             PaymentManager,
             UserManager,
             AnalyticsUtil,
-            LoginManager;
+            LoginManager,
+            BrandUtil,
+            BrandManager,
+            $cordovaDevice,
+            $ionicPlatform,
+            genericTrackingId,
+            doBackButtonAction;
 
         beforeEach(function () {
 
-            spyOn(ionic.Platform, "fullScreen").and.callThrough();
-
-            module("app.shared");
-
-            module(function ($provide) {
-                $provide.constant("globals", mockGlobals);
-            });
-
-            module("app.components");
-
-            module(function ($provide, globals, appGlobals, sharedGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, globals));
-            });
-
-            module("app.shared");
-            module("app.html");
-
-            // mock dependencies
+            //mock dependencies:
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             BankManager = jasmine.createSpyObj("BankManager", ["clearCachedValues", "getActiveBanks", "hasMultipleBanks"]);
             PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getOrCreatePaymentAdd"]);
@@ -104,8 +122,15 @@
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTracker", "trackView"]);
             LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
+            BrandUtil = jasmine.createSpyObj("BrandUtil", ["getAssetBySubtype"]);
+            BrandManager = jasmine.createSpyObj("BrandManager", ["loadBundledBrand"]);
+            $cordovaDevice = jasmine.createSpyObj("$cordovaDevice", ["getPlatform"]);
+            $ionicPlatform = jasmine.createSpyObj("$ionicPlatform", ["ready", "registerBackButtonAction"]);
 
-            module(function ($provide) {
+            module("app.shared");
+
+            module("app.components", function ($provide) {
+                $provide.constant("globals", mockGlobals);
                 $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("BankManager", BankManager);
                 $provide.value("PaymentMaintenance", PaymentMaintenance);
@@ -113,7 +138,32 @@
                 $provide.value("UserManager", UserManager);
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("LoginManager", LoginManager);
+                $provide.value("BrandUtil", BrandUtil);
+                $provide.value("BrandManager", BrandManager);
+                $provide.value("$cordovaDevice", $cordovaDevice);
+                $provide.value("$ionicPlatform", $ionicPlatform);
+
+                //setup mocks:
+                genericTrackingId = TestUtils.getRandomBrandAsset(Object);
+                BrandUtil.getAssetBySubtype.and.returnValue(genericTrackingId);
+                $ionicPlatform.ready.and.callFake(function (readyCallback) {
+                    if (readyCallback) {
+                        readyCallback();
+                    }
+
+                    return TestUtils.resolvedPromise();
+                });
+                $ionicPlatform.registerBackButtonAction.and.callFake(function (callback) {
+                    doBackButtonAction = callback;
+                });
             });
+
+            module(function ($provide, globals, appGlobals, sharedGlobals) {
+                $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, globals));
+            });
+
+            module("app.shared");
+            module("app.html");
 
             inject(function (_$q_, _$rootScope_, _$state_, _CommonService_) {
                 $q = _$q_;
@@ -130,9 +180,7 @@
             spyOn(CommonService, "exitApp");
             spyOn(CommonService, "loadingBegin");
             spyOn(CommonService, "loadingComplete");
-            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function (callback) {
-                return $q.resolve((callback || _.noop)());
-            });
+            spyOn(CommonService, "goToBackState");
         });
 
         it("should set the app to fullscreen with a status bar", function () {
@@ -140,7 +188,7 @@
         });
 
         it("should call AnalyticsUtil.startTracker with the expected tracking ID", function () {
-            //TODO - figure out how to test this
+            expect(AnalyticsUtil.startTracker).toHaveBeenCalledWith(genericTrackingId.assetValue);
         });
 
         describe("when running the app from Chrome", function () {
@@ -153,7 +201,9 @@
         describe("when there are bundled brand assets", function () {
 
             it("should call BrandManager.loadBundledBrand for each bundled brand", function () {
-                //TODO - Figure out how to test this
+                _.forOwn(mockGlobals.BRANDS, function (brandResource, brandId) {
+                    expect(BrandManager.loadBundledBrand).toHaveBeenCalledWith(brandId, brandResource);
+                });
             });
         });
 
@@ -312,18 +362,17 @@
 
         describe("has a hardware back button action that", function () {
 
-            xit("should be registered with $ionicPlatform.registerBackButtonAction with the expected priority", function () {
-                //TODO - figure out how to test this
+            it("should be registered with $ionicPlatform.registerBackButtonAction with the expected priority", function () {
                 expect($ionicPlatform.registerBackButtonAction).toHaveBeenCalledWith(jasmine.any(Function), 101);
             });
 
             describe("when the hardware back button is pressed", function () {
 
                 beforeEach(function () {
-                    //TODO - figure out how to test this
+                    doBackButtonAction();
                 });
 
-                xit("should call CommonService.goToBackState", function () {
+                it("should call CommonService.goToBackState", function () {
                     expect(CommonService.goToBackState).toHaveBeenCalledWith();
                 });
             });

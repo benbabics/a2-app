@@ -1439,6 +1439,56 @@
             });
         });
 
+        describe("has a getGenericBrandAssetBySubtype function that", function () {
+            var assetSubtypeId,
+                genericBrandAssets,
+                brandAsset,
+                result;
+
+            beforeEach(function () {
+                genericBrandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                brandAsset = TestUtils.getRandomValueFromArray(genericBrandAssets);
+
+                mockBrandAssetCollection.find.and.returnValue(genericBrandAssets);
+                BrandUtil.getAssetBySubtype.and.returnValue(brandAsset);
+
+                result = BrandManager.getGenericBrandAssetBySubtype(assetSubtypeId);
+            });
+
+            it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
+                expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(genericBrandAssets, assetSubtypeId);
+            });
+
+            it("should return the value from BrandUtil.getAssetBySubtype", function () {
+                expect(result).toEqual(brandAsset);
+            });
+        });
+
+        describe("has a getWexBrandAssetBySubtype function that", function () {
+            var assetSubtypeId,
+                wexBrandAssets,
+                brandAsset,
+                result;
+
+            beforeEach(function () {
+                wexBrandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                brandAsset = TestUtils.getRandomValueFromArray(wexBrandAssets);
+
+                mockBrandAssetCollection.find.and.returnValue(wexBrandAssets);
+                BrandUtil.getAssetBySubtype.and.returnValue(brandAsset);
+
+                result = BrandManager.getWexBrandAssetBySubtype(assetSubtypeId);
+            });
+
+            it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
+                expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(wexBrandAssets, assetSubtypeId);
+            });
+
+            it("should return the value from BrandUtil.getAssetBySubtype", function () {
+                expect(result).toEqual(brandAsset);
+            });
+        });
+
     });
 
 })();

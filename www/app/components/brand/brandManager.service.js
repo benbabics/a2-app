@@ -14,19 +14,21 @@
 
         // Revealed Public members
         var service = {
-            fetchBrandAssets          : fetchBrandAssets,
-            getBrandAssets            : getBrandAssets,
-            getBrandAssetsByBrand     : getBrandAssetsByBrand,
-            getGenericBrandAssets     : getGenericBrandAssets,
-            getUserBrandAssetBySubtype: getUserBrandAssetBySubtype,
-            getUserBrandAssets        : getUserBrandAssets,
-            getWexBrandAssets         : getWexBrandAssets,
-            loadBundledBrand          : loadBundledBrand,
-            removeBrandAsset          : removeBrandAsset,
-            removeExpiredBrandAssets  : removeExpiredBrandAssets,
-            setBrandAssets            : setBrandAssets,
-            storeBrandAssets          : storeBrandAssets,
-            updateBrandCache          : updateBrandCache
+            fetchBrandAssets             : fetchBrandAssets,
+            getBrandAssets               : getBrandAssets,
+            getBrandAssetsByBrand        : getBrandAssetsByBrand,
+            getGenericBrandAssetBySubtype: getGenericBrandAssetBySubtype,
+            getGenericBrandAssets        : getGenericBrandAssets,
+            getUserBrandAssetBySubtype   : getUserBrandAssetBySubtype,
+            getUserBrandAssets           : getUserBrandAssets,
+            getWexBrandAssetBySubtype    : getWexBrandAssetBySubtype,
+            getWexBrandAssets            : getWexBrandAssets,
+            loadBundledBrand             : loadBundledBrand,
+            removeBrandAsset             : removeBrandAsset,
+            removeExpiredBrandAssets     : removeExpiredBrandAssets,
+            setBrandAssets               : setBrandAssets,
+            storeBrandAssets             : storeBrandAssets,
+            updateBrandCache             : updateBrandCache
         };
 
         return service;
@@ -35,7 +37,7 @@
         function cacheBrandAssetResource(brandAsset, forceUpdate) {
             return BrandUtil.cacheAssetResourceData(brandAsset, forceUpdate)
                 .catch(function (error) {
-                    var genericEquivalent = getGenericBrandAssetEquivalent(brandAsset.assetSubtypeId),
+                    var genericEquivalent = getGenericBrandAssetBySubtype(brandAsset.assetSubtypeId),
                         promise;
 
                     //TODO - check for 400/422/500 responses and correctly handle each status
@@ -124,7 +126,7 @@
             return null;
         }
 
-        function getGenericBrandAssetEquivalent(assetSubtypeId) {
+        function getGenericBrandAssetBySubtype(assetSubtypeId) {
             return BrandUtil.getAssetBySubtype(getGenericBrandAssets(), assetSubtypeId);
         }
 
@@ -133,7 +135,7 @@
         }
 
         function getUserBrandAssetBySubtype(assetSubtypeId) {
-            return BrandUtil.getAssetBySubtype(getUserBrandAssets(), assetSubtypeId) || getGenericBrandAssetEquivalent(assetSubtypeId);
+            return BrandUtil.getAssetBySubtype(getUserBrandAssets(), assetSubtypeId) || getGenericBrandAssetBySubtype(assetSubtypeId);
         }
 
         function getUserBrandAssets() {
@@ -145,6 +147,10 @@
             else {
                 throw new Error("User must be logged in to get user brand assets");
             }
+        }
+
+        function getWexBrandAssetBySubtype(assetSubtypeId) {
+            return BrandUtil.getAssetBySubtype(getWexBrandAssets(), assetSubtypeId);
         }
 
         function getWexBrandAssets() {

@@ -4,8 +4,8 @@
     var _,
         $rootScope,
         $compile,
-        $cordovaGoogleAnalytics,
         $q,
+        AnalyticsUtil,
         CommonService,
         wexAnalyticsTrackEvent,
         event;
@@ -17,10 +17,10 @@
             module("app.html");
 
             //mock dependencies:
-            $cordovaGoogleAnalytics = jasmine.createSpyObj("$cordovaGoogleAnalytics", ["trackEvent"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackEvent"]);
 
             module(function ($provide) {
-                $provide.value("$cordovaGoogleAnalytics", $cordovaGoogleAnalytics);
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
             });
 
             inject(function (_$rootScope_, _$compile_, _$q_, _CommonService_) {
@@ -29,12 +29,6 @@
                 $q = _$q_;
                 CommonService = _CommonService_;
                 _ = CommonService._;
-            });
-
-            //setup spies:
-            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
-                //just execute the callback directly
-                return $q.when((callback || function() {})());
             });
         });
 
@@ -48,8 +42,8 @@
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 });
 
-                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
-                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call AnalyticsUtil.trackEvent", function () {
+                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
                 describe("when the parent element is clicked", function () {
@@ -59,8 +53,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call $cordovaGoogleAnalytics.trackEvent with the expected values", function () {
-                        expect($cordovaGoogleAnalytics.trackEvent).toHaveBeenCalledWith(event[0], event[1], undefined, undefined);
+                    it("should call AnalyticsUtil.trackEvent with the expected values", function () {
+                        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
                     });
                 });
             });
@@ -73,8 +67,8 @@
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 });
 
-                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
-                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call AnalyticsUtil.trackEvent", function () {
+                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
                 describe("when the parent element is clicked", function () {
@@ -84,8 +78,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call $cordovaGoogleAnalytics.trackEvent with the expected values", function () {
-                        expect($cordovaGoogleAnalytics.trackEvent).toHaveBeenCalledWith(event[0], event[1], event[2], undefined);
+                    it("should call AnalyticsUtil.trackEvent with the expected values", function () {
+                        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
                     });
                 });
             });
@@ -98,8 +92,8 @@
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 });
 
-                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
-                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call AnalyticsUtil.trackEvent", function () {
+                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
                 describe("when the parent element is clicked", function () {
@@ -109,8 +103,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call $cordovaGoogleAnalytics.trackEvent with the expected values", function () {
-                        expect($cordovaGoogleAnalytics.trackEvent).toHaveBeenCalledWith(event[0], event[1], event[2], event[3]);
+                    it("should call AnalyticsUtil.trackEvent with the expected values", function () {
+                        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
                     });
                 });
             });
@@ -123,8 +117,8 @@
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 });
 
-                it("should NOT call $cordovaGoogleAnalytics.trackEvent", function () {
-                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call AnalyticsUtil.trackEvent", function () {
+                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
                 describe("when the parent element is clicked", function () {
@@ -134,8 +128,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call $cordovaGoogleAnalytics.trackEvent with the expected values", function () {
-                        expect($cordovaGoogleAnalytics.trackEvent).toHaveBeenCalledWith(event[0], event[1], event[2], event[3]);
+                    it("should call AnalyticsUtil.trackEvent with the expected values", function () {
+                        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
                     });
                 });
             });
@@ -151,7 +145,7 @@
                         createWexAnalyticsTrackEvent(event);
                     }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
-                    expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
             });
         });
@@ -167,7 +161,7 @@
                     createWexAnalyticsTrackEvent(event);
                 }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
-                expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
             });
         });
 
@@ -182,7 +176,7 @@
                     createWexAnalyticsTrackEvent(event);
                 }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
-                expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
             });
         });
 
@@ -197,7 +191,7 @@
                     createWexAnalyticsTrackEvent(event);
                 }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
-                expect($cordovaGoogleAnalytics.trackEvent).not.toHaveBeenCalled();
+                expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
             });
         });
     });

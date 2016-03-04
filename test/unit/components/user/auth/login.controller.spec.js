@@ -89,7 +89,7 @@
             $state = jasmine.createSpyObj("state", ["go"]);
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["setUserId", "trackEvent", "trackView"]);
-            LoginManager = jasmine.createSpyObj("LoginManager", ["logIn", "logOut", "waitForCompletedLogin"]);
+            LoginManager = jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]);
 
             inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _CommonService_, BrandAssetModel, UserAccountModel, UserModel,
                              globals) {

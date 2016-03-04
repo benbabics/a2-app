@@ -21,13 +21,6 @@
     };
 
     /**
-     * Google Analytics
-     */
-    sharedGlobals.GOOGLE_ANALYTICS = {
-        TRACKING_ID: "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID@@@"
-    };
-
-    /**
      * Logging
      */
     sharedGlobals.LOGGING = {
@@ -110,10 +103,12 @@
         WEX    : "WEX",
 
         ASSET_TYPES: {
-            "FILE": "FILE"
+            "FILE": "FILE",
+            "TEXT": "TEXT"
         },
         ASSET_SUBTYPES: {
-            "BRAND_LOGO": "BRAND_LOGO"
+            "BRAND_LOGO"                  : "BRAND_LOGO",
+            "GOOGLE_ANALYTICS_TRACKING_ID": "GOOGLE_ANALYTICS_TRACKING_ID"
         }
     };
 

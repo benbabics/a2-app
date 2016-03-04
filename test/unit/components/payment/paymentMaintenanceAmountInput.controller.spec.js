@@ -63,10 +63,12 @@
         beforeEach(function () {
 
             module("app.shared");
-            module("app.components");
+            module("app.components", function ($provide, sharedGlobals) {
+                $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
+            });
 
-            module(function ($provide, sharedGlobals) {
-                $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
+            module(function ($provide, sharedGlobals, appGlobals) {
+                $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
             });
 
             // stub the routing and template loading

@@ -3,6 +3,7 @@
 
     var $rootScope,
         $ionicPlatform,
+        $state,
         PaymentManager;
 
     describe("A Payment Module", function () {
@@ -11,15 +12,17 @@
 
             module("app.shared");
             module("app.html");
-            module("app.components.payment");
+            module("app.components");
 
-            inject(function (_$rootScope_, _$ionicPlatform_, _PaymentManager_) {
+            inject(function (_$rootScope_, _$ionicPlatform_, _$state_, _PaymentManager_) {
                 $rootScope = _$rootScope_;
                 $ionicPlatform = _$ionicPlatform_;
+                $state = _$state_;
                 PaymentManager = _PaymentManager_;
             });
 
             spyOn(PaymentManager, "clearCachedValues");
+            spyOn($state, "transitionTo");
         });
 
         describe("has a run function that", function () {

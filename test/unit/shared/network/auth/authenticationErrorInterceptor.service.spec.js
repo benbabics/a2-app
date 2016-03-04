@@ -120,11 +120,14 @@
 
             module("app.shared");
 
-            module(function ($provide, sharedGlobals) {
+            module("app.components", function ($provide, sharedGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
-            module("app.components");
+            module(function ($provide, sharedGlobals, appGlobals) {
+                $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
+            });
+
             module("app.html");
 
             // mock dependencies

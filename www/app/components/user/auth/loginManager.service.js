@@ -2,62 +2,40 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:7
+    // jshint maxparams:9
 
     /* @ngInject */
-    function LoginManager($q, $rootScope, AnalyticsUtil, BrandManager, CommonService, Logger, UserManager) {
+    function LoginManager($q, $rootScope, globals,
+                          AnalyticsUtil, AuthenticationManager, BrandManager, CommonService, Logger, UserManager) {
         // Private members
-        var initializationCompletedDeferred;
+        var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES;
 
         // Revealed Public members
         var service = {
-            "logIn"                : logIn,
-            "logOut"               : logOut,
-            "waitForCompletedLogin": waitForCompletedLogin
+            "logIn" : logIn,
+            "logOut": logOut
         };
-
-        activate();
 
         return service;
         //////////////////////
 
-        function activate() {
-            $rootScope.$on("app:login", doLoginInitialization);
-            $rootScope.$on("app:logout", clearCachedValues);
-
-            clearCachedValues();
-        }
-
         function logIn() {
-            clearCachedValues();
-
             $rootScope.$emit("app:login");
 
-            return waitForCompletedLogin();
+            return doLoginInitialization();
         }
 
         function logOut() {
             $rootScope.$emit("app:logout");
 
-            return $q.resolve();
-        }
-
-        function waitForCompletedLogin() {
-            return initializationCompletedDeferred.promise;
-        }
-
-        function clearCachedValues() {
-            initializationCompletedDeferred = $q.defer();
+            return doLogoutCleanup();
         }
 
         function doLoginInitialization() {
             CommonService.loadingBegin();
 
-            UserManager.fetchCurrentUserDetails()
+            return UserManager.fetchCurrentUserDetails()
                 .then(function (userDetails) {
-                    // track all events with the user's ID
-                    AnalyticsUtil.setUserId(userDetails.id);
-
                     return BrandManager.updateBrandCache(userDetails.brand)
                         .catch(function (error) {
                             Logger.error(CommonService.getErrorMessage(error));
@@ -65,13 +43,42 @@
                             //eat the error
                         });
                 })
-                .then(initializationCompletedDeferred.resolve)
+                .then(startBrandedTracker)
                 .catch(function (error) {
-                    initializationCompletedDeferred.reject(error);
-
                     throw new Error("Failed to complete login initialization: " + CommonService.getErrorMessage(error));
                 })
                 .finally(CommonService.loadingComplete);
+        }
+
+        function doLogoutCleanup() {
+            startGenericTracker();
+
+            return $q.resolve();
+        }
+
+        function startBrandedTracker() {
+            var user = UserManager.getUser(),
+                trackingId;
+
+            if (AuthenticationManager.userLoggedIn()) {
+                //use the user's branded tracker
+                trackingId = BrandManager.getUserBrandAssetBySubtype(ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+
+                if (trackingId) {
+                    AnalyticsUtil.startTracker(trackingId.assetValue);
+                }
+
+                //track all events with the user's ID
+                AnalyticsUtil.setUserId(user.id);
+            }
+        }
+
+        function startGenericTracker() {
+            var trackingId = BrandManager.getGenericBrandAssetBySubtype(ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+
+            if (trackingId) {
+                AnalyticsUtil.startTracker(trackingId.assetValue);
+            }
         }
     }
 

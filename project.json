@@ -16,7 +16,10 @@
         },
         "content_security_policy": "default-src * 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: filesystem: cdvfile:;",
         "whitelist_domains": ["*"],
-        "google_analytics_tracking_id": "UA-71223382-2",
+        "google_analytics_tracking_ids": {
+            "generic": "UA-71223382-6",
+            "wex": "UA-71223382-2"
+        },
         "logging_enabled": "true"
     },
     "dit": {
@@ -31,7 +34,10 @@
         },
         "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://pwm-wex-178.wrightexpress.com:* https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: filesystem: cdvfile:;",
         "whitelist_domains": ["pwm-wex-178.wrightexpress.com", "www.google.com"],
-        "google_analytics_tracking_id": "UA-71223382-2",
+        "google_analytics_tracking_ids": {
+            "generic": "UA-71223382-6",
+            "wex": "UA-71223382-2"
+        },
         "logging_enabled": "true"
     },
     "stage": {
@@ -46,7 +52,10 @@
         },
         "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://uat.account.wexmobile.com https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: filesystem: cdvfile:;",
         "whitelist_domains": ["uat.account.wexmobile.com", "www.google.com"],
-        "google_analytics_tracking_id": "UA-71223382-1",
+        "google_analytics_tracking_ids": {
+            "generic": "UA-71223382-10",
+            "wex": "UA-71223382-1"
+        },
         "logging_enabled": "true"
     },
     "prod": {
@@ -61,7 +70,10 @@
         },
         "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://account.wexmobile.com https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: filesystem: cdvfile:;",
         "whitelist_domains": ["account.wexmobile.com", "www.google.com"],
-        "google_analytics_tracking_id": "UA-4082503-34",
+        "google_analytics_tracking_ids": {
+            "generic": "UA-4082503-35",
+            "wex": "UA-4082503-34"
+        },
         "logging_enabled": "false"
     }
 }

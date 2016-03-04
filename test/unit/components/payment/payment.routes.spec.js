@@ -279,7 +279,14 @@
         beforeEach(function () {
 
             module("app.shared");
-            module("app.components");
+            module("app.components", function ($provide, sharedGlobals) {
+                $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
+            });
+
+            module(function ($provide, sharedGlobals, appGlobals) {
+                $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
+            });
+
             module("app.html");
 
             // mock dependencies
@@ -293,7 +300,6 @@
             LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
 
             module(function ($provide, sharedGlobals) {
-                $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
                 $provide.value("BankManager", BankManager);
                 $provide.value("InvoiceManager", InvoiceManager);
                 $provide.value("Logger", Logger);

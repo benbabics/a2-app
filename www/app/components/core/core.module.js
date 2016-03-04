@@ -3,10 +3,11 @@
 
     //TODO - Move as much logic out of here as possible
 
-    // jshint maxparams:11
+    // jshint maxparams:12
     function coreRun($cordovaDevice, $q, $rootScope, $state, $ionicPlatform, $window,
-                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, CommonService) {
-        var _ = CommonService._;
+                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, BrandUtil, CommonService) {
+        var _ = CommonService._,
+            ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES;
 
         function isExitState(stateName) {
             return "app.exit" === stateName;
@@ -71,11 +72,19 @@
             return deferred.promise;
         }
 
+        function startGenericAnalyticsTracker() {
+            var genericTrackingId = BrandUtil.getAssetBySubtype(globals.BRANDS.GENERIC, ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+
+            if (genericTrackingId) {
+                AnalyticsUtil.startTracker(genericTrackingId.assetValue);
+            }
+        }
+
         //app must be set to fullscreen so that ionic headers are the correct size in iOS
         //see: http://forum.ionicframework.com/t/ion-nav-bar-top-padding-in-ios7/2488/12
         $ionicPlatform.ready(function() {
             // jshint undef:false
-            ionic.Platform.fullScreen(true, true);
+            $window.ionic.Platform.fullScreen(true, true);
         });
 
         $rootScope.$on("$stateChangeStart", validateRoutePreconditions);
@@ -92,7 +101,7 @@
             .then(requestChromeFileSystem)
             .then(loadBundledBrands);
 
-        AnalyticsUtil.startTracker(globals.GOOGLE_ANALYTICS.TRACKING_ID);
+        startGenericAnalyticsTracker();
     }
 
     angular.module("app.components.core", [])

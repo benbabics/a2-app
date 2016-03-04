@@ -546,7 +546,15 @@
     };
 
     appGlobals.BRANDS = {
-        "GENERIC": [],
+        "GENERIC": [
+            {
+                "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
+                "assetTypeId"    : "TEXT",
+                "assetValue"     : "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_GENERIC@@@",
+                "clientBrandName": "GENERIC",
+                "links": []
+            }
+        ],
         "WEX"    : [
             {
                 "assetSubtypeId" : "BRAND_LOGO",
@@ -559,6 +567,13 @@
                         "href": "img/brands/wexinc/brand_logo/wex_logo.svg"
                     }
                 ]
+            },
+            {
+                "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
+                "assetTypeId"    : "TEXT",
+                "assetValue"     : "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_WEX@@@",
+                "clientBrandName": "WEX",
+                "links": []
             }
         ]
     };
