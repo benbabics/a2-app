@@ -57,15 +57,15 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"UniversalAnalytics\"><param name=\"android-package\" value=\"com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
                             "count": 1
                         },
                         {
                             "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"GoogleAnalytics\"><param name=\"android-package\" value=\"com.cmackay.plugins.googleanalytics.GoogleAnalyticsPlugin\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -83,17 +83,17 @@
                             "count": 1
                         },
                         {
-                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
+                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
                             "count": 1
                         },
                         {
-                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
                             "count": 1
                         }
                     ],
                     "/manifest/application": [
                         {
-                            "xml": "<receiver android:enabled=\"true\" android:name=\"com.google.android.gms.analytics.AnalyticsReceiver\"><intent-filter><action android:name=\"com.google.android.gms.analytics.ANALYTICS_DISPATCH\" /></intent-filter></receiver>",
+                            "xml": "<meta-data android:name=\"com.google.android.gms.version\" android:value=\"@integer/google_play_services_version\" />",
                             "count": 1
                         },
                         {
@@ -101,11 +101,15 @@
                             "count": 1
                         },
                         {
+                            "xml": "<service android:name=\"com.google.android.gms.analytics.CampaignTrackingService\" />",
+                            "count": 1
+                        },
+                        {
                             "xml": "<receiver android:exported=\"true\" android:name=\"com.google.android.gms.analytics.CampaignTrackingReceiver\"><intent-filter><action android:name=\"com.android.vending.INSTALL_REFERRER\" /></intent-filter></receiver>",
                             "count": 1
                         },
                         {
-                            "xml": "<service android:name=\"com.google.android.gms.analytics.CampaignTrackingService\" />",
+                            "xml": "<receiver android:enabled=\"true\" android:name=\"com.google.android.gms.analytics.AnalyticsReceiver\"><intent-filter><action android:name=\"com.google.android.gms.analytics.ANALYTICS_DISPATCH\" /></intent-filter></receiver>",
                             "count": 1
                         }
                     ]
@@ -144,13 +148,13 @@
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "cordova-plugin-google-analytics": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "com.cmackay.plugins.googleanalytics": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
@@ -210,13 +214,6 @@
             "clobbers": [
                 "cordova.InAppBrowser.open",
                 "window.open"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-google-analytics/www/analytics.js",
-            "id": "cordova-plugin-google-analytics.UniversalAnalytics",
-            "clobbers": [
-                "analytics"
             ]
         },
         {
@@ -375,6 +372,13 @@
                 "cordova"
             ],
             "runs": true
+        },
+        {
+            "file": "plugins/com.cmackay.plugins.googleanalytics/www/analytics.js",
+            "id": "com.cmackay.plugins.googleanalytics.GoogleAnalytics",
+            "clobbers": [
+                "navigator.analytics"
+            ]
         }
     ]
 }

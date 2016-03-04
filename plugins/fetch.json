@@ -79,14 +79,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-google-analytics": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-google-analytics@~0.8.1"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-x-toast": {
         "source": {
             "type": "registry",
@@ -99,6 +91,14 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-file"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.cmackay.plugins.googleanalytics": {
+        "source": {
+            "type": "registry",
+            "id": "com.cmackay.plugins.googleanalytics"
         },
         "is_top_level": true,
         "variables": {}

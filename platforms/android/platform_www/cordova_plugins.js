@@ -57,13 +57,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-google-analytics/www/analytics.js",
-        "id": "cordova-plugin-google-analytics.UniversalAnalytics",
-        "clobbers": [
-            "analytics"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
         "id": "cordova-plugin-x-toast.Toast",
         "clobbers": [
@@ -219,6 +212,13 @@ module.exports = [
             "cordova"
         ],
         "runs": true
+    },
+    {
+        "file": "plugins/com.cmackay.plugins.googleanalytics/www/analytics.js",
+        "id": "com.cmackay.plugins.googleanalytics.GoogleAnalytics",
+        "clobbers": [
+            "navigator.analytics"
+        ]
     }
 ];
 module.exports.metadata = 

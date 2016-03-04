@@ -31,15 +31,15 @@
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
-    <feature name="UniversalAnalytics">
-        <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
-    </feature>
     <feature name="Toast">
         <param name="android-package" value="nl.xservices.plugins.Toast" />
     </feature>
     <feature name="File">
         <param name="android-package" value="org.apache.cordova.file.FileUtils" />
         <param name="onload" value="true" />
+    </feature>
+    <feature name="GoogleAnalytics">
+        <param name="android-package" value="com.cmackay.plugins.googleanalytics.GoogleAnalyticsPlugin" />
     </feature>
     <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
     <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
