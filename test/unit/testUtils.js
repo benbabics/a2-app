@@ -33,7 +33,8 @@ var TestUtils = (function () {
             getRandomUser                     : getRandomUser,
             getRandomUserAccount              : getRandomUserAccount,
             getRandomValueFromArray           : getRandomValueFromArray,
-            getRandomValueFromMap             : getRandomValueFromMap
+            getRandomValueFromMap             : getRandomValueFromMap,
+            resolvedPromise                   : resolvedPromise,
         };
 
     return TestUtils;
@@ -50,6 +51,17 @@ var TestUtils = (function () {
         expect(scope.$digest).toThrow();
         delete scope.$$phase;
         scope.$digest();
+    }
+
+    //Allows for simulating a resolved promise chain without using $q
+    function resolvedPromise(value) {
+        return {
+            then: function (thenCallback) {
+                thenCallback(value);
+
+                return resolvedPromise(value);
+            }
+        };
     }
 
     function getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel) {
