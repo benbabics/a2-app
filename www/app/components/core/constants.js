@@ -562,6 +562,7 @@
                 "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
                 "assetTypeId"    : "TEXT",
                 "assetValue"     : "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_GENERIC@@@",
+                "brandAssetId"   : "32",
                 "clientBrandName": "GENERIC",
                 "links": []
             }
@@ -571,6 +572,7 @@
                 "assetSubtypeId" : "BRAND_LOGO",
                 "assetTypeId"    : "FILE",
                 "assetValue"     : "wex_logo.svg",
+                "brandAssetId"   : "15",
                 "clientBrandName": "WEX",
                 "links": [
                     {
@@ -583,6 +585,7 @@
                 "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
                 "assetTypeId"    : "TEXT",
                 "assetValue"     : "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_WEX@@@",
+                "brandAssetId"   : "31",
                 "clientBrandName": "WEX",
                 "links": []
             }
