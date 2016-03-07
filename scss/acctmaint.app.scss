@@ -177,7 +177,11 @@ $user-login-error-message-animation: all linear 0.5s;
                 float: right;
                 width: 100%;
                 height: 100%;
+                   svg {
+                       max-height: 75px;
+                }
             }
+
         }
     }
 
