@@ -43,8 +43,6 @@
         }
 
         function configure(analytics) {
-            analytics.setLogLevel(analytics.LogLevel.VERBOSE);
-
             analytics.setDispatchInterval(DISPATCH_INTERVAL, _.noop, handleTrackingError);
         }
 
