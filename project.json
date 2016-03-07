@@ -2,6 +2,9 @@
     "all": {
         "auth": {
             "login_state": "user.auth.login"
+        },
+        "datastore": {
+            "name": "fleetSmartHub"
         }
     },
     "dev": {

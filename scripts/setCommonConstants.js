@@ -37,6 +37,9 @@ module.exports = function(context) {
             console.log(LOG_PREFIX + "In " + fullFileName + " - setting LOGIN STATE to: " + configObj.all.auth.login_state);
             replaceStringInFile(fullFileName, "@@@STRING_REPLACE_LOGIN_STATE@@@", configObj.all.auth.login_state);
 
+            console.log(LOG_PREFIX + "In " + fullFileName + " - setting DATASTORE NAME to: " + configObj.all.datastore.name);
+            replaceStringInFile(fullFileName, "@@@STRING_REPLACE_APP_DATASTORE_NAME@@@", configObj.all.datastore.name);
+
         } else {
             console.log(LOG_PREFIX + "ERROR missing " + fullFileName + " file.");
         }

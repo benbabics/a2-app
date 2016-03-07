@@ -192,23 +192,10 @@
     };
 
     /**
-     * App Database Configuration
+     * App Datastore Configuration
      */
     sharedGlobals.DATASTORE = {
-        "APP_CONTEXT"    : "fleetManager",
-        "DATABASE" : {
-            "NAME" : "fleetManagerCollections"
-        }
-    };
-
-    /**
-     * Brand Asset Collection
-     */
-    sharedGlobals.BRAND_ASSET_COLLECTION = {
-        "NAME"      : "brandAssetsCollection",
-        "OPTIONS": {
-            "unique": "brandAssetId"
-        }
+        "NAME" : "@@@STRING_REPLACE_APP_DATASTORE_NAME@@@"
     };
 
     angular

@@ -21,7 +21,7 @@
         //////////////////////
 
         function activate() {
-            db = new Loki(dataStore.DATABASE.NAME, {
+            db = new Loki(dataStore.NAME, {
                 autoload         : true,
                 autoloadCallback : loadHandler,
                 autosave         : true,

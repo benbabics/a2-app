@@ -20,6 +20,17 @@
         }
     };
 
+
+    /**
+     * Brand Asset Collection
+     */
+    appGlobals.BRAND_ASSET_COLLECTION = {
+        "NAME"      : "brandAssetsCollection",
+        "OPTIONS": {
+            "unique": "brandAssetId"
+        }
+    };
+
     appGlobals.USER_LOGIN = {
         "CONFIG": {
             "ANALYTICS"   : {
