@@ -14,9 +14,9 @@
         //////////////////////
 
         function getCollection() {
-            collection = DataStore.getCollection(globals.BRAND_ASSET_COLLECTIOM);
+            collection = DataStore.getCollection(globals.BRAND_ASSET_COLLECTION);
             if (collection === null) {
-                collection = DataStore.addCollection(globals.BRAND_ASSET_COLLECTIOM);
+                collection = DataStore.addCollection(globals.BRAND_ASSET_COLLECTION);
             }
             return collection;
         }

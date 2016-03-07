@@ -40,7 +40,7 @@
                 });
 
                 it("should call DataStore.getCollection", function () {
-                    expect(DataStore.getCollection).toHaveBeenCalledWith(globals.BRAND_ASSET_COLLECTIOM);
+                    expect(DataStore.getCollection).toHaveBeenCalledWith(globals.BRAND_ASSET_COLLECTION);
                 });
 
                 it("should return a result equal to brandAssetCollection", function () {
@@ -60,11 +60,11 @@
                     });
 
                     it("should call DataStore.getCollection", function () {
-                        expect(DataStore.getCollection).toHaveBeenCalledWith(globals.BRAND_ASSET_COLLECTIOM);
+                        expect(DataStore.getCollection).toHaveBeenCalledWith(globals.BRAND_ASSET_COLLECTION);
                     });
 
                     it("should call DataStore.addCollection", function () {
-                        expect(DataStore.addCollection).toHaveBeenCalledWith(globals.BRAND_ASSET_COLLECTIOM);
+                        expect(DataStore.addCollection).toHaveBeenCalledWith(globals.BRAND_ASSET_COLLECTION);
                     });
 
                     it("should return a result equal to brandAssetCollection", function () {
@@ -79,11 +79,11 @@
                     });
 
                     it("should call DataStore.getCollection", function () {
-                        expect(DataStore.getCollection).toHaveBeenCalledWith(globals.BRAND_ASSET_COLLECTIOM);
+                        expect(DataStore.getCollection).toHaveBeenCalledWith(globals.BRAND_ASSET_COLLECTION);
                     });
 
                     it("should call DataStore.addCollection", function () {
-                        expect(DataStore.addCollection).toHaveBeenCalledWith(globals.BRAND_ASSET_COLLECTIOM);
+                        expect(DataStore.addCollection).toHaveBeenCalledWith(globals.BRAND_ASSET_COLLECTION);
                     });
 
                     it("should return null", function () {

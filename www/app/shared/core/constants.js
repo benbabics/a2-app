@@ -204,7 +204,7 @@
     /**
      * Brand Asset Collection
      */
-    sharedGlobals.BRAND_ASSET_COLLECTIOM = {
+    sharedGlobals.BRAND_ASSET_COLLECTION = {
         "NAME"      : "brandAssetsCollection",
         "OPTIONS": {
             "unique": "brandAssetId"
