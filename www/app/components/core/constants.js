@@ -577,7 +577,7 @@
                 "links": [
                     {
                         "rel": "self",
-                        "href": "img/brands/wexinc/brand_logo/wex_logo.svg"
+                        "href": "img/brands/wex/brand_logo/wex_logo.svg"
                     }
                 ]
             },
