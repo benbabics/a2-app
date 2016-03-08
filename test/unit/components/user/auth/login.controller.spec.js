@@ -563,7 +563,7 @@
 
         });
 
-        describe("has a keyboardIsVisible function that", function () {
+        describe("has an isKeyboardVisible function that", function () {
 
             describe("when Cordova is available", function () {
 
@@ -578,7 +578,7 @@
                     });
 
                     it("should return true", function () {
-                        expect(ctrl.keyboardIsVisible()).toBeTruthy();
+                        expect(ctrl.isKeyboardVisible()).toBeTruthy();
                     });
                 });
 
@@ -589,7 +589,7 @@
                     });
 
                     it("should return false", function () {
-                        expect(ctrl.keyboardIsVisible()).toBeFalsy();
+                        expect(ctrl.isKeyboardVisible()).toBeFalsy();
                     });
                 });
             });
@@ -601,7 +601,7 @@
                 });
 
                 it("should return false", function () {
-                    expect(ctrl.keyboardIsVisible()).toBeFalsy();
+                    expect(ctrl.isKeyboardVisible()).toBeFalsy();
                 });
             });
         });

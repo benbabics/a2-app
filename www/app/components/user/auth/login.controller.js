@@ -13,7 +13,7 @@
         vm.config = globals.USER_LOGIN.CONFIG;
         vm.user = {};
         vm.authenticateUser = authenticateUser;
-        vm.keyboardIsVisible = keyboardIsVisible;
+        vm.isKeyboardVisible = isKeyboardVisible;
 
         activate();
 
@@ -89,7 +89,7 @@
             vm.globalError = false;
         }
 
-        function keyboardIsVisible() {
+        function isKeyboardVisible() {
             return CommonService.platformHasCordova() && $cordovaKeyboard.isVisible();
         }
 
