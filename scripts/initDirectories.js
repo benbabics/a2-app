@@ -37,4 +37,6 @@ module.exports = function(context) {
         });
     } catch (ex) {
     }
+
+    console.log(context.hook + " hook has finished running script " + context.scriptLocation);
 };

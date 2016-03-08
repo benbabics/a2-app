@@ -33,4 +33,6 @@ module.exports = function(context) {
             }
         });
     }
+
+    console.log(context.hook + " hook has finished running script " + context.scriptLocation);
 };

@@ -282,4 +282,6 @@ module.exports = function(context) {
             console.log(LOG_PREFIX + "ERROR missing rootdir");
         }
     })();
+
+    console.log(context.hook + " hook has finished running script " + context.scriptLocation);
 };

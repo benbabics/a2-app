@@ -36,4 +36,6 @@ module.exports = function(context) {
 
     deleteFolderRecursive(iosPlatformsDir);
     deleteFolderRecursive(androidPlatformsDir);
+
+    console.log(context.hook + " hook has finished running script " + context.scriptLocation);
 };
