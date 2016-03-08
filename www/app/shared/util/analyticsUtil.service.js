@@ -11,8 +11,7 @@
         // Private members
         var DISPATCH_INTERVAL = 30, //in seconds (Note: Too large of an interval seems to break real-time analytics completely)
             _ = CommonService._,
-            activeTrackerId,
-            readyPromise;
+            activeTrackerId;
 
         // Revealed Public members
         var service = {
@@ -30,20 +29,13 @@
         //////////////////////
 
         function activate() {
-            readyPromise = CommonService.waitForCordovaPlatform(function () {
-                if ($window.navigator.analytics) {
-                    return $window.navigator.analytics;
-                }
-                else {
-                    throw "AnalyticsUtil is not available on this platform.";
-                }
-            });
-
-            whenReady(configure);
+            configure();
         }
 
-        function configure(analytics) {
-            analytics.setDispatchInterval(DISPATCH_INTERVAL, _.noop, handleTrackingError);
+        function configure() {
+            whenReady(function (analytics) {
+                analytics.setDispatchInterval(DISPATCH_INTERVAL, _.noop, handleTrackingError);
+            });
         }
 
         function getActiveTrackerId() {
@@ -90,7 +82,14 @@
         }
 
         function whenReady(callback) {
-            readyPromise.then(callback);
+            return CommonService.waitForCordovaPlatform(function () {
+                if ($window.navigator.analytics) {
+                    return $window.navigator.analytics;
+                }
+                else {
+                    throw "AnalyticsUtil is not available on this platform.";
+                }
+            }).then(callback);
         }
     }
 
