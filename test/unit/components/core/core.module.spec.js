@@ -105,7 +105,6 @@
             UserManager,
             AnalyticsUtil,
             LoginManager,
-            BrandUtil,
             BrandManager,
             $cordovaDevice,
             $ionicPlatform,
@@ -122,8 +121,7 @@
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTracker", "trackView"]);
             LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
-            BrandUtil = jasmine.createSpyObj("BrandUtil", ["getAssetBySubtype"]);
-            BrandManager = jasmine.createSpyObj("BrandManager", ["loadBundledBrand"]);
+            BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericAnalyticsTrackingId", "loadBundledBrand"]);
             $cordovaDevice = jasmine.createSpyObj("$cordovaDevice", ["getPlatform"]);
             $ionicPlatform = jasmine.createSpyObj("$ionicPlatform", ["ready", "registerBackButtonAction"]);
 
@@ -138,14 +136,13 @@
                 $provide.value("UserManager", UserManager);
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("LoginManager", LoginManager);
-                $provide.value("BrandUtil", BrandUtil);
                 $provide.value("BrandManager", BrandManager);
                 $provide.value("$cordovaDevice", $cordovaDevice);
                 $provide.value("$ionicPlatform", $ionicPlatform);
 
                 //setup mocks:
-                genericTrackingId = TestUtils.getRandomBrandAsset(Object);
-                BrandUtil.getAssetBySubtype.and.returnValue(genericTrackingId);
+                genericTrackingId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                BrandManager.getGenericAnalyticsTrackingId.and.returnValue(genericTrackingId);
                 $ionicPlatform.ready.and.callFake(function (readyCallback) {
                     if (readyCallback) {
                         readyCallback();
@@ -188,7 +185,7 @@
         });
 
         it("should call AnalyticsUtil.startTracker with the expected tracking ID", function () {
-            expect(AnalyticsUtil.startTracker).toHaveBeenCalledWith(genericTrackingId.assetValue);
+            expect(AnalyticsUtil.startTracker).toHaveBeenCalledWith(genericTrackingId);
         });
 
         describe("when running the app from Chrome", function () {

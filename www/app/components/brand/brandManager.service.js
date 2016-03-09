@@ -10,6 +10,7 @@
 
         // Private members
         var _ = CommonService._,
+            ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
             brandAssets = null;
 
         // Revealed Public members
@@ -19,10 +20,12 @@
             getBrandAssetsByBrand        : getBrandAssetsByBrand,
             getGenericBrandAssetBySubtype: getGenericBrandAssetBySubtype,
             getGenericBrandAssets        : getGenericBrandAssets,
+            getGenericAnalyticsTrackingId: getGenericAnalyticsTrackingId,
             getUserBrandAssetBySubtype   : getUserBrandAssetBySubtype,
             getUserBrandAssets           : getUserBrandAssets,
             getWexBrandAssetBySubtype    : getWexBrandAssetBySubtype,
             getWexBrandAssets            : getWexBrandAssets,
+            getWexAnalyticsTrackingId    : getWexAnalyticsTrackingId,
             loadBundledBrand             : loadBundledBrand,
             removeBrandAsset             : removeBrandAsset,
             removeExpiredBrandAssets     : removeExpiredBrandAssets,
@@ -134,6 +137,17 @@
             return getBrandAssetsByBrand(globals.BRAND.GENERIC);
         }
 
+        function getGenericAnalyticsTrackingId() {
+            var trackingId = BrandUtil.getAssetBySubtype(globals.BRANDS.GENERIC, ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+
+            if (trackingId) {
+                return trackingId.assetValue;
+            }
+            else {
+                return null;
+            }
+        }
+
         function getUserBrandAssetBySubtype(assetSubtypeId) {
             return BrandUtil.getAssetBySubtype(getUserBrandAssets(), assetSubtypeId) || getGenericBrandAssetBySubtype(assetSubtypeId);
         }
@@ -155,6 +169,17 @@
 
         function getWexBrandAssets() {
             return getBrandAssetsByBrand(globals.BRAND.WEX);
+        }
+
+        function getWexAnalyticsTrackingId() {
+            var trackingId = BrandUtil.getAssetBySubtype(globals.BRANDS.WEX, ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+
+            if (trackingId) {
+                return trackingId.assetValue;
+            }
+            else {
+                return null;
+            }
         }
 
         function loadBundledBrand(brandName, brandResource) {

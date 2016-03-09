@@ -3,11 +3,10 @@
 
     //TODO - Move as much logic out of here as possible
 
-    // jshint maxparams:12
+    // jshint maxparams:11
     function coreRun($cordovaDevice, $q, $rootScope, $state, $ionicPlatform, $window,
-                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, BrandUtil, CommonService) {
-        var _ = CommonService._,
-            ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES;
+                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, CommonService) {
+        var _ = CommonService._;
 
         function isExitState(stateName) {
             return "app.exit" === stateName;
@@ -73,10 +72,10 @@
         }
 
         function startGenericAnalyticsTracker() {
-            var genericTrackingId = BrandUtil.getAssetBySubtype(globals.BRANDS.GENERIC, ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+            var genericTrackingId = BrandManager.getGenericAnalyticsTrackingId();
 
             if (genericTrackingId) {
-                AnalyticsUtil.startTracker(genericTrackingId.assetValue);
+                AnalyticsUtil.startTracker(genericTrackingId);
             }
         }
 

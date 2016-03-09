@@ -20,7 +20,41 @@
         UserManager,
         user,
         moment,
-        globals;
+        globals,
+        mockGlobals = {
+            BRANDS: {
+                "GENERIC": [
+                    {
+                        "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
+                        "assetTypeId"    : "TEXT",
+                        "assetValue"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "clientBrandName": "GENERIC",
+                        "links": []
+                    }
+                ],
+                "WEX"    : [
+                    {
+                        "assetSubtypeId" : "BRAND_LOGO",
+                        "assetTypeId"    : "FILE",
+                        "assetValue"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "clientBrandName": "WEX",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": TestUtils.getRandomStringThatIsAlphaNumeric(15)
+                            }
+                        ]
+                    },
+                    {
+                        "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
+                        "assetTypeId"    : "TEXT",
+                        "assetValue"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "clientBrandName": "WEX",
+                        "links": []
+                    }
+                ]
+            }
+        };
 
     describe("A Brand Manager", function () {
 
@@ -28,6 +62,7 @@
 
             module("app.shared");
             module("app.html");
+            module("app.components.core");
             module("app.components.brand");
             module("app.components.user");
 
@@ -45,11 +80,13 @@
                 "setLastBrandUpdateDate"
             ]);
 
-            module(function ($provide) {
+            module(function ($provide, appGlobals, sharedGlobals) {
                 $provide.value("BrandsResource", BrandsResource);
                 $provide.value("BrandAssetCollection", BrandAssetCollection);
                 $provide.value("UserManager", UserManager);
                 $provide.value("BrandUtil", BrandUtil);
+
+                $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
             });
 
             inject(function (_$q_, _$rootScope_, _$state_, _globals_, _moment_,
@@ -1486,6 +1523,84 @@
 
             it("should return the value from BrandUtil.getAssetBySubtype", function () {
                 expect(result).toEqual(brandAsset);
+            });
+        });
+
+        describe("has a getGenericAnalyticsTrackingId function that", function () {
+
+            describe("when there is a generic analytics tracking id", function () {
+                var trackingId,
+                    result;
+
+                beforeEach(function () {
+                    trackingId = TestUtils.getRandomBrandAsset(BrandAssetModel);
+                    BrandUtil.getAssetBySubtype.and.returnValue(trackingId);
+
+                    result = BrandManager.getGenericAnalyticsTrackingId();
+                });
+
+                it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
+                    expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(globals.BRANDS.GENERIC, globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+                });
+
+                it("should return the expected value", function () {
+                    expect(result).toEqual(trackingId.assetValue);
+                });
+            });
+
+            describe("when there is NOT a generic analytics tracking id", function () {
+                var result;
+
+                beforeEach(function () {
+                    result = BrandManager.getGenericAnalyticsTrackingId();
+                });
+
+                it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
+                    expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(globals.BRANDS.GENERIC, globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+                });
+
+                it("should return null", function () {
+                    expect(result).toBeNull();
+                });
+            });
+        });
+
+        describe("has a getWexAnalyticsTrackingId function that", function () {
+
+            describe("when there is a wex analytics tracking id", function () {
+                var trackingId,
+                    result;
+
+                beforeEach(function () {
+                    trackingId = TestUtils.getRandomBrandAsset(BrandAssetModel);
+                    BrandUtil.getAssetBySubtype.and.returnValue(trackingId);
+
+                    result = BrandManager.getWexAnalyticsTrackingId();
+                });
+
+                it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
+                    expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(globals.BRANDS.WEX, globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+                });
+
+                it("should return the expected value", function () {
+                    expect(result).toEqual(trackingId.assetValue);
+                });
+            });
+
+            describe("when there is NOT a wex analytics tracking id", function () {
+                var result;
+
+                beforeEach(function () {
+                    result = BrandManager.getWexAnalyticsTrackingId();
+                });
+
+                it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
+                    expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(globals.BRANDS.WEX, globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+                });
+
+                it("should return null", function () {
+                    expect(result).toBeNull();
+                });
             });
         });
 

@@ -32,6 +32,7 @@
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn"]);
             BrandManager = jasmine.createSpyObj("BrandManager", [
                 "getGenericBrandAssetBySubtype",
+                "getGenericAnalyticsTrackingId",
                 "getUserBrandAssetBySubtype",
                 "updateBrandCache"
             ]);
@@ -76,8 +77,8 @@
             var trackingId;
 
             beforeEach(function () {
-                trackingId = TestUtils.getRandomBrandAsset(BrandAssetModel);
-                BrandManager.getGenericBrandAssetBySubtype.and.returnValue(trackingId);
+                trackingId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                BrandManager.getGenericAnalyticsTrackingId.and.returnValue(trackingId);
                 AuthenticationManager.userLoggedIn.and.returnValue(false);
 
                 spyOn($rootScope, "$emit");
@@ -93,7 +94,7 @@
             });
 
             it("should call AnalyticsUtil.startTracker with the generic tracker ID", function () {
-                expect(AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId.assetValue);
+                expect(AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId);
             });
 
             it("should resolve", function () {

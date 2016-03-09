@@ -74,10 +74,10 @@
         }
 
         function startGenericTracker() {
-            var trackingId = BrandManager.getGenericBrandAssetBySubtype(ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+            var trackingId = BrandManager.getGenericAnalyticsTrackingId();
 
             if (trackingId) {
-                AnalyticsUtil.startTracker(trackingId.assetValue);
+                AnalyticsUtil.startTracker(trackingId);
             }
         }
     }
