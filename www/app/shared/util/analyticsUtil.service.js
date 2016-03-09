@@ -29,10 +29,6 @@
         //////////////////////
 
         function activate() {
-            configure();
-        }
-
-        function configure() {
             whenReady(function (analytics) {
                 analytics.setDispatchInterval(DISPATCH_INTERVAL, _.noop, handleTrackingError);
             });
