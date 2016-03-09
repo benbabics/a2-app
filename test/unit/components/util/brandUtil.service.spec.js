@@ -41,7 +41,7 @@
             module("app.html");
 
             //mock dependencies:
-            BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericBrandAssets"]);
+            BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericAnalyticsTrackingId", "getGenericBrandAssets"]);
             FileUtil = jasmine.createSpyObj("FileUtil", [
                 "checkFileExists",
                 "checkDirectoryExists",
