@@ -44,6 +44,7 @@
                         });
                 })
                 .then(startBrandedTracker)
+                .then(setTrackerUserId)
                 .catch(function (error) {
                     throw new Error("Failed to complete login initialization: " + CommonService.getErrorMessage(error));
                 })
@@ -56,20 +57,19 @@
             return $q.resolve();
         }
 
+        function setTrackerUserId() {
+            var user = UserManager.getUser();
+
+            //track all events with the user's ID
+            AnalyticsUtil.setUserId(user.id);
+        }
+
         function startBrandedTracker() {
-            var user = UserManager.getUser(),
-                trackingId;
+            var trackingId = BrandManager.getUserBrandAssetBySubtype(ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
 
-            if (AuthenticationManager.userLoggedIn()) {
-                //use the user's branded tracker
-                trackingId = BrandManager.getUserBrandAssetBySubtype(ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
-
-                if (trackingId) {
-                    AnalyticsUtil.startTracker(trackingId.assetValue);
-                }
-
-                //track all events with the user's ID
-                AnalyticsUtil.setUserId(user.id);
+            //use the user's branded tracker
+            if (trackingId) {
+                AnalyticsUtil.startTracker(trackingId.assetValue);
             }
         }
 
