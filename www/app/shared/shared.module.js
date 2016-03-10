@@ -15,11 +15,11 @@
         "app.shared.logger",
         "app.shared.util",
         "app.shared.widgets",
-        "app.shared.db",
+        "app.shared.db"
     ])
 
-        // jshint maxparams:6
-        .run(function ($ionicPlatform, _, $rootScope, $ionicLoading, globals, Logger) { // Services may be included here in order to force them to be instantiated at startup
+        // jshint maxparams:5
+        .run(function (_, $ionicPlatform, $rootScope, globals, Logger) { // Services may be included here in order to force them to be instantiated at startup
             $ionicPlatform.ready(function () {
 
                 /**
@@ -43,19 +43,6 @@
                 document.addEventListener("resume", function () {
                     $rootScope.$emit("app:cordovaResume");
                 }, false);
-
-                /**
-                 * Set up loading indicator
-                 */
-                $rootScope.$on("app:loadingBegin", function () {
-                    $ionicLoading.show({
-                        template: "<ion-spinner class='spinner-light'></ion-spinner>"
-                    });
-                });
-
-                $rootScope.$on("app:loadingComplete", function () {
-                    $ionicLoading.hide();
-                });
             });
 
         });

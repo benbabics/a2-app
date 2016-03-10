@@ -3,37 +3,15 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
-    // jshint maxparams:8
 
     /* @ngInject */
-    function CommonService(_, $ionicPlatform, $ionicPopup, $q, $rootScope, $state, globals, Logger) {
-
+    function ElementUtil(_) {
         // Private members
-        var POBOX_REGEX = new RegExp("([\\w\\s*\\W]*(P(OST)?(\\.)?\\s*O(FF(ICE)?)?(\\.)?\\s*B(OX)?))[\\w\\s*\\W]*"),
-            loadingIndicatorCount = 0,
-            alertPopup,
-            confirmPopup,
-            focusedStateOrder = ["stage", "entering", "active"],
-            unfocusedStateOrder = ["cached", "leaving", "active"],
-            logCordovaPlatformWarning = _.once(function () {
-                Logger.debug(
-                    "waitForCordovaPlatform callback function skipped: Cordova is not available on this platform. " +
-                    "Note: All future callbacks will also be skipped."
-                );
-            });
+        var focusedStateOrder = ["stage", "entering", "active"],
+            unfocusedStateOrder = ["cached", "leaving", "active"];
 
         // Revealed Public members
         var service = {
-            // common dependencies
-            "_": _,
-
-            // utility functions
-            "closeAlert"               : closeAlert,
-            "closeAllPopups"           : closeAllPopups,
-            "closeConfirm"             : closeConfirm,
-            "displayAlert"             : displayAlert,
-            "displayConfirm"           : displayConfirm,
-            "exitApp"                  : exitApp,
             "fieldHasError"            : fieldHasError,
             "findActiveBackButton"     : findActiveBackButton,
             "findBackButton"           : findBackButton,
@@ -44,136 +22,16 @@
             "findViews"                : findViews,
             "findViewsMatching"        : findViewsMatching,
             "getActiveNavView"         : getActiveNavView,
-            "getErrorMessage"          : getErrorMessage,
             "getFocusedNavBar"         : getFocusedNavBar,
             "getFocusedView"           : getFocusedView,
             "getUnfocusedNavBar"       : getUnfocusedNavBar,
             "getUnfocusedView"         : getUnfocusedView,
             "getViewContent"           : getViewContent,
-            "goToBackState"            : goToBackState,
-            "isPoBox"                  : isPoBox,
-            "loadingBegin"             : loadingBegin,
-            "loadingComplete"          : loadingComplete,
-            "maskAccountNumber"        : maskAccountNumber,
-            "pageHasNavBar"            : pageHasNavBar,
-            "platformHasCordova"       : platformHasCordova,
-            "waitForCordovaPlatform"   : waitForCordovaPlatform
+            "pageHasNavBar"            : pageHasNavBar
         };
 
         return service;
         //////////////////////
-
-        // Common utility functions go here
-
-        /**
-         * Closes an alert that had been previously opened by calling the displayAlert function.
-         */
-        function closeAlert() {
-            if (alertPopup) {
-                alertPopup.close();
-                alertPopup = null;
-            }
-        }
-
-        /**
-         * Closes all popups that have been previously opened by calling any of the displayPopup functions.
-         */
-        function closeAllPopups() {
-            closeAlert();
-            closeConfirm();
-
-            //TODO close datepicker modal popup
-        }
-
-        /**
-         * Closes a confirm that had been previously opened by calling the displayConfirm function.
-         */
-        function closeConfirm() {
-            if (confirmPopup) {
-                confirmPopup.close();
-                confirmPopup = null;
-            }
-        }
-
-        /**
-         * Displays an alert and saves a reference to it for the closeAlert function to use.
-         */
-        function displayAlert(options) {
-            var mappedOptions = {};
-
-            if (_.isObject(options)) {
-                mappedOptions = mapCommonPopupOptions(options);
-
-                mappedOptions.cssClass = mappedOptions.cssClass || "wex-alert-popup";
-
-                if (_.isString(options.buttonText)) {
-                    mappedOptions.okText = options.buttonText;
-                }
-
-                if (_.isString(options.buttonCssClass)) {
-                    mappedOptions.okType = options.buttonCssClass;
-                }
-            }
-            else {
-                mappedOptions = {
-                    cssClass: "wex-alert-popup"
-                };
-            }
-
-            alertPopup = $ionicPopup.alert(mappedOptions);
-
-            return alertPopup.then(function () { // args: resolution
-                // close popup
-            });
-        }
-
-        /**
-         * Displays a confirm and saves a reference to it for the closeConfirm function to use.
-         */
-        function displayConfirm(options) {
-            var mappedOptions = {};
-
-            if (_.isObject(options)) {
-                mappedOptions = mapCommonPopupOptions(options);
-
-                mappedOptions.cssClass = mappedOptions.cssClass || "wex-confirm-popup";
-
-                if (_.isString(options.okButtonText)) {
-                    mappedOptions.okText = options.okButtonText;
-                }
-
-                if (_.isString(options.okButtonCssClass)) {
-                    mappedOptions.okType = options.okButtonCssClass;
-                }
-
-                if (_.isString(options.cancelButtonText)) {
-                    mappedOptions.cancelText = options.cancelButtonText;
-                }
-
-                if (_.isString(options.cancelButtonCssClass)) {
-                    mappedOptions.cancelType = options.cancelButtonCssClass;
-                }
-            }
-            else {
-                mappedOptions = {
-                    cssClass: "wex-confirm-popup"
-                };
-            }
-
-            confirmPopup = $ionicPopup.confirm(mappedOptions);
-
-            return confirmPopup;
-        }
-
-        function exitApp() {
-            //close the app (this does not work on iOS since it does not allow apps to close themselves)
-            if (navigator.app) {
-                navigator.app.exitApp();
-            }
-
-            //app couldn't be closed (i.e. on iOS or a browser, so just go back to the login page)
-            $state.go(globals.LOGIN_STATE);
-        }
 
         function fieldHasError(field) {
             return (field && field.$error && !_.isEmpty(field.$error));
@@ -382,41 +240,6 @@
         }
 
         /**
-         * Decomposes the errorObject and pulls out the appropriate values with details about the
-         * error whether it's the response of a failed remote request or simply a string message.
-         *
-         * @param errorObject
-         * @return string the error message
-         */
-        function getErrorMessage(errorObject) {
-
-            var errorMessage = "";
-
-            if (_.isArray(errorObject)) {
-                errorMessage = _.reduce(errorObject, function (message, error) {
-                    return message + "\n- " + getErrorMessage(error);
-                }, "");
-            }
-            else if (_.isString(errorObject)) {
-                errorMessage = errorObject;
-            }
-            // if an Error class object
-            else if (_.has(errorObject, "message")) {
-                errorMessage = errorObject.message;
-            }
-            else if (_.has(errorObject, "data") && _.isObject(errorObject.data)) {
-                errorMessage += errorObject.data.error ? errorObject.data.error + ": " : "";
-                errorMessage += errorObject.data.error_description || "";
-            }
-
-            if (_.isEmpty(errorMessage)) {
-                errorMessage = globals.GENERAL.ERRORS.UNKNOWN_EXCEPTION;
-            }
-
-            return errorMessage;
-        }
-
-        /**
          * Searches for the focused nav-bar element.
          *
          * @return {jqLite} An element that represents the nav-bar, or null if no nav-bar was found
@@ -473,92 +296,6 @@
         }
 
         /**
-         * Goes to the back state specified by a given back button.
-         *
-         * @param {jqLite} [backButton] The back button to use (default: the active back button)
-         * @return {Boolean} True if the call is successful
-         * @throws {Error} Throws error if the back button couldn't be found
-         */
-        function goToBackState(backButton) {
-            var backButtonScope;
-
-            backButton = backButton || findActiveBackButton();
-
-            //if there is a back button, call its goBack function
-            if (backButton) {
-                backButtonScope = backButton.isolateScope();
-                if (backButtonScope) {
-                    backButtonScope.goBack();
-                    return true;
-                }
-            }
-
-            var error = "Couldn't find the back button to go the back state";
-            Logger.error(error);
-            throw new Error(error);
-        }
-
-        function isPoBox(addressLine) {
-            return _.isString(addressLine) && addressLine.length > 0 && !!addressLine.toUpperCase().match(POBOX_REGEX);
-        }
-
-        function loadingBegin() {
-            if (loadingIndicatorCount === 0) {
-                $rootScope.$emit("app:loadingBegin");
-            }
-
-            loadingIndicatorCount++;
-        }
-
-        function loadingComplete() {
-            loadingIndicatorCount--;
-
-            if (loadingIndicatorCount === 0) {
-                $rootScope.$emit("app:loadingComplete");
-            }
-        }
-
-        function mapCommonPopupOptions(options) {
-            var mappedOptions = {};
-
-            // Only set the options if they are provided as setting them to a option NOT specified
-            // results in us passing undefined values which may or may not be acceptable
-            if (_.isString(options.title)) {
-                mappedOptions.title = options.title;
-            }
-
-            if (_.isString(options.subTitle)) {
-                mappedOptions.subTitle = options.subTitle;
-            }
-
-            if (_.isString(options.cssClass)) {
-                mappedOptions.cssClass = options.cssClass;
-            }
-
-            if (_.isString(options.content)) {
-                mappedOptions.template = options.content;
-            }
-
-            if (_.isString(options.contentUrl)) {
-                mappedOptions.templateUrl = options.contentUrl;
-            }
-
-            return mappedOptions;
-        }
-
-        function maskAccountNumber(accountNumber) {
-
-            var maskedNumber = "";
-
-            if (!_.isEmpty(accountNumber)) {
-                // Replace all but the last 4 characters with *
-                maskedNumber = accountNumber.replace(/.(?=.{4})/g, "*");
-            }
-
-            return maskedNumber;
-        }
-
-        /**
          * Determines whether or not the page currently has a visible navBar.
          *
          * @return {boolean} true if the page has a visible navBar, false if it does not
@@ -571,40 +308,9 @@
             }
             return false;
         }
-
-        function platformHasCordova() {
-            return !!window.cordova;
-        }
-
-        /**
-         * Convenience function that executes a callback once Cordova/Ionic are ready and Cordova is available on the platform.
-         *
-         * @param {Function} [callback] A callback to execute when Cordova is ready and available.
-         *
-         * @return {Promise} a promise that will resolve when Cordova is ready and available, or reject if Cordova is not
-         * available on the current platform. If a callback is given, the promise will resolve with the result of the callback.
-         */
-        function waitForCordovaPlatform(callback) {
-            return $ionicPlatform.ready()
-                .then(function () {
-                    if (platformHasCordova()) {
-                        //cordova is available, so execute the callback (if given)
-                        if (_.isFunction(callback)) {
-                            return callback();
-                        }
-                    }
-                    else {
-                        //Log the warning message (this only happens once per session)
-                        logCordovaPlatformWarning();
-
-                        return $q.reject();
-                    }
-                });
-        }
-
     }
 
     angular
-        .module("app.shared.core")
-        .factory("CommonService", CommonService);
+        .module("app.shared.util")
+        .factory("ElementUtil", ElementUtil);
 })();
