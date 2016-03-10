@@ -6,7 +6,6 @@
         var _,
             $q,
             $rootScope,
-            CommonService,
             PromiseUtil,
             resolveHandler,
             rejectHandler;
@@ -15,9 +14,8 @@
 
             module("app.shared");
 
-            inject(function (_$rootScope_, _$q_, _CommonService_, _PromiseUtil_) {
-                CommonService = _CommonService_;
-                _ = CommonService._;
+            inject(function (___, _$rootScope_, _$q_, _PromiseUtil_) {
+                _ = ___;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 PromiseUtil = _PromiseUtil_;

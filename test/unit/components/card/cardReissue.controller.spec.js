@@ -17,9 +17,9 @@
             module("app.components.card");
             module("app.components.account");
 
-            inject(function (_$rootScope_, AccountModel, AddressModel, CardModel, CardReissueModel, CommonService, ShippingCarrierModel, ShippingMethodModel) {
+            inject(function (___, _$rootScope_, AccountModel, AddressModel, CardModel, CardReissueModel, ShippingCarrierModel, ShippingMethodModel) {
                 $rootScope = _$rootScope_;
-                _ = CommonService._;
+                _ = ___;
 
                 $scope = $rootScope.$new();
 

@@ -4,10 +4,9 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function CardChangeStatusConfirmationController(globals, card, CommonService, Logger) {
+    function CardChangeStatusConfirmationController(_, globals, card, Logger) {
 
-        var _ = CommonService._,
-            vm = this;
+        var vm = this;
 
         vm.card = card;
         vm.config = globals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG;

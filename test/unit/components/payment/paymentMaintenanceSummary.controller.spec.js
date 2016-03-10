@@ -123,10 +123,10 @@
                 $provide.value("UserManager", UserManager);
             });
 
-            inject(function ($controller, _$q_, $rootScope, _moment_, _BankModel_, appGlobals,
-                             CommonService, _PaymentModel_, PaymentMaintenanceDetailsModel) {
+            inject(function (___, $controller, _$q_, $rootScope, _moment_, _BankModel_, appGlobals,
+                             _PaymentModel_, PaymentMaintenanceDetailsModel) {
 
-                _ = CommonService._;
+                _ = ___;
                 $q = _$q_;
                 moment = _moment_;
                 BankModel = _BankModel_;

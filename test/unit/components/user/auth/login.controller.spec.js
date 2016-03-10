@@ -13,7 +13,7 @@
         ctrl,
         logInDeferred,
         AuthenticationManager,
-        CommonService,
+        PlatformUtil,
         mockGlobals = {
             "USER_LOGIN": {
                 "CONFIG": {
@@ -90,27 +90,27 @@
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["setUserId", "trackEvent", "trackView"]);
             LoginManager = jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]);
+            PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["platformHasCordova"]);
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, _CommonService_, BrandAssetModel, UserAccountModel, UserModel,
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, BrandAssetModel, UserAccountModel, UserModel,
                              globals) {
                 $ionicHistory = _$ionicHistory_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
                 $rootScope = _$rootScope_;
-                CommonService = _CommonService_;
 
                 mockConfig.ANALYTICS.errorEvents = globals.USER_LOGIN.CONFIG.ANALYTICS.errorEvents;
 
                 ctrl = $controller("LoginController", {
-                    $scope                 : $scope,
-                    $state                 : $state,
-                    $stateParams           : $stateParams,
-                    AnalyticsUtil          : AnalyticsUtil,
-                    $cordovaKeyboard       : $cordovaKeyboard,
-                    globals                : mockGlobals,
-                    AuthenticationManager  : AuthenticationManager,
-                    CommonService          : CommonService,
-                    LoginManager           : LoginManager
+                    $scope               : $scope,
+                    $state               : $state,
+                    $stateParams         : $stateParams,
+                    AnalyticsUtil        : AnalyticsUtil,
+                    $cordovaKeyboard     : $cordovaKeyboard,
+                    globals              : mockGlobals,
+                    AuthenticationManager: AuthenticationManager,
+                    LoginManager         : LoginManager,
+                    PlatformUtil         : PlatformUtil
                 });
 
                 //setup spies:
@@ -568,7 +568,7 @@
             describe("when Cordova is available", function () {
 
                 beforeEach(function () {
-                    spyOn(CommonService, "platformHasCordova").and.returnValue(true);
+                    PlatformUtil.platformHasCordova.and.returnValue(true);
                 });
 
                 describe("when the keyboard is visible", function () {
@@ -597,7 +597,7 @@
             describe("when Cordova is NOT available", function () {
 
                 beforeEach(function () {
-                    spyOn(CommonService, "platformHasCordova").and.returnValue(false);
+                    PlatformUtil.platformHasCordova.and.returnValue(false);
                 });
 
                 it("should return false", function () {

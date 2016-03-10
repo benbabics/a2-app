@@ -3,14 +3,13 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
-    /* jshint maxparams: 5 */
+    /* jshint maxparams: 6 */
 
     /* @ngInject */
-    function AuthenticationManager(FormEncoder, AuthenticationResource, CommonService, Logger, globals) {
+    function AuthenticationManager(_, FormEncoder, AuthenticationResource, Logger, LoggerUtil, globals) {
 
         // Private members
         var CONSTANTS = globals.AUTH_API,
-            _ = CommonService._,
             oauth,
             tokenUsername;
 
@@ -90,7 +89,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Getting Auth Token failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Getting Auth Token failed: " + LoggerUtil.getErrorMessage(failureResponse);
 
                     Logger.error(error);
 

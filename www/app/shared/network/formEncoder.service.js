@@ -4,9 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function FormEncoder(CommonService) {
-        // Private members
-        var _ = CommonService._;
+    function FormEncoder(_) {
 
         // Revealed Public members
         var service = {

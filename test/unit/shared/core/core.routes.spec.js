@@ -3,7 +3,7 @@
 
     var $state,
         $rootScope,
-        CommonService;
+        NavigationUtil;
 
     describe("A Core Module Route Config", function () {
 
@@ -14,9 +14,9 @@
 
             module(function($provide) {
                 //mock dependencies
-                CommonService = jasmine.createSpyObj("CommonService", ["exitApp"]);
+                NavigationUtil = jasmine.createSpyObj("NavigationUtil", ["exitApp"]);
 
-                $provide.value("CommonService", CommonService);
+                $provide.value("NavigationUtil", NavigationUtil);
             });
 
             inject(function (_$state_, _$rootScope_) {
@@ -79,8 +79,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.exitApp", function () {
-                    expect(CommonService.exitApp).toHaveBeenCalledWith();
+                it("should call NavigationUtil.exitApp", function () {
+                    expect(NavigationUtil.exitApp).toHaveBeenCalledWith();
                 });
             });
         });

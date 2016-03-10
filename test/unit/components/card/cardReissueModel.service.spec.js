@@ -13,9 +13,9 @@
             module("app.components.account");
             module("app.components.card");
 
-            inject(function (CommonService, CardReissueModel, AccountModel, AddressModel, CardModel,
+            inject(function (___, CardReissueModel, AccountModel, AddressModel, CardModel,
                              ShippingCarrierModel, _ShippingMethodModel_, _sharedGlobals_) {
-                _ = CommonService._;
+                _ = ___;
                 sharedGlobals = _sharedGlobals_;
                 ShippingMethodModel = _ShippingMethodModel_;
 

@@ -2,6 +2,7 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
+    // jshint maxparams:5
 
     /* Directive that overrides which state the active back button on the current page will redirect to.
      * Example usage:
@@ -12,18 +13,17 @@
      */
 
     /* @ngInject */
-    function wexBackState($rootScope, $interval, CommonService, Logger) {
+    function wexBackState(_, $rootScope, $interval, ElementUtil, Logger) {
         var directive = {
                 restrict: "A",
                 link    : link
-            },
-            _ = CommonService._;
+            };
 
         return directive;
         //////////////////////
 
         function applyBackState() {
-            var backButton = CommonService.findActiveBackButton();
+            var backButton = ElementUtil.findActiveBackButton();
 
             if (backButton) {
                 if (backButton.isolateScope()) {

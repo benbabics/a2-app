@@ -2,13 +2,13 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:7
+    // jshint maxparams:9
 
     /* @ngInject */
-    function CardReissueFormController($state, globals, cardReissueDetails, CardManager, CommonService, Logger, UserManager) {
+    function CardReissueFormController(_, $state, globals,
+                                       cardReissueDetails, CardManager, LoadingIndicator, Logger, PopupUtil, UserManager) {
 
-        var _ = CommonService._,
-            vm = this;
+        var vm = this;
 
         vm.config = globals.CARD_REISSUE.CONFIG;
         vm.cardReissueDetails = cardReissueDetails;
@@ -25,7 +25,7 @@
         function confirmReissue() {
             var accountId = UserManager.getUser().billingCompany.accountId;
 
-            CommonService.loadingBegin();
+            LoadingIndicator.begin();
 
             CardManager.reissue(accountId,
                 vm.cardReissueDetails.originalCard.cardId,
@@ -41,7 +41,7 @@
 
                     Logger.error("Failed to reissue card: " + errorResponse);
                 })
-                .finally(CommonService.loadingComplete);
+                .finally(LoadingIndicator.complete);
         }
 
         function isFormComplete() {
@@ -51,7 +51,7 @@
         }
 
         function promptReissue() {
-            return CommonService.displayConfirm({
+            return PopupUtil.displayConfirm({
                 content             : vm.config.confirmationPopup.content,
                 okButtonText        : vm.config.confirmationPopup.yesButton,
                 cancelButtonText    : vm.config.confirmationPopup.noButton,

@@ -5,7 +5,7 @@
 
         var _,
             address,
-            CommonService,
+            AddressUtil,
             poBoxAcceptableValues = ["PO Box", "P O Box", "POBox", "P OBox", "P.O. Box", "P. O. Box", "P.O.Box", "P. O.Box",
                 "PO. Box", "P O. Box", "PO.Box", "P OBox", "P.O Box", "P. O Box", "P.OBox", "P. OBox", "POB", "P.O.B.",
                 "POST OFFICE BOX", "Post Office Box"],
@@ -15,9 +15,9 @@
             module("app.shared");
             module("app.components.account");
 
-            inject(function (_CommonService_, AddressModel) {
-                CommonService = _CommonService_;
-                _ = CommonService._;
+            inject(function (___, _AddressUtil_, AddressModel) {
+                AddressUtil = _AddressUtil_;
+                _ = ___;
 
                 address = TestUtils.getRandomAddress(AddressModel);
             });
@@ -90,7 +90,7 @@
             var result;
 
             beforeEach(function () {
-                spyOn(CommonService, "isPoBox").and.callThrough();
+                spyOn(AddressUtil, "isPoBox").and.callThrough();
             });
 
             describe("when addressLine1 is a PO Box", function () {
@@ -101,8 +101,8 @@
                     result = address.isPoBox();
                 });
 
-                it("should call CommonService.isPoBox with addressLine1", function () {
-                    expect(CommonService.isPoBox).toHaveBeenCalledWith(address.addressLine1);
+                it("should call AddressUtil.isPoBox with addressLine1", function () {
+                    expect(AddressUtil.isPoBox).toHaveBeenCalledWith(address.addressLine1);
                 });
 
                 it("should return true", function () {
@@ -124,12 +124,12 @@
                         result = address.isPoBox();
                     });
 
-                    it("should call CommonService.isPoBox with addressLine1", function () {
-                        expect(CommonService.isPoBox).toHaveBeenCalledWith(address.addressLine1);
+                    it("should call AddressUtil.isPoBox with addressLine1", function () {
+                        expect(AddressUtil.isPoBox).toHaveBeenCalledWith(address.addressLine1);
                     });
 
-                    it("should call CommonService.isPoBox with addressLine2", function () {
-                        expect(CommonService.isPoBox).toHaveBeenCalledWith(address.addressLine2);
+                    it("should call AddressUtil.isPoBox with addressLine2", function () {
+                        expect(AddressUtil.isPoBox).toHaveBeenCalledWith(address.addressLine2);
                     });
 
                     it("should return true", function () {
@@ -145,12 +145,12 @@
                         result = address.isPoBox();
                     });
 
-                    it("should call CommonService.isPoBox with addressLine1", function () {
-                        expect(CommonService.isPoBox).toHaveBeenCalledWith(address.addressLine1);
+                    it("should call AddressUtil.isPoBox with addressLine1", function () {
+                        expect(AddressUtil.isPoBox).toHaveBeenCalledWith(address.addressLine1);
                     });
 
-                    it("should call CommonService.isPoBox with addressLine2", function () {
-                        expect(CommonService.isPoBox).toHaveBeenCalledWith(address.addressLine2);
+                    it("should call AddressUtil.isPoBox with addressLine2", function () {
+                        expect(AddressUtil.isPoBox).toHaveBeenCalledWith(address.addressLine2);
                     });
 
                     it("should return false", function () {

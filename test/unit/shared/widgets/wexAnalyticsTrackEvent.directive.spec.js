@@ -6,7 +6,6 @@
         $compile,
         $q,
         AnalyticsUtil,
-        CommonService,
         wexAnalyticsTrackEvent,
         event;
 
@@ -23,12 +22,11 @@
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
             });
 
-            inject(function (_$rootScope_, _$compile_, _$q_, _CommonService_) {
+            inject(function (___, _$rootScope_, _$compile_, _$q_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
                 $q = _$q_;
-                CommonService = _CommonService_;
-                _ = CommonService._;
+                _ = ___;
             });
         });
 

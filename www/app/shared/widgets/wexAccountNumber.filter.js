@@ -2,9 +2,7 @@
     "use strict";
 
     /* @ngInject */
-    function wexAccountNumber(CommonService) {
-
-        var _ = CommonService._;
+    function wexAccountNumber(_) {
 
         return function (item) {
             var accountNumber = "";

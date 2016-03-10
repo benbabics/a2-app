@@ -29,8 +29,8 @@
                 $provide.value("BanksResource", BanksResource);
             });
 
-            inject(function (_$q_, _$rootScope_, globals, _BankManager_, _BankModel_, _CommonService_) {
-                _ = _CommonService_._;
+            inject(function (___, _$q_, _$rootScope_, globals, _BankManager_, _BankModel_) {
+                _ = ___;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 BankManager = _BankManager_;

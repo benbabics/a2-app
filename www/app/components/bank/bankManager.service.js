@@ -2,14 +2,13 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:7
 
     /* @ngInject */
-    function BankManager($q, BankModel, BanksResource, CommonService, Logger) {
+    function BankManager(_, $q, BankModel, BanksResource, Logger, LoggerUtil) {
 
         // Private members
-        var _ = CommonService._,
-            activeBanks = {};
+        var activeBanks = {};
 
         // Revealed Public members
         var service = {
@@ -62,7 +61,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Getting Active Banks failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Getting Active Banks failed: " + LoggerUtil.getErrorMessage(failureResponse);
 
                     Logger.error(error);
                     throw new Error(error);

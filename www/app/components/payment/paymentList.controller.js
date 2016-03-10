@@ -4,10 +4,9 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentListController($scope, globals, payments, CommonService) {
+    function PaymentListController(_, $scope, globals, payments) {
 
-        var _ = CommonService._,
-            vm = this;
+        var vm = this;
 
         vm.config = globals.PAYMENT_LIST.CONFIG;
 

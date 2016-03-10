@@ -4,9 +4,8 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function DataStore(globals, CommonService, Loki) {
-        var _ = CommonService._,
-            collections = [],
+    function DataStore(_, globals, Loki) {
+        var collections = [],
             dataStore = globals.DATASTORE,
             db,
             service = {

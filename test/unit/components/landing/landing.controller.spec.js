@@ -72,7 +72,7 @@
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearHistory"]);
             mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
 
-            inject(function ($controller, $rootScope, $q, _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, CommonService) {
+            inject(function ($controller, $rootScope, $q, _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, PlatformUtil) {
 
                 UserAccountModel = _UserAccountModel_;
                 InvoiceSummaryModel = _InvoiceSummaryModel_;
@@ -85,7 +85,7 @@
                 mockBrandLogo = TestUtils.getRandomStringThatIsAlphaNumeric(50);
 
                 //setup spies
-                spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+                spyOn(PlatformUtil, "waitForCordovaPlatform").and.callFake(function(callback) {
                     //just execute the callback directly
                     return $q.when((callback || function() {})());
                 });

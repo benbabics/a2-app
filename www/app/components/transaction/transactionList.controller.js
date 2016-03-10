@@ -2,13 +2,12 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:7
 
     /* @ngInject */
-    function TransactionListController(globals, moment, CommonService, Logger, TransactionManager, UserManager) {
+    function TransactionListController(_, globals, moment, LoadingIndicator, Logger, TransactionManager, UserManager) {
 
-        var _ = CommonService._,
-            vm = this,
+        var vm = this,
             currentPage = 0;
 
         vm.config = globals.TRANSACTION_LIST.CONFIG;
@@ -31,7 +30,7 @@
                 fromDate = moment().subtract(vm.searchOptions.MAX_DAYS, "days").toDate(),
                 toDate = moment().toDate();
 
-            CommonService.loadingBegin();
+            LoadingIndicator.begin();
 
             //fetch the next page of transactions
             return TransactionManager.fetchPostedTransactions(billingAccountId, fromDate, toDate, currentPage, vm.searchOptions.PAGE_SIZE)
@@ -54,7 +53,7 @@
                     // There was an error fetching data so indicate that there is no more data to fetch
                     return true;
                 })
-                .finally(CommonService.loadingComplete);
+                .finally(LoadingIndicator.complete);
         }
 
         function pageLoaded() {

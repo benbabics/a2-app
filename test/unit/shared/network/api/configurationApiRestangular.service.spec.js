@@ -22,10 +22,10 @@
                 $provide.value("DataExtractorResponseInterceptor", DataExtractorResponseInterceptor);
             });
 
-            inject(function (_ConfigurationApiRestangular_, _globals_, CommonService) {
+            inject(function (___, _ConfigurationApiRestangular_, _globals_) {
+                _ = ___;
                 ConfigurationApiRestangular = _ConfigurationApiRestangular_;
                 globals = _globals_;
-                _ = CommonService._;
             });
 
         });

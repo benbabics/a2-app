@@ -16,7 +16,7 @@
         BrandsResource,
         BrandAssetCollection,
         BrandUtil,
-        CommonService,
+        LoggerUtil,
         UserManager,
         user,
         moment,
@@ -89,10 +89,10 @@
                 $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
             });
 
-            inject(function (_$q_, _$rootScope_, _$state_, _globals_, _moment_,
-                             _BrandManager_, _BrandAssetModel_, _CommonService_, UserModel, UserAccountModel) {
-                _ = _CommonService_._;
-                CommonService = _CommonService_;
+            inject(function (___, _$q_, _$rootScope_, _$state_, _globals_, _moment_,
+                             _BrandManager_, _BrandAssetModel_, _LoggerUtil_, UserModel, UserAccountModel) {
+                _ = ___;
+                LoggerUtil = _LoggerUtil_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
@@ -1257,7 +1257,7 @@
                     });
 
                     it("should NOT update the last update date and throw an error", function () {
-                        var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + CommonService.getErrorMessage(error) + ".*?$");
+                        var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + LoggerUtil.getErrorMessage(error) + ".*?$");
 
                         expect(function () {
                             TestUtils.digestError($rootScope);
@@ -1464,7 +1464,7 @@
                     });
 
                     it("should NOT update the last update date and throw an error", function () {
-                        var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + CommonService.getErrorMessage(error) + ".*?$");
+                        var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + LoggerUtil.getErrorMessage(error) + ".*?$");
 
                         expect(function () {
                             TestUtils.digestError($rootScope);

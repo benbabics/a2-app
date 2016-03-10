@@ -39,11 +39,8 @@
 
         beforeEach(function () {
 
-            module("app.shared.dependencies");
-            module("app.shared.core");
-
-            module(function ($provide) {
-                $provide.value("globals", globals);
+            module("app.shared", function ($provide, sharedGlobals) {
+                $provide.value("globals", angular.extend({}, sharedGlobals, globals));
             });
 
             // stub the routing and template loading

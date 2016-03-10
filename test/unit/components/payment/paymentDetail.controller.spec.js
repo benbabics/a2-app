@@ -8,7 +8,7 @@
         AnalyticsUtil,
         $q,
         ctrl,
-        CommonService,
+        PopupUtil,
         PaymentManager,
         UserManager,
         confirmDeferred,
@@ -91,13 +91,12 @@
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["removePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackEvent"]);
+            PopupUtil = jasmine.createSpyObj("PopupUtil", ["displayConfirm"]);
 
-            inject(function (_$rootScope_, _CommonService_, $controller, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
+            inject(function (___, _$rootScope_, $controller, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
 
                 $rootScope = _$rootScope_;
                 $q = _$q_;
-                CommonService = _CommonService_;
-                _ = CommonService._;
                 confirmDeferred = $q.defer();
                 removePaymentDeferred = $q.defer();
 
@@ -112,6 +111,7 @@
                     $state           : $state,
                     AnalyticsUtil    : AnalyticsUtil,
                     PaymentManager   : PaymentManager,
+                    PopupUtil        : PopupUtil,
                     UserManager      : UserManager,
                     payment          : mockPayment,
                     isPaymentEditable: mockIsPaymentEditable
@@ -123,7 +123,7 @@
             PaymentManager.removePayment.and.returnValue(removePaymentDeferred.promise);
 
             //setup spies:
-            spyOn(CommonService, "displayConfirm").and.returnValue(confirmDeferred.promise);
+            PopupUtil.displayConfirm.and.returnValue(confirmDeferred.promise);
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -154,8 +154,8 @@
                 ctrl.displayCancelPaymentPopup();
             });
 
-            it("should call CommonService.displayConfirm with the expected values", function () {
-                expect(CommonService.displayConfirm).toHaveBeenCalledWith({
+            it("should call PopupUtil.displayConfirm with the expected values", function () {
+                expect(PopupUtil.displayConfirm).toHaveBeenCalledWith({
                     content             : mockConfig.cancelPaymentConfirm.content,
                     okButtonText        : mockConfig.cancelPaymentConfirm.yesButton,
                     cancelButtonText    : mockConfig.cancelPaymentConfirm.noButton,

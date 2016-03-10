@@ -14,9 +14,8 @@
      */
 
     /* @ngInject */
-    function wexInfiniteList($q, CommonService) {
-        var DEFAULT_RELOAD_DISTANCE = "1%",
-            _ = CommonService._;
+    function wexInfiniteList(_, $q) {
+        var DEFAULT_RELOAD_DISTANCE = "1%";
 
         var directive = {
             restrict   : "E",
@@ -25,7 +24,7 @@
             templateUrl: "app/shared/widgets/templates/infiniteList.html",
             scope      : {
                 onReload       : "=",
-                onPageLoaded: "=",
+                onPageLoaded   : "=",
                 reloadDistance : "=?",
                 loadingComplete: "&?"
             }

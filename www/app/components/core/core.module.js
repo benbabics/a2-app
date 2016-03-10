@@ -3,10 +3,9 @@
 
     //TODO - Move as much logic out of here as possible
 
-    // jshint maxparams:11
-    function coreRun($cordovaDevice, $q, $rootScope, $state, $ionicPlatform, $window,
-                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, CommonService) {
-        var _ = CommonService._;
+    // jshint maxparams:14
+    function coreRun(_, $cordovaDevice, $q, $rootScope, $state, $ionicPlatform, $window,
+                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, NavigationUtil, PlatformUtil, PopupUtil) {
 
         function isExitState(stateName) {
             return "app.exit" === stateName;
@@ -42,7 +41,7 @@
 
         function handleApplicationResume() {
             // Close any opened popups
-            CommonService.closeAllPopups();
+            PopupUtil.closeAllPopups();
 
             // Go to the login page
             $state.go(globals.LOGIN_STATE);
@@ -93,10 +92,10 @@
 
         //make the hardware back button go to the same state as the back button by default
         $ionicPlatform.registerBackButtonAction(function () { //args: event
-            CommonService.goToBackState();
+            NavigationUtil.goToBackState();
         }, 101);
 
-        CommonService.waitForCordovaPlatform()
+        PlatformUtil.waitForCordovaPlatform()
             .then(requestChromeFileSystem)
             .then(loadBundledBrands);
 

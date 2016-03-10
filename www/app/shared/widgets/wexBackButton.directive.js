@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
     /* @ngInject */
-    function wexBackButton($state, $ionicHistory, $interval, CommonService) {
+    function wexBackButton(_, $state, $ionicHistory, $interval) {
         var directive = {
                 restrict  : "E",
                 replace   : true,
@@ -15,8 +15,7 @@
                     backState: "@?",
                     hide     : "&?"
                 }
-            },
-            _ = CommonService._;
+            };
 
         return directive;
         //////////////////////

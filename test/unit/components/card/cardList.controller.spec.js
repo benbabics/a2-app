@@ -5,7 +5,8 @@
         $scope,
         $q,
         AnalyticsUtil,
-        CommonService,
+        LoadingIndicator,
+        ElementUtil,
         CardManager,
         UserManager,
         UserModel,
@@ -59,34 +60,32 @@
             CardManager = jasmine.createSpyObj("CardManager", ["fetchCards"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackEvent", "trackView"]);
+            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
+            ElementUtil = jasmine.createSpyObj("ElementUtil", ["getFocusedView"]);
 
-            inject(function (_$rootScope_, _$q_, $controller,
-                             _CommonService_, _UserModel_, _UserAccountModel_, _CardModel_) {
+            inject(function (_$rootScope_, _$q_, $controller,_UserModel_, _UserAccountModel_, _CardModel_) {
                 $rootScope = _$rootScope_;
                 $q = _$q_;
                 UserModel = _UserModel_;
                 UserAccountModel = _UserAccountModel_;
-                CommonService = _CommonService_;
                 CardModel = _CardModel_;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("CardListController", {
-                    $scope       : $scope,
-                    AnalyticsUtil: AnalyticsUtil,
-                    globals      : mockGlobals,
-                    CardManager  : CardManager,
-                    CommonService: CommonService,
-                    UserManager  : UserManager
+                    $scope          : $scope,
+                    AnalyticsUtil   : AnalyticsUtil,
+                    globals         : mockGlobals,
+                    CardManager     : CardManager,
+                    ElementUtil     : ElementUtil,
+                    LoadingIndicator: LoadingIndicator,
+                    UserManager     : UserManager
                 });
 
             });
 
             //setup spies
-            spyOn(CommonService, "loadingBegin");
-            spyOn(CommonService, "loadingComplete");
-
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
@@ -123,7 +122,7 @@
                     }
                 });
 
-                spyOn(CommonService, "getFocusedView").and.returnValue([view]);
+                ElementUtil.getFocusedView.and.returnValue([view]);
                 spyOn(angular.element.prototype, "remove");
                 spyOn(angular.element.prototype, "controller").and.returnValue(infiniteListController);
             });
@@ -226,8 +225,8 @@
                     .catch(rejectHandler);
             });
 
-            it("should call CommonService.loadingBegin", function () {
-                expect(CommonService.loadingBegin).toHaveBeenCalledWith();
+            it("should call LoadingIndicator.begin", function () {
+                expect(LoadingIndicator.begin).toHaveBeenCalledWith();
             });
 
             it("should call CardManager.fetchCards with the expected values", function () {
@@ -263,8 +262,8 @@
                     expect(rejectHandler).not.toHaveBeenCalled();
                 });
 
-                it("should call CommonService.loadingComplete", function () {
-                    expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
 
@@ -305,8 +304,8 @@
                     expect(rejectHandler).not.toHaveBeenCalled();
                 });
 
-                it("should call CommonService.loadingComplete", function () {
-                    expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
 
@@ -326,8 +325,8 @@
                     expect(resolveHandler).toHaveBeenCalledWith(true);
                 });
 
-                it("should call CommonService.loadingComplete", function () {
-                    expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
         });

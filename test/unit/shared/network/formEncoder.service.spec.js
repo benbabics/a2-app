@@ -10,9 +10,9 @@
 
             module("app.shared");
 
-            inject(function (_FormEncoder_, CommonService) {
+            inject(function (___, _FormEncoder_) {
+                _ = ___;
                 FormEncoder = _FormEncoder_;
-                _ = CommonService._;
             });
 
         });
@@ -81,7 +81,7 @@
                 encodedString = FormEncoder.encode(rawData);
                 pairs = encodedString.split("&");
 
-                _.forEach(pairs, function (value, index) {
+                _.forEach(pairs, function (value) {
                     components = value.split("=");
                     encodedData[decodeURIComponent(components[0])] = decodeURIComponent(components[1]);
                 });

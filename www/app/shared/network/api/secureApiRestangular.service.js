@@ -4,11 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function SecureApiRestangular(Restangular, AuthorizationHeaderRequestInterceptor,
-                                  CommonService, DataExtractorResponseInterceptor) {
-
-        // Private members
-        var _ = CommonService._;
+    function SecureApiRestangular(_, Restangular, AuthorizationHeaderRequestInterceptor, DataExtractorResponseInterceptor) {
 
         // Revealed Public members
         var service = Restangular.withConfig(setUpConfiguration);

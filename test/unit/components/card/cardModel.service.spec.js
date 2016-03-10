@@ -10,8 +10,8 @@
             module("app.shared");
             module("app.components.card");
 
-            inject(function (CardModel, CommonService) {
-                _ = CommonService._;
+            inject(function (___, CardModel) {
+                _ = ___;
 
                 card = new CardModel();
             });

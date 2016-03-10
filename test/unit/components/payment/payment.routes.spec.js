@@ -262,7 +262,7 @@
             mockUser,
             BankManager,
             BankModel,
-            CommonService,
+            PopupUtil,
             PaymentManager,
             PaymentModel,
             InvoiceManager,
@@ -298,8 +298,9 @@
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTracker", "trackView", "trackEvent"]);
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
+            PopupUtil = jasmine.createSpyObj("PopupUtil", ["displayAlert"]);
 
-            module(function ($provide, sharedGlobals) {
+            module(function ($provide) {
                 $provide.value("BankManager", BankManager);
                 $provide.value("InvoiceManager", InvoiceManager);
                 $provide.value("Logger", Logger);
@@ -308,20 +309,20 @@
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("LoginManager", LoginManager);
+                $provide.value("PopupUtil", PopupUtil);
             });
 
-            inject(function (_$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _InvoiceSummaryModel_,
-                             _CommonService_, _PaymentModel_, UserAccountModel, UserModel) {
+            inject(function (___, _$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _InvoiceSummaryModel_,
+                             _PaymentModel_, UserAccountModel, UserModel) {
+                _ = ___;
                 $injector = _$injector_;
                 $location = _$location_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
                 BankModel = _BankModel_;
-                CommonService = _CommonService_;
                 PaymentModel = _PaymentModel_;
                 InvoiceSummaryModel = _InvoiceSummaryModel_;
-                _ = CommonService._;
 
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
             });
@@ -1197,8 +1198,9 @@
                 UserManager.getUser.and.returnValue(mockUser);
 
                 spyOn($state, "go").and.callThrough();
-                spyOn(CommonService, "displayAlert").and.returnValue($q.resolve());
                 spyOn($rootScope, "$on").and.callThrough();
+
+                PopupUtil.displayAlert.and.returnValue($q.resolve());
             });
 
             describe("when bank accounts have NOT been setup", function () {
@@ -1238,8 +1240,8 @@
                         expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
-                    it("should call CommonService.displayAlert", function () {
-                        expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                    it("should call PopupUtil.displayAlert", function () {
+                        expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
                             content       : mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
                             buttonCssClass: "button-submit"
                         });
@@ -1285,8 +1287,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call CommonService.displayAlert", function () {
-                            expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                        it("should call PopupUtil.displayAlert", function () {
+                            expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
@@ -1336,8 +1338,8 @@
                         expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
-                    it("should call CommonService.displayAlert", function () {
-                        expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                    it("should call PopupUtil.displayAlert", function () {
+                        expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
                             content       : mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
                             buttonCssClass: "button-submit"
                         });
@@ -1383,8 +1385,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call CommonService.displayAlert", function () {
-                            expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                        it("should call PopupUtil.displayAlert", function () {
+                            expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
@@ -1434,8 +1436,8 @@
                         expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
-                    it("should call CommonService.displayAlert", function () {
-                        expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                    it("should call PopupUtil.displayAlert", function () {
+                        expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
                             content       : mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
                             buttonCssClass: "button-submit"
                         });
@@ -1481,8 +1483,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call CommonService.displayAlert", function () {
-                            expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                        it("should call PopupUtil.displayAlert", function () {
+                            expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
                                 buttonCssClass: "button-submit"
                             });
@@ -1532,8 +1534,8 @@
                         expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
-                    it("should call CommonService.displayAlert", function () {
-                        expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                    it("should call PopupUtil.displayAlert", function () {
+                        expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
                             content       : mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
                             buttonCssClass: "button-submit"
                         });
@@ -1579,8 +1581,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call CommonService.displayAlert", function () {
-                            expect(CommonService.displayAlert).toHaveBeenCalledWith({
+                        it("should call PopupUtil.displayAlert", function () {
+                            expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
                                 buttonCssClass: "button-submit"
                             });
@@ -1630,8 +1632,8 @@
                         expect($state.go).toHaveBeenCalledWith(paymentAddState);
                     });
 
-                    it("should NOT call CommonService.displayAlert", function () {
-                        expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                    it("should NOT call PopupUtil.displayAlert", function () {
+                        expect(PopupUtil.displayAlert).not.toHaveBeenCalled();
                     });
 
                     it("should NOT call AnalyticsUtil.trackEvent", function () {
@@ -1674,8 +1676,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should NOT call CommonService.displayAlert", function () {
-                            expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                        it("should NOT call PopupUtil.displayAlert", function () {
+                            expect(PopupUtil.displayAlert).not.toHaveBeenCalled();
                         });
 
                         it("should NOT call AnalyticsUtil.trackEvent", function () {

@@ -5,7 +5,6 @@
 
         var $scope,
             $rootScope,
-            CommonService,
             formModel,
             directiveForm,
             submitButton,
@@ -16,10 +15,8 @@
             module("app.shared");
             module("app.html");
 
-            inject(function (_$rootScope_, $compile, _CommonService_) {
+            inject(function (_$rootScope_, $compile) {
                 $rootScope = _$rootScope_;
-
-                CommonService = _CommonService_;
 
                 $scope = $rootScope.$new();
 
@@ -27,10 +24,10 @@
 
                 //Compile the angular markup to get an instance of the directive
                 directiveForm = $compile([
-                    '<form novalidate name="formModel">',
-                    '<input type="text" name="mockInput" ng-model="mockInputModel" required>',
-                    '<wex-required-submit text="{{mockSubmitText}}"></wex-required-submit>',
-                    '</form>'
+                    "<form novalidate name='formModel'>",
+                    "<input type='text' name='mockInput' ng-model='mockInputModel' required>",
+                    "<wex-required-submit text='{{mockSubmitText}}'></wex-required-submit>",
+                    "</form>"
                 ].join(""))($scope);
 
                 $rootScope.$digest();

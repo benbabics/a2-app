@@ -5,7 +5,7 @@
         BrandManager,
         BrandAssetModel,
         FileUtil,
-        CommonService,
+        LoggerUtil,
         moment,
         globals,
         $q,
@@ -56,10 +56,10 @@
                 $provide.value("FileUtil", FileUtil);
             });
 
-            inject(function (_$localStorage_, _$rootScope_, _$q_, _$window_, _globals_, _moment_, _BrandAssetModel_, _BrandUtil_, _CommonService_) {
+            inject(function (_$localStorage_, _$rootScope_, _$q_, _$window_, _globals_, _moment_, _BrandAssetModel_, _BrandUtil_, _LoggerUtil_) {
 
                 BrandUtil = _BrandUtil_;
-                CommonService = _CommonService_;
+                LoggerUtil = _LoggerUtil_;
                 BrandAssetModel = _BrandAssetModel_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
@@ -148,7 +148,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "Failed to get brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
+                        var expectedError = "Failed to get brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -248,7 +248,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "Failed to get brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
+                        var expectedError = "Failed to get brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -267,7 +267,7 @@
                 });
 
                 it("should throw an error", function () {
-                    var expectedError = "Failed to get brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
+                    var expectedError = "Failed to get brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
 
                     expect($rootScope.$digest).toThrowError(expectedError);
                 });
@@ -341,7 +341,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
+                        var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -394,7 +394,7 @@
                         });
 
                         it("should throw an error", function () {
-                            var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
+                            var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
 
                             expect($rootScope.$digest).toThrowError(expectedError);
                         });
@@ -413,7 +413,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
+                        var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -543,7 +543,7 @@
                                 it("should throw an error", function () {
                                     var expectedError = "Failed to store brand asset resource file '" +
                                         getAssetResourceSubPath(brandAsset) +
-                                        "': " + CommonService.getErrorMessage(error);
+                                        "': " + LoggerUtil.getErrorMessage(error);
 
                                     expect($rootScope.$digest).toThrowError(expectedError);
                                 });
@@ -619,7 +619,7 @@
                             it("should throw an error", function () {
                                 var expectedError = "Failed to store brand asset resource file '" +
                                     getAssetResourceSubPath(brandAsset) +
-                                    "': " + CommonService.getErrorMessage(error);
+                                    "': " + LoggerUtil.getErrorMessage(error);
 
                                 expect($rootScope.$digest).toThrowError(expectedError);
                             });
@@ -764,7 +764,7 @@
                                 it("should throw an error", function () {
                                     var expectedError = "Failed to store brand asset resource file '" +
                                         getAssetResourceSubPath(brandAsset) +
-                                        "': " + CommonService.getErrorMessage(error);
+                                        "': " + LoggerUtil.getErrorMessage(error);
 
                                     expect($rootScope.$digest).toThrowError(expectedError);
                                 });
@@ -840,7 +840,7 @@
                             it("should throw an error", function () {
                                 var expectedError = "Failed to store brand asset resource file '" +
                                     getAssetResourceSubPath(brandAsset) +
-                                    "': " + CommonService.getErrorMessage(error);
+                                    "': " + LoggerUtil.getErrorMessage(error);
 
                                 expect($rootScope.$digest).toThrowError(expectedError);
                             });
@@ -963,7 +963,7 @@
                         });
 
                         it("should throw an error", function () {
-                            var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
+                            var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
 
                             expect($rootScope.$digest).toThrowError(expectedError);
                         });
@@ -1050,7 +1050,7 @@
                                 });
 
                                 it("should throw an error", function () {
-                                    var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error);
+                                    var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
 
                                     expect($rootScope.$digest).toThrowError(expectedError);
                                 });
@@ -1304,7 +1304,7 @@
                             message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                         };
 
-                        expectedError = "Failed to remove asset resource file " + resourcePath + ": " + CommonService.getErrorMessage(error);
+                        expectedError = "Failed to remove asset resource file " + resourcePath + ": " + LoggerUtil.getErrorMessage(error);
 
                         removeFileDeferred.reject(error);
                     });
@@ -1333,7 +1333,7 @@
                 });
 
                 it("should throw an error", function () {
-                    var expectedError = "Failed to remove asset resource file " + resourcePath + ": " + CommonService.getErrorMessage(error);
+                    var expectedError = "Failed to remove asset resource file " + resourcePath + ": " + LoggerUtil.getErrorMessage(error);
 
                     expect($rootScope.$digest).toThrowError(expectedError);
                 });

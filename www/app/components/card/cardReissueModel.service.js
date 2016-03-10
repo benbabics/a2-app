@@ -2,8 +2,7 @@
     "use strict";
 
     // jshint maxparams:6
-    var CardReissueModel = function (globals, AccountModel, AddressModel, CardModel, CommonService, ShippingMethodModel) {
-        var _ = CommonService._;
+    var CardReissueModel = function (_, globals, AccountModel, AddressModel, CardModel, ShippingMethodModel) {
 
         function CardReissueModel() {
             this.account = "";

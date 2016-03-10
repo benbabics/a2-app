@@ -28,9 +28,9 @@
             //mock dependencies:
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
 
-            inject(function ($controller, _$rootScope_, BankModel, CommonService, InvoiceSummaryModel, PaymentModel) {
+            inject(function (___, $controller, _$rootScope_, BankModel, InvoiceSummaryModel, PaymentModel) {
                 $rootScope = _$rootScope_;
-                _ = CommonService._;
+                _ = ___;
 
                 $scope = $rootScope.$new();
 

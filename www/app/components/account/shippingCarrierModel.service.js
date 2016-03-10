@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    var ShippingCarrierModel = function (CommonService, ShippingMethodModel) {
-        var _ = CommonService._;
+    var ShippingCarrierModel = function (_, ShippingMethodModel) {
 
         function ShippingCarrierModel() {
             this.id = "";

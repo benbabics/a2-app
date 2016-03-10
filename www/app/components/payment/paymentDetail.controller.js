@@ -2,14 +2,13 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:10
+    // jshint maxparams:11
 
     /* @ngInject */
-    function PaymentDetailController($scope, $state, globals, isPaymentEditable, payment,
-                                     AnalyticsUtil, CommonService, Logger, PaymentManager, UserManager) {
+    function PaymentDetailController(_, $scope, $state, globals, isPaymentEditable, payment,
+                                     AnalyticsUtil, Logger, PaymentManager, PopupUtil, UserManager) {
 
-        var vm = this,
-            _ = CommonService._;
+        var vm = this;
 
         vm.config = globals.PAYMENT_VIEW.CONFIG;
 
@@ -45,7 +44,7 @@
         }
 
         function displayCancelPaymentPopup() {
-            return CommonService.displayConfirm({
+            return PopupUtil.displayConfirm({
                 content             : vm.config.cancelPaymentConfirm.content,
                 okButtonText        : vm.config.cancelPaymentConfirm.yesButton,
                 cancelButtonText    : vm.config.cancelPaymentConfirm.noButton,

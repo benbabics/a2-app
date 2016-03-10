@@ -1,9 +1,11 @@
 (function () {
     "use strict";
 
-    var ctrl,
+    var _,
+        ctrl,
         scope,
-        CommonService,
+        PopupUtil,
+        PlatformUtil,
         $ionicHistory,
         mockPayment = {
             amount: TestUtils.getRandomNumber(1, 999)
@@ -82,10 +84,12 @@
             });
 
             //mock dependencies:
-            CommonService = jasmine.createSpyObj("CommonService", ["displayAlert", "waitForCordovaPlatform"]);
+            PopupUtil = jasmine.createSpyObj("PopupUtil", ["displayAlert"]);
+            PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["waitForCordovaPlatform"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
 
-            inject(function ($rootScope, $controller, $filter, $q, appGlobals, PaymentMaintenanceDetailsModel) {
+            inject(function (___, $rootScope, $controller, $filter, $q, appGlobals, PaymentMaintenanceDetailsModel) {
+                _ = ___;
 
                 scope = $rootScope.$new();
 
@@ -102,7 +106,8 @@
                     maintenanceDetails: mockMaintenance,
                     payment           : mockPayment,
                     invoiceSummary    : mockInvoiceSumary,
-                    CommonService     : CommonService
+                    PopupUtil         : PopupUtil,
+                    PlatformUtil      : PlatformUtil
                 });
             });
         });
@@ -175,7 +180,7 @@
                 });
 
                 it("should show the expected error", function () {
-                    expect(CommonService.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
+                    expect(PopupUtil.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
                         content: mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT.ERRORS.zeroPayment
                     }));
                 });
@@ -194,7 +199,7 @@
                 });
 
                 it("should show the expected error", function () {
-                    expect(CommonService.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
+                    expect(PopupUtil.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
                         content: mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT.ERRORS.paymentTooLarge
                     }));
                 });
@@ -213,7 +218,7 @@
                 });
 
                 it("should NOT show an error", function () {
-                    expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                    expect(PopupUtil.displayAlert).not.toHaveBeenCalled();
                 });
 
                 it("should go back to the previous page", function () {
@@ -230,7 +235,7 @@
                 });
 
                 it("should NOT show an error", function () {
-                    expect(CommonService.displayAlert).not.toHaveBeenCalled();
+                    expect(PopupUtil.displayAlert).not.toHaveBeenCalled();
                 });
 
                 it("should go back to the previous page", function () {

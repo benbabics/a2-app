@@ -5,7 +5,7 @@
     // jshint maxparams:5
 
     /* @ngInject */
-    function UserManager($rootScope, CommonService, Logger, UserModel, UsersResource) {
+    function UserManager($rootScope, Logger, LoggerUtil, UserModel, UsersResource) {
         // Private members
         var user = {};
 
@@ -49,7 +49,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Getting Current User failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Getting Current User failed: " + LoggerUtil.getErrorMessage(failureResponse);
 
                     Logger.error(error);
                     throw new Error(error);

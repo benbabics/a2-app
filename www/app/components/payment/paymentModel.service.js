@@ -1,13 +1,11 @@
 (function () {
     "use strict";
 
-    var PaymentModel = function (globals, BankModel, CommonService) {
+    var PaymentModel = function (_, globals, BankModel) {
 
         // Constants
         var PAYMENT_STATUS = globals.PAYMENT.STATUS,
             PAYMENT_METHOD = globals.PAYMENT.METHOD;
-
-        var _ = CommonService._;
 
         function PaymentModel() {
             this.id = "";

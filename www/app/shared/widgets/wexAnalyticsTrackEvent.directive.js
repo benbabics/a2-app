@@ -18,12 +18,11 @@
      */
 
     /* @ngInject */
-    function wexAnalyticsTrackEvent(AnalyticsUtil, CommonService) {
+    function wexAnalyticsTrackEvent(_, AnalyticsUtil) {
         var directive = {
                 restrict: "A",
                 link    : link
-            },
-            _ = CommonService._;
+            };
 
         return directive;
         //////////////////////

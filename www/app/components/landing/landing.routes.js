@@ -17,42 +17,42 @@
                         },
 
                         //jshint maxparams:5
-                        brandLogo: function($q, globals, CommonService, BrandManager, BrandUtil) {
+                        brandLogo: function($q, globals, BrandManager, BrandUtil, LoadingIndicator) {
                             var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
                                 brandLogoAsset = BrandManager.getUserBrandAssetBySubtype(ASSET_SUBTYPES.BRAND_LOGO);
 
                             //if this brand has a logo associated with it then get its data
                             if (brandLogoAsset) {
-                                CommonService.loadingBegin();
+                                LoadingIndicator.begin();
 
                                 return BrandUtil.getAssetResourceData(brandLogoAsset)
                                     .catch(function () {
                                         //we couldn't get the brand logo file data, so just resolve with no logo
                                         return $q.resolve("");
                                     })
-                                    .finally(CommonService.loadingComplete);
+                                    .finally(LoadingIndicator.complete);
                             }
                             else {
                                 return "";
                             }
                         },
 
-                        currentInvoiceSummary: function (accountId, CommonService, InvoiceManager) {
-                            CommonService.loadingBegin();
+                        currentInvoiceSummary: function (accountId, InvoiceManager, LoadingIndicator) {
+                            LoadingIndicator.begin();
 
                             // Return the current invoice summary
                             return InvoiceManager.fetchCurrentInvoiceSummary(accountId)
                                 .finally(function() {
-                                    CommonService.loadingComplete();
+                                    LoadingIndicator.complete();
                                 });
                         },
 
-                        scheduledPaymentsCount: function (accountId, globals, CommonService, PaymentManager) {
-                            CommonService.loadingBegin();
+                        scheduledPaymentsCount: function (accountId, globals, PaymentManager, LoadingIndicator) {
+                            LoadingIndicator.begin();
 
                             return PaymentManager.fetchScheduledPaymentsCount(accountId)
                                 .finally(function () {
-                                    CommonService.loadingComplete();
+                                    LoadingIndicator.complete();
                                 });
                         }
                     }

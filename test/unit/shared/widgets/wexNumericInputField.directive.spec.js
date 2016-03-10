@@ -6,6 +6,7 @@
             KEY_DECIMAL = "decimal",
             KEY_DELETE = "delete",
             _,
+            ElementUtil,
             $rootScope,
             $compile,
             scope,
@@ -15,22 +16,27 @@
             viewContent;
 
         beforeEach(function () {
-            module("app.shared");
+            //mock dependencies
+            ElementUtil = jasmine.createSpyObj("ElementUtil", ["getFocusedView", "getViewContent"]);
+
+            module("app.shared", function ($provide) {
+                $provide.value("ElementUtil", ElementUtil);
+            });
             module("app.html");
 
-            inject(function (_$rootScope_, _$compile_, CommonService) {
+            inject(function (___, _$rootScope_, _$compile_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
-
-                _ = CommonService._;
+                _ = ___;
 
                 view = $compile("<ion-view></ion-view>")($rootScope);
                 viewContent = $compile("<ion-content></ion-content>")($rootScope);
 
                 view.append(viewContent);
 
-                spyOn(CommonService, "getFocusedView").and.returnValue(view);
-                spyOn(CommonService, "getViewContent").and.returnValue(viewContent);
+                ElementUtil.getFocusedView.and.returnValue(view);
+                ElementUtil.getViewContent.and.returnValue(viewContent);
+
                 spyOn(angular.element.prototype, "on").and.callThrough();
                 spyOn(window, "addEventListener").and.callThrough();
 

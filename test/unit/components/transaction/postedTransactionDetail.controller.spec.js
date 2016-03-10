@@ -45,7 +45,7 @@
                 });
             });
 
-            inject(function ($controller, $rootScope, $q, PostedTransactionModel, CommonService) {
+            inject(function ($controller, $rootScope, $q, PostedTransactionModel) {
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();

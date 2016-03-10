@@ -10,13 +10,7 @@
             mockTransitionType = "Mock transition type";
 
         beforeEach(function () {
-            module("app.shared.widgets");
-
-            module(function ($provide) {
-                $provide.value("CommonService", {
-                    "_": _
-                });
-            });
+            module("app.shared");
 
             inject(function (_$rootScope_, $compile, _$document_) {
                 var $scope = _$rootScope_.$new();
@@ -27,11 +21,11 @@
 
                 spyOn($rootScope, "$on").and.callThrough();
 
-                ionNavView = $compile('<ion-nav-view></ion-nav-view>')($scope);
-                $document.find('body').eq(0).append(ionNavView);
+                ionNavView = $compile("<ion-nav-view></ion-nav-view>")($scope);
+                $document.find("body").eq(0).append(ionNavView);
 
                 //Compile the angular markup to get an instance of the directive
-                directiveElem = $compile('<div wex-no-transition></div>')($scope);
+                directiveElem = $compile("<div wex-no-transition></div>")($scope);
 
                 $scope.$digest();
             });

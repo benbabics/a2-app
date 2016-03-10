@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function PaymentMaintenanceSummaryController($scope, $ionicHistory, globals, maintenanceDetails, moment, payment,
-                                                 CommonService, InvoiceManager, Logger, PaymentManager, UserManager) {
+                                                 InvoiceManager, LoadingIndicator, Logger, PaymentManager, UserManager) {
 
         var vm = this,
             paymentMaintenanceSummary = globals.PAYMENT_MAINTENANCE_SUMMARY;
@@ -27,7 +27,7 @@
         }
 
         function addPayment() {
-            CommonService.loadingBegin();
+            LoadingIndicator.begin();
 
             return PaymentManager.addPayment(UserManager.getUser().billingCompany.accountId, vm.payment)
                 .then(function (paymentResponse) {
@@ -40,7 +40,7 @@
                     Logger.error("Failed to add payment: " + paymentError);
                 })
                 .finally(function () {
-                    CommonService.loadingComplete();
+                    LoadingIndicator.complete();
                 });
 
         }
@@ -71,7 +71,7 @@
         }
 
         function updatePayment() {
-            CommonService.loadingBegin();
+            LoadingIndicator.begin();
 
             return PaymentManager.updatePayment(UserManager.getUser().billingCompany.accountId, vm.payment)
                 .then(function (paymentResponse) {
@@ -84,7 +84,7 @@
                     Logger.error("Failed to update payment: " + paymentError);
                 })
                 .finally(function () {
-                    CommonService.loadingComplete();
+                    LoadingIndicator.complete();
                 });
 
         }

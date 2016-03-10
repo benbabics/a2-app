@@ -2,9 +2,7 @@
     "use strict";
 
     /* @ngInject */
-    function wexCardSuffix(CommonService) {
-
-        var _ = CommonService._;
+    function wexCardSuffix(_) {
 
         return function (item) {
             var cardSuffix = "";

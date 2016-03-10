@@ -22,10 +22,10 @@
                 $provide.value("DataExtractorResponseInterceptor", DataExtractorResponseInterceptor);
             });
 
-            inject(function (_AccountMaintenanceRestangular_, _globals_, CommonService) {
+            inject(function (___, _AccountMaintenanceRestangular_, _globals_) {
+                _ = ___;
                 AccountMaintenanceRestangular = _AccountMaintenanceRestangular_;
                 globals = _globals_;
-                _ = CommonService._;
             });
 
         });

@@ -4,15 +4,13 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
     /* @ngInject */
-    function wexRequired(CommonService) {
+    function wexRequired(_) {
         var directive = {
-                restrict: "C",
-                require: "ngModel",
-                link: link,
-                scope: {}
-            },
-            _ = CommonService._;
-
+            restrict: "C",
+            require : "ngModel",
+            link    : link,
+            scope   : {}
+        };
 
         return directive;
 

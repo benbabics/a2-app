@@ -12,8 +12,8 @@
             module("app.components.bank");
             module("app.components.payment");
 
-            inject(function (_BankModel_, CommonService, PaymentModel) {
-                _ = CommonService._;
+            inject(function (___, _BankModel_, PaymentModel) {
+                _ = ___;
 
                 BankModel = _BankModel_;
 

@@ -6,7 +6,7 @@
         var $rootScope,
             $state,
             AnalyticsUtil,
-            CommonService,
+            PlatformUtil,
             LoginManager,
             $q,
             $cordovaSplashscreen,
@@ -40,16 +40,16 @@
                 $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
-            inject(function (_$rootScope_, _$state_, _$q_, _$interval_, _CommonService_) {
+            inject(function (_$rootScope_, _$state_, _$q_, _$interval_, _PlatformUtil_) {
                 $rootScope = _$rootScope_;
                 $state = _$state_;
                 $q = _$q_;
                 $interval = _$interval_;
-                CommonService = _CommonService_;
+                PlatformUtil = _PlatformUtil_;
             });
 
             //setup spies:
-            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+            spyOn(PlatformUtil, "waitForCordovaPlatform").and.callFake(function(callback) {
                 //just execute the callback directly
                 return $q.when((callback || function() {})());
             });

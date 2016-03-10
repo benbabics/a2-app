@@ -4,18 +4,17 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
     /* @ngInject */
-    function wexRequiredSubmit(CommonService, $compile) {
+    function wexRequiredSubmit(_, $compile) {
         var directive = {
-                restrict: "E",
-                require: "^form",
-                replace: true,
-                templateUrl: "app/shared/widgets/templates/requiredSubmit.directive.html",
-                link: link,
-                scope: {
-                    text: "@"
-                }
-            },
-            _ = CommonService._;
+            restrict   : "E",
+            require    : "^form",
+            replace    : true,
+            templateUrl: "app/shared/widgets/templates/requiredSubmit.directive.html",
+            link       : link,
+            scope      : {
+                text: "@"
+            }
+        };
 
         return directive;
 

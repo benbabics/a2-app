@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    var ShippingMethodModel = function (CommonService, $filter) {
-        var _ = CommonService._;
+    var ShippingMethodModel = function (_, $filter) {
 
         function ShippingMethodModel() {
             this.id = "";
@@ -20,7 +19,7 @@
             var displayName = this.name;
             showCost = _.isUndefined(showCost) ? true : showCost;
 
-            if(showCost) {
+            if (showCost) {
                 displayName += " " + $filter("currency")(this.cost);
             }
 

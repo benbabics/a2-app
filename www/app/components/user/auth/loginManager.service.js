@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function LoginManager($q, $rootScope, globals,
-                          AnalyticsUtil, AuthenticationManager, BrandManager, CommonService, Logger, UserManager) {
+                          AnalyticsUtil, BrandManager, LoadingIndicator, Logger, LoggerUtil, UserManager) {
         // Private members
         var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES;
 
@@ -32,13 +32,13 @@
         }
 
         function doLoginInitialization() {
-            CommonService.loadingBegin();
+            LoadingIndicator.begin();
 
             return UserManager.fetchCurrentUserDetails()
                 .then(function (userDetails) {
                     return BrandManager.updateBrandCache(userDetails.brand)
                         .catch(function (error) {
-                            Logger.error(CommonService.getErrorMessage(error));
+                            Logger.error(LoggerUtil.getErrorMessage(error));
 
                             //eat the error
                         });
@@ -46,9 +46,9 @@
                 .then(startBrandedTracker)
                 .then(setTrackerUserId)
                 .catch(function (error) {
-                    throw new Error("Failed to complete login initialization: " + CommonService.getErrorMessage(error));
+                    throw new Error("Failed to complete login initialization: " + LoggerUtil.getErrorMessage(error));
                 })
-                .finally(CommonService.loadingComplete);
+                .finally(LoadingIndicator.complete);
         }
 
         function doLogoutCleanup() {

@@ -2,15 +2,14 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:10
+    // jshint maxparams:11
 
     /* @ngInject */
-    function BrandManager($q, globals, BrandAssetModel, BrandAssetCollection, BrandUtil, BrandsResource,
-                          CommonService, Logger, PromiseUtil, UserManager) {
+    function BrandManager(_, $q, globals, BrandAssetModel, BrandAssetCollection, BrandUtil, BrandsResource,
+                          Logger, LoggerUtil, PromiseUtil, UserManager) {
 
         // Private members
-        var _ = CommonService._,
-            ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
+        var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
             brandAssets = null;
 
         // Revealed Public members
@@ -101,7 +100,7 @@
                     if (failureResponse.status !== 304) {
                         // There was some unknown problem
                         var error = "There was an error getting the brand assets for brandId: " + brandId +
-                            " - " + CommonService.getErrorMessage(failureResponse);
+                            " - " + LoggerUtil.getErrorMessage(failureResponse);
 
                         Logger.error(error);
                         throw new Error(error);
@@ -204,7 +203,7 @@
 
             return $q.all(promises)
                 .catch(function (error) {
-                    throw new Error("Failed to load bundled brand '" + brandName + "': " + CommonService.getErrorMessage(error));
+                    throw new Error("Failed to load bundled brand '" + brandName + "': " + LoggerUtil.getErrorMessage(error));
                 });
         }
 
@@ -286,7 +285,7 @@
                     BrandUtil.setLastBrandUpdateDate(brandName);
                 })
                 .catch(function (error) {
-                    throw new Error("Failed to update brand cache: " + CommonService.getErrorMessage(error));
+                    throw new Error("Failed to update brand cache: " + LoggerUtil.getErrorMessage(error));
                 });
         }
     }

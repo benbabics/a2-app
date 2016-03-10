@@ -8,7 +8,9 @@
         $state,
         CardManager,
         CardModel,
-        CommonService,
+        PopupUtil,
+        PlatformUtil,
+        LoadingIndicator,
         UserManager,
         mockCard,
         mockGlobals = {
@@ -53,10 +55,16 @@
                 "updateStatus"
             ]);
 
-            CommonService = jasmine.createSpyObj("CommonService", [
-                "displayConfirm",
-                "loadingBegin",
-                "loadingComplete",
+            PopupUtil = jasmine.createSpyObj("PopupUtil", [
+                "displayConfirm"
+            ]);
+
+            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", [
+                "begin",
+                "complete"
+            ]);
+
+            PlatformUtil = jasmine.createSpyObj("PlatformUtil", [
                 "waitForCordovaPlatform"
             ]);
 
@@ -80,13 +88,15 @@
                 mockGlobals.CARD = sharedGlobals.CARD;
 
                 ctrl = $controller("CardChangeStatusController", {
-                    $scope       : $scope,
-                    $state       : $state,
-                    globals      : mockGlobals,
-                    card         : mockCard,
-                    CardManager  : CardManager,
-                    CommonService: CommonService,
-                    UserManager  : UserManager
+                    $scope          : $scope,
+                    $state          : $state,
+                    globals         : mockGlobals,
+                    card            : mockCard,
+                    CardManager     : CardManager,
+                    LoadingIndicator: LoadingIndicator,
+                    PlatformUtil    : PlatformUtil,
+                    PopupUtil       : PopupUtil,
+                    UserManager     : UserManager
                 });
             });
 
@@ -120,7 +130,7 @@
                 confirmDeferred = $q.defer();
                 updateStatusDeferred = $q.defer();
 
-                CommonService.displayConfirm.and.returnValue(confirmDeferred.promise);
+                PopupUtil.displayConfirm.and.returnValue(confirmDeferred.promise);
                 CardManager.updateStatus.and.returnValue(updateStatusDeferred.promise);
             });
 
@@ -128,8 +138,8 @@
                 ctrl.promptStatusChange(newStatus);
             });
 
-            it("should call CommonService.displayConfirm with the expected values", function () {
-                expect(CommonService.displayConfirm).toHaveBeenCalledWith({
+            it("should call PopupUtil.displayConfirm with the expected values", function () {
+                expect(PopupUtil.displayConfirm).toHaveBeenCalledWith({
                     content             : mockConfig.confirmationPopup.contentMessages[newStatus],
                     okButtonText        : mockConfig.confirmationPopup.yesButton,
                     cancelButtonText    : mockConfig.confirmationPopup.noButton,
@@ -145,8 +155,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.loadingBegin", function () {
-                    expect(CommonService.loadingBegin).toHaveBeenCalledWith();
+                it("should call LoadingIndicator.begin", function () {
+                    expect(LoadingIndicator.begin).toHaveBeenCalledWith();
                 });
 
                 it("should call CardManager.updateStatus with the expected values", function () {
@@ -175,8 +185,8 @@
                         expect($state.go).toHaveBeenCalledWith("card.changeStatus.confirmation", {cardId: updatedCard.cardId});
                     });
 
-                    it("should call CommonService.loadingComplete", function () {
-                        expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                    it("should call LoadingIndicator.complete", function () {
+                        expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                     });
                 });
 
@@ -191,8 +201,8 @@
                         expect($state.go).not.toHaveBeenCalledWith("card.changeStatus.confirmation", jasmine.any(Object));
                     });
 
-                    it("should call CommonService.loadingComplete", function () {
-                        expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                    it("should call LoadingIndicator.complete", function () {
+                        expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                     });
                 });
             });

@@ -4,29 +4,27 @@
     /* jshint -W003 */ /* jshint -W026 */ // These allow us to show the definition of the Directive above the scroll
 
     /* @ngInject */
-    function wexInputField($compile, CommonService) {
+    function wexInputField(_, $compile, ElementUtil) {
         var directive = {
-                require: "^form",
-                restrict: "E",
-                transclude: true,
-                replace: true,
-                link: link,
-                templateUrl: "app/shared/widgets/templates/inputField.directive.html",
-                scope: {
-                    label: "@",
-                    errors: "@",
-                    toolTip: "@",
-                    toolTipOptions: "@"
-                }
+            require    : "^form",
+            restrict   : "E",
+            transclude : true,
+            replace    : true,
+            link       : link,
+            templateUrl: "app/shared/widgets/templates/inputField.directive.html",
+            scope      : {
+                label         : "@",
+                errors        : "@",
+                toolTip       : "@",
+                toolTipOptions: "@"
+            }
 
-            },
-            _ = CommonService._;
-
+        };
 
         return directive;
 
         function fieldHasAnyErrors() {
-            return this.form.$submitted && CommonService.fieldHasError(this.form[this.fieldName]);
+            return this.form.$submitted && ElementUtil.fieldHasError(this.form[this.fieldName]);
         }
 
         function fieldHasError(errorType) {

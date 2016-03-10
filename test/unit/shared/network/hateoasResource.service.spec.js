@@ -4,7 +4,6 @@
     var $q,
         $rootScope,
         HateoasResource,
-        CommonService,
         SecureApiRestangular,
         oneUrlResponse,
         resourceModel,
@@ -23,9 +22,8 @@
                 $provide.value("SecureApiRestangular", SecureApiRestangular);
             });
 
-            inject(function (_$rootScope_, _$q_, _HateoasResource_, _CommonService_) {
+            inject(function (_$rootScope_, _$q_, _HateoasResource_) {
                 HateoasResource = _HateoasResource_;
-                CommonService = _CommonService_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
             });

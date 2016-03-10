@@ -2,10 +2,9 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:4
 
     /* @ngInject */
-    function InvoiceManager(CommonService, InvoiceSummaryModel, InvoicesResource, Logger) {
+    function InvoiceManager(InvoiceSummaryModel, InvoicesResource, Logger, LoggerUtil) {
         // Private members
         var invoiceSummary = {};
 
@@ -47,7 +46,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Getting Current Invoice Summary failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Getting Current Invoice Summary failed: " + LoggerUtil.getErrorMessage(failureResponse);
 
                     Logger.error(error);
                     throw new Error(error);

@@ -5,14 +5,13 @@
     // jshint maxparams:5
 
     /* @ngInject */
-    function NetworkStatusController($ionicModal, $rootScope, $scope, globals, CommonService) {
+    function NetworkStatusController(_, $ionicModal, $rootScope, $scope, globals) {
 
         // Constants
         var MODAL_TEMPLATE = "app/shared/network/templates/networkStatus.modal.html";
 
         // Private members
-        var _ = CommonService._,
-            modal;
+        var modal;
 
         var vm = this;
 

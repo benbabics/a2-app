@@ -36,14 +36,14 @@
                     templateUrl: "app/components/card/templates/cardDetail.html",
                     controller : "CardDetailController as vm",
                     resolve    : {
-                        card: function ($stateParams, CardManager, CommonService) {
+                        card: function ($stateParams, CardManager, LoadingIndicator) {
                             var cardId = $stateParams.cardId;
 
-                            CommonService.loadingBegin();
+                            LoadingIndicator.begin();
 
                             return CardManager.fetchCard(cardId)
                                 .finally(function () {
-                                    CommonService.loadingComplete();
+                                    LoadingIndicator.complete();
                                 });
                         }
                     }
@@ -58,14 +58,14 @@
             abstract: true,
             url     : "/changeStatus/:cardId",
             resolve : {
-                card: function ($stateParams, CardManager, CommonService) {
+                card: function ($stateParams, CardManager, LoadingIndicator) {
                     var cardId = $stateParams.cardId;
 
-                    CommonService.loadingBegin();
+                    LoadingIndicator.begin();
 
                     return CardManager.fetchCard(cardId)
                         .finally(function () {
-                            CommonService.loadingComplete();
+                            LoadingIndicator.complete();
                         });
                 }
             },
@@ -113,21 +113,21 @@
                     template  : "<ion-nav-view name='view'></ion-nav-view>",
                     controller: "CardReissueController as reissueController",
                     resolve   : {
-                        account: function (AccountManager, CommonService, UserManager) {
+                        account: function (AccountManager, LoadingIndicator, UserManager) {
                             var accountId = UserManager.getUser().billingCompany.accountId;
 
-                            CommonService.loadingBegin();
+                            LoadingIndicator.begin();
 
                             return AccountManager.fetchAccount(accountId)
-                                .finally(CommonService.loadingComplete);
+                                .finally(LoadingIndicator.complete);
                         },
-                        card: function ($stateParams, CardManager, CommonService) {
+                        card: function ($stateParams, CardManager, LoadingIndicator) {
                             var cardId = $stateParams.cardId;
 
-                            CommonService.loadingBegin();
+                            LoadingIndicator.begin();
 
                             return CardManager.fetchCard(cardId)
-                                .finally(CommonService.loadingComplete);
+                                .finally(LoadingIndicator.complete);
                         }
                     }
                 }

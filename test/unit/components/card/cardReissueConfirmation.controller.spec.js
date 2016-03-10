@@ -32,7 +32,7 @@
             module("app.components.account");
 
             inject(function ($controller, _$rootScope_, $q, AddressModel, ShippingMethodModel,
-                             CardReissueModel, CommonService, AccountModel, CardModel, ShippingCarrierModel) {
+                             CardReissueModel, AccountModel, CardModel, ShippingCarrierModel) {
                 $rootScope = _$rootScope_;
 
                 $scope = $rootScope.$new();

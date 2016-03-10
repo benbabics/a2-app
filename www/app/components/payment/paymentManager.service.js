@@ -2,18 +2,17 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:8
+    // jshint maxparams:9
 
     /* @ngInject */
-    function PaymentManager($q, globals, moment, CommonService, Logger,
+    function PaymentManager(_, $q, globals, moment, Logger, LoggerUtil,
                             PaymentAddAvailabilityModel, PaymentModel, PaymentsResource) {
         // Private members
         var paymentAddAvailability = {},
             payments;
 
         // Revealed Public members
-        var _ = CommonService._,
-            service = {
+        var service = {
             addPayment                 : addPayment,
             clearCachedValues          : clearCachedValues,
             fetchPayment               : fetchPayment,
@@ -60,7 +59,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Adding a Payment failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Adding a Payment failed: " + LoggerUtil.getErrorMessage(failureResponse);
 
                     Logger.error(error);
                     throw new Error(error);
@@ -101,7 +100,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Getting Payment Add Availability failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Getting Payment Add Availability failed: " + LoggerUtil.getErrorMessage(failureResponse);
 
                     Logger.error(error);
                     throw new Error(error);
@@ -133,7 +132,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Getting Payments failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Getting Payments failed: " + LoggerUtil.getErrorMessage(failureResponse);
 
                     Logger.error(error);
                     throw new Error(error);
@@ -164,7 +163,7 @@
                 .catch(function(failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Getting scheduled payments count failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Getting scheduled payments count failed: " + LoggerUtil.getErrorMessage(failureResponse);
 
                     Logger.error(error);
                     throw new Error(error);
@@ -200,7 +199,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Removing a Payment failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Removing a Payment failed: " + LoggerUtil.getErrorMessage(failureResponse);
                     Logger.error(error);
                     throw new Error(error);
                 });
@@ -241,7 +240,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Updating a Payment failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Updating a Payment failed: " + LoggerUtil.getErrorMessage(failureResponse);
                     Logger.error(error);
                     throw new Error(error);
                 });

@@ -2,7 +2,6 @@
     "use strict";
 
     var AnalyticsUtil,
-        CommonService,
         Logger,
         analytics,
         $q,
@@ -30,9 +29,8 @@
                 });
             });
 
-            inject(function (_$q_, _AnalyticsUtil_, _CommonService_, _Logger_) {
+            inject(function (_$q_, _AnalyticsUtil_, _Logger_) {
                 AnalyticsUtil = _AnalyticsUtil_;
-                CommonService = _CommonService_;
                 Logger = _Logger_;
                 $q = _$q_;
             });

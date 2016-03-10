@@ -1,42 +1,50 @@
 (function () {
     "use strict";
 
+    /* jshint -W003, -W026 */ // These allow us to define functions after they're used
+
     var ToastService,
         $window,
         $ionicLoading,
         $cordovaToast,
-        CommonService,
+        PlatformUtil,
         mockMessage = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
     describe("A Toast Service", function () {
 
         beforeEach(function () {
 
+            //mock dependencies:
+            $cordovaToast = jasmine.createSpyObj("$cordovaToast", [
+                "showShortTop",
+                "showShortCenter",
+                "showShortBottom",
+                "showLongTop",
+                "showLongCenter",
+                "showLongBottom",
+                "show"
+            ]);
+            $ionicLoading = jasmine.createSpyObj("$ionicLoading", ["show"]);
+            PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["platformHasCordova"]);
+
             module("app.shared.core");
             module("app.shared.dependencies");
             module("app.shared.logger");
-            module("app.shared.integration");
-
-            //mock dependencies:
-            $cordovaToast = jasmine.createSpyObj("$cordovaToast", ["showShortTop", "showShortCenter", "showShortBottom",
-                "showLongTop", "showLongCenter", "showLongBottom", "show"]);
-            $ionicLoading = jasmine.createSpyObj("$ionicLoading", ["show"]);
-
-            module(function ($provide) {
+            module("app.shared.integration", function ($provide) {
                 $provide.value("$ionicLoading", $ionicLoading);
                 $provide.value("$cordovaToast", $cordovaToast);
+                $provide.value("PlatformUtil", PlatformUtil);
             });
 
-            inject(function (_$window_, _CommonService_) {
+            inject(function (_$window_) {
                 $window = _$window_;
-                CommonService = _CommonService_;
             });
         });
 
         describe("when Cordova plugins are available", function () {
 
             beforeEach(function () {
-                spyOn(CommonService, "platformHasCordova").and.returnValue(true);
+                PlatformUtil.platformHasCordova.and.returnValue(true);
 
                 inject(function (_ToastService_) {
                     ToastService = _ToastService_;
@@ -51,7 +59,7 @@
         describe("when Cordova plugins are not available", function () {
 
             beforeEach(function () {
-                spyOn(CommonService, "platformHasCordova").and.returnValue(false);
+                PlatformUtil.platformHasCordova.and.returnValue(false);
 
                 inject(function (_ToastService_) {
                     ToastService = _ToastService_;

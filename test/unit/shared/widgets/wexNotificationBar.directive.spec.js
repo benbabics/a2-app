@@ -4,7 +4,7 @@
     describe("A WEX Notification Bar directive", function () {
 
         var $scope,
-            CommonService,
+            ElementUtil,
             bar,
             barUncloseable,
             barCloseable,
@@ -16,16 +16,19 @@
             mockChildText = "Mock child text";
 
         beforeEach(function () {
-            module("app.shared");
+            //mock dependencies
+            ElementUtil = jasmine.createSpyObj("ElementUtil", ["getActiveNavView", "getFocusedView", "pageHasNavBar"]);
+
+            module("app.shared", function ($provide) {
+                $provide.value("ElementUtil", ElementUtil);
+            });
             module("app.html");
 
             // INJECT! This part is critical
             // $rootScope - injected to create a new $scope instance.
             // $compile - injected to allow us test snippets produced by the directive
-            inject(function ($rootScope, $compile, _CommonService_) {
+            inject(function ($rootScope, $compile) {
                 $scope = $rootScope.$new();
-
-                CommonService = _CommonService_;
 
                 activeNavView = $compile("<ion-nav-view></ion-nav-view>")($scope);
                 activeView = $compile("<ion-view nav-view='active'></ion-view>")($scope);
@@ -36,9 +39,9 @@
 
                 $scope.$digest();
 
-                spyOn(CommonService, "getActiveNavView").and.returnValue(activeNavView);
-                spyOn(CommonService, "getFocusedView").and.returnValue(activeView);
-                spyOn(CommonService, "pageHasNavBar").and.callFake(function () {
+                ElementUtil.getActiveNavView.and.returnValue(activeNavView);
+                ElementUtil.getFocusedView.and.returnValue(activeView);
+                ElementUtil.pageHasNavBar.and.callFake(function () {
                     return pageHasNavBar;
                 });
 

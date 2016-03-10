@@ -119,9 +119,9 @@
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
 
-            inject(function ($controller, $rootScope, $q, _moment_, _BankModel_, appGlobals, CommonService, PaymentMaintenanceDetailsModel) {
+            inject(function (___, $controller, $rootScope, $q, _moment_, _BankModel_, appGlobals, PaymentMaintenanceDetailsModel) {
 
-                _ = CommonService._;
+                _ = ___;
                 moment = _moment_;
                 BankModel = _BankModel_;
 

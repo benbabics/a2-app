@@ -10,8 +10,8 @@
             module("app.shared");
             module("app.components.account");
 
-            inject(function (CommonService, ShippingCarrierModel, ShippingMethodModel) {
-                _ = CommonService._;
+            inject(function (___, ShippingCarrierModel, ShippingMethodModel) {
+                _ = ___;
 
                 shippingCarrier = TestUtils.getRandomShippingCarrier(ShippingCarrierModel, ShippingMethodModel);
             });

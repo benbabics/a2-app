@@ -3,13 +3,12 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
-    // jshint maxparams:7
+    // jshint maxparams:8
 
     /* @ngInject */
-    function BrandUtil($localStorage, $q, $window, globals, moment, CommonService, FileUtil) {
+    function BrandUtil(_, $localStorage, $q, $window, globals, moment, FileUtil, LoggerUtil) {
         // Private members
-        var LAST_BRAND_UPDATE_DATE = globals.LOCALSTORAGE.KEYS.LAST_BRAND_UPDATE_DATE,
-            _ = CommonService._;
+        var LAST_BRAND_UPDATE_DATE = globals.LOCALSTORAGE.KEYS.LAST_BRAND_UPDATE_DATE;
 
         // Revealed Public members
         var service = {
@@ -87,7 +86,7 @@
                     return FileUtil.readFile(resourcePath, binary);
                 })
                 .catch(function (error) {
-                    throw new Error("Failed to get brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error));
+                    throw new Error("Failed to get brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error));
                 });
         }
 
@@ -142,7 +141,7 @@
                     return storeAssetResourceFile(brandAsset, resourceData);
                 })
                 .catch(function (error) {
-                    throw new Error("Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "': " + CommonService.getErrorMessage(error));
+                    throw new Error("Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "': " + LoggerUtil.getErrorMessage(error));
                 });
         }
 
@@ -154,7 +153,7 @@
                     return FileUtil.removeFile(resourcePath);
                 })
                 .catch(function (error) {
-                    throw new Error("Failed to remove asset resource file " + resourcePath + ": " + CommonService.getErrorMessage(error));
+                    throw new Error("Failed to remove asset resource file " + resourcePath + ": " + LoggerUtil.getErrorMessage(error));
                 });
         }
 
@@ -184,7 +183,7 @@
                 })
                 .catch(function (error) {
                     if (error) {
-                        throw new Error("Failed to store brand asset resource file '" + resourcePath + "': " + CommonService.getErrorMessage(error));
+                        throw new Error("Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error));
                     }
                 });
         }

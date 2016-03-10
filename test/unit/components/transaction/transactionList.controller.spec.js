@@ -5,7 +5,7 @@
         $scope,
         $q,
         moment,
-        CommonService,
+        LoadingIndicator,
         TransactionManager,
         UserManager,
         UserModel,
@@ -52,34 +52,30 @@
             //mock dependencies:
             TransactionManager = jasmine.createSpyObj("TransactionManager", ["fetchPostedTransactions"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
 
-            inject(function (_$rootScope_, _$q_, _moment_,
-                             _CommonService_, _UserModel_, _UserAccountModel_, _PostedTransactionModel_, $controller) {
+            inject(function (_$rootScope_, _$q_, _moment_, _UserModel_, _UserAccountModel_, _PostedTransactionModel_, $controller) {
                 $rootScope = _$rootScope_;
                 $q = _$q_;
                 moment = _moment_;
                 UserModel = _UserModel_;
                 UserAccountModel = _UserAccountModel_;
-                CommonService = _CommonService_;
                 PostedTransactionModel = _PostedTransactionModel_;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("TransactionListController", {
-                    $scope                 : $scope,
-                    globals                : mockGlobals,
-                    CommonService          : CommonService,
-                    TransactionManager     : TransactionManager,
-                    UserManager            : UserManager
+                    $scope            : $scope,
+                    globals           : mockGlobals,
+                    LoadingIndicator  : LoadingIndicator,
+                    TransactionManager: TransactionManager,
+                    UserManager       : UserManager
                 });
 
             });
 
             //setup spies
-            spyOn(CommonService, "loadingBegin");
-            spyOn(CommonService, "loadingComplete");
-
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
@@ -102,8 +98,8 @@
                     .catch(rejectHandler);
             });
 
-            it("should call CommonService.loadingBegin", function () {
-                expect(CommonService.loadingBegin).toHaveBeenCalledWith();
+            it("should call LoadingIndicator.begin", function () {
+                expect(LoadingIndicator.begin).toHaveBeenCalledWith();
             });
 
             it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
@@ -132,8 +128,8 @@
                     expect(rejectHandler).not.toHaveBeenCalled();
                 });
 
-                it("should call CommonService.loadingComplete", function () {
-                    expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
 
@@ -170,8 +166,8 @@
                     expect(rejectHandler).not.toHaveBeenCalled();
                 });
 
-                it("should call CommonService.loadingComplete", function () {
-                    expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
 
@@ -191,8 +187,8 @@
                     expect(resolveHandler).toHaveBeenCalledWith(true);
                 });
 
-                it("should call CommonService.loadingComplete", function () {
-                    expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
         });

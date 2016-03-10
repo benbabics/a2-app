@@ -39,7 +39,7 @@
                 });
             });
 
-            inject(function ($controller, $rootScope, $q, CommonService, CardModel) {
+            inject(function ($controller, $rootScope, $q, CardModel) {
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();

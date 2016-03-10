@@ -33,7 +33,7 @@
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
 
             inject(function ($controller, _$rootScope_, _sharedGlobals_, $q, AddressModel, ShippingMethodModel,
-                             CardReissueModel, CommonService, AccountModel, CardModel, ShippingCarrierModel) {
+                             CardReissueModel, AccountModel, CardModel, ShippingCarrierModel) {
                 $rootScope = _$rootScope_;
                 sharedGlobals = _sharedGlobals_;
 

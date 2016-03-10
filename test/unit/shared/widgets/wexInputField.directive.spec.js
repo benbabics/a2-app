@@ -5,7 +5,6 @@
 
         var $scope,
             $rootScope,
-            CommonService,
             _,
             element,
             directive,
@@ -25,11 +24,9 @@
             module("app.shared");
             module("app.html");
 
-            inject(function (_$rootScope_, $compile, _CommonService_) {
+            inject(function (___, _$rootScope_, $compile) {
                 $rootScope = _$rootScope_;
-
-                CommonService = _CommonService_;
-                _ = CommonService._;
+                _ = ___;
 
                 $scope = $rootScope.$new();
 

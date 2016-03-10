@@ -5,7 +5,6 @@
 
         var $scope,
             $rootScope,
-            CommonService,
             directiveElem,
             mockSrc = "mockSrc";
 
@@ -13,10 +12,8 @@
             module("app.shared");
             module("app.html");
 
-            inject(function (_$rootScope_, $compile, _CommonService_) {
+            inject(function (_$rootScope_, $compile) {
                 $rootScope = _$rootScope_;
-
-                CommonService = _CommonService_;
 
                 $scope = $rootScope.$new();
 

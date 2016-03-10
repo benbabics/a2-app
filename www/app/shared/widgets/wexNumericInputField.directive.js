@@ -14,23 +14,12 @@
      */
 
     /* @ngInject */
-    function wexNumericInputField(CommonService, $compile, $ionicScrollDelegate) {
+    function wexNumericInputField(_, $compile, $ionicScrollDelegate, ElementUtil) {
+        //Private members
         var KEY_NUMERIC = "numeric",
             KEY_DECIMAL = "decimal",
             KEY_DELETE = "delete",
             MODEL_DISPLAY_ELEMENT_SELECTOR = "[data-display-model]",
-            directive = {
-                restrict: "A",
-                link: link,
-                scope: {
-                    allowDecimal: "&?",
-                    allowKeypadToggle: "&?",
-                    formatters: "=?",
-                    model: "=ngModel",
-                    onInput: "=?" //callback: function(input, newValue, oldValue)
-                }
-            },
-            _ = CommonService._,
             vm,
             keyMap = [
                 [numericKey(1), numericKey(2), numericKey(3)],
@@ -44,6 +33,19 @@
             modelElem,
             view,
             viewContent;
+
+        //Public members
+        var directive = {
+            restrict: "A",
+            link    : link,
+            scope   : {
+                allowDecimal     : "&?",
+                allowKeypadToggle: "&?",
+                formatters       : "=?",
+                model            : "=ngModel",
+                onInput          : "=?" //callback: function(input, newValue, oldValue)
+            }
+        };
 
         return directive;
 
@@ -171,9 +173,9 @@
             //the directive's element
             directiveElem = elem;
             //the active view element
-            view = CommonService.getFocusedView();
+            view = ElementUtil.getFocusedView();
             //the active content element
-            viewContent = CommonService.getViewContent(view);
+            viewContent = ElementUtil.getViewContent(view);
             //the element that contains the keypad
             keypadElem = $compile(
                 "<div ng-include=\"'app/shared/widgets/templates/numericInputField/numericKeypad.html'\"></div>"

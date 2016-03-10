@@ -44,14 +44,14 @@
             templateUrl: "app/components/transaction/templates/postedTransactionDetail.html",
             controller : "PostedTransactionDetailController as vm",
             resolve    : {
-                postedTransaction: function ($stateParams, CommonService, TransactionManager) {
+                postedTransaction: function ($stateParams, LoadingIndicator, TransactionManager) {
                     var transactionId = $stateParams.transactionId;
 
-                    CommonService.loadingBegin();
+                    LoadingIndicator.begin();
 
                     return TransactionManager.fetchPostedTransaction(transactionId)
                         .finally(function () {
-                            CommonService.loadingComplete();
+                            LoadingIndicator.complete();
                         });
                 }
             },

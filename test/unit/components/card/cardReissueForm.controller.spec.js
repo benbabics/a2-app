@@ -9,7 +9,8 @@
         $ionicHistory,
         CardManager,
         CardModel,
-        CommonService,
+        PopupUtil,
+        LoadingIndicator,
         UserManager,
         AddressModel,
         ShippingMethodModel,
@@ -68,8 +69,12 @@
                 "nextViewOptions"
             ]);
 
+            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
+
+            PopupUtil = jasmine.createSpyObj("PopupUtil", ["displayConfirm"]);
+
             inject(function ($controller, _$rootScope_, _$q_, _sharedGlobals_, _AddressModel_, _ShippingMethodModel_,
-                             CardReissueModel, _CommonService_, AccountModel, _CardModel_, ShippingCarrierModel, UserModel,
+                             CardReissueModel, AccountModel, _CardModel_, ShippingCarrierModel, UserModel,
                              UserAccountModel) {
                 $rootScope = _$rootScope_;
                 $q = _$q_;
@@ -77,7 +82,6 @@
                 AddressModel = _AddressModel_;
                 ShippingMethodModel = _ShippingMethodModel_;
                 CardModel = _CardModel_;
-                CommonService = _CommonService_;
 
                 $scope = $rootScope.$new();
 
@@ -91,16 +95,14 @@
                     globals           : mockGlobals,
                     cardReissueDetails: mockCardReissueDetails,
                     CardManager       : CardManager,
-                    CommonService     : CommonService,
+                    LoadingIndicator  : LoadingIndicator,
+                    PopupUtil         : PopupUtil,
                     UserManager       : UserManager
                 });
             });
 
             //setup mocks
             UserManager.getUser.and.returnValue(mockUser);
-            spyOn(CommonService, "displayConfirm");
-            spyOn(CommonService, "loadingBegin");
-            spyOn(CommonService, "loadingComplete");
         });
 
         it("should set card to the given card object", function () {
@@ -234,7 +236,7 @@
                 confirmDeferred = $q.defer();
                 reissueDeferred = $q.defer();
 
-                CommonService.displayConfirm.and.returnValue(confirmDeferred.promise);
+                PopupUtil.displayConfirm.and.returnValue(confirmDeferred.promise);
                 CardManager.reissue.and.returnValue(reissueDeferred.promise);
             });
 
@@ -242,8 +244,8 @@
                 ctrl.promptReissue();
             });
 
-            it("should call CommonService.displayConfirm with the expected values", function () {
-                expect(CommonService.displayConfirm).toHaveBeenCalledWith({
+            it("should call PopupUtil.displayConfirm with the expected values", function () {
+                expect(PopupUtil.displayConfirm).toHaveBeenCalledWith({
                     content             : mockConfig.confirmationPopup.content,
                     okButtonText        : mockConfig.confirmationPopup.yesButton,
                     cancelButtonText    : mockConfig.confirmationPopup.noButton,
@@ -259,8 +261,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.loadingBegin", function () {
-                    expect(CommonService.loadingBegin).toHaveBeenCalledWith();
+                it("should call LoadingIndicator.begin", function () {
+                    expect(LoadingIndicator.begin).toHaveBeenCalledWith();
                 });
 
                 it("should call CardManager.reissue with the expected values", function () {
@@ -292,8 +294,8 @@
                         expect($state.go).toHaveBeenCalledWith("card.reissue.confirmation", {cardId: mockCardReissueDetails.originalCard.cardId});
                     });
 
-                    it("should call CommonService.loadingComplete", function () {
-                        expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                    it("should call LoadingIndicator.complete", function () {
+                        expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                     });
                 });
 
@@ -308,8 +310,8 @@
                         expect($state.go).not.toHaveBeenCalledWith("card.reissue.confirmation", jasmine.any(Object));
                     });
 
-                    it("should call CommonService.loadingComplete", function () {
-                        expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                    it("should call LoadingIndicator.complete", function () {
+                        expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                     });
                 });
             });

@@ -11,8 +11,8 @@
             module("app.shared");
             module("app.components.account");
 
-            inject(function (AccountModel, AddressModel, CommonService, ShippingCarrierModel, _ShippingMethodModel_) {
-                _ = CommonService._;
+            inject(function (___, AccountModel, AddressModel, ShippingCarrierModel, _ShippingMethodModel_) {
+                _ = ___;
                 ShippingMethodModel = _ShippingMethodModel_;
 
                 account = TestUtils.getRandomAccount(AccountModel, AddressModel, ShippingCarrierModel, ShippingMethodModel);

@@ -4,13 +4,10 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
     /* @ngInject */
-    function wexToolTip($ionicModal, CommonService) {
+    function wexToolTip(_, $ionicModal) {
         // Constants
         var ICON_TEMPLATE = "app/shared/widgets/templates/toolTip/tooltip.directive.html",
             MODAL_TEMPLATE = "app/shared/widgets/templates/toolTip/tooltipModal.html";
-
-        // Private members
-        var _ = CommonService._;
 
         // Revealed Public members
         var directive = {

@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:7
+    // jshint maxparams:8
 
     /* @ngInject */
-    function CardChangeStatusController($state, globals, card, CardManager, CommonService, Logger, UserManager) {
+    function CardChangeStatusController($state, globals, card, CardManager, LoadingIndicator, Logger, PopupUtil, UserManager) {
 
         var vm = this;
 
@@ -26,7 +26,7 @@
         function confirmStatusChange(newStatus) {
             var accountId = UserManager.getUser().billingCompany.accountId;
 
-            CommonService.loadingBegin();
+            LoadingIndicator.begin();
 
             CardManager.updateStatus(accountId, vm.card.cardId, newStatus)
                 .then(function(card) {
@@ -37,11 +37,11 @@
 
                     Logger.error("Failed to change card status: " + errorResponse);
                 })
-                .finally(CommonService.loadingComplete);
+                .finally(LoadingIndicator.complete);
         }
 
         function promptStatusChange(newStatus) {
-            return CommonService.displayConfirm({
+            return PopupUtil.displayConfirm({
                 content             : vm.config.confirmationPopup.contentMessages[newStatus],
                 okButtonText        : vm.config.confirmationPopup.yesButton,
                 cancelButtonText    : vm.config.confirmationPopup.noButton,

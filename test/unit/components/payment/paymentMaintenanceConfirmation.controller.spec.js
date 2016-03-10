@@ -70,9 +70,9 @@
                 });
             });
 
-            inject(function ($controller, $rootScope, $q, appGlobals, CommonService, PaymentMaintenanceDetailsModel) {
+            inject(function (___, $controller, $rootScope, $q, appGlobals, PaymentMaintenanceDetailsModel) {
 
-                _ = CommonService._;
+                _ = ___;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();

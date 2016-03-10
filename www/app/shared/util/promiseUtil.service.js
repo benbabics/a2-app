@@ -5,9 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function PromiseUtil($q, CommonService) {
-        // Private members
-        var _ = CommonService._;
+    function PromiseUtil(_, $q) {
 
         // Revealed Public members
         var service = {

@@ -2,16 +2,15 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:7
 
     /* @ngInject */
-    function CardManager($q, globals, CardModel, CardsResource, CommonService, Logger) {
+    function CardManager(_, $q, globals, CardModel, CardsResource, Logger, LoggerUtil) {
         // Private members
         var cards;
 
         // Revealed Public members
-        var _ = CommonService._,
-            service = {
+        var service = {
                 clearCachedValues: clearCachedValues,
                 fetchCard        : fetchCard,
                 fetchCards       : fetchCards,
@@ -82,7 +81,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Getting Cards failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Getting Cards failed: " + LoggerUtil.getErrorMessage(failureResponse);
                     Logger.error(error);
                     throw new Error(error);
                 });
@@ -128,7 +127,7 @@
                 .catch(function(failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Reissuing Card failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Reissuing Card failed: " + LoggerUtil.getErrorMessage(failureResponse);
                     Logger.error(error);
                     throw new Error(error);
                 });
@@ -170,7 +169,7 @@
                 .catch(function(failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Updating Card Status failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Updating Card Status failed: " + LoggerUtil.getErrorMessage(failureResponse);
                     Logger.error(error);
                     throw new Error(error);
                 });

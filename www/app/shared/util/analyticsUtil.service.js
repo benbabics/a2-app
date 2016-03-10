@@ -3,14 +3,14 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
+    // jshint maxparams:5
 
     // NOTE: This service will only track analytics data on platforms with Cordova.
 
     /* @ngInject */
-    function AnalyticsUtil($window, CommonService, Logger) {
+    function AnalyticsUtil(_, $window, Logger, LoggerUtil, PlatformUtil) {
         // Private members
         var DISPATCH_INTERVAL = 30, //in seconds (Note: Too large of an interval seems to break real-time analytics completely)
-            _ = CommonService._,
             activeTrackerId;
 
         // Revealed Public members
@@ -39,7 +39,7 @@
         }
 
         function handleTrackingError(error) {
-            throw new Error("Failed to do analytics tracking: " + CommonService.getErrorMessage(error));
+            throw new Error("Failed to do analytics tracking: " + LoggerUtil.getErrorMessage(error));
         }
 
         function hasActiveTracker() {
@@ -78,7 +78,7 @@
         }
 
         function whenReady(callback) {
-            return CommonService.waitForCordovaPlatform(function () {
+            return PlatformUtil.waitForCordovaPlatform(function () {
                 if ($window.navigator.analytics) {
                     return $window.navigator.analytics;
                 }

@@ -41,15 +41,15 @@
             templateUrl: "app/components/payment/templates/paymentList.html",
             controller : "PaymentListController as vm",
             resolve    : {
-                payments: function (globals, CommonService, PaymentManager, UserManager) {
+                payments: function (globals, LoadingIndicator, PaymentManager, UserManager) {
                     var billingAccountId = UserManager.getUser().billingCompany.accountId,
                         options = globals.PAYMENT_LIST.SEARCH_OPTIONS;
 
-                    CommonService.loadingBegin();
+                    LoadingIndicator.begin();
 
                     return PaymentManager.fetchPayments(billingAccountId, options.PAGE_NUMBER, options.PAGE_SIZE)
                         .finally(function () {
-                            CommonService.loadingComplete();
+                            LoadingIndicator.complete();
                         });
                 }
             },
@@ -66,26 +66,26 @@
                     templateUrl: "app/components/payment/templates/paymentDetail.html",
                     controller : "PaymentDetailController as vm",
                     resolve    : {
-                        payment: function ($stateParams, CommonService, PaymentManager) {
+                        payment: function ($stateParams, LoadingIndicator, PaymentManager) {
                             var paymentId = $stateParams.paymentId;
 
-                            CommonService.loadingBegin();
+                            LoadingIndicator.begin();
 
                             return PaymentManager.fetchPayment(paymentId)
                                 .finally(function () {
-                                    CommonService.loadingComplete();
+                                    LoadingIndicator.complete();
                                 });
                         },
 
                         // jshint maxparams:5
-                        isPaymentEditable: function (globals, payment, CommonService, PaymentManager, UserManager) {
+                        isPaymentEditable: function (globals, payment, LoadingIndicator, PaymentManager, UserManager) {
                             var billingAccountId = UserManager.getUser().billingCompany.accountId;
 
-                            CommonService.loadingBegin();
+                            LoadingIndicator.begin();
 
                             return PaymentManager.isPaymentEditable(billingAccountId, payment)
                                 .finally(function () {
-                                    CommonService.loadingComplete();
+                                    LoadingIndicator.complete();
                                 });
                         }
                     }
@@ -116,7 +116,7 @@
                     return maintenanceDetails;
                 },
                 // jshint maxparams:7
-                payment: function ($q, $state, $stateParams, CommonService, PaymentManager, PaymentModel, globals) {
+                payment: function ($q, $state, $stateParams, LoadingIndicator, PaymentManager, PaymentModel, globals) {
                     var maintenanceState = $stateParams.maintenanceState,
                         payment = new PaymentModel(),
                         paymentId;
@@ -124,7 +124,7 @@
                     if (maintenanceState === globals.PAYMENT_MAINTENANCE.STATES.UPDATE) {
                         paymentId = $stateParams.paymentId;
 
-                        CommonService.loadingBegin();
+                        LoadingIndicator.begin();
 
                         return PaymentManager.fetchPayment(paymentId)
                             .then(function(paymentToUpdate) {
@@ -139,7 +139,7 @@
 
                                 //TODO: Show the user an error if this happens?
                             })
-                            .finally(CommonService.loadingComplete);
+                            .finally(LoadingIndicator.complete);
                     }
                     else {
                         return $q.when(payment);
@@ -152,10 +152,10 @@
                     controller : "PaymentMaintenanceController as maintenanceController",
                     resolve    : {
                         //jshint maxparams:6
-                        defaultBank: function ($q, $state, BankManager, CommonService, InvoiceManager, UserManager) {
+                        defaultBank: function ($q, $state, BankManager, InvoiceManager, LoadingIndicator, UserManager) {
                             var accountId = UserManager.getUser().billingCompany.accountId;
 
-                            CommonService.loadingBegin();
+                            LoadingIndicator.begin();
 
                             return BankManager.getDefaultBank(accountId)
                                 .catch(function () {
@@ -165,7 +165,7 @@
 
                                     //TODO: Show the user an error if this happens?
                                 })
-                                .finally(CommonService.loadingComplete);
+                                .finally(LoadingIndicator.complete);
                         }
                     }
                 }
@@ -180,16 +180,16 @@
                     templateUrl: "app/components/payment/templates/paymentMaintenanceForm.html",
                     controller : "PaymentMaintenanceFormController as vm",
                     resolve    : {
-                        hasMultipleBanks: function (BankManager, CommonService, UserManager) {
+                        hasMultipleBanks: function (BankManager, LoadingIndicator, UserManager) {
                             var billingAccountId;
 
-                            CommonService.loadingBegin();
+                            LoadingIndicator.begin();
 
                             billingAccountId = UserManager.getUser().billingCompany.accountId;
 
                             return BankManager.hasMultipleBanks(billingAccountId)
                                 .finally(function () {
-                                    CommonService.loadingComplete();
+                                    LoadingIndicator.complete();
                                 });
                         }
                     }
@@ -259,9 +259,8 @@
                     templateUrl: "app/components/payment/templates/paymentMaintenanceBankAccount.input.html",
                     controller : "PaymentMaintenanceBankAccountInputController as vm",
                     resolve    : {
-                        bankAccounts: function (payment, BankManager, CommonService) {
-                            var _ = CommonService._,
-                                activeBanks = _.sortBy(BankManager.getActiveBanks(), "name"),
+                        bankAccounts: function (_, payment, BankManager) {
+                            var activeBanks = _.sortBy(BankManager.getActiveBanks(), "name"),
                                 currentBankAccount = payment.bankAccount;
 
                             // If there is a bank account already selected, remove it from the list
@@ -286,22 +285,21 @@
             $state.go("payment.maintenance.form", angular.extend({maintenanceState: maintenanceState}, $stateParams));
         }
 
-        function validateBeforeNavigatingToPaymentAdd($state, $rootScope, globals,
-                                                      AnalyticsUtil, CommonService, Logger, PaymentManager, UserManager) {
+        function validateBeforeNavigatingToPaymentAdd(_, $state, $rootScope, globals, AnalyticsUtil,
+                                                      LoadingIndicator, Logger, PaymentManager, PopupUtil, UserManager) {
             var WARNINGS = globals.PAYMENT_ADD.WARNINGS,
                 ANALYTICS_EVENTS = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events,
-                _ = CommonService._,
                 billingAccountId,
                 removeListener,
                 showRouteValidationError = function (errorMessage, trackEvent) {
-                    return CommonService.displayAlert({
+                    return PopupUtil.displayAlert({
                         content       : errorMessage,
                         buttonCssClass: "button-submit"
                     })
                         .then(_.partial(_.spread(AnalyticsUtil.trackEvent), trackEvent));
                 };
 
-            CommonService.loadingBegin();
+            LoadingIndicator.begin();
 
             billingAccountId = UserManager.getUser().billingCompany.accountId;
 
@@ -355,7 +353,7 @@
                     $state.go("payment.list.view");
                 })
                 .finally(function () {
-                    CommonService.loadingComplete();
+                    LoadingIndicator.complete();
                 });
         }
 

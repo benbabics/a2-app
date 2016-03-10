@@ -34,7 +34,7 @@
             module("app.shared");
             module("app.components.card");
 
-            inject(function ($controller, _$rootScope_, $q, _sharedGlobals_, CardModel, CommonService) {
+            inject(function ($controller, _$rootScope_, $q, _sharedGlobals_, CardModel) {
                 $rootScope = _$rootScope_;
                 sharedGlobals = _sharedGlobals_;
 

@@ -31,8 +31,8 @@
                 $provide.value("BankManager", BankManager);
             });
 
-            inject(function (_$injector_, _$rootScope_, _$state_, _$q_,
-                             _globals_, _BankModel_, CommonService, _PaymentModel_, PaymentMaintenanceDetailsModel) {
+            inject(function (___, _$injector_, _$rootScope_, _$state_, _$q_,
+                             _globals_, _BankModel_, _PaymentModel_, PaymentMaintenanceDetailsModel) {
                 $rootScope = _$rootScope_;
                 $injector = _$injector_;
                 $state = _$state_;
@@ -40,7 +40,7 @@
                 globals = _globals_;
                 BankModel = _BankModel_;
                 PaymentModel = _PaymentModel_;
-                _ = CommonService._;
+                _ = ___;
 
                 paymentMaintenanceDetails = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, globals.PAYMENT_MAINTENANCE.STATES);
             });

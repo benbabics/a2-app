@@ -6,12 +6,11 @@
     //Using the Ionic directive nav-transition set to "none" causes a bug with the header title
     //(see https://github.com/driftyco/ionic/issues/2966).
     //TODO remove and replace uses of this directive with nav-transition="none" once the above bug is fixed in Ionic
-    function wexNoTransition($rootScope, $document, CommonService) {
+    function wexNoTransition(_, $rootScope, $document) {
         var directive = {
-                restrict: "A",
-                link: link
-            },
-            _ = CommonService._;
+            restrict: "A",
+            link    : link
+        };
 
         function disablePageTransitions() {
             //only fire this listener once

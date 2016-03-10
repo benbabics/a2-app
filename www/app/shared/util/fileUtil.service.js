@@ -7,9 +7,7 @@
     // NOTE: This service will only work on platforms with Cordova.
 
     /* @ngInject */
-    function FileUtil($cordovaFile, CommonService) {
-        // Private members
-        var _ = CommonService._;
+    function FileUtil(_, $cordovaFile, LoggerUtil, PlatformUtil) {
 
         // Revealed Public members
         var service = {
@@ -29,31 +27,31 @@
         //////////////////////
 
         function appendFile(file, data, parentDirectory) {
-            return CommonService.waitForCordovaPlatform(
+            return PlatformUtil.waitForCordovaPlatform(
                 _.partial($cordovaFile.writeExistingFile, makeValidDirectory(parentDirectory), file, data)
             ).catch(handleFileError);
         }
 
         function checkDirectoryExists(directory, parentDirectory) {
-            return CommonService.waitForCordovaPlatform(
+            return PlatformUtil.waitForCordovaPlatform(
                 _.partial($cordovaFile.checkDir, makeValidDirectory(parentDirectory), directory)
             );
         }
 
         function checkFileExists(file, parentDirectory) {
-            return CommonService.waitForCordovaPlatform(
+            return PlatformUtil.waitForCordovaPlatform(
                 _.partial($cordovaFile.checkFile, makeValidDirectory(parentDirectory), file)
             );
         }
 
         function createDirectory(directory, replaceIfExists, parentDirectory) {
-            return CommonService.waitForCordovaPlatform(
+            return PlatformUtil.waitForCordovaPlatform(
                 _.partial($cordovaFile.createDir, makeValidDirectory(parentDirectory), directory, replaceIfExists)
             ).catch(handleFileError);
         }
 
         function createFile(file, replaceIfExists, parentDirectory) {
-            return CommonService.waitForCordovaPlatform(
+            return PlatformUtil.waitForCordovaPlatform(
                 _.partial($cordovaFile.createFile, makeValidDirectory(parentDirectory), file, replaceIfExists)
             ).catch(handleFileError);
         }
@@ -68,7 +66,7 @@
         }
 
         function handleFileError(error) {
-            throw new Error("File operation failed: " + CommonService.getErrorMessage(error));
+            throw new Error("File operation failed: " + LoggerUtil.getErrorMessage(error));
         }
 
         function makeValidDirectory(directory) {
@@ -87,13 +85,13 @@
 
             var operation = binary ? $cordovaFile.readAsBinaryString : $cordovaFile.readAsText;
 
-            return CommonService.waitForCordovaPlatform(
+            return PlatformUtil.waitForCordovaPlatform(
                 _.partial(operation, makeValidDirectory(parentDirectory), file)
             ).catch(handleFileError);
         }
 
         function readFileAsDataUrl(file, parentDirectory) {
-            return CommonService.waitForCordovaPlatform(
+            return PlatformUtil.waitForCordovaPlatform(
                 _.partial($cordovaFile.readAsDataURL, makeValidDirectory(parentDirectory), file)
             ).catch(handleFileError);
         }
@@ -103,19 +101,19 @@
 
             var operation = recursive ? $cordovaFile.removeRecursively : $cordovaFile.removeDir;
 
-            return CommonService.waitForCordovaPlatform(
+            return PlatformUtil.waitForCordovaPlatform(
                 _.partial(operation, makeValidDirectory(parentDirectory), directory)
             ).catch(handleFileError);
         }
 
         function removeFile(file, parentDirectory) {
-            return CommonService.waitForCordovaPlatform(
+            return PlatformUtil.waitForCordovaPlatform(
                 _.partial($cordovaFile.removeFile, makeValidDirectory(parentDirectory), file)
             ).catch(handleFileError);
         }
 
         function writeFile(file, data, replaceIfExists, parentDirectory) {
-            return CommonService.waitForCordovaPlatform(
+            return PlatformUtil.waitForCordovaPlatform(
                 _.partial($cordovaFile.writeFile, makeValidDirectory(parentDirectory), file, data, replaceIfExists)
             ).catch(handleFileError);
         }

@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    var AddressModel = function (CommonService) {
+    var AddressModel = function (AddressUtil) {
 
         function AddressModel() {
             this.firstName = "";
@@ -21,7 +21,7 @@
         };
 
         AddressModel.prototype.isPoBox = function () {
-            return CommonService.isPoBox(this.addressLine1) || CommonService.isPoBox(this.addressLine2);
+            return AddressUtil.isPoBox(this.addressLine1) || AddressUtil.isPoBox(this.addressLine2);
         };
 
         return AddressModel;

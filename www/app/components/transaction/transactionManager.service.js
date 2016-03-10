@@ -2,16 +2,15 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:5
+    // jshint maxparams:6
 
     /* @ngInject */
-    function TransactionManager($q, CommonService, Logger, PostedTransactionModel, TransactionsResource) {
+    function TransactionManager(_, $q, Logger, LoggerUtil, PostedTransactionModel, TransactionsResource) {
         // Private members
         var postedTransactions;
 
         // Revealed Public members
-        var _ = CommonService._,
-            service = {
+        var service = {
                 clearCachedValues      : clearCachedValues,
                 fetchPostedTransaction : fetchPostedTransaction,
                 fetchPostedTransactions: fetchPostedTransactions,
@@ -79,7 +78,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Getting Posted Transactions failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Getting Posted Transactions failed: " + LoggerUtil.getErrorMessage(failureResponse);
                     Logger.error(error);
                     throw new Error(error);
                 });

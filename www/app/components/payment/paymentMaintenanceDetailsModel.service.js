@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    var PaymentMaintenanceDetailsModel = function ($state, appGlobals, CommonService, Logger) {
-        var _ = CommonService._;
+    var PaymentMaintenanceDetailsModel = function (_, $state, appGlobals, Logger) {
 
         function PaymentMaintenanceDetailsModel() {
             this.state = "";

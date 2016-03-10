@@ -3,20 +3,19 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
-    // jshint maxparams:5
-    function wexNotificationBar($rootScope, $compile, $window, $timeout, CommonService) {
+    // jshint maxparams:6
+    function wexNotificationBar(_, $rootScope, $compile, $window, $timeout, ElementUtil) {
         var directive = {
-                restrict: "E",
-                transclude: true,
-                link: link,
-                scope: {
-                    text: "@",
-                    closeable: "=",
-                    ngIf: "="
-                },
-                templateUrl: "app/shared/widgets/templates/notificationBar.directive.html"
+            restrict   : "E",
+            transclude : true,
+            link       : link,
+            scope      : {
+                text     : "@",
+                closeable: "=",
+                ngIf     : "="
             },
-            _ = CommonService._;
+            templateUrl: "app/shared/widgets/templates/notificationBar.directive.html"
+        };
 
         function close() {
             var self = this;
@@ -40,7 +39,7 @@
 
         //sets either has-header or has-subheader (based on the bar type) on the active ion-content element if true
         function setVisible(visible, viewElem) {
-            viewElem = viewElem || CommonService.getActiveNavView();
+            viewElem = viewElem || ElementUtil.getActiveNavView();
             var contentElem = angular.element(viewElem.find("ion-content")),
                 hasBarClass = "has-" + getBarType(),
                 lastBarClass;
@@ -65,16 +64,16 @@
 
         function onViewLeaving() {
             //remove the bar from the old view
-            this.setVisible(false, CommonService.getFocusedView());
+            this.setVisible(false, ElementUtil.getFocusedView());
         }
 
         function onViewEntering() {
             //add the bar to the new view
-            this.setVisible(this.ngIf, CommonService.getFocusedView());
+            this.setVisible(this.ngIf, ElementUtil.getFocusedView());
         }
 
         function getBarType() {
-            return CommonService.pageHasNavBar() ? "subheader" : "header";
+            return ElementUtil.pageHasNavBar() ? "subheader" : "header";
         }
 
         function deregisterEventListeners() {
@@ -102,7 +101,7 @@
             scope.deregisterEventListeners = _.bind(deregisterEventListeners, scope);
 
             //watchers
-            scope.$watch(CommonService.pageHasNavBar, scope.setSubheader);
+            scope.$watch(ElementUtil.pageHasNavBar, scope.setSubheader);
             scope.$watch("ngIf", scope.setVisible);
 
             //event listeners

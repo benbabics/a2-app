@@ -9,8 +9,8 @@
             module("app.shared");
             module("app.components.payment");
 
-            inject(function (CommonService) {
-                _ = CommonService._;
+            inject(function (___) {
+                _ = ___;
             });
         });
 

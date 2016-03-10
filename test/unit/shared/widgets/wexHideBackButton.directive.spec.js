@@ -4,7 +4,7 @@
     var $rootScope,
         $compile,
         $interval,
-        CommonService,
+        ElementUtil,
         wexHideBackButton,
         mockHide,
         mockBackButton,
@@ -13,24 +13,24 @@
     describe("A Wex Hide Back Button Directive", function () {
 
         beforeEach(function () {
-            module("app.shared");
+            //mock dependencies:
+            ElementUtil = jasmine.createSpyObj("ElementUtil", ["findActiveBackButton"]);
+            mockBackButton = jasmine.createSpyObj("jqLite", ["isolateScope"]);
+            mockBackButtonScope = jasmine.createSpyObj("WexBackButton", ["isHidden", "setHidden"]);
+            mockHide = TestUtils.getRandomBoolean();
+
+            module("app.shared", function ($provide) {
+                $provide.value("ElementUtil", ElementUtil);
+            });
             module("app.html");
 
-            inject(function (_$rootScope_, _$compile_, _$interval_, _CommonService_) {
+            inject(function (_$rootScope_, _$compile_, _$interval_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
                 $interval = _$interval_;
-                CommonService = _CommonService_;
             });
 
-            //mock objects:
-            mockBackButton = jasmine.createSpyObj("jqLite", ["isolateScope"]);
-            mockBackButtonScope = jasmine.createSpyObj("WexBackButton", ["isHidden", "setHidden"]);
-
-            mockHide = TestUtils.getRandomBoolean();
-
             //spies:
-            spyOn(CommonService, "findActiveBackButton");
             spyOn($rootScope, "$on");
 
             wexHideBackButton = createWexHideBackButton({hide: mockHide});
@@ -87,7 +87,7 @@
             describe("when there is a back button", function () {
 
                 beforeEach(function () {
-                    CommonService.findActiveBackButton.and.returnValue(mockBackButton);
+                    ElementUtil.findActiveBackButton.and.returnValue(mockBackButton);
                 });
 
                 describe("when there is a scope on the back button", function () {
@@ -154,7 +154,7 @@
             describe("when there is NOT a back button", function () {
 
                 beforeEach(function () {
-                    CommonService.findActiveBackButton.and.returnValue(null);
+                    ElementUtil.findActiveBackButton.and.returnValue(null);
                 });
 
                 it("should throw an error", function () {

@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    var HateoasResource = function (CommonService, SecureApiRestangular) {
-        var _ = CommonService._;
+    var HateoasResource = function (_, SecureApiRestangular) {
 
         function HateoasResource(resource) {
             if (resource) {

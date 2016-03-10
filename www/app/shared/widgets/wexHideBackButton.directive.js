@@ -2,6 +2,7 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
+    // jshint maxparams:5
 
     /* Directive that overrides the visibility of the active back button on the current page.
      * Example usage:
@@ -12,18 +13,17 @@
      */
 
     /* @ngInject */
-    function wexHideBackButton($rootScope, $interval, CommonService, Logger) {
+    function wexHideBackButton(_, $rootScope, $interval, ElementUtil, Logger) {
         var directive = {
-                restrict: "A",
-                link    : link
-            },
-            _ = CommonService._;
+            restrict: "A",
+            link    : link
+        };
 
         return directive;
         //////////////////////
 
         function applyHideState() {
-            var backButton = CommonService.findActiveBackButton();
+            var backButton = ElementUtil.findActiveBackButton();
 
             if (backButton) {
                 if (backButton.isolateScope()) {

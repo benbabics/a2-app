@@ -2,14 +2,13 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:11
+    // jshint maxparams:13
 
     /* @ngInject */
-    function LoginController($cordovaKeyboard, $ionicHistory, $rootScope, $scope, $state, $stateParams,
-                             globals, AnalyticsUtil, AuthenticationManager, CommonService, LoginManager) {
+    function LoginController(_, $cordovaKeyboard, $ionicHistory, $rootScope, $scope, $state, $stateParams,
+                             globals, AnalyticsUtil, AuthenticationManager, LoadingIndicator, LoginManager, PlatformUtil) {
 
-        var _ = CommonService._,
-            vm = this;
+        var vm = this;
         vm.config = globals.USER_LOGIN.CONFIG;
         vm.user = {};
         vm.authenticateUser = authenticateUser;
@@ -51,7 +50,7 @@
         function authenticateUser() {
             clearErrorMessage();
 
-            CommonService.loadingBegin();
+            LoadingIndicator.begin();
 
             return AuthenticationManager.authenticate(vm.user.username, vm.user.password)
                 .then(LoginManager.logIn)
@@ -81,7 +80,7 @@
                     LoginManager.logOut();
                     trackErrorEvent(errorReason);
                 })
-                .finally(CommonService.loadingComplete);
+                .finally(LoadingIndicator.complete);
         }
 
         function clearErrorMessage() {
@@ -90,7 +89,7 @@
         }
 
         function isKeyboardVisible() {
-            return CommonService.platformHasCordova() && $cordovaKeyboard.isVisible();
+            return PlatformUtil.platformHasCordova() && $cordovaKeyboard.isVisible();
         }
 
         function removeKeyboardOpenClass() {

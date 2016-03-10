@@ -3,7 +3,6 @@
 
     var _,
         $scope,
-        CommonService,
         ctrl,
         mockCompletedPayments,
         mockPayments,
@@ -45,10 +44,9 @@
                 });
             });
 
-            inject(function ($controller, $rootScope, $q, BankModel, PaymentModel, _CommonService_) {
+            inject(function (___, $controller, $rootScope, $q, BankModel, PaymentModel) {
 
-                CommonService = _CommonService_;
-                _ = CommonService._;
+                _ = ___;
 
                 // setup mock objects
                 mockCompletedPayments = getRandomNotScheduledPayments(PaymentModel, BankModel);

@@ -13,9 +13,9 @@
             module("app.shared");
             module("app.components.brand");
 
-            inject(function (_globals_, _moment_, BrandAssetModel, CommonService, _HateoasResource_) {
+            inject(function (___, _globals_, _moment_, BrandAssetModel, _HateoasResource_) {
                 HateoasResource = _HateoasResource_;
-                _ = CommonService._;
+                _ = ___;
                 globals = _globals_;
                 moment = _moment_;
 

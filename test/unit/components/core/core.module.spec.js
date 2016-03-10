@@ -100,7 +100,9 @@
             AuthenticationManager,
             BankManager,
             PaymentMaintenance,
-            CommonService,
+            PopupUtil,
+            NavigationUtil,
+            LoadingIndicator,
             PaymentManager,
             UserManager,
             AnalyticsUtil,
@@ -124,6 +126,9 @@
             BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericAnalyticsTrackingId", "loadBundledBrand"]);
             $cordovaDevice = jasmine.createSpyObj("$cordovaDevice", ["getPlatform"]);
             $ionicPlatform = jasmine.createSpyObj("$ionicPlatform", ["ready", "registerBackButtonAction"]);
+            PopupUtil = jasmine.createSpyObj("PopupUtil", ["closeAllPopups"]);
+            NavigationUtil = jasmine.createSpyObj("NavigationUtil", ["exitApp", "goToBackState"]);
+            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
 
             module("app.shared");
 
@@ -139,6 +144,9 @@
                 $provide.value("BrandManager", BrandManager);
                 $provide.value("$cordovaDevice", $cordovaDevice);
                 $provide.value("$ionicPlatform", $ionicPlatform);
+                $provide.value("PopupUtil", PopupUtil);
+                $provide.value("NavigationUtil", NavigationUtil);
+                $provide.value("LoadingIndicator", LoadingIndicator);
 
                 //setup mocks:
                 genericTrackingId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
@@ -162,22 +170,13 @@
             module("app.shared");
             module("app.html");
 
-            inject(function (_$q_, _$rootScope_, _$state_, _CommonService_) {
+            inject(function (_$q_, _$rootScope_, _$state_) {
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
-                CommonService = _CommonService_;
 
                 spyOn($rootScope, "$on").and.callThrough();
             });
-
-            //setup spies:
-            spyOn(CommonService, "closeAllPopups");
-            spyOn(CommonService, "displayAlert");
-            spyOn(CommonService, "exitApp");
-            spyOn(CommonService, "loadingBegin");
-            spyOn(CommonService, "loadingComplete");
-            spyOn(CommonService, "goToBackState");
         });
 
         it("should set the app to fullscreen with a status bar", function () {
@@ -336,7 +335,7 @@
             });
 
             it("should close any popups", function () {
-                expect(CommonService.closeAllPopups).toHaveBeenCalledWith();
+                expect(PopupUtil.closeAllPopups).toHaveBeenCalledWith();
             });
 
             it("should redirect to the login page", function () {
@@ -369,8 +368,8 @@
                     doBackButtonAction();
                 });
 
-                it("should call CommonService.goToBackState", function () {
-                    expect(CommonService.goToBackState).toHaveBeenCalledWith();
+                it("should call NavigationUtil.goToBackState", function () {
+                    expect(NavigationUtil.goToBackState).toHaveBeenCalledWith();
                 });
             });
         });

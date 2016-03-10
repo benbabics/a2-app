@@ -7,7 +7,8 @@
         LoginManager,
         AnalyticsUtil,
         AuthenticationManager,
-        CommonService,
+        LoadingIndicator,
+        LoggerUtil,
         UserManager,
         BrandManager,
         BrandAssetModel,
@@ -36,19 +37,21 @@
                 "getUserBrandAssetBySubtype",
                 "updateBrandCache"
             ]);
+            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
 
             module(function ($provide) {
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("BrandManager", BrandManager);
+                $provide.value("LoadingIndicator", LoadingIndicator);
             });
 
-            inject(function (_$q_, _$rootScope_, globals,
-                             _BrandAssetModel_, _CommonService_, _Logger_, _LoginManager_, UserAccountModel, _UserManager_, UserModel) {
-                _ = _CommonService_._;
+            inject(function (___, _$q_, _$rootScope_, globals, _BrandAssetModel_, _LoggerUtil_, _Logger_, _LoginManager_,
+                             UserAccountModel, _UserManager_, UserModel) {
+                _ = ___;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
-                CommonService = _CommonService_;
+                LoggerUtil = _LoggerUtil_;
                 LoginManager = _LoginManager_;
                 UserManager = _UserManager_;
                 BrandAssetModel = _BrandAssetModel_;
@@ -64,8 +67,6 @@
             updateBrandCacheDeferred = $q.defer();
             spyOn(UserManager, "fetchCurrentUserDetails").and.returnValue(fetchCurrentUserDetailsDeferred.promise);
             spyOn(UserManager, "getUser").and.returnValue(userDetails);
-            spyOn(CommonService, "loadingBegin");
-            spyOn(CommonService, "loadingComplete");
             spyOn(Logger, "error");
 
             //setup mocks
@@ -119,8 +120,8 @@
                 expect($rootScope.$emit).toHaveBeenCalledWith("app:login");
             });
 
-            it("should call CommonService.loadingBegin", function () {
-                expect(CommonService.loadingBegin).toHaveBeenCalledWith();
+            it("should call LoadingIndicator.begin", function () {
+                expect(LoadingIndicator.begin).toHaveBeenCalledWith();
             });
 
             it("should call UserManager.fetchCurrentUserDetails", function () {
@@ -162,8 +163,8 @@
                         expect(resolveHandler).toHaveBeenCalled();
                     });
 
-                    it("should call CommonService.loadingComplete", function () {
-                        expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                    it("should call LoadingIndicator.complete", function () {
+                        expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                     });
                 });
 
@@ -180,7 +181,7 @@
                     });
 
                     it("should log the error", function () {
-                        expect(Logger.error).toHaveBeenCalledWith(CommonService.getErrorMessage(error));
+                        expect(Logger.error).toHaveBeenCalledWith(LoggerUtil.getErrorMessage(error));
                     });
 
                     it("should call AnalyticsUtil.startTracker with the user's branded tracker ID", function () {
@@ -195,8 +196,8 @@
                         expect(resolveHandler).toHaveBeenCalled();
                     });
 
-                    it("should call CommonService.loadingComplete", function () {
-                        expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                    it("should call LoadingIndicator.complete", function () {
+                        expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                     });
                 });
             });
@@ -210,7 +211,7 @@
                         message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     };
 
-                    expectedError = "Failed to complete login initialization: " + CommonService.getErrorMessage(error);
+                    expectedError = "Failed to complete login initialization: " + LoggerUtil.getErrorMessage(error);
 
                     fetchCurrentUserDetailsDeferred.reject(error);
                 });
@@ -225,10 +226,10 @@
                     expect(rejectHandler).toHaveBeenCalledWith(new Error(expectedError));
                 });
 
-                it("should call CommonService.loadingComplete", function () {
+                it("should call LoadingIndicator.complete", function () {
                     TestUtils.digestError($rootScope);
 
-                    expect(CommonService.loadingComplete).toHaveBeenCalledWith();
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
         });

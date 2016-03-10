@@ -16,8 +16,8 @@
             module("app.components.user");
             module("app.html");
 
-            inject(function (sharedGlobals, _$rootScope_, _$q_, CommonService, UserModel) {
-                _ = CommonService._;
+            inject(function (___, sharedGlobals, _$rootScope_, _$q_, UserModel) {
+                _ = ___;
                 BRAND = sharedGlobals.BRAND;
                 ONLINE_APPLICATION = sharedGlobals.USER.ONLINE_APPLICATION;
                 $q = _$q_;

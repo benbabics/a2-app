@@ -5,7 +5,7 @@
     // jshint maxparams:5
 
     /* @ngInject */
-    function AccountManager($q, CommonService, Logger, AccountModel, AccountsResource) {
+    function AccountManager($q, Logger, LoggerUtil, AccountModel, AccountsResource) {
         // Private members
         var account;
 
@@ -57,7 +57,7 @@
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
-                    var error = "Getting Account failed: " + CommonService.getErrorMessage(failureResponse);
+                    var error = "Getting Account failed: " + LoggerUtil.getErrorMessage(failureResponse);
                     Logger.error(error);
                     throw new Error(error);
                 });

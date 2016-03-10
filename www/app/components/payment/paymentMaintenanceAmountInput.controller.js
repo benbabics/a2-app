@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function PaymentMaintenanceAmountInputController($scope, $filter, $ionicHistory,
-                                                     globals, maintenanceDetails, payment, invoiceSummary, CommonService) {
+                                                     globals, maintenanceDetails, payment, invoiceSummary, PopupUtil) {
 
         var DEFAULT_VALUE = 0,
             vm = this,
@@ -78,7 +78,7 @@
         }
 
         function showError(error) {
-            CommonService.displayAlert({
+            PopupUtil.displayAlert({
                 content: error
             });
         }

@@ -24,6 +24,7 @@
         beforeEach(function () {
 
             module("app.shared.dependencies");
+            module("app.shared.util");
             module("app.shared.core");
 
             module(function ($provide) {

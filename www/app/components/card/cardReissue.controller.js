@@ -5,9 +5,7 @@
     // jshint maxparams:5
 
     /* @ngInject */
-    function CardReissueController(CommonService, Logger, account, card, cardReissueDetails) {
-
-        var _ = CommonService._;
+    function CardReissueController(_, Logger, account, card, cardReissueDetails) {
 
         activate();
 

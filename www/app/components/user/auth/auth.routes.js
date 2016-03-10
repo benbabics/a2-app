@@ -19,12 +19,12 @@
                 }
             },
             // jshint maxparams:6
-            onEnter: function($cordovaSplashscreen, $interval, globals, AnalyticsUtil, LoginManager, CommonService) {
+            onEnter: function($cordovaSplashscreen, $interval, globals, AnalyticsUtil, LoginManager, PlatformUtil) {
                 //log out the user
                 LoginManager.logOut();
 
                 //make sure the ionic platform is ready before hiding the splash screen
-                CommonService.waitForCordovaPlatform(function() {
+                PlatformUtil.waitForCordovaPlatform(function() {
                     $interval(function() {
                         $cordovaSplashscreen.hide();
                     }, 2000, 1);

@@ -2,13 +2,13 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:7
+    // jshint maxparams:9
 
     /* @ngInject */
-    function CardListController($scope, globals, AnalyticsUtil, CardManager, CommonService, Logger, UserManager) {
+    function CardListController(_, $scope, globals,
+                                AnalyticsUtil, CardManager, ElementUtil, LoadingIndicator, Logger, UserManager) {
 
-        var _ = CommonService._,
-            vm = this,
+        var vm = this,
             activeSearchFilter = "",
             currentPage = 0;
 
@@ -48,7 +48,7 @@
         function loadNextPage() {
             var billingAccountId = UserManager.getUser().billingCompany.accountId;
 
-            CommonService.loadingBegin();
+            LoadingIndicator.begin();
 
             //fetch the next page of cards
             // Passing in activeSearchFilter 3 times seems strange but the controller wants to apply the same filter to the
@@ -74,7 +74,7 @@
                     vm.loadingComplete = true;
                     return vm.loadingComplete;
                 })
-                .finally(CommonService.loadingComplete);
+                .finally(LoadingIndicator.complete);
         }
 
         function pageLoaded() {
@@ -82,7 +82,7 @@
         }
 
         function resetSearch() {
-            var view = CommonService.getFocusedView();
+            var view = ElementUtil.getFocusedView();
 
             //this should never happen
             if (!view) {

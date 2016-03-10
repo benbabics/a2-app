@@ -2,7 +2,8 @@
     "use strict";
 
     var FileUtil,
-        CommonService,
+        PlatformUtil,
+        LoggerUtil,
         $cordovaFile,
         $q,
         $rootScope,
@@ -51,15 +52,16 @@
                 $provide.value("$cordovaFile", $cordovaFile);
             });
 
-            inject(function (_$rootScope_, _$q_, _FileUtil_, _CommonService_) {
+            inject(function (_$rootScope_, _$q_, _FileUtil_, _PlatformUtil_, _LoggerUtil_) {
                 FileUtil = _FileUtil_;
-                CommonService = _CommonService_;
+                LoggerUtil = _LoggerUtil_;
+                PlatformUtil = _PlatformUtil_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
             });
 
             //setup spies:
-            spyOn(CommonService, "waitForCordovaPlatform").and.callFake(function(callback) {
+            spyOn(PlatformUtil, "waitForCordovaPlatform").and.callFake(function(callback) {
                 //just execute the callback directly
                 return $q.when((callback || function() {})());
             });
@@ -119,8 +121,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.writeExistingFile with the expected values", function () {
@@ -154,7 +156,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -170,8 +172,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.writeExistingFile with the expected values", function () {
@@ -205,7 +207,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -224,8 +226,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.checkDir with the expected values", function () {
@@ -269,8 +271,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.checkDir with the expected values", function () {
@@ -317,8 +319,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.checkFile with the expected values", function () {
@@ -362,8 +364,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.checkFile with the expected values", function () {
@@ -415,8 +417,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.createDir with the expected values", function () {
@@ -450,7 +452,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -466,8 +468,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.createDir with the expected values", function () {
@@ -501,7 +503,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -525,8 +527,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.createFile with the expected values", function () {
@@ -560,7 +562,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -576,8 +578,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.createFile with the expected values", function () {
@@ -611,7 +613,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -637,8 +639,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call CommonService.waitForCordovaPlatform", function () {
-                        expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
                     it("should call $cordovaFile.readAsBinaryString with the expected values", function () {
@@ -672,7 +674,7 @@
                         });
 
                         it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                             expect($rootScope.$digest).toThrowError(expectedError);
                         });
@@ -688,8 +690,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call CommonService.waitForCordovaPlatform", function () {
-                        expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
                     it("should call $cordovaFile.readAsBinaryString with the expected values", function () {
@@ -723,7 +725,7 @@
                         });
 
                         it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                             expect($rootScope.$digest).toThrowError(expectedError);
                         });
@@ -746,8 +748,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call CommonService.waitForCordovaPlatform", function () {
-                        expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
                     it("should call $cordovaFile.readAsText with the expected values", function () {
@@ -781,7 +783,7 @@
                         });
 
                         it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                             expect($rootScope.$digest).toThrowError(expectedError);
                         });
@@ -797,8 +799,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call CommonService.waitForCordovaPlatform", function () {
-                        expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
                     it("should call $cordovaFile.readAsText with the expected values", function () {
@@ -832,7 +834,7 @@
                         });
 
                         it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                             expect($rootScope.$digest).toThrowError(expectedError);
                         });
@@ -852,8 +854,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.readAsDataURL with the expected values", function () {
@@ -887,7 +889,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -903,8 +905,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.readAsDataURL with the expected values", function () {
@@ -938,7 +940,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -964,8 +966,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call CommonService.waitForCordovaPlatform", function () {
-                        expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
                     it("should call $cordovaFile.removeRecursively with the expected values", function () {
@@ -999,7 +1001,7 @@
                         });
 
                         it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                             expect($rootScope.$digest).toThrowError(expectedError);
                         });
@@ -1015,8 +1017,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call CommonService.waitForCordovaPlatform", function () {
-                        expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
                     it("should call $cordovaFile.removeRecursively with the expected values", function () {
@@ -1050,7 +1052,7 @@
                         });
 
                         it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                             expect($rootScope.$digest).toThrowError(expectedError);
                         });
@@ -1073,8 +1075,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call CommonService.waitForCordovaPlatform", function () {
-                        expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
                     it("should call $cordovaFile.removeDir with the expected values", function () {
@@ -1108,7 +1110,7 @@
                         });
 
                         it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                             expect($rootScope.$digest).toThrowError(expectedError);
                         });
@@ -1124,8 +1126,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call CommonService.waitForCordovaPlatform", function () {
-                        expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
                     it("should call $cordovaFile.removeDir with the expected values", function () {
@@ -1159,7 +1161,7 @@
                         });
 
                         it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                             expect($rootScope.$digest).toThrowError(expectedError);
                         });
@@ -1179,8 +1181,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.removeFile with the expected values", function () {
@@ -1214,7 +1216,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -1230,8 +1232,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.removeFile with the expected values", function () {
@@ -1265,7 +1267,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -1291,8 +1293,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.writeFile with the expected values", function () {
@@ -1326,7 +1328,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
@@ -1342,8 +1344,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call CommonService.waitForCordovaPlatform", function () {
-                    expect(CommonService.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
                 it("should call $cordovaFile.writeFile with the expected values", function () {
@@ -1377,7 +1379,7 @@
                     });
 
                     it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + CommonService.getErrorMessage(error);
+                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect($rootScope.$digest).toThrowError(expectedError);
                     });
