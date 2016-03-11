@@ -15,7 +15,7 @@
         });
 
         $stateProvider.state("transaction.list", {
-            cache      : false,
+            cache   : true,
             url     : "/list",
             views   : {
                 "view@transaction": {

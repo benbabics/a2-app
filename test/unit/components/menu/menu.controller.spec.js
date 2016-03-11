@@ -200,8 +200,16 @@
                 $rootScope.$digest();
             });
 
-            it("should navigate to the transaction list page", function () {
-                expect($state.go).toHaveBeenCalledWith("transaction.list");
+            it("should call $ionicHistory.clearCache", function () {
+                expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+            });
+
+            it("should navigate to the transaction list page and reload it", function () {
+                expect($state.go).toHaveBeenCalledWith("transaction.list", null, {
+                    reload : true,
+                    inherit: false,
+                    notify : true
+                });
             });
 
             it("should call the resolve handler", function () {

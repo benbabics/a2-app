@@ -48,7 +48,15 @@
         }
 
         function goToTransactionActivity() {
-            return $state.go("transaction.list");
+            //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
+            return $ionicHistory.clearCache()
+                .then(function () {
+                    return $state.go("transaction.list", null, {
+                        reload : true,
+                        inherit: false,
+                        notify : true
+                    });
+                });
         }
 
         function goToCards() {
