@@ -24,6 +24,7 @@
             "getActiveNavView"         : getActiveNavView,
             "getFocusedNavBar"         : getFocusedNavBar,
             "getFocusedView"           : getFocusedView,
+            "getSideMenu"              : getSideMenu,
             "getUnfocusedNavBar"       : getUnfocusedNavBar,
             "getUnfocusedView"         : getUnfocusedView,
             "getViewContent"           : getViewContent,
@@ -256,6 +257,13 @@
          */
         function getFocusedView(navView) {
             return findViewByStatesInOrder(focusedStateOrder, navView);
+        }
+
+        function getSideMenu(side) {
+            var selector = "ion-side-menu" + (side ? "[side='" + side + "']" : ""),
+                sideMenu = document.querySelector(selector);
+
+            return sideMenu ? angular.element(sideMenu) : null;
         }
 
         /**

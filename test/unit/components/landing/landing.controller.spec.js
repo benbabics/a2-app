@@ -12,6 +12,7 @@
         InvoiceSummaryModel,
         UserManager,
         UserModel,
+        MenuDelegate,
         mockGlobals = {
             "LANDING": {
                 "CONFIG": {
@@ -71,6 +72,7 @@
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearHistory"]);
             mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
+            MenuDelegate = jasmine.createSpyObj("MenuDelegate", ["closeMenu"]);
 
             inject(function ($controller, $rootScope, $q, _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, PlatformUtil) {
 
@@ -96,6 +98,7 @@
                 ctrl = $controller("LandingController", {
                     $scope                : $scope,
                     $ionicHistory         : $ionicHistory,
+                    MenuDelegate          : MenuDelegate,
                     UserManager           : UserManager,
                     currentInvoiceSummary : mockCurrentInvoiceSummary,
                     scheduledPaymentsCount: mockScheduledPaymentCount,
@@ -136,6 +139,10 @@
                 expect(ctrl.branding).toEqual({
                     logo: mockBrandLogo
                 });
+            });
+
+            it("should set the menu delegate", function () {
+                expect(ctrl.menuDelegate).toEqual(MenuDelegate);
             });
 
             it("should set the chart options", function () {

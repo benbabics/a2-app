@@ -1,43 +1,43 @@
 <ion-content class="menu-view">
     <ion-list ng-click="vm.closeMenu()">
         <ion-item id="option-home"
-                  ui-sref="landing">
+                  ng-click="vm.goToHome()">
             {{::vm.config.options.home}}
         </ion-item>
         <ion-item id="option-add-payment"
-                  href="#/payment/add/verify"
+                  ng-click="vm.goToMakePayment()"
                   wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink">
             {{::vm.config.options.addPayment}}
         </ion-item>
         <ion-item id="option-payments"
-                  ui-sref="payment.list.view"
+                  ng-click="vm.goToPaymentActivity()"
                   wex-analytics-track-event="vm.config.ANALYTICS.events.paymentActivityLink">
             {{::vm.config.options.payments}}
         </ion-item>
         <ion-item id="option-transaction-activity"
-                  ui-sref="transaction.list"
+                  ng-click="vm.goToTransactionActivity()"
                   wex-analytics-track-event="vm.config.ANALYTICS.events.transactionActivityLink">
             {{::vm.config.options.transactionActivity}}
         </ion-item>
         <ion-item id="option-cards"
-                  ui-sref="card.list"
+                  ng-click="vm.goToCards()"
                   wex-analytics-track-event="vm.config.ANALYTICS.events.cardsLink">
             {{::vm.config.options.cards}}
         </ion-item>
         <ion-item id="option-contact-us"
-                  ui-sref="contactUs">
+                  ng-click="vm.goToContactUs()">
             {{::vm.config.options.contactUs}}
         </ion-item>
         <ion-item id="option-terms"
-                  ui-sref="termsOfUse">
+                  ng-click="vm.goToTermsOfUse()">
             {{::vm.config.options.terms}}
         </ion-item>
         <ion-item id="option-privacy-policy"
-                  ui-sref="privacyPolicy">
+                  ng-click="vm.goToPrivacyPolicy()">
             {{::vm.config.options.privacyPolicy}}
         </ion-item>
         <ion-item id="option-log-out"
-                  ng-click="vm.logOut()">
+                  ng-click="vm.goToLogOut()">
             {{::vm.config.options.logOut}}
         </ion-item>
     </ion-list>

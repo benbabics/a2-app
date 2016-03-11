@@ -6,13 +6,14 @@
 
     /* @ngInject */
     function LandingController($scope, $ionicHistory, currentInvoiceSummary, brandLogo, globals, scheduledPaymentsCount,
-                               UserManager) {
+                               MenuDelegate, UserManager) {
 
         var vm = this;
         vm.config = globals.LANDING.CONFIG;
         vm.invoiceSummary = {};
         vm.billingCompany = {};
         vm.branding = {};
+        vm.menuDelegate = MenuDelegate;
         vm.scheduledPaymentsCount = 0;
 
         activate();

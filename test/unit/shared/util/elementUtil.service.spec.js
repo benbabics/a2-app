@@ -1482,8 +1482,95 @@
             });
         });
 
+        describe("has a getSideMenu function that", function () {
+
+            beforeEach(function () {
+                spyOn(document, "querySelector");
+            });
+
+            describe("when given a side", function () {
+                var side;
+
+                beforeEach(function () {
+                    side = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                });
+
+                describe("when there is a menu with the given side", function () {
+                    var sideMenu,
+                        result;
+
+                    beforeEach(function () {
+                        sideMenu = createSideMenu(side);
+                        document.querySelector.and.returnValue(sideMenu);
+
+                        result = ElementUtil.getSideMenu(side);
+                    });
+
+                    it("should return the side menu", function () {
+                        expect(result).toEqual(angular.element(sideMenu));
+                    });
+                });
+
+                describe("when there is NOT a menu with the given side", function () {
+                    var result;
+
+                    beforeEach(function () {
+                        result = ElementUtil.getSideMenu(side);
+                    });
+
+                    it("should return the side menu", function () {
+                        expect(result).toBeNull();
+                    });
+                });
+            });
+
+            describe("when NOT given a side", function () {
+
+                describe("when there is a menu", function () {
+                    var sideMenu,
+                        result;
+
+                    beforeEach(function () {
+                        sideMenu = createSideMenu();
+                        document.querySelector.and.returnValue(sideMenu);
+
+                        result = ElementUtil.getSideMenu();
+                    });
+
+                    it("should return the side menu", function () {
+                        expect(result).toEqual(angular.element(sideMenu));
+                    });
+                });
+
+                describe("when there is NOT a menu", function () {
+                    var result;
+
+                    beforeEach(function () {
+                        result = ElementUtil.getSideMenu();
+                    });
+
+                    it("should return the side menu", function () {
+                        expect(result).toBeNull();
+                    });
+                });
+            });
+        });
+
         function createNavView(state) {
             return $compile("<ion-nav-view nav-view='" + state + "'></ion-nav-view>")($rootScope);
+        }
+
+        function createSideMenu(side) {
+            var template;
+
+            if (side) {
+                template = "<ion-side-menus><ion-side-menu side='" + side + "'></ion-side-menu></ion-side-menus>";
+            }
+            else {
+                template = "<ion-side-menus><ion-side-menu></ion-side-menu></ion-side-menus>";
+            }
+
+            return $compile(template)($rootScope).find("ion-side-menu");
         }
 
         function createView(state, parent) {
