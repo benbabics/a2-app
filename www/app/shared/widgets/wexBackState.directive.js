@@ -2,7 +2,7 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
-    // jshint maxparams:5
+    // jshint maxparams:6
 
     /* Directive that overrides which state the active back button on the current page will redirect to.
      * Example usage:
@@ -13,7 +13,7 @@
      */
 
     /* @ngInject */
-    function wexBackState(_, $rootScope, $interval, ElementUtil, Logger) {
+    function wexBackState(_, $rootScope, $interval, $parse, ElementUtil, Logger) {
         var directive = {
                 restrict: "A",
                 link    : link
@@ -31,7 +31,7 @@
                     this.prevState = this.backButtonScope.getOverrideBackState();
 
                     //set the override state on the button
-                    this.backButtonScope.overrideBackState(this.wexBackState);
+                    this.backButtonScope.overrideBackState(this.wexBackState, this.wexBackParams, this.wexBackOptions);
                 }
                 else {
                     //back button directive hasn't been loaded yet, so wait and try it again later
@@ -83,6 +83,8 @@
 
             //vm objects:
             vm.wexBackState = attrs.wexBackState;
+            vm.wexBackParams = attrs.wexBackParams ? $parse(attrs.wexBackParams)(scope) : null;
+            vm.wexBackOptions = attrs.wexBackOptions ? $parse(attrs.wexBackOptions)(scope) : null;
             vm.prevState = null;
             vm.stateApplied = false;
             vm.backButtonScope = null;

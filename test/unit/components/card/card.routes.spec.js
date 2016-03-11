@@ -226,8 +226,8 @@
                 expect(state.abstract).toBeFalsy();
             });
 
-            it("should not be cached", function () {
-                expect(state.cache).toBeFalsy();
+            it("should be cached", function () {
+                expect(state.cache).toBeTruthy();
             });
 
             it("should have the expected URL", function () {

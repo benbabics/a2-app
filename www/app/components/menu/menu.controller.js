@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:7
 
     /* @ngInject */
-    function MenuController($location, $q, $state, $ionicSideMenuDelegate, globals, LoginManager) {
+    function MenuController($ionicHistory, $location, $q, $state, $ionicSideMenuDelegate, globals, LoginManager) {
 
         var vm = this;
         vm.config = globals.MENU.CONFIG;
@@ -44,7 +44,15 @@
         }
 
         function goToCards() {
-            return $state.go("card.list");
+            //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
+            return $ionicHistory.clearCache()
+                .then(function () {
+                    return $state.go("card.list", null, {
+                        reload : true,
+                        inherit: false,
+                        notify : true
+                    });
+                });
         }
 
         function goToContactUs() {

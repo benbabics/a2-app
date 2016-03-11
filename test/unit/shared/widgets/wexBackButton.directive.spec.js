@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    var $rootScope,
+    var _,
+        $rootScope,
         $compile,
         $state,
         $ionicHistory,
@@ -23,7 +24,8 @@
                 $provide.value("$ionicHistory", $ionicHistory);
             });
 
-            inject(function (_$rootScope_, _$compile_, _$interval_) {
+            inject(function (___, _$rootScope_, _$compile_, _$interval_) {
+                _ = ___;
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
                 $interval = _$interval_;
@@ -80,6 +82,58 @@
             });
         });
 
+        describe("when a backParams value is provided", function () {
+            var backParams;
+
+            beforeEach(function () {
+                backParams = {
+                    property: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+                wexBackButton = createWexBackButton({backParams: backParams});
+            });
+
+            it("should set backParams to a getter function returning the provided value", function () {
+                expect(wexBackButton.scope.backParams()).toEqual(backParams);
+            });
+        });
+
+        describe("when a backParams value is NOT provided", function () {
+
+            beforeEach(function () {
+                wexBackButton = createWexBackButton();
+            });
+
+            it("should set hide to a function returning null", function () {
+                expect(wexBackButton.scope.backParams()).toEqual(null);
+            });
+        });
+
+        describe("when a backOptions value is provided", function () {
+            var backOptions;
+
+            beforeEach(function () {
+                backOptions = {
+                    property: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+                wexBackButton = createWexBackButton({backOptions: backOptions});
+            });
+
+            it("should set backOptions to a getter function returning the provided value", function () {
+                expect(wexBackButton.scope.backOptions()).toEqual(backOptions);
+            });
+        });
+
+        describe("when a backOptions value is NOT provided", function () {
+
+            beforeEach(function () {
+                wexBackButton = createWexBackButton();
+            });
+
+            it("should set hide to a function returning null", function () {
+                expect(wexBackButton.scope.backOptions()).toEqual(null);
+            });
+        });
+
         describe("has a getOverrideBackState function that", function () {
 
             describe("when there is an override back state specified", function () {
@@ -109,16 +163,26 @@
         describe("has a goBack function that", function () {
 
             describe("when there is an override back state specified", function () {
-                var mockState;
+                var mockState,
+                    backParams,
+                    backOptions;
 
                 beforeEach(function () {
+                    backParams = {
+                        property: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    };
+                    backOptions = {
+                        property: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    };
                     wexBackButton.scope.backState = mockState = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                    wexBackButton.scope.backParams = _.constant(backParams);
+                    wexBackButton.scope.backOptions = _.constant(backOptions);
 
                     wexBackButton.scope.goBack();
                 });
 
-                it("should call $state.go with the back state", function () {
-                    expect($state.go).toHaveBeenCalledWith(mockState);
+                it("should call $state.go with the expected values", function () {
+                    expect($state.go).toHaveBeenCalledWith(mockState, backParams, backOptions);
                 });
             });
 
@@ -170,12 +234,80 @@
 
                 beforeEach(function () {
                     mockState = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-
-                    wexBackButton.scope.overrideBackState(mockState);
                 });
 
-                it("should set backState to the provided value", function () {
-                    expect(wexBackButton.scope.backState).toEqual(mockState);
+                describe("when passed params", function () {
+                    var params;
+
+                    beforeEach(function () {
+                        params = {
+                            property: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        };
+                    });
+
+                    describe("when passed options", function () {
+                        var options;
+
+                        beforeEach(function () {
+                            options = {
+                                property: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+                        });
+
+                        beforeEach(function () {
+                            wexBackButton.scope.overrideBackState(mockState, params, options);
+                        });
+
+                        it("should set backState to the provided value", function () {
+                            expect(wexBackButton.scope.backState).toEqual(mockState);
+                        });
+
+                        it("should set backParams to a getter returning the provided value", function () {
+                            expect(wexBackButton.scope.backParams()).toEqual(params);
+                        });
+
+                        it("should set backOptions to a getter returning the provided value", function () {
+                            expect(wexBackButton.scope.backOptions()).toEqual(options);
+                        });
+                    });
+
+                    describe("when NOT passed options", function () {
+
+                        beforeEach(function () {
+                            wexBackButton.scope.overrideBackState(mockState, params);
+                        });
+
+                        it("should set backState to the provided value", function () {
+                            expect(wexBackButton.scope.backState).toEqual(mockState);
+                        });
+
+                        it("should set backParams to a getter returning the provided value", function () {
+                            expect(wexBackButton.scope.backParams()).toEqual(params);
+                        });
+
+                        it("should set backOptions to a getter returning undefined", function () {
+                            expect(wexBackButton.scope.backOptions()).toBeUndefined();
+                        });
+                    });
+                });
+
+                describe("when NOT passed params", function () {
+
+                    beforeEach(function () {
+                        wexBackButton.scope.overrideBackState(mockState);
+                    });
+
+                    it("should set backState to the provided value", function () {
+                        expect(wexBackButton.scope.backState).toEqual(mockState);
+                    });
+
+                    it("should set backParams to a getter returning undefined", function () {
+                        expect(wexBackButton.scope.backParams()).toBeUndefined();
+                    });
+
+                    it("should set backOptions to a getter returning undefined", function () {
+                        expect(wexBackButton.scope.backOptions()).toBeUndefined();
+                    });
                 });
             });
 
@@ -334,14 +466,19 @@
             element;
 
         options = options || {};
-        scope.backState = options.backState;
-        scope.hide = options.hide;
+        angular.extend(scope, options);
 
         var markup = [];
 
         markup.push("<wex-back-button");
         if (scope.backState) {
             markup.push(" back-state='{{backState}}'");
+        }
+        if (scope.backParams) {
+            markup.push(" back-params='backParams'");
+        }
+        if (scope.backOptions) {
+            markup.push(" back-options='backOptions'");
         }
         if (scope.hide) {
             markup.push(" hide='hide'");

@@ -12,8 +12,10 @@
                 link      : link,
                 templateUrl: "app/shared/widgets/templates/backButton.directive.html",
                 scope     : {
-                    backState: "@?",
-                    hide     : "&?"
+                    backState  : "@?",
+                    backParams : "&?",
+                    backOptions: "&?",
+                    hide       : "&?"
                 }
             };
 
@@ -26,7 +28,7 @@
 
         function goBack() {
             if (this.backState) {
-                $state.go(this.backState);
+                $state.go(this.backState, this.backParams(), this.backOptions());
             }
             else {
                 $ionicHistory.goBack();
@@ -38,9 +40,11 @@
             return this.hide();
         }
 
-        function overrideBackState(backState) {
+        function overrideBackState(backState, params, options) {
             if (_.isString(backState)) {
                 this.backState = backState;
+                this.backParams = _.constant(params);
+                this.backOptions = _.constant(options);
             }
             else {
                 this.backState = null;
@@ -67,6 +71,8 @@
         function link(scope, elem) { // args: scope, elem, attrs
             //scope objects:
             scope.backButtonElem = elem;
+            scope.backParams = scope.backParams || _.constant(null);
+            scope.backOptions = scope.backOptions || _.constant(null);
 
             scope.getOverrideBackState = _.bind(getOverrideBackState, scope);
             scope.goBack = _.bind(goBack, scope);

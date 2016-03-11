@@ -8,7 +8,9 @@
         wexBackState,
         mockState,
         mockBackButton,
-        mockBackButtonScope;
+        mockBackButtonScope,
+        params,
+        options;
 
     describe("A Wex Back State Directive", function () {
 
@@ -18,6 +20,12 @@
             mockBackButton = jasmine.createSpyObj("jqLite", ["isolateScope"]);
             mockBackButtonScope = jasmine.createSpyObj("WexBackButton", ["getOverrideBackState", "overrideBackState"]);
             mockState = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+            params = {
+                property: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+            };
+            options = {
+                property: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+            };
 
             module("app.shared", function ($provide) {
                 $provide.value("ElementUtil", ElementUtil);
@@ -33,7 +41,11 @@
             //spies:
             spyOn($rootScope, "$on");
 
-            wexBackState = createWexBackState({backState: mockState});
+            wexBackState = createWexBackState({
+                backState: mockState,
+                backParams: params,
+                backOptions: options
+            });
         });
 
         it("should set prevState to null", function () {
@@ -82,6 +94,58 @@
             });
         });
 
+        describe("when a backParams value is provided", function () {
+            var backParams;
+
+            beforeEach(function () {
+                backParams = {
+                    property: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+                wexBackState = createWexBackState({backParams: backParams});
+            });
+
+            it("should set backParams to the provided value", function () {
+                expect(wexBackState.vm.wexBackParams).toEqual(backParams);
+            });
+        });
+
+        describe("when a backParams value is NOT provided", function () {
+
+            beforeEach(function () {
+                wexBackState = createWexBackState();
+            });
+
+            it("should set backParams to null", function () {
+                expect(wexBackState.vm.wexBackParams).toEqual(null);
+            });
+        });
+
+        describe("when a backOptions value is provided", function () {
+            var backOptions;
+
+            beforeEach(function () {
+                backOptions = {
+                    property: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+                wexBackState = createWexBackState({backOptions: backOptions});
+            });
+
+            it("should set backOptions to the provided value", function () {
+                expect(wexBackState.vm.wexBackOptions).toEqual(backOptions);
+            });
+        });
+
+        describe("when a backOptions value is NOT provided", function () {
+
+            beforeEach(function () {
+                wexBackState = createWexBackState();
+            });
+
+            it("should set backOptions to null", function () {
+                expect(wexBackState.vm.wexBackOptions).toEqual(null);
+            });
+        });
+
         describe("has an applyBackState function that", function () {
 
             describe("when there is a back button", function () {
@@ -106,8 +170,8 @@
                         expect(wexBackState.vm.prevState).toEqual(mockOverrideState);
                     });
 
-                    it("should call WexBackButton.overrideBackState with the back state", function () {
-                        expect(mockBackButtonScope.overrideBackState).toHaveBeenCalledWith(mockState);
+                    it("should call WexBackButton.overrideBackState with the expected values", function () {
+                        expect(mockBackButtonScope.overrideBackState).toHaveBeenCalledWith(mockState, params, options);
                     });
 
                     it("should set backButtonScope to the button's scope", function () {
@@ -140,8 +204,8 @@
                             expect(wexBackState.vm.prevState).toEqual(mockOverrideState);
                         });
 
-                        it("should call WexBackButton.overrideBackState with the back state", function () {
-                            expect(mockBackButtonScope.overrideBackState).toHaveBeenCalledWith(mockState);
+                        it("should call WexBackButton.overrideBackState with the expected values", function () {
+                            expect(mockBackButtonScope.overrideBackState).toHaveBeenCalledWith(mockState, params, options);
                         });
 
                         it("should set backButtonScope to the button's scope", function () {
@@ -351,13 +415,19 @@
             element;
 
         options = options || {};
-        scope.backState = options.backState;
+        angular.extend(scope, options);
 
         var markup = [];
 
         markup.push("<div wex-back-state");
         if (scope.backState) {
             markup.push("='{{backState}}'");
+        }
+        if (scope.backParams) {
+            markup.push(" wex-back-params='backParams'");
+        }
+        if (scope.backOptions) {
+            markup.push(" wex-back-options='backOptions'");
         }
         markup.push(">");
         markup.push("</div>");

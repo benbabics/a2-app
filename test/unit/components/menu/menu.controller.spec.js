@@ -120,6 +120,7 @@
             //setup spies
             LoginManager.logOut.and.returnValue($q.resolve());
             $state.go.and.returnValue($q.resolve());
+            spyOn($ionicHistory, "clearCache").and.returnValue($q.resolve());
             rejectHandler = jasmine.createSpy("rejectHandler");
             resolveHandler = jasmine.createSpy("resolveHandler");
         });
@@ -210,8 +211,16 @@
                 $rootScope.$digest();
             });
 
-            it("should navigate to the card list page", function () {
-                expect($state.go).toHaveBeenCalledWith("card.list");
+            it("should call $ionicHistory.clearCache", function () {
+                expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+            });
+
+            it("should navigate to the card list page and reload it", function () {
+                expect($state.go).toHaveBeenCalledWith("card.list", null, {
+                    reload : true,
+                    inherit: false,
+                    notify : true
+                });
             });
 
             it("should call the resolve handler", function () {

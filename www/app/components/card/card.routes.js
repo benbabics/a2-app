@@ -15,7 +15,7 @@
         });
 
         $stateProvider.state("card.list", {
-            cache: false,
+            cache: true,
             url  : "/list",
             views: {
                 "view@card": {
