@@ -36,7 +36,15 @@
         }
 
         function goToPaymentActivity() {
-            return $state.go("payment.list.view");
+            //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
+            return $ionicHistory.clearCache()
+                .then(function () {
+                    return $state.go("payment.list.view", null, {
+                        reload : true,
+                        inherit: false,
+                        notify : true
+                    });
+                });
         }
 
         function goToTransactionActivity() {

@@ -173,8 +173,16 @@
                 $rootScope.$digest();
             });
 
-            it("should navigate to the payment list page", function () {
-                expect($state.go).toHaveBeenCalledWith("payment.list.view");
+            it("should call $ionicHistory.clearCache", function () {
+                expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+            });
+
+            it("should navigate to the payment list page and reload it", function () {
+                expect($state.go).toHaveBeenCalledWith("payment.list.view", null, {
+                    reload : true,
+                    inherit: false,
+                    notify : true
+                });
             });
 
             it("should call the resolve handler", function () {
