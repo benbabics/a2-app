@@ -3,6 +3,7 @@
   "private": "true",
   "dependencies": {
     "ang-accordion": "*",
+    "angular": ">=1.4.6",
     "angular-base64": "~2",
     "angular-chart.js": "~0.8.2",
     "angular-moment": "~0",

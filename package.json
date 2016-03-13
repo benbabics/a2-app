@@ -4,6 +4,7 @@
   "description": "Fleet SmartHub: An Ionic project",
   "devDependencies": {
     "bower": "^1.7.0",
+    "cordova": "^6.0.0",
     "elementtree": "^0.1.6",
     "gulp": "^3.9.0",
     "gulp-angular-filesort": "^1.1.1",
@@ -18,6 +19,9 @@
     "gulp-sass": "^2.1.0",
     "gulp-util": "^3.0.7",
     "gulp-webserver": "^0.9.1",
+    "ionic": "^1.7.14",
+    "ios-deploy": "^1.8.5",
+    "ios-sim": "^5.0.6",
     "jasmine-core": "^2.4.1",
     "jscs": "^2.10.1",
     "jshint": "^2.8.0",
