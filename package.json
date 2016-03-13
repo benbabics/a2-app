@@ -41,7 +41,7 @@
     "cordova-plugin-console",
     "cordova-plugin-crosswalk-webview",
     "cordova-ios-requires-fullscreen",
-    "com.ionic.keyboard",
+    "ionic-plugin-keyboard",
     "cordova-plugin-network-information",
     {
       "locator": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
