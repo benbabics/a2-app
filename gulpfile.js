@@ -6,7 +6,7 @@ var gulp = require("gulp");
 var gutil = require("gulp-util");
 var bower = require("bower");
 var sass = require("gulp-sass");
-var minifyCss = require("gulp-minify-css");
+var cleanCss = require("gulp-clean-css");
 var rename = require("gulp-rename");
 var sh = require("shelljs");
 var wiredep = require("wiredep").stream;
@@ -75,7 +75,7 @@ gulp.task("sass", function (done) {
             errLogToConsole: true
         }))
         .pipe(gulp.dest(destPaths.root.css))
-        .pipe(minifyCss({
+        .pipe(cleanCss({
             keepSpecialComments: 0
         }))
         .pipe(rename({extname: ".min.css"}))
