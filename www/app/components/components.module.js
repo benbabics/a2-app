@@ -13,6 +13,7 @@
         "app.components.invoice",
         "app.components.menu",
         "app.components.navBar",
+        "app.components.navigation",
         "app.components.payment",
         "app.components.privacyPolicy",
         "app.components.transaction",

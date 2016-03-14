@@ -12,7 +12,7 @@
         InvoiceSummaryModel,
         UserManager,
         UserModel,
-        MenuDelegate,
+        Navigation,
         mockGlobals = {
             "LANDING": {
                 "CONFIG": {
@@ -48,8 +48,7 @@
                     }
                 }
             }
-        },
-        mockConfig = mockGlobals.LANDING.CONFIG;
+        };
 
     describe("A Landing Controller", function () {
 
@@ -72,7 +71,7 @@
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearHistory"]);
             mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
-            MenuDelegate = jasmine.createSpyObj("MenuDelegate", ["closeMenu"]);
+            Navigation = jasmine.createSpyObj("Navigation", ["goToCards", "goToMakePayment", "goToTransactionActivity"]);
 
             inject(function ($controller, $rootScope, $q, _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, PlatformUtil) {
 
@@ -98,7 +97,7 @@
                 ctrl = $controller("LandingController", {
                     $scope                : $scope,
                     $ionicHistory         : $ionicHistory,
-                    MenuDelegate          : MenuDelegate,
+                    Navigation            : Navigation,
                     UserManager           : UserManager,
                     currentInvoiceSummary : mockCurrentInvoiceSummary,
                     scheduledPaymentsCount: mockScheduledPaymentCount,
@@ -139,10 +138,6 @@
                 expect(ctrl.branding).toEqual({
                     logo: mockBrandLogo
                 });
-            });
-
-            it("should set the menu delegate", function () {
-                expect(ctrl.menuDelegate).toEqual(MenuDelegate);
             });
 
             it("should set the chart options", function () {
@@ -227,6 +222,42 @@
 
                 });
 
+            });
+
+        });
+
+        describe("has a goToCards function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToCards();
+            });
+
+            it("should navigate to cards", function () {
+                expect(Navigation.goToCards).toHaveBeenCalledWith();
+            });
+
+        });
+
+        describe("has a goToMakePayment function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToMakePayment();
+            });
+
+            it("should navigate to make payment", function () {
+                expect(Navigation.goToMakePayment).toHaveBeenCalledWith();
+            });
+
+        });
+
+        describe("has a goToTransactionActivity function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToTransactionActivity();
+            });
+
+            it("should navigate to transaction activity", function () {
+                expect(Navigation.goToTransactionActivity).toHaveBeenCalledWith();
             });
 
         });

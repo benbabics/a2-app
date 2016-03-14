@@ -2,10 +2,9 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:7
 
     /* @ngInject */
-    function MenuController($ionicHistory, $location, $q, $state, $ionicSideMenuDelegate, globals, LoginManager) {
+    function MenuController($ionicSideMenuDelegate, globals, Navigation) {
 
         var vm = this;
         vm.config = globals.MENU.CONFIG;
@@ -25,69 +24,40 @@
             $ionicSideMenuDelegate.toggleRight(false);
         }
 
-        function goToHome() {
-            return $state.go("landing");
-        }
-
-        function goToMakePayment() {
-            $location.url("/payment/add/verify");
-
-            return $q.resolve();
-        }
-
-        function goToPaymentActivity() {
-            //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
-            return $ionicHistory.clearCache()
-                .then(function () {
-                    return $state.go("payment.list.view", null, {
-                        reload : true,
-                        inherit: false,
-                        notify : true
-                    });
-                });
-        }
-
-        function goToTransactionActivity() {
-            //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
-            return $ionicHistory.clearCache()
-                .then(function () {
-                    return $state.go("transaction.list", null, {
-                        reload : true,
-                        inherit: false,
-                        notify : true
-                    });
-                });
-        }
-
         function goToCards() {
-            //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
-            return $ionicHistory.clearCache()
-                .then(function () {
-                    return $state.go("card.list", null, {
-                        reload : true,
-                        inherit: false,
-                        notify : true
-                    });
-                });
+            return Navigation.goToCards();
         }
 
         function goToContactUs() {
-            return $state.go("contactUs");
+            return Navigation.goToContactUs();
         }
 
-        function goToTermsOfUse() {
-            return $state.go("termsOfUse");
-        }
-
-        function goToPrivacyPolicy() {
-            return $state.go("privacyPolicy");
+        function goToHome() {
+            return Navigation.goToHome();
         }
 
         function goToLogOut() {
-            return LoginManager.logOut()
-                .finally(function () {
-                    return $state.go(globals.LOGIN_STATE);
-                });
+            return Navigation.goToLogOut();
+        }
+
+        function goToMakePayment() {
+            return Navigation.goToMakePayment();
+        }
+
+        function goToPaymentActivity() {
+            return Navigation.goToPaymentActivity();
+        }
+
+        function goToPrivacyPolicy() {
+            return Navigation.goToPrivacyPolicy();
+        }
+
+        function goToTermsOfUse() {
+            return Navigation.goToTermsOfUse();
+        }
+
+        function goToTransactionActivity() {
+            return Navigation.goToTransactionActivity();
         }
     }
 

@@ -2,18 +2,20 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:7
+    // jshint maxparams:8
 
     /* @ngInject */
     function LandingController($scope, $ionicHistory, currentInvoiceSummary, brandLogo, globals, scheduledPaymentsCount,
-                               MenuDelegate, UserManager) {
+                               Navigation, UserManager) {
 
         var vm = this;
         vm.config = globals.LANDING.CONFIG;
         vm.invoiceSummary = {};
         vm.billingCompany = {};
         vm.branding = {};
-        vm.menuDelegate = MenuDelegate;
+        vm.goToCards = goToCards;
+        vm.goToMakePayment = goToMakePayment;
+        vm.goToTransactionActivity = goToTransactionActivity;
         vm.scheduledPaymentsCount = 0;
 
         activate();
@@ -69,6 +71,18 @@
                 data   : [vm.invoiceSummary.availableCredit, vm.invoiceSummary.billedAmount, vm.invoiceSummary.unbilledAmount]
             };
 
+        }
+
+        function goToCards() {
+            return Navigation.goToCards();
+        }
+
+        function goToMakePayment() {
+            return Navigation.goToMakePayment();
+        }
+
+        function goToTransactionActivity() {
+            return Navigation.goToTransactionActivity();
         }
 
     }

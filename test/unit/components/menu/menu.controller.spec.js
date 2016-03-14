@@ -1,14 +1,9 @@
 (function () {
     "use strict";
 
-    var $ionicHistory,
-        $ionicSideMenuDelegate,
-        $q,
-        $rootScope,
+    var $ionicSideMenuDelegate,
         ctrl,
-        LoginManager,
-        $state,
-        $location,
+        Navigation,
         mockGlobals = {
             LOGIN_STATE: "user.auth.login",
             AUTH_API: {
@@ -79,9 +74,7 @@
             GOOGLE_ANALYTICS: {
                 TRACKING_ID: TestUtils.getRandomStringThatIsAlphaNumeric(10)
             }
-        },
-        rejectHandler,
-        resolveHandler;
+        };
 
     describe("A Menu Controller", function () {
 
@@ -99,228 +92,15 @@
             });
 
             // mock dependencies
-            LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
-            $state = jasmine.createSpyObj("state", ["go"]);
-            $location = jasmine.createSpyObj("$location", ["url"]);
+            Navigation = jasmine.createSpyObj("Navigation", ["goToCards", "goToContactUs", "goToHome", "goToLogOut", "goToMakePayment",
+                                                             "goToPaymentActivity", "goToPrivacyPolicy", "goToTermsOfUse", "goToTransactionActivity"]);
             $ionicSideMenuDelegate = jasmine.createSpyObj("$ionicSideMenuDelegate", ["toggleRight"]);
 
-            inject(function ($controller, _$ionicHistory_, _$q_, _$rootScope_) {
-                $ionicHistory = _$ionicHistory_;
-                $q = _$q_;
-                $rootScope = _$rootScope_;
-
+            inject(function ($controller) {
                 ctrl = $controller("MenuController", {
-                    LoginManager          : LoginManager,
-                    $location             : $location,
-                    $state                : $state,
-                    $ionicSideMenuDelegate: $ionicSideMenuDelegate
+                    $ionicSideMenuDelegate: $ionicSideMenuDelegate,
+                    Navigation            : Navigation
                 });
-            });
-
-            //setup spies
-            LoginManager.logOut.and.returnValue($q.resolve());
-            $state.go.and.returnValue($q.resolve());
-            spyOn($ionicHistory, "clearCache").and.returnValue($q.resolve());
-            rejectHandler = jasmine.createSpy("rejectHandler");
-            resolveHandler = jasmine.createSpy("resolveHandler");
-        });
-
-        describe("has a goToHome function that", function () {
-
-            beforeEach(function () {
-                ctrl.goToHome()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-
-                $rootScope.$digest();
-            });
-
-            it("should navigate to the landing page", function () {
-                expect($state.go).toHaveBeenCalledWith("landing");
-            });
-
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
-            });
-        });
-
-        describe("has a goToMakePayment function that", function () {
-
-            beforeEach(function () {
-                ctrl.goToMakePayment()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-
-                $rootScope.$digest();
-            });
-
-            it("should navigate to /payment/add/verify", function () {
-                expect($location.url).toHaveBeenCalledWith("/payment/add/verify");
-            });
-
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
-            });
-        });
-
-        describe("has a goToPaymentActivity function that", function () {
-
-            beforeEach(function () {
-                ctrl.goToPaymentActivity()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-
-                $rootScope.$digest();
-            });
-
-            it("should call $ionicHistory.clearCache", function () {
-                expect($ionicHistory.clearCache).toHaveBeenCalledWith();
-            });
-
-            it("should navigate to the payment list page and reload it", function () {
-                expect($state.go).toHaveBeenCalledWith("payment.list.view", null, {
-                    reload : true,
-                    inherit: false,
-                    notify : true
-                });
-            });
-
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
-            });
-        });
-
-        describe("has a goToTransactionActivity function that", function () {
-
-            beforeEach(function () {
-                ctrl.goToTransactionActivity()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-
-                $rootScope.$digest();
-            });
-
-            it("should call $ionicHistory.clearCache", function () {
-                expect($ionicHistory.clearCache).toHaveBeenCalledWith();
-            });
-
-            it("should navigate to the transaction list page and reload it", function () {
-                expect($state.go).toHaveBeenCalledWith("transaction.list", null, {
-                    reload : true,
-                    inherit: false,
-                    notify : true
-                });
-            });
-
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
-            });
-        });
-
-        describe("has a goToCards function that", function () {
-
-            beforeEach(function () {
-                ctrl.goToCards()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-
-                $rootScope.$digest();
-            });
-
-            it("should call $ionicHistory.clearCache", function () {
-                expect($ionicHistory.clearCache).toHaveBeenCalledWith();
-            });
-
-            it("should navigate to the card list page and reload it", function () {
-                expect($state.go).toHaveBeenCalledWith("card.list", null, {
-                    reload : true,
-                    inherit: false,
-                    notify : true
-                });
-            });
-
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
-            });
-        });
-
-        describe("has a goToContactUs function that", function () {
-
-            beforeEach(function () {
-                ctrl.goToContactUs()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-
-                $rootScope.$digest();
-            });
-
-            it("should navigate to the contact us page", function () {
-                expect($state.go).toHaveBeenCalledWith("contactUs");
-            });
-
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
-            });
-        });
-
-        describe("has a goToTermsOfUse function that", function () {
-
-            beforeEach(function () {
-                ctrl.goToTermsOfUse()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-
-                $rootScope.$digest();
-            });
-
-            it("should navigate to the terms of use page", function () {
-                expect($state.go).toHaveBeenCalledWith("termsOfUse");
-            });
-
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
-            });
-        });
-
-        describe("has a goToPrivacyPolicy function that", function () {
-
-            beforeEach(function () {
-                ctrl.goToPrivacyPolicy()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-
-                $rootScope.$digest();
-            });
-
-            it("should navigate to the privacy policy page", function () {
-                expect($state.go).toHaveBeenCalledWith("privacyPolicy");
-            });
-
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
-            });
-        });
-
-        describe("has a goToLogOut function that", function () {
-
-            beforeEach(function () {
-                ctrl.goToLogOut()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-
-                $rootScope.$digest();
-            });
-
-            it("should log out the User", function () {
-                expect(LoginManager.logOut).toHaveBeenCalledWith();
-            });
-
-            it("should navigate to the login page", function () {
-                expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
-            });
-
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
             });
         });
 
@@ -333,6 +113,115 @@
             it("should close the menu", function () {
                 expect($ionicSideMenuDelegate.toggleRight).toHaveBeenCalledWith(false);
             });
+
+        });
+
+        describe("has a goToCards function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToCards();
+            });
+
+            it("should navigate to the card list page", function () {
+                expect(Navigation.goToCards).toHaveBeenCalledWith();
+            });
+
+        });
+
+        describe("has a goToContactUs function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToContactUs();
+            });
+
+            it("should navigate to the contact us page", function () {
+                expect(Navigation.goToContactUs).toHaveBeenCalledWith();
+            });
+
+        });
+
+        describe("has a goToHome function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToHome();
+            });
+
+            it("should navigate to the home page", function () {
+                expect(Navigation.goToHome).toHaveBeenCalledWith();
+            });
+
+        });
+
+        describe("has a goToLogOut function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToLogOut();
+            });
+
+            it("should navigate to the login page", function () {
+                expect(Navigation.goToLogOut).toHaveBeenCalledWith();
+            });
+
+        });
+
+        describe("has a goToMakePayment function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToMakePayment();
+            });
+
+            it("should navigate to the make payment page", function () {
+                expect(Navigation.goToMakePayment).toHaveBeenCalledWith();
+            });
+
+        });
+
+        describe("has a goToPaymentActivity function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToPaymentActivity();
+            });
+
+            it("should navigate to the payment list page", function () {
+                expect(Navigation.goToPaymentActivity).toHaveBeenCalledWith();
+            });
+
+        });
+
+        describe("has a goToPrivacyPolicy function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToPrivacyPolicy();
+            });
+
+            it("should navigate to the privacy policy page", function () {
+                expect(Navigation.goToPrivacyPolicy).toHaveBeenCalledWith();
+            });
+
+        });
+
+        describe("has a goToTermsOfUse function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToTermsOfUse();
+            });
+
+            it("should navigate to the terms of use page", function () {
+                expect(Navigation.goToTermsOfUse).toHaveBeenCalledWith();
+            });
+
+        });
+
+        describe("has a goToTransactionActivity function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToTransactionActivity();
+            });
+
+            it("should navigate to the transaction activity list page", function () {
+                expect(Navigation.goToTransactionActivity).toHaveBeenCalledWith();
+            });
+
         });
 
     });
