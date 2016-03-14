@@ -30,6 +30,10 @@
 
         function activate() {
             whenReady(function (analytics) {
+                if (Logger.isEnabled()) {
+                    analytics.setLogLevel(analytics.LogLevel.VERBOSE);
+                }
+
                 analytics.setDispatchInterval(DISPATCH_INTERVAL, _.noop, handleTrackingError);
             });
         }

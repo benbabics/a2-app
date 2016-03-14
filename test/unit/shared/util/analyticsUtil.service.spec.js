@@ -43,6 +43,8 @@
             expect(analytics.setDispatchInterval).toHaveBeenCalledWith(DISPATCH_INTERVAL, jasmine.any(Function), jasmine.any(Function));
         });
 
+        //TODO - Figure out how to test that analytics.setLogLevel(analytics.LogLevel.VERBOSE) is call ONLY if Logger.isEnabled returns true
+
         describe("has a setUserId function that", function () {
             var userId;
 

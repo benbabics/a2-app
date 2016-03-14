@@ -136,6 +136,20 @@
 
         });
 
+        describe("has an isEnabled function that", function () {
+
+            var enabled = TestUtils.getRandomBoolean();
+
+            beforeEach(function () {
+                Logger.enabled(enabled);
+            });
+
+            it("should return the value passed to enabled", function () {
+                expect(Logger.isEnabled()).toEqual(enabled);
+            });
+
+        });
+
         describe("has a log function that", function () {
 
             describe("when enabled is false", function () {

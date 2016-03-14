@@ -5,14 +5,15 @@
 
     /* @ngInject */
     function Logger($log) {
-        var isEnabled = false,
+        var _isEnabled = false,
             service = {
-                debug: debug,
-                enabled: enabled,
-                error: error,
-                info: info,
-                log: log,
-                warn: warn
+                debug    : debug,
+                enabled  : enabled,
+                error    : error,
+                info     : info,
+                isEnabled: isEnabled,
+                log      : log,
+                warn     : warn
             };
 
         return service;
@@ -23,7 +24,7 @@
         }
 
         function enabled(_enabled) {
-            isEnabled = !!_enabled;
+            _isEnabled = !!_enabled;
         }
 
         function error() {
@@ -32,6 +33,10 @@
 
         function info() {
             _enhanceLogging("info", arguments);
+        }
+
+        function isEnabled() {
+            return _isEnabled;
         }
 
         function log() {
@@ -54,12 +59,12 @@
         function _enhanceLogging(loggingFunctionName, args) {
             var modifiedArguments;
 
-            if (!isEnabled) {
+            if (!_isEnabled) {
                 return;
             }
 
             modifiedArguments = [].slice.call(args);
-            modifiedArguments[0] = [_getFormattedTimestamp() + ": "]  + modifiedArguments[0];
+            modifiedArguments[0] = [_getFormattedTimestamp() + ": "] + modifiedArguments[0];
             $log[loggingFunctionName].apply(null, modifiedArguments);
         }
     }
