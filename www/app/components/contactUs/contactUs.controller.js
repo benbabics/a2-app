@@ -9,12 +9,7 @@
         var vm = this;
         vm.config = globals.CONTACT_US.CONFIG;
 
-        activate();
-
         //////////////////////
-        // Controller initialization
-        function activate() {
-        }
 
     }
 

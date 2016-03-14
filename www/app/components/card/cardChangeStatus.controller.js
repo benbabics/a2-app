@@ -15,13 +15,7 @@
 
         vm.promptStatusChange = promptStatusChange;
 
-        activate();
-
         //////////////////////
-
-        // Controller initialization
-        function activate() {
-        }
 
         function confirmStatusChange(newStatus) {
             var accountId = UserManager.getUser().billingCompany.accountId;

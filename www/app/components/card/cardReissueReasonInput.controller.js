@@ -13,11 +13,7 @@
 
         vm.confirmSelection = confirmSelection;
 
-        activate();
-
-        // Controller initialization
-        function activate() {
-        }
+        //////////////////////
 
         function confirmSelection(reissueReason) {
             vm.cardReissueDetails.reissueReason = reissueReason;

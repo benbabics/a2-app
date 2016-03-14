@@ -16,11 +16,7 @@
         vm.isFormComplete = isFormComplete;
         vm.promptReissue = promptReissue;
 
-        activate();
-
-        // Controller initialization
-        function activate() {
-        }
+        //////////////////////
 
         function confirmReissue() {
             var accountId = UserManager.getUser().billingCompany.accountId;

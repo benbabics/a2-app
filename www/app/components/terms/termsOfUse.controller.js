@@ -9,12 +9,7 @@
         var vm = this;
         vm.config = globals.TERMS_OF_USE.CONFIG;
 
-        activate();
-
         //////////////////////
-        // Controller initialization
-        function activate() {
-        }
 
     }
 

@@ -13,13 +13,7 @@
 
         vm.getConfirmationMessage = getConfirmationMessage;
 
-        activate();
-
         //////////////////////
-
-        // Controller initialization
-        function activate() {
-        }
 
         function getConfirmationMessage() {
             var status = vm.card.status ? vm.card.status.toLowerCase() : null;

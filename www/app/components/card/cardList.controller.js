@@ -24,12 +24,7 @@
         vm.loadNextPage = loadNextPage;
         vm.pageLoaded = pageLoaded;
 
-        activate();
-
         //////////////////////
-        // Controller initialization
-        function activate() {
-        }
 
         function applySearchFilter() {
             if (vm.searchFilter !== activeSearchFilter) {

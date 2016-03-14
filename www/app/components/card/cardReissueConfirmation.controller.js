@@ -11,13 +11,8 @@
         vm.reissuedCard = cardReissueDetails.reissuedCard;
         vm.config = globals.CARD_REISSUE_CONFIRMATION.CONFIG;
 
-        activate();
-
         //////////////////////
 
-        // Controller initialization
-        function activate() {
-        }
     }
 
     angular.module("app.components.card")

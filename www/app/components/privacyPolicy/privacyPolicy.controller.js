@@ -9,12 +9,7 @@
         var vm = this;
         vm.openUrl = openUrl;
 
-        activate();
-
         //////////////////////
-        // Controller initialization
-        function activate() {
-        }
 
         function openUrl(url) {
             // TODO? - Maybe add an event listener for the app to handle external URLs getting loaded outside the app instead of needing a function in each place it's needed

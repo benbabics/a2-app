@@ -18,12 +18,7 @@
         vm.loadNextPage = loadNextPage;
         vm.pageLoaded = pageLoaded;
 
-        activate();
-
         //////////////////////
-        // Controller initialization
-        function activate() {
-        }
 
         function loadNextPage() {
             var billingAccountId = UserManager.getUser().billingCompany.accountId,
