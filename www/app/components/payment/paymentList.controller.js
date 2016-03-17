@@ -2,9 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:5
 
     /* @ngInject */
-    function PaymentListController(_, $scope, globals, payments) {
+    function PaymentListController(_, globals, LoadingIndicator, PaymentManager, UserManager) {
 
         var vm = this;
 
@@ -18,12 +19,17 @@
         //////////////////////
         // Controller initialization
         function activate() {
-            // set event listeners
-            $scope.$on("$ionicView.beforeEnter", beforeEnter);
+            var billingAccountId = UserManager.getUser().billingCompany.accountId,
+                options = globals.PAYMENT_LIST.SEARCH_OPTIONS;
+
+            LoadingIndicator.begin();
+
+            PaymentManager.fetchPayments(billingAccountId, options.PAGE_NUMBER, options.PAGE_SIZE)
+                .then(filterPayments)
+                .finally(LoadingIndicator.complete);
         }
 
-        function beforeEnter() {
-
+        function filterPayments(payments) {
             var unsortedScheduledPayments,
                 unsortedCompletedPayments;
 

@@ -40,19 +40,6 @@
             cache      : true,
             templateUrl: "app/components/payment/templates/paymentList.html",
             controller : "PaymentListController as vm",
-            resolve    : {
-                payments: function (globals, LoadingIndicator, PaymentManager, UserManager) {
-                    var billingAccountId = UserManager.getUser().billingCompany.accountId,
-                        options = globals.PAYMENT_LIST.SEARCH_OPTIONS;
-
-                    LoadingIndicator.begin();
-
-                    return PaymentManager.fetchPayments(billingAccountId, options.PAGE_NUMBER, options.PAGE_SIZE)
-                        .finally(function () {
-                            LoadingIndicator.complete();
-                        });
-                }
-            },
             onEnter: function(globals, AnalyticsUtil) {
                 AnalyticsUtil.trackView(globals.PAYMENT_LIST.CONFIG.ANALYTICS.pageName);
             }

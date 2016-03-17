@@ -2,7 +2,9 @@
     "use strict";
 
     var _,
+        $rootScope,
         $scope,
+        $q,
         ctrl,
         mockCompletedPayments,
         mockPayments,
@@ -25,11 +27,21 @@
                 }
             }
         },
-        mockConfig = mockGlobals.PAYMENT_LIST.CONFIG;
+        mockConfig = mockGlobals.PAYMENT_LIST.CONFIG,
+        mockUser,
+        UserManager,
+        PaymentManager,
+        LoadingIndicator,
+        fetchPaymentsDeferred;
 
     describe("A Payment List Controller", function () {
 
         beforeEach(function () {
+
+            //create mock dependencies
+            UserManager = jasmine.createSpyObj("UserManager", ["getUser", "userLoggedIn"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayments"]);
+            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
 
             module("app.shared");
             module("app.components");
@@ -44,42 +56,89 @@
                 });
             });
 
-            inject(function (___, $controller, $rootScope, $q, BankModel, PaymentModel) {
+            inject(function (___, globals, $controller, _$rootScope_, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
 
                 _ = ___;
+                $q = _$q_;
+                $rootScope = _$rootScope_;
 
                 // setup mock objects
                 mockCompletedPayments = getRandomNotScheduledPayments(PaymentModel, BankModel);
                 mockScheduledPayments = getRandomScheduledPayments(PaymentModel, BankModel);
                 mockPayments = _.union(mockCompletedPayments, mockScheduledPayments);
+                mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel, globals.USER.ONLINE_APPLICATION);
+                fetchPaymentsDeferred = $q.defer();
+
+                UserManager.getUser.and.returnValue(mockUser);
+                UserManager.userLoggedIn.and.returnValue(true);
+                PaymentManager.fetchPayments.and.returnValue(fetchPaymentsDeferred.promise);
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("PaymentListController", {
-                    $scope  : $scope,
-                    payments: mockPayments,
-                    globals : mockGlobals
+                    $scope          : $scope,
+                    payments        : mockPayments,
+                    globals         : mockGlobals,
+                    LoadingIndicator: LoadingIndicator,
+                    PaymentManager  : PaymentManager,
+                    UserManager     : UserManager
                 });
 
             });
-
         });
 
-        describe("has an $ionicView.beforeEnter event handler function that", function () {
+        describe("has an activate function that", function () {
 
-            beforeEach(function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
+            it("should call LoadingIndicator.begin", function () {
+                expect(LoadingIndicator.begin).toHaveBeenCalledWith();
             });
 
-            it("should set the completed payments", function () {
-                expect(ctrl.completedPayments).toEqual(_.sortByOrder(mockCompletedPayments, ["scheduledDate"], ["desc"]));
+            it("should call PaymentManager.fetchPayments", function () {
+                expect(PaymentManager.fetchPayments).toHaveBeenCalledWith(mockUser.billingCompany.accountId,
+                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
+                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE);
             });
 
-            it("should set the scheduled payments", function () {
-                expect(ctrl.scheduledPayments).toEqual(_.sortByOrder(mockScheduledPayments, ["scheduledDate"], ["asc"]));
+            describe("when the payments are successfully fetched", function () {
+
+                beforeEach(function () {
+                    fetchPaymentsDeferred.resolve(mockPayments);
+                    $rootScope.$digest();
+                });
+
+                it("should set the completed payments", function () {
+                    expect(ctrl.completedPayments).toEqual(_.sortByOrder(mockCompletedPayments, ["scheduledDate"], ["desc"]));
+                });
+
+                it("should set the scheduled payments", function () {
+                    expect(ctrl.scheduledPayments).toEqual(_.sortByOrder(mockScheduledPayments, ["scheduledDate"], ["asc"]));
+                });
+
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                });
             });
 
+            describe("when the payments are NOT successfully fetched", function () {
+
+                beforeEach(function () {
+                    fetchPaymentsDeferred.reject();
+                    $rootScope.$digest();
+                });
+
+                it("should NOT set the completed payments", function () {
+                    expect(ctrl.completedPayments).toEqual({});
+                });
+
+                it("should NOT set the scheduled payments", function () {
+                    expect(ctrl.scheduledPayments).toEqual({});
+                });
+
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                });
+            });
         });
 
     });

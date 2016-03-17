@@ -431,38 +431,6 @@
             it("should respond to the URL", function () {
                 expect($state.href(stateName)).toEqual("#/payment/list");
             });
-
-            describe("when navigated to", function () {
-
-                var fetchPaymentsDeferred;
-
-                beforeEach(function () {
-
-                    fetchPaymentsDeferred = $q.defer();
-                    UserManager.getUser.and.returnValue(mockUser);
-                    PaymentManager.fetchPayments.and.returnValue(fetchPaymentsDeferred.promise);
-
-                    $state.go(stateName);
-                    fetchPaymentsDeferred.resolve(mockPayments);
-                    $rootScope.$digest();
-                });
-
-                it("should call PaymentManager.fetchPayments", function () {
-                    expect(PaymentManager.fetchPayments).toHaveBeenCalledWith(mockUser.billingCompany.accountId,
-                        mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
-                        mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE);
-                });
-
-                it("should transition successfully", function () {
-                    expect($state.current.name).toBe(stateName);
-                });
-
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.pageName);
-                });
-
-            });
-
         });
 
         describe("has a payment.detail state that", function () {
