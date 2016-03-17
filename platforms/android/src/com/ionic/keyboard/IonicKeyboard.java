@@ -1,4 +1,4 @@
-package io.ionic.keyboard;
+package com.ionic.keyboard;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;

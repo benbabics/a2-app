@@ -43,7 +43,7 @@
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "ionic-plugin-keyboard": {
+        "com.ionic.keyboard": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
