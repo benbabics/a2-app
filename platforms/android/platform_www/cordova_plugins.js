@@ -219,8 +219,8 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/com.ionic.keyboard/www/keyboard.js",
-        "id": "com.ionic.keyboard.keyboard",
+        "file": "plugins/ionic-plugin-keyboard/www/android/keyboard.js",
+        "id": "ionic-plugin-keyboard.keyboard",
         "clobbers": [
             "cordova.plugins.Keyboard"
         ],

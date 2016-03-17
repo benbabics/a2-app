@@ -36,6 +36,8 @@
 		31063E6C45234F74A5C9C094 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2B690E74C448558C5CE718 /* CDVStatusBar.m */; };
 		9D757D0438F74D7AAD82EE72 /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 247C90DA9A614604837EC86F /* Toast+UIView.m */; };
 		F95B2170C81845FDA2301FCF /* Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8BCFFFEF44D8FB7F17D61 /* Toast.m */; };
+		7F03F1F2EE364D2E8A7B7884 /* IonicKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = D098BB605E304FA2A671C0E7 /* IonicKeyboard.m */; };
+		E78E0ACF3EAE4F79AFA4CB20 /* UIWebViewExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = BA3B3FEF06CE43358147D42C /* UIWebViewExtension.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,10 +122,10 @@
 		3FC8BCFFFEF44D8FB7F17D61 /* Toast.m */ = {isa = PBXFileReference; name = "Toast.m"; path = "cordova-plugin-x-toast/Toast.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		909BE6B3F69A4C16817EEC1C /* Toast+UIView.h */ = {isa = PBXFileReference; name = "Toast+UIView.h"; path = "cordova-plugin-x-toast/Toast+UIView.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		6A24F4848E23444C89396C8D /* Toast.h */ = {isa = PBXFileReference; name = "Toast.h"; path = "cordova-plugin-x-toast/Toast.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		B94F49986C6749B2863DD714 /* IonicKeyboard.m */ = {isa = PBXFileReference; name = "IonicKeyboard.m"; path = "ionic-plugin-keyboard/IonicKeyboard.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		2C20D8969EDA409CBB0CCB66 /* UIWebViewExtension.m */ = {isa = PBXFileReference; name = "UIWebViewExtension.m"; path = "ionic-plugin-keyboard/UIWebViewExtension.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		189AF5C728264340BF994A19 /* IonicKeyboard.h */ = {isa = PBXFileReference; name = "IonicKeyboard.h"; path = "ionic-plugin-keyboard/IonicKeyboard.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		C32C608B2F584726883FC158 /* UIWebViewExtension.h */ = {isa = PBXFileReference; name = "UIWebViewExtension.h"; path = "ionic-plugin-keyboard/UIWebViewExtension.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		D098BB605E304FA2A671C0E7 /* IonicKeyboard.m */ = {isa = PBXFileReference; name = "IonicKeyboard.m"; path = "ionic-plugin-keyboard/IonicKeyboard.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		BA3B3FEF06CE43358147D42C /* UIWebViewExtension.m */ = {isa = PBXFileReference; name = "UIWebViewExtension.m"; path = "ionic-plugin-keyboard/UIWebViewExtension.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		E7F4E8BE823840D0A34713BF /* IonicKeyboard.h */ = {isa = PBXFileReference; name = "IonicKeyboard.h"; path = "ionic-plugin-keyboard/IonicKeyboard.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		DFDA26258DF44CFB8C680A89 /* UIWebViewExtension.h */ = {isa = PBXFileReference; name = "UIWebViewExtension.h"; path = "ionic-plugin-keyboard/UIWebViewExtension.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,10 +280,10 @@
 				3FC8BCFFFEF44D8FB7F17D61 /* Toast.m */,
 				909BE6B3F69A4C16817EEC1C /* Toast+UIView.h */,
 				6A24F4848E23444C89396C8D /* Toast.h */,
-				B94F49986C6749B2863DD714 /* IonicKeyboard.m */,
-				2C20D8969EDA409CBB0CCB66 /* UIWebViewExtension.m */,
-				189AF5C728264340BF994A19 /* IonicKeyboard.h */,
-				C32C608B2F584726883FC158 /* UIWebViewExtension.h */,
+				D098BB605E304FA2A671C0E7 /* IonicKeyboard.m */,
+				BA3B3FEF06CE43358147D42C /* UIWebViewExtension.m */,
+				E7F4E8BE823840D0A34713BF /* IonicKeyboard.h */,
+				DFDA26258DF44CFB8C680A89 /* UIWebViewExtension.h */,
 			);
 			name = Plugins;
 			path = "Fleet SmartHub/Plugins";
@@ -410,8 +412,8 @@
 				31063E6C45234F74A5C9C094 /* CDVStatusBar.m in Sources */,
 				9D757D0438F74D7AAD82EE72 /* Toast+UIView.m in Sources */,
 				F95B2170C81845FDA2301FCF /* Toast.m in Sources */,
-				412BE2DC422647248B2E0936 /* IonicKeyboard.m in Sources */,
-				6AB4163D24AF4831954395B4 /* UIWebViewExtension.m in Sources */,
+				7F03F1F2EE364D2E8A7B7884 /* IonicKeyboard.m in Sources */,
+				E78E0ACF3EAE4F79AFA4CB20 /* UIWebViewExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

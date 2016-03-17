@@ -95,10 +95,10 @@
         "is_top_level": true,
         "variables": {}
     },
-    "com.ionic.keyboard": {
+    "ionic-plugin-keyboard": {
         "source": {
             "type": "registry",
-            "id": "ionic-plugin-keyboard@1.0.6"
+            "id": "ionic-plugin-keyboard@1.0.8"
         },
         "is_top_level": true,
         "variables": {}

@@ -10,9 +10,6 @@
         "com.cmackay.plugins.googleanalytics": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "com.ionic.keyboard": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
         "cordova-ios-requires-fullscreen": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
@@ -44,6 +41,9 @@
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
