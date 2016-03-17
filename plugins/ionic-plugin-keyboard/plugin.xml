@@ -63,4 +63,12 @@
         </js-module>
     </platform>
 
+    <!-- browser -->
+    <platform name="browser">
+        <js-module src="www/android/keyboard.js" name="keyboard">
+            <runs/>
+            <clobbers target="cordova.plugins.Keyboard" />
+        </js-module>
+    </platform>
+
 </plugin>
