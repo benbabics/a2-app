@@ -80,10 +80,10 @@
             return directory;
         }
 
-        function readFile(file, binary, parentDirectory) {
-            binary = _.isUndefined(binary) ? false : binary;
+        function readFile(file, isBinary, parentDirectory) {
+            isBinary = isBinary || false;
 
-            var operation = binary ? $cordovaFile.readAsBinaryString : $cordovaFile.readAsText;
+            var operation = isBinary ? $cordovaFile.readAsBinaryString : $cordovaFile.readAsText;
 
             return PlatformUtil.waitForCordovaPlatform(
                 _.partial(operation, makeValidDirectory(parentDirectory), file)
@@ -96,10 +96,10 @@
             ).catch(handleFileError);
         }
 
-        function removeDirectory(directory, recursive, parentDirectory) {
-            recursive = _.isUndefined(recursive) ? true : recursive;
+        function removeDirectory(directory, isRecursive, parentDirectory) {
+            isRecursive = _.isUndefined(isRecursive) ? true : isRecursive;
 
-            var operation = recursive ? $cordovaFile.removeRecursively : $cordovaFile.removeDir;
+            var operation = isRecursive ? $cordovaFile.removeRecursively : $cordovaFile.removeDir;
 
             return PlatformUtil.waitForCordovaPlatform(
                 _.partial(operation, makeValidDirectory(parentDirectory), directory)
