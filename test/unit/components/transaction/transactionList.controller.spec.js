@@ -3,6 +3,7 @@
 
     var $rootScope,
         $scope,
+        $stateParams = {},
         $q,
         moment,
         LoadingIndicator,
@@ -78,6 +79,7 @@
 
                 ctrl = $controller("TransactionListController", {
                     $scope            : $scope,
+                    $stateParams      : $stateParams,
                     globals           : mockGlobals,
                     LoadingIndicator  : LoadingIndicator,
                     TransactionManager: TransactionManager,
@@ -113,14 +115,98 @@
                 expect(LoadingIndicator.begin).toHaveBeenCalledWith();
             });
 
-            it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
-                expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
-                    mockUser.billingCompany.accountId,
-                    moment().subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
-                    moment().toDate(),
-                    0,
-                    mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE
-                );
+            describe("when $stateParams.cardId is a non-empty string", function () {
+                var cardId;
+
+                beforeEach(function() {
+                    cardId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                    $stateParams.cardId = cardId;
+
+                    ctrl.loadNextPage()
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                });
+
+                it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
+                    expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
+                        mockUser.billingCompany.accountId,
+                        moment().subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
+                        moment().toDate(),
+                        0,
+                        mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE,
+                        cardId
+                    );
+                });
+
+            });
+
+            describe("when $stateParams.cardId is an empty string", function () {
+
+                beforeEach(function() {
+                    $stateParams.cardId = "";
+
+                    ctrl.loadNextPage()
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                });
+
+                it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
+                    expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
+                        mockUser.billingCompany.accountId,
+                        moment().subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
+                        moment().toDate(),
+                        0,
+                        mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE,
+                        undefined
+                    );
+                });
+
+            });
+
+            describe("when $stateParams.cardId is null", function () {
+
+                beforeEach(function() {
+                    $stateParams.cardId = null;
+
+                    ctrl.loadNextPage()
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                });
+
+                it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
+                    expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
+                        mockUser.billingCompany.accountId,
+                        moment().subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
+                        moment().toDate(),
+                        0,
+                        mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE,
+                        undefined
+                    );
+                });
+
+            });
+
+            describe("when $stateParams.cardId is undefined", function () {
+
+                beforeEach(function() {
+                    delete $stateParams.cardId;
+
+                    ctrl.loadNextPage()
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                });
+
+                it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
+                    expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
+                        mockUser.billingCompany.accountId,
+                        moment().subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
+                        moment().toDate(),
+                        0,
+                        mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE,
+                        undefined
+                    );
+                });
+
             });
 
             describe("when fetchPostedTransactions resolves with an empty list of transactions", function () {
