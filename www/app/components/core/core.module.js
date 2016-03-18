@@ -5,7 +5,7 @@
 
     // jshint maxparams:14
     function coreRun(_, $cordovaDevice, $q, $rootScope, $state, $ionicPlatform, $window,
-                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, NavigationUtil, PlatformUtil, Popup) {
+                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, Navigation, PlatformUtil, Popup) {
 
         function isExitState(stateName) {
             return "app.exit" === stateName;
@@ -92,7 +92,7 @@
 
         //make the hardware back button go to the same state as the back button by default
         $ionicPlatform.registerBackButtonAction(function () { //args: event
-            NavigationUtil.goToBackState();
+            Navigation.goToBackState();
         }, 101);
 
         PlatformUtil.waitForCordovaPlatform()

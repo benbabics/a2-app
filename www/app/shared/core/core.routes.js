@@ -3,8 +3,8 @@
 
     function configureRoutes($urlRouterProvider, $stateProvider) {
 
-        $urlRouterProvider.when("/app/exit", function (NavigationUtil) {
-            NavigationUtil.exitApp();
+        $urlRouterProvider.when("/app/exit", function (Navigation) {
+            Navigation.exitApp();
         });
 
         $stateProvider.state("app", {

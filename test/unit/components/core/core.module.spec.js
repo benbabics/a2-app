@@ -101,7 +101,7 @@
             BankManager,
             PaymentMaintenance,
             Popup,
-            NavigationUtil,
+            Navigation,
             LoadingIndicator,
             PaymentManager,
             UserManager,
@@ -127,7 +127,7 @@
             $cordovaDevice = jasmine.createSpyObj("$cordovaDevice", ["getPlatform"]);
             $ionicPlatform = jasmine.createSpyObj("$ionicPlatform", ["ready", "registerBackButtonAction"]);
             Popup = jasmine.createSpyObj("Popup", ["closeAllPopups"]);
-            NavigationUtil = jasmine.createSpyObj("NavigationUtil", ["exitApp", "goToBackState"]);
+            Navigation = jasmine.createSpyObj("Navigation", ["exitApp", "goToBackState"]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
 
             module("app.shared");
@@ -145,7 +145,7 @@
                 $provide.value("$cordovaDevice", $cordovaDevice);
                 $provide.value("$ionicPlatform", $ionicPlatform);
                 $provide.value("Popup", Popup);
-                $provide.value("NavigationUtil", NavigationUtil);
+                $provide.value("Navigation", Navigation);
                 $provide.value("LoadingIndicator", LoadingIndicator);
 
                 //setup mocks:
@@ -368,8 +368,8 @@
                     doBackButtonAction();
                 });
 
-                it("should call NavigationUtil.goToBackState", function () {
-                    expect(NavigationUtil.goToBackState).toHaveBeenCalledWith();
+                it("should call Navigation.goToBackState", function () {
+                    expect(Navigation.goToBackState).toHaveBeenCalledWith();
                 });
             });
         });

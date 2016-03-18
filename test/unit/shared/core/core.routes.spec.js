@@ -3,7 +3,7 @@
 
     var $state,
         $rootScope,
-        NavigationUtil;
+        Navigation;
 
     describe("A Core Module Route Config", function () {
 
@@ -14,9 +14,9 @@
 
             module(function($provide) {
                 //mock dependencies
-                NavigationUtil = jasmine.createSpyObj("NavigationUtil", ["exitApp"]);
+                Navigation = jasmine.createSpyObj("Navigation", ["exitApp"]);
 
-                $provide.value("NavigationUtil", NavigationUtil);
+                $provide.value("Navigation", Navigation);
             });
 
             inject(function (_$state_, _$rootScope_) {
@@ -79,8 +79,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call NavigationUtil.exitApp", function () {
-                    expect(NavigationUtil.exitApp).toHaveBeenCalledWith();
+                it("should call Navigation.exitApp", function () {
+                    expect(Navigation.exitApp).toHaveBeenCalledWith();
                 });
             });
         });
