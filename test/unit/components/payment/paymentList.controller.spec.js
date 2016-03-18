@@ -78,7 +78,6 @@
 
                 ctrl = $controller("PaymentListController", {
                     $scope          : $scope,
-                    payments        : mockPayments,
                     globals         : mockGlobals,
                     LoadingIndicator: LoadingIndicator,
                     PaymentManager  : PaymentManager,

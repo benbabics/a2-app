@@ -19,6 +19,10 @@
         //////////////////////
         // Controller initialization
         function activate() {
+            fetchPayments();
+        }
+
+        function fetchPayments() {
             var billingAccountId = UserManager.getUser().billingCompany.accountId,
                 options = globals.PAYMENT_LIST.SEARCH_OPTIONS;
 
