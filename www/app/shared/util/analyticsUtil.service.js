@@ -3,12 +3,12 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
-    // jshint maxparams:5
+    // jshint maxparams:6
 
     // NOTE: This service will only track analytics data on platforms with Cordova.
 
     /* @ngInject */
-    function AnalyticsUtil(_, $window, Logger, LoggerUtil, PlatformUtil) {
+    function AnalyticsUtil(_, $q, $window, Logger, LoggerUtil, PlatformUtil) {
         // Private members
         var DISPATCH_INTERVAL = 30, //in seconds (Note: Too large of an interval seems to break real-time analytics completely)
             activeTrackerId;
@@ -35,6 +35,8 @@
                 }
 
                 analytics.setDispatchInterval(DISPATCH_INTERVAL, _.noop, handleTrackingError);
+            }).catch(function () {
+                throw "AnalyticsUtil is not available on this platform.";
             });
         }
 
@@ -87,7 +89,7 @@
                     return $window.navigator.analytics;
                 }
                 else {
-                    throw "AnalyticsUtil is not available on this platform.";
+                    return $q.reject();
                 }
             }).then(callback);
         }
