@@ -42,14 +42,18 @@
             return $q.when(_.find(postedTransactions, {transactionId: transactionId}));
         }
 
-        // jshint maxparams:5
-        function fetchPostedTransactions(accountId, fromDate, toDate, pageNumber, pageSize) {
+        // jshint maxparams:6
+        function fetchPostedTransactions(accountId, fromDate, toDate, pageNumber, pageSize, cardId) {
             var params = {
                 fromDate  : fromDate,
                 toDate    : toDate,
                 pageNumber: pageNumber,
                 pageSize  : pageSize
             };
+
+            if (!_.isUndefined(cardId)) {
+                params.cardId = cardId;
+            }
 
             return TransactionsResource.getPostedTransactions(accountId, params)
                 .then(function (postedTransactionsResponse) {

@@ -160,7 +160,8 @@
                 mockFromDate,
                 mockToDate,
                 mockPageNumber,
-                mockPageSize;
+                mockPageSize,
+                mockCardId;
 
             beforeEach(function () {
                 getPostedTransactionsDeferred = $q.defer();
@@ -169,6 +170,7 @@
                 mockToDate = TestUtils.getRandomDate();
                 mockPageNumber = TestUtils.getRandomInteger(0, 10);
                 mockPageSize = TestUtils.getRandomInteger(1, 100);
+                mockCardId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                 TransactionManager.setPostedTransactions(mockCachedPostedTransactionsCollection.slice());
 
@@ -177,18 +179,40 @@
 
             describe("when getting the posted transactions", function () {
 
-                beforeEach(function () {
-                    TransactionManager.fetchPostedTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
+                describe("with a cardId", function () {
+
+                    beforeEach(function () {
+                        TransactionManager.fetchPostedTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize, mockCardId)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
+
+                    it("should call TransactionsResource.getPostedTransactions", function () {
+                        expect(TransactionsResource.getPostedTransactions).toHaveBeenCalledWith(mockAccountId, {
+                            fromDate  : mockFromDate,
+                            toDate    : mockToDate,
+                            pageNumber: mockPageNumber,
+                            pageSize  : mockPageSize,
+                            cardId    : mockCardId
+                        });
+                    });
                 });
 
-                it("should call TransactionsResource.getPostedTransactions", function () {
-                    expect(TransactionsResource.getPostedTransactions).toHaveBeenCalledWith(mockAccountId, {
-                        fromDate  : mockFromDate,
-                        toDate    : mockToDate,
-                        pageNumber: mockPageNumber,
-                        pageSize  : mockPageSize
+                describe("without a cardId", function () {
+
+                    beforeEach(function () {
+                        TransactionManager.fetchPostedTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
+
+                    it("should call TransactionsResource.getPostedTransactions", function () {
+                        expect(TransactionsResource.getPostedTransactions).toHaveBeenCalledWith(mockAccountId, {
+                            fromDate  : mockFromDate,
+                            toDate    : mockToDate,
+                            pageNumber: mockPageNumber,
+                            pageSize  : mockPageSize
+                        });
                     });
                 });
             });
