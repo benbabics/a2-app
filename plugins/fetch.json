@@ -98,7 +98,7 @@
     "ionic-plugin-keyboard": {
         "source": {
             "type": "registry",
-            "id": "ionic-plugin-keyboard@1.0.8"
+            "id": "ionic-plugin-keyboard@2.0.1"
         },
         "is_top_level": true,
         "variables": {}
