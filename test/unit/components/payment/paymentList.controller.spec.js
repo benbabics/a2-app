@@ -32,6 +32,7 @@
         UserManager,
         PaymentManager,
         LoadingIndicator,
+        AnalyticsUtil,
         fetchPaymentsDeferred;
 
     describe("A Payment List Controller", function () {
@@ -42,9 +43,19 @@
             UserManager = jasmine.createSpyObj("UserManager", ["getUser", "userLoggedIn"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayments"]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
 
             module("app.shared");
-            module("app.components");
+            module("app.components", function ($provide) {
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
+            });
 
             // stub the routing and template loading
             module(function ($urlRouterProvider) {

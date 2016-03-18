@@ -27,6 +27,12 @@
                     }),
                     registerBackButtonAction: jasmine.createSpy("registerBackButtonAction")
                 });
+
+                $provide.value("PlatformUtil", {
+                    waitForCordovaPlatform: jasmine.createSpy("waitForCordovaPlatform").and.callFake(function () {
+                        return TestUtils.resolvedPromise(analytics);
+                    })
+                });
             });
 
             inject(function (_$q_, _AnalyticsUtil_, _Logger_) {

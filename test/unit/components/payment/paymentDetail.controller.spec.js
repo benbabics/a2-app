@@ -67,9 +67,25 @@
 
         beforeEach(function () {
 
+            // mock dependencies
+            $state = jasmine.createSpyObj("$state", ["go"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["removePayment"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
+            Popup = jasmine.createSpyObj("Popup", ["displayConfirm"]);
+
             module("app.shared");
             module("app.components", function ($provide, sharedGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
+
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
             });
 
             module(function ($provide, sharedGlobals, appGlobals) {
@@ -85,13 +101,6 @@
                 $provide.value("$ionicTemplateCache", function () {
                 });
             });
-
-            // mock dependencies
-            $state = jasmine.createSpyObj("$state", ["go"]);
-            PaymentManager = jasmine.createSpyObj("PaymentManager", ["removePayment"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackEvent"]);
-            Popup = jasmine.createSpyObj("Popup", ["displayConfirm"]);
 
             inject(function (___, _$rootScope_, $controller, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
 
@@ -111,7 +120,7 @@
                     $state           : $state,
                     AnalyticsUtil    : AnalyticsUtil,
                     PaymentManager   : PaymentManager,
-                    Popup        : Popup,
+                    Popup            : Popup,
                     UserManager      : UserManager,
                     payment          : mockPayment,
                     isPaymentEditable: mockIsPaymentEditable

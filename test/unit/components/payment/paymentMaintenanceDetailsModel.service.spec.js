@@ -13,23 +13,31 @@
             PaymentManager,
             BankManager,
             PaymentModel,
-            BankModel;
+            BankModel,
+            AnalyticsUtil;
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.components");
-            module("app.html");
-
             //mock dependencies:
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayment"]);
             BankManager = jasmine.createSpyObj("BankManager", ["getDefaultBank", "hasMultipleBanks"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
 
-            module(function($provide) {
+            module("app.shared");
+            module("app.components", function($provide) {
                 $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("BankManager", BankManager);
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
             });
+            module("app.html");
 
             inject(function (___, _$injector_, _$rootScope_, _$state_, _$q_,
                              _globals_, _BankModel_, _PaymentModel_, PaymentMaintenanceDetailsModel) {

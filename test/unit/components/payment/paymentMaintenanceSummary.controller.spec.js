@@ -83,15 +83,38 @@
         InvoiceManager,
         PaymentManager,
         PaymentModel,
-        UserManager;
+        UserManager,
+        AnalyticsUtil;
 
     describe("A Payment Maintenance Summary Controller", function () {
 
         beforeEach(function () {
 
+            // mock dependencies
+            $state = jasmine.createSpyObj("state", ["go"]);
+            $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["nextViewOptions"]);
+            InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "updatePayment"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
+
             module("app.shared");
             module("app.components", function ($provide, sharedGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
+
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
+                $provide.value("$state", $state);
+                $provide.value("$ionicHistory", $ionicHistory);
+                $provide.value("InvoiceManager", InvoiceManager);
+                $provide.value("PaymentManager", PaymentManager);
+                $provide.value("UserManager", UserManager);
             });
 
             module(function ($provide, sharedGlobals, appGlobals) {
@@ -106,21 +129,6 @@
             module(function ($provide) {
                 $provide.value("$ionicTemplateCache", function () {
                 });
-            });
-
-            // mock dependencies
-            $state = jasmine.createSpyObj("state", ["go"]);
-            $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["nextViewOptions"]);
-            InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
-            PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "updatePayment"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-
-            module(function ($provide) {
-                $provide.value("$state", $state);
-                $provide.value("$ionicHistory", $ionicHistory);
-                $provide.value("InvoiceManager", InvoiceManager);
-                $provide.value("PaymentManager", PaymentManager);
-                $provide.value("UserManager", UserManager);
             });
 
             inject(function (___, $controller, _$q_, $rootScope, _moment_, _BankModel_, appGlobals,

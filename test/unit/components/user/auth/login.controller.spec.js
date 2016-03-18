@@ -71,8 +71,25 @@
 
         beforeEach(function () {
 
+            // mock dependencies
+            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate"]);
+            $state = jasmine.createSpyObj("state", ["go"]);
+            $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
+            LoginManager = jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]);
+            PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["platformHasCordova"]);
+
             module("app.shared");
-            module("app.components");
+            module("app.components", function($provide) {
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
+            });
 
             // stub the routing and template loading
             module(function ($urlRouterProvider) {
@@ -83,14 +100,6 @@
                 $provide.value("$ionicTemplateCache", function () {
                 });
             });
-
-            // mock dependencies
-            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate"]);
-            $state = jasmine.createSpyObj("state", ["go"]);
-            $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["setUserId", "trackEvent", "trackView"]);
-            LoginManager = jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]);
-            PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["platformHasCordova"]);
 
             inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, BrandAssetModel, UserAccountModel, UserModel,
                              globals) {

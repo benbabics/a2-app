@@ -109,6 +109,7 @@
         LOGIN_STATE_DATA = {"reason": "TOKEN_EXPIRED"},
         AuthorizationHeaderRequestInterceptor,
         AuthenticationManager,
+        AnalyticsUtil,
         refreshAuthenticationDeferred,
         authenticationDeferred,
         restangularDeferred,
@@ -118,10 +119,26 @@
 
         beforeEach(function () {
 
+            // mock dependencies
+            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn", "hasRefreshToken", "refreshAuthentication", "authenticate", "logOut", "getAuthorizationHeader"]);
+            AuthorizationHeaderRequestInterceptor = jasmine.createSpyObj("AuthorizationHeaderRequestInterceptor", ["request"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
+
             module("app.shared");
 
             module("app.components", function ($provide, sharedGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
+
+                $provide.value("AuthenticationManager", AuthenticationManager);
+                $provide.value("AuthorizationHeaderRequestInterceptor", AuthorizationHeaderRequestInterceptor);
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
             });
 
             module(function ($provide, sharedGlobals, appGlobals) {
@@ -129,15 +146,6 @@
             });
 
             module("app.html");
-
-            // mock dependencies
-            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn", "hasRefreshToken", "refreshAuthentication", "authenticate", "logOut", "getAuthorizationHeader"]);
-            AuthorizationHeaderRequestInterceptor = jasmine.createSpyObj("AuthorizationHeaderRequestInterceptor", ["request"]);
-
-            module(function($provide) {
-                $provide.value("AuthenticationManager", AuthenticationManager);
-                $provide.value("AuthorizationHeaderRequestInterceptor", AuthorizationHeaderRequestInterceptor);
-            });
 
             inject(function (_AuthenticationErrorInterceptor_, _$httpBackend_, _$rootScope_, _$state_, $q) {
                 AuthenticationErrorInterceptor = _AuthenticationErrorInterceptor_;

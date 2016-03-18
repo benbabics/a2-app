@@ -11,6 +11,7 @@
         UserModel,
         UserAccountModel,
         PostedTransactionModel,
+        AnalyticsUtil,
         ctrl,
         resolveHandler,
         rejectHandler,
@@ -36,8 +37,23 @@
 
         beforeEach(function () {
 
+            //mock dependencies:
+            TransactionManager = jasmine.createSpyObj("TransactionManager", ["fetchPostedTransactions"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
+
             module("app.shared");
-            module("app.components");
+            module("app.components", function ($provide) {
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
+            });
 
             // stub the routing and template loading
             module(function ($urlRouterProvider) {
@@ -48,11 +64,6 @@
                 $provide.value("$ionicTemplateCache", function () {
                 });
             });
-
-            //mock dependencies:
-            TransactionManager = jasmine.createSpyObj("TransactionManager", ["fetchPostedTransactions"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
 
             inject(function (_$rootScope_, _$q_, _moment_, _UserModel_, _UserAccountModel_, _PostedTransactionModel_, $controller) {
                 $rootScope = _$rootScope_;

@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    var BrandUtil,
+    var AnalyticsUtil,
+        BrandUtil,
         BrandManager,
         BrandAssetModel,
         FileUtil,
@@ -11,6 +12,7 @@
         $q,
         $rootScope,
         $window,
+        $state,
         $localStorage,
         brandAssets,
         brandAsset,
@@ -34,12 +36,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.core");
-            module("app.components.brand");
-            module("app.components.util");
-            module("app.html");
-
             //mock dependencies:
             BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericAnalyticsTrackingId", "getGenericBrandAssets"]);
             FileUtil = jasmine.createSpyObj("FileUtil", [
@@ -50,13 +46,25 @@
                 "removeFile",
                 "writeFile"
             ]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
 
-            module(function ($provide) {
+            module("app.shared");
+            module("app.components", function ($provide) {
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("BrandManager", BrandManager);
                 $provide.value("FileUtil", FileUtil);
             });
+            module("app.html");
 
-            inject(function (_$localStorage_, _$rootScope_, _$q_, _$window_, _globals_, _moment_, _BrandAssetModel_, _BrandUtil_, _LoggerUtil_) {
+            inject(function (_$localStorage_, _$rootScope_, _$state_, _$q_, _$window_, _globals_, _moment_,
+                             _BrandAssetModel_, _BrandUtil_, _LoggerUtil_) {
 
                 BrandUtil = _BrandUtil_;
                 LoggerUtil = _LoggerUtil_;
@@ -67,6 +75,7 @@
                 $localStorage = _$localStorage_;
                 globals = _globals_;
                 moment = _moment_;
+                $state = _$state_;
 
                 LAST_BRAND_UPDATE_DATE = globals.LOCALSTORAGE.KEYS.LAST_BRAND_UPDATE_DATE;
                 BRAND = globals.BRAND;
@@ -99,6 +108,7 @@
             rejectHandler = jasmine.createSpy("rejectHandler");
             resolveHandler = jasmine.createSpy("resolveHandler");
             spyOn(brandAsset, "fetchResource").and.returnValue(fetchResourceDeferred.promise);
+            spyOn($state, "transitionTo").and.stub();
         });
 
         describe("has a getAssetResourceData function that", function () {

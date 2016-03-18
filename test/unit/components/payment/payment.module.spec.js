@@ -4,15 +4,28 @@
     var $rootScope,
         $ionicPlatform,
         $state,
-        PaymentManager;
+        PaymentManager,
+        AnalyticsUtil;
 
     describe("A Payment Module", function () {
 
         beforeEach(function () {
 
+            //mock dependencies
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
+
             module("app.shared");
             module("app.html");
-            module("app.components");
+            module("app.components", function ($provide) {
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
+            });
 
             inject(function (_$rootScope_, _$ionicPlatform_, _$state_, _PaymentManager_) {
                 $rootScope = _$rootScope_;

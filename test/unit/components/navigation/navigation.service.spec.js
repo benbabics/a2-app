@@ -6,6 +6,7 @@
         $rootScope,
         Navigation,
         LoginManager,
+        AnalyticsUtil,
         $state,
         $location,
         mockGlobals = {
@@ -101,11 +102,20 @@
             LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
             $state = jasmine.createSpyObj("state", ["go"]);
             $location = jasmine.createSpyObj("$location", ["url"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
 
             module(function ($provide) {
                 $provide.value("LoginManager", LoginManager);
                 $provide.value("$state", $state);
                 $provide.value("$location", $location);
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
             });
 
             inject(function ($controller, _$ionicHistory_, _$q_, _$rootScope_, _Navigation_) {

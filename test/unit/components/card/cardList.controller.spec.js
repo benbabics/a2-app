@@ -43,8 +43,24 @@
 
         beforeEach(function () {
 
+            //mock dependencies:
+            CardManager = jasmine.createSpyObj("CardManager", ["fetchCards"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
+            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
+            ElementUtil = jasmine.createSpyObj("ElementUtil", ["getFocusedView"]);
+
             module("app.shared");
-            module("app.components");
+            module("app.components", function ($provide) {
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
+            });
 
             // stub the routing and template loading
             module(function ($urlRouterProvider) {
@@ -55,13 +71,6 @@
                 $provide.value("$ionicTemplateCache", function () {
                 });
             });
-
-            //mock dependencies:
-            CardManager = jasmine.createSpyObj("CardManager", ["fetchCards"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackEvent", "trackView"]);
-            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
-            ElementUtil = jasmine.createSpyObj("ElementUtil", ["getFocusedView"]);
 
             inject(function (_$rootScope_, _$q_, $controller,_UserModel_, _UserAccountModel_, _CardModel_) {
                 $rootScope = _$rootScope_;

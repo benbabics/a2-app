@@ -60,6 +60,10 @@ var TestUtils = (function () {
                 thenCallback(value);
 
                 return resolvedPromise(value);
+            },
+            catch: _.noop,
+            finally: function (finallyCallback) {
+                finallyCallback();
             }
         };
     }
