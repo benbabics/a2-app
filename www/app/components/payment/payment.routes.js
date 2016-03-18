@@ -273,13 +273,13 @@
         }
 
         function validateBeforeNavigatingToPaymentAdd(_, $state, $rootScope, globals, AnalyticsUtil,
-                                                      LoadingIndicator, Logger, PaymentManager, PopupUtil, UserManager) {
+                                                      LoadingIndicator, Logger, PaymentManager, Popup, UserManager) {
             var WARNINGS = globals.PAYMENT_ADD.WARNINGS,
                 ANALYTICS_EVENTS = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events,
                 billingAccountId,
                 removeListener,
                 showRouteValidationError = function (errorMessage, trackEvent) {
-                    return PopupUtil.displayAlert({
+                    return Popup.displayAlert({
                         content       : errorMessage,
                         buttonCssClass: "button-submit"
                     })

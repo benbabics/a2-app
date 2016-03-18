@@ -9,7 +9,7 @@
         $ionicHistory,
         CardManager,
         CardModel,
-        PopupUtil,
+        Popup,
         LoadingIndicator,
         UserManager,
         AddressModel,
@@ -71,7 +71,7 @@
 
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
 
-            PopupUtil = jasmine.createSpyObj("PopupUtil", ["displayConfirm"]);
+            Popup = jasmine.createSpyObj("Popup", ["displayConfirm"]);
 
             inject(function ($controller, _$rootScope_, _$q_, _sharedGlobals_, _AddressModel_, _ShippingMethodModel_,
                              CardReissueModel, AccountModel, _CardModel_, ShippingCarrierModel, UserModel,
@@ -96,7 +96,7 @@
                     cardReissueDetails: mockCardReissueDetails,
                     CardManager       : CardManager,
                     LoadingIndicator  : LoadingIndicator,
-                    PopupUtil         : PopupUtil,
+                    Popup         : Popup,
                     UserManager       : UserManager
                 });
             });
@@ -236,7 +236,7 @@
                 confirmDeferred = $q.defer();
                 reissueDeferred = $q.defer();
 
-                PopupUtil.displayConfirm.and.returnValue(confirmDeferred.promise);
+                Popup.displayConfirm.and.returnValue(confirmDeferred.promise);
                 CardManager.reissue.and.returnValue(reissueDeferred.promise);
             });
 
@@ -244,8 +244,8 @@
                 ctrl.promptReissue();
             });
 
-            it("should call PopupUtil.displayConfirm with the expected values", function () {
-                expect(PopupUtil.displayConfirm).toHaveBeenCalledWith({
+            it("should call Popup.displayConfirm with the expected values", function () {
+                expect(Popup.displayConfirm).toHaveBeenCalledWith({
                     content             : mockConfig.confirmationPopup.content,
                     okButtonText        : mockConfig.confirmationPopup.yesButton,
                     cancelButtonText    : mockConfig.confirmationPopup.noButton,

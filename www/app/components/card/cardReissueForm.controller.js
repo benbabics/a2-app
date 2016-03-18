@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function CardReissueFormController(_, $state, globals,
-                                       cardReissueDetails, CardManager, LoadingIndicator, Logger, PopupUtil, UserManager) {
+                                       cardReissueDetails, CardManager, LoadingIndicator, Logger, Popup, UserManager) {
 
         var vm = this;
 
@@ -47,7 +47,7 @@
         }
 
         function promptReissue() {
-            return PopupUtil.displayConfirm({
+            return Popup.displayConfirm({
                 content             : vm.config.confirmationPopup.content,
                 okButtonText        : vm.config.confirmationPopup.yesButton,
                 cancelButtonText    : vm.config.confirmationPopup.noButton,

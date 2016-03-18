@@ -5,7 +5,7 @@
 
     // jshint maxparams:14
     function coreRun(_, $cordovaDevice, $q, $rootScope, $state, $ionicPlatform, $window,
-                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, NavigationUtil, PlatformUtil, PopupUtil) {
+                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, NavigationUtil, PlatformUtil, Popup) {
 
         function isExitState(stateName) {
             return "app.exit" === stateName;
@@ -41,7 +41,7 @@
 
         function handleApplicationResume() {
             // Close any opened popups
-            PopupUtil.closeAllPopups();
+            Popup.closeAllPopups();
 
             // Go to the login page
             $state.go(globals.LOGIN_STATE);

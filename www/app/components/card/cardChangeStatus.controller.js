@@ -5,7 +5,7 @@
     // jshint maxparams:8
 
     /* @ngInject */
-    function CardChangeStatusController($state, globals, card, CardManager, LoadingIndicator, Logger, PopupUtil, UserManager) {
+    function CardChangeStatusController($state, globals, card, CardManager, LoadingIndicator, Logger, Popup, UserManager) {
 
         var vm = this;
 
@@ -35,7 +35,7 @@
         }
 
         function promptStatusChange(newStatus) {
-            return PopupUtil.displayConfirm({
+            return Popup.displayConfirm({
                 content             : vm.config.confirmationPopup.contentMessages[newStatus],
                 okButtonText        : vm.config.confirmationPopup.yesButton,
                 cancelButtonText    : vm.config.confirmationPopup.noButton,

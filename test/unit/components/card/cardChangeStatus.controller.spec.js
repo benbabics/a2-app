@@ -8,7 +8,7 @@
         $state,
         CardManager,
         CardModel,
-        PopupUtil,
+        Popup,
         PlatformUtil,
         LoadingIndicator,
         UserManager,
@@ -55,7 +55,7 @@
                 "updateStatus"
             ]);
 
-            PopupUtil = jasmine.createSpyObj("PopupUtil", [
+            Popup = jasmine.createSpyObj("Popup", [
                 "displayConfirm"
             ]);
 
@@ -95,7 +95,7 @@
                     CardManager     : CardManager,
                     LoadingIndicator: LoadingIndicator,
                     PlatformUtil    : PlatformUtil,
-                    PopupUtil       : PopupUtil,
+                    Popup       : Popup,
                     UserManager     : UserManager
                 });
             });
@@ -130,7 +130,7 @@
                 confirmDeferred = $q.defer();
                 updateStatusDeferred = $q.defer();
 
-                PopupUtil.displayConfirm.and.returnValue(confirmDeferred.promise);
+                Popup.displayConfirm.and.returnValue(confirmDeferred.promise);
                 CardManager.updateStatus.and.returnValue(updateStatusDeferred.promise);
             });
 
@@ -138,8 +138,8 @@
                 ctrl.promptStatusChange(newStatus);
             });
 
-            it("should call PopupUtil.displayConfirm with the expected values", function () {
-                expect(PopupUtil.displayConfirm).toHaveBeenCalledWith({
+            it("should call Popup.displayConfirm with the expected values", function () {
+                expect(Popup.displayConfirm).toHaveBeenCalledWith({
                     content             : mockConfig.confirmationPopup.contentMessages[newStatus],
                     okButtonText        : mockConfig.confirmationPopup.yesButton,
                     cancelButtonText    : mockConfig.confirmationPopup.noButton,

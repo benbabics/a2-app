@@ -262,7 +262,7 @@
             mockUser,
             BankManager,
             BankModel,
-            PopupUtil,
+            Popup,
             PaymentManager,
             PaymentModel,
             InvoiceManager,
@@ -298,7 +298,7 @@
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTracker", "trackView", "trackEvent"]);
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
-            PopupUtil = jasmine.createSpyObj("PopupUtil", ["displayAlert"]);
+            Popup = jasmine.createSpyObj("Popup", ["displayAlert"]);
 
             module(function ($provide) {
                 $provide.value("BankManager", BankManager);
@@ -309,7 +309,7 @@
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("LoginManager", LoginManager);
-                $provide.value("PopupUtil", PopupUtil);
+                $provide.value("Popup", Popup);
             });
 
             inject(function (___, _$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _InvoiceSummaryModel_,
@@ -1168,7 +1168,7 @@
                 spyOn($state, "go").and.callThrough();
                 spyOn($rootScope, "$on").and.callThrough();
 
-                PopupUtil.displayAlert.and.returnValue($q.resolve());
+                Popup.displayAlert.and.returnValue($q.resolve());
             });
 
             describe("when bank accounts have NOT been setup", function () {
@@ -1208,8 +1208,8 @@
                         expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
-                    it("should call PopupUtil.displayAlert", function () {
-                        expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
+                    it("should call Popup.displayAlert", function () {
+                        expect(Popup.displayAlert).toHaveBeenCalledWith({
                             content       : mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
                             buttonCssClass: "button-submit"
                         });
@@ -1255,8 +1255,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call PopupUtil.displayAlert", function () {
-                            expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
+                        it("should call Popup.displayAlert", function () {
+                            expect(Popup.displayAlert).toHaveBeenCalledWith({
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
@@ -1306,8 +1306,8 @@
                         expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
-                    it("should call PopupUtil.displayAlert", function () {
-                        expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
+                    it("should call Popup.displayAlert", function () {
+                        expect(Popup.displayAlert).toHaveBeenCalledWith({
                             content       : mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
                             buttonCssClass: "button-submit"
                         });
@@ -1353,8 +1353,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call PopupUtil.displayAlert", function () {
-                            expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
+                        it("should call Popup.displayAlert", function () {
+                            expect(Popup.displayAlert).toHaveBeenCalledWith({
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
                                 buttonCssClass: "button-submit"
                             });
@@ -1404,8 +1404,8 @@
                         expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
-                    it("should call PopupUtil.displayAlert", function () {
-                        expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
+                    it("should call Popup.displayAlert", function () {
+                        expect(Popup.displayAlert).toHaveBeenCalledWith({
                             content       : mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
                             buttonCssClass: "button-submit"
                         });
@@ -1451,8 +1451,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call PopupUtil.displayAlert", function () {
-                            expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
+                        it("should call Popup.displayAlert", function () {
+                            expect(Popup.displayAlert).toHaveBeenCalledWith({
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
                                 buttonCssClass: "button-submit"
                             });
@@ -1502,8 +1502,8 @@
                         expect($state.go).toHaveBeenCalledWith(paymentListState);
                     });
 
-                    it("should call PopupUtil.displayAlert", function () {
-                        expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
+                    it("should call Popup.displayAlert", function () {
+                        expect(Popup.displayAlert).toHaveBeenCalledWith({
                             content       : mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
                             buttonCssClass: "button-submit"
                         });
@@ -1549,8 +1549,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call PopupUtil.displayAlert", function () {
-                            expect(PopupUtil.displayAlert).toHaveBeenCalledWith({
+                        it("should call Popup.displayAlert", function () {
+                            expect(Popup.displayAlert).toHaveBeenCalledWith({
                                 content       : mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
                                 buttonCssClass: "button-submit"
                             });
@@ -1600,8 +1600,8 @@
                         expect($state.go).toHaveBeenCalledWith(paymentAddState);
                     });
 
-                    it("should NOT call PopupUtil.displayAlert", function () {
-                        expect(PopupUtil.displayAlert).not.toHaveBeenCalled();
+                    it("should NOT call Popup.displayAlert", function () {
+                        expect(Popup.displayAlert).not.toHaveBeenCalled();
                     });
 
                     it("should NOT call AnalyticsUtil.trackEvent", function () {
@@ -1644,8 +1644,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should NOT call PopupUtil.displayAlert", function () {
-                            expect(PopupUtil.displayAlert).not.toHaveBeenCalled();
+                        it("should NOT call Popup.displayAlert", function () {
+                            expect(Popup.displayAlert).not.toHaveBeenCalled();
                         });
 
                         it("should NOT call AnalyticsUtil.trackEvent", function () {

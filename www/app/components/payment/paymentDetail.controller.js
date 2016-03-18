@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function PaymentDetailController(_, $scope, $state, globals, isPaymentEditable, payment,
-                                     AnalyticsUtil, Logger, PaymentManager, PopupUtil, UserManager) {
+                                     AnalyticsUtil, Logger, PaymentManager, Popup, UserManager) {
 
         var vm = this;
 
@@ -44,7 +44,7 @@
         }
 
         function displayCancelPaymentPopup() {
-            return PopupUtil.displayConfirm({
+            return Popup.displayConfirm({
                 content             : vm.config.cancelPaymentConfirm.content,
                 okButtonText        : vm.config.cancelPaymentConfirm.yesButton,
                 cancelButtonText    : vm.config.cancelPaymentConfirm.noButton,

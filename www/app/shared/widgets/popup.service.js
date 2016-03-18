@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function PopupUtil(_, $ionicPopup) {
+    function Popup(_, $ionicPopup) {
         // Private members
         var alertPopup,
             confirmPopup;
@@ -152,6 +152,6 @@
     }
 
     angular
-        .module("app.shared.util")
-        .factory("PopupUtil", PopupUtil);
+        .module("app.shared.widgets")
+        .factory("Popup", Popup);
 })();

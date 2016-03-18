@@ -53,6 +53,6 @@
     }
 
     angular
-        .module("app.shared.util")
+        .module("app.shared.widgets")
         .factory("LoadingIndicator", LoadingIndicator);
 })();

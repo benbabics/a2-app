@@ -8,7 +8,7 @@
         AnalyticsUtil,
         $q,
         ctrl,
-        PopupUtil,
+        Popup,
         PaymentManager,
         UserManager,
         confirmDeferred,
@@ -91,7 +91,7 @@
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["removePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackEvent"]);
-            PopupUtil = jasmine.createSpyObj("PopupUtil", ["displayConfirm"]);
+            Popup = jasmine.createSpyObj("Popup", ["displayConfirm"]);
 
             inject(function (___, _$rootScope_, $controller, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
 
@@ -111,7 +111,7 @@
                     $state           : $state,
                     AnalyticsUtil    : AnalyticsUtil,
                     PaymentManager   : PaymentManager,
-                    PopupUtil        : PopupUtil,
+                    Popup        : Popup,
                     UserManager      : UserManager,
                     payment          : mockPayment,
                     isPaymentEditable: mockIsPaymentEditable
@@ -123,7 +123,7 @@
             PaymentManager.removePayment.and.returnValue(removePaymentDeferred.promise);
 
             //setup spies:
-            PopupUtil.displayConfirm.and.returnValue(confirmDeferred.promise);
+            Popup.displayConfirm.and.returnValue(confirmDeferred.promise);
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -154,8 +154,8 @@
                 ctrl.displayCancelPaymentPopup();
             });
 
-            it("should call PopupUtil.displayConfirm with the expected values", function () {
-                expect(PopupUtil.displayConfirm).toHaveBeenCalledWith({
+            it("should call Popup.displayConfirm with the expected values", function () {
+                expect(Popup.displayConfirm).toHaveBeenCalledWith({
                     content             : mockConfig.cancelPaymentConfirm.content,
                     okButtonText        : mockConfig.cancelPaymentConfirm.yesButton,
                     cancelButtonText    : mockConfig.cancelPaymentConfirm.noButton,

@@ -100,7 +100,7 @@
             AuthenticationManager,
             BankManager,
             PaymentMaintenance,
-            PopupUtil,
+            Popup,
             NavigationUtil,
             LoadingIndicator,
             PaymentManager,
@@ -126,7 +126,7 @@
             BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericAnalyticsTrackingId", "loadBundledBrand"]);
             $cordovaDevice = jasmine.createSpyObj("$cordovaDevice", ["getPlatform"]);
             $ionicPlatform = jasmine.createSpyObj("$ionicPlatform", ["ready", "registerBackButtonAction"]);
-            PopupUtil = jasmine.createSpyObj("PopupUtil", ["closeAllPopups"]);
+            Popup = jasmine.createSpyObj("Popup", ["closeAllPopups"]);
             NavigationUtil = jasmine.createSpyObj("NavigationUtil", ["exitApp", "goToBackState"]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
 
@@ -144,7 +144,7 @@
                 $provide.value("BrandManager", BrandManager);
                 $provide.value("$cordovaDevice", $cordovaDevice);
                 $provide.value("$ionicPlatform", $ionicPlatform);
-                $provide.value("PopupUtil", PopupUtil);
+                $provide.value("Popup", Popup);
                 $provide.value("NavigationUtil", NavigationUtil);
                 $provide.value("LoadingIndicator", LoadingIndicator);
 
@@ -335,7 +335,7 @@
             });
 
             it("should close any popups", function () {
-                expect(PopupUtil.closeAllPopups).toHaveBeenCalledWith();
+                expect(Popup.closeAllPopups).toHaveBeenCalledWith();
             });
 
             it("should redirect to the login page", function () {

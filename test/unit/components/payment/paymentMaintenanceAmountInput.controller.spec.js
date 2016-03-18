@@ -4,7 +4,7 @@
     var _,
         ctrl,
         scope,
-        PopupUtil,
+        Popup,
         PlatformUtil,
         $ionicHistory,
         mockPayment = {
@@ -84,7 +84,7 @@
             });
 
             //mock dependencies:
-            PopupUtil = jasmine.createSpyObj("PopupUtil", ["displayAlert"]);
+            Popup = jasmine.createSpyObj("Popup", ["displayAlert"]);
             PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["waitForCordovaPlatform"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
 
@@ -106,7 +106,7 @@
                     maintenanceDetails: mockMaintenance,
                     payment           : mockPayment,
                     invoiceSummary    : mockInvoiceSumary,
-                    PopupUtil         : PopupUtil,
+                    Popup         : Popup,
                     PlatformUtil      : PlatformUtil
                 });
             });
@@ -180,7 +180,7 @@
                 });
 
                 it("should show the expected error", function () {
-                    expect(PopupUtil.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
+                    expect(Popup.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
                         content: mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT.ERRORS.zeroPayment
                     }));
                 });
@@ -199,7 +199,7 @@
                 });
 
                 it("should show the expected error", function () {
-                    expect(PopupUtil.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
+                    expect(Popup.displayAlert).toHaveBeenCalledWith(jasmine.objectContaining({
                         content: mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT.ERRORS.paymentTooLarge
                     }));
                 });
@@ -218,7 +218,7 @@
                 });
 
                 it("should NOT show an error", function () {
-                    expect(PopupUtil.displayAlert).not.toHaveBeenCalled();
+                    expect(Popup.displayAlert).not.toHaveBeenCalled();
                 });
 
                 it("should go back to the previous page", function () {
@@ -235,7 +235,7 @@
                 });
 
                 it("should NOT show an error", function () {
-                    expect(PopupUtil.displayAlert).not.toHaveBeenCalled();
+                    expect(Popup.displayAlert).not.toHaveBeenCalled();
                 });
 
                 it("should go back to the previous page", function () {

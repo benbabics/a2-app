@@ -1,9 +1,9 @@
 (function () {
     "use strict";
 
-    describe("A PopupUtil service", function () {
+    describe("A Popup service", function () {
 
-        var PopupUtil,
+        var Popup,
             $ionicPopup,
             $q,
             alertDeferred,
@@ -22,8 +22,8 @@
                 $provide.value("$ionicPopup", $ionicPopup);
             });
 
-            inject(function (_$q_, _PopupUtil_) {
-                PopupUtil = _PopupUtil_;
+            inject(function (_$q_, _Popup_) {
+                Popup = _Popup_;
                 $q = _$q_;
 
                 alertDeferred = $q.defer();
@@ -49,7 +49,7 @@
             describe("should NOT close an alert when none have been displayed", function () {
 
                 beforeEach(function () {
-                    PopupUtil.closeAlert();
+                    Popup.closeAlert();
                 });
 
                 it("should NOT try to close the alert", function () {
@@ -61,9 +61,9 @@
             describe("should close an alert when one has been displayed", function () {
 
                 beforeEach(function () {
-                    PopupUtil.displayAlert();
+                    Popup.displayAlert();
 
-                    PopupUtil.closeAlert();
+                    Popup.closeAlert();
                 });
 
                 it("should call close the alert", function () {
@@ -79,7 +79,7 @@
             describe("should NOT close a confirm when none have been displayed", function () {
 
                 beforeEach(function () {
-                    PopupUtil.closeConfirm();
+                    Popup.closeConfirm();
                 });
 
                 it("should NOT try to close the confirm", function () {
@@ -91,9 +91,9 @@
             describe("should close a confirm when one has been displayed", function () {
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm();
+                    Popup.displayConfirm();
 
-                    PopupUtil.closeConfirm();
+                    Popup.closeConfirm();
                 });
 
                 it("should call close the confirm", function () {
@@ -109,7 +109,7 @@
             describe("should NOT close an alert when none have been displayed", function () {
 
                 beforeEach(function () {
-                    PopupUtil.closeAlert();
+                    Popup.closeAlert();
                 });
 
                 it("should NOT try to close the alert", function () {
@@ -121,9 +121,9 @@
             describe("should close an alert when one has been displayed", function () {
 
                 beforeEach(function () {
-                    PopupUtil.displayAlert();
+                    Popup.displayAlert();
 
-                    PopupUtil.closeAlert();
+                    Popup.closeAlert();
                 });
 
                 it("should call close the alert", function () {
@@ -135,7 +135,7 @@
             describe("should NOT close a confirm when none have been displayed", function () {
 
                 beforeEach(function () {
-                    PopupUtil.closeConfirm();
+                    Popup.closeConfirm();
                 });
 
                 it("should NOT try to close the confirm", function () {
@@ -147,9 +147,9 @@
             describe("should close a confirm when one has been displayed", function () {
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm();
+                    Popup.displayConfirm();
 
-                    PopupUtil.closeConfirm();
+                    Popup.closeConfirm();
                 });
 
                 it("should call close the confirm", function () {
@@ -165,7 +165,7 @@
             describe("when options are NOT provided", function () {
 
                 beforeEach(function () {
-                    PopupUtil.displayAlert();
+                    Popup.displayAlert();
                 });
 
                 it("should call $ionicPopup.alert with the default cssClass", function () {
@@ -181,7 +181,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayAlert(options);
+                    Popup.displayAlert(options);
                 });
 
                 it("should call $ionicPopup.alert with the correct options", function () {
@@ -197,7 +197,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayAlert(options);
+                    Popup.displayAlert(options);
                 });
 
                 it("should call $ionicPopup.alert with the correct options", function () {
@@ -213,7 +213,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayAlert(options);
+                    Popup.displayAlert(options);
                 });
 
                 it("should call $ionicPopup.alert with the correct options", function () {
@@ -229,7 +229,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayAlert(options);
+                    Popup.displayAlert(options);
                 });
 
                 it("should call $ionicPopup.alert with the correct options", function () {
@@ -245,7 +245,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayAlert(options);
+                    Popup.displayAlert(options);
                 });
 
                 it("should call $ionicPopup.alert with the correct options", function () {
@@ -264,7 +264,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayAlert(options);
+                    Popup.displayAlert(options);
                 });
 
                 it("should call $ionicPopup.alert with the correct options", function () {
@@ -280,7 +280,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayAlert(options);
+                    Popup.displayAlert(options);
                 });
 
                 it("should call $ionicPopup.alert with the correct options", function () {
@@ -297,7 +297,7 @@
             describe("when options are NOT provided", function () {
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm();
+                    Popup.displayConfirm();
                 });
 
                 it("should call $ionicPopup.confirm with the default cssClass", function () {
@@ -313,7 +313,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm(options);
+                    Popup.displayConfirm(options);
                 });
 
                 it("should call $ionicPopup.alert with the correct options", function () {
@@ -332,7 +332,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm(options);
+                    Popup.displayConfirm(options);
                 });
 
                 it("should call $ionicPopup.confirm with the correct options", function () {
@@ -351,7 +351,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm(options);
+                    Popup.displayConfirm(options);
                 });
 
                 it("should call $ionicPopup.confirm with the correct options", function () {
@@ -367,7 +367,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm(options);
+                    Popup.displayConfirm(options);
                 });
 
                 it("should call $ionicPopup.confirm with the correct options", function () {
@@ -386,7 +386,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm(options);
+                    Popup.displayConfirm(options);
                 });
 
                 it("should call $ionicPopup.confirm with the correct options", function () {
@@ -405,7 +405,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm(options);
+                    Popup.displayConfirm(options);
                 });
 
                 it("should call $ionicPopup.confirm with the correct options", function () {
@@ -423,7 +423,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm(options);
+                    Popup.displayConfirm(options);
                 });
 
                 it("should call $ionicPopup.confirm with the correct options", function () {
@@ -441,7 +441,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm(options);
+                    Popup.displayConfirm(options);
                 });
 
                 it("should call $ionicPopup.confirm with the correct options", function () {
@@ -459,7 +459,7 @@
                 };
 
                 beforeEach(function () {
-                    PopupUtil.displayConfirm(options);
+                    Popup.displayConfirm(options);
                 });
 
                 it("should call $ionicPopup.confirm with the correct options", function () {
