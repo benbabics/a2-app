@@ -119,16 +119,17 @@
 
     appGlobals.CARD_DETAIL = {
         "CONFIG": {
-            "ANALYTICS"         : {
+            "ANALYTICS"                : {
                 "pageName": "CardDetails"
             },
-            "title"             : "Card Details",
-            "cardNumber"        : "Card Number",
-            "standardEmbossing" : "Standard Embossing",
-            "optionalEmbossing" : "Optional Embossing",
-            "status"            : "Status",
-            "changeStatusButton": "Change Status",
-            "reissueCardButton" : "Reissue Card"
+            "title"                    : "Card Details",
+            "cardNumber"               : "Card Number",
+            "standardEmbossing"        : "Standard Embossing",
+            "optionalEmbossing"        : "Optional Embossing",
+            "status"                   : "Status",
+            "changeStatusButton"       : "Change Status",
+            "reissueCardButton"        : "Reissue Card",
+            "transactionActivityButton": "Transaction Activity"
         }
     };
 
