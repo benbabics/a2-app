@@ -115,11 +115,15 @@
             });
 
             it("should have the expected URL", function () {
-                expect(state.url).toEqual("/list");
+                expect(state.url).toEqual("/list/:cardId");
             });
 
-            it("should respond to the URL", function () {
-                expect($state.href(stateName)).toEqual("#/transaction/list");
+            it("should respond to the URL without a cardId", function () {
+                expect($state.href(stateName)).toEqual("#/transaction/list/");
+            });
+
+            it("should respond to the URL with a cardId", function () {
+                expect($state.href(stateName, {cardId: "1234"})).toEqual("#/transaction/list/1234");
             });
 
             describe("when navigated to", function () {

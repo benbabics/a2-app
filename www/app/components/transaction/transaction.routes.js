@@ -16,7 +16,7 @@
 
         $stateProvider.state("transaction.list", {
             cache   : true,
-            url     : "/list",
+            url     : "/list/:cardId",
             views   : {
                 "view@transaction": {
                     templateUrl: "app/components/transaction/templates/transactionList.html",
