@@ -16,10 +16,12 @@ $user-login-error-message-animation: all linear 0.5s;
 
 .user-login-view {
 
-    color: $inverse-font-color;
-    background: url("../img/login_background.jpg") no-repeat center 0 scroll;
-    background-size: cover;
-
+     .title-bar{
+        color: $inverse-font-color;
+        background: url("../img/titlebar.svg") no-repeat center scroll;
+        background-size: cover;
+        height: 12%;
+    }
     @at-root .platform-ios.keyboard-open & {
         position: absolute;
         top: $user-login-image-header-offset-ios;
@@ -32,7 +34,6 @@ $user-login-error-message-animation: all linear 0.5s;
     }
 
     #errorMessage {
-        position: absolute;
 
         &.ng-enter, &.ng-leave {
             -webkit-transition: $user-login-error-message-animation;
@@ -51,7 +52,7 @@ $user-login-error-message-animation: all linear 0.5s;
     }
 
     form {
-        position: absolute;
+
         top: $user-login-image-form-offset;
         bottom: 0;
         left: 0;
