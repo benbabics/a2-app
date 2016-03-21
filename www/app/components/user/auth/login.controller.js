@@ -43,6 +43,8 @@
 
             $ionicHistory.clearHistory();
 
+            setupUsername();
+
             if (_.has($stateParams, "reason") && _.isString($stateParams.reason)) {
                 vm.globalError = vm.config.serverErrors[$stateParams.reason];
 
@@ -109,6 +111,18 @@
 
         function removeKeyboardOpenClass() {
             document.body.classList.remove("keyboard-open");
+        }
+
+        function setupUsername() {
+            // default the checkbox to false
+            vm.rememberMe = false;
+
+            // if the Remember Me option was selected previously
+            // populate the Username and set the checkbox
+            if (_.has($localStorage, USERNAME_KEY)) {
+                vm.user.username = $localStorage[USERNAME_KEY];
+                vm.rememberMe = true;
+            }
         }
 
         function trackErrorEvent(errorReason) {

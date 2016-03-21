@@ -154,6 +154,56 @@
                 ctrl.globalError = "This is a previous error";
             });
 
+            describe("when the Username is stored in Local Storage", function () {
+
+                beforeEach(function() {
+                    $localStorage.USERNAME = TestUtils.getRandomStringThatIsAlphaNumeric(20);
+
+                    // clear the username field so we can validate what it gets set to
+                    ctrl.user.username = null;
+
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
+
+                it("should clear the ionic history", function () {
+                    expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+                });
+
+                it("should set the username with the value from Local Storage", function () {
+                    expect(ctrl.user.username).toEqual($localStorage.USERNAME);
+                });
+
+                it("should set the rememberMe option to true", function () {
+                    expect(ctrl.rememberMe).toBeTruthy();
+                });
+
+            });
+
+            describe("when the Username is NOT stored in Local Storage", function () {
+
+                beforeEach(function() {
+                    delete $localStorage.USERNAME;
+
+                    // clear the username field so we can validate what it gets set to
+                    ctrl.user.username = null;
+
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
+
+                it("should clear the ionic history", function () {
+                    expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
+                });
+
+                it("should NOT set the username", function () {
+                    expect(ctrl.user.username).toBeNull();
+                });
+
+                it("should set the rememberMe option to false", function () {
+                    expect(ctrl.rememberMe).toBeFalsy();
+                });
+
+            });
+
             describe("when $stateParams.reason is TOKEN_EXPIRED", function () {
 
                 beforeEach(function() {
