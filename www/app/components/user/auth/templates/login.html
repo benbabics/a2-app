@@ -31,6 +31,18 @@
                     </span>
                 </div>
 
+                <div class="padding">
+                    <span class="item-input">
+                        <label class="toggle">
+                            <input type="checkbox">
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                            {{::vm.config.rememberMe.label}}
+                        </label>
+                    </span>
+                </div>
+
                 <div class="padding align_center">
                     <wex-required-submit class="button-width" text="{{::vm.config.submitButton}}"></wex-required-submit>
                 </div>
