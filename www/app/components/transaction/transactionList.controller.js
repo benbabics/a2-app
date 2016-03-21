@@ -8,8 +8,10 @@
     function TransactionListController(_, $stateParams, globals, moment, LoadingIndicator, Logger, TransactionManager, UserManager) {
 
         var vm = this,
+            cardIdFilter,
             currentPage = 0;
 
+        vm.backStateOverride = null;
         vm.config = globals.TRANSACTION_LIST.CONFIG;
         vm.firstPageLoaded = false;
         vm.postedTransactions = [];
@@ -18,24 +20,30 @@
         vm.loadNextPage = loadNextPage;
         vm.pageLoaded = pageLoaded;
 
+        activate();
+
         //////////////////////
+        // Controller initialization
+        function activate() {
+            if (_.has($stateParams, "cardId") &&
+                !_.isEmpty($stateParams.cardId) &&
+                _.isString($stateParams.cardId)) {
+                cardIdFilter  = $stateParams.cardId;
+            }
+            else {
+                vm.backStateOverride = "landing";
+            }
+        }
 
         function loadNextPage() {
             var billingAccountId = UserManager.getUser().billingCompany.accountId,
                 fromDate = moment().subtract(vm.searchOptions.MAX_DAYS, "days").toDate(),
-                toDate = moment().toDate(),
-                cardId;
-
-            if (_.has($stateParams, "cardId") &&
-                !_.isEmpty($stateParams.cardId) &&
-                _.isString($stateParams.cardId)) {
-                cardId  = $stateParams.cardId;
-            }
+                toDate = moment().toDate();
 
             LoadingIndicator.begin();
 
             //fetch the next page of transactions
-            return TransactionManager.fetchPostedTransactions(billingAccountId, fromDate, toDate, currentPage, vm.searchOptions.PAGE_SIZE, cardId)
+            return TransactionManager.fetchPostedTransactions(billingAccountId, fromDate, toDate, currentPage, vm.searchOptions.PAGE_SIZE, cardIdFilter)
                 .then(function (postedTransactions) {
                     if (_.isEmpty(postedTransactions)) {
                         return true;

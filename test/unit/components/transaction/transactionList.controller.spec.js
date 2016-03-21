@@ -13,6 +13,7 @@
         UserAccountModel,
         PostedTransactionModel,
         AnalyticsUtil,
+        cardIdFilter,
         ctrl,
         resolveHandler,
         rejectHandler,
@@ -31,8 +32,7 @@
                     "PAGE_SIZE": TestUtils.getRandomInteger(1, 100)
                 }
             }
-        },
-        mockConfig = mockGlobals.TRANSACTION_LIST.CONFIG;
+        };
 
     describe("A Transaction List Controller", function () {
 
@@ -77,6 +77,9 @@
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
+                cardIdFilter = getRandomCardIdFilter();
+                $stateParams.cardId = cardIdFilter;
+
                 ctrl = $controller("TransactionListController", {
                     $scope            : $scope,
                     $stateParams      : $stateParams,
@@ -97,6 +100,10 @@
             UserManager.getUser.and.returnValue(mockUser);
         });
 
+        it("should set backStateOverride to the expected value", function () {
+            expect(ctrl.backStateOverride).toEqual(getExpectedBackStateOverride(cardIdFilter));
+        });
+
         describe("has a loadNextPage function that", function () {
             var fetchPostedTransactionsDeferred;
 
@@ -115,98 +122,15 @@
                 expect(LoadingIndicator.begin).toHaveBeenCalledWith();
             });
 
-            describe("when $stateParams.cardId is a non-empty string", function () {
-                var cardId;
-
-                beforeEach(function() {
-                    cardId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                    $stateParams.cardId = cardId;
-
-                    ctrl.loadNextPage()
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                });
-
-                it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
-                    expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
-                        mockUser.billingCompany.accountId,
-                        moment().subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
-                        moment().toDate(),
-                        0,
-                        mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE,
-                        cardId
-                    );
-                });
-
-            });
-
-            describe("when $stateParams.cardId is an empty string", function () {
-
-                beforeEach(function() {
-                    $stateParams.cardId = "";
-
-                    ctrl.loadNextPage()
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                });
-
-                it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
-                    expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
-                        mockUser.billingCompany.accountId,
-                        moment().subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
-                        moment().toDate(),
-                        0,
-                        mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE,
-                        undefined
-                    );
-                });
-
-            });
-
-            describe("when $stateParams.cardId is null", function () {
-
-                beforeEach(function() {
-                    $stateParams.cardId = null;
-
-                    ctrl.loadNextPage()
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                });
-
-                it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
-                    expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
-                        mockUser.billingCompany.accountId,
-                        moment().subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
-                        moment().toDate(),
-                        0,
-                        mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE,
-                        undefined
-                    );
-                });
-
-            });
-
-            describe("when $stateParams.cardId is undefined", function () {
-
-                beforeEach(function() {
-                    delete $stateParams.cardId;
-
-                    ctrl.loadNextPage()
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                });
-
-                it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
-                    expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
-                        mockUser.billingCompany.accountId,
-                        moment().subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
-                        moment().toDate(),
-                        0,
-                        mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE,
-                        undefined
-                    );
-                });
-
+            it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
+                expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
+                    mockUser.billingCompany.accountId,
+                    moment().subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
+                    moment().toDate(),
+                    0,
+                    mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE,
+                    getExpectedCardId(cardIdFilter)
+                );
             });
 
             describe("when fetchPostedTransactions resolves with an empty list of transactions", function () {
@@ -299,5 +223,41 @@
         });
 
     });
+
+    function getExpectedBackStateOverride(cardIdFilter) {
+        if (isFilteredByCardId(cardIdFilter)) {
+            return null;
+        }
+
+        return "landing";
+    }
+
+    function getExpectedCardId(cardIdFilter) {
+        if (isFilteredByCardId(cardIdFilter)) {
+            return cardIdFilter;
+        }
+
+        return undefined;
+    }
+
+    function isFilteredByCardId(cardIdFilter) {
+        return !_.isEmpty(cardIdFilter) && _.isString(cardIdFilter);
+    }
+
+    function getRandomCardIdFilter() {
+        var randomValue = TestUtils.getRandomInteger(0, 3);
+
+        if (randomValue === 0) {
+            return TestUtils.getRandomStringThatIsAlphaNumeric(10);
+        }
+        if (randomValue === 1) {
+            return "";
+        }
+        if (randomValue === 2) {
+            return null;
+        }
+
+        return undefined;
+    }
 
 }());

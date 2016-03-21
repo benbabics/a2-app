@@ -1,4 +1,4 @@
-<ion-view view-title="{{::vm.config.title}}" wex-back-state="landing">
+<ion-view view-title="{{::vm.config.title}}" wex-back-state="{{vm.backStateOverride}}">
     <ion-content class="padding">
         <wex-infinite-list on-reload="vm.loadNextPage"
                            on-page-loaded="vm.pageLoaded"
