@@ -62,6 +62,14 @@ $user-login-error-message-animation: all linear 0.5s;
         .list {
             background: none;
         }
+
+        .item-toggle {
+            border-style: none;
+
+            .toggle {
+                top: 0px;
+            }
+        }
     }
 }
 
