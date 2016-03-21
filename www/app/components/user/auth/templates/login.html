@@ -33,13 +33,7 @@
 
                 <div class="padding">
                     <span class="item-input">
-                        <label class="toggle">
-                            <input type="checkbox">
-                            <div class="track">
-                                <div class="handle"></div>
-                            </div>
-                            {{::vm.config.rememberMe.label}}
-                        </label>
+                        <ion-toggle ng-model="vm.rememberMe">{{::vm.config.rememberMe.label}}</ion-toggle>
                     </span>
                 </div>
 

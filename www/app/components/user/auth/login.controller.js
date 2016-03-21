@@ -2,14 +2,17 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:13
+    // jshint maxparams:14
 
     /* @ngInject */
-    function LoginController(_, $cordovaKeyboard, $ionicHistory, $rootScope, $scope, $state, $stateParams,
+    function LoginController(_, $cordovaKeyboard, $ionicHistory, $localStorage, $rootScope, $scope, $state, $stateParams,
                              globals, AnalyticsUtil, AuthenticationManager, LoadingIndicator, LoginManager, PlatformUtil) {
 
-        var vm = this;
+        var USERNAME_KEY = globals.LOCALSTORAGE.KEYS.USERNAME,
+            vm = this;
+
         vm.config = globals.USER_LOGIN.CONFIG;
+        vm.rememberMe = false;
         vm.user = {};
         vm.authenticateUser = authenticateUser;
         vm.isKeyboardVisible = isKeyboardVisible;
@@ -57,6 +60,9 @@
                 .then(function () {
                     trackSuccessEvent();
 
+                    // Store the Username or not based on Remember Me checkbox
+                    rememberUsername(vm.rememberMe, vm.user.username);
+
                     // Do not allow backing up to the login page.
                     $ionicHistory.nextViewOptions(
                         {
@@ -90,6 +96,15 @@
 
         function isKeyboardVisible() {
             return PlatformUtil.platformHasCordova() && $cordovaKeyboard.isVisible();
+        }
+
+        function rememberUsername(shouldRemember, username) {
+            if (shouldRemember) {
+                $localStorage[USERNAME_KEY] = username;
+            }
+            else {
+                delete $localStorage[USERNAME_KEY];
+            }
         }
 
         function removeKeyboardOpenClass() {

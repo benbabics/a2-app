@@ -2,6 +2,7 @@
     "use strict";
 
     var $ionicHistory,
+        $localStorage,
         $rootScope,
         $scope,
         $state,
@@ -15,6 +16,14 @@
         AuthenticationManager,
         PlatformUtil,
         mockGlobals = {
+            "LOCALSTORAGE" : {
+                "CONFIG": {
+                    "keyPrefix": "FLEET_MANAGER-"
+                },
+                "KEYS": {
+                    "USERNAME": "USERNAME"
+                }
+            },
             "USER_LOGIN": {
                 "CONFIG": {
                     "ANALYTICS"   : {
@@ -50,6 +59,9 @@
                     "password"    : {
                         "label"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                         "maxLength": TestUtils.getRandomInteger(1, 100)
+                    },
+                    "rememberMe"    : {
+                        "label"    : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     },
                     "submitButton": TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "serverErrors": {
@@ -101,9 +113,10 @@
                 });
             });
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, $q, BrandAssetModel, UserAccountModel, UserModel,
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, _$localStorage_, $q, BrandAssetModel, UserAccountModel, UserModel,
                              globals) {
                 $ionicHistory = _$ionicHistory_;
+                $localStorage = _$localStorage_;
                 $scope = _$rootScope_.$new();
                 authenticateDeferred = $q.defer();
                 $rootScope = _$rootScope_;
@@ -111,6 +124,7 @@
                 mockConfig.ANALYTICS.errorEvents = globals.USER_LOGIN.CONFIG.ANALYTICS.errorEvents;
 
                 ctrl = $controller("LoginController", {
+                    $localStorage        : $localStorage,
                     $scope               : $scope,
                     $state               : $state,
                     $stateParams         : $stateParams,
@@ -295,6 +309,9 @@
             };
 
             beforeEach(function () {
+                // clear Local Storage to start
+                delete $localStorage.USERNAME;
+
                 AuthenticationManager.authenticate.and.returnValue(authenticateDeferred.promise);
 
                 ctrl.user = mockUser;
@@ -323,23 +340,66 @@
                         spyOn($ionicHistory, "nextViewOptions");
 
                         logInDeferred.resolve();
-                        $scope.$digest();
                     });
 
-                    it("should call AnalyticsUtil.trackEvent with the expected event", function () {
-                        verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
+                    describe("when the Remember Me option is checked", function () {
+
+                        beforeEach(function () {
+                            ctrl.rememberMe = true;
+
+                            $scope.$digest();
+                        });
+
+                        it("should set the username in Local Storage", function () {
+                            expect($localStorage.USERNAME).toEqual(ctrl.user.username);
+                        });
+
+                        it("should call AnalyticsUtil.trackEvent with the expected event", function () {
+                            verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
+                        });
+
+                        it("should call disable backing up to the login page", function () {
+                            expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
+                        });
+
+                        it("should NOT have an error message", function () {
+                            expect(ctrl.globalError).toBeFalsy();
+                        });
+
+                        it("should navigate to the landing page", function () {
+                            expect($state.go).toHaveBeenCalledWith("landing");
+                        });
+
                     });
 
-                    it("should call disable backing up to the login page", function () {
-                        expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
-                    });
+                    describe("when the Remember Me option is NOT checked", function () {
 
-                    it("should NOT have an error message", function () {
-                        expect(ctrl.globalError).toBeFalsy();
-                    });
+                        beforeEach(function () {
+                            ctrl.rememberMe = false;
 
-                    it("should navigate to the landing page", function () {
-                        expect($state.go).toHaveBeenCalledWith("landing");
+                            $scope.$digest();
+                        });
+
+                        it("should Remove the username from Local Storage", function () {
+                            expect($localStorage.USERNAME).not.toBeDefined();
+                        });
+
+                        it("should call AnalyticsUtil.trackEvent with the expected event", function () {
+                            verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
+                        });
+
+                        it("should call disable backing up to the login page", function () {
+                            expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
+                        });
+
+                        it("should NOT have an error message", function () {
+                            expect(ctrl.globalError).toBeFalsy();
+                        });
+
+                        it("should navigate to the landing page", function () {
+                            expect($state.go).toHaveBeenCalledWith("landing");
+                        });
+
                     });
 
                 });

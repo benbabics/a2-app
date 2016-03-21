@@ -16,10 +16,10 @@
             "keyPrefix": "FLEET_MANAGER-"
         },
         "KEYS": {
-            "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE"
+            "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE",
+            "USERNAME"              : "USERNAME"
         }
     };
-
 
     /**
      * Brand Asset Collection
