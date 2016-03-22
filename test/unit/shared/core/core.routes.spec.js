@@ -3,7 +3,7 @@
 
     var $state,
         $rootScope,
-        Navigation;
+        FlowUtil;
 
     describe("A Core Module Route Config", function () {
 
@@ -14,9 +14,9 @@
 
             module(function($provide) {
                 //mock dependencies
-                Navigation = jasmine.createSpyObj("Navigation", ["exitApp"]);
+                FlowUtil = jasmine.createSpyObj("FlowUtil", ["exitApp"]);
 
-                $provide.value("Navigation", Navigation);
+                $provide.value("FlowUtil", FlowUtil);
             });
 
             inject(function (_$state_, _$rootScope_) {
@@ -79,8 +79,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call Navigation.exitApp", function () {
-                    expect(Navigation.exitApp).toHaveBeenCalledWith();
+                it("should call FlowUtil.exitApp", function () {
+                    expect(FlowUtil.exitApp).toHaveBeenCalledWith();
                 });
             });
         });

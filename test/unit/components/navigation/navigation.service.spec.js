@@ -10,37 +10,37 @@
         $state,
         $location,
         mockGlobals = {
-            LOGIN_STATE: "user.auth.login",
-            AUTH_API: {
-                BASE_URL: "/someUrl",
-                AUTH: {
+            LOGIN_STATE            : "user.auth.login",
+            AUTH_API               : {
+                BASE_URL          : "/someUrl",
+                AUTH              : {
                     TOKENS: "uaa/oauth/token",
-                    ME: "uaa/me"
+                    ME    : "uaa/me"
                 },
                 CLIENT_CREDENTIALS: {
                     CLIENT_ID    : "Some_Client_Id",
                     CLIENT_SECRET: "Some_Client_Secret"
                 }
             },
-            LOCALSTORAGE : {
+            LOCALSTORAGE           : {
                 "CONFIG": {
                     "keyPrefix": "FLEET_MANAGER-"
                 },
-                "KEYS": {
+                "KEYS"  : {
                     "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE"
                 }
             },
             ACCOUNT_MAINTENANCE_API: {
                 BASE_URL: "/someAMRestUrl",
-                CARDS: {
-                    BASE: "Cards_Base",
-                    STATUS: "Status",
+                CARDS   : {
+                    BASE               : "Cards_Base",
+                    STATUS             : "Status",
                     CHECK_STATUS_CHANGE: "Status_Change"
                 },
                 ACCOUNTS: {
                     BASE: "Accounts_Base"
                 },
-                BANKS: {
+                BANKS   : {
                     ACTIVE_BANKS: "Active_Banks"
                 },
                 INVOICES: {
@@ -54,7 +54,7 @@
                     CURRENT: "Current_User"
                 }
             },
-            PAYMENT: {
+            PAYMENT                : {
                 STATUS: {
                     "CANCELLED": "CANCELLED",
                     "COMPLETE" : "COMPLETE",
@@ -63,20 +63,19 @@
                     "UNKNOWN"  : "UNKNOWN"
                 }
             },
-            NOTIFICATIONS: {
+            NOTIFICATIONS          : {
                 "serverConnectionError": "Server connection error",
                 "networkError"         : "Network error"
             },
-            LOGGING: {
+            LOGGING                : {
                 ENABLED: false
             },
-            MENU: {
+            MENU                   : {
                 CONFIG: {
-                    options: {
-                    }
+                    options: {}
                 }
             },
-            GOOGLE_ANALYTICS: {
+            GOOGLE_ANALYTICS       : {
                 TRACKING_ID: TestUtils.getRandomStringThatIsAlphaNumeric(10)
             }
         },
@@ -329,144 +328,6 @@
 
             it("should call the resolve handler", function () {
                 expect(resolveHandler).toHaveBeenCalled();
-            });
-        });
-
-        describe("has an exitApp function that", function () {
-
-            beforeEach(function () {
-                $state.go.and.stub();
-            });
-
-            describe("when on a platform that supports app self-termination", function () {
-
-                beforeEach(function () {
-                    navigator.app = jasmine.createSpyObj("navigator.app", ["exitApp"]);
-                });
-
-                beforeEach(function () {
-                    Navigation.exitApp();
-                });
-
-                it("should call navigator.app.exitApp()", function () {
-                    expect(navigator.app.exitApp).toHaveBeenCalledWith();
-                });
-
-                it("should redirect to the login state", function () {
-                    expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
-                });
-            });
-
-            describe("when NOT on a platform that supports app self-termination", function () {
-
-                beforeEach(function () {
-                    delete navigator.app;
-                });
-
-                beforeEach(function () {
-                    Navigation.exitApp();
-                });
-
-                it("should redirect to the login state", function () {
-                    expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
-                });
-            });
-        });
-
-        describe("has a goToBackState function that", function () {
-            var backButton,
-                isolateScope,
-                result;
-
-            beforeEach(function () {
-                backButton = jasmine.createSpyObj("BackButton", ["isolateScope"]);
-                isolateScope = jasmine.createSpyObj("IsolateScope", ["goBack"]);
-            });
-
-            describe("when given a back button", function () {
-
-                describe("when the given back button is valid", function () {
-
-                    describe("when the given back button has an isolate scope", function () {
-
-                        beforeEach(function () {
-                            backButton.isolateScope.and.returnValue(isolateScope);
-                        });
-
-                        beforeEach(function () {
-                            result = Navigation.goToBackState(backButton);
-                        });
-
-                        it("should call the back button's goBack function", function () {
-                            expect(isolateScope.goBack).toHaveBeenCalledWith();
-                        });
-
-                        it("should return true", function () {
-                            expect(result).toBeTruthy();
-                        });
-                    });
-
-                    describe("when the given back button does NOT have an isolate scope", function () {
-
-                        it("should return false", function () {
-                            expect(Navigation.goToBackState(backButton)).toBeFalsy();
-                        });
-                    });
-                });
-
-                describe("when the given back button is NOT valid", function () {
-
-                    beforeEach(function () {
-                        backButton = null;
-                    });
-
-                    it("should return false", function () {
-                        expect(Navigation.goToBackState(backButton)).toBeFalsy();
-                    });
-                });
-            });
-
-            describe("when NOT given a back button", function () {
-
-                xdescribe("when an active back button is found", function () {
-
-                    beforeEach(function () {
-                        //TODO - figure out how to set this test up
-                    });
-
-                    describe("when the active back button has an accessible isolate scope", function () {
-
-                        beforeEach(function () {
-                            backButton.isolateScope.and.returnValue(isolateScope);
-                        });
-
-                        beforeEach(function () {
-                            result = Navigation.goToBackState();
-                        });
-
-                        it("should call the back button's goBack function", function () {
-                            expect(isolateScope.goBack).toHaveBeenCalledWith();
-                        });
-
-                        it("should return true", function () {
-                            expect(result).toBeTruthy();
-                        });
-                    });
-
-                    describe("when the active back button does NOT have an accessible isolate scope", function () {
-
-                        it("should return false", function () {
-                            expect(Navigation.goToBackState()).toBeFalsy();
-                        });
-                    });
-                });
-
-                describe("when an active back button is NOT found", function () {
-
-                    it("should return false", function () {
-                        expect(Navigation.goToBackState()).toBeFalsy();
-                    });
-                });
             });
         });
 

@@ -13,7 +13,11 @@
      */
 
     /* @ngInject */
-    function wexBackState(_, $rootScope, $interval, $parse, ElementUtil, Logger) {
+    function wexBackState(_, $interval, $parse, ElementUtil, FlowUtil, Logger) {
+        //Private members
+        var activeBackState;
+
+        //Public members
         var directive = {
                 restrict: "A",
                 link    : link
@@ -45,21 +49,29 @@
             }
         }
 
-        function onEnter(stateName) {
-            if (this.wexBackState && !this.stateApplied) {
-                this.stateApplied = true;
-                this.activeViewState = stateName;
+        function onEnter() {
+            if (activeBackState !== this) {
 
-                this.applyBackState();
+                if (activeBackState) {
+                    activeBackState.onLeave();
+                }
+
+                if (this.wexBackState) {
+                    this.applyBackState();
+                }
+
+                activeBackState = this;
             }
         }
 
-        function onLeave(stateName) {
-            if (this.stateApplied && stateName === this.activeViewState) {
-                this.removeBackState();
+        function onLeave() {
+            if (activeBackState === this) {
 
-                this.stateApplied = false;
-                this.activeViewState = null;
+                if (this.wexBackState) {
+                    this.removeBackState();
+                }
+
+                activeBackState = null;
             }
         }
 
@@ -78,17 +90,27 @@
         }
 
         function link(scope, elem, attrs) {
-            var removeLeaveListener,
-                vm = scope.wexBackState = {};
+            var initialState,
+                removeListeners = [],
+                vm = scope.wexBackState = {},
+                enterHandler = function (stateName) {
+                    initialState = stateName;
+
+                    vm.onEnter();
+                },
+                leaveHandler = function (stateName) {
+                    //ignore leave events that happen on a different view
+                    if (stateName === initialState) {
+                        vm.onLeave();
+                    }
+                };
 
             //vm objects:
             vm.wexBackState = attrs.wexBackState;
             vm.wexBackParams = attrs.wexBackParams ? $parse(attrs.wexBackParams)(scope) : null;
             vm.wexBackOptions = attrs.wexBackOptions ? $parse(attrs.wexBackOptions)(scope) : null;
             vm.prevState = null;
-            vm.stateApplied = false;
             vm.backButtonScope = null;
-            vm.activeViewState = null;
 
             vm.applyBackState = _.bind(applyBackState, vm);
             vm.onEnter = _.bind(onEnter, vm);
@@ -96,15 +118,11 @@
             vm.removeBackState = _.bind(removeBackState, vm);
 
             //event listeners:
-            scope.$on("$ionicView.afterEnter", function(event, stateInfo) {
-                vm.onEnter(stateInfo.stateName);
-            });
+            removeListeners.concat(FlowUtil.onPageEnter(enterHandler, scope, {global: false, once: false}));
+            removeListeners.concat(FlowUtil.onPageLeave(leaveHandler, scope, {once: false}));
 
-            removeLeaveListener = $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams, fromState) { // args: event, toState, toParams, fromState, fromParams
-                //only fire this listener once
-                removeLeaveListener();
-
-                vm.onLeave(fromState.name);
+            scope.$on("$destroy", function () {
+                _.invoke(removeListeners, _.call);
             });
         }
     }
