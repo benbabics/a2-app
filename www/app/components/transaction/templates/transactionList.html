@@ -9,8 +9,8 @@
                      collection-repeat="transaction in vm.postedTransactions"
                      ui-sref="transaction.posted.detail({transactionId: transaction.transactionId})">
 
-                    <div class="col col-75 ellipsis">{{transaction.embossedCardNumber | wexCardNumber}}<br><span class="body-text">{{transaction.driverLastName}}, {{transaction.driverFirstName}}</span><br>{{transaction.customVehicleId}}<br><span class="active-link">{{transaction.merchantName}}<br>{{transaction.productDescription}}</span></div>
-                    <div class="col col-25 right-align"><span class="currency">{{transaction.netCost | currency}}</span><br><span class="body-text">{{transaction.transactionDate | wexDefaultDateFormat}}</span></div>
+                    <div class="col col-74 ellipsis">{{transaction.embossedCardNumber | wexCardNumber}}<br><span class="body-text">{{transaction.driverLastName}}, {{transaction.driverFirstName}}<br>{{transaction.customVehicleId}}</span><br><span class="active-link">{{transaction.merchantName}}<br>{{transaction.productDescription}}</span></div>
+                    <div class="col col-26 right-align"><span class="currency">{{transaction.netCost | currency}}</span><br><span class="body-text">{{transaction.transactionDate | wexDefaultDateFormat}}</span></div>
                 </div>
 
                 <div ng-switch-when="false" ng-if="vm.firstPageLoaded" class="no-transactions">{{::vm.config.emptyList}}</div>
