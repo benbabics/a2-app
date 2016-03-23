@@ -3,17 +3,18 @@
 
     describe("A WEX Notification Bar directive", function () {
 
-        var $scope,
+        var $compile,
+            $rootScope,
+            $scope,
             ElementUtil,
             bar,
-            barUncloseable,
-            barCloseable,
             activeNavView,
             activeView,
             activeContent,
             pageHasNavBar = true,
-            mockTitleText = "Mock title text",
-            mockChildText = "Mock child text";
+            mockTitleText,
+            mockSubtitleText,
+            mockChildText;
 
         beforeEach(function () {
             //mock dependencies
@@ -24,10 +25,9 @@
             });
             module("app.html");
 
-            // INJECT! This part is critical
-            // $rootScope - injected to create a new $scope instance.
-            // $compile - injected to allow us test snippets produced by the directive
-            inject(function ($rootScope, $compile) {
+            inject(function (_$rootScope_, _$compile_) {
+                $compile = _$compile_;
+                $rootScope = _$rootScope_;
                 $scope = $rootScope.$new();
 
                 activeNavView = $compile("<ion-nav-view></ion-nav-view>")($scope);
@@ -45,36 +45,11 @@
                     return pageHasNavBar;
                 });
 
+                mockTitleText = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                mockSubtitleText = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                mockChildText = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
                 $scope.barVisible = true;
-                $scope.mockTitleText = mockTitleText;
-                $scope.mockChildText = mockChildText;
-
-                /* TODO/NOTE: There's a bug when using ngIf in $compile in that causes it to always evaluate to false.
-                 * To get around this, we need to wrap the ngIf'd element in a <div>.
-                 */
-
-                //Compile the angular markup to get an instance of the directive that's uncloseable
-                barUncloseable = $compile([
-                    "<div>",
-                    "<wex-notification-bar text='{{mockTitleText}}' ng-if='barVisible'>",
-                    "{{mockChildText}}",
-                    "</wex-notification-bar>",
-                    "</div>"
-                ].join(""))($scope);
-
-                //Compile the angular markup to get an instance of the directive that's closeable
-                barCloseable = $compile([
-                    "<div>",
-                    "<wex-notification-bar text='{{mockTitleText}}' closeable='true' ng-if='barVisible'>",
-                    "{{mockChildText}}",
-                    "</wex-notification-bar>",
-                    "</div>"
-                ].join(""))($scope);
-
-                $scope.$digest();
-
-                barUncloseable = barUncloseable.children();
-                barCloseable = barCloseable.children();
             });
         });
 
@@ -86,7 +61,10 @@
         describe("creates a header bar that", function () {
 
             beforeEach(function () {
-                bar = barCloseable.find("ion-header-bar");
+                bar = createWexNotificationBar({
+                    text: mockTitleText,
+                    content: mockChildText
+                });
             });
 
             it("should exist", function () {
@@ -102,69 +80,90 @@
                 expect(bar.hasClass("bar-header")).toBeTruthy();
             });
 
-            it("should align the title to the center", function () {
-                expect(bar.attr("align-title")).toEqual("center");
-            });
-
             it("should have the transcluded child content", function () {
                 expect(bar.html()).toContain(mockChildText);
             });
 
-            describe("has a title that", function () {
-                var title;
+            describe("when the banner has subtitle text", function () {
 
                 beforeEach(function () {
-                    _.each(bar.children(), function (child) {
-                        if (child.className === "title") {
-                            title = child;
-                        }
+                    bar = createWexNotificationBar({
+                        text: mockTitleText,
+                        subtext: mockSubtitleText
                     });
                 });
 
-                it("should exist", function () {
-                    expect(title).toBeDefined();
+                describe("has a title that", function () {
+                    var title;
+
+                    beforeEach(function () {
+                        title = bar.find("h1");
+                    });
+
+                    it("should exist", function () {
+                        expect(title).toBeDefined();
+                    });
+
+                    it("should contain the title text", function () {
+                        expect(title.text()).toContain(mockTitleText);
+                    });
+
+                    it("should contain the subtitle text", function () {
+                        expect(title.text()).toContain(mockSubtitleText);
+                    });
+                });
+            });
+
+            describe("when the banner does NOT have subtitle text", function () {
+
+                beforeEach(function () {
+                    bar = createWexNotificationBar({text: mockTitleText});
                 });
 
-                it("should contain the title text", function () {
-                    expect(title.innerHTML).toContain(mockTitleText);
+                describe("has a title that", function () {
+                    var title;
+
+                    beforeEach(function () {
+                        title = bar.find("h1");
+                    });
+
+                    it("should exist", function () {
+                        expect(title).toBeDefined();
+                    });
+
+                    it("should contain the title text", function () {
+                        expect(title.text()).toContain(mockTitleText);
+                    });
                 });
             });
 
             describe("when the banner is closeable", function () {
 
                 beforeEach(function () {
-                    bar = barCloseable.find("ion-header-bar");
+                    bar = createWexNotificationBar({
+                        text: mockTitleText,
+                        closeable: true,
+                        content: mockChildText
+                    });
                 });
 
                 it("should add a close button", function () {
-
-                    var closeButton = null;
-                    _.each(bar.children(), function (child) {
-                        if (child.className.indexOf("close-button") !== -1) {
-                            closeButton = child;
-                        }
-                    });
-
-                    expect(closeButton).toBeTruthy();
+                    expect(bar[0].querySelector(".close-button")).toBeDefined();
                 });
             });
 
             describe("when the banner is not closeable", function () {
 
                 beforeEach(function () {
-                    bar = barUncloseable.find("ion-header-bar");
+                    bar = createWexNotificationBar({
+                        text: mockTitleText,
+                        closeable: false,
+                        content: mockChildText
+                    });
                 });
 
                 it("should not add a close button", function () {
-
-                    var closeButton = null;
-                    _.each(bar.children(), function (child) {
-                        if (child.className.indexOf("close-button") !== -1) {
-                            closeButton = child;
-                        }
-                    });
-
-                    expect(closeButton).toEqual(null);
+                    expect(bar[0].querySelector(".close-button")).toBeNull();
                 });
             });
 
@@ -259,14 +258,53 @@
             //TODO Tests for removing correct bar class on ion-content when leaving old view
         });
 
+        function createWexNotificationBar(options) {
+            var scope = angular.extend($scope.$new(), options || {}),
+                template = [],
+                element;
+
+            /* TODO/NOTE: There's a bug when using ngIf in $compile in that causes it to always evaluate to false.
+             * To get around this, we need to wrap the ngIf'd element in a <div>.
+             */
+            template.push("<div>");
+            template.push("<wex-notification-bar");
+
+            if (_.has(scope, "text")) {
+                template.push(" text='{{text}}'");
+            }
+
+            if (_.has(scope, "subtext")) {
+                template.push(" subtext='{{subtext}}'");
+            }
+
+            if (_.has(scope, "closeable")) {
+                template.push(" closeable='closeable'");
+            }
+
+            template.push(" ng-if='barVisible'>");
+
+            if (_.has(scope, "content")) {
+                template.push("{{content}}");
+            }
+
+            template.push("</wex-notification-bar>");
+            template.push("</div>");
+
+            element = $compile(template.join(""))(scope);
+            $rootScope.$digest();
+
+            return element.children().find("ion-header-bar");
+        }
+
         function toggleBarVisibility(visible) {
-            if ($scope.barVisible === visible) {
-                $scope.barVisible = !visible;
-                $scope.$digest();
+            visible = _.isUndefined(visible) ? !$scope.barVisible : visible;
+
+            if (visible === $scope.barVisible) {
+                toggleBarVisibility();
             }
 
             $scope.barVisible = visible;
-            $scope.$digest();
+            $rootScope.$digest();
         }
     });
 }());

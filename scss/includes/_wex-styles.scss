@@ -13,33 +13,56 @@
   }
 }
 
+/* Styles for wexNotificationBar directive */
+$bar-notification-multi-line-height: $bar-height + $bar-title-font-size;
+
 .bar-notification {
   background-color: $warning-message-fill;
-  font-size: $bar-title-font-size;
+  color: $warning-message-color;
 
-  .title:before {
-    font-family: ionicons;
-    content: "\f100";
+  &.bar-notification-multi-line {
+    //ion-header-bar has a fixed size so we need to manually resize it to support multiple lines
+    height: $bar-notification-multi-line-height;
+
+    //override the has-header/has-subheader styles as needed
+    @at-root [notification-bar-class="has-header"] {
+      top: $bar-notification-multi-line-height !important;
+    }
+
+    @at-root [notification-bar-class="has-subheader"] {
+      top: $bar-notification-multi-line-height + $bar-subheader-height !important;
+    }
   }
-  .ion-pos {
-    vertical-align: middle;
+
+  .icon-warning {
+    @include flexbox();
+    @include justify-content(center);
+    @include flex-direction(column);
+
+    //make the icon twice as big as the title text
+    font-size: $bar-title-font-size * 2;
   }
 
-  .title {
-    color: $warning-message-color;
-    margin-right: $button-bar-button-height;
+  .title-container {
+    width: 100%;
 
-    /* ngFitText doesn't seem to account for ionicons, so we need this extra padding to make sure the last couple characters fit
-    in the container. */
-    /* TODO figure out a better way to accomplish this */
-    .title-text:after {
-      content: "\00a0\00a0\00a0";
+    h1 {
+      color: inherit !important;
+      margin: 0 !important;
+
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    [fittext] {
+      //max font size for ngFitText
+      font-size: $bar-title-font-size;
     }
   }
 
   .close-button {
     display: block !important;
-    width: 100% !important;
+    width: $button-bar-button-height !important;
     text-align: right !important;
 
     background: none;
@@ -179,6 +202,11 @@
 
 .platform-ios .icon-search {
     @extend .ion-ios-search-strong;
+}
+
+/* Warning icon */
+.icon-warning {
+  @extend .ion-alert-circled;  /* default icon - neither Android nor iOS */
 }
 
 /**-----------------------------------------------------------

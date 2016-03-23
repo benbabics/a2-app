@@ -3,14 +3,14 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
-    // jshint maxparams:6
-    function wexNotificationBar(_, $rootScope, $compile, $window, $timeout, ElementUtil) {
+    function wexNotificationBar(_, $rootScope, $timeout, ElementUtil) {
         var directive = {
             restrict   : "E",
             transclude : true,
             link       : link,
             scope      : {
                 text     : "@",
+                subtext  : "@",
                 closeable: "=",
                 ngIf     : "="
             },
@@ -87,8 +87,6 @@
             //public members:
             //the ion-header-bar element
             scope.barElem = elem.children();
-            //the default header bar title size for data-fittext-max
-            scope.titleSize = $window.getComputedStyle(elem[0], null).getPropertyValue("font-size");
             //all deregister functions for event listeners
             scope.listenerDestroyers = [];
 
@@ -109,17 +107,6 @@
             scope.listenerDestroyers.push($rootScope.$on("$ionicView.afterEnter", scope.onViewEntering));
             scope.$on("$destroy", scope.deregisterEventListeners);
             scope.$on("$destroy", _.partial(scope.setVisible, false));
-
-            //note: title must be compiled here instead of in the template file or else ngFitText won't work properly
-            var titleNode = $compile([
-                "<h1 class='title'>",
-                "<span class='title-text' data-fittext data-fittext-max='{{titleSize}}'>",
-                "&nbsp;{{text}}",
-                "</span>",
-                "</h1>"
-            ].join(""))(scope);
-
-            scope.barElem.append(titleNode);
         }
 
         return directive;

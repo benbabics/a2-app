@@ -1,4 +1,16 @@
-<ion-header-bar class="bar-notification" align-title="center">
+<ion-header-bar class="bar-notification" ng-class="{'bar-notification-multi-line': subtext}">
     <span ng-transclude></span>
-    <button class="button close-button icon ion-close" ng-if="closeable" on-tap="close()"></button>
+    <div class="row">
+        <div class="column icon icon-warning"></div>
+        <div class="column title-container">
+            <!-- Note: The title elements need to be wrapped with a div for ngFitText to work correctly -->
+            <div>
+                <h1 fittext fittext-max='inherit' ng-bind="text"></h1>
+            </div>
+            <div ng-if="subtext">
+                <h1 fittext fittext-max='inherit' ng-bind="subtext"></h1>
+            </div>
+        </div>
+        <button class="column button close-button icon ion-close" ng-if="closeable" on-tap="close()"></button>
+    </div>
 </ion-header-bar>
