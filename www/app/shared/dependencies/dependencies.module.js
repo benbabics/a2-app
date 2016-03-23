@@ -19,6 +19,7 @@
         "ngStorage",                  // From https://github.com/gsklee/ngStorage
         "chart.js",                   // From http://jtblin.github.io/angular-chart.js/
         "lokijs",                     // From https://github.com/techfort/LokiJS/
-        "ngPromiseExtras"             // From https://github.com/ohjames/angular-promise-extras
+        "ngPromiseExtras",            // From https://github.com/ohjames/angular-promise-extras
+        "ngIdle"                      // From https://github.com/HackedByChinese/ng-idle
     ]);
 })();
