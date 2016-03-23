@@ -28,7 +28,7 @@ module.exports = function(config) {
             "lib/restangular/dist/restangular.js",
             "lib/angular-base64/angular-base64.js",
             "lib/ngCordova/dist/ng-cordova.js",
-            "lib/ngFitText/src/ng-FitText.js",
+            "lib/ngFitText/dist/ng-FitText.min.js",
             "lib/moment/moment.js",
             "lib/angular-moment/angular-moment.js",
             "lib/ionic-datepicker-widget/dist/ionic-datepicker.min.js",
