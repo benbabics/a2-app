@@ -9,7 +9,7 @@
             return angular.extend({}, sharedGlobals, appGlobals);
         };
 
-    appGlobals.DEFAULT_ROUTE = "/user/auth/login";
+    appGlobals.DEFAULT_ROUTE = "/version/status";
 
     appGlobals.LOCALSTORAGE = {
         "CONFIG": {

@@ -321,7 +321,6 @@
                     mockRejection.config = MOCK_FAILED_REQUEST_CONFIG;
 
                     errorResult = AuthenticationErrorInterceptor.responseError(mockRejection, restangularDeferred, restangularResponseHandler);
-                    $rootScope.$digest();
                 });
 
                 it("should return true", function () {

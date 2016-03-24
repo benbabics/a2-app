@@ -20,6 +20,7 @@
         "app.components.terms",
         "app.components.user",
         "app.components.util",
+        "app.components.version",
         "app.components.widgets"
     ]);
 })();
