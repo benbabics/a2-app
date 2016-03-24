@@ -34,40 +34,60 @@ $bar-notification-multi-line-height: $bar-height + $bar-title-font-size;
     }
   }
 
-  .icon-warning {
+  .row, .col {
+    padding: 0;
+    margin: 0;
+  }
+
+  .icon-container {
     @include flexbox();
     @include justify-content(center);
     @include flex-direction(column);
 
-    //make the icon twice as big as the title text
-    font-size: $bar-title-font-size * 2;
+    max-width: $bar-height;
+
+    .icon {
+      font-family: ionicons;
+
+      //max icon size for ngFitText
+      &[fittext] {
+        font-size: $bar-height;
+      }
+    }
   }
 
   .title-container {
+    @include flexbox();
+    @include justify-content(center);
+    @include flex-direction(column);
+
     width: 100%;
 
     h1 {
       color: inherit !important;
       margin: 0 !important;
 
-      text-align: center;
       white-space: nowrap;
     }
 
+    //max font size for ngFitText
     [fittext] {
-      //max font size for ngFitText
       font-size: $bar-title-font-size;
     }
   }
 
-  .close-button {
-    display: block !important;
-    width: $button-bar-button-height !important;
-    text-align: right !important;
+  .button-container {
+    max-width: $button-bar-button-height;
 
-    background: none;
-    border: none;
-    color: #bbb;
+    .close-button {
+      display: block !important;
+      width: $button-bar-button-height !important;
+      text-align: right !important;
+
+      background: none;
+      border: none;
+      color: #bbb;
+    }
   }
 }
 
