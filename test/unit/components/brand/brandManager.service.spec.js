@@ -67,6 +67,7 @@
             module("app.components.brand");
             module("app.components.user");
             module("app.components.navigation");
+            module("app.components.widgets");
 
             // mock dependencies
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
