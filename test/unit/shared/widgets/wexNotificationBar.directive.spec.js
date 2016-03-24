@@ -7,6 +7,7 @@
             $rootScope,
             $scope,
             ElementUtil,
+            FlowUtil,
             bar,
             activeNavView,
             activeView,
@@ -19,9 +20,11 @@
         beforeEach(function () {
             //mock dependencies
             ElementUtil = jasmine.createSpyObj("ElementUtil", ["getActiveNavView", "getFocusedView", "pageHasNavBar"]);
+            FlowUtil = jasmine.createSpyObj("FlowUtil", ["onPageEnter", "onPageLeave"]);
 
             module("app.shared", function ($provide) {
                 $provide.value("ElementUtil", ElementUtil);
+                $provide.value("FlowUtil", FlowUtil);
             });
             module("app.html");
 
@@ -82,6 +85,14 @@
 
             it("should have the transcluded child content", function () {
                 expect(bar.html()).toContain(mockChildText);
+            });
+
+            it("should call FlowUtil.onPageEnter with the expected values", function () {
+                expect(FlowUtil.onPageEnter).toHaveBeenCalledWith(jasmine.any(Function), bar.scope(), {once: false});
+            });
+
+            it("should call FlowUtil.onPageLeave with the expected values", function () {
+                expect(FlowUtil.onPageLeave).toHaveBeenCalledWith(jasmine.any(Function), bar.scope(), {once: false});
             });
 
             describe("when the banner has subtitle text", function () {
@@ -253,9 +264,23 @@
                 });
             });
 
-            //TODO Tests for setting correct bar class on ion-content when entering new view
+            describe("when the scope is destroyed", function () {
 
-            //TODO Tests for removing correct bar class on ion-content when leaving old view
+                beforeEach(function () {
+                    spyOn(bar.scope(), "setVisible");
+
+                    bar.scope().$broadcast("$destroy");
+                    $rootScope.$digest();
+                });
+
+                it("should remove all listeners", function () {
+                    //TODO - Figure out how to test this
+                });
+
+                it("should call setVisible with the expected values", function () {
+                    expect(bar.scope().setVisible).toHaveBeenCalledWith(false, activeView);
+                });
+            });
         });
 
         function createWexNotificationBar(options) {
