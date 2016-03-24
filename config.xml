@@ -93,6 +93,7 @@
     <engine name="ios" spec="~4.1.0" />
     <engine name="browser" spec="~4.1.0" />
     <plugin name="com.cmackay.plugins.googleanalytics" spec="~0.1.22" />
+    <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
     <plugin name="cordova-plugin-device" spec="~1.1.1" />
     <plugin name="cordova-plugin-splashscreen" spec="~3.2.1" />
     <plugin name="cordova-plugin-statusbar" spec="~2.1.2" />

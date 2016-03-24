@@ -114,6 +114,16 @@
                         }
                     ]
                 }
+            },
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"RareloopAppVersion\"><param name=\"android-package\" value=\"com.rareloop.cordova.appversion.RareloopAppVersion\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
             }
         }
     },
@@ -155,6 +165,9 @@
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-appversion": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
@@ -385,6 +398,13 @@
                 "cordova.plugins.Keyboard"
             ],
             "runs": true
+        },
+        {
+            "file": "plugins/cordova-plugin-appversion/www/app-version.js",
+            "id": "cordova-plugin-appversion.RareloopAppVersion",
+            "clobbers": [
+                "AppVersion"
+            ]
         }
     ]
 }

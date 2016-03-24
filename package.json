@@ -53,6 +53,7 @@
     "cordova-plugin-whitelist",
     "cordova-plugin-statusbar",
     "cordova-plugin-splashscreen",
+    "cordova-plugin-appversion",
     "cordova-plugin-device",
     "cordova-plugin-google-analytics",
     "cordova-plugin-file",
