@@ -62,6 +62,8 @@
                     return callback(toState);
                 };
 
+            options = options || {};
+
             if (!_.has(options, "global")) {
                 options.global = true;
             }
@@ -115,6 +117,8 @@
                     //invoke the callback with the from state
                     return callback(fromState);
                 };
+
+            options = options || {};
 
             if (!_.has(options, "global")) {
                 options.global = true;
