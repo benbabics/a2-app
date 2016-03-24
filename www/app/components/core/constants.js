@@ -73,6 +73,10 @@
                 "USER_MUST_ACCEPT_TERMS"            : "Invalid login information. Go online to set up or recover your username and password.",
                 "USER_MUST_SETUP_SECURITY_QUESTIONS": "Invalid login information. Go online to set up or recover your username and password.",
                 "USER_NOT_ACTIVE"                   : "Invalid login information. Go online to set up or recover your username and password."
+            },
+            "sessionTimeOut": {
+                "line1": "Your session has timed out due to 15 minutes of",
+                "line2": "inactivity. Please login to access your account."
             }
         }
     };

@@ -154,6 +154,14 @@
                 ctrl.globalError = "This is a previous error";
             });
 
+            it("should set timedOut to $stateParams.timedOut", function () {
+                $stateParams.timedOut = TestUtils.getRandomBoolean();
+                $scope.$broadcast("$ionicView.beforeEnter");
+                $rootScope.$digest();
+
+                expect(ctrl.timedOut).toEqual($stateParams.timedOut);
+            });
+
             describe("when the Username is stored in Local Storage", function () {
 
                 beforeEach(function() {
@@ -204,10 +212,10 @@
 
             });
 
-            describe("when $stateParams.reason is TOKEN_EXPIRED", function () {
+            describe("when $stateParams.errorReason is TOKEN_EXPIRED", function () {
 
                 beforeEach(function() {
-                    $stateParams.reason = "TOKEN_EXPIRED";
+                    $stateParams.errorReason = "TOKEN_EXPIRED";
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -226,10 +234,10 @@
 
             });
 
-            describe("when $stateParams.reason is an object", function () {
+            describe("when $stateParams.errorReason is an object", function () {
 
                 beforeEach(function() {
-                    $stateParams.reason = {
+                    $stateParams.errorReason = {
                         randomProperty       : "Property value",
                         anotherRandomProperty: "Another property value"
                     };
@@ -251,10 +259,10 @@
 
             });
 
-            describe("when $stateParams.reason is empty string", function () {
+            describe("when $stateParams.errorReason is empty string", function () {
 
                 beforeEach(function() {
-                    $stateParams.reason = "";
+                    $stateParams.errorReason = "";
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -273,10 +281,10 @@
 
             });
 
-            describe("when $stateParams.reason is null", function () {
+            describe("when $stateParams.errorReason is null", function () {
 
                 beforeEach(function() {
-                    $stateParams.reason = null;
+                    $stateParams.errorReason = null;
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -295,10 +303,10 @@
 
             });
 
-            describe("when $stateParams.reason is undefined", function () {
+            describe("when $stateParams.errorReason is undefined", function () {
 
                 beforeEach(function() {
-                    delete $stateParams.reason;
+                    delete $stateParams.errorReason;
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -370,6 +378,14 @@
 
             it("should authenticate the User", function () {
                 expect(AuthenticationManager.authenticate).toHaveBeenCalledWith(ctrl.user.username, ctrl.user.password);
+            });
+
+            it("should set globalError to false", function () {
+                expect(ctrl.globalError).toBeFalsy();
+            });
+
+            it("should set timedOut to false", function () {
+                expect(ctrl.timedOut).toBeFalsy();
             });
 
             describe("when the User is Authenticated successfully", function () {

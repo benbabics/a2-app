@@ -13,6 +13,7 @@
 
         vm.config = globals.USER_LOGIN.CONFIG;
         vm.rememberMe = false;
+        vm.timedOut = false;
         vm.user = {};
         vm.authenticateUser = authenticateUser;
         vm.isKeyboardVisible = isKeyboardVisible;
@@ -45,11 +46,13 @@
 
             setupUsername();
 
-            if (_.has($stateParams, "reason") && _.isString($stateParams.reason)) {
-                vm.globalError = vm.config.serverErrors[$stateParams.reason];
+            if (_.has($stateParams, "errorReason") && _.isString($stateParams.errorReason)) {
+                vm.globalError = vm.config.serverErrors[$stateParams.errorReason];
 
-                trackErrorEvent($stateParams.reason);
+                trackErrorEvent($stateParams.errorReason);
             }
+
+            vm.timedOut = $stateParams.timedOut;
         }
 
         function authenticateUser() {
@@ -94,6 +97,9 @@
         function clearErrorMessage() {
             //clear any previous error
             vm.globalError = false;
+
+            //clear any timeout warnings
+            vm.timedOut = false;
         }
 
         function isKeyboardVisible() {

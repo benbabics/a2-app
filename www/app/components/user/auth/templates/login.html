@@ -1,4 +1,9 @@
 <ion-view view-title="{{::vm.config.title}}" hide-nav-bar="true" class="user-login-view" wex-back-state="app.exit">
+    <wex-notification-bar ng-if="vm.timedOut"
+                          text="{{::vm.config.sessionTimeOut.line1}}"
+                          subtext="{{::vm.config.sessionTimeOut.line2}}">
+    </wex-notification-bar>
+
     <ion-content scroll="false">
      <div class="title-bar"></div>
         <div class="card card-error padding"

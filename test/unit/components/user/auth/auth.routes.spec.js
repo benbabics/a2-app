@@ -95,7 +95,7 @@
             });
 
             it("should have the expected URL", function() {
-                expect(state.url).toEqual("/login?reason");
+                expect(state.url).toEqual("/login?errorReason&{timedOut:bool}");
             });
 
             it("should define a view on the user view container", function() {
