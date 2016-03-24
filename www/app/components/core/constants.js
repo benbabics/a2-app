@@ -596,6 +596,8 @@
         ]
     };
 
+    appGlobals.USER_IDLE_TIMEOUT = 900; //in seconds
+
     angular
         .module("app.components.core")
         .constant("appGlobals", appGlobals)

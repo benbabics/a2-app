@@ -2,11 +2,11 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:9
+    // jshint maxparams:11
 
     /* @ngInject */
-    function LoginManager($q, $rootScope, globals,
-                          AnalyticsUtil, BrandManager, LoadingIndicator, Logger, LoggerUtil, UserManager) {
+    function LoginManager($q, $ionicSideMenuDelegate, $rootScope, globals,
+                          AnalyticsUtil, BrandManager, LoadingIndicator, Logger, LoggerUtil, Popup, UserManager) {
         // Private members
         var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES;
 
@@ -52,6 +52,13 @@
         }
 
         function doLogoutCleanup() {
+            //close any opened popups
+            Popup.closeAllPopups();
+
+            //close the side menu
+            $ionicSideMenuDelegate.toggleRight(false);
+
+            //start the generic analytics tracker
             startGenericTracker();
 
             return $q.resolve();

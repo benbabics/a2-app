@@ -4,8 +4,9 @@
     //TODO - Move as much logic out of here as possible
 
     // jshint maxparams:14
+    // Services may be included here in order to force them to be instantiated at startup
     function coreRun(_, $cordovaDevice, $q, $rootScope, $state, $ionicPlatform, $window,
-                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, FlowUtil, PlatformUtil, Popup) {
+                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, FlowUtil, PlatformUtil, UserIdle) {
 
         function isExitState(stateName) {
             return "app.exit" === stateName;
@@ -32,19 +33,6 @@
         function handleApplicationLogOut() {
             // clear any data in memory tied to the user
             AuthenticationManager.logOut();
-        }
-
-        function handleApplicationPause() {
-            // log out the user
-            handleApplicationLogOut();
-        }
-
-        function handleApplicationResume() {
-            // Close any opened popups
-            Popup.closeAllPopups();
-
-            // Go to the login page
-            $state.go(globals.LOGIN_STATE);
         }
 
         function loadBundledBrands() {
@@ -86,8 +74,6 @@
         });
 
         $rootScope.$on("$stateChangeStart", validateRoutePreconditions);
-        $rootScope.$on("app:cordovaPause", handleApplicationPause);
-        $rootScope.$on("app:cordovaResume", handleApplicationResume);
         $rootScope.$on("app:logout", handleApplicationLogOut);
 
         //make the hardware back button go to the same state as the back button by default

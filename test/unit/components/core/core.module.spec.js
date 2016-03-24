@@ -314,36 +314,6 @@
             });
         });
 
-        describe("has an app:cordovaPause event handler function that", function () {
-
-            beforeEach(function () {
-                $rootScope.$emit("app:cordovaPause");
-            });
-
-            it("should log out the User", function () {
-                expect(AuthenticationManager.logOut).toHaveBeenCalledWith();
-            });
-
-        });
-
-        describe("has an app:cordovaResume event handler function that", function () {
-
-            beforeEach(function () {
-                spyOn($state, "go");
-
-                $rootScope.$emit("app:cordovaResume");
-            });
-
-            it("should close any popups", function () {
-                expect(Popup.closeAllPopups).toHaveBeenCalledWith();
-            });
-
-            it("should redirect to the login page", function () {
-                expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
-            });
-
-        });
-
         describe("has an app:logout event handler function that", function () {
 
             beforeEach(function() {

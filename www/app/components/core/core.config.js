@@ -21,6 +21,14 @@
 
     };
 
+    var ngIdleConfig = function (appGlobals, IdleProvider) {
+        //set the idle timeout length until the user is automatically logged out
+        IdleProvider.idle(appGlobals.USER_IDLE_TIMEOUT);
+
+        //disable user timeout warning response
+        IdleProvider.timeout(false);
+    };
+
     var ngStorageConfig = function ($localStorageProvider, appGlobals) {
         $localStorageProvider.setKeyPrefix(appGlobals.LOCALSTORAGE.CONFIG.keyPrefix);
     };
@@ -30,5 +38,6 @@
         .config(angularConfig)
         .config(urlConfig)
         .config(ionicConfig)
-        .config(ngStorageConfig);
+        .config(ngStorageConfig)
+        .config(ngIdleConfig);
 })();

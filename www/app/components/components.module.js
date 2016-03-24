@@ -19,6 +19,7 @@
         "app.components.transaction",
         "app.components.terms",
         "app.components.user",
-        "app.components.util"
+        "app.components.util",
+        "app.components.widgets"
     ]);
 })();

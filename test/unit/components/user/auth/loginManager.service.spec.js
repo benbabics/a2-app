@@ -2,6 +2,7 @@
     "use strict";
 
     var _,
+        $ionicSideMenuDelegate,
         $q,
         $rootScope,
         LoginManager,
@@ -13,6 +14,7 @@
         BrandManager,
         BrandAssetModel,
         Logger,
+        Popup,
         userDetails,
         fetchCurrentUserDetailsDeferred,
         updateBrandCacheDeferred,
@@ -38,12 +40,16 @@
                 "updateBrandCache"
             ]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
+            $ionicSideMenuDelegate = jasmine.createSpyObj("$ionicSideMenuDelegate", ["toggleRight"]);
+            Popup = jasmine.createSpyObj("Popup", ["closeAllPopups"]);
 
             module(function ($provide) {
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("BrandManager", BrandManager);
                 $provide.value("LoadingIndicator", LoadingIndicator);
+                $provide.value("Popup", Popup);
+                $provide.value("$ionicSideMenuDelegate", $ionicSideMenuDelegate);
             });
 
             inject(function (___, _$q_, _$rootScope_, globals, _BrandAssetModel_, _LoggerUtil_, _Logger_, _LoginManager_,
@@ -96,6 +102,14 @@
 
             it("should call AnalyticsUtil.startTracker with the generic tracker ID", function () {
                 expect(AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId);
+            });
+
+            it("should call Popup.closeAllPopups", function () {
+                expect(Popup.closeAllPopups).toHaveBeenCalledWith();
+            });
+
+            it("should close the side menu", function () {
+                expect($ionicSideMenuDelegate.toggleRight).toHaveBeenCalledWith(false);
             });
 
             it("should resolve", function () {
