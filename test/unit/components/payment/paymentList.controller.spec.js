@@ -33,7 +33,9 @@
         PaymentManager,
         LoadingIndicator,
         AnalyticsUtil,
-        fetchPaymentsDeferred;
+        fetchPaymentsDeferred,
+        resolveHandler,
+        rejectHandler;
 
     describe("A Payment List Controller", function () {
 
@@ -96,6 +98,10 @@
                 });
 
             });
+
+            //setup spies
+            resolveHandler = jasmine.createSpy("resolveHandler");
+            rejectHandler = jasmine.createSpy("rejectHandler");
         });
 
         describe("has an activate function that", function () {
@@ -147,6 +153,71 @@
 
                 it("should call LoadingIndicator.complete", function () {
                     expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                });
+            });
+        });
+
+        describe("has a fetchPayments function that", function () {
+
+            beforeEach(function () {
+                spyOn($scope, "$broadcast").and.callThrough();
+
+                ctrl.fetchPayments()
+                    .then(resolveHandler)
+                    .catch(rejectHandler);
+            });
+
+            it("should call PaymentManager.fetchPayments", function () {
+                expect(PaymentManager.fetchPayments).toHaveBeenCalledWith(mockUser.billingCompany.accountId,
+                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
+                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE);
+            });
+
+            describe("when the payments are successfully fetched", function () {
+
+                beforeEach(function () {
+                    fetchPaymentsDeferred.resolve(mockPayments);
+                    $rootScope.$digest();
+                });
+
+                it("should set the completed payments", function () {
+                    expect(ctrl.completedPayments).toEqual(_.sortByOrder(mockCompletedPayments, ["scheduledDate"], ["desc"]));
+                });
+
+                it("should set the scheduled payments", function () {
+                    expect(ctrl.scheduledPayments).toEqual(_.sortByOrder(mockScheduledPayments, ["scheduledDate"], ["asc"]));
+                });
+
+                it("should broadcast 'scroll.refreshComplete'", function () {
+                    expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
+                });
+
+                it("should resolve", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
+                });
+            });
+
+            describe("when the payments are NOT successfully fetched", function () {
+
+                beforeEach(function () {
+                    fetchPaymentsDeferred.reject();
+                    $rootScope.$digest();
+                });
+
+                it("should NOT set the completed payments", function () {
+                    expect(ctrl.completedPayments).toEqual({});
+                });
+
+                it("should NOT set the scheduled payments", function () {
+                    expect(ctrl.scheduledPayments).toEqual({});
+                });
+
+                it("should broadcast 'scroll.refreshComplete'", function () {
+                    expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
+                });
+
+                it("should reject", function () {
+                    expect(rejectHandler).toHaveBeenCalled();
                 });
             });
         });

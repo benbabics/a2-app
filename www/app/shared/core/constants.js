@@ -198,6 +198,13 @@
         "NAME" : "@@@STRING_REPLACE_APP_DATASTORE_NAME@@@"
     };
 
+    /**
+     * Pull to refresh Configuration
+     */
+    sharedGlobals.PULL_TO_REFRESH = {
+        "pullText": "Pull to refresh"
+    };
+
     angular
         .module("app.shared.core")
         .constant("sharedGlobals", sharedGlobals)

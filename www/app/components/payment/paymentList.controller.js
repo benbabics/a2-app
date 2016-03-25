@@ -2,35 +2,40 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:5
+    // jshint maxparams:6
 
     /* @ngInject */
-    function PaymentListController(_, globals, LoadingIndicator, PaymentManager, UserManager) {
+    function PaymentListController(_, $scope, globals, LoadingIndicator, PaymentManager, UserManager) {
 
         var vm = this;
 
-        vm.config = globals.PAYMENT_LIST.CONFIG;
+        vm.config = angular.extend({}, globals.PAYMENT_LIST.CONFIG, globals.PULL_TO_REFRESH);
 
         vm.completedPayments = {};
         vm.scheduledPayments = {};
+
+        vm.fetchPayments = fetchPayments;
 
         activate();
 
         //////////////////////
         // Controller initialization
         function activate() {
-            fetchPayments();
+            LoadingIndicator.begin();
+
+            fetchPayments()
+                .finally(LoadingIndicator.complete);
         }
 
         function fetchPayments() {
             var billingAccountId = UserManager.getUser().billingCompany.accountId,
                 options = globals.PAYMENT_LIST.SEARCH_OPTIONS;
 
-            LoadingIndicator.begin();
-
-            PaymentManager.fetchPayments(billingAccountId, options.PAGE_NUMBER, options.PAGE_SIZE)
+            return PaymentManager.fetchPayments(billingAccountId, options.PAGE_NUMBER, options.PAGE_SIZE)
                 .then(filterPayments)
-                .finally(LoadingIndicator.complete);
+                .finally(function () {
+                    $scope.$broadcast("scroll.refreshComplete");
+                });
         }
 
         function filterPayments(payments) {
