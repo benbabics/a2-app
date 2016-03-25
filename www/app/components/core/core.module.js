@@ -3,27 +3,27 @@
 
     //TODO - Move as much logic out of here as possible
 
-    // jshint maxparams:14
+    // jshint maxparams:13
     // Services may be included here in order to force them to be instantiated at startup
     function coreRun(_, $cordovaDevice, $q, $rootScope, $state, $ionicPlatform, $window,
-                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, FlowUtil, PlatformUtil, UserIdle) {
+                     globals, AnalyticsUtil, AuthenticationManager, BrandManager, FlowUtil, PlatformUtil) {
 
-        function isExitState(stateName) {
-            return "app.exit" === stateName;
-        }
+        function isSecuredState(stateName) {
+            //TODO - Make this a list somewhere
 
-        function isLoginPage(stateName) {
-            return globals.LOGIN_STATE === stateName;
+            return globals.LOGIN_STATE !== stateName &&
+                "version.status" !== stateName &&
+                "app.exit" !== stateName;
         }
 
         function validateRoutePreconditions(event, toState) { // args: event, toState, toParams, fromState, fromParams
 
             var stateName = toState.name;
 
-            if (!isLoginPage(stateName) && !isExitState(stateName)) {
-                // when navigating to any page that isn't the login page, validate that the user is logged in
+            if (isSecuredState(stateName)) {
+                // when navigating to any page that is secured, validate that the user is logged in
                 if (!AuthenticationManager.userLoggedIn()) {
-                    // user is not logged in and is not trying to access the login page so redirect to the login page
+                    // user is not logged in and is trying to access secured content so redirect to the login page
                     event.preventDefault();
                     $state.go(globals.LOGIN_STATE);
                 }

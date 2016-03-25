@@ -6,7 +6,12 @@
 
         $stateProvider.state("version", {
             abstract: true,
-            url     : "/version"
+            url     : "/version",
+            views   : {
+                "@": {
+                    template: "<ion-nav-view name='view'></ion-nav-view>"
+                }
+            }
         });
 
         $stateProvider.state("version.status", {
@@ -14,6 +19,7 @@
             cache: false,
             views: {
                 "view@version": {
+                    templateUrl: "app/components/version/templates/versionStatus.html",
                     controller : "VersionStatusController as vm"
                 }
             }

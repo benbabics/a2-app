@@ -243,6 +243,18 @@
                     });
                 });
 
+                describe("when the user is navigating to the version status state", function () {
+
+                    beforeEach(function () {
+                        $state.go("version.status");
+                        $rootScope.$digest();
+                    });
+
+                    it("should continue to the state", function () {
+                        expect($state.current.name).toEqual("version.status");
+                    });
+                });
+
                 describe("when the user is navigating to the landing page", function () {
 
                     beforeEach(function () {
@@ -285,6 +297,18 @@
 
                     it("should continue to the state", function () {
                         expect($state.current.name).toEqual("app.exit");
+                    });
+                });
+
+                describe("when the user is navigating to the version status state", function () {
+
+                    beforeEach(function () {
+                        $state.go("version.status");
+                        $rootScope.$digest();
+                    });
+
+                    it("should continue to the state", function () {
+                        expect($state.current.name).toEqual("version.status");
                     });
                 });
 
