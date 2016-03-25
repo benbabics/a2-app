@@ -63,11 +63,31 @@ $user-login-error-message-animation: all linear 0.5s;
             background: none;
         }
 
-        .item-toggle {
-            border-style: none;
+        .item {
+            vertical-align: middle;
+        }
 
-            .toggle {
-                top: 0px;
+        .toggle-align {
+            padding: 6px 0 5px 0;
+
+            div {
+                display:inline-block;
+            }
+        }
+
+        .item-input {
+            width: 100%;
+            text-align: center;
+            display: inline-block;
+
+                .item-toggle {
+                    border-style: none;
+                    padding-right: 0px;
+
+                    .toggle {
+                        top: 0px;
+                        position: relative;
+                    }
             }
         }
     }

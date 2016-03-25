@@ -13,7 +13,7 @@
         </div>
 
         <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.authenticateUser()">
-            <div class="list">
+            <div class="list padding">
                 <div class="padding">
                     <span class="item item-input item-user-name">
                         <input ng-model="vm.user.username"
@@ -36,14 +36,13 @@
                     </span>
                 </div>
 
-                <div class="padding">
-                    <span class="item-input">
+                    <div class="item-input toggle-align">
                         <ion-toggle ng-model="vm.rememberMe"></ion-toggle>
-                        <span>{{::vm.config.rememberMe.label}}</span>
-                    </span>
-                </div>
+                        <div>{{::vm.config.rememberMe.label}}</div>
+                    </div>
 
-                <div class="padding align_center">
+
+                <div class="align_center">
                     <wex-required-submit class="button-width" text="{{::vm.config.submitButton}}"></wex-required-submit>
                 </div>
 
