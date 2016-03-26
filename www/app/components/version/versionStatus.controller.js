@@ -16,8 +16,6 @@
         }
 
         function beforeEnter() {
-            console.log("Starting VersionStatusController.beforeEnter");
-
             return $state.go(globals.LOGIN_STATE);
         }
     }
