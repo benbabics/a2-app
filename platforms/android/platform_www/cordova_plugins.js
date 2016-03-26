@@ -225,6 +225,13 @@ module.exports = [
             "cordova.plugins.Keyboard"
         ],
         "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-app-version/www/AppVersionPlugin.js",
+        "id": "cordova-plugin-app-version.AppVersionPlugin",
+        "clobbers": [
+            "cordova.getAppVersion"
+        ]
     }
 ];
 module.exports.metadata = 

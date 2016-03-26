@@ -37,6 +37,7 @@
 		013F91EF723544C69B8B94DE /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D45CAD825242348ABAEF54 /* Toast+UIView.m */; };
 		78AB8FF78F26470DBA2E6D08 /* Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 110AE70B049A4259BA48DA5E /* Toast.m */; };
 		8A42CFA313FA4B37AD05449F /* IonicKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = EE69191B6BF044CAAD1DC84D /* IonicKeyboard.m */; };
+		528C776A61FA4FF792037D61 /* AppVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5E7DA9AEC64CFA8C476F3F /* AppVersion.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +124,8 @@
 		03B9498090F84CBCB523FF77 /* Toast.h */ = {isa = PBXFileReference; name = "Toast.h"; path = "cordova-plugin-x-toast/Toast.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		EE69191B6BF044CAAD1DC84D /* IonicKeyboard.m */ = {isa = PBXFileReference; name = "IonicKeyboard.m"; path = "ionic-plugin-keyboard/IonicKeyboard.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		3BD006373EE64022BC081B05 /* IonicKeyboard.h */ = {isa = PBXFileReference; name = "IonicKeyboard.h"; path = "ionic-plugin-keyboard/IonicKeyboard.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		5C5E7DA9AEC64CFA8C476F3F /* AppVersion.m */ = {isa = PBXFileReference; name = "AppVersion.m"; path = "cordova-plugin-app-version/AppVersion.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		7F6A565D0D63471B8155F3F8 /* AppVersion.h */ = {isa = PBXFileReference; name = "AppVersion.h"; path = "cordova-plugin-app-version/AppVersion.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -279,6 +282,8 @@
 				03B9498090F84CBCB523FF77 /* Toast.h */,
 				EE69191B6BF044CAAD1DC84D /* IonicKeyboard.m */,
 				3BD006373EE64022BC081B05 /* IonicKeyboard.h */,
+				5C5E7DA9AEC64CFA8C476F3F /* AppVersion.m */,
+				7F6A565D0D63471B8155F3F8 /* AppVersion.h */,
 			);
 			name = Plugins;
 			path = "Fleet SmartHub/Plugins";
@@ -408,6 +413,7 @@
 				013F91EF723544C69B8B94DE /* Toast+UIView.m in Sources */,
 				78AB8FF78F26470DBA2E6D08 /* Toast.m in Sources */,
 				8A42CFA313FA4B37AD05449F /* IonicKeyboard.m in Sources */,
+				528C776A61FA4FF792037D61 /* AppVersion.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

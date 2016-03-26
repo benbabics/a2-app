@@ -67,6 +67,10 @@
                         {
                             "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"io.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AppVersion\"><param name=\"android-package\" value=\"uk.co.whiteoctober.cordova.AppVersion\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -160,6 +164,9 @@
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-app-version": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
@@ -390,6 +397,13 @@
                 "cordova.plugins.Keyboard"
             ],
             "runs": true
+        },
+        {
+            "file": "plugins/cordova-plugin-app-version/www/AppVersionPlugin.js",
+            "id": "cordova-plugin-app-version.AppVersionPlugin",
+            "clobbers": [
+                "cordova.getAppVersion"
+            ]
         }
     ]
 }
