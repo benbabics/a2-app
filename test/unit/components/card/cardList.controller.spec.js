@@ -55,7 +55,7 @@
                 "trackView"
             ]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
-            ElementUtil = jasmine.createSpyObj("ElementUtil", ["getFocusedView"]);
+            ElementUtil = jasmine.createSpyObj("ElementUtil", ["getFocusedView", "resetInfiniteList"]);
 
             module("app.shared");
             module("app.components", function ($provide) {
@@ -104,36 +104,13 @@
         });
 
         describe("has an applySearchFilter function that", function () {
-            var searchFilter,
-                view,
-                cardList,
-                infiniteListElem,
-                infiniteListController;
+            var searchFilter;
 
             beforeEach(function () {
                 searchFilter = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                view = jasmine.createSpyObj("view", ["querySelector"]);
-                cardList = jasmine.createSpyObj("cardList", ["querySelectorAll"]);
-                infiniteListElem = jasmine.createSpyObj("infiniteListElem", ["controller"]);
-                infiniteListController = jasmine.createSpyObj("infiniteListController", ["checkBounds"]);
 
                 ctrl.loadingComplete = true;
                 ctrl.cards = [TestUtils.getRandomCard(CardModel)];
-            });
-
-            beforeEach(function () {
-                view.querySelector.and.callFake(function (query) {
-                    if (query === ".card-list") {
-                        return cardList;
-                    }
-                    else if (query === "ion-infinite-scroll") {
-                        return infiniteListElem;
-                    }
-                });
-
-                ElementUtil.getFocusedView.and.returnValue([view]);
-                spyOn(angular.element.prototype, "remove");
-                spyOn(angular.element.prototype, "controller").and.returnValue(infiniteListController);
             });
 
             describe("when the filter is equal to the active filter", function () {
@@ -156,16 +133,8 @@
                     expect(ctrl.cards).not.toEqual([]);
                 });
 
-                it("should NOT remove the existing items from the DOM list", function () {
-                    expect(view.querySelector).not.toHaveBeenCalled();
-                    expect(cardList.querySelectorAll).not.toHaveBeenCalled();
-                    expect(angular.element.prototype.remove).not.toHaveBeenCalled();
-                });
-
-                it("should NOT call checkBounds on the infinite scroll's controller", function () {
-                    $rootScope.$digest();
-
-                    expect(infiniteListController.checkBounds).not.toHaveBeenCalled();
+                it("should NOT call ElementUtil.resetInfiniteList", function () {
+                    expect(ElementUtil.resetInfiniteList).not.toHaveBeenCalled();
                 });
             });
 
@@ -194,16 +163,8 @@
                     expect(ctrl.cards).toEqual([]);
                 });
 
-                it("should remove the existing items from the DOM list", function () {
-                    expect(view.querySelector).toHaveBeenCalledWith(".card-list");
-                    expect(cardList.querySelectorAll).toHaveBeenCalledWith(".row");
-                    expect(angular.element.prototype.remove).toHaveBeenCalledWith();
-                });
-
-                it("should call checkBounds on the infinite scroll's controller", function () {
-                    $rootScope.$digest();
-
-                    expect(infiniteListController.checkBounds).toHaveBeenCalledWith();
+                it("should call ElementUtil.resetInfiniteList", function () {
+                    expect(ElementUtil.resetInfiniteList).toHaveBeenCalledWith();
                 });
 
                 it("should call AnalyticsUtil.trackEvent", function () {

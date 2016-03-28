@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:9
+    // jshint maxparams:8
 
     /* @ngInject */
-    function CardListController(_, $scope, globals,
+    function CardListController(_, globals,
                                 AnalyticsUtil, CardManager, ElementUtil, LoadingIndicator, Logger, UserManager) {
 
         var vm = this,
@@ -77,36 +77,12 @@
         }
 
         function resetSearch() {
-            var view = ElementUtil.getFocusedView();
-
-            //this should never happen
-            if (!view) {
-                var error = "Failed to apply search filter: Couldn't find the active view";
-                Logger.error(error);
-                throw new Error(error);
-            }
-
             vm.firstPageLoaded = false;
             vm.loadingComplete = false;
             currentPage = 0;
             vm.cards = [];
 
-            //TODO: Remove this kludge when Ionic's collection-repeat is fixed to remove previous items from the list
-            angular.element(view[0].querySelector(".card-list").querySelectorAll(".row")).remove();
-
-            //TODO: Remove this kludge when Ionic's ion-infinite-scroll is fixed to call onInfinite() when a collection is reset
-            $scope.$$postDigest(function () {
-                var infiniteList = angular.element(view[0].querySelector("ion-infinite-scroll"));
-
-                if (!infiniteList) {
-                    var error = "Failed to reset infinite scroll: No infinite scroll found";
-                    Logger.error(error);
-                    throw new Error(error);
-                }
-
-                //force the infinite scroll to re-evaluate the bounds so that an onInfinite update occurs
-                infiniteList.controller("ionInfiniteScroll").checkBounds();
-            });
+            ElementUtil.resetInfiniteList();
         }
     }
 
