@@ -167,6 +167,14 @@
                     .catch(rejectHandler);
             });
 
+            it("should broadcast 'scroll.refreshComplete'", function () {
+                expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
+            });
+
+            it("should call LoadingIndicator.begin", function () {
+                expect(LoadingIndicator.begin).toHaveBeenCalledWith();
+            });
+
             it("should call PaymentManager.fetchPayments", function () {
                 expect(PaymentManager.fetchPayments).toHaveBeenCalledWith(mockUser.billingCompany.accountId,
                     mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
@@ -188,8 +196,8 @@
                     expect(ctrl.scheduledPayments).toEqual(_.sortByOrder(mockScheduledPayments, ["scheduledDate"], ["asc"]));
                 });
 
-                it("should broadcast 'scroll.refreshComplete'", function () {
-                    expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
 
                 it("should resolve", function () {
@@ -212,8 +220,8 @@
                     expect(ctrl.scheduledPayments).toEqual({});
                 });
 
-                it("should broadcast 'scroll.refreshComplete'", function () {
-                    expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
 
                 it("should reject", function () {

@@ -9,7 +9,7 @@
 
         var vm = this;
 
-        vm.config = angular.extend({}, globals.PAYMENT_LIST.CONFIG, globals.PULL_TO_REFRESH);
+        vm.config = globals.PAYMENT_LIST.CONFIG;
 
         vm.completedPayments = {};
         vm.scheduledPayments = {};
@@ -21,21 +21,19 @@
         //////////////////////
         // Controller initialization
         function activate() {
-            LoadingIndicator.begin();
-
-            fetchPayments()
-                .finally(LoadingIndicator.complete);
+            fetchPayments();
         }
 
         function fetchPayments() {
             var billingAccountId = UserManager.getUser().billingCompany.accountId,
                 options = globals.PAYMENT_LIST.SEARCH_OPTIONS;
 
+            $scope.$broadcast("scroll.refreshComplete");
+            LoadingIndicator.begin();
+
             return PaymentManager.fetchPayments(billingAccountId, options.PAGE_NUMBER, options.PAGE_SIZE)
                 .then(filterPayments)
-                .finally(function () {
-                    $scope.$broadcast("scroll.refreshComplete");
-                });
+                .finally(LoadingIndicator.complete);
         }
 
         function filterPayments(payments) {

@@ -1,6 +1,6 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="landing">
     <ion-content>
-        <ion-refresher pulling-text="{{::vm.config.pullText}}" on-refresh="vm.fetchPayments()"></ion-refresher>
+        <ion-refresher class="wex-refresher" on-refresh="vm.fetchPayments()"></ion-refresher>
         <ang-accordion icon-position="left"
                        close-icon-class="ion-android-add"
                        open-icon-class="ion-minus">
