@@ -15,6 +15,7 @@
         beforeEach(function () {
 
             module("app.shared");
+            module("app.html");
 
             inject(function (___, _$compile_, _$rootScope_, _ElementUtil_) {
                 _ = ___;
@@ -1551,6 +1552,103 @@
 
                     it("should return the side menu", function () {
                         expect(result).toBeNull();
+                    });
+                });
+            });
+        });
+
+        describe("has a resetInfiniteList function that", function () {
+            var wexInfiniteListElem,
+                collectionRepeatContainerElem,
+                infiniteScrollElem,
+                infiniteScrollController,
+                scope;
+
+            beforeEach(function () {
+                scope = $rootScope.$new();
+
+                wexInfiniteListElem = $compile([
+                    "<ion-content>",
+                    "<wex-infinite-list>",
+                    "<div class='collection-repeat-container'>",
+                    "<div class='child'></div>",
+                    "<div class='child'></div>",
+                    "<div class='child'></div>",
+                    "</div>",
+                    "<ion-infinite-scroll></ion-infinite-scroll>",
+                    "</wex-infinite-list>",
+                    "</ion-content>"
+                ].join(""))(scope)
+                    .find("wex-infinite-list");
+
+                $rootScope.$digest();
+
+                collectionRepeatContainerElem = angular.element(wexInfiniteListElem[0].querySelector(".collection-repeat-container"));
+                infiniteScrollElem = angular.element(wexInfiniteListElem[0].querySelector("ion-infinite-scroll"));
+
+                infiniteScrollController = jasmine.createSpyObj("infiniteScrollController", ["checkBounds"]);
+                spyOn(angular.element.prototype, "controller").and.returnValue(infiniteScrollController);
+            });
+
+            describe("when given an infinite list", function () {
+
+                beforeEach(function () {
+                    ElementUtil.resetInfiniteList(wexInfiniteListElem);
+                    
+                    $rootScope.$digest();
+                });
+
+                it("should remove all children from the collection repeat container", function () {
+                    expect(collectionRepeatContainerElem.children().length).toEqual(0);
+                });
+
+                it("should call checkBounds on the infinite scroll's controller", function () {
+                    expect(infiniteScrollController.checkBounds).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("when NOT given an infinite list", function () {
+
+                describe("when there is an active view", function () {
+                    var view;
+
+                    beforeEach(function () {
+                        view = createView("active", rootNavView);
+                    });
+
+                    describe("when there is an infinite list in the active view", function () {
+
+                        beforeEach(function () {
+                            view.append(wexInfiniteListElem);
+                            $rootScope.$digest();
+                        });
+
+                        beforeEach(function () {
+                            ElementUtil.resetInfiniteList();
+                            $rootScope.$digest();
+                        });
+
+                        it("should remove all children from the collection repeat container", function () {
+                            expect(collectionRepeatContainerElem.children().length).toEqual(0);
+                        });
+
+                        it("should call checkBounds on the infinite scroll's controller", function () {
+                            expect(infiniteScrollController.checkBounds).toHaveBeenCalledWith();
+                        });
+                    });
+
+                    describe("when there is NOT an infinite list in the active view", function () {
+
+                        it("should throw an error", function () {
+                            expect(ElementUtil.resetInfiniteList).toThrowError("Failed to reset infinite list: No infinite scroll found");
+                        });
+                    });
+                });
+
+                describe("when there is NOT an active view", function () {
+
+                    it("should throw an error", function () {
+                        expect(ElementUtil.resetInfiniteList).toThrowError("Failed to reset infinite list: Couldn't find the active view");
                     });
                 });
             });
