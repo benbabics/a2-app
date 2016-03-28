@@ -4,8 +4,9 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
+    // jshint maxparams:5
     /* @ngInject */
-    function PlatformUtil(_, $ionicPlatform, $q, Logger) {
+    function PlatformUtil(_, $cordovaDevice, $ionicPlatform, $q, Logger) {
         // Private members
         var logCordovaPlatformWarning = _.once(function () {
                 Logger.debug(
@@ -16,15 +17,25 @@
 
         // Revealed Public members
         var service = {
-            "platformHasCordova"    : platformHasCordova,
-            "waitForCordovaPlatform": waitForCordovaPlatform
+            "getPlatform"               : getPlatform,
+            "platformHasCordova"        : platformHasCordova,
+            "platformSupportsAppVersion": platformSupportsAppVersion,
+            "waitForCordovaPlatform"    : waitForCordovaPlatform
         };
 
         return service;
         //////////////////////
 
+        function getPlatform() {
+            return $cordovaDevice.getPlatform();
+        }
+
         function platformHasCordova() {
             return !!window.cordova;
+        }
+
+        function platformSupportsAppVersion() {
+            return getPlatform() !== "browser";
         }
 
         /**

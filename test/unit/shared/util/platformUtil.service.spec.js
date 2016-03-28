@@ -3,7 +3,8 @@
 
     describe("A PlatformUtil service", function () {
 
-        var PlatformUtil,
+        var $cordovaDevice,
+            PlatformUtil,
             Logger,
             $ionicPlatform,
             $rootScope,
@@ -16,9 +17,11 @@
             module("app.shared");
 
             //mock dependencies
+            $cordovaDevice = jasmine.createSpyObj("$cordovaDevice", ["getPlatform"]);
             Logger = jasmine.createSpyObj("Logger", ["debug", "enabled", "error"]);
 
             module(function ($provide) {
+                $provide.value("$cordovaDevice", $cordovaDevice);
                 $provide.value("Logger", Logger);
             });
 
@@ -32,6 +35,22 @@
             //setup spies
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
+        });
+
+        describe("has a getPlatform function that", function () {
+
+            var mockPlatform;
+
+            beforeEach(function () {
+                mockPlatform = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                $cordovaDevice.getPlatform.and.returnValue(mockPlatform);
+            });
+
+            it("should return value from $cordovaDevice.getPlatform()", function () {
+                expect(PlatformUtil.getPlatform()).toBe(mockPlatform);
+            });
+
         });
 
         describe("has a platformHasCordova function that", function () {
@@ -57,6 +76,87 @@
                     expect(PlatformUtil.platformHasCordova()).toBeFalsy();
                 });
             });
+        });
+
+        describe("has a platformSupportsAppVersion function that", function () {
+
+            describe("when platform is browser", function () {
+
+                beforeEach(function () {
+                    $cordovaDevice.getPlatform.and.returnValue("browser");
+                });
+
+                it("should return false", function () {
+                    expect(PlatformUtil.platformSupportsAppVersion()).toBeFalsy();
+                });
+            });
+
+            describe("when platform is android", function () {
+
+                beforeEach(function () {
+                    $cordovaDevice.getPlatform.and.returnValue("android");
+                });
+
+                it("should return true", function () {
+                    expect(PlatformUtil.platformSupportsAppVersion()).toBeTruthy();
+                });
+            });
+
+            describe("when platform is ios", function () {
+
+                beforeEach(function () {
+                    $cordovaDevice.getPlatform.and.returnValue("ios");
+                });
+
+                it("should return true", function () {
+                    expect(PlatformUtil.platformSupportsAppVersion()).toBeTruthy();
+                });
+            });
+
+            describe("when platform is random string", function () {
+
+                beforeEach(function () {
+                    $cordovaDevice.getPlatform.and.returnValue(TestUtils.getRandomStringThatIsAlphaNumeric(10));
+                });
+
+                it("should return true", function () {
+                    expect(PlatformUtil.platformSupportsAppVersion()).toBeTruthy();
+                });
+            });
+
+            describe("when platform is empty", function () {
+
+                beforeEach(function () {
+                    $cordovaDevice.getPlatform.and.returnValue("");
+                });
+
+                it("should return true", function () {
+                    expect(PlatformUtil.platformSupportsAppVersion()).toBeTruthy();
+                });
+            });
+
+            describe("when platform is null", function () {
+
+                beforeEach(function () {
+                    $cordovaDevice.getPlatform.and.returnValue(null);
+                });
+
+                it("should return true", function () {
+                    expect(PlatformUtil.platformSupportsAppVersion()).toBeTruthy();
+                });
+            });
+
+            describe("when platform is undefined", function () {
+
+                beforeEach(function () {
+                    $cordovaDevice.getPlatform.and.returnValue(undefined);
+                });
+
+                it("should return true", function () {
+                    expect(PlatformUtil.platformSupportsAppVersion()).toBeTruthy();
+                });
+            });
+
         });
 
         describe("has a waitForCordovaPlatform function that", function () {
