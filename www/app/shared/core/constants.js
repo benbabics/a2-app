@@ -211,7 +211,9 @@
      * Pull to refresh Configuration
      */
     sharedGlobals.PULL_TO_REFRESH = {
-        "pullText": "Pull to refresh"
+        "pullingText": "Pull to refresh",
+        "spinner"    : "none",
+        "showSpinner": false
     };
 
     angular
