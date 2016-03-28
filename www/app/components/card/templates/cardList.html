@@ -8,6 +8,7 @@
         </form>
     </ion-header>
     <ion-content class="has-subheader">
+        <ion-refresher class="wex-refresher" on-refresh="vm.resetSearchResults()"></ion-refresher>
         <div class="row divider list-header"
              ng-if="vm.cards.length > 0">
             <div class="col col-25">{{::vm.config.cardNumber}}</div>

@@ -309,6 +309,35 @@
 
         });
 
+        describe("has a resetSearchResults function that", function () {
+
+            beforeEach(function () {
+                spyOn($scope, "$broadcast");
+
+                ctrl.resetSearchResults();
+            });
+
+            it("should set loadingComplete to false", function () {
+                expect(ctrl.loadingComplete).toBeFalsy();
+            });
+
+            xit("should set currentPage to 0", function () {
+                //TODO figure out how to test this
+            });
+
+            it("should set cards to an empty array", function () {
+                expect(ctrl.cards).toEqual([]);
+            });
+
+            it("should call ElementUtil.resetInfiniteList", function () {
+                expect(ElementUtil.resetInfiniteList).toHaveBeenCalledWith();
+            });
+
+            it("should broadcast the 'scroll.refreshComplete' event", function () {
+                expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
+            });
+        });
+
     });
 
     function verifyEventTracked(event) {

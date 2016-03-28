@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:8
+    // jshint maxparams:9
 
     /* @ngInject */
-    function CardListController(_, globals,
+    function CardListController(_, $scope, globals,
                                 AnalyticsUtil, CardManager, ElementUtil, LoadingIndicator, Logger, UserManager) {
 
         var vm = this,
@@ -23,6 +23,7 @@
         vm.getActiveSearchFilter = getActiveSearchFilter;
         vm.loadNextPage = loadNextPage;
         vm.pageLoaded = pageLoaded;
+        vm.resetSearchResults = resetSearchResults;
 
         //////////////////////
 
@@ -30,7 +31,7 @@
             if (vm.searchFilter !== activeSearchFilter) {
                 activeSearchFilter = vm.searchFilter;
 
-                resetSearch();
+                resetSearchResults();
 
                 _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events.searchSubmitted);
             }
@@ -76,11 +77,14 @@
             vm.firstPageLoaded = true;
         }
 
-        function resetSearch() {
+        function resetSearchResults() {
             vm.firstPageLoaded = false;
             vm.loadingComplete = false;
             currentPage = 0;
             vm.cards = [];
+
+            //note: we need to hide the refresher before resetting the infinite list or else it won't refetch the results
+            $scope.$broadcast("scroll.refreshComplete");
 
             ElementUtil.resetInfiniteList();
         }
