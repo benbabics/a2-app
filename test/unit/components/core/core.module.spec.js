@@ -108,6 +108,7 @@
             AnalyticsUtil,
             LoginManager,
             BrandManager,
+            VersionUtil,
             $cordovaDevice,
             $ionicPlatform,
             genericTrackingId,
@@ -129,6 +130,7 @@
             Popup = jasmine.createSpyObj("Popup", ["closeAllPopups"]);
             FlowUtil = jasmine.createSpyObj("FlowUtil", ["exitApp", "goToBackState"]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
+            VersionUtil = jasmine.createSpyObj("VersionUtil", ["determineVersionStatus"]);
 
             module("app.shared");
 
@@ -147,6 +149,7 @@
                 $provide.value("Popup", Popup);
                 $provide.value("FlowUtil", FlowUtil);
                 $provide.value("LoadingIndicator", LoadingIndicator);
+                $provide.value("VersionUtil", VersionUtil);
 
                 //setup mocks:
                 genericTrackingId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
@@ -245,8 +248,16 @@
 
                 describe("when the user is navigating to the version status state", function () {
 
+                    var determineVersionStatusDeferred;
+
                     beforeEach(function () {
+                        determineVersionStatusDeferred = $q.defer();
+                        VersionUtil.determineVersionStatus.and.returnValue(determineVersionStatusDeferred.promise);
+
                         $state.go("version.status");
+
+                        determineVersionStatusDeferred.resolve();
+
                         $rootScope.$digest();
                     });
 
@@ -302,8 +313,16 @@
 
                 describe("when the user is navigating to the version status state", function () {
 
+                    var determineVersionStatusDeferred;
+
                     beforeEach(function () {
+                        determineVersionStatusDeferred = $q.defer();
+                        VersionUtil.determineVersionStatus.and.returnValue(determineVersionStatusDeferred.promise);
+
                         $state.go("version.status");
+
+                        determineVersionStatusDeferred.resolve();
+
                         $rootScope.$digest();
                     });
 

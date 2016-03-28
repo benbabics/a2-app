@@ -20,7 +20,17 @@
             views: {
                 "view@version": {
                     templateUrl: "app/components/version/templates/versionStatus.html",
-                    controller : "VersionStatusController as vm"
+                    controller : "VersionStatusController as vm",
+                    resolve    : {
+                        versionStatus: function(LoadingIndicator, VersionUtil) {
+                            LoadingIndicator.begin();
+
+                            return VersionUtil.determineVersionStatus()
+                                .finally(function () {
+                                    LoadingIndicator.complete();
+                                });
+                        }
+                    }
                 }
             }
         });

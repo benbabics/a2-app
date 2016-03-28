@@ -6,7 +6,8 @@
         ctrl,
         mockGlobals = {
             LOGIN_STATE: "user.auth.login"
-        };
+        },
+        versionStatus;
 
     describe("A VersionStatus Controller", function () {
 
@@ -28,12 +29,15 @@
                 "go"
             ]);
 
-            inject(function ($controller, $rootScope) {
+            inject(function ($controller, $rootScope, VersionStatusModel) {
                 $scope = $rootScope.$new();
 
+                versionStatus = TestUtils.getRandomVersionStatus(VersionStatusModel);
+
                 ctrl = $controller("VersionStatusController", {
-                    $scope: $scope,
-                    $state: $state
+                    $scope       : $scope,
+                    $state       : $state,
+                    versionStatus: versionStatus
                 });
             });
         });

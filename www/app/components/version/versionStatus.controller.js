@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function VersionStatusController($scope, $state, globals) {
+    function VersionStatusController($scope, $state, globals, versionStatus) {
 
         activate();
 
