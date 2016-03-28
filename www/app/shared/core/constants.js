@@ -92,6 +92,15 @@
         BRANDS  : {
             "BASE"  : "brands",
             "ASSETS": "assets"
+        },
+        VERSIONS   : {
+            "BASE"         : "versions",
+            "STATUS"       : "status",
+            "STATUS_VALUES": {
+                "NO_UPDATE"  : "ok",
+                "CAN_UPDATE" : "warn",
+                "MUST_UPDATE": "fail"
+            }
         }
     };
 
