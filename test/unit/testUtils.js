@@ -34,7 +34,8 @@ var TestUtils = (function () {
             getRandomUserAccount              : getRandomUserAccount,
             getRandomValueFromArray           : getRandomValueFromArray,
             getRandomValueFromMap             : getRandomValueFromMap,
-            resolvedPromise                   : resolvedPromise,
+            getRandomVersionStatus            : getRandomVersionStatus,
+            resolvedPromise                   : resolvedPromise
         };
 
     return TestUtils;
@@ -411,6 +412,16 @@ var TestUtils = (function () {
 
     function getRandomValueFromMap(map) {
         return _.isObject(map) ? getRandomValueFromArray(_.values(map)) : null;
+    }
+
+    function getRandomVersionStatus(VersionStatusModel) {
+        var versionStatus = new VersionStatusModel();
+
+        versionStatus.set({
+            status: getRandomStringThatIsAlphaNumeric(10)
+        });
+
+        return versionStatus;
     }
 
 })();
