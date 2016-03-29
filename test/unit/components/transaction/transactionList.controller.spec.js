@@ -105,11 +105,14 @@
         });
 
         describe("has a loadNextPage function that", function () {
-            var fetchPostedTransactionsDeferred;
+            var fetchPostedTransactionsDeferred,
+                currentDate = TestUtils.getRandomDate();
 
             beforeEach(function () {
                 fetchPostedTransactionsDeferred = $q.defer();
                 TransactionManager.fetchPostedTransactions.and.returnValue(fetchPostedTransactionsDeferred.promise);
+
+                jasmine.clock().mockDate(currentDate);
             });
 
             beforeEach(function () {
@@ -125,8 +128,8 @@
             it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
                 expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
                     mockUser.billingCompany.accountId,
-                    moment().subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
-                    moment().toDate(),
+                    moment(currentDate).subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
+                    currentDate,
                     0,
                     mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE,
                     getExpectedCardId(cardIdFilter)
@@ -139,6 +142,10 @@
                     fetchPostedTransactionsDeferred.resolve([]);
 
                     $rootScope.$digest();
+                });
+
+                it("should set loadingComplete to true", function () {
+                    expect(ctrl.loadingComplete).toBeTruthy();
                 });
 
                 it("should resolve with a value of true", function () {
@@ -183,6 +190,10 @@
                     expect(resolveHandler).toHaveBeenCalledWith(false);
                 });
 
+                it("should set loadingComplete to false", function () {
+                    expect(ctrl.loadingComplete).toBeFalsy();
+                });
+
                 it("should NOT reject", function () {
                     expect(rejectHandler).not.toHaveBeenCalled();
                 });
@@ -204,6 +215,10 @@
                     expect($rootScope.$digest).toThrow();
                 });
 
+                it("should set loadingComplete to true", function () {
+                    expect(ctrl.loadingComplete).toBeTruthy();
+                });
+
                 it("should resolve with a value of true", function () {
                     expect(resolveHandler).toHaveBeenCalledWith(true);
                 });
@@ -220,6 +235,35 @@
                 //TODO figure out how to test this
             });
 
+        });
+
+        describe("has a resetSearchResults function that", function () {
+
+            beforeEach(function () {
+                spyOn($scope, "$broadcast");
+
+                ctrl.resetSearchResults();
+            });
+
+            it("should set firstPageLoaded to false", function () {
+                expect(ctrl.firstPageLoaded).toBeFalsy();
+            });
+
+            it("should set loadingComplete to false", function () {
+                expect(ctrl.loadingComplete).toBeFalsy();
+            });
+
+            xit("should set currentPage to 0", function () {
+                //TODO figure out how to test this
+            });
+
+            it("should set postedTransactions to an empty array", function () {
+                expect(ctrl.postedTransactions).toEqual([]);
+            });
+
+            it("should call ElementUtil.resetInfiniteList", function () {
+                expect(ElementUtil.resetInfiniteList).toHaveBeenCalledWith();
+            });
         });
 
     });

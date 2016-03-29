@@ -2,10 +2,11 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:8
+    // jshint maxparams:9
 
     /* @ngInject */
-    function TransactionListController(_, $stateParams, globals, moment, LoadingIndicator, Logger, TransactionManager, UserManager) {
+    function TransactionListController(_, $stateParams, globals, moment,
+                                       ElementUtil, LoadingIndicator, Logger, TransactionManager, UserManager) {
 
         var vm = this,
             cardIdFilter,
@@ -14,11 +15,13 @@
         vm.backStateOverride = null;
         vm.config = globals.TRANSACTION_LIST.CONFIG;
         vm.firstPageLoaded = false;
+        vm.loadingComplete = false;
         vm.postedTransactions = [];
         vm.searchOptions = globals.TRANSACTION_LIST.SEARCH_OPTIONS;
 
         vm.loadNextPage = loadNextPage;
         vm.pageLoaded = pageLoaded;
+        vm.resetSearchResults = resetSearchResults;
 
         activate();
 
@@ -45,29 +48,39 @@
             //fetch the next page of transactions
             return TransactionManager.fetchPostedTransactions(billingAccountId, fromDate, toDate, currentPage, vm.searchOptions.PAGE_SIZE, cardIdFilter)
                 .then(function (postedTransactions) {
-                    if (_.isEmpty(postedTransactions)) {
-                        return true;
-                    }
-                    else {
+                    vm.loadingComplete = _.isEmpty(postedTransactions);
+
+                    if (!vm.loadingComplete) {
                         //add the fetched transactions to the current list
                         vm.postedTransactions = vm.postedTransactions.concat(postedTransactions);
 
                         ++currentPage;
-                        return false;
                     }
+
+                    return vm.loadingComplete;
                 })
                 .catch(function (errorResponse) {
                     //TODO - What do we do here?
                     Logger.error("Failed to fetch next page of posted transactions: " + errorResponse);
 
                     // There was an error fetching data so indicate that there is no more data to fetch
-                    return true;
+                    vm.loadingComplete = true;
+                    return vm.loadingComplete;
                 })
                 .finally(LoadingIndicator.complete);
         }
 
         function pageLoaded() {
             vm.firstPageLoaded = true;
+        }
+
+        function resetSearchResults() {
+            vm.firstPageLoaded = false;
+            vm.loadingComplete = false;
+            vm.postedTransactions = [];
+            currentPage = 0;
+
+            ElementUtil.resetInfiniteList();
         }
 
     }
