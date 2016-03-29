@@ -45,9 +45,16 @@
                 label: "Not Now"
             }
         },
+        "FAIL"      : {
+            "instructionalText1": "A new version of Fleet SmartHub is available.",
+            "instructionalText2": "Please Update to continue using Fleet SmartHub.",
+            "later"             : {
+                visible: false
+            }
+        },
         "WARN"      : {
-            "instructionalText1": "A new version of Fleet SmartHub is available",
-            "instructionalText2": "Please Update",
+            "instructionalText1": "A new version of Fleet SmartHub is available.",
+            "instructionalText2": "Please Update.",
             "later"             : {
                 visible: true
             }

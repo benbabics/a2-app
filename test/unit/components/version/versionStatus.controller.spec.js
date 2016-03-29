@@ -94,8 +94,12 @@
                         $scope.$broadcast("$ionicView.beforeEnter");
                     });
 
-                    it("should redirect to the login state", function () {
-                        expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
+                    it("should set the config correctly", function () {
+                        expect(ctrl.config).toEqual(angular.merge({}, globals.VERSION_STATUS.CONFIG, globals.VERSION_STATUS.FAIL));
+                    });
+
+                    it("should NOT redirect to a different page", function () {
+                        expect($state.go).not.toHaveBeenCalled();
                     });
                 });
 

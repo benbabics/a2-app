@@ -26,6 +26,9 @@
                 if (versionStatus.status === globals.CONFIGURATION_API.VERSIONS.STATUS_VALUES.CAN_UPDATE) {
                     vm.config = angular.merge({}, globals.VERSION_STATUS.CONFIG, globals.VERSION_STATUS.WARN);
                 }
+                else if (versionStatus.status === globals.CONFIGURATION_API.VERSIONS.STATUS_VALUES.MUST_UPDATE) {
+                    vm.config = angular.merge({}, globals.VERSION_STATUS.CONFIG, globals.VERSION_STATUS.FAIL);
+                }
                 else {
                     return goToLogin();
                 }
