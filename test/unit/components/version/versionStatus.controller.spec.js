@@ -196,6 +196,7 @@
                 $rootScope.$digest();
             });
 
+            //TODO - Figure out how to test this
             xit("should open the market plugin", function () {
                 expect(window.cordova.plugins.market.open).toHaveBeenCalledWith(url);
             });
