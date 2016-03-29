@@ -71,6 +71,10 @@
                         {
                             "xml": "<feature name=\"AppVersion\"><param name=\"android-package\" value=\"uk.co.whiteoctober.cordova.AppVersion\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Market\"><param name=\"android-package\" value=\"com.xmartlabs.cordova.market.Market\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -167,6 +171,9 @@
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-app-version": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "com.xmartlabs.cordova.market": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
@@ -403,6 +410,13 @@
             "id": "cordova-plugin-app-version.AppVersionPlugin",
             "clobbers": [
                 "cordova.getAppVersion"
+            ]
+        },
+        {
+            "file": "plugins/com.xmartlabs.cordova.market/www/market.js",
+            "id": "com.xmartlabs.cordova.market.Market",
+            "clobbers": [
+                "cordova.plugins.market"
             ]
         }
     ]

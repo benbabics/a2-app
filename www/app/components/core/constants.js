@@ -31,6 +31,29 @@
         }
     };
 
+    appGlobals.VERSION_STATUS = {
+        "APP_STORES": {
+            android: "com.wex.fleetsmarthub",
+            ios    : "id1051414868?ls=1&mt=8"
+        },
+        "CONFIG"    : {
+            "title" : "Update Available",
+            "update": {
+                label: "Update"
+            },
+            "later" : {
+                label: "Not Now"
+            }
+        },
+        "WARN"      : {
+            "instructionalText1": "A new version of Fleet SmartHub is available",
+            "instructionalText2": "Please Update",
+            "later"             : {
+                visible: true
+            }
+        }
+    };
+
     appGlobals.USER_LOGIN = {
         "CONFIG": {
             "ANALYTICS"   : {

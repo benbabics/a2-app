@@ -232,6 +232,13 @@ module.exports = [
         "clobbers": [
             "cordova.getAppVersion"
         ]
+    },
+    {
+        "file": "plugins/com.xmartlabs.cordova.market/www/market.js",
+        "id": "com.xmartlabs.cordova.market.Market",
+        "clobbers": [
+            "cordova.plugins.market"
+        ]
     }
 ];
 module.exports.metadata = 
