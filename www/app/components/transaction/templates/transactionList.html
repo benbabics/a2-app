@@ -1,8 +1,10 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="{{vm.backStateOverride}}">
     <ion-content class="padding">
+        <ion-refresher class="wex-refresher" on-refresh="vm.resetSearchResults()"></ion-refresher>
         <wex-infinite-list on-reload="vm.loadNextPage"
                            on-page-loaded="vm.pageLoaded"
-                           reload-distance="::vm.config.reloadDistance">
+                           reload-distance="::vm.config.reloadDistance"
+                           loading-complete="vm.loadingComplete">
             <div ng-switch="vm.postedTransactions.length > 0">
                 <div ng-switch-when="true"
                      class="row divider"

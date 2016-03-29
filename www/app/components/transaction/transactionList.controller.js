@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:9
+    // jshint maxparams:10
 
     /* @ngInject */
-    function TransactionListController(_, $stateParams, globals, moment,
+    function TransactionListController(_, $scope, $stateParams, globals, moment,
                                        ElementUtil, LoadingIndicator, Logger, TransactionManager, UserManager) {
 
         var vm = this,
@@ -79,6 +79,9 @@
             vm.loadingComplete = false;
             vm.postedTransactions = [];
             currentPage = 0;
+
+            //note: we need to hide the refresher before resetting the infinite list or else it won't refetch the results
+            $scope.$broadcast("scroll.refreshComplete");
 
             ElementUtil.resetInfiniteList();
         }

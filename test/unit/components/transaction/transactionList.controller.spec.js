@@ -13,6 +13,7 @@
         UserAccountModel,
         PostedTransactionModel,
         AnalyticsUtil,
+        ElementUtil,
         cardIdFilter,
         ctrl,
         resolveHandler,
@@ -50,6 +51,7 @@
                 "trackEvent",
                 "trackView"
             ]);
+            ElementUtil = jasmine.createSpyObj("ElementUtil", ["resetInfiniteList"]);
 
             module("app.shared");
             module("app.components", function ($provide) {
@@ -84,6 +86,7 @@
                     $scope            : $scope,
                     $stateParams      : $stateParams,
                     globals           : mockGlobals,
+                    ElementUtil       : ElementUtil,
                     LoadingIndicator  : LoadingIndicator,
                     TransactionManager: TransactionManager,
                     UserManager       : UserManager
@@ -259,6 +262,10 @@
 
             it("should set postedTransactions to an empty array", function () {
                 expect(ctrl.postedTransactions).toEqual([]);
+            });
+
+            it("should broadcast the 'scroll.refreshComplete' event", function () {
+                expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
             });
 
             it("should call ElementUtil.resetInfiniteList", function () {
