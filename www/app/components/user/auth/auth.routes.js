@@ -18,17 +18,10 @@
                     controller: "LoginController as vm"
                 }
             },
-            // jshint maxparams:6
-            onEnter: function($cordovaSplashscreen, $interval, globals, AnalyticsUtil, LoginManager, PlatformUtil) {
+            // jshint maxparams:5
+            onEnter: function($cordovaSplashscreen, $interval, globals, AnalyticsUtil, LoginManager) {
                 //log out the user
                 LoginManager.logOut();
-
-                //make sure the ionic platform is ready before hiding the splash screen
-                PlatformUtil.waitForCordovaPlatform(function() {
-                    $interval(function() {
-                        $cordovaSplashscreen.hide();
-                    }, 2000, 1);
-                });
 
                 AnalyticsUtil.trackView(globals.USER_LOGIN.CONFIG.ANALYTICS.pageName);
             }

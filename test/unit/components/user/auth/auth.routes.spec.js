@@ -6,11 +6,8 @@
         var $rootScope,
             $state,
             AnalyticsUtil,
-            PlatformUtil,
             LoginManager,
             $q,
-            $cordovaSplashscreen,
-            $interval,
             mockGlobals = {
                 USER_LOGIN: {
                     CONFIG: {
@@ -30,29 +27,20 @@
 
             //mock dependencies:
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
-            $cordovaSplashscreen = jasmine.createSpyObj("$cordovaSplashscreen", ["hide"]);
             LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
 
             module(function($provide, sharedGlobals) {
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
-                $provide.value("$cordovaSplashscreen", $cordovaSplashscreen);
                 $provide.value("LoginManager", LoginManager);
                 $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
-            inject(function (_$rootScope_, _$state_, _$q_, _$interval_, _PlatformUtil_) {
+            inject(function (_$rootScope_, _$state_, _$q_) {
                 $rootScope = _$rootScope_;
                 $state = _$state_;
                 $q = _$q_;
-                $interval = _$interval_;
-                PlatformUtil = _PlatformUtil_;
             });
 
-            //setup spies:
-            spyOn(PlatformUtil, "waitForCordovaPlatform").and.callFake(function(callback) {
-                //just execute the callback directly
-                return $q.when((callback || function() {})());
-            });
         });
 
         describe("has a user.auth state that", function () {
@@ -126,21 +114,6 @@
                     expect(LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
-                it("should NOT call $cordovaSplashscreen.hide", function () {
-                    expect($cordovaSplashscreen.hide).not.toHaveBeenCalled();
-                });
-
-                describe("after 2000ms have passed", function () {
-
-                    beforeEach(function () {
-                        $interval.flush(2000);
-                        $rootScope.$digest();
-                    });
-
-                    it("should call $cordovaSplashscreen.hide", function () {
-                        expect($cordovaSplashscreen.hide).toHaveBeenCalledWith();
-                    });
-                });
             });
         });
     });

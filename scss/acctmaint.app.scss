@@ -7,6 +7,38 @@
 $container-background-color: #f0f0f0;
 
 /**------------------------------------------------------
+ Version Update Page
+ ------------------------------------------------------**/
+$user-login-image-header-offset-ios: -8%;
+$user-login-image-header-offset-android: 22%;
+$user-login-image-form-offset: 27%;
+$user-login-error-message-animation: all linear 0.5s;
+
+.version-update-view {
+
+    .button-default {
+        color: #FFFFFF;
+        text-transform: inherit;
+    }
+
+    .button-stable {
+        color: #FFFFFF;
+        text-transform: inherit;
+    }
+
+    .title {
+        padding-top: 10px;
+    }
+
+    .title-bar {
+        color: $inverse-font-color;
+        background: url("../img/titlebar.svg") no-repeat center scroll;
+        background-size: cover;
+        height: 12%;
+    }
+}
+
+/**------------------------------------------------------
  User Login Page
  ------------------------------------------------------**/
 $user-login-image-header-offset-ios: -8%;

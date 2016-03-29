@@ -3,12 +3,15 @@
 
     describe("A Version Module Route Config", function () {
 
-        var $injector,
+        var $cordovaSplashscreen,
+            $injector,
+            $interval,
             $q,
             $rootScope,
             $state,
             mockVersionStatus,
             LoadingIndicator,
+            PlatformUtil,
             VersionUtil;
 
         beforeEach(function () {
@@ -18,22 +21,33 @@
             module("app.html");
 
             // mock dependencies
+            $cordovaSplashscreen = jasmine.createSpyObj("$cordovaSplashscreen", ["hide"]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
             VersionUtil = jasmine.createSpyObj("VersionUtil", ["determineVersionStatus"]);
 
             module(function ($provide) {
+                $provide.value("$cordovaSplashscreen", $cordovaSplashscreen);
                 $provide.value("LoadingIndicator", LoadingIndicator);
                 $provide.value("VersionUtil", VersionUtil);
             });
 
-            inject(function (_$injector_, _$q_, _$rootScope_, _$state_, VersionStatusModel) {
+            inject(function (_$injector_, _$interval_, _$q_, _$rootScope_, _$state_, _PlatformUtil_, VersionStatusModel) {
                 $injector = _$injector_;
+                $interval = _$interval_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
+                PlatformUtil = _PlatformUtil_;
 
                 mockVersionStatus = TestUtils.getRandomVersionStatus(VersionStatusModel);
             });
+
+            //setup spies:
+            spyOn(PlatformUtil, "waitForCordovaPlatform").and.callFake(function(callback) {
+                //just execute the callback directly
+                return $q.when((callback || function() {})());
+            });
+
         });
 
         describe("has a version state that", function () {
@@ -119,6 +133,22 @@
                         .then(function (versionStatus) {
                             expect(versionStatus).toEqual(mockVersionStatus);
                         });
+                });
+
+                it("should NOT call $cordovaSplashscreen.hide", function () {
+                    expect($cordovaSplashscreen.hide).not.toHaveBeenCalled();
+                });
+
+                describe("after 2000ms have passed", function () {
+
+                    beforeEach(function () {
+                        $interval.flush(2000);
+                        $rootScope.$digest();
+                    });
+
+                    it("should call $cordovaSplashscreen.hide", function () {
+                        expect($cordovaSplashscreen.hide).toHaveBeenCalledWith();
+                    });
                 });
 
             });
