@@ -8,7 +8,8 @@
         mockGlobals = {
             PULL_TO_REFRESH: {
                 pullingText: TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                spinner: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                spinner: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                showSpinner: false //note: test will throw an error if this is true
             }
         };
 
