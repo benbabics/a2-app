@@ -30,10 +30,10 @@
                     var rejections = _.filter(results, {state: "rejected"});
 
                     if (_.isEmpty(rejections)) {
-                        return _.pluck(results, "value");
+                        return _.map(results, "value");
                     }
                     else {
-                        throw _.pluck(rejections, "reason");
+                        throw _.map(rejections, "reason");
                     }
                 });
         }

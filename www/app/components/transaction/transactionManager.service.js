@@ -67,7 +67,7 @@
                         }
 
                         //only cache the fetched transactions that haven't been cached yet
-                        postedTransactions = _.unique(postedTransactions.concat(fetchedTransactions), "transactionId");
+                        postedTransactions = _.uniqBy(postedTransactions.concat(fetchedTransactions), "transactionId");
 
                         return fetchedTransactions;
                     }

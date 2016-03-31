@@ -66,7 +66,7 @@
                         }
 
                         //only cache the fetched cards that haven't been cached yet
-                        cards = _.unique(cards.concat(fetchedCards), "cardId");
+                        cards = _.uniqBy(cards.concat(fetchedCards), "cardId");
 
                         return fetchedCards;
                     }

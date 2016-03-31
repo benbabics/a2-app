@@ -273,7 +273,7 @@
                             });
 
                             it("should add only the uncached cards from the data to cards", function () {
-                                var expectedValues = _.unique(mockCachedCardCollection.concat(mockCards.data), "cardId");
+                                var expectedValues = _.uniqBy(mockCachedCardCollection.concat(mockCards.data), "cardId");
 
                                 expect(CardManager.getCards()).toEqual(expectedValues);
                             });

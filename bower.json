@@ -10,7 +10,7 @@
     "angular-ui-router": ">=0.2.15",
     "ionic": "~1",
     "ionic-datepicker-widget": "~1",
-    "lodash": "~3",
+    "lodash": "~4",
     "ngCordova": "0.1.20-alpha",
     "ngFitText": "~4.1.0",
     "ngstorage": "~0.3.9",

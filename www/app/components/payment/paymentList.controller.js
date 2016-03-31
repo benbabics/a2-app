@@ -51,10 +51,10 @@
             });
 
             // Sort the scheduled payments by scheduled date ascending
-            vm.scheduledPayments = _.sortByOrder(unsortedScheduledPayments, ["scheduledDate"], ["asc"]);
+            vm.scheduledPayments = _.orderBy(unsortedScheduledPayments, ["scheduledDate"], ["asc"]);
 
             // Sort the rest of the payments by scheduled date descending
-            vm.completedPayments = _.sortByOrder(unsortedCompletedPayments, ["scheduledDate"], ["desc"]);
+            vm.completedPayments = _.orderBy(unsortedCompletedPayments, ["scheduledDate"], ["desc"]);
         }
 
     }

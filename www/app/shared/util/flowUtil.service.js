@@ -55,7 +55,7 @@
                 handler = function (toState) {
                     if (options.once) {
                         //remove all listeners
-                        _.invoke(removeListeners, _.call);
+                        _.invokeMap(removeListeners, _.call);
                     }
 
                     //invoke the callback with the to state
@@ -111,7 +111,7 @@
                 handler = function (fromState) {
                     if (options.once) {
                         //remove all listeners
-                        _.invoke(removeListeners, _.call);
+                        _.invokeMap(removeListeners, _.call);
                     }
 
                     //invoke the callback with the from state

@@ -96,7 +96,7 @@
                         return defaultBank;
                     }
 
-                    return _.first(_.sortBy(bankModelCollection, "name"));
+                    return _.head(_.sortBy(bankModelCollection, "name"));
                 });
         }
 

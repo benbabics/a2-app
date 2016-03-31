@@ -122,7 +122,7 @@
             removeListeners.concat(FlowUtil.onPageLeave(leaveHandler, scope, {once: false}));
 
             scope.$on("$destroy", function () {
-                _.invoke(removeListeners, _.call);
+                _.invokeMap(removeListeners, _.call);
             });
         }
     }

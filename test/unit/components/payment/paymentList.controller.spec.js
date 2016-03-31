@@ -124,11 +124,11 @@
                 });
 
                 it("should set the completed payments", function () {
-                    expect(ctrl.completedPayments).toEqual(_.sortByOrder(mockCompletedPayments, ["scheduledDate"], ["desc"]));
+                    expect(ctrl.completedPayments).toEqual(_.orderBy(mockCompletedPayments, ["scheduledDate"], ["desc"]));
                 });
 
                 it("should set the scheduled payments", function () {
-                    expect(ctrl.scheduledPayments).toEqual(_.sortByOrder(mockScheduledPayments, ["scheduledDate"], ["asc"]));
+                    expect(ctrl.scheduledPayments).toEqual(_.orderBy(mockScheduledPayments, ["scheduledDate"], ["asc"]));
                 });
 
                 it("should call LoadingIndicator.complete", function () {
@@ -189,11 +189,11 @@
                 });
 
                 it("should set the completed payments", function () {
-                    expect(ctrl.completedPayments).toEqual(_.sortByOrder(mockCompletedPayments, ["scheduledDate"], ["desc"]));
+                    expect(ctrl.completedPayments).toEqual(_.orderBy(mockCompletedPayments, ["scheduledDate"], ["desc"]));
                 });
 
                 it("should set the scheduled payments", function () {
-                    expect(ctrl.scheduledPayments).toEqual(_.sortByOrder(mockScheduledPayments, ["scheduledDate"], ["asc"]));
+                    expect(ctrl.scheduledPayments).toEqual(_.orderBy(mockScheduledPayments, ["scheduledDate"], ["asc"]));
                 });
 
                 it("should call LoadingIndicator.complete", function () {

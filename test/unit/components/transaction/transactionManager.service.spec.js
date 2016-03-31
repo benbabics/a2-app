@@ -278,7 +278,7 @@
                             });
 
                             it("should add only the uncached transactions from the data to postedTransactions", function () {
-                                var expectedValues = _.unique(mockCachedPostedTransactionsCollection.concat(mockPostedTransactions.data), "transactionId");
+                                var expectedValues = _.uniqBy(mockCachedPostedTransactionsCollection.concat(mockPostedTransactions.data), "transactionId");
 
                                 expect(TransactionManager.getPostedTransactions()).toEqual(expectedValues);
                             });

@@ -251,7 +251,7 @@
 
                     BankManager.setActiveBanks(mockBankCollection);
 
-                    expectedResult = _.first(_.sortBy(mockBankCollection, "name"));
+                    expectedResult = _.head(_.sortBy(mockBankCollection, "name"));
 
                     BankManager.getDefaultBank(accountId)
                         .then(function (response) {

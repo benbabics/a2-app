@@ -227,7 +227,7 @@
             return findViews(function (view) {
                 var navViewAttr = view.attr("nav-view");
 
-                return (navViewAttr && _.contains(states, navViewAttr));
+                return (navViewAttr && _.includes(states, navViewAttr));
             }, firstView, navView);
         }
 
@@ -338,7 +338,7 @@
 
                 infiniteList = angular.element(view[0].querySelector("wex-infinite-list"));
             }
-            
+
             if (infiniteList.length === 0) {
                 error = "Failed to reset infinite list: No infinite scroll found";
                 Logger.error(error);
