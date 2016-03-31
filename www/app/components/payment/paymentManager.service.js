@@ -80,7 +80,7 @@
         }
 
         function fetchPayment(paymentId) {
-            return $q.when(_.find(payments, "id", paymentId));
+            return $q.when(_.find(payments, {id: paymentId}));
         }
 
         function fetchPaymentAddAvailability(accountId) {
