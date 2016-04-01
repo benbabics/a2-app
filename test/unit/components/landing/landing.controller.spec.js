@@ -3,7 +3,10 @@
 
     var $scope,
         $ionicHistory,
+        $ionicPlatform,
+        $interval,
         ctrl,
+        doBackButtonAction,
         mockCurrentInvoiceSummary,
         mockUser,
         mockScheduledPaymentCount,
@@ -13,6 +16,9 @@
         UserManager,
         UserModel,
         Navigation,
+        Toast,
+        FlowUtil,
+        AnalyticsUtil,
         mockGlobals = {
             "LANDING": {
                 "CONFIG": {
@@ -46,6 +52,11 @@
                         billedAmount           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                         unbilledAmount         : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     }
+                },
+                "BACK_TO_EXIT": {
+                    "duration": TestUtils.getRandomInteger(1, 1000),
+                    "position": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "message" : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 }
             }
         };
@@ -53,9 +64,27 @@
     describe("A Landing Controller", function () {
 
         beforeEach(function () {
+            // mock dependencies
+            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearHistory"]);
+            mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
+            Navigation = jasmine.createSpyObj("Navigation", ["goToCards", "goToMakePayment", "goToTransactionActivity"]);
+            $ionicPlatform = jasmine.createSpyObj("$ionicPlatform", ["registerBackButtonAction"]);
+            FlowUtil = jasmine.createSpyObj("FlowUtil", ["exitApp"]);
+            Toast = jasmine.createSpyObj("Toast", ["show"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
 
             module("app.shared");
-            module("app.components");
+            module("app.components", function ($provide) {
+                $provide.value("AnalyticsUtil", AnalyticsUtil);
+            });
 
             // stub the routing and template loading
             module(function ($urlRouterProvider) {
@@ -67,17 +96,13 @@
                 });
             });
 
-            // mock dependencies
-            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearHistory"]);
-            mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
-            Navigation = jasmine.createSpyObj("Navigation", ["goToCards", "goToMakePayment", "goToTransactionActivity"]);
-
-            inject(function ($controller, $rootScope, $q, _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, PlatformUtil) {
+            inject(function ($controller, _$interval_, $rootScope, $q,
+                             _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, PlatformUtil) {
 
                 UserAccountModel = _UserAccountModel_;
                 InvoiceSummaryModel = _InvoiceSummaryModel_;
                 UserModel = _UserModel_;
+                $interval = _$interval_;
 
                 //setup mocks
                 mockCurrentInvoiceSummary = TestUtils.getRandomInvoiceSummary(InvoiceSummaryModel);
@@ -90,19 +115,87 @@
                     //just execute the callback directly
                     return $q.when((callback || function() {})());
                 });
+                spyOn($interval, "cancel").and.callThrough();
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
+                $ionicPlatform.registerBackButtonAction.and.callFake(function (callback) {
+                    doBackButtonAction = callback;
+                });
+
                 ctrl = $controller("LandingController", {
                     $scope                : $scope,
                     $ionicHistory         : $ionicHistory,
+                    $ionicPlatform        : $ionicPlatform,
                     Navigation            : Navigation,
                     UserManager           : UserManager,
+                    Toast                 : Toast,
+                    FlowUtil              : FlowUtil,
                     currentInvoiceSummary : mockCurrentInvoiceSummary,
                     scheduledPaymentsCount: mockScheduledPaymentCount,
                     globals               : mockGlobals,
                     brandLogo             : mockBrandLogo
+                });
+            });
+        });
+
+        describe("has a back button action that", function () {
+
+            beforeEach(function () {
+                doBackButtonAction();
+            });
+
+            it("should call Toast.show with the expected values", function () {
+                expect(Toast.show).toHaveBeenCalledWith(
+                    mockGlobals.LANDING.BACK_TO_EXIT.message,
+                    mockGlobals.LANDING.BACK_TO_EXIT.duration,
+                    mockGlobals.LANDING.BACK_TO_EXIT.position
+                );
+            });
+
+            it("should start a timer to allow the user to exit the app", function () {
+                //TODO - Figure out how to test this
+            });
+
+            describe("while the timer is active", function () {
+
+                describe("sets a back button action that", function () {
+
+                    beforeEach(function () {
+                        doBackButtonAction();
+                    });
+
+                    it("should call FlowUtil.exitApp", function () {
+                        expect(FlowUtil.exitApp).toHaveBeenCalledWith();
+                    });
+                });
+            });
+
+            describe("while the timer is NOT active", function () {
+
+                beforeEach(function () {
+                    $interval.flush(mockGlobals.LANDING.BACK_TO_EXIT.duration);
+                    $scope.$digest();
+                });
+
+                describe("sets a back button action that", function () {
+
+                    beforeEach(function () {
+                        doBackButtonAction();
+                    });
+
+                    it("should call Toast.show with the expected values", function () {
+                        expect(Toast.show.calls.argsFor(1)).toEqual([
+                            mockGlobals.LANDING.BACK_TO_EXIT.message,
+                            mockGlobals.LANDING.BACK_TO_EXIT.duration,
+                            mockGlobals.LANDING.BACK_TO_EXIT.position
+                        ]);
+                    });
+
+                    it("should start a timer to allow the user to exit the app", function () {
+                        //TODO - Figure out how to test this
+                    });
                 });
             });
         });

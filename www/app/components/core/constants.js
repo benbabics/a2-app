@@ -151,6 +151,11 @@
             "constants": {
                 "negativeCreditData": 1 //forces angular-chart.js to render negative/zero credit data as a solid/filled graph
             }
+        },
+        "BACK_TO_EXIT": {
+            "duration": 3000, //ms
+            "position": "bottom",
+            "message" : "Press again to exit."
         }
     };
 
