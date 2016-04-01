@@ -13,7 +13,7 @@
         resolveHandler,
         rejectHandler;
 
-    fdescribe("A PaymentMaintenanceUtil service", function () {
+    describe("A PaymentMaintenanceUtil service", function () {
 
         beforeEach(function () {
             //mock dependencies
