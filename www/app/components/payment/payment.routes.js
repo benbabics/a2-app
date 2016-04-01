@@ -11,12 +11,12 @@
 
         $urlRouterProvider.when("/payment/add/verify", validateBeforeNavigatingToPaymentAdd);
 
-        $urlRouterProvider.when("/payment/add", function(globals, $state, $stateParams) {
-            goToMaintenanceFlow(globals.PAYMENT_MAINTENANCE.STATES.ADD, $state, $stateParams);
+        $urlRouterProvider.when("/payment/add", function(globals, $state, $stateParams, PaymentMaintenanceUtil) {
+            PaymentMaintenanceUtil.go("payment.maintenance.form", $stateParams, globals.PAYMENT_MAINTENANCE.STATES.ADD);
         });
 
-        $urlRouterProvider.when("/payment/update/:paymentId", function(globals, $state, $stateParams) {
-            goToMaintenanceFlow(globals.PAYMENT_MAINTENANCE.STATES.UPDATE, $state, $stateParams);
+        $urlRouterProvider.when("/payment/update/:paymentId", function(globals, $state, $stateParams, PaymentMaintenanceUtil) {
+            PaymentMaintenanceUtil.go("payment.maintenance.form", $stateParams, globals.PAYMENT_MAINTENANCE.STATES.UPDATE);
         });
 
         $stateProvider.state("payment", {
@@ -95,13 +95,10 @@
             cache   : false,
             abstract: true,
             url     : "/maintenance/:maintenanceState?paymentId",
+            data    : {
+                maintenanceState: ""
+            },
             resolve : {
-                maintenanceDetails: function ($stateParams, PaymentMaintenanceDetailsModel) {
-                    var maintenanceDetails = new PaymentMaintenanceDetailsModel();
-
-                    maintenanceDetails.state = $stateParams.maintenanceState;
-                    return maintenanceDetails;
-                },
                 // jshint maxparams:7
                 payment: function ($q, $state, $stateParams, LoadingIndicator, PaymentManager, PaymentModel, globals) {
                     var maintenanceState = $stateParams.maintenanceState,
@@ -156,6 +153,9 @@
                         }
                     }
                 }
+            },
+            onEnter: function($stateParams) {
+                this.data.maintenanceState = $stateParams.maintenanceState;
             }
         });
 
@@ -182,8 +182,10 @@
                     }
                 }
             },
-            onEnter: function(globals, maintenanceDetails, AnalyticsUtil) {
-                AnalyticsUtil.trackView(maintenanceDetails.getConfig(globals.PAYMENT_MAINTENANCE_FORM).ANALYTICS.pageName);
+            onEnter: function(globals, PaymentMaintenanceUtil, AnalyticsUtil) {
+                var config = PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_FORM, this.data.maintenanceState);
+
+                AnalyticsUtil.trackView(config.ANALYTICS.pageName);
             }
         });
 
@@ -196,8 +198,10 @@
                     controller : "PaymentMaintenanceSummaryController as vm"
                 }
             },
-            onEnter: function(globals, maintenanceDetails, AnalyticsUtil) {
-                AnalyticsUtil.trackView(maintenanceDetails.getConfig(globals.PAYMENT_MAINTENANCE_SUMMARY).ANALYTICS.pageName);
+            onEnter: function(globals, PaymentMaintenanceUtil, AnalyticsUtil) {
+                var config = PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_SUMMARY, this.data.maintenanceState);
+
+                AnalyticsUtil.trackView(config.ANALYTICS.pageName);
             }
         });
 
@@ -210,8 +214,10 @@
                     controller : "PaymentMaintenanceConfirmationController as vm"
                 }
             },
-            onEnter: function(globals, maintenanceDetails, AnalyticsUtil) {
-                AnalyticsUtil.trackView(maintenanceDetails.getConfig(globals.PAYMENT_MAINTENANCE_CONFIRMATION).ANALYTICS.pageName);
+            onEnter: function(globals, PaymentMaintenanceUtil, AnalyticsUtil) {
+                var config = PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_CONFIRMATION, this.data.maintenanceState);
+
+                AnalyticsUtil.trackView(config.ANALYTICS.pageName);
             }
         });
 
@@ -234,8 +240,10 @@
                     }
                 }
             },
-            onEnter: function(globals, maintenanceDetails, AnalyticsUtil) {
-                AnalyticsUtil.trackView(maintenanceDetails.getConfig(globals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT).ANALYTICS.pageName);
+            onEnter: function(globals, PaymentMaintenanceUtil, AnalyticsUtil) {
+                var config = PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT, this.data.maintenanceState);
+
+                AnalyticsUtil.trackView(config.ANALYTICS.pageName);
             }
         });
 
@@ -263,14 +271,12 @@
                     }
                 }
             },
-            onEnter: function(globals, maintenanceDetails, AnalyticsUtil) {
-                AnalyticsUtil.trackView(maintenanceDetails.getConfig(globals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT).ANALYTICS.pageName);
+            onEnter: function(globals, PaymentMaintenanceUtil, AnalyticsUtil) {
+                var config = PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT, this.data.maintenanceState);
+
+                AnalyticsUtil.trackView(config.ANALYTICS.pageName);
             }
         });
-
-        function goToMaintenanceFlow(maintenanceState, $state, $stateParams) {
-            $state.go("payment.maintenance.form", angular.extend({maintenanceState: maintenanceState}, $stateParams));
-        }
 
         function validateBeforeNavigatingToPaymentAdd(_, $state, $rootScope, globals, AnalyticsUtil,
                                                       LoadingIndicator, Logger, PaymentManager, Popup, UserManager) {

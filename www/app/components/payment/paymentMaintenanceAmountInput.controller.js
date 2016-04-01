@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function PaymentMaintenanceAmountInputController($scope, $filter, $ionicHistory,
-                                                     globals, maintenanceDetails, payment, invoiceSummary, Popup) {
+                                                     globals, payment, invoiceSummary, PaymentMaintenanceUtil, Popup) {
 
         var DEFAULT_VALUE = 0,
             vm = this,
@@ -14,7 +14,7 @@
             firstInput = true;
 
         //public members:
-        vm.config = angular.extend({}, globals.BUTTONS.CONFIG, maintenanceDetails.getConfig(paymentMaintenanceAmountInput));
+        vm.config = angular.extend({}, globals.BUTTONS.CONFIG, PaymentMaintenanceUtil.getConfig(paymentMaintenanceAmountInput));
         vm.errors = paymentMaintenanceAmountInput.ERRORS;
         vm.amount = getDisplayAmount(DEFAULT_VALUE);
 

@@ -5,22 +5,23 @@
     // jshint maxparams:8
 
     /* @ngInject */
-    function PaymentMaintenanceFormController($scope, globals, hasMultipleBanks, maintenanceDetails, moment, payment,
-                                              InvoiceManager, UserManager) {
+    function PaymentMaintenanceFormController($scope, globals, hasMultipleBanks, moment, payment,
+                                              InvoiceManager, PaymentMaintenanceUtil, UserManager) {
 
         var vm = this,
             paymentMaintenanceForm = globals.PAYMENT_MAINTENANCE_FORM;
 
-        vm.config = maintenanceDetails.getConfig(paymentMaintenanceForm);
+        vm.config = PaymentMaintenanceUtil.getConfig(paymentMaintenanceForm);
 
         vm.backStateOverride = null;
         vm.billingCompany = {};
         vm.hasMultipleBanks = false;
         vm.invoiceSummary = {};
-        vm.maintenanceDetails = maintenanceDetails;
         vm.maxDate = {};
         vm.minDate = {};
         vm.payment = {};
+
+        vm.goToPage = goToPage;
 
         activate();
 
@@ -31,7 +32,7 @@
             $scope.$on("$ionicView.beforeEnter", beforeEnter);
 
             //override back to go to the landing page if we're in ADD mode
-            if (maintenanceDetails.state === maintenanceDetails.getStates().ADD) {
+            if (PaymentMaintenanceUtil.isAddState()) {
                 vm.backStateOverride = "landing";
             }
         }
@@ -43,6 +44,10 @@
             vm.payment = payment;
             vm.minDate = moment().subtract(1, "days").toDate();
             vm.maxDate = moment().add(paymentMaintenanceForm.INPUTS.DATE.CONFIG.maxFutureDays, "days").toDate();
+        }
+
+        function goToPage(stateName, params) {
+            PaymentMaintenanceUtil.go(stateName, params);
         }
 
     }

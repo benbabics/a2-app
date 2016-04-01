@@ -5,13 +5,13 @@
     // jshint maxparams:11
 
     /* @ngInject */
-    function PaymentMaintenanceSummaryController($scope, $ionicHistory, globals, maintenanceDetails, moment, payment,
-                                                 InvoiceManager, LoadingIndicator, Logger, PaymentManager, UserManager) {
+    function PaymentMaintenanceSummaryController($scope, $ionicHistory, globals, moment, payment,
+                                                 InvoiceManager, LoadingIndicator, Logger, PaymentMaintenanceUtil, PaymentManager, UserManager) {
 
         var vm = this,
             paymentMaintenanceSummary = globals.PAYMENT_MAINTENANCE_SUMMARY;
 
-        vm.config = maintenanceDetails.getConfig(paymentMaintenanceSummary);
+        vm.config = PaymentMaintenanceUtil.getConfig(paymentMaintenanceSummary);
 
         vm.processPayment = processPayment;
         vm.payment = {};
@@ -50,20 +50,21 @@
             $ionicHistory.nextViewOptions({disableBack: true});
 
             // transition to the confirmation page
-            maintenanceDetails.go("payment.maintenance.confirmation");
+            PaymentMaintenanceUtil.go("payment.maintenance.confirmation");
         }
 
         function processPayment() {
-            var maintenanceStates = maintenanceDetails.getStates();
+            var maintenanceStates = PaymentMaintenanceUtil.getStates(),
+                maintenanceState = PaymentMaintenanceUtil.getActiveState();
 
             // call the function that corresponds to the current state
-            switch (maintenanceDetails.state) {
+            switch (maintenanceState) {
                 case maintenanceStates.ADD:
                     return addPayment();
                 case maintenanceStates.UPDATE:
                     return updatePayment();
                 default:
-                    var error = "Unrecognized payment maintenance state: " + maintenanceDetails.state;
+                    var error = "Unrecognized payment maintenance state: " + maintenanceState;
 
                     Logger.error(error);
                     throw new Error(error);

@@ -4,11 +4,11 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentMaintenanceConfirmationController($scope, globals, maintenanceDetails, payment) {
+    function PaymentMaintenanceConfirmationController($scope, globals, payment, PaymentMaintenanceUtil) {
 
         var vm = this;
 
-        vm.config = maintenanceDetails.getConfig(globals.PAYMENT_MAINTENANCE_CONFIRMATION);
+        vm.config = PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_CONFIRMATION);
 
         vm.payment = {};
 

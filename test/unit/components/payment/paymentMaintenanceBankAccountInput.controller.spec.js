@@ -4,6 +4,8 @@
     var ctrl,
         scope,
         $ionicHistory,
+        PaymentMaintenanceUtil,
+        MockPaymentMaintenanceUtil,
         bankModel1,
         bankModel2,
         bankModel3,
@@ -49,8 +51,7 @@
                 }
             }
         },
-        mockStateParams,
-        mockMaintenance,
+        maintenanceState,
         BankModel;
 
     describe("A Payment Maintenance Bank Account Input Controller", function () {
@@ -78,12 +79,13 @@
 
             //mock dependencies:
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
+            MockPaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", ["getConfig"]);
 
-            inject(function ($rootScope, $controller, $filter, $q, _BankModel_, PaymentModel, appGlobals, PaymentMaintenanceDetailsModel) {
+            inject(function ($rootScope, $controller, $filter, $q, _BankModel_, PaymentModel, appGlobals, _PaymentMaintenanceUtil_) {
 
                 scope = $rootScope.$new();
-
                 BankModel = _BankModel_;
+                PaymentMaintenanceUtil = _PaymentMaintenanceUtil_;
 
                 mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
 
@@ -96,28 +98,30 @@
                 mockBankAccounts[bankModel2.id] = bankModel2;
                 mockBankAccounts[bankModel3.id] = bankModel3;
 
-                mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, appGlobals.PAYMENT_MAINTENANCE.STATES);
-                mockStateParams = {
-                    maintenanceState: mockMaintenance.state
-                };
+                maintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
+
+                //mock calls to PaymentMaintenanceUtil to pass the maintenanceState explicitly
+                MockPaymentMaintenanceUtil.getConfig.and.callFake(function (constants) {
+                    return PaymentMaintenanceUtil.getConfig(constants, maintenanceState);
+                });
 
                 ctrl = $controller("PaymentMaintenanceBankAccountInputController", {
-                    $ionicHistory     : $ionicHistory,
-                    $scope            : scope,
-                    bankAccounts      : mockBankAccounts,
-                    globals           : mockGlobals,
-                    maintenanceDetails: mockMaintenance,
-                    payment           : mockPayment
+                    $ionicHistory         : $ionicHistory,
+                    $scope                : scope,
+                    PaymentMaintenanceUtil: MockPaymentMaintenanceUtil,
+                    bankAccounts          : mockBankAccounts,
+                    globals               : mockGlobals,
+                    payment               : mockPayment
                 });
 
             });
         });
 
         it("should set the config to the expected value", function () {
-            expect(ctrl.config).toEqual(angular.extend({},
-                mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT.CONFIG,
+            expect(ctrl.config).toEqual(angular.extend(
+                {},
                 mockGlobals.BUTTONS.CONFIG,
-                getConfig(mockMaintenance)
+                PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT, maintenanceState)
             ));
         });
 
@@ -157,16 +161,4 @@
         });
 
     });
-
-    function getConfig(maintenance) {
-        var constants = mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT;
-
-        if (_.has(constants, maintenance.state)) {
-            return angular.extend({}, constants.CONFIG, constants[maintenance.state].CONFIG);
-        }
-        else {
-            return constants.CONFIG;
-        }
-    }
-
 }());

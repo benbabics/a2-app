@@ -4,13 +4,13 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PaymentMaintenanceController(InvoiceManager, defaultBank, payment, maintenanceDetails) {
+    function PaymentMaintenanceController(defaultBank, payment, InvoiceManager, PaymentMaintenanceUtil) {
 
         activate();
 
         // Controller initialization
         function activate() {
-            if (maintenanceDetails.state === maintenanceDetails.getStates().ADD) {
+            if (PaymentMaintenanceUtil.isAddState()) {
                 initializePaymentDetails();
             }
         }

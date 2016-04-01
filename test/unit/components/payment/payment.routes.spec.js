@@ -274,7 +274,8 @@
             mockInvoiceSummary,
             AnalyticsUtil,
             AuthenticationManager,
-            LoginManager;
+            LoginManager,
+            PaymentMaintenanceUtil;
 
         beforeEach(function () {
 
@@ -313,7 +314,7 @@
             });
 
             inject(function (___, _$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _InvoiceSummaryModel_,
-                             _PaymentModel_, UserAccountModel, UserModel) {
+                             _PaymentModel_, _PaymentMaintenanceUtil_, UserAccountModel, UserModel) {
                 _ = ___;
                 $injector = _$injector_;
                 $location = _$location_;
@@ -323,6 +324,7 @@
                 BankModel = _BankModel_;
                 PaymentModel = _PaymentModel_;
                 InvoiceSummaryModel = _InvoiceSummaryModel_;
+                PaymentMaintenanceUtil = _PaymentMaintenanceUtil_;
 
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
             });
@@ -648,10 +650,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should resolve a maintenanceDetails object with the expected values", function () {
-                        expect($injector.invoke($state.$current.parent.resolve.maintenanceDetails)).toEqual(jasmine.objectContaining({
-                            state: maintenanceState
-                        }));
+                    it("should set the maintenanceState data attribute to the expected state", function () {
+                        expect($state.$current.data.maintenanceState).toEqual(maintenanceState);
                     });
 
                     it("should resolve a payment object as a new PaymentModel", function () {
@@ -705,10 +705,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should resolve a maintenanceDetails object with the expected values", function () {
-                        expect($injector.invoke($state.$current.parent.resolve.maintenanceDetails)).toEqual(jasmine.objectContaining({
-                            state : maintenanceState
-                        }));
+                    it("should set the maintenanceState data attribute to the expected state", function () {
+                        expect($state.$current.data.maintenanceState).toEqual(maintenanceState);
                     });
 
                     describe("when the payment is able to be resolved", function () {
@@ -829,7 +827,9 @@
                 });
 
                 it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM, maintenanceState).ANALYTICS.pageName);
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(
+                        PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM, maintenanceState).ANALYTICS.pageName
+                    );
                 });
 
             });
@@ -885,7 +885,9 @@
                 });
 
                 it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(getConfig(mockGlobals.PAYMENT_MAINTENANCE_SUMMARY, maintenanceState).ANALYTICS.pageName);
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(
+                        PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_SUMMARY, maintenanceState).ANALYTICS.pageName
+                    );
                 });
 
             });
@@ -941,7 +943,9 @@
                 });
 
                 it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(getConfig(mockGlobals.PAYMENT_MAINTENANCE_CONFIRMATION, maintenanceState).ANALYTICS.pageName);
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(
+                        PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_CONFIRMATION, maintenanceState).ANALYTICS.pageName
+                    );
                 });
             });
 
@@ -1026,7 +1030,9 @@
                 });
 
                 it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT, maintenanceState).ANALYTICS.pageName);
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(
+                        PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT, maintenanceState).ANALYTICS.pageName
+                    );
                 });
             });
         });
@@ -1084,7 +1090,9 @@
                 });
 
                 it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT, maintenanceState).ANALYTICS.pageName);
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(
+                        PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT, maintenanceState).ANALYTICS.pageName
+                    );
                 });
 
                 describe("when the payment does not have a bank account", function () {
@@ -1719,23 +1727,6 @@
 
         function verifyEventTracked(event) {
             expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
-        }
-
-        function getConfig(constants, maintenanceState) {
-            if (maintenanceState && _.has(constants, "CONFIG")) {
-                var state = maintenanceState.toUpperCase();
-
-                if (_.has(constants, state)) {
-                    return angular.extend({}, constants.CONFIG, constants[state].CONFIG);
-                }
-                else {
-                    return constants.CONFIG;
-                }
-            }
-            else {
-                var error = "Failed to get maintenance config (state: " + maintenanceState + ")";
-                throw new Error(error);
-            }
         }
     });
 

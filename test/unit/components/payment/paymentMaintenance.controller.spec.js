@@ -9,8 +9,7 @@
         mockBank,
         mockPayment,
         mockInvoiceSummary,
-        mockMaintenanceState,
-        mockMaintenance;
+        PaymentMaintenanceUtil;
 
     describe("A Payment Maintenance Controller", function () {
 
@@ -29,6 +28,7 @@
 
             //mock dependencies:
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
+            PaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", ["isAddState"]);
 
             inject(function (___, $controller, _$rootScope_, BankModel, InvoiceSummaryModel, PaymentModel) {
                 $rootScope = _$rootScope_;
@@ -48,18 +48,17 @@
         describe("when the maintenance state is ADD", function () {
 
             beforeEach(function () {
-                inject(function($controller, globals, PaymentMaintenanceDetailsModel) {
-                    mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, globals.PAYMENT_MAINTENANCE.STATES);
-                    mockMaintenance.state = mockMaintenanceState = globals.PAYMENT_MAINTENANCE.STATES.ADD;
+                inject(function($controller) {
+                    PaymentMaintenanceUtil.isAddState.and.returnValue(true);
 
                     jasmine.clock().mockDate();
 
                     ctrl = $controller("PaymentMaintenanceController", {
-                        $scope            : $scope,
-                        InvoiceManager    : InvoiceManager,
-                        defaultBank       : mockBank,
-                        payment           : mockPayment,
-                        maintenanceDetails: mockMaintenance
+                        $scope                : $scope,
+                        defaultBank           : mockBank,
+                        payment               : mockPayment,
+                        InvoiceManager        : InvoiceManager,
+                        PaymentMaintenanceUtil: PaymentMaintenanceUtil
                     });
                 });
             });
@@ -77,23 +76,22 @@
             });
         });
 
-        describe("when the maintenance state is UPDATE", function () {
+        describe("when the maintenance state is NOT ADD", function () {
             var originalPayment;
 
             beforeEach(function () {
-                inject(function ($controller, globals, PaymentMaintenanceDetailsModel, PaymentModel) {
+                inject(function ($controller, globals, PaymentModel) {
                     originalPayment = new PaymentModel();
                     originalPayment.set(mockPayment);
 
-                    mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, globals.PAYMENT_MAINTENANCE.STATES);
-                    mockMaintenance.state = mockMaintenanceState = globals.PAYMENT_MAINTENANCE.STATES.UPDATE;
+                    PaymentMaintenanceUtil.isAddState.and.returnValue(false);
 
                     ctrl = $controller("PaymentMaintenanceController", {
-                        $scope            : $scope,
-                        InvoiceManager    : InvoiceManager,
-                        defaultBank       : mockBank,
-                        payment           : mockPayment,
-                        maintenanceDetails: mockMaintenance
+                        $scope                : $scope,
+                        defaultBank           : mockBank,
+                        payment               : mockPayment,
+                        InvoiceManager        : InvoiceManager,
+                        PaymentMaintenanceUtil: PaymentMaintenanceUtil
                     });
                 });
             });

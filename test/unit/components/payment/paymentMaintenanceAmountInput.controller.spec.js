@@ -6,6 +6,8 @@
         scope,
         Popup,
         PlatformUtil,
+        MockPaymentMaintenanceUtil,
+        PaymentMaintenanceUtil,
         $ionicHistory,
         mockPayment = {
             amount: TestUtils.getRandomNumber(1, 999)
@@ -57,8 +59,7 @@
                 }
             }
         },
-        mockStateParams,
-        mockMaintenance;
+        maintenanceState;
 
     describe("A Payment Maintenance Amount Input Controller", function () {
 
@@ -87,33 +88,41 @@
             Popup = jasmine.createSpyObj("Popup", ["displayAlert"]);
             PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["waitForCordovaPlatform"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
+            MockPaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", ["getConfig"]);
 
-            inject(function (___, $rootScope, $controller, $filter, $q, appGlobals, PaymentMaintenanceDetailsModel) {
+            inject(function (___, $rootScope, $controller, $filter, $q, appGlobals, _PaymentMaintenanceUtil_) {
                 _ = ___;
+                PaymentMaintenanceUtil = _PaymentMaintenanceUtil_;
 
                 scope = $rootScope.$new();
 
-                mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, appGlobals.PAYMENT_MAINTENANCE.STATES);
-                mockStateParams = {
-                    maintenanceState: mockMaintenance.state
-                };
+                maintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
+
+                //mock calls to PaymentMaintenanceUtil to pass the maintenanceState explicitly
+                MockPaymentMaintenanceUtil.getConfig.and.callFake(function (constants) {
+                    return PaymentMaintenanceUtil.getConfig(constants, maintenanceState);
+                });
 
                 ctrl = $controller("PaymentMaintenanceAmountInputController", {
-                    $scope            : scope,
-                    $filter           : $filter,
-                    $ionicHistory     : $ionicHistory,
-                    globals           : mockGlobals,
-                    maintenanceDetails: mockMaintenance,
-                    payment           : mockPayment,
-                    invoiceSummary    : mockInvoiceSumary,
-                    Popup         : Popup,
-                    PlatformUtil      : PlatformUtil
+                    $scope                : scope,
+                    $filter               : $filter,
+                    $ionicHistory         : $ionicHistory,
+                    globals               : mockGlobals,
+                    payment               : mockPayment,
+                    invoiceSummary        : mockInvoiceSumary,
+                    PaymentMaintenanceUtil: MockPaymentMaintenanceUtil,
+                    Popup                 : Popup,
+                    PlatformUtil          : PlatformUtil
                 });
             });
         });
 
         it("should set the config to the expected value", function () {
-            expect(ctrl.config).toEqual(angular.extend({}, mockGlobals.BUTTONS.CONFIG, getConfig(mockMaintenance)));
+            expect(ctrl.config).toEqual(angular.extend(
+                {},
+                mockGlobals.BUTTONS.CONFIG,
+                PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT, maintenanceState)
+            ));
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -244,17 +253,6 @@
             });
         });
     });
-
-    function getConfig(maintenance) {
-        var constants = mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT;
-
-        if (_.has(constants, maintenance.state)) {
-            return angular.extend({}, constants.CONFIG, constants[maintenance.state].CONFIG);
-        }
-        else {
-            return constants.CONFIG;
-        }
-    }
 
     function getDisplayAmount(value) {
         return value * 100;

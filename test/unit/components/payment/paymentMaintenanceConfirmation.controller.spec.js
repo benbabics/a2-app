@@ -3,9 +3,11 @@
 
     var _,
         $scope,
+        PaymentMaintenanceUtil,
+        MockPaymentMaintenanceUtil,
         ctrl,
+        maintenanceState,
         mockStateParams,
-        mockMaintenance,
         mockGlobals = {
             LOCALSTORAGE : {
                 "CONFIG": {
@@ -70,31 +72,38 @@
                 });
             });
 
-            inject(function (___, $controller, $rootScope, $q, appGlobals, PaymentMaintenanceDetailsModel) {
+            //mock dependencies
+            MockPaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", ["getConfig"]);
 
-                _ = ___;
+            inject(function (___, $controller, $rootScope, $q, appGlobals, _PaymentMaintenanceUtil_) {
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
+                _ = ___;
+                PaymentMaintenanceUtil = _PaymentMaintenanceUtil_;
 
-                mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, appGlobals.PAYMENT_MAINTENANCE.STATES);
-                mockStateParams = {
-                    maintenanceState: mockMaintenance.state
-                };
+                maintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
+
+                //mock calls to PaymentMaintenanceUtil to pass the maintenanceState explicitly
+                MockPaymentMaintenanceUtil.getConfig.and.callFake(function (constants) {
+                    return PaymentMaintenanceUtil.getConfig(constants, maintenanceState);
+                });
 
                 ctrl = $controller("PaymentMaintenanceConfirmationController", {
-                    $scope            : $scope,
-                    $stateParams      : mockStateParams,
-                    maintenanceDetails: mockMaintenance,
-                    payment           : mockPayment,
-                    globals           : mockGlobals
+                    $scope                : $scope,
+                    $stateParams          : mockStateParams,
+                    payment               : mockPayment,
+                    globals               : mockGlobals,
+                    PaymentMaintenanceUtil: MockPaymentMaintenanceUtil
                 });
 
             });
         });
 
         it("should set the config to the expected value", function () {
-            expect(ctrl.config).toEqual(getConfig(mockMaintenance));
+            expect(ctrl.config).toEqual(
+                PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_CONFIRMATION, maintenanceState)
+            );
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -109,16 +118,4 @@
         });
 
     });
-
-    function getConfig(maintenance) {
-        var constants = mockGlobals.PAYMENT_MAINTENANCE_CONFIRMATION;
-
-        if (_.has(constants, maintenance.state)) {
-            return angular.extend({}, constants.CONFIG, constants[maintenance.state].CONFIG);
-        }
-        else {
-            return constants.CONFIG;
-        }
-    }
-
 }());

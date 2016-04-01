@@ -7,8 +7,9 @@
         BankManager,
         BankModel,
         InvoiceManager,
-        mockStateParams,
-        mockMaintenance,
+        PaymentMaintenanceUtil,
+        MockPaymentMaintenanceUtil,
+        maintenanceState,
         mockGlobals = {
             LOCALSTORAGE : {
                 "CONFIG": {
@@ -118,31 +119,38 @@
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            MockPaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", ["getConfig", "go", "isAddState"]);
 
-            inject(function (___, $controller, $rootScope, $q, _moment_, _BankModel_, appGlobals, PaymentMaintenanceDetailsModel) {
+            inject(function (___, $controller, $rootScope, $q, _moment_, _BankModel_, appGlobals, _PaymentMaintenanceUtil_) {
 
                 _ = ___;
                 moment = _moment_;
                 BankModel = _BankModel_;
+                PaymentMaintenanceUtil = _PaymentMaintenanceUtil_;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
-                mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, appGlobals.PAYMENT_MAINTENANCE.STATES);
-                mockStateParams = {
-                    maintenanceState: mockMaintenance.state
-                };
+                maintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
+
+                //mock calls to PaymentMaintenanceUtil to pass the maintenanceState explicitly
+                MockPaymentMaintenanceUtil.getConfig.and.callFake(function (constants) {
+                    return PaymentMaintenanceUtil.getConfig(constants, maintenanceState);
+                });
+
+                MockPaymentMaintenanceUtil.isAddState.and.callFake(function () {
+                    return PaymentMaintenanceUtil.isAddState(maintenanceState);
+                });
 
                 ctrl = $controller("PaymentMaintenanceFormController", {
-                    $scope            : $scope,
-                    $stateParams      : mockStateParams,
-                    hasMultipleBanks  : mockHasMultipleBanks,
-                    maintenanceDetails: mockMaintenance,
-                    payment           : mockPayment,
-                    globals           : mockGlobals,
-                    BankManager       : BankManager,
-                    InvoiceManager    : InvoiceManager,
-                    UserManager       : UserManager
+                    $scope                : $scope,
+                    hasMultipleBanks      : mockHasMultipleBanks,
+                    payment               : mockPayment,
+                    globals               : mockGlobals,
+                    BankManager           : BankManager,
+                    InvoiceManager        : InvoiceManager,
+                    PaymentMaintenanceUtil: MockPaymentMaintenanceUtil,
+                    UserManager           : UserManager
                 });
             });
 
@@ -151,11 +159,11 @@
         });
 
         it("should set the config to the expected value", function () {
-            expect(ctrl.config).toEqual(getConfig(mockMaintenance));
+            expect(ctrl.config).toEqual(PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM, maintenanceState));
         });
 
         it("should set backStateOverride to the expected value", function () {
-            expect(ctrl.backStateOverride).toEqual(getBackStateOverride(mockMaintenance));
+            expect(ctrl.backStateOverride).toEqual(getBackStateOverride(maintenanceState));
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -195,25 +203,35 @@
 
         });
 
+        describe("has a goToPage function that", function () {
+            var stateName,
+                params;
+
+            beforeEach(function () {
+                var numParams = TestUtils.getRandomInteger(0, 10);
+                stateName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                params = {};
+
+                for (var i = 0; i < numParams; ++i) {
+                    params[TestUtils.getRandomStringThatIsAlphaNumeric(10)] = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                }
+
+                ctrl.goToPage(stateName, params);
+            });
+
+            it("should call PaymentMaintenanceUtil.go with the expected values", function () {
+                expect(MockPaymentMaintenanceUtil.go).toHaveBeenCalledWith(stateName, params);
+            });
+        });
+
     });
 
-    function getBackStateOverride(maintenance) {
-        if (maintenance.state === maintenance.getStates().ADD) {
+    function getBackStateOverride(maintenanceState) {
+        if (PaymentMaintenanceUtil.isAddState(maintenanceState)) {
             return "landing";
         }
 
         return null;
-    }
-
-    function getConfig(maintenance) {
-        var constants = mockGlobals.PAYMENT_MAINTENANCE_FORM;
-
-        if (_.has(constants, maintenance.state)) {
-            return angular.extend({}, constants.CONFIG, constants[maintenance.state].CONFIG);
-        }
-        else {
-            return constants.CONFIG;
-        }
     }
 
 }());

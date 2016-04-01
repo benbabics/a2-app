@@ -19,7 +19,6 @@ var TestUtils = (function () {
             getRandomDate                     : getRandomDate,
             getRandomInteger                  : getRandomInteger,
             getRandomInvoiceSummary           : getRandomInvoiceSummary,
-            getRandomPaymentMaintenanceDetails: getRandomPaymentMaintenanceDetails,
             getRandomNumber                   : getRandomNumber,
             getRandomNumberWithLength         : getRandomNumberWithLength,
             getRandomOnlineApplication        : getRandomOnlineApplication,
@@ -266,16 +265,6 @@ var TestUtils = (function () {
         randomPaymentAdd.bankAccount = getRandomBank(BankModel).name;
 
         return randomPaymentAdd;
-    }
-
-    function getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, STATES) {
-        var paymentMaintenanceDetails = new PaymentMaintenanceDetailsModel();
-
-        paymentMaintenanceDetails.set({
-            state: getRandomValueFromMap(STATES)
-        });
-
-        return paymentMaintenanceDetails;
     }
 
     function getRandomPaymentUpdate(PaymentModel, BankModel) {

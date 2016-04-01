@@ -6,13 +6,13 @@
 
     /* @ngInject */
     function PaymentMaintenanceBankAccountInputController($ionicHistory, $scope,
-                                                          bankAccounts, globals, maintenanceDetails, payment) {
+                                                          bankAccounts, globals, payment, PaymentMaintenanceUtil) {
 
         var vm = this,
             paymentMaintenanceBankAccountInput = globals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT;
 
         //public members:
-        vm.config = angular.extend({}, globals.BUTTONS.CONFIG, maintenanceDetails.getConfig(paymentMaintenanceBankAccountInput));
+        vm.config = angular.extend({}, globals.BUTTONS.CONFIG, PaymentMaintenanceUtil.getConfig(paymentMaintenanceBankAccountInput));
 
         vm.selectBank = selectBank;
 

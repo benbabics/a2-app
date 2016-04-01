@@ -7,8 +7,9 @@
         $state,
         $ionicHistory,
         ctrl,
-        mockStateParams,
-        mockMaintenance,
+        PaymentMaintenanceUtil,
+        MockPaymentMaintenanceUtil,
+        maintenanceState,
         mockGlobals = {
             LOCALSTORAGE : {
                 "CONFIG": {
@@ -104,6 +105,12 @@
                 "trackEvent",
                 "trackView"
             ]);
+            MockPaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", [
+                "getConfig",
+                "go",
+                "getActiveState",
+                "getStates"
+            ]);
 
             module("app.shared");
             module("app.components", function ($provide, sharedGlobals) {
@@ -132,45 +139,48 @@
             });
 
             inject(function (___, $controller, _$q_, $rootScope, _moment_, _BankModel_, appGlobals,
-                             _PaymentModel_, PaymentMaintenanceDetailsModel) {
+                             _PaymentModel_, _PaymentMaintenanceUtil_) {
 
                 _ = ___;
                 $q = _$q_;
                 moment = _moment_;
                 BankModel = _BankModel_;
                 PaymentModel = _PaymentModel_;
+                PaymentMaintenanceUtil = _PaymentMaintenanceUtil_;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
-                mockMaintenance = TestUtils.getRandomPaymentMaintenanceDetails(PaymentMaintenanceDetailsModel, appGlobals.PAYMENT_MAINTENANCE.STATES);
-                mockStateParams = {
-                    maintenanceState: mockMaintenance.state
-                };
+                maintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
 
-                switch (mockMaintenance.state) {
-                    case appGlobals.PAYMENT_MAINTENANCE.STATES.ADD:
-                        mockPaymentProcess = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
-                        break;
-                    case appGlobals.PAYMENT_MAINTENANCE.STATES.UPDATE:
-                        mockPaymentProcess = TestUtils.getRandomPaymentUpdate(PaymentModel, BankModel);
-                        break;
-                    default:
-                        mockPaymentProcess = null;
-                        break;
+                if (PaymentMaintenanceUtil.isAddState(maintenanceState)) {
+                    mockPaymentProcess = TestUtils.getRandomPaymentAdd(PaymentModel, BankModel);
+                }
+                else if (PaymentMaintenanceUtil.isUpdateState(maintenanceState)) {
+                    mockPaymentProcess = TestUtils.getRandomPaymentUpdate(PaymentModel, BankModel);
+                }
+                else {
+                    mockPaymentProcess = null;
                 }
 
+                //mock calls to PaymentMaintenanceUtil to pass the maintenanceState explicitly
+                MockPaymentMaintenanceUtil.getConfig.and.callFake(function (constants) {
+                    return PaymentMaintenanceUtil.getConfig(constants, maintenanceState);
+                });
+
+                MockPaymentMaintenanceUtil.getStates.and.returnValue(appGlobals.PAYMENT_MAINTENANCE.STATES);
+                MockPaymentMaintenanceUtil.getActiveState.and.returnValue(maintenanceState);
+
                 ctrl = $controller("PaymentMaintenanceSummaryController", {
-                    $scope            : $scope,
-                    $state            : $state,
-                    $stateParams      : mockStateParams,
-                    $ionicHistory     : $ionicHistory,
-                    maintenanceDetails: mockMaintenance,
-                    InvoiceManager    : InvoiceManager,
-                    PaymentManager    : PaymentManager,
-                    UserManager       : UserManager,
-                    payment           : mockPaymentProcess,
-                    globals           : mockGlobals
+                    $scope                : $scope,
+                    $state                : $state,
+                    $ionicHistory         : $ionicHistory,
+                    InvoiceManager        : InvoiceManager,
+                    PaymentMaintenanceUtil: MockPaymentMaintenanceUtil,
+                    PaymentManager        : PaymentManager,
+                    UserManager           : UserManager,
+                    payment               : mockPaymentProcess,
+                    globals               : mockGlobals
                 });
 
             });
@@ -179,15 +189,10 @@
             mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
             InvoiceManager.getInvoiceSummary.and.returnValue(mockCurrentInvoiceSummary);
             UserManager.getUser.and.returnValue(mockUser);
-
-            spyOn(mockMaintenance, "go");
         });
 
         it("should set the config to the expected value", function () {
-            expect(ctrl.config).toEqual(angular.extend({},
-                mockGlobals.PAYMENT_MAINTENANCE_SUMMARY.CONFIG,
-                getConfig(mockMaintenance)
-            ));
+            expect(ctrl.config).toEqual(PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_SUMMARY, maintenanceState));
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -285,7 +290,7 @@
 
             beforeEach(function () {
                 processPaymentDeferred = $q.defer();
-                mockPaymentProcessFunction = getPaymentProcessFunction(mockMaintenance, PaymentManager);
+                mockPaymentProcessFunction = getPaymentProcessFunction();
 
                 mockPaymentProcessFunction.and.returnValue(processPaymentDeferred.promise);
 
@@ -318,7 +323,7 @@
                 });
 
                 it("should navigate to the payment maintenance confirmation page", function () {
-                    expect(mockMaintenance.go).toHaveBeenCalledWith("payment.maintenance.confirmation");
+                    expect(MockPaymentMaintenanceUtil.go).toHaveBeenCalledWith("payment.maintenance.confirmation");
                 });
 
             });
@@ -346,30 +351,18 @@
 
         });
 
-    });
-
-    function getConfig(maintenance) {
-        var constants = mockGlobals.PAYMENT_MAINTENANCE_SUMMARY;
-
-        if (_.has(constants, maintenance.state)) {
-            return angular.extend({}, constants.CONFIG, constants[maintenance.state].CONFIG);
-        }
-        else {
-            return constants.CONFIG;
-        }
-    }
-
-    function getPaymentProcessFunction(maintenance, PaymentManager) {
-        var maintenanceStates = maintenance.getStates();
-
-        switch (maintenance.state) {
-            case maintenanceStates.ADD:
+        function getPaymentProcessFunction() {
+            if (PaymentMaintenanceUtil.isAddState(maintenanceState)) {
                 return PaymentManager.addPayment;
-            case maintenanceStates.UPDATE:
+            }
+            else if (PaymentMaintenanceUtil.isUpdateState(maintenanceState)) {
                 return PaymentManager.updatePayment;
-            default:
+            }
+            else {
                 return null;
+            }
         }
-    }
+
+    });
 
 }());
