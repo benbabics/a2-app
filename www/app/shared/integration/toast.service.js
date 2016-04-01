@@ -5,7 +5,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function ToastService(_, $ionicLoading, $cordovaToast, PlatformUtil) {
+    function Toast(_, $ionicLoading, $cordovaToast, PlatformUtil) {
         var toast;
 
         if (PlatformUtil.platformHasCordova()) {
@@ -32,17 +32,26 @@
         function show(message, duration) {
             $ionicLoading.show({
                 template: "<span class=\"toast-message\">" + message + "</span>",
-                duration  : mapDurationString(duration),
+                duration  : mapDuration(duration),
                 noBackdrop: true
             });
         }
 
-        function mapDurationString(duration) {
-            if (duration.toLowerCase() === "short") {
-                return 2000;
-            } else if (duration.toLowerCase() === "long") {
-                return 4000;
+        function mapDuration(duration) {
+            if (_.isNumber(duration)) {
+                return duration;
             }
+            else if (_.isString(duration)) {
+                duration = duration.toLowerCase();
+
+                switch (duration) {
+                    case "short":
+                        return 2000;
+                    case "long":
+                        return 4000;
+                }
+            }
+
             return 0;
         }
 
@@ -51,5 +60,5 @@
 
     angular
         .module("app.shared.integration")
-        .factory("ToastService", ToastService);
+        .factory("Toast", Toast);
 }());

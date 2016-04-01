@@ -3,7 +3,7 @@
 
     /* jshint -W003, -W026 */ // These allow us to define functions after they're used
 
-    var ToastService,
+    var Toast,
         $window,
         $ionicLoading,
         $cordovaToast,
@@ -46,13 +46,13 @@
             beforeEach(function () {
                 PlatformUtil.platformHasCordova.and.returnValue(true);
 
-                inject(function (_ToastService_) {
-                    ToastService = _ToastService_;
+                inject(function (_Toast_) {
+                    Toast = _Toast_;
                 });
             });
 
             it("should use the Cordova toast plugin", function () {
-                expect(ToastService).toEqual(jasmine.objectContaining($cordovaToast));
+                expect(Toast).toEqual(jasmine.objectContaining($cordovaToast));
             });
         });
 
@@ -61,8 +61,8 @@
             beforeEach(function () {
                 PlatformUtil.platformHasCordova.and.returnValue(false);
 
-                inject(function (_ToastService_) {
-                    ToastService = _ToastService_;
+                inject(function (_Toast_) {
+                    Toast = _Toast_;
                 });
             });
 
@@ -74,15 +74,13 @@
                     beforeEach(function () {
                         duration = "short";
 
-                        ToastService.show(mockMessage, duration);
+                        Toast.show(mockMessage, duration);
                     });
 
                     it("should call $ionicLoading.show with the expected values", function () {
-                        var expectedDuration = mapDurationString(duration);
-
                         expect($ionicLoading.show).toHaveBeenCalledWith(jasmine.objectContaining({
                             template: getExpectedToastTemplate(mockMessage),
-                            duration: expectedDuration
+                            duration: 2000
                         }));
                     });
                 });
@@ -93,15 +91,30 @@
                     beforeEach(function () {
                         duration = "long";
 
-                        ToastService.show(mockMessage, duration);
+                        Toast.show(mockMessage, duration);
                     });
 
                     it("should call $ionicLoading.show with the expected values", function () {
-                        var expectedDuration = mapDurationString(duration);
-
                         expect($ionicLoading.show).toHaveBeenCalledWith(jasmine.objectContaining({
                             template: getExpectedToastTemplate(mockMessage),
-                            duration: expectedDuration
+                            duration: 4000
+                        }));
+                    });
+                });
+
+                describe("when the duration is set to a number", function () {
+                    var duration;
+
+                    beforeEach(function () {
+                        duration = TestUtils.getRandomInteger(1, 1000);
+
+                        Toast.show(mockMessage, duration);
+                    });
+
+                    it("should call $ionicLoading.show with the expected values", function () {
+                        expect($ionicLoading.show).toHaveBeenCalledWith(jasmine.objectContaining({
+                            template: getExpectedToastTemplate(mockMessage),
+                            duration: duration
                         }));
                     });
                 });
@@ -112,15 +125,13 @@
                     beforeEach(function () {
                         duration = "invalid duration string";
 
-                        ToastService.show(mockMessage, duration);
+                        Toast.show(mockMessage, duration);
                     });
 
                     it("should call $ionicLoading.show with the expected values", function () {
-                        var expectedDuration = 0;
-
                         expect($ionicLoading.show).toHaveBeenCalledWith(jasmine.objectContaining({
                             template: getExpectedToastTemplate(mockMessage),
-                            duration: expectedDuration
+                            duration: 0
                         }));
                     });
                 });
@@ -131,15 +142,13 @@
 
                 beforeEach(function () {
                     duration = "short";
-                    ToastService.showShortTop(mockMessage);
+                    Toast.showShortTop(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
-                    var expectedDuration = mapDurationString(duration);
-
                     expect($ionicLoading.show).toHaveBeenCalledWith(jasmine.objectContaining({
                         template: getExpectedToastTemplate(mockMessage),
-                        duration: expectedDuration
+                        duration: 2000
                     }));
                 });
             });
@@ -149,15 +158,13 @@
 
                 beforeEach(function () {
                     duration = "short";
-                    ToastService.showShortCenter(mockMessage);
+                    Toast.showShortCenter(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
-                    var expectedDuration = mapDurationString(duration);
-
                     expect($ionicLoading.show).toHaveBeenCalledWith(jasmine.objectContaining({
                         template: getExpectedToastTemplate(mockMessage),
-                        duration: expectedDuration
+                        duration: 2000
                     }));
                 });
             });
@@ -167,15 +174,13 @@
 
                 beforeEach(function () {
                     duration = "short";
-                    ToastService.showShortBottom(mockMessage);
+                    Toast.showShortBottom(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
-                    var expectedDuration = mapDurationString(duration);
-
                     expect($ionicLoading.show).toHaveBeenCalledWith(jasmine.objectContaining({
                         template: getExpectedToastTemplate(mockMessage),
-                        duration: expectedDuration
+                        duration: 2000
                     }));
                 });
             });
@@ -185,15 +190,13 @@
 
                 beforeEach(function () {
                     duration = "long";
-                    ToastService.showLongTop(mockMessage);
+                    Toast.showLongTop(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
-                    var expectedDuration = mapDurationString(duration);
-
                     expect($ionicLoading.show).toHaveBeenCalledWith(jasmine.objectContaining({
                         template: getExpectedToastTemplate(mockMessage),
-                        duration: expectedDuration
+                        duration: 4000
                     }));
                 });
             });
@@ -203,15 +206,13 @@
 
                 beforeEach(function () {
                     duration = "long";
-                    ToastService.showLongCenter(mockMessage);
+                    Toast.showLongCenter(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
-                    var expectedDuration = mapDurationString(duration);
-
                     expect($ionicLoading.show).toHaveBeenCalledWith(jasmine.objectContaining({
                         template: getExpectedToastTemplate(mockMessage),
-                        duration: expectedDuration
+                        duration: 4000
                     }));
                 });
             });
@@ -221,29 +222,18 @@
 
                 beforeEach(function () {
                     duration = "long";
-                    ToastService.showLongBottom(mockMessage);
+                    Toast.showLongBottom(mockMessage);
                 });
 
                 it("should call $ionicLoading.show with the expected values", function () {
-                    var expectedDuration = mapDurationString(duration);
-
                     expect($ionicLoading.show).toHaveBeenCalledWith(jasmine.objectContaining({
                         template: getExpectedToastTemplate(mockMessage),
-                        duration: expectedDuration
+                        duration: 4000
                     }));
                 });
             });
         });
     });
-
-    function mapDurationString(duration) {
-        if (duration.toLowerCase() === "short") {
-            return 2000;
-        } else if (duration.toLowerCase() === "long") {
-            return 4000;
-        }
-        return 0;
-    }
 
     function getExpectedToastTemplate(message) {
         return "<span class=\"toast-message\">" + message + "</span>";
