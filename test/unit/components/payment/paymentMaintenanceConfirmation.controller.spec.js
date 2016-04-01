@@ -5,6 +5,7 @@
         $scope,
         PaymentMaintenanceUtil,
         MockPaymentMaintenanceUtil,
+        Navigation,
         ctrl,
         maintenanceState,
         mockStateParams,
@@ -74,6 +75,7 @@
 
             //mock dependencies
             MockPaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", ["getConfig"]);
+            Navigation = jasmine.createSpyObj("Navigation", ["goToPaymentActivity"]);
 
             inject(function (___, $controller, $rootScope, $q, appGlobals, _PaymentMaintenanceUtil_) {
 
@@ -94,6 +96,7 @@
                     $stateParams          : mockStateParams,
                     payment               : mockPayment,
                     globals               : mockGlobals,
+                    Navigation            : Navigation,
                     PaymentMaintenanceUtil: MockPaymentMaintenanceUtil
                 });
 
@@ -117,5 +120,15 @@
             });
         });
 
+        describe("has a goToPaymentActivity function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToPaymentActivity();
+            });
+
+            it("should call Navigation.goToPaymentActivity", function () {
+                expect(Navigation.goToPaymentActivity).toHaveBeenCalledWith();
+            });
+        });
     });
 }());

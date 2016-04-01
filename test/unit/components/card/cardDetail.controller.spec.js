@@ -2,6 +2,7 @@
     "use strict";
 
     var $scope,
+        Navigation,
         ctrl,
         mockCard,
         mockGlobals = {
@@ -39,6 +40,9 @@
                 });
             });
 
+            //mock dependencies
+            Navigation = jasmine.createSpyObj("Navigation", ["goToTransactionActivity"]);
+
             inject(function ($controller, $rootScope, $q, CardModel) {
 
                 // create a scope object for us to use.
@@ -47,9 +51,10 @@
                 mockCard = TestUtils.getRandomCard(CardModel);
 
                 ctrl = $controller("CardDetailController", {
-                    $scope : $scope,
-                    card   : mockCard,
-                    globals: mockGlobals
+                    $scope    : $scope,
+                    card      : mockCard,
+                    globals   : mockGlobals,
+                    Navigation: Navigation
                 });
 
             });
@@ -66,6 +71,17 @@
                 expect(ctrl.card).toEqual(mockCard);
             });
 
+        });
+
+        describe("has a goToTransactionActivity function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToTransactionActivity();
+            });
+
+            it("should call Navigation.goToTransactionActivity", function () {
+                expect(Navigation.goToTransactionActivity).toHaveBeenCalledWith();
+            });
         });
 
     });

@@ -4,6 +4,7 @@
     var ctrl,
         $rootScope,
         $scope,
+        Navigation,
         mockCardReissueDetails,
         mockGlobals = {
             "CARD_REISSUE_CONFIRMATION": {
@@ -31,6 +32,9 @@
             module("app.components.card");
             module("app.components.account");
 
+            //mock dependencies
+            Navigation = jasmine.createSpyObj("Navigation", ["goToCards"]);
+
             inject(function ($controller, _$rootScope_, $q, AddressModel, ShippingMethodModel,
                              CardReissueModel, AccountModel, CardModel, ShippingCarrierModel) {
                 $rootScope = _$rootScope_;
@@ -42,7 +46,8 @@
                 ctrl = $controller("CardReissueConfirmationController", {
                     $scope            : $scope,
                     globals           : mockGlobals,
-                    cardReissueDetails: mockCardReissueDetails
+                    cardReissueDetails: mockCardReissueDetails,
+                    Navigation        : Navigation
                 });
             });
 
@@ -54,6 +59,17 @@
 
         it("should set config to the expected constant values", function () {
             expect(ctrl.config).toEqual(mockGlobals.CARD_REISSUE_CONFIRMATION.CONFIG);
+        });
+
+        describe("has a goToCards function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToCards();
+            });
+
+            it("should call Navigation.goToCards", function () {
+                expect(Navigation.goToCards).toHaveBeenCalledWith();
+            });
         });
     });
 })();

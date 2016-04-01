@@ -2,11 +2,11 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:11
+    // jshint maxparams:12
 
     /* @ngInject */
     function PaymentDetailController(_, $scope, $state, globals, isPaymentEditable, payment,
-                                     AnalyticsUtil, Logger, PaymentManager, Popup, UserManager) {
+                                     AnalyticsUtil, Logger, Navigation, PaymentManager, Popup, UserManager) {
 
         var vm = this;
 
@@ -35,7 +35,7 @@
         function confirmPaymentCancel() {
             PaymentManager.removePayment(UserManager.getUser().billingCompany.accountId, vm.payment.id)
                 .then(function () {
-                    $state.go("payment.list.view");
+                    Navigation.goToPaymentActivity();
                 })
                 .catch(function (errorResponse) {
                     //TODO - What do we do here?

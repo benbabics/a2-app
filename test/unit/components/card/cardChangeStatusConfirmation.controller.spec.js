@@ -4,6 +4,7 @@
     var ctrl,
         $rootScope,
         $scope,
+        Navigation,
         sharedGlobals,
         mockCard,
         mockGlobals = {
@@ -34,6 +35,9 @@
             module("app.shared");
             module("app.components.card");
 
+            //mock dependencies
+            Navigation = jasmine.createSpyObj("Navigation", ["goToCards"]);
+
             inject(function ($controller, _$rootScope_, $q, _sharedGlobals_, CardModel) {
                 $rootScope = _$rootScope_;
                 sharedGlobals = _sharedGlobals_;
@@ -43,9 +47,10 @@
                 mockCard = TestUtils.getRandomCard(CardModel);
 
                 ctrl = $controller("CardChangeStatusConfirmationController", {
-                    $scope : $scope,
-                    globals: mockGlobals,
-                    card   : mockCard
+                    $scope    : $scope,
+                    globals   : mockGlobals,
+                    card      : mockCard,
+                    Navigation: Navigation
                 });
 
             });
@@ -137,6 +142,17 @@
                 it("should return an empty string", function () {
                     expect(ctrl.getConfirmationMessage()).toEqual("");
                 });
+            });
+        });
+
+        describe("has a goToCards function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToCards();
+            });
+
+            it("should call Navigation.goToCards", function () {
+                expect(Navigation.goToCards).toHaveBeenCalledWith();
             });
         });
     });

@@ -2,15 +2,18 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:5
 
     /* @ngInject */
-    function PaymentMaintenanceConfirmationController($scope, globals, payment, PaymentMaintenanceUtil) {
+    function PaymentMaintenanceConfirmationController($scope, globals, payment, Navigation, PaymentMaintenanceUtil) {
 
         var vm = this;
 
         vm.config = PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_CONFIRMATION);
 
         vm.payment = {};
+
+        vm.goToPaymentActivity = Navigation.goToPaymentActivity;
 
         activate();
 

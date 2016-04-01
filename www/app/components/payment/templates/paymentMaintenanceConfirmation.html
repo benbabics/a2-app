@@ -21,7 +21,7 @@
             <br>
             <div>
                 <button class="button button-block button-light item item-icon-right"
-                        ui-sref="payment.list.view"
+                        ng-click="vm.goToPaymentActivity()"
                         wex-analytics-track-event="vm.config.ANALYTICS.events.paymentActivityLink">
                     <i class="icon ion-chevron-right"></i>
                     <span id="activityButton" class="btn_align black">{{::vm.config.activityButton}}</span>

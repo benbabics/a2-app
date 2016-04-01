@@ -6,6 +6,7 @@
         $scope,
         $state,
         AnalyticsUtil,
+        Navigation,
         $q,
         ctrl,
         Popup,
@@ -80,6 +81,7 @@
                 "trackView"
             ]);
             Popup = jasmine.createSpyObj("Popup", ["displayConfirm"]);
+            Navigation = jasmine.createSpyObj("Navigation", ["goToPaymentActivity"]);
 
             module("app.shared");
             module("app.components", function ($provide, sharedGlobals) {
@@ -103,7 +105,7 @@
             });
 
             inject(function (___, _$rootScope_, $controller, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
-
+                _ = ___;
                 $rootScope = _$rootScope_;
                 $q = _$q_;
                 confirmDeferred = $q.defer();
@@ -119,6 +121,7 @@
                     $scope           : $scope,
                     $state           : $state,
                     AnalyticsUtil    : AnalyticsUtil,
+                    Navigation       : Navigation,
                     PaymentManager   : PaymentManager,
                     Popup            : Popup,
                     UserManager      : UserManager,
@@ -198,8 +201,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should redirect to payment.list.view", function () {
-                        expect($state.go).toHaveBeenCalledWith("payment.list.view");
+                    it("should go to the payment activity page", function () {
+                        expect(Navigation.goToPaymentActivity).toHaveBeenCalledWith();
                     });
                 });
 
@@ -210,8 +213,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should NOT redirect to payment.list.view", function () {
-                        expect($state.go).not.toHaveBeenCalledWith("payment.list.view");
+                    it("should NOT go to the payment activity page", function () {
+                        expect(Navigation.goToPaymentActivity).not.toHaveBeenCalled();
                     });
                 });
             });
@@ -227,8 +230,8 @@
                     expect(PaymentManager.removePayment).not.toHaveBeenCalledWith();
                 });
 
-                it("should NOT redirect to payment.list.view", function () {
-                    expect($state.go).not.toHaveBeenCalledWith("payment.list.view");
+                it("should NOT go to the payment activity page", function () {
+                    expect(Navigation.goToPaymentActivity).not.toHaveBeenCalled();
                 });
             });
         });

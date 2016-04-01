@@ -2,9 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:5
 
     /* @ngInject */
-    function CardChangeStatusConfirmationController(_, globals, card, Logger) {
+    function CardChangeStatusConfirmationController(_, globals, card, Logger, Navigation) {
 
         var vm = this;
 
@@ -12,6 +13,7 @@
         vm.config = globals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG;
 
         vm.getConfirmationMessage = getConfirmationMessage;
+        vm.goToCards = Navigation.goToCards;
 
         //////////////////////
 

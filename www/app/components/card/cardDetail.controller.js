@@ -4,13 +4,15 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function CardDetailController($scope, globals, card) {
+    function CardDetailController($scope, globals, card, Navigation) {
 
         var vm = this;
 
         vm.config = globals.CARD_DETAIL.CONFIG;
 
         vm.card = {};
+
+        vm.goToTransactionActivity = Navigation.goToTransactionActivity;
 
         activate();
 
