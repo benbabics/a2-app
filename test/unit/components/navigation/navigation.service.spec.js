@@ -331,6 +331,54 @@
             });
         });
 
+        describe("has an isSecuredState function that", function () {
+            var stateName;
+
+            describe("when the given state is the login state", function () {
+
+                beforeEach(function () {
+                    stateName = mockGlobals.LOGIN_STATE;
+                });
+
+                it("should return false", function () {
+                    expect(Navigation.isSecuredState(stateName)).toBeFalsy();
+                });
+            });
+
+            describe("when the given state is the version.status state", function () {
+
+                beforeEach(function () {
+                    stateName = "version.status";
+                });
+
+                it("should return false", function () {
+                    expect(Navigation.isSecuredState(stateName)).toBeFalsy();
+                });
+            });
+
+            describe("when the given state is the app.exit state", function () {
+
+                beforeEach(function () {
+                    stateName = "app.exit";
+                });
+
+                it("should return false", function () {
+                    expect(Navigation.isSecuredState(stateName)).toBeFalsy();
+                });
+            });
+
+            describe("when the given state is NOT an unsecured state", function () {
+
+                beforeEach(function () {
+                    stateName = "card.list";
+                });
+
+                it("should return true", function () {
+                    expect(Navigation.isSecuredState(stateName)).toBeTruthy();
+                });
+            });
+        });
+
     });
 
 }());

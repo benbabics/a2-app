@@ -15,7 +15,8 @@
             goToPaymentActivity    : goToPaymentActivity,
             goToPrivacyPolicy      : goToPrivacyPolicy,
             goToTermsOfUse         : goToTermsOfUse,
-            goToTransactionActivity: goToTransactionActivity
+            goToTransactionActivity: goToTransactionActivity,
+            isSecuredState         : isSecuredState
         };
 
         return service;
@@ -84,6 +85,14 @@
                         notify : true
                     });
                 });
+        }
+
+        function isSecuredState(stateName) {
+            //TODO - Make this a list somewhere
+
+            return globals.LOGIN_STATE !== stateName &&
+                "version.status" !== stateName &&
+                "app.exit" !== stateName;
         }
     }
 
