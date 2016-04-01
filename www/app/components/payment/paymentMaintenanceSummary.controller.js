@@ -74,7 +74,7 @@
 
         function resolveAddPaymentError() {
             var WARNINGS = globals.PAYMENT_MAINTENANCE.WARNINGS,
-                errorMessage,
+                errorMessage = WARNINGS.DEFAULT,
                 billingAccountId = UserManager.getUser().billingCompany.accountId;
 
             LoadingIndicator.begin();
@@ -87,6 +87,8 @@
                 })
                 .finally(function () {
                     LoadingIndicator.complete();
+
+                    PaymentMaintenanceUtil.showPaymentError(errorMessage);
                 });
         }
 

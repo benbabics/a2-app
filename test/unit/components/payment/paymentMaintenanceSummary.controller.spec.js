@@ -52,7 +52,8 @@
             },
             PAYMENT_MAINTENANCE: {
                 "WARNINGS": {
-                    "DEFAULT": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    "DEFAULT": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "PAYMENT_ALREADY_SCHEDULED": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 }
             },
             LOGIN_STATE: TestUtils.getRandomStringThatIsAlphaNumeric(10)
@@ -373,8 +374,10 @@
                                 expect(mockPaymentProcess.set).not.toHaveBeenCalled();
                             });
 
-                            it("should NOT navigate away from the current page", function () {
-                                expect($state.go).not.toHaveBeenCalled();
+                            it("should call PaymentMaintenanceUtil.showPaymentError with the expected message", function () {
+                                expect(MockPaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(
+                                    mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.PAYMENT_ALREADY_SCHEDULED
+                                );
                             });
                         });
 
@@ -391,8 +394,10 @@
                                 expect(mockPaymentProcess.set).not.toHaveBeenCalled();
                             });
 
-                            it("should NOT navigate away from the current page", function () {
-                                expect($state.go).not.toHaveBeenCalled();
+                            it("should call PaymentMaintenanceUtil.showPaymentError with the expected message", function () {
+                                expect(MockPaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(
+                                    mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.DEFAULT
+                                );
                             });
                         });
                     });
@@ -410,8 +415,10 @@
                             expect(mockPaymentProcess.set).not.toHaveBeenCalled();
                         });
 
-                        it("should NOT navigate away from the current page", function () {
-                            expect($state.go).not.toHaveBeenCalled();
+                        it("should call PaymentMaintenanceUtil.showPaymentError with the expected message", function () {
+                            expect(MockPaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(
+                                mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.DEFAULT
+                            );
                         });
                     });
                 });
