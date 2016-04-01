@@ -22,11 +22,11 @@
         return service;
         //////////////////////
 
-        function goToCards() {
+        function goToCards(params) {
             //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
             return $ionicHistory.clearCache()
                 .then(function () {
-                    return $state.go("card.list", null, {
+                    return $state.go("card.list", params, {
                         reload : true,
                         inherit: false,
                         notify : true
@@ -42,10 +42,10 @@
             return $state.go("landing");
         }
 
-        function goToLogOut() {
+        function goToLogOut(params) {
             return LoginManager.logOut()
                 .finally(function () {
-                    return $state.go(globals.LOGIN_STATE);
+                    return $state.go(globals.LOGIN_STATE, params);
                 });
         }
 
@@ -55,11 +55,11 @@
             return $q.resolve();
         }
 
-        function goToPaymentActivity() {
+        function goToPaymentActivity(params) {
             //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
             return $ionicHistory.clearCache()
                 .then(function () {
-                    return $state.go("payment.list.view", null, {
+                    return $state.go("payment.list.view", params, {
                         reload : true,
                         inherit: false,
                         notify : true
@@ -75,11 +75,11 @@
             return $state.go("termsOfUse");
         }
 
-        function goToTransactionActivity() {
+        function goToTransactionActivity(params) {
             //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
             return $ionicHistory.clearCache()
                 .then(function () {
-                    return $state.go("transaction.list", null, {
+                    return $state.go("transaction.list", params, {
                         reload : true,
                         inherit: false,
                         notify : true

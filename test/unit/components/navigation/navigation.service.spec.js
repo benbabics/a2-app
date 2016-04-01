@@ -134,28 +134,63 @@
 
         describe("has a goToCards function that", function () {
 
-            beforeEach(function () {
-                Navigation.goToCards()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
+            describe("when given params", function () {
+                var params;
 
-                $rootScope.$digest();
-            });
+                beforeEach(function () {
+                    params = TestUtils.getRandomMap();
+                });
 
-            it("should call $ionicHistory.clearCache", function () {
-                expect($ionicHistory.clearCache).toHaveBeenCalledWith();
-            });
+                beforeEach(function () {
+                    Navigation.goToCards(params)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
 
-            it("should navigate to the card list page and reload it", function () {
-                expect($state.go).toHaveBeenCalledWith("card.list", null, {
-                    reload : true,
-                    inherit: false,
-                    notify : true
+                    $rootScope.$digest();
+                });
+
+                it("should call $ionicHistory.clearCache", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                });
+
+                it("should navigate to the card list page and reload it", function () {
+                    expect($state.go).toHaveBeenCalledWith("card.list", params, {
+                        reload : true,
+                        inherit: false,
+                        notify : true
+                    });
+                });
+
+                it("should call the resolve handler", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
                 });
             });
 
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
+            describe("when NOT given params", function () {
+
+                beforeEach(function () {
+                    Navigation.goToCards()
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+
+                    $rootScope.$digest();
+                });
+
+                it("should call $ionicHistory.clearCache", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                });
+
+                it("should navigate to the card list page and reload it", function () {
+                    expect($state.go).toHaveBeenCalledWith("card.list", undefined, {
+                        reload : true,
+                        inherit: false,
+                        notify : true
+                    });
+                });
+
+                it("should call the resolve handler", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
+                });
             });
         });
 
@@ -199,24 +234,55 @@
 
         describe("has a goToLogOut function that", function () {
 
-            beforeEach(function () {
-                Navigation.goToLogOut()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
+            describe("when given params", function () {
+                var params;
 
-                $rootScope.$digest();
+                beforeEach(function () {
+                    params = TestUtils.getRandomMap();
+                });
+
+                beforeEach(function () {
+                    Navigation.goToLogOut(params)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+
+                    $rootScope.$digest();
+                });
+
+                it("should log out the User", function () {
+                    expect(LoginManager.logOut).toHaveBeenCalledWith();
+                });
+
+                it("should navigate to the login page", function () {
+                    expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE, params);
+                });
+
+                it("should call the resolve handler", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
+                });
             });
 
-            it("should log out the User", function () {
-                expect(LoginManager.logOut).toHaveBeenCalledWith();
-            });
+            describe("when NOT given params", function () {
 
-            it("should navigate to the login page", function () {
-                expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
-            });
+                beforeEach(function () {
+                    Navigation.goToLogOut()
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
 
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
+                    $rootScope.$digest();
+                });
+
+                it("should log out the User", function () {
+                    expect(LoginManager.logOut).toHaveBeenCalledWith();
+                });
+
+                it("should navigate to the login page", function () {
+                    expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE, undefined);
+                });
+
+                it("should call the resolve handler", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
+                });
             });
         });
 
@@ -241,28 +307,63 @@
 
         describe("has a goToPaymentActivity function that", function () {
 
-            beforeEach(function () {
-                Navigation.goToPaymentActivity()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
+            describe("when given params", function () {
+                var params;
 
-                $rootScope.$digest();
-            });
+                beforeEach(function () {
+                    params = TestUtils.getRandomMap();
+                });
 
-            it("should call $ionicHistory.clearCache", function () {
-                expect($ionicHistory.clearCache).toHaveBeenCalledWith();
-            });
+                beforeEach(function () {
+                    Navigation.goToPaymentActivity(params)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
 
-            it("should navigate to the payment list page and reload it", function () {
-                expect($state.go).toHaveBeenCalledWith("payment.list.view", null, {
-                    reload : true,
-                    inherit: false,
-                    notify : true
+                    $rootScope.$digest();
+                });
+
+                it("should call $ionicHistory.clearCache", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                });
+
+                it("should navigate to the payment list page and reload it", function () {
+                    expect($state.go).toHaveBeenCalledWith("payment.list.view", params, {
+                        reload : true,
+                        inherit: false,
+                        notify : true
+                    });
+                });
+
+                it("should call the resolve handler", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
                 });
             });
 
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
+            describe("when NOT given params", function () {
+
+                beforeEach(function () {
+                    Navigation.goToPaymentActivity()
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+
+                    $rootScope.$digest();
+                });
+
+                it("should call $ionicHistory.clearCache", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                });
+
+                it("should navigate to the payment list page and reload it", function () {
+                    expect($state.go).toHaveBeenCalledWith("payment.list.view", undefined, {
+                        reload : true,
+                        inherit: false,
+                        notify : true
+                    });
+                });
+
+                it("should call the resolve handler", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
+                });
             });
         });
 
@@ -306,28 +407,63 @@
 
         describe("has a goToTransactionActivity function that", function () {
 
-            beforeEach(function () {
-                Navigation.goToTransactionActivity()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
+            describe("when given params", function () {
+                var params;
 
-                $rootScope.$digest();
-            });
+                beforeEach(function () {
+                    params = TestUtils.getRandomMap();
+                });
 
-            it("should call $ionicHistory.clearCache", function () {
-                expect($ionicHistory.clearCache).toHaveBeenCalledWith();
-            });
+                beforeEach(function () {
+                    Navigation.goToTransactionActivity(params)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
 
-            it("should navigate to the transaction list page and reload it", function () {
-                expect($state.go).toHaveBeenCalledWith("transaction.list", null, {
-                    reload : true,
-                    inherit: false,
-                    notify : true
+                    $rootScope.$digest();
+                });
+
+                it("should call $ionicHistory.clearCache", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                });
+
+                it("should navigate to the transaction list page and reload it", function () {
+                    expect($state.go).toHaveBeenCalledWith("transaction.list", params, {
+                        reload : true,
+                        inherit: false,
+                        notify : true
+                    });
+                });
+
+                it("should call the resolve handler", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
                 });
             });
 
-            it("should call the resolve handler", function () {
-                expect(resolveHandler).toHaveBeenCalled();
+            describe("when NOT given params", function () {
+
+                beforeEach(function () {
+                    Navigation.goToTransactionActivity()
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+
+                    $rootScope.$digest();
+                });
+
+                it("should call $ionicHistory.clearCache", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                });
+
+                it("should navigate to the transaction list page and reload it", function () {
+                    expect($state.go).toHaveBeenCalledWith("transaction.list", undefined, {
+                        reload : true,
+                        inherit: false,
+                        notify : true
+                    });
+                });
+
+                it("should call the resolve handler", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
+                });
             });
         });
 

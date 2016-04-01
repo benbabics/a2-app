@@ -20,6 +20,7 @@ var TestUtils = (function () {
             getRandomDate                     : getRandomDate,
             getRandomInteger                  : getRandomInteger,
             getRandomInvoiceSummary           : getRandomInvoiceSummary,
+            getRandomMap                      : getRandomMap,
             getRandomNumber                   : getRandomNumber,
             getRandomNumberWithLength         : getRandomNumberWithLength,
             getRandomOnlineApplication        : getRandomOnlineApplication,
@@ -241,6 +242,17 @@ var TestUtils = (function () {
         randomInvoiceSummary.unbilledAmount = getRandomNumberWithLength(5);
 
         return randomInvoiceSummary;
+    }
+
+    function getRandomMap(numEntries) {
+        var map = {};
+        numEntries = numEntries || getRandomInteger(1, 10);
+
+        for (var i = 0; i < numEntries; ++i) {
+            map[getRandomStringThatIsAlphaNumeric(10)] = getRandomStringThatIsAlphaNumeric(10);
+        }
+
+        return map;
     }
 
     function getRandomNumber(min, max) {
