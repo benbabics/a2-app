@@ -15,6 +15,13 @@
                     STATES: {
                         "ADD"   : "add",
                         "UPDATE": "update"
+                    },
+                    WARNINGS: {
+                        BANK_ACCOUNTS_NOT_SETUP  : "Banks Not Setup",
+                        DIRECT_DEBIT_SETUP       : "Direct Debit Enabled",
+                        NO_BALANCE_DUE           : "No Current Balance",
+                        PAYMENT_ALREADY_SCHEDULED: "Payment Already Scheduled",
+                        DEFAULT                  : "We are unable to process your changes at this time."
                     }
                 },
                 LOCALSTORAGE : {
@@ -139,16 +146,6 @@
                     "SEARCH_OPTIONS": {
                         "PAGE_NUMBER": TestUtils.getRandomInteger(0, 20),
                         "PAGE_SIZE"  : TestUtils.getRandomInteger(10, 100)
-                    }
-                },
-
-                PAYMENT_ADD: {
-                    CONFIG  : {},
-                    WARNINGS: {
-                        BANK_ACCOUNTS_NOT_SETUP  : "Banks Not Setup",
-                        DIRECT_DEBIT_SETUP       : "Direct Debit Enabled",
-                        NO_BALANCE_DUE           : "No Current Balance",
-                        PAYMENT_ALREADY_SCHEDULED: "Payment Already Scheduled"
                     }
                 },
 
@@ -1193,7 +1190,7 @@
 
                 it("should call PaymentMaintenanceUtil.showPaymentError with the expected values", function () {
                     expect(PaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(
-                        mockGlobals.PAYMENT_ADD.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
+                        mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
                         mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddBankAccountsNotSetup
                     );
                 });
@@ -1228,7 +1225,7 @@
 
                 it("should call PaymentMaintenanceUtil.showPaymentError with the expected values", function () {
                     expect(PaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(
-                        mockGlobals.PAYMENT_ADD.WARNINGS.DIRECT_DEBIT_SETUP,
+                        mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.DIRECT_DEBIT_SETUP,
                         mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddDirectDebitSetup
                     );
                 });
@@ -1262,7 +1259,7 @@
 
                 it("should call PaymentMaintenanceUtil.showPaymentError with the expected values", function () {
                     expect(PaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(
-                        mockGlobals.PAYMENT_ADD.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
+                        mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
                         mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddPaymentAlreadyScheduled
                     );
                 });
@@ -1296,7 +1293,7 @@
 
                 it("should call PaymentMaintenanceUtil.showPaymentError with the expected values", function () {
                     expect(PaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(
-                        mockGlobals.PAYMENT_ADD.WARNINGS.NO_BALANCE_DUE,
+                        mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.NO_BALANCE_DUE,
                         mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddNoBalanceDue
                     );
                 });

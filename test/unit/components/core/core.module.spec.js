@@ -55,13 +55,13 @@
                         options: {}
                     }
                 },
-                PAYMENT_ADD            : {
-                    CONFIG  : {},
+                PAYMENT_MAINTENANCE            : {
                     WARNINGS: {
                         BANK_ACCOUNTS_NOT_SETUP  : "Banks Not Setup",
                         DIRECT_DEBIT_SETUP       : "Direct Debit Enabled",
                         NO_BALANCE_DUE           : "No Current Balance",
-                        PAYMENT_ALREADY_SCHEDULED: "Payment Already Scheduled"
+                        PAYMENT_ALREADY_SCHEDULED: "Payment Already Scheduled",
+                        DEFAULT                  : "We are unable to process your changes at this time."
                     }
                 },
                 BRANDS: {

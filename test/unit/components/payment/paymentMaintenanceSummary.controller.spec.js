@@ -6,6 +6,7 @@
         $scope,
         $state,
         $ionicHistory,
+        appGlobals,
         ctrl,
         PaymentMaintenanceUtil,
         MockPaymentMaintenanceUtil,
@@ -46,6 +47,11 @@
                             "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                         }
                     }
+                }
+            },
+            PAYMENT_MAINTENANCE: {
+                "WARNINGS": {
+                    "DEFAULT": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 }
             },
             LOGIN_STATE: TestUtils.getRandomStringThatIsAlphaNumeric(10)
@@ -109,23 +115,18 @@
                 "getConfig",
                 "go",
                 "getActiveState",
-                "getStates"
+                "getStates",
+                "showPaymentError"
             ]);
 
             module("app.shared");
-            module("app.components", function ($provide, sharedGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
-
+            module("app.components", function ($provide) {
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("$state", $state);
                 $provide.value("$ionicHistory", $ionicHistory);
                 $provide.value("InvoiceManager", InvoiceManager);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
-            });
-
-            module(function ($provide, sharedGlobals, appGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
             });
 
             // stub the routing and template loading
@@ -138,11 +139,12 @@
                 });
             });
 
-            inject(function (___, $controller, _$q_, $rootScope, _moment_, _BankModel_, appGlobals,
+            inject(function (___, $controller, _$q_, $rootScope, _appGlobals_, _moment_, _BankModel_,
                              _PaymentModel_, _PaymentMaintenanceUtil_) {
 
                 _ = ___;
                 $q = _$q_;
+                appGlobals = _appGlobals_;
                 moment = _moment_;
                 BankModel = _BankModel_;
                 PaymentModel = _PaymentModel_;
@@ -169,7 +171,9 @@
                 });
 
                 MockPaymentMaintenanceUtil.getStates.and.returnValue(appGlobals.PAYMENT_MAINTENANCE.STATES);
-                MockPaymentMaintenanceUtil.getActiveState.and.returnValue(maintenanceState);
+                MockPaymentMaintenanceUtil.getActiveState.and.callFake(function () {
+                    return maintenanceState;
+                });
 
                 ctrl = $controller("PaymentMaintenanceSummaryController", {
                     $scope                : $scope,
@@ -285,83 +289,135 @@
 
         describe("has a processPayment function that", function () {
 
-            var processPaymentDeferred,
-                mockPaymentProcessFunction;
-
             beforeEach(function () {
-                processPaymentDeferred = $q.defer();
-                mockPaymentProcessFunction = getPaymentProcessFunction();
-
-                mockPaymentProcessFunction.and.returnValue(processPaymentDeferred.promise);
-
                 spyOn(mockPaymentProcess, "set").and.callThrough();
 
                 ctrl.payment = mockPaymentProcess;
-
-                ctrl.processPayment();
             });
 
-            it("should process the Payment", function () {
-                expect(mockPaymentProcessFunction).toHaveBeenCalledWith(mockUser.billingCompany.accountId, mockPaymentProcess);
-            });
-
-            describe("when the Payment is processed successfully", function () {
+            describe("when the maintenance state is ADD", function () {
+                var addPaymentDeferred;
 
                 beforeEach(function () {
-                    //resolve the process payment promise
-                    processPaymentDeferred.resolve(mockPayment);
+                    maintenanceState = appGlobals.PAYMENT_MAINTENANCE.STATES.ADD;
+                    addPaymentDeferred = $q.defer();
 
-                    $scope.$digest();
+                    PaymentManager.addPayment.and.returnValue(addPaymentDeferred.promise);
+
+                    ctrl.processPayment();
                 });
 
-                it("should set the payment", function () {
-                    expect(mockPaymentProcess.set).toHaveBeenCalledWith(mockPayment);
+                it("should add the Payment", function () {
+                    expect(PaymentManager.addPayment).toHaveBeenCalledWith(mockUser.billingCompany.accountId, mockPaymentProcess);
                 });
 
-                it("should disable the back button for the confirmation page", function () {
-                    expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
+                describe("when the Payment is added successfully", function () {
+
+                    beforeEach(function () {
+                        //resolve the process payment promise
+                        addPaymentDeferred.resolve(mockPayment);
+
+                        $scope.$digest();
+                    });
+
+                    it("should set the payment", function () {
+                        expect(mockPaymentProcess.set).toHaveBeenCalledWith(mockPayment);
+                    });
+
+                    it("should disable the back button for the confirmation page", function () {
+                        expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
+                    });
+
+                    it("should navigate to the payment maintenance confirmation page", function () {
+                        expect(MockPaymentMaintenanceUtil.go).toHaveBeenCalledWith("payment.maintenance.confirmation");
+                    });
+
                 });
 
-                it("should navigate to the payment maintenance confirmation page", function () {
-                    expect(MockPaymentMaintenanceUtil.go).toHaveBeenCalledWith("payment.maintenance.confirmation");
-                });
+                describe("when the Payment is NOT added successfully", function () {
 
+                    var errorObjectArg = new Error("Processing payment failed");
+
+                    beforeEach(function () {
+                        //reject with an error message
+                        addPaymentDeferred.reject(errorObjectArg);
+
+                        $scope.$digest();
+                    });
+
+                    it("should NOT set the payment", function () {
+                        expect(mockPaymentProcess.set).not.toHaveBeenCalled();
+                    });
+
+                    it("should NOT navigate away from the current page", function () {
+                        expect($state.go).not.toHaveBeenCalled();
+                    });
+
+                });
             });
 
-            describe("when the Payment is NOT processed successfully", function () {
-
-                var errorObjectArg = new Error("Processing payment failed");
+            describe("when the maintenance state is UPDATE", function () {
+                var updatePaymentDeferred;
 
                 beforeEach(function () {
-                    //reject with an error message
-                    processPaymentDeferred.reject(errorObjectArg);
+                    maintenanceState = appGlobals.PAYMENT_MAINTENANCE.STATES.UPDATE;
+                    updatePaymentDeferred = $q.defer();
 
-                    $scope.$digest();
+                    PaymentManager.updatePayment.and.returnValue(updatePaymentDeferred.promise);
+
+                    ctrl.processPayment();
                 });
 
-                it("should NOT set the payment", function () {
-                    expect(mockPaymentProcess.set).not.toHaveBeenCalled();
+                it("should update the Payment", function () {
+                    expect(PaymentManager.updatePayment).toHaveBeenCalledWith(mockUser.billingCompany.accountId, mockPaymentProcess);
                 });
 
-                it("should NOT navigate away from the current page", function () {
-                    expect($state.go).not.toHaveBeenCalled();
+                describe("when the Payment is updated successfully", function () {
+
+                    beforeEach(function () {
+                        //resolve the process payment promise
+                        updatePaymentDeferred.resolve(mockPayment);
+
+                        $scope.$digest();
+                    });
+
+                    it("should set the payment", function () {
+                        expect(mockPaymentProcess.set).toHaveBeenCalledWith(mockPayment);
+                    });
+
+                    it("should disable the back button for the confirmation page", function () {
+                        expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
+                    });
+
+                    it("should navigate to the payment maintenance confirmation page", function () {
+                        expect(MockPaymentMaintenanceUtil.go).toHaveBeenCalledWith("payment.maintenance.confirmation");
+                    });
+
                 });
 
+                describe("when the Payment is NOT updated successfully", function () {
+
+                    var errorObjectArg = new Error("Processing payment failed");
+
+                    beforeEach(function () {
+                        //reject with an error message
+                        updatePaymentDeferred.reject(errorObjectArg);
+
+                        $scope.$digest();
+                    });
+
+                    it("should NOT set the payment", function () {
+                        expect(mockPaymentProcess.set).not.toHaveBeenCalled();
+                    });
+
+                    it("should call PaymentMaintenanceUtil.showPaymentError with the expected values", function () {
+                        expect(MockPaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.DEFAULT);
+                    });
+
+                });
             });
 
         });
-
-        function getPaymentProcessFunction() {
-            if (PaymentMaintenanceUtil.isAddState(maintenanceState)) {
-                return PaymentManager.addPayment;
-            }
-            else if (PaymentMaintenanceUtil.isUpdateState(maintenanceState)) {
-                return PaymentManager.updatePayment;
-            }
-            else {
-                return null;
-            }
-        }
 
     });
 

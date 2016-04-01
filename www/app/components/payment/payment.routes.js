@@ -276,7 +276,7 @@
 
         function validateBeforeNavigatingToPaymentAdd($state, globals, LoadingIndicator, Logger,
                                                       Navigation, PaymentMaintenanceUtil, PaymentManager, UserManager) {
-            var WARNINGS = globals.PAYMENT_ADD.WARNINGS,
+            var WARNINGS = globals.PAYMENT_MAINTENANCE.WARNINGS,
                 ANALYTICS_EVENTS = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events,
                 billingAccountId;
 

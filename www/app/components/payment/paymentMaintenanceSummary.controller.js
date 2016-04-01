@@ -81,8 +81,9 @@
                     goToConfirmationPage();
                 })
                 .catch(function (paymentError) {
-                    //TODO - What do we do here?
                     Logger.error("Failed to update payment: " + paymentError);
+
+                    PaymentMaintenanceUtil.showPaymentError(globals.PAYMENT_MAINTENANCE.WARNINGS.DEFAULT);
                 })
                 .finally(function () {
                     LoadingIndicator.complete();
