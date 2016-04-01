@@ -13,7 +13,7 @@
         resolveHandler,
         rejectHandler;
 
-    describe("A PaymentMaintenanceUtil service", function () {
+    fdescribe("A PaymentMaintenanceUtil service", function () {
 
         beforeEach(function () {
             //mock dependencies
@@ -26,7 +26,7 @@
                 "trackView"
             ]);
             Navigation = jasmine.createSpyObj("Navigation", ["goToPaymentActivity", "isSecuredState"]);
-            Popup = jasmine.createSpyObj("Popup", ["displayAlert"]);
+            Popup = jasmine.createSpyObj("Popup", ["closeAllPopups", "displayAlert"]);
 
             module("app.shared");
             module("app.components", function($provide) {
