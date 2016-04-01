@@ -4,8 +4,6 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Routes above the scroll
     /* jshint -W072 */ // Not sure why, but maxparams:7 did not seem to work but this does
 
-    var PAYMENT_ADD_ERROR_REDIRECT_STATE = "payment.list.view";
-
     /* @ngInject */
     function configureRoutes($stateProvider, $urlRouterProvider) {
 
@@ -100,7 +98,7 @@
             },
             resolve : {
                 // jshint maxparams:7
-                payment: function ($q, $state, $stateParams, LoadingIndicator, PaymentManager, PaymentModel, globals) {
+                payment: function ($q, $stateParams, LoadingIndicator, Navigation, PaymentManager, PaymentModel, globals) {
                     var maintenanceState = $stateParams.maintenanceState,
                         payment = new PaymentModel(),
                         paymentId;
@@ -118,8 +116,7 @@
                             })
                             .catch(function () {
                                 //there was an error fetching the payment, so we need to cancel
-                                $state.go(PAYMENT_ADD_ERROR_REDIRECT_STATE);
-                                return $q.resolve();
+                                return Navigation.goToPaymentActivity();
 
                                 //TODO: Show the user an error if this happens?
                             })
@@ -135,8 +132,8 @@
                     template   : "<ion-nav-view name='view'></ion-nav-view>",
                     controller : "PaymentMaintenanceController as maintenanceController",
                     resolve    : {
-                        //jshint maxparams:6
-                        defaultBank: function ($q, $state, BankManager, InvoiceManager, LoadingIndicator, UserManager) {
+                        //jshint maxparams:5
+                        defaultBank: function (BankManager, InvoiceManager, LoadingIndicator, Navigation, UserManager) {
                             var accountId = UserManager.getUser().billingCompany.accountId;
 
                             LoadingIndicator.begin();
@@ -144,8 +141,7 @@
                             return BankManager.getDefaultBank(accountId)
                                 .catch(function () {
                                     //there was an error getting the default bank, so we need to cancel
-                                    $state.go(PAYMENT_ADD_ERROR_REDIRECT_STATE);
-                                    return $q.resolve();
+                                    return Navigation.goToPaymentActivity();
 
                                     //TODO: Show the user an error if this happens?
                                 })
@@ -278,19 +274,11 @@
             }
         });
 
-        function validateBeforeNavigatingToPaymentAdd(_, $state, $rootScope, globals, AnalyticsUtil,
-                                                      LoadingIndicator, Logger, PaymentManager, Popup, UserManager) {
+        function validateBeforeNavigatingToPaymentAdd($state, globals, LoadingIndicator, Logger,
+                                                      Navigation, PaymentMaintenanceUtil, PaymentManager, UserManager) {
             var WARNINGS = globals.PAYMENT_ADD.WARNINGS,
                 ANALYTICS_EVENTS = globals.PAYMENT_LIST.CONFIG.ANALYTICS.events,
-                billingAccountId,
-                removeListener,
-                showRouteValidationError = function (errorMessage, trackEvent) {
-                    return Popup.displayAlert({
-                        content       : errorMessage,
-                        buttonCssClass: "button-submit"
-                    })
-                        .then(_.partial(_.spread(AnalyticsUtil.trackEvent), trackEvent));
-                };
+                billingAccountId;
 
             LoadingIndicator.begin();
 
@@ -319,19 +307,8 @@
                     }
 
                     if (errorMessage) {
-                        $state.go(PAYMENT_ADD_ERROR_REDIRECT_STATE);
-
-                        //if already at the error redirect state then just show the alert, else finish the redirect before showing the alert
-                        if ($state.current.name === PAYMENT_ADD_ERROR_REDIRECT_STATE) {
-                            showRouteValidationError(errorMessage, trackEvent);
-                        }
-                        else {
-                            removeListener = $rootScope.$on("$stateChangeSuccess", function () {
-                                removeListener();
-
-                                showRouteValidationError(errorMessage, trackEvent);
-                            });
-                        }
+                        //TODO - Figure out how to display the error popup after the payment list has been fetched so the loading indicator doesn't overlap it
+                        PaymentMaintenanceUtil.showPaymentError(errorMessage, trackEvent);
                     }
                     else {
                         // No problems we're worried about here so go to the payment add page
@@ -343,7 +320,7 @@
 
                     Logger.error("Failed to determine payment add availability: " + errorResponse);
 
-                    $state.go("payment.list.view");
+                    Navigation.goToPaymentActivity();
                 })
                 .finally(function () {
                     LoadingIndicator.complete();

@@ -10,6 +10,7 @@ var TestUtils = (function () {
             digestError                       : digestError,
             getRandomAccount                  : getRandomAccount,
             getRandomAddress                  : getRandomAddress,
+            getRandomAnalyticsEvent           : getRandomAnalyticsEvent,
             getRandomBank                     : getRandomBank,
             getRandomBoolean                  : getRandomBoolean,
             getRandomBrandAsset               : getRandomBrandAsset,
@@ -102,6 +103,17 @@ var TestUtils = (function () {
         });
 
         return address;
+    }
+
+    function getRandomAnalyticsEvent() {
+        var event = [],
+            numParams = getRandomInteger(2, 4);
+
+        for (var i = 0; i < numParams; ++i) {
+            event.push(TestUtils.getRandomStringThatIsAlphaNumeric(10));
+        }
+
+        return event;
     }
 
     function getRandomBank(BankModel) {

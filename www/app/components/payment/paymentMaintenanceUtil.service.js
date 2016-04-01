@@ -2,22 +2,37 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:5
+    // jshint maxparams:6
 
     /* @ngInject */
-    function PaymentMaintenanceUtil(_, $state, globals, Logger) {
+    function PaymentMaintenanceUtil(_, $state, globals, AnalyticsUtil, Logger, Navigation, Popup) {
         // Revealed Public members
         var service = {
-            getConfig     : getConfig,
-            getActiveState: getActiveState,
-            getStates     : getStates,
-            go            : go,
-            isAddState    : isAddState,
-            isUpdateState : isUpdateState
+            getConfig       : getConfig,
+            getActiveState  : getActiveState,
+            getStates       : getStates,
+            go              : go,
+            isAddState      : isAddState,
+            isUpdateState   : isUpdateState,
+            showPaymentError: showPaymentError
         };
 
         return service;
         //////////////////////
+
+        function showPaymentError(errorMessage, analyticsEvent) {
+            if (analyticsEvent) {
+                _.spread(AnalyticsUtil.trackEvent)(analyticsEvent);
+            }
+
+            return Navigation.goToPaymentActivity()
+                .then(function () {
+                    return Popup.displayAlert({
+                        content       : errorMessage,
+                        buttonCssClass: "button-submit"
+                    });
+                });
+        }
 
         function getConfig(constants, maintenanceState) {
             maintenanceState = (maintenanceState || getActiveState()).toUpperCase();

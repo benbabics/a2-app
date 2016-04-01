@@ -3,10 +3,15 @@
 
     var _,
         appGlobals,
+        $q,
         $rootScope,
         $state,
         AnalyticsUtil,
-        PaymentMaintenanceUtil;
+        Navigation,
+        PaymentMaintenanceUtil,
+        Popup,
+        resolveHandler,
+        rejectHandler;
 
     describe("A PaymentMaintenanceUtil service", function () {
 
@@ -20,22 +25,30 @@
                 "trackEvent",
                 "trackView"
             ]);
+            Navigation = jasmine.createSpyObj("Navigation", ["goToPaymentActivity", "isSecuredState"]);
+            Popup = jasmine.createSpyObj("Popup", ["displayAlert"]);
 
             module("app.shared");
             module("app.components", function($provide) {
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
+                $provide.value("Navigation", Navigation);
+                $provide.value("Popup", Popup);
+
             });
             module("app.html");
 
-            inject(function (___, _$rootScope_, _$state_, _appGlobals_, Navigation, _PaymentMaintenanceUtil_) {
+            inject(function (___, _$q_, _$rootScope_, _$state_, _appGlobals_, Navigation, _PaymentMaintenanceUtil_) {
                 _ = ___;
+                $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
                 appGlobals = _appGlobals_;
                 PaymentMaintenanceUtil = _PaymentMaintenanceUtil_;
-
-                spyOn(Navigation, "isSecuredState").and.returnValue(false);
             });
+
+            //setup spies
+            resolveHandler = jasmine.createSpy("resolveHandler");
+            rejectHandler = jasmine.createSpy("rejectHandler");
         });
 
         describe("has a getConfig function that", function () {
@@ -179,6 +192,168 @@
 
                 it("should call $state.go with the expected values", function () {
                     expect($state.go).toHaveBeenCalledWith(viewStateName, {maintenanceState: maintenanceState});
+                });
+            });
+        });
+
+        describe("has a showPaymentError function that", function () {
+            var errorMessage,
+                goToPaymentActivityDeferred,
+                displayAlertDeferred;
+
+            beforeEach(function () {
+                errorMessage = TestUtils.getRandomStringThatIsAlphaNumeric(20);
+                goToPaymentActivityDeferred = $q.defer();
+                displayAlertDeferred = $q.defer();
+
+                Navigation.goToPaymentActivity.and.returnValue(goToPaymentActivityDeferred.promise);
+                Popup.displayAlert.and.returnValue(displayAlertDeferred.promise);
+            });
+
+            describe("when given an analytics event to track", function () {
+                var analyticsEvent;
+
+                beforeEach(function () {
+                    analyticsEvent = TestUtils.getRandomAnalyticsEvent();
+
+                    PaymentMaintenanceUtil.showPaymentError(errorMessage, analyticsEvent)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                });
+
+                it("should call AnalyticsUtil.trackEvent with the expected values", function () {
+                    expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(analyticsEvent);
+                });
+
+                describe("when going to the payment activity page succeeds", function () {
+
+                    beforeEach(function () {
+                        goToPaymentActivityDeferred.resolve();
+                        $rootScope.$digest();
+                    });
+
+                    it("should call Popup.displayAlert with the expected values", function () {
+                        expect(Popup.displayAlert).toHaveBeenCalledWith({
+                            content       : errorMessage,
+                            buttonCssClass: "button-submit"
+                        });
+                    });
+
+                    describe("when displaying the popup succeeds", function () {
+
+                        beforeEach(function () {
+                            displayAlertDeferred.resolve();
+                            $rootScope.$digest();
+                        });
+
+                        it("should resolve", function () {
+                            expect(resolveHandler).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("when displaying the popup fails", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            displayAlertDeferred.reject(error);
+                            $rootScope.$digest();
+                        });
+
+                        it("should reject", function () {
+                            expect(rejectHandler).toHaveBeenCalledWith(error);
+                        });
+                    });
+                });
+
+                describe("when going to the payment activity page fails", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        goToPaymentActivityDeferred.reject(error);
+                        $rootScope.$digest();
+                    });
+
+                    it("should reject", function () {
+                        expect(rejectHandler).toHaveBeenCalledWith(error);
+                    });
+
+                    it("should NOT call Popup.displayAlert", function () {
+                        expect(Popup.displayAlert).not.toHaveBeenCalled();
+                    });
+                });
+            });
+
+            describe("when NOT given an analytics event to track", function () {
+
+                beforeEach(function () {
+                    PaymentMaintenanceUtil.showPaymentError(errorMessage)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                });
+
+                describe("when going to the payment activity page succeeds", function () {
+
+                    beforeEach(function () {
+                        goToPaymentActivityDeferred.resolve();
+                        $rootScope.$digest();
+                    });
+
+                    it("should call Popup.displayAlert with the expected values", function () {
+                        expect(Popup.displayAlert).toHaveBeenCalledWith({
+                            content       : errorMessage,
+                            buttonCssClass: "button-submit"
+                        });
+                    });
+
+                    describe("when displaying the popup succeeds", function () {
+
+                        beforeEach(function () {
+                            displayAlertDeferred.resolve();
+                            $rootScope.$digest();
+                        });
+
+                        it("should resolve", function () {
+                            expect(resolveHandler).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("when displaying the popup fails", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                            displayAlertDeferred.reject(error);
+                            $rootScope.$digest();
+                        });
+
+                        it("should reject", function () {
+                            expect(rejectHandler).toHaveBeenCalledWith(error);
+                        });
+                    });
+                });
+
+                describe("when going to the payment activity page fails", function () {
+                    var error;
+
+                    beforeEach(function () {
+                        error = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+
+                        goToPaymentActivityDeferred.reject(error);
+                        $rootScope.$digest();
+                    });
+
+                    it("should reject", function () {
+                        expect(rejectHandler).toHaveBeenCalledWith(error);
+                    });
+
+                    it("should NOT call Popup.displayAlert", function () {
+                        expect(Popup.displayAlert).not.toHaveBeenCalled();
+                    });
                 });
             });
         });
