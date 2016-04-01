@@ -8,6 +8,7 @@
         $ionicHistory,
         appGlobals,
         ctrl,
+        PaymentAddAvailabilityModel,
         PaymentMaintenanceUtil,
         MockPaymentMaintenanceUtil,
         maintenanceState,
@@ -101,7 +102,7 @@
             $state = jasmine.createSpyObj("state", ["go"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["nextViewOptions"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
-            PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "updatePayment"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "fetchPaymentAddAvailability", "updatePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
                 "getActiveTrackerId",
@@ -140,7 +141,7 @@
             });
 
             inject(function (___, $controller, _$q_, $rootScope, _appGlobals_, _moment_, _BankModel_,
-                             _PaymentModel_, _PaymentMaintenanceUtil_) {
+                             _PaymentModel_, _PaymentAddAvailabilityModel_, _PaymentMaintenanceUtil_) {
 
                 _ = ___;
                 $q = _$q_;
@@ -149,6 +150,7 @@
                 BankModel = _BankModel_;
                 PaymentModel = _PaymentModel_;
                 PaymentMaintenanceUtil = _PaymentMaintenanceUtil_;
+                PaymentAddAvailabilityModel = _PaymentAddAvailabilityModel_;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
@@ -335,24 +337,83 @@
                 });
 
                 describe("when the Payment is NOT added successfully", function () {
-
-                    var errorObjectArg = new Error("Processing payment failed");
+                    var fetchPaymentAddAvailabilityDeferred,
+                        error;
 
                     beforeEach(function () {
-                        //reject with an error message
-                        addPaymentDeferred.reject(errorObjectArg);
+                        error = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                        fetchPaymentAddAvailabilityDeferred = $q.defer();
 
+                        PaymentManager.fetchPaymentAddAvailability.and.returnValue(fetchPaymentAddAvailabilityDeferred.promise);
+                        addPaymentDeferred.reject(error);
                         $scope.$digest();
                     });
 
-                    it("should NOT set the payment", function () {
-                        expect(mockPaymentProcess.set).not.toHaveBeenCalled();
+                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
+                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                     });
 
-                    it("should NOT navigate away from the current page", function () {
-                        expect($state.go).not.toHaveBeenCalled();
+                    describe("when PaymentManager.fetchPaymentAddAvailability succeeds", function () {
+                        var paymentAddAvailability;
+
+                        beforeEach(function () {
+                            paymentAddAvailability = TestUtils.getRandomPaymentAddAvailability(PaymentAddAvailabilityModel);
+                        });
+
+                        describe("when a payment has already been scheduled", function () {
+
+                            beforeEach(function () {
+                                paymentAddAvailability.shouldDisplayOutstandingPaymentMessage = true;
+
+                                fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
+                                $scope.$digest();
+                            });
+
+                            it("should NOT set the payment", function () {
+                                expect(mockPaymentProcess.set).not.toHaveBeenCalled();
+                            });
+
+                            it("should NOT navigate away from the current page", function () {
+                                expect($state.go).not.toHaveBeenCalled();
+                            });
+                        });
+
+                        describe("when a payment has NOT already been scheduled", function () {
+
+                            beforeEach(function () {
+                                paymentAddAvailability.shouldDisplayOutstandingPaymentMessage = false;
+
+                                fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
+                                $scope.$digest();
+                            });
+
+                            it("should NOT set the payment", function () {
+                                expect(mockPaymentProcess.set).not.toHaveBeenCalled();
+                            });
+
+                            it("should NOT navigate away from the current page", function () {
+                                expect($state.go).not.toHaveBeenCalled();
+                            });
+                        });
                     });
 
+                    describe("when PaymentManager.fetchPaymentAddAvailability fails", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                            fetchPaymentAddAvailabilityDeferred.reject(error);
+                            $scope.$digest();
+                        });
+
+                        it("should NOT set the payment", function () {
+                            expect(mockPaymentProcess.set).not.toHaveBeenCalled();
+                        });
+
+                        it("should NOT navigate away from the current page", function () {
+                            expect($state.go).not.toHaveBeenCalled();
+                        });
+                    });
                 });
             });
 

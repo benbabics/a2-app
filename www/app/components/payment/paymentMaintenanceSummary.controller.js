@@ -36,8 +36,9 @@
                     goToConfirmationPage();
                 })
                 .catch(function (paymentError) {
-                    //TODO - What do we do here?
                     Logger.error("Failed to add payment: " + paymentError);
+
+                    resolveAddPaymentError();
                 })
                 .finally(function () {
                     LoadingIndicator.complete();
@@ -69,6 +70,24 @@
                     Logger.error(error);
                     throw new Error(error);
             }
+        }
+
+        function resolveAddPaymentError() {
+            var WARNINGS = globals.PAYMENT_MAINTENANCE.WARNINGS,
+                errorMessage,
+                billingAccountId = UserManager.getUser().billingCompany.accountId;
+
+            LoadingIndicator.begin();
+
+            PaymentManager.fetchPaymentAddAvailability(billingAccountId)
+                .then(function (paymentAddAvailability) {
+                    if (paymentAddAvailability.shouldDisplayOutstandingPaymentMessage) {
+                        errorMessage = WARNINGS.PAYMENT_ALREADY_SCHEDULED;
+                    }
+                })
+                .finally(function () {
+                    LoadingIndicator.complete();
+                });
         }
 
         function updatePayment() {

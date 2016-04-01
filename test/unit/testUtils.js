@@ -26,6 +26,7 @@ var TestUtils = (function () {
             getRandomOnlineApplication        : getRandomOnlineApplication,
             getRandomPayment                  : getRandomPayment,
             getRandomPaymentAdd               : getRandomPaymentAdd,
+            getRandomPaymentAddAvailability   : getRandomPaymentAddAvailability,
             getRandomPaymentUpdate            : getRandomPaymentUpdate,
             getRandomPostedTransaction        : getRandomPostedTransaction,
             getRandomShippingCarrier          : getRandomShippingCarrier,
@@ -289,6 +290,20 @@ var TestUtils = (function () {
         randomPaymentAdd.bankAccount = getRandomBank(BankModel).name;
 
         return randomPaymentAdd;
+    }
+
+    function getRandomPaymentAddAvailability(PaymentAddAvailabilityModel) {
+        var paymentAddAvailability = new PaymentAddAvailabilityModel();
+
+        paymentAddAvailability.set({
+            makePaymentAllowed                    : getRandomBoolean(),
+            shouldDisplayCurrentBalanceDueMessage : getRandomBoolean(),
+            shouldDisplayBankAccountSetupMessage  : getRandomBoolean(),
+            shouldDisplayDirectDebitEnabledMessage: getRandomBoolean(),
+            shouldDisplayOutstandingPaymentMessage: getRandomBoolean()
+        });
+
+        return paymentAddAvailability;
     }
 
     function getRandomPaymentUpdate(PaymentModel, BankModel) {
