@@ -12,7 +12,7 @@
             mockVersionStatus,
             LoadingIndicator,
             PlatformUtil,
-            VersionUtil;
+            VersionManager;
 
         beforeEach(function () {
 
@@ -23,12 +23,12 @@
             // mock dependencies
             $cordovaSplashscreen = jasmine.createSpyObj("$cordovaSplashscreen", ["hide"]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
-            VersionUtil = jasmine.createSpyObj("VersionUtil", ["determineVersionStatus"]);
+            VersionManager = jasmine.createSpyObj("VersionManager", ["determineVersionStatus"]);
 
             module(function ($provide) {
                 $provide.value("$cordovaSplashscreen", $cordovaSplashscreen);
                 $provide.value("LoadingIndicator", LoadingIndicator);
-                $provide.value("VersionUtil", VersionUtil);
+                $provide.value("VersionManager", VersionManager);
             });
 
             inject(function (_$injector_, _$interval_, _$q_, _$rootScope_, _$state_, _PlatformUtil_, VersionStatusModel) {
@@ -112,7 +112,7 @@
 
                 beforeEach(function () {
                     determineVersionStatusDeferred = $q.defer();
-                    VersionUtil.determineVersionStatus.and.returnValue(determineVersionStatusDeferred.promise);
+                    VersionManager.determineVersionStatus.and.returnValue(determineVersionStatusDeferred.promise);
 
                     $state.go(stateName);
 
@@ -120,8 +120,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call VersionUtil.determineVersionStatus", function () {
-                    expect(VersionUtil.determineVersionStatus).toHaveBeenCalledWith();
+                it("should call VersionManager.determineVersionStatus", function () {
+                    expect(VersionManager.determineVersionStatus).toHaveBeenCalledWith();
                 });
 
                 it("should transition successfully", function () {

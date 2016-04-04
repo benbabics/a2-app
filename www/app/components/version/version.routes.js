@@ -22,10 +22,10 @@
                     templateUrl: "app/components/version/templates/versionStatus.html",
                     controller : "VersionStatusController as vm",
                     resolve    : {
-                        versionStatus: function(LoadingIndicator, VersionUtil) {
+                        versionStatus: function(LoadingIndicator, VersionManager) {
                             LoadingIndicator.begin();
 
-                            return VersionUtil.determineVersionStatus()
+                            return VersionManager.determineVersionStatus()
                                 .finally(function () {
                                     LoadingIndicator.complete();
                                 });

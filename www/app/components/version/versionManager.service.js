@@ -3,12 +3,14 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
+    // jshint maxparams:8
     /* @ngInject */
-    function VersionManager(Logger, LoggerUtil, VersionsResource, VersionStatusModel) {
+    function VersionManager($cordovaAppVersion, $q, globals, Logger, LoggerUtil, PlatformUtil, VersionsResource, VersionStatusModel) {
 
         // Revealed Public members
         var service = {
-            fetchVersionStatus: fetchVersionStatus
+            determineVersionStatus: determineVersionStatus,
+            fetchVersionStatus    : fetchVersionStatus
         };
 
         return service;
@@ -19,6 +21,39 @@
             versionStatus.set(versionStatusResource);
 
             return versionStatus;
+        }
+
+        function determineVersionStatus() {
+
+            var self = this;
+
+            var fetchVersionStatus = function(versionNumber) {
+                var clientId = globals.AUTH_API.CLIENT_CREDENTIALS.CLIENT_ID,
+                    platform = PlatformUtil.getPlatform();
+
+                return self.fetchVersionStatus(clientId, platform, versionNumber);
+            };
+
+            return PlatformUtil.waitForCordovaPlatform()
+                .then(function() {
+                    if (!PlatformUtil.platformSupportsAppVersion()) {
+                        Logger.warn("Platform does not support application versioning");
+
+                        // Return "ok" to indicate that this platform cannot be updated
+                        return $q.when(globals.CONFIGURATION_API.VERSIONS.STATUS_VALUES.NO_UPDATE);
+                    }
+
+                    return $cordovaAppVersion.getVersionNumber().then(fetchVersionStatus);
+                })
+                .catch(function(failureResponse) {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+
+                    var error = "Determining Version Status failed: " + LoggerUtil.getErrorMessage(failureResponse);
+                    Logger.warn(error);
+
+                    // Return "ok" to indicate that as far as we know we are not out of date
+                    return $q.when(globals.CONFIGURATION_API.VERSIONS.STATUS_VALUES.NO_UPDATE);
+                });
         }
 
         function fetchVersionStatus(clientId, platform, versionNumber) {

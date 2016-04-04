@@ -108,7 +108,7 @@
             AnalyticsUtil,
             LoginManager,
             BrandManager,
-            VersionUtil,
+            VersionManager,
             $cordovaDevice,
             $ionicPlatform,
             genericTrackingId,
@@ -130,7 +130,7 @@
             Popup = jasmine.createSpyObj("Popup", ["closeAllPopups"]);
             FlowUtil = jasmine.createSpyObj("FlowUtil", ["exitApp", "goToBackState"]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
-            VersionUtil = jasmine.createSpyObj("VersionUtil", ["determineVersionStatus"]);
+            VersionManager = jasmine.createSpyObj("VersionManager", ["determineVersionStatus"]);
 
             module("app.shared");
 
@@ -149,7 +149,7 @@
                 $provide.value("Popup", Popup);
                 $provide.value("FlowUtil", FlowUtil);
                 $provide.value("LoadingIndicator", LoadingIndicator);
-                $provide.value("VersionUtil", VersionUtil);
+                $provide.value("VersionManager", VersionManager);
 
                 //setup mocks:
                 genericTrackingId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
@@ -252,7 +252,7 @@
 
                     beforeEach(function () {
                         determineVersionStatusDeferred = $q.defer();
-                        VersionUtil.determineVersionStatus.and.returnValue(determineVersionStatusDeferred.promise);
+                        VersionManager.determineVersionStatus.and.returnValue(determineVersionStatusDeferred.promise);
 
                         $state.go("version.status");
 
@@ -317,7 +317,7 @@
 
                     beforeEach(function () {
                         determineVersionStatusDeferred = $q.defer();
-                        VersionUtil.determineVersionStatus.and.returnValue(determineVersionStatusDeferred.promise);
+                        VersionManager.determineVersionStatus.and.returnValue(determineVersionStatusDeferred.promise);
 
                         $state.go("version.status");
 
