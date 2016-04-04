@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:7
 
     /* @ngInject */
-    function Navigation($ionicHistory, $location, $q, $state, globals, LoginManager) {
+    function Navigation(_, $ionicHistory, $location, $q, $state, globals, LoginManager) {
         var service = {
             goToCards              : goToCards,
             goToContactUs          : goToContactUs,
@@ -16,7 +16,7 @@
             goToPrivacyPolicy      : goToPrivacyPolicy,
             goToTermsOfUse         : goToTermsOfUse,
             goToTransactionActivity: goToTransactionActivity,
-            isSecuredState         : isSecuredState
+            isUnsecuredState       : isUnsecuredState
         };
 
         return service;
@@ -87,12 +87,9 @@
                 });
         }
 
-        function isSecuredState(stateName) {
-            //TODO - Make this a list somewhere
-
-            return globals.LOGIN_STATE !== stateName &&
-                "version.status" !== stateName &&
-                "app.exit" !== stateName;
+        function isUnsecuredState(stateName) {
+            // Login state by nature is unsecure
+            return globals.LOGIN_STATE === stateName || _.includes(globals.UNSECURE_STATES, stateName);
         }
     }
 

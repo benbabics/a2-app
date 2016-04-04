@@ -11,6 +11,13 @@
 
     appGlobals.DEFAULT_ROUTE = "/version/status";
 
+
+    // Login state by nature is unsecure and does not need to be listed here
+    appGlobals.UNSECURE_STATES = [
+        "version.status",
+        "app.exit"
+    ];
+
     appGlobals.LOCALSTORAGE = {
         "CONFIG": {
             "keyPrefix": "FLEET_MANAGER-"

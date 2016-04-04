@@ -25,7 +25,7 @@
                 "trackEvent",
                 "trackView"
             ]);
-            Navigation = jasmine.createSpyObj("Navigation", ["goToPaymentActivity", "isSecuredState"]);
+            Navigation = jasmine.createSpyObj("Navigation", ["goToPaymentActivity", "isUnsecuredState"]);
             Popup = jasmine.createSpyObj("Popup", ["closeAllPopups", "displayAlert"]);
 
             module("app.shared");
@@ -49,6 +49,9 @@
             //setup spies
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
+
+            spyOn($state, "go").and.callThrough();
+            spyOn($state, "transitionTo");
         });
 
         describe("has a getConfig function that", function () {
@@ -109,8 +112,6 @@
 
             beforeEach(function () {
                 maintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
-
-                spyOn($state, "go").and.callThrough();
             });
 
             describe("when the current view state has a maintenanceState", function () {
@@ -160,9 +161,6 @@
             beforeEach(function () {
                 viewStateName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 maintenanceState = TestUtils.getRandomValueFromMap(appGlobals.PAYMENT_MAINTENANCE.STATES);
-
-                spyOn($state, "go").and.callThrough();
-                spyOn($state, "transitionTo");
             });
 
             describe("when given params", function () {

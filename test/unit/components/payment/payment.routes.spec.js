@@ -296,7 +296,7 @@
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTracker", "trackView", "trackEvent"]);
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["logOut", "userLoggedIn"]);
             LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
-            Navigation = jasmine.createSpyObj("Navigation", ["goToPaymentActivity", "isSecuredState"]);
+            Navigation = jasmine.createSpyObj("Navigation", ["goToPaymentActivity", "isUnsecuredState"]);
 
             module(function ($provide) {
                 $provide.value("BankManager", BankManager);

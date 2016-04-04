@@ -467,7 +467,7 @@
             });
         });
 
-        describe("has an isSecuredState function that", function () {
+        describe("has an isUnsecuredState function that", function () {
             var stateName;
 
             describe("when the given state is the login state", function () {
@@ -476,8 +476,8 @@
                     stateName = mockGlobals.LOGIN_STATE;
                 });
 
-                it("should return false", function () {
-                    expect(Navigation.isSecuredState(stateName)).toBeFalsy();
+                it("should return true", function () {
+                    expect(Navigation.isUnsecuredState(stateName)).toBeTruthy();
                 });
             });
 
@@ -487,8 +487,8 @@
                     stateName = "version.status";
                 });
 
-                it("should return false", function () {
-                    expect(Navigation.isSecuredState(stateName)).toBeFalsy();
+                it("should return true", function () {
+                    expect(Navigation.isUnsecuredState(stateName)).toBeTruthy();
                 });
             });
 
@@ -499,18 +499,18 @@
                 });
 
                 it("should return false", function () {
-                    expect(Navigation.isSecuredState(stateName)).toBeFalsy();
+                    expect(Navigation.isUnsecuredState(stateName)).toBeTruthy();
                 });
             });
 
-            describe("when the given state is NOT an unsecured state", function () {
+            describe("when the given state is a secured state", function () {
 
                 beforeEach(function () {
                     stateName = "card.list";
                 });
 
-                it("should return true", function () {
-                    expect(Navigation.isSecuredState(stateName)).toBeTruthy();
+                it("should return false", function () {
+                    expect(Navigation.isUnsecuredState(stateName)).toBeFalsy();
                 });
             });
         });

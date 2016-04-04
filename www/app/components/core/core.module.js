@@ -12,7 +12,7 @@
 
             var stateName = toState.name;
 
-            if (Navigation.isSecuredState(stateName)) {
+            if (!Navigation.isUnsecuredState(stateName)) {
                 // when navigating to any page that is secured, validate that the user is logged in
                 if (!AuthenticationManager.userLoggedIn()) {
                     // user is not logged in and is trying to access secured content so redirect to the login page
