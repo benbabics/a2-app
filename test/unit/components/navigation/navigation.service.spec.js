@@ -149,8 +149,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call $ionicHistory.clearCache", function () {
-                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                it("should call $ionicHistory.clearCache on the card views", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith(["card"]);
                 });
 
                 it("should navigate to the card list page and reload it", function () {
@@ -176,8 +176,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call $ionicHistory.clearCache", function () {
-                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                it("should call $ionicHistory.clearCache on the card views", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith(["card"]);
                 });
 
                 it("should navigate to the card list page and reload it", function () {
@@ -322,8 +322,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call $ionicHistory.clearCache", function () {
-                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                it("should call $ionicHistory.clearCache on the payments views", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith(["payment"]);
                 });
 
                 it("should navigate to the payment list page and reload it", function () {
@@ -349,8 +349,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call $ionicHistory.clearCache", function () {
-                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                it("should call $ionicHistory.clearCache on the payments views", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith(["payment"]);
                 });
 
                 it("should navigate to the payment list page and reload it", function () {
@@ -422,8 +422,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call $ionicHistory.clearCache", function () {
-                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                it("should call $ionicHistory.clearCache on the transaction views", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith(["transaction"]);
                 });
 
                 it("should navigate to the transaction list page and reload it", function () {
@@ -449,8 +449,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call $ionicHistory.clearCache", function () {
-                    expect($ionicHistory.clearCache).toHaveBeenCalledWith();
+                it("should call $ionicHistory.clearCache on the transaction views", function () {
+                    expect($ionicHistory.clearCache).toHaveBeenCalledWith(["transaction"]);
                 });
 
                 it("should navigate to the transaction list page and reload it", function () {

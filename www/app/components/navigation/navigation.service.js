@@ -24,7 +24,7 @@
 
         function goToCards(params) {
             //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
-            return $ionicHistory.clearCache()
+            return $ionicHistory.clearCache(["card"])
                 .then(function () {
                     return $state.go("card.list", params, {
                         reload : true,
@@ -57,7 +57,7 @@
 
         function goToPaymentActivity(params) {
             //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
-            return $ionicHistory.clearCache()
+            return $ionicHistory.clearCache(["payment"])
                 .then(function () {
                     return $state.go("payment.list.view", params, {
                         reload : true,
@@ -77,7 +77,7 @@
 
         function goToTransactionActivity(params) {
             //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
-            return $ionicHistory.clearCache()
+            return $ionicHistory.clearCache(["transaction"])
                 .then(function () {
                     return $state.go("transaction.list", params, {
                         reload : true,
