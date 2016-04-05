@@ -28,6 +28,7 @@
             var billingAccountId = UserManager.getUser().billingCompany.accountId,
                 options = globals.PAYMENT_LIST.SEARCH_OPTIONS;
 
+            //note: due to an issue with collection-repeat and ion-refresher, we hide the refresher before refreshing the list to match how the infinite list pages work
             $scope.$broadcast("scroll.refreshComplete");
             LoadingIndicator.begin();
 
