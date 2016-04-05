@@ -100,7 +100,6 @@
             AuthenticationManager,
             BankManager,
             PaymentMaintenance,
-            Popup,
             FlowUtil,
             LoadingIndicator,
             PaymentManager,
@@ -127,7 +126,6 @@
             BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericAnalyticsTrackingId", "loadBundledBrand"]);
             $cordovaDevice = jasmine.createSpyObj("$cordovaDevice", ["getPlatform"]);
             $ionicPlatform = jasmine.createSpyObj("$ionicPlatform", ["ready", "registerBackButtonAction"]);
-            Popup = jasmine.createSpyObj("Popup", ["closeAllPopups"]);
             FlowUtil = jasmine.createSpyObj("FlowUtil", ["exitApp", "goToBackState"]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
             VersionManager = jasmine.createSpyObj("VersionManager", ["determineVersionStatus"]);
@@ -146,7 +144,6 @@
                 $provide.value("BrandManager", BrandManager);
                 $provide.value("$cordovaDevice", $cordovaDevice);
                 $provide.value("$ionicPlatform", $ionicPlatform);
-                $provide.value("Popup", Popup);
                 $provide.value("FlowUtil", FlowUtil);
                 $provide.value("LoadingIndicator", LoadingIndicator);
                 $provide.value("VersionManager", VersionManager);
