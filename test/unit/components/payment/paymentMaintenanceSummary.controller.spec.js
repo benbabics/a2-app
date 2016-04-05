@@ -95,7 +95,7 @@
         UserManager,
         AnalyticsUtil;
 
-    describe("A Payment Maintenance Summary Controller", function () {
+    fdescribe("A Payment Maintenance Summary Controller", function () {
 
         beforeEach(function () {
 
@@ -103,7 +103,7 @@
             $state = jasmine.createSpyObj("state", ["go"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["nextViewOptions"]);
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
-            PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "fetchPaymentAddAvailability", "updatePayment"]);
+            PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "fetchScheduledPaymentsCount", "updatePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
                 "getActiveTrackerId",
@@ -338,35 +338,31 @@
                 });
 
                 describe("when the Payment is NOT added successfully", function () {
-                    var fetchPaymentAddAvailabilityDeferred,
+                    var fetchScheduledPaymentsCountDeferred,
                         error;
 
                     beforeEach(function () {
                         error = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                        fetchPaymentAddAvailabilityDeferred = $q.defer();
+                        fetchScheduledPaymentsCountDeferred = $q.defer();
 
-                        PaymentManager.fetchPaymentAddAvailability.and.returnValue(fetchPaymentAddAvailabilityDeferred.promise);
+                        PaymentManager.fetchScheduledPaymentsCount.and.returnValue(fetchScheduledPaymentsCountDeferred.promise);
                         addPaymentDeferred.reject(error);
                         $scope.$digest();
                     });
 
-                    it("should call PaymentManager.fetchPaymentAddAvailability", function () {
-                        expect(PaymentManager.fetchPaymentAddAvailability).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
+                    it("should call PaymentManager.fetchScheduledPaymentsCount", function () {
+                        expect(PaymentManager.fetchScheduledPaymentsCount).toHaveBeenCalledWith(mockUser.billingCompany.accountId);
                     });
 
-                    describe("when PaymentManager.fetchPaymentAddAvailability succeeds", function () {
-                        var paymentAddAvailability;
-
-                        beforeEach(function () {
-                            paymentAddAvailability = TestUtils.getRandomPaymentAddAvailability(PaymentAddAvailabilityModel);
-                        });
+                    describe("when PaymentManager.fetchScheduledPaymentsCount succeeds", function () {
+                        var scheduledPaymentsCount;
 
                         describe("when a payment has already been scheduled", function () {
 
                             beforeEach(function () {
-                                paymentAddAvailability.shouldDisplayOutstandingPaymentMessage = true;
+                                scheduledPaymentsCount = 1;
 
-                                fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
+                                fetchScheduledPaymentsCountDeferred.resolve(scheduledPaymentsCount);
                                 $scope.$digest();
                             });
 
@@ -384,9 +380,9 @@
                         describe("when a payment has NOT already been scheduled", function () {
 
                             beforeEach(function () {
-                                paymentAddAvailability.shouldDisplayOutstandingPaymentMessage = false;
+                                scheduledPaymentsCount = 0;
 
-                                fetchPaymentAddAvailabilityDeferred.resolve(paymentAddAvailability);
+                                fetchScheduledPaymentsCountDeferred.resolve(scheduledPaymentsCount);
                                 $scope.$digest();
                             });
 
@@ -402,12 +398,12 @@
                         });
                     });
 
-                    describe("when PaymentManager.fetchPaymentAddAvailability fails", function () {
+                    describe("when PaymentManager.fetchScheduledPaymentsCount fails", function () {
                         var error;
 
                         beforeEach(function () {
                             error = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                            fetchPaymentAddAvailabilityDeferred.reject(error);
+                            fetchScheduledPaymentsCountDeferred.reject(error);
                             $scope.$digest();
                         });
 

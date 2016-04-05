@@ -79,9 +79,9 @@
 
             LoadingIndicator.begin();
 
-            PaymentManager.fetchPaymentAddAvailability(billingAccountId)
-                .then(function (paymentAddAvailability) {
-                    if (paymentAddAvailability.shouldDisplayOutstandingPaymentMessage) {
+            PaymentManager.fetchScheduledPaymentsCount(billingAccountId)
+                .then(function (scheduledPaymentsCount) {
+                    if (scheduledPaymentsCount > 0) {
                         errorMessage = WARNINGS.PAYMENT_ALREADY_SCHEDULED;
                     }
                 })
