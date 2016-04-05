@@ -555,11 +555,20 @@ $numeric-keypad-animation: all linear 0.15s;
  ----------------------------------**/
 .datepicker {
     .selected {
-        background-color: $wex-red !important;;
+        background-color: $wex-red !important;
         color: $inverse-font-color
     }
 }
 
 .button-row {
     margin-top: 10px;
+}
+
+
+/**--------------------------------
+  Toggle
+ ----------------------------------**/
+
+.toggle {
+  @include toggle-style($wex-toggle-color, $wex-toggle-color);
 }
