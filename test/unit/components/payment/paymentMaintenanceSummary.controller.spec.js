@@ -95,7 +95,7 @@
         UserManager,
         AnalyticsUtil;
 
-    fdescribe("A Payment Maintenance Summary Controller", function () {
+    describe("A Payment Maintenance Summary Controller", function () {
 
         beforeEach(function () {
 
