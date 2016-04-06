@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		013F91EF723544C69B8B94DE /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D45CAD825242348ABAEF54 /* Toast+UIView.m */; };
-		0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0207DA571B56EA530066E2B4 /* Images.xcassets */; };
 		0284497F525D4517952D5CD4 /* CDVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E1D643A5A0D4023BAF0BC96 /* CDVFile.m */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -83,7 +82,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0207DA571B56EA530066E2B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "Fleet SmartHub/Images.xcassets"; sourceTree = SOURCE_ROOT; };
 		03B9498090F84CBCB523FF77 /* Toast.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = Toast.h; path = "cordova-plugin-x-toast/Toast.h"; sourceTree = "<group>"; };
 		08DE5CD2C74045319F82F9EA /* CDVReachability.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVReachability.h; path = "cordova-plugin-network-information/CDVReachability.h"; sourceTree = "<group>"; };
 		09F44C63CCDC4AE88F04A48A /* GoogleAnalyticsPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = GoogleAnalyticsPlugin.m; path = com.cmackay.plugins.googleanalytics/GoogleAnalyticsPlugin.m; sourceTree = "<group>"; };
@@ -251,7 +249,6 @@
 			children = (
 				D418B82D1CADACC800D162B0 /* splash */,
 				D418B80C1CADACC000D162B0 /* icons */,
-				0207DA571B56EA530066E2B4 /* Images.xcassets */,
 				3047A50E1AB8057F00498E2A /* config */,
 				8D1107310486CEB800E47090 /* Fleet SmartHub-Info.plist */,
 			);
@@ -482,7 +479,6 @@
 				D418B8361CADACC800D162B0 /* Default-667h.png in Resources */,
 				D418B8261CADACC000D162B0 /* icon-76.png in Resources */,
 				D418B82C1CADACC000D162B0 /* icon@2x.png in Resources */,
-				0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */,
 				D418B81E1CADACC000D162B0 /* icon-40@2x.png in Resources */,
 				D418B82B1CADACC000D162B0 /* icon.png in Resources */,
 				D418B8291CADACC000D162B0 /* icon-small@2x.png in Resources */,
