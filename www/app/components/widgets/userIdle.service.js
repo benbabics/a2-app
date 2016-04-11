@@ -53,5 +53,9 @@
 
     angular
         .module("app.components.widgets")
-        .factory("UserIdle", UserIdle);
+        .factory("UserIdle", UserIdle)
+        // jshint unused:false
+        .run(function (UserIdle) {
+            // explicitly instantiate this service
+        });
 })();
