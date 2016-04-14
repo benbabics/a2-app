@@ -553,11 +553,41 @@ $numeric-keypad-animation: all linear 0.15s;
 /**--------------------------------
   Datepicker
  ----------------------------------**/
-.datepicker {
-    .selected {
-        background-color: $wex-red !important;
-        color: $inverse-font-color
-    }
+$wex-datepicker-header-color: $charcoal;
+$wex-datepicker-selection-color: $positive;
+
+.ionic_datepicker_popup {
+
+  .selected_date_full {
+    background-color: $wex-datepicker-header-color !important;
+  }
+
+  .next_btn_section .button-clear, .prev_btn_section .button-clear, .item-select::after {
+    color: $wex-datepicker-header-color !important;
+  }
+
+  .item-select {
+    border-color: $wex-datepicker-header-color !important;
+  }
+
+  .selected_date {
+    background-color: $wex-datepicker-selection-color !important;
+  }
+
+  .today {
+    border-color: $wex-datepicker-selection-color !important;
+  }
+
+  .popup-buttons button {
+    background-color: $wex-inverted-button-color !important;
+    color: $wex-inverted-button-font-color !important;
+    text-transform: uppercase !important;
+  }
+
+  .popup-buttons button.button_set {
+    background-color: $wex-button-color !important;
+    color: $wex-button-font-color !important;
+  }
 }
 
 .button-row {

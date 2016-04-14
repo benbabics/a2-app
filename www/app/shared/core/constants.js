@@ -216,6 +216,15 @@
         "showSpinner": false
     };
 
+    /**
+     * Date picker Configuration
+     */
+    sharedGlobals.DATE_PICKER = {
+        mondayFirst    : false,
+        setLabel       : "Select",
+        showTodayButton: true
+    };
+
     angular
         .module("app.shared.core")
         .constant("sharedGlobals", sharedGlobals)

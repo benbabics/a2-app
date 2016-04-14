@@ -90,15 +90,33 @@
             }
         },
         moment,
-        UserManager;
+        UserManager,
+        ionicDatePicker,
+        AnalyticsUtil;
 
     describe("A Payment Maintenance Form Controller", function () {
 
         beforeEach(function () {
 
+            // mock dependencies
+            BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks"]);
+            InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
+            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            MockPaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", ["getConfig", "go", "isAddState"]);
+            ionicDatePicker = jasmine.createSpyObj("ionicDatePicker", ["openDatePicker"]);
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
+
             module("app.shared");
             module("app.components", function ($provide, sharedGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
+                $provide.value("AnalyticsUtil", AnalyticsUtil)
             });
 
             module(function ($provide, sharedGlobals, appGlobals) {
@@ -114,12 +132,6 @@
                 $provide.value("$ionicTemplateCache", function () {
                 });
             });
-
-            // mock dependencies
-            BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks"]);
-            InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            MockPaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", ["getConfig", "go", "isAddState"]);
 
             inject(function (___, $controller, $rootScope, $q, _moment_, _BankModel_, appGlobals, _PaymentMaintenanceUtil_) {
 
@@ -145,6 +157,7 @@
                 ctrl = $controller("PaymentMaintenanceFormController", {
                     $scope                : $scope,
                     hasMultipleBanks      : mockHasMultipleBanks,
+                    ionicDatePicker       : ionicDatePicker,
                     payment               : mockPayment,
                     globals               : mockGlobals,
                     BankManager           : BankManager,
@@ -172,17 +185,7 @@
                 //setup an existing values to test them being modified
                 ctrl.hasAnyCards = null;
 
-                jasmine.clock().mockDate();
-
                 $scope.$broadcast("$ionicView.beforeEnter");
-            });
-
-            it("should set the min date range to yesterday", function () {
-                expect(ctrl.minDate).toEqual(moment().subtract(1, "days").toDate());
-            });
-
-            it("should set the max date range to the expected time in the future", function () {
-                expect(ctrl.maxDate).toEqual(moment().add(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.DATE.CONFIG.maxFutureDays, "days").toDate());
             });
 
             it("should set hasMultipleBanks", function () {
@@ -221,6 +224,56 @@
 
             it("should call PaymentMaintenanceUtil.go with the expected values", function () {
                 expect(MockPaymentMaintenanceUtil.go).toHaveBeenCalledWith(stateName, params);
+            });
+        });
+
+        describe("has an openDatePicker function that", function () {
+            var fromDate,
+                toDate;
+
+            beforeEach(function () {
+                jasmine.clock().mockDate();
+
+                fromDate = moment().toDate();
+                toDate = moment().add(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.DATE.CONFIG.maxFutureDays, "days").toDate();
+
+                $scope.$broadcast("$ionicView.beforeEnter");
+                $scope.$digest();
+            });
+
+            describe("when there is already a scheduled date", function () {
+
+                beforeEach(function () {
+                    ctrl.payment.scheduledDate = TestUtils.getRandomDate();
+
+                    ctrl.openDatePicker();
+                });
+
+                it("should call ionicDatePicker.openDatePicker with the expected values", function () {
+                    expect(ionicDatePicker.openDatePicker).toHaveBeenCalledWith({
+                        callback : jasmine.any(Function),
+                        inputDate: ctrl.payment.scheduledDate,
+                        from     : fromDate,
+                        to       : toDate
+                    });
+                });
+            });
+
+            describe("when there is NOT already a scheduled date", function () {
+
+                beforeEach(function () {
+                    delete ctrl.payment.scheduledDate;
+
+                    ctrl.openDatePicker();
+                });
+
+                it("should call ionicDatePicker.openDatePicker with the expected values", function () {
+                    expect(ionicDatePicker.openDatePicker).toHaveBeenCalledWith({
+                        callback : jasmine.any(Function),
+                        from     : fromDate,
+                        to       : toDate
+                    });
+                });
             });
         });
 

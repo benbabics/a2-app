@@ -21,6 +21,10 @@
 
     };
 
+    var ionicDatePickerConfig = function (ionicDatePickerProvider, sharedGlobals) {
+        ionicDatePickerProvider.configDatePicker(sharedGlobals.DATE_PICKER);
+    };
+
     var ngIdleConfig = function (appGlobals, IdleProvider) {
         //set the idle timeout length until the user is automatically logged out
         IdleProvider.idle(appGlobals.USER_IDLE_TIMEOUT);
@@ -38,6 +42,7 @@
         .config(angularConfig)
         .config(urlConfig)
         .config(ionicConfig)
+        .config(ionicDatePickerConfig)
         .config(ngStorageConfig)
         .config(ngIdleConfig);
 })();

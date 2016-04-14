@@ -7,17 +7,20 @@
             $ionicConfigProvider,
             $urlRouterProvider,
             IdleProvider,
-            appGlobals;
+            ionicDatePickerProvider,
+            appGlobals,
+            sharedGlobals;
 
         beforeEach(function () {
 
             module("app.shared");
 
-            module(function (_$compileProvider_, _$ionicConfigProvider_, _$urlRouterProvider_, _IdleProvider_) {
+            module(function (_$compileProvider_, _$ionicConfigProvider_, _$urlRouterProvider_, _IdleProvider_, _ionicDatePickerProvider_) {
                 $ionicConfigProvider = _$ionicConfigProvider_;
                 $urlRouterProvider = _$urlRouterProvider_;
                 $compileProvider = _$compileProvider_;
                 IdleProvider = _IdleProvider_;
+                ionicDatePickerProvider = _ionicDatePickerProvider_;
 
                 $compileProvider.imgSrcSanitizationWhitelist = jasmine.createSpy("imgSrcSanitizationWhitelist");
                 $urlRouterProvider.otherwise = jasmine.createSpy("otherwise");
@@ -25,13 +28,15 @@
                 $ionicConfigProvider.backButton.previousTitleText = jasmine.createSpy("previousTitleText");
                 IdleProvider.idle = jasmine.createSpy("idle");
                 IdleProvider.timeout = jasmine.createSpy("timeout");
+                ionicDatePickerProvider.configDatePicker = jasmine.createSpy("configDatePicker");
             });
 
             module("app.components");
             module("app.shared");
 
-            inject(function(_appGlobals_) {
+            inject(function(_appGlobals_, _sharedGlobals_) {
                 appGlobals = _appGlobals_;
+                sharedGlobals = _sharedGlobals_;
             });
         });
 
@@ -57,6 +62,10 @@
 
         it("should disable user timeout warning response", function () {
             expect(IdleProvider.timeout).toHaveBeenCalledWith(false);
+        });
+
+        it("should set the expected properties for the date picker", function () {
+            expect(ionicDatePickerProvider.configDatePicker).toHaveBeenCalledWith(sharedGlobals.DATE_PICKER);
         });
 
     });

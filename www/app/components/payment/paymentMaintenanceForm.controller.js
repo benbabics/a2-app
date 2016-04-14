@@ -2,13 +2,15 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:8
+    // jshint maxparams:9
 
     /* @ngInject */
-    function PaymentMaintenanceFormController($scope, globals, hasMultipleBanks, moment, payment,
+    function PaymentMaintenanceFormController($scope, globals, hasMultipleBanks, ionicDatePicker, moment, payment,
                                               InvoiceManager, PaymentMaintenanceUtil, UserManager) {
 
         var vm = this,
+            maxDate,
+            minDate,
             paymentMaintenanceForm = globals.PAYMENT_MAINTENANCE_FORM;
 
         vm.config = PaymentMaintenanceUtil.getConfig(paymentMaintenanceForm);
@@ -17,11 +19,10 @@
         vm.billingCompany = {};
         vm.hasMultipleBanks = false;
         vm.invoiceSummary = {};
-        vm.maxDate = {};
-        vm.minDate = {};
         vm.payment = {};
 
         vm.goToPage = goToPage;
+        vm.openDatePicker = openDatePicker;
 
         activate();
 
@@ -42,12 +43,31 @@
             vm.hasMultipleBanks = hasMultipleBanks;
             vm.invoiceSummary = InvoiceManager.getInvoiceSummary();
             vm.payment = payment;
-            vm.minDate = moment().subtract(1, "days").toDate();
-            vm.maxDate = moment().add(paymentMaintenanceForm.INPUTS.DATE.CONFIG.maxFutureDays, "days").toDate();
+
+            minDate = moment().toDate();
+            maxDate = moment().add(paymentMaintenanceForm.INPUTS.DATE.CONFIG.maxFutureDays, "days").toDate();
         }
 
         function goToPage(stateName, params) {
             PaymentMaintenanceUtil.go(stateName, params);
+        }
+
+        function onSelectDate(val) {
+            vm.payment.scheduledDate = moment(val).toDate();
+        }
+
+        function openDatePicker() {
+            var options = {
+                callback: onSelectDate,
+                from    : minDate,
+                to      : maxDate
+            };
+
+            if (vm.payment.scheduledDate) {
+                options.inputDate = vm.payment.scheduledDate;
+            }
+
+            ionicDatePicker.openDatePicker(options);
         }
 
     }

@@ -44,16 +44,13 @@
             <span class="block_align black">
                 {{::vm.config.scheduledDate}}
             </span>
-            <ionic-datepicker value="vm.payment.scheduledDate"
-                              min="vm.minDate"
-                              max="vm.maxDate"
-                              title="::vm.config.scheduledDatePickerTitle">
+            <div>
                 <span class="active-link">
                     {{vm.payment.scheduledDate | wexDefaultDateFormat}}
                 </span>
-                <span class="button button-icon icon ion-ios-arrow-forward chevron_align">
+                <span class="button button-icon icon ion-ios-arrow-forward chevron_align" ng-click="vm.openDatePicker()">
                 </span>
-            </ionic-datepicker>
+            </div>
         </div>
 
         <div class="form-item">
