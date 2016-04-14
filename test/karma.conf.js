@@ -31,7 +31,7 @@ module.exports = function(config) {
             "lib/ngFitText/dist/ng-FitText.min.js",
             "lib/moment/moment.js",
             "lib/angular-moment/angular-moment.js",
-            "lib/ionic-datepicker-widget/dist/ionic-datepicker.min.js",
+            "lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js",
             "lib/ang-accordion/js/ang-accordion.js",
             "lib/Chart.js/Chart.js",
             "lib/angular-chart.js/dist/angular-chart.js",

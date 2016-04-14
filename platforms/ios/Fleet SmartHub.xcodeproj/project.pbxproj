@@ -17,9 +17,6 @@
 		301BF552109A68D80062928A /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; };
 		302D95F114D2391D003F00A1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 302D95EF14D2391D003F00A1 /* MainViewController.m */; };
 		302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 302D95F014D2391D003F00A1 /* MainViewController.xib */; };
-		3047A5121AB8059700498E2A /* build-debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3047A50F1AB8059700498E2A /* build-debug.xcconfig */; };
-		3047A5131AB8059700498E2A /* build-release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3047A5101AB8059700498E2A /* build-release.xcconfig */; };
-		3047A5141AB8059700498E2A /* build.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3047A5111AB8059700498E2A /* build.xcconfig */; };
 		37025464A01647F59111C51C /* CDVInAppBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2AAAEB3DC641F0B70682F1 /* CDVInAppBrowser.m */; };
 		3AB678BB30764C5B99120C11 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2354CCF52546428E6259BC /* CDVStatusBar.m */; };
 		3B698CF783FB439C89D9FA52 /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 29D8E1C5C977448ABACBAC3C /* CDVConnection.m */; };
@@ -415,7 +412,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 510;
+				LastUpgradeCheck = 0710;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = 8928727EQS;
@@ -465,7 +462,6 @@
 				D418B81F1CADACC000D162B0 /* icon-50.png in Resources */,
 				D418B8371CADACC800D162B0 /* Default-736h.png in Resources */,
 				D418B8381CADACC800D162B0 /* Default-Portrait@2x~ipad.png in Resources */,
-				3047A5131AB8059700498E2A /* build-release.xcconfig in Resources */,
 				D418B8231CADACC000D162B0 /* icon-60@3x.png in Resources */,
 				D418B83A1CADACC800D162B0 /* Default@2x~iphone.png in Resources */,
 				D418B81D1CADACC000D162B0 /* icon-40.png in Resources */,
@@ -475,7 +471,6 @@
 				D418B8251CADACC000D162B0 /* icon-72@2x.png in Resources */,
 				D418B8201CADACC000D162B0 /* icon-50@2x.png in Resources */,
 				D418B8281CADACC000D162B0 /* icon-small.png in Resources */,
-				3047A5141AB8059700498E2A /* build.xcconfig in Resources */,
 				D418B8361CADACC800D162B0 /* Default-667h.png in Resources */,
 				D418B8261CADACC000D162B0 /* icon-76.png in Resources */,
 				D418B82C1CADACC000D162B0 /* icon@2x.png in Resources */,
@@ -483,7 +478,6 @@
 				D418B82B1CADACC000D162B0 /* icon.png in Resources */,
 				D418B8291CADACC000D162B0 /* icon-small@2x.png in Resources */,
 				D418B8271CADACC000D162B0 /* icon-76@2x.png in Resources */,
-				3047A5121AB8059700498E2A /* build-debug.xcconfig in Resources */,
 				D418B8391CADACC800D162B0 /* Default-Portrait~ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -568,6 +562,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Fleet SmartHub/Plugins/com.cmackay.plugins.googleanalytics\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wex.fleetsmarthub;
 				PRODUCT_NAME = "Fleet SmartHub";
 			};
 			name = Debug;
@@ -590,6 +585,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Fleet SmartHub/Plugins/com.cmackay.plugins.googleanalytics\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wex.fleetsmarthub;
 				PRODUCT_NAME = "Fleet SmartHub";
 			};
 			name = Release;
@@ -606,6 +602,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
