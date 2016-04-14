@@ -4,8 +4,10 @@
     describe("A Popup service", function () {
 
         var Popup,
+            $compile,
             $ionicPopup,
             $q,
+            $rootScope,
             alertDeferred,
             confirmDeferred,
             alertPromise,
@@ -22,9 +24,11 @@
                 $provide.value("$ionicPopup", $ionicPopup);
             });
 
-            inject(function (_$q_, _Popup_) {
+            inject(function (_$compile_, _$q_, _$rootScope_, _Popup_) {
                 Popup = _Popup_;
                 $q = _$q_;
+                $compile = _$compile_;
+                $rootScope = _$rootScope_;
 
                 alertDeferred = $q.defer();
                 confirmDeferred = $q.defer();
@@ -105,6 +109,17 @@
         });
 
         describe("has a closeAllPopups function that", function () {
+            var datePicker,
+                mockScope,
+                popup;
+
+            beforeEach(function () {
+                datePicker = $compile("<div class='ionic_datepicker_popup'></div>")($rootScope);
+                mockScope = {$parent: {}};
+                popup = jasmine.createSpyObj("popup", ["close"]);
+
+                spyOn(angular.element.prototype, "scope").and.returnValue(mockScope);
+            });
 
             describe("should NOT close an alert when none have been displayed", function () {
 
@@ -156,6 +171,55 @@
                     expect(confirmPromise.close).toHaveBeenCalledWith();
                 });
 
+            });
+
+            describe("when there is an open date picker", function () {
+
+                beforeEach(function () {
+                    angular.element(document.body).append(datePicker);
+                    $rootScope.$digest();
+                });
+
+                describe("when there is a popup on the parent scope", function () {
+
+                    beforeEach(function () {
+                        mockScope.$parent.popup = popup;
+                    });
+
+                    beforeEach(function () {
+                        Popup.closeDatePicker();
+                    });
+
+                    it("should call close on the open date picker's popup", function () {
+                        expect(popup.close).toHaveBeenCalledWith();
+                    });
+                });
+
+                describe("when there is NOT a popup on the parent scope", function () {
+
+                    beforeEach(function () {
+                        delete mockScope.$parent.popup;
+                    });
+
+                    beforeEach(function () {
+                        Popup.closeDatePicker();
+                    });
+
+                    it("should NOT call close on the open date picker's popup", function () {
+                        expect(popup.close).not.toHaveBeenCalled();
+                    });
+                });
+            });
+
+            describe("when there is NOT an open date picker", function () {
+
+                beforeEach(function () {
+                    Popup.closeDatePicker();
+                });
+
+                it("should NOT call close on the open date picker's popup", function () {
+                    expect(popup.close).not.toHaveBeenCalled();
+                });
             });
 
         });
@@ -468,6 +532,69 @@
                         cssClass: defaultCssClass});
                 });
 
+            });
+        });
+
+        describe("has a closeDatePicker function that", function () {
+            var datePicker,
+                mockScope,
+                popup;
+
+            beforeEach(function () {
+                datePicker = $compile("<div class='ionic_datepicker_popup'></div>")($rootScope);
+                mockScope = {$parent: {}};
+                popup = jasmine.createSpyObj("popup", ["close"]);
+
+                spyOn(angular.element.prototype, "scope").and.returnValue(mockScope);
+            });
+
+            describe("when there is an open date picker", function () {
+
+                beforeEach(function () {
+                    angular.element(document.body).append(datePicker);
+                    $rootScope.$digest();
+                });
+
+                describe("when there is a popup on the parent scope", function () {
+
+                    beforeEach(function () {
+                        mockScope.$parent.popup = popup;
+                    });
+
+                    beforeEach(function () {
+                        Popup.closeDatePicker();
+                    });
+
+                    it("should call close on the open date picker's popup", function () {
+                        expect(popup.close).toHaveBeenCalledWith();
+                    });
+                });
+
+                describe("when there is NOT a popup on the parent scope", function () {
+
+                    beforeEach(function () {
+                        delete mockScope.$parent.popup;
+                    });
+
+                    beforeEach(function () {
+                        Popup.closeDatePicker();
+                    });
+
+                    it("should NOT call close on the open date picker's popup", function () {
+                        expect(popup.close).not.toHaveBeenCalled();
+                    });
+                });
+            });
+
+            describe("when there is NOT an open date picker", function () {
+
+                beforeEach(function () {
+                    Popup.closeDatePicker();
+                });
+
+                it("should NOT call close on the open date picker's popup", function () {
+                    expect(popup.close).not.toHaveBeenCalled();
+                });
             });
         });
     });

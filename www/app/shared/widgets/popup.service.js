@@ -12,11 +12,12 @@
 
         // Revealed Public members
         var service = {
-            "closeAlert"    : closeAlert,
-            "closeAllPopups": closeAllPopups,
-            "closeConfirm"  : closeConfirm,
-            "displayAlert"  : displayAlert,
-            "displayConfirm": displayConfirm
+            "closeAlert"     : closeAlert,
+            "closeAllPopups" : closeAllPopups,
+            "closeConfirm"   : closeConfirm,
+            "closeDatePicker": closeDatePicker,
+            "displayAlert"   : displayAlert,
+            "displayConfirm" : displayConfirm
         };
 
         return service;
@@ -38,8 +39,7 @@
         function closeAllPopups() {
             closeAlert();
             closeConfirm();
-
-            //TODO close datepicker modal popup
+            closeDatePicker();
         }
 
         /**
@@ -49,6 +49,19 @@
             if (confirmPopup) {
                 confirmPopup.close();
                 confirmPopup = null;
+            }
+        }
+
+        function closeDatePicker() {
+            var datePicker = angular.element(document.querySelector(".ionic_datepicker_popup")),
+                scope;
+
+            if (!_.isEmpty(datePicker)) {
+                scope = datePicker.scope().$parent;
+
+                if (_.has(scope, "popup")) {
+                    scope.popup.close();
+                }
             }
         }
 
