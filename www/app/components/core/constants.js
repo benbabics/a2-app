@@ -233,8 +233,8 @@
             },
             "title"               : "Confirmation",
             "confirmationMessages": {
-                "active"    : "Card has been activated.",
-                "terminated": "Card has been terminated."
+                "active"    : "Your card has been activated.",
+                "terminated": "Your card has been terminated."
             },
             "cardNumber"          : "Card Number",
             "standardEmbossing"   : "Standard Embossing",
