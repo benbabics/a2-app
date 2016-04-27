@@ -1,5 +1,5 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="{{vm.backStateOverride}}">
-    <ion-content class="padding">
+    <ion-content>
         <ion-refresher class="wex-refresher" on-refresh="vm.resetSearchResults()"></ion-refresher>
         <wex-infinite-list on-reload="vm.loadNextPage"
                            on-page-loaded="vm.pageLoaded"
@@ -7,8 +7,9 @@
                            loading-complete="vm.loadingComplete">
             <div ng-switch="vm.postedTransactions.length > 0">
                 <div ng-switch-when="true"
-                     class="row divider"
+                     class="row"
                      collection-repeat="transaction in vm.postedTransactions"
+                     ng-class="$index%2 !=0 ? 'transaction-row' :''"
                      ui-sref="transaction.posted.detail({transactionId: transaction.transactionId})">
 
                     <div class="col col-74 ellipsis">{{transaction.embossedCardNumber | wexCardNumber}}<br><span class="body-text">{{transaction.driverLastName}}, {{transaction.driverFirstName}}<br>{{transaction.customVehicleId}}</span><br><span class="active-link">{{transaction.merchantName}}<br>{{transaction.productDescription}}</span></div>
