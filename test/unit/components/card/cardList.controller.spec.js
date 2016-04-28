@@ -237,11 +237,53 @@
                 });
             });
 
-            describe("when fetchCards resolves with a non-empty list of cards", function () {
+            describe("when fetchCards resolves with a non-empty, non-full list of cards", function () {
                 var mockCards;
 
                 beforeEach(function () {
-                    var numCards = TestUtils.getRandomInteger(1, 100);
+                    var numCards = TestUtils.getRandomInteger(1, mockGlobals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE);
+                    mockCards = [];
+                    for (var i = 0; i < numCards; ++i) {
+                        mockCards.push(TestUtils.getRandomCard(CardModel));
+                    }
+                });
+
+                beforeEach(function () {
+                    fetchCardsDeferred.resolve(mockCards);
+
+                    $rootScope.$digest();
+                });
+
+                it("should add the cards to the list", function () {
+                    expect(ctrl.cards).toEqual(mockCards);
+                });
+
+                xit("should increment the current page", function () {
+                    //TODO figure out how to test this
+                });
+
+                it("should resolve with a value of true", function () {
+                    expect(resolveHandler).toHaveBeenCalledWith(true);
+                });
+
+                it("should set loadingComplete to true", function () {
+                    expect(ctrl.loadingComplete).toBeTruthy();
+                });
+
+                it("should NOT reject", function () {
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("when fetchCards resolves with a full list of cards", function () {
+                var mockCards;
+
+                beforeEach(function () {
+                    var numCards = mockGlobals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE;
                     mockCards = [];
                     for (var i = 0; i < numCards; ++i) {
                         mockCards.push(TestUtils.getRandomCard(CardModel));

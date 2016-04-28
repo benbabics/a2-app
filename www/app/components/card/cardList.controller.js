@@ -51,9 +51,9 @@
             // card number, embossing line 1 and embossing line 2 and it doesn't seem right to have the manager know that
             return CardManager.fetchCards(billingAccountId, activeSearchFilter, activeSearchFilter, activeSearchFilter, vm.searchOptions.STATUSES, currentPage, vm.searchOptions.PAGE_SIZE)
                 .then(function (cards) {
-                    vm.loadingComplete = _.isEmpty(cards);
+                    vm.loadingComplete = _.size(cards) < vm.searchOptions.PAGE_SIZE;
 
-                    if (!vm.loadingComplete) {
+                    if (!_.isEmpty(cards)) {
                         //add the fetched cards to the current list
                         vm.cards = vm.cards.concat(cards);
 

@@ -164,11 +164,53 @@
                 });
             });
 
-            describe("when fetchPostedTransactions resolves with a non-empty list of transactions", function () {
+            describe("when fetchPostedTransactions resolves with a non-empty, non-full list of transactions", function () {
                 var mockTransactions;
 
                 beforeEach(function () {
-                    var numTransactions = TestUtils.getRandomInteger(1, 100);
+                    var numTransactions = TestUtils.getRandomInteger(1, mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE);
+                    mockTransactions = [];
+                    for (var i = 0; i < numTransactions; ++i) {
+                        mockTransactions.push(TestUtils.getRandomPostedTransaction(PostedTransactionModel));
+                    }
+                });
+
+                beforeEach(function () {
+                    fetchPostedTransactionsDeferred.resolve(mockTransactions);
+
+                    $rootScope.$digest();
+                });
+
+                it("should add the transactions to the list", function () {
+                    expect(ctrl.postedTransactions).toEqual(mockTransactions);
+                });
+
+                xit("should increment the current page", function () {
+                    //TODO figure out how to test this
+                });
+
+                it("should set loadingComplete to true", function () {
+                    expect(ctrl.loadingComplete).toBeTruthy();
+                });
+
+                it("should resolve with a value of true", function () {
+                    expect(resolveHandler).toHaveBeenCalledWith(true);
+                });
+
+                it("should NOT reject", function () {
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                });
+
+                it("should call LoadingIndicator.complete", function () {
+                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                });
+            });
+
+            describe("when fetchPostedTransactions resolves with a full list of transactions", function () {
+                var mockTransactions;
+
+                beforeEach(function () {
+                    var numTransactions = mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE;
                     mockTransactions = [];
                     for (var i = 0; i < numTransactions; ++i) {
                         mockTransactions.push(TestUtils.getRandomPostedTransaction(PostedTransactionModel));

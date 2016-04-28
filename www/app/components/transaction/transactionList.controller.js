@@ -48,9 +48,9 @@
             //fetch the next page of transactions
             return TransactionManager.fetchPostedTransactions(billingAccountId, fromDate, toDate, currentPage, vm.searchOptions.PAGE_SIZE, cardIdFilter)
                 .then(function (postedTransactions) {
-                    vm.loadingComplete = _.isEmpty(postedTransactions);
+                    vm.loadingComplete = _.size(postedTransactions) < vm.searchOptions.PAGE_SIZE;
 
-                    if (!vm.loadingComplete) {
+                    if (!_.isEmpty(postedTransactions)) {
                         //add the fetched transactions to the current list
                         vm.postedTransactions = vm.postedTransactions.concat(postedTransactions);
 
