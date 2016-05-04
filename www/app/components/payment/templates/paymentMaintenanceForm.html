@@ -44,12 +44,11 @@
             <span class="block_align black">
                 {{::vm.config.scheduledDate}}
             </span>
-            <div>
+            <div ng-click="vm.openDatePicker()">
                 <span class="active-link">
                     {{vm.payment.scheduledDate | wexDefaultDateFormat}}
                 </span>
-                <span class="button button-icon icon ion-ios-arrow-forward chevron_align" ng-click="vm.openDatePicker()">
-                </span>
+                <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
             </div>
         </div>
 
