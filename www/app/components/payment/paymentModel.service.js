@@ -19,6 +19,10 @@
 
         PaymentModel.prototype.set = function (paymentResource) {
             angular.extend(this, paymentResource);
+
+            // Convert the date strings to Dates
+            this.scheduledDate = moment(paymentResource.scheduledDate).toDate();
+
             this.bankAccount = new BankModel();
             this.bankAccount.set(paymentResource.bankAccount);
         };

@@ -17,32 +17,18 @@
         describe("has a set function that", function () {
 
             var postedTransaction,
-                mockPostedTransactionResource = {
-                    transactionId        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    transactionDate      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    postDate             : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    accountNumber        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    embossedAccountNumber: TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    embossedCardNumber   : TestUtils.getRandomStringThatIsAlphaNumeric(5),
-                    driverFirstName      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    driverMiddleName     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    driverLastName       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    customVehicleId      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    merchantBrand        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    merchantName         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    merchantAddress      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    merchantCity         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    merchantState        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    merchantZipCode      : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    productDescription   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    grossCost            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    netCost              : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                },
+                mockPostedTransactionResource,
                 postedTransactionModelKeys,
                 postedTransactionResourceKeys;
 
             beforeEach(inject(function (PostedTransactionModel) {
                 postedTransaction = new PostedTransactionModel();
+
+                mockPostedTransactionResource = angular.extend(TestUtils.getRandomPostedTransaction(PostedTransactionModel), {
+                    newField1: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    newField2: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    newField3: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                });
 
                 // set all values to "default" to more easily detect any changes
                 for (var property in postedTransaction) {

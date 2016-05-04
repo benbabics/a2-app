@@ -5,17 +5,19 @@
 
         var _,
             payment,
-            BankModel;
+            BankModel,
+            PaymentModel;
 
         beforeEach(function () {
             module("app.shared");
             module("app.components.bank");
             module("app.components.payment");
 
-            inject(function (___, _BankModel_, PaymentModel) {
+            inject(function (___, _BankModel_, _PaymentModel_) {
                 _ = ___;
 
                 BankModel = _BankModel_;
+                PaymentModel = _PaymentModel_;
 
                 payment = new PaymentModel();
             });
@@ -23,27 +25,17 @@
 
         describe("has a set function that", function () {
 
-            var mockPaymentResource = {
-                    newField1         : "some value",
-                    newField2         : "some other value",
-                    newField3         : "yet another value",
-                    id                : "id value",
-                    scheduledDate     : "scheduledDate value",
-                    amount            : "amount value",
-                    bankAccount       : {
-                        id            : "bank id value",
-                        defaultBank   : true,
-                        lastFourDigits: "1234",
-                        name          : "company name value"
-                    },
-                    status            : "status value",
-                    confirmationNumber: "confirmationNumber value",
-                    method            : "method value"
-                },
+            var mockPaymentResource,
                 paymentModelKeys,
                 paymentResourceKeys;
 
             beforeEach(inject(function () {
+                mockPaymentResource = angular.extend(TestUtils.getRandomPayment(PaymentModel, BankModel), {
+                    newField1: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    newField2: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    newField3: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                });
+
                 // set all values to "default" to more easily detect any changes
                 for (var property in payment) {
                     if (_.has(payment, property)) {

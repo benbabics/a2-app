@@ -27,6 +27,10 @@
 
         PostedTransactionModel.prototype.set = function (postedTransactionResource) {
             angular.extend(this, postedTransactionResource);
+
+            // Convert the date strings to Dates
+            this.transactionDate = moment(postedTransactionResource.transactionDate).toDate();
+            this.postDate = moment(postedTransactionResource.postDate).toDate();
         };
 
         return PostedTransactionModel;

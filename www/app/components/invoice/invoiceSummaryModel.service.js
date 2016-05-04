@@ -22,6 +22,11 @@
 
         InvoiceSummaryModel.prototype.set = function (invoiceSummaryResource) {
             angular.extend(this, invoiceSummaryResource);
+
+            // Convert the date strings to Dates
+            this.billingDate = moment(invoiceSummaryResource.billingDate).toDate();
+            this.closingDate = moment(invoiceSummaryResource.closingDate).toDate();
+            this.paymentDueDate = moment(invoiceSummaryResource.paymentDueDate).toDate();
         };
 
         InvoiceSummaryModel.prototype.isAllCreditAvailable = function () {

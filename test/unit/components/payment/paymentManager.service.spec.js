@@ -116,7 +116,7 @@
                 mockResponse = {
                     data: {
                         id                : "id value",
-                        scheduledDate     : "scheduledDate value",
+                        scheduledDate     : TestUtils.getRandomDate(),
                         amount            : "amount value",
                         bankAccount       : {
                             id         : "bank id value",

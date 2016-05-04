@@ -4,14 +4,16 @@
     describe("An Invoice Summary Model Service", function () {
 
         var _,
-            account;
+            account,
+            InvoiceSummaryModel;
 
         beforeEach(function () {
             module("app.shared");
             module("app.components.invoice");
 
-            inject(function (___, InvoiceSummaryModel) {
+            inject(function (___, _InvoiceSummaryModel_) {
                 _ = ___;
+                InvoiceSummaryModel = _InvoiceSummaryModel_;
 
                 account = new InvoiceSummaryModel();
             });
@@ -19,29 +21,17 @@
 
         describe("has a set function that", function () {
 
-            var mockInvoiceSummaryResource = {
-                    newField1         : "some value",
-                    newField2         : "some other value",
-                    newField3         : "yet another value",
-                    accountNumber     : "account number value",
-                    availableCredit   : "available credit value",
-                    billingDate       : "available credit value",
-                    billedAmount      : "available credit value",
-                    closingDate       : "closing date value",
-                    creditLimit     : "credit limit value",
-                    currentBalance    : "current balance value",
-                    currentBalanceAsOf: "current balance as of value",
-                    invoiceId         : "invoice id value",
-                    invoiceNumber     : "invoice number value",
-                    minimumPaymentDue : "minimum payment due value",
-                    paymentDueDate    : "payment due date value",
-                    statementBalance: "statement balance value",
-                    unbilledAmount  : "unbilled amount value"
-                },
+            var mockInvoiceSummaryResource,
                 invoiceSummaryModelKeys,
                 invoiceSummaryResourceKeys;
 
             beforeEach(inject(function () {
+                mockInvoiceSummaryResource = angular.extend(TestUtils.getRandomInvoiceSummary(InvoiceSummaryModel), {
+                    newField1: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    newField2: TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    newField3: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                });
+
                 // set all values to "default" to more easily detect any changes
                 for (var property in account) {
                     if (_.has(account, property)) {
