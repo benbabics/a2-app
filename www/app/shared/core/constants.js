@@ -222,7 +222,7 @@
     sharedGlobals.DATE_PICKER = {
         mondayFirst    : false,
         setLabel       : "Select",
-        showTodayButton: true
+        showTodayButton: false
     };
 
     angular

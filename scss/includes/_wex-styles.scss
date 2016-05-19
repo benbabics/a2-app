@@ -110,26 +110,31 @@ $bar-notification-multi-line-height: $bar-height + $bar-title-font-size;
 /**-----------------------------------------------------------
  Buttons/Icons
  ----------------------------------------------------------**/
-.button {
-  border: none;
-}
+a, button {
 
-.button-default {
-  background-color: $wex-inverted-button-color;
-  color: $wex-inverted-button-font-color;
-  text-transform: uppercase;
-}
+  &.button {
+    border: none;
+    background-color: $wex-link-color;
+    color: $wex-inverted-button-font-color;
+  }
 
-.button-submit {
-  background-color: $wex-button-color;
-  color: $wex-button-font-color;
-  text-transform: uppercase;
-}
+  &.button-default {
+    background-color: $wex-inverted-button-color;
+    color: $wex-inverted-button-font-color;
+    text-transform: uppercase;
+  }
 
-.button[disabled] {
-  background-color: $wex-button-disabled-color;
-  color: $wex-button-disabled-font-color;
-  opacity: initial;
+  &.button-submit {
+    background-color: $wex-button-color;
+    color: $wex-button-font-color;
+    text-transform: uppercase;
+  }
+
+  &.button[disabled] {
+    background-color: $wex-button-disabled-color;
+    color: $wex-button-disabled-font-color;
+    opacity: initial;
+  }
 }
 
 /* Refresh Button - per platform */
@@ -284,7 +289,7 @@ List
  Links
  ------------------------------------------------------**/
 a {
-  color: $link-font-color;
+  color: $wex-link-color;
   text-decoration: none;
 }
 
@@ -554,7 +559,7 @@ $numeric-keypad-animation: all linear 0.15s;
   Datepicker
  ----------------------------------**/
 $wex-datepicker-header-color: $charcoal;
-$wex-datepicker-selection-color: $positive;
+$wex-datepicker-selection-color: $stable;
 
 .ionic_datepicker_popup {
 
@@ -578,10 +583,15 @@ $wex-datepicker-selection-color: $positive;
     border-color: $wex-datepicker-selection-color !important;
   }
 
+  .popup-buttons {
+    flex-direction: row-reverse !important;
+  }
+
   .popup-buttons button {
     background-color: $wex-inverted-button-color !important;
     color: $wex-inverted-button-font-color !important;
     text-transform: uppercase !important;
+    margin: 0 !important;
   }
 
   .popup-buttons button.button_set {

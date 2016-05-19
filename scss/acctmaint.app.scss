@@ -502,7 +502,7 @@ $user-login-error-message-animation: all linear 0.5s;
         }
 
         .item p .active-link {
-            color: $link-font-color;
+            color: $wex-link-color;
         }
 
     }
@@ -546,7 +546,7 @@ $user-login-error-message-animation: all linear 0.5s;
 }
 /** Hyperlink Color **/
 .active-link {
-    color: $link-font-color;
+    color: $wex-link-color;
 }
 
 /* Fix for content alignment in ipad-mini */
