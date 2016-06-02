@@ -17,8 +17,31 @@
 $bar-notification-multi-line-height: $bar-height + $bar-title-font-size;
 
 .bar-notification {
-  background-color: $warning-message-fill;
   color: $warning-message-color;
+  background-color: $warning-message-fill;
+
+  @at-root wex-notification-bar > & {
+    padding: 10px;
+    height: 61px;
+    color: $base-color;
+    border: 1px solid $warning-message-color;
+    background-color: $warning-message-fill;
+
+    .icon-container {
+      margin-right: 8px;
+
+      .icon {
+        color: $warning-message-color;
+        font-size: 30px !important;
+      }
+    }
+
+    .title-container {
+      h1 {
+        white-space: normal;
+      }
+    }
+  }
 
   &.bar-notification-multi-line {
     //ion-header-bar has a fixed size so we need to manually resize it to support multiple lines
