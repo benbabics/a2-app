@@ -11,6 +11,7 @@
         mockUser,
         mockScheduledPaymentCount,
         mockBrandLogo,
+        mockGreeting,
         UserAccountModel,
         InvoiceSummaryModel,
         UserManager,
@@ -109,6 +110,7 @@
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
                 UserManager.getUser.and.returnValue(mockUser);
                 mockBrandLogo = TestUtils.getRandomStringThatIsAlphaNumeric(50);
+                mockGreeting = "Hello, " + mockUser.firstName;
 
                 //setup spies
                 spyOn(PlatformUtil, "waitForCordovaPlatform").and.callFake(function(callback) {
@@ -233,6 +235,10 @@
                 });
             });
 
+            it("should set the greeting", function () {
+                expect(ctrl.greeting).toEqual(mockGreeting);
+            });
+            
             it("should set the chart options", function () {
 
                 describe("when no credit is available", function () {

@@ -18,6 +18,7 @@
         vm.invoiceSummary = {};
         vm.billingCompany = {};
         vm.branding = {};
+        vm.greeting = "";
         vm.goToCards = goToCards;
         vm.goToMakePayment = goToMakePayment;
         vm.goToTransactionActivity = goToTransactionActivity;
@@ -53,6 +54,8 @@
             vm.chart = getChartConfiguration();
 
             vm.branding.logo = brandLogo;
+
+            vm.greeting = "Hello, " + vm.user.firstName;
         }
 
         function getChartConfiguration() {
