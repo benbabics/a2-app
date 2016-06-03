@@ -114,7 +114,10 @@
             "sessionTimeOut": {
                 "line1": "Your session has timed out due to 15 minutes of",
                 "line2": "inactivity. Please login to access your account."
-            }
+            },
+            "enrollment": {
+              label: "Enroll Now"
+            },
         }
     };
 
@@ -601,6 +604,24 @@
             "cancel": "Cancel",
             "done"  : "Done"
         }
+    };
+
+    appGlobals.ONLINE_ENROLLMENT = {
+      "CONFIG": {
+        "APP_URL": "http://dit-wex.wexinc.com:12080/enrollment/",
+        "MESSAGES": {
+          "ERRORS": {
+            "serviceUnavailable": "We are unable to complete your request at this time. Please try again later.",
+            "applicationError":   "There was an error. Please try again later."
+          }
+        },
+        "ANALYTICS": {
+          "events": {
+            "EnrollmentAvailable":    ["EnrollNowLink", "EnrollmentAvailable"],
+            "EnrollmentNotAvailable": ["EnrollNowLink", "EnrollmentNotAvailable"]
+          }
+        }
+      }
     };
 
     appGlobals.BRANDS = {

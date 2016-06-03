@@ -35,8 +35,8 @@
             "client_id": "mobileAccountManagement",
             "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
         },
-        "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://pwm-wex-178.wrightexpress.com:* https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: filesystem: cdvfile:;",
-        "whitelist_domains": ["pwm-wex-178.wrightexpress.com", "www.google.com"],
+        "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com http://pwm-wex-178.wrightexpress.com:* http://dit-wex.wexinc.com:* https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: filesystem: cdvfile:;",
+        "whitelist_domains": ["pwm-wex-178.wrightexpress.com", "www.google.com", "dit-wex.wexinc.com"],
         "google_analytics_tracking_ids": {
             "generic": "UA-71223382-6",
             "wex": "UA-71223382-2"
