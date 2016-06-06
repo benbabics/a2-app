@@ -27,6 +27,11 @@
             });
         }
 
+        function isGlobalBar() {
+            //a notification bar is considered global if it is not contained within the page's view
+            return !ElementUtil.getFocusedView()[0].contains(this.barElem[0]);
+        }
+
         function setSubheader(subheader) {
             if (subheader) {
                 this.barElem.addClass("bar-subheader");
@@ -71,7 +76,8 @@
             var initialState,
                 removeListeners = [],
                 onViewEntering = function (toState) {
-                    if (!initialState || toState === initialState) {
+                    //only change the visibility of the bar if we're on the page the bar is defined in (unless it's global)
+                    if (scope.isGlobalBar() || !initialState || toState === initialState) {
                         //add the bar to the new view (if visible)
                         scope.setVisible(scope.ngIf(), ElementUtil.getFocusedView());
 
@@ -79,7 +85,7 @@
                     }
                 },
                 onViewLeaving = function (fromState) {
-                    if (fromState === initialState) {
+                    if (scope.isGlobalBar() || fromState === initialState) {
                         //remove the bar from the old view
                         scope.setVisible(false, ElementUtil.getFocusedView());
                     }
@@ -91,6 +97,7 @@
 
             //functions
             scope.close = _.bind(close, scope);
+            scope.isGlobalBar = _.bind(isGlobalBar, scope);
             scope.setVisible = _.bind(setVisible, scope, _, undefined);
             scope.setSubheader = _.bind(setSubheader, scope, _);
 

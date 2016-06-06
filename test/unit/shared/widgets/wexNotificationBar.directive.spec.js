@@ -178,8 +178,7 @@
                 });
             });
 
-            describe("when the banner is visible", function () {
-
+            function testBarVisible() {
                 describe("when the page has a navBar", function () {
 
                     beforeEach(function () {
@@ -217,6 +216,72 @@
                         expect(activeContent.hasClass("has-subheader")).toBeFalsy();
                     });
                 });
+            }
+
+            function testBarNotVisible() {
+
+                it("should NOT apply the has-header class to the active ion-content", function () {
+                    expect(activeContent.hasClass("has-header")).toBeFalsy();
+                });
+
+                it("should NOT apply the has-subheader class to the active ion-content", function () {
+                    expect(activeContent.hasClass("has-subheader")).toBeFalsy();
+                });
+            }
+
+            describe("when the banner is visible", function () {
+
+                describe("when the banner is global", function () {
+
+                    beforeEach(function () {
+                        activeNavView.append(bar);
+
+                        bar.scope().$apply();
+                    });
+
+                    it("should set initialState to the current toState", function () {
+                        //TODO - Figure out how to test this
+                    });
+
+                    it("should set the bar to be visible", testBarVisible);
+                });
+
+                describe("when the banner is NOT global", function () {
+
+                    beforeEach(function () {
+                        activeContent.append(bar);
+
+                        bar.scope().$apply();
+                    });
+
+                    describe("when the banner has an initial state already set", function () {
+
+                        xdescribe("when the initial state is equal to the toState", function () {
+
+                            //TODO - Figure out how to test this
+
+                            it("should set initialState to the current toState", function () {
+                            });
+
+                            it("should set the bar to be visible", testBarVisible);
+                        });
+
+                        describe("when the initial state is NOT equal to the toState", function () {
+
+                            it("should NOT set the bar to be visible", testBarNotVisible);
+                        });
+                    });
+
+                    xdescribe("when the banner does NOT have an initial state already set", function () {
+
+                        //TODO - Figure out how to test this
+
+                        it("should set initialState to the current toState", function () {
+                        });
+
+                        it("should set the bar to be visible", testBarVisible);
+                    });
+                });
             });
 
             describe("when the banner is NOT visible", function () {
@@ -229,13 +294,7 @@
                     toggleBarVisibility(true);
                 });
 
-                it("should NOT apply the has-header class to the active ion-content", function () {
-                    expect(activeContent.hasClass("has-header")).toBeFalsy();
-                });
-
-                it("should NOT apply the has-subheader class to the active ion-content", function () {
-                    expect(activeContent.hasClass("has-subheader")).toBeFalsy();
-                });
+                it("should NOT set the bar to be visible", testBarNotVisible);
             });
 
             describe("when the page has a navBar", function () {
