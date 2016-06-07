@@ -4,6 +4,7 @@
     describe("A PlatformUtil service", function () {
 
         var $cordovaDevice,
+            $cordovaNetwork,
             PlatformUtil,
             Logger,
             $ionicPlatform,
@@ -18,10 +19,12 @@
 
             //mock dependencies
             $cordovaDevice = jasmine.createSpyObj("$cordovaDevice", ["getPlatform"]);
+            $cordovaNetwork = jasmine.createSpyObj("$cordovaNetwork", ["isOnline"]);
             Logger = jasmine.createSpyObj("Logger", ["debug", "enabled", "error"]);
 
             module(function ($provide) {
                 $provide.value("$cordovaDevice", $cordovaDevice);
+                $provide.value("$cordovaNetwork", $cordovaNetwork);
                 $provide.value("Logger", Logger);
             });
 
@@ -324,5 +327,47 @@
                 });
             });
         });
+
+        describe("has an isOnline function that", function () {
+
+            describe("when platform is a browser", function () {
+
+                beforeEach(function () {
+                    $cordovaDevice.getPlatform.and.returnValue("browser");
+                });
+
+                it("should return true", function () {
+                   expect(PlatformUtil.isOnline()).toBe(true);
+                });
+            });
+
+            describe("when platform is not a browser", function () {
+                beforeEach(function () {
+                    $cordovaDevice.getPlatform.and.returnValue("android");
+                });
+
+                describe("when device is online", function () {
+                    beforeEach(function () {
+                        $cordovaNetwork.isOnline.and.returnValue(true);
+                    });
+
+                    it("should return true", function () {
+                        expect(PlatformUtil.isOnline()).toBe(true);
+                    });
+                });
+
+                describe("when device is not online", function () {
+                    beforeEach(function () {
+                        $cordovaNetwork.isOnline.and.returnValue(false);
+                    });
+
+                    it("should return false", function () {
+                        expect(PlatformUtil.isOnline()).toBe(false);
+                    });
+                });
+            });
+
+        });
+
     });
 })();

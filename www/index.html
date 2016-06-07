@@ -39,6 +39,10 @@
             </ion-nav-bar>
 
             <div ng-controller="NetworkStatusController as networkStatus">
+                <wex-notification-bar text="{{networkStatus.bannerText}}"
+                                      ng-if="!networkStatus.isOnline"
+                                      closeable="false">
+                </wex-notification-bar>
                 <div ng-controller="ServerConnectionErrorBannerController as serverConnection">
                     <wex-notification-bar class="sever-connection-banner"
                                           text="{{serverConnection.bannerText}}"

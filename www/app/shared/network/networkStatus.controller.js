@@ -5,20 +5,13 @@
     // jshint maxparams:5
 
     /* @ngInject */
-    function NetworkStatusController(_, $ionicModal, $rootScope, $scope, globals) {
-
-        // Constants
-        var MODAL_TEMPLATE = "app/shared/network/templates/networkStatus.modal.html";
-
-        // Private members
-        var modal;
+    function NetworkStatusController(_, $rootScope, $scope, globals, PlatformUtil) {
 
         var vm = this;
 
         vm.bannerText = globals.NOTIFICATIONS.networkError;
-        vm.disableModal = disableModal;
-        vm.enableModal = enableModal;
-        vm.isOnline = true;
+
+        vm.isOnline = PlatformUtil.isOnline();
 
         activate();
 
@@ -28,8 +21,6 @@
             var deregisterCordovaNetworkOnlineListener = $rootScope.$on("$cordovaNetwork:online", _.bind(onOnline, vm)),
                 deregisterCordovaNetworkOfflineListener = $rootScope.$on("$cordovaNetwork:offline", _.bind(onOffline, vm));
 
-            vm.enableModal();
-
             //deregister $rootScope listeners
             $scope.$on("$destroy", function () {
                 deregisterCordovaNetworkOnlineListener();
@@ -37,40 +28,15 @@
             });
         }
 
-        function disableModal() {
-            modal = null;
-        }
-
-        function enableModal() {
-            var modalScope = $scope;
-
-            modalScope.bannerText = vm.bannerText;
-
-            $ionicModal.fromTemplateUrl(MODAL_TEMPLATE, {
-                scope: modalScope,
-                animation: "slide-in-up",
-                backdropClickToClose: false,
-                hardwareBackButtonClose: false
-            }).then(function(modalFromTemplate) {
-                modal = modalFromTemplate;
-            });
-        }
-
         function onOnline() {
             $scope.$apply(function () {
                 vm.isOnline = true;
-                if (_.isObject(modal)) {
-                    modal.hide();
-                }
             });
         }
 
         function onOffline() {
             $scope.$apply(function () {
                 vm.isOnline = false;
-                if (_.isObject(modal)) {
-                    modal.show();
-                }
             });
         }
     }

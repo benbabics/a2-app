@@ -6,7 +6,7 @@
 
     // jshint maxparams:5
     /* @ngInject */
-    function PlatformUtil(_, $cordovaDevice, $ionicPlatform, $q, Logger) {
+    function PlatformUtil(_, $cordovaDevice, $ionicPlatform, $q, Logger, $cordovaNetwork) {
         // Private members
         var logCordovaPlatformWarning = _.once(function () {
                 Logger.debug(
@@ -20,7 +20,8 @@
             "getPlatform"               : getPlatform,
             "platformHasCordova"        : platformHasCordova,
             "platformSupportsAppVersion": platformSupportsAppVersion,
-            "waitForCordovaPlatform"    : waitForCordovaPlatform
+            "waitForCordovaPlatform"    : waitForCordovaPlatform,
+            "isOnline"                  : isOnline
         };
 
         return service;
@@ -36,6 +37,14 @@
 
         function platformSupportsAppVersion() {
             return getPlatform() !== "browser";
+        }
+
+        function isOnline() {
+            //when platform is a browser, $cordovaNetwork.isOnline() does not return true when it is online.
+            if (getPlatform() === "browser") {
+                return true;
+            }
+            return $cordovaNetwork.isOnline();
         }
 
         /**
