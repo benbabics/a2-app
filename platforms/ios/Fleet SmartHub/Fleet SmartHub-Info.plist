@@ -68,7 +68,7 @@
     <dict>
       <key>NSExceptionDomains</key>
       <dict>
-        <key>uat.account.wexmobile.com</key>
+        <key>pwm-wex-178.wrightexpress.com</key>
         <dict>
           <key>NSIncludesSubdomains</key>
           <true/>
@@ -102,6 +102,23 @@
           <key>NSThirdPartyExceptionMinimumTLSVersion</key>
           <string>TLSv1.2</string>
         </dict>
+        <key>dit-wex.wexinc.com</key>
+        <dict>
+          <key>NSIncludesSubdomains</key>
+          <true/>
+          <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+          <key>NSExceptionRequiresForwardSecrecy</key>
+          <false/>
+          <key>NSExceptionMinimumTLSVersion</key>
+          <string>TLSv1.2</string>
+          <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+          <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+          <false/>
+          <key>NSThirdPartyExceptionMinimumTLSVersion</key>
+          <string>TLSv1.2</string>
+        </dict>
       </dict>
     </dict>
     <key>NSMainNibFile</key>
@@ -112,8 +129,6 @@
     <array>
       <string>UIInterfaceOrientationPortrait</string>
     </array>
-    <key>UIRequiresFullScreen</key>
-    <true/>
     <key>UISupportedInterfaceOrientations</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>
@@ -124,5 +139,7 @@
       <string>UIInterfaceOrientationPortrait</string>
       <string>UIInterfaceOrientationPortraitUpsideDown</string>
     </array>
+    <key>UIRequiresFullScreen</key>
+    <true/>
   </dict>
 </plist>

@@ -583,7 +583,7 @@ public class InAppBrowser extends CordovaPlugin {
                 }
                 back.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        goBack();
+                        // goBack();
                     }
                 });
 
@@ -675,7 +675,7 @@ public class InAppBrowser extends CordovaPlugin {
 
                 String overrideUserAgent = preferences.getString("OverrideUserAgent", null);
                 String appendUserAgent = preferences.getString("AppendUserAgent", null);
-                
+
                 if (overrideUserAgent != null) {
                     settings.setUserAgentString(overrideUserAgent);
                 }
@@ -707,19 +707,21 @@ public class InAppBrowser extends CordovaPlugin {
                 inAppWebView.requestFocusFromTouch();
 
                 // Add the back and forward buttons to our action button container layout
-                actionButtonContainer.addView(back);
-                actionButtonContainer.addView(forward);
+                // actionButtonContainer.addView(back);
+                // actionButtonContainer.addView(forward);
 
                 // Add the views to our toolbar
                 toolbar.addView(actionButtonContainer);
-                toolbar.addView(edittext);
-                toolbar.addView(close);
 
                 // Don't add the toolbar if its been disabled
                 if (getShowLocationBar()) {
-                    // Add our toolbar to our main view/layout
-                    main.addView(toolbar);
+                  toolbar.addView(edittext);
                 }
+
+                toolbar.addView(close);
+
+                // Add our toolbar to our main view/layout
+                main.addView(toolbar);
 
                 // Add our webview to our main view/layout
                 main.addView(inAppWebView);
