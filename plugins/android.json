@@ -43,13 +43,13 @@
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
         "cordova-plugin-app-version": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "com.xmartlabs.cordova.market": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
