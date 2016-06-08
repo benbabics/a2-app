@@ -16,12 +16,12 @@
           replace:     true,
           transclude:  true,
           scope:       {},
-          link:        link
+          controller:  onlineEnrollmentController
       };
 
-      function link(scope, element, attrs) {
+      function onlineEnrollmentController($scope) {
         assigncordovaInAppBrowserListeners();
-        scope.handleOpenEnrollmentWindow = handleOpenEnrollmentWindow;
+        $scope.handleOpenEnrollmentWindow = handleOpenEnrollmentWindow;
       }
 
       function assigncordovaInAppBrowserListeners() {
