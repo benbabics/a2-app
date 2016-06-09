@@ -11,7 +11,8 @@
         "app_urls": {
             "am_api": "http://127.0.0.1:20080",
             "auth_api": "http://127.0.0.1:26080",
-            "configuration_api": "http://127.0.0.1:29080"
+            "configuration_api": "http://127.0.0.1:29080",
+            "online_enrollment_api": ""
         },
         "auth": {
             "client_id": "mobileAccountManagement",
@@ -29,7 +30,8 @@
         "app_urls": {
             "am_api": "http://pwm-wex-178.wrightexpress.com:20080",
             "auth_api": "http://pwm-wex-178.wrightexpress.com:26080",
-            "configuration_api": "http://pwm-wex-178.wrightexpress.com:29080"
+            "configuration_api": "http://pwm-wex-178.wrightexpress.com:29080",
+            "online_enrollment_api": "http://dit-wex.wexinc.com:12080/enrollment"
         },
         "auth": {
             "client_id": "mobileAccountManagement",
@@ -47,7 +49,8 @@
         "app_urls": {
             "am_api": "https://uat.account.wexmobile.com/maintenance",
             "auth_api": "https://uat.account.wexmobile.com/authAPI",
-            "configuration_api": "https://uat.account.wexmobile.com/configurationAPI"
+            "configuration_api": "https://uat.account.wexmobile.com/configurationAPI",
+            "online_enrollment_api": ""
         },
         "auth": {
             "client_id": "mobileAccountManagement",
@@ -65,7 +68,8 @@
         "app_urls": {
             "am_api": "https://account.wexmobile.com/maintenance",
             "auth_api": "https://account.wexmobile.com/authAPI",
-            "configuration_api": "https://account.wexmobile.com/configurationAPI"
+            "configuration_api": "https://account.wexmobile.com/configurationAPI",
+            "online_enrollment_api": ""
         },
         "auth": {
             "client_id": "mobileAccountManagement",

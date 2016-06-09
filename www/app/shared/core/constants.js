@@ -122,6 +122,13 @@
     };
 
     /**
+     * Online Enrollment API
+     */
+    sharedGlobals.ONLINE_ENROLLMENT_API = {
+        BASE_URL: "@@@STRING_REPLACE_APP_URL_ONLINE_ENROLLMENT_API@@@"
+    };
+
+    /**
      * Payment Constants
      */
     sharedGlobals.PAYMENT = {
