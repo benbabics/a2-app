@@ -233,7 +233,7 @@
                     it("should call Popup.displayAlert with the expected values", function () {
                         expect(Popup.displayAlert).toHaveBeenCalledWith({
                             content       : errorMessage,
-                            buttonCssClass: "button-submit"
+                            buttonCssClass: "button-primary"
                         });
                     });
 
@@ -303,7 +303,7 @@
                     it("should call Popup.displayAlert with the expected values", function () {
                         expect(Popup.displayAlert).toHaveBeenCalledWith({
                             content       : errorMessage,
-                            buttonCssClass: "button-submit"
+                            buttonCssClass: "button-primary"
                         });
                     });
 

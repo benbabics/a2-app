@@ -16,14 +16,9 @@ $user-login-error-message-animation: all linear 0.5s;
 
 .version-update-view {
 
-    .button-default {
+    .button,
+    .button-stable:hover {
         color: #FFFFFF;
-        text-transform: inherit;
-    }
-
-    .button-stable, .button-stable:hover {
-        color: #FFFFFF;
-        text-transform: inherit;
     }
 
     .title {

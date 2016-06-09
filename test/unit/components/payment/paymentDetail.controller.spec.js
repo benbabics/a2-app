@@ -171,8 +171,8 @@
                     content             : mockConfig.cancelPaymentConfirm.content,
                     okButtonText        : mockConfig.cancelPaymentConfirm.yesButton,
                     cancelButtonText    : mockConfig.cancelPaymentConfirm.noButton,
-                    okButtonCssClass    : "button-submit",
-                    cancelButtonCssClass: "button-default"
+                    okButtonCssClass    : "button-primary",
+                    cancelButtonCssClass: "button-secondary"
                 });
             });
 

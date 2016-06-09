@@ -29,7 +29,7 @@
                 .then(function () {
                     return Popup.displayAlert({
                         content       : errorMessage,
-                        buttonCssClass: "button-submit"
+                        buttonCssClass: "button-primary"
                     });
                 });
         }

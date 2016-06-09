@@ -58,7 +58,7 @@
             </span>
 
             <div ng-if="!vm.hasMultipleBanks" class="shrink single-value">
-                <span class="button right-padding ellipsis float-right">
+                <span class="button right-padding ellipsis float-right black">
                     {{vm.payment.bankAccount.getDisplayName()}}
                 </span>
             </div>
@@ -74,7 +74,7 @@
         <br>
         <div class="padding align_center">
             <button id="makePaymentButton"
-                    class="button button-block button-submit button-width"
+                    class="button button-block button-primary button-width"
                     ng-disabled="vm.payment.amount <= 0"
                     ng-click="vm.goToPage('payment.maintenance.summary')">{{::vm.config.submitButton}}</button>
         </div>

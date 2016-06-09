@@ -249,8 +249,8 @@
                     content             : mockConfig.confirmationPopup.content,
                     okButtonText        : mockConfig.confirmationPopup.yesButton,
                     cancelButtonText    : mockConfig.confirmationPopup.noButton,
-                    okButtonCssClass    : "button-submit",
-                    cancelButtonCssClass: "button-default"
+                    okButtonCssClass    : "button-primary",
+                    cancelButtonCssClass: "button-secondary"
                 });
             });
 

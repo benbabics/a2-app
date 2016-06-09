@@ -39,8 +39,8 @@
                 content             : vm.config.confirmationPopup.contentMessages[newStatus],
                 okButtonText        : vm.config.confirmationPopup.yesButton,
                 cancelButtonText    : vm.config.confirmationPopup.noButton,
-                okButtonCssClass    : "button-submit",
-                cancelButtonCssClass: "button-default"
+                okButtonCssClass    : "button-primary",
+                cancelButtonCssClass: "button-secondary"
             })
                 .then(function (result) {
                     if (result) {

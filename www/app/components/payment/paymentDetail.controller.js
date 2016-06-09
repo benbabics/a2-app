@@ -48,8 +48,8 @@
                 content             : vm.config.cancelPaymentConfirm.content,
                 okButtonText        : vm.config.cancelPaymentConfirm.yesButton,
                 cancelButtonText    : vm.config.cancelPaymentConfirm.noButton,
-                okButtonCssClass    : "button-submit",
-                cancelButtonCssClass: "button-default"
+                okButtonCssClass    : "button-primary",
+                cancelButtonCssClass: "button-secondary"
             })
                 .then(function (result) {
                     if (result) {

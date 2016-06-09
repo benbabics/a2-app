@@ -133,27 +133,33 @@ $bar-notification-multi-line-height: $bar-height + $bar-title-font-size;
 /**-----------------------------------------------------------
  Buttons/Icons
  ----------------------------------------------------------**/
-a, button {
+.button {
 
-  &.button {
-    border: none;
+  border: none;
+  background-color: $wex-inverted-button-color;
+  color: $wex-inverted-button-font-color;
+
+  &.button-link {
     background-color: $wex-link-color;
     color: $wex-inverted-button-font-color;
   }
 
-  &.button-default {
-    background-color: $wex-inverted-button-color;
-    color: $wex-inverted-button-font-color;
-    text-transform: uppercase;
+  &.button-icon {
+    background-color: initial;
+    color: initial;
   }
 
-  &.button-submit {
+  &.button-primary {
     background-color: $wex-button-color;
     color: $wex-button-font-color;
+  }
+
+  &.button-primary,
+  &.button-secondary {
     text-transform: uppercase;
   }
 
-  &.button[disabled] {
+  &[disabled] {
     background-color: $wex-button-disabled-color;
     color: $wex-button-disabled-font-color;
     opacity: initial;
@@ -241,15 +247,15 @@ a, button {
 
 /* Search Icon - per platform */
 .icon-search {
-    @extend .ion-search;  /* default icon - neither Android nor iOS */
+  @extend .ion-search;  /* default icon - neither Android nor iOS */
 }
 
 .platform-android .icon-search {
-    @extend .ion-android-search;
+  @extend .ion-android-search;
 }
 
 .platform-ios .icon-search {
-    @extend .ion-ios-search-strong;
+  @extend .ion-ios-search-strong;
 }
 
 /* Warning icon */
@@ -314,6 +320,10 @@ List
 a {
   color: $wex-link-color;
   text-decoration: none;
+
+  &.button {
+    @extend .button.button-link;
+  }
 }
 
 /**------------------------------------------------------
@@ -560,22 +570,22 @@ $numeric-keypad-animation: all linear 0.15s;
  Accordion
  ------------------------------------------------------**/
 .accordion {
-    .collapsible-item {
-        .title {
-            font-weight: bold;
-        }
-
-        .body {
-            transition-duration: 0.0s;
-        }
+  .collapsible-item {
+    .title {
+      font-weight: bold;
     }
 
-    .collapsible-item.open {
-        .body {
-            max-height: inherit;
-        }
-
+    .body {
+      transition-duration: 0.0s;
     }
+  }
+
+  .collapsible-item.open {
+    .body {
+      max-height: inherit;
+    }
+
+  }
 }
 
 /**--------------------------------
@@ -624,5 +634,5 @@ $wex-datepicker-selection-color: $stable;
 }
 
 .button-row {
-    margin-top: 10px;
+  margin-top: 10px;
 }
