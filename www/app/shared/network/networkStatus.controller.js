@@ -11,7 +11,13 @@
 
         vm.bannerText = globals.NOTIFICATIONS.networkError;
 
-        vm.isOnline = PlatformUtil.isOnline();
+        // default isOnline
+        vm.isOnline = true;
+
+        // once cordova has initialized, check if platform isOnline
+        PlatformUtil.waitForCordovaPlatform().then(function() {
+            vm.isOnline = PlatformUtil.isOnline();
+        });
 
         activate();
 

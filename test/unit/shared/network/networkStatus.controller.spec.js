@@ -3,6 +3,7 @@
 
     var $rootScope,
         $scope,
+        $q,
         ctrl,
         PlatformUtil;
 
@@ -22,12 +23,22 @@
             });
 
             // mock dependencies
-            PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["isOnline"]);
+            PlatformUtil = jasmine.createSpyObj("PlatformUtil", [
+                "isOnline",
+                "waitForCordovaPlatform"
+            ]);
+
+            //setup spies
+            PlatformUtil.waitForCordovaPlatform.and.callFake(function(callback) {
+                //just execute the callback directly
+                return $q.when((callback || function() {})());
+            });
 
             // INJECT! This part is critical
             // $rootScope - injected to create a new $scope instance.
             // $controller - injected to create an instance of our controller.
-            inject(function (_$rootScope_, $controller) {
+            inject(function (_$rootScope_, _$q_, $controller) {
+                $q = _$q_;
                 $rootScope = _$rootScope_;
                 $scope = $rootScope.$new();
 
@@ -37,11 +48,12 @@
                     PlatformUtil: PlatformUtil
                 });
             });
+
         });
 
         describe("has a cordovaOnline event handler function that", function () {
             beforeEach(function () {
-                PlatformUtil.isOnline.and.returnValue(false);
+                PlatformUtil.isOnline.and.returnValue(true);
                 ctrl.isOnline = null;
                 $rootScope.$broadcast("$cordovaNetwork:online");
             });
@@ -55,13 +67,13 @@
         describe("has a cordovaOffline event handler function that", function () {
 
             beforeEach(function () {
-                PlatformUtil.isOnline.and.returnValue(true);
+                PlatformUtil.isOnline.and.returnValue(false);
                 ctrl.isOnline = null;
 
                 $rootScope.$broadcast("$cordovaNetwork:offline");
             });
 
-            it("should set isOnline to false", function () {
+                it("should set isOnline to false", function () {
                 expect(ctrl.isOnline).toEqual(false);
             });
         });
