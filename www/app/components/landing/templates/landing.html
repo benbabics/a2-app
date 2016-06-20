@@ -11,7 +11,7 @@
                     <span class="body-text">{{vm.user.getDisplayAccountNumber()}}</span>
                 </div>
                 <div class="col col-20" ng-if="vm.branding.logo">
-                    <div class="brand-logo" ng-bind-html="vm.branding.logo | wexTrustedHtml"></div>
+                    <div class="brand-logo" ng-bind-html="vm.branding.logo | wexSvg"></div>
                 </div>
             </div>
 
