@@ -10,7 +10,8 @@
 
         // Revealed Public members
         var service = {
-            getPostedTransactions: getPostedTransactions
+            getPendingTransactions: getPendingTransactions,
+            getPostedTransactions:  getPostedTransactions
         };
 
         activate();
@@ -20,6 +21,10 @@
 
         function activate() {
             accountsResource = AccountsResource;
+        }
+
+        function getPendingTransactions(accountId, searchCriteria) {
+            return $q.when(accountsResource.forAccount(accountId).getList(globals.ACCOUNT_MAINTENANCE_API.TRANSACTIONS.PENDING.BASE, searchCriteria));
         }
 
         function getPostedTransactions(accountId, searchCriteria) {

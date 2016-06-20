@@ -11,7 +11,7 @@
         mockPostedTransactionsCollection,
         mockCachedPostedTransactionsCollection;
 
-    describe("A Transaction Manager", function () {
+    fdescribe("A Transaction Manager", function () {
 
         beforeEach(function () {
 
@@ -20,7 +20,7 @@
             module("app.components.transaction");
 
             // mock dependencies
-            TransactionsResource = jasmine.createSpyObj("TransactionsResource", ["getPostedTransactions"]);
+            TransactionsResource = jasmine.createSpyObj("TransactionsResource", ["getPendingTransactions", "getPostedTransactions"]);
 
             module(function ($provide) {
                 $provide.value("TransactionsResource", TransactionsResource);
@@ -150,6 +150,84 @@
 
                 it("should NOT reject", function () {
                     expect(rejectHandler).not.toHaveBeenCalled();
+                });
+            });
+        });
+
+        describe("has a fetchPendingTransactions function that", function () {
+            var getPendingTransactionsDeferred,
+                mockAccountId,
+                mockCardId,
+                mockFilterValue;
+
+            beforeEach(function () {
+                getPendingTransactionsDeferred = $q.defer();
+                mockAccountId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                mockCardId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                mockFilterValue = TestUtils.getRandomStringThatIsAlphaNumeric(2);
+
+                TransactionsResource.getPendingTransactions.and.returnValue(getPendingTransactionsDeferred.promise);
+            });
+
+            describe("when getting the pending transactions", function () {
+
+                describe("with a cardId", function () {
+
+                    beforeEach(function () {
+                        TransactionManager.fetchPendingTransactions(mockAccountId, mockCardId)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
+
+                    it("should call TransactionsResource.getPendingTransactions", function () {
+                        expect(TransactionsResource.getPendingTransactions).toHaveBeenCalledWith(mockAccountId, {
+                            cardId: mockCardId
+                        });
+                    });
+                });
+
+                describe("without a cardId", function () {
+
+                    beforeEach(function () {
+                        TransactionManager.fetchPendingTransactions(mockAccountId)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
+
+                    it("should call TransactionsResource.getPendingTransactions", function () {
+                        expect(TransactionsResource.getPendingTransactions).toHaveBeenCalledWith(mockAccountId, {});
+                    });
+                });
+
+                describe("with a filterValue", function () {
+
+                    beforeEach(function () {
+                        TransactionManager.fetchPendingTransactions(mockAccountId, mockCardId, mockFilterValue)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
+
+                    it("should call TransactionsResource.getPendingTransactions", function () {
+                        expect(TransactionsResource.getPendingTransactions).toHaveBeenCalledWith(mockAccountId, {
+                            cardId: mockCardId,
+                            filterValue: mockFilterValue
+                        });
+                    });
+                });
+
+                describe("without a filterValue", function () {
+
+                    beforeEach(function () {
+                        TransactionManager.fetchPendingTransactions(mockAccountId, mockCardId)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
+
+                    it("should call TransactionsResource.getPendingTransactions", function () {
+                        expect(TransactionsResource.getPendingTransactions).toHaveBeenCalledWith(mockAccountId, {
+                          cardId: mockCardId
+                        });
+                    });
                 });
             });
         });

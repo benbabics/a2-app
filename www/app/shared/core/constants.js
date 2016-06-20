@@ -74,6 +74,9 @@
             "PAYMENT_ADD_AVAILABILITY": "payments/makePaymentAvailability"
         },
         TRANSACTIONS: {
+            "PENDING": {
+                "BASE": "pendingTransactions"
+            },
             "POSTED": {
                 "BASE": "postedTransactions"
             }

@@ -7,15 +7,17 @@
     /* @ngInject */
     function TransactionManager(_, $q, Logger, LoggerUtil, PostedTransactionModel, TransactionsResource) {
         // Private members
-        var postedTransactions;
+        var pendingTransactions,
+            postedTransactions;
 
         // Revealed Public members
         var service = {
-                clearCachedValues      : clearCachedValues,
-                fetchPostedTransaction : fetchPostedTransaction,
-                fetchPostedTransactions: fetchPostedTransactions,
-                getPostedTransactions  : getPostedTransactions,
-                setPostedTransactions  : setPostedTransactions
+                clearCachedValues       : clearCachedValues,
+                fetchPostedTransaction  : fetchPostedTransaction,
+                fetchPostedTransactions : fetchPostedTransactions,
+                fetchPendingTransactions: fetchPendingTransactions,
+                getPostedTransactions   : getPostedTransactions,
+                setPostedTransactions   : setPostedTransactions
             };
 
         activate();
@@ -28,14 +30,15 @@
         }
 
         function clearCachedValues() {
+            pendingTransactions = [];
             postedTransactions = [];
         }
 
-        function createPostedTransaction(postedTransactionResource) {
-            var postedTransactionModel = new PostedTransactionModel();
-            postedTransactionModel.set(postedTransactionResource);
+        function createTransaction(transactionResource) {
+            var transactionModel = new PostedTransactionModel();
+            transactionModel.set(transactionResource);
 
-            return postedTransactionModel;
+            return transactionModel;
         }
 
         function fetchPostedTransaction(transactionId) {
@@ -59,7 +62,7 @@
                 .then(function (postedTransactionsResponse) {
                     if (postedTransactionsResponse && postedTransactionsResponse.data) {
                         //map the posted transaction data to model objects
-                        var fetchedTransactions = _.map(postedTransactionsResponse.data, createPostedTransaction);
+                        var fetchedTransactions = _.map(postedTransactionsResponse.data, createTransaction);
 
                         //reset the cache if we're fetching the first page of results
                         if (pageNumber === 0) {
@@ -83,6 +86,46 @@
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
                     var error = "Getting Posted Transactions failed: " + LoggerUtil.getErrorMessage(failureResponse);
+                    Logger.error(error);
+                    throw new Error(error);
+                });
+        }
+
+        // jshint maxparams:3
+        function fetchPendingTransactions(accountId, cardId, filterValue) {
+            var params = {};
+
+            if (!_.isUndefined(cardId)) {
+                params.cardId = cardId;
+            }
+
+            if (!_.isUndefined(filterValue)) {
+                params.filterValue = filterValue;
+            }
+
+            return TransactionsResource.getPendingTransactions(accountId, params)
+                .then(function (pendingTransactionsResponse) {
+                    if (pendingTransactionsResponse && pendingTransactionsResponse.data) {
+                        //map the pending transaction data to model objects
+                        var fetchedTransactions = _.map(pendingTransactionsResponse.data, createTransaction);
+
+                        //reset the cache
+                        pendingTransactions = [];
+
+                        return fetchedTransactions;
+                    }
+                    // no data in the response
+                    else {
+                        var error = "No data in Response from getting the Pending Transactions";
+                        Logger.error(error);
+                        throw new Error(error);
+                    }
+                })
+                // get pending transactions failed
+                .catch(function (failureResponse) {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+
+                    var error = "Getting Pending Transactions failed: " + LoggerUtil.getErrorMessage(failureResponse);
                     Logger.error(error);
                     throw new Error(error);
                 });
