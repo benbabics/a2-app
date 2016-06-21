@@ -18,7 +18,8 @@
     "moment-timezone": "~0.5.0",
     "angular-promise-extras": "~0.1.5",
     "ng-idle": "^1.2.0",
-    "ionic-datepicker": "^1.1.0"
+    "ionic-datepicker": "^1.1.0",
+    "angular-mocks": "^1.5.7"
   },
   "resolutions": {
     "angular": ">=1.4.6",

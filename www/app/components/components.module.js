@@ -22,5 +22,18 @@
         "app.components.util",
         "app.components.version",
         "app.components.widgets"
-    ]);
+    ])
+
+    // expose $httpBackend as a service
+    .config(function($provide) {
+        $provide.decorator( '$httpBackend', angular.mock.e2e.$httpBackendDecorator );
+    })
+
+    // catch-all pass through for all other requests, not defined as mocks in other modules
+    .run(function($httpBackend) {
+        $httpBackend.whenGET(/.*/).passThrough();
+        $httpBackend.whenPOST(/.*/).passThrough();
+        $httpBackend.whenDELETE(/.*/).passThrough();
+        $httpBackend.whenPUT(/.*/).passThrough();
+    });
 })();
