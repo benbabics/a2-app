@@ -1,5 +1,19 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="{{vm.backStateOverride}}">
     <ion-content>
+        <!--Button-bar
+         <div class="padding button-bar bar-positive" fittext fittext-max="inherit">
+            <a class="button">Date</a>
+            <a class="button">Driver Name</a>
+            <a class="button">Card Number</a></div>
+        <ion-list>
+            <ion-item>
+                <a class="item-content" ng-href="">{{transaction.driverLastName}}, {{transaction.driverFirstName}}Adams,John <i class="icon ion-chevron-right"></i></a>
+
+            </ion-item>
+            <ion-item>
+                <a class="item-content" ng-href="">{{transaction.embossedCardNumber | wexCardNumber}}12345  <i class="icon ion-chevron-right"></i></a>
+            </ion-item>
+        </ion-list>-->
         <ion-refresher class="wex-refresher" on-refresh="vm.resetSearchResults()"></ion-refresher>
         <wex-infinite-list on-reload="vm.loadNextPage"
                            on-page-loaded="vm.pageLoaded"

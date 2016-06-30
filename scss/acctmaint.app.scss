@@ -649,3 +649,32 @@ $user-login-error-message-animation: all linear 0.5s;
 
 .text-normal {
     font-weight: normal; }
+
+/** Button-bar **/
+
+.button-bar {
+    //max font size for ngFitText
+    [fittext] {
+        font-size: 16px;
+    }
+    .button:first-child {
+        border-radius : 10px 0px 0px 10px;
+    }
+    .button:last-child {
+        border-radius : 0px 10px 10px 0px;
+    }
+    .button {
+        border: 1px solid #fff;
+    }
+    .bar-positive .button-activated {
+        background-color: #ab112f;
+    }
+
+}
+/** Button-bar End**/
+
+.ion-chevron-right {
+    color: $wex-link-color;
+    float: right;
+    font-size:20px;
+}
