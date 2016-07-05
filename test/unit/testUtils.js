@@ -11,6 +11,7 @@ var TestUtils = (function () {
             getRandomAccount                  : getRandomAccount,
             getRandomAddress                  : getRandomAddress,
             getRandomAnalyticsEvent           : getRandomAnalyticsEvent,
+            getRandomArray                    : getRandomArray,
             getRandomBank                     : getRandomBank,
             getRandomBoolean                  : getRandomBoolean,
             getRandomBrandAsset               : getRandomBrandAsset,
@@ -18,6 +19,7 @@ var TestUtils = (function () {
             getRandomCard                     : getRandomCard,
             getRandomCardReissueDetails       : getRandomCardReissueDetails,
             getRandomDate                     : getRandomDate,
+            getRandomDriver                   : getRandomDriver,
             getRandomInteger                  : getRandomInteger,
             getRandomInvoiceSummary           : getRandomInvoiceSummary,
             getRandomMap                      : getRandomMap,
@@ -118,6 +120,17 @@ var TestUtils = (function () {
         return event;
     }
 
+    function getRandomArray(length, mockCreator /*...*/) {
+        var array = [],
+            mockArgs = arguments.length > 2 ? Array.prototype.slice.call(arguments, 2) : [];
+
+        for (var i = 0; i < length; ++i) {
+            array.push(mockCreator.apply(this, mockArgs));
+        }
+
+        return array;
+    }
+
     function getRandomBank(BankModel) {
         var randomBank = new BankModel();
 
@@ -145,14 +158,7 @@ var TestUtils = (function () {
     }
 
     function getRandomBrandAssets(BrandAssetModel) {
-        var brandAssets = [],
-            numBrandAssets = getRandomInteger(1, 20);
-
-        for (var i = 0; i < numBrandAssets; ++i) {
-            brandAssets.push(getRandomBrandAsset(BrandAssetModel));
-        }
-
-        return brandAssets;
+        return getRandomArray(getRandomInteger(1, 20), getRandomBrandAsset, BrandAssetModel);
     }
 
     function getRandomBoolean() {
@@ -218,6 +224,23 @@ var TestUtils = (function () {
         end = end || new Date();
 
         return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    }
+
+    function getRandomDriver(DriverModel) {
+        var driver = new DriverModel();
+
+        driver.set({
+            driverId: getRandomStringThatIsAlphaNumeric(5),
+            promptId: getRandomStringThatIsAlphaNumeric(10),
+            firstName: getRandomStringThatIsAlphaNumeric(5),
+            middleName: getRandomStringThatIsAlphaNumeric(5),
+            lastName: getRandomStringThatIsAlphaNumeric(5),
+            status: getRandomStringThatIsAlphaNumeric(5),
+            statusDate: getRandomDate(),
+            sourceSystem: getRandomStringThatIsAlphaNumeric(5)
+        });
+
+        return driver;
     }
 
     function getRandomInteger(min, max) {
