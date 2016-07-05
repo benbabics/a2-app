@@ -9,6 +9,7 @@
         "app.components.card",
         "app.components.contactUs",
         "app.components.core",
+        "app.components.driver",
         "app.components.landing",
         "app.components.invoice",
         "app.components.menu",

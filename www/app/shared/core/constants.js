@@ -66,6 +66,9 @@
         BANKS: {
             "ACTIVE_BANKS": "payments/activeBanks"
         },
+        DRIVERS: {
+            "BASE": "drivers"
+        },
         INVOICES: {
             "CURRENT_INVOICE_SUMMARY": "payments/currentInvoiceSummary"
         },
