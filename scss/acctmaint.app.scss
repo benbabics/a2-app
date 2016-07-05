@@ -655,7 +655,7 @@ $user-login-error-message-animation: all linear 0.5s;
 .button-bar {
     //max font size for ngFitText
     [fittext] {
-        font-size: 16px;
+        font-size: 14px;
     }
     .button:first-child {
         border-radius : 10px 0px 0px 10px;
@@ -677,4 +677,10 @@ $user-login-error-message-animation: all linear 0.5s;
     color: $wex-link-color;
     float: right;
     font-size:20px;
+}
+
+@media (max-width: 320px) {
+    [fittext] {
+        font-size: 10.71px !important;
+    }
 }
