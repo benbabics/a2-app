@@ -684,3 +684,27 @@ $user-login-error-message-animation: all linear 0.5s;
         font-size: 10.71px !important;
     }
 }
+
+#pendingAuth {
+    font-size: 14px;
+    background: #7f7f7f;
+    color: #fff;
+}
+
+#date {
+    font-size: 14px;
+    background: #e2e3e4;
+    color: #333;
+}
+
+.filter-list {
+
+    .item-divider {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+    .item {
+        color: #333;
+        border-color: #ccc;
+    }
+}

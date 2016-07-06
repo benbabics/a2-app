@@ -1,22 +1,37 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="{{vm.backStateOverride}}">
     <ion-content>
-        <!--Button-bar >
+        <!--Button-bar -->
          <div class="padding button-bar bar-positive">
             <a class="button"><div><div fittext fittext-max="inherit">Date</div></div></a>
             <a class="button"><div><div fittext fittext-max="inherit">Driver Name</div></div></a>
             <a class="button"><div><div fittext fittext-max="inherit">Card Number</div></div></a></div>
         <!-- Button-bar END -->
+        <!-- Filter by Date
+        <div class="list">
+            <div class="item item-divider" id="pendingAuth">
+                Pending Authorizations
+            </div>
+            <div class="item item-divider" id="date">
+               Date 05/25/2016
+            </div>
 
-            <!-- Driver Name template >
-            <ion-list>
+            <a class="item" href="#">
+                Card Number<br>Drive Name<br>Asset ID<br>Description
+            <i class="icon ion-chevron-right"></i>
+             </a>
+        </div>
+        <!-- Filter by Date END -->
+
+            <!-- Driver Name template
+            <ion-list class="filter-list">
                  <ion-item>
                      <a class="item-content" ng-href="">{{transaction.driverLastName}}, {{transaction.driverFirstName}}Adams,John <i class="icon ion-chevron-right"></i></a>
                  </ion-item>
             </ion-list>
             <!-- Drive Name template END -->
 
-            <!-- Card Number template >
-            <ion-list>
+            <!-- Card Number template
+            <ion-list class="filter-list">
                 <ion-item>
                     <a class="item-content" ng-href="">{{transaction.embossedCardNumber | wexCardNumber}}12345  <i class="icon ion-chevron-right"></i></a>
                 </ion-item>
