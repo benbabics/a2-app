@@ -540,9 +540,14 @@
             "ANALYTICS"     : {
                 "pageName": "TransactionActivity"
             },
-            "title"         : "Transaction Activity",
+            "title"         : "Transactions",
             "reloadDistance": "5%",
-            "emptyList"     : "No Records Found."
+            "emptyList"     : "No Records Found.",
+            "buttonLabels"  : {
+              "date"  : "Date",
+              "driver": "Driver Name",
+              "card"  : "Card Number"
+            }
         },
         "SEARCH_OPTIONS": {
             "MAX_DAYS" : 60,

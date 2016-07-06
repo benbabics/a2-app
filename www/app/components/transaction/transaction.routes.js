@@ -18,7 +18,7 @@
             cache   : true,
             url     : "/list/:cardId",
             views   : {
-                "view@transaction": {
+                "view": {
                     templateUrl: "app/components/transaction/templates/transactionList.html",
                     controller : "TransactionListController as vm"
                 }
@@ -28,22 +28,26 @@
             }
         });
 
-        $stateProvider.state("transaction.posted", {
-            abstract: true,
-            url     : "/posted",
-            views   : {
-                "view@transaction": {
-                    template: "<ion-nav-view></ion-nav-view>"
-                }
-            }
+        $stateProvider.state("transaction.filterBy", {
+            url:   "/filter/:filterId",
+            cache: false,
+            views: {
+              "view": {
+                templateUrl: "app/components/transaction/templates/transactionFilterBy.html"
+              }
+            },
         });
 
-        $stateProvider.state("transaction.posted.detail", {
-            url        : "/detail/:transactionId",
-            cache      : false,
-            templateUrl: "app/components/transaction/templates/postedTransactionDetail.html",
-            controller : "PostedTransactionDetailController as vm",
-            resolve    : {
+        $stateProvider.state("transaction.postedDetail", {
+            url:   "/posted/detail/:transactionId",
+            cache: false,
+            views: {
+              "view": {
+                templateUrl: "app/components/transaction/templates/postedTransactionDetail.html",
+                controller : "PostedTransactionDetailController as vm",
+              }
+            },
+            resolve: {
                 postedTransaction: function ($stateParams, LoadingIndicator, TransactionManager) {
                     var transactionId = $stateParams.transactionId;
 

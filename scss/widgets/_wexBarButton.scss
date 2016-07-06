@@ -1,0 +1,51 @@
+.widget-wex-bar-button {
+  .button-bar.button-bar-inline > & > .button {
+    width: auto;
+    display: inline-block;
+    float: left;
+  }
+
+  .button-bar > & {
+    @include flex(1);
+    display: block;
+    &:first-child > .button {
+      border-radius: 4px 0px 0px 4px;
+    }
+    &:last-child > .button{
+      border-right-width: 1px;
+      border-radius: 0px 4px 4px 0px;
+    }
+    &:before,
+    .icon:before {
+      line-height: 44px;
+    }
+
+    > .button {
+      overflow: hidden;
+      display: block;
+      padding: 0 16px;
+      width: 100%;
+      border-width: 1px 0px 1px 1px;
+      border-radius: 0;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  input {
+    /* hide any radio button inputs elements (the ugly circles) */
+    position: absolute;
+    left: -9999px;
+
+    &:checked ~ .button {
+      /* style the item content when its checked */
+      background: #ab112f;
+    }
+
+    &:checked ~ .radio-icon {
+      /* show the checkmark icon when its checked */
+      visibility: visible;
+    }
+  }
+}

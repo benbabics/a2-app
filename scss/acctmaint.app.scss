@@ -3,6 +3,7 @@
 @import "includes/flexbox";
 @import "includes/wex-mixins";
 @import "includes/wex-styles";
+@import "widgets/main";
 
 $container-background-color: #f0f0f0;
 
@@ -651,26 +652,37 @@ $user-login-error-message-animation: all linear 0.5s;
     font-weight: normal; }
 
 /** Button-bar **/
-
 .button-bar {
-    //max font size for ngFitText
-    [fittext] {
-        font-size: 14px;
-    }
-    .button:first-child {
-        border-radius : 10px 0px 0px 10px;
-    }
-    .button:last-child {
-        border-radius : 0px 10px 10px 0px;
-    }
-    .button {
-        border: 1px solid #fff;
-    }
-    .bar-positive .button-activated {
-        background-color: #ab112f;
-    }
+  //max font size for ngFitText
+  [fittext] {
+    // insert media-query here
+    font-size: 14px;
 
+    @media (max-width: 320px) {
+      font-size: 10.71px !important;
+    }
+  }
+
+  // theme
+  &.bar-positive {
+    .button {
+      border-color: transparent;
+
+      &:not(:first-of-type) {
+        border-left-color: #ccc;
+      }
+    }
+    .button-activated {
+      background-color: #ab112f;
+
+      &:not(:first-of-type),
+      & + .button {
+        border-left-color: $default-light;
+      }
+    }
+  }
 }
+
 /** Button-bar End**/
 
 .ion-chevron-right {

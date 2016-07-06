@@ -5,7 +5,7 @@
     // jshint maxparams:10
 
     /* @ngInject */
-    function TransactionListController(_, $scope, $stateParams, globals, moment,
+    function TransactionListController(_, $scope, $stateParams, $localStorage, globals, moment,
                                        ElementUtil, LoadingIndicator, Logger, TransactionManager, UserManager) {
 
         var vm = this,
@@ -18,6 +18,10 @@
         vm.loadingComplete = false;
         vm.postedTransactions = [];
         vm.searchOptions = globals.TRANSACTION_LIST.SEARCH_OPTIONS;
+
+        vm.filterViews = $localStorage.$default({
+          transactionsFilterValue: "date"
+        });
 
         vm.loadNextPage = loadNextPage;
         vm.pageLoaded = pageLoaded;

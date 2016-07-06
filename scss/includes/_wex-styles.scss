@@ -135,7 +135,10 @@ $bar-notification-multi-line-height: $bar-height + $bar-title-font-size;
  ----------------------------------------------------------**/
 .button {
 
-  border: none;
+  :not(.button-bar) > & {
+    border: none;
+  }
+
   background-color: $wex-inverted-button-color;
   color: $wex-inverted-button-font-color;
 
