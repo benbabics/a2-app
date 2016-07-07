@@ -12,18 +12,24 @@
     <ion-content class="has-subheader">
 
         <!-- Filter by Date
-        <div class="list">
+        <div class="list filter-list">
             <div class="item item-divider" id="pendingAuth">
                 Pending Authorizations
             </div>
             <div class="item item-divider" id="date">
                Date 05/25/2016
             </div>
-
-            <a class="item" href="#">
-                Card Number<br>Drive Name<br>Asset ID<br>Description
-            <i class="icon ion-chevron-right"></i>
-             </a>
+            <div class="row date-filter-list">
+                <div class="col col-65">
+                    <span class="cardNumber">{{transaction.embossedCardNumber | wexCardNumber}}</span><br>{{transaction.driverLastName}}, {{transaction.driverFirstName}}<br>{{transaction.customVehicleId}}<br>{{transaction.merchantName}} <br>{{transaction.productDescription}}
+                </div>
+                <div class="col col-35">
+                    <div class="chevron">
+                        <span class="currency">{{transaction.netCost | currency}}$90.00</span>
+                        <span class="icon ion-chevron-right"></span>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- Filter by Date END -->
 

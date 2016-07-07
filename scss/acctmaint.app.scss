@@ -643,11 +643,6 @@ $user-login-error-message-animation: all linear 0.5s;
     }
 }
 
-.currency {
-    font-size: 16px;
-    font-weight: bold;
-}
-
 .text-normal {
     font-weight: normal; }
 
@@ -691,24 +686,6 @@ $user-login-error-message-animation: all linear 0.5s;
     font-size:20px;
 }
 
-@media (max-width: 320px) {
-    [fittext] {
-        font-size: 10.71px !important;
-    }
-}
-
-#pendingAuth {
-    font-size: 14px;
-    background: #7f7f7f;
-    color: #fff;
-}
-
-#date {
-    font-size: 14px;
-    background: #e2e3e4;
-    color: #333;
-}
-
 .filter-list {
 
     .item-divider {
@@ -718,5 +695,41 @@ $user-login-error-message-animation: all linear 0.5s;
     .item {
         color: #333;
         border-color: #ccc;
+    }
+
+    #pendingAuth {
+        font-size: 14px;
+        background: #7f7f7f;
+        color: #fff;
+    }
+
+    #date {
+        font-size: 14px;
+        background: #e2e3e4;
+        color: #333;
+    }
+}
+
+.col-65 {
+    max-width: 65%;
+}
+.col-35 {
+    max-width: 35%;
+}
+
+.date-filter-list {
+    .cardNumber {
+        font-size: 16px;
+    }
+    .chevron {
+        float: right;
+
+        .ion-chevron-right {
+            margin-left: 10px;
+        }
+        .currency {
+            font-size: 24px;
+            color: #333;
+        }
     }
 }
