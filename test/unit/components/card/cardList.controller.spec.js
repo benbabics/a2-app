@@ -141,6 +141,8 @@
             describe("when the filter is NOT equal to the active filter", function () {
 
                 beforeEach(function () {
+                    CardManager.fetchCards.and.returnValue($q.resolve());
+
                     ctrl.searchFilter = searchFilter;
 
                     ctrl.applySearchFilter();
@@ -157,14 +159,6 @@
 
                 xit("should set currentPage to 0", function () {
                     //TODO figure out how to test this
-                });
-
-                it("should set cards to an empty array", function () {
-                    expect(ctrl.cards).toEqual([]);
-                });
-
-                it("should call ElementUtil.resetInfiniteList", function () {
-                    expect(ElementUtil.resetInfiniteList).toHaveBeenCalledWith();
                 });
 
                 it("should call AnalyticsUtil.trackEvent", function () {
@@ -190,13 +184,11 @@
             });
 
             beforeEach(function () {
+                spyOn($scope, "$broadcast");
+
                 ctrl.loadNextPage()
                     .then(resolveHandler)
                     .catch(rejectHandler);
-            });
-
-            it("should call LoadingIndicator.begin", function () {
-                expect(LoadingIndicator.begin).toHaveBeenCalledWith();
             });
 
             it("should call CardManager.fetchCards with the expected values", function () {
@@ -316,6 +308,10 @@
                     expect(rejectHandler).not.toHaveBeenCalled();
                 });
 
+                it("should broadcast the 'scroll.refreshComplete' event", function () {
+                    expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
+                });
+
                 it("should call LoadingIndicator.complete", function () {
                     expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
@@ -337,24 +333,20 @@
                     expect(resolveHandler).toHaveBeenCalledWith(true);
                 });
 
+                it("should broadcast the 'scroll.refreshComplete' event", function () {
+                    expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
+                });
+
                 it("should call LoadingIndicator.complete", function () {
                     expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
         });
 
-        describe("has a pageLoaded function that", function () {
-
-            xit("should set firstPageLoaded to truer", function () {
-                //TODO figure out how to test this
-            });
-
-        });
-
         describe("has a resetSearchResults function that", function () {
 
             beforeEach(function () {
-                spyOn($scope, "$broadcast");
+                CardManager.fetchCards.and.returnValue($q.resolve());
 
                 ctrl.resetSearchResults();
             });
@@ -369,14 +361,6 @@
 
             it("should set cards to an empty array", function () {
                 expect(ctrl.cards).toEqual([]);
-            });
-
-            it("should call ElementUtil.resetInfiniteList", function () {
-                expect(ElementUtil.resetInfiniteList).toHaveBeenCalledWith();
-            });
-
-            it("should broadcast the 'scroll.refreshComplete' event", function () {
-                expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
             });
         });
 

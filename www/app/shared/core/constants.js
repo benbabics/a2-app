@@ -224,9 +224,7 @@
      * Pull to refresh Configuration
      */
     sharedGlobals.PULL_TO_REFRESH = {
-        "pullingText": "Pull to refresh",
-        "spinner"    : "none",
-        "showSpinner": false
+        "pullingText": "Pull to refresh"
     };
 
     /**

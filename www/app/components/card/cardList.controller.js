@@ -2,11 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:9
+    // jshint maxparams:8
 
     /* @ngInject */
-    function CardListController(_, $scope, globals,
-                                AnalyticsUtil, CardManager, ElementUtil, LoadingIndicator, Logger, UserManager) {
+    function CardListController(_, $scope, globals, AnalyticsUtil, CardManager, LoadingIndicator, Logger, UserManager) {
 
         var vm = this,
             activeSearchFilter = "",
@@ -14,7 +13,6 @@
 
         vm.config = globals.CARD_LIST.CONFIG;
         vm.cards = [];
-        vm.firstPageLoaded = false;
         vm.loadingComplete = false;
         vm.searchFilter = "";
         vm.searchOptions = globals.CARD_LIST.SEARCH_OPTIONS;
@@ -22,10 +20,16 @@
         vm.applySearchFilter = applySearchFilter;
         vm.getActiveSearchFilter = getActiveSearchFilter;
         vm.loadNextPage = loadNextPage;
-        vm.pageLoaded = pageLoaded;
+        vm.loadNextPageWithOverlay = loadNextPageWithOverlay;
         vm.resetSearchResults = resetSearchResults;
 
+        activate();
+
         //////////////////////
+
+        function activate() {
+            $scope.$on("$ionicView.beforeEnter", beforeEnter);
+        }
 
         function applySearchFilter() {
             if (vm.searchFilter !== activeSearchFilter) {
@@ -35,16 +39,27 @@
 
                 _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events.searchSubmitted);
             }
+
+        }
+
+        function beforeEnter() {
+            //show the fullscreen loading indicator for the first page load
+            LoadingIndicator.begin();
         }
 
         function getActiveSearchFilter() {
             return activeSearchFilter;
         }
 
-        function loadNextPage() {
+        /**
+         * Loads the next page of card data.
+         *
+         * @param {Array} [cardsResult] An optional buffer to add the newly fetched cards to.
+         */
+        function loadNextPage(cardsResult) {
             var billingAccountId = UserManager.getUser().billingCompany.accountId;
 
-            LoadingIndicator.begin();
+            cardsResult = cardsResult || vm.cards;
 
             //fetch the next page of cards
             // Passing in activeSearchFilter 3 times seems strange but the controller wants to apply the same filter to the
@@ -55,7 +70,7 @@
 
                     if (!_.isEmpty(cards)) {
                         //add the fetched cards to the current list
-                        vm.cards = vm.cards.concat(cards);
+                        Array.prototype.push.apply(cardsResult, cards);
 
                         ++currentPage;
                     }
@@ -70,23 +85,30 @@
                     vm.loadingComplete = true;
                     return vm.loadingComplete;
                 })
+                .finally(function () {
+                    $scope.$broadcast("scroll.refreshComplete");
+                    LoadingIndicator.complete();
+                });
+        }
+
+        //TODO - Remove this when greeking/alternative infinite list loading indicator is implemented
+        function loadNextPageWithOverlay(cardsResult) {
+            LoadingIndicator.begin();
+
+            return loadNextPage(cardsResult)
                 .finally(LoadingIndicator.complete);
         }
 
-        function pageLoaded() {
-            vm.firstPageLoaded = true;
-        }
-
         function resetSearchResults() {
-            vm.firstPageLoaded = false;
             vm.loadingComplete = false;
             currentPage = 0;
-            vm.cards = [];
 
-            //note: we need to hide the refresher before resetting the infinite list or else it won't refetch the results
-            $scope.$broadcast("scroll.refreshComplete");
-
-            ElementUtil.resetInfiniteList();
+            //use double buffering so that the previous results don't disappear as the list is being refreshed
+            var cardsBuffer = [];
+            loadNextPage(cardsBuffer)
+                .finally(function () {
+                    vm.cards = cardsBuffer;
+                });
         }
     }
 

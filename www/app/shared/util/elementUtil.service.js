@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function ElementUtil(_, Logger) {
+    function ElementUtil(_) {
         // Private members
         var focusedStateOrder = ["stage", "entering", "active"],
             unfocusedStateOrder = ["cached", "leaving", "active"];
@@ -28,8 +28,7 @@
             "getUnfocusedNavBar"       : getUnfocusedNavBar,
             "getUnfocusedView"         : getUnfocusedView,
             "getViewContent"           : getViewContent,
-            "pageHasNavBar"            : pageHasNavBar,
-            "resetInfiniteList"        : resetInfiniteList
+            "pageHasNavBar"            : pageHasNavBar
         };
 
         return service;
@@ -316,45 +315,6 @@
                 return !angular.element(navBar).hasClass("hide");
             }
             return false;
-        }
-
-        /**
-         * Resets an infinite list so that it is reloaded.
-         *
-         * @param {jqLite} [infiniteList] The infinite list to reset (if not given, resets the first infinite list in the active view)
-         * @throws Will throw an error if no infinite list is given and one cannot be found in the active view
-         */
-        function resetInfiniteList(infiniteList) {
-            var error;
-
-            if (!infiniteList) {
-                var view = getFocusedView();
-
-                if (!view) {
-                    error = "Failed to reset infinite list: Couldn't find the active view";
-                    Logger.error(error);
-                    throw new Error(error);
-                }
-
-                infiniteList = angular.element(view[0].querySelector("wex-infinite-list"));
-            }
-
-            if (infiniteList.length === 0) {
-                error = "Failed to reset infinite list: No infinite scroll found";
-                Logger.error(error);
-                throw new Error(error);
-            }
-
-            //TODO: Remove this kludge when Ionic's collection-repeat is fixed to remove previous items from the list
-            angular.element(infiniteList[0].querySelector(".collection-repeat-container")).children().remove();
-
-            //TODO: Remove this kludge when Ionic's ion-infinite-scroll is fixed to call onInfinite() when a collection is reset
-            infiniteList.scope().$$postDigest(function () {
-                //force the infinite scroll to re-evaluate the bounds so that an onInfinite update occurs
-                var infiniteScroll = angular.element(infiniteList[0].querySelector("ion-infinite-scroll"));
-
-                infiniteScroll.controller("ionInfiniteScroll").checkBounds();
-            });
         }
     }
 

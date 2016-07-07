@@ -24,7 +24,7 @@
             templateUrl: "app/shared/widgets/templates/infiniteList.html",
             scope      : {
                 onReload       : "=",
-                onPageLoaded   : "=",
+                onPageLoaded   : "=?",
                 reloadDistance : "=?",
                 loadingComplete: "&?"
             }
@@ -41,7 +41,10 @@
                     self.allDataLoaded = allDataLoaded;
                 })
                 .finally(function () {
-                    self.onPageLoaded();
+                    if (self.onPageLoaded) {
+                        self.onPageLoaded();
+                    }
+
                     self.$broadcast("scroll.infiniteScrollComplete");
                 });
         }

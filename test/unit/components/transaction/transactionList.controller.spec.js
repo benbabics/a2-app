@@ -124,10 +124,6 @@
                     .catch(rejectHandler);
             });
 
-            it("should call LoadingIndicator.begin", function () {
-                expect(LoadingIndicator.begin).toHaveBeenCalledWith();
-            });
-
             it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
                 expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
                     mockUser.billingCompany.accountId,
@@ -210,6 +206,8 @@
                 var mockTransactions;
 
                 beforeEach(function () {
+                    spyOn($scope, "$broadcast");
+
                     var numTransactions = mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE;
                     mockTransactions = [];
                     for (var i = 0; i < numTransactions; ++i) {
@@ -243,6 +241,10 @@
                     expect(rejectHandler).not.toHaveBeenCalled();
                 });
 
+                it("should broadcast the 'scroll.refreshComplete' event", function () {
+                    expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
+                });
+
                 it("should call LoadingIndicator.complete", function () {
                     expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
@@ -251,6 +253,8 @@
             describe("when fetchPostedTransactions rejects", function () {
 
                 beforeEach(function () {
+                    spyOn($scope, "$broadcast");
+
                     fetchPostedTransactionsDeferred.reject();
 
                     $rootScope.$digest();
@@ -268,30 +272,22 @@
                     expect(resolveHandler).toHaveBeenCalledWith(true);
                 });
 
+                it("should broadcast the 'scroll.refreshComplete' event", function () {
+                    expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
+                });
+
                 it("should call LoadingIndicator.complete", function () {
                     expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
         });
 
-        describe("has a pageLoaded function that", function () {
-
-            xit("should set firstPageLoaded to truer", function () {
-                //TODO figure out how to test this
-            });
-
-        });
-
         describe("has a resetSearchResults function that", function () {
 
             beforeEach(function () {
-                spyOn($scope, "$broadcast");
+                TransactionManager.fetchPostedTransactions.and.returnValue($q.resolve());
 
                 ctrl.resetSearchResults();
-            });
-
-            it("should set firstPageLoaded to false", function () {
-                expect(ctrl.firstPageLoaded).toBeFalsy();
             });
 
             it("should set loadingComplete to false", function () {
@@ -304,14 +300,6 @@
 
             it("should set postedTransactions to an empty array", function () {
                 expect(ctrl.postedTransactions).toEqual([]);
-            });
-
-            it("should broadcast the 'scroll.refreshComplete' event", function () {
-                expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
-            });
-
-            it("should call ElementUtil.resetInfiniteList", function () {
-                expect(ElementUtil.resetInfiniteList).toHaveBeenCalledWith();
             });
         });
 

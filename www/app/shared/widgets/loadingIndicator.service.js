@@ -44,7 +44,9 @@
         }
 
         function complete() {
-            loadingIndicatorCount--;
+            if (loadingIndicatorCount > 0) {
+                loadingIndicatorCount--;
+            }
 
             if (loadingIndicatorCount === 0) {
                 $rootScope.$emit("app:loadingComplete");
