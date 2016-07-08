@@ -12,7 +12,7 @@
             "am_api": "http://127.0.0.1:20080",
             "auth_api": "http://127.0.0.1:26080",
             "configuration_api": "http://127.0.0.1:29080",
-            "online_enrollment_api": ""
+            "online_enrollment_api": "http://dit-wex.wexinc.com:12080/enrollment/"
         },
         "auth": {
             "client_id": "mobileAccountManagement",
@@ -31,7 +31,7 @@
             "am_api": "http://pwm-wex-178.wrightexpress.com:20080",
             "auth_api": "http://pwm-wex-178.wrightexpress.com:26080",
             "configuration_api": "http://pwm-wex-178.wrightexpress.com:29080",
-            "online_enrollment_api": "http://dit-wex.wexinc.com:12080/enrollment"
+            "online_enrollment_api": "http://dit-wex.wexinc.com:12080/enrollment/"
         },
         "auth": {
             "client_id": "mobileAccountManagement",
@@ -50,14 +50,14 @@
             "am_api": "https://uat.account.wexmobile.com/maintenance",
             "auth_api": "https://uat.account.wexmobile.com/authAPI",
             "configuration_api": "https://uat.account.wexmobile.com/configurationAPI",
-            "online_enrollment_api": ""
+            "online_enrollment_api": "https://uat-wex.wexinc.com/enrollment/"
         },
         "auth": {
             "client_id": "mobileAccountManagement",
             "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
         },
-        "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://uat.account.wexmobile.com https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: filesystem: cdvfile:;",
-        "whitelist_domains": ["uat.account.wexmobile.com", "www.google.com"],
+        "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://uat.account.wexmobile.com https://uat-wex.wexinc.com:* https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: filesystem: cdvfile:;",
+        "whitelist_domains": ["uat-wex.wexmobile.com", "uat.account.wexmobile.com", "www.google.com"],
         "google_analytics_tracking_ids": {
             "generic": "UA-71223382-10",
             "wex": "UA-71223382-1"
@@ -69,14 +69,14 @@
             "am_api": "https://account.wexmobile.com/maintenance",
             "auth_api": "https://account.wexmobile.com/authAPI",
             "configuration_api": "https://account.wexmobile.com/configurationAPI",
-            "online_enrollment_api": ""
+            "online_enrollment_api": "https://www.myfleetcardlogin.com/enrollment/"
         },
         "auth": {
             "client_id": "mobileAccountManagement",
             "client_secret": "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
         },
-        "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://account.wexmobile.com https://www.google.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: filesystem: cdvfile:;",
-        "whitelist_domains": ["account.wexmobile.com", "www.google.com"],
+        "content_security_policy": "default-src 'self' data: gap: https://ssl.gstatic.com https://account.wexmobile.com https://www.google.com https://www.myfleetcardlogin.com:* 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: filesystem: cdvfile:;",
+        "whitelist_domains": ["www.myfleetcardlogin.com", "account.wexmobile.com", "www.google.com"],
         "google_analytics_tracking_ids": {
             "generic": "UA-4082503-35",
             "wex": "UA-4082503-34"

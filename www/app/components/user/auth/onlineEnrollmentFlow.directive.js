@@ -7,7 +7,7 @@
     function onlineEnrollmentFlow($rootScope, $http, $cordovaInAppBrowser, LoadingIndicator, Popup, AnalyticsUtil, globals) {
 
       var GLOBALS = globals.ONLINE_ENROLLMENT.CONFIG,
-          ENROLLMENT_URL      = globals.ONLINE_ENROLLMENT_API.BASE_URL + "/",
+          ENROLLMENT_URL      = globals.ONLINE_ENROLLMENT_API.BASE_URL,
           ENROLLMENT_PING_URL = ENROLLMENT_URL + "ping";
 
       return {

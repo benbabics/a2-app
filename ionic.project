@@ -6,6 +6,7 @@
     "index",
     "watch"
   ],
+  "defaultBrowser": "chrome",
   "documentRoot": "platforms/browser/www",
   "watchPatterns": [
     "www/**/*",

@@ -51,6 +51,9 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-ios-no-export-compliance": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
     "dependent_plugins": {}
