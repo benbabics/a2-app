@@ -61,14 +61,14 @@
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleVersion</key>
-    <string>33</string>
+    <string>34</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
     <dict>
       <key>NSExceptionDomains</key>
       <dict>
-        <key>uat-wex.wexmobile.com</key>
+        <key>uat-wex.wexinc.com</key>
         <dict>
           <key>NSIncludesSubdomains</key>
           <true/>
