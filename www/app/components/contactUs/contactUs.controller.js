@@ -4,10 +4,16 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function ContactUsController(globals) {
+    function ContactUsController(globals, $ionicPlatform, $cordovaAppVersion) {
 
         var vm = this;
         vm.config = globals.CONTACT_US.CONFIG;
+
+        $ionicPlatform.ready(function () {
+            $cordovaAppVersion.getVersionNumber().then(function (version) {
+                vm.config.sendEmailLink = vm.config.sendEmailLink + version;
+            });
+        });
 
         //////////////////////
 
