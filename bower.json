@@ -19,7 +19,8 @@
     "angular-promise-extras": "~0.1.5",
     "ng-idle": "^1.2.0",
     "ionic-datepicker": "^1.1.0",
-    "angular-mocks": "^1.5.7"
+    "angular-mocks": "^1.5.7",
+    "ion-sticky": "^1.0.6"
   },
   "resolutions": {
     "angular": ">=1.4.6",

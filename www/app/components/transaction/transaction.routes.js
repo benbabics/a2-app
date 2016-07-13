@@ -29,11 +29,15 @@
         });
 
         $stateProvider.state("transaction.filterBy", {
-            url:   "/filter/:filterId",
+            url:   "/filter/:filterBy/:filterValue",
             cache: false,
+            params: {
+                transaction: null
+            },
             views: {
               "view": {
-                templateUrl: "app/components/transaction/templates/transactionFilterBy.html"
+                templateUrl: "app/components/transaction/templates/transactionFilterBy.html",
+                controller:  "TransactionFilterByController as vm"
               }
             },
         });

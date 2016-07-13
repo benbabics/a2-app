@@ -519,9 +519,10 @@ $user-login-error-message-animation: all linear 0.5s;
     text-align: center;
     display: block;
 }
- .transaction-row {
-     background-color: #f0f0f0;
- }
+.item.transaction-row,
+.transaction-row .item {
+    background-color: #f0f0f0;
+}
 
 /**------ Chevron Alignment -------**/
 
@@ -678,6 +679,10 @@ $user-login-error-message-animation: all linear 0.5s;
   }
 }
 
+.text-block {
+    display: block;
+}
+
 /** Button-bar End**/
 
 .ion-chevron-right {
@@ -687,7 +692,6 @@ $user-login-error-message-animation: all linear 0.5s;
 }
 
 .filter-list {
-
     .item-divider {
         padding-top: 4px;
         padding-bottom: 4px;
@@ -695,18 +699,6 @@ $user-login-error-message-animation: all linear 0.5s;
     .item {
         color: #333;
         border-color: #ccc;
-    }
-
-    #pendingAuth {
-        font-size: 14px;
-        background: #7f7f7f;
-        color: #fff;
-    }
-
-    #date {
-        font-size: 14px;
-        background: #e2e3e4;
-        color: #333;
     }
 }
 

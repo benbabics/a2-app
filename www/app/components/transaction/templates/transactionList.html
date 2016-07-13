@@ -1,7 +1,7 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="{{vm.backStateOverride}}">
     <div class="bar bar-subheader">
       <div class="bar bar-header">
-        <div class="button-bar bar-positive">
+        <div class="button-bar bar-positive" ng-click="vm.handleFilterSelection()">
           <wex-bar-button ng-value="'date'"   ng-model="vm.filterViews.transactionsFilterValue">{{::vm.config.buttonLabels.date}}</wex-bar-button>
           <wex-bar-button ng-value="'driver'" ng-model="vm.filterViews.transactionsFilterValue">{{::vm.config.buttonLabels.driver}}</wex-bar-button>
           <wex-bar-button ng-value="'card'"   ng-model="vm.filterViews.transactionsFilterValue">{{::vm.config.buttonLabels.card}}</wex-bar-button>
@@ -9,60 +9,21 @@
       </div>
     </div>
 
-    <ion-content class="has-subheader">
+    <ion-content class="has-subheader" ion-sticky>
 
-        <!-- Filter by Date
-        <div class="list filter-list">
-            <div class="item item-divider" id="pendingAuth">
-                Pending Authorizations
+        <div ng-switch="vm.filterViews.transactionsFilterValue">
+            <div ng-switch-when="date">
+                <filter-date-transaction-list cardId="vm.cardIdFilter"></filter-date-transaction-list>
             </div>
-            <div class="item item-divider" id="date">
-               Date 05/25/2016
+
+            <div ng-switch-when="driver">
+                <filter-driver-transaction-list cardId="vm.cardIdFilter"></filter-driver-transaction-list>
             </div>
-            <div class="row date-filter-list">
-                <div class="col col-65">
-                    <span class="cardNumber">{{transaction.embossedCardNumber | wexCardNumber}}</span><br>{{transaction.driverLastName}}, {{transaction.driverFirstName}}<br>{{transaction.customVehicleId}}<br>{{transaction.merchantName}} <br>{{transaction.productDescription}}
-                </div>
-                <div class="col col-35">
-                    <div class="chevron">
-                        <span class="currency">{{transaction.netCost | currency}}$90.00</span>
-                        <span class="icon ion-chevron-right"></span>
-                    </div>
-                </div>
+
+            <div ng-switch-when="card">
+                <filter-card-transaction-list cardId="vm.cardIdFilter"></filter-card-transaction-list>
             </div>
         </div>
-        <!-- Filter by Date END -->
 
-        <!-- Driver Name template
-        <ion-list class="filter-list">
-             <ion-item>
-                 <a class="item-content" ng-href="">{{transaction.driverLastName}}, {{transaction.driverFirstName}}Adams,John <i class="icon ion-chevron-right"></i></a>
-             </ion-item>
-        </ion-list>
-        <!-- Drive Name template END -->
-
-        <!-- Card Number template
-        <ion-list class="filter-list">
-            <ion-item>
-                <a class="item-content" ng-href="">{{transaction.embossedCardNumber | wexCardNumber}}12345  <i class="icon ion-chevron-right"></i></a>
-            </ion-item>
-        </ion-list>
-        <!-- Card Number template END -->
-
-        <ion-refresher class="wex-refresher" on-refresh="vm.resetSearchResults()"></ion-refresher>
-
-        <wex-infinite-list on-reload="vm.loadNextPage"
-                           reload-distance="::vm.config.reloadDistance"
-                           loading-complete="vm.loadingComplete">
-            <div class="row"
-                 collection-repeat="transaction in vm.postedTransactions"
-                 ng-class="$index%2 !=0 ? 'transaction-row' :''"
-                 ui-sref="transaction.postedDetail({transactionId: transaction.transactionId})">
-
-                <div class="col col-74 ellipsis">{{transaction.embossedCardNumber | wexCardNumber}}<br><span class="body-text">{{transaction.driverLastName}}, {{transaction.driverFirstName}}<br>{{transaction.customVehicleId}}</span><br><span class="active-link">{{transaction.merchantName}}<br>{{transaction.productDescription}}</span></div>
-                <div class="col col-26 right-align"><span class="currency">{{transaction.netCost | currency}}</span><br><span class="body-text">{{transaction.transactionDate | wexDefaultDateFormat}}</span></div>
-            </div>
-        </wex-infinite-list>
-        <div ng-show="vm.loadingComplete && vm.postedTransactions.length <= 0" class="no-transactions">{{::vm.config.emptyList}}</div>
     </ion-content>
 </ion-view>

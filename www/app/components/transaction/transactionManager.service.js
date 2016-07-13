@@ -46,13 +46,18 @@
         }
 
         // jshint maxparams:6
-        function fetchPostedTransactions(accountId, fromDate, toDate, pageNumber, pageSize, cardId) {
+        function fetchPostedTransactions(accountId, fromDate, toDate, pageNumber, pageSize, filterBy, filterValue, cardId) {
             var params = {
                 fromDate  : fromDate,
                 toDate    : toDate,
                 pageNumber: pageNumber,
                 pageSize  : pageSize
             };
+
+            if ( !_.isUndefined(filterBy) && !_.isUndefined(filterValue) ) {
+              params.filterBy    = filterBy;
+              params.filterValue = filterValue;
+            }
 
             if (!_.isUndefined(cardId)) {
                 params.cardId = cardId;
@@ -91,16 +96,21 @@
                 });
         }
 
-        // jshint maxparams:3
-        function fetchPendingTransactions(accountId, cardId, filterValue) {
-            var params = {};
+        function fetchPendingTransactions(accountId, fromDate, toDate, pageNumber, pageSize, filterBy, filterValue, cardId) {
+            var params = {
+                fromDate:   fromDate,
+                toDate:     toDate,
+                pageSize:   pageSize,
+                pageNumber: pageNumber
+            };
+
+            if ( !_.isUndefined(filterBy) && !_.isUndefined(filterValue) ) {
+              params.filterBy    = filterBy;
+              params.filterValue = filterValue;
+            }
 
             if (!_.isUndefined(cardId)) {
                 params.cardId = cardId;
-            }
-
-            if (!_.isUndefined(filterValue)) {
-                params.filterValue = filterValue;
             }
 
             return TransactionsResource.getPendingTransactions(accountId, params)
@@ -133,6 +143,10 @@
 
         function getPostedTransactions() {
             return postedTransactions;
+        }
+
+        function getPendingTransactions() {
+            return pendingTransactions;
         }
 
         // Caution against using this as it replaces the object versus setting properties on it or extending it

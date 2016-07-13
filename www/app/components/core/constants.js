@@ -203,7 +203,8 @@
         },
         "SEARCH_OPTIONS": {
             "PAGE_SIZE": 25,
-            "STATUSES" : "active,suspended,terminated"
+            "STATUSES" : "active,suspended,terminated",
+            "STATUS_ACTIVE": "active"
         }
     };
 
@@ -311,6 +312,15 @@
             "sendEmailLink"  : "mailto:MobileApplications@wexinc.com?subject=Fleet SmartHub version "
         }
     };
+
+    appGlobals.DRIVER_LIST = {
+        "SEARCH_OPTIONS": {
+            "PAGE_SIZE": 25,
+            "STATUSES" : "active,suspended,terminated",
+            "STATUS_ACTIVE": "active"
+        }
+    };
+
     appGlobals.PAYMENT_MAINTENANCE = {
         STATES: {
             "ADD"   : "ADD",
