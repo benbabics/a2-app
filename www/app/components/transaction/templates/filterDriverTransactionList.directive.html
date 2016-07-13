@@ -1,0 +1,23 @@
+<div class="widget-filter-driver-transaction-list">
+
+    <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
+
+    <wex-infinite-list on-reload="loadNextPage"
+                       reload-distance="::config.reloadDistance"
+                       loading-complete="infiniteScrollService.isLoadingComplete">
+
+        <div class="item item-icon-right"
+             collection-repeat="transaction in transactions"
+             ui-sref="transaction.filterBy({ filterBy: 'driver', filterValue: transaction.driverId, transaction: transaction })">
+
+                <a class="item-content">
+                    {{ transaction.lastName }}, {{ transaction.firstName }}
+                    <i class="icon ion-chevron-right"></i>
+                </a>
+
+        </div>
+    </wex-infinite-list>
+
+    <div ng-show="infiniteScrollService.isLoadingComplete && infiniteScrollService.model.collection.length <= 0" class="no-transactions">{{::config.emptyList}}</div>
+
+</div>

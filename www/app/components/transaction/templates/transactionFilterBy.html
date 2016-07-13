@@ -1,0 +1,26 @@
+<ion-view view-title="{{ ::vm.config.title }}" wex-back-state="{{ vm.backStateOverride }}">
+    <div class="bar bar-subheader bar-positive" ng-switch="vm.params.filterBy">
+        <h2 ng-switch-when="card"   class="title">***{{ ::vm.params.transaction.embossedCardNumber }}</h2>
+        <h2 ng-switch-when="driver" class="title">{{ ::vm.params.transaction.firstName }} {{ ::vm.params.transaction.lastName }}</h2>
+    </div>
+
+    <ion-content class="has-subheader" ion-sticky>
+
+        <div ng-switch="vm.params.filterBy">
+            <div ng-switch-when="card">
+                <filter-date-transaction-list cache="false"
+                                              filterBy="vm.params.filterBy"
+                                              filterValue="vm.params.filterValue">
+                </filter-date-transaction-list>
+            </div>
+
+            <div ng-switch-when="driver">
+                <filter-date-transaction-list cache="false"
+                                              filterBy="vm.params.filterBy"
+                                              filterValue="vm.params.filterValue">
+                </filter-date-transaction-list>
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>

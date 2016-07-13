@@ -1,0 +1,25 @@
+<div class="widget-filter-date-transaction-list">
+
+    <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
+
+    <wex-infinite-list on-reload="loadNextPage"
+                       reload-distance="::config.reloadDistance"
+                       loading-complete="infiniteScrollService.isLoadingComplete">
+
+        <ion-item class="item-divider">Pending Transactions</ion-item>
+        <div ng-repeat="transaction in transactions.pendingCollection"
+             ui-sref="transaction.postedDetail({transactionId: transaction.transactionId})">
+                 <transaction-result-as-date />
+        </div>
+
+        <ion-item class="item-divider">Posted Transactions</ion-item>
+        <div collection-repeat="transaction in transactions.collection | groupTransactionsByDate"
+             ui-sref="transaction.postedDetail({transactionId: transaction.transactionId})"
+             item-height="transaction.renderHeight">
+                 <transaction-result-as-date />
+        </div>
+    </wex-infinite-list>
+
+    <div ng-show="infiniteScrollService.isLoadingComplete && transaction.collection.length <= 0" class="no-transactions">{{ ::config.emptyList }}</div>
+
+</div>
