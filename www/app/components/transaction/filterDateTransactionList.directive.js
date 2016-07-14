@@ -33,10 +33,11 @@
 
             controller.assignServiceDelegate({
                 makeRequest:  handleMakeRequestPostedTransactions,
-                onResetItems: handleResetItems,
+                onResetItems: handleOnResetItems,
                 onError:      handleOnError
             });
 
+            // if we don't yet have pending transactions, fetch them
             if ( !scope.transactions.pendingCollection ) {
                 makeRequestPendingTransactions();
             }
@@ -51,7 +52,7 @@
                 .then( sortTransactionsByDate );
             }
 
-            function handleResetItems() {
+            function handleOnResetItems() {
               makeRequestPendingTransactions();
             }
 
@@ -61,7 +62,7 @@
             }
 
             /**
-             * Methods
+             * Private Methods
             **/
             function sortTransactionsByDate(transacstions) {
                 return _.sortBy( transacstions, function(obj) {
