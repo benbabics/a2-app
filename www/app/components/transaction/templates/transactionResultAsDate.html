@@ -7,8 +7,8 @@
         <a class="item-content">
             <div class="row date-filter-list">
                 <div class="col col-65">
-                    <span class="text-block" ng-show="isDriver">{{ transaction.embossedCardNumber | wexCardNumber }} &nbsp;</span>
-                    <span class="text-block" ng-hide="isDriver">{{ transaction.driverLastName }}, {{ transaction.driverFirstName }} &nbsp;</span>
+                    <span class="text-block text-strong" ng-hide="isCard">{{ transaction.embossedCardNumber | wexCardNumber }} &nbsp;</span>
+                    <span class="text-block text-strong" ng-show="isCard">{{ transaction.driverLastName }}, {{ transaction.driverFirstName }} &nbsp;</span>
                     <span class="text-block">{{ transaction.customVehicleId }} &nbsp;</span>
                     <span class="text-block">{{ transaction.merchantName }} &nbsp;</span>
                     <span class="text-block">{{ transaction.productDescription }} &nbsp;</span>

@@ -645,7 +645,11 @@ $user-login-error-message-animation: all linear 0.5s;
 }
 
 .text-normal {
-    font-weight: normal; }
+    font-weight: normal;
+}
+.text-strong {
+    font-weight: 500;
+}
 
 /** Button-bar **/
 .button-bar {
