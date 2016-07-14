@@ -8,8 +8,14 @@
         return {
             restrict:    "E",
             replace:     true,
-            templateUrl: "app/components/transaction/templates/transactionResultAsDate.html"
+            templateUrl: "app/components/transaction/templates/transactionResultAsDate.html",
+            controller:  controller
         };
+
+        function controller($scope) {
+          $scope.isCard   = $scope.filterBy === "card";
+          $scope.isDriver = $scope.filterBy === "driver";
+        }
     }
 
     angular.module("app.components.transaction")

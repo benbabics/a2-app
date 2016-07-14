@@ -1,14 +1,14 @@
 <div>
     <ion-item class="item-alt-divider" ng-if="transaction.hasDivider">
-      {{ transaction.postDate | wexDefaultDateTimeFormat }}
+      {{ transaction.postDate | wexDefaultDateFormat }}
     </ion-item>
 
     <ion-item class="item item-icon-right widget-transaction-result-as-date">
         <a class="item-content">
             <div class="row date-filter-list">
                 <div class="col col-65">
-                    <span class="cardNumber">{{ transaction.embossedCardNumber | wexCardNumber }} &nbsp;</span>
-                    <span class="text-block">{{ transaction.driverLastName }}, {{ transaction.driverFirstName }} &nbsp;</span>
+                    <span class="text-block" ng-show="isDriver">{{ transaction.embossedCardNumber | wexCardNumber }} &nbsp;</span>
+                    <span class="text-block" ng-hide="isDriver">{{ transaction.driverLastName }}, {{ transaction.driverFirstName }} &nbsp;</span>
                     <span class="text-block">{{ transaction.customVehicleId }} &nbsp;</span>
                     <span class="text-block">{{ transaction.merchantName }} &nbsp;</span>
                     <span class="text-block">{{ transaction.productDescription }} &nbsp;</span>

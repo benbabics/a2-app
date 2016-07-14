@@ -11,7 +11,7 @@
             restrict:    "E",
             templateUrl: "app/components/transaction/templates/filterDriverTransactionList.directive.html",
             scope: {
-              cardId: '='
+                cardId: '='
             },
             controller: controller
         };

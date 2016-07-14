@@ -8,7 +8,7 @@
 
         <div class="item item-icon-right"
              collection-repeat="transaction in transactions"
-             ui-sref="transaction.filterBy({ filterBy: 'driver', filterValue: transaction.driverId, transaction: transaction })">
+             ui-sref="transaction.filterBy({ filterBy: 'driver', filterValue: transaction.promptId, transaction: transaction })">
 
                 <a class="item-content">
                     {{ transaction.lastName }}, {{ transaction.firstName }}

@@ -5,22 +5,11 @@
     </div>
 
     <ion-content class="has-subheader" ion-sticky>
-
-        <div ng-switch="vm.params.filterBy">
-            <div ng-switch-when="card">
-                <filter-date-transaction-list cache="false"
-                                              filterBy="vm.params.filterBy"
-                                              filterValue="vm.params.filterValue">
-                </filter-date-transaction-list>
-            </div>
-
-            <div ng-switch-when="driver">
-                <filter-date-transaction-list cache="false"
-                                              filterBy="vm.params.filterBy"
-                                              filterValue="vm.params.filterValue">
-                </filter-date-transaction-list>
-            </div>
-        </div>
+      
+        <filter-date-transaction-list cache="false"
+                                      filter-by="vm.params.filterBy"
+                                      filter-value="vm.params.filterValue">
+        </filter-date-transaction-list>
 
     </ion-content>
 </ion-view>
