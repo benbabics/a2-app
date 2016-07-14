@@ -16,10 +16,10 @@
 
           if ( !previousDate || previousDate.format() != currentDate.format() ) {
             item.hasDivider   = true;
-            item.renderHeight = 171;
+            item.renderHeight = 151;
           }
           else {
-            item.renderHeight = 134;
+            item.renderHeight = 114;
           }
 
           previousDate = currentDate;
