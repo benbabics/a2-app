@@ -14,14 +14,13 @@
                 cardId:      '=',
                 filterBy:    '=',
                 filterValue: '=',
-                cache:       '='
+                cacheKey:    '@'
             },
             controller: controller
         };
 
         function controller($scope, globals, _, moment, Logger, TransactionManager, UserManager, wexInfiniteListService) {
-            var shouldCache = true,
-                serviceDelegate = {
+            var serviceDelegate = {
                     makeRequest: makeRequestPostedTransactions
                 },
                 requestParams = {
@@ -30,10 +29,6 @@
                     // fromDate:         moment().subtract(vm.searchOptions.MAX_DAYS, "days").toDate(),
                     toDate:           moment().toDate()
                 };
-
-            if ( $scope.cache === false || $scope.cache === 'false' ) {
-                shouldCache = false;
-            }
 
             function loadNextPage() {
                 return $scope.infiniteScrollService.loadNextPage()
@@ -66,13 +61,13 @@
 
             function makeRequestPendingTransactions() {
                 var fauxDate = moment( '04/16/2015' );
-                var requestConfig = _.extend({}, infiniteScrollService.settings, {
+                var requestConfig = _.extend({}, $scope.infiniteScrollService.settings, {
                     fromDate: moment( fauxDate ).toDate(),
                     toDate  : moment( fauxDate ).add(13, 'days').toDate()
                 });
 
                 if ( $scope.transactions ) {
-                    infiniteScrollService.model.pendingCollection = [];
+                    $scope.infiniteScrollService.model.pendingCollection = [];
                 }
 
                 TransactionManager.fetchPendingTransactions(
@@ -80,7 +75,7 @@
                 )
                     .then(function(transactionsCollection) {
                         transactionsCollection = sortTransactionsByDate( transactionsCollection );
-                        infiniteScrollService.model.pendingCollection = transactionsCollection;
+                        $scope.infiniteScrollService.model.pendingCollection = transactionsCollection;
                     })
                     .catch(function() {
                         console.log('fetchPendingTransactions failure', arguments);
@@ -90,18 +85,17 @@
                     });
             }
 
-            if ( !shouldCache || !infiniteScrollService ) {
-                infiniteScrollService = new wexInfiniteListService( serviceDelegate );
-                makeRequestPendingTransactions();
-            }
-
             $scope.config                = globals.TRANSACTION_LIST.CONFIG;
             $scope.searchOptions         = globals.TRANSACTION_LIST.SEARCH_OPTIONS;
-            $scope.infiniteScrollService = infiniteScrollService;
+            $scope.infiniteScrollService = new wexInfiniteListService( serviceDelegate, _.pick($scope, 'cacheKey') );
             $scope.transactions          = $scope.infiniteScrollService.model;
 
             $scope.loadNextPage       = loadNextPage;
             $scope.resetSearchResults = resetSearchResults;
+
+            if ( !$scope.transactions.pendingCollection ) {
+                makeRequestPendingTransactions();
+            }
         }
     }
 

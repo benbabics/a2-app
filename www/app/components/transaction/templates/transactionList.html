@@ -13,15 +13,21 @@
 
         <div ng-switch="vm.filterViews.transactionsFilterValue">
             <div ng-switch-when="date">
-                <filter-date-transaction-list cardId="vm.cardIdFilter"></filter-date-transaction-list>
+                <filter-date-transaction-list card-id="vm.cardIdFilter"
+                                              cache-key="activities-date">
+                </filter-date-transaction-list>
             </div>
 
             <div ng-switch-when="driver">
-                <filter-driver-transaction-list cardId="vm.cardIdFilter"></filter-driver-transaction-list>
+                <filter-driver-transaction-list card-id="vm.cardIdFilter"
+                                              cache-key="activities-driver">
+                </filter-driver-transaction-list>
             </div>
 
             <div ng-switch-when="card">
-                <filter-card-transaction-list cardId="vm.cardIdFilter"></filter-card-transaction-list>
+                <filter-card-transaction-list card-id="vm.cardIdFilter"
+                                              cache-key="activities-card">
+                </filter-card-transaction-list>
             </div>
         </div>
 

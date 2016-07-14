@@ -1,13 +1,15 @@
 (function () {
     "use strict";
 
+    var __store = {};
+
     /**
     * Constructor
     **/
     var WexInfiniteListService = function(delegate, options) {
-      this.model = {
-        collection: []
-      };
+      options = options || {};
+      this.model = getCachedModel( options.cacheKey );
+      delete options.cacheKey;
 
       this.settings = angular.extend({
         pageSize:    25,
@@ -57,6 +59,14 @@
     /**
      * Private Methods
     **/
+    function getCachedModel(key) {
+      var emptyModel = { collection: [] };
+      if ( !!key && !__store[ key ] ) {
+        __store[ key ] = emptyModel;
+      }
+      return __store[ key ] || emptyModel;
+    }
+
     function registerDelegate(delegate) {
       // ensure delegate has expected method(s)
       if ( delegateHasMethods(delegate) ) {

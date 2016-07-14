@@ -5,13 +5,12 @@
 
     /* @ngInject */
     function filterDriverTransactionList() {
-        var infiniteScrollService;
-
         return {
             restrict:    "E",
             templateUrl: "app/components/transaction/templates/filterDriverTransactionList.directive.html",
             scope: {
-                cardId: '='
+                cardId:   '=',
+                cacheKey: '@'
             },
             controller: controller
         };
@@ -47,13 +46,9 @@
                 });
             }
 
-            if ( !infiniteScrollService ) {
-                infiniteScrollService = new wexInfiniteListService( serviceDelegate );
-            }
-
             $scope.config                = globals.TRANSACTION_LIST.CONFIG;
             $scope.searchOptions         = globals.TRANSACTION_LIST.SEARCH_OPTIONS;
-            $scope.infiniteScrollService = infiniteScrollService;
+            $scope.infiniteScrollService = new wexInfiniteListService( serviceDelegate, _.pick($scope, 'cacheKey') );;
             $scope.transactions          = $scope.infiniteScrollService.model.collection;
 
             $scope.loadNextPage       = loadNextPage;
