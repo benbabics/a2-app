@@ -7,6 +7,8 @@
     * Constructor
     **/
     var WexInfiniteListService = function(delegate, options) {
+      var collectionSize;
+
       options = options || {};
       this.model = getCachedModel( options.cacheKey );
       delete options.cacheKey;
@@ -15,6 +17,11 @@
         pageSize:    25,
         currentPage: 0
       }, options || {});
+
+      collectionSize = _.size( this.model.collection );
+      if ( collectionSize ) {
+        checkIfIsLoadingComplete.call( this, collectionSize );
+      }
 
       registerDelegate.call( this, delegate );
     };
@@ -31,14 +38,15 @@
 
       return requestPromise
         .then(function(items) {
-          var hasItems = !_.isEmpty( items );
+          var collectionSize, hasItems = !_.isEmpty( items );
           if ( hasItems ) {
             //add the fetched items to the collection
             Array.prototype.push.apply( collection, items );
             ++self.settings.currentPage;
           }
 
-          return self.isLoadingComplete = _.size( items ) < self.settings.pageSize;
+          collectionSize = _.size( self.model.collection );
+          return checkIfIsLoadingComplete.call( self, collectionSize );
         })
         .catch(function() {
           return self.isLoadingComplete = true;
@@ -89,6 +97,11 @@
       }
 
       return false;
+    }
+
+    function checkIfIsLoadingComplete(collectionSize) {
+        collectionSize = collectionSize || 0;
+        this.isLoadingComplete = collectionSize < this.settings.pageSize;
     }
 
     /**
