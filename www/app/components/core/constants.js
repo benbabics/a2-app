@@ -571,6 +571,7 @@
                 "pageName": "TransactionDetails"
             },
             "cardNumber"          : "Card Number",
+            "currentOdometer"     : "Odometer",
             "customVehicleAssetId": "Asset ID",
             "driverFirstName"     : "Driver First Name",
             "driverLastName"      : "Driver Last Name",
