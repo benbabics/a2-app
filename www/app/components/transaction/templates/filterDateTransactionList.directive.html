@@ -6,10 +6,12 @@
                        reload-distance="::config.reloadDistance"
                        loading-complete="infiniteScrollService.isLoadingComplete">
 
-        <ion-item class="item-divider">Pending Transactions</ion-item>
-        <div ng-repeat="transaction in transactions.pendingCollection | groupTransactionsByDate"
-             ui-sref="transaction.postedDetail({ transactionId: transaction.transactionId })">
-                 <transaction-result-as-date />
+        <div ng-if="unlessAppIsClassic">
+            <ion-item class="item-divider">Pending Transactions</ion-item>
+            <div ng-repeat="transaction in transactions.pendingCollection | groupTransactionsByDate"
+                 ui-sref="transaction.postedDetail({ transactionId: transaction.transactionId })">
+                     <transaction-result-as-date />
+            </div>
         </div>
 
         <ion-item class="item-divider">Posted Transactions</ion-item>

@@ -27,9 +27,10 @@
                     toDate:           moment().toDate()
                 };
 
-            scope.config        = globals.TRANSACTION_LIST.CONFIG;
-            scope.searchOptions = globals.TRANSACTION_LIST.SEARCH_OPTIONS;
-            scope.transactions  = scope.infiniteScrollService.model;
+            scope.config             = globals.TRANSACTION_LIST.CONFIG;
+            scope.searchOptions      = globals.TRANSACTION_LIST.SEARCH_OPTIONS;
+            scope.transactions       = scope.infiniteScrollService.model;
+            scope.unlessAppIsClassic = !UserManager.getUser().isOnlineAppClassic;
 
             controller.assignServiceDelegate({
                 makeRequest:  handleMakeRequestPostedTransactions,
@@ -71,6 +72,8 @@
             }
 
             function makeRequestPendingTransactions() {
+                if ( scope.isAppClassic ) return;
+
                 var fauxDate = moment( '04/16/2015' );
                 var requestConfig = _.extend({}, scope.infiniteScrollService.settings, {
                     fromDate: moment( fauxDate ).toDate(),

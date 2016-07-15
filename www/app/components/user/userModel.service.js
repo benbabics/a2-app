@@ -15,6 +15,7 @@
         }
 
         UserModel.prototype.set = function (userResource) {
+            var ONLINE_APPLICATION = globals.USER.ONLINE_APPLICATION;
             angular.extend(this, userResource);
 
             if (!userResource.brand) {
@@ -26,6 +27,9 @@
 
             this.billingCompany = new UserAccountModel();
             this.billingCompany.set(userResource.billingCompany);
+
+            this.isOnlineAppWolNp   = this.onlineApplication === ONLINE_APPLICATION.WOL_NP;
+            this.isOnlineAppClassic = this.onlineApplication === ONLINE_APPLICATION.CLASSIC;
         };
 
         UserModel.prototype.getDisplayAccountNumber = function () {
