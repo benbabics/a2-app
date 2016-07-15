@@ -20,17 +20,18 @@
         };
 
         function link(scope, element, attrs, controller) {
-            var requestParams = {
-                    billingAccountId: UserManager.getUser().billingCompany.accountId,
-                    fromDate:         moment().subtract(900, "days").toDate(),
-                    // fromDate:         moment().subtract(vm.searchOptions.MAX_DAYS, "days").toDate(),
-                    toDate:           moment().toDate()
-                };
+            var requestParams;
 
             scope.config             = globals.TRANSACTION_LIST.CONFIG;
             scope.searchOptions      = globals.TRANSACTION_LIST.SEARCH_OPTIONS;
             scope.transactions       = scope.infiniteScrollService.model;
             scope.unlessAppIsClassic = !UserManager.getUser().isOnlineAppClassic;
+
+            requestParams = {
+                billingAccountId: UserManager.getUser().billingCompany.accountId,
+                fromDate:         moment().subtract( scope.searchOptions.MAX_DAYS, 'days' ).toDate(),
+                toDate:           moment().toDate()
+            };
 
             controller.assignServiceDelegate({
                 makeRequest:  handleMakeRequestPostedTransactions,
@@ -74,10 +75,9 @@
             function makeRequestPendingTransactions() {
                 if ( scope.isAppClassic ) return;
 
-                var fauxDate = moment( '04/16/2015' );
                 var requestConfig = _.extend({}, scope.infiniteScrollService.settings, {
-                    fromDate: moment( fauxDate ).toDate(),
-                    toDate  : moment( fauxDate ).add(13, 'days').toDate()
+                    fromDate: moment().toDate(),
+                    toDate:   moment().add(13, 'days').toDate()
                 });
 
                 if ( scope.transactions ) {
@@ -92,7 +92,7 @@
                         scope.transactions.pendingCollection = transactionsCollection;
                     })
                     .catch(function() {
-                        console.log('fetchPendingTransactions failure', arguments);
+                        Logger.error( 'fetchPendingTransactions failure', arguments );
                     })
                     .finally(function() {
                         scope.$broadcast("scroll.refreshComplete");
