@@ -7,11 +7,12 @@
                        loading-complete="infiniteScrollService.isLoadingComplete">
 
         <div class="item item-icon-right"
-             collection-repeat="transaction in transactions"
+             collection-repeat="transaction in transactions.collection"
+             ng-class="{ 'ui-greeking': transaction.isGreekLoading }"
              ui-sref="transaction.filterBy({ filterBy: 'card', filterValue: transaction.cardId, transaction: transaction })">
 
                 <a class="item-content">
-                    {{ transaction.embossedCardNumber | wexCardNumber }}
+                    <span class="greek-block">{{ transaction.embossedCardNumber | wexCardNumber }}</span>
                     <i class="icon ion-chevron-right"></i>
                 </a>
 

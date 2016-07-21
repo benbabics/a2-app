@@ -554,9 +554,9 @@
             "reloadDistance": "5%",
             "emptyList"     : "No Records Found.",
             "buttonLabels"  : {
-              "date"  : "Date",
-              "driver": "Driver Name",
-              "card"  : "Card Number"
+                "date"  : "Date",
+                "driver": "Driver Name",
+                "card"  : "Card Number"
             }
         },
         "SEARCH_OPTIONS": {

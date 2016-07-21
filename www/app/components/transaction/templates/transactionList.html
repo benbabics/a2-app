@@ -14,19 +14,22 @@
         <div ng-switch="vm.filterViews.transactionsFilterValue">
             <div ng-switch-when="date">
                 <filter-date-transaction-list card-id="vm.cardIdFilter"
-                                              cache-key="activities-date">
+                                              cache-key="records-date"
+                                              is-greeking="true">
                 </filter-date-transaction-list>
             </div>
 
             <div ng-switch-when="driver">
                 <filter-driver-transaction-list card-id="vm.cardIdFilter"
-                                              cache-key="activities-driver">
+                                              cache-key="records-driver"
+                                              is-greeking="true">
                 </filter-driver-transaction-list>
             </div>
 
             <div ng-switch-when="card">
                 <filter-card-transaction-list card-id="vm.cardIdFilter"
-                                              cache-key="activities-card">
+                                              cache-key="records-card"
+                                              is-greeking="true">
                 </filter-card-transaction-list>
             </div>
         </div>

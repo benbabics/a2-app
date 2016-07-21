@@ -18,10 +18,11 @@
         function link(scope, element, attrs, controller) {
             scope.config        = globals.TRANSACTION_LIST.CONFIG;
             scope.searchOptions = globals.TRANSACTION_LIST.SEARCH_OPTIONS;
+            scope.transactions  = scope.infiniteScrollService.model;
 
             controller.assignServiceDelegate({
-                makeRequest: handleMakeRequest,
-                onError:     handleOnError
+                makeRequest:  handleMakeRequest,
+                onError:      handleOnError
             });
 
             function handleMakeRequest(requestConfig) {

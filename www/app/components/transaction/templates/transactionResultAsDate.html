@@ -1,27 +1,26 @@
 <div>
     <ion-item class="item-alt-divider" ng-if="transaction.hasDivider">
-      {{ transaction.postDate | wexDefaultDateFormat }}
+      {{ transaction.displayDate | wexDefaultDateFormat }}
     </ion-item>
 
-    <ion-item class="item item-icon-right widget-transaction-result-as-date">
+    <ion-item class="item item-icon-right widget-transaction-result-as-date" ng-class="{ 'ui-greeking': transaction.isGreekLoading }">
         <a class="item-content">
             <div class="row date-filter-list">
-                <div class="col col-65">
+                <div class="col col-65 greek-block-group">
                     <span class="text-block text-strong" ng-hide="isCard">{{ transaction.embossedCardNumber | wexCardNumber }} &nbsp;</span>
                     <span class="text-block text-strong" ng-show="isCard">{{ transaction.driverLastName }}, {{ transaction.driverFirstName }} &nbsp;</span>
                     <span class="text-block">{{ transaction.customVehicleId }} &nbsp;</span>
                     <span class="text-block">{{ transaction.merchantName }} &nbsp;</span>
                     <span class="text-block">{{ transaction.productDescription }} &nbsp;</span>
                 </div>
-                <div class="col col-35">
+                <div class="col col-35 greek-block-group">
                     <div class="chevron">
-                        <span class="currency">{{ transaction.netCost | currency }}</span>
-                        <span class="icon ion-chevron-right"></span>
+                        <span class="currency text-block">{{ transaction.netCost | currency }} &nbsp;</span>
                     </div>
                 </div>
             </div>
 
-            <i class="icon ion-chevron-right"></i>
+            <i class="icon ion-chevron-right" ng-show="displayChevron"></i>
         </a>
     </ion-item>
 </div>

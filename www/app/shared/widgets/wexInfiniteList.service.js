@@ -32,23 +32,35 @@
     function loadNextPage(collection) {
       var self = this,
           requestConfig  = _.clone( this.settings ),
-          requestPromise = this.delegate.makeRequest( requestConfig );
+          requestPromise = this.delegate.makeRequest( requestConfig ),
+          greekingCollection;
 
       collection = collection || this.model.collection;
+
+      // if enabled, greek the results while loading
+      greekingCollection = greekResultsPre.call( this, collection ) || [];
 
       return requestPromise
         .then(function(items) {
           var collectionSize, hasItems = !_.isEmpty( items );
           if ( hasItems ) {
             //add the fetched items to the collection
-            Array.prototype.push.apply( collection, items );
+            if ( !self.settings.isGreeking ) {
+              Array.prototype.push.apply( collection, items );
+            }
+
             ++self.settings.currentPage;
           }
 
-          collectionSize = _.size( self.model.collection );
+          // if enabled, ungreek the results after loading
+          greekResultsPost.call( self, collection, greekingCollection, items );
+
+          collectionSize = _.size( items );
           return checkIfIsLoadingComplete.call( self, collectionSize );
         })
         .catch(function() {
+          // if enabled, ungreek the results after loading
+          greekResultsPost.call( self, collection, greekingCollection, [] );
           return self.isLoadingComplete = true;
         });
     }
@@ -59,9 +71,22 @@
 
       resetProperties.call( this );
 
-      this.loadNextPage( collectionBuffer ).finally(function() {
+      // if greeking, assign buffer before request to render greeking state
+      if ( this.settings.isGreeking ) {
         this.model.collection = collectionBuffer;
+      }
+
+      return this.loadNextPage( collectionBuffer ).finally(function() {
+        self.model.collection = collectionBuffer;
       });
+    }
+
+    /**
+     * Static Methods
+    **/
+    function emptyCache() {
+        var keys = [].slice.call( arguments, 0 );
+        keys.forEach( clearCachedModel );
     }
 
     /**
@@ -73,6 +98,12 @@
         __store[ key ] = emptyModel;
       }
       return __store[ key ] || emptyModel;
+    }
+
+    function clearCachedModel(key) {
+      if ( key && __store[ key ] ) {
+          __store[ key ] = getCachedModel();
+      }
     }
 
     function registerDelegate(delegate) {
@@ -104,6 +135,35 @@
         this.isLoadingComplete = collectionSize < this.settings.pageSize;
     }
 
+    function greekResultsPre(collectionBuffer) {
+        var collection = [];
+        if ( !this.settings.isGreeking ) return;
+
+        for( var i = 0; i < this.settings.pageSize; i++ ) {
+          collection.push({ isGreekLoading: true });
+        }
+
+        Array.prototype.push.apply( collectionBuffer, collection );
+        return collection;
+    }
+
+    function greekResultsPost(collectionBuffer, collectionGreeking, items) {
+        if ( !this.settings.isGreeking ) return;
+
+        for ( var i = 0; i < collectionGreeking.length; i++ ) {
+          var item        = items[ i ],
+              greekedItem = collectionGreeking[ i ],
+              itemIndex   = collectionBuffer.indexOf( greekedItem );
+
+          if ( item ) {
+            _.extend( greekedItem, item, { isGreekLoading: false } );
+          }
+          else {
+            collectionBuffer.splice( itemIndex, 1 );
+          }
+        }
+    }
+
     /**
      * Expose Methods
     **/
@@ -111,6 +171,9 @@
       loadNextPage:    loadNextPage,
       resetCollection: resetCollection
     };
+
+    // Static Methods
+    WexInfiniteListService.emptyCache = emptyCache;
 
 
     angular

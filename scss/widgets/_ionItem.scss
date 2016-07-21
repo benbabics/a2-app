@@ -1,0 +1,64 @@
+.item {
+
+  .greek-block {
+    @extend .text-block;
+  }
+
+  &.ui-greeking {
+    .greek-block,
+    .greek-block-group .text-block {
+      &:not(.ng-hide) {
+        &:after {
+          content: "...";
+        }
+
+        margin-bottom: 10px;
+        min-width: 75px;
+        height:    12px;
+        overflow: hidden;
+
+        text-indent: -9999px;
+        box-shadow: inset 0 -12px 0px rgba(0,0,0,.05);
+
+        &:not(.no-animation) {
+          -webkit-animation-duration:        3s;
+          animation-duration:                3s;
+          -webkit-animation-fill-mode:       forwards;
+          animation-fill-mode:               forwards;
+          -webkit-animation-iteration-count: infinite;
+          animation-iteration-count:         infinite;
+          -webkit-animation-name:            placeHolderShimmer;
+          animation-name:                    placeHolderShimmer;
+          -webkit-animation-timing-function: linear;
+          animation-timing-function:         linear;
+          // background: #f6f7f8;
+          // background: #eee;
+          background: -webkit-gradient(linear, left top, right top, color-stop(8%, transparent), color-stop(18%, #ddd), color-stop(33%, transparent));
+          background: -webkit-linear-gradient(left, transparent 8%, #ddd 18%, transparent 33%);
+          background:         linear-gradient(to right, transparent 8%, #ddd 18%, transparent 33%);
+          -webkit-background-size: 800px;
+          background-size:         800px;
+        }
+      }
+    }
+
+    .greek-block-group + .greek-block-group .text-block {
+      &:not(.no-animation) {
+        -webkit-background-size: 300px;
+        background-size:         300px;
+      }
+    }
+  }
+
+}
+
+
+@-webkit-keyframes placeHolderShimmer {
+  0%   {  background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@keyframes placeHolderShimmer {
+  0%   {  background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}

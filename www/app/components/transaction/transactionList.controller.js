@@ -5,7 +5,7 @@
     // jshint maxparams:9
 
     /* @ngInject */
-    function TransactionListController(_, $scope, $stateParams, $localStorage, $ionicScrollDelegate, globals) {
+    function TransactionListController(_, $scope, $stateParams, $localStorage, $ionicScrollDelegate, globals, wexInfiniteListService) {
 
         var vm = this;
 
@@ -29,10 +29,18 @@
             else {
                 vm.backStateOverride = "landing";
             }
+
+            $scope.$on( '$destroy', handleResetCachedLists );
         }
 
         function handleFilterSelection() {
-          $ionicScrollDelegate.scrollTop();
+            $ionicScrollDelegate.scrollTop();
+        }
+
+        function handleResetCachedLists() {
+            wexInfiniteListService.emptyCache( 'records-date' );
+            wexInfiniteListService.emptyCache( 'records-driver' );
+            wexInfiniteListService.emptyCache( 'records-card' );
         }
 
     }

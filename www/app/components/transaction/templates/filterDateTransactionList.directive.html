@@ -8,17 +8,16 @@
 
         <div ng-if="unlessAppIsClassic">
             <ion-item class="item-divider">Pending Transactions</ion-item>
-            <div ng-repeat="transaction in transactions.pendingCollection | groupTransactionsByDate"
-                 ui-sref="transaction.postedDetail({ transactionId: transaction.transactionId })">
-                     <transaction-result-as-date />
+            <div ng-repeat="transaction in transactions.pendingCollection | groupTransactionsByDate : 'transactionDate'">
+                <transaction-result-as-date display-chevron="false" />
             </div>
         </div>
 
         <ion-item class="item-divider">Posted Transactions</ion-item>
-        <div collection-repeat="transaction in transactions.collection | groupTransactionsByDate"
+        <div collection-repeat="transaction in transactions.collection | groupTransactionsByDate : 'postDate'"
              ui-sref="transaction.postedDetail({ transactionId: transaction.transactionId })"
              item-height="transaction.renderHeight">
-                 <transaction-result-as-date />
+                <transaction-result-as-date />
         </div>
     </wex-infinite-list>
 

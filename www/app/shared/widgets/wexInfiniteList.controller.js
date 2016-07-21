@@ -1,13 +1,16 @@
 (function () {
     "use strict";
 
-    function WexInfiniteListController($scope, $attrs, _, wexInfiniteListService) {
+    function WexInfiniteListController($scope, $attrs, $ionicScrollDelegate, _, wexInfiniteListService) {
       var serviceDelegate = {
               makeRequest:  handleMakeRequest,
               onError:      handleOnError,
               onResetItems: handleOnResetItems
           },
-          settings = _.extend( _.pick($attrs, 'cacheKey'), $attrs.settings );
+          settings = _.extend( _.pick($attrs, 'cacheKey', 'isGreeking'), $attrs.settings );
+
+      // check for isGreeking
+      settings.isGreeking = settings.isGreeking === 'true' || settings.isGreeking === true;
 
 
       /**
@@ -19,13 +22,17 @@
                   serviceDelegate.onError( errorResponse );
               })
               .finally(function() {
+                  if ( settings.isGreeking ) {
+                    $ionicScrollDelegate.resize();
+                  }
+
                   $scope.$broadcast( 'scroll.refreshComplete' );
               });
       }
 
       function resetSearchResults() {
           serviceDelegate.onResetItems();
-          $scope.infiniteScrollService.resetCollection();
+          return $scope.infiniteScrollService.resetCollection();
       }
 
 
@@ -49,10 +56,8 @@
        * Expose Properties
       **/
       $scope.infiniteScrollService = new wexInfiniteListService( serviceDelegate, settings );
-      $scope.transactions          = $scope.infiniteScrollService.model.collection;
-
-      $scope.loadNextPage       = loadNextPage;
-      $scope.resetSearchResults = resetSearchResults;
+      $scope.loadNextPage          = loadNextPage;
+      $scope.resetSearchResults    = resetSearchResults;
     }
 
 

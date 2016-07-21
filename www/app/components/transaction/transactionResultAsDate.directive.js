@@ -9,12 +9,18 @@
             restrict:    "E",
             replace:     true,
             templateUrl: "app/components/transaction/templates/transactionResultAsDate.html",
-            controller:  controller
+            controller:  controller,
+            link:        link
         };
 
         function controller($scope) {
-          $scope.isCard   = $scope.filterBy === "card";
-          $scope.isDriver = $scope.filterBy === "driver";
+            $scope.isCard   = $scope.filterBy === "card";
+            $scope.isDriver = $scope.filterBy === "driver";
+        }
+
+        function link(scope, element, attrs) {
+            var displayChevron = attrs.displayChevron === undefined ? true : attrs.displayChevron;
+            scope.displayChevron = JSON.parse( displayChevron );
         }
     }
 
