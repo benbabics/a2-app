@@ -14,7 +14,7 @@
         vm.config = globals.USER_LOGIN.CONFIG;
         vm.rememberMe = false;
         vm.timedOut = false;
-        vm.user = { password: 'Tester17' };
+        vm.user = { password: '' };
         vm.authenticateUser = authenticateUser;
         vm.isKeyboardVisible = isKeyboardVisible;
 
