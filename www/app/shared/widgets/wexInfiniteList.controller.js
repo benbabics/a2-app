@@ -1,17 +1,19 @@
 (function () {
     "use strict";
 
-    function WexInfiniteListController($scope, $attrs, $ionicScrollDelegate, _, wexInfiniteListService) {
+    function WexInfiniteListController($scope, $attrs, $parse, $ionicScrollDelegate, _, wexInfiniteListService) {
       var serviceDelegate = {
-              makeRequest:  handleMakeRequest,
-              onError:      handleOnError,
-              onResetItems: handleOnResetItems
+              makeRequest:  angular.noop,
+              onError:      angular.noop,
+              onResetItems: angular.noop
           },
-          settings = _.extend( _.pick($attrs, 'cacheKey', 'isGreeking'), $attrs.settings );
+          settings = _.extend(
+              _.pick( $attrs, 'cacheKey', 'isGreeking' ), // create new object of specific attrs
+              $scope.$parent.$eval( $attrs.settings )     // evaluate any settings attr expressions
+          );
 
       // check for isGreeking
       settings.isGreeking = settings.isGreeking === 'true' || settings.isGreeking === true;
-
 
       /**
        * Private Methods
@@ -23,7 +25,7 @@
               })
               .finally(function() {
                   if ( settings.isGreeking ) {
-                    $ionicScrollDelegate.resize();
+                    $ionicScrollDelegate.resize(); // recalc rendered ion-items
                   }
 
                   $scope.$broadcast( 'scroll.refreshComplete' );
@@ -35,22 +37,12 @@
           return $scope.infiniteScrollService.resetCollection();
       }
 
-
       /**
        * Public Methods
       **/
       this.assignServiceDelegate = function(delegate) {
           _.extend( serviceDelegate, delegate );
       }
-
-
-      /**
-       * Abstract Methods
-      **/
-      function handleMakeRequest() {}
-      function handleOnError() {}
-      function handleOnResetItems() {}
-
 
       /**
        * Expose Properties

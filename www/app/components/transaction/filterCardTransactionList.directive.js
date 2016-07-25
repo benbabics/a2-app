@@ -16,9 +16,8 @@
         };
 
         function link(scope, element, attrs, controller) {
-            scope.config        = globals.TRANSACTION_LIST.CONFIG;
-            scope.searchOptions = globals.TRANSACTION_LIST.SEARCH_OPTIONS;
-            scope.transactions  = scope.infiniteScrollService.model;
+            scope.config       = globals.TRANSACTION_LIST.CONFIG;
+            scope.transactions = scope.infiniteScrollService.model;
 
             controller.assignServiceDelegate({
                 makeRequest: handleMakeRequest,
