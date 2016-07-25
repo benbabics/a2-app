@@ -632,8 +632,8 @@
         },
         "ANALYTICS": {
           "events": {
-            "EnrollmentAvailable":    ["EnrollNowLink", "EnrollmentAvailable"],
-            "EnrollmentNotAvailable": ["EnrollNowLink", "EnrollmentNotAvailable"]
+            "EnrollmentAvailable":    ["OnlineEnrollment", "EnrollNowLink", "EnrollmentAvailable"],
+            "EnrollmentNotAvailable": ["OnlineEnrollment", "EnrollNowLink", "EnrollmentNotAvailable"]
           }
         }
       }
