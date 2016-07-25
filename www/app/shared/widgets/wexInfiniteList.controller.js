@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    function WexInfiniteListController($scope, $attrs, $parse, $ionicScrollDelegate, _, wexInfiniteListService) {
+    function WexInfiniteListController($scope, $attrs, $ionicScrollDelegate, _, wexInfiniteListService) {
       var serviceDelegate = {
               makeRequest:  angular.noop,
               onError:      angular.noop,
