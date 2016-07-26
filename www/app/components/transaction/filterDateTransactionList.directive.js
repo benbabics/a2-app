@@ -13,7 +13,8 @@
             scope: {
                 cardId:      '=',
                 filterBy:    '=',
-                filterValue: '='
+                filterValue: '=',
+                onScroll:    '&'
             },
             controller: 'WexInfiniteListController',
             link:       link
@@ -48,6 +49,10 @@
              * Delegate Methods
             **/
             function handleMakeRequestPostedTransactions(requestConfig) {
+                if ( requestConfig.currentPage > 0 && scope.onScroll ) {
+                    scope.onScroll();
+                }
+
                 return TransactionManager.fetchPostedTransactions(
                     requestParams.billingAccountId, requestParams.fromDate, requestParams.toDate, requestConfig.currentPage, requestConfig.pageSize, scope.filterBy, scope.filterValue, scope.cardId
                 )

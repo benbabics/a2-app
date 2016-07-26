@@ -548,7 +548,13 @@
     appGlobals.TRANSACTION_LIST = {
         "CONFIG"        : {
             "ANALYTICS"     : {
-                "pageName": "TransactionActivity"
+                "pageName": "TransactionActivity",
+                "events": {
+                    "date"  : ["Transaction", "Date"],
+                    "card"  : ["Transaction", "CardNumber"],
+                    "driver": ["Transaction", "DriverName"],
+                    "scroll": ["Transaction", "InfiniteScroll"]
+                }
             },
             "title"         : "Transactions",
             "reloadDistance": "5%",

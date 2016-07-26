@@ -5,7 +5,7 @@
     // jshint maxparams:9
 
     /* @ngInject */
-    function TransactionListController(_, $scope, $stateParams, $localStorage, $ionicScrollDelegate, globals, wexInfiniteListService) {
+    function TransactionListController(_, $scope, $stateParams, $localStorage, $ionicScrollDelegate, globals, wexInfiniteListService, AnalyticsUtil) {
 
         var vm = this;
 
@@ -16,9 +16,13 @@
           transactionsFilterValue: "date"
         });
 
-        vm.handleFilterSelection = handleFilterSelection;
+        vm.handleFilterSelection    = handleFilterSelection;
+        vm.handleLoadSubsequentData = handleLoadSubsequentData;
 
         activate();
+
+        // report initial filter selected value to analytics
+        trackEvent( vm.filterViews.transactionsFilterValue );
 
         //////////////////////
         // Controller initialization
@@ -33,14 +37,28 @@
             $scope.$on( '$destroy', handleResetCachedLists );
         }
 
-        function handleFilterSelection() {
+        function handleFilterSelection($event) {
+            var selectedValue = $event.target.value;
             $ionicScrollDelegate.scrollTop();
+            trackEvent( selectedValue );
+        }
+
+        function handleLoadSubsequentData() {
+            trackEvent( 'scroll' );
         }
 
         function handleResetCachedLists() {
             wexInfiniteListService.emptyCache( 'records-date' );
             wexInfiniteListService.emptyCache( 'records-driver' );
             wexInfiniteListService.emptyCache( 'records-card' );
+        }
+
+        /**
+          * Analytics
+        **/
+        function trackEvent(action) {
+          var eventData = vm.config.ANALYTICS.events[ action ];
+          _.spread( AnalyticsUtil.trackEvent )( eventData );
         }
 
     }

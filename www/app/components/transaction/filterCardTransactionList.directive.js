@@ -9,7 +9,8 @@
             restrict:    "E",
             templateUrl: "app/components/transaction/templates/filterCardTransactionList.directive.html",
             scope: {
-                cardId: '=',
+                cardId:   '=',
+                onScroll: '&'
             },
             controller: 'WexInfiniteListController',
             link:       link
@@ -27,6 +28,10 @@
             function handleMakeRequest(requestConfig) {
                 var SEARCH_OPTIONS   = globals.CARD_LIST.SEARCH_OPTIONS,
                     billingAccountId = UserManager.getUser().billingCompany.accountId;
+
+                if ( requestConfig.currentPage > 0 && scope.onScroll ) {
+                    scope.onScroll();
+                }
 
                 return CardManager.fetchCards(
                     billingAccountId, null, null, null, SEARCH_OPTIONS.STATUS_ACTIVE, requestConfig.currentPage, requestConfig.pageSize

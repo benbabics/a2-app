@@ -1,7 +1,7 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="{{vm.backStateOverride}}">
     <div class="bar bar-subheader">
       <div class="bar bar-header">
-        <div class="button-bar bar-positive" ng-click="vm.handleFilterSelection()">
+        <div class="button-bar bar-positive" ng-click="vm.handleFilterSelection($event)">
           <wex-bar-button ng-value="'date'"   ng-model="vm.filterViews.transactionsFilterValue">{{::vm.config.buttonLabels.date}}</wex-bar-button>
           <wex-bar-button ng-value="'driver'" ng-model="vm.filterViews.transactionsFilterValue">{{::vm.config.buttonLabels.driver}}</wex-bar-button>
           <wex-bar-button ng-value="'card'"   ng-model="vm.filterViews.transactionsFilterValue">{{::vm.config.buttonLabels.card}}</wex-bar-button>
@@ -15,21 +15,24 @@
             <div ng-switch-when="date">
                 <filter-date-transaction-list card-id="vm.cardIdFilter"
                                               cache-key="records-date"
-                                              is-greeking="true">
+                                              is-greeking="true"
+                                              on-scroll="vm.handleLoadSubsequentData()">
                 </filter-date-transaction-list>
             </div>
 
             <div ng-switch-when="driver">
                 <filter-driver-transaction-list card-id="vm.cardIdFilter"
                                               cache-key="records-driver"
-                                              is-greeking="true">
+                                              is-greeking="true"
+                                              on-scroll="vm.handleLoadSubsequentData()">
                 </filter-driver-transaction-list>
             </div>
 
             <div ng-switch-when="card">
                 <filter-card-transaction-list card-id="vm.cardIdFilter"
                                               cache-key="records-card"
-                                              is-greeking="true">
+                                              is-greeking="true"
+                                              on-scroll="vm.handleLoadSubsequentData()">
                 </filter-card-transaction-list>
             </div>
         </div>
