@@ -22,8 +22,13 @@
             angular.extend(this, brandAssetResource);
 
             // Convert the date strings to Dates
-            this.endDate = moment(brandAssetResource.endDate).toDate();
-            this.startDate = moment(brandAssetResource.startDate).toDate();
+            if(this.endDate) {
+                this.endDate = moment(brandAssetResource.endDate).toDate();
+            }
+
+            if(this.startDate) {
+                this.startDate = moment(brandAssetResource.startDate).toDate();
+            }
         };
 
         BrandAssetModel.prototype.hasResource = function () {

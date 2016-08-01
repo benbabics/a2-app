@@ -271,7 +271,12 @@
         }
 
         function updateBrandCache(brandName) {
-            var lastUpdateDate = BrandUtil.getLastBrandUpdateDate(brandName);
+            var lastUpdateDate = null;
+
+            //make sure that there is cached brand info before we use the last update date
+            if(!_.isEmpty(getBrandAssetsByBrand(brandName))) {
+                lastUpdateDate = BrandUtil.getLastBrandUpdateDate(brandName);
+            }
 
             removeExpiredBrandAssets(brandName);
 

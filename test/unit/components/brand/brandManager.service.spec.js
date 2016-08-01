@@ -1035,275 +1035,12 @@
                 cacheAssetResourceDataDeferred2,
                 removeAssetResourceFileDeferred;
 
-            beforeEach(function () {
-                brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
-                currentDate = TestUtils.getRandomDate();
-                numFileAssets = 0;
-                getBrandAssetsDeferred = $q.defer();
-                cacheAssetResourceDataDeferred = $q.defer();
-                cacheAssetResourceDataDeferred2 = $q.defer();
-                removeAssetResourceFileDeferred = $q.defer();
-
-                _.forEach(_.filter(brandAssets, TestUtils.getRandomBoolean), function (brandAsset) {
-                    brandAsset.assetTypeId = globals.BRAND.ASSET_TYPES.FILE;
-                    ++numFileAssets;
-                });
-
-                //make sure there is at least 1 file asset
-                if (numFileAssets === 0) {
-                    brandAssets[0].assetTypeId = globals.BRAND.ASSET_TYPES.FILE;
-                    numFileAssets = 1;
-                }
-
-                BrandsResource.getBrandAssets.and.returnValue(getBrandAssetsDeferred.promise);
-                //return cacheAssetResourceDataDeferred/cacheAssetResourceDataDeferred2 x number of times based on the number of assets
-                _.spread(BrandUtil.cacheAssetResourceData.and.returnValues)(
-                    _.fill(new Array(numFileAssets), cacheAssetResourceDataDeferred.promise).concat(
-                        _.fill(new Array(numFileAssets), cacheAssetResourceDataDeferred2.promise)
-                    ));
-                BrandUtil.removeAssetResourceFile.and.returnValue(removeAssetResourceFileDeferred.promise);
-                mockBrandAssetCollection.find.and.returnValue(brandAssets);
-                mockBrandAssetCollection.by.and.callFake(function (key, value) {
-                    return _.find(brandAssets, _.zipObject([key], [value]));
-                });
-
-                jasmine.clock().mockDate(currentDate);
-            });
-
-            describe("when there is a last update date", function () {
-                var lastUpdateDate;
-
-                beforeEach(function () {
-                    lastUpdateDate = TestUtils.getRandomDate();
-                    BrandUtil.getLastBrandUpdateDate.and.returnValue(lastUpdateDate);
-                });
-
-                beforeEach(function () {
-                    BrandManager.updateBrandCache(brandName)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                });
-
-                it("should call BrandsResource.getBrandAssets with the expected values", function () {
-                    expect(BrandsResource.getBrandAssets).toHaveBeenCalledWith(brandName, lastUpdateDate);
-                });
-
-                it("should call BrandUtil.removeAssetResourceFile with the expected values", function () {
-                    _.forEach(brandAssets, function (brandAsset) {
-                        if (brandAsset.isExpired()) {
-                            expect(BrandUtil.removeAssetResourceFile).toHaveBeenCalledWith(brandAsset);
-                        }
-                    });
-                });
-
-                describe("when BrandUtil.removeAssetResourceFile succeeds", function () {
-
-                    beforeEach(function () {
-                        removeAssetResourceFileDeferred.resolve();
-                        $rootScope.$digest();
-                    });
-
-                    it("should call BrandAssetCollection.remove with the expected values", function () {
-                        _.forEach(brandAssets, function (brandAsset) {
-                            if (brandAsset.isExpired()) {
-                                expect(mockBrandAssetCollection.remove).toHaveBeenCalledWith(brandAsset);
-                            }
-                        });
-                    });
-                });
-
-                describe("when BrandUtil.removeAssetResourceFile fails", function () {
-
-                    beforeEach(function () {
-                        removeAssetResourceFileDeferred.reject();
-                        $rootScope.$digest();
-                    });
-
-                    it("should NOT reject the promise", function () {
-                        expect(rejectHandler).not.toHaveBeenCalled();
-                    });
-                });
-
-                describe("when getting the brand assets succeeds", function () {
-
-                    beforeEach(function () {
-                        getBrandAssetsDeferred.resolve({data: brandAssets});
-                        $rootScope.$digest();
-                    });
-
-                    it("should call BrandUtil.cacheAssetResourceData with the expected values", function () {
-                        _.forEach(brandAssets, function (brandAsset) {
-                            if (brandAsset.hasResource()) {
-                                expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(brandAsset, true);
-                            }
-                            else {
-                                expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(brandAsset, true);
-                            }
-                        });
-                    });
-
-                    describe("when BrandUtil.cacheAssetResourceData succeeds", function () {
-
-                        beforeEach(function () {
-                            cacheAssetResourceDataDeferred.resolve();
-                            $rootScope.$digest();
-                        });
-
-                        it("should call BrandUtil.setLastBrandUpdateDate with the brand name", function () {
-                            expect(BrandUtil.setLastBrandUpdateDate).toHaveBeenCalledWith(brandName);
-                        });
-
-                        it("should resolve", function () {
-                            expect(resolveHandler).toHaveBeenCalled();
-                        });
-                    });
-
-                    describe("when BrandUtil.cacheAssetResourceData fails", function () {
-                        var error,
-                            genericAssets;
-
-                        beforeEach(function () {
-                            error = {
-                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            };
-                            genericAssets = _.map(brandAssets, function (brandAsset) {
-                                return angular.extend(new BrandAssetModel(), brandAsset);
-                            });
-
-                            mockBrandAssetCollection.find.and.returnValue(genericAssets);
-                            cacheAssetResourceDataDeferred.reject(error);
-                        });
-
-                        describe("when BrandUtil.cacheAssetResourceData succeeds with the generic asset", function () {
-
-                            beforeEach(function () {
-                                cacheAssetResourceDataDeferred2.resolve();
-                            });
-
-                            it("should throw an error", function () {
-                                var expectedError = new RegExp("Failed to update brand cache:.+");
-
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrowError(expectedError);
-
-                                expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
-                            });
-
-                            it("should NOT update the last update date", function () {
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrow();
-
-                                expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
-                            });
-
-                            it("should call BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrow();
-
-                                _.forEach(genericAssets, function (genericAsset) {
-                                    if (genericAsset.hasResource()) {
-                                        expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, true);
-                                    }
-                                    else {
-                                        expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, true);
-                                    }
-                                });
-                            });
-                        });
-
-                        describe("when BrandUtil.cacheAssetResourceData fails with the generic asset", function () {
-
-                            beforeEach(function () {
-                                cacheAssetResourceDataDeferred2.reject(error);
-                            });
-
-                            it("should throw an error", function () {
-                                var expectedError = new RegExp("Failed to update brand cache:.+");
-
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrowError(expectedError);
-
-                                expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
-                            });
-
-                            it("should NOT update the last update date", function () {
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrow();
-
-                                expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
-                            });
-
-                            it("should call BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrow();
-
-                                _.forEach(genericAssets, function (genericAsset) {
-                                    if (genericAsset.hasResource()) {
-                                        expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, true);
-                                    }
-                                    else {
-                                        expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, true);
-                                    }
-                                });
-                            });
-                        });
-                    });
-                });
-
-                describe("when getting the brand assets fails", function () {
-                    var error;
-
-                    beforeEach(function () {
-                        error = {
-                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                        };
-
-                        getBrandAssetsDeferred.reject(error);
-                    });
-
-                    it("should NOT update the last update date and throw an error", function () {
-                        var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + LoggerUtil.getErrorMessage(error) + ".*?$");
-
-                        expect(function () {
-                            TestUtils.digestError($rootScope);
-                        }).toThrowError(expectedError);
-
-                        expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
-                    });
-                });
-            });
-
-            describe("when there is NOT a last update date", function () {
-
-                beforeEach(function () {
-                    BrandUtil.getLastBrandUpdateDate.and.returnValue(null);
-                });
-
-                beforeEach(function () {
-                    BrandManager.updateBrandCache(brandName)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                });
+            function testUpdateBrandCacheWithoutDate() {
 
                 it("should call BrandsResource.getBrandAssets with the expected values", function () {
                     expect(BrandsResource.getBrandAssets).toHaveBeenCalledWith(brandName, null);
                 });
 
-                it("should call BrandUtil.removeAssetResourceFile with the expected values", function () {
-                    _.forEach(brandAssets, function (brandAsset) {
-                        if (brandAsset.isExpired()) {
-                            expect(BrandUtil.removeAssetResourceFile).toHaveBeenCalledWith(brandAsset);
-                        }
-                    });
-                });
-
                 describe("when BrandUtil.removeAssetResourceFile succeeds", function () {
 
                     beforeEach(function () {
@@ -1333,14 +1070,23 @@
                 });
 
                 describe("when getting the brand assets succeeds", function () {
+                    var brandAssetResources;
 
                     beforeEach(function () {
-                        getBrandAssetsDeferred.resolve({data: brandAssets});
+                        brandAssetResources = _.clone(brandAssets);
+
+                        if(_.isEmpty(brandAssetResources)) {
+                            var addedResource = TestUtils.getRandomBrandAsset(BrandAssetModel);
+                            addedResource.assetTypeId = globals.BRAND.ASSET_TYPES.FILE;
+                            brandAssetResources.push(addedResource);
+                        }
+
+                        getBrandAssetsDeferred.resolve({data: brandAssetResources});
                         $rootScope.$digest();
                     });
 
                     it("should call BrandUtil.cacheAssetResourceData with the expected values", function () {
-                        _.forEach(brandAssets, function (brandAsset) {
+                        _.forEach(brandAssetResources, function (brandAsset) {
                             if (brandAsset.hasResource()) {
                                 expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(brandAsset, false);
                             }
@@ -1374,7 +1120,7 @@
                             error = {
                                 message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                             };
-                            genericAssets = _.map(brandAssets, function (brandAsset) {
+                            genericAssets = _.map(brandAssetResources, function (brandAsset) {
                                 return angular.extend(new BrandAssetModel(), brandAsset);
                             });
 
@@ -1485,6 +1231,299 @@
                         expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
                     });
                 });
+            }
+
+            beforeEach(function () {
+                brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                currentDate = TestUtils.getRandomDate();
+                numFileAssets = 0;
+                getBrandAssetsDeferred = $q.defer();
+                cacheAssetResourceDataDeferred = $q.defer();
+                cacheAssetResourceDataDeferred2 = $q.defer();
+                removeAssetResourceFileDeferred = $q.defer();
+
+                _.forEach(_.filter(brandAssets, TestUtils.getRandomBoolean), function (brandAsset) {
+                    brandAsset.assetTypeId = globals.BRAND.ASSET_TYPES.FILE;
+                    ++numFileAssets;
+                });
+
+                //make sure there is at least 1 file asset
+                if (numFileAssets === 0) {
+                    brandAssets[0].assetTypeId = globals.BRAND.ASSET_TYPES.FILE;
+                    numFileAssets = 1;
+                }
+
+                BrandsResource.getBrandAssets.and.returnValue(getBrandAssetsDeferred.promise);
+                //return cacheAssetResourceDataDeferred/cacheAssetResourceDataDeferred2 x number of times based on the number of assets
+                _.spread(BrandUtil.cacheAssetResourceData.and.returnValues)(
+                    _.fill(new Array(numFileAssets), cacheAssetResourceDataDeferred.promise).concat(
+                        _.fill(new Array(numFileAssets), cacheAssetResourceDataDeferred2.promise)
+                    ));
+
+                BrandUtil.removeAssetResourceFile.and.returnValue(removeAssetResourceFileDeferred.promise);
+
+                jasmine.clock().mockDate(currentDate);
+            });
+
+            describe("when there is a last update date", function () {
+                var lastUpdateDate;
+
+                function testUpdateBrandCacheWithDate() {
+
+                    it("should call BrandsResource.getBrandAssets with the expected values", function () {
+                        expect(BrandsResource.getBrandAssets).toHaveBeenCalledWith(brandName, lastUpdateDate);
+                    });
+
+                    it("should call BrandUtil.removeAssetResourceFile with the expected values", function () {
+                        _.forEach(brandAssets, function (brandAsset) {
+                            if (brandAsset.isExpired()) {
+                                expect(BrandUtil.removeAssetResourceFile).toHaveBeenCalledWith(brandAsset);
+                            }
+                        });
+                    });
+
+                    describe("when BrandUtil.removeAssetResourceFile succeeds", function () {
+
+                        beforeEach(function () {
+                            removeAssetResourceFileDeferred.resolve();
+                            $rootScope.$digest();
+                        });
+
+                        it("should call BrandAssetCollection.remove with the expected values", function () {
+                            _.forEach(brandAssets, function (brandAsset) {
+                                if (brandAsset.isExpired()) {
+                                    expect(mockBrandAssetCollection.remove).toHaveBeenCalledWith(brandAsset);
+                                }
+                            });
+                        });
+                    });
+
+                    describe("when BrandUtil.removeAssetResourceFile fails", function () {
+
+                        beforeEach(function () {
+                            removeAssetResourceFileDeferred.reject();
+                            $rootScope.$digest();
+                        });
+
+                        it("should NOT reject the promise", function () {
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("when getting the brand assets succeeds", function () {
+
+                        beforeEach(function () {
+                            getBrandAssetsDeferred.resolve({data: brandAssets});
+                            $rootScope.$digest();
+                        });
+
+                        it("should call BrandUtil.cacheAssetResourceData with the expected values", function () {
+                            _.forEach(brandAssets, function (brandAsset) {
+                                if (brandAsset.hasResource()) {
+                                    expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(brandAsset, true);
+                                }
+                                else {
+                                    expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(brandAsset, true);
+                                }
+                            });
+                        });
+
+                        describe("when BrandUtil.cacheAssetResourceData succeeds", function () {
+
+                            beforeEach(function () {
+                                cacheAssetResourceDataDeferred.resolve();
+                                $rootScope.$digest();
+                            });
+
+                            it("should call BrandUtil.setLastBrandUpdateDate with the brand name", function () {
+                                expect(BrandUtil.setLastBrandUpdateDate).toHaveBeenCalledWith(brandName);
+                            });
+
+                            it("should resolve", function () {
+                                expect(resolveHandler).toHaveBeenCalled();
+                            });
+                        });
+
+                        describe("when BrandUtil.cacheAssetResourceData fails", function () {
+                            var error,
+                                genericAssets;
+
+                            beforeEach(function () {
+                                error = {
+                                    message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                                };
+                                genericAssets = _.map(brandAssets, function (brandAsset) {
+                                    return angular.extend(new BrandAssetModel(), brandAsset);
+                                });
+
+                                mockBrandAssetCollection.find.and.returnValue(genericAssets);
+                                cacheAssetResourceDataDeferred.reject(error);
+                            });
+
+                            describe("when BrandUtil.cacheAssetResourceData succeeds with the generic asset", function () {
+
+                                beforeEach(function () {
+                                    cacheAssetResourceDataDeferred2.resolve();
+                                });
+
+                                it("should throw an error", function () {
+                                    var expectedError = new RegExp("Failed to update brand cache:.+");
+
+                                    expect(function () {
+                                        TestUtils.digestError($rootScope);
+                                    }).toThrowError(expectedError);
+
+                                    expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                });
+
+                                it("should NOT update the last update date", function () {
+                                    expect(function () {
+                                        TestUtils.digestError($rootScope);
+                                    }).toThrow();
+
+                                    expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                });
+
+                                it("should call BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
+                                    expect(function () {
+                                        TestUtils.digestError($rootScope);
+                                    }).toThrow();
+
+                                    _.forEach(genericAssets, function (genericAsset) {
+                                        if (genericAsset.hasResource()) {
+                                            expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, true);
+                                        }
+                                        else {
+                                            expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, true);
+                                        }
+                                    });
+                                });
+                            });
+
+                            describe("when BrandUtil.cacheAssetResourceData fails with the generic asset", function () {
+
+                                beforeEach(function () {
+                                    cacheAssetResourceDataDeferred2.reject(error);
+                                });
+
+                                it("should throw an error", function () {
+                                    var expectedError = new RegExp("Failed to update brand cache:.+");
+
+                                    expect(function () {
+                                        TestUtils.digestError($rootScope);
+                                    }).toThrowError(expectedError);
+
+                                    expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                });
+
+                                it("should NOT update the last update date", function () {
+                                    expect(function () {
+                                        TestUtils.digestError($rootScope);
+                                    }).toThrow();
+
+                                    expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                });
+
+                                it("should call BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
+                                    expect(function () {
+                                        TestUtils.digestError($rootScope);
+                                    }).toThrow();
+
+                                    _.forEach(genericAssets, function (genericAsset) {
+                                        if (genericAsset.hasResource()) {
+                                            expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, true);
+                                        }
+                                        else {
+                                            expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, true);
+                                        }
+                                    });
+                                });
+                            });
+                        });
+                    });
+
+                    describe("when getting the brand assets fails", function () {
+                        var error;
+
+                        beforeEach(function () {
+                            error = {
+                                message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            };
+
+                            getBrandAssetsDeferred.reject(error);
+                        });
+
+                        it("should NOT update the last update date and throw an error", function () {
+                            var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + LoggerUtil.getErrorMessage(error) + ".*?$");
+
+                            expect(function () {
+                                TestUtils.digestError($rootScope);
+                            }).toThrowError(expectedError);
+
+                            expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                        });
+                    });
+                }
+
+                beforeEach(function () {
+                    lastUpdateDate = TestUtils.getRandomDate();
+                    BrandUtil.getLastBrandUpdateDate.and.returnValue(lastUpdateDate);
+                });
+
+                describe("when there are assets for the given brand in the cache", function () {
+
+                    beforeEach(function () {
+                        mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                        mockBrandAssetCollection.by.and.callFake(function (key, value) {
+                            return _.find(brandAssets, _.zipObject([key], [value]));
+                        });
+                    });
+
+                    beforeEach(function () {
+                        BrandManager.updateBrandCache(brandName)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
+
+                    describe("should update the brand assets using the last update date: ", testUpdateBrandCacheWithDate);
+                });
+
+                describe("when there are NO assets for the given brand in the cache", function () {
+
+                    beforeEach(function () {
+                        brandAssets = [];
+                        mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                    });
+
+                    beforeEach(function () {
+                        BrandManager.updateBrandCache(brandName)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
+
+                    describe("should update the brand assets using the last update date: ", testUpdateBrandCacheWithoutDate);
+                });
+            });
+
+            describe("when there is NOT a last update date", function () {
+
+                beforeEach(function () {
+                    BrandUtil.getLastBrandUpdateDate.and.returnValue(null);
+
+                    mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                    mockBrandAssetCollection.by.and.callFake(function (key, value) {
+                        return _.find(brandAssets, _.zipObject([key], [value]));
+                    });
+                });
+
+                beforeEach(function () {
+                    BrandManager.updateBrandCache(brandName)
+                        .then(resolveHandler)
+                        .catch(rejectHandler);
+                });
+
+                describe("should update the brand assets NOT using the last update date: ", testUpdateBrandCacheWithoutDate);
             });
         });
 
