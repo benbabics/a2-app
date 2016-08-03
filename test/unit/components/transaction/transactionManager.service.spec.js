@@ -158,13 +158,23 @@
             var getPendingTransactionsDeferred,
                 mockAccountId,
                 mockCardId,
-                mockFilterValue;
+                mockFilterValue,
+                mockFromDate,
+                mockToDate,
+                mockPageNumber,
+                mockPageSize,
+                mockFilterBy;
 
             beforeEach(function () {
                 getPendingTransactionsDeferred = $q.defer();
                 mockAccountId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 mockCardId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 mockFilterValue = TestUtils.getRandomStringThatIsAlphaNumeric(2);
+                mockFromDate = TestUtils.getRandomDate();
+                mockToDate = TestUtils.getRandomDate();
+                mockPageNumber = TestUtils.getRandomNumberWithLength(1);
+                mockPageSize = TestUtils.getRandomNumberWithLength(2);
+                mockFilterBy = 'card';
 
                 TransactionsResource.getPendingTransactions.and.returnValue(getPendingTransactionsDeferred.promise);
             });
@@ -174,14 +184,20 @@
                 describe("with a cardId", function () {
 
                     beforeEach(function () {
-                        TransactionManager.fetchPendingTransactions(mockAccountId, mockCardId)
+                        TransactionManager.fetchPendingTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize, mockFilterBy, mockFilterValue, mockCardId)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                     });
 
                     it("should call TransactionsResource.getPendingTransactions", function () {
                         expect(TransactionsResource.getPendingTransactions).toHaveBeenCalledWith(mockAccountId, {
-                            cardId: mockCardId
+                            cardId:      mockCardId,
+                            fromDate:    mockFromDate,
+                            toDate:      mockToDate,
+                            pageNumber:  mockPageNumber,
+                            pageSize:    mockPageSize,
+                            filterBy:    mockFilterBy,
+                            filterValue: mockFilterValue
                         });
                     });
                 });
@@ -189,27 +205,39 @@
                 describe("without a cardId", function () {
 
                     beforeEach(function () {
-                        TransactionManager.fetchPendingTransactions(mockAccountId)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                    });
-
-                    it("should call TransactionsResource.getPendingTransactions", function () {
-                        expect(TransactionsResource.getPendingTransactions).toHaveBeenCalledWith(mockAccountId, {});
-                    });
-                });
-
-                describe("with a filterValue", function () {
-
-                    beforeEach(function () {
-                        TransactionManager.fetchPendingTransactions(mockAccountId, mockCardId, mockFilterValue)
+                        TransactionManager.fetchPendingTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize, mockFilterBy, mockFilterValue)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                     });
 
                     it("should call TransactionsResource.getPendingTransactions", function () {
                         expect(TransactionsResource.getPendingTransactions).toHaveBeenCalledWith(mockAccountId, {
-                            cardId: mockCardId,
+                          fromDate:    mockFromDate,
+                          toDate:      mockToDate,
+                          pageNumber:  mockPageNumber,
+                          pageSize:    mockPageSize,
+                          filterBy:    mockFilterBy,
+                          filterValue: mockFilterValue
+                        });
+                    });
+                });
+
+                describe("with a filterValue", function () {
+
+                    beforeEach(function () {
+                        TransactionManager.fetchPendingTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize, mockFilterBy, mockFilterValue, mockCardId)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
+
+                    it("should call TransactionsResource.getPendingTransactions", function () {
+                        expect(TransactionsResource.getPendingTransactions).toHaveBeenCalledWith(mockAccountId, {
+                            cardId:      mockCardId,
+                            fromDate:    mockFromDate,
+                            toDate:      mockToDate,
+                            pageNumber:  mockPageNumber,
+                            pageSize:    mockPageSize,
+                            filterBy:    mockFilterBy,
                             filterValue: mockFilterValue
                         });
                     });
@@ -218,14 +246,17 @@
                 describe("without a filterValue", function () {
 
                     beforeEach(function () {
-                        TransactionManager.fetchPendingTransactions(mockAccountId, mockCardId)
+                        TransactionManager.fetchPendingTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                     });
 
                     it("should call TransactionsResource.getPendingTransactions", function () {
                         expect(TransactionsResource.getPendingTransactions).toHaveBeenCalledWith(mockAccountId, {
-                          cardId: mockCardId
+                          fromDate:    mockFromDate,
+                          toDate:      mockToDate,
+                          pageNumber:  mockPageNumber,
+                          pageSize:    mockPageSize,
                         });
                     });
                 });
@@ -260,18 +291,20 @@
                 describe("with a cardId", function () {
 
                     beforeEach(function () {
-                        TransactionManager.fetchPostedTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize, mockCardId)
+                        TransactionManager.fetchPostedTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize, null, null, mockCardId)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                     });
 
                     it("should call TransactionsResource.getPostedTransactions", function () {
                         expect(TransactionsResource.getPostedTransactions).toHaveBeenCalledWith(mockAccountId, {
-                            fromDate  : mockFromDate,
-                            toDate    : mockToDate,
-                            pageNumber: mockPageNumber,
-                            pageSize  : mockPageSize,
-                            cardId    : mockCardId
+                            cardId     : mockCardId,
+                            fromDate   : mockFromDate,
+                            toDate     : mockToDate,
+                            pageNumber : mockPageNumber,
+                            pageSize   : mockPageSize,
+                            filterBy   : null,
+                            filterValue: null
                         });
                     });
                 });

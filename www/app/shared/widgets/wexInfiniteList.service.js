@@ -102,7 +102,7 @@
 
     function clearCachedModel(key) {
       if ( key && __store[ key ] ) {
-          __store[ key ] = getCachedModel();
+          _.extend( __store[ key ], getCachedModel() );
       }
     }
 
@@ -112,7 +112,7 @@
         this.delegate = delegate;
       }
       else {
-        Logger.error( "wexInfiniteListService expected delegate to have some methods." );
+        throw new Error( "wexInfiniteListService expected delegate to have some methods." );
       }
     }
 

@@ -145,41 +145,9 @@
 
         });
 
-        describe("has a transaction.posted state that", function () {
+        describe("has a transaction.filterBy state that", function () {
             var state,
-                stateName = "transaction.posted";
-
-            beforeEach(function () {
-                state = $state.get(stateName);
-            });
-
-            it("should be valid", function () {
-                expect(state).toBeDefined();
-                expect(state).not.toBeNull();
-            });
-
-            it("should be abstract", function () {
-                expect(state.abstract).toBeTruthy();
-            });
-
-            it("should have the expected URL", function () {
-                expect(state.url).toEqual("/posted");
-            });
-
-            it("should define a transaction view", function () {
-                expect(state.views).toBeDefined();
-                expect(state.views["view@transaction"]).toBeDefined();
-                expect(state.views["view@transaction"].template).toEqual("<ion-nav-view></ion-nav-view>");
-            });
-
-            it("should respond to the URL", function () {
-                expect($state.href(stateName)).toEqual("#/transaction/posted");
-            });
-        });
-
-        describe("has a transaction.posted.detail state that", function () {
-            var state,
-                stateName = "transaction.posted.detail";
+                stateName = "transaction.filterBy";
 
             beforeEach(function () {
                 state = $state.get(stateName);
@@ -199,7 +167,54 @@
             });
 
             it("should have the expected URL", function () {
-                expect(state.url).toEqual("/detail/:transactionId");
+                expect(state.url).toEqual("/filter/:filterBy/:filterValue");
+            });
+
+            it("should respond to the URL", function () {
+                var params = {
+                  transactionId: "1234",
+                  filterBy:      "card",
+                  filterValue:   "7890"
+                },
+                segments = params.filterBy +"/"+ params.filterValue;
+                expect($state.href(stateName, params)).toEqual("#/transaction/filter/" + segments);
+            });
+
+            describe("when navigated to", function () {
+                beforeEach(function () {
+                    $state.go(stateName);
+                    $rootScope.$digest();
+                });
+
+                it("should transition successfully", function () {
+                    expect($state.current.name).toBe(stateName);
+                });
+            });
+        });
+
+        describe("has a transaction.postedDetail state that", function () {
+            var state,
+                stateName = "transaction.postedDetail";
+
+            beforeEach(function () {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function () {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should not be abstract", function () {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should not be cached", function () {
+                expect(state.cache).toBeFalsy();
+            });
+
+            it("should have the expected URL", function () {
+                expect(state.url).toEqual("/posted/detail/:transactionId");
             });
 
             it("should respond to the URL", function () {

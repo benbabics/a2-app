@@ -5,6 +5,11 @@
         $scope,
         $stateParams = {},
         $q,
+        $stateParams,
+        $localStorage,
+        $ionicScrollDelegateMock,
+        wexInfiniteListService,
+        AnalyticsUtil,
         moment,
         LoadingIndicator,
         TransactionManager,
@@ -12,7 +17,6 @@
         UserModel,
         UserAccountModel,
         PostedTransactionModel,
-        AnalyticsUtil,
         ElementUtil,
         cardIdFilter,
         ctrl,
@@ -23,10 +27,21 @@
             TRANSACTION_LIST: {
                 "CONFIG"        : {
                     "ANALYTICS"                 : {
-                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "events": {
+                            "date"  : ["Transaction", "Date"],
+                            "card"  : ["Transaction", "CardNumber"],
+                            "driver": ["Transaction", "DriverName"],
+                            "scroll": ["Transaction", "InfiniteScroll"]
+                        }
                     },
                     "title"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "reloadDistance" : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    "reloadDistance" : TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                    "buttonLabels"  : {
+                        "date"  : "Date",
+                        "driver": "Driver Name",
+                        "card"  : "Card Number"
+                    }
                 },
                 "SEARCH_OPTIONS": {
                     "MAX_DAYS" : TestUtils.getRandomInteger(1, 100),
@@ -43,6 +58,7 @@
             TransactionManager = jasmine.createSpyObj("TransactionManager", ["fetchPostedTransactions"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
+            wexInfiniteListService = jasmine.createSpyObj("wexInfiniteListService", ["emptyCache"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
                 "getActiveTrackerId",
                 "hasActiveTracker",
@@ -52,6 +68,7 @@
                 "trackView"
             ]);
             ElementUtil = jasmine.createSpyObj("ElementUtil", ["resetInfiniteList"]);
+            $ionicScrollDelegateMock = jasmine.createSpyObj("$ionicScrollDelegate", ["scrollTop"]);
 
             module("app.shared");
             module("app.components", function ($provide) {
@@ -68,13 +85,11 @@
                 });
             });
 
-            inject(function (_$rootScope_, _$q_, _moment_, _UserModel_, _UserAccountModel_, _PostedTransactionModel_, $controller) {
-                $rootScope = _$rootScope_;
-                $q = _$q_;
-                moment = _moment_;
-                UserModel = _UserModel_;
-                UserAccountModel = _UserAccountModel_;
-                PostedTransactionModel = _PostedTransactionModel_;
+            inject(function (_$rootScope_, _$stateParams_, $controller, _$localStorage_, _AnalyticsUtil_) {
+                $rootScope             = _$rootScope_;
+                $stateParams           = _$stateParams_;
+                $localStorage          = _$localStorage_;
+                AnalyticsUtil          = _AnalyticsUtil_;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
@@ -83,13 +98,14 @@
                 $stateParams.cardId = cardIdFilter;
 
                 ctrl = $controller("TransactionListController", {
-                    $scope            : $scope,
-                    $stateParams      : $stateParams,
-                    globals           : mockGlobals,
-                    ElementUtil       : ElementUtil,
-                    LoadingIndicator  : LoadingIndicator,
-                    TransactionManager: TransactionManager,
-                    UserManager       : UserManager
+                    $scope                : $scope,
+                    $stateParams          : $stateParams,
+                    globals               : mockGlobals,
+                    ElementUtil           : ElementUtil,
+                    $localStorage         : $localStorage,
+                    $ionicScrollDelegate  : $ionicScrollDelegateMock,
+                    wexInfiniteListService: wexInfiniteListService,
+                    AnalyticsUtil         : AnalyticsUtil
                 });
 
             });
@@ -97,17 +113,44 @@
             //setup spies
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
-
-            //setup mocks
-            mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
-            UserManager.getUser.and.returnValue(mockUser);
         });
 
         it("should set backStateOverride to the expected value", function () {
             expect(ctrl.backStateOverride).toEqual(getExpectedBackStateOverride(cardIdFilter));
         });
 
-        describe("has a loadNextPage function that", function () {
+        describe("has a filterViews.transactionsFilterValue property that", function () {
+            it("should default to the value 'date', if not  previously set", function () {
+                expect(ctrl.filterViews.transactionsFilterValue).toEqual('date');
+            });
+        });
+
+        describe("has a handleFilterSelection function that", function () {
+            var params;
+
+            it("should call $ionicScrollDelegate.scrollTop", function () {
+                params = { target: { value: 'foo' } };
+                ctrl.handleFilterSelection( params );
+                expect($ionicScrollDelegateMock.scrollTop).toHaveBeenCalled();
+            });
+        });
+
+        describe("has a listener for the $destroy event that", function () {
+          it("should send a message to wexInfiniteListService.emptyCache", function () {
+            $scope.$broadcast( '$destroy' );
+            expect(wexInfiniteListService.emptyCache).toHaveBeenCalled();
+          });
+        });
+
+        describe("has a handleLoadSubsequentData function that", function () {
+          it("should send a message to AnalyticsUtil.trackEvent", function () {
+            var params = mockGlobals.TRANSACTION_LIST.CONFIG.ANALYTICS.events.scroll;
+            ctrl.handleLoadSubsequentData();
+            expect(AnalyticsUtil.trackEvent).toHaveBeenCalledWith( params[0], params[1] );
+          });
+        });
+
+        xdescribe("has a loadNextPage function that", function () {
             var fetchPostedTransactionsDeferred,
                 currentDate = TestUtils.getRandomDate();
 
@@ -282,7 +325,7 @@
             });
         });
 
-        describe("has a resetSearchResults function that", function () {
+        xdescribe("has a resetSearchResults function that", function () {
 
             beforeEach(function () {
                 TransactionManager.fetchPostedTransactions.and.returnValue($q.resolve());

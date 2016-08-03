@@ -15,6 +15,10 @@
       // check for isGreeking
       settings.isGreeking = settings.isGreeking === 'true' || settings.isGreeking === true;
 
+      // make props accesible for tests
+      this.settings        = settings;
+      this.serviceDelegate = serviceDelegate;
+
       /**
        * Private Methods
       **/
