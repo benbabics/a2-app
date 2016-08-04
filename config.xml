@@ -107,5 +107,5 @@
     <plugin name="ionic-plugin-keyboard" spec="~2.2.0" />
     <plugin name="cordova-plugin-ios-no-export-compliance" spec="https://github.com/WEXInc/cordova-plugin-ios-no-export-compliance.git" />
     <plugin name="cordova-plugin-touch-id" spec="~3.2.0" />
-    <plugin name="cordova-plugin-android-fingerprint-auth" spec="~0.0.8" />
+    <plugin name="cordova-plugin-android-fingerprint-auth" spec="~0.0.10" />
 </widget>
