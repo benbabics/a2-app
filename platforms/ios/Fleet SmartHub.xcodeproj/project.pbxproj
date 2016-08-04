@@ -65,6 +65,9 @@
 		FE465502B39648AC835DB3D2 /* AppVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9DD3DBBAA146D8BFC59BAB /* AppVersion.m */; };
 		5E674DBE8E48486FB0ECBC9F /* CDVMarket.m in Sources */ = {isa = PBXBuildFile; fileRef = D2EDACD256854FEEB86B8289 /* CDVMarket.m */; };
 		4E0AD5102F214A639D0AA270 /* IonicKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 0327F55722034E8583C45175 /* IonicKeyboard.m */; };
+		F1524E22841843CEBF3A2D10 /* TouchID.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A6BF7B0E45C4BC59D328A00 /* TouchID.m */; };
+		7A1DB68073D84FDE8D24960A /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC6D75FF09042AD9FE20DAE /* LocalAuthentication.framework */; };
+		426665BA407F4F24934D644F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66B82E092F4E4755AA07255A /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +187,10 @@
 		F92BEC49774B41D4BE54F607 /* CDVMarket.h */ = {isa = PBXFileReference; name = "CDVMarket.h"; path = "com.xmartlabs.cordova.market/CDVMarket.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		0327F55722034E8583C45175 /* IonicKeyboard.m */ = {isa = PBXFileReference; name = "IonicKeyboard.m"; path = "ionic-plugin-keyboard/IonicKeyboard.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		C6ADADCE43EA4708B528E6C6 /* IonicKeyboard.h */ = {isa = PBXFileReference; name = "IonicKeyboard.h"; path = "ionic-plugin-keyboard/IonicKeyboard.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		2A6BF7B0E45C4BC59D328A00 /* TouchID.m */ = {isa = PBXFileReference; name = "TouchID.m"; path = "cordova-plugin-touch-id/TouchID.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		5E9A6078DAC64752AD6F1AB5 /* TouchID.h */ = {isa = PBXFileReference; name = "TouchID.h"; path = "cordova-plugin-touch-id/TouchID.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		DFC6D75FF09042AD9FE20DAE /* LocalAuthentication.framework */ = {isa = PBXFileReference; name = "LocalAuthentication.framework"; path = "System/Library/Frameworks/LocalAuthentication.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		66B82E092F4E4755AA07255A /* Security.framework */ = {isa = PBXFileReference; name = "Security.framework"; path = "System/Library/Frameworks/Security.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +214,8 @@
 				A6FDA366E4A94E1E8BD5FC1A /* SystemConfiguration.framework in Frameworks */,
 				BC2DCC3C891040C8B09101FB /* CoreTelephony.framework in Frameworks */,
 				2AE420106DA344FCA1F52FE7 /* QuartzCore.framework in Frameworks */,
+				7A1DB68073D84FDE8D24960A /* LocalAuthentication.framework in Frameworks */,
+				426665BA407F4F24934D644F /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +301,8 @@
 				AF9EDEFF10514B0E817BB0B6 /* SystemConfiguration.framework */,
 				4CEEBF38017E40B8B5FF0DBC /* CoreTelephony.framework */,
 				107AD73C39C44EBA90696D05 /* QuartzCore.framework */,
+				DFC6D75FF09042AD9FE20DAE /* LocalAuthentication.framework */,
+				66B82E092F4E4755AA07255A /* Security.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -361,6 +372,8 @@
 				F92BEC49774B41D4BE54F607 /* CDVMarket.h */,
 				0327F55722034E8583C45175 /* IonicKeyboard.m */,
 				C6ADADCE43EA4708B528E6C6 /* IonicKeyboard.h */,
+				2A6BF7B0E45C4BC59D328A00 /* TouchID.m */,
+				5E9A6078DAC64752AD6F1AB5 /* TouchID.h */,
 			);
 			name = Plugins;
 			path = "Fleet SmartHub/Plugins";
@@ -554,6 +567,7 @@
 				FE465502B39648AC835DB3D2 /* AppVersion.m in Sources */,
 				5E674DBE8E48486FB0ECBC9F /* CDVMarket.m in Sources */,
 				4E0AD5102F214A639D0AA270 /* IonicKeyboard.m in Sources */,
+				F1524E22841843CEBF3A2D10 /* TouchID.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

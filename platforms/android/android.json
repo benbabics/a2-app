@@ -75,6 +75,10 @@
                         {
                             "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"io.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FingerprintAuth\"><param name=\"android-package\" value=\"com.cordova.plugin.android.fingerprintauth.FingerprintAuth\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -96,6 +100,10 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.USE_FINGERPRINT\" />",
                             "count": 1
                         }
                     ],
@@ -177,6 +185,12 @@
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-ios-no-export-compliance": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-touch-id": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-android-fingerprint-auth": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
@@ -421,6 +435,20 @@
                 "cordova.plugins.Keyboard"
             ],
             "runs": true
+        },
+        {
+            "file": "plugins/cordova-plugin-touch-id/www/TouchID.js",
+            "id": "cordova-plugin-touch-id.TouchID",
+            "clobbers": [
+                "window.plugins.touchid"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-android-fingerprint-auth/www/FingerprintAuth.js",
+            "id": "cordova-plugin-android-fingerprint-auth.FingerprintAuth",
+            "clobbers": [
+                "FingerprintAuth"
+            ]
         }
     ]
 }

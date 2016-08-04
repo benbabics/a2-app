@@ -239,6 +239,20 @@ module.exports = [
             "cordova.plugins.Keyboard"
         ],
         "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-touch-id/www/TouchID.js",
+        "id": "cordova-plugin-touch-id.TouchID",
+        "clobbers": [
+            "window.plugins.touchid"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-android-fingerprint-auth/www/FingerprintAuth.js",
+        "id": "cordova-plugin-android-fingerprint-auth.FingerprintAuth",
+        "clobbers": [
+            "FingerprintAuth"
+        ]
     }
 ];
 module.exports.metadata = 

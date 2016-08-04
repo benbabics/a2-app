@@ -54,6 +54,12 @@
         },
         "cordova-plugin-ios-no-export-compliance": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-touch-id": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-android-fingerprint-auth": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
     "dependent_plugins": {}
