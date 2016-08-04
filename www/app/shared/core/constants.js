@@ -236,6 +236,14 @@
         showTodayButton: false
     };
 
+    sharedGlobals.FINGERPRINT_AUTH = {
+        PASSWORD_FALLBACK: {
+            NONE   : "NONE", //Android only
+            DEFAULT: "DEFAULT",
+            CUSTOM : "CUSTOM" //iOS only
+        }
+    };
+
     angular
         .module("app.shared.core")
         .constant("sharedGlobals", sharedGlobals)
