@@ -567,7 +567,8 @@
         },
         "SEARCH_OPTIONS": {
             "MAX_DAYS" : 60,
-            "PAGE_SIZE": 25
+            "PAGE_SIZE": 25,
+            "PENDING_MAX_DAYS" : 13
         }
     };
 

@@ -94,8 +94,8 @@
                 scope.shouldDisplayPendingDivider = false;
 
                 var requestConfig = _.extend({}, scope.infiniteScrollService.settings, {
-                    fromDate: moment().toDate(),
-                    toDate:   moment().add(13, 'days').toDate()
+                    fromDate: moment().subtract(scope.searchOptions.PENDING_MAX_DAYS, 'days').toDate(),
+                    toDate:   moment().toDate()
                 });
 
                 if ( scope.transactions ) {
