@@ -3,9 +3,10 @@
 
     function WexInfiniteListController($scope, $attrs, $ionicScrollDelegate, _, wexInfiniteListService) {
       var serviceDelegate = {
-              makeRequest:  angular.noop,
-              onError:      angular.noop,
-              onResetItems: angular.noop
+              makeRequest:      angular.noop,
+              onError:          angular.noop,
+              onResetItems:     angular.noop,
+              onRenderComplete: angular.noop
           },
           settings = _.extend(
               _.pick( $attrs, 'cacheKey', 'isGreeking' ), // create new object of specific attrs
@@ -32,13 +33,16 @@
                     $ionicScrollDelegate.resize(); // recalc rendered ion-items
                   }
 
+                  serviceDelegate.onRenderComplete();
                   $scope.$broadcast( 'scroll.refreshComplete' );
               });
       }
 
       function resetSearchResults() {
           serviceDelegate.onResetItems();
-          return $scope.infiniteScrollService.resetCollection();
+          return $scope.infiniteScrollService.resetCollection().finally(function() {
+              serviceDelegate.onRenderComplete();
+          });
       }
 
       /**

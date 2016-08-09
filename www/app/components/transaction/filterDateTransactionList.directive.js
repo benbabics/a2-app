@@ -28,6 +28,9 @@
             scope.transactions       = scope.infiniteScrollService.model;
             scope.unlessAppIsClassic = !UserManager.getUser().isOnlineAppClassic;
 
+            scope.shouldDisplayPendingDivider = false;
+            scope.shouldDisplayPostedDivider  = false;
+
             requestParams = {
                 billingAccountId: UserManager.getUser().billingCompany.accountId,
                 fromDate:         moment().subtract( scope.searchOptions.MAX_DAYS, 'days' ).toDate(),
@@ -35,9 +38,10 @@
             };
 
             controller.assignServiceDelegate({
-                makeRequest:  handleMakeRequestPostedTransactions,
-                onResetItems: handleOnResetItems,
-                onError:      handleOnError
+                makeRequest:      handleMakeRequestPostedTransactions,
+                onResetItems:     handleOnResetItems,
+                onError:          handleOnError,
+                onRenderComplete: handleOnRenderComplete
             });
 
             // if we don't yet have pending transactions, fetch them
@@ -68,6 +72,12 @@
                 Logger.error( 'Failed to fetch next page of posted transactions: ' + errorResponse );
             }
 
+            function handleOnRenderComplete() {
+                if ( scope.transactions.collection.length ) {
+                    scope.shouldDisplayPostedDivider = true;
+                }
+            }
+
             /**
              * Private Methods
             **/
@@ -79,6 +89,9 @@
 
             function makeRequestPendingTransactions() {
                 if ( scope.isAppClassic ) return;
+
+                // hide pending transactions divider
+                scope.shouldDisplayPendingDivider = false;
 
                 var requestConfig = _.extend({}, scope.infiniteScrollService.settings, {
                     fromDate: moment().toDate(),
@@ -100,6 +113,8 @@
                         Logger.error( 'fetchPendingTransactions failure', arguments );
                     })
                     .finally(function() {
+                        var shouldDisplay = scope.transactions.pendingCollection.length > 0;
+                        scope.shouldDisplayPendingDivider = shouldDisplay;
                         scope.$broadcast( 'scroll.refreshComplete' );
                     });
             }
