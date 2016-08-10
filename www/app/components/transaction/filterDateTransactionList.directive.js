@@ -28,8 +28,6 @@
             scope.transactions       = scope.infiniteScrollService.model;
             scope.unlessAppIsClassic = !UserManager.getUser().isOnlineAppClassic;
 
-            scope.shouldDisplayPendingDivider = false;
-            scope.shouldDisplayPostedDivider  = false;
 
             requestParams = {
                 billingAccountId: UserManager.getUser().billingCompany.accountId,
@@ -44,8 +42,16 @@
                 onRenderComplete: handleOnRenderComplete
             });
 
-            // if we don't yet have pending transactions, fetch them
-            if ( !scope.transactions.pendingCollection ) {
+            // if we have posted transactions, display the divider
+            if ( scope.transactions.collection.length ) {
+                scope.shouldDisplayPostedDivider  = true;
+            }
+            // if we have pending transactions, display the divider
+            if ( scope.transactions.pendingCollection && scope.transactions.pendingCollection.length ) {
+                scope.shouldDisplayPendingDivider = true;
+            }
+            // otherwise fetch them
+            else {
                 makeRequestPendingTransactions();
             }
 
