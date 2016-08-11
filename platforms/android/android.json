@@ -79,6 +79,10 @@
                         {
                             "xml": "<feature name=\"FingerprintAuth\"><param name=\"android-package\" value=\"com.cordova.plugin.android.fingerprintauth.FingerprintAuth\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SecureStorage\"><param name=\"android-package\" value=\"com.crypho.plugins.SecureStorage\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -191,6 +195,9 @@
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-android-fingerprint-auth": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-secure-storage": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
@@ -449,6 +456,18 @@
             "clobbers": [
                 "FingerprintAuth"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-secure-storage/www/securestorage.js",
+            "id": "cordova-plugin-secure-storage.SecureStorage",
+            "clobbers": [
+                "SecureStorage"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-secure-storage/www/sjcl_ss.js",
+            "id": "cordova-plugin-secure-storage.sjcl_ss",
+            "runs": true
         }
     ]
 }

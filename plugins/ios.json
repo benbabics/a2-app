@@ -60,6 +60,9 @@
         },
         "cordova-plugin-android-fingerprint-auth": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-secure-storage": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
     "dependent_plugins": {}
