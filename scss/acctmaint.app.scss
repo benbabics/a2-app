@@ -5,6 +5,9 @@
 @import "includes/wex-styles";
 @import "widgets/main";
 
+$fa-font-path: "/www/lib/fontawesome/fonts";
+@import "/www/lib/fontawesome/scss/font-awesome";
+
 $container-background-color: #f0f0f0;
 
 /**------------------------------------------------------

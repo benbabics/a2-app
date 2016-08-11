@@ -20,7 +20,8 @@
     "ng-idle": "^1.2.0",
     "ionic-datepicker": "^1.1.0",
     "angular-mocks": "^1.5.7",
-    "ion-sticky": "^1.0.6"
+    "ion-sticky": "^1.0.6",
+    "fontawesome": "^4.6.3"
   },
   "resolutions": {
     "angular": ">=1.4.6",
