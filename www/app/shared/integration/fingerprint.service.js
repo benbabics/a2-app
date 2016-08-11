@@ -7,7 +7,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function FingerprintService(_, $q, globals, PlatformUtil) {
+    function FingerprintService(_, $q, globals, PlatformUtil, SecureStorage) {
         //Private members:
         var CONSTANTS = globals.FINGERPRINT_AUTH,
             NOT_SUPPORTED_ERROR = "Fingerprint authentication is not available on this platform.",
@@ -46,6 +46,10 @@
         function verify(options) {
             var command = "verify";
 
+            if (_.isNil(_.get(options, "clientId"))) {
+                return $q.reject(new Error("'clientId' is required for fingerprint verification."));
+            }
+
             if (platform === PLATFORM_IOS) {
                 //use a custom password fallback prompt (iOS only)
                 if (_.get(options, "passwordFallback") === CONSTANTS.PASSWORD_FALLBACK.CUSTOM) {
@@ -53,7 +57,26 @@
                 }
             }
 
-            return doPluginCommand(command, options);
+            //do fingerprint authentication
+            return doPluginCommand(command, options)
+                .then(function (authResponse) {
+                    var clientSecret = _.get(options, "clientSecret"),
+                        isRegistering = !_.isNil(clientSecret),
+                        promise;
+
+                    //set/get the client id and secret in secure storage
+                    if (isRegistering) {
+                        promise = SecureStorage.set(options.clientId, clientSecret);
+                    }
+                    else {
+                        promise = SecureStorage.get(options.clientId);
+                    }
+
+                    //return the authentication response with the client secret
+                    return promise.then(function (response) {
+                        return _.extend({clientSecret: isRegistering ? clientSecret : response}, authResponse);
+                    });
+                });
         }
 
         //Private functions:
@@ -125,6 +148,9 @@
                         "locale"
                     ]);
 
+                    //Note - Android plugin always requires a clientSecret
+                    _.set(configObject, "clientSecret", _.get(configObject, "clientSecret", configObject.clientId));
+
                     //only enable fallback password if DEFAULT is specified
                     configObject.disableBackup = _.get(options, "passwordFallback") !== CONSTANTS.PASSWORD_FALLBACK.DEFAULT;
 
@@ -138,7 +164,7 @@
             switch (command) {
                 case "verify":
                 case "verifyFingerprintWithCustomPasswordFallback":
-                    return [_.get(options, "message")];
+                    return [_.get(options, "message", CONSTANTS.CONFIG.defaultMessage)];
                 default:
                     return [];
             }

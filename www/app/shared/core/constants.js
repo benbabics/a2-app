@@ -237,6 +237,9 @@
     };
 
     sharedGlobals.FINGERPRINT_AUTH = {
+        CONFIG: {
+            defaultMessage: "Scan your fingerprint below to enter your account"
+        },
         PASSWORD_FALLBACK: {
             NONE   : "NONE", //Android only
             DEFAULT: "DEFAULT",
