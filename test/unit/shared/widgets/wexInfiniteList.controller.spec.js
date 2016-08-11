@@ -33,9 +33,11 @@
 
                 // wexInfiniteListService is a spy of a constructor.
                 // Below are spies for it's methods... is there a better way to do this?
-                wexInfiniteListService.prototype.loadNextPage = function() {};
+                wexInfiniteListService.prototype.loadNextPage    = function() {};
                 spyOn( wexInfiniteListService.prototype, "loadNextPage" ).and.returnValue( deferred.promise ); // expecting a promise
-                wexInfiniteListService.prototype.resetCollection = jasmine.createSpy( "resetCollection" );
+                wexInfiniteListService.prototype.resetCollection = function() {};
+                spyOn( wexInfiniteListService.prototype, "resetCollection" ).and.returnValue( deferred.promise ); // expecting a promise
+                // wexInfiniteListService.prototype.resetCollection = jasmine.createSpy( "resetCollection" );
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
