@@ -59,7 +59,7 @@
             //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
             return $ionicHistory.clearCache(["payment"])
                 .then(function () {
-                    return $state.go("payment.list.view", params, {
+                    return $state.go("payment.activity.list.view", params, {
                         reload : true,
                         inherit: false,
                         notify : true

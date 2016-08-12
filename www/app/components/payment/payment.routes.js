@@ -23,7 +23,12 @@
             template: "<ion-nav-view name='view'></ion-nav-view>"
         });
 
-        $stateProvider.state("payment.list", {
+        $stateProvider.state("payment.activity", {
+            abstract: true,
+            url     : "/activity"
+        });
+
+        $stateProvider.state("payment.activity.list", {
             abstract: true,
             url     : "/list",
             views   : {
@@ -33,7 +38,7 @@
             }
         });
 
-        $stateProvider.state("payment.list.view", {   // default payment.list child state
+        $stateProvider.state("payment.activity.list.view", {   // default payment.activity.list child state
             url        : "",
             cache      : true,
             templateUrl: "app/components/payment/templates/paymentList.html",
@@ -43,7 +48,7 @@
             }
         });
 
-        $stateProvider.state("payment.detail", {
+        $stateProvider.state("payment.activity.detail", {
             url        : "/detail/:paymentId",
             cache      : false,
             views: {

@@ -373,9 +373,9 @@
             });
         });
 
-        describe("has a payment.list state that", function () {
+        describe("has a payment.activity.list state that", function () {
             var state,
-                stateName = "payment.list";
+                stateName = "payment.activity.list";
 
             beforeEach(function () {
                 state = $state.get(stateName);
@@ -401,13 +401,13 @@
             });
 
             it("should respond to the URL", function () {
-                expect($state.href(stateName)).toEqual("#/payment/list");
+                expect($state.href(stateName)).toEqual("#/payment/activity/list");
             });
         });
 
-        describe("has a payment.list.view state that", function () {
+        describe("has a payment.activity.list.view state that", function () {
             var state,
-                stateName = "payment.list.view";
+                stateName = "payment.activity.list.view";
 
             beforeEach(function () {
                 state = $state.get(stateName);
@@ -431,13 +431,13 @@
             });
 
             it("should respond to the URL", function () {
-                expect($state.href(stateName)).toEqual("#/payment/list");
+                expect($state.href(stateName)).toEqual("#/payment/activity/list");
             });
         });
 
-        describe("has a payment.detail state that", function () {
+        describe("has a payment.activity.detail state that", function () {
             var state,
-                stateName = "payment.detail";
+                stateName = "payment.activity.detail";
 
             beforeEach(function () {
                 state = $state.get(stateName);
@@ -466,7 +466,7 @@
             });
 
             it("should respond to the URL", function () {
-                expect($state.href(stateName, {paymentId: "1234"})).toEqual("#/payment/detail/1234");
+                expect($state.href(stateName, {paymentId: "1234"})).toEqual("#/payment/activity/detail/1234");
             });
 
             describe("when navigated to", function () {

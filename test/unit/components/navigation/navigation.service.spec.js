@@ -327,7 +327,7 @@
                 });
 
                 it("should navigate to the payment list page and reload it", function () {
-                    expect($state.go).toHaveBeenCalledWith("payment.list.view", params, {
+                    expect($state.go).toHaveBeenCalledWith("payment.activity.list.view", params, {
                         reload : true,
                         inherit: false,
                         notify : true
@@ -354,7 +354,7 @@
                 });
 
                 it("should navigate to the payment list page and reload it", function () {
-                    expect($state.go).toHaveBeenCalledWith("payment.list.view", undefined, {
+                    expect($state.go).toHaveBeenCalledWith("payment.activity.list.view", undefined, {
                         reload : true,
                         inherit: false,
                         notify : true
