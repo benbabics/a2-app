@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function MenuController($ionicSideMenuDelegate, globals, Navigation) {
+    function MenuController(_, $ionicSideMenuDelegate, $state, globals, Navigation) {
 
         var vm = this;
         vm.config = globals.MENU.CONFIG;
@@ -19,6 +19,7 @@
         vm.goToTermsOfUse = goToTermsOfUse;
         vm.goToPrivacyPolicy = goToPrivacyPolicy;
         vm.goToLogOut = goToLogOut;
+        vm.currentStateHasRoot = currentStateHasRoot;
 
         function closeMenu() {
             $ionicSideMenuDelegate.toggleRight(false);
@@ -58,6 +59,10 @@
 
         function goToTransactionActivity() {
             return Navigation.goToTransactionActivity();
+        }
+
+        function currentStateHasRoot(rootState) {
+            return _.startsWith($state.current.name, rootState);
         }
     }
 

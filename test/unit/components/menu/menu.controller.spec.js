@@ -1,9 +1,12 @@
 (function () {
     "use strict";
 
-    var $ionicSideMenuDelegate,
+    var _,
+        $ionicSideMenuDelegate,
         ctrl,
         Navigation,
+        $state,
+        appGlobals,
         mockGlobals = {
             LOGIN_STATE: "user.auth.login",
             AUTH_API: {
@@ -95,10 +98,18 @@
             Navigation = jasmine.createSpyObj("Navigation", ["goToCards", "goToContactUs", "goToHome", "goToLogOut", "goToMakePayment",
                                                              "goToPaymentActivity", "goToPrivacyPolicy", "goToTermsOfUse", "goToTransactionActivity"]);
             $ionicSideMenuDelegate = jasmine.createSpyObj("$ionicSideMenuDelegate", ["toggleRight"]);
+            $state = {
+                current : {
+                    name : ""
+                }
+            };
+            inject(function ($controller, ___, _appGlobals_) {
+                _ = ___;
+                appGlobals = _appGlobals_;
 
-            inject(function ($controller) {
                 ctrl = $controller("MenuController", {
                     $ionicSideMenuDelegate: $ionicSideMenuDelegate,
+                    $state                : $state,
                     Navigation            : Navigation
                 });
             });
@@ -224,6 +235,29 @@
 
         });
 
-    });
+        describe("has a currentStateHasRoot function that", function () {
 
+            describe("when the current state does begin with the passed root", function () {
+
+                it("should return TRUE", function () {
+
+                    _.forEach(appGlobals.MENU.CONFIG.rootStates, function (root) {
+                        $state.current.name = root + "." + TestUtils.getRandomStringThatIsAlphaNumeric(12);
+                        expect(ctrl.currentStateHasRoot(root)).toBe(true);
+                    });
+                });
+            });
+
+            describe("when the current state does NOT begin with the passed root", function () {
+
+                it("should return FALSE", function () {
+
+                    _.forEach(appGlobals.MENU.CONFIG.rootStates, function (root) {
+                        $state.current.name = TestUtils.getRandomStringThatIsAlphaNumeric(root.length - 1) + "." + root;
+                        expect(ctrl.currentStateHasRoot(root)).toBe(false);
+                    });
+                });
+            });
+        });
+    });
 }());

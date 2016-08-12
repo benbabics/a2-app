@@ -631,12 +631,23 @@
                 "alerts"             : "Alerts",
                 "addPayment"         : "Make Payment",
                 "payments"           : "Payment Activity",
-                "transactionActivity": "Transaction Activity",
+                "transactionActivity": "Transactions",
                 "cards"              : "Cards",
                 "contactUs"          : "Contact Us",
                 "terms"              : "Terms of Use",
                 "privacyPolicy"      : "Privacy Policy",
                 "logOut"             : "Log Out"
+            },
+            "rootStates": {
+                "home"               : "landing",
+                "addPayment"         : "payment.maintenance",
+                "payments"           : "payment.activity",
+                "transactionActivity": "transaction",
+                "cards"              : "card",
+                "alerts"             : "alerts",
+                "contactUs"          : "contactUs",
+                "terms"              : "termsOfUse",
+                "privacyPolicy"      : "privacyPolicy"
             }
         }
     };
