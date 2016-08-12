@@ -1,0 +1,27 @@
+<ion-view view-title="{{::vm.config.title}}">
+
+  <ion-content ion-sticky>
+
+    <div class="widget-filter-transaction-list widget-filter-card-transaction-list">
+
+        <ion-refresher class="wex-refresher" on-refresh="vm.resetSearchResults()"></ion-refresher>
+
+        <wex-infinite-list on-reload="vm.loadNextPage"
+                           reload-distance="::config.reloadDistance"
+                           loading-complete="vm.infiniteScrollService.isLoadingComplete">
+
+            <div collection-repeat="alert in vm.alerts.collection | groupAlertsByDate : 'postDate'"
+                 item-height="alert.renderHeight">
+
+                    <alert-item />
+
+            </div>
+        </wex-infinite-list>
+
+        <div ng-show="vm.infiniteScrollService.isLoadingComplete && vm.infiniteScrollService.model.collection.length <= 0" class="no-transactions">{{::config.emptyList}}</div>
+
+    </div>
+
+  </ion-content>
+
+</ion-view>

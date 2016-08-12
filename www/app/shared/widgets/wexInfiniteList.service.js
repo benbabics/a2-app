@@ -65,14 +65,15 @@
         });
     }
 
-    function resetCollection() {
+    function resetCollection(options) {
       var self = this,
           collectionBuffer = [];
 
       resetProperties.call( this );
 
       // if greeking, assign buffer before request to render greeking state
-      if ( this.settings.isGreeking ) {
+      options = options || {};
+      if ( this.settings.isGreeking && !options.skipGreeking ) {
         this.model.collection = collectionBuffer;
       }
 

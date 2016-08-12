@@ -189,6 +189,22 @@
                       expect( item.isGreekLoading ).toBeFalsy();
                   });
               });
+              it("should not be populated with 'isGreekLoading:false' if an argument with the hash { skipGreeking: true } was present", function() {
+                Array.prototype.push.apply( instance.model.collection, mockItems );
+
+                instance.resetCollection({ skipGreeking: true });
+                expect( instance.model.collection ).toEqual( mockItems );
+
+                deferred.resolve( mockResponse );
+                $scope.$apply();
+
+                expect( instance.model.collection.length ).toEqual( mockResponse.length );
+
+                _.each(instance.model.collection, function(item) {
+                    expect( item.isGreekLoading ).toBeDefined();
+                    expect( item.isGreekLoading ).toBeFalsy();
+                });
+              });
           });
       });
 

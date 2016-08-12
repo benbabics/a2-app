@@ -52,6 +52,9 @@
      */
     sharedGlobals.ACCOUNT_MAINTENANCE_API = {
         BASE_URL: "@@@STRING_REPLACE_APP_URL_AM_API@@@",
+        ALERTS: {
+          "BASE": "alerts"
+        },
         CARDS: {
             "UPDATE_TYPES"       : {
                 "REISSUE": "reissue"
@@ -166,6 +169,13 @@
                 UNKNOWN     : "N/A"
             }
         }
+    };
+
+    /**
+     * Alert Constants
+     */
+    sharedGlobals.ALERT = {
+      DISPLAY_MAPPINGS: {}
     };
 
     /**

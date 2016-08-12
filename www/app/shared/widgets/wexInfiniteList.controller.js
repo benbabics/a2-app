@@ -9,8 +9,8 @@
               onRenderComplete: angular.noop
           },
           settings = _.extend(
-              _.pick( $attrs, 'cacheKey', 'isGreeking' ), // create new object of specific attrs
-              $scope.$parent.$eval( $attrs.settings )     // evaluate any settings attr expressions
+              _.pick( $attrs, 'cacheKey', 'isGreeking' ),                   // create new object of specific attrs
+              $scope.$parent ? $scope.$parent.$eval( $attrs.settings ) : {} // evaluate any settings attr expressions
           );
 
       // check for isGreeking
@@ -38,9 +38,11 @@
               });
       }
 
-      function resetSearchResults() {
+      function resetSearchResults(options) {
           serviceDelegate.onResetItems();
-          return $scope.infiniteScrollService.resetCollection().finally(function() {
+          // settings.isGreeking may be enabled, but allow for the ability to
+          // reset the collection without greeking.
+          return $scope.infiniteScrollService.resetCollection(options).finally(function() {
               serviceDelegate.onRenderComplete();
           });
       }

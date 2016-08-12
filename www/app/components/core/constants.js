@@ -169,6 +169,24 @@
         }
     };
 
+    appGlobals.ALERTS_LIST = {
+        "CONFIG": {
+            "ANALYTICS": {
+                "pageName": "Alerts",
+                "events": {
+                    "scroll": ["Alerts", "InfiniteScroll"]
+                }
+            },
+            "title":          "Alerts",
+            "emptyList":      "There are no alerts at this time.",
+            "reloadDistance": "5%"
+        },
+        "SEARCH_OPTIONS": {
+            "PAGE_SIZE": 25,
+            "STATUS_ACTIVE": "active"
+        }
+    };
+
     appGlobals.CARD_DETAIL = {
         "CONFIG": {
             "ANALYTICS"                : {
@@ -610,6 +628,7 @@
             },
             "options": {
                 "home"               : "Home",
+                "alerts"             : "Alerts",
                 "addPayment"         : "Make Payment",
                 "payments"           : "Payment Activity",
                 "transactionActivity": "Transaction Activity",
