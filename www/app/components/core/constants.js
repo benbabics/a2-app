@@ -628,11 +628,11 @@
             },
             "options": {
                 "home"               : "Home",
-                "alerts"             : "Alerts",
                 "addPayment"         : "Make Payment",
                 "payments"           : "Payment Activity",
                 "transactionActivity": "Transactions",
                 "cards"              : "Cards",
+                "alerts"             : "Alerts",
                 "contactUs"          : "Contact Us",
                 "terms"              : "Terms of Use",
                 "privacyPolicy"      : "Privacy Policy",
