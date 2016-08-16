@@ -10,7 +10,8 @@
 
         // Revealed Public members
         var service = {
-            getAlerts:  getAlerts
+            getAlerts:   getAlerts,
+            deleteAlert: deleteAlert
         };
 
         activate();
@@ -25,6 +26,12 @@
         function getAlerts(accountId, criteria) {
             var account = accountsResource.forAccount( accountId );
             return $q.when( account.getList(globals.ACCOUNT_MAINTENANCE_API.ALERTS.BASE, criteria) );
+        }
+
+        function deleteAlert(alertId) {
+            var deferred = $q.defer();
+            deferred.resolve();
+            return deferred.promise;
         }
 
     }

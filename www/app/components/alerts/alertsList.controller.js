@@ -5,7 +5,7 @@
     // jshint maxparams:9
 
     /* @ngInject */
-    function AlertsListController(_, $scope, $stateParams, $controller, globals, AnalyticsUtil, AlertsManager, UserManager) {
+    function AlertsListController(_, $scope, $stateParams, $controller, $ionicListDelegate, globals, AnalyticsUtil, AlertsManager, UserManager) {
 
         var vm = this, infiniteListController;
         vm.config  = globals.ALERTS_LIST.CONFIG;
@@ -26,6 +26,7 @@
 
           infiniteListController.assignServiceDelegate({
               makeRequest: handleMakeRequest,
+              removeItem:  handleRemoveItem,
               onError:     handleOnError
           });
 
@@ -60,6 +61,12 @@
             return _.sortBy(alerts, function(obj) {
                 return obj.postDate;
             }).reverse();
+        }
+
+        function handleRemoveItem(alert) {
+            return AlertsManager.deleteAlert( alert ).then(function() {
+                $ionicListDelegate.closeOptionButtons();
+            });
         }
 
         /**

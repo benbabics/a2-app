@@ -82,6 +82,16 @@
       });
     }
 
+    function removeItem(item) {
+        var collection = this.model.collection,
+            index      = collection.indexOf( item );
+
+        return this.delegate.removeItem( item )
+            .then(function() {
+                collection.splice( index, 1 );
+            });
+    }
+
     /**
      * Static Methods
     **/
@@ -170,7 +180,8 @@
     **/
     WexInfiniteListService.prototype = {
       loadNextPage:    loadNextPage,
-      resetCollection: resetCollection
+      resetCollection: resetCollection,
+      removeItem:      removeItem
     };
 
     // Static Methods

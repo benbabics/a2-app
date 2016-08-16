@@ -177,9 +177,10 @@
                     "scroll": ["Alerts", "InfiniteScroll"]
                 }
             },
-            "title":          "Alerts",
-            "emptyList":      "There are no alerts at this time.",
-            "reloadDistance": "5%"
+            "title":            "Alerts",
+            "emptyList":        "There are no alerts at this time.",
+            "reloadDistance":   "5%",
+            "labelDeleteAlert": "Delete"
         },
         "SEARCH_OPTIONS": {
             "PAGE_SIZE": 25,

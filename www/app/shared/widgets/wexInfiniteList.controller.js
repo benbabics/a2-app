@@ -4,6 +4,7 @@
     function WexInfiniteListController($scope, $attrs, $ionicScrollDelegate, _, wexInfiniteListService) {
       var serviceDelegate = {
               makeRequest:      angular.noop,
+              removeItem:       angular.noop,
               onError:          angular.noop,
               onResetItems:     angular.noop,
               onRenderComplete: angular.noop
@@ -38,6 +39,17 @@
               });
       }
 
+      function removeItem(model) {
+          return $scope.infiniteScrollService.removeItem(model)
+              .finally(function() {
+                  if ( settings.isGreeking ) {
+                    $ionicScrollDelegate.resize(); // recalc rendered ion-items
+                  }
+
+                  $scope.$broadcast( 'scroll.refreshComplete' );
+              });
+      }
+
       function resetSearchResults(options) {
           serviceDelegate.onResetItems();
           // settings.isGreeking may be enabled, but allow for the ability to
@@ -60,6 +72,7 @@
       $scope.infiniteScrollService = new wexInfiniteListService( serviceDelegate, settings );
       $scope.loadNextPage          = loadNextPage;
       $scope.resetSearchResults    = resetSearchResults;
+      $scope.removeItem            = removeItem;
     }
 
 

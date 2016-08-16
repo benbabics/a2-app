@@ -12,6 +12,7 @@
       // Revealed Public members
       var service = {
               fetchAlerts: fetchAlerts,
+              deleteAlert: deleteAlert
           };
 
       activate();
@@ -34,7 +35,7 @@
           return alertModel;
       }
 
-      // jshint maxparams:5
+      // jshint maxparams:3
       function fetchAlerts(accountId, pageNumber, pageSize) {
           var params = {
               pageNumber: pageNumber,
@@ -72,6 +73,13 @@
                   var error = "Getting Alerts failed: " + LoggerUtil.getErrorMessage( response );
                   Logger.error( error );
                   throw new Error( error );
+              });
+      }
+
+      function deleteAlert(alert) {
+          return AlertsResource.deleteAlert( alert.alertId )
+              .then(function(response) {
+                  __alerts = _.without( __alerts, alert );
               });
       }
 
