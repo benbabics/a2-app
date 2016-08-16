@@ -1,45 +1,78 @@
 <ion-content class="menu-view">
     <ion-list ng-click="vm.closeMenu()">
-        <ion-item id="option-home"
-                  ng-click="vm.goToHome()">
+
+        <wex-menu-item id="option-home"
+                       icon="fa-home"
+                       root-state="{{::vm.config.rootStates.home}}"
+                       ng-click="vm.goToHome()">
             {{::vm.config.options.home}}
-        </ion-item>
-        <ion-item id="option-add-payment"
-                  ng-click="vm.goToMakePayment()"
-                  wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink">
+        </wex-menu-item>
+
+        <wex-menu-item id="option-add-payment"
+                       ng-click="vm.goToMakePayment()"
+                       icon="fa-bank"
+                       root-state="{{::vm.config.rootStates.addPayment}}"
+                       wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink">
             {{::vm.config.options.addPayment}}
-        </ion-item>
-        <ion-item id="option-payments"
-                  ng-click="vm.goToPaymentActivity()"
-                  wex-analytics-track-event="vm.config.ANALYTICS.events.paymentActivityLink">
+        </wex-menu-item>
+
+        <wex-menu-item id="option-payments"
+                       ng-click="vm.goToPaymentActivity()"
+                       icon="fa-usd"
+                       root-state="{{::vm.config.rootStates.payments}}"
+                       wex-analytics-track-event="vm.config.ANALYTICS.events.paymentActivityLink">
             {{::vm.config.options.payments}}
-        </ion-item>
-        <ion-item id="option-transaction-activity"
-                  ng-click="vm.goToTransactionActivity()"
+        </wex-menu-item>
+
+        <wex-menu-item id="option-transaction-activity"
+                       ng-click="vm.goToTransactionActivity()"
+                       icon="fa-exchange"
+                       root-state="{{::vm.config.rootStates.transactionActivity}}"
                   wex-analytics-track-event="vm.config.ANALYTICS.events.transactionActivityLink">
             {{::vm.config.options.transactionActivity}}
-        </ion-item>
-        <ion-item id="option-cards"
-                  ng-click="vm.goToCards()"
-                  wex-analytics-track-event="vm.config.ANALYTICS.events.cardsLink">
+        </wex-menu-item>
+
+        <!-- Does not go anywhere yet, and fakes the alert count. -->
+        <wex-menu-item id="option-alerts"
+                       icon="fa-bell"
+                       root-state="{{::vm.config.rootStates.alerts}}"
+                       no-chevron>
+            {{::vm.config.options.alerts}}
+            <i class="badge badge-assertive">15</i>
+        </wex-menu-item>
+
+        <wex-menu-item id="option-cards"
+                       ng-click="vm.goToCards()"
+                       icon="fa-credit-card-alt"
+                       root-state="{{::vm.config.rootStates.cards}}"
+                       wex-analytics-track-event="vm.config.ANALYTICS.events.cardsLink">
             {{::vm.config.options.cards}}
-        </ion-item>
-        <ion-item id="option-contact-us"
-                  ng-click="vm.goToContactUs()">
+        </wex-menu-item>
+
+        <wex-menu-item id="option-contact-us"
+                       ng-click="vm.goToContactUs()"
+                       icon="fa-comments"
+                       root-state="{{::vm.config.rootStates.contactUs}}">
             {{::vm.config.options.contactUs}}
-        </ion-item>
-        <ion-item id="option-terms"
-                  ng-click="vm.goToTermsOfUse()">
+        </wex-menu-item>
+
+        <wex-menu-item id="option-terms"
+                       root-state="{{::vm.config.rootStates.terms}}"
+                       ng-click="vm.goToTermsOfUse()">
             {{::vm.config.options.terms}}
-        </ion-item>
-        <ion-item id="option-privacy-policy"
-                  ng-click="vm.goToPrivacyPolicy()">
+        </wex-menu-item>
+
+        <wex-menu-item id="option-privacy-policy"
+                       ng-click="vm.goToPrivacyPolicy()"
+                       root-state="{{::vm.config.rootStates.privacyPolicy}}">
             {{::vm.config.options.privacyPolicy}}
-        </ion-item>
-        <ion-item id="option-log-out"
-                  ng-click="vm.goToLogOut()">
+        </wex-menu-item>
+
+        <wex-menu-item id="option-log-out"
+                       ng-click="vm.goToLogOut()">
             {{::vm.config.options.logOut}}
-        </ion-item>
+        </wex-menu-item>
+
     </ion-list>
 </ion-content>
 

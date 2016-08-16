@@ -198,16 +198,54 @@ $user-login-error-message-animation: all linear 0.5s;
  ------------------------------------------------------**/
 .menu-view {
     background-color: $charcoal-light;
-    padding-top: $bar-height;
 
     .item, .item-content {
         background-color: $charcoal-light;
         color: $inverse-font-color;
         border-color: $charcoal;
     }
-    a:active {
-        background-color: $charcoal !important;
+    .chevron-container {
+        float: right;
     }
+    .fa-chevron-right {
+        font-size: 0.7em;
+    }
+    .menu-icon {
+        color: #fff;
+        opacity: 0.6;
+    }
+    .item.current {
+        background-color: #3a97b5;
+        .fa-chevron-right {
+            opacity: 0.6;
+        }
+    }
+    .item.activated {
+        background-color: #333333;
+        color: #8c8c8c;
+        .fa-chevron-right {
+            color: #8c8c8c;
+        }
+    }
+    .badge {
+        background-color: #e51937;
+        float: right;
+        position: static;
+    }
+    .fa-fw {
+        margin-right: 11px;
+    }
+}
+
+// For the drop shadow that looks like it's cast by the hamburger menu.
+body.menu-open .nav-view-root::before {
+    content: '';
+    z-index: 10; // 9 puts hamburger in front, 8 does not touch header.
+    box-shadow: -15px 0px 30px 0px rgba(0,0,0,0.15) inset;
+    pointer-events: none;
+    width: 100%;
+    height: 110%; // If it's too short, the top/bottom edges will be visible as blur radius increases.
+    position: absolute;
 }
 
 /**------------------------------
