@@ -2,10 +2,10 @@
     "use strict";
 
     angular.module('app.components.alerts', ['app.components.account'])
-        .run(function ($ionicPlatform, $rootScope/*, CardManager*/) {
+        .run(function ($ionicPlatform, $rootScope, AlertsManager) {
 
             function handleApplicationLogOut() {
-                // CardManager.clearCachedValues();
+                AlertsManager.clearCachedValues();
             }
 
             $ionicPlatform.ready(function () {

@@ -11,8 +11,11 @@
 
       // Revealed Public members
       var service = {
-              fetchAlerts: fetchAlerts,
-              deleteAlert: deleteAlert
+              fetchAlerts:       fetchAlerts,
+              deleteAlert:       deleteAlert,
+              clearCachedValues: clearCachedValues,
+              getAlerts:         getAlerts,
+              setAlerts:         setAlerts
           };
 
       activate();
@@ -81,6 +84,16 @@
               .then(function(response) {
                   __alerts = _.without( __alerts, alert );
               });
+      }
+
+      function getAlerts() {
+          return __alerts;
+      }
+
+      // Caution against using this as it replaces the object versus setting properties on it or extending it
+      // suggested use for testing only
+      function setAlerts(alertItems) {
+          __alerts = alertItems;
       }
 
     }
