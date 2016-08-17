@@ -1,9 +1,9 @@
 (function () {
     "use strict";
 
-    var _,
-        $rootScope,
+    var $rootScope,
         $compile,
+        $state,
         menuItem;
 
     describe("A WEX Menu Item directive", function () {
@@ -11,13 +11,21 @@
         beforeEach(function() {
             module("app.shared");
             module("app.html");
-            module("app.components.menu");
+            module("app.components", function ($provide) {
+                TestUtils.provideCommonMockDependencies($provide);
+            });
 
-            inject(function(___, _$rootScope_, _$compile_) {
-                _ = ___;
+            inject(function(_$rootScope_, _$compile_, _$state_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
+                $state = _$state_;
+
+                menuItem = createWexMenuItem();
             });
+        });
+
+        it("should set menu on the scope to the menu's controller", function () {
+            expect(_.get(menuItem, "scope.menu.currentStateHasRoot")).toBeDefined();
         });
 
         describe("has an option for displaying a chevron", function() {
@@ -91,8 +99,8 @@
                 describe("when 'root-state' does match the current state", function() {
 
                     beforeEach(function() {
-                        var mockCurrentState = mockRootState + "." + TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                        menuItem = createWexMenuItem({mockCurrentState:mockCurrentState,rootState:mockRootState});
+                        $state.current.name = mockRootState + "." + TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                        menuItem = createWexMenuItem({rootState: mockRootState});
                         $rootScope.$digest();
                     });
 
@@ -104,8 +112,8 @@
                 describe("when 'root-state' does NOT match the current state", function() {
 
                     beforeEach(function() {
-                        var mockCurrentState = TestUtils.getRandomStringThatIsAlphaNumeric(9) + "." + TestUtils.getRandomStringThatIsAlphaNumeric(9);
-                        menuItem = createWexMenuItem({mockCurrentState:mockCurrentState,rootState:mockRootState});
+                        $state.current.name = TestUtils.getRandomStringThatIsAlphaNumeric(9) + "." + TestUtils.getRandomStringThatIsAlphaNumeric(9);
+                        menuItem = createWexMenuItem({rootState: mockRootState});
                         $rootScope.$digest();
                     });
 
@@ -118,8 +126,7 @@
             describe("when the 'root-state' attribute is NOT specified", function() {
 
                 beforeEach(function() {
-                    var mockCurrentState = TestUtils.getRandomStringThatIsAlphaNumeric(10) + "." + TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                    menuItem = createWexMenuItem({mockCurrentState:mockCurrentState});
+                    menuItem = createWexMenuItem();
                     $rootScope.$digest();
                 });
 
@@ -148,20 +155,19 @@
 
     function createWexMenuItem(options) {
         var scope = $rootScope.$new();
-        var element;
+        var menuElement,
+            menuItemElement;
+
+        menuElement = $compile("<div wex-menu></div>")($rootScope);
+        $rootScope.$digest();
 
         options = options || {};
         scope.icon = options.icon;
         scope.rootState = options.rootState;
         scope.noChevron = options.noChevron;
-        scope.vm = {
-            currentStateHasRoot : function(root) {
-                return _.startsWith(options.mockCurrentState, root);;
-            }
-        };
 
         var markup = [];
-        markup.push("<wex-menu-item ");
+        markup.push("<wex-menu-item class='mock-menu-item' ");
         if(scope.icon) {
             markup.push(" icon='" + scope.icon + "'");
         }
@@ -176,11 +182,14 @@
             markup.push(options.mockContent);
         }
         markup.push("</wex-menu-item>");
-        element = $compile(markup.join(""))(scope);
+
+        menuItemElement = $compile(markup.join(""))(scope);
+        menuElement.append(menuItemElement);
         $rootScope.$digest();
+
         return {
-            element: element,
-            scope: scope
+            element: menuItemElement,
+            scope: menuItemElement.scope()
         };
     }
 

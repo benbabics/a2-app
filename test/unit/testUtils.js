@@ -40,6 +40,7 @@ var TestUtils = (function () {
             getRandomValueFromArray           : getRandomValueFromArray,
             getRandomValueFromMap             : getRandomValueFromMap,
             getRandomVersionStatus            : getRandomVersionStatus,
+            provideCommonMockDependencies     : provideCommonMockDependencies,
             resolvedPromise                   : resolvedPromise
         };
 
@@ -484,6 +485,12 @@ var TestUtils = (function () {
         });
 
         return versionStatus;
+    }
+
+    function provideCommonMockDependencies($provide) {
+        var AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTracker", "trackView", "trackEvent"]);
+
+        $provide.value("AnalyticsUtil", AnalyticsUtil);
     }
 
 })();

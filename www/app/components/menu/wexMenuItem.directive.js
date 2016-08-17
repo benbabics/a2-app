@@ -1,7 +1,6 @@
 (function () {
     "use strict";
 
-    // This directive assumes the existence of a MenuController vm
     function wexMenuItem() {
         var directive = {
 
@@ -9,17 +8,19 @@
             replace: true,
             transclude: true,
             scope: true,
+            require: "^wexMenu",
             link: link,
             templateUrl: "app/components/menu/templates/menuItem.html",
         };
 
         return directive;
 
-        function link(scope, elem, attrs) {
+        function link(scope, elem, attrs, ctrl) {
 
             scope.icon = attrs.icon;
             scope.rootState = attrs.rootState;
             scope.noChevron = attrs.noChevron;
+            scope.menu = ctrl;
         }
     }
 

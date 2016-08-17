@@ -58,9 +58,7 @@
             <ion-nav-view class="nav-view-root"></ion-nav-view>
         </ion-side-menu-content>
 
-        <ion-side-menu side="right" ng-controller="MenuController as vm">
-            <ng-include src="'app/components/menu/templates/menu.html'"></ng-include>
-        </ion-side-menu>
+        <ion-side-menu side="right" wex-menu></ion-side-menu>
     </ion-side-menus>
 
         <!-- libraries -->
@@ -165,6 +163,8 @@
         <script src="app/shared/util/analyticsUtil.service.js"></script>
         <script src="app/shared/util/addressUtil.service.js"></script>
         <script src="app/shared/util/accountUtil.service.js"></script>
+        <script src="app/shared/logger/logger.module.js"></script>
+        <script src="app/shared/logger/logger.service.js"></script>
         <script src="app/shared/network/network.module.js"></script>
         <script src="app/shared/network/serverConnectionErrorBanner.controller.js"></script>
         <script src="app/shared/network/networkStatus.controller.js"></script>
@@ -173,18 +173,16 @@
         <script src="app/shared/network/hateoasResource.service.js"></script>
         <script src="app/shared/network/formEncoder.service.js"></script>
         <script src="app/shared/network/dataExtractorResponseInterceptor.service.js"></script>
-        <script src="app/shared/logger/logger.module.js"></script>
-        <script src="app/shared/logger/logger.service.js"></script>
         <script src="app/shared/integration/integration.module.js"></script>
         <script src="app/shared/integration/toast.service.js"></script>
         <script src="app/shared/integration/lodash.service.js"></script>
         <script src="app/shared/integration/fingerprint.service.js"></script>
         <script src="app/shared/dependencies/dependencies.module.js"></script>
+        <script src="app/shared/db/db.module.js"></script>
+        <script src="app/shared/db/dataStore.service.js"></script>
         <script src="app/shared/core/core.module.js"></script>
         <script src="app/shared/core/core.routes.js"></script>
         <script src="app/shared/core/constants.js"></script>
-        <script src="app/shared/db/db.module.js"></script>
-        <script src="app/shared/db/dataStore.service.js"></script>
         <script src="app/components/widgets/widgets.module.js"></script>
         <script src="app/components/widgets/userIdle.service.js"></script>
         <script src="app/components/version/version.module.js"></script>
@@ -217,9 +215,6 @@
         <script src="app/components/terms/terms.module.js"></script>
         <script src="app/components/terms/termsOfUse.controller.js"></script>
         <script src="app/components/terms/terms.routes.js"></script>
-        <script src="app/components/privacyPolicy/privacyPolicy.module.js"></script>
-        <script src="app/components/privacyPolicy/privacyPolicy.routes.js"></script>
-        <script src="app/components/privacyPolicy/privacyPolicy.controller.js"></script>
         <script src="app/components/payment/wexPaymentListItem.directive.js"></script>
         <script src="app/components/payment/wexPaymentList.directive.js"></script>
         <script src="app/components/payment/payment.module.js"></script>
@@ -237,12 +232,16 @@
         <script src="app/components/payment/paymentDetail.controller.js"></script>
         <script src="app/components/payment/paymentAddAvailabilityModel.service.js"></script>
         <script src="app/components/payment/payment.routes.js"></script>
+        <script src="app/components/privacyPolicy/privacyPolicy.module.js"></script>
+        <script src="app/components/privacyPolicy/privacyPolicy.routes.js"></script>
+        <script src="app/components/privacyPolicy/privacyPolicy.controller.js"></script>
         <script src="app/components/navigation/navigation.module.js"></script>
         <script src="app/components/navigation/navigation.service.js"></script>
         <script src="app/components/navBar/navBar.module.js"></script>
         <script src="app/components/navBar/navBar.controller.js"></script>
         <script src="app/components/menu/menu.module.js"></script>
         <script src="app/components/menu/wexMenuItem.directive.js"></script>
+        <script src="app/components/menu/wexMenu.directive.js"></script>
         <script src="app/components/menu/menu.controller.js"></script>
         <script src="app/components/landing/landing.module.js"></script>
         <script src="app/components/landing/landing.routes.js"></script>
