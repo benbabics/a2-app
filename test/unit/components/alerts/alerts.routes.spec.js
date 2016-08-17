@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    fdescribe("An Alert Module Route Config", function () {
+    describe("An Alert Module Route Config", function () {
 
         var $injector,
             $q,

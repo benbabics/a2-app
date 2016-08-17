@@ -5,7 +5,7 @@
         $ionicPlatform,
         AlertsManager;
 
-    fdescribe("A Transaction Module", function () {
+    describe("A Transaction Module", function () {
 
         beforeEach(function () {
 

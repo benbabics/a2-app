@@ -11,7 +11,7 @@
         mockAlertsCollection,
         mockCachedAlertsCollection;
 
-    fdescribe("A Transaction Manager", function () {
+    describe("A Transaction Manager", function () {
 
         beforeEach(function () {
 

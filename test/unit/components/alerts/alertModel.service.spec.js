@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    fdescribe("An Alert Model Service", function () {
+    describe("An Alert Model Service", function () {
 
         var _;
 
