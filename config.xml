@@ -32,6 +32,11 @@
     <preference name="FadeSplashScreenDuration" value="1000" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="com.urbanairship.production_app_key" value="@@@STRING_REPLACE_URBANAIRSHIP_APP_KEY_PROD@@@" />
+    <preference name="com.urbanairship.production_app_secret" value="@@@STRING_REPLACE_URBANAIRSHIP_APP_SECRET_PROD@@@" />
+    <preference name="com.urbanairship.development_app_key" value="@@@STRING_REPLACE_URBANAIRSHIP_APP_KEY_DEV@@@" />
+    <preference name="com.urbanairship.development_app_secret" value="@@@STRING_REPLACE_URBANAIRSHIP_APP_SECRET_DEV@@@" />
+    <preference name="com.urbanairship.in_production" value="@@@STRING_REPLACE_IS_PRODUCTION@@@" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
@@ -56,6 +61,7 @@
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
         <preference name="StatusBarBackgroundColor" value="#424242" />
+        <preference name="com.urbanairship.gcm_sender" value="@@@STRING_REPLACE_GCM_APP_ID@@@" />
     </platform>
     <platform name="ios">
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -108,4 +114,5 @@
     <plugin name="cordova-plugin-ios-no-export-compliance" spec="https://github.com/WEXInc/cordova-plugin-ios-no-export-compliance.git" />
     <plugin name="cordova-plugin-touch-id" spec="~3.2.0" />
     <plugin name="cordova-plugin-android-fingerprint-auth" spec="~0.0.10" />
+    <plugin name="urbanairship-cordova" spec="~5.3.1" />
 </widget>

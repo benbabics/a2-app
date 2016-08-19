@@ -27,7 +27,10 @@ module.exports = function(context) {
         var FILE_PATHS = {
             constants: {
                 sharedConstants: "/www/app/shared/core/constants.js",
-                appConstants   : "/www/app/components/core/constants.js"
+                appConstants   : "/www/app/components/core/constants.js",
+                config         : "config.xml",
+                configAndroid  : "/res/xml/config.xml",
+                configIos      : "/Fleet SmartHub/config.xml"
             },
             index: "/www/index.html"
         };
@@ -151,42 +154,36 @@ module.exports = function(context) {
 
             updateConstants: function (platform, platformPath, configObj) {
                 var properties = configObj.environmentProperties,
-                    self = this;
-
-                if (platform === "android") {
-                    platformPath += ANDROID_ASSETS_PATH;
-                }
+                    CONSTANTS = {
+                        "@@@STRING_REPLACE_APP_URL_AM_API@@@"                      : properties.app_urls.am_api,
+                        "@@@STRING_REPLACE_APP_URL_AUTH_API@@@"                    : properties.app_urls.auth_api,
+                        "@@@STRING_REPLACE_APP_URL_CONFIGURATION_API@@@"           : properties.app_urls.configuration_api,
+                        "@@@STRING_REPLACE_APP_URL_ONLINE_ENROLLMENT_API@@@"       : properties.app_urls.online_enrollment_api,
+                        "@@@STRING_REPLACE_AUTH_CLIENT_ID@@@"                      : properties.auth.client_id,
+                        "@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@"                  : properties.auth.client_secret,
+                        "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_GENERIC@@@": properties.google_analytics_tracking_ids.generic,
+                        "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_WEX@@@"    : properties.google_analytics_tracking_ids.wex,
+                        "@@@STRING_REPLACE_IS_PRODUCTION@@@"                       : _.get(properties, "is_prod", _.startsWith(_.toLower(platform), "prod")),
+                        "@@@STRING_REPLACE_LOGGING_ENABLED@@@"                     : properties.logging_enabled
+                    },
+                    self = this,
+                    doConstantReplace = function (value, placeholder, targetFile) {
+                        console.log(LOG_PREFIX + "In " + targetFile + " - setting" + placeholder + " to: " + value);
+                        self.replaceStringInFile(targetFile, placeholder, value);
+                    };
 
                 _.forOwn(FILE_PATHS.constants, function (constantsFile) {
-                    var targetFile = path.join(platformPath, constantsFile);
+                    var targetFile;
+
+                    if (platform === "android" && _.startsWith(constantsFile, "/www")) {
+                        targetFile = path.join(platformPath, ANDROID_ASSETS_PATH, constantsFile);
+                    }
+                    else {
+                        targetFile = path.join(platformPath, constantsFile);
+                    }
 
                     if (fs.existsSync(targetFile)) {
-
-                        console.log(LOG_PREFIX + "In " + targetFile + " - setting AM_API URL to: " + properties.app_urls.am_api);
-                        self.replaceStringInFile(targetFile, "@@@STRING_REPLACE_APP_URL_AM_API@@@", properties.app_urls.am_api);
-
-                        console.log(LOG_PREFIX + "In " + targetFile + " - setting AUTH_API URL to: " + properties.app_urls.auth_api);
-                        self.replaceStringInFile(targetFile, "@@@STRING_REPLACE_APP_URL_AUTH_API@@@", properties.app_urls.auth_api);
-
-                        console.log(LOG_PREFIX + "In " + targetFile + " - setting CONFIGURATION_API URL to: " + properties.app_urls.configuration_api);
-                        self.replaceStringInFile(targetFile, "@@@STRING_REPLACE_APP_URL_CONFIGURATION_API@@@", properties.app_urls.configuration_api);
-
-                        console.log(LOG_PREFIX + "In " + targetFile + " - setting ONLINE_ENROLLMENT_API URL to: " + properties.app_urls.online_enrollment_api);
-                        self.replaceStringInFile(targetFile, "@@@STRING_REPLACE_APP_URL_ONLINE_ENROLLMENT_API@@@", properties.app_urls.online_enrollment_api);
-
-                        console.log(LOG_PREFIX + "In " + targetFile + " - setting Client ID to: " + properties.auth.client_id);
-                        self.replaceStringInFile(targetFile, "@@@STRING_REPLACE_AUTH_CLIENT_ID@@@", properties.auth.client_id);
-                        self.replaceStringInFile(targetFile, "@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@", properties.auth.client_secret);
-
-                        console.log(LOG_PREFIX + "In " + targetFile + " - setting GOOGLE ANALYTICS TRACKING ID (GENERIC) to: " + properties.google_analytics_tracking_ids.generic);
-                        self.replaceStringInFile(targetFile, "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_GENERIC@@@", properties.google_analytics_tracking_ids.generic);
-
-                        console.log(LOG_PREFIX + "In " + targetFile + " - setting GOOGLE ANALYTICS TRACKING ID (WEX) to: " + properties.google_analytics_tracking_ids.wex);
-                        self.replaceStringInFile(targetFile, "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_WEX@@@", properties.google_analytics_tracking_ids.wex);
-
-                        console.log(LOG_PREFIX + "In " + targetFile + " - setting LOGGING_ENABLED to: " + properties.logging_enabled);
-                        self.replaceStringInFile(targetFile, "@@@STRING_REPLACE_LOGGING_ENABLED@@@", properties.logging_enabled);
-
+                        _.forOwn(CONSTANTS, _.partial(doConstantReplace, _, _, targetFile));
                     } else {
                         console.log(LOG_PREFIX + "ERROR missing " + targetFile + " file.");
                     }

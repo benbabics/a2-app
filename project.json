@@ -5,6 +5,17 @@
         },
         "datastore": {
             "name": "fleetSmartHub"
+        },
+        "gcm": {
+            "app_id": "947308204490"
+        },
+        "notifications": {
+            "urbanairship": {
+                "app_key_prod": "Your Production App Key",
+                "app_secret_prod": "Your Production Secret",
+                "app_key_dev": "qVkZmEtES6iSUFcNLEAaFw",
+                "app_secret_dev": "6OjyrsLOTsi40peZrulwBg"
+            }
         }
     },
     "dev": {

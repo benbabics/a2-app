@@ -12,10 +12,21 @@ module.exports = function(context) {
     console.log(context.hook + " hook is running script " + context.scriptLocation);
     var LOG_PREFIX = "    ";
 
+    var _ = context.requireCordovaModule("lodash");
     var fs = context.requireCordovaModule("fs");
     var path = context.requireCordovaModule("path");
 
-    var rootdir = context.opts.projectRoot;
+    var ANDROID_ASSETS_PATH = "/assets",
+        FILE_CONFIG = {
+            constants: {
+                sharedConstants: "/www/app/shared/core/constants.js",
+                appConstants   : "/www/app/components/core/constants.js",
+                config         : "config.xml",
+                configAndroid  : "/res/xml/config.xml",
+                configIos      : "/Fleet SmartHub/config.xml"
+            }
+        },
+        rootdir = context.opts.projectRoot;
 
     function replaceStringInFile(filename, toReplace, replaceWith) {
         try {
@@ -29,17 +40,32 @@ module.exports = function(context) {
         }
     }
 
-    function updateConstants(rootdir, fileName, configObj) {
-        var fullFileName = path.join(rootdir, fileName);
+    function updateConstants(platform, fileName, configObj) {
+        var CONSTANTS = {
+                "@@@STRING_REPLACE_APP_DATASTORE_NAME@@@"          : configObj.all.datastore.name,
+                "@@@STRING_REPLACE_GCM_APP_ID@@@"                  : configObj.all.gcm.app_id,
+                "@@@STRING_REPLACE_LOGIN_STATE@@@"                 : configObj.all.auth.login_state,
+                "@@@STRING_REPLACE_URBANAIRSHIP_APP_KEY_PROD@@@"   : configObj.all.notifications.urbanairship.app_key_prod,
+                "@@@STRING_REPLACE_URBANAIRSHIP_APP_SECRET_PROD@@@": configObj.all.notifications.urbanairship.app_secret_prod,
+                "@@@STRING_REPLACE_URBANAIRSHIP_APP_KEY_DEV@@@"    : configObj.all.notifications.urbanairship.app_key_dev,
+                "@@@STRING_REPLACE_URBANAIRSHIP_APP_SECRET_DEV@@@" : configObj.all.notifications.urbanairship.app_secret_dev
+            },
+            platformPath = path.join(rootdir, "platforms", platform.trim().toLowerCase()),
+            fullFileName,
+            doConstantReplace = function (value, placeholder) {
+                console.log(LOG_PREFIX + "In " + fullFileName + " - setting " + placeholder + " to: " + value);
+                replaceStringInFile(fullFileName, placeholder, value);
+            };
+
+        if (platform === "android" && _.startsWith(fileName, "/www")) {
+            fullFileName = path.join(platformPath, ANDROID_ASSETS_PATH, fileName);
+        }
+        else {
+            fullFileName = path.join(platformPath, fileName);
+        }
 
         if (fs.existsSync(fullFileName)) {
-
-            console.log(LOG_PREFIX + "In " + fullFileName + " - setting LOGIN STATE to: " + configObj.all.auth.login_state);
-            replaceStringInFile(fullFileName, "@@@STRING_REPLACE_LOGIN_STATE@@@", configObj.all.auth.login_state);
-
-            console.log(LOG_PREFIX + "In " + fullFileName + " - setting DATASTORE NAME to: " + configObj.all.datastore.name);
-            replaceStringInFile(fullFileName, "@@@STRING_REPLACE_APP_DATASTORE_NAME@@@", configObj.all.datastore.name);
-
+            _.forOwn(CONSTANTS, doConstantReplace);
         } else {
             console.log(LOG_PREFIX + "ERROR missing " + fullFileName + " file.");
         }
@@ -51,10 +77,14 @@ module.exports = function(context) {
             var configFile = path.join(rootdir, "project.json");
             var configObj = JSON.parse(fs.readFileSync(configFile, "utf8"));
 
-            // Update constants.js for each platform
-            updateConstants(rootdir, "platforms/android/assets/www/app/shared/core/constants.js", configObj);
-            updateConstants(rootdir, "platforms/ios/www/app/shared/core/constants.js", configObj);
-            updateConstants(rootdir, "platforms/browser/www/app/shared/core/constants.js", configObj);
+            // go through each of the platforms requested in the build
+            _.forEach(context.opts.platforms, function (platform) {
+                try {
+                    _.forEach(FILE_CONFIG.constants, _.partial(updateConstants, platform, _, configObj));
+                } catch (e) {
+                    console.log(LOG_PREFIX + e);
+                }
+            });
 
         } catch (e) {
             console.log(LOG_PREFIX + e);
