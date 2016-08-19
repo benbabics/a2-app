@@ -35,4 +35,9 @@
     <preference name="FadeSplashScreenDuration" value="1000" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="com.urbanairship.production_app_key" value="???" />
+    <preference name="com.urbanairship.production_app_secret" value="???" />
+    <preference name="com.urbanairship.development_app_key" value="???" />
+    <preference name="com.urbanairship.development_app_secret" value="???" />
+    <preference name="com.urbanairship.in_production" value="false" />
 </widget>

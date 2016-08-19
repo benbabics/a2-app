@@ -146,5 +146,13 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "urbanairship-cordova": {
+        "source": {
+            "type": "registry",
+            "id": "urbanairship-cordova"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

@@ -253,6 +253,13 @@ module.exports = [
         "clobbers": [
             "FingerprintAuth"
         ]
+    },
+    {
+        "file": "plugins/urbanairship-cordova/www/UrbanAirship.js",
+        "id": "urbanairship-cordova.UrbanAirship",
+        "clobbers": [
+            "UAirship"
+        ]
     }
 ];
 module.exports.metadata = 

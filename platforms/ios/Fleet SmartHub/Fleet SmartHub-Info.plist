@@ -139,6 +139,10 @@
       <string>UIInterfaceOrientationPortrait</string>
       <string>UIInterfaceOrientationPortraitUpsideDown</string>
     </array>
+    <key>UIBackgroundModes</key>
+    <array>
+      <string>remote-notification</string>
+    </array>
     <key>UIRequiresFullScreen</key>
     <true/>
     <key>ITSAppUsesNonExemptEncryption</key>

@@ -50,6 +50,10 @@
     <feature name="FingerprintAuth">
         <param name="android-package" value="com.cordova.plugin.android.fingerprintauth.FingerprintAuth" />
     </feature>
+    <feature name="UAirship">
+        <param name="android-package" value="com.urbanairship.cordova.UAirshipPlugin" />
+        <param name="onload" value="true" />
+    </feature>
     <allow-intent href="market:*" />
     <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
     <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
@@ -70,6 +74,7 @@
     <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
     <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     <preference name="StatusBarBackgroundColor" value="#424242" />
+    <preference name="com.urbanairship.gcm_sender" value="947308204490" />
     <name>Fleet SmartHub</name>
     <description>
         App for managing WEX fleet accounts
@@ -102,4 +107,9 @@
     <preference name="FadeSplashScreenDuration" value="1000" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="com.urbanairship.production_app_key" value="Your Production App Key" />
+    <preference name="com.urbanairship.production_app_secret" value="Your Production Secret" />
+    <preference name="com.urbanairship.development_app_key" value="qVkZmEtES6iSUFcNLEAaFw" />
+    <preference name="com.urbanairship.development_app_secret" value="6OjyrsLOTsi40peZrulwBg" />
+    <preference name="com.urbanairship.in_production" value="false" />
 </widget>
