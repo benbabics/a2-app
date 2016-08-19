@@ -34,6 +34,7 @@
 
         <!-- Does not go anywhere yet, and fakes the alert count. -->
         <wex-menu-item id="option-alerts"
+                       ng-click="vm.goToAlerts()"
                        icon="fa-bell"
                        root-state="{{::vm.config.rootStates.alerts}}"
                        no-chevron>
@@ -75,4 +76,3 @@
 
     </ion-list>
 </ion-content>
-

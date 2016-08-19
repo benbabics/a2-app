@@ -7,6 +7,7 @@
     /* @ngInject */
     function Navigation(_, $ionicHistory, $location, $q, $state, globals, LoginManager) {
         var service = {
+            goToAlerts             : goToAlerts,
             goToCards              : goToCards,
             goToContactUs          : goToContactUs,
             goToHome               : goToHome,
@@ -21,6 +22,10 @@
 
         return service;
         //////////////////////
+
+        function goToAlerts() {
+            return $state.go("alerts.list");
+        }
 
         function goToCards(params) {
             //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
