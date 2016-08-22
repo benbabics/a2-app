@@ -196,6 +196,20 @@ $user-login-error-message-animation: all linear 0.5s;
 }
 
 /**------------------------------------------------------
+ Navigation Bar
+ ------------------------------------------------------**/
+.bar-wex {
+    .badge {
+        position: absolute;
+        font-size: 0.7em;
+        padding: 0.1em 0.5em;
+        right: -3px;
+        background-color: #e51937;
+    }
+}
+
+
+/**------------------------------------------------------
  Side Menu
  ------------------------------------------------------**/
 .menu-view {
