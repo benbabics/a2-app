@@ -19,7 +19,7 @@
 
             scope.icon = attrs.icon;
             scope.rootState = attrs.rootState;
-            scope.noChevron = attrs.noChevron;
+            scope.noChevron = attrs.hasOwnProperty("noChevron");
             scope.menu = ctrl;
         }
     }
