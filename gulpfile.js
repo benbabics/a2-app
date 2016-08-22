@@ -194,9 +194,24 @@ gulp.task("ionic-prod-build", function () {
     sh.exec("ionic build");
 });
 
+gulp.task("ionic-prod-build-browser", function () {
+    sh.env.TARGET = "prod";
+    sh.exec("ionic build browser");
+});
+
 gulp.task("ionic-prod-build-release", function () {
     sh.env.TARGET = "prod";
     sh.exec("ionic build --release");
+});
+
+gulp.task("ionic-prod-run-android", function () {
+    sh.env.TARGET = "prod";
+    sh.exec("ionic run android");
+});
+
+gulp.task("ionic-prod-run-ios", function () {
+    sh.env.TARGET = "prod";
+    sh.exec("ionic run ios --device");
 });
 
 /**
