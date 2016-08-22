@@ -163,7 +163,7 @@ module.exports = function(context) {
                         "@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@"                  : properties.auth.client_secret,
                         "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_GENERIC@@@": properties.google_analytics_tracking_ids.generic,
                         "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_WEX@@@"    : properties.google_analytics_tracking_ids.wex,
-                        "@@@STRING_REPLACE_IS_PRODUCTION@@@"                       : _.get(properties, "is_prod", _.startsWith(_.toLower(platform), "prod")),
+                        "@@@STRING_REPLACE_IS_PRODUCTION@@@"                       : _.get(properties, "is_prod", _.startsWith(platform.toLowerCase(), "prod")),
                         "@@@STRING_REPLACE_LOGGING_ENABLED@@@"                     : properties.logging_enabled
                     },
                     self = this,
