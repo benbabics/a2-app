@@ -90,6 +90,9 @@
     margin: 25px auto;
     max-width: 80px;
 
+    .fleet-icon {
+      max-width: 100%;
+    }
     .alert-icon {
       position: absolute;
       top:   -8px;
