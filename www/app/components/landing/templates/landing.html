@@ -1,7 +1,10 @@
   <ion-view view-title="{{::vm.config.title}}" class="landing-view" wex-hide-back-button="true">
     <ion-content>
-        <div class="content item item-divider main-container">
 
+        <!-- Display Notifications Prompt -->
+        <enable-notifications-prompt />
+
+        <div class="content item item-divider main-container">
             <div class="row header">
                 <div class="col col-80 ellipsis" id="companyDetails">
                     <span class="text-normal">{{vm.greeting}}</span>

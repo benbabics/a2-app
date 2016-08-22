@@ -13,6 +13,7 @@
         vm.goToHome = goToHome;
         vm.goToMakePayment = goToMakePayment;
         vm.goToPaymentActivity = goToPaymentActivity;
+        vm.goToAlerts = goToAlerts;
         vm.goToTransactionActivity = goToTransactionActivity;
         vm.goToCards = goToCards;
         vm.goToContactUs = goToContactUs;
@@ -47,6 +48,10 @@
 
         function goToPaymentActivity() {
             return Navigation.goToPaymentActivity();
+        }
+
+        function goToAlerts() {
+            return Navigation.goToAlerts();
         }
 
         function goToPrivacyPolicy() {

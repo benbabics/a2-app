@@ -1,0 +1,127 @@
+.item.notifications-banner-wrapper {
+  padding: 0;
+
+  .notifications-banner-slidebox {
+    opacity: 0;
+    max-height: 0;
+    -webkit-transition: all .3s ease-in-out;
+    transition:         all .3s ease-in-out;
+
+    &.is-open {
+      opacity: 1;
+      max-height: 150px;
+    }
+  }
+}
+
+.notifications-banner,
+.modal-notifications-prompt {
+  $buttonPositive: #3a97b5;
+
+  p {
+    color: #333;
+    font-family: 'open_sansregular';
+  }
+
+  .button {
+    border-radius: 5px;
+    font-family: 'open_sanssemibold';
+
+    &.button-positive {
+      background-color: $buttonPositive;
+    }
+  }
+}
+.notifications-banner {
+  position: relative;
+  padding: 16px;
+  background-color: #f8f9d1;
+
+  p {
+    font-size: 14px;
+  }
+
+  .button {
+    min-height: 45px;
+    max-width: 350px;
+    font-size: 15px;
+
+    &.close-button {
+      position: absolute;
+      top:   0;
+      right: 0;
+      color: #aaa;
+    }
+  }
+}
+
+.modal-notifications-prompt {
+  $paddingTop: 80px;
+  $maxWidth: 320px;
+
+  $startColor: #fff;
+  $stopColor:  #e5e5e5;
+
+  background: $startColor;
+  background: -webkit-linear-gradient(top,  $startColor 40%, $stopColor 80%);
+  background: linear-gradient(to bottom,    $startColor 40%, $stopColor 80%);
+
+  .scroll-content {
+    margin: 0 auto;
+    padding-top: $paddingTop;
+    max-width: $maxWidth;
+    text-align: center;
+  }
+
+  h1 {
+    // font-size: 42px;
+    // font-family: 'league_gothic_regular';
+    font-size: 27px;
+    font-family: 'plymouth_serialregular';
+  }
+  p {
+    color: #333;
+    font-size: 16px;
+    font-family: 'open_sansregular';
+  }
+
+  .ui-icons {
+    position: relative;
+    margin: 25px auto;
+    max-width: 80px;
+
+    .alert-icon {
+      position: absolute;
+      top:   -8px;
+      right: 1px;
+      width: 30px;
+    }
+  }
+
+  .actions {
+    margin-top: 30px;
+
+    .button {
+      min-height: 53px;
+
+      &.button-stable {
+        color: #707070;
+      }
+    }
+  }
+
+  .bar.bar-footer {
+    padding: 0;
+    background-color: transparent;
+
+    .ui-footer {
+      display: flex;
+      align-items: flex-end;
+      width: 100%;
+
+      .wex-footer {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+<ion-modal-view class="modal-notifications-prompt">
+
+  <ion-content>
+    <h1>{{ ::config.prompt.title }}</h1>
+    <div class="ui-icons">
+      <img src="img/pages/notifications/fleet-icon.svg" class="fleet-icon">
+      <img src="img/pages/notifications/alert-icon.svg" class="alert-icon">
+    </div>
+    <p>{{ ::config.prompt.content }}</p>
+
+    <div class="actions">
+      <button ng-click="closeModal(); enableNotifications();" class="button button-full button-positive">{{ ::config.prompt.buttonLabels.accept }}</button>
+      <button ng-click="closeModal(); rejectPrompt();" class="button button-clear button-full button-stable">{{ ::config.prompt.buttonLabels.decline }}</button>
+    </div>
+  </ion-content>
+
+  <ion-footer-bar>
+    <div class="ui-footer">
+      <img src="img/common/wex-footer.svg" class="wex-footer">
+    </div>
+  </ion-footer-bar>
+
+</ion-modal-view>

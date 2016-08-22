@@ -16,6 +16,7 @@
         "app.components.menu",
         "app.components.navBar",
         "app.components.navigation",
+        "app.components.notifications",
         "app.components.payment",
         "app.components.privacyPolicy",
         "app.components.transaction",
@@ -28,7 +29,7 @@
 
     // expose $httpBackend as a service
     .config(function($provide) {
-        $provide.decorator( '$httpBackend', angular.mock.e2e.$httpBackendDecorator );
+        $provide.decorator( "$httpBackend", angular.mock.e2e.$httpBackendDecorator );
     })
 
     // catch-all pass through for all other requests, not defined as mocks in other modules

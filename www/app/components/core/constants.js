@@ -340,6 +340,33 @@
         }
     };
 
+    appGlobals.NOTIFICATIONS = {
+        "CONFIG": {
+            "ANALYTICS": {
+                "pageName": "Notifications",
+                "events": {
+                    "rejectedBanner": ["Notifications", "RejectBanner"],
+                    "rejectedPrompt": ["Notifications", "RejectPrompt"],
+                    "hasEnabled":     ["Notifications", "Accepted"]
+                }
+            },
+            "banner": {
+                "content": "Improve your SmartHub experience.",
+                "buttonLabels": {
+                    "accept": "Enable Notifications"
+                }
+            },
+            "prompt": {
+                "title": "Stay Updated on Your Fleet",
+                "content": "Allow Fleet SmartHub to send you alert notifications to keep you aware on any irregular account activity.",
+                "buttonLabels": {
+                    "accept": "I'm Interested",
+                    "decline": "No Thanks"
+                }
+            }
+        }
+    };
+
     appGlobals.PAYMENT_MAINTENANCE = {
         STATES: {
             "ADD"   : "ADD",

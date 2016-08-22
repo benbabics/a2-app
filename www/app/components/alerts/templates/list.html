@@ -9,6 +9,11 @@
                              reload-distance="::config.reloadDistance"
                              loading-complete="vm.infiniteScrollService.isLoadingComplete">
 
+              <!-- Notifications Banner -->
+              <ion-item class="notifications-banner-wrapper">
+                  <enable-notifications-banner />
+              </ion-item>
+
               <div collection-repeat="alert in vm.alerts.collection | groupAlertsByDate : 'postDate'"
                    item-height="alert.renderHeight">
 

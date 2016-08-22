@@ -1,0 +1,8 @@
+<div ng-if="shouldDisplay" ng-class="{ 'is-open': isOpen }" class="notifications-banner-slidebox">
+  <div class="notifications-banner">
+    <p>{{ ::config.banner.content }}</p>
+
+    <button ng-click="hideBanner(); enableNotifications();" class="button button-full button-positive">{{ ::config.banner.buttonLabels.accept }}</button>
+    <button class="button close-button icon ion-close button-clear" ng-click="hideBanner(); rejectBanner();"></button>
+  </div>
+</div>
