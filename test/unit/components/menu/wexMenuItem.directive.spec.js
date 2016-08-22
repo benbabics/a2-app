@@ -32,14 +32,28 @@
 
             describe("when the 'no-chevron' attribute is included", function() {
 
-                beforeEach(function () {
-                    // A boolean attribute's value is just the empty string.
-                    menuItem = createWexMenuItem({noChevron: ""});
-                    $rootScope.$digest();
+                describe("when it does have a value of 'true'", function() {
+
+                    beforeEach(function () {
+                        menuItem = createWexMenuItem({noChevron: "true"});
+                        $rootScope.$digest();
+                    });
+
+                    it("does hide the chevron container element", function() {
+                        expect(menuItem.element[0].querySelector(".chevron-container.ng-hide")).toBeTruthy();
+                    });
                 });
 
-                it("hides the chevron container element", function() {
-                    expect(menuItem.element[0].querySelector(".chevron-container.ng-hide")).toBeTruthy();
+                describe("when it does NOT have a value of 'true'", function() {
+
+                    beforeEach(function () {
+                        menuItem = createWexMenuItem({noChevron: TestUtils.getRandomStringThatIsAlphaNumeric(5)});
+                        $rootScope.$digest();
+                    });
+
+                    it("does NOT hide the chevron container element", function() {
+                        expect(menuItem.element[0].querySelector(".chevron-container.ng-hide")).toBeFalsy();
+                    });
                 });
             });
 
@@ -69,11 +83,11 @@
                 });
 
                 it("shows the icon element", function() {
-                    expect(menuItem.element[0].querySelector("i.ng-hide")).toBeFalsy();
+                    expect(menuItem.element[0].querySelector("i.menu-icon")).toBeTruthy();
                 });
 
                 it("uses the specified icon class", function() {
-                    expect(menuItem.element[0].querySelector("i."+mockIcon)).toBeTruthy();
+                    expect(menuItem.element[0].querySelector("i.menu-icon."+mockIcon)).toBeTruthy();
                 });
             });
 
@@ -84,8 +98,8 @@
                     $rootScope.$digest();
                 })
 
-                it("hides the icon element", function() {
-                    expect(menuItem.element[0].querySelector("i.ng-hide")).toBeTruthy();
+                it("removes the icon element", function() {
+                    expect(menuItem.element[0].querySelector("i.menu-icon")).toBeNull();
                 });
             });
         });
@@ -174,8 +188,8 @@
         if(scope.rootState) {
             markup.push(" root-state='" + scope.rootState + "'");
         }
-        if(!_.isNil(scope.noChevron)) {
-            markup.push(" no-chevron");
+        if(scope.noChevron) {
+            markup.push(" no-chevron='" + scope.noChevron + "'");
         }
         markup.push(">");
         if(options.mockContent) {

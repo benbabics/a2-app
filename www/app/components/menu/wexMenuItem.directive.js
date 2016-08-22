@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
+
     function wexMenuItem() {
         var directive = {
 
@@ -10,7 +12,7 @@
             scope: true,
             require: "^wexMenu",
             link: link,
-            templateUrl: "app/components/menu/templates/menuItem.html",
+            templateUrl: "app/components/menu/templates/menuItem.html"
         };
 
         return directive;
@@ -19,7 +21,9 @@
 
             scope.icon = attrs.icon;
             scope.rootState = attrs.rootState;
-            scope.noChevron = attrs.hasOwnProperty("noChevron");
+            attrs.$observe("noChevron", function(value) {
+                scope.noChevron = (value.toUpperCase() === "TRUE");
+            });
             scope.menu = ctrl;
         }
     }
