@@ -55,7 +55,6 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-app-version",
     "cordova-plugin-device",
-    "cordova-plugin-google-analytics",
     "cordova-plugin-file",
     "ionic-plugin-keyboard@2.0.1"
   ],
