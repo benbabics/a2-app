@@ -55,7 +55,7 @@
          * @return {Promise} a promise that will resolve when Cordova is ready and available, or reject if Cordova is not
          * available on the current platform. If a callback is given, the promise will resolve with the result of the callback.
          */
-        function waitForCordovaPlatform(callback) {
+        function waitForCordovaPlatform(callback, failureCallback) {
             return $ionicPlatform.ready()
                 .then(function () {
                     if (platformHasCordova()) {
@@ -67,7 +67,9 @@
                     else {
                         //Log the warning message (this only happens once per session)
                         logCordovaPlatformWarning();
-
+                        if ( _.isFunction(failureCallback) ) {
+                          failureCallback();
+                        }
                         return $q.reject();
                     }
                 });

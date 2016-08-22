@@ -38,11 +38,11 @@
           PlatformUtil.waitForCordovaPlatform(function() {
               checkPlatformEnableNotifications();
               deferred.resolve();
-          });
+          }, function() { deferred.resolve(); });
       }
 
       function checkPlatformEnableNotifications() {
-          var isIOS     = PlatformUtil.getPlatform() !== "iOS",
+          var isIOS     = PlatformUtil.getPlatform() === "iOS",
               isEnabled = storage.notificationsFlags.hasEnabled;
 
           Logger.log( "checkPlatformEnableNotifications", PlatformUtil.getPlatform() );
