@@ -35,9 +35,13 @@
     <preference name="FadeSplashScreenDuration" value="1000" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
-    <preference name="com.urbanairship.production_app_key" value="???" />
-    <preference name="com.urbanairship.production_app_secret" value="???" />
-    <preference name="com.urbanairship.development_app_key" value="???" />
-    <preference name="com.urbanairship.development_app_secret" value="???" />
+    <preference name="com.urbanairship.production_app_key" value="Your Production App Key" />
+    <preference name="com.urbanairship.production_app_secret" value="Your Production Secret" />
+    <preference name="com.urbanairship.development_app_key" value="qVkZmEtES6iSUFcNLEAaFw" />
+    <preference name="com.urbanairship.development_app_secret" value="6OjyrsLOTsi40peZrulwBg" />
     <preference name="com.urbanairship.in_production" value="false" />
+    <preference name="xwalkVersion" value="16+" />
+    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
+    <preference name="xwalkMode" value="embedded" />
+    <preference name="xwalkMultipleApk" value="true" />
 </widget>

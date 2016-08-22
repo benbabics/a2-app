@@ -2,7 +2,7 @@
     "cordova-ios-requires-fullscreen": {
         "source": {
             "type": "registry",
-            "id": "cordova-ios-requires-fullscreen"
+            "id": "cordova-ios-requires-fullscreen@~0.0.2"
         },
         "is_top_level": true,
         "variables": {}
@@ -10,7 +10,7 @@
     "cordova-plugin-console": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-console@^1.0.1"
+            "id": "cordova-plugin-console@~1.0.2"
         },
         "is_top_level": true,
         "variables": {}
@@ -18,7 +18,15 @@
     "com.cmackay.plugins.googleanalytics": {
         "source": {
             "type": "registry",
-            "id": "com.cmackay.plugins.googleanalytics"
+            "id": "com.cmackay.plugins.googleanalytics@~0.1.22"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-app-version": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-app-version@~0.1.8"
         },
         "is_top_level": true,
         "variables": {}
@@ -26,7 +34,7 @@
     "cordova-plugin-device": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-device@1.1.1"
+            "id": "cordova-plugin-device@~1.1.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -34,7 +42,7 @@
     "cordova-plugin-splashscreen": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-splashscreen@3.2.1"
+            "id": "cordova-plugin-splashscreen@~3.2.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -42,7 +50,7 @@
     "cordova-plugin-statusbar": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-statusbar@2.1.2"
+            "id": "cordova-plugin-statusbar@~2.1.2"
         },
         "is_top_level": true,
         "variables": {}
@@ -50,7 +58,7 @@
     "cordova-plugin-network-information": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-network-information@1.2.0"
+            "id": "cordova-plugin-network-information@~1.2.0"
         },
         "is_top_level": true,
         "variables": {}
@@ -58,7 +66,7 @@
     "cordova-plugin-crosswalk-webview": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-crosswalk-webview@1.5.0"
+            "id": "cordova-plugin-crosswalk-webview@~1.5.0"
         },
         "is_top_level": true,
         "variables": {}
@@ -66,15 +74,16 @@
     "cordova-plugin-whitelist": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-whitelist@1.2.1"
+            "id": "cordova-plugin-whitelist@~1.2.1"
         },
         "is_top_level": true,
         "variables": {}
     },
     "cordova-plugin-x-toast": {
         "source": {
-            "type": "registry",
-            "id": "cordova-plugin-x-toast@2.4.2"
+            "type": "git",
+            "url": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
+            "subdir": "."
         },
         "is_top_level": true,
         "variables": {}
@@ -82,34 +91,15 @@
     "cordova-plugin-file": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-file@4.1.1"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-app-version": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "com.xmartlabs.cordova.market": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/xmartlabs/cordova-plugin-market",
-            "subdir": "."
+            "id": "cordova-plugin-file@~4.1.1"
         },
         "is_top_level": true,
         "variables": {}
     },
     "cordova-plugin-inappbrowser": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/benbabics/cordova-plugin-inappbrowser.git",
-            "subdir": "."
+            "type": "registry",
+            "id": "cordova-plugin-inappbrowser@~1.3.0"
         },
         "is_top_level": true,
         "variables": {}
@@ -117,7 +107,7 @@
     "ionic-plugin-keyboard": {
         "source": {
             "type": "registry",
-            "id": "ionic-plugin-keyboard"
+            "id": "ionic-plugin-keyboard@2.0.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -134,7 +124,7 @@
     "cordova-plugin-touch-id": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-touch-id"
+            "id": "cordova-plugin-touch-id@~3.2.0"
         },
         "is_top_level": true,
         "variables": {}
@@ -142,7 +132,7 @@
     "cordova-plugin-android-fingerprint-auth": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-android-fingerprint-auth"
+            "id": "cordova-plugin-android-fingerprint-auth@~0.0.10"
         },
         "is_top_level": true,
         "variables": {}
@@ -150,7 +140,7 @@
     "urbanairship-cordova": {
         "source": {
             "type": "registry",
-            "id": "urbanairship-cordova"
+            "id": "urbanairship-cordova@~5.3.1"
         },
         "is_top_level": true,
         "variables": {}

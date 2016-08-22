@@ -7,28 +7,19 @@
         "files": {}
     },
     "installed_plugins": {
-        "com.cmackay.plugins.googleanalytics": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
         "cordova-ios-requires-fullscreen": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "cordova-plugin-crosswalk-webview": {
+        "com.cmackay.plugins.googleanalytics": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-app-version": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-splashscreen": {
@@ -37,16 +28,22 @@
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "cordova-plugin-app-version": {
+        "cordova-plugin-file": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "com.xmartlabs.cordova.market": {
+        "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "ionic-plugin-keyboard": {

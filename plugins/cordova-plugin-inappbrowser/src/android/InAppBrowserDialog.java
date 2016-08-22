@@ -46,7 +46,6 @@ public class InAppBrowserDialog extends Dialog {
         if (this.inAppBrowser == null) {
             this.dismiss();
         } else {
-            /*
             // better to go through the in inAppBrowser
             // because it does a clean up
             if (this.inAppBrowser.hardwareBack() && this.inAppBrowser.canGoBack()) {
@@ -54,7 +53,6 @@ public class InAppBrowserDialog extends Dialog {
             }  else {
                 this.inAppBrowser.closeDialog();
             }
-            */
         }
     }
 }

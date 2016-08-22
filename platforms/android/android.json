@@ -13,19 +13,11 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+                            "xml": "<feature name=\"FingerprintAuth\"><param name=\"android-package\" value=\"com.cordova.plugin.android.fingerprintauth.FingerprintAuth\" /></feature>",
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
+                            "xml": "<feature name=\"AppVersion\"><param name=\"android-package\" value=\"uk.co.whiteoctober.cordova.AppVersion\" /></feature>",
                             "count": 1
                         },
                         {
@@ -49,11 +41,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
                             "count": 1
                         },
                         {
@@ -65,19 +53,27 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"AppVersion\"><param name=\"android-package\" value=\"uk.co.whiteoctober.cordova.AppVersion\" /></feature>",
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Market\"><param name=\"android-package\" value=\"com.xmartlabs.cordova.market.Market\" /></feature>",
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
                             "count": 1
                         },
                         {
                             "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"io.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"FingerprintAuth\"><param name=\"android-package\" value=\"com.cordova.plugin.android.fingerprintauth.FingerprintAuth\" /></feature>",
                             "count": 1
                         }
                     ],
@@ -93,11 +89,15 @@
                 "parents": {
                     "/*": [
                         {
+                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
+                            "count": 1
+                        },
+                        {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
                             "count": 3
                         },
                         {
-                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
+                            "xml": "<uses-permission android:name=\"android.permission.USE_FINGERPRINT\" />",
                             "count": 1
                         },
                         {
@@ -106,10 +106,6 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.USE_FINGERPRINT\" />",
                             "count": 1
                         }
                     ],
@@ -156,43 +152,29 @@
                         }
                     ]
                 }
-            },
-            "config.xml": {
-                "parents": {
-                    "/*": []
-                }
             }
         }
     },
     "installed_plugins": {
+        "com.cmackay.plugins.googleanalytics": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
         "cordova-ios-requires-fullscreen": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-android-fingerprint-auth": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-app-version": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "com.cmackay.plugins.googleanalytics": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
         "cordova-plugin-crosswalk-webview": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "cordova-plugin-x-toast": {
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-file": {
@@ -201,22 +183,28 @@
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "cordova-plugin-app-version": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "com.xmartlabs.cordova.market": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
-        "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.wex.fleetsmarthub"
-        },
         "cordova-plugin-ios-no-export-compliance": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "cordova-plugin-touch-id": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
-        "cordova-plugin-android-fingerprint-auth": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "urbanairship-cordova": {
@@ -233,56 +221,25 @@
             ]
         },
         {
+            "file": "plugins/cordova-plugin-android-fingerprint-auth/www/FingerprintAuth.js",
+            "id": "cordova-plugin-android-fingerprint-auth.FingerprintAuth",
+            "clobbers": [
+                "FingerprintAuth"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-app-version/www/AppVersionPlugin.js",
+            "id": "cordova-plugin-app-version.AppVersionPlugin",
+            "clobbers": [
+                "cordova.getAppVersion"
+            ]
+        },
+        {
             "file": "plugins/cordova-plugin-device/www/device.js",
             "id": "cordova-plugin-device.device",
             "clobbers": [
                 "device"
             ]
-        },
-        {
-            "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-            "id": "cordova-plugin-splashscreen.SplashScreen",
-            "clobbers": [
-                "navigator.splashscreen"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-            "id": "cordova-plugin-statusbar.statusbar",
-            "clobbers": [
-                "window.StatusBar"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-network-information/www/network.js",
-            "id": "cordova-plugin-network-information.network",
-            "clobbers": [
-                "navigator.connection",
-                "navigator.network.connection"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-network-information/www/Connection.js",
-            "id": "cordova-plugin-network-information.Connection",
-            "clobbers": [
-                "Connection"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-whitelist/whitelist.js",
-            "id": "cordova-plugin-whitelist.whitelist",
-            "runs": true
-        },
-        {
-            "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
-            "id": "cordova-plugin-x-toast.Toast",
-            "clobbers": [
-                "window.plugins.toast"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-x-toast/test/tests.js",
-            "id": "cordova-plugin-x-toast.tests"
         },
         {
             "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
@@ -444,18 +401,51 @@
             ]
         },
         {
-            "file": "plugins/cordova-plugin-app-version/www/AppVersionPlugin.js",
-            "id": "cordova-plugin-app-version.AppVersionPlugin",
+            "file": "plugins/cordova-plugin-network-information/www/network.js",
+            "id": "cordova-plugin-network-information.network",
             "clobbers": [
-                "cordova.getAppVersion"
+                "navigator.connection",
+                "navigator.network.connection"
             ]
         },
         {
-            "file": "plugins/com.xmartlabs.cordova.market/www/market.js",
-            "id": "com.xmartlabs.cordova.market.Market",
+            "file": "plugins/cordova-plugin-network-information/www/Connection.js",
+            "id": "cordova-plugin-network-information.Connection",
             "clobbers": [
-                "cordova.plugins.market"
+                "Connection"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+            "id": "cordova-plugin-splashscreen.SplashScreen",
+            "clobbers": [
+                "navigator.splashscreen"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+            "id": "cordova-plugin-statusbar.statusbar",
+            "clobbers": [
+                "window.StatusBar"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-touch-id/www/TouchID.js",
+            "id": "cordova-plugin-touch-id.TouchID",
+            "clobbers": [
+                "window.plugins.touchid"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+            "id": "cordova-plugin-x-toast.Toast",
+            "clobbers": [
+                "window.plugins.toast"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+            "id": "cordova-plugin-x-toast.tests"
         },
         {
             "file": "plugins/ionic-plugin-keyboard/www/android/keyboard.js",
@@ -466,25 +456,31 @@
             "runs": true
         },
         {
-            "file": "plugins/cordova-plugin-touch-id/www/TouchID.js",
-            "id": "cordova-plugin-touch-id.TouchID",
-            "clobbers": [
-                "window.plugins.touchid"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-android-fingerprint-auth/www/FingerprintAuth.js",
-            "id": "cordova-plugin-android-fingerprint-auth.FingerprintAuth",
-            "clobbers": [
-                "FingerprintAuth"
-            ]
-        },
-        {
             "file": "plugins/urbanairship-cordova/www/UrbanAirship.js",
             "id": "urbanairship-cordova.UrbanAirship",
             "clobbers": [
                 "UAirship"
             ]
         }
-    ]
+    ],
+    "plugin_metadata": {
+        "com.cmackay.plugins.googleanalytics": "0.1.22",
+        "cordova-ios-requires-fullscreen": "0.0.2",
+        "cordova-plugin-android-fingerprint-auth": "0.0.8",
+        "cordova-plugin-app-version": "0.1.8",
+        "cordova-plugin-console": "1.0.3",
+        "cordova-plugin-crosswalk-webview": "1.5.0",
+        "cordova-plugin-device": "1.1.2",
+        "cordova-plugin-file": "4.1.1",
+        "cordova-plugin-inappbrowser": "1.3.0",
+        "cordova-plugin-ios-no-export-compliance": "0.0.1",
+        "cordova-plugin-network-information": "1.2.1",
+        "cordova-plugin-splashscreen": "3.2.2",
+        "cordova-plugin-statusbar": "2.1.3",
+        "cordova-plugin-touch-id": "3.2.0",
+        "cordova-plugin-whitelist": "1.2.2",
+        "cordova-plugin-x-toast": "2.4.2",
+        "ionic-plugin-keyboard": "2.2.1",
+        "urbanairship-cordova": "5.3.1"
+    }
 }
