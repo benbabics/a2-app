@@ -60,6 +60,9 @@
         },
         "urbanairship-cordova": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "com.xmartlabs.cordova.market": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
     "dependent_plugins": {}

@@ -248,6 +248,13 @@ module.exports = [
         "clobbers": [
             "UAirship"
         ]
+    },
+    {
+        "file": "plugins/com.xmartlabs.cordova.market/www/market.js",
+        "id": "com.xmartlabs.cordova.market.Market",
+        "clobbers": [
+            "cordova.plugins.market"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -270,7 +277,8 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.2.2",
     "cordova-plugin-x-toast": "2.4.2",
     "ionic-plugin-keyboard": "2.2.1",
-    "urbanairship-cordova": "5.3.1"
+    "urbanairship-cordova": "5.3.1",
+    "com.xmartlabs.cordova.market": "1.1"
 };
 // BOTTOM OF METADATA
 });

@@ -48,7 +48,24 @@
     <dict>
       <key>NSExceptionDomains</key>
       <dict>
-        <key>pwm-wex-178.wrightexpress.com</key>
+        <key>uat-wex.wexinc.com</key>
+        <dict>
+          <key>NSIncludesSubdomains</key>
+          <true/>
+          <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+          <key>NSExceptionRequiresForwardSecrecy</key>
+          <false/>
+          <key>NSExceptionMinimumTLSVersion</key>
+          <string>TLSv1.2</string>
+          <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+          <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+          <false/>
+          <key>NSThirdPartyExceptionMinimumTLSVersion</key>
+          <string>TLSv1.2</string>
+        </dict>
+        <key>uat.account.wexmobile.com</key>
         <dict>
           <key>NSIncludesSubdomains</key>
           <true/>
@@ -66,23 +83,6 @@
           <string>TLSv1.2</string>
         </dict>
         <key>www.google.com</key>
-        <dict>
-          <key>NSIncludesSubdomains</key>
-          <true/>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-          <key>NSExceptionRequiresForwardSecrecy</key>
-          <false/>
-          <key>NSExceptionMinimumTLSVersion</key>
-          <string>TLSv1.2</string>
-          <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-          <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-          <false/>
-          <key>NSThirdPartyExceptionMinimumTLSVersion</key>
-          <string>TLSv1.2</string>
-        </dict>
-        <key>dit-wex.wexinc.com</key>
         <dict>
           <key>NSIncludesSubdomains</key>
           <true/>

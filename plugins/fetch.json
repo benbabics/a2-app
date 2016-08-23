@@ -107,7 +107,7 @@
     "ionic-plugin-keyboard": {
         "source": {
             "type": "registry",
-            "id": "ionic-plugin-keyboard@2.0.1"
+            "id": "ionic-plugin-keyboard@~2.2.0"
         },
         "is_top_level": true,
         "variables": {}
@@ -141,6 +141,15 @@
         "source": {
             "type": "registry",
             "id": "urbanairship-cordova@~5.3.1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.xmartlabs.cordova.market": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/xmartlabs/cordova-plugin-market",
+            "subdir": "."
         },
         "is_top_level": true,
         "variables": {}

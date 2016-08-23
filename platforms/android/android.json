@@ -75,6 +75,10 @@
                         {
                             "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"io.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Market\"><param name=\"android-package\" value=\"com.xmartlabs.cordova.market.Market\" /></feature>",
+                            "count": 1
                         }
                     ],
                     "/widget": [
@@ -208,6 +212,9 @@
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
         "urbanairship-cordova": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
+        "com.xmartlabs.cordova.market": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
     },
@@ -461,6 +468,13 @@
             "clobbers": [
                 "UAirship"
             ]
+        },
+        {
+            "file": "plugins/com.xmartlabs.cordova.market/www/market.js",
+            "id": "com.xmartlabs.cordova.market.Market",
+            "clobbers": [
+                "cordova.plugins.market"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -481,6 +495,7 @@
         "cordova-plugin-whitelist": "1.2.2",
         "cordova-plugin-x-toast": "2.4.2",
         "ionic-plugin-keyboard": "2.2.1",
-        "urbanairship-cordova": "5.3.1"
+        "urbanairship-cordova": "5.3.1",
+        "com.xmartlabs.cordova.market": "1.1"
     }
 }
