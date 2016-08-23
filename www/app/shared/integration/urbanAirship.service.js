@@ -5,7 +5,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function UrbanAirship(_, PlatformUtil) {
+    function UrbanAirship(_, $q, Logger, PlatformUtil) {
 
         init();
 
@@ -13,9 +13,17 @@
         ////////////////////
         //Public functions:
         function ready() {
-            return PlatformUtil.waitForCordovaPlatform(function () {
-                return UAirship;
-            });
+            return PlatformUtil.waitForCordovaPlatform()
+                .then(function () {
+                    if (!_.isNil(_.get(window, "UAirship"))) {
+                        return window.UAirship;
+                    }
+                    else {
+                        var error = "UrbanAirship is not available on this platform.";
+                        Logger.info(error);
+                        return $q.reject(error);
+                    }
+                });
         }
 
         ////////////////////

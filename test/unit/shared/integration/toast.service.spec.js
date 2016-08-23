@@ -25,7 +25,6 @@
                 "show"
             ]);
             $ionicLoading = jasmine.createSpyObj("$ionicLoading", ["show"]);
-            PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["platformHasCordova"]);
 
             module("app.shared.core");
             module("app.shared.dependencies");
@@ -33,8 +32,10 @@
             module("app.shared.integration", function ($provide) {
                 $provide.value("$ionicLoading", $ionicLoading);
                 $provide.value("$cordovaToast", $cordovaToast);
-                $provide.value("PlatformUtil", PlatformUtil);
             });
+            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
+                PlatformUtil = mocks.PlatformUtil;
+            })]);
 
             inject(function (_$window_) {
                 $window = _$window_;

@@ -20,18 +20,22 @@
             ]);
 
             module("app.shared", function ($provide) {
+                TestUtils.provideCommonMockDependencies($provide, function (mocks) {
+                    delete mocks.AnalyticsUtil;
+
+                    mocks.PlatformUtil.waitForCordovaPlatform.and.callFake(function () {
+                        return TestUtils.resolvedPromise(analytics);
+                    });
+
+                    Logger = mocks.Logger;
+                });
+
                 $provide.value("$ionicPlatform", {
                     ready: jasmine.createSpy("ready").and.callFake(function () {
                         //execute all analytics commands with the mock analytics object
                         return TestUtils.resolvedPromise(analytics);
                     }),
                     registerBackButtonAction: jasmine.createSpy("registerBackButtonAction")
-                });
-
-                $provide.value("PlatformUtil", {
-                    waitForCordovaPlatform: jasmine.createSpy("waitForCordovaPlatform").and.callFake(function () {
-                        return TestUtils.resolvedPromise(analytics);
-                    })
                 });
             });
 
@@ -40,9 +44,6 @@
                 Logger = _Logger_;
                 $q = _$q_;
             });
-
-            //setup spies:
-            spyOn(Logger, "info");
         });
 
         it("should call analytics.setDispatchInterval with the expected values", function () {

@@ -41,6 +41,7 @@ var TestUtils = (function () {
             getRandomValueFromMap             : getRandomValueFromMap,
             getRandomVersionStatus            : getRandomVersionStatus,
             provideCommonMockDependencies     : provideCommonMockDependencies,
+            rejectedPromise                   : rejectedPromise,
             resolvedPromise                   : resolvedPromise
         };
 
@@ -61,14 +62,24 @@ var TestUtils = (function () {
     }
 
     //Allows for simulating a resolved promise chain without using $q
+    function rejectedPromise(value) {
+        return {
+            then: resolvedPromise,
+            catch: function (catchCallback) {
+                return rejectedPromise(catchCallback(value));
+            },
+            finally: function (finallyCallback) {
+                finallyCallback();
+            }
+        };
+    }
+
     function resolvedPromise(value) {
         return {
             then: function (thenCallback) {
-                thenCallback(value);
-
-                return resolvedPromise(value);
+                return resolvedPromise(thenCallback(value));
             },
-            catch: _.noop,
+            catch: rejectedPromise,
             finally: function (finallyCallback) {
                 finallyCallback();
             }
@@ -487,10 +498,36 @@ var TestUtils = (function () {
         return versionStatus;
     }
 
-    function provideCommonMockDependencies($provide) {
-        var AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTracker", "trackView", "trackEvent"]);
+    function provideCommonMockDependencies($provide, setter) {
+        var dependencies = {
+            AnalyticsUtil: jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackView",
+                "trackEvent"
+            ]),
+            LoadingIndicator: jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]),
+            Logger: jasmine.createSpyObj("Logger", ["enabled", "debug", "error", "info", "isEnabled", "log", "warn"]),
+            LoginManager: jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]),
+            PlatformUtil: jasmine.createSpyObj("PlatformUtil", [
+                "getPlatform",
+                "platformHasCordova",
+                "platformSupportsAppVersion",
+                "waitForCordovaPlatform",
+                "isOnline"
+            ]),
+            UrbanAirship: jasmine.createSpyObj("UrbanAirship", ["ready"])
+        };
 
-        $provide.value("AnalyticsUtil", AnalyticsUtil);
+        dependencies.PlatformUtil.waitForCordovaPlatform.and.returnValue(rejectedPromise("Cordova disabled by default."));
+
+        _.merge(dependencies, (setter || _.noop)(dependencies));
+
+        _.forOwn(dependencies, function (mock, name) {
+            $provide.value(name, mock);
+        });
     }
 
 })();

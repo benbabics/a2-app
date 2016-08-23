@@ -20,13 +20,16 @@
             //mock dependencies
             $cordovaDevice = jasmine.createSpyObj("$cordovaDevice", ["getPlatform"]);
             $cordovaNetwork = jasmine.createSpyObj("$cordovaNetwork", ["isOnline"]);
-            Logger = jasmine.createSpyObj("Logger", ["debug", "enabled", "error"]);
 
             module(function ($provide) {
                 $provide.value("$cordovaDevice", $cordovaDevice);
                 $provide.value("$cordovaNetwork", $cordovaNetwork);
-                $provide.value("Logger", Logger);
             });
+            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
+                delete mocks.PlatformUtil;
+
+                Logger = mocks.Logger;
+            })]);
 
             inject(function (_$ionicPlatform_, _$q_, _$rootScope_, _PlatformUtil_) {
                 PlatformUtil = _PlatformUtil_;

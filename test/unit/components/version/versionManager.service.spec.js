@@ -26,20 +26,20 @@
             module("app.shared");
             module("app.html");
             module("app.components.version");
+            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
+                PlatformUtil = mocks.PlatformUtil;
+                Logger = mocks.Logger;
+            })]);
 
             // mock dependencies
             $cordovaAppVersion = jasmine.createSpyObj("$cordovaAppVersion", ["getVersionNumber"]);
-            Logger = jasmine.createSpyObj("Logger", ["enabled", "warn"]);
             LoggerUtil = jasmine.createSpyObj("LoggerUtil", ["getErrorMessage"]);
-            PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["getPlatform", "platformSupportsAppVersion", "waitForCordovaPlatform"]);
             VersionsResource = jasmine.createSpyObj("VersionsResource", ["getVersionStatus"]);
             mockVersionStatus = jasmine.createSpyObj("VersionStatusModel", ["VersionStatusModel", "set"]);
 
             module(function ($provide) {
                 $provide.value("$cordovaAppVersion", $cordovaAppVersion);
-                $provide.value("Logger", Logger);
                 $provide.value("LoggerUtil", LoggerUtil);
-                $provide.value("PlatformUtil", PlatformUtil);
                 $provide.value("VersionsResource", VersionsResource);
             });
 

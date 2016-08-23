@@ -101,11 +101,9 @@
             BankManager,
             PaymentMaintenance,
             FlowUtil,
-            LoadingIndicator,
             PaymentManager,
             UserManager,
             AnalyticsUtil,
-            LoginManager,
             BrandManager,
             VersionManager,
             $cordovaDevice,
@@ -121,13 +119,10 @@
             PaymentMaintenance = jasmine.createSpyObj("PaymentMaintenance", ["getOrCreatePaymentAdd"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["clearCachedValues", "fetchPaymentAddAvailability"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["startTracker", "trackView"]);
-            LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
             BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericAnalyticsTrackingId", "loadBundledBrand"]);
             $cordovaDevice = jasmine.createSpyObj("$cordovaDevice", ["getPlatform"]);
             $ionicPlatform = jasmine.createSpyObj("$ionicPlatform", ["ready", "registerBackButtonAction"]);
             FlowUtil = jasmine.createSpyObj("FlowUtil", ["exitApp", "goToBackState"]);
-            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
             VersionManager = jasmine.createSpyObj("VersionManager", ["determineVersionStatus"]);
 
             module("app.shared");
@@ -139,13 +134,10 @@
                 $provide.value("PaymentMaintenance", PaymentMaintenance);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
-                $provide.value("LoginManager", LoginManager);
                 $provide.value("BrandManager", BrandManager);
                 $provide.value("$cordovaDevice", $cordovaDevice);
                 $provide.value("$ionicPlatform", $ionicPlatform);
                 $provide.value("FlowUtil", FlowUtil);
-                $provide.value("LoadingIndicator", LoadingIndicator);
                 $provide.value("VersionManager", VersionManager);
 
                 //setup mocks:
@@ -169,6 +161,9 @@
 
             module("app.shared");
             module("app.html");
+            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
+                AnalyticsUtil = mocks.AnalyticsUtil;
+            })]);
 
             inject(function (_$q_, _$rootScope_, _$state_) {
                 $q = _$q_;
