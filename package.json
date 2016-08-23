@@ -42,21 +42,34 @@
     "wiredep": "^3.0.0"
   },
   "cordovaPlugins": [
-    "cordova-plugin-console",
-    "cordova-plugin-crosswalk-webview",
-    "cordova-ios-requires-fullscreen",
-    "cordova-plugin-network-information",
+    "cordova-ios-requires-fullscreen@~0.0.2",
+    "cordova-plugin-console@~1.0.2",
+    "com.cmackay.plugins.googleanalytics@~0.1.22",
+    {
+      "locator": "https://github.com/xmartlabs/cordova-plugin-market",
+      "id": "com.xmartlabs.cordova.market@1.1"
+    },
+    "cordova-plugin-app-version@~0.1.8",
+    "cordova-plugin-device@~1.1.1",
+    "cordova-plugin-splashscreen@~3.2.1",
+    "cordova-plugin-statusbar@~2.1.2",
+    "cordova-plugin-network-information@~1.2.0",
+    "cordova-plugin-crosswalk-webview@~1.5.0",
+    "cordova-plugin-whitelist@~1.2.1",
     {
       "locator": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
-      "id": "cordova-plugin-x-toast"
+      "id": "cordova-plugin-x-toast@~2.4.2"
     },
-    "cordova-plugin-whitelist",
-    "cordova-plugin-statusbar",
-    "cordova-plugin-splashscreen",
-    "cordova-plugin-app-version",
-    "cordova-plugin-device",
-    "cordova-plugin-file",
-    "ionic-plugin-keyboard@2.0.1"
+    "cordova-plugin-file@~4.1.1",
+    "cordova-plugin-inappbrowser@~1.3.0",
+    "ionic-plugin-keyboard@~2.2.0",
+    {
+      "locator": "https://github.com/WEXInc/cordova-plugin-ios-no-export-compliance.git",
+      "id": "cordova-plugin-ios-no-export-compliance"
+    },
+    "cordova-plugin-touch-id@~3.2.0",
+    "cordova-plugin-android-fingerprint-auth@~0.0.10",
+    "urbanairship-cordova@~5.3.1"
   ],
   "cordovaPlatforms": [
     {
