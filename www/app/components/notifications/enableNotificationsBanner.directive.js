@@ -24,7 +24,7 @@
 
           scope.hideBanner = function() {
               scope.isOpen = false;
-          }
+          };
         }
     }
 
