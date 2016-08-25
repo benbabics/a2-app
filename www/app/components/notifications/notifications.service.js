@@ -2,9 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
+    // jshint maxparams:5
 
     /* @ngInject */
-    function NotificationsManager($q, $localStorage, Logger, PlatformUtil) {
+    function NotificationsManager($q, $localStorage, Logger, PlatformUtil, UrbanAirship) {
 
       var deferred, storage, service;
 
@@ -57,7 +58,12 @@
 
       function enableNotifications() {
           storage.notificationsFlags.hasEnabled = true;
-          alert( "Delegate to iOS for enabling notifications" );
+
+          UrbanAirship.ready().then(function(airship) {
+              airship.setUserNotificationsEnabled( true );
+              Logger.log( "UrbanAirship.setUserNotificationsEnabled", true );
+          });
+
           Logger.log( "notificationsFlags.hasEnabled", true );
       }
       function rejectBanner() {
