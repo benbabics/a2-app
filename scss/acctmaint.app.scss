@@ -320,7 +320,7 @@ body.menu-open .nav-view-root::before {
     #companyDetails {
         font-weight: bold;
         font-size: 16px;
-        line-height: 15px;
+        line-height: 20px;
 
         .body-text {
             font-weight: normal;
@@ -746,13 +746,14 @@ body.menu-open .nav-view-root::before {
 
 /** Button-bar End**/
 
-.ion-chevron-right {
-    color: $wex-link-color;
-    float: right;
-    font-size:20px;
-}
+.widget-filter-transaction-list {
 
-.filter-list {
+    .ion-chevron-right {
+        color: #3a97b5;
+        float: right;
+        font-size:20px;
+    }
+
     .item-divider {
         padding-top: 4px;
         padding-bottom: 4px;
