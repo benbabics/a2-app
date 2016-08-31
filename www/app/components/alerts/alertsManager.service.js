@@ -15,7 +15,8 @@
               deleteAlert:       deleteAlert,
               clearCachedValues: clearCachedValues,
               getAlerts:         getAlerts,
-              setAlerts:         setAlerts
+              setAlerts:         setAlerts,
+              getUnreadAlertsCount: getUnreadAlertsCount
           };
 
       activate();
@@ -96,6 +97,9 @@
           __alerts = alertItems;
       }
 
+      function getUnreadAlertsCount() {
+          return 21;
+      }
     }
 
     angular

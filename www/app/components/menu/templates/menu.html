@@ -32,14 +32,13 @@
             {{::vm.config.options.transactionActivity}}
         </wex-menu-item>
 
-        <!-- Does not go anywhere yet, and fakes the alert count. -->
         <wex-menu-item id="option-alerts"
                        ng-click="vm.goToAlerts()"
                        icon="fa-bell"
                        root-state="{{::vm.config.rootStates.alerts}}"
-                       no-chevron>
+                       no-chevron="{{vm.getUnreadAlertsCount() > 0}}">
             {{::vm.config.options.alerts}}
-            <i class="badge badge-assertive">15</i>
+            <i class="badge badge-assertive" ng-hide="vm.getUnreadAlertsCount() == 0">{{vm.getUnreadAlertsCount()}}</i>
         </wex-menu-item>
 
         <wex-menu-item id="option-cards"

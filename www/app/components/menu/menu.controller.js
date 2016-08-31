@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function MenuController(_, $ionicSideMenuDelegate, $state, globals, Navigation) {
+    function MenuController(_, $ionicSideMenuDelegate, $state, globals, Navigation, AlertsManager) {
 
         var vm = this;
         vm.config = globals.MENU.CONFIG;
@@ -21,6 +21,7 @@
         vm.goToPrivacyPolicy = goToPrivacyPolicy;
         vm.goToLogOut = goToLogOut;
         vm.currentStateHasRoot = currentStateHasRoot;
+        vm.getUnreadAlertsCount = getUnreadAlertsCount;
 
         function closeMenu() {
             $ionicSideMenuDelegate.toggleRight(false);
@@ -68,6 +69,10 @@
 
         function currentStateHasRoot(rootState) {
             return _.startsWith($state.current.name, rootState);
+        }
+
+        function getUnreadAlertsCount() {
+            return AlertsManager.getUnreadAlertsCount();
         }
     }
 
