@@ -145,6 +145,7 @@ $user-login-error-message-animation: all linear 0.5s;
 .block_align {
     display: inline-block;
     text-align: left;
+    color: #707070;
 }
 
 
@@ -579,6 +580,24 @@ body.menu-open .nav-view-root::before {
 .item.transaction-row,
 .transaction-row .item {
     background-color: #f0f0f0;
+}
+
+.transactionDetails {
+
+    .item-wrap {
+        margin-top: 5px;
+    }
+
+    .divider {
+        height: 40px;
+    }
+
+     .details-value {
+          color: $charcoal;
+          font-weight: 500;
+          font-size: 16px;
+          float: right;
+     }
 }
 
 /**------ Chevron Alignment -------**/
