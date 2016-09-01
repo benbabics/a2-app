@@ -8,6 +8,21 @@
     function coreRun(_, $cordovaDevice, $q, $rootScope, $state, $ionicPlatform, $window,
                      globals, AnalyticsUtil, AuthenticationManager, BrandManager, FlowUtil, Navigation, PlatformUtil) {
 
+        //Fix for Ionic issue outlined here: https://github.com/driftyco/ionic/issues/3908
+        function applyScrollTapFix() {
+            var originalScroll = ionic.views.Scroll,
+                rebindTap = ionic.debounce(function () {
+                    var deregister = ionic.tap.register(document);
+                    deregister();
+                    ionic.tap.register(document);
+                }, 100);
+
+            ionic.views.Scroll = function (options) {
+                rebindTap();
+                return new originalScroll(options);
+            };
+        }
+
         function validateRoutePreconditions(event, toState) { // args: event, toState, toParams, fromState, fromParams
 
             var stateName = toState.name;
@@ -78,6 +93,8 @@
             .then(loadBundledBrands);
 
         startGenericAnalyticsTracker();
+
+        applyScrollTapFix();
     }
 
     angular.module("app.components.core", [])
