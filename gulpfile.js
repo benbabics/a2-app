@@ -16,6 +16,7 @@ var inject = require("gulp-inject");
 var jshint = require("gulp-jshint");
 var jscs = require("gulp-jscs");
 var webserver = require("gulp-webserver");
+var gulpsync = require("gulp-sync")(gulp);
 
 var sourcePaths = {
     root: {
@@ -37,23 +38,18 @@ var destPaths = {
 
 var config = {
     webserver: {
+        host: "127.0.0.1",
         port: 8100,
-        open: true
+        open: true,
+        livereload: true
     }
 };
 
-gulp.task("default", ["sass", "index", "watch"]);
+gulp.task("default", gulpsync.sync(["ionic-build-browser", "watch", "serve-browser"]));
 
 /**
  * Installation Tasks
  */
-gulp.task("install", ["git-check"], function () {
-    return bower.commands.install()
-        .on("log", function (data) {
-            gutil.log("bower", gutil.colors.cyan(data.id), data.message);
-        });
-});
-
 gulp.task("git-check", function (done) {
     if (!sh.which("git")) {
         console.log(
@@ -66,6 +62,23 @@ gulp.task("git-check", function (done) {
     }
     done();
 });
+
+gulp.task("bower-install", ["git-check"], function () {
+    return bower.commands.install()
+        .on("log", function (data) {
+            gutil.log("bower", gutil.colors.cyan(data.id), data.message);
+        });
+});
+
+gulp.task("npm-install", function (done) {
+    sh.exec("npm install", done);
+});
+
+gulp.task("ionic-restore", function (done) {
+    sh.exec("ionic state reset", done);
+});
+
+gulp.task("prepare-environment", gulpsync.sync(["npm-install", "bower-install", "ionic-restore"]));
 
 /**
  * Index.html building and compilation Tasks
@@ -85,23 +98,24 @@ gulp.task("sass", function (done) {
 });
 
 gulp.task("watch", function () {
-    gulp.watch(sourcePaths.root.sass, ["sass"]);
-    gulp.watch([sourcePaths.root.css, sourcePaths.root.scripts], ["index"]);
+    gulp.watch([sourcePaths.root.sass, sourcePaths.root.scripts], ["ionic-build-browser"]);
 });
 
-gulp.task("bower", function () {
+gulp.task("bower", function (done) {
     gulp.src(sourcePaths.root.indexPage)
         .pipe(wiredep({
             exclude: "/angular/"
         }))
-        .pipe(gulp.dest(destPaths.root.root));
+        .pipe(gulp.dest(destPaths.root.root))
+        .on("end", done);
 });
 
-gulp.task("index", function () {
-    return gulp.src(sourcePaths.root.indexPage)
+gulp.task("index", function (done) {
+    gulp.src(sourcePaths.root.indexPage)
         .pipe(inject(gulp.src(sourcePaths.root.scripts).pipe(naturalSort()).pipe(angularFilesort()), {relative: true}))
         .pipe(inject(gulp.src(sourcePaths.root.cssMin, {read: false}), {relative: true}))
-        .pipe(gulp.dest(destPaths.root.root));
+        .pipe(gulp.dest(destPaths.root.root))
+        .on("end", done);
 });
 
 /**
@@ -130,89 +144,99 @@ gulp.task("ionic-serve-lab", function () {
     sh.exec("ionic serve -l");
 });
 
-gulp.task("ionic-dev-build", function () {
+/**
+ * Build Tasks
+ */
+
+gulp.task("ionic-build-prepare", gulpsync.sync(["sass", "index", "bower"]));
+
+gulp.task("ionic-dev-build", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "dev";
-    sh.exec("ionic build");
+    sh.exec("ionic build", done);
 });
 
-gulp.task("ionic-dev-build-browser", function () {
+gulp.task("ionic-build-browser", ["ionic-build-prepare"], function (done) {
+    sh.exec("ionic build browser", done);
+});
+
+gulp.task("ionic-dev-build-browser", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "dev";
-    sh.exec("ionic build browser");
+    sh.exec("ionic build browser", done);
 });
 
-gulp.task("ionic-dit-build", function () {
+gulp.task("ionic-dit-build", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "dit";
-    sh.exec("ionic build");
+    sh.exec("ionic build", done);
 });
 
-gulp.task("ionic-dit-build-browser", function () {
+gulp.task("ionic-dit-build-browser", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "dit";
-    sh.exec("ionic build browser");
+    sh.exec("ionic build browser", done);
 });
 
-gulp.task("ionic-dit-emulate-ios", function () {
+gulp.task("ionic-dit-emulate-ios", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "dit";
-    sh.exec("ionic emulate ios");
+    sh.exec("ionic emulate ios", done);
 });
 
-gulp.task("ionic-stage-build", function () {
+gulp.task("ionic-stage-build", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "stage";
-    sh.exec("ionic build");
+    sh.exec("ionic build", done);
 });
 
-gulp.task("ionic-stage-build-browser", function () {
+gulp.task("ionic-stage-build-browser", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "stage";
-    sh.exec("ionic build browser");
+    sh.exec("ionic build browser", done);
 });
 
-gulp.task("ionic-stage-build-release-android", function () {
+gulp.task("ionic-stage-build-release-android", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "stage";
-    sh.exec("ionic build android --release");
+    sh.exec("ionic build android --release", done);
 });
 
-gulp.task("ionic-stage-emulate-android", function () {
+gulp.task("ionic-stage-emulate-android", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "stage";
-    sh.exec("ionic emulate android");
+    sh.exec("ionic emulate android", done);
 });
 
-gulp.task("ionic-stage-emulate-ios", function () {
+gulp.task("ionic-stage-emulate-ios", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "stage";
-    sh.exec("ionic emulate ios");
+    sh.exec("ionic emulate ios", done);
 });
 
-gulp.task("ionic-stage-run-android", function () {
+gulp.task("ionic-stage-run-android", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "stage";
-    sh.exec("ionic run android");
+    sh.exec("ionic run android", done);
 });
 
-gulp.task("ionic-stage-run-ios", function () {
+gulp.task("ionic-stage-run-ios", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "stage";
-    sh.exec("ionic run ios --device");
+    sh.exec("ionic run ios --device", done);
 });
 
-gulp.task("ionic-prod-build", function () {
+gulp.task("ionic-prod-build", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "prod";
-    sh.exec("ionic build");
+    sh.exec("ionic build", done);
 });
 
-gulp.task("ionic-prod-build-browser", function () {
+gulp.task("ionic-prod-build-browser", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "prod";
-    sh.exec("ionic build browser");
+    sh.exec("ionic build browser", done);
 });
 
-gulp.task("ionic-prod-build-release", function () {
+gulp.task("ionic-prod-build-release", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "prod";
-    sh.exec("ionic build --release");
+    sh.exec("ionic build --release", done);
 });
 
-gulp.task("ionic-prod-run-android", function () {
+gulp.task("ionic-prod-run-android", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "prod";
-    sh.exec("ionic run android");
+    sh.exec("ionic run android", done);
 });
 
-gulp.task("ionic-prod-run-ios", function () {
+gulp.task("ionic-prod-run-ios", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "prod";
-    sh.exec("ionic run ios --device");
+    sh.exec("ionic run ios --device", done);
 });
 
 /**
