@@ -27,8 +27,8 @@
         }
 
         function getFieldId(route) {
-            if (_.isUndefined(route)) {
-                throw new Error("You're creating a Restangular entity without the path.");
+            if (route === "") {
+                return "";
             }
 
             // if route is secure/accounts ==> returns accounts
