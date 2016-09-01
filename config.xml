@@ -92,6 +92,7 @@
         <preference name="StatusBarOverlaysWebView" value="false" />
         <preference name="StatusBarBackgroundColor" value="#333333" />
         <preference name="StatusBarStyle" value="blackopaque" />
+        <preference name="KeychainAccessibility" value="WhenUnlockedThisDeviceOnly"/>
     </platform>
     <plugin name="cordova-ios-requires-fullscreen" spec="~0.0.2" />
     <plugin name="cordova-plugin-console" spec="~1.0.2" />
@@ -115,6 +116,7 @@
     <plugin name="cordova-plugin-touch-id" spec="~3.2.0" />
     <plugin name="cordova-plugin-android-fingerprint-auth" spec="~0.0.10" />
     <plugin name="urbanairship-cordova" spec="~5.3.1" />
+    <plugin name="cordova-plugin-secure-storage" spec="~2.4.1" />
     <preference name="xwalkVersion" value="16+" />
     <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
     <preference name="xwalkMode" value="embedded" />

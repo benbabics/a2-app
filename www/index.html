@@ -34,7 +34,6 @@
                 <ion-nav-buttons side="right">
                     <button menu-toggle="right"
                             class="button button-clear icon ion-navicon-round">
-                        <span ng-show="vm.getUnreadAlertsCount() > 0" class="badge badge-assertive">{{vm.getUnreadAlertsCount()}}</span>
                     </button>
                 </ion-nav-buttons>
             </ion-nav-bar>
@@ -59,7 +58,9 @@
             <ion-nav-view class="nav-view-root"></ion-nav-view>
         </ion-side-menu-content>
 
-        <ion-side-menu side="right" wex-menu></ion-side-menu>
+        <ion-side-menu side="right" ng-controller="MenuController as vm">
+            <ng-include src="'app/components/menu/templates/menu.html'"></ng-include>
+        </ion-side-menu>
     </ion-side-menus>
 
         <!-- libraries -->
@@ -173,6 +174,7 @@
         <script src="app/shared/integration/integration.module.js"></script>
         <script src="app/shared/integration/urbanAirship.service.js"></script>
         <script src="app/shared/integration/toast.service.js"></script>
+        <script src="app/shared/integration/secureStorage.service.js"></script>
         <script src="app/shared/integration/lodash.service.js"></script>
         <script src="app/shared/integration/fingerprint.service.js"></script>
         <script src="app/shared/dependencies/dependencies.module.js"></script>

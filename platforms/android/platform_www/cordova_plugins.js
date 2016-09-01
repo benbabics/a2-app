@@ -203,6 +203,18 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/cordova-plugin-secure-storage/www/securestorage.js",
+        "id": "cordova-plugin-secure-storage.SecureStorage",
+        "clobbers": [
+            "SecureStorage"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-secure-storage/www/sjcl_ss.js",
+        "id": "cordova-plugin-secure-storage.sjcl_ss",
+        "runs": true
+    },
+    {
         "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
         "id": "cordova-plugin-splashscreen.SplashScreen",
         "clobbers": [
@@ -263,7 +275,7 @@ module.exports.metadata =
     "com.cmackay.plugins.googleanalytics": "0.1.22",
     "cordova-ios-requires-fullscreen": "0.0.2",
     "cordova-plugin-android-fingerprint-auth": "0.0.8",
-    "cordova-plugin-app-version": "0.1.8",
+    "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-console": "1.0.3",
     "cordova-plugin-crosswalk-webview": "1.5.0",
     "cordova-plugin-device": "1.1.2",
@@ -271,6 +283,7 @@ module.exports.metadata =
     "cordova-plugin-inappbrowser": "1.3.0",
     "cordova-plugin-ios-no-export-compliance": "0.0.1",
     "cordova-plugin-network-information": "1.2.1",
+    "cordova-plugin-secure-storage": "2.4.2",
     "cordova-plugin-splashscreen": "3.2.2",
     "cordova-plugin-statusbar": "2.1.3",
     "cordova-plugin-touch-id": "3.2.0",

@@ -61,6 +61,9 @@
         "urbanairship-cordova": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         },
+        "cordova-plugin-secure-storage": {
+            "PACKAGE_NAME": "com.wex.fleetsmarthub"
+        },
         "com.xmartlabs.cordova.market": {
             "PACKAGE_NAME": "com.wex.fleetsmarthub"
         }
