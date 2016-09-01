@@ -28,7 +28,8 @@
         //////////////////////
 
         function activate() {
-            $scope.$on("$ionicView.beforeEnter", beforeEnter);
+            //show the fullscreen loading indicator for the first page load
+            LoadingIndicator.begin();
         }
 
         function applySearchFilter() {
@@ -40,11 +41,6 @@
                 _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events.searchSubmitted);
             }
 
-        }
-
-        function beforeEnter() {
-            //show the fullscreen loading indicator for the first page load
-            LoadingIndicator.begin();
         }
 
         function getActiveSearchFilter() {

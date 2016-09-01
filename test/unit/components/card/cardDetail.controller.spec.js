@@ -2,6 +2,7 @@
     "use strict";
 
     var $scope,
+        $state,
         Navigation,
         ctrl,
         mockCard,
@@ -43,12 +44,13 @@
             //mock dependencies
             Navigation = jasmine.createSpyObj("Navigation", ["goToTransactionActivity"]);
 
-            inject(function ($controller, $rootScope, $q, CardModel) {
+            inject(function ($controller, $rootScope, $q, _$state_, CardModel) {
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
                 mockCard = TestUtils.getRandomCard(CardModel);
+                $state = _$state_;
 
                 ctrl = $controller("CardDetailController", {
                     $scope    : $scope,
@@ -61,26 +63,23 @@
 
         });
 
-        describe("has an $ionicView.beforeEnter event handler function that", function () {
-
-            beforeEach(function () {
-                $scope.$broadcast("$ionicView.beforeEnter");
-            });
-
-            it("should set the card", function () {
-                expect(ctrl.card).toEqual(mockCard);
-            });
-
+        it("should set the card", function () {
+            expect(ctrl.card).toEqual(mockCard);
         });
 
         describe("has a goToTransactionActivity function that", function () {
 
             beforeEach(function () {
+                spyOn($state, "go").and.stub();
+
                 ctrl.goToTransactionActivity();
             });
 
-            it("should call Navigation.goToTransactionActivity", function () {
-                expect(Navigation.goToTransactionActivity).toHaveBeenCalledWith();
+            it("should call $state.go with the expected values", function () {
+                expect($state.go).toHaveBeenCalledWith("transaction.filterBy", {
+                    filterBy: "card",
+                    filterValue: mockCard.cardId
+                });
             });
         });
 

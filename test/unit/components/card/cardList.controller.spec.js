@@ -103,6 +103,10 @@
             UserManager.getUser.and.returnValue(mockUser);
         });
 
+        it("should call LoadingIndicator.begin", function () {
+            expect(LoadingIndicator.begin).toHaveBeenCalledWith();
+        });
+
         describe("has an applySearchFilter function that", function () {
             var searchFilter;
 

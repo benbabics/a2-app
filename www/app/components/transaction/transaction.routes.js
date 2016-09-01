@@ -31,15 +31,26 @@
         $stateProvider.state("transaction.filterBy", {
             url:   "/filter/:filterBy/:filterValue",
             cache: false,
-            params: {
-                transaction: null
-            },
             views: {
-              "view": {
-                templateUrl: "app/components/transaction/templates/transactionFilterBy.html",
-                controller:  "TransactionFilterByController as vm"
-              }
+                "view": {
+                    templateUrl: "app/components/transaction/templates/transactionFilterBy.html",
+                    controller : "TransactionFilterByController as vm"
+                }
             },
+            resolve: {
+                filterDetails: function(_, $stateParams, CardManager, DriverManager) {
+                    switch (_.toLower($stateParams.filterBy)) {
+                        case "date":
+                            return {};
+                        case "card":
+                            return CardManager.fetchCard($stateParams.filterValue);
+                        case "driver":
+                            return DriverManager.fetchDriver($stateParams.filterValue);
+                        default:
+                            throw new Error("Unrecognized transaction filterBy: " + $stateParams.filterBy);
+                    }
+                }
+            }
         });
 
         $stateProvider.state("transaction.postedDetail", {

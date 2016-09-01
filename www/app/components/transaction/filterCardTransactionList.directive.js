@@ -17,8 +17,8 @@
         };
 
         function link(scope, element, attrs, controller) {
-            scope.config       = globals.TRANSACTION_LIST.CONFIG;
-            scope.transactions = scope.infiniteScrollService.model;
+            scope.config = globals.TRANSACTION_LIST.CONFIG;
+            scope.cards  = scope.infiniteScrollService.model;
 
             controller.assignServiceDelegate({
                 makeRequest: handleMakeRequest,
@@ -39,8 +39,8 @@
             }
 
             function handleOnError(errorResponse) {
-              //TODO - What do we do here?
-              Logger.error( 'Failed to fetch next page of card transactions: ' + errorResponse );
+                //TODO - What do we do here?
+                Logger.error( 'Failed to fetch next page of cards: ' + errorResponse );
             }
         }
     }

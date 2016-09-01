@@ -7,12 +7,12 @@
                        loading-complete="infiniteScrollService.isLoadingComplete">
 
         <div class="item item-icon-right"
-             collection-repeat="transaction in transactions.collection"
-             ng-class="{ 'ui-greeking': transaction.isGreekLoading }"
-             ui-sref="transaction.filterBy({ filterBy: 'driver', filterValue: transaction.promptId, transaction: transaction })">
+             collection-repeat="driver in drivers.collection"
+             ng-class="{ 'ui-greeking': driver.isGreekLoading }"
+             ui-sref="transaction.filterBy({ filterBy: 'driver', filterValue: driver.promptId })">
 
                 <a class="item-content">
-                    <span class="greek-block">{{ transaction.lastName }}, {{ transaction.firstName }}</span>
+                    <span class="greek-block">{{ driver.lastName }}, {{ driver.firstName }}</span>
                     <i class="icon ion-chevron-right"></i>
                 </a>
 

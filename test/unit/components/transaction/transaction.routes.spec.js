@@ -10,6 +10,10 @@
             mockPostedTransaction,
             TransactionManager,
             AnalyticsUtil,
+            CardManager,
+            DriverManager,
+            CardModel,
+            DriverModel,
             mockGlobals = {
                 TRANSACTION_LIST: {
                     "CONFIG": {
@@ -43,24 +47,32 @@
         beforeEach(function () {
 
             module("app.shared");
+            module("app.components.card");
+            module("app.components.driver");
             module("app.components.transaction");
             module("app.html");
 
             // mock dependencies
             TransactionManager = jasmine.createSpyObj("TransactionManager", ["fetchPostedTransaction"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
+            CardManager = jasmine.createSpyObj("CardManager", ["fetchCard"]);
+            DriverManager = jasmine.createSpyObj("DriverManager", ["fetchDriver"]);
 
             module(function ($provide, sharedGlobals) {
                 $provide.value("TransactionManager", TransactionManager);
+                $provide.value("CardManager", CardManager);
+                $provide.value("DriverManager", DriverManager);
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
-            inject(function (_$injector_, _$q_, _$rootScope_, _$state_, PostedTransactionModel) {
+            inject(function (_$injector_, _$q_, _$rootScope_, _$state_, _CardModel_, _DriverModel_, PostedTransactionModel) {
                 $injector = _$injector_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
+                CardModel = _CardModel_;
+                DriverModel = _DriverModel_;
 
                 mockPostedTransaction = TestUtils.getRandomPostedTransaction(PostedTransactionModel);
             });
@@ -172,22 +184,94 @@
 
             it("should respond to the URL", function () {
                 var params = {
-                  transactionId: "1234",
-                  filterBy:      "card",
-                  filterValue:   "7890"
+                    filterBy:    "card",
+                    filterValue: "7890"
                 },
-                segments = params.filterBy +"/"+ params.filterValue;
+                segments = params.filterBy + "/" + params.filterValue;
+
                 expect($state.href(stateName, params)).toEqual("#/transaction/filter/" + segments);
             });
 
             describe("when navigated to", function () {
+                var params;
+
                 beforeEach(function () {
-                    $state.go(stateName);
-                    $rootScope.$digest();
+                    params = {};
+                    params.filterValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 });
 
-                it("should transition successfully", function () {
-                    expect($state.current.name).toBe(stateName);
+                describe("when filtering by date", function () {
+
+                    beforeEach(function () {
+                        params.filterBy = "date";
+                    });
+
+                    beforeEach(function () {
+                        $state.go(stateName, params);
+                        $rootScope.$digest();
+                    });
+
+                    it("should transition successfully", function () {
+                        expect($state.current.name).toBe(stateName);
+                    });
+
+                    it("should resolve the filterDetails", function () {
+                        expect($injector.invoke($state.current.resolve.filterDetails)).toEqual({});
+                    });
+                });
+
+                describe("when filtering by card", function () {
+                    var card;
+
+                    beforeEach(function () {
+                        card = TestUtils.getRandomCard(CardModel);
+                        params.filterBy = "card";
+
+                        CardManager.fetchCard.and.returnValue($q.resolve(card));
+                    });
+
+                    beforeEach(function () {
+                        $state.go(stateName, params);
+                        $rootScope.$digest();
+                    });
+
+                    it("should transition successfully", function () {
+                        expect($state.current.name).toBe(stateName);
+                    });
+
+                    it("should resolve the filterDetails", function () {
+                        $injector.invoke($state.current.resolve.filterDetails)
+                            .then(function (filterDetails) {
+                                expect(filterDetails).toEqual(card);
+                            });
+                    });
+                });
+
+                describe("when filtering by driver", function () {
+                    var driver;
+
+                    beforeEach(function () {
+                        driver = TestUtils.getRandomDriver(DriverModel);
+                        params.filterBy = "driver";
+
+                        DriverManager.fetchDriver.and.returnValue($q.resolve(driver));
+                    });
+
+                    beforeEach(function () {
+                        $state.go(stateName, params);
+                        $rootScope.$digest();
+                    });
+
+                    it("should transition successfully", function () {
+                        expect($state.current.name).toBe(stateName);
+                    });
+
+                    it("should resolve the filterDetails", function () {
+                        $injector.invoke($state.current.resolve.filterDetails)
+                            .then(function (filterDetails) {
+                                expect(filterDetails).toEqual(driver);
+                            });
+                    });
                 });
             });
         });
