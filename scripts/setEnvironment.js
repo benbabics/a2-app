@@ -158,6 +158,7 @@ module.exports = function(context) {
                         "@@@STRING_REPLACE_APP_URL_AM_API@@@"                      : properties.app_urls.am_api,
                         "@@@STRING_REPLACE_APP_URL_AUTH_API@@@"                    : properties.app_urls.auth_api,
                         "@@@STRING_REPLACE_APP_URL_CONFIGURATION_API@@@"           : properties.app_urls.configuration_api,
+                        "@@@STRING_REPLACE_APP_URL_NOTIFICATIONS_API@@@"           : properties.app_urls.notifications_api,
                         "@@@STRING_REPLACE_APP_URL_ONLINE_ENROLLMENT_API@@@"       : properties.app_urls.online_enrollment_api,
                         "@@@STRING_REPLACE_AUTH_CLIENT_ID@@@"                      : properties.auth.client_id,
                         "@@@STRING_REPLACE_AUTH_CLIENT_SECRET@@@"                  : properties.auth.client_secret,

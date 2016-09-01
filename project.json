@@ -23,6 +23,7 @@
             "am_api": "http://127.0.0.1:20080",
             "auth_api": "http://127.0.0.1:26080",
             "configuration_api": "http://127.0.0.1:29080",
+            "notifications_api": "http://127.0.0.1:31080",
             "online_enrollment_api": "http://dit-wex.wexinc.com:12080/enrollment/"
         },
         "auth": {
@@ -42,6 +43,7 @@
             "am_api": "http://pwm-wex-178.wrightexpress.com:20080",
             "auth_api": "http://pwm-wex-178.wrightexpress.com:26080",
             "configuration_api": "http://pwm-wex-178.wrightexpress.com:29080",
+            "notifications_api": "http://pwm-wex-178.wrightexpress.com:31080",
             "online_enrollment_api": "http://dit-wex.wexinc.com:12080/enrollment/"
         },
         "auth": {
@@ -61,6 +63,7 @@
             "am_api": "https://uat.account.wexmobile.com/maintenance",
             "auth_api": "https://uat.account.wexmobile.com/authAPI",
             "configuration_api": "https://uat.account.wexmobile.com/configurationAPI",
+            "notifications_api": "https://uat.account.wexmobile.com/notifications",
             "online_enrollment_api": "https://uat-wex.wexinc.com/enrollment/"
         },
         "auth": {
@@ -80,6 +83,7 @@
             "am_api": "https://account.wexmobile.com/maintenance",
             "auth_api": "https://account.wexmobile.com/authAPI",
             "configuration_api": "https://account.wexmobile.com/configurationAPI",
+            "notifications_api": "https://account.wexmobile.com/notifications",
             "online_enrollment_api": "https://www.myfleetcardlogin.com/enrollment/"
         },
         "auth": {

@@ -131,6 +131,13 @@
     };
 
     /**
+     * Notifications API
+     */
+    sharedGlobals.NOTIFICATIONS_API = {
+        BASE_URL: "@@@STRING_REPLACE_APP_URL_NOTIFICATIONS_API@@@"
+    };
+
+    /**
      * Online Enrollment API
      */
     sharedGlobals.ONLINE_ENROLLMENT_API = {
