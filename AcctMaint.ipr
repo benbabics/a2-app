@@ -108,9 +108,7 @@
   </component>
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$" libraries="{AcctMaint node_modules}" />
-    <file url="PROJECT" libraries="{jasmine-DefinitelyTyped, karma-jasmine-DefinitelyTyped}" />
   </component>
-  <component name="JscsConfiguration" jscs-preset="" />
   <component name="JscsProjectComponent">
     <option name="jscsExecutable" value="$PROJECT_DIR$/node_modules/.bin/jscs" />
     <option name="nodeInterpreter" value="/usr/local/opt/nvm/versions/node/v0.12.5/bin/node" />
