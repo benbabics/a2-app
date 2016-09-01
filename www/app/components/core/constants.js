@@ -100,6 +100,14 @@
             "rememberMe"  : {
                 "label"    : "Remember Username"
             },
+            "touchId": {
+                "enabled": {
+                    "label": "Touch ID"
+                },
+                "disabled": {
+                    "label": "Set Up Touch ID"
+                }
+            },
             "submitButton": "Log In",
             "serverErrors": {
                 "AUTHORIZATION_FAILED"              : "We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.",

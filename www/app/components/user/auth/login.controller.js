@@ -13,10 +13,13 @@
 
         vm.config = globals.USER_LOGIN.CONFIG;
         vm.rememberMe = false;
+        vm.enableTouchId = false; // hook into fingerprint auth service
         vm.timedOut = false;
-        vm.user = { password: '' };
+        vm.user = { password: "" };
         vm.authenticateUser = authenticateUser;
         vm.isKeyboardVisible = isKeyboardVisible;
+
+        vm.toggleEnableTouchId = handleToggleEnableTouchId;
 
         activate();
 
@@ -33,14 +36,22 @@
 
             $scope.$on("$destroy", removeKeyboardShowListener);
             $scope.$on("$destroy", removeKeyboardHideListener);
+            $scope.$on("$destroy", toggleDisableScroll);
         }
 
         function addKeyboardOpenClass() {
             document.body.classList.add("keyboard-open");
         }
 
+        function toggleDisableScroll(shouldDisabled) {
+            if ( !!window.cordova ) {
+                cordova.plugins.Keyboard.disableScroll( !!shouldDisabled );
+            }
+        }
+
         function beforeEnter() {
             clearErrorMessage();
+            toggleDisableScroll( true );
 
             $ionicHistory.clearHistory();
 
@@ -113,6 +124,10 @@
             else {
                 delete $localStorage[USERNAME_KEY];
             }
+        }
+
+        function handleToggleEnableTouchId() {
+            vm.enableTouchId = !vm.enableTouchId;
         }
 
         function removeKeyboardOpenClass() {

@@ -1,0 +1,166 @@
+.page-login {
+
+  $color-primary:   #3a97b5;
+  $color-white:     #fff;
+  $color-black:     #000;
+  $color-dark-gray: #444;
+
+  .scroll-content {
+    padding-left:  30px;
+    padding-right: 30px;
+    font-family: 'open_sansregular';
+    background: url('../img/pages/login/background-street.jpg') no-repeat;
+    background-size: contain;
+
+    .title-bar {
+      padding-top: 80px;
+      text-align: center;
+
+      img {
+        max-width: 80%;
+      }
+    }
+
+    form {
+      position: relative;
+      margin-top: 150px;
+      padding: 16px;
+      background-color: #eee;
+
+      -webkit-transition: margin-top .2s ease-in-out;
+      transition:         margin-top .2s ease-in-out;
+
+      .keyboard-open & {
+        margin-top: 20px;
+      }
+
+      &:after {
+        position: absolute;
+        bottom: 2px;
+        left:   5px;
+        width:  calc(100% - 10px);
+        height: 1px;
+        box-shadow: 0 2px 3px rgba(0,0,0,.4);
+        content: "";
+      }
+    }
+
+    .login-controls {
+      padding: 0;
+
+      .col {
+        &:first-of-type {
+          padding-left: 0;
+        }
+      }
+    }
+
+    .touch-id-indicator {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      text-align: right;
+      color: $color-dark-gray;
+
+      &:after {
+        flex: 1;
+        margin-left: 10px;
+        font-family: "Ionicons2";
+        font-size: 30px;
+        color: $color-primary;
+        content: "\f17c";
+      }
+      p.text-touchid {
+        flex: 10;
+        margin: 0;
+      }
+    }
+
+    .item-checkbox {
+      display: flex;
+      align-items: center;
+      flex-direction: row-reverse;
+      overflow: visible;
+      padding: 0;
+      height: 100%;
+      border-color:     transparent;
+      background-color: transparent;
+
+      .checkbox,
+      .item-content {
+        flex: 1;
+      }
+      .checkbox {
+        position: static;
+        margin:  0;
+        padding: 0;
+      }
+      .item-content {
+        text-overflow: initial;
+        white-space:   initial;
+        font-size: 13px;
+        color: $color-dark-gray;
+      }
+
+      i.checkbox-icon {
+        width:  16px;
+        height: 16px;
+        opacity: .4;
+
+        &:before {
+          border-radius: 2px;
+          border-color:     $color-black;
+          background-color: transparent;
+        }
+        &:after {
+          opacity: 1;
+          transform: rotate(0deg);
+          top:  2px;
+          left: 2px;
+          border: none;
+          line-height: normal;
+          font-family: 'FontAwesome';
+          font-size: 13px;
+          color: $color-black;
+          content: "";
+        }
+      }
+
+      input:checked + i.checkbox-icon {
+        opacity: 1;
+
+        &:before {
+          border-color:     $color-primary;
+          background-color: $color-primary;
+        }
+        &:after {
+          color: $color-white;
+        }
+      }
+    }
+
+    .item-input {
+      padding-left: 0;
+      border-width: 0 0 1px;
+      border-color: #b9b9b9;
+
+      input {
+        color: #333;
+        font-family: 'open_sansbold';
+        background-color: transparent;
+      }
+    }
+
+    .actions {
+      .button-primary {
+        color:            $color-white;
+        background-color: $color-primary;
+      }
+    }
+
+    .button-positive {
+      color: $color-primary;
+    }
+  }
+
+}

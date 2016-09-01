@@ -1,56 +1,61 @@
-<ion-view view-title="{{::vm.config.title}}" hide-nav-bar="true" class="user-login-view" wex-back-state="app.exit">
+<ion-view view-title="{{ ::vm.config.title }}" hide-nav-bar="true" class="page-login" wex-back-state="app.exit">
     <wex-notification-bar ng-if="vm.timedOut"
-                          text="{{::vm.config.sessionTimeOut.line1}}"
-                          subtext="{{::vm.config.sessionTimeOut.line2}}">
+                          text="{{ ::vm.config.sessionTimeOut.line1 }}"
+                          subtext="{{ ::vm.config.sessionTimeOut.line2 }}">
     </wex-notification-bar>
 
     <ion-content scroll="false">
-     <div class="title-bar"></div>
-        <div class="card card-error padding"
-             id="errorMessage"
-             ng-if="vm.globalError && !vm.isKeyboardVisible()">
-            {{vm.globalError}}
+      <div class="card card-error padding"
+           id="errorMessage"
+           ng-if="vm.globalError && !vm.isKeyboardVisible()">
+          {{ vm.globalError }}
+      </div>
+
+      <div class="title-bar">
+        <img src="img/pages/login/logo.png" />
+      </div>
+
+      <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.authenticateUser()">
+        <div class="list">
+          <div class="item item-input item-stacked-label">
+            <input ng-model="vm.user.username"
+                   name="userName"
+                   type="text"
+                   required
+                   placeholder="{{ ::vm.config.userName.label }}"
+                   wex-max-length="{{ ::vm.config.userName.maxLength }}">
+          </div>
+
+          <div class="item item-input item-stacked-label">
+            <input ng-model="vm.user.password"
+                   name="password"
+                   type="password"
+                   required
+                   placeholder="{{ ::vm.config.password.label }}"
+                   wex-max-length="{{ ::vm.config.password.maxLength }}">
+          </div>
         </div>
 
-        <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.authenticateUser()">
-            <div class="list padding">
-                <div class="padding">
-                    <span class="item item-input item-user-name">
-                        <input ng-model="vm.user.username"
-                               name="userName"
-                               type="text"
-                               required
-                               placeholder="{{::vm.config.userName.label}}"
-                               wex-max-length="{{::vm.config.userName.maxLength}}">
-                    </span>
-                </div>
+        <div class="row login-controls">
+          <div class="col col-50">
+            <ion-checkbox ng-model="vm.rememberMe">{{ ::vm.config.rememberMe.label }}</ion-checkbox>
+          </div>
 
-                <div class="padding">
-                    <span class="item item-input item-password">
-                        <input ng-model="vm.user.password"
-                               name="password"
-                               type="password"
-                               required
-                               placeholder="{{::vm.config.password.label}}"
-                               wex-max-length="{{::vm.config.password.maxLength}}">
-                    </span>
-                </div>
-
-                    <div class="item-input toggle-align">
-                        <ion-toggle ng-model="vm.rememberMe"></ion-toggle>
-                        <div>{{::vm.config.rememberMe.label}}</div>
-                    </div>
-
-
-                <div class="align_center">
-                    <wex-required-submit class="button-width" text="{{::vm.config.submitButton}}"></wex-required-submit>
-                </div>
-
-                <div class="padding align_center">
-                  <online-enrollment-flow>{{::vm.config.enrollment.label}}</online-enrollment-flow>
-                </div>
-
+          <div class="col col-50">
+            <ion-checkbox ng-if="!vm.enableTouchId" ng-model="vm.enableTouchId">{{ ::vm.config.touchId.disabled.label }}</ion-checkbox>
+            <div class="touch-id-indicator" ng-if="vm.enableTouchId" ng-click="vm.toggleEnableTouchId()">
+              <p class="text-touchid">{{ ::vm.config.touchId.enabled.label }}</p>
             </div>
-        </form>
+          </div>
+        </div>
+
+        <div class="actions">
+          <wex-required-submit text="{{ ::vm.config.submitButton }}"></wex-required-submit>
+        </div>
+      </form>
+
+      <div class="padding align_center">
+        <online-enrollment-flow>{{ ::vm.config.enrollment.label }}</online-enrollment-flow>
+      </div>
     </ion-content>
 </ion-view>
