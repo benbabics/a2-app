@@ -18,9 +18,9 @@
                 var item = clone[i],
                     isGreek = item.isGreekLoading;
 
-                currentDate = moment(item[dateKeyName]);
+                currentDate = moment(item[dateKeyName]).startOf("day");
 
-                if (!isGreek && (!previousDate || previousDate.format() !== currentDate.format())) {
+                if (!isGreek && (!previousDate || !previousDate.isSame(currentDate))) {
                     item.hasDivider = true;
                     item.renderHeight = 151;
                     item.displayDate = item[dateKeyName];
