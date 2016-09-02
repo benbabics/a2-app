@@ -3,6 +3,7 @@
 
     var $rootScope,
         $q,
+        globals,
         resolveHandler,
         rejectHandler,
         AlertModel,
@@ -26,8 +27,9 @@
                 $provide.value("AlertsResource", AlertsResource);
             });
 
-            inject(function (_$q_, _$rootScope_, _AlertsManager_, _AlertModel_) {
+            inject(function (_$q_, _globals_, _$rootScope_, _AlertsManager_, _AlertModel_) {
                 $q = _$q_;
+                globals = _globals_;
                 $rootScope = _$rootScope_;
                 AlertsManager = _AlertsManager_;
                 AlertModel = _AlertModel_;
@@ -67,13 +69,11 @@
 
         describe("has a fetchAlerts function that", function () {
             var getAlertsDeferred,
-                mockAccountId,
                 mockPageNumber,
                 mockPageSize;
 
             beforeEach(function () {
                 getAlertsDeferred = $q.defer();
-                mockAccountId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 mockPageNumber = TestUtils.getRandomInteger(0, 10);
                 mockPageSize = TestUtils.getRandomInteger(1, 100);
 
@@ -84,13 +84,14 @@
 
             describe("when getting the alerts", function () {
                 beforeEach(function () {
-                    AlertsManager.fetchAlerts(mockAccountId, mockPageNumber, mockPageSize)
+                    AlertsManager.fetchAlerts(mockPageNumber, mockPageSize)
                         .then(resolveHandler)
                         .catch(rejectHandler);
                 });
 
                 it("should call AlertsResource.getAlerts", function () {
-                    expect(AlertsResource.getAlerts).toHaveBeenCalledWith(mockAccountId, {
+                    expect(AlertsResource.getAlerts).toHaveBeenCalledWith({
+                        status: globals.NOTIFICATIONS_API.STATUS.READ + "," + globals.NOTIFICATIONS_API.STATUS.UNREAD,
                         pageNumber: mockPageNumber,
                         pageSize  : mockPageSize
                     });
@@ -109,7 +110,7 @@
                         beforeEach(function () {
                             mockPageNumber = 0;
 
-                            AlertsManager.fetchAlerts(mockAccountId, mockPageNumber, mockPageSize)
+                            AlertsManager.fetchAlerts(mockPageNumber, mockPageSize)
                                 .then(resolveHandler)
                                 .catch(rejectHandler);
                         });
@@ -129,7 +130,7 @@
                         beforeEach(function () {
                             mockPageNumber = TestUtils.getRandomInteger(1, 10);
 
-                            AlertsManager.fetchAlerts(mockAccountId, mockPageNumber, mockPageSize)
+                            AlertsManager.fetchAlerts(mockPageNumber, mockPageSize)
                                 .then(resolveHandler)
                                 .catch(rejectHandler);
                         });
@@ -168,7 +169,7 @@
 
                 describe("when there is no data in the response", function () {
                     beforeEach(function () {
-                        AlertsManager.fetchAlerts(mockAccountId, mockPageNumber, mockPageSize)
+                        AlertsManager.fetchAlerts(mockPageNumber, mockPageSize)
                             .then(resolveHandler)
                             .catch(rejectHandler);
                     });
@@ -191,7 +192,7 @@
                 var mockResponse = "Some error";
 
                 beforeEach(function () {
-                    AlertsManager.fetchAlerts(mockAccountId, mockPageNumber, mockPageSize)
+                    AlertsManager.fetchAlerts(mockPageNumber, mockPageSize)
                         .then(resolveHandler)
                         .catch(rejectHandler);
                 });

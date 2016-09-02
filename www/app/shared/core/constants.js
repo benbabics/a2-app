@@ -134,7 +134,12 @@
      * Notifications API
      */
     sharedGlobals.NOTIFICATIONS_API = {
-        BASE_URL: "@@@STRING_REPLACE_APP_URL_NOTIFICATIONS_API@@@"
+        BASE_URL: "@@@STRING_REPLACE_APP_URL_NOTIFICATIONS_API@@@",
+        UNREAD: "unread",
+        STATUS: {
+            "READ": "READ",
+            "UNREAD": "UNREAD"
+        }
     };
 
     /**

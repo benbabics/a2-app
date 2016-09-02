@@ -5,9 +5,10 @@
     // jshint maxparams:6
 
     /* @ngInject */
-    function AlertsManager(_, $q, Logger, LoggerUtil, AlertModel, AlertsResource) {
+    function AlertsManager(_, $q, globals, $rootScope, Logger, LoggerUtil, AlertModel, AlertsResource) {
 
-      var __alerts;
+      var cachedAlerts;
+      var cachedUnreadAlertsCount;
 
       // Revealed Public members
       var service = {
@@ -16,7 +17,8 @@
               clearCachedValues: clearCachedValues,
               getAlerts:         getAlerts,
               setAlerts:         setAlerts,
-              getUnreadAlertsCount: getUnreadAlertsCount
+              getUnreadAlertsCount: getUnreadAlertsCount,
+              setAlertsRead:     setAlertsRead
           };
 
       activate();
@@ -25,11 +27,14 @@
       //////////////////////
 
       function activate() {
+          // Get the initial unread count after login.
+          $rootScope.$on("app:login", fetchUnreadAlertsCount);
           clearCachedValues();
       }
 
       function clearCachedValues() {
-          __alerts = [];
+          cachedAlerts = [];
+          cachedUnreadAlertsCount = 0;
       }
 
       function createAlert(resource) {
@@ -40,13 +45,14 @@
       }
 
       // jshint maxparams:3
-      function fetchAlerts(accountId, pageNumber, pageSize) {
+      function fetchAlerts(pageNumber, pageSize) {
           var params = {
+              status: globals.NOTIFICATIONS_API.STATUS.READ + "," + globals.NOTIFICATIONS_API.STATUS.UNREAD,
               pageNumber: pageNumber,
               pageSize:   pageSize
           };
 
-          return AlertsResource.getAlerts(accountId, params)
+          return AlertsResource.getAlerts(params)
               .then(function(response) {
                   if ( response && response.data ) {
                       // map the alerts data to model objects
@@ -54,11 +60,11 @@
 
                       // reset the cache if we're fetching the first page of results
                       if ( pageNumber === 0 ) {
-                          __alerts = [];
+                          cachedAlerts = [];
                       }
 
                       // only cache the fetched alerts that haven't been cached yet
-                      __alerts = _.uniqBy( __alerts.concat(fetchedAlerts), 'alertId' );
+                      cachedAlerts = _.uniqBy( cachedAlerts.concat(fetchedAlerts), 'alertId' );
 
                       return fetchedAlerts;
                   }
@@ -82,23 +88,52 @@
 
       function deleteAlert(alert) {
           return AlertsResource.deleteAlert( alert.alertId )
-              .then(function(response) {
-                  __alerts = _.without( __alerts, alert );
+              .then(function() {
+                  cachedAlerts = _.without( cachedAlerts, alert );
+              })
+              .catch(function(response) {
+                  var error = "Deleting alert failed: " + LoggerUtil.getErrorMessage( response );
+                  Logger.error( error );
+                  throw new Error( error );
               });
       }
 
       function getAlerts() {
-          return __alerts;
+          return cachedAlerts;
       }
 
       // Caution against using this as it replaces the object versus setting properties on it or extending it
       // suggested use for testing only
       function setAlerts(alertItems) {
-          __alerts = alertItems;
+          cachedAlerts = alertItems;
+      }
+
+      function fetchUnreadAlertsCount() {
+          return AlertsResource.getUnreadAlertsCount()
+              .then(function(response) {
+                  cachedUnreadAlertsCount = response.data;
+              })
+              .catch(function(response) {
+                  var error = "Fetching unread alerts count failed: " + LoggerUtil.getErrorMessage(response);
+                  Logger.error(error);
+                  throw new Error(error);
+              });
       }
 
       function getUnreadAlertsCount() {
-          return 21;
+          return cachedUnreadAlertsCount;
+      }
+
+      function setAlertsRead(alertIds) {
+          return AlertsResource.setAlertsRead(alertIds)
+              .then(function() {
+                  fetchUnreadAlertsCount();
+              })
+              .catch(function(response) {
+                  var error = "Setting alerts as read failed: " + LoggerUtil.getErrorMessage(response);
+                  Logger.error(error);
+                  throw new Error(error);
+              });
       }
     }
 

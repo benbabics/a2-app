@@ -4,14 +4,16 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function AlertsResource($q, globals, AccountsResource) {
+    function AlertsResource($q, globals, NotificationsRestangular) {
         // Private members
-        var accountsResource;
+        var notificationsResource;
 
         // Revealed Public members
         var service = {
             getAlerts:   getAlerts,
-            deleteAlert: deleteAlert
+            deleteAlert: deleteAlert,
+            getUnreadAlertsCount: getUnreadAlertsCount,
+            setAlertsRead: setAlertsRead
         };
 
         activate();
@@ -20,18 +22,23 @@
         //////////////////////
 
         function activate() {
-            accountsResource = AccountsResource;
+            notificationsResource = NotificationsRestangular.service("");
         }
 
-        function getAlerts(accountId, criteria) {
-            var account = accountsResource.forAccount( accountId );
-            return $q.when( account.getList(globals.ACCOUNT_MAINTENANCE_API.ALERTS.BASE, criteria) );
+        function getAlerts(params) {
+            return $q.when(notificationsResource.one().get(params));
         }
 
         function deleteAlert(alertId) {
-            var deferred = $q.defer();
-            deferred.resolve();
-            return deferred.promise;
+            return $q.when(notificationsResource.one(alertId).remove());
+        }
+
+        function getUnreadAlertsCount() {
+            return $q.when(notificationsResource.one(globals.NOTIFICATIONS_API.UNREAD).get());
+        }
+
+        function setAlertsRead(alertIds) {
+            return $q.when(notificationsResource.one(alertIds.join()).put());
         }
 
     }

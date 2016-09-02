@@ -39,13 +39,12 @@
         }
 
         function handleMakeRequest(requestConfig) {
-            var billingAccountId = UserManager.getUser().billingCompany.accountId;
-
             // if ( requestConfig.currentPage > 0 ) handleLoadSubsequentData();
 
             return AlertsManager.fetchAlerts(
-                billingAccountId, requestConfig.currentPage, requestConfig.pageSize
+                requestConfig.currentPage, requestConfig.pageSize
             )
+            .then(setAlertsRead)
             .then( sortAlertsByDate );
         }
 
@@ -55,6 +54,14 @@
 
         function handleLoadSubsequentData() {
             trackEvent( 'scroll' );
+        }
+
+        function setAlertsRead(alerts) {
+            var alertIds = _.map(alerts, function(value) {
+                return value.alertId;
+            });
+            AlertsManager.setAlertsRead(alertIds);
+            return alerts;
         }
 
         function sortAlertsByDate(alerts) {
