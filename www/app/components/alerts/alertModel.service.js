@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    var AlertModel = function(globals) {
+    var AlertModel = function (globals) {
 
         // Constants
         var CONFIG = globals.ALERT;
@@ -10,8 +10,8 @@
             this.alertId = "";
         }
 
-        AlertModel.prototype.set = function(alertResource) {
-            angular.extend( this, alertResource );
+        AlertModel.prototype.set = function (alertResource) {
+            angular.extend(this, alertResource);
         };
 
         return AlertModel;

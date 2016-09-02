@@ -16,19 +16,19 @@
 
         $stateProvider.state("alerts.list", {
             cache: true,
-            url:   "/",
+            url: "/",
             views: {
-              view: {
-                  templateUrl: "app/components/alerts/templates/list.html",
-                  controller : "AlertsListController as vm"
-              }
+                view: {
+                    templateUrl: "app/components/alerts/templates/list.html",
+                    controller: "AlertsListController as vm"
+                }
             },
-            onEnter: function(globals, AnalyticsUtil) {
+            onEnter: function (globals, AnalyticsUtil) {
                 // AnalyticsUtil.trackView(globals.ALERTS_LIST.CONFIG.ANALYTICS.pageName);
             }
         });
     }
 
     angular.module("app.components.alerts")
-        .config( configureRoutes );
+        .config(configureRoutes);
 }());

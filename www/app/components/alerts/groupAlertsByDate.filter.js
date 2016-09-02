@@ -1,37 +1,39 @@
 (function () {
     "use strict";
 
-    function groupAlertsByDate(_) {
-      var dividers = {};
+    function groupAlertsByDate(_, moment) {
 
-      return function(input, dateKeyName) {
-        var previousDate, currentDate;
+        return function (input, dateKeyName) {
+            var previousDate, currentDate;
 
-        dateKeyName = dateKeyName || 'postDate';
+            dateKeyName = dateKeyName || "postDate";
 
-        if ( !input || !_.isArray(input) ) return;
-        var clone = _.clone( input );
+            if (!input || !_.isArray(input)) {
+                return;
+            }
 
-        for (var i = 0, len = clone.length; i < len; i++) {
-          var item = clone[i],
-              isGreek = item.isGreekLoading;
+            var clone = _.clone(input);
 
-          currentDate = moment( item[ dateKeyName ] );
+            for (var i = 0, len = clone.length; i < len; i++) {
+                var item = clone[i],
+                    isGreek = item.isGreekLoading;
 
-          if ( !isGreek && (!previousDate || previousDate.format() != currentDate.format()) ) {
-            item.hasDivider   = true;
-            item.renderHeight = 151;
-            item.displayDate  = item[ dateKeyName ];
-          }
-          else {
-            item.renderHeight = 114;
-          }
+                currentDate = moment(item[dateKeyName]);
 
-          previousDate = currentDate;
-        }
+                if (!isGreek && (!previousDate || previousDate.format() !== currentDate.format())) {
+                    item.hasDivider = true;
+                    item.renderHeight = 151;
+                    item.displayDate = item[dateKeyName];
+                }
+                else {
+                    item.renderHeight = 114;
+                }
 
-        return clone;
-      };
+                previousDate = currentDate;
+            }
+
+            return clone;
+        };
     }
 
     angular.module("app.components.alerts")
