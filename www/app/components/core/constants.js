@@ -756,6 +756,11 @@
         }
     };
 
+    appGlobals.USER_AUTHORIZATION_TYPES = {
+        "FINGERPRINT": "FINGERPRINT",
+        "SECRET"     : "SECRET"
+    };
+
     appGlobals.USER_IDLE_TIMEOUT = 900; //in seconds
 
     angular
