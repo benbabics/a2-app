@@ -748,6 +748,14 @@
         ]
     };
 
+    appGlobals.MODAL_TYPES = {
+        FINGERPRINT_AUTH_TERMS: {
+            "templateUrl": "app/components/user/auth/templates/fingerprintAuthTerms.html",
+            "options"    : {"backdropClickToClose": false},
+            "animation"  : "slide-in-down"
+        }
+    };
+
     appGlobals.USER_IDLE_TIMEOUT = 900; //in seconds
 
     angular

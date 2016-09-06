@@ -806,3 +806,30 @@ body.menu-open .nav-view-root::before {
         }
     }
 }
+
+/**--------------------------------
+  Fingerprint T&Cs modal
+ ----------------------------------**/
+$fingerprint-tc-footer-height: 60px;
+
+.fingerprint-terms-modal {
+
+    .has-footer {
+        bottom: $fingerprint-tc-footer-height;
+    }
+
+    .bar-footer {
+
+        &, .bar-button {
+            height: $fingerprint-tc-footer-height !important;
+            border: none !important;
+            background-image: none !important;
+        }
+
+        .button {
+            border: 1px solid;
+            border-radius: 0;
+            margin: 0 5px;
+        }
+    }
+}
