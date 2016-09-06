@@ -89,7 +89,7 @@
         },
         mockConfig = mockGlobals.USER_LOGIN.CONFIG;
 
-    fdescribe("A Login Controller", function () {
+    describe("A Login Controller", function () {
 
         beforeEach(function () {
 
