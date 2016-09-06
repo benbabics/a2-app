@@ -1,8 +1,10 @@
 (function () {
     "use strict";
 
-    var $ionicHistory,
+    var _,
+        $ionicHistory,
         $localStorage,
+        $q,
         $rootScope,
         $scope,
         $state,
@@ -15,6 +17,10 @@
         logInDeferred,
         AuthenticationManager,
         PlatformUtil,
+        Fingerprint,
+        UserAuthorizationManager,
+        SecureStorage,
+        fingerprintAvailableDeferred,
         mockGlobals = {
             "LOCALSTORAGE" : {
                 "CONFIG": {
@@ -75,11 +81,15 @@
                         "USER_NOT_ACTIVE"                   : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     }
                 }
+            },
+            USER_AUTHORIZATION_TYPES: {
+                "FINGERPRINT": "FINGERPRINT",
+                "SECRET"     : "SECRET"
             }
         },
         mockConfig = mockGlobals.USER_LOGIN.CONFIG;
 
-    describe("A Login Controller", function () {
+    fdescribe("A Login Controller", function () {
 
         beforeEach(function () {
 
@@ -97,6 +107,9 @@
             ]);
             LoginManager = jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]);
             PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["platformHasCordova"]);
+            Fingerprint = jasmine.createSpyObj("Fingerprint", ["isAvailable"]);
+            UserAuthorizationManager = jasmine.createSpyObj("UserAuthorizationManager", ["verify"]);
+            SecureStorage = jasmine.createSpyObj("SecureStorage", ["get", "remove"]);
 
             module("app.shared");
             module("app.components", function($provide) {
@@ -113,34 +126,41 @@
                 });
             });
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, _$localStorage_, $q, BrandAssetModel, UserAccountModel, UserModel,
+            inject(function (___, _$rootScope_, $controller, _$ionicHistory_, _$localStorage_, _$q_, BrandAssetModel, UserAccountModel, UserModel,
                              globals) {
+                _ = ___;
                 $ionicHistory = _$ionicHistory_;
                 $localStorage = _$localStorage_;
                 $scope = _$rootScope_.$new();
-                authenticateDeferred = $q.defer();
+                $q = _$q_;
                 $rootScope = _$rootScope_;
+                authenticateDeferred = $q.defer();
 
                 mockConfig.ANALYTICS.errorEvents = globals.USER_LOGIN.CONFIG.ANALYTICS.errorEvents;
 
                 ctrl = $controller("LoginController", {
-                    $localStorage        : $localStorage,
-                    $scope               : $scope,
-                    $state               : $state,
-                    $stateParams         : $stateParams,
-                    AnalyticsUtil        : AnalyticsUtil,
-                    $cordovaKeyboard     : $cordovaKeyboard,
-                    globals              : mockGlobals,
-                    AuthenticationManager: AuthenticationManager,
-                    LoginManager         : LoginManager,
-                    PlatformUtil         : PlatformUtil
+                    $localStorage           : $localStorage,
+                    $scope                  : $scope,
+                    $state                  : $state,
+                    $stateParams            : $stateParams,
+                    AnalyticsUtil           : AnalyticsUtil,
+                    $cordovaKeyboard        : $cordovaKeyboard,
+                    globals                 : mockGlobals,
+                    AuthenticationManager   : AuthenticationManager,
+                    LoginManager            : LoginManager,
+                    PlatformUtil            : PlatformUtil,
+                    Fingerprint             : Fingerprint,
+                    UserAuthorizationManager: UserAuthorizationManager,
+                    SecureStorage           : SecureStorage
                 });
 
                 //setup spies:
                 logInDeferred = $q.defer();
+                fingerprintAvailableDeferred = $q.defer();
 
                 //setup mocks:
                 LoginManager.logIn.and.returnValue(logInDeferred.promise);
+                Fingerprint.isAvailable.and.returnValue(fingerprintAvailableDeferred.promise);
             });
 
         });
@@ -210,6 +230,55 @@
                     expect(ctrl.rememberMe).toBeFalsy();
                 });
 
+            });
+
+            describe("when fingerprint authentication is available", function () {
+
+                beforeEach(function () {
+                    fingerprintAvailableDeferred.resolve();
+
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
+
+                describe("when the user has a stored fingerprint profile", function () {
+
+                    beforeEach(function () {
+                        SecureStorage.get.and.returnValue($q.resolve());
+                        $rootScope.$digest();
+                    });
+
+                    it("should set vm.fingerprintProfileAvailable to true", function () {
+                        expect(ctrl.fingerprintProfileAvailable).toBe(true);
+                    });
+
+                    it("should set vm.fingerprintAuthAvailable to true", function () {
+                        expect(ctrl.fingerprintAuthAvailable).toBe(true);
+                    });
+                });
+
+                describe("when the user does NOT have a stored fingerprint profile", function () {
+
+                    beforeEach(function () {
+                        SecureStorage.get.and.returnValue($q.reject());
+                        $rootScope.$digest();
+                    });
+
+                    it("should NOT set vm.fingerprintProfileAvailable to true", function () {
+                        expect(ctrl.fingerprintProfileAvailable).toBe(false);
+                    });
+
+                    it("should set vm.fingerprintAuthAvailable to true", function () {
+                        expect(ctrl.fingerprintAuthAvailable).toBe(true);
+                    });
+                });
+            });
+
+            describe("when fingerprint authentication is NOT available", function () {
+                beforeEach(function () {
+                    fingerprintAvailableDeferred.reject();
+
+                    $scope.$broadcast("$ionicView.beforeEnter");
+                });
             });
 
             describe("when $stateParams.errorReason is TOKEN_EXPIRED", function () {
@@ -359,7 +428,7 @@
             });
         });
 
-        describe("has an authenticateUser function that", function () {
+        describe("has an logInUser function that", function () {
 
             var mockUser = {
                 username: "someusername",
@@ -370,15 +439,82 @@
                 // clear Local Storage to start
                 delete $localStorage.USERNAME;
 
-                AuthenticationManager.authenticate.and.returnValue(authenticateDeferred.promise);
+                UserAuthorizationManager.verify.and.returnValue(authenticateDeferred.promise);
 
                 ctrl.user = mockUser;
-                ctrl.authenticateUser();
             });
 
-            it("should authenticate the User", function () {
-                expect(AuthenticationManager.authenticate).toHaveBeenCalledWith(ctrl.user.username, ctrl.user.password);
+            describe("when using fingerprint authentication", function () {
+
+                beforeEach(function () {
+                    ctrl.fingerprintProfileAvailable = true;
+
+                    ctrl.logInUser(true);
+                });
+
+                it("should authorize the User", function () {
+                    expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
+                        clientId: ctrl.user.username,
+                        clientSecret: ctrl.user.password,
+                        method: mockGlobals.USER_AUTHORIZATION_TYPES.FINGERPRINT
+                    }));
+                });
+
+                it("should NOT set vm.fingerprintProfileAvailable to false", function () {
+                    expect(ctrl.fingerprintProfileAvailable).not.toBe(false);
+                });
+
+                it("should NOT call SecureStorage.remove with the expected value", function () {
+                    expect(SecureStorage.remove).not.toHaveBeenCalled();
+                });
+
+                describe("when the User is NOT Authenticated successfully with a BAD_CREDENTIALS error", function () {
+                    var errorObjectArg = new Error("BAD_CREDENTIALS");
+
+                    beforeEach(function () {
+                        authenticateDeferred.reject(errorObjectArg);
+                        $scope.$digest();
+                    });
+
+                    it("should set vm.fingerprintProfileAvailable to false", function () {
+                        expect(ctrl.fingerprintProfileAvailable).toBe(false);
+                    });
+
+                    it("should call SecureStorage.remove with the expected value", function () {
+                        expect(SecureStorage.remove).toHaveBeenCalledWith(_.toLower(ctrl.user.username));
+                    });
+                });
+
+                describe("when authorizing", logInUserAuthTests);
             });
+
+            describe("when NOT using fingerprint authentication", function () {
+
+                beforeEach(function () {
+                    ctrl.logInUser(false);
+                });
+
+                it("should authorize the User", function () {
+                    expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
+                        clientId: ctrl.user.username,
+                        clientSecret: ctrl.user.password,
+                        method: mockGlobals.USER_AUTHORIZATION_TYPES.SECRET
+                    }));
+                });
+
+                it("should set vm.fingerprintProfileAvailable to false", function () {
+                    expect(ctrl.fingerprintProfileAvailable).toBe(false);
+                });
+
+                it("should call SecureStorage.remove with the expected value", function () {
+                    expect(SecureStorage.remove).toHaveBeenCalledWith(_.toLower(ctrl.user.username));
+                });
+
+                describe("when authorizing", logInUserAuthTests);
+            });
+        });
+
+        function logInUserAuthTests() {
 
             it("should set globalError to false", function () {
                 expect(ctrl.globalError).toBeFalsy();
@@ -388,7 +524,7 @@
                 expect(ctrl.timedOut).toBeFalsy();
             });
 
-            describe("when the User is Authenticated successfully", function () {
+            describe("when the User is Authorized successfully", function () {
 
                 beforeEach(function () {
                     //return a promise object and resolve it
@@ -695,8 +831,7 @@
                 });
 
             });
-
-        });
+        }
 
         describe("has an isKeyboardVisible function that", function () {
 

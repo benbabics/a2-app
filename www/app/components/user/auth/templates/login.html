@@ -15,7 +15,7 @@
         <img src="img/pages/login/logo.png" />
       </div>
 
-      <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.authenticateUser()">
+      <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.logInUser(vm.setupFingerprintAuth)">
         <div class="list">
           <div class="item item-input item-stacked-label">
             <input ng-model="vm.user.username"
@@ -42,8 +42,10 @@
           </div>
 
           <div class="col col-50">
-            <ion-checkbox ng-if="!vm.enableTouchId" ng-model="vm.enableTouchId">{{ ::vm.config.touchId.disabled.label }}</ion-checkbox>
-            <div class="touch-id-indicator" ng-if="vm.enableTouchId" ng-click="vm.toggleEnableTouchId()">
+            <ion-checkbox ng-if="vm.fingerprintAuthAvailable && !vm.fingerprintProfileAvailable"
+                          ng-disabled="!vm.rememberMe"
+                          ng-model="vm.setupFingerprintAuth">{{ ::vm.config.touchId.disabled.label }}</ion-checkbox>
+            <div class="touch-id-indicator" ng-if="vm.fingerprintProfileAvailable" ng-click="vm.logInUser(true)">
               <p class="text-touchid">{{ ::vm.config.touchId.enabled.label }}</p>
             </div>
           </div>

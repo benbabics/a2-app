@@ -2,24 +2,26 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:14
+    // jshint maxparams:17
 
     /* @ngInject */
-    function LoginController(_, $cordovaKeyboard, $ionicHistory, $localStorage, $rootScope, $scope, $state, $stateParams,
-                             globals, AnalyticsUtil, AuthenticationManager, LoadingIndicator, LoginManager, PlatformUtil) {
+    function LoginController(_, $cordovaKeyboard, $ionicHistory, $localStorage, $q, $rootScope, $scope, $state, $stateParams,
+                             globals, AnalyticsUtil, Fingerprint, LoadingIndicator, LoginManager, PlatformUtil, SecureStorage, UserAuthorizationManager) {
 
-        var USERNAME_KEY = globals.LOCALSTORAGE.KEYS.USERNAME,
+        var BAD_CREDENTIALS = "BAD_CREDENTIALS",
+            USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION_TYPES,
+            USERNAME_KEY = globals.LOCALSTORAGE.KEYS.USERNAME,
             vm = this;
 
         vm.config = globals.USER_LOGIN.CONFIG;
+        vm.fingerprintAuthAvailable = false;
+        vm.fingerprintProfileAvailable = false;
+        vm.setupFingerprintAuth = false;
         vm.rememberMe = false;
-        vm.enableTouchId = false; // hook into fingerprint auth service
         vm.timedOut = false;
         vm.user = { password: "" };
-        vm.authenticateUser = authenticateUser;
         vm.isKeyboardVisible = isKeyboardVisible;
-
-        vm.toggleEnableTouchId = handleToggleEnableTouchId;
+        vm.logInUser = logInUser;
 
         activate();
 
@@ -64,14 +66,45 @@
             }
 
             vm.timedOut = $stateParams.timedOut;
+
+            Fingerprint.isAvailable()
+                .then(function () {
+                    var clientId = _.toLower(vm.user.username);
+
+                    //enable fingerprint login if there is an existing fingerprint profile for this user
+                    SecureStorage.get(clientId)
+                        .then(_.partial(_.set, vm, "fingerprintProfileAvailable", true))
+                        .finally(_.partial(_.set, vm, "fingerprintAuthAvailable", true));
+                })
+                .catch(function (error) {
+                    if (error.isDeviceSupported) {
+                        //TODO - Show native fingerprint settings dialog
+                    }
+                });
         }
 
-        function authenticateUser() {
+        function clearFingerprintProfile(clientId) {
+            vm.fingerprintProfileAvailable = false;
+
+            return SecureStorage.remove(clientId);
+        }
+
+        function logInUser(useFingerprintAuth) {
+            var clientId = _.toLower(vm.user.username);
+
             clearErrorMessage();
 
-            LoadingIndicator.begin();
+            if (!useFingerprintAuth) {
+                //remove the previous fingerprint profile for this user (if any)
+                clearFingerprintProfile(clientId);
+            }
 
-            return AuthenticationManager.authenticate(vm.user.username, vm.user.password)
+            return UserAuthorizationManager.verify({
+                    clientId: clientId,
+                    clientSecret: vm.user.password,
+                    method: useFingerprintAuth ? USER_AUTHORIZATION_TYPES.FINGERPRINT : USER_AUTHORIZATION_TYPES.SECRET
+                })
+                .then(LoadingIndicator.begin)
                 .then(LoginManager.logIn)
                 .then(function () {
                     trackSuccessEvent();
@@ -97,10 +130,18 @@
                         errorReason = loginError.message;
                     }
 
-                    vm.globalError = vm.config.serverErrors[errorReason];
+                    return $q.reject(errorReason)
+                        .finally(function () {
+                            vm.globalError = vm.config.serverErrors[errorReason];
 
-                    LoginManager.logOut();
-                    trackErrorEvent(errorReason);
+                            LoginManager.logOut();
+                            trackErrorEvent(errorReason);
+
+                            if (useFingerprintAuth && loginError.message === BAD_CREDENTIALS) {
+                                //user needs to update the auth profile since their password has changed
+                                return clearFingerprintProfile(clientId);
+                            }
+                        });
                 })
                 .finally(LoadingIndicator.complete);
         }
@@ -124,10 +165,6 @@
             else {
                 delete $localStorage[USERNAME_KEY];
             }
-        }
-
-        function handleToggleEnableTouchId() {
-            vm.enableTouchId = !vm.enableTouchId;
         }
 
         function removeKeyboardOpenClass() {
