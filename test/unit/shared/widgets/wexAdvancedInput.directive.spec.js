@@ -5,7 +5,7 @@
         $compile,
         wexAdvancedInput;
 
-    fdescribe("A Wex Advanced Input Directive", function () {
+    describe("A Wex Advanced Input Directive", function () {
         var button, field, tContent;
 
         beforeEach(function () {
