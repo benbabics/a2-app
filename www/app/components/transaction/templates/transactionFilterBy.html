@@ -4,7 +4,7 @@
         <h2 ng-switch-when="driver" class="title">{{ ::vm.filterDetails.firstName }} {{ ::vm.filterDetails.lastName }}</h2>
     </div>
 
-    <ion-content class="has-subheader" ion-sticky>
+    <ion-content class="has-subheader" ion-sticky overflow-scroll="false">
 
         <filter-date-transaction-list filter-by="vm.params.filterBy"
                                       filter-value="vm.params.filterValue"
