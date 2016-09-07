@@ -18,6 +18,7 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             // Code libraries
+            "lib/jquery/dist/jquery.js",
             "lib/angular/angular.js",
             "lib/angular-animate/angular-animate.js",
             "lib/angular-sanitize/angular-sanitize.js",

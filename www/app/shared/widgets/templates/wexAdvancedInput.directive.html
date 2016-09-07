@@ -1,0 +1,12 @@
+<div class="widget-wex-advanced-input">
+
+  <div class="field-wrapper" ng-hide="isMaskVisible">
+    <div ng-transclude></div>
+    <i class="ion-close-circled" ng-show="isEditable" ng-click="handleClearValue($event)"></i>
+  </div>
+
+  <div class="mask-wrapper" ng-show="isMaskVisible" ng-click="handleToggleIsEditable(true)">
+    <div class="masked-field">{{ maskedValue }} &nbsp;</div>
+  </div>
+
+</div>

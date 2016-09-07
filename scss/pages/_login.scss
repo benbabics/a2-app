@@ -121,8 +121,6 @@
           line-height: normal;
           font-family: 'FontAwesome';
           font-size: 13px;
-          color: $color-black;
-          content: "";
         }
       }
 
@@ -135,18 +133,28 @@
         }
         &:after {
           color: $color-white;
+          content: "";
         }
       }
     }
 
+    .item-input input,
+    .masked-field {
+      color: #333;
+      font-family: 'open_sansbold';
+    }
+    .masked-field {
+      padding-top:    2px;
+      padding-bottom: 3px;
+      font-size: 14px;
+      line-height: 30px;
+    }
     .item-input {
       padding-left: 0;
       border-width: 0 0 1px;
       border-color: #b9b9b9;
 
       input {
-        color: #333;
-        font-family: 'open_sansbold';
         background-color: transparent;
       }
     }

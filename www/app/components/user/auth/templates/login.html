@@ -18,21 +18,25 @@
       <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.logInUser(vm.setupFingerprintAuth)">
         <div class="list">
           <div class="item item-input item-stacked-label">
-            <input ng-model="vm.user.username"
-                   name="userName"
-                   type="text"
-                   required
-                   placeholder="{{ ::vm.config.userName.label }}"
-                   wex-max-length="{{ ::vm.config.userName.maxLength }}">
+            <wex-advanced-input mask-text="true">
+              <input ng-model="vm.user.username"
+                     name="userName"
+                     type="text"
+                     required
+                     placeholder="{{ ::vm.config.userName.label }}"
+                     wex-max-length="{{ ::vm.config.userName.maxLength }}">
+            </wex-advanced-input>
           </div>
 
           <div class="item item-input item-stacked-label">
-            <input ng-model="vm.user.password"
-                   name="password"
-                   type="password"
-                   required
-                   placeholder="{{ ::vm.config.password.label }}"
-                   wex-max-length="{{ ::vm.config.password.maxLength }}">
+            <wex-advanced-input>
+              <input ng-model="vm.user.password"
+                     name="password"
+                     type="password"
+                     required
+                     placeholder="{{ ::vm.config.password.label }}"
+                     wex-max-length="{{ ::vm.config.password.maxLength }}">
+            </wex-advanced-input>
           </div>
         </div>
 
