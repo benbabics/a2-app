@@ -8,7 +8,7 @@
 
         var vm = this;
 
-        vm.bannerText = globals.NOTIFICATIONS.serverConnectionError;
+        vm.bannerText = globals.GLOBAL_NOTIFICATIONS.serverConnectionError;
         vm.isConnected = true;
 
         activate();

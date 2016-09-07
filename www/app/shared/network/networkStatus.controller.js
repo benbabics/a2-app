@@ -9,7 +9,7 @@
 
         var vm = this;
 
-        vm.bannerText = globals.NOTIFICATIONS.networkError;
+        vm.bannerText = globals.GLOBAL_NOTIFICATIONS.networkError;
 
         // default isOnline
         vm.isOnline = true;

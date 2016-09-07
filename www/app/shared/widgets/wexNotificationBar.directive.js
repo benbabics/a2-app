@@ -28,8 +28,10 @@
         }
 
         function isGlobalBar() {
+            var focusedView = ElementUtil.getFocusedView();
+
             //a notification bar is considered global if it is not contained within the page's view
-            return !ElementUtil.getFocusedView()[0].contains(this.barElem[0]);
+            return !(focusedView && focusedView[0].contains(this.barElem[0]));
         }
 
         function setSubheader(subheader) {

@@ -223,7 +223,7 @@
     /**
      * App-level notifications
      */
-    sharedGlobals.NOTIFICATIONS = {
+    sharedGlobals.GLOBAL_NOTIFICATIONS = {
         "serverConnectionError": "Could not connect to server. Please try again later.",
         "networkError"         : "Lost internet connection."
     };
