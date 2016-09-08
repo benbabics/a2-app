@@ -35,9 +35,11 @@
             //see http://ionicframework.com/docs/api/page/keyboard/
             var removeKeyboardShowListener = $rootScope.$on("$cordovaKeyboard:show", addKeyboardOpenClass);
             var removeKeyboardHideListener = $rootScope.$on("$cordovaKeyboard:hide", removeKeyboardOpenClass);
+            var removeCordovaPauseListener = $rootScope.$on("app:cordovaPause",      handleOnCordovaPause);
 
             $scope.$on("$destroy", removeKeyboardShowListener);
             $scope.$on("$destroy", removeKeyboardHideListener);
+            $scope.$on("$destroy", removeCordovaPauseListener);
             $scope.$on("$destroy", toggleDisableScroll);
         }
 
@@ -169,6 +171,13 @@
 
         function removeKeyboardOpenClass() {
             document.body.classList.remove("keyboard-open");
+        }
+
+        function handleOnCordovaPause() {
+            //clear any previous error
+            $scope.$apply(function() {
+                vm.globalError = false;
+            });
         }
 
         function setupUsername() {
