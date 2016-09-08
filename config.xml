@@ -60,6 +60,7 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <preference name="StatusBarBackgroundColor" value="#424242" />
         <preference name="com.urbanairship.gcm_sender" value="@@@STRING_REPLACE_GCM_APP_ID@@@" />
     </platform>
     <platform name="ios">
@@ -88,7 +89,8 @@
         <splash height="1024" src="resources/ios/splash/Default-Portrait~ipad.png" width="768" />
         <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
-        <preference name="StatusBarOverlaysWebView" value="true" />
+        <preference name="StatusBarOverlaysWebView" value="false" />
+        <preference name="StatusBarBackgroundColor" value="#333333" />
         <preference name="StatusBarStyle" value="blackopaque" />
         <preference name="KeychainAccessibility" value="WhenUnlockedThisDeviceOnly"/>
     </platform>
