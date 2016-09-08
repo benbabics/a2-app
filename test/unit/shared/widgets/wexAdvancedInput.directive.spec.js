@@ -5,7 +5,7 @@
         $compile,
         wexAdvancedInput;
 
-    describe("A Wex Advanced Input Directive", function () {
+    fdescribe("A Wex Advanced Input Directive", function () {
         var button, field, tContent;
 
         beforeEach(function () {
@@ -61,11 +61,6 @@
                 maskWrapper  = wexAdvancedInput.element.find( ".mask-wrapper" );
 
                 originalValue = wexAdvancedInput.scope.$parent.myModel.text;
-            });
-
-            it("should mask the last three characters of a value", function () {
-                var maskedValue = originalValue.slice(0, -3) + "***";
-                expect( wexAdvancedInput.scope.maskedValue ).toEqual( maskedValue );
             });
 
             describe("when clicked", function () {
