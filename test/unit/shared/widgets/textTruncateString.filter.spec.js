@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    fdescribe("A WEX Truncate String Filter", function () {
+    describe("A WEX Truncate String Filter", function () {
 
         var wexTruncateStringFilter;
 
