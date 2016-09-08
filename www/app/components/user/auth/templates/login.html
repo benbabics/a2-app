@@ -1,7 +1,7 @@
 <ion-view view-title="{{ ::vm.config.title }}" hide-nav-bar="true" class="page-login" wex-back-state="app.exit">
     <ion-content scroll="false">
       <div class="alerts-wrapper">
-        <wex-notification-bar ng-ifa="vm.timedOut"
+        <wex-notification-bar ng-if="vm.timedOut"
                               text="{{ ::vm.config.sessionTimeOut.line1 }}"
                               subtext="{{ ::vm.config.sessionTimeOut.line2 }}">
         </wex-notification-bar>
