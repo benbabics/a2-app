@@ -57,8 +57,6 @@
 
 .modal-notifications-prompt {
   $paddingTop: 80px;
-  $maxWidth: 320px;
-
   $startColor: #fff;
   $stopColor:  #e5e5e5;
 
@@ -67,17 +65,20 @@
   background: linear-gradient(to bottom,    $startColor 40%, $stopColor 80%);
 
   .scroll-content {
+    z-index: 10; // layer above the .bar.bar-footer
     margin: 0 auto;
     padding-top: $paddingTop;
-    max-width: $maxWidth;
+    max-width: 280px;
     text-align: center;
+
+    @media (min-width: 321px) {
+      max-width: 320px;
+    }
   }
 
   h1 {
-    // font-size: 42px;
-    // font-family: 'league_gothic_regular';
-    font-size: 27px;
-    font-family: 'plymouth_serialregular';
+    font-size: 30px;
+    font-family: 'tablet_gothic_semibold';
   }
   p {
     color: #333;
