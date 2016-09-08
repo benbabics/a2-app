@@ -41,11 +41,11 @@
         </div>
 
         <div class="row login-controls">
-          <div class="col col-50">
+          <div class="col col-50 checkbox-remember-me">
             <ion-checkbox ng-model="vm.rememberMe">{{ ::vm.config.rememberMe.label }}</ion-checkbox>
           </div>
 
-          <div class="col col-50">
+          <div class="col col-50 checkbox-touch-id">
             <ion-checkbox ng-if="vm.fingerprintAuthAvailable && !vm.fingerprintProfileAvailable"
                           ng-disabled="!vm.rememberMe"
                           ng-model="vm.setupFingerprintAuth">{{ ::vm.config.touchId.disabled.label }}</ion-checkbox>
