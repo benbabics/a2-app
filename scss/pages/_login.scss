@@ -140,6 +140,9 @@
           font-family: 'FontAwesome';
           font-size: 13px;
         }
+        .platform-ios &:after {
+          top: 1px;
+        }
       }
 
       input:checked + i.checkbox-icon {
