@@ -30,7 +30,7 @@
       -webkit-transition: margin-top .2s ease-in-out;
       transition:         margin-top .2s ease-in-out;
 
-      .keyboard-open & {
+      &.is-active {
         margin-top: 20px;
       }
 
