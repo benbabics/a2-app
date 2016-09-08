@@ -1,7 +1,10 @@
 (function () {
     "use strict";
 
-    var $scope,
+    var $ionicHistory,
+        $q,
+        $rootScope,
+        $scope,
         $state,
         Navigation,
         ctrl,
@@ -41,26 +44,33 @@
                 });
             });
 
+            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _)]);
+
             //mock dependencies
             Navigation = jasmine.createSpyObj("Navigation", ["goToTransactionActivity"]);
+            $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearCache"]);
 
-            inject(function ($controller, $rootScope, $q, _$state_, CardModel) {
+            inject(function ($controller, _$rootScope_, _$q_, _$state_, CardModel) {
 
-                // create a scope object for us to use.
+                $rootScope = _$rootScope_;
                 $scope = $rootScope.$new();
+                $q = _$q_;
 
                 mockCard = TestUtils.getRandomCard(CardModel);
                 $state = _$state_;
 
                 ctrl = $controller("CardDetailController", {
-                    $scope    : $scope,
-                    card      : mockCard,
-                    globals   : mockGlobals,
-                    Navigation: Navigation
+                    $ionicHistory: $ionicHistory,
+                    $scope       : $scope,
+                    card         : mockCard,
+                    globals      : mockGlobals,
+                    Navigation   : Navigation
                 });
 
             });
 
+            //setup mocks
+            $ionicHistory.clearCache.and.returnValue($q.resolve());
         });
 
         it("should set the card", function () {
@@ -73,6 +83,11 @@
                 spyOn($state, "go").and.stub();
 
                 ctrl.goToTransactionActivity();
+                $rootScope.$digest();
+            });
+
+            it("should call $ionicHistory.clearCache with the expected values", function () {
+                expect($ionicHistory.clearCache).toHaveBeenCalledWith(["transaction"]);
             });
 
             it("should call $state.go with the expected values", function () {
