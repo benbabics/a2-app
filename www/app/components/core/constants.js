@@ -193,6 +193,9 @@
         "SEARCH_OPTIONS": {
             "PAGE_SIZE": 25,
             "STATUS_ACTIVE": "active"
+        },
+        "REASON_PREFIX": {
+            "TRANSACTION_DECLINE" : "Decline: "
         }
     };
 

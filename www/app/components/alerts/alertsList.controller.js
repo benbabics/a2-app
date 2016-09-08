@@ -30,6 +30,7 @@
                 onError    : handleOnError
             });
 
+            vm.alertPrefixMap = globals.ALERTS_LIST.REASON_PREFIX;
             vm.alerts = vm.infiniteScrollService.model;
 
             // if we're dealing with cached results, check for updates
