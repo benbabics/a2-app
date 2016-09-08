@@ -396,6 +396,17 @@
 
         });
 
+        describe("has a app:cordovaPause event handler function that", function () {
+            it("should set globalError property to false", function () {
+                ctrl.globalError = "an existing error.";
+
+                $rootScope.$broadcast( "app:cordovaPause" );
+                $rootScope.$digest();
+
+                expect( ctrl.globalError ).toBe( false );
+            });
+        });
+
         describe("has a $cordovaKeyboard:show event handler function that", function () {
 
             beforeEach(function () {
