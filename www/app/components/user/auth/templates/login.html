@@ -1,14 +1,16 @@
 <ion-view view-title="{{ ::vm.config.title }}" hide-nav-bar="true" class="page-login" wex-back-state="app.exit">
-    <wex-notification-bar ng-if="vm.timedOut"
-                          text="{{ ::vm.config.sessionTimeOut.line1 }}"
-                          subtext="{{ ::vm.config.sessionTimeOut.line2 }}">
-    </wex-notification-bar>
-
     <ion-content scroll="false">
-      <div class="card card-error padding"
-           id="errorMessage"
-           ng-if="vm.globalError && !vm.isKeyboardVisible()">
-          {{ vm.globalError }}
+      <div class="alerts-wrapper">
+        <wex-notification-bar ng-ifa="vm.timedOut"
+                              text="{{ ::vm.config.sessionTimeOut.line1 }}"
+                              subtext="{{ ::vm.config.sessionTimeOut.line2 }}">
+        </wex-notification-bar>
+
+        <div class="card card-error padding"
+             id="errorMessage"
+             ng-if="vm.globalError && !vm.isKeyboardVisible()">
+            {{ vm.globalError }}
+        </div>
       </div>
 
       <div class="title-bar">
