@@ -5,8 +5,8 @@
     <i class="ion-close-circled" ng-show="isEditable" ng-click="handleClearValue($event)"></i>
   </div>
 
-  <div class="mask-wrapper" ng-show="isMaskVisible" ng-click="handleToggleIsEditable(true)">
-    <div class="masked-field">{{ maskedValue }} &nbsp;</div>
+  <div class="mask-wrapper" ng-show="isMaskVisible" ng-click="handleClickMask()">
+    <div class="masked-field">{{ maskedValue | wexTruncateString }} &nbsp;</div>
   </div>
 
 </div>

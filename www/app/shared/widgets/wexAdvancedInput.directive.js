@@ -21,61 +21,55 @@
     }
 
     function linkFn(scope, element) {
-        // WHY AREN'T WE LOADING jQUERY?!?! ಠ_ಠ
         var field  = element.find( "input" ),
             button = angular.element( element[0].querySelector(".ion-close-circled") ),
             modelPath = field.attr( "ng-model" );
 
-        scope.isEditable       = false;
-        scope.maskedValue      = "";
-        scope.isMaskVisible    = toggleIsMaskVisible();
+        scope.isEditable    = false;
+        scope.maskedValue   = "";
+        scope.isMaskVisible = toggleIsMaskVisible();
 
-        scope.handleClearValue       = handleClearValue;
-        scope.handleToggleIsEditable = handleToggleIsEditable;
+        scope.handleClearValue = handleClearValue;
+        scope.handleClickMask  = handleClickMask;
 
-        // toggle reset value button button
+        // toggle reset value button
         field.on("focus blur", function (evt) {
             var isEditable = evt.type === "focus";
-            scope.$apply(function() { handleToggleIsEditable(isEditable); });
+            scope.$apply(function() { toggleIsEditable(isEditable); });
         });
 
-        // set maskedValue property
+        // toggle isMaskVisible
+        scope.$watchCollection( "[maskedValue, isEditable]", toggleIsMaskVisible );
+
+        // set maskedValue property from input ng-model
         scope.$parent.$watch(modelPath, function (val) {
             if ( scope.maskText ) {
-                scope.maskedValue = transformToMaskedValue( val );
-                toggleIsMaskVisible();
+                scope.maskedValue = val;
             }
         });
 
+        // handlers
         function handleClearValue(evt) {
             evt.preventDefault();
             field.val( "" ).triggerHandler( "change" );
             setTimeout(function() { field[0].focus(); });
         }
-
-        function handleToggleIsEditable(isEditable) {
-            scope.isEditable = isEditable;
-            toggleIsMaskVisible();
+        function handleClickMask() {
+            setTimeout(function() { field[0].focus(); });
+            toggleIsEditable( true );
         }
 
+        // update properties
+        function toggleIsEditable(isEditable) {
+            scope.isEditable = isEditable;
+        }
         function toggleIsMaskVisible() {
             if ( scope.maskText ) {
-                var hasMaskedValue = scope.maskedValue.length > 0;
+                var hasMaskedValue = (scope.maskedValue || "").length > 0;
                 scope.isMaskVisible = !scope.isEditable && hasMaskedValue;
                 return scope.isMaskVisible;
             }
-
             return false;
-        }
-
-        function transformToMaskedValue(val) {
-            val = val || "";
-
-            if ( val.length > 3 ) {
-                return val.slice( 0, -3 ) + "***";
-            }
-
-            return "*".repeat( val.length );
         }
     }
 
