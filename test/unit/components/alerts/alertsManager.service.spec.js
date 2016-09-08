@@ -12,7 +12,7 @@
         mockAlertsCollection,
         mockCachedAlertsCollection;
 
-    describe("A Transaction Manager", function () {
+    describe("An Alerts Manager", function () {
 
         beforeEach(function () {
 
@@ -91,7 +91,7 @@
 
                 it("should call AlertsResource.getAlerts", function () {
                     expect(AlertsResource.getAlerts).toHaveBeenCalledWith({
-                        status: globals.NOTIFICATIONS_API.STATUS.READ + "," + globals.NOTIFICATIONS_API.STATUS.UNREAD,
+                        status    : globals.NOTIFICATIONS_API.STATUS.READ + "," + globals.NOTIFICATIONS_API.STATUS.UNREAD,
                         pageNumber: mockPageNumber,
                         pageSize  : mockPageSize
                     });
@@ -99,10 +99,10 @@
             });
 
             describe("when the alerts are fetched successfully", function () {
-                var mockAlerts = {data: {}};
+                var mockAlerts = {data: {notifications: []}};
 
                 beforeEach(function () {
-                    mockAlerts.data = mockAlertsCollection.slice();
+                    mockAlerts.data.notifications = mockAlertsCollection.slice();
                 });
 
                 describe("when there is data in the response", function () {
@@ -121,7 +121,7 @@
                         });
 
                         it("should resolve", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(mockAlerts.data);
+                            expect(resolveHandler).toHaveBeenCalledWith(mockAlerts.data.notifications);
                             expect(rejectHandler).not.toHaveBeenCalled();
                         });
                     });
@@ -143,12 +143,12 @@
                             });
 
                             it("should resolve", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(mockAlerts.data);
+                                expect(resolveHandler).toHaveBeenCalledWith(mockAlerts.data.notifications);
                                 expect(rejectHandler).not.toHaveBeenCalled();
                             });
 
                             it("should add only the uncached alerts from the data to __alerts", function () {
-                                var expectedValues = _.uniqBy(mockCachedAlertsCollection.concat(mockAlerts.data), "alertId");
+                                var expectedValues = _.uniqBy(mockCachedAlertsCollection.concat(mockAlerts.data.notifications), "id");
                                 expect(AlertsManager.getAlerts()).toEqual(expectedValues);
                             });
                         });
@@ -160,7 +160,7 @@
                             });
 
                             it("should resolve", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(mockAlerts.data);
+                                expect(resolveHandler).toHaveBeenCalledWith(mockAlerts.data.notifications);
                                 expect(rejectHandler).not.toHaveBeenCalled();
                             });
                         });

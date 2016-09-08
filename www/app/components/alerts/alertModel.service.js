@@ -7,7 +7,7 @@
         var CONFIG = globals.ALERT;
 
         function AlertModel() {
-            this.alertId = "";
+            this.id = "";
         }
 
         AlertModel.prototype.set = function (alertResource) {

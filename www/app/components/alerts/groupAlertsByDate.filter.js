@@ -6,7 +6,7 @@
         return function (input, dateKeyName) {
             var previousDate, currentDate;
 
-            dateKeyName = dateKeyName || "postDate";
+            dateKeyName = dateKeyName || "authorizationDate";
 
             if (!input || !_.isArray(input)) {
                 return;
@@ -16,14 +16,15 @@
 
             for (var i = 0, len = clone.length; i < len; i++) {
                 var item = clone[i],
-                    isGreek = item.isGreekLoading;
+                    isGreek = item.isGreekLoading,
+                    displayDate = _.get(item, dateKeyName);
 
-                currentDate = moment(item[dateKeyName]).startOf("day");
+                currentDate = moment(displayDate).startOf("day");
 
                 if (!isGreek && (!previousDate || !previousDate.isSame(currentDate))) {
                     item.hasDivider = true;
                     item.renderHeight = 151;
-                    item.displayDate = item[dateKeyName];
+                    item.displayDate = displayDate;
                 }
                 else {
                     item.renderHeight = 114;

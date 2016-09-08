@@ -14,7 +14,7 @@
                   <enable-notifications-banner />
               </ion-item>
 
-              <div collection-repeat="alert in vm.alerts.collection | groupAlertsByDate : 'postDate'"
+              <div collection-repeat="alert in vm.alerts.collection | groupAlertsByDate : 'data.authorizationDate'"
                    item-height="alert.renderHeight">
 
                       <alert-item />

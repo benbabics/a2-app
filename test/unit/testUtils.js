@@ -126,7 +126,7 @@ var TestUtils = (function () {
         var randomAlertItem = new AlertModel();
 
         randomAlertItem.set({
-            AlertId: getRandomStringThatIsAlphaNumeric(10)
+            id: getRandomStringThatIsAlphaNumeric(10)
         });
 
         return randomAlertItem;

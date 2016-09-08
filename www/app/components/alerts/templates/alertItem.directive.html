@@ -6,10 +6,10 @@
     <ion-item class="item item-icon-right widget-transaction-result-as-date" ng-class="{ 'ui-greeking': alert.isGreekLoading }">
         <div class="row date-filter-list">
             <div class="col greek-block-group">
-                <span class="text-block" style="color: red;">{{ alert.alertMessage }} &nbsp;</span>
-                <span class="text-block text-strong">{{ alert.embossedCardNumber | wexCardNumber }} &nbsp;</span>
-                <span class="text-block">{{ alert.lastName }}, {{ alert.firstName }} &nbsp;</span>
-                <span class="text-block">{{ alert.merchantName }} {{ alert.productDescription }} &nbsp;</span>
+                <span class="text-block" style="color: red;">Decline: {{ alert.data.alertReason }} &nbsp;</span>
+                <span class="text-block text-strong">{{ alert.data.cardNumber | wexCardNumber }} &nbsp;</span>
+                <span class="text-block">{{ alert.data.driverLastName }}, {{ alert.data.driverFirstName }} &nbsp;</span>
+                <span class="text-block">{{ alert.data.merchantName }} &nbsp;</span>
             </div>
         </div>
 
