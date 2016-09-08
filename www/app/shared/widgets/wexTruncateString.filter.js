@@ -21,10 +21,10 @@
             char  = char  || "*";
 
             if ( val.length > limit ) {
-                return val.slice( 0, -limit ) + repeat( limit );
+                return val.slice( 0, -limit ) + repeat( char, limit );
             }
 
-            return repeat( val.length );
+            return repeat( char, val.length );
         };
     }
 
