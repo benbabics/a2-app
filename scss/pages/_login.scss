@@ -8,6 +8,10 @@
   /**
    * Alerts
   **/
+  [notification-bar-class=has-header] {
+    top: 0 !important; // override until we refactor alerts priority
+  }
+
   .alerts-wrapper {
     position: absolute;
     left: 0;
