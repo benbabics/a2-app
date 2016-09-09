@@ -20,7 +20,7 @@
 
           if ( !isGreek && (!previousDate || previousDate.format() != currentDate.format()) ) {
             item.hasDivider   = true;
-            item.renderHeight = 151;
+            item.renderHeight = 142;
             item.displayDate  = item[ dateKeyName ];
           }
           else {
