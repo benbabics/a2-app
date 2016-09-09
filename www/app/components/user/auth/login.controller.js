@@ -33,14 +33,20 @@
 
             //note: Ionic adds and removes this class by default, but it adds a 400ms delay first which is unacceptable here.
             //see http://ionicframework.com/docs/api/page/keyboard/
-            var removeKeyboardShowListener = $rootScope.$on("$cordovaKeyboard:show", addKeyboardOpenClass);
-            var removeKeyboardHideListener = $rootScope.$on("$cordovaKeyboard:hide", removeKeyboardOpenClass);
-            var removeCordovaPauseListener = $rootScope.$on("app:cordovaPause",      handleOnCordovaPause);
+            var removeKeyboardShowListener = $rootScope.$on("$cordovaKeyboard:show", addKeyboardOpenClass),
+                removeKeyboardHideListener = $rootScope.$on("$cordovaKeyboard:hide", removeKeyboardOpenClass),
+                removeCordovaPauseListener = $rootScope.$on("app:cordovaPause",      handleOnCordovaPause);
 
             $scope.$on("$destroy", removeKeyboardShowListener);
             $scope.$on("$destroy", removeKeyboardHideListener);
             $scope.$on("$destroy", removeCordovaPauseListener);
             $scope.$on("$destroy", toggleDisableScroll);
+        }
+
+        function toggleStatusBarOverlaysWebView(shouldOverlay) {
+            if ( !!window.StatusBar ) {
+                StatusBar.overlaysWebView( !!shouldOverlay );
+            }
         }
 
         function addKeyboardOpenClass() {
@@ -54,6 +60,9 @@
         }
 
         function beforeEnter() {
+            // toggle StatusBar as overlay
+            toggleStatusBarOverlaysWebView( true );
+            
             clearErrorMessage();
             toggleDisableScroll( true );
 
@@ -123,6 +132,9 @@
 
                     // transition to the landing page
                     $state.go("landing");
+
+                    // toggle StatusBar as fixed
+                    toggleStatusBarOverlaysWebView( false );
                 })
                 .catch(function (loginError) {
                     var errorReason = "DEFAULT";
