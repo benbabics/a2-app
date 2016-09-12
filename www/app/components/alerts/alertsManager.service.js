@@ -18,7 +18,9 @@
             getAlerts           : getAlerts,
             setAlerts           : setAlerts,
             getUnreadAlertsCount: getUnreadAlertsCount,
-            setAlertsRead       : setAlertsRead
+            setUnreadAlertsCount: setUnreadAlertsCount,
+            setAlertsRead       : setAlertsRead,
+            fetchUnreadAlertsCount: fetchUnreadAlertsCount
         };
 
         activate();
@@ -124,10 +126,15 @@
             return cachedUnreadAlertsCount;
         }
 
+        // For testing only.
+        function setUnreadAlertsCount(newCount) {
+            cachedUnreadAlertsCount = newCount;
+        }
+
         function setAlertsRead(alertIds) {
             return AlertsResource.setAlertsRead(alertIds)
                 .then(function () {
-                    fetchUnreadAlertsCount();
+                    service.fetchUnreadAlertsCount();
                 })
                 .catch(function (response) {
                     var error = "Setting alerts as read failed: " + LoggerUtil.getErrorMessage(response);

@@ -21,7 +21,7 @@
             module("app.components.alerts");
 
             // mock dependencies
-            AlertsResource = jasmine.createSpyObj("AlertsResource", ["getAlerts"]);
+            AlertsResource = jasmine.createSpyObj("AlertsResource", ["getAlerts", "deleteAlert", "getUnreadAlertsCount", "setAlertsRead"]);
 
             module(function ($provide) {
                 $provide.value("AlertsResource", AlertsResource);
@@ -64,6 +64,10 @@
 
             it("should reset the cached alerts", function () {
                 expect(AlertsManager.getAlerts()).toEqual([]);
+            });
+
+            it("should reset the cached unread alerts count", function() {
+                expect(AlertsManager.getUnreadAlertsCount()).toEqual(0);
             });
         });
 
@@ -147,7 +151,7 @@
                                 expect(rejectHandler).not.toHaveBeenCalled();
                             });
 
-                            it("should add only the uncached alerts from the data to __alerts", function () {
+                            it("should add only the uncached alerts from the data to the alerts cache", function () {
                                 var expectedValues = _.uniqBy(mockCachedAlertsCollection.concat(mockAlerts.data.notifications), "id");
                                 expect(AlertsManager.getAlerts()).toEqual(expectedValues);
                             });
@@ -182,7 +186,7 @@
                         expect($rootScope.$digest).toThrow();
                     });
 
-                    it("should NOT modify __alerts", function () {
+                    it("should NOT modify the alerts cache", function () {
                         expect(AlertsManager.getAlerts()).toEqual(mockCachedAlertsCollection);
                     });
                 });
@@ -206,6 +210,173 @@
                 });
             });
 
+        });
+
+        describe("has a getUnreadAlertsCount function that", function() {
+            var mockUnreadCount;
+
+            beforeEach(function() {
+                mockUnreadCount = TestUtils.getRandomInteger(1, 100);
+                AlertsManager.setUnreadAlertsCount(mockUnreadCount);
+            });
+
+            it("should return the cached unread alerts count", function() {
+                expect(AlertsManager.getUnreadAlertsCount()).toEqual(mockUnreadCount);
+            });
+        });
+
+        describe("has a fetchUnreadAlertsCount function that", function() {
+
+            var fetchUnreadDeferred,
+                mockUnreadCount;
+
+            beforeEach(function() {
+                fetchUnreadDeferred = $q.defer();
+                AlertsResource.getUnreadAlertsCount.and.returnValue(fetchUnreadDeferred.promise);
+                mockUnreadCount = TestUtils.getRandomInteger(1, 100);
+            });
+
+            beforeEach(function() {
+                AlertsManager.fetchUnreadAlertsCount()
+                    .then(resolveHandler)
+                    .catch(rejectHandler);
+            });
+
+            it("should call AlertsResource.getUnreadAlertsCount", function() {
+                expect(AlertsResource.getUnreadAlertsCount).toHaveBeenCalled();
+            });
+
+            describe("when it does successfully receive a count", function() {
+
+                beforeEach(function() {
+                    fetchUnreadDeferred.resolve({data: mockUnreadCount});
+                    $rootScope.$digest();
+                });
+
+                it("should update the cached value with the received count", function() {
+                    expect(resolveHandler).toHaveBeenCalled();
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                    expect(AlertsManager.getUnreadAlertsCount()).toEqual(mockUnreadCount);
+                });
+            });
+
+            describe("when it does NOT successfully receive a count", function() {
+
+                beforeEach(function() {
+                    AlertsManager.setUnreadAlertsCount(mockUnreadCount);
+                    fetchUnreadDeferred.reject();
+                    TestUtils.digestError($rootScope);
+                });
+
+                it("should NOT update the cached value", function() {
+                    expect(rejectHandler).toHaveBeenCalled();
+                    expect(resolveHandler).not.toHaveBeenCalled();
+                    expect(AlertsManager.getUnreadAlertsCount()).toEqual(mockUnreadCount);
+                });
+            });
+        });
+
+        describe("has a setAlertsRead function that", function() {
+
+            var setAlertsReadDeferred,
+                alertIds;
+
+            beforeEach(function() {
+                setAlertsReadDeferred = $q.defer();
+                alertIds = _.map(mockCachedAlertsCollection, function (alert) {
+                    return alert.id;
+                });
+                AlertsResource.setAlertsRead.and.returnValue(setAlertsReadDeferred.promise);
+                spyOn(AlertsManager, "fetchUnreadAlertsCount");
+            });
+
+            beforeEach(function() {
+                AlertsManager.setAlertsRead(alertIds)
+                    .then(resolveHandler)
+                    .catch(rejectHandler);
+            });
+
+            it("should call AlertsResource.setAlertsRead", function() {
+               expect(AlertsResource.setAlertsRead).toHaveBeenCalledWith(alertIds);
+            });
+
+            describe("when it does succeed", function() {
+                beforeEach(function() {
+                    setAlertsReadDeferred.resolve();
+                    $rootScope.$digest();
+                });
+
+                it("does call fetchUnreadAlertsCount", function() {
+                    expect(resolveHandler).toHaveBeenCalled();
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                    expect(AlertsManager.fetchUnreadAlertsCount).toHaveBeenCalled();
+                });
+            });
+
+            describe("when it does NOT succeed", function() {
+                beforeEach(function() {
+                    setAlertsReadDeferred.reject();
+                    TestUtils.digestError($rootScope);
+                });
+
+                it("does NOT call fetchUnreadAlertsCount", function() {
+                    expect(rejectHandler).toHaveBeenCalled();
+                    expect(resolveHandler).not.toHaveBeenCalled();
+                    expect(AlertsManager.fetchUnreadAlertsCount).not.toHaveBeenCalled();
+                });
+            });
+        });
+
+        describe("has a deleteAlert function that", function() {
+
+            var deleteAlertDeferred,
+                removedAlert;
+
+            beforeEach(function() {
+                deleteAlertDeferred = $q.defer();
+                AlertsResource.deleteAlert.and.returnValue(deleteAlertDeferred.promise);
+                AlertsManager.setAlerts(mockCachedAlertsCollection.slice());
+                removedAlert = _.sample(mockCachedAlertsCollection);
+            });
+
+            beforeEach(function() {
+                AlertsManager.deleteAlert(removedAlert)
+                    .then(resolveHandler)
+                    .catch(rejectHandler);
+            });
+
+            it("should call AlertsResource.deleteAlert", function() {
+                expect(AlertsResource.deleteAlert).toHaveBeenCalledWith(removedAlert.id);
+            });
+
+            describe("when it does succeed", function() {
+
+                beforeEach(function() {
+                    deleteAlertDeferred.resolve();
+                    $rootScope.$digest();
+                });
+
+                it("does remove the alert from the cache", function() {
+                    expect(resolveHandler).toHaveBeenCalled();
+                    expect(rejectHandler).not.toHaveBeenCalled();
+                    var expectedResult = _.filter(mockCachedAlertsCollection, function(value) { return value.id !== removedAlert.id });
+                    expect(AlertsManager.getAlerts()).toEqual(expectedResult);
+                });
+            });
+
+            describe("when it does NOT succeed", function (){
+
+                beforeEach(function() {
+                    deleteAlertDeferred.reject();
+                    TestUtils.digestError($rootScope);
+                });
+
+                it("does NOT remove the alert from the cache", function() {
+                    expect(rejectHandler).toHaveBeenCalled();
+                    expect(resolveHandler).not.toHaveBeenCalled();
+                    expect(AlertsManager.getAlerts()).toEqual(mockCachedAlertsCollection);
+                });
+            });
         });
     });
 })();
