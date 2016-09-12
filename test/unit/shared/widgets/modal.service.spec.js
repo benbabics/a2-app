@@ -10,7 +10,8 @@
             Modal,
             modals,
             resolveHandler,
-            rejectHandler;
+            rejectHandler,
+            newScope;
 
         beforeEach(function () {
             //create mock dependencies:
@@ -30,6 +31,8 @@
             });
 
             //setup mocks:
+            newScope = $rootScope.$new(); //define a static scope to return from $new
+            spyOn($rootScope, "$new").and.returnValue(newScope);
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
             Modal.setAll(modals = getRandomModals());
@@ -92,7 +95,7 @@
                 });
 
                 it("should call $ionicModal.fromTemplate with the expected values", function () {
-                    expect($ionicModal.fromTemplate).toHaveBeenCalledWith(type.template, _.extend({}, _.get(type, "options", {}), options));
+                    expect($ionicModal.fromTemplate).toHaveBeenCalledWith(type.template, mapOptions(_.merge({}, _.get(type, "options", {}), options)));
                 });
 
                 it("should resolve", function () {
@@ -159,7 +162,7 @@
                 });
 
                 it("should call $ionicModal.fromTemplateUrl with the expected values", function () {
-                    expect($ionicModal.fromTemplateUrl).toHaveBeenCalledWith(type.templateUrl, _.extend({}, _.get(type, "options", {}), options));
+                    expect($ionicModal.fromTemplateUrl).toHaveBeenCalledWith(type.templateUrl, mapOptions(_.merge({}, _.get(type, "options", {}), options)));
                 });
 
                 it("should resolve", function () {
@@ -237,7 +240,7 @@
             });
 
             it("should call $ionicModal.fromTemplate with the expected values", function () {
-                expect($ionicModal.fromTemplate).toHaveBeenCalledWith(template, options);
+                expect($ionicModal.fromTemplate).toHaveBeenCalledWith(template, mapOptions(options));
             });
 
             it("should add the modal to the global list", function () {
@@ -301,7 +304,7 @@
             });
 
             it("should call $ionicModal.fromTemplateUrl with the expected values", function () {
-                expect($ionicModal.fromTemplateUrl).toHaveBeenCalledWith(templateUrl, options);
+                expect($ionicModal.fromTemplateUrl).toHaveBeenCalledWith(templateUrl, mapOptions(options));
             });
 
             it("should resolve", function () {
@@ -385,6 +388,28 @@
             }
 
             return modals;
+        }
+
+        function mapOptions(options) {
+            var modalOptions = _.pick(options, [
+                "scope",
+                "animation",
+                "focusFirstInput",
+                "backdropClickToClose",
+                "hardwareBackButtonClose"
+            ]);
+
+            //create a new scope if one is not given
+            if (!_.get(modalOptions, "scope")) {
+                modalOptions.scope = $rootScope.$new();
+            }
+
+            //apply any given scope variables to the scope
+            if (_.has(options, "scopeVars")) {
+                _.merge(modalOptions.scope, options.scopeVars);
+            }
+
+            return modalOptions;
         }
     });
 })();

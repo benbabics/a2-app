@@ -1,22 +1,14 @@
 <ion-modal-view class="fingerprint-terms-modal">
     <ion-header-bar class="bar-wex">
-        <h1 class="title">Terms & Conditions</h1>
+        <h1 class="title">{{::CONFIG.TITLE}}</h1>
     </ion-header-bar>
     <ion-content class="has-header has-footer">
-        <div class="terms">
-            <p><b>Here are the Terms & Conditions for enabling Touch ID&reg;  functionality with FLEET SmartHub.</b></p>
-            <p>To enable Touch ID&reg; for log in, you are required to save your Username on this device. <b>Once Touch ID&reg; is enabled, you understand and agree that any Touch ID&reg; fingerprint stored on this device can be used to access your accounts in FLEET SmartHub.</b></p>
-            <p>WEX neither controls the functionality of Touch ID&reg; nor has access to your fingerprint information.</p>
-            <p>There may be circumstances where Touch ID&reg; will not function as expected and we may ask you to log in using password.</p>
-            <p>By choosing Accept, you agree to these terms and conditions. Choose Decline to cancel set up of Touch ID&reg; for FLEET SmartHub.</p>
-            <p>Apple, the Apple logo, Touch ID&reg; [iPhone, iPad] are trademarks of Apple Inc., registered in the U.S. and other countries.  App Store is a service mark of Apple Inc.</p>
-            <p>To enable Touch ID&reg; for log in, you are required to save your Username on this device. Note that Touch ID&reg; allows multiple fingerprints to be stored on your device.</p>
-        </div>
+        <div class="terms" ng-bind-html="::getTerms()"></div>
     </ion-content>
     <ion-footer-bar>
         <div class="buttons button-bar">
-            <button class="button button-block button-light" ng-click="$emit('FingerprintAuthTerms.rejected')">Decline</button>
-            <button class="button button-block button-link" ng-click="$emit('FingerprintAuthTerms.accepted')">Accept</button>
+            <button class="button button-block button-light" ng-click="$emit('FingerprintAuthTerms.rejected')">{{::CONFIG.BUTTONS.DECLINE}}</button>
+            <button class="button button-block button-link" ng-click="$emit('FingerprintAuthTerms.accepted')">{{::CONFIG.BUTTONS.ACCEPT}}</button>
         </div>
     </ion-footer-bar>
 </ion-modal-view>

@@ -2,6 +2,7 @@
     "use strict";
 
     /* jshint -W101 */
+    /*jshint multistr: true */
     // jscs:disable maximumLineLength
 
     var appGlobals = {},
@@ -754,7 +755,32 @@
     appGlobals.MODAL_TYPES = {
         FINGERPRINT_AUTH_TERMS: {
             "templateUrl": "app/components/user/auth/templates/fingerprintAuthTerms.html",
-            "options"    : {"backdropClickToClose": false},
+            "options"    : {
+                "backdropClickToClose": false,
+                "scopeVars"  : {
+                    "CONFIG": {
+                        termsIos: "<p><b>Here are the Terms & Conditions for enabling Touch ID&reg; functionality with FLEET SmartHub.</b></p> \
+                           <p>To enable Touch ID&reg; for log in, you are required to save your Username on this device. <b>Once Touch ID&reg; is enabled, you understand and agree that any Touch ID&reg; fingerprint stored on this device can be used to access your accounts in FLEET SmartHub.</b></p> \
+                           <p>WEX neither controls the functionality of Touch ID&reg; nor has access to your fingerprint information.</p> \
+                           <p>There may be circumstances where Touch ID&reg; will not function as expected and we may ask you to log in using password.</p> \
+                           <p>By choosing Accept, you agree to these terms and conditions. Choose Decline to cancel set up of Touch ID&reg; for FLEET SmartHub.</p> \
+                           <p>Apple, the Apple logo, Touch ID&reg; [iPhone, iPad] are trademarks of Apple Inc., registered in the U.S. and other countries.  App Store is a service mark of Apple Inc.</p> \
+                           <p>To enable Touch ID&reg; for log in, you are required to save your Username on this device. Note that Touch ID&reg; allows multiple fingerprints to be stored on your device.</p>",
+                        termsAndroid: "<p><b>Here are the Terms & Conditions for enabling fingerprint authentication with FLEET SmartHub.</b></p> \
+                               <p>To enable fingerprint authentication for log in, you are required to save your Username on this device. <b>Once fingerprint authentication is enabled, you understand and agree that any fingerprint stored on this device can be used to access your accounts in FLEET SmartHub.</b></p> \
+                               <p>WEX neither controls the functionality of fingerprint nor has access to your fingerprint information.</p> \
+                               <p>There may be circumstances where fingerprint authentication will not function as expected and we may ask you to log in using your password.</p> \
+                               <p>By choosing Accept, you agree to these terms and conditions. Choose Decline to cancel set up of fingerprint authentication for FLEET SmartHub.</p> \
+                               <p>Android is a trademark of Google Inc.</p> \
+                               <p>To enable fingerprint authentication for log in, you are required to save your Username on this device. Note that fingerprint authentication allows multiple fingerprints to be stored on your device.</p>",
+                        "BUTTONS": {
+                            "ACCEPT" : "Accept",
+                            "DECLINE": "Decline"
+                        },
+                        "TITLE": "Terms & Conditions"
+                    }
+                }
+            },
             "animation"  : "slide-in-down"
         }
     };

@@ -36,10 +36,10 @@
 
         function createByType(type, options) {
             if (_.has(type, "template")) {
-                return $q.when(createFromTemplate(type.template, _.extend({}, _.get(type, "options", {}), options)));
+                return $q.when(createFromTemplate(type.template, _.merge({}, _.get(type, "options", {}), options)));
             }
             else if (_.has(type, "templateUrl")) {
-                return createFromTemplateUrl(type.templateUrl, _.extend({}, _.get(type, "options", {}), options));
+                return createFromTemplateUrl(type.templateUrl, _.merge({}, _.get(type, "options", {}), options));
             }
             else {
                 var error = "Failed to create modal from unknown type. ";
@@ -50,11 +50,11 @@
         }
 
         function createFromTemplate(template, options) {
-            return addModal($ionicModal.fromTemplate(template, options));
+            return addModal($ionicModal.fromTemplate(template, mapOptions(options)));
         }
 
         function createFromTemplateUrl(templateUrl, options) {
-            return $ionicModal.fromTemplateUrl(templateUrl, options)
+            return $ionicModal.fromTemplateUrl(templateUrl, mapOptions(options))
                 .then(addModal);
         }
 
@@ -99,6 +99,27 @@
                 //fix for issue where keyboard doesn't close when modal is shown
                 return show().then($cordovaKeyboard.close);
             };
+        }
+
+        function mapOptions(options) {
+            var modalOptions = _.pick(options, [
+                "scope",
+                "animation",
+                "focusFirstInput",
+                "backdropClickToClose",
+                "hardwareBackButtonClose"
+            ]);
+
+            if (!_.get(modalOptions, "scope")) {
+                modalOptions.scope = $rootScope.$new();
+            }
+
+            //apply any given scope variables to the scope
+            if (_.has(options, "scopeVars")) {
+                _.merge(modalOptions.scope, options.scopeVars);
+            }
+
+            return modalOptions;
         }
     }
 

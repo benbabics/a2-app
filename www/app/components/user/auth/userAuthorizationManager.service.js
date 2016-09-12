@@ -4,8 +4,8 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function UserAuthorizationManager(_, $q, $rootScope, globals,
-                                      AuthenticationManager, Fingerprint, LoadingIndicator, Logger, Modal, SecureStorage) {
+    function UserAuthorizationManager(_, $q, $rootScope, globals, AuthenticationManager, Fingerprint, LoadingIndicator,
+                                      Logger, Modal, PlatformUtil, SecureStorage) {
         var USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION_TYPES;
 
         var service = {
@@ -29,6 +29,17 @@
         //////////////////////
         //Private functions:
 
+        function getFingerprintTerms() {
+            switch (_.toLower(PlatformUtil.getPlatform())) {
+                case "android":
+                    return _.get(this, "CONFIG.termsAndroid");
+                case "ios":
+                    return _.get(this, "CONFIG.termsIos");
+                default:
+                    return _.get(this, "CONFIG.termsAndroid");
+            }
+        }
+
         function verifyWithFingerprint(clientId, clientSecret) {
             var verificationOptions = {clientId: clientId},
                 bypassFingerprint = false,
@@ -41,7 +52,9 @@
                     //authenticate the account with the given username/password
                     return verifyWithSecret(clientId, clientSecret)
                         //prompt the user to accept the terms of use
-                        .then(_.partial(Modal.createByType, globals.MODAL_TYPES.FINGERPRINT_AUTH_TERMS, {}))
+                        .then(_.partial(Modal.createByType, globals.MODAL_TYPES.FINGERPRINT_AUTH_TERMS, {
+                            scopeVars: {getTerms: getFingerprintTerms}
+                        }))
                         .then(function (modal) {
                             termsModal = modal;
 
