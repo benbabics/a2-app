@@ -199,13 +199,15 @@ $user-login-error-message-animation: all linear 0.5s;
 /**------------------------------------------------------
  Navigation Bar
  ------------------------------------------------------**/
+$badge-color: #e51937;
+ 
 .bar-wex {
     .badge {
         position: absolute;
         font-size: 0.7em;
         padding: 0.1em 0.5em;
         right: -3px;
-        background-color: #e51937;
+        background-color: $badge-color;
     }
 }
 
@@ -214,6 +216,7 @@ $user-login-error-message-animation: all linear 0.5s;
  Side Menu
  ------------------------------------------------------**/
 .menu-view {
+    $tap-state-text-color: #8c8c8c;
     background-color: $charcoal-light;
 
     .item, .item-content {
@@ -239,13 +242,13 @@ $user-login-error-message-animation: all linear 0.5s;
     }
     .item.activated {
         background-color: #333333;
-        color: #8c8c8c;
+        color: $tap-state-text-color;
         .fa-chevron-right {
-            color: #8c8c8c;
+            color: $tap-state-text-color;
         }
     }
     .badge {
-        background-color: #e51937;
+        background-color: $badge-color;
         float: right;
         position: static;
     }
