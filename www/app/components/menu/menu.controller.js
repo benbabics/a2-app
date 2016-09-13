@@ -2,12 +2,14 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
+    // jshint maxparams:8
 
     /* @ngInject */
-    function MenuController(_, $ionicSideMenuDelegate, $state, globals, Navigation, AlertsManager) {
+    function MenuController(_, $ionicSideMenuDelegate, $state, $timeout, globals, Navigation, AlertsManager, Fingerprint) {
 
         var vm = this;
         vm.config = globals.MENU.CONFIG;
+        vm.fingerprintAuthAvailable = false;
 
         vm.closeMenu = closeMenu;
         vm.goToHome = goToHome;
@@ -19,9 +21,19 @@
         vm.goToContactUs = goToContactUs;
         vm.goToTermsOfUse = goToTermsOfUse;
         vm.goToPrivacyPolicy = goToPrivacyPolicy;
+        vm.goToSettings = goToSettings;
         vm.goToLogOut = goToLogOut;
         vm.currentStateHasRoot = currentStateHasRoot;
         vm.getUnreadAlertsCount = getUnreadAlertsCount;
+
+        $timeout( activate );
+
+        /////////////////////
+        // Controller initialization
+        function activate() {
+            Fingerprint.isAvailable()
+                .then(function () { vm.fingerprintAuthAvailable = true; });
+        }
 
         function closeMenu() {
             $ionicSideMenuDelegate.toggleRight(false);
@@ -49,6 +61,10 @@
 
         function goToPaymentActivity() {
             return Navigation.goToPaymentActivity();
+        }
+
+        function goToSettings() {
+            return Navigation.goToSettings();
         }
 
         function goToAlerts() {

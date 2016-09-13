@@ -19,6 +19,7 @@
         "app.components.notifications",
         "app.components.payment",
         "app.components.privacyPolicy",
+        "app.components.settings",
         "app.components.transaction",
         "app.components.terms",
         "app.components.user",

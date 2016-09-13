@@ -1,12 +1,15 @@
 (function () {
     "use strict";
 
-    var _,
+    var $rootScope,
+        $timeout,
         $ionicSideMenuDelegate,
         ctrl,
         Navigation,
         $state,
         appGlobals,
+        Fingerprint,
+        fingerprintAvailableDeferred,
         mockGlobals = {
             LOGIN_STATE: "user.auth.login",
             AUTH_API: {
@@ -86,6 +89,7 @@
             module("app.shared");
             module("app.html");
 
+
             module("app.components", function ($provide, sharedGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
@@ -94,23 +98,62 @@
                 $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
             });
 
+            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _)]);
+
+
             // mock dependencies
             Navigation = jasmine.createSpyObj("Navigation", ["goToCards", "goToContactUs", "goToHome", "goToLogOut", "goToMakePayment",
-                                                             "goToPaymentActivity", "goToPrivacyPolicy", "goToTermsOfUse", "goToTransactionActivity"]);
+                                                             "goToPaymentActivity", "goToPrivacyPolicy", "goToSettings", "goToTermsOfUse", "goToTransactionActivity"]);
             $ionicSideMenuDelegate = jasmine.createSpyObj("$ionicSideMenuDelegate", ["toggleRight"]);
+            Fingerprint = jasmine.createSpyObj("Fingerprint", ["isAvailable"]);
             $state = {
                 current : {
                     name : ""
                 }
             };
-            inject(function ($controller, ___, _appGlobals_) {
-                _ = ___;
+
+            inject(function (_$rootScope_, _$timeout_, $q, $controller, _appGlobals_) {
                 appGlobals = _appGlobals_;
+                $rootScope = _$rootScope_;
+                $timeout   = _$timeout_;
+
+                //setup spies:
+                fingerprintAvailableDeferred = $q.defer();
+
+                //setup mocks:
+                Fingerprint.isAvailable.and.returnValue( fingerprintAvailableDeferred.promise );
 
                 ctrl = $controller("MenuController", {
                     $ionicSideMenuDelegate: $ionicSideMenuDelegate,
                     $state                : $state,
-                    Navigation            : Navigation
+                    Navigation            : Navigation,
+                    Fingerprint           : Fingerprint
+                });
+            });
+        });
+
+        describe("has a property vm.fingerprintAuthAvailable that", function () {
+            describe("when fingerprint authentication is available", function () {
+                beforeEach(function () {
+                    $timeout.flush();
+                    fingerprintAvailableDeferred.resolve();
+                    $rootScope.$digest();
+                });
+
+                it("should set to true", function () {
+                    expect( ctrl.fingerprintAuthAvailable ).toBe( true );
+                });
+            });
+
+            describe("when fingerprint authentication is NOT available", function () {
+                beforeEach(function () {
+                    $timeout.flush();
+                    fingerprintAvailableDeferred.reject();
+                    $rootScope.$digest();
+                });
+
+                it("should set to false", function () {
+                    expect( ctrl.fingerprintAuthAvailable ).toBe( false );
                 });
             });
         });
@@ -207,6 +250,18 @@
 
             it("should navigate to the privacy policy page", function () {
                 expect(Navigation.goToPrivacyPolicy).toHaveBeenCalledWith();
+            });
+
+        });
+
+        describe("has a goToSettings function that", function () {
+
+            beforeEach(function () {
+                ctrl.goToSettings();
+            });
+
+            it("should navigate to the settings page", function () {
+                expect(Navigation.goToSettings).toHaveBeenCalledWith();
             });
 
         });

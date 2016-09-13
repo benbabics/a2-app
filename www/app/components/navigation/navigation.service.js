@@ -15,6 +15,7 @@
             goToMakePayment        : goToMakePayment,
             goToPaymentActivity    : goToPaymentActivity,
             goToPrivacyPolicy      : goToPrivacyPolicy,
+            goToSettings           : goToSettings,
             goToTermsOfUse         : goToTermsOfUse,
             goToTransactionActivity: goToTransactionActivity,
             isUnsecuredState       : isUnsecuredState
@@ -74,6 +75,10 @@
 
         function goToPrivacyPolicy() {
             return $state.go("privacyPolicy");
+        }
+
+        function goToSettings() {
+            return $state.go("settings");
         }
 
         function goToTermsOfUse() {

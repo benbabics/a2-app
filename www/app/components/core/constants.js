@@ -674,6 +674,7 @@
                 "cards"              : "Cards",
                 "alerts"             : "Alerts",
                 "contactUs"          : "Contact Us",
+                "settings"           : "Settings",
                 "terms"              : "Terms of Use",
                 "privacyPolicy"      : "Privacy Policy",
                 "logOut"             : "Log Out"
@@ -687,7 +688,8 @@
                 "alerts"             : "alerts",
                 "contactUs"          : "contactUs",
                 "terms"              : "termsOfUse",
-                "privacyPolicy"      : "privacyPolicy"
+                "privacyPolicy"      : "privacyPolicy",
+                "settings"           : "settings"
             }
         }
     };

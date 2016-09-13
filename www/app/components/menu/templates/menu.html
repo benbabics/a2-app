@@ -49,6 +49,14 @@
             {{::vm.config.options.cards}}
         </wex-menu-item>
 
+        <wex-menu-item id="option-settings"
+                       ng-if="vm.fingerprintAuthAvailable"
+                       ng-click="vm.goToSettings()"
+                       icon="fa-cog"
+                       root-state="{{::vm.config.rootStates.settings}}">
+            {{::vm.config.options.settings}}
+        </wex-menu-item>
+
         <wex-menu-item id="option-contact-us"
                        ng-click="vm.goToContactUs()"
                        icon="fa-comments"
