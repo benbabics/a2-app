@@ -2,27 +2,25 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:9
+    // jshint maxparams:6
 
     /* @ngInject */
-    function TransactionListController(_, $scope, $stateParams, $localStorage, $ionicScrollDelegate, globals, wexInfiniteListService, AnalyticsUtil) {
+    function TransactionListController(_, $stateParams, $localStorage, $ionicScrollDelegate, globals, AnalyticsUtil) {
 
         var vm = this;
 
         vm.backStateOverride = null;
         vm.config = globals.TRANSACTION_LIST.CONFIG;
 
-        vm.filterViews = $localStorage.$default({
-          transactionsFilterValue: "date"
-        });
+        vm.filterViews = $localStorage.$default({transactionsFilterValue: "date"});
 
-        vm.handleFilterSelection    = handleFilterSelection;
+        vm.handleFilterSelection = handleFilterSelection;
         vm.handleLoadSubsequentData = handleLoadSubsequentData;
 
         activate();
 
         // report initial filter selected value to analytics
-        trackEvent( vm.filterViews.transactionsFilterValue );
+        trackEvent(vm.filterViews.transactionsFilterValue);
 
         //////////////////////
         // Controller initialization
@@ -33,32 +31,24 @@
             else {
                 vm.backStateOverride = "landing";
             }
-
-            $scope.$on( '$destroy', handleResetCachedLists );
         }
 
         function handleFilterSelection($event) {
             var selectedValue = $event.target.value;
             $ionicScrollDelegate.scrollTop();
-            trackEvent( selectedValue );
+            trackEvent(selectedValue);
         }
 
         function handleLoadSubsequentData() {
-            trackEvent( 'scroll' );
-        }
-
-        function handleResetCachedLists() {
-            wexInfiniteListService.emptyCache( 'records-date' );
-            wexInfiniteListService.emptyCache( 'records-driver' );
-            wexInfiniteListService.emptyCache( 'records-card' );
+            trackEvent("scroll");
         }
 
         /**
-          * Analytics
-        **/
+         * Analytics
+         **/
         function trackEvent(action) {
-          var eventData = vm.config.ANALYTICS.events[ action ];
-          _.spread( AnalyticsUtil.trackEvent )( eventData );
+            var eventData = vm.config.ANALYTICS.events[action];
+            _.spread(AnalyticsUtil.trackEvent)(eventData);
         }
 
     }

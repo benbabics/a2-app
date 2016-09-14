@@ -135,13 +135,6 @@
             });
         });
 
-        describe("has a listener for the $destroy event that", function () {
-          it("should send a message to wexInfiniteListService.emptyCache", function () {
-            $scope.$broadcast( '$destroy' );
-            expect(wexInfiniteListService.emptyCache).toHaveBeenCalled();
-          });
-        });
-
         describe("has a handleLoadSubsequentData function that", function () {
           it("should send a message to AnalyticsUtil.trackEvent", function () {
             var params = mockGlobals.TRANSACTION_LIST.CONFIG.ANALYTICS.events.scroll;

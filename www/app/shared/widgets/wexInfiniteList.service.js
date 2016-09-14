@@ -1,8 +1,6 @@
 (function () {
     "use strict";
 
-    var __store = {};
-
     /**
     * Constructor
     **/
@@ -10,7 +8,7 @@
       var collectionSize;
 
       options = options || {};
-      this.model = getCachedModel( options.cacheKey );
+      this.model = {collection: []};
       delete options.cacheKey;
 
       this.settings = angular.extend({
@@ -93,29 +91,8 @@
     }
 
     /**
-     * Static Methods
-    **/
-    function emptyCache() {
-        var keys = [].slice.call( arguments, 0 );
-        keys.forEach( clearCachedModel );
-    }
-
-    /**
      * Private Methods
     **/
-    function getCachedModel(key) {
-      var emptyModel = { collection: [] };
-      if ( !!key && !__store[ key ] ) {
-        __store[ key ] = emptyModel;
-      }
-      return __store[ key ] || emptyModel;
-    }
-
-    function clearCachedModel(key) {
-      if ( key && __store[ key ] ) {
-          _.extend( __store[ key ], getCachedModel() );
-      }
-    }
 
     function registerDelegate(delegate) {
       // ensure delegate has expected method(s)
@@ -183,9 +160,6 @@
       resetCollection: resetCollection,
       removeItem:      removeItem
     };
-
-    // Static Methods
-    WexInfiniteListService.emptyCache = emptyCache;
 
 
     angular

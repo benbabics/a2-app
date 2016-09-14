@@ -42,18 +42,14 @@
           });
 
           describe("accepts an options hash as the second argument and", function () {
-              it("creates a unique model from the 'cacheKey' property", function () {
-                  var instance1 = new wexInfiniteListService( delegate, { cacheKey: 'foo' } ),
-                      instance2 = new wexInfiniteListService( delegate, { cacheKey: 'bar' } );
 
-                  expect( instance1.model ).not.toBe( instance2.model );
-              });
-              it("creates a unique model without the 'cacheKey' property", function() {
+              it("creates a unique model", function() {
                 var instance1 = new wexInfiniteListService( delegate ),
                     instance2 = new wexInfiniteListService( delegate );
 
                 expect( instance1.model ).not.toBe( instance2.model );
-              })
+              });
+
               it("extends the instance's settings with properties provided", function () {
                   var options  = { pageSize: 10, currentPage: 10 },
                       instance = new wexInfiniteListService( delegate, options );
@@ -205,33 +201,6 @@
                     expect( item.isGreekLoading ).toBeFalsy();
                 });
               });
-          });
-      });
-
-      describe("has a static emptyCache function that", function () {
-          var instance1, instance2, instance3;
-
-          beforeEach(function() {
-            instance1 = new wexInfiniteListService( delegate, { cacheKey: 'foo' } ),
-            instance2 = new wexInfiniteListService( delegate, { cacheKey: 'bar' } ),
-            instance3 = new wexInfiniteListService( delegate, { cacheKey: 'baz' } );
-
-            Array.prototype.push.apply( instance1.model.collection, mockItems );
-            Array.prototype.push.apply( instance2.model.collection, mockItems );
-            Array.prototype.push.apply( instance3.model.collection, mockItems );
-          });
-
-          it("should accept a single argument of 'cacheKey' to reset an instance's model.collection", function () {
-              wexInfiniteListService.emptyCache( 'bar' );
-              expect( instance1.model.collection ).toEqual( mockItems );
-              expect( instance2.model.collection ).toEqual( [] );
-              expect( instance3.model.collection ).toEqual( mockItems );
-          });
-          it("should accept a multiple arguments of 'cacheKey' to reset each instance's model.collection", function () {
-              wexInfiniteListService.emptyCache( 'foo', 'baz' );
-              expect( instance1.model.collection ).toEqual( [] );
-              expect( instance2.model.collection ).toEqual( mockItems );
-              expect( instance3.model.collection ).toEqual( [] );
           });
       });
     });

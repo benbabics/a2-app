@@ -1,13 +1,16 @@
 (function () {
     "use strict";
 
-    var $rootScope,
+    var CACHE_KEY_PENDING = "transactions.pending",
+        CACHE_KEY_POSTED = "transactions.posted",
+        $rootScope,
         $q,
         resolveHandler,
         rejectHandler,
         PostedTransactionModel,
         TransactionsResource,
         TransactionManager,
+        WexCache,
         mockPostedTransactionsCollection,
         mockCachedPostedTransactionsCollection;
 
@@ -22,8 +25,15 @@
             // mock dependencies
             TransactionsResource = jasmine.createSpyObj("TransactionsResource", ["getPendingTransactions", "getPostedTransactions"]);
 
+            WexCache = jasmine.createSpyObj("WexCache", [
+                "clearPropertyValue",
+                "mergePropertyValue",
+                "readPropertyValue"
+            ]);
+
             module(function ($provide) {
                 $provide.value("TransactionsResource", TransactionsResource);
+                $provide.value("WexCache", WexCache);
             });
 
             inject(function (_$q_, _$rootScope_, _TransactionManager_, _PostedTransactionModel_) {
@@ -60,12 +70,15 @@
         describe("has a clearCachedValues function that", function () {
 
             beforeEach(function () {
-                TransactionManager.setPostedTransactions(mockPostedTransactionsCollection);
                 TransactionManager.clearCachedValues();
             });
 
             it("should reset the cached posted transactions", function () {
-                expect(TransactionManager.getPostedTransactions()).toEqual([]);
+                expect(WexCache.clearPropertyValue).toHaveBeenCalledWith(CACHE_KEY_POSTED);
+            });
+
+            it("should reset the cached pending transactions", function () {
+                expect(WexCache.clearPropertyValue).toHaveBeenCalledWith(CACHE_KEY_PENDING);
             });
         });
 
@@ -73,10 +86,10 @@
             var postedTransactionToFetch,
                 fetchedPostedTransaction;
 
-            describe("when postedTransactions is NOT empty", function () {
+            describe("when there are cached posted transactions", function () {
 
                 beforeEach(function () {
-                    TransactionManager.setPostedTransactions(mockPostedTransactionsCollection);
+                    WexCache.readPropertyValue.and.returnValue(mockPostedTransactionsCollection);
                 });
 
                 describe("when the posted transaction to fetch is in the list", function () {
@@ -126,10 +139,10 @@
                 });
             });
 
-            describe("when payments is empty", function () {
+            describe("when there are NOT any cached posted transactions", function () {
 
                 beforeEach(function () {
-                    TransactionManager.setPostedTransactions([]);
+                    WexCache.readPropertyValue.and.returnValue([]);
                 });
 
                 beforeEach(function () {
@@ -174,7 +187,7 @@
                 mockToDate = TestUtils.getRandomDate();
                 mockPageNumber = TestUtils.getRandomNumberWithLength(1);
                 mockPageSize = TestUtils.getRandomNumberWithLength(2);
-                mockFilterBy = 'card';
+                mockFilterBy = "card";
 
                 TransactionsResource.getPendingTransactions.and.returnValue(getPendingTransactionsDeferred.promise);
             });
@@ -281,8 +294,6 @@
                 mockPageSize = TestUtils.getRandomInteger(1, 100);
                 mockCardId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
-                TransactionManager.setPostedTransactions(mockCachedPostedTransactionsCollection.slice());
-
                 TransactionsResource.getPostedTransactions.and.returnValue(getPostedTransactionsDeferred.promise);
             });
 
@@ -337,15 +348,35 @@
 
                 describe("when there is data in the response", function () {
 
-                    describe("when the first page is requested", function () {
+                    beforeEach(function () {
+                        mockPageNumber = TestUtils.getRandomInteger(1, 10);
+
+                        TransactionManager.fetchPostedTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize)
+                            .then(resolveHandler)
+                            .catch(rejectHandler);
+                    });
+
+                    describe("when there are transactions in the fetched data that are already cached", function () {
 
                         beforeEach(function () {
-                            mockPageNumber = 0;
+                            Array.prototype.push.apply(mockPostedTransactions.data, mockCachedPostedTransactionsCollection);
 
-                            TransactionManager.fetchPostedTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize)
-                                .then(resolveHandler)
-                                .catch(rejectHandler);
+                            getPostedTransactionsDeferred.resolve(mockPostedTransactions);
+
+                            $rootScope.$digest();
                         });
+
+                        it("should resolve", function () {
+                            expect(resolveHandler).toHaveBeenCalledWith(mockPostedTransactions.data);
+                            expect(rejectHandler).not.toHaveBeenCalled();
+                        });
+
+                        it("should merge the values into the cache", function () {
+                            expect(WexCache.mergePropertyValue).toHaveBeenCalledWith(CACHE_KEY_POSTED, mockPostedTransactions.data, {mergeBy: "transactionId"});
+                        });
+                    });
+
+                    describe("when there are no transactions in the fetched data that are already cached", function () {
 
                         beforeEach(function () {
                             getPostedTransactionsDeferred.resolve(mockPostedTransactions);
@@ -358,59 +389,8 @@
                             expect(rejectHandler).not.toHaveBeenCalled();
                         });
 
-                        it("should reset postedTransactions to an array of models set from the data", function () {
-                            expect(TransactionManager.getPostedTransactions()).toEqual(mockPostedTransactionsCollection);
-                        });
-                    });
-
-                    describe("when a page beyond the first page requested", function () {
-
-                        beforeEach(function () {
-                            mockPageNumber = TestUtils.getRandomInteger(1, 10);
-
-                            TransactionManager.fetchPostedTransactions(mockAccountId, mockFromDate, mockToDate, mockPageNumber, mockPageSize)
-                                .then(resolveHandler)
-                                .catch(rejectHandler);
-                        });
-
-                        describe("when there are transactions in the fetched data that are already cached", function () {
-
-                            beforeEach(function () {
-                                Array.prototype.push.apply(mockPostedTransactions.data, mockCachedPostedTransactionsCollection);
-
-                                getPostedTransactionsDeferred.resolve(mockPostedTransactions);
-
-                                $rootScope.$digest();
-                            });
-
-                            it("should resolve", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(mockPostedTransactions.data);
-                                expect(rejectHandler).not.toHaveBeenCalled();
-                            });
-
-                            it("should add only the uncached transactions from the data to postedTransactions", function () {
-                                var expectedValues = _.uniqBy(mockCachedPostedTransactionsCollection.concat(mockPostedTransactions.data), "transactionId");
-
-                                expect(TransactionManager.getPostedTransactions()).toEqual(expectedValues);
-                            });
-                        });
-
-                        describe("when there are no transactions in the fetched data that are already cached", function () {
-
-                            beforeEach(function () {
-                                getPostedTransactionsDeferred.resolve(mockPostedTransactions);
-
-                                $rootScope.$digest();
-                            });
-
-                            it("should resolve", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(mockPostedTransactions.data);
-                                expect(rejectHandler).not.toHaveBeenCalled();
-                            });
-
-                            it("should add all of the fetched transactions to postedTransactions", function () {
-                                expect(TransactionManager.getPostedTransactions()).toEqual(mockCachedPostedTransactionsCollection.concat(mockPostedTransactions.data));
-                            });
+                        it("should merge the values into the cache", function () {
+                            expect(WexCache.mergePropertyValue).toHaveBeenCalledWith(CACHE_KEY_POSTED, mockPostedTransactions.data, {mergeBy: "transactionId"});
                         });
                     });
                 });
@@ -431,8 +411,8 @@
                         expect($rootScope.$digest).toThrow();
                     });
 
-                    it("should NOT modify postedTransactions", function () {
-                        expect(TransactionManager.getPostedTransactions()).toEqual(mockCachedPostedTransactionsCollection);
+                    it("should NOT merge the values into the cache", function () {
+                        expect(WexCache.mergePropertyValue).not.toHaveBeenCalled();
                     });
                 });
             });
@@ -457,32 +437,32 @@
 
         });
 
-        describe("has a getPostedTransactions function that", function () {
+        describe("has a getCachedPostedTransactions function that", function () {
 
-            it("should return the posted transactions passed to setPostedTransactions", function () {
-                var result;
-
-                TransactionManager.setPostedTransactions(mockPostedTransactionsCollection);
-                result = TransactionManager.getPostedTransactions();
-
-                expect(result).toEqual(mockPostedTransactionsCollection);
+            beforeEach(function () {
+                WexCache.readPropertyValue.and.returnValue(mockPostedTransactionsCollection);
             });
 
-            // TODO: figure out how to test this without using setPostedTransactions
+            it("should return the cached posted transactions", function () {
+                var result = TransactionManager.getCachedPostedTransactions();
+
+                expect(WexCache.readPropertyValue).toHaveBeenCalledWith(CACHE_KEY_POSTED);
+                expect(result).toEqual(mockPostedTransactionsCollection);
+            });
         });
 
-        describe("has a setPostedTransactions function that", function () {
+        describe("has a getCachedPendingTransactions function that", function () {
 
-            it("should update the posted transactions returned by getPostedTransactions", function () {
-                var result;
-
-                TransactionManager.setPostedTransactions(mockPostedTransactionsCollection);
-                result = TransactionManager.getPostedTransactions();
-
-                expect(result).toEqual(mockPostedTransactionsCollection);
+            beforeEach(function () {
+                WexCache.readPropertyValue.and.returnValue(mockPostedTransactionsCollection);
             });
 
-            // TODO: figure out how to test this without using getPostedTransactions
+            it("should return the cached pending transactions", function () {
+                var result = TransactionManager.getCachedPendingTransactions();
+
+                expect(WexCache.readPropertyValue).toHaveBeenCalledWith(CACHE_KEY_PENDING);
+                expect(result).toEqual(mockPostedTransactionsCollection);
+            });
         });
     });
 })();

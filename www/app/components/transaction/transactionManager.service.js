@@ -2,22 +2,23 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:6
+    // jshint maxparams:7
 
     /* @ngInject */
-    function TransactionManager(_, $q, Logger, LoggerUtil, PostedTransactionModel, TransactionsResource) {
+    function TransactionManager(_, $q, Logger, LoggerUtil, PostedTransactionModel, TransactionsResource, WexCache) {
         // Private members
-        var pendingTransactions,
-            postedTransactions;
+        var CACHE_KEY_PENDING = "transactions.pending",
+            CACHE_KEY_POSTED = "transactions.posted";
 
         // Revealed Public members
         var service = {
-                clearCachedValues       : clearCachedValues,
-                fetchPostedTransaction  : fetchPostedTransaction,
-                fetchPostedTransactions : fetchPostedTransactions,
-                fetchPendingTransactions: fetchPendingTransactions,
-                getPostedTransactions   : getPostedTransactions,
-                setPostedTransactions   : setPostedTransactions
+                clearCachedValues           : clearCachedValues,
+                fetchPendingTransaction     : fetchPendingTransaction,
+                fetchPendingTransactions    : fetchPendingTransactions,
+                fetchPostedTransaction      : fetchPostedTransaction,
+                fetchPostedTransactions     : fetchPostedTransactions,
+                getCachedPendingTransactions: getCachedPendingTransactions,
+                getCachedPostedTransactions : getCachedPostedTransactions
             };
 
         activate();
@@ -30,8 +31,8 @@
         }
 
         function clearCachedValues() {
-            pendingTransactions = [];
-            postedTransactions = [];
+            WexCache.clearPropertyValue(CACHE_KEY_PENDING);
+            WexCache.clearPropertyValue(CACHE_KEY_POSTED);
         }
 
         function createTransaction(transactionResource) {
@@ -41,11 +42,15 @@
             return transactionModel;
         }
 
-        function fetchPostedTransaction(transactionId) {
-            return $q.when(_.find(postedTransactions, {transactionId: transactionId}));
+        function fetchPendingTransaction(authorizationId) {
+            return $q.when(_.find(getCachedPendingTransactions(), {authorizationId: authorizationId}));
         }
 
-        // jshint maxparams:6
+        function fetchPostedTransaction(transactionId) {
+            return $q.when(_.find(getCachedPostedTransactions(), {transactionId: transactionId}));
+        }
+
+        // jshint maxparams:8
         function fetchPostedTransactions(accountId, fromDate, toDate, pageNumber, pageSize, filterBy, filterValue, cardId) {
             var params = {
                 fromDate  : fromDate,
@@ -69,13 +74,7 @@
                         //map the posted transaction data to model objects
                         var fetchedTransactions = _.map(postedTransactionsResponse.data, createTransaction);
 
-                        //reset the cache if we're fetching the first page of results
-                        if (pageNumber === 0) {
-                            postedTransactions = [];
-                        }
-
-                        //only cache the fetched transactions that haven't been cached yet
-                        postedTransactions = _.uniqBy(postedTransactions.concat(fetchedTransactions), "transactionId");
+                        updateCachedPostedTransactions(fetchedTransactions);
 
                         return fetchedTransactions;
                     }
@@ -119,8 +118,7 @@
                         //map the pending transaction data to model objects
                         var fetchedTransactions = _.map(pendingTransactionsResponse.data, createTransaction);
 
-                        //reset the cache
-                        pendingTransactions = [];
+                        updateCachedPendingTransactions(fetchedTransactions);
 
                         return fetchedTransactions;
                     }
@@ -141,18 +139,20 @@
                 });
         }
 
-        function getPostedTransactions() {
-            return postedTransactions;
+        function getCachedPostedTransactions() {
+            return WexCache.readPropertyValue(CACHE_KEY_POSTED) || [];
         }
 
-        function getPendingTransactions() {
-            return pendingTransactions;
+        function getCachedPendingTransactions() {
+            return WexCache.readPropertyValue(CACHE_KEY_PENDING) || [];
         }
 
-        // Caution against using this as it replaces the object versus setting properties on it or extending it
-        // suggested use for testing only
-        function setPostedTransactions(postedTransactionsInfo) {
-            postedTransactions = postedTransactionsInfo;
+        function updateCachedPendingTransactions(transactions) {
+            WexCache.mergePropertyValue(CACHE_KEY_PENDING, transactions, {mergeBy: "authorizationId"});
+        }
+
+        function updateCachedPostedTransactions(transactions) {
+            WexCache.mergePropertyValue(CACHE_KEY_POSTED, transactions, {mergeBy: "transactionId"});
         }
     }
 

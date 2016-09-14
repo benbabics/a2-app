@@ -5,7 +5,6 @@
 
     /* @ngInject */
     function filterDateTransactionList(globals, _, moment, Logger, TransactionManager, UserManager) {
-        var infiniteScrollService;
 
         return {
             restrict:    "E",
