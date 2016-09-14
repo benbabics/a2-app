@@ -11,7 +11,7 @@
 
         $stateProvider.state("user.auth.login", {
             cache: false,
-            url: "/login?errorReason&{timedOut:bool}",
+            url: "/login?errorReason&{timedOut:bool}&{logOut:bool}",
             views: {
                 "view@user": {
                     templateUrl: "app/components/user/auth/templates/login.html",

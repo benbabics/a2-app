@@ -254,7 +254,7 @@
                 });
 
                 it("should navigate to the login page", function () {
-                    expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE, params);
+                    expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE, _.merge({logOut: true}, params));
                 });
 
                 it("should call the resolve handler", function () {
@@ -277,7 +277,7 @@
                 });
 
                 it("should navigate to the login page", function () {
-                    expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE, undefined);
+                    expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE, {logOut: true});
                 });
 
                 it("should call the resolve handler", function () {

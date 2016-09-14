@@ -72,7 +72,12 @@
     "cordova-plugin-touch-id@~3.2.0",
     "cordova-plugin-android-fingerprint-auth@~0.0.10",
     "urbanairship-cordova@~5.3.1",
-    "cordova-plugin-secure-storage@~2.4.1"
+    "cordova-plugin-secure-storage@~2.4.1",
+    "cordova-plugin-dialogs",
+    {
+      "locator": "https://github.com/selahssea/cordova-open-native-settings",
+      "id": "com.phonegap.plugins.nativesettingsopener"
+    }
   ],
   "cordovaPlatforms": [
     {

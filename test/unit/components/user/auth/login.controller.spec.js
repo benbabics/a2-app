@@ -1,15 +1,16 @@
 (function () {
     "use strict";
 
-    var _,
-        $ionicHistory,
+    var $ionicHistory,
         $localStorage,
         $q,
         $rootScope,
         $scope,
         $state,
         $stateParams = {},
+        $cordovaDialogs,
         $cordovaKeyboard,
+        $interval,
         AnalyticsUtil,
         LoginManager,
         authenticateDeferred,
@@ -21,6 +22,8 @@
         UserAuthorizationManager,
         SecureStorage,
         fingerprintAvailableDeferred,
+        cordovaPluginsKeyboard,
+        cordovaPluginSettings,
         mockGlobals = {
             "LOCALSTORAGE" : {
                 "CONFIG": {
@@ -79,6 +82,23 @@
                         "USER_MUST_ACCEPT_TERMS"            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                         "USER_MUST_SETUP_SECURITY_QUESTIONS": TestUtils.getRandomStringThatIsAlphaNumeric(10),
                         "USER_NOT_ACTIVE"                   : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    },
+                    "touchId": {
+                        "enabled": {
+                            "label": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "disabled": {
+                            "label": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        },
+                        "settingsPrompt": {
+                            "title": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "messageAndroid": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "messageIos": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "buttons": {
+                                "cancel": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                "settings": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            }
+                        }
                     }
                 }
             },
@@ -97,19 +117,15 @@
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate"]);
             $state = jasmine.createSpyObj("state", ["go"]);
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
-            LoginManager = jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]);
-            PlatformUtil = jasmine.createSpyObj("PlatformUtil", ["platformHasCordova"]);
             Fingerprint = jasmine.createSpyObj("Fingerprint", ["isAvailable"]);
             UserAuthorizationManager = jasmine.createSpyObj("UserAuthorizationManager", ["verify"]);
             SecureStorage = jasmine.createSpyObj("SecureStorage", ["get", "remove"]);
+            $cordovaDialogs = jasmine.createSpyObj("$cordovaDialogs", ["confirm"]);
+            cordovaPluginsKeyboard = jasmine.createSpyObj("cordova.plugins.Keyboard", ["disableScroll"]);
+            cordovaPluginSettings = jasmine.createSpyObj("cordova.plugins.settings", ["openSetting", "open"]);
+
+            _.set(window, "cordova.plugins.settings", cordovaPluginSettings);
+            _.set(window, "cordova.plugins.Keyboard", cordovaPluginsKeyboard);
 
             module("app.shared");
             module("app.components", function($provide) {
@@ -126,14 +142,20 @@
                 });
             });
 
-            inject(function (___, _$rootScope_, $controller, _$ionicHistory_, _$localStorage_, _$q_, BrandAssetModel, UserAccountModel, UserModel,
+            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
+                AnalyticsUtil = mocks.AnalyticsUtil;
+                PlatformUtil = mocks.PlatformUtil;
+                LoginManager = mocks.LoginManager;
+            })]);
+
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, _$interval_,  _$localStorage_, _$q_, BrandAssetModel, UserAccountModel, UserModel,
                              globals) {
-                _ = ___;
                 $ionicHistory = _$ionicHistory_;
                 $localStorage = _$localStorage_;
                 $scope = _$rootScope_.$new();
                 $q = _$q_;
                 $rootScope = _$rootScope_;
+                $interval = _$interval_;
                 authenticateDeferred = $q.defer();
 
                 mockConfig.ANALYTICS.errorEvents = globals.USER_LOGIN.CONFIG.ANALYTICS.errorEvents;
@@ -144,6 +166,7 @@
                     $state                  : $state,
                     $stateParams            : $stateParams,
                     AnalyticsUtil           : AnalyticsUtil,
+                    $cordovaDialogs         : $cordovaDialogs,
                     $cordovaKeyboard        : $cordovaKeyboard,
                     globals                 : mockGlobals,
                     AuthenticationManager   : AuthenticationManager,
@@ -172,6 +195,8 @@
 
                 //setup an existing values to test them being modified
                 ctrl.globalError = "This is a previous error";
+
+                UserAuthorizationManager.verify.and.returnValue($q.resolve());
             });
 
             it("should set timedOut to $stateParams.timedOut", function () {
@@ -244,15 +269,46 @@
 
                     beforeEach(function () {
                         SecureStorage.get.and.returnValue($q.resolve());
-                        $rootScope.$digest();
                     });
 
                     it("should set vm.fingerprintProfileAvailable to true", function () {
+                        $rootScope.$digest();
+
                         expect(ctrl.fingerprintProfileAvailable).toBe(true);
                     });
 
                     it("should set vm.fingerprintAuthAvailable to true", function () {
+                        $rootScope.$digest();
+
                         expect(ctrl.fingerprintAuthAvailable).toBe(true);
+                    });
+
+                    describe("when the user logged out", function () {
+
+                        beforeEach(function () {
+                            $stateParams.logOut = true;
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should NOT start the fingerprint login process", function () {
+                            expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe("when the user has NOT logged out", function () {
+
+                        beforeEach(function () {
+                            $stateParams.logOut = false;
+
+                            $rootScope.$digest();
+                        });
+
+                        it("should start the fingerprint login process", function () {
+                            expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
+                                method: mockGlobals.USER_AUTHORIZATION_TYPES.FINGERPRINT
+                            }));
+                        });
                     });
                 });
 
@@ -270,14 +326,128 @@
                     it("should set vm.fingerprintAuthAvailable to true", function () {
                         expect(ctrl.fingerprintAuthAvailable).toBe(true);
                     });
+
+                    it("should NOT start the fingerprint login process", function () {
+                        expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
+                    });
                 });
             });
 
             describe("when fingerprint authentication is NOT available", function () {
-                beforeEach(function () {
-                    fingerprintAvailableDeferred.reject();
+                var error;
 
-                    $scope.$broadcast("$ionicView.beforeEnter");
+                beforeEach(function () {
+                    error = {
+                        isDeviceSupported: false,
+                        isSetup: false
+                    };
+                });
+
+                describe("when the device supports fingerprint auth", function () {
+                    var platform;
+
+                    describe("when the platform is Android", function () {
+
+                        beforeEach(function () {
+                            platform = "android";
+                            PlatformUtil.getPlatform.and.returnValue(platform);
+                        });
+
+                        describe("will behave such that", commonTests);
+                    });
+
+                    describe("when the platform is NOT Android", function () {
+                        beforeEach(function () {
+                            platform = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                            PlatformUtil.getPlatform.and.returnValue(platform);
+                        });
+
+                        describe("will behave such that", commonTests);
+                    });
+
+                    function commonTests() {
+                        var confirmDeferred;
+
+                        beforeEach(function () {
+                            confirmDeferred = $q.defer();
+                            error.isDeviceSupported = true;
+
+                            $cordovaDialogs.confirm.and.returnValue(confirmDeferred.promise);
+
+                            fingerprintAvailableDeferred.reject(error);
+
+                            $scope.$broadcast("$ionicView.beforeEnter");
+                            $rootScope.$digest();
+                        });
+
+                        it("should call SecureStorage.remove with the expected value", function () {
+                            expect(SecureStorage.remove).toHaveBeenCalledWith(_.toLower(ctrl.user.username));
+                        });
+
+                        it("should call $cordovaDialogs.confirm with the expected values", function () {
+                            expect($cordovaDialogs.confirm).toHaveBeenCalledWith(
+                                getFingerprintSettingsPromptText(platform),
+                                mockConfig.touchId.settingsPrompt.title, [
+                                    mockConfig.touchId.settingsPrompt.buttons.settings,
+                                    mockConfig.touchId.settingsPrompt.buttons.cancel
+                                ]);
+                        });
+
+                        describe("when the user confirms the dialog", function () {
+
+                            beforeEach(function () {
+                                confirmDeferred.resolve(1);
+                                $rootScope.$digest();
+                            });
+
+                            it("should open the platform's setting menu", function () {
+                                testPlatformSettingsWereOpened(platform);
+                            });
+                        });
+
+                        describe("when the user cancels the dialog", function () {
+
+                            beforeEach(function () {
+                                confirmDeferred.resolve(0);
+                                $rootScope.$digest();
+                            });
+
+                            it("should NOT open the platform's setting menu", function () {
+                                testPlatformSettingsWereNotOpened(platform);
+                            });
+                        });
+
+                        function testPlatformSettingsWereOpened(platform) {
+                            switch (_.toLower(platform)) {
+                                case "android":
+                                    expect(cordovaPluginSettings.openSetting).toHaveBeenCalledWith("security");
+                                    break;
+                                default:
+                                    expect(cordovaPluginSettings.open).toHaveBeenCalledWith();
+                            }
+                        }
+
+                        function testPlatformSettingsWereNotOpened(platform) {
+                            switch (_.toLower(platform)) {
+                                case "android":
+                                    expect(cordovaPluginSettings.openSetting).not.toHaveBeenCalled();
+                                    break;
+                                default:
+                                    expect(cordovaPluginSettings.open).not.toHaveBeenCalled();
+                            }
+                        }
+                    }
+                });
+
+                describe("when the device does NOT support fingerprint auth", function () {
+
+                    beforeEach(function () {
+                        error.isDeviceSupported = false;
+
+                        fingerprintAvailableDeferred.reject(error);
+
+                        $scope.$broadcast("$ionicView.beforeEnter");
+                    });
                 });
             });
 
@@ -397,13 +567,92 @@
         });
 
         describe("has a app:cordovaPause event handler function that", function () {
-            it("should set globalError property to false", function () {
+
+            beforeEach(function () {
                 ctrl.globalError = "an existing error.";
 
-                $rootScope.$broadcast( "app:cordovaPause" );
+                UserAuthorizationManager.verify.and.returnValue($q.resolve());
+            });
+
+            it("should set globalError property to false", function () {
+                $rootScope.$broadcast("app:cordovaPause");
                 $rootScope.$digest();
 
-                expect( ctrl.globalError ).toBe( false );
+                expect(ctrl.globalError).toBe(false);
+            });
+
+            describe("when there is a fingerprint profile set", function () {
+
+                beforeEach(function () {
+                    ctrl.fingerprintProfileAvailable = true;
+                });
+
+                describe("when the user is logging in", function () {
+
+                    beforeEach(function () {
+                        ctrl.isLoggingIn = true;
+                        $rootScope.$broadcast("app:cordovaPause");
+                        $rootScope.$digest();
+                    });
+
+                    describe("when 2000 ms has elapsed", function () {
+
+                        beforeEach(function () {
+                            $interval.flush(2000);
+                            $rootScope.$digest();
+                        });
+
+                        it("should NOT start the fingerprint login process", function () {
+                            expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+
+                describe("when the user is NOT logging in", function () {
+
+                    beforeEach(function () {
+                        ctrl.isLoggingIn = false;
+                        $rootScope.$broadcast("app:cordovaPause");
+                        $rootScope.$digest();
+                    });
+
+                    describe("when 2000 ms has elapsed", function () {
+
+                        beforeEach(function () {
+                            $interval.flush(2000);
+                            $rootScope.$digest();
+                        });
+
+                        it("should start the fingerprint login process", function () {
+                            expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
+                                method: mockGlobals.USER_AUTHORIZATION_TYPES.FINGERPRINT
+                            }));
+                        });
+                    });
+
+                    describe("when 2000 ms has NOT elapsed", function () {
+
+                        beforeEach(function () {
+                            $rootScope.$digest();
+                        });
+
+                        it("should NOT start the fingerprint login process", function () {
+                            expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+            });
+
+            describe("when there is NOT a fingerprint profile set", function () {
+
+                beforeEach(function () {
+                    ctrl.fingerprintProfileAvailable = true;
+                    $rootScope.$digest();
+                });
+
+                it("should NOT start the fingerprint login process", function () {
+                    expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
+                });
             });
         });
 
@@ -888,6 +1137,17 @@
         });
 
     });
+
+    function getFingerprintSettingsPromptText(platform) {
+        switch (_.toLower(platform)) {
+            case "android":
+                return _.get(mockConfig, "touchId.settingsPrompt.messageAndroid");
+            case "ios":
+                return _.get(mockConfig, "touchId.settingsPrompt.messageIos");
+            default:
+                return _.get(mockConfig, "touchId.settingsPrompt.messageAndroid");
+        }
+    }
 
     function verifyEventTracked(event) {
         expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);

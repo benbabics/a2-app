@@ -2,13 +2,14 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:17
+    // jshint maxparams:19
 
     /* @ngInject */
-    function LoginController(_, $cordovaKeyboard, $ionicHistory, $localStorage, $q, $rootScope, $scope, $state, $stateParams,
+    function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $ionicHistory, $interval, $localStorage, $q, $rootScope, $scope, $state, $stateParams,
                              globals, AnalyticsUtil, Fingerprint, LoadingIndicator, LoginManager, PlatformUtil, SecureStorage, UserAuthorizationManager) {
 
         var BAD_CREDENTIALS = "BAD_CREDENTIALS",
+            FINGERPRINT_PROMPT_RESUME_DELAY = 2000,
             USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION_TYPES,
             USERNAME_KEY = globals.LOCALSTORAGE.KEYS.USERNAME,
             vm = this;
@@ -16,6 +17,7 @@
         vm.config = globals.USER_LOGIN.CONFIG;
         vm.fingerprintAuthAvailable = false;
         vm.fingerprintProfileAvailable = false;
+        vm.isLoggingIn = false;
         vm.setupFingerprintAuth = false;
         vm.rememberMe = false;
         vm.timedOut = false;
@@ -62,7 +64,7 @@
         function beforeEnter() {
             // toggle StatusBar as overlay
             toggleStatusBarOverlaysWebView( true );
-            
+
             clearErrorMessage();
             toggleDisableScroll( true );
 
@@ -78,18 +80,20 @@
 
             vm.timedOut = $stateParams.timedOut;
 
-            Fingerprint.isAvailable()
+            doFingerprintAuthCheck()
                 .then(function () {
-                    var clientId = _.toLower(vm.user.username);
-
-                    //enable fingerprint login if there is an existing fingerprint profile for this user
-                    SecureStorage.get(clientId)
-                        .then(_.partial(_.set, vm, "fingerprintProfileAvailable", true))
-                        .finally(_.partial(_.set, vm, "fingerprintAuthAvailable", true));
+                    if (vm.fingerprintProfileAvailable && !$stateParams.logOut) {
+                        logInUser(true);
+                    }
                 })
                 .catch(function (error) {
-                    if (error.isDeviceSupported) {
-                        //TODO - Show native fingerprint settings dialog
+                    var clientId = _.toLower(vm.user.username);
+
+                    if (_.get(error, "isDeviceSupported")) {
+                        clearFingerprintProfile(clientId);
+
+                        showUserSettingsPopup()
+                            .finally(doFingerprintAuthCheck);
                     }
                 });
         }
@@ -100,8 +104,22 @@
             return SecureStorage.remove(clientId);
         }
 
+        function doFingerprintAuthCheck() {
+            return Fingerprint.isAvailable()
+                .then(function () {
+                    var clientId = _.toLower(vm.user.username);
+
+                    //enable fingerprint login if there is an existing fingerprint profile for this user
+                    return SecureStorage.get(clientId)
+                        .then(_.partial(_.set, vm, "fingerprintProfileAvailable", true))
+                        .finally(_.partial(_.set, vm, "fingerprintAuthAvailable", true));
+                });
+        }
+
         function logInUser(useFingerprintAuth) {
             var clientId = _.toLower(vm.user.username);
+
+            vm.isLoggingIn = true;
 
             clearErrorMessage();
 
@@ -157,7 +175,11 @@
                             }
                         });
                 })
-                .finally(LoadingIndicator.complete);
+                .finally(function () {
+                    LoadingIndicator.complete();
+
+                    vm.isLoggingIn = false;
+                });
         }
 
         function clearErrorMessage() {
@@ -189,6 +211,12 @@
             //clear any previous error
             $scope.$apply(function() {
                 vm.globalError = false;
+
+                //show the fingerprint login prompt if there's a fingerprint profile
+                //NOTE: A delay is needed as showing the prompt too early results in occasional app crashes.
+                if (vm.fingerprintProfileAvailable && !vm.isLoggingIn) {
+                    $interval(_.partial(logInUser, true), FINGERPRINT_PROMPT_RESUME_DELAY, 1);
+                }
             });
         }
 
@@ -202,6 +230,38 @@
                 vm.user.username = $localStorage[USERNAME_KEY];
                 vm.rememberMe = true;
             }
+        }
+
+        function showUserSettingsPopup() {
+            var getFingerprintSettingsPromptText = function () {
+                switch (_.toLower(PlatformUtil.getPlatform())) {
+                    case "android":
+                        return _.get(vm, "config.touchId.settingsPrompt.messageAndroid");
+                    case "ios":
+                        return _.get(vm, "config.touchId.settingsPrompt.messageIos");
+                    default:
+                        return _.get(vm, "config.touchId.settingsPrompt.messageAndroid");
+                }
+            };
+
+            return $cordovaDialogs.confirm(
+                getFingerprintSettingsPromptText(),
+                vm.config.touchId.settingsPrompt.title, [
+                    vm.config.touchId.settingsPrompt.buttons.settings,
+                    vm.config.touchId.settingsPrompt.buttons.cancel
+                ])
+                .then(function (result) {
+                    if (result === 1) {
+                        switch (_.toLower(PlatformUtil.getPlatform())) {
+                            case "android":
+                                cordova.plugins.settings.openSetting("security");
+                                break;
+                            default:
+                                cordova.plugins.settings.open();
+                        }
+
+                    }
+                });
         }
 
         function trackErrorEvent(errorReason) {

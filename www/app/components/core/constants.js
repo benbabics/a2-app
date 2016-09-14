@@ -107,6 +107,15 @@
                 },
                 "disabled": {
                     "label": "Set Up Touch ID"
+                },
+                "settingsPrompt": {
+                    "title": "",
+                    "messageAndroid": "Fingerprint authentication must be enabled on your device to use this feature.",
+                    "messageIos": "Touch ID\u00AE must be enabled on your device to use this feature.",
+                    "buttons": {
+                        "cancel": "Cancel",
+                        "settings": "Settings"
+                    }
                 }
             },
             "submitButton": "Log In",
@@ -125,8 +134,8 @@
                 "line2": "inactivity. Please login to access your account."
             },
             "enrollment": {
-              label: "Enroll Now"
-            },
+                "label": "Enroll Now"
+            }
         }
     };
 

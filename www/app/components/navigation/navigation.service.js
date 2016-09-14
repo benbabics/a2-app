@@ -51,7 +51,7 @@
         function goToLogOut(params) {
             return LoginManager.logOut()
                 .finally(function () {
-                    return $state.go(globals.LOGIN_STATE, params);
+                    return $state.go(globals.LOGIN_STATE, _.merge({logOut: true}, params));
                 });
         }
 
