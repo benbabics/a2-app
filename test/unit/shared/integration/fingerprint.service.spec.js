@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    fdescribe("A Fingerprint Service", function () {
+    describe("A Fingerprint Service", function () {
 
         var CONSTANTS,
             IOS_PASSCODE_NOT_SET = -5,
