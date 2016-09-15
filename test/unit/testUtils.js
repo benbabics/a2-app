@@ -518,6 +518,7 @@ var TestUtils = (function () {
                 "waitForCordovaPlatform",
                 "isOnline"
             ]),
+            SecureStorage: jasmine.createSpyObj("SecureStorage", ["isAvailable", "set", "get", "remove"]),
             UrbanAirship: jasmine.createSpyObj("UrbanAirship", ["ready"])
         };
 

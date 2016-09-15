@@ -6,17 +6,23 @@
 
     /* @ngInject */
     function SecureStorage(_, $q, globals, Logger, LoggerUtil, PlatformUtil) {
-        var secureStorage;
+        var secureStorage,
+            availableDeferred = $q.defer();
 
         init();
 
         return {
-            set   : set,
-            get   : get,
-            remove: remove
+            isAvailable: isAvailable,
+            set        : set,
+            get        : get,
+            remove     : remove
         };
 
         //Public functions:
+        function isAvailable() {
+            return availableDeferred.promise;
+        }
+
         function set(key, value) {
             return whenReady(function (secureStorage) {
                 var deferred = $q.defer();
@@ -50,16 +56,14 @@
         //Private functions:
         function init() {
             PlatformUtil.waitForCordovaPlatform(function () {
-                var deferred = $q.defer();
-
                 //initialize SecureStorage plugin
                 secureStorage = new cordova.plugins.SecureStorage(
-                    deferred.resolve,
-                    deferred.reject,
+                    availableDeferred.resolve,
+                    availableDeferred.reject,
                     globals.LOCALSTORAGE.CONFIG.keyPrefix
                 );
 
-                return deferred.promise
+                return availableDeferred.promise
                     .catch(function (error) {
                         Logger.info("SecureStorage is not available on this device. " + LoggerUtil.getErrorMessage(error));
                         return $q.reject(error);

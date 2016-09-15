@@ -11,6 +11,9 @@
         //Private members:
         var CONSTANTS = globals.FINGERPRINT_AUTH,
             NOT_SUPPORTED_ERROR = "Fingerprint authentication is not available on this platform.",
+            IOS_PASSCODE_NOT_SET = -5,
+            IOS_TOUCH_ID_NOT_AVAILABLE = -6,
+            IOS_TOUCH_ID_NOT_ENROLLED = -7,
             PLATFORM_ANDROID = "android",
             PLATFORM_IOS = "ios",
             platform,
@@ -39,8 +42,41 @@
 
         //Public functions:
         function isAvailable() {
-            return $q.when(isSupportedPlatform())
-                .then(_.partial(doPluginCommand, "isAvailable"));
+            return isSupportedPlatform()
+                .then(SecureStorage.isAvailable)
+                .then(_.partial(doPluginCommand, "isAvailable"))
+                .catch(function (availabilityDetails) {
+                    var options = {
+                        isDeviceSupported: false,
+                        isSetup          : false
+                    };
+
+                    if (platform === PLATFORM_IOS && _.has(availabilityDetails, "code")) {
+                        options.isDeviceSupported = !_.includes([
+                            IOS_TOUCH_ID_NOT_AVAILABLE
+                        ], availabilityDetails.code);
+
+                        options.isSetup = options.isDeviceSupported && !_.includes([
+                            IOS_PASSCODE_NOT_SET,
+                            IOS_TOUCH_ID_NOT_ENROLLED
+                        ], availabilityDetails.code);
+                    }
+
+                    return $q.reject(options);
+                })
+                .then(function (availabilityDetails) {
+                    //perform additional checks on Android to determine if auth is available
+                    if (platform !== PLATFORM_ANDROID || _.get(availabilityDetails, "isAvailable", true)) {
+                        return availabilityDetails;
+                    }
+                    else {
+                        //fingerprint auth not available
+                        return $q.reject({
+                            isDeviceSupported: _.get(availabilityDetails, "isHardwareDetected", false),
+                            isSetup          : _.get(availabilityDetails, "hasEnrolledFingerprints", false)
+                        });
+                    }
+                });
         }
 
         function verify(options) {
@@ -90,16 +126,21 @@
                         commandParams,
                         commandFuncMapping = commonPluginMappings[command];
 
-                    if (_.isEmpty(commandFuncMapping)) {
-                        throw new Error("Unrecognized plugin command: " + command);
-                    }
-
                     //get the plugin function for the command and the relevant parameters
-                    commandFunc = _.isFunction(commandFuncMapping) ? commandFuncMapping : fingerprint[commandFuncMapping];
-                    commandParams = getPluginCommandParams(command, options).concat([deferred.resolve, deferred.reject]);
+                    if (_.isFunction(commandFuncMapping)) {
+                        return deferred.resolve(commandFuncMapping());
+                    }
+                    else {
+                        if (_.isEmpty(commandFuncMapping)) {
+                            throw new Error("Unrecognized plugin command: " + command);
+                        }
 
-                    //call the plugin function with the params
-                    commandFunc.apply(commandFunc, commandParams);
+                        commandFunc = fingerprint[commandFuncMapping];
+                        commandParams = getPluginCommandParams(command, options).concat([deferred.resolve, deferred.reject]);
+
+                        //call the plugin function with the params
+                        commandFunc.apply(commandFunc, commandParams);
+                    }
                 });
 
             return deferred.promise;
@@ -173,12 +214,17 @@
         function init() {
             PlatformUtil.waitForCordovaPlatform(function () {
                 platform = _.toLower(PlatformUtil.getPlatform());
-                commonPluginMappings = getCommonPluginMappings();
+
+                isSupportedPlatform().then(function () {
+                    commonPluginMappings = getCommonPluginMappings();
+                });
             });
         }
 
         function isSupportedPlatform() {
-            return (platform === PLATFORM_ANDROID || platform === PLATFORM_IOS);
+            return PlatformUtil.waitForCordovaPlatform(function () {
+                return (platform === PLATFORM_ANDROID || platform === PLATFORM_IOS) ? $q.resolve() : $q.reject("Unsupported platform.");
+            });
         }
     }
 
