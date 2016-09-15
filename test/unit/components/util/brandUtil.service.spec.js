@@ -37,7 +37,7 @@
         beforeEach(function () {
 
             //mock dependencies:
-            BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericAnalyticsTrackingId", "getGenericBrandAssets"]);
+            BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericAnalyticsTrackingId", "getGenericBrandAssets", "loadBundledBrand"]);
             FileUtil = jasmine.createSpyObj("FileUtil", [
                 "checkFileExists",
                 "checkDirectoryExists",
@@ -46,22 +46,17 @@
                 "removeFile",
                 "writeFile"
             ]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
 
             module("app.shared");
             module("app.components", function ($provide) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("BrandManager", BrandManager);
                 $provide.value("FileUtil", FileUtil);
             });
             module("app.html");
+
+            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
+                AnalyticsUtil = mocks.AnalyticsUtil;
+            })]);
 
             inject(function (_$localStorage_, _$rootScope_, _$state_, _$q_, _$window_, _globals_, _moment_,
                              _BrandAssetModel_, _BrandUtil_, _LoggerUtil_) {
