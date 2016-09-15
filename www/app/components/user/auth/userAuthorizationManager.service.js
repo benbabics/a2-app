@@ -16,12 +16,13 @@
         //////////////////////
         //Public functions:
 
-        function verify(options) {
-            switch (_.get(options, "method", USER_AUTHORIZATION_TYPES.SECRET)) {
+        function verify(credentials, options) {
+            options = options || {};
+            switch (_.get(credentials, "method", USER_AUTHORIZATION_TYPES.SECRET)) {
                 case USER_AUTHORIZATION_TYPES.SECRET:
-                    return verifyWithSecret(_.get(options, "clientId"), _.get(options, "clientSecret"));
+                    return verifyWithSecret(_.get(credentials, "clientId"), _.get(credentials, "clientSecret"), options);
                 case USER_AUTHORIZATION_TYPES.FINGERPRINT:
-                    return verifyWithFingerprint(_.get(options, "clientId"), _.get(options, "clientSecret"));
+                    return verifyWithFingerprint(_.get(credentials, "clientId"), _.get(credentials, "clientSecret"), options);
                 default:
                     return $q.reject("Unrecognized user authorization type.");
             }
@@ -40,9 +41,11 @@
             }
         }
 
-        function verifyWithFingerprint(clientId, clientSecret) {
+        function verifyWithFingerprint(clientId, clientSecret, options) {
+            options = _.extend( { bypassFingerprint: null }, options );
+
             var verificationOptions = {clientId: clientId},
-                bypassFingerprint = false,
+                bypassFingerprint = options.bypassFingerprint,
                 termsModal;
 
             //check to see if the user already set up a fingerprint profile
@@ -50,7 +53,7 @@
                 //set up a new fingerprint profile with this clientId
                 .catch(function () {
                     //authenticate the account with the given username/password
-                    return verifyWithSecret(clientId, clientSecret)
+                    return verifyWithSecret(clientId, clientSecret, options)
                         //prompt the user to accept the terms of use
                         .then(_.partial(Modal.createByType, globals.MODAL_TYPES.FINGERPRINT_AUTH_TERMS, {
                             scopeVars: {getTerms: getFingerprintTerms}
@@ -71,7 +74,7 @@
                         //register a new fingerprint profile for this user
                         .then(_.partial(_.set, verificationOptions, "clientSecret", clientSecret))
                         .catch(function (error) {
-                            if (termsModal && termsModal.isShown()) {
+                            if (_.isNull(bypassFingerprint) && termsModal && termsModal.isShown()) {
                                 //user declined the terms, so bypass fingerprint auth
                                 bypassFingerprint = true;
                             }
@@ -97,10 +100,10 @@
                         return $q.reject(errorStr);
                     }
                 })
-                .then(_.partial(verifyWithSecret, clientId, _));
+                .then(_.partial(verifyWithSecret, clientId, _, options));
         }
 
-        function verifyWithSecret(clientId, clientSecret) {
+        function verifyWithSecret(clientId, clientSecret, options) {
             if (_.isNil(clientId)) {
                 return $q.reject("clientId is required to verify user with secret.");
             }

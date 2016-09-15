@@ -2,11 +2,11 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:19
+    // jshint maxparams:20
 
     /* @ngInject */
     function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $ionicHistory, $interval, $localStorage, $q, $rootScope, $scope, $state, $stateParams,
-                             globals, AnalyticsUtil, Fingerprint, LoadingIndicator, LoginManager, PlatformUtil, SecureStorage, UserAuthorizationManager) {
+                             globals, AnalyticsUtil, Fingerprint, LoadingIndicator, LoginManager, PlatformUtil, SecureStorage, UserAuthorizationManager, sessionCredentials) {
 
         var BAD_CREDENTIALS = "BAD_CREDENTIALS",
             FINGERPRINT_PROMPT_RESUME_DELAY = 2000,
@@ -117,7 +117,8 @@
         }
 
         function logInUser(useFingerprintAuth) {
-            var clientId = _.toLower(vm.user.username);
+            var clientId = _.toLower(vm.user.username),
+                clientSecret = vm.user.password;
 
             vm.isLoggingIn = true;
 
@@ -130,13 +131,25 @@
 
             return UserAuthorizationManager.verify({
                     clientId: clientId,
-                    clientSecret: vm.user.password,
+                    clientSecret: clientSecret,
                     method: useFingerprintAuth ? USER_AUTHORIZATION_TYPES.FINGERPRINT : USER_AUTHORIZATION_TYPES.SECRET
                 })
                 .then(LoadingIndicator.begin)
                 .then(LoginManager.logIn)
                 .then(function () {
                     trackSuccessEvent();
+
+                    // persist session credentials for one-click fingerprint auth in settings
+                    // NOTE: sessionCredentials service (itself) will listen for "app:logout" event
+                    // and handle clearing these credentials from the session.
+                    if ( vm.fingerprintProfileAvailable ) {
+                        SecureStorage.get( clientId ).then(function(clientSecret) {
+                            sessionCredentials.set({ clientId: clientId, clientSecret: clientSecret });
+                        });
+                    }
+                    else {
+                        sessionCredentials.set({ clientId: clientId, clientSecret: clientSecret });
+                    }
 
                     // Store the Username or not based on Remember Me checkbox
                     rememberUsername(vm.rememberMe, vm.user.username);
