@@ -2,22 +2,23 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
-    // jshint maxparams:9
+    // jshint maxparams:11
 
     /* @ngInject */
-    function SettingsController($q, $scope, $localStorage, globals, PlatformUtil, Fingerprint, UserAuthorizationManager, SecureStorage, sessionCredentials) {
+    function SettingsController($q, $scope, $localStorage, $cordovaDialogs, $timeout, globals, PlatformUtil, Fingerprint, UserAuthorizationManager, SecureStorage, sessionCredentials, wexTruncateStringFilter) {
 
-        var DEVICE_IOS               = "ios",
-            DEVICE_ANDROID           = "android",
-            USERNAME_KEY             = globals.LOCALSTORAGE.KEYS.USERNAME,
+        var USERNAME_KEY             = globals.LOCALSTORAGE.KEYS.USERNAME,
             USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION_TYPES;
 
         var platform,
             vm = this;
 
+        vm.config = globals.SETTINGS.CONFIG;
         vm.username = null;
-        vm.fingerprintAuthTextLabel    = "";
-        vm.fingerprintProfileAvailable = null;
+        vm.platformContent = {};
+        vm.fingerprintProfileAvailable = false;
+
+        vm.handleFingerprintProfileChange = handleFingerprintProfileChange;
 
         activate();
 
@@ -25,7 +26,6 @@
         // Controller initialization
         function activate() {
             $scope.$on( "$ionicView.beforeEnter", beforeEnter );
-            $scope.$watch( "vm.fingerprintProfileAvailable", handleFingerprintProfileChange );
         }
 
         function beforeEnter() {
@@ -61,17 +61,11 @@
         }
 
         function setupContent(platform) {
-            switch (platform) {
-                case DEVICE_IOS:
-                    vm.fingerprintAuthTextLabel = "Use Touch ID";
-                    break;
-                case DEVICE_ANDROID:
-                    vm.fingerprintAuthTextLabel = "Use fingerprint authentication";
-                    break;
-            }
+            vm.platformContent = vm.config.platformContent[ platform ];
         }
 
-        function handleFingerprintProfileChange(shouldCreate) {
+        function handleFingerprintProfileChange() {
+            var shouldCreate = vm.fingerprintProfileAvailable === true;
             sessionCredentials.get().then(function(credentials) {
                 if ( shouldCreate ) { createFingerprintProfile(credentials); }
                 else { destroyFingerprintProfile(credentials.clientId); }
@@ -81,11 +75,37 @@
         function createFingerprintProfile(credentials) {
             _.extend( credentials, { method: USER_AUTHORIZATION_TYPES.FINGERPRINT } );
             UserAuthorizationManager.verify( credentials, { bypassFingerprint: false } )
+                .then( _.partial(renderFingerprintProfileSuccessMessage, credentials.clientId) )
                 .catch(function() { vm.fingerprintProfileAvailable = false; });
         }
 
         function destroyFingerprintProfile(clientId) {
-            SecureStorage.remove( clientId );
+            var content = vm.config.removeFingerprintProfileConfirm,
+                message = _.template( content.message )({
+                    fingerprintAuthName: vm.platformContent.fingerprintAuthName,
+                    username:            wexTruncateStringFilter( clientId )
+                });
+
+            $cordovaDialogs.confirm(
+                message, "", [ content.noButton, content.yesButton ]
+            )
+            .then(function (btnIndex) {
+                if ( btnIndex === 2 ) { SecureStorage.remove( clientId ); }
+                else { vm.fingerprintProfileAvailable = true; }
+            });
+        }
+
+        function renderFingerprintProfileSuccessMessage(clientId) {
+            var message = _.template( vm.config.createFingerprintAuthMessage )({
+                    fingerprintAuthName: vm.platformContent.fingerprintAuthName,
+                    username:            wexTruncateStringFilter( clientId )
+                });
+
+            vm.fingerprintProfileSuccessMessage = message;
+
+            $timeout(function() {
+                vm.fingerprintProfileSuccessMessage = "";
+            }, 3000);
         }
 
     }

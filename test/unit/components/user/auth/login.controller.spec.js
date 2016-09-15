@@ -22,6 +22,7 @@
         UserAuthorizationManager,
         SecureStorage,
         fingerprintAvailableDeferred,
+        sessionCredentials,
         cordovaPluginsKeyboard,
         cordovaPluginSettings,
         mockGlobals = {
@@ -120,6 +121,7 @@
             Fingerprint = jasmine.createSpyObj("Fingerprint", ["isAvailable"]);
             UserAuthorizationManager = jasmine.createSpyObj("UserAuthorizationManager", ["verify"]);
             SecureStorage = jasmine.createSpyObj("SecureStorage", ["get", "remove"]);
+            sessionCredentials = jasmine.createSpyObj( "sessionCredentials", ["set"] );
             $cordovaDialogs = jasmine.createSpyObj("$cordovaDialogs", ["confirm"]);
             cordovaPluginsKeyboard = jasmine.createSpyObj("cordova.plugins.Keyboard", ["disableScroll"]);
             cordovaPluginSettings = jasmine.createSpyObj("cordova.plugins.settings", ["openSetting", "open"]);
@@ -174,7 +176,8 @@
                     PlatformUtil            : PlatformUtil,
                     Fingerprint             : Fingerprint,
                     UserAuthorizationManager: UserAuthorizationManager,
-                    SecureStorage           : SecureStorage
+                    SecureStorage           : SecureStorage,
+                    sessionCredentials      : sessionCredentials
                 });
 
                 //setup spies:
@@ -800,6 +803,7 @@
 
                     beforeEach(function () {
                         spyOn($ionicHistory, "nextViewOptions");
+                        SecureStorage.get.and.returnValue($q.resolve());
 
                         logInDeferred.resolve();
                     });
@@ -808,12 +812,20 @@
 
                         beforeEach(function () {
                             ctrl.rememberMe = true;
+                            SecureStorage.get.and.returnValue( $q.resolve(ctrl.user.password) );
 
                             $scope.$digest();
                         });
 
                         it("should set the username in Local Storage", function () {
                             expect($localStorage.USERNAME).toEqual(ctrl.user.username);
+                        });
+
+                        it("should store credentials in sessionCredentials service", function () {
+                            expect( sessionCredentials.set ).toHaveBeenCalledWith({
+                                clientId:     ctrl.user.username,
+                                clientSecret: ctrl.user.password
+                            });
                         });
 
                         it("should call AnalyticsUtil.trackEvent with the expected event", function () {

@@ -1,10 +1,14 @@
-<ion-view view-title="Settings">
+<ion-view view-title="{{ ::vm.config.title }}" class="page-settings">
     <ion-content>
-        <div class="content padding">
+        <div class="content">
+            <div class="alert alert-success" ng-class="{ 'is-visible': vm.fingerprintProfileSuccessMessage }">
+              <div class="alert-content">{{ ::vm.fingerprintProfileSuccessMessage }}</div>
+            </div>
+
             <div class="list">
               <ion-toggle ng-model="vm.fingerprintProfileAvailable"
-                          ng-checked="vm.fingerprintProfileAvailable">
-                {{ vm.fingerprintAuthTextLabel }}
+                          ng-change="vm.handleFingerprintProfileChange()">
+                {{ ::vm.config.fingerprintAuthTextLabel }} {{ vm.platformContent.fingerprintAuthName }}
               </ion-toggle>
             </div>
         </div>

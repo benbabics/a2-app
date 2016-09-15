@@ -10,11 +10,9 @@
         SecureStorage,
         sessionCredentials,
         ctrl,
-        authenticateDeferred,
-        fingerprintAvailableDeferred,
         credentials,
         mockGlobals = {
-            "LOCALSTORAGE" : {
+            "LOCALSTORAGE": {
                 "CONFIG": {
                     "keyPrefix": "FLEET_MANAGER-"
                 },
@@ -24,6 +22,26 @@
             },
             "USER_AUTHORIZATION_TYPES": {
                 "FINGERPRINT": "FINGERPRINT"
+            },
+            "SETTINGS": {
+                "CONFIG": {
+                    "title": "Settings",
+                    "platformContent": {
+                        "android": {
+                            "fingerprintAuthName": "fingerprint authentication"
+                        },
+                        "ios": {
+                            "fingerprintAuthName": "Touch ID®"
+                        }
+                    },
+                    "fingerprintAuthTextLabel": "Use",
+                    "removeFingerprintProfileConfirm": {
+                        "message":   "Are you sure you want to turn off <%= fingerprintAuthName %> for your Username <%= username %>?",
+                        "yesButton": "Yes",
+                        "noButton":  "No"
+                    },
+                    "createFingerprintAuthMessage": "<%= fingerprintAuthName %> is now setup for your Username <%= username %>."
+                }
             }
         };
 
@@ -69,18 +87,13 @@
                     sessionCredentials:       sessionCredentials,
                     UserAuthorizationManager: UserAuthorizationManager,
                 });
-
-                authenticateDeferred         = $q.defer();
-                fingerprintAvailableDeferred = $q.defer();
-
-                //setup mocks:
-                Fingerprint.isAvailable.and.returnValue( fingerprintAvailableDeferred.promise );
-                sessionCredentials.get.and.returnValue( $q.resolve(credentials) );
             });
-
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
+            beforeEach(function () {
+                Fingerprint.isAvailable.and.returnValue( $q.resolve() );
+            });
 
             describe("when the Username is stored in Local Storage", function () {
                 beforeEach(function() {
@@ -114,7 +127,6 @@
 
             describe("defaults the value of the fingerprintProfileAvailable property", function () {
                 beforeEach(function () {
-                    fingerprintAvailableDeferred.resolve();
                     $scope.$broadcast( "$ionicView.beforeEnter" );
                 });
 
@@ -136,34 +148,37 @@
                     });
 
                     it("should NOT set fingerprintProfileAvailable to true", function () {
-                        expect( ctrl.fingerprintProfileAvailable ).toBeNull();
+                        expect( ctrl.fingerprintProfileAvailable ).toBe( false );
                     });
                 });
             });
         });
 
-        describe("observes the value of the fingerprintProfileAvailable property that", function () {
+        describe("has a vm.handleFingerprintProfileChange() method that", function () {
             beforeEach(function () {
+                sessionCredentials.get.and.returnValue( $q.resolve(credentials) );
                 UserAuthorizationManager.verify.and.returnValue( $q.resolve() );
                 SecureStorage.remove.and.returnValue( $q.resolve() );
             });
 
-            describe("when it becomes true", function () {
-                beforeEach(function () {
-                    $scope.$apply( "vm.fingerprintProfileAvailable=true" );
-                });
-
+            describe("when vm.fingerprintProfileAvailable is true", function () {
                 it("should send a message to UserAuthorizationManager.verify() with session credentials", function () {
+                    ctrl.fingerprintProfileAvailable = true;
+                    ctrl.handleFingerprintProfileChange();
+                    $scope.$digest();
+
+                    expect( sessionCredentials.get ).toHaveBeenCalled();
                     expect( UserAuthorizationManager.verify ).toHaveBeenCalledWith( credentials, { bypassFingerprint: false } );
                 });
             });
 
-            describe("when it becomes false", function () {
-                beforeEach(function () {
-                    $scope.$apply( "vm.fingerprintProfileAvailable=false" );
-                });
-
+            describe("when vm.fingerprintProfileAvailable is false", function () {
                 it("should send a message to SecureStorage.remove() with the session clientId", function () {
+                    ctrl.fingerprintProfileAvailable = false;
+                    ctrl.handleFingerprintProfileChange();
+                    $scope.$digest();
+
+                    expect( sessionCredentials.get ).toHaveBeenCalled();
                     expect( SecureStorage.remove ).toHaveBeenCalledWith( credentials.clientId );
                 });
             });

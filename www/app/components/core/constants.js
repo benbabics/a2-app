@@ -661,6 +661,27 @@
         }
     };
 
+    appGlobals.SETTINGS = {
+        "CONFIG": {
+            "title": "Settings",
+            "platformContent": {
+                "android": {
+                    "fingerprintAuthName": "fingerprint authentication"
+                },
+                "ios": {
+                    "fingerprintAuthName": "Touch ID®"
+                }
+            },
+            "fingerprintAuthTextLabel": "Use",
+            "removeFingerprintProfileConfirm": {
+                "message":   "Are you sure you want to turn off <%= fingerprintAuthName %> for your Username <%= username %>?",
+                "yesButton": "Yes",
+                "noButton":  "No"
+            },
+            "createFingerprintAuthMessage": "<%= fingerprintAuthName %> is now setup for your Username <%= username %>."
+        }
+    };
+
     appGlobals.NAV_BAR = {
         "CONFIG": {}
     };

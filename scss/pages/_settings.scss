@@ -1,0 +1,28 @@
+.page-settings {
+  background-color: #e2e3e4;
+
+  .alert {
+    overflow: hidden;
+    max-height: 0;
+    margin-bottom: 20px;
+    -webkit-transition: max-height 1s ease-in-out;
+    transition:         max-height 1s ease-in-out;
+
+    &.is-visible {
+      max-height: 150px;
+    }
+
+    .alert-content {
+      padding: 16px;
+      color: #333;
+      font-family: "open_sansregular";
+      font-size: 13px;
+    }
+
+    &.alert-success .alert-content {
+      background-color: #dff0d8;
+      border: 1px solid #005100;
+    }
+  }
+
+}
