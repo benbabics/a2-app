@@ -1,0 +1,134 @@
+.page-landing {
+  @extend .ui-page;
+
+  section {
+    margin-bottom: 10px;
+  }
+
+  .company-details {
+    .card {
+      padding: 10px 13px;
+
+      .item {
+        padding: 0;
+      }
+    }
+
+    .company-name,
+    .account-number {
+      margin-bottom: 0;
+      @extend .color-gray-dark;
+    }
+    .company-name {
+      @extend .text-lg;
+    }
+    .account-number {
+      @extend .text-sm;
+    }
+  }
+
+  .account-overview {
+    .item {
+      @extend .text-sm;
+      @extend .color-gray;
+
+      &.item-text-wrap {
+        text-align: center;
+      }
+    }
+    .item-currency {
+      float: right;
+      @extend .color-gray-dark;
+    }
+
+    .balance-current {
+      font-family: 'open_sanssemibold';
+
+      .item-currency {
+        @extend .text-xxl;
+        font-family: 'open_sansregular';
+      }
+    }
+    .balance-statement .item-currency {
+      @extend .text-lg;
+    }
+
+    .chart-wrapper {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+
+      .labels,
+      .chart {
+        flex: 1;
+      }
+      .labels {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        text-align: left;
+
+        &:first-of-type {
+          order: 2;
+        }
+        &:last-of-type {
+          order: 3;
+        }
+
+        .label {
+          position: relative;
+          padding: 15px 25px;
+
+          .text-amount,
+          .text-title {
+            line-height: normal;
+          }
+          .text-amount {
+            @extend .text-md;
+            @extend .color-gray-dark;
+          }
+          .text-title {
+            @extend .color-gray;
+          }
+
+          &:before {
+            position: absolute;
+            display: block;
+            top:  calc(50% - 5px);
+            left: 10px;
+            width:  10px;
+            height: 10px;
+            font-size: 10px;
+            font-family: 'FontAwesome';
+            content: "\f111";
+          }
+        }
+      }
+      .chart {
+        order: 1;
+        text-align: center;
+      }
+
+      @media (min-width: 380px) {
+        flex-direction: row;
+
+        .labels {
+          flex-direction: column;
+
+          &:first-of-type {
+            order: 1;
+            text-align: right;
+
+            .label:before {
+              left:  auto;
+              right: 10px;
+            }
+          }
+        }
+        .chart {
+          order: 2;
+        }
+      }
+    }
+  }
+}

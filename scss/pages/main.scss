@@ -1,4 +1,105 @@
 @import "alerts";
+@import "landing";
 @import "login";
 @import "notifications";
 @import "settings";
+
+.ui-page {
+  $color-blue:       #3a97b5;
+  $color-gray:       #7f7f7f;
+  $color-gray-light: #ccc;
+  $color-gray-dark:  #333;
+
+  font-family: 'open_sansregular';
+  background-color: #e2e3e4;
+
+  .scroll-refresher {
+    background-color: #fff;
+  }
+
+  .color-blue {
+    color: $color-blue;
+  }
+  .color-gray {
+    color: $color-gray;
+  }
+  .color-gray-light {
+    color: $color-gray-light;
+  }
+  .color-gray-dark {
+    color: $color-gray-dark;
+  }
+
+  .text-sm {
+    font-size: 12px;
+  }
+  .text-md {
+    font-size: 14px;
+  }
+  .text-lg {
+    font-size: 16px;
+  }
+  .text-xl {
+    font-size: 18px;
+  }
+  .text-xxl {
+    font-size: 22px;
+  }
+
+  .list {
+    .item {
+      @extend .color-blue;
+
+      &.item-icon-left {
+        padding-left: 50px;
+      }
+      &.item-icon-right {
+        padding-right: 50px;
+      }
+      &.item-icon-left.item-icon-right {
+        .icon:first-of-type {
+          @extend .text-xl;
+          @extend .color-gray;
+        }
+        .icon:last-of-type {
+          right: 16px;
+          @extend .text-lg;
+
+          &:before {
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+
+  .card {
+    margin: 0;
+
+    &:not(.list) > .item {
+      border: none;
+
+      &.item-divider {
+        min-height: auto;
+        @extend .text-sm;
+        @extend .color-gray-light;
+        text-transform: uppercase;
+        font-family: 'open_sanssemibold';
+        background-color: transparent;
+      }
+      &.item-divider + .item-text-wrap {
+        margin-top: 8px;
+      }
+    }
+
+    .list {
+      padding-left:  16px;
+      padding-right: 16px;
+
+      .item {
+        padding: 8px 0;
+        border-color: $color-gray-light;
+      }
+    }
+  }
+}

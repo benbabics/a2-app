@@ -164,17 +164,17 @@
         "CHART" : {
             "options"  : {
                 animation            : false,
-                percentageInnerCutout: 40,
+                percentageInnerCutout: 70,
                 showTooltips         : false,
                 segmentStrokeWidth   : 1,
                 scaleOverride        : true,
                 responsive           : false
             },
             "colors"   : {
-                availableCreditPositive: "#39802b",
-                availableCreditNegative: "#b30308",
-                billedAmount           : "#334c5b",
-                unbilledAmount         : "#3799b3"
+                availableCreditPositive: "#3eb049",
+                availableCreditNegative: "#ff0000",
+                billedAmount           : "#324e5d",
+                unbilledAmount         : "#34b39d"
             },
             "constants": {
                 "negativeCreditData": 1 //forces angular-chart.js to render negative/zero credit data as a solid/filled graph

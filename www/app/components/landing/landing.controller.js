@@ -15,6 +15,7 @@
             vm = this;
 
         vm.config = globals.LANDING.CONFIG;
+        vm.chartColors = globals.LANDING.CHART.colors;
         vm.invoiceSummary = {};
         vm.billingCompany = {};
         vm.branding = {};
@@ -64,7 +65,7 @@
                 return {
                     options: globals.LANDING.CHART.options,
                     labels : [vm.config.availableCredit],
-                    colors : [globals.LANDING.CHART.colors.availableCreditNegative],
+                    colors : [vm.chartColors.availableCreditNegative],
                     data   : [globals.LANDING.CHART.constants.negativeCreditData]
                 };
             }
@@ -73,7 +74,7 @@
                 return {
                     options: globals.LANDING.CHART.options,
                     labels : [vm.config.availableCredit],
-                    colors : [globals.LANDING.CHART.colors.availableCreditPositive],
+                    colors : [vm.chartColors.availableCreditPositive],
                     data   : [vm.invoiceSummary.availableCredit]
                 };
             }
@@ -81,7 +82,7 @@
             return {
                 options: globals.LANDING.CHART.options,
                 labels : [vm.config.availableCredit, vm.config.billedAmount, vm.config.unbilledAmount],
-                colors : [globals.LANDING.CHART.colors.availableCreditPositive, globals.LANDING.CHART.colors.billedAmount, globals.LANDING.CHART.colors.unbilledAmount],
+                colors : [vm.chartColors.availableCreditPositive, vm.chartColors.billedAmount, vm.chartColors.unbilledAmount],
                 data   : [vm.invoiceSummary.availableCredit, vm.invoiceSummary.billedAmount, vm.invoiceSummary.unbilledAmount]
             };
 

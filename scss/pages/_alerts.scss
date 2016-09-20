@@ -1,7 +1,3 @@
 .page-alerts {
-  background-color: #e2e3e4;
-
-  .scroll-refresher {
-    background-color: #fff;
-  }
+  @extend .ui-page;
 }

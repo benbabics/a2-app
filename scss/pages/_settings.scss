@@ -1,5 +1,5 @@
 .page-settings {
-  background-color: #e2e3e4;
+  @extend .ui-page;
 
   .alert {
     overflow: hidden;
