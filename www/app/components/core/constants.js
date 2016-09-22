@@ -624,7 +624,7 @@
                 }
             },
             "title"         : "Transactions",
-            "reloadDistance": "5%",
+            "reloadDistance": "50%",
             "emptyList"     : "No Records Found.",
             "buttonLabels"  : {
                 "date"  : "Date",
