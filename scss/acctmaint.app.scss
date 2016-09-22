@@ -116,6 +116,7 @@ $user-login-error-message-animation: all linear 0.5s;
                 .item-toggle {
                     border-style: none;
                     padding-right: 0px;
+                    text-overflow: inherit;
 
                     .toggle {
                         top: 0px;
