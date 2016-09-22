@@ -138,23 +138,34 @@ $bar-notification-multi-line-height: $bar-height + $bar-title-font-size;
   :not(.button-bar) > & {
     border: none;
   }
+  &.activated {
+    color: $dark !important;
+  }
 
   background-color: $wex-inverted-button-color;
-  color: $wex-inverted-button-font-color;
-
-  &.button-link {
-    background-color: $wex-link-color;
+  &,&:hover {
     color: $wex-inverted-button-font-color;
   }
 
+  &.button-link {
+    background-color: $wex-link-color;
+    &, &:hover {
+      color: $wex-inverted-button-font-color;
+    }
+  }
+
   &.button-icon {
-    background-color: initial;
-    color: initial;
+    &, &:hover {
+      background-color: initial;
+      color: initial;
+    }
   }
 
   &.button-primary {
     background-color: $wex-button-color;
-    color: $wex-button-font-color;
+    &, &:hover {
+      color: $wex-button-font-color;
+    }
   }
 
   &.button-primary,
