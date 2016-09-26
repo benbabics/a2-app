@@ -3,6 +3,9 @@
           wex-back-state="landing">
     <ion-content>
         <div class="content padding">
+            <p>
+              {{::vm.config.lastUpdated}} {{::vm.releaseDate | wexDefaultDateFormat}}
+            </p>
             <p id="introduction">
                 <span ng-bind-html="vm.config.introduction"></span>
             </p>
@@ -33,6 +36,12 @@
                 </p>
                 <p>
                     {{::vm.config.sectionNine}}
+                </p>
+                <p>
+                    {{::vm.config.sectionTen}}
+                </p>
+                <p>
+                    {{::vm.config.sectionEleven}}
                 </p>
             </div>
             <p id="closing">
