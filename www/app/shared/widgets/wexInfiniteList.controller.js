@@ -55,6 +55,10 @@
           // settings.isGreeking may be enabled, but allow for the ability to
           // reset the collection without greeking.
           return $scope.infiniteScrollService.resetCollection(options).finally(function() {
+              if ( settings.isGreeking ) {
+                $ionicScrollDelegate.resize(); // recalc rendered ion-items
+              }
+              
               serviceDelegate.onRenderComplete();
           });
       }

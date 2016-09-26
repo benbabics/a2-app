@@ -64,8 +64,7 @@
 
                 return TransactionManager.fetchPostedTransactions(
                     requestParams.billingAccountId, requestParams.fromDate, requestParams.toDate, requestConfig.currentPage, requestConfig.pageSize, scope.filterBy, scope.filterValue, scope.cardId
-                )
-                .then( sortTransactionsByDate );
+                );
             }
 
             function handleOnResetItems() {
@@ -86,12 +85,6 @@
             /**
              * Private Methods
             **/
-            function sortTransactionsByDate(transacstions) {
-                return _.sortBy( transacstions, function(obj) {
-                    return obj.postDate;
-                }).reverse();
-            }
-
             function makeRequestPendingTransactions() {
                 if ( scope.isAppClassic ) return;
 
@@ -111,7 +104,6 @@
                     requestParams.billingAccountId, requestConfig.fromDate, requestConfig.toDate, requestConfig.currentPage, requestConfig.pageSize, requestConfig.filterBy, requestConfig.filterValue, scope.filterBy, scope.filterValue, scope.cardId
                 )
                     .then(function(transactionsCollection) {
-                        transactionsCollection = sortTransactionsByDate( transactionsCollection );
                         scope.transactions.pendingCollection = transactionsCollection;
                     })
                     .catch(function() {
