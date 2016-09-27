@@ -4,8 +4,8 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function UserAuthorizationManager(_, $q, $rootScope, globals, AuthenticationManager, Fingerprint, LoadingIndicator,
-                                      Logger, Modal, PlatformUtil, SecureStorage) {
+    function UserAuthorizationManager(_, $q, $rootScope, globals, AuthenticationManager, Fingerprint,
+                                      FingerprintProfileUtil, LoadingIndicator, Logger, Modal, PlatformUtil) {
         var USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION_TYPES;
 
         var service = {
@@ -49,7 +49,7 @@
                 termsModal;
 
             //check to see if the user already set up a fingerprint profile
-            return SecureStorage.get(clientId)
+            return FingerprintProfileUtil.getProfile(clientId)
                 //set up a new fingerprint profile with this clientId
                 .catch(function () {
                     //authenticate the account with the given username/password

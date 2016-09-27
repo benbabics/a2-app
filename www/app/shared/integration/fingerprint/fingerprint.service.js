@@ -7,7 +7,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function FingerprintService(_, $q, globals, PlatformUtil, SecureStorage) {
+    function FingerprintService(_, $q, globals, FingerprintProfileUtil, PlatformUtil, SecureStorage) {
         //Private members:
         var CONSTANTS = globals.FINGERPRINT_AUTH,
             NOT_SUPPORTED_ERROR = "Fingerprint authentication is not available on this platform.",
@@ -102,15 +102,15 @@
 
                     //set/get the client id and secret in secure storage
                     if (isRegistering) {
-                        promise = SecureStorage.set(options.clientId, clientSecret);
+                        promise = FingerprintProfileUtil.setProfile(options.clientId, clientSecret);
                     }
                     else {
-                        promise = SecureStorage.get(options.clientId);
+                        promise = FingerprintProfileUtil.getProfile(options.clientId);
                     }
 
                     //return the authentication response with the client secret
                     return promise.then(function (response) {
-                        return _.extend({clientSecret: isRegistering ? clientSecret : response}, authResponse);
+                        return _.extend(response, authResponse);
                     });
                 });
         }
@@ -229,6 +229,6 @@
     }
 
     angular
-        .module("app.shared.integration")
+        .module("app.shared.integration.fingerprint")
         .factory("Fingerprint", FingerprintService);
 })();

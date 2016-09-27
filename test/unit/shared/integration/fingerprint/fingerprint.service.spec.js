@@ -14,6 +14,7 @@
             FingerprintPlugin,
             FingerprintPluginAndroid,
             FingerprintPluginIos,
+            FingerprintProfileUtil,
             PlatformUtil,
             SecureStorage,
             options,
@@ -35,6 +36,10 @@
                 "isAvailable",
                 "verifyFingerprint",
                 "verifyFingerprintWithCustomPasswordFallback"
+            ]);
+            FingerprintProfileUtil = jasmine.createSpyObj("FingerprintProfileUtil", [
+                "getProfile",
+                "setProfile"
             ]);
 
             //setup mock dependencies:
@@ -306,7 +311,7 @@
                         beforeEach(function () {
                             setDeferred = $q.defer();
 
-                            SecureStorage.set.and.returnValue(setDeferred.promise);
+                            FingerprintProfileUtil.setProfile.and.returnValue(setDeferred.promise);
                         });
 
                         describe("when the passwordFallback is CUSTOM", function () {
@@ -326,7 +331,7 @@
                         beforeEach(function () {
                             getDeferred = $q.defer();
 
-                            SecureStorage.get.and.returnValue(getDeferred.promise);
+                            FingerprintProfileUtil.getProfile.and.returnValue(getDeferred.promise);
                         });
 
                         describe("when the passwordFallback is CUSTOM", function () {
@@ -662,7 +667,7 @@
             beforeEach(function () {
                 setDeferred = $q.defer();
 
-                SecureStorage.set.and.returnValue(setDeferred.promise);
+                FingerprintProfileUtil.setProfile.and.returnValue(setDeferred.promise);
             });
 
             describe("when FingerprintPlugin.show resolves", function () {
@@ -677,11 +682,11 @@
                     $rootScope.$digest();
                 });
 
-                it("should call SecureStorage.set with the expected values", function () {
-                    expect(SecureStorage.set).toHaveBeenCalledWith(options.clientId, options.clientSecret);
+                it("should call FingerprintProfileUtil.setProfile with the expected values", function () {
+                    expect(FingerprintProfileUtil.setProfile).toHaveBeenCalledWith(options.clientId, options.clientSecret);
                 });
 
-                describe("when SecureStorage.set resolves", function () {
+                describe("when FingerprintProfileUtil.setProfile resolves", function () {
 
                     beforeEach(function () {
                         setDeferred.resolve();
@@ -689,13 +694,11 @@
                     });
 
                     it("should resolve with the expected value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(
-                            _.extend({clientSecret: options.clientSecret}, authResponse)
-                        );
+                        expect(resolveHandler).toHaveBeenCalledWith(jasmine.objectContaining(authResponse));
                     });
                 });
 
-                describe("when SecureStorage.set rejects", function () {
+                describe("when FingerprintProfileUtil.setProfile rejects", function () {
                     var error;
 
                     beforeEach(function () {
@@ -733,7 +736,7 @@
             beforeEach(function () {
                 getDeferred = $q.defer();
 
-                SecureStorage.get.and.returnValue(getDeferred.promise);
+                FingerprintProfileUtil.getProfile.and.returnValue(getDeferred.promise);
             });
 
             describe("when FingerprintPlugin.show resolves", function () {
@@ -748,11 +751,11 @@
                     $rootScope.$digest();
                 });
 
-                it("should call SecureStorage.get with the expected values", function () {
-                    expect(SecureStorage.get).toHaveBeenCalledWith(options.clientId);
+                it("should call FingerprintProfileUtil.getProfile with the expected values", function () {
+                    expect(FingerprintProfileUtil.getProfile).toHaveBeenCalledWith(options.clientId);
                 });
 
-                describe("when SecureStorage.get resolves", function () {
+                describe("when FingerprintProfileUtil.getProfile resolves", function () {
                     var getResponse;
 
                     beforeEach(function () {
@@ -765,13 +768,11 @@
                     });
 
                     it("should resolve with the expected value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(
-                            _.extend({clientSecret: getResponse}, authResponse)
-                        );
+                        expect(resolveHandler).toHaveBeenCalledWith(jasmine.objectContaining(authResponse));
                     });
                 });
 
-                describe("when SecureStorage.get rejects", function () {
+                describe("when FingerprintProfileUtil.getProfile rejects", function () {
                     var error;
 
                     beforeEach(function () {
@@ -805,22 +806,26 @@
 
         function setupMocks() {
 
-            module("app.shared", ["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
-                PlatformUtil = mocks.PlatformUtil;
-                SecureStorage = mocks.SecureStorage;
+            module("app.shared", function ($provide) {
+                $provide.value("FingerprintProfileUtil", FingerprintProfileUtil);
 
-                PlatformUtil.getPlatform.and.returnValue(platform);
+                TestUtils.provideCommonMockDependencies($provide, function (mocks) {
+                    PlatformUtil = mocks.PlatformUtil;
+                    SecureStorage = mocks.SecureStorage;
 
-                //temporarily needed until we can inject $q
-                PlatformUtil.waitForCordovaPlatform.and.callFake(function (callback) {
-                    if (callback) {
-                        return callback();
-                    }
-                    else {
-                        return TestUtils.resolvedPromise();
-                    }
+                    PlatformUtil.getPlatform.and.returnValue(platform);
+
+                    //temporarily needed until we can inject $q
+                    PlatformUtil.waitForCordovaPlatform.and.callFake(function (callback) {
+                        if (callback) {
+                            return callback();
+                        }
+                        else {
+                            return TestUtils.resolvedPromise();
+                        }
+                    });
                 });
-            })]);
+            });
 
             inject(function (_$q_, _globals_, _$rootScope_, _Fingerprint_) {
                 $q = _$q_;
