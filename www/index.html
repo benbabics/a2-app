@@ -42,13 +42,15 @@
             <div ng-controller="NetworkStatusController as networkStatus">
                 <wex-notification-bar text="{{networkStatus.bannerText}}"
                                       ng-if="!networkStatus.isOnline"
-                                      closeable="false">
+                                      closeable="false"
+                                      priority="0">
                 </wex-notification-bar>
                 <div ng-controller="ServerConnectionErrorBannerController as serverConnection">
                     <wex-notification-bar class="sever-connection-banner"
                                           text="{{serverConnection.bannerText}}"
                                           ng-if="networkStatus.isOnline && !serverConnection.isConnected"
-                                          closeable="false">
+                                          closeable="false"
+                                          priority="1">
                     </wex-notification-bar>
                 </div>
             </div>
