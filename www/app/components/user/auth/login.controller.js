@@ -2,11 +2,13 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:20
+    // jshint maxparams:22
 
     /* @ngInject */
-    function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $ionicHistory, $interval, $localStorage, $q, $rootScope, $scope, $state, $stateParams,
-                             globals, AnalyticsUtil, Fingerprint, LoadingIndicator, LoginManager, PlatformUtil, SecureStorage, UserAuthorizationManager, sessionCredentials) {
+    function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $ionicHistory, $interval, $localStorage, $q,
+                             $rootScope, $scope, $state, $stateParams, globals, sessionCredentials, AnalyticsUtil,
+                             Fingerprint, FingerprintProfileUtil, LoadingIndicator, LoginManager, PlatformUtil,
+                             UserAuthorizationManager) {
 
         var BAD_CREDENTIALS = "BAD_CREDENTIALS",
             FINGERPRINT_PROMPT_RESUME_DELAY = 2000,
@@ -20,10 +22,12 @@
         vm.isLoggingIn = false;
         vm.setupFingerprintAuth = false;
         vm.rememberMe = false;
+        vm.rememberMeToggle = false;
         vm.timedOut = false;
         vm.user = { password: "" };
         vm.isKeyboardVisible = isKeyboardVisible;
         vm.logInUser = logInUser;
+        vm.verifyFingerprintRemoval = verifyFingerprintRemoval;
 
         activate();
 
@@ -87,10 +91,8 @@
                     }
                 })
                 .catch(function (error) {
-                    var clientId = _.toLower(vm.user.username);
-
                     if (_.get(error, "isDeviceSupported")) {
-                        clearFingerprintProfile(clientId);
+                        clearFingerprintProfile(vm.user.username);
 
                         showUserSettingsPopup()
                             .finally(doFingerprintAuthCheck);
@@ -98,19 +100,17 @@
                 });
         }
 
-        function clearFingerprintProfile(clientId) {
+        function clearFingerprintProfile(username) {
             vm.fingerprintProfileAvailable = false;
 
-            return SecureStorage.remove(clientId);
+            return FingerprintProfileUtil.clearProfile(username);
         }
 
         function doFingerprintAuthCheck() {
             return Fingerprint.isAvailable()
                 .then(function () {
-                    var clientId = _.toLower(vm.user.username);
-
                     //enable fingerprint login if there is an existing fingerprint profile for this user
-                    return SecureStorage.get(clientId)
+                    return FingerprintProfileUtil.getProfile(vm.user.username)
                         .then(_.partial(_.set, vm, "fingerprintProfileAvailable", true))
                         .finally(_.partial(_.set, vm, "fingerprintAuthAvailable", true));
                 });
@@ -142,17 +142,17 @@
                     // persist session credentials for one-click fingerprint auth in settings
                     // NOTE: sessionCredentials service (itself) will listen for "app:logout" event
                     // and handle clearing these credentials from the session.
-                    if ( vm.fingerprintProfileAvailable ) {
-                        SecureStorage.get( clientId ).then(function(clientSecret) {
-                            sessionCredentials.set({ clientId: clientId, clientSecret: clientSecret });
+                    if (vm.fingerprintProfileAvailable) {
+                        FingerprintProfileUtil.getProfile(clientId).then(function (clientSecret) {
+                            sessionCredentials.set({clientId: clientId, clientSecret: clientSecret});
                         });
                     }
                     else {
-                        sessionCredentials.set({ clientId: clientId, clientSecret: clientSecret });
+                        sessionCredentials.set({clientId: clientId, clientSecret: clientSecret});
                     }
 
                     // Store the Username or not based on Remember Me checkbox
-                    rememberUsername(vm.rememberMe, vm.user.username);
+                    rememberUsername(vm.rememberMeToggle, vm.user.username);
 
                     // Do not allow backing up to the login page.
                     $ionicHistory.nextViewOptions(
@@ -203,6 +203,14 @@
             vm.timedOut = false;
         }
 
+        function clearForm() {
+            vm.rememberMe = vm.rememberMeToggle = false;
+            vm.user.username = "";
+            vm.user.password = "";
+
+            rememberUsername(false);
+        }
+
         function isKeyboardVisible() {
             return PlatformUtil.platformHasCordova() && $cordovaKeyboard.isVisible();
         }
@@ -235,13 +243,13 @@
 
         function setupUsername() {
             // default the checkbox to false
-            vm.rememberMe = false;
+            vm.rememberMe = vm.rememberMeToggle = false;
 
             // if the Remember Me option was selected previously
             // populate the Username and set the checkbox
             if (_.has($localStorage, USERNAME_KEY)) {
                 vm.user.username = $localStorage[USERNAME_KEY];
-                vm.rememberMe = true;
+                vm.rememberMe = vm.rememberMeToggle = true;
             }
         }
 
@@ -288,6 +296,44 @@
 
         function trackSuccessEvent() {
             _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events.successfulLogin);
+        }
+
+        function verifyFingerprintRemoval(model) {
+            var getFingerprintWarningPromptText = function () {
+                switch (_.toLower(PlatformUtil.getPlatform())) {
+                    case "android":
+                        return _.get(vm, "config.touchId.warningPrompt.messageAndroid");
+                    case "ios":
+                        return _.get(vm, "config.touchId.warningPrompt.messageIos");
+                    default:
+                        return _.get(vm, "config.touchId.warningPrompt.messageAndroid");
+                }
+            };
+
+            if (vm.fingerprintProfileAvailable) {
+                //delay the unchecking of the remember me box
+                if (model === "rememberMe") {
+                    vm.rememberMeToggle = true;
+                }
+
+                return $cordovaDialogs.confirm(
+                    getFingerprintWarningPromptText(),
+                    vm.config.touchId.warningPrompt.title, [
+                        vm.config.touchId.warningPrompt.buttons.ok,
+                        vm.config.touchId.warningPrompt.buttons.cancel
+                    ])
+                    .then(function (result) {
+                        if (result === 1) {
+                            clearFingerprintProfile(vm.user.username);
+                            clearForm();
+                        }
+                    });
+            }
+            else {
+                if (model === "rememberMe") {
+                    vm.rememberMe = vm.rememberMeToggle;
+                }
+            }
         }
     }
 

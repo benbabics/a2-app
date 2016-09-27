@@ -116,6 +116,15 @@
                         "cancel": "Cancel",
                         "settings": "Settings"
                     }
+                },
+                "warningPrompt": {
+                    "title": "",
+                    "messageAndroid": "Your fingerprint authentication will be disabled.",
+                    "messageIos": "Your Touch ID\u00AE will be disabled.",
+                    "buttons": {
+                        "cancel": "Cancel",
+                        "ok": "OK"
+                    }
                 }
             },
             "submitButton": "Log In",

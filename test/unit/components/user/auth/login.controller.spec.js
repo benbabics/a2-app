@@ -20,7 +20,7 @@
         PlatformUtil,
         Fingerprint,
         UserAuthorizationManager,
-        SecureStorage,
+        FingerprintProfileUtil,
         fingerprintAvailableDeferred,
         sessionCredentials,
         cordovaPluginsKeyboard,
@@ -99,6 +99,15 @@
                                 "cancel": TestUtils.getRandomStringThatIsAlphaNumeric(10),
                                 "settings": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                             }
+                        },
+                        "warningPrompt": {
+                            "title": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "messageAndroid": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "messageIos": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "buttons": {
+                                "cancel": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                "ok": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            }
                         }
                     }
                 }
@@ -120,7 +129,7 @@
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["isVisible"]);
             Fingerprint = jasmine.createSpyObj("Fingerprint", ["isAvailable"]);
             UserAuthorizationManager = jasmine.createSpyObj("UserAuthorizationManager", ["verify"]);
-            SecureStorage = jasmine.createSpyObj("SecureStorage", ["get", "remove"]);
+            FingerprintProfileUtil = jasmine.createSpyObj("FingerprintProfileUtil", ["getProfile", "clearProfile"]);
             sessionCredentials = jasmine.createSpyObj( "sessionCredentials", ["set"] );
             $cordovaDialogs = jasmine.createSpyObj("$cordovaDialogs", ["confirm"]);
             cordovaPluginsKeyboard = jasmine.createSpyObj("cordova.plugins.Keyboard", ["disableScroll"]);
@@ -176,7 +185,7 @@
                     PlatformUtil            : PlatformUtil,
                     Fingerprint             : Fingerprint,
                     UserAuthorizationManager: UserAuthorizationManager,
-                    SecureStorage           : SecureStorage,
+                    FingerprintProfileUtil  : FingerprintProfileUtil,
                     sessionCredentials      : sessionCredentials
                 });
 
@@ -230,7 +239,7 @@
                 });
 
                 it("should set the rememberMe option to true", function () {
-                    expect(ctrl.rememberMe).toBeTruthy();
+                    expect(ctrl.rememberMeToggle).toBeTruthy();
                 });
 
             });
@@ -255,7 +264,7 @@
                 });
 
                 it("should set the rememberMe option to false", function () {
-                    expect(ctrl.rememberMe).toBeFalsy();
+                    expect(ctrl.rememberMeToggle).toBeFalsy();
                 });
 
             });
@@ -271,7 +280,7 @@
                 describe("when the user has a stored fingerprint profile", function () {
 
                     beforeEach(function () {
-                        SecureStorage.get.and.returnValue($q.resolve());
+                        FingerprintProfileUtil.getProfile.and.returnValue($q.resolve());
                     });
 
                     it("should set vm.fingerprintProfileAvailable to true", function () {
@@ -318,7 +327,7 @@
                 describe("when the user does NOT have a stored fingerprint profile", function () {
 
                     beforeEach(function () {
-                        SecureStorage.get.and.returnValue($q.reject());
+                        FingerprintProfileUtil.getProfile.and.returnValue($q.reject());
                         $rootScope.$digest();
                     });
 
@@ -383,8 +392,8 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call SecureStorage.remove with the expected value", function () {
-                            expect(SecureStorage.remove).toHaveBeenCalledWith(_.toLower(ctrl.user.username));
+                        it("should call FingerprintProfileUtil.clearProfile with the expected value", function () {
+                            expect(FingerprintProfileUtil.clearProfile).toHaveBeenCalledWith(ctrl.user.username);
                         });
 
                         it("should call $cordovaDialogs.confirm with the expected values", function () {
@@ -727,8 +736,8 @@
                     expect(ctrl.fingerprintProfileAvailable).not.toBe(false);
                 });
 
-                it("should NOT call SecureStorage.remove with the expected value", function () {
-                    expect(SecureStorage.remove).not.toHaveBeenCalled();
+                it("should NOT call FingerprintProfileUtil.clearProfile with the expected value", function () {
+                    expect(FingerprintProfileUtil.clearProfile).not.toHaveBeenCalled();
                 });
 
                 describe("when the User is NOT Authenticated successfully with a BAD_CREDENTIALS error", function () {
@@ -743,8 +752,8 @@
                         expect(ctrl.fingerprintProfileAvailable).toBe(false);
                     });
 
-                    it("should call SecureStorage.remove with the expected value", function () {
-                        expect(SecureStorage.remove).toHaveBeenCalledWith(_.toLower(ctrl.user.username));
+                    it("should call FingerprintProfileUtil.clearProfile with the expected value", function () {
+                        expect(FingerprintProfileUtil.clearProfile).toHaveBeenCalledWith(ctrl.user.username);
                     });
                 });
 
@@ -769,8 +778,8 @@
                     expect(ctrl.fingerprintProfileAvailable).toBe(false);
                 });
 
-                it("should call SecureStorage.remove with the expected value", function () {
-                    expect(SecureStorage.remove).toHaveBeenCalledWith(_.toLower(ctrl.user.username));
+                it("should call FingerprintProfileUtil.clearProfile with the expected value", function () {
+                    expect(FingerprintProfileUtil.clearProfile).toHaveBeenCalledWith(ctrl.user.username);
                 });
 
                 describe("when authorizing", logInUserAuthTests);
@@ -803,7 +812,7 @@
 
                     beforeEach(function () {
                         spyOn($ionicHistory, "nextViewOptions");
-                        SecureStorage.get.and.returnValue($q.resolve());
+                        FingerprintProfileUtil.getProfile.and.returnValue($q.resolve(ctrl.user.password));
 
                         logInDeferred.resolve();
                     });
@@ -811,8 +820,7 @@
                     describe("when the Remember Me option is checked", function () {
 
                         beforeEach(function () {
-                            ctrl.rememberMe = true;
-                            SecureStorage.get.and.returnValue( $q.resolve(ctrl.user.password) );
+                            ctrl.rememberMe = ctrl.rememberMeToggle = true;
 
                             $scope.$digest();
                         });
@@ -849,7 +857,7 @@
                     describe("when the Remember Me option is NOT checked", function () {
 
                         beforeEach(function () {
-                            ctrl.rememberMe = false;
+                            ctrl.rememberMe = ctrl.rememberMeToggle = false;
 
                             $scope.$digest();
                         });
@@ -1148,6 +1156,141 @@
             });
         });
 
+        describe("has a verifyFingerprintRemoval function that", function () {
+            var model;
+
+            describe("when a fingerprint profile is available", function () {
+                var platform,
+                    confirmDeferred,
+                    username,
+                    password,
+                    result;
+
+                beforeEach(function () {
+                    platform = TestUtils.getRandomBoolean() ? "android" : "ios";
+                    confirmDeferred = $q.defer();
+
+                    PlatformUtil.getPlatform.and.returnValue(platform);
+                    $cordovaDialogs.confirm.and.returnValue(confirmDeferred.promise);
+                });
+
+                beforeEach(function () {
+                    ctrl.fingerprintProfileAvailable = true;
+                    ctrl.user.username = username = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                    ctrl.user.password = password = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                });
+
+                describe("when the model is 'rememberMe'", function () {
+
+                    beforeEach(function () {
+                        model = "rememberMe";
+
+                        ctrl.verifyFingerprintRemoval(model);
+                    });
+
+                    it("should set rememberMeToggle to true", function () {
+                        expect(ctrl.rememberMeToggle).toBe(true);
+                    });
+
+                    describe("should behave such that", commonTests);
+                });
+
+                describe("when the model is NOT 'rememberMe'", function () {
+
+                    beforeEach(function () {
+                        model = TestUtils.getRandomStringThatIsAlphaNumeric(12);
+
+                        ctrl.verifyFingerprintRemoval(model);
+                    });
+
+                    describe("should behave such that", commonTests);
+                });
+
+                function commonTests() {
+
+                    it("should call $cordovaDialogs.confirm with the expected values", function () {
+                        expect($cordovaDialogs.confirm).toHaveBeenCalledWith(
+                            getFingerprintWarningPromptText(platform),
+                            mockConfig.touchId.warningPrompt.title, [
+                                mockConfig.touchId.warningPrompt.buttons.ok,
+                                mockConfig.touchId.warningPrompt.buttons.cancel
+                            ]
+                        );
+                    });
+
+                    describe("when the user confirms", function () {
+
+                        beforeEach(function () {
+                            result = 1;
+                            confirmDeferred.resolve(result);
+                            $rootScope.$digest();
+                        });
+
+                        it("should call FingerprintProfileUtil.clearProfile", function () {
+                            expect(FingerprintProfileUtil.clearProfile).toHaveBeenCalledWith(username);
+                        });
+
+                        it("should clear the form", function () {
+                            expect(ctrl.rememberMe).toBe(false);
+                            expect(ctrl.rememberMeToggle).toBe(false);
+                            expect(ctrl.user.username).toEqual("");
+                            expect(ctrl.user.password).toEqual("");
+                            expect($localStorage.USERNAME).not.toBeDefined();
+                        });
+                    });
+
+                    describe("when the user rejects", function () {
+
+                        beforeEach(function () {
+                            result = 0;
+                            confirmDeferred.resolve(result);
+                            $rootScope.$digest();
+                        });
+
+                        it("should NOT call FingerprintProfileUtil.clearProfile", function () {
+                            expect(FingerprintProfileUtil.clearProfile).not.toHaveBeenCalled();
+                        });
+
+                        it("should NOT clear the form", function () {
+                            expect(ctrl.user.username).not.toEqual("");
+                            expect(ctrl.user.password).not.toEqual("");
+                        });
+                    });
+                }
+
+                function getFingerprintWarningPromptText(platform) {
+                    switch (_.toLower(platform)) {
+                        case "android":
+                            return _.get(mockConfig, "touchId.warningPrompt.messageAndroid");
+                        case "ios":
+                            return _.get(mockConfig, "touchId.warningPrompt.messageIos");
+                        default:
+                            return _.get(mockConfig, "touchId.warningPrompt.messageAndroid");
+                    }
+                }
+            });
+
+            describe("when a fingerprint profile is NOT available", function () {
+
+                beforeEach(function () {
+                    ctrl.fingerprintProfileAvailable = false;
+                    ctrl.rememberMeToggle = TestUtils.getRandomBoolean();
+                });
+
+                describe("when the model is 'rememberMe'", function () {
+
+                    beforeEach(function () {
+                        model = "rememberMe";
+
+                        ctrl.verifyFingerprintRemoval(model);
+                    });
+
+                    it("should set rememberMe to the value of rememberMeToggle", function () {
+                        expect(ctrl.rememberMe).toEqual(ctrl.rememberMeToggle);
+                    });
+                });
+            });
+        });
     });
 
     function getFingerprintSettingsPromptText(platform) {

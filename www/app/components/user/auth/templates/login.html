@@ -1,71 +1,74 @@
 <ion-view view-title="{{ ::vm.config.title }}" hide-nav-bar="true" class="page-login" wex-back-state="app.exit">
     <ion-content scroll="false">
-      <div class="alerts-wrapper">
-        <wex-notification-bar ng-if="vm.timedOut"
-                              text="{{ ::vm.config.sessionTimeOut.line1 }}"
-                              subtext="{{ ::vm.config.sessionTimeOut.line2 }}">
-        </wex-notification-bar>
+        <div class="alerts-wrapper">
+            <wex-notification-bar ng-if="vm.timedOut"
+                                  text="{{ ::vm.config.sessionTimeOut.line1 }}"
+                                  subtext="{{ ::vm.config.sessionTimeOut.line2 }}">
+            </wex-notification-bar>
 
-        <div class="card card-error padding"
-             id="errorMessage"
-             ng-if="vm.globalError">
-            {{ vm.globalError }}
-        </div>
-      </div>
-
-      <div class="title-bar">
-        <img src="img/pages/login/logo.png" />
-      </div>
-
-      <form wex-active-element ng-class="{ 'is-active': isActive }" novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.logInUser(vm.setupFingerprintAuth)">
-        <div class="list">
-          <div class="item item-input item-stacked-label">
-            <wex-advanced-input mask-text="true">
-              <input ng-model="vm.user.username"
-                     name="userName"
-                     type="text"
-                     required
-                     autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                     placeholder="{{ ::vm.config.userName.label }}"
-                     wex-max-length="{{ ::vm.config.userName.maxLength }}">
-            </wex-advanced-input>
-          </div>
-
-          <div class="item item-input item-stacked-label">
-            <wex-advanced-input>
-              <input ng-model="vm.user.password"
-                     name="password"
-                     type="password"
-                     required
-                     autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                     placeholder="{{ ::vm.config.password.label }}"
-                     wex-max-length="{{ ::vm.config.password.maxLength }}">
-            </wex-advanced-input>
-          </div>
-        </div>
-
-        <div class="row login-controls">
-          <div class="col col-50 checkbox-remember-me">
-            <ion-checkbox ng-model="vm.rememberMe">{{ ::vm.config.rememberMe.label }}</ion-checkbox>
-          </div>
-
-          <div class="col col-50 checkbox-touch-id">
-            <ion-checkbox ng-if="vm.fingerprintAuthAvailable && !vm.fingerprintProfileAvailable"
-                          ng-disabled="!vm.rememberMe"
-                          ng-model="vm.setupFingerprintAuth">{{ ::vm.config.touchId.disabled.label }}</ion-checkbox>
-            <div class="touch-id-indicator" ng-if="vm.fingerprintProfileAvailable" ng-click="vm.logInUser(true)">
-              <p class="text-touchid">{{ ::vm.config.touchId.enabled.label }}</p>
+            <div class="card card-error padding"
+                 id="errorMessage"
+                 ng-if="vm.globalError">
+                {{ vm.globalError }}
             </div>
-          </div>
         </div>
 
-        <div class="actions">
-          <wex-required-submit text="{{ ::vm.config.submitButton }}"></wex-required-submit>
+        <div class="title-bar">
+            <img src="img/pages/login/logo.png"/>
         </div>
-      </form>
 
-      <div class="padding align_center">
-        <online-enrollment-flow>{{ ::vm.config.enrollment.label }}</online-enrollment-flow>
-      </div>
+        <form wex-active-element ng-class="{ 'is-active': isActive }" novalidate name="vm.userLoginForm"
+              ng-submit="vm.userLoginForm.$valid && vm.logInUser(vm.setupFingerprintAuth)">
+            <div class="list">
+                <div class="item item-input item-stacked-label">
+                    <wex-advanced-input mask-text="true" ng-click="vm.verifyFingerprintRemoval('user.username')">
+                        <input ng-model="vm.user.username"
+                               name="userName"
+                               type="text"
+                               required
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                               placeholder="{{ ::vm.config.userName.label }}"
+                               wex-max-length="{{ ::vm.config.userName.maxLength }}">
+                    </wex-advanced-input>
+                </div>
+
+                <div class="item item-input item-stacked-label">
+                    <wex-advanced-input>
+                        <input ng-model="vm.user.password"
+                               name="password"
+                               type="password"
+                               required
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                               placeholder="{{ ::vm.config.password.label }}"
+                               wex-max-length="{{ ::vm.config.password.maxLength }}">
+                    </wex-advanced-input>
+                </div>
+            </div>
+
+            <div class="row login-controls">
+                <div class="col col-50 checkbox-remember-me">
+                    <ion-checkbox ng-model="vm.rememberMeToggle" ng-click="vm.verifyFingerprintRemoval('rememberMe')">{{ ::vm.config.rememberMe.label }}</ion-checkbox>
+                </div>
+
+                <div class="col col-50 checkbox-touch-id">
+                    <ion-checkbox ng-if="vm.fingerprintAuthAvailable && !vm.fingerprintProfileAvailable"
+                                  ng-disabled="!vm.rememberMe"
+                                  ng-model="vm.setupFingerprintAuth">{{ ::vm.config.touchId.disabled.label }}
+                    </ion-checkbox>
+                    <div class="touch-id-indicator" ng-if="vm.fingerprintProfileAvailable"
+                         ng-click="vm.logInUser(true)">
+                        <p class="text-touchid">{{ ::vm.config.touchId.enabled.label }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <wex-required-submit text="{{ ::vm.config.submitButton }}"></wex-required-submit>
+            </div>
+        </form>
+
+        <div class="padding align_center">
+            <online-enrollment-flow>{{ ::vm.config.enrollment.label }}</online-enrollment-flow>
+        </div>
     </ion-content>
 </ion-view>
