@@ -1,5 +1,11 @@
 .widget-filter-transaction-list {
 
+  .item-content.activated {
+    .date-filter-list .chevron .currency {
+      color: #fff;
+    }
+  }
+
   .date-filter-list {
     font-size: 14px;
 

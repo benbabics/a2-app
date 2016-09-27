@@ -1,0 +1,19 @@
+.widget-payment-list-item {
+  display: block;
+  margin-left:  -5px;
+  margin-right: -5px;
+  padding: 5px;
+  text-align: left;
+  color: #000;
+  border-bottom: 1px solid #e5e5e5;
+
+  &.activated {
+    @extend %list-item-activated;
+  }
+
+  .ion-chevron-right {
+    margin-left: 5px;
+    font-size: 18px;
+    vertical-align: middle;
+  }
+}

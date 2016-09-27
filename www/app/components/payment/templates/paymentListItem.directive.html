@@ -1,12 +1,12 @@
-<div ui-sref="payment.activity.detail({ paymentId: payment.id })">
-    <span class="block_align black list_align ellipsis">
+<a ui-sref="payment.activity.detail({ paymentId: payment.id })"
+     class="widget-payment-list-item">
+    <span class="list_align ellipsis">
         {{payment.getBankAccountDisplayName()}}
         <br>
         {{payment.scheduledDate | wexDefaultDateFormat}}
     </span>
     <span class="value_align">
         {{payment.amount | currency}}
-        <span class="button button-icon icon ion-ios-arrow-forward content-align chevron_align">
-        </span>
+        <i class="icon ion-chevron-right"></i>
     </span>
-</div>
+</a>

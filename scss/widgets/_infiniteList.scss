@@ -1,0 +1,35 @@
+%list-item-activated {
+  color: #fff;
+  background-color: #3a97b5;
+
+  .ion-chevron-right {
+    color: #fff;
+  }
+}
+
+.widget-infinite-list {
+
+  .item {
+    .item-content {
+      margin:  -16px;
+      padding: 16px;
+
+      &.activated {
+        @extend %list-item-activated;
+      }
+    }
+
+    &.item-icon-right {
+      .item-content {
+        margin-right:  -54px;
+        padding-right: 30px;
+
+        .ion-chevron-right {
+          right: 0;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+}
