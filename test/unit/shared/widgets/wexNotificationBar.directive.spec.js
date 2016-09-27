@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    fdescribe("A WEX Notification Bar directive", function () {
+    describe("A WEX Notification Bar directive", function () {
 
         var $compile,
             $rootScope,
