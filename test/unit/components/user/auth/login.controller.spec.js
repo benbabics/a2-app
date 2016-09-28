@@ -85,11 +85,9 @@
                         "USER_NOT_ACTIVE"                   : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     },
                     "touchId": {
-                        "enabled": {
-                            "label": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                        },
                         "disabled": {
-                            "label": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            "labelAndroid": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                            "labelIos": TestUtils.getRandomStringThatIsAlphaNumeric(10)
                         },
                         "settingsPrompt": {
                             "title": TestUtils.getRandomStringThatIsAlphaNumeric(10),
@@ -119,7 +117,7 @@
         },
         mockConfig = mockGlobals.USER_LOGIN.CONFIG;
 
-    describe("A Login Controller", function () {
+    fdescribe("A Login Controller", function () {
 
         beforeEach(function () {
 
@@ -1290,6 +1288,31 @@
                     });
                 });
             });
+        });
+
+        describe("has a getFingerprintDisabledLabel function that", function () {
+            var platform;
+
+            beforeEach(function () {
+                platform = TestUtils.getRandomBoolean() ? "android" : "ios";
+
+                PlatformUtil.getPlatform.and.returnValue(platform);
+            });
+
+            it("should return the correct label for the current platform", function () {
+                expect(ctrl.getFingerprintDisabledLabel(platform)).toEqual(getFingerprintDisabledLabel(platform));
+            });
+
+            function getFingerprintDisabledLabel(platform) {
+                switch (_.toLower(platform)) {
+                    case "android":
+                        return _.get(mockConfig, "touchId.disabled.labelAndroid");
+                    case "ios":
+                        return _.get(mockConfig, "touchId.disabled.labelIos");
+                    default:
+                        return _.get(mockConfig, "touchId.disabled.labelAndroid");
+                }
+            }
         });
     });
 

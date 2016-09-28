@@ -25,6 +25,7 @@
         vm.rememberMeToggle = false;
         vm.timedOut = false;
         vm.user = { password: "" };
+        vm.getFingerprintDisabledLabel = getFingerprintDisabledLabel;
         vm.isKeyboardVisible = isKeyboardVisible;
         vm.logInUser = logInUser;
         vm.verifyFingerprintRemoval = verifyFingerprintRemoval;
@@ -209,6 +210,17 @@
             vm.user.password = "";
 
             rememberUsername(false);
+        }
+
+        function getFingerprintDisabledLabel() {
+            switch (_.toLower(PlatformUtil.getPlatform())) {
+                case "android":
+                    return _.get(vm, "config.touchId.disabled.labelAndroid");
+                case "ios":
+                    return _.get(vm, "config.touchId.disabled.labelIos");
+                default:
+                    return _.get(vm, "config.touchId.disabled.labelAndroid");
+            }
         }
 
         function isKeyboardVisible() {

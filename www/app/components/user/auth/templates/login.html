@@ -47,17 +47,20 @@
 
             <div class="row login-controls">
                 <div class="col col-50 checkbox-remember-me">
-                    <ion-checkbox ng-model="vm.rememberMeToggle" ng-click="vm.verifyFingerprintRemoval('rememberMe')">{{ ::vm.config.rememberMe.label }}</ion-checkbox>
+                    <ion-checkbox ng-model="vm.rememberMeToggle" ng-click="vm.verifyFingerprintRemoval('rememberMe')">
+                        <span fittext fittext-min="inherit" ng-bind="::vm.config.rememberMe.label"></span>
+                    </ion-checkbox>
                 </div>
 
                 <div class="col col-50 checkbox-touch-id">
                     <ion-checkbox ng-if="vm.fingerprintAuthAvailable && !vm.fingerprintProfileAvailable"
                                   ng-disabled="!vm.rememberMe"
-                                  ng-model="vm.setupFingerprintAuth">{{ ::vm.config.touchId.disabled.label }}
+                                  ng-model="vm.setupFingerprintAuth">
+                        <span fittext fittext-min="inherit" ng-bind="::vm.getFingerprintDisabledLabel()"></span>
                     </ion-checkbox>
-                    <div class="touch-id-indicator" ng-if="vm.fingerprintProfileAvailable"
+                    <div class="fingerprint-indicator icon-fingerprint"
+                         ng-if="vm.fingerprintProfileAvailable"
                          ng-click="vm.logInUser(true)">
-                        <p class="text-touchid">{{ ::vm.config.touchId.enabled.label }}</p>
                     </div>
                 </div>
             </div>

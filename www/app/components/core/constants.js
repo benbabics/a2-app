@@ -102,11 +102,9 @@
                 "label"    : "Remember Username"
             },
             "touchId": {
-                "enabled": {
-                    "label": "Touch ID"
-                },
                 "disabled": {
-                    "label": "Set Up Touch ID"
+                    "labelAndroid": "Set Up Fingerprint",
+                    "labelIos": "Set Up Touch ID"
                 },
                 "settingsPrompt": {
                     "title": "",

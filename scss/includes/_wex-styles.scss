@@ -277,6 +277,29 @@ $bar-notification-multi-line-height: $bar-height + $bar-title-font-size;
   @extend .ion-alert-circled;  /* default icon - neither Android nor iOS */
 }
 
+/* Fingerprint icon - per platform */
+.icon-fingerprint {
+  /* default icon - neither Android nor iOS */
+  &:after {
+    font-family: "Ionicons2";
+    content: "\f2ee";
+  }
+}
+
+.platform-android .icon-fingerprint {
+  &:after {
+    font-family: "Ionicons2";
+    content: "\f2ee";
+  }
+}
+
+.platform-ios .icon-fingerprint {
+  &:after {
+    font-family: "Ionicons2";
+    content: "\f17c";
+  }
+}
+
 /**-----------------------------------------------------------
  Error Messaging
  ----------------------------------------------------------**/

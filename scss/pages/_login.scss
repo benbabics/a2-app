@@ -5,6 +5,9 @@
   $color-black:     #000;
   $color-dark-gray: #444;
 
+  $checkbox-width: 16px;
+  $checkbox-height: 16px;
+
   /**
    * Alerts
   **/
@@ -119,25 +122,20 @@
       }
     }
 
-    .touch-id-indicator {
+    .fingerprint-indicator {
       display: flex;
       align-items: center;
       width:  100%;
       height: 100%;
+      padding: 0 8px;
       text-align: right;
       color: $color-dark-gray;
 
       &:after {
         flex: 1;
-        font-family: "Ionicons2";
         font-size:   30px;
         line-height: 30px;
         color: $color-primary;
-        content: "\f17c";
-      }
-      p.text-touchid {
-        flex: 3;
-        margin: 0;
       }
     }
 
@@ -149,33 +147,39 @@
       }
     }
 
+    .col {
+      padding: 0 8px;
+    }
+
     .item-checkbox {
       display: flex;
       align-items: center;
-      flex-direction: row-reverse;
       overflow: visible;
       padding: 0;
+      width: 100%;
       height: 100%;
       border-color:     transparent;
       background-color: transparent;
 
-      .checkbox,
-      .item-content {
-        flex: 1;
-      }
       .checkbox {
+        order: 1;
         position: static;
         margin:  0;
-        padding: 0;
+        padding: 0 $checkbox-width;
+        width: $checkbox-width;
+        height: $checkbox-height;
       }
+
       .item-content {
+        order: 0;
         text-overflow: initial;
         white-space:   initial;
-        font-size: 10px;
+        text-align: center;
         color: $color-dark-gray;
 
-        @media (min-height: 640px) {
-          font-size: 13px;
+        //min label size for ngFitText
+        & span.ng-binding[fittext] {
+          font-size: 0.8em;
         }
       }
 
@@ -184,8 +188,8 @@
 
         &,
         &:before {
-          width:  16px;
-          height: 16px;
+          width:  $checkbox-width;
+          height: $checkbox-height;
         }
         &:before {
           margin: 0;
