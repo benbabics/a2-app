@@ -4,6 +4,7 @@
     describe("A WEX Infinite List Controller", function () {
       var $rootScope,
           $scope,
+          $timeout,
           $q,
           $ionicScrollDelegate,
           wexInfiniteListService,
@@ -23,8 +24,9 @@
               onResetItems: jasmine.createSpy( "onResetItems" )
             };
 
-            inject(function (_$rootScope_, _$q_, $controller) {
+            inject(function (_$rootScope_, _$timeout_, _$q_, $controller) {
                 $rootScope = _$rootScope_;
+                $timeout   = _$timeout_;
                 $q         = _$q_;
                 deferred   = $q.defer();
 
@@ -129,17 +131,20 @@
                 // IS THIS FAILING? Look at greekingStates array and make sure the item values correlate with order of tests
                 deferred.resolve();
                 $scope.$apply(); // call for deferred to work
+                $timeout.flush(); // call to flush timeout that delays rendering
                 expect( $ionicScrollDelegate.resize ).toHaveBeenCalled();
             });
                 it("should NOT send a message to $ionicScrollDelegate.resize if it is successful and settings.isGreeking is false", function () {
                   // IS THIS FAILING? Look at greekingStates array and make sure the item values correlate with order of tests
                 deferred.resolve();
                 $scope.$apply(); // call for deferred to work
+                $timeout.flush(); // call to flush timeout that delays rendering
                 expect( $ionicScrollDelegate.resize ).not.toHaveBeenCalled();
             });
             it("should broadcast the event 'scroll.refreshComplete' if it is successful", function () {
                 deferred.resolve();
                 $scope.$apply(); // call for deferred to work
+                $timeout.flush(); // call to flush timeout that delays rendering
                 expect( $scope.$broadcast ).toHaveBeenCalledWith( "scroll.refreshComplete" );
             });
         });
