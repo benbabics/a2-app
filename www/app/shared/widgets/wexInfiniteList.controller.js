@@ -1,7 +1,10 @@
 (function () {
     "use strict";
 
-    function WexInfiniteListController($scope, $attrs, $ionicScrollDelegate, _, wexInfiniteListService) {
+    /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
+    // jshint maxparams:6
+
+    function WexInfiniteListController($scope, $attrs, $timeout, $ionicScrollDelegate, _, wexInfiniteListService) {
       var serviceDelegate = {
               makeRequest:      angular.noop,
               removeItem:       angular.noop,
@@ -10,33 +13,50 @@
               onRenderComplete: angular.noop
           },
           settings = _.extend(
-              _.pick( $attrs, 'cacheKey', 'isGreeking' ),                   // create new object of specific attrs
+              _.pick( $attrs, "cacheKey", "isGreeking" ),                   // create new object of specific attrs
               $scope.$parent ? $scope.$parent.$eval( $attrs.settings ) : {} // evaluate any settings attr expressions
           );
 
       // check for isGreeking
-      settings.isGreeking = settings.isGreeking === 'true' || settings.isGreeking === true;
+      settings.isGreeking = settings.isGreeking === "true" || settings.isGreeking === true;
 
       // make props accesible for tests
       this.settings        = settings;
       this.serviceDelegate = serviceDelegate;
 
+      // prevent clicking on greeking results prematurely
+      if ( settings.isGreeking ) {
+          $scope.$on("$stateChangeStart", function(evt, toState, toParams) {
+              if ( toParams.isGreeking ) { evt.preventDefault(); }
+          });
+      }
+
       /**
        * Private Methods
       **/
-      function loadNextPage() {
-          return $scope.infiniteScrollService.loadNextPage()
+      function respondToRequest(promise) {
+          return promise
               .catch(function(errorResponse) {
                   serviceDelegate.onError( errorResponse );
               })
               .finally(function() {
-                  if ( settings.isGreeking ) {
-                    $ionicScrollDelegate.resize(); // recalc rendered ion-items
-                  }
-
-                  serviceDelegate.onRenderComplete();
-                  $scope.$broadcast( 'scroll.refreshComplete' );
+                  $timeout(function() {
+                      if ( settings.isGreeking ) {
+                          $ionicScrollDelegate.resize(); // recalc rendered ion-items
+                      }
+                      serviceDelegate.onRenderComplete();
+                      $scope.$broadcast( "scroll.refreshComplete" );
+                  }, 100);
               });
+      }
+
+      function loadNextPage() {
+          return respondToRequest( $scope.infiniteScrollService.loadNextPage() );
+      }
+
+      function resetSearchResults(options) {
+          serviceDelegate.onResetItems();
+          return respondToRequest( $scope.infiniteScrollService.resetCollection(options) );
       }
 
       function removeItem(model) {
@@ -46,21 +66,8 @@
                     $ionicScrollDelegate.resize(); // recalc rendered ion-items
                   }
 
-                  $scope.$broadcast( 'scroll.refreshComplete' );
+                  $scope.$broadcast( "scroll.refreshComplete" );
               });
-      }
-
-      function resetSearchResults(options) {
-          serviceDelegate.onResetItems();
-          // settings.isGreeking may be enabled, but allow for the ability to
-          // reset the collection without greeking.
-          return $scope.infiniteScrollService.resetCollection(options).finally(function() {
-              if ( settings.isGreeking ) {
-                $ionicScrollDelegate.resize(); // recalc rendered ion-items
-              }
-              
-              serviceDelegate.onRenderComplete();
-          });
       }
 
       /**
@@ -68,7 +75,7 @@
       **/
       this.assignServiceDelegate = function(delegate) {
           _.extend( serviceDelegate, delegate );
-      }
+      };
 
       /**
        * Expose Properties

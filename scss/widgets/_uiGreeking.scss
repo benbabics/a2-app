@@ -1,0 +1,37 @@
+.widget-ui-greeking {
+  background-color: #f4f4f4;
+
+  svg {
+    display: block;
+    width: 100%;
+
+    -webkit-animation-duration:        3s;
+    animation-duration:                3s;
+    -webkit-animation-fill-mode:       forwards;
+    animation-fill-mode:               forwards;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count:         infinite;
+    -webkit-animation-name:            placeHolderShimmer;
+    animation-name:                    placeHolderShimmer;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function:         linear;
+    @include ui-greeking-gradient-color();
+    -webkit-background-size: 800px;
+    background-size:         800px;
+
+    rect {
+      fill:   #ffffff;
+      stroke: #ffffff;
+    }
+  }
+}
+
+@-webkit-keyframes placeHolderShimmer {
+  0%   {  background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@keyframes placeHolderShimmer {
+  0%   {  background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}

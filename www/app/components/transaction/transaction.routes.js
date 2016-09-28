@@ -37,6 +37,9 @@
                     controller : "TransactionFilterByController as vm"
                 }
             },
+            params: {
+                isGreeking: false
+            },
             resolve: {
                 filterDetails: function(_, $stateParams, CardManager, DriverManager) {
                     switch (_.toLower($stateParams.filterBy)) {
@@ -61,6 +64,9 @@
                 templateUrl: "app/components/transaction/templates/postedTransactionDetail.html",
                 controller : "PostedTransactionDetailController as vm",
               }
+            },
+            params: {
+                isGreeking: false
             },
             resolve: {
                 postedTransaction: function ($stateParams, LoadingIndicator, TransactionManager) {

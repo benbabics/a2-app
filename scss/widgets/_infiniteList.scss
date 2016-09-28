@@ -1,9 +1,22 @@
 %list-item-activated {
+  $activated-color: #3a97b5;
+
   color: #fff;
-  background-color: #3a97b5;
+  background-color: $activated-color;
 
   .ion-chevron-right {
     color: #fff;
+  }
+
+  .widget-ui-greeking {
+    svg {
+      @include ui-greeking-gradient-color(#386878, $activated-color);
+    }
+
+    rect {
+      fill:   $activated-color;
+      stroke: $activated-color;
+    }
   }
 }
 

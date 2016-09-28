@@ -12,3 +12,9 @@
     background-size: $width $height;
   }
 }
+
+@mixin ui-greeking-gradient-color($color: #ddd, $background-color: transparent) {
+  background: -webkit-gradient(linear, left top, right top, color-stop(8%, $background-color), color-stop(18%, $color), color-stop(33%, $background-color));
+  background: -webkit-linear-gradient(left, $background-color 8%, $color 18%, $background-color 33%);
+  background:         linear-gradient(to right, $background-color 8%, $color 18%, $background-color 33%);
+}

@@ -8,12 +8,18 @@
 
         <div class="item item-icon-right"
              collection-repeat="driver in drivers.collection"
-             ng-class="{ 'ui-greeking': driver.isGreekLoading, 'item-last': $last }"
-             ui-sref="transaction.filterBy({ filterBy: 'driver', filterValue: driver.promptId })">
+             ng-class="{ 'item-last': $last }"
+             ui-sref="transaction.filterBy({ filterBy: 'driver', filterValue: driver.promptId, isGreeking: driver.isGreekLoading })">
 
                 <a class="item-content">
-                    <span class="greek-block">{{ driver.lastName }}, {{ driver.firstName }}</span>
-                    <i class="icon fa fa-chevron-right"></i>
+                    <div ng-show="driver.isGreekLoading">
+                        <wex-ui-greeking />
+                    </div>
+
+                    <div ng-hide="driver.isGreekLoading">
+                        <span class="greek-block">{{ driver.lastName }}, {{ driver.firstName }}</span>
+                        <i class="icon fa fa-chevron-right"></i>
+                    </div>
                 </a>
 
         </div>
