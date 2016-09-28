@@ -1,5 +1,5 @@
-<ion-view view-title="{{::vm.config.title}}" wex-back-state="{{vm.backStateOverride}}">
-    <div class="bar bar-subheader">
+<ion-view view-title="{{::vm.config.title}}" wex-back-state="{{vm.backStateOverride}}" class="page-transactions">
+    <div class="bar bar-subheader wex-bar-button-group">
       <div class="bar bar-header">
         <div class="button-bar bar-positive" ng-click="vm.handleFilterSelection($event)">
           <wex-bar-button ng-value="'date'"   ng-model="vm.filterViews.transactionsFilterValue">{{::vm.config.buttonLabels.date}}</wex-bar-button>

@@ -3,7 +3,7 @@
       {{ transaction.displayDate | wexDefaultDateFormat }}
     </ion-item>
 
-    <ion-item class="item item-icon-right widget-transaction-result-as-date" ng-class="{ 'ui-greeking': transaction.isGreekLoading }">
+    <ion-item class="item item-icon-right widget-transaction-result-as-date" ng-class="{ 'ui-greeking': transaction.isGreekLoading, 'item-last': $last }">
         <a class="item-content">
             <div class="row date-filter-list">
                 <div class="col col-65 greek-block-group">
@@ -20,7 +20,7 @@
                 </div>
             </div>
 
-            <i class="icon ion-chevron-right" ng-show="displayChevron"></i>
+            <i class="icon fa fa-chevron-right" ng-show="displayChevron"></i>
         </a>
     </ion-item>
 </div>

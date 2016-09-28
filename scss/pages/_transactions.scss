@@ -1,0 +1,17 @@
+.page-transactions {
+  @extend .ui-page;
+
+  .widget-filter-transaction-list {
+    .collection-repeat-container {
+      > .item {
+        &.item-last {
+          border-bottom-color: #aaa;
+        }
+        &.item-icon-right .icon {
+          color: #3a97b5;
+        }
+      }
+    }
+  }
+
+}

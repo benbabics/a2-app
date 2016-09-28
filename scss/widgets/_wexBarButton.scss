@@ -1,4 +1,26 @@
+.wex-bar-button-group {
+  padding: 0;
+  height: 85px;
+
+  > .bar-header {
+   height: auto;
+   padding: 15px 15px 20px;
+   background: transparent;
+  }
+
+  + .has-subheader {
+   top: 130px;
+  }
+}
+
 .widget-wex-bar-button {
+  height: 50px;
+  font-family: 'open_sanssemibold';
+  border-right: 1px solid #fff;
+  &:last-of-type {
+    border-right: none;
+  }
+
   .button-bar.button-bar-inline > & > .button {
     width: auto;
     display: inline-block;
@@ -11,8 +33,7 @@
     &:first-child > .button {
       border-radius: 4px 0px 0px 4px;
     }
-    &:last-child > .button{
-      border-right-width: 1px;
+    &:last-child > .button {
       border-radius: 0px 4px 4px 0px;
     }
     &:before,
@@ -22,14 +43,20 @@
 
     > .button {
       overflow: hidden;
-      display: block;
+      display: flex;
+      align-items: center;
       padding: 0 16px;
-      width: 100%;
+      width:  100%;
+      height: 100%;
       border-width: 1px 0px 1px 1px;
       border-radius: 0;
       text-align: center;
       text-overflow: ellipsis;
       white-space: nowrap;
+
+      > div {
+        flex: 1;
+      }
     }
   }
 

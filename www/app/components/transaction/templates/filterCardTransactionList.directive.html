@@ -8,12 +8,12 @@
 
         <div class="item item-icon-right"
              collection-repeat="card in cards.collection"
-             ng-class="{ 'ui-greeking': card.isGreekLoading }"
+             ng-class="{ 'ui-greeking': card.isGreekLoading, 'item-last': $last }"
              ui-sref="transaction.filterBy({ filterBy: 'card', filterValue: card.cardId })">
 
                 <a class="item-content">
                     <span class="greek-block">{{ card.embossedCardNumber | wexCardNumber }}</span>
-                    <i class="icon ion-chevron-right"></i>
+                    <i class="icon fa fa-chevron-right"></i>
                 </a>
 
         </div>
