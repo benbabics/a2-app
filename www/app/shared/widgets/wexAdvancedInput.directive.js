@@ -22,7 +22,6 @@
 
     function linkFn(scope, element) {
         var field  = element.find( "input" ),
-            button = angular.element( element[0].querySelector(".ion-close-circled") ),
             modelPath = field.attr( "ng-model" );
 
         scope.isEditable    = false;
@@ -31,11 +30,11 @@
 
         scope.handleClearValue = handleClearValue;
         scope.handleClickMask  = handleClickMask;
+        scope.checkIsEditable = checkIsEditable;
 
         // toggle reset value button
-        field.on("focus blur", function (evt) {
-            var isEditable = evt.type === "focus";
-            scope.$apply(function() { toggleIsEditable(isEditable); });
+        field.on("blur", function (evt) {
+            scope.$apply(function() { toggleIsEditable(evt.type === "focus"); });
         });
 
         // toggle isMaskVisible
@@ -56,7 +55,10 @@
         }
         function handleClickMask() {
             setTimeout(function() { field[0].focus(); });
-            toggleIsEditable( true );
+        }
+
+        function checkIsEditable() {
+            toggleIsEditable(field.attr("disabled") !== "disabled");
         }
 
         // update properties

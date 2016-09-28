@@ -30,19 +30,47 @@
                 button = wexAdvancedInput.element.find( ".ion-close-circled" );
             });
 
-            it("should be invisible without field focus", function () {
-                expect( wexAdvancedInput.scope.isEditable ).toBe( false );
+            describe("when a field is NOT clicked", function () {
+
+                it("should be invisible", function () {
+                    expect(wexAdvancedInput.scope.isEditable).toBe(false);
+                });
             });
 
-            it("should be visible with field focus", function () {
-                field.triggerHandler( "focus" );
-                expect( wexAdvancedInput.scope.isEditable ).toBe( true );
-            });
+            describe("when a field is clicked", function () {
 
-            it("should clear the field's ng-model when clicked", function () {
-                expect( wexAdvancedInput.scope.$parent.myModel.text ).not.toEqual( "" );
-                button.triggerHandler( "click" );
-                expect( wexAdvancedInput.scope.$parent.myModel.text ).toEqual( "" );
+                describe("when the input is disabled", function () {
+
+                    beforeEach(function () {
+                        field.attr("disabled", "disabled");
+                        field.click();
+                    });
+
+                    it("should be invisible", function () {
+                        expect(wexAdvancedInput.scope.isEditable).toBe(false);
+                    });
+                });
+
+                describe("when the input is NOT disabled", function () {
+
+                    beforeEach(function () {
+                        field.removeAttr("disabled");
+                        field.click();
+                    });
+
+                    it("should be visible", function () {
+                        expect(wexAdvancedInput.scope.isEditable).toBe(true);
+                    });
+
+                    it("should NOT clear the field's ng-model when NOT clicked", function () {
+                        expect(wexAdvancedInput.scope.$parent.myModel.text).not.toEqual("");
+                    });
+
+                    it("should clear the field's ng-model when clicked", function () {
+                        button.click();
+                        expect(wexAdvancedInput.scope.$parent.myModel.text).toEqual("");
+                    });
+                });
             });
         });
 
@@ -63,26 +91,52 @@
                 originalValue = wexAdvancedInput.scope.$parent.myModel.text;
             });
 
-            describe("when clicked", function () {
-                it("should show :input and hide the .mask-field", function () {
-                    maskWrapper.triggerHandler( "click" );
-                    expect( fieldWrapper.hasClass("ng-hide") ).toBe( false );
-                    expect( maskWrapper.hasClass("ng-hide") ).toBe( true );
-                });
-            });
+            describe("when a field is NOT clicked", function () {
 
-            describe("when a field is NOT in focus", function () {
                 it("should show .mask-field and hide the :input", function () {
-                    expect( maskWrapper.hasClass("ng-hide") ).toBe( false );
-                    expect( fieldWrapper.hasClass("ng-hide") ).toBe( true );
+                    expect(maskWrapper.hasClass("ng-hide")).toBe(false);
+                    expect(fieldWrapper.hasClass("ng-hide")).toBe(true);
                 });
             });
 
-            describe("when a field is in focus", function () {
-                it("should show :input and hide the .mask-field", function () {
-                    field.triggerHandler( "focus" );
-                    expect( fieldWrapper.hasClass("ng-hide") ).toBe( false );
-                    expect( maskWrapper.hasClass("ng-hide") ).toBe( true );
+            describe("when a field is clicked", function () {
+
+                describe("when the input is disabled", function () {
+
+                    beforeEach(function () {
+                        field.attr("disabled", "disabled");
+                        field.click();
+                    });
+
+                    it("should show .mask-field and hide the :input", function () {
+                        expect(maskWrapper.hasClass("ng-hide")).toBe(false);
+                        expect(fieldWrapper.hasClass("ng-hide")).toBe(true);
+                    });
+                });
+
+                describe("when the input is NOT disabled", function () {
+
+                    beforeEach(function () {
+                        field.removeAttr("disabled");
+                        field.click();
+                    });
+
+                    it("should show :input and hide the .mask-field", function () {
+                        expect(fieldWrapper.hasClass("ng-hide")).toBe(false);
+                        expect(maskWrapper.hasClass("ng-hide")).toBe(true);
+                    });
+
+                    describe("when a field is blurred", function () {
+
+                        beforeEach(function () {
+                            field.triggerHandler("blur");
+                        });
+
+                        it("should show .mask-field and hide the :input", function () {
+                            expect(maskWrapper.hasClass("ng-hide")).toBe(false);
+                            expect(fieldWrapper.hasClass("ng-hide")).toBe(true);
+                        });
+                    });
                 });
             });
         });

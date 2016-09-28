@@ -23,6 +23,7 @@
                 <div class="item item-input item-stacked-label">
                     <wex-advanced-input mask-text="true" ng-click="vm.verifyFingerprintRemoval('user.username')">
                         <input ng-model="vm.user.username"
+                               ng-disabled="vm.fingerprintProfileAvailable"
                                name="userName"
                                type="text"
                                required
@@ -35,6 +36,7 @@
                 <div class="item item-input item-stacked-label">
                     <wex-advanced-input>
                         <input ng-model="vm.user.password"
+                               ng-disabled="vm.fingerprintProfileAvailable"
                                name="password"
                                type="password"
                                required
