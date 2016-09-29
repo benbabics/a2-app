@@ -156,14 +156,10 @@
                     rememberUsername(vm.rememberMeToggle, vm.user.username);
 
                     // Do not allow backing up to the login page.
-                    $ionicHistory.nextViewOptions(
-                        {
-                            disableBack: true
-                        }
-                    );
+                    $ionicHistory.nextViewOptions({disableBack: true});
 
-                    // transition to the landing page
-                    $state.go("landing");
+                    // transition to the next page
+                    $state.go($stateParams.toState || "landing");
 
                     // toggle StatusBar as fixed
                     toggleStatusBarOverlaysWebView( false );

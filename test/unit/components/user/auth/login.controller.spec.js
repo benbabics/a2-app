@@ -819,15 +819,15 @@
 
                         beforeEach(function () {
                             ctrl.rememberMe = ctrl.rememberMeToggle = true;
-
-                            $scope.$digest();
                         });
 
                         it("should set the username in Local Storage", function () {
+                            $scope.$digest();
                             expect($localStorage.USERNAME).toEqual(ctrl.user.username);
                         });
 
                         it("should store credentials in sessionCredentials service", function () {
+                            $scope.$digest();
                             expect( sessionCredentials.set ).toHaveBeenCalledWith({
                                 clientId:     ctrl.user.username,
                                 clientSecret: ctrl.user.password
@@ -835,51 +835,96 @@
                         });
 
                         it("should call AnalyticsUtil.trackEvent with the expected event", function () {
+                            $scope.$digest();
                             verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
                         });
 
                         it("should call disable backing up to the login page", function () {
+                            $scope.$digest();
                             expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
                         });
 
                         it("should NOT have an error message", function () {
+                            $scope.$digest();
                             expect(ctrl.globalError).toBeFalsy();
                         });
 
-                        it("should navigate to the landing page", function () {
-                            expect($state.go).toHaveBeenCalledWith("landing");
+                        describe("when there is a toState", function () {
+                            var toState;
+
+                            beforeEach(function () {
+                                $stateParams.toState = toState = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                                $scope.$digest();
+                            });
+
+                            it("should navigate to the given page", function () {
+                                expect($state.go).toHaveBeenCalledWith(toState);
+                            });
                         });
 
+                        describe("when there is NOT a toState", function () {
+
+                            beforeEach(function () {
+                                delete $stateParams.toState;
+                                $scope.$digest();
+                            });
+
+                            it("should navigate to the landing page", function () {
+                                expect($state.go).toHaveBeenCalledWith("landing");
+                            });
+                        });
                     });
 
                     describe("when the Remember Me option is NOT checked", function () {
 
                         beforeEach(function () {
                             ctrl.rememberMe = ctrl.rememberMeToggle = false;
-
-                            $scope.$digest();
                         });
 
                         it("should Remove the username from Local Storage", function () {
+                            $scope.$digest();
                             expect($localStorage.USERNAME).not.toBeDefined();
                         });
 
                         it("should call AnalyticsUtil.trackEvent with the expected event", function () {
+                            $scope.$digest();
                             verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
                         });
 
                         it("should call disable backing up to the login page", function () {
+                            $scope.$digest();
                             expect($ionicHistory.nextViewOptions).toHaveBeenCalledWith({disableBack: true});
                         });
 
                         it("should NOT have an error message", function () {
+                            $scope.$digest();
                             expect(ctrl.globalError).toBeFalsy();
                         });
 
-                        it("should navigate to the landing page", function () {
-                            expect($state.go).toHaveBeenCalledWith("landing");
+                        describe("when there is a toState", function () {
+                            var toState;
+
+                            beforeEach(function () {
+                                $stateParams.toState = toState = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                                $scope.$digest();
+                            });
+
+                            it("should navigate to the given page", function () {
+                                expect($state.go).toHaveBeenCalledWith(toState);
+                            });
                         });
 
+                        describe("when there is NOT a toState", function () {
+
+                            beforeEach(function () {
+                                delete $stateParams.toState;
+                                $scope.$digest();
+                            });
+
+                            it("should navigate to the landing page", function () {
+                                expect($state.go).toHaveBeenCalledWith("landing");
+                            });
+                        });
                     });
 
                 });

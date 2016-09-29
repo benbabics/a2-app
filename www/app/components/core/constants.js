@@ -15,8 +15,9 @@
 
     // Login state by nature is unsecure and does not need to be listed here
     appGlobals.UNSECURE_STATES = [
-        "version.status",
-        "app.exit"
+        "app.exit",
+        "user.auth.check",
+        "version.status"
     ];
 
     appGlobals.LOCALSTORAGE = {

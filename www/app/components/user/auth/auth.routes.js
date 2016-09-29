@@ -11,7 +11,7 @@
 
         $stateProvider.state("user.auth.login", {
             cache: false,
-            url: "/login?errorReason&{timedOut:bool}&{logOut:bool}",
+            url: "/login?errorReason&toState&{timedOut:bool}&{logOut:bool}",
             views: {
                 "view@user": {
                     templateUrl: "app/components/user/auth/templates/login.html",
@@ -24,6 +24,24 @@
                 LoginManager.logOut();
 
                 AnalyticsUtil.trackView(globals.USER_LOGIN.CONFIG.ANALYTICS.pageName);
+            }
+        });
+
+        $stateProvider.state("user.auth.check", {
+            cache: false,
+            url: "/check?state",
+            resolve: {
+                redirect: function (_, globals, $q, $state, $stateParams, AuthenticationManager) {
+                    return $q.reject()
+                        .finally(function () {
+                            if (AuthenticationManager.userLoggedIn() && _.has($stateParams, "state")) {
+                                $state.go($stateParams.state);
+                            }
+                            else {
+                                $state.go(globals.LOGIN_STATE, {toState: $stateParams.state});
+                            }
+                        });
+                }
             }
         });
     }

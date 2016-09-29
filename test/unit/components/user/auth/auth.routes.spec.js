@@ -6,9 +6,12 @@
         var $rootScope,
             $state,
             AnalyticsUtil,
+            AuthenticationManager,
             LoginManager,
             $q,
+            globals,
             mockGlobals = {
+                LOGIN_STATE: "user.auth.login",
                 USER_LOGIN: {
                     CONFIG: {
                         ANALYTICS: {
@@ -23,22 +26,26 @@
             module("app.shared");
             module("app.components.user");
             module("app.components.user.auth");
+            module("app.components.alerts");
             module("app.html");
 
             //mock dependencies:
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
+            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn"]);
             LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
 
             module(function($provide, sharedGlobals) {
                 $provide.value("AnalyticsUtil", AnalyticsUtil);
+                $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("LoginManager", LoginManager);
                 $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
-            inject(function (_$rootScope_, _$state_, _$q_) {
+            inject(function (_$rootScope_, _$state_, _$q_, _globals_) {
                 $rootScope = _$rootScope_;
                 $state = _$state_;
                 $q = _$q_;
+                globals = _globals_;
             });
 
         });
@@ -114,6 +121,73 @@
                     expect(LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
+            });
+        });
+
+        describe("has a user.auth.check state that", function () {
+            var state,
+                stateName = "user.auth.check";
+
+            beforeEach(function() {
+                state = $state.get(stateName);
+            });
+
+            it("should be valid", function() {
+                expect(state).toBeDefined();
+                expect(state).not.toBeNull();
+            });
+
+            it("should not be abstract", function() {
+                expect(state.abstract).toBeFalsy();
+            });
+
+            it("should have the expected URL", function() {
+                expect(state.url).toEqual("/check?state");
+            });
+
+            it("should respond to the URL", function () {
+                expect($state.href(stateName)).toEqual("#/user/auth/check");
+            });
+
+            describe("when navigated to", function () {
+                var toState;
+
+                beforeEach(function () {
+                    toState = "alerts.list";
+                });
+
+                describe("when the user is logged in", function () {
+
+                    beforeEach(function () {
+                        AuthenticationManager.userLoggedIn.and.returnValue(true);
+                    });
+
+                    beforeEach(function () {
+                        $state.go(stateName, {state: toState});
+                        $rootScope.$digest();
+                    });
+
+                    it("should transition to the given page", function () {
+                        expect($state.current.name).toBe(toState);
+                    });
+                });
+
+                describe("when the user is NOT logged in", function () {
+
+                    beforeEach(function () {
+                        AuthenticationManager.userLoggedIn.and.returnValue(false);
+                    });
+
+                    beforeEach(function () {
+                        $state.go(stateName, {state: toState});
+                        $rootScope.$digest();
+                    });
+
+                    it("should transition to the login page with the expected toState", function () {
+                        expect($state.current.name).toEqual(globals.LOGIN_STATE);
+                        expect($state.params.toState).toEqual(toState);
+                    });
+                });
             });
         });
     });
