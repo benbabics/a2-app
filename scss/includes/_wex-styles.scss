@@ -1,3 +1,5 @@
+$wex-notification-bar-height: 61px;
+
 /**----------------------------------------------------------
  Header, Navigation
  ----------------------------------------------------------**/
@@ -14,11 +16,15 @@
 }
 
 wex-notification-bar {
+  @at-root [notification-bar-class="has-subheader"] {
+    top: $wex-notification-bar-height + $bar-height;
+  }
+
   & > .bar-notification {
     border: 1px solid;
     color: $base-color;
     padding: 10px;
-    height: 61px;
+    height: $wex-notification-bar-height;
     line-height: normal;
     overflow: hidden;
 
