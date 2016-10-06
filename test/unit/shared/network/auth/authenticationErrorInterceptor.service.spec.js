@@ -147,6 +147,11 @@
 
             module("app.html");
 
+            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function(mock) {
+                AnalyticsUtil = mock.AnalyticsUtil;
+            })]);
+
+
             inject(function (_AuthenticationErrorInterceptor_, _$httpBackend_, _$rootScope_, _$state_, $q) {
                 AuthenticationErrorInterceptor = _AuthenticationErrorInterceptor_;
                 $httpBackend = _$httpBackend_;
