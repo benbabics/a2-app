@@ -13,27 +13,17 @@
   }
 }
 
-/* Styles for wexNotificationBar directive */
-$bar-notification-multi-line-height: $bar-height + $bar-title-font-size;
-
-.bar-notification {
-  color: $warning-message-color;
-  background-color: $warning-message-fill;
-
-  @at-root wex-notification-bar > & {
+wex-notification-bar {
+  & > .bar-notification {
+    border: 1px solid;
+    color: $base-color;
     padding: 10px;
     height: 61px;
-    color: $base-color;
-    border: 1px solid $warning-message-color;
-    background-color: $warning-message-fill;
+    line-height: normal;
+    overflow: hidden;
 
     .icon-container {
       margin-right: 8px;
-
-      .icon {
-        color: $warning-message-color;
-        font-size: 30px !important;
-      }
     }
 
     .title-container {
@@ -41,75 +31,92 @@ $bar-notification-multi-line-height: $bar-height + $bar-title-font-size;
         white-space: normal;
       }
     }
-  }
 
-  &.bar-notification-multi-line {
-    //ion-header-bar has a fixed size so we need to manually resize it to support multiple lines
-    height: $bar-notification-multi-line-height;
-
-    //override the has-header/has-subheader styles as needed
-    @at-root [notification-bar-class="has-header"] {
-      top: $bar-notification-multi-line-height !important;
+    .row, .col {
+      padding: 0;
+      margin: 0;
     }
 
-    @at-root [notification-bar-class="has-subheader"] {
-      top: $bar-notification-multi-line-height + $bar-subheader-height !important;
+    .icon-container {
+      @include flexbox();
+      @include justify-content(center);
+      @include flex-direction(column);
+
+      max-width: $bar-height;
+      font-size: 2em;
     }
-  }
 
-  .row, .col {
-    padding: 0;
-    margin: 0;
-  }
+    .title-container {
+      @include flexbox();
+      @include justify-content(center);
+      @include flex-direction(column);
 
-  .icon-container {
-    @include flexbox();
-    @include justify-content(center);
-    @include flex-direction(column);
+      width: 100%;
 
-    max-width: $bar-height;
+      h1 {
+        color: inherit !important;
+        margin: 0 !important;
 
-    .icon {
-      font-family: ionicons;
+        white-space: initial;
+        text-overflow: initial;
+      }
 
-      //max icon size for ngFitText
-      &[fittext] {
-        font-size: $bar-height;
+      //min font size for ngFitText
+      [fittext] {
+        font-size: $font-size-base;
+      }
+    }
+
+    .button-container {
+      max-width: $button-bar-button-height;
+
+      .close-button {
+        display: block !important;
+        width: $button-bar-button-height !important;
+        text-align: right !important;
+
+        background: none;
+        border: none;
+        color: #bbb;
       }
     }
   }
 
-  .title-container {
-    @include flexbox();
-    @include justify-content(center);
-    @include flex-direction(column);
+  & > .bar, &.bar-warning > .bar {
+    border-color: $warning-message-color;
+    background-color: $warning-message-fill;
 
-    width: 100%;
+    .icon-container > .icon::after {
+      color: $warning-message-color;
 
-    h1 {
-      color: inherit !important;
-      margin: 0 !important;
-
-      white-space: nowrap;
-    }
-
-    //max font size for ngFitText
-    [fittext] {
-      font-size: $bar-title-font-size;
+      font-family: ionicons;
+      content: "\f100"; //icon-warning
     }
   }
 
-  .button-container {
-    max-width: $button-bar-button-height;
+  &.bar-error > .bar {
+    border-color: $error-message-color;
+    background-color: $error-message-fill;
 
-    .close-button {
-      display: block !important;
-      width: $button-bar-button-height !important;
-      text-align: right !important;
+    .icon-container {
+      display: none;
 
-      background: none;
-      border: none;
-      color: #bbb;
+      .icon::after {
+        color: $error-message-color;
+      }
+    }
+  }
+
+  &.bar-success > .bar {
+    border-color: $success-message-color;
+    background-color: $success-message-fill;
+
+    .icon-container {
+      display: none;
+
+      .icon::after {
+        color: $success-message-color;
+      }
     }
   }
 }

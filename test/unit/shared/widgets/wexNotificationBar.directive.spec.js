@@ -8,7 +8,6 @@
             $scope,
             $state,
             ElementUtil,
-            FlowUtil,
             bar,
             body,
             activeNavView,
@@ -16,7 +15,6 @@
             activeContent,
             pageHasNavBar = true,
             mockTitleText,
-            mockSubtitleText,
             mockChildText;
 
         beforeEach(function () {
@@ -27,12 +25,11 @@
                 "getViewContent",
                 "pageHasNavBar"
             ]);
-            FlowUtil = jasmine.createSpyObj("FlowUtil", ["onPageEnter"]);
 
             module("app.shared", function ($provide) {
                 $provide.value("ElementUtil", ElementUtil);
-                $provide.value("FlowUtil", FlowUtil);
             });
+
             module("app.html");
 
             inject(function (_$rootScope_, _$compile_, _$state_) {
@@ -59,10 +56,9 @@
                 });
 
                 mockTitleText = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                mockSubtitleText = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 mockChildText = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
-                $scope.barVisible = true;
+                $scope.ngIf = true;
             });
 
             spyOn(_, "throttle").and.callFake(function (func) {
@@ -75,6 +71,10 @@
         afterEach(function () {
             activeContent.removeClass("has-header");
             activeContent.removeClass("has-subheader");
+
+            if (bar) {
+                bar.remove();
+            }
         });
 
         describe("creates a header bar that", function () {
@@ -102,312 +102,269 @@
                 expect(bar.find("ion-header-bar").html()).toContain(mockChildText);
             });
 
-            it("should call FlowUtil.onPageEnter with the expected values", function () {
-                expect(FlowUtil.onPageEnter).toHaveBeenCalledWith(jasmine.any(Function), bar.isolateScope(), {once: false});
+            it("should add the banner from the list of banners", function () {
+                //TODO - Figure out how to test this
             });
 
-            describe("when the banner has subtitle text", function () {
+            describe("has a title that", function () {
+                var title;
 
                 beforeEach(function () {
-                    bar = createWexNotificationBar({
-                        text: mockTitleText,
-                        subtext: mockSubtitleText
-                    });
+                    title = bar.find("h1");
                 });
 
-                describe("has a title that", function () {
-                    var title;
+                it("should exist", function () {
+                    expect(title).toBeDefined();
+                });
 
-                    beforeEach(function () {
-                        title = bar.find("h1");
-                    });
-
-                    it("should exist", function () {
-                        expect(title).toBeDefined();
-                    });
-
-                    it("should contain the title text", function () {
-                        expect(title.text()).toContain(mockTitleText);
-                    });
-
-                    it("should contain the subtitle text", function () {
-                        expect(title.text()).toContain(mockSubtitleText);
-                    });
+                it("should contain the title text", function () {
+                    expect(title.text()).toContain(mockTitleText);
                 });
             });
-
-            describe("when the banner does NOT have subtitle text", function () {
-
+            
+            describe("when visible", function () {
+                
                 beforeEach(function () {
-                    bar = createWexNotificationBar({text: mockTitleText});
+                    bar.isolateScope().setVisible(true);
+                    $rootScope.$digest();
                 });
-
-                describe("has a title that", function () {
-                    var title;
-
-                    beforeEach(function () {
-                        title = bar.find("h1");
-                    });
-
-                    it("should exist", function () {
-                        expect(title).toBeDefined();
-                    });
-
-                    it("should contain the title text", function () {
-                        expect(title.text()).toContain(mockTitleText);
-                    });
-                });
+                
+                describe("should behave such that", testBarVisible);
             });
-
-            describe("when the banner is closeable", function () {
-
+            
+            describe("when not visible", function () {
+                
                 beforeEach(function () {
-                    bar = createWexNotificationBar({
-                        text: mockTitleText,
-                        closeable: true,
-                        content: mockChildText
-                    });
+                    bar.isolateScope().remove();
+
+                    $rootScope.$digest();
                 });
 
-                it("should add a close button", function () {
-                    expect(bar[0].querySelector(".close-button")).toBeDefined();
+                it("should NOT apply the has-header class to the active ion-content", function () {
+                    expect(activeContent.hasClass("has-header")).toBeFalsy();
+                });
+
+                it("should NOT apply the has-subheader class to the active ion-content", function () {
+                    expect(activeContent.hasClass("has-subheader")).toBeFalsy();
+                });
+
+                describe("should behave such that", testBarNotVisible);
+            });
+        });
+
+        describe("when the banner is closeable", function () {
+
+            beforeEach(function () {
+                bar = createWexNotificationBar({
+                    text: mockTitleText,
+                    closeable: true,
+                    content: mockChildText
                 });
             });
 
-            describe("when the banner is not closeable", function () {
+            it("should add a close button", function () {
+                expect(bar[0].querySelector(".close-button")).toBeDefined();
+            });
+        });
 
-                beforeEach(function () {
-                    bar = createWexNotificationBar({
-                        text: mockTitleText,
-                        closeable: false,
-                        content: mockChildText
-                    });
-                });
+        describe("when the banner is not closeable", function () {
 
-                it("should not add a close button", function () {
-                    expect(bar[0].querySelector(".close-button")).toBeNull();
+            beforeEach(function () {
+                bar = createWexNotificationBar({
+                    text: mockTitleText,
+                    closeable: false,
+                    content: mockChildText
                 });
             });
 
-            describe("when the directive has an ngIf set", function () {
-                var bars;
+            it("should not add a close button", function () {
+                expect(bar[0].querySelector(".close-button")).toBeNull();
+            });
+        });
+
+        describe("when the directive has an ngIf set", function () {
+            var bars;
+
+            beforeEach(function () {
+                bars = [];
+            });
+
+            afterEach(function () {
+                _.forEach(bars, function (bar) {
+                    bar.remove();
+                });
+            });
+
+            describe("when the ngIf is true", function () {
 
                 beforeEach(function () {
-                    bars = [];
+                    var numBars = TestUtils.getRandomInteger(1, 5);
+
+                    for (var i = 0; i < numBars; ++i) {
+                        bars.push(createWexNotificationBar({
+                            text: mockTitleText,
+                            ngIf: true,
+                            content: mockChildText,
+                            priority: TestUtils.getRandomInteger(1, 10)
+                        }));
+                    }
                 });
 
-                afterEach(function () {
-                    _.forEach(bars.concat(bar), function (bar) {
-                        bar.remove();
-                    });
-                });
+                describe("when the bar is a global bar", function () {
 
-                describe("when the ngIf is true", function () {
+                    describe("when the bar is the highest priority", function () {
 
-                    beforeEach(function () {
-                        var numBars = TestUtils.getRandomInteger(1, 5);
-
-                        for (var i = 0; i < numBars; ++i) {
-                            bars.push(createWexNotificationBar({
+                        beforeEach(function () {
+                            bar = createWexNotificationBar({
                                 text: mockTitleText,
-                                barVisible: true,
+                                ngIf: true,
                                 content: mockChildText,
-                                priority: TestUtils.getRandomInteger(1, 10)
-                            }));
-                        }
+                                priority: 0
+                            });
+
+                            _.forEach(bars.concat(bar), function (bar) {
+                                body.append(bar);
+                            });
+                        });
+
+                        it("should be visible", function () {
+                            $rootScope.$digest();
+
+                            expect(bar.isolateScope().isVisible()).toBe(true);
+                        });
+
+                        describe("will set the bar to be visible", testBarVisible);
                     });
 
-                    describe("when the bar is a global bar", function () {
+                    describe("when the bar is the NOT highest priority", function () {
 
-                        describe("when the bar is the highest priority", function () {
+                        beforeEach(function () {
+                            bar = createWexNotificationBar({
+                                text: mockTitleText,
+                                ngIf: true,
+                                content: mockChildText,
+                                priority: TestUtils.getRandomInteger(11, 20)
+                            });
+
+                            _.forEach(bars.concat(bar), function (bar) {
+                                body.append(bar);
+                            });
+                        });
+
+                        it("should NOT be visible", function () {
+                            $rootScope.$digest();
+
+                            expect(bar.isolateScope().isVisible()).toBe(false);
+                        });
+                    });
+                });
+
+                describe("when the bar is NOT a global bar", function () {
+
+                    describe("when the bar is the highest priority", function () {
+
+                        beforeEach(function () {
+                            bar = createWexNotificationBar({
+                                text: mockTitleText,
+                                ngIf: true,
+                                content: mockChildText,
+                                priority: 0
+                            });
+                        });
+
+                        describe("when there is a global bar", function () {
 
                             beforeEach(function () {
-                                bar = createWexNotificationBar({
-                                    text: mockTitleText,
-                                    barVisible: true,
-                                    content: mockChildText,
-                                    priority: 0
+                                activeView.append(bar);
+
+                                _.forEach(bars, function (bar) {
+                                    body.append(bar);
                                 });
 
-                                _.forEach(bars.concat(bar), function (bar) {
-                                    body.append(bar);
+                                //needed for unit tests since we add the element directly to the DOM
+                                $rootScope.$broadcast("wexNotificationBar:priorityChange");
+                            });
+
+                            it("should NOT be visible", function () {
+                                $rootScope.$digest();
+
+                                expect(bar.isolateScope().isVisible()).toBe(false);
+                            });
+                        });
+
+                        describe("when there is NOT a global bar", function () {
+
+                            beforeEach(function () {
+                                activeView.append(bar);
+
+                                _.forEach(bars, function (bar) {
+                                    activeView.append(bar);
                                 });
                             });
 
                             it("should be visible", function () {
                                 $rootScope.$digest();
 
-                                expect(bar.isolateScope().shouldBeVisible()).toBe(true);
+                                expect(bar.isolateScope().isVisible()).toBe(true);
                             });
 
                             describe("will set the bar to be visible", testBarVisible);
                         });
-
-                        describe("when the bar is the NOT highest priority", function () {
-
-                            beforeEach(function () {
-                                bar = createWexNotificationBar({
-                                    text: mockTitleText,
-                                    barVisible: true,
-                                    content: mockChildText,
-                                    priority: TestUtils.getRandomInteger(11, 20)
-                                });
-
-                                _.forEach(bars.concat(bar), function (bar) {
-                                    body.append(bar);
-                                });
-                            });
-
-                            it("should NOT be visible", function () {
-                                $rootScope.$digest();
-
-                                expect(bar.isolateScope().shouldBeVisible()).toBe(false);
-                            });
-                        });
                     });
 
-                    describe("when the bar is NOT a global bar", function () {
-                        var initialState;
+                    describe("when the bar is NOT the highest priority", function () {
 
                         beforeEach(function () {
-                            initialState = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                        });
-
-                        describe("when the current state is the initial state", function () {
-
-                            beforeEach(function () {
-                                _.set($state, "current.name", initialState);
+                            bar = createWexNotificationBar({
+                                text: mockTitleText,
+                                ngIf: true,
+                                content: mockChildText,
+                                priority: TestUtils.getRandomInteger(11, 20)
                             });
 
-                            describe("when the bar is the highest priority", function () {
-
-                                beforeEach(function () {
-                                    bar = createWexNotificationBar({
-                                        text: mockTitleText,
-                                        barVisible: true,
-                                        content: mockChildText,
-                                        priority: 0
-                                    });
-
-                                    bar.isolateScope().initialState = initialState;
-                                });
-
-                                describe("when there is a global bar", function () {
-
-                                    beforeEach(function () {
-                                        activeView.append(bar);
-
-                                        _.forEach(bars, function (bar) {
-                                            body.append(bar);
-                                        });
-                                    });
-
-                                    it("should NOT be visible", function () {
-                                        $rootScope.$digest();
-
-                                        expect(bar.isolateScope().shouldBeVisible()).toBe(false);
-                                    });
-                                });
-
-                                describe("when there is NOT a global bar", function () {
-
-                                    beforeEach(function () {
-                                        activeView.append(bar);
-
-                                        _.forEach(bars, function (bar) {
-                                            activeView.append(bar);
-                                        });
-                                    });
-
-                                    it("should be visible", function () {
-                                        $rootScope.$digest();
-
-                                        expect(bar.isolateScope().shouldBeVisible()).toBe(true);
-                                    });
-
-                                    describe("will set the bar to be visible", testBarVisible);
-                                });
-                            });
-
-                            describe("when the bar is NOT the highest priority", function () {
-
-                                beforeEach(function () {
-                                    bar = createWexNotificationBar({
-                                        text: mockTitleText,
-                                        barVisible: true,
-                                        content: mockChildText,
-                                        priority: TestUtils.getRandomInteger(11, 20)
-                                    });
-
-                                    bar.isolateScope().initialState = initialState;
-
-                                    _.forEach(bars.concat(bar), function (bar) {
-                                        activeView.append(bar);
-                                    });
-                                });
-
-                                it("should NOT be visible", function () {
-                                    $rootScope.$digest();
-
-                                    expect(bar.isolateScope().shouldBeVisible()).toBe(false);
-                                });
-
-                                describe("will NOT set the bar to be visible", testBarNotVisible);
-                            });
-                        });
-
-                        describe("when the current state is NOT the initial state", function () {
-
-                            beforeEach(function () {
-                                bar = createWexNotificationBar({
-                                    text: mockTitleText,
-                                    barVisible: true,
-                                    content: mockChildText,
-                                    priority: 0
-                                });
-
-                                bar.isolateScope().initialState = initialState;
-
+                            _.forEach(bars.concat(bar), function (bar) {
                                 activeView.append(bar);
                             });
-
-                            it("should NOT be visible", function () {
-                                $rootScope.$digest();
-
-                                expect(bar.isolateScope().shouldBeVisible()).toBe(false);
-                            });
-
-                            describe("will NOT set the bar to be visible", testBarNotVisible);
-                        });
-                    });
-                });
-
-                describe("when the ngIf is false", function () {
-
-                    beforeEach(function () {
-                        bar = createWexNotificationBar({
-                            text: mockTitleText,
-                            barVisible: false,
-                            content: mockChildText
                         });
 
-                        activeView.append(bar);
+                        it("should NOT be visible", function () {
+                            $rootScope.$digest();
+
+                            expect(bar.isolateScope().isVisible()).toBe(false);
+                        });
+
+                        describe("will NOT set the bar to be visible", testBarNotVisible);
                     });
-
-                    it("should NOT be visible", function () {
-                        $rootScope.$digest();
-
-                        expect(bar.isolateScope()).not.toBeDefined();
-                    });
-
-                    describe("will NOT set the bar to be visible", testBarNotVisible);
                 });
+            });
+
+            describe("when the ngIf is false", function () {
+
+                beforeEach(function () {
+                    bar = createWexNotificationBar({
+                        text: mockTitleText,
+                        ngIf: false,
+                        content: mockChildText
+                    });
+
+                    activeView.append(bar);
+                });
+
+                it("should NOT be visible", function () {
+                    $rootScope.$digest();
+
+                    expect(bar.isolateScope()).not.toBeDefined();
+                });
+
+                describe("will NOT set the bar to be visible", testBarNotVisible);
             });
 
             describe("when the page has a navBar", function () {
 
                 beforeEach(function () {
                     pageHasNavBar = true;
+
+                    bar = createWexNotificationBar({text: mockTitleText});
 
                     bar.scope().$apply();
                 });
@@ -422,6 +379,8 @@
                 beforeEach(function () {
                     pageHasNavBar = false;
 
+                    bar = createWexNotificationBar({text: mockTitleText});
+
                     bar.scope().$apply();
                 });
 
@@ -433,13 +392,15 @@
             describe("when the scope is destroyed", function () {
 
                 beforeEach(function () {
+                    bar = createWexNotificationBar({text: mockTitleText});
+
                     spyOn(bar.isolateScope(), "setVisible");
 
                     bar.scope().$broadcast("$destroy");
                     $rootScope.$digest();
                 });
 
-                it("should remove all listeners", function () {
+                it("should remove the banner from the list of banners", function () {
                     //TODO - Figure out how to test this
                 });
 
@@ -454,6 +415,8 @@
                 template = [],
                 element;
 
+            scope.ngIf = _.isUndefined(scope.ngIf) ? true : scope.ngIf;
+
             /* NOTE: There's a bug when using ngIf in $compile in that causes it to always evaluate to false.
              * To get around this, we need to wrap the ngIf'd element in a <div>.
              */
@@ -464,10 +427,6 @@
                 template.push(" text='{{text}}'");
             }
 
-            if (_.has(scope, "subtext")) {
-                template.push(" subtext='{{subtext}}'");
-            }
-
             if (_.has(scope, "closeable")) {
                 template.push(" closeable='closeable'");
             }
@@ -476,7 +435,7 @@
                 template.push(" priority='{{priority}}'");
             }
 
-            template.push(" ng-if='barVisible'>");
+            template.push(" ng-if='ngIf'>");
 
             if (_.has(scope, "content")) {
                 template.push("{{content}}");
@@ -539,14 +498,6 @@
 
             beforeEach(function () {
                 $rootScope.$digest();
-            });
-
-            it("should NOT apply the has-header class to the active ion-content", function () {
-                expect(activeContent.hasClass("has-header")).toBeFalsy();
-            });
-
-            it("should NOT apply the has-subheader class to the active ion-content", function () {
-                expect(activeContent.hasClass("has-subheader")).toBeFalsy();
             });
 
             it("should apply the hide class to the bar", function () {
