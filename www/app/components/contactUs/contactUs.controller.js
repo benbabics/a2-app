@@ -8,10 +8,11 @@
 
         var vm = this;
         vm.config = globals.CONTACT_US.CONFIG;
+        vm.sendEmailLink = "";
 
         $ionicPlatform.ready(function () {
             $cordovaAppVersion.getVersionNumber().then(function (version) {
-                vm.config.sendEmailLink = vm.config.sendEmailLink + version;
+                vm.sendEmailLink = vm.config.sendEmailLink + version;
             });
         });
 
