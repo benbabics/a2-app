@@ -79,7 +79,7 @@
   .card {
     margin: 0;
 
-    &:not(.list) > .item {
+    &:not(.list) .item {
       border: none;
 
       &.item-divider {

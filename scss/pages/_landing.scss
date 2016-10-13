@@ -7,7 +7,21 @@
 
   .company-details {
     .card {
-      padding: 10px 13px;
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+
+      .card-detail, .logo {
+        display: table-cell;
+        padding: 10px 13px;
+      }
+
+      .logo {
+        padding-left: 0;
+        text-align: right;
+        vertical-align: middle;
+        width: 35%;
+      }
 
       .item {
         padding: 0;
