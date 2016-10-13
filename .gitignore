@@ -6,3 +6,5 @@ plugins/
 platforms/
 www/lib/
 www/css/
+www/test/
+test/results/
