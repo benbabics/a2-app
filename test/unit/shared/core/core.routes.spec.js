@@ -7,10 +7,11 @@
 
     describe("A Core Module Route Config", function () {
 
-        beforeEach(function () {
+        beforeAll(function () {
+            this.includeHtml = true;
+        });
 
-            module("app.shared.core");
-            module("app.html");
+        beforeEach(function () {
 
             module(function($provide) {
                 //mock dependencies

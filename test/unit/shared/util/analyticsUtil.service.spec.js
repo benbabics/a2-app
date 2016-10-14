@@ -9,7 +9,14 @@
 
     describe("An Analytics Util service", function () {
 
+        beforeAll(function () {
+            this.commonSharedMockExclusions = ["AnalyticsUtil"];
+            this.includeAppDependencies = false;
+        });
+
         beforeEach(function () {
+            var self = this;
+
             //mock dependencies:
             analytics = jasmine.createSpyObj("analytics", [
                 "set",
@@ -19,15 +26,9 @@
                 "setDispatchInterval"
             ]);
 
-            module("app.shared", function ($provide) {
-                TestUtils.provideCommonMockDependencies($provide, function (mocks) {
-                    delete mocks.AnalyticsUtil;
-
-                    mocks.PlatformUtil.waitForCordovaPlatform.and.callFake(function () {
-                        return TestUtils.resolvedPromise(analytics);
-                    });
-
-                    Logger = mocks.Logger;
+            module(function ($provide) {
+                self.PlatformUtil.waitForCordovaPlatform.and.callFake(function () {
+                    return TestUtils.resolvedPromise(analytics);
                 });
 
                 $provide.value("$ionicPlatform", {

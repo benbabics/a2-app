@@ -49,6 +49,9 @@ module.exports = function(config) {
             // Test Utilities
             "../test/unit/testUtils.js",
 
+            // Helpers
+            "../test/unit/helpers/**/*.js",
+
             // Source code
             "app/**/*.module.js",
             "app/**/*!(.module).js",

@@ -24,6 +24,12 @@
             resolveHandler,
             rejectHandler;
 
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+            this.includeSharedDependencies = false;
+            this.includeHtml = true;
+        });
+
         beforeEach(function () {
 
             //create mock dependencies:
@@ -809,7 +815,7 @@
             module("app.shared", function ($provide) {
                 $provide.value("FingerprintProfileUtil", FingerprintProfileUtil);
 
-                TestUtils.provideCommonMockDependencies($provide, function (mocks) {
+                TestUtils.provideCommonSharedMockDependencies($provide, function (mocks) {
                     PlatformUtil = mocks.PlatformUtil;
                     SecureStorage = mocks.SecureStorage;
 

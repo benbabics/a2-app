@@ -12,10 +12,11 @@
             navBar,
             rootNavView;
 
-        beforeEach(function () {
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+        });
 
-            module("app.shared");
-            module("app.html");
+        beforeEach(function () {
 
             inject(function (___, _$compile_, _$rootScope_, _ElementUtil_) {
                 _ = ___;

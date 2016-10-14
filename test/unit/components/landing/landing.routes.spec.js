@@ -49,36 +49,36 @@
             InvoiceManager,
             PaymentManager,
             UserManager,
-            AnalyticsUtil,
             BrandUtil,
             BrandManager,
             mockAccountId,
             BrandAssetModel;
 
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+            this.includeHtml = true;
+        });
+
         beforeEach(function () {
 
-            module("app.shared");
             module("app.components.landing");
             module("app.components.brand");
             module("app.components.invoice");
             module("app.components.user");
-            module("app.html");
 
             // mock dependencies
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["fetchCurrentInvoiceSummary"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchScheduledPaymentsCount"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
             BrandUtil = jasmine.createSpyObj("BrandUtil", ["getAssetResourceData"]);
-            BrandManager = jasmine.createSpyObj("BrandManager ", ["getUserBrandAssetBySubtype"]);
+            BrandManager = jasmine.createSpyObj("BrandManager ", ["getUserBrandAssetBySubtype", "getGenericAnalyticsTrackingId", "loadBundledBrand"]);
 
             module(function($provide, sharedGlobals) {
-                $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
+                $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
                 $provide.value("accountId", mockAccountId);
                 $provide.value("InvoiceManager", InvoiceManager);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("BrandUtil", BrandUtil);
                 $provide.value("BrandManager", BrandManager);
             });
@@ -188,10 +188,10 @@
                         });
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
+                it("should call this.AnalyticsUtil.trackView", function () {
                     $rootScope.$digest();
 
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.LANDING.CONFIG.ANALYTICS.pageName);
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.LANDING.CONFIG.ANALYTICS.pageName);
                 });
 
                 describe("when the user has a brand with a logo", function () {

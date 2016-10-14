@@ -14,7 +14,6 @@
             CardManager,
             CardReissueModel,
             UserManager,
-            AnalyticsUtil,
             mockGlobals = {
                 "CARD_CHANGE_STATUS": {
                     "CONFIG": {
@@ -141,27 +140,28 @@
                 }
             };
 
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+            this.includeHtml = true;
+        });
+
         beforeEach(function () {
 
-            module("app.shared");
             module("app.components.card");
             module("app.components.account");
             module("app.components.user");
             module("app.components.brand");
-            module("app.html");
 
             // mock dependencies
             CardManager = jasmine.createSpyObj("CardManager", ["fetchCard"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             AccountManager = jasmine.createSpyObj("AccountManager", ["fetchAccount"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
 
             module(function ($provide, sharedGlobals) {
-                $provide.value("globals", angular.extend({}, mockGlobals, sharedGlobals));
+                $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
                 $provide.value("CardManager", CardManager);
                 $provide.value("UserManager", UserManager);
                 $provide.value("AccountManager", AccountManager);
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
             });
 
             inject(function (_$injector_, _$q_, _$rootScope_, _$state_,
@@ -249,8 +249,8 @@
                     expect($state.current.name).toBe(stateName);
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_LIST.CONFIG.ANALYTICS.pageName);
+                it("should call this.AnalyticsUtil.trackView", function () {
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_LIST.CONFIG.ANALYTICS.pageName);
                 });
 
             });
@@ -316,8 +316,8 @@
                         });
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_DETAIL.CONFIG.ANALYTICS.pageName);
+                it("should call this.AnalyticsUtil.trackView", function () {
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_DETAIL.CONFIG.ANALYTICS.pageName);
                 });
 
             });
@@ -417,8 +417,8 @@
                     expect($state.current.name).toBe(stateName);
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_CHANGE_STATUS.CONFIG.ANALYTICS.pageName);
+                it("should call this.AnalyticsUtil.trackView", function () {
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_CHANGE_STATUS.CONFIG.ANALYTICS.pageName);
                 });
             });
         });
@@ -470,8 +470,8 @@
                     expect($state.current.name).toBe(stateName);
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG.ANALYTICS.pageName);
+                it("should call this.AnalyticsUtil.trackView", function () {
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG.ANALYTICS.pageName);
                 });
             });
         });
@@ -582,8 +582,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE.CONFIG.ANALYTICS.pageName);
+                it("should call this.AnalyticsUtil.trackView", function () {
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE.CONFIG.ANALYTICS.pageName);
                 });
             });
         });
@@ -630,8 +630,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_INPUTS.SHIPPING_METHOD.CONFIG.ANALYTICS.pageName);
+                it("should call this.AnalyticsUtil.trackView", function () {
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_INPUTS.SHIPPING_METHOD.CONFIG.ANALYTICS.pageName);
                 });
             });
         });
@@ -678,8 +678,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG.ANALYTICS.pageName);
+                it("should call this.AnalyticsUtil.trackView", function () {
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG.ANALYTICS.pageName);
                 });
             });
         });
@@ -726,8 +726,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_CONFIRMATION.CONFIG.ANALYTICS.pageName);
+                it("should call this.AnalyticsUtil.trackView", function () {
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_CONFIRMATION.CONFIG.ANALYTICS.pageName);
                 });
             });
         });

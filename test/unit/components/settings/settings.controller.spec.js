@@ -57,21 +57,7 @@
             sessionCredentials       = jasmine.createSpyObj( "sessionCredentials", ["get"] );
             UserAuthorizationManager = jasmine.createSpyObj( "UserAuthorizationManager", ["verify"] );
 
-            module("app.shared");
-            module("app.components");
-
-            // stub the routing and template loading
-            module(function($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-
-            module(function($provide) {
-                $provide.value( "$ionicTemplateCache", function() {} );
-            });
-
-            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _)]);
-
-            inject(function ($controller, _$rootScope_, _$q_, _$localStorage_) {
+            inject(function ($controller, _$rootScope_, _$q_, _$localStorage_, globals) {
                 // create a scope object for us to use.
                 $rootScope    = _$rootScope_;
                 $scope        = $rootScope.$new();
@@ -81,7 +67,7 @@
                 ctrl = $controller("SettingsController", {
                     $scope:                   $scope,
                     $localStorage:            $localStorage,
-                    globals:                  mockGlobals,
+                    globals:                  angular.extend({}, globals, mockGlobals),
                     Fingerprint:              Fingerprint,
                     SecureStorage:            SecureStorage,
                     sessionCredentials:       sessionCredentials,

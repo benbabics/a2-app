@@ -7,42 +7,44 @@ var TestUtils = (function () {
 
     var ALPHANUMERIC_CHARACTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
         TestUtils = {
-            digestError                       : digestError,
-            getRandomAccount                  : getRandomAccount,
-            getRandomAddress                  : getRandomAddress,
-            getRandomAlert                    : getRandomAlert,
-            getRandomAnalyticsEvent           : getRandomAnalyticsEvent,
-            getRandomArray                    : getRandomArray,
-            getRandomBank                     : getRandomBank,
-            getRandomBoolean                  : getRandomBoolean,
-            getRandomBrandAsset               : getRandomBrandAsset,
-            getRandomBrandAssets              : getRandomBrandAssets,
-            getRandomCard                     : getRandomCard,
-            getRandomCardReissueDetails       : getRandomCardReissueDetails,
-            getRandomDate                     : getRandomDate,
-            getRandomDriver                   : getRandomDriver,
-            getRandomInteger                  : getRandomInteger,
-            getRandomInvoiceSummary           : getRandomInvoiceSummary,
-            getRandomMap                      : getRandomMap,
-            getRandomNumber                   : getRandomNumber,
-            getRandomNumberWithLength         : getRandomNumberWithLength,
-            getRandomOnlineApplication        : getRandomOnlineApplication,
-            getRandomPayment                  : getRandomPayment,
-            getRandomPaymentAdd               : getRandomPaymentAdd,
-            getRandomPaymentAddAvailability   : getRandomPaymentAddAvailability,
-            getRandomPaymentUpdate            : getRandomPaymentUpdate,
-            getRandomPostedTransaction        : getRandomPostedTransaction,
-            getRandomShippingCarrier          : getRandomShippingCarrier,
-            getRandomShippingMethod           : getRandomShippingMethod,
-            getRandomStringThatIsAlphaNumeric : getRandomStringThatIsAlphaNumeric,
-            getRandomUser                     : getRandomUser,
-            getRandomUserAccount              : getRandomUserAccount,
-            getRandomValueFromArray           : getRandomValueFromArray,
-            getRandomValueFromMap             : getRandomValueFromMap,
-            getRandomVersionStatus            : getRandomVersionStatus,
-            provideCommonMockDependencies     : provideCommonMockDependencies,
-            rejectedPromise                   : rejectedPromise,
-            resolvedPromise                   : resolvedPromise
+            digestError                        : digestError,
+            getRandomAccount                   : getRandomAccount,
+            getRandomAddress                   : getRandomAddress,
+            getRandomAlert                     : getRandomAlert,
+            getRandomAnalyticsEvent            : getRandomAnalyticsEvent,
+            getRandomArray                     : getRandomArray,
+            getRandomBank                      : getRandomBank,
+            getRandomBoolean                   : getRandomBoolean,
+            getRandomBrandAsset                : getRandomBrandAsset,
+            getRandomBrandAssets               : getRandomBrandAssets,
+            getRandomCard                      : getRandomCard,
+            getRandomCardReissueDetails        : getRandomCardReissueDetails,
+            getRandomDate                      : getRandomDate,
+            getRandomDriver                    : getRandomDriver,
+            getRandomInteger                   : getRandomInteger,
+            getRandomInvoiceSummary            : getRandomInvoiceSummary,
+            getRandomMap                       : getRandomMap,
+            getRandomNumber                    : getRandomNumber,
+            getRandomNumberWithLength          : getRandomNumberWithLength,
+            getRandomOnlineApplication         : getRandomOnlineApplication,
+            getRandomPayment                   : getRandomPayment,
+            getRandomPaymentAdd                : getRandomPaymentAdd,
+            getRandomPaymentAddAvailability    : getRandomPaymentAddAvailability,
+            getRandomPaymentUpdate             : getRandomPaymentUpdate,
+            getRandomPostedTransaction         : getRandomPostedTransaction,
+            getRandomShippingCarrier           : getRandomShippingCarrier,
+            getRandomShippingMethod            : getRandomShippingMethod,
+            getRandomStringThatIsAlphaNumeric  : getRandomStringThatIsAlphaNumeric,
+            getRandomUser                      : getRandomUser,
+            getRandomUserAccount               : getRandomUserAccount,
+            getRandomValueFromArray            : getRandomValueFromArray,
+            getRandomValueFromMap              : getRandomValueFromMap,
+            getRandomVersionStatus             : getRandomVersionStatus,
+            provideCommonMockDependencies      : provideCommonMockDependencies,
+            provideCommonAppMockDependencies   : provideCommonAppMockDependencies,
+            provideCommonSharedMockDependencies: provideCommonSharedMockDependencies,
+            rejectedPromise                    : rejectedPromise,
+            resolvedPromise                    : resolvedPromise
         };
 
     return TestUtils;
@@ -498,8 +500,25 @@ var TestUtils = (function () {
         return versionStatus;
     }
 
-    function provideCommonMockDependencies($provide, setter) {
-        var dependencies = {
+    function provideCommonMockDependencies($provide, mocks, setter, exclusions) {
+        mocks = _.omit(mocks, exclusions);
+        _.merge(mocks, (setter || _.noop)(mocks));
+
+        _.forOwn(mocks, function (mock, name) {
+            $provide.value(name, mock);
+        });
+    }
+
+    function provideCommonAppMockDependencies($provide, setter, exclusions) {
+        var mocks = {
+            LoginManager: jasmine.createSpyObj("LoginManager", ["logIn", "logOut"])
+        };
+
+        provideCommonMockDependencies($provide, mocks, setter, exclusions);
+    }
+
+    function provideCommonSharedMockDependencies($provide, setter, exclusions) {
+        var mocks = {
             AnalyticsUtil: jasmine.createSpyObj("AnalyticsUtil", [
                 "getActiveTrackerId",
                 "hasActiveTracker",
@@ -510,7 +529,6 @@ var TestUtils = (function () {
             ]),
             LoadingIndicator: jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]),
             Logger: jasmine.createSpyObj("Logger", ["enabled", "debug", "error", "info", "isEnabled", "log", "warn"]),
-            LoginManager: jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]),
             PlatformUtil: jasmine.createSpyObj("PlatformUtil", [
                 "getPlatform",
                 "platformHasCordova",
@@ -522,13 +540,9 @@ var TestUtils = (function () {
             UrbanAirship: jasmine.createSpyObj("UrbanAirship", ["ready"])
         };
 
-        dependencies.PlatformUtil.waitForCordovaPlatform.and.returnValue(rejectedPromise("Cordova disabled by default."));
+        mocks.PlatformUtil.waitForCordovaPlatform.and.returnValue(rejectedPromise("Cordova disabled by default."));
 
-        _.merge(dependencies, (setter || _.noop)(dependencies));
-
-        _.forOwn(dependencies, function (mock, name) {
-            $provide.value(name, mock);
-        });
+        provideCommonMockDependencies($provide, mocks, setter, exclusions);
     }
 
 })();

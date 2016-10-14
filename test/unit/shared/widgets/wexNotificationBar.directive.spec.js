@@ -17,6 +17,11 @@
             mockTitleText,
             mockChildText;
 
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+            this.includeHtml = true;
+        });
+
         beforeEach(function () {
             //mock dependencies
             ElementUtil = jasmine.createSpyObj("ElementUtil", [
@@ -26,11 +31,9 @@
                 "pageHasNavBar"
             ]);
 
-            module("app.shared", function ($provide) {
+            module(function ($provide) {
                 $provide.value("ElementUtil", ElementUtil);
             });
-
-            module("app.html");
 
             inject(function (_$rootScope_, _$compile_, _$state_) {
                 $compile = _$compile_;

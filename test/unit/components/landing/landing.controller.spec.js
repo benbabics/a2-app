@@ -19,7 +19,6 @@
         Navigation,
         Toast,
         FlowUtil,
-        AnalyticsUtil,
         mockGlobals = {
             "LANDING": {
                 "CONFIG": {
@@ -73,32 +72,9 @@
             $ionicPlatform = jasmine.createSpyObj("$ionicPlatform", ["registerBackButtonAction"]);
             FlowUtil = jasmine.createSpyObj("FlowUtil", ["exitApp"]);
             Toast = jasmine.createSpyObj("Toast", ["show"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
-
-            module("app.shared");
-            module("app.components", function ($provide) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
-            });
-
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
-            });
 
             inject(function ($controller, _$interval_, $rootScope, $q,
-                             _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, PlatformUtil) {
+                             _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, PlatformUtil, globals) {
 
                 UserAccountModel = _UserAccountModel_;
                 InvoiceSummaryModel = _InvoiceSummaryModel_;
@@ -113,7 +89,7 @@
                 mockGreeting = "Hello, " + mockUser.firstName;
 
                 //setup spies
-                spyOn(PlatformUtil, "waitForCordovaPlatform").and.callFake(function(callback) {
+                PlatformUtil.waitForCordovaPlatform = jasmine.createSpy("waitForCordovaPlatform").and.callFake(function(callback) {
                     //just execute the callback directly
                     return $q.when((callback || function() {})());
                 });
@@ -136,7 +112,7 @@
                     FlowUtil              : FlowUtil,
                     currentInvoiceSummary : mockCurrentInvoiceSummary,
                     scheduledPaymentsCount: mockScheduledPaymentCount,
-                    globals               : mockGlobals,
+                    globals               : angular.extend({}, globals, mockGlobals),
                     brandLogo             : mockBrandLogo
                 });
             });
