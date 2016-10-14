@@ -6,16 +6,17 @@
 
         <section class="company-details">
           <div class="card">
-            <div class="item item-divider">
-              {{ vm.greeting }}
+            <div class="card-detail">
+              <div class="item item-divider">
+                {{ vm.greeting }}
+              </div>
+              <div class="item item-text-wrap">
+                <p class="company-name">{{ vm.user.billingCompany.name }}</p>
+                <p class="account-number">{{ vm.user.getDisplayAccountNumber() }}</p>
+              </div>
             </div>
-            <div class="item item-text-wrap">
-              <p class="company-name">{{ vm.user.billingCompany.name }}</p>
-              <p class="account-number">{{ vm.user.getDisplayAccountNumber() }}</p>
-            </div>
+            <div class="logo" ng-bind-html="vm.branding.logo | wexSvg"></div>
           </div>
-
-          <div class="logo" ng-bind-html="vm.branding.logo | wexSvg"></div>
         </section>
 
         <section class="account-overview">
