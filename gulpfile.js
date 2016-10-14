@@ -71,7 +71,7 @@ gulp.task("bower-install", ["git-check"], function () {
 });
 
 gulp.task("npm-install", function (done) {
-    sh.exec("npm install", done);
+    sh.exec("yarn", done);
 });
 
 gulp.task("ionic-restore", function (done) {
