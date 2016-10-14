@@ -42,7 +42,7 @@
     "plist": "^1.2.0",
     "protractor": "^3.0.0",
     "shelljs": "^0.6.0",
-    "wiredep": "^3.0.0"
+    "wiredep": "^4.0.0"
   },
   "cordovaPlugins": [
     "cordova-ios-requires-fullscreen@~0.0.2",
