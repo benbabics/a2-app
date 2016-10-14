@@ -17,7 +17,7 @@
             <img src="img/pages/login/logo.png"/>
         </div>
 
-        <form ng-class="{'is-active': vm.isKeyboardVisible()}" novalidate name="vm.userLoginForm"
+        <form wex-active-element ng-class="{ 'is-active': isActive }" novalidate name="vm.userLoginForm"
               ng-submit="vm.userLoginForm.$valid && vm.logInUser(vm.setupFingerprintAuth)">
             <div class="list">
                 <div class="item item-input item-stacked-label">
