@@ -17,6 +17,7 @@ var jshint = require("gulp-jshint");
 var jscs = require("gulp-jscs");
 var webserver = require("gulp-webserver");
 var gulpsync = require("gulp-sync")(gulp);
+var KarmaServer = require("karma").Server;
 
 var sourcePaths = {
     root: {
@@ -37,6 +38,9 @@ var destPaths = {
 };
 
 var config = {
+    test: {
+        dir: "test"
+    },
     webserver: {
         host: "127.0.0.1",
         port: 8100,
@@ -237,6 +241,19 @@ gulp.task("ionic-prod-run-android", ["ionic-build-prepare"], function (done) {
 gulp.task("ionic-prod-run-ios", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "prod";
     sh.exec("ionic run ios --device", done);
+});
+
+/**
+ * Test Tasks
+ */
+gulp.task("test", function (done) {
+    new KarmaServer({
+        configFile: __dirname + "/" + config.test.dir + "/karma.conf.js",
+        singleRun: true,
+        browsers: ["PhantomJS"]
+    }, function() {
+        done();
+    }).start();
 });
 
 /**
