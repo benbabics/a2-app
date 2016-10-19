@@ -119,7 +119,8 @@
 
         function logInUser(useFingerprintAuth) {
             var clientId = _.toLower(vm.user.username),
-                clientSecret = vm.user.password;
+                clientSecret = vm.user.password,
+                settingUpFingerprintAuth = useFingerprintAuth && !vm.fingerprintProfileAvailable;
 
             vm.isLoggingIn = true;
 
@@ -140,29 +141,38 @@
                 .then(function () {
                     trackSuccessEvent();
 
-                    // persist session credentials for one-click fingerprint auth in settings
-                    // NOTE: sessionCredentials service (itself) will listen for "app:logout" event
-                    // and handle clearing these credentials from the session.
-                    if (vm.fingerprintProfileAvailable) {
-                        FingerprintProfileUtil.getProfile(clientId).then(function (clientSecret) {
-                            sessionCredentials.set({clientId: clientId, clientSecret: clientSecret});
-                        });
-                    }
-                    else {
-                        sessionCredentials.set({clientId: clientId, clientSecret: clientSecret});
-                    }
-
                     // Store the Username or not based on Remember Me checkbox
                     rememberUsername(vm.rememberMeToggle, vm.user.username);
 
                     // Do not allow backing up to the login page.
                     $ionicHistory.nextViewOptions({disableBack: true});
 
-                    // transition to the next page
-                    $state.go($stateParams.toState || "landing");
-
                     // toggle StatusBar as fixed
                     toggleStatusBarOverlaysWebView( false );
+
+                    return FingerprintProfileUtil.getProfile(clientId)
+                        .then(function (fingerprintProfile) {
+                            clientSecret = fingerprintProfile.clientSecret;
+                        })
+                        .catch(function () {
+                            settingUpFingerprintAuth = false;
+
+                            return $q.resolve();
+                        })
+                        .finally(function () {
+                            // persist session credentials for one-click fingerprint auth in settings
+                            // NOTE: sessionCredentials service (itself) will listen for "app:logout" event
+                            // and handle clearing these credentials from the session.
+                            sessionCredentials.set({clientId: clientId, clientSecret: clientSecret});
+
+                            // transition to the next page
+                            if ($stateParams.toState) {
+                                $state.go($stateParams.toState);
+                            }
+                            else {
+                                $state.go("landing", {showFingerprintBanner: settingUpFingerprintAuth});
+                            }
+                        });
                 })
                 .catch(function (loginError) {
                     var errorReason = "DEFAULT";

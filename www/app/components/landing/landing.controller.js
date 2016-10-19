@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:12
+    // jshint maxparams:13
 
     /* @ngInject */
-    function LandingController($scope, $interval, $ionicHistory, $ionicPlatform,
+    function LandingController($scope, $stateParams, $interval, $ionicHistory, $ionicPlatform,
                                currentInvoiceSummary, brandLogo, globals, scheduledPaymentsCount,
                                FlowUtil, Navigation, Toast, UserManager) {
 
@@ -14,16 +14,17 @@
             exitTimerPromise,
             vm = this;
 
-        vm.config = globals.LANDING.CONFIG;
+        vm.config = _.merge({}, globals.LANDING.CONFIG, globals.FINGERPRINT_AUTH.CONFIG)
         vm.chartColors = globals.LANDING.CHART.colors;
         vm.invoiceSummary = {};
         vm.billingCompany = {};
         vm.branding = {};
         vm.greeting = "";
+        vm.params = $stateParams;
+        vm.scheduledPaymentsCount = 0;
         vm.goToCards = goToCards;
         vm.goToMakePayment = goToMakePayment;
         vm.goToTransactionActivity = goToTransactionActivity;
-        vm.scheduledPaymentsCount = 0;
 
         activate();
 

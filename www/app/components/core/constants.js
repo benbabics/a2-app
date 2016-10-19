@@ -6,8 +6,21 @@
     // jscs:disable maximumLineLength
 
     var appGlobals = {},
-        globals = function (sharedGlobals) {
-            return angular.extend({}, sharedGlobals, appGlobals);
+        appGlobalsAndroid = {},
+        appGlobalsIos = {},
+        globals = function (_, sharedGlobals, sharedGlobalsAndroid, sharedGlobalsIos, PlatformUtil) {
+            var platformGlobals = (function () {
+                switch (_.toLower(PlatformUtil.getPlatform())) {
+                    case "android":
+                        return  _.merge({}, sharedGlobalsAndroid, appGlobalsAndroid);
+                    case "ios":
+                        return _.merge({}, sharedGlobalsIos, appGlobalsIos);
+                    default:
+                        return {};
+                }
+            })();
+
+            return _.merge({}, sharedGlobals, appGlobals, platformGlobals);
         };
 
     appGlobals.DEFAULT_ROUTE = "/version/status";
@@ -953,11 +966,19 @@
         "SECRET"     : "SECRET"
     };
 
+    appGlobals.FINGERPRINT_AUTH = {
+        CONFIG: {
+            "registerSuccessBanner": "is now setup for your username"
+        }
+    };
+
     appGlobals.USER_IDLE_TIMEOUT = 900; //in seconds
 
     angular
         .module("app.components.core")
         .constant("appGlobals", appGlobals)
+        .constant("appGlobalsAndroid", appGlobalsAndroid)
+        .constant("appGlobalsIos", appGlobalsIos)
         .factory("globals", globals);
 
 })();

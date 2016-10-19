@@ -5,6 +5,7 @@
         $ionicHistory,
         $ionicPlatform,
         $interval,
+        $stateParams,
         ctrl,
         doBackButtonAction,
         mockCurrentInvoiceSummary,
@@ -72,6 +73,7 @@
             $ionicPlatform = jasmine.createSpyObj("$ionicPlatform", ["registerBackButtonAction"]);
             FlowUtil = jasmine.createSpyObj("FlowUtil", ["exitApp"]);
             Toast = jasmine.createSpyObj("Toast", ["show"]);
+            $stateParams = {param: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
             inject(function ($controller, _$interval_, $rootScope, $q,
                              _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, PlatformUtil, globals) {
@@ -106,6 +108,7 @@
                     $scope                : $scope,
                     $ionicHistory         : $ionicHistory,
                     $ionicPlatform        : $ionicPlatform,
+                    $stateParams          : $stateParams,
                     Navigation            : Navigation,
                     UserManager           : UserManager,
                     Toast                 : Toast,
@@ -213,6 +216,10 @@
 
             it("should set the greeting", function () {
                 expect(ctrl.greeting).toEqual(mockGreeting);
+            });
+
+            it("should set the params", function () {
+                expect(ctrl.params).toEqual($stateParams);
             });
             
             it("should set the chart options", function () {

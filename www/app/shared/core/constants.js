@@ -2,8 +2,21 @@
     "use strict";
 
     var sharedGlobals = {},
-        globals = function () {
-            return sharedGlobals;
+        sharedGlobalsAndroid = {},
+        sharedGlobalsIos = {},
+        globals = function (_, PlatformUtil) {
+            var platformGlobals = (function () {
+                switch (_.toLower(PlatformUtil.getPlatform())) {
+                    case "android":
+                        return sharedGlobalsAndroid;
+                    case "ios":
+                        return sharedGlobalsIos;
+                    default:
+                        return {};
+                }
+            })();
+
+            return _.merge({}, sharedGlobals, platformGlobals);
         };
 
     sharedGlobals.LOGIN_STATE = "@@@STRING_REPLACE_LOGIN_STATE@@@";
@@ -25,6 +38,13 @@
      */
     sharedGlobals.LOGGING = {
         "ENABLED": "@@@STRING_REPLACE_LOGGING_ENABLED@@@"
+    };
+
+    /**
+     * Platform
+     */
+    sharedGlobals.PLATFORM = {
+        "name": "Browser"
     };
 
     /**
@@ -260,7 +280,8 @@
 
     sharedGlobals.FINGERPRINT_AUTH = {
         CONFIG: {
-            defaultMessage: "Scan your fingerprint below to enter your account"
+            defaultMessage: "Scan your fingerprint below to enter your account",
+            platformName: "Fingerprint authentication"
         },
         PASSWORD_FALLBACK: {
             NONE   : "NONE", //Android only
@@ -269,9 +290,41 @@
         }
     };
 
+    /**
+     * PLATFORM GLOBALS
+     */
+
+    /**
+     * Android
+     */
+    sharedGlobalsAndroid.PLATFORM = {
+        "name": "Android"
+    };
+
+    sharedGlobalsAndroid.FINGERPRINT_AUTH = {
+        CONFIG: {
+            platformName: "Fingerprint authentication"
+        }
+    };
+
+    /**
+     * iOS
+     */
+    sharedGlobalsIos.PLATFORM = {
+        "name": "iOS"
+    };
+
+    sharedGlobalsIos.FINGERPRINT_AUTH = {
+        CONFIG: {
+            platformName: "Touch ID\u00AE"
+        }
+    };
+
     angular
         .module("app.shared.core")
         .constant("sharedGlobals", sharedGlobals)
+        .constant("sharedGlobalsAndroid", sharedGlobalsAndroid)
+        .constant("sharedGlobalsIos", sharedGlobalsIos)
         .factory("globals", globals);
 
 })();

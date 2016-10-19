@@ -1,106 +1,113 @@
-  <ion-view view-title="{{::vm.config.title}}" class="page-landing" wex-hide-back-button="true">
+<ion-view view-title="{{::vm.config.title}}" class="page-landing" wex-hide-back-button="true">
+    <wex-notification-bar class="bar-success"
+                          ng-if="vm.params.showFingerprintBanner"
+                          wex-toast-timer
+                          wex-toast-on-hide="vm.params.showFingerprintBanner = false"
+                          text="{{::vm.config.platformName}} {{::vm.config.registerSuccessBanner}} {{vm.user.username | wexTruncateString}}">
+    </wex-notification-bar>
+
     <ion-content class="padding">
 
         <!-- Display Notifications Prompt -->
         <enable-notifications-prompt></enable-notifications-prompt>
 
         <section class="company-details">
-          <div class="card">
-            <div class="item item-divider">
-              {{ vm.greeting }}
+            <div class="card">
+                <div class="item item-divider">
+                    {{ vm.greeting }}
+                </div>
+                <div class="item item-text-wrap">
+                    <p class="company-name">{{ vm.user.billingCompany.name }}</p>
+                    <p class="account-number">{{ vm.user.getDisplayAccountNumber() }}</p>
+                </div>
             </div>
-            <div class="item item-text-wrap">
-              <p class="company-name">{{ vm.user.billingCompany.name }}</p>
-              <p class="account-number">{{ vm.user.getDisplayAccountNumber() }}</p>
-            </div>
-          </div>
 
-          <div class="logo" ng-bind-html="vm.branding.logo | wexSvg"></div>
+            <div class="logo" ng-bind-html="vm.branding.logo | wexSvg"></div>
         </section>
 
         <section class="account-overview">
-          <div class="card">
-            <div class="item item-divider">
-              Account Overview
-            </div>
-
-            <div class="item item-text-wrap">
-              <div class="chart-wrapper">
-                <div class="labels">
-                  <div class="label" style="color: #efcc57;">
-                    <div class="text-amount">$200,000<sup>00</sup></div>
-                    <div class="text-title">Pending</div>
-                  </div>
-                  <div class="label" style="color: {{ vm.chartColors.unbilledAmount }};">
-                    <div class="text-amount">{{ vm.invoiceSummary.unbilledAmount | currency }}</div>
-                    <div class="text-title">{{ ::vm.config.unbilledAmount }}</div>
-                  </div>
+            <div class="card">
+                <div class="item item-divider">
+                    Account Overview
                 </div>
 
-                <div class="chart">
-                  <canvas width="125"
-                          height="125"
-                          class="chart chart-doughnut"
-                          chart-options="vm.chart.options"
-                          chart-data="vm.chart.data"
-                          chart-colours="vm.chart.colors"
-                          chart-labels="vm.chart.labels">
-                  </canvas>
-                </div>
+                <div class="item item-text-wrap">
+                    <div class="chart-wrapper">
+                        <div class="labels">
+                            <div class="label" style="color: #efcc57;">
+                                <div class="text-amount">$200,000<sup>00</sup></div>
+                                <div class="text-title">Pending</div>
+                            </div>
+                            <div class="label" style="color: {{ vm.chartColors.unbilledAmount }};">
+                                <div class="text-amount">{{ vm.invoiceSummary.unbilledAmount | currency }}</div>
+                                <div class="text-title">{{ ::vm.config.unbilledAmount }}</div>
+                            </div>
+                        </div>
 
-                <div class="labels">
-                  <div class="label" style="color: {{ vm.chartColors.availableCreditPositive }};">
-                    <div class="text-amount">{{ vm.invoiceSummary.availableCredit | currency }}</div>
-                    <div class="text-title">{{ ::vm.config.availableCredit }}</div>
-                  </div>
-                  <div class="label" style="color: {{ vm.chartColors.billedAmount }};">
-                    <div class="text-amount">{{ vm.invoiceSummary.billedAmount | currency }}</div>
-                    <div class="text-title">{{ ::vm.config.billedAmount }}</div>
-                  </div>
+                        <div class="chart">
+                            <canvas width="125"
+                                    height="125"
+                                    class="chart chart-doughnut"
+                                    chart-options="vm.chart.options"
+                                    chart-data="vm.chart.data"
+                                    chart-colours="vm.chart.colors"
+                                    chart-labels="vm.chart.labels">
+                            </canvas>
+                        </div>
+
+                        <div class="labels">
+                            <div class="label" style="color: {{ vm.chartColors.availableCreditPositive }};">
+                                <div class="text-amount">{{ vm.invoiceSummary.availableCredit | currency }}</div>
+                                <div class="text-title">{{ ::vm.config.availableCredit }}</div>
+                            </div>
+                            <div class="label" style="color: {{ vm.chartColors.billedAmount }};">
+                                <div class="text-amount">{{ vm.invoiceSummary.billedAmount | currency }}</div>
+                                <div class="text-title">{{ ::vm.config.billedAmount }}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+                <div class="list">
+                    <div class="item balance-current">
+                        {{ ::vm.config.currentBalance }}
+                        <span class="item-currency">{{ vm.invoiceSummary.currentBalance | currency }}</span>
+                    </div>
+                    <div class="item balance-statement">
+                        {{ ::vm.config.statementBalance }}
+                        <span class="item-currency">{{ vm.invoiceSummary.statementBalance | currency }}</span>
+                    </div>
+                    <div class="item due-date">
+                        {{ ::vm.config.paymentDueDate }}
+                        <span class="item-currency">{{ vm.invoiceSummary.paymentDueDate | wexDefaultDateFormat }}</span>
+                    </div>
+                </div>
             </div>
-            <div class="list">
-              <div class="item balance-current">
-                {{ ::vm.config.currentBalance }}
-                <span class="item-currency">{{ vm.invoiceSummary.currentBalance | currency }}</span>
-              </div>
-              <div class="item balance-statement">
-                {{ ::vm.config.statementBalance }}
-                <span class="item-currency">{{ vm.invoiceSummary.statementBalance | currency }}</span>
-              </div>
-              <div class="item due-date">
-                {{ ::vm.config.paymentDueDate }}
-                <span class="item-currency">{{ vm.invoiceSummary.paymentDueDate | wexDefaultDateFormat }}</span>
-              </div>
-            </div>
-          </div>
         </section>
 
         <div class="card list">
-          <div class="item item-icon-left item-icon-right"
-               ng-click="vm.goToMakePayment()"
-               wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink">
-            <i class="icon fa fa-bank"></i>
-            {{ ::vm.config.makePayment }}
-            <i class="icon fa fa-chevron-right"></i>
-          </div>
+            <div class="item item-icon-left item-icon-right"
+                 ng-click="vm.goToMakePayment()"
+                 wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink">
+                <i class="icon fa fa-bank"></i>
+                {{ ::vm.config.makePayment }}
+                <i class="icon fa fa-chevron-right"></i>
+            </div>
 
-          <div class="item item-icon-left item-icon-right"
-               ng-click="vm.goToTransactionActivity()"
-               wex-analytics-track-event="vm.config.ANALYTICS.events.transactionActivityLink">
-            <i class="icon fa fa-exchange"></i>
-            {{ ::vm.config.transactionActivity }}
-            <i class="icon fa fa-chevron-right"></i>
-          </div>
+            <div class="item item-icon-left item-icon-right"
+                 ng-click="vm.goToTransactionActivity()"
+                 wex-analytics-track-event="vm.config.ANALYTICS.events.transactionActivityLink">
+                <i class="icon fa fa-exchange"></i>
+                {{ ::vm.config.transactionActivity }}
+                <i class="icon fa fa-chevron-right"></i>
+            </div>
 
-          <div class="item item-icon-left item-icon-right"
-               ng-click="vm.goToCards()"
-               wex-analytics-track-event="vm.config.ANALYTICS.events.cardsLink">
-            <i class="icon fa fa-credit-card-alt"></i>
-            {{ ::vm.config.cards }}
-            <i class="icon fa fa-chevron-right"></i>
-          </div>
+            <div class="item item-icon-left item-icon-right"
+                 ng-click="vm.goToCards()"
+                 wex-analytics-track-event="vm.config.ANALYTICS.events.cardsLink">
+                <i class="icon fa fa-credit-card-alt"></i>
+                {{ ::vm.config.cards }}
+                <i class="icon fa fa-chevron-right"></i>
+            </div>
         </div>
 
     </ion-content>

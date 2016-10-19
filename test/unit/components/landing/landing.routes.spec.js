@@ -119,7 +119,7 @@
             });
 
             it("should have the expected URL", function () {
-                expect(state.url).toEqual("/landing");
+                expect(state.url).toEqual("/landing?{showFingerprintBanner:bool}");
             });
 
             it("should define a view on the root view container", function () {
