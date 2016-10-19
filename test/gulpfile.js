@@ -1,5 +1,18 @@
 "use strict";
 
+/* Helps to debug "Error: spawn ENOENT" issues */
+(function() {
+    var childProcess = require("child_process");
+    var oldSpawn = childProcess.spawn;
+    function mySpawn() {
+        console.log('spawn called');
+        console.log(arguments);
+        var result = oldSpawn.apply(this, arguments);
+        return result;
+    }
+    childProcess.spawn = mySpawn;
+})();
+
 var gulp = require("gulp");
 var bower = require("bower");
 var concat = require("gulp-concat");
@@ -8,6 +21,7 @@ var sh = require("shelljs");
 var angularFilesort = require("gulp-angular-filesort");
 var inject = require("gulp-inject");
 var protractor = require("gulp-protractor").protractor;
+var Testserver = require('karma').Server;
 
 // the source paths
 var sourcePaths = {
@@ -145,4 +159,13 @@ gulp.task("protractor-run-userLogin", function () {
         .on("error", function (e) {
             throw e;
         });
+});
+
+gulp.task('test', function (done) {
+    new Testserver({
+        configFile: __dirname + '/test/karma.conf.js',
+        singleRun: true,
+        browsers: ["PhantomJS"],
+        browserNoActivityTimeout: 60000
+    }, done).start();
 });
