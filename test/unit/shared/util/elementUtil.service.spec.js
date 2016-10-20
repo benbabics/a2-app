@@ -1364,7 +1364,7 @@
                 });
 
                 it("should return the content", function () {
-                    expect(ElementUtil.getViewContent()).toEqual(content);
+                    expect(ElementUtil.getViewContent()[0].outerHTML).toEqual(content[0].outerHTML);
                 });
             });
 
@@ -1412,7 +1412,7 @@
                     });
 
                     it("should return the content", function () {
-                        expect(ElementUtil.getViewContent(view)).toEqual(content);
+                        expect(ElementUtil.getViewContent(view)[0].outerHTML).toEqual(content[0].outerHTML);
                     });
                 });
             });
