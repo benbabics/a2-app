@@ -122,6 +122,9 @@
             "BASE"  : "brands",
             "ASSETS": "assets"
         },
+        SERVICE_LOG: {
+            "BASE": "service-log"
+        },
         VERSIONS   : {
             "BASE"         : "versions",
             "STATUS"       : "status",

@@ -4,9 +4,11 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function UserAuthorizationManager(_, $q, $rootScope, globals, AuthenticationManager, Fingerprint,
-                                      FingerprintProfileUtil, LoadingIndicator, Logger, Modal, PlatformUtil) {
-        var USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION_TYPES;
+    function UserAuthorizationManager(_, $cordovaDevice, $q, $rootScope, globals, AuthenticationManager, Fingerprint,
+                                      FingerprintProfileUtil, LoadingIndicator, Logger, Modal, PlatformUtil, ServiceLogManager) {
+        var USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION_TYPES,
+            TERMS_ACCEPTANCE_LOG = globals.FINGERPRINT_AUTH.TERMS_ACCEPTANCE_LOG,
+            termsAcceptanceLogTemplate = _.template(TERMS_ACCEPTANCE_LOG.template);
 
         var service = {
             verify: verify
@@ -71,8 +73,6 @@
 
                             return acceptedTermsDeferred.promise;
                         })
-                        //register a new fingerprint profile for this user
-                        .then(_.partial(_.set, verificationOptions, "clientSecret", clientSecret))
                         .catch(function (error) {
                             if (_.isNull(bypassFingerprint) && termsModal && termsModal.isShown()) {
                                 //user declined the terms, so bypass fingerprint auth
@@ -81,6 +81,19 @@
 
                             return $q.reject(error);
                         })
+                        .then(function () {
+                            LoadingIndicator.begin();
+
+                            //log the user's acceptance of the terms
+                            return ServiceLogManager.log(termsAcceptanceLogTemplate({
+                                username: clientId,
+                                date: new Date(),
+                                deviceId: $cordovaDevice.getUUID(),
+                                deviceModel: $cordovaDevice.getModel()
+                            })).finally(LoadingIndicator.complete);
+                        })
+                        //register a new fingerprint profile for this user
+                        .then(_.partial(_.set, verificationOptions, "clientSecret", clientSecret))
                         .finally(function () {
                             return termsModal.remove();
                         });

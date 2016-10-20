@@ -13,6 +13,7 @@
         "app.shared.api",
         "app.shared.integration",
         "app.shared.logger",
+        "app.shared.serviceLog",
         "app.shared.util",
         "app.shared.widgets",
         "app.shared.db"
