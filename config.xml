@@ -126,4 +126,5 @@
     <preference name="xwalkMultipleApk" value="true" />
     <plugin name="cordova-plugin-dialogs" spec="~1.2.1" />
     <plugin name="com.phonegap.plugins.nativesettingsopener" spec="https://github.com/selahssea/cordova-open-native-settings" />
+    <plugin name="cordova-plugin-ignore-lint-translation" spec="~0.0.1" />
 </widget>
