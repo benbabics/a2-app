@@ -263,7 +263,8 @@ gulp.task("test", function (done) {
     new KarmaServer({
         configFile: __dirname + "/" + config.test.dir + "/karma.conf.js",
         singleRun: true,
-        browsers: ["PhantomJS"]
+        browsers: ["PhantomJS"],
+        browserNoActivityTimeout: 60000
     }, function() {
         done();
     }).start();
