@@ -119,7 +119,8 @@
 
         function logInUser(useFingerprintAuth) {
             var clientId = _.toLower(vm.user.username),
-                clientSecret = vm.user.password;
+                clientSecret = vm.user.password,
+                acceptTermsListener, rejectTermsListener;
 
             vm.isLoggingIn = true;
 
@@ -130,6 +131,10 @@
                 clearFingerprintProfile(clientId);
             }
 
+            // track accepted/rejected terms
+            acceptTermsListener = $rootScope.$on("FingerprintAuthTerms.accepted", function() { trackEvent( "AcceptTerms" ); });
+            rejectTermsListener = $rootScope.$on("FingerprintAuthTerms.rejected", function() { trackEvent( "DeclineTerms" ); });
+
             return UserAuthorizationManager.verify({
                     clientId: clientId,
                     clientSecret: clientSecret,
@@ -138,7 +143,11 @@
                 .then(LoadingIndicator.begin)
                 .then(LoginManager.logIn)
                 .then(function () {
-                    trackSuccessEvent();
+                    // track if login was biometric or manual
+                    if ( vm.fingerprintAuthAvailable && vm.fingerprintProfileAvailable ) {
+                        trackEvent( "successfulLoginBiometric" );
+                    }
+                    else { trackEvent( "successfulLoginManual" ); }
 
                     // persist session credentials for one-click fingerprint auth in settings
                     // NOTE: sessionCredentials service (itself) will listen for "app:logout" event
@@ -187,8 +196,11 @@
                 })
                 .finally(function () {
                     LoadingIndicator.complete();
-
                     vm.isLoggingIn = false;
+
+                    // remove listeners for accepted/rejected terms
+                    acceptTermsListener();
+                    rejectTermsListener();
                 });
         }
 
@@ -302,8 +314,8 @@
             }
         }
 
-        function trackSuccessEvent() {
-            _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events.successfulLogin);
+        function trackEvent(eventId) {
+            _.spread( AnalyticsUtil.trackEvent )( vm.config.ANALYTICS.events[ eventId ] );
         }
 
         function verifyFingerprintRemoval(model) {

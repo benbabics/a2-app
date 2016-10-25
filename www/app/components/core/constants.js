@@ -75,11 +75,14 @@
             "ANALYTICS"   : {
                 "pageName"   : "Login",
                 "events"     : {
-                    "successfulLogin"       : ["Login", "LoginSuccessful"],
-                    "inactiveStatus"        : ["Login", "InactiveStatus"],
-                    "accountNotReadyStatus" : ["Login", "AccountNotReadyStatus"],
-                    "wrongCredentialsStatus": ["Login", "WrongCredentialsStatus"],
-                    "lockedPasswordStatus"  : ["Login", "LockedPasswordStatus"]
+                    "AcceptTerms"             : ["SetUpBiometrics", "AcceptTerms"],
+                    "DeclineTerms"            : ["SetUpBiometrics", "DeclineTerms"],
+                    "successfulLoginManual"   : ["Login", "LoginSuccessfulManual"],
+                    "successfulLoginBiometric": ["Login", "LoginSuccessfulBiometric"],
+                    "inactiveStatus"          : ["Login", "InactiveStatus"],
+                    "accountNotReadyStatus"   : ["Login", "AccountNotReadyStatus"],
+                    "wrongCredentialsStatus"  : ["Login", "WrongCredentialsStatus"],
+                    "lockedPasswordStatus"    : ["Login", "LockedPasswordStatus"]
                 },
                 "errorEvents": {
                     "USER_MUST_ACCEPT_TERMS"            : "inactiveStatus",
@@ -798,6 +801,12 @@
     appGlobals.SETTINGS = {
         "CONFIG": {
             "title": "Settings",
+            "events": {
+                "AcceptTerms" : ["BiometricSettings", "EnableBiometrics", "AcceptTerms"],
+                "DeclineTerms": ["BiometricSettings", "EnableBiometrics", "DeclineTerms"],
+                "YesConfirm"  : ["BiometricSettings", "DisableBiometrics", "YesConfirm"],
+                "NoConfirm"   : ["BiometricSettings", "DisableBiometrics", "NoConfirm"]
+            },
             "platformContent": {
                 "android": {
                     "fingerprintAuthName": "fingerprint authentication"
