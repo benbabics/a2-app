@@ -5,7 +5,7 @@
     // jshint maxparams:12
 
     /* @ngInject */
-    function LandingController($scope, $interval, $ionicHistory, $ionicPlatform,
+    function LandingController(_, $scope, $interval, $ionicHistory, $ionicPlatform,
                                currentInvoiceSummary, brandLogo, globals, scheduledPaymentsCount,
                                FlowUtil, Navigation, Toast, UserManager) {
 
@@ -60,6 +60,7 @@
         }
 
         function getChartConfiguration() {
+            var creditIds, chartConfig;
 
             if (!vm.invoiceSummary.isAnyCreditAvailable()) {
                 return {
@@ -74,16 +75,26 @@
                 return {
                     options: globals.LANDING.CHART.options,
                     labels : [vm.config.availableCredit],
-                    colors : [vm.chartColors.availableCreditPositive],
+                    colors : [vm.chartColors.availableCredit],
                     data   : [vm.invoiceSummary.availableCredit]
                 };
             }
 
+            chartConfig = { labels: [], colors: [], data: [] };
+            creditIds   = [ "pendingAmount", "availableCredit", "billedAmount", "unbilledAmount" ];
+            _.each(creditIds, function(id) {
+                if ( vm.invoiceSummary[ id ] > 0 ) {
+                    chartConfig.labels.push( vm.config[ id ] );
+                    chartConfig.colors.push( vm.chartColors[ id ] );
+                    chartConfig.data.push( vm.invoiceSummary[ id ] );
+                }
+            });
+
             return {
                 options: globals.LANDING.CHART.options,
-                labels : [vm.config.availableCredit, vm.config.billedAmount, vm.config.unbilledAmount],
-                colors : [vm.chartColors.availableCreditPositive, vm.chartColors.billedAmount, vm.chartColors.unbilledAmount],
-                data   : [vm.invoiceSummary.availableCredit, vm.invoiceSummary.billedAmount, vm.invoiceSummary.unbilledAmount]
+                labels:  chartConfig.labels,
+                colors:  chartConfig.colors,
+                data:    chartConfig.data
             };
 
         }
