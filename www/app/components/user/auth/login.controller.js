@@ -7,12 +7,15 @@
     /* @ngInject */
     function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $ionicHistory, $interval, $localStorage, $q,
                              $rootScope, $scope, $state, $stateParams, globals, sessionCredentials, AnalyticsUtil,
-                             Fingerprint, FingerprintProfileUtil, LoadingIndicator, LoginManager, PlatformUtil,
-                             UserAuthorizationManager) {
+                             Fingerprint, FingerprintProfileUtil, LoadingIndicator, LoginManager, Logger,
+                             Network, PlatformUtil, UserAuthorizationManager) {
 
         var BAD_CREDENTIALS = "BAD_CREDENTIALS",
-            FINGERPRINT_PROMPT_RESUME_DELAY = 2000,
-            USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION_TYPES,
+            PASSWORD_CHANGED = "PASSWORD_CHANGED",
+            CONNECTION_ERROR = "CONNECTION_ERROR",
+            FINGERPRINT_PROMPT_RESUME_DELAY = 500,
+            USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION.TYPES,
+            USER_AUTHORIZATION_ERRORS = globals.USER_AUTHORIZATION.ERRORS,
             USERNAME_KEY = globals.LOCALSTORAGE.KEYS.USERNAME,
             vm = this;
 
@@ -42,11 +45,13 @@
             //see http://ionicframework.com/docs/api/page/keyboard/
             var removeKeyboardShowListener = $rootScope.$on("$cordovaKeyboard:show", addKeyboardOpenClass),
                 removeKeyboardHideListener = $rootScope.$on("$cordovaKeyboard:hide", removeKeyboardOpenClass),
-                removeCordovaPauseListener = $rootScope.$on("app:cordovaPause",      handleOnCordovaPause);
+                removeCordovaPauseListener = $rootScope.$on("app:cordovaPause", handleOnCordovaPause),
+                removeCordovaResumeListener = $rootScope.$on("app:cordovaResume", handleOnCordovaResume);
 
             $scope.$on("$destroy", removeKeyboardShowListener);
             $scope.$on("$destroy", removeKeyboardHideListener);
             $scope.$on("$destroy", removeCordovaPauseListener);
+            $scope.$on("$destroy", removeCordovaResumeListener);
             $scope.$on("$destroy", toggleDisableScroll);
         }
 
@@ -88,7 +93,8 @@
             doFingerprintAuthCheck()
                 .then(function () {
                     if (vm.fingerprintProfileAvailable && !$stateParams.logOut) {
-                        logInUser(true);
+                        //show the fingerprint prompt
+                        $interval(_.partial(logInUser, true), FINGERPRINT_PROMPT_RESUME_DELAY, 1);
                     }
                 })
                 .catch(function (error) {
@@ -175,24 +181,36 @@
                         });
                 })
                 .catch(function (loginError) {
-                    var errorReason = "DEFAULT";
+                    var IGNORED_USER_AUTH_ERRORS = [
+                            USER_AUTHORIZATION_ERRORS.USER_CANCELED,
+                            USER_AUTHORIZATION_ERRORS.EXCEEDED_ATTEMPTS
+                        ],
+                        errorMessageCode = _.get(loginError, "data.message");
 
-                    //use the more specific error code if it is a trackable error
-                    if (_.has(loginError, "message") && _.has(vm.config.serverErrors, loginError.message)) {
-                        errorReason = loginError.message;
+                    if (Network.isServerConnectionError(loginError.data) || loginError.reason === USER_AUTHORIZATION_ERRORS.TERMS_LOG_FAILED) {
+                        errorMessageCode = CONNECTION_ERROR;
+                    }
+                    else if (useFingerprintAuth && !settingUpFingerprintAuth && errorMessageCode === BAD_CREDENTIALS) {
+                        errorMessageCode = PASSWORD_CHANGED;
+
+                        //user needs to update the auth profile since their password has changed
+                        clearFingerprintProfile(clientId);
+                    }
+                    else if (!_.has(vm.config.serverErrors, errorMessageCode)) {
+                        //use less specific error code if it is not a trackable error
+                        errorMessageCode = "DEFAULT";
                     }
 
-                    return $q.reject(errorReason)
+                    if (!_.includes(IGNORED_USER_AUTH_ERRORS, loginError.reason)) {
+                        vm.globalError = vm.config.serverErrors[errorMessageCode];
+
+                        Logger.error(vm.globalError);
+                        trackErrorEvent(errorMessageCode);
+                    }
+
+                    return $q.reject(errorMessageCode)
                         .finally(function () {
-                            vm.globalError = vm.config.serverErrors[errorReason];
-
                             LoginManager.logOut();
-                            trackErrorEvent(errorReason);
-
-                            if (useFingerprintAuth && loginError.message === BAD_CREDENTIALS) {
-                                //user needs to update the auth profile since their password has changed
-                                return clearFingerprintProfile(clientId);
-                            }
                         });
                 })
                 .finally(function () {
@@ -250,13 +268,15 @@
             //clear any previous error
             $scope.$apply(function() {
                 vm.globalError = false;
-
-                //show the fingerprint login prompt if there's a fingerprint profile
-                //NOTE: A delay is needed as showing the prompt too early results in occasional app crashes.
-                if (vm.fingerprintProfileAvailable && !vm.isLoggingIn) {
-                    $interval(_.partial(logInUser, true), FINGERPRINT_PROMPT_RESUME_DELAY, 1);
-                }
             });
+        }
+
+        function handleOnCordovaResume() {
+            //show the fingerprint login prompt if there's a fingerprint profile
+            //NOTE: A delay is needed as showing the prompt too early results in occasional app crashes.
+            if (vm.fingerprintProfileAvailable && !vm.isLoggingIn) {
+                $interval(_.partial(logInUser, true), FINGERPRINT_PROMPT_RESUME_DELAY, 1);
+            }
         }
 
         function setupUsername() {

@@ -5,75 +5,49 @@
         $scope,
         $q,
         $localStorage,
+        $cordovaDialogs,
         Fingerprint,
         UserAuthorizationManager,
         SecureStorage,
         sessionCredentials,
         ctrl,
         credentials,
-        mockGlobals = {
-            "LOCALSTORAGE": {
-                "CONFIG": {
-                    "keyPrefix": "FLEET_MANAGER-"
-                },
-                "KEYS": {
-                    "USERNAME": "USERNAME"
-                }
-            },
-            "USER_AUTHORIZATION_TYPES": {
-                "FINGERPRINT": "FINGERPRINT"
-            },
-            "SETTINGS": {
-                "CONFIG": {
-                    "title": "Settings",
-                    "platformContent": {
-                        "android": {
-                            "fingerprintAuthName": "fingerprint authentication"
-                        },
-                        "ios": {
-                            "fingerprintAuthName": "Touch ID®"
-                        }
-                    },
-                    "fingerprintAuthTextLabel": "Use",
-                    "removeFingerprintProfileConfirm": {
-                        "message":   "Are you sure you want to turn off <%= fingerprintAuthName %> for your Username <%= username %>?",
-                        "yesButton": "Yes",
-                        "noButton":  "No"
-                    },
-                    "createFingerprintAuthMessage": "<%= fingerprintAuthName %> is now setup for your Username <%= username %>."
-                }
-            }
-        };
+        globals;
 
-    describe("A Settings Controller", function () {
+    fdescribe("A Settings Controller", function () {
         credentials = {
             clientId:     TestUtils.getRandomStringThatIsAlphaNumeric( 8 ),
             clientSecret: TestUtils.getRandomStringThatIsAlphaNumeric( 16 )
         };
 
         beforeEach(function () {
-            Fingerprint              = jasmine.createSpyObj( "Fingerprint", ["isAvailable"] );
-            SecureStorage            = jasmine.createSpyObj( "SecureStorage", ["get", "remove"] );
-            sessionCredentials       = jasmine.createSpyObj( "sessionCredentials", ["get"] );
-            UserAuthorizationManager = jasmine.createSpyObj( "UserAuthorizationManager", ["verify"] );
+            Fingerprint = jasmine.createSpyObj("Fingerprint", ["isAvailable"]);
+            SecureStorage = jasmine.createSpyObj("SecureStorage", ["get", "remove"]);
+            sessionCredentials = jasmine.createSpyObj("sessionCredentials", ["get"]);
+            UserAuthorizationManager = jasmine.createSpyObj("UserAuthorizationManager", ["verify"]);
+            $cordovaDialogs = jasmine.createSpyObj("$cordovaDialogs", ["confirm"]);
 
-            inject(function ($controller, _$rootScope_, _$q_, _$localStorage_, globals) {
+            inject(function ($controller, _$rootScope_, _$q_, _$localStorage_, _globals_) {
                 // create a scope object for us to use.
                 $rootScope    = _$rootScope_;
                 $scope        = $rootScope.$new();
                 $q            = _$q_;
                 $localStorage = _$localStorage_;
+                globals = _globals_;
 
                 ctrl = $controller("SettingsController", {
+                    $cordovaDialogs:          $cordovaDialogs,
                     $scope:                   $scope,
                     $localStorage:            $localStorage,
-                    globals:                  angular.extend({}, globals, mockGlobals),
                     Fingerprint:              Fingerprint,
                     SecureStorage:            SecureStorage,
                     sessionCredentials:       sessionCredentials,
-                    UserAuthorizationManager: UserAuthorizationManager,
+                    UserAuthorizationManager: UserAuthorizationManager
                 });
             });
+
+            //TODO - Test the failure condition of this
+            $cordovaDialogs.confirm.and.returnValue($q.resolve(2));
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {

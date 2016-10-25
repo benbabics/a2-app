@@ -5,8 +5,9 @@
 
     /* @ngInject */
     function UserAuthorizationManager(_, $cordovaDevice, $q, $rootScope, globals, AuthenticationManager, Fingerprint,
-                                      FingerprintProfileUtil, LoadingIndicator, Logger, Modal, PlatformUtil, ServiceLogManager) {
-        var USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION_TYPES,
+                                      FingerprintProfileUtil, LoadingIndicator, Modal, PlatformUtil, ServiceLogManager) {
+        var USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION.TYPES,
+            USER_AUTHORIZATION_ERRORS = globals.USER_AUTHORIZATION.ERRORS,
             TERMS_ACCEPTANCE_LOG = globals.FINGERPRINT_AUTH.TERMS_ACCEPTANCE_LOG,
             termsAcceptanceLogTemplate = _.template(TERMS_ACCEPTANCE_LOG.template);
 
@@ -32,6 +33,12 @@
         //////////////////////
         //Private functions:
 
+        function createFingerprintTermsModal() {
+            return Modal.createByType(globals.MODAL_TYPES.FINGERPRINT_AUTH_TERMS, {
+                scopeVars: {getTerms: getFingerprintTerms}
+            });
+        }
+
         function getFingerprintTerms() {
             switch (_.toLower(PlatformUtil.getPlatform())) {
                 case "android":
@@ -41,6 +48,25 @@
                 default:
                     return _.get(this, "CONFIG.termsAndroid");
             }
+        }
+
+        function logFingerprintTermsAcceptance(clientId) {
+            LoadingIndicator.begin();
+
+            //log the user's acceptance of the terms
+            return ServiceLogManager.log(termsAcceptanceLogTemplate({
+                username: clientId,
+                date: new Date(),
+                deviceId: $cordovaDevice.getUUID(),
+                deviceModel: $cordovaDevice.getModel()
+            }))
+                .catch(function (error) {
+                    return $q.reject({
+                        reason: USER_AUTHORIZATION_ERRORS.TERMS_LOG_FAILED,
+                        data: error
+                    });
+                })
+                .finally(LoadingIndicator.complete);
         }
 
         function verifyWithFingerprint(clientId, clientSecret, options) {
@@ -54,12 +80,12 @@
             return FingerprintProfileUtil.getProfile(clientId)
                 //set up a new fingerprint profile with this clientId
                 .catch(function () {
+                    verificationOptions.clientSecret = clientSecret;
+
                     //authenticate the account with the given username/password
                     return verifyWithSecret(clientId, clientSecret, options)
                         //prompt the user to accept the terms of use
-                        .then(_.partial(Modal.createByType, globals.MODAL_TYPES.FINGERPRINT_AUTH_TERMS, {
-                            scopeVars: {getTerms: getFingerprintTerms}
-                        }))
+                        .then(createFingerprintTermsModal)
                         .then(function (modal) {
                             termsModal = modal;
 
@@ -81,19 +107,7 @@
 
                             return $q.reject(error);
                         })
-                        .then(function () {
-                            LoadingIndicator.begin();
-
-                            //log the user's acceptance of the terms
-                            return ServiceLogManager.log(termsAcceptanceLogTemplate({
-                                username: clientId,
-                                date: new Date(),
-                                deviceId: $cordovaDevice.getUUID(),
-                                deviceModel: $cordovaDevice.getModel()
-                            })).finally(LoadingIndicator.complete);
-                        })
-                        //register a new fingerprint profile for this user
-                        .then(_.partial(_.set, verificationOptions, "clientSecret", clientSecret))
+                        .then(_.partial(logFingerprintTermsAcceptance, clientId))
                         .finally(function () {
                             return termsModal.remove();
                         });
@@ -106,12 +120,26 @@
                         //user changed their mind about using fingerprint auth, so login regularly
                         return $q.resolve(clientSecret);
                     }
-                    else {
-                        var errorStr = "Failed to verify user via fingerprint auth. ";
-
-                        Logger.error(errorStr + error);
-                        return $q.reject(errorStr);
+                    else if (error.userCanceled) {
+                        error = {
+                            reason: USER_AUTHORIZATION_ERRORS.USER_CANCELED,
+                            data: error
+                        };
                     }
+                    else if (error.exceededAttempts) {
+                        error = {
+                            reason: USER_AUTHORIZATION_ERRORS.EXCEEDED_ATTEMPTS,
+                            data: error
+                        };
+                    }
+                    else if (!_.has(error, "reason")) {
+                        error = {
+                            reason: USER_AUTHORIZATION_ERRORS.UNKNOWN,
+                            data: error
+                        };
+                    }
+
+                    return $q.reject(error);
                 })
                 .then(_.partial(verifyWithSecret, clientId, _, options));
         }
@@ -128,6 +156,12 @@
             LoadingIndicator.begin();
 
             return AuthenticationManager.authenticate(clientId, clientSecret)
+                .catch(function (error) {
+                    return $q.reject({
+                        reason: USER_AUTHORIZATION_ERRORS.AUTHENTICATION_ERROR,
+                        data: error
+                    });
+                })
                 .finally(LoadingIndicator.complete);
         }
     }

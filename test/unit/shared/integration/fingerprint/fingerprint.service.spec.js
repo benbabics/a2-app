@@ -4,6 +4,10 @@
     describe("A Fingerprint Service", function () {
 
         var CONSTANTS,
+            ANDROID_USER_CANCELED = "Cancelled",
+            ANDROID_EXCEEDED_ATTEMPTS = "Too many attempts. Try again later.",
+            IOS_EXCEEDED_ATTEMPTS = -1,
+            IOS_USER_CANCELED = -2,
             IOS_PASSCODE_NOT_SET = -5,
             IOS_TOUCH_ID_NOT_AVAILABLE = -6,
             IOS_TOUCH_ID_NOT_ENROLLED = -7,
@@ -130,6 +134,8 @@
                             });
 
                             describe("it should behave such that", commonVerifyRegisterTests);
+
+                            describe("when the plugin rejects", commonVerifyErrorTests);
                         });
 
                         describe("when the passwordFallback is NOT DEFAULT", function () {
@@ -154,6 +160,8 @@
                             });
 
                             describe("it should behave such that", commonVerifyRegisterTests);
+
+                            describe("when the plugin rejects", commonVerifyErrorTests);
                         });
                     });
 
@@ -184,6 +192,8 @@
                             });
 
                             describe("it should behave such that", commonVerifyReadTests);
+
+                            describe("when the plugin rejects", commonVerifyErrorTests);
                         });
 
                         describe("when the passwordFallback is NOT DEFAULT", function () {
@@ -211,6 +221,8 @@
                             });
 
                             describe("it should behave such that", commonVerifyReadTests);
+
+                            describe("when the plugin rejects", commonVerifyErrorTests);
                         });
                     });
                 });
@@ -229,6 +241,63 @@
                     });
                 });
             });
+
+            function commonVerifyErrorTests() {
+
+                describe("when the plugin rejects due to exceeded attempts", function () {
+
+                    beforeEach(function () {
+                        this.error = ANDROID_EXCEEDED_ATTEMPTS;
+
+                        pluginReject(this.error);
+                        $rootScope.$digest();
+                    });
+
+                    it("should reject with the expected value", function () {
+                        expect(rejectHandler).toHaveBeenCalledWith({
+                            exceededAttempts: true,
+                            userCanceled: false,
+                            data: this.error
+                        });
+                    });
+                });
+
+                describe("when the plugin rejects due to the user canceling", function () {
+
+                    beforeEach(function () {
+                        this.error = ANDROID_USER_CANCELED;
+
+                        pluginReject(this.error);
+                        $rootScope.$digest();
+                    });
+
+                    it("should reject with the expected value", function () {
+                        expect(rejectHandler).toHaveBeenCalledWith({
+                            exceededAttempts: false,
+                            userCanceled: true,
+                            data: this.error
+                        });
+                    });
+                });
+
+                describe("when the plugin rejects due to an unknown error", function () {
+
+                    beforeEach(function () {
+                        this.error = TestUtils.getRandomStringThatIsAlphaNumeric(11);
+
+                        pluginReject(this.error);
+                        $rootScope.$digest();
+                    });
+
+                    it("should reject with the expected value", function () {
+                        expect(rejectHandler).toHaveBeenCalledWith({
+                            exceededAttempts: false,
+                            userCanceled: false,
+                            data: this.error
+                        });
+                    });
+                });
+            }
         });
 
         describe("when on iOS", function () {
@@ -323,11 +392,49 @@
                         describe("when the passwordFallback is CUSTOM", function () {
 
                             describe("it should behave such that", _.flow([customPasswordTests, commonVerifyRegisterTests]));
+
+                            describe("when the plugin rejects", function () {
+
+                                beforeEach(function () {
+                                    FingerprintPlugin.verifyFingerprintWithCustomPasswordFallback.and.callFake(function (config, resolve, reject) {
+                                        pluginResolve = resolve;
+                                        pluginReject = reject;
+                                    });
+                                });
+
+                                beforeEach(function() {
+                                    Fingerprint.verify(_.extend({passwordFallback: CONSTANTS.PASSWORD_FALLBACK.CUSTOM}, options))
+                                        .then(resolveHandler)
+                                        .catch(rejectHandler);
+                                    $rootScope.$digest();
+                                });
+
+                                describe("it should behave such that", commonVerifyErrorTests);
+                            });
                         });
 
                         describe("when the passwordFallback is NOT CUSTOM", function () {
 
                             describe("it should behave such that", _.flow([notCustomPasswordTests, commonVerifyRegisterTests]));
+
+                            describe("when the plugin rejects", function () {
+
+                                beforeEach(function () {
+                                    FingerprintPlugin.verifyFingerprint.and.callFake(function (config, resolve, reject) {
+                                        pluginResolve = resolve;
+                                        pluginReject = reject;
+                                    });
+                                });
+
+                                beforeEach(function() {
+                                    Fingerprint.verify(options)
+                                        .then(resolveHandler)
+                                        .catch(rejectHandler);
+                                    $rootScope.$digest();
+                                });
+
+                                describe("it should behave such that", commonVerifyErrorTests);
+                            });
                         });
                     });
 
@@ -343,11 +450,49 @@
                         describe("when the passwordFallback is CUSTOM", function () {
 
                             describe("it should behave such that", _.flow([customPasswordTests, commonVerifyReadTests]));
+
+                            describe("when the plugin rejects", function () {
+
+                                beforeEach(function () {
+                                    FingerprintPlugin.verifyFingerprintWithCustomPasswordFallback.and.callFake(function (config, resolve, reject) {
+                                        pluginResolve = resolve;
+                                        pluginReject = reject;
+                                    });
+                                });
+
+                                beforeEach(function() {
+                                    Fingerprint.verify(_.extend({passwordFallback: CONSTANTS.PASSWORD_FALLBACK.CUSTOM}, options))
+                                        .then(resolveHandler)
+                                        .catch(rejectHandler);
+                                    $rootScope.$digest();
+                                });
+
+                                describe("it should behave such that", commonVerifyErrorTests);
+                            });
                         });
 
                         describe("when the passwordFallback is NOT CUSTOM", function () {
 
                             describe("it should behave such that", _.flow([notCustomPasswordTests, commonVerifyReadTests]));
+
+                            describe("when the plugin rejects", function () {
+
+                                beforeEach(function () {
+                                    FingerprintPlugin.verifyFingerprint.and.callFake(function (config, resolve, reject) {
+                                        pluginResolve = resolve;
+                                        pluginReject = reject;
+                                    });
+                                });
+
+                                beforeEach(function() {
+                                    Fingerprint.verify(options)
+                                        .then(resolveHandler)
+                                        .catch(rejectHandler);
+                                    $rootScope.$digest();
+                                });
+
+                                describe("it should behave such that", commonVerifyErrorTests);
+                            });
                         });
                     });
 
@@ -420,6 +565,63 @@
                     });
                 });
             });
+
+            function commonVerifyErrorTests() {
+
+                describe("when the plugin rejects due to exceeded attempts", function () {
+
+                    beforeEach(function () {
+                        this.error = {code: IOS_EXCEEDED_ATTEMPTS};
+
+                        pluginReject(this.error);
+                        $rootScope.$digest();
+                    });
+
+                    it("should reject with the expected value", function () {
+                        expect(rejectHandler).toHaveBeenCalledWith({
+                            exceededAttempts: true,
+                            userCanceled: false,
+                            data: this.error
+                        });
+                    });
+                });
+
+                describe("when the plugin rejects due to the user canceling", function () {
+
+                    beforeEach(function () {
+                        this.error = {code: IOS_USER_CANCELED};
+
+                        pluginReject(this.error);
+                        $rootScope.$digest();
+                    });
+
+                    it("should reject with the expected value", function () {
+                        expect(rejectHandler).toHaveBeenCalledWith({
+                            exceededAttempts: false,
+                            userCanceled: true,
+                            data: this.error
+                        });
+                    });
+                });
+
+                describe("when the plugin rejects due to an unknown error", function () {
+
+                    beforeEach(function () {
+                        this.error = {code: TestUtils.getRandomStringThatIsAlphaNumeric(11)};
+
+                        pluginReject(this.error);
+                        $rootScope.$digest();
+                    });
+
+                    it("should reject with the expected value", function () {
+                        expect(rejectHandler).toHaveBeenCalledWith({
+                            exceededAttempts: false,
+                            userCanceled: false,
+                            data: this.error
+                        });
+                    });
+                });
+            }
         });
 
         describe("when on an unsupported platform", function () {
@@ -715,7 +917,11 @@
                     });
 
                     it("should reject with the expected value", function () {
-                        expect(rejectHandler).toHaveBeenCalledWith(error);
+                        expect(rejectHandler).toHaveBeenCalledWith({
+                            exceededAttempts: false,
+                            userCanceled: false,
+                            data: error
+                        });
                     });
                 });
             });
@@ -731,7 +937,11 @@
                 });
 
                 it("should reject with the expected value", function () {
-                    expect(rejectHandler).toHaveBeenCalledWith(error);
+                    expect(rejectHandler).toHaveBeenCalledWith({
+                        exceededAttempts: false,
+                        userCanceled: false,
+                        data: error
+                    });
                 });
             });
         }
@@ -789,7 +999,11 @@
                     });
 
                     it("should reject with the expected value", function () {
-                        expect(rejectHandler).toHaveBeenCalledWith(error);
+                        expect(rejectHandler).toHaveBeenCalledWith({
+                            exceededAttempts: false,
+                            userCanceled: false,
+                            data: error
+                        });
                     });
                 });
             });
@@ -805,7 +1019,11 @@
                 });
 
                 it("should reject with the expected value", function () {
-                    expect(rejectHandler).toHaveBeenCalledWith(error);
+                    expect(rejectHandler).toHaveBeenCalledWith({
+                        exceededAttempts: false,
+                        userCanceled: false,
+                        data: error
+                    });
                 });
             });
         }
