@@ -65,14 +65,14 @@
                 dataIds  = [ "pendingAmount", "availableCredit", "billedAmount", "unbilledAmount" ];
 
             _.each(dataIds, function(id) {
-                // if ( vm.invoiceSummary[ id ] > 0 ) {
+                if ( vm.invoiceSummary[ id ] > 0 ) {
                     datasets.collection.push({
                         id:    id,
                         label: vm.config[ id ],
                         color: vm.chartColors[ id ],
-                        data:  250 //vm.invoiceSummary[ id ]
+                        data:  vm.invoiceSummary[ id ]
                     });
-                // }
+                }
             });
 
             datasets.right = angular.copy( datasets.collection );
