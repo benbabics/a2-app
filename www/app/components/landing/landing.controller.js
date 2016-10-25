@@ -52,51 +52,62 @@
             // the scheduledPaymentsCount object should be bound now to the object returned by fetchScheduledPaymentsCount
             vm.scheduledPaymentsCount = scheduledPaymentsCount;
 
-            vm.chart = getChartConfiguration();
+            vm.chartDisplay = getChartDisplayConfiguration();
+            vm.chart        = getChartConfiguration();
 
             vm.branding.logo = brandLogo;
 
             vm.greeting = "Hello, " + vm.user.firstName;
         }
 
-        function getChartConfiguration() {
-            var creditIds, chartConfig;
+        function getChartDisplayConfiguration() {
+            var datasets = { collection: [] },
+                dataIds  = [ "pendingAmount", "availableCredit", "billedAmount", "unbilledAmount" ];
 
-            if (!vm.invoiceSummary.isAnyCreditAvailable()) {
-                return {
-                    options: globals.LANDING.CHART.options,
-                    labels : [vm.config.availableCredit],
-                    colors : [vm.chartColors.availableCreditNegative],
-                    data   : [globals.LANDING.CHART.constants.negativeCreditData]
-                };
-            }
-
-            if (vm.invoiceSummary.isAllCreditAvailable()) {
-                return {
-                    options: globals.LANDING.CHART.options,
-                    labels : [vm.config.availableCredit],
-                    colors : [vm.chartColors.availableCredit],
-                    data   : [vm.invoiceSummary.availableCredit]
-                };
-            }
-
-            chartConfig = { labels: [], colors: [], data: [] };
-            creditIds   = [ "pendingAmount", "availableCredit", "billedAmount", "unbilledAmount" ];
-            _.each(creditIds, function(id) {
-                if ( vm.invoiceSummary[ id ] > 0 ) {
-                    chartConfig.labels.push( vm.config[ id ] );
-                    chartConfig.colors.push( vm.chartColors[ id ] );
-                    chartConfig.data.push( vm.invoiceSummary[ id ] );
-                }
+            _.each(dataIds, function(id) {
+                // if ( vm.invoiceSummary[ id ] > 0 ) {
+                    datasets.collection.push({
+                        id:    id,
+                        label: vm.config[ id ],
+                        color: vm.chartColors[ id ],
+                        data:  250 //vm.invoiceSummary[ id ]
+                    });
+                // }
             });
+
+            datasets.right = angular.copy( datasets.collection );
+            datasets.left  = datasets.right.splice(0, Math.ceil( datasets.right.length / 2 ));
+
+            return datasets;
+        }
+
+        function getChartConfiguration() {
+            var availableCreditData = _.find( vm.chartDisplay.collection, { id: "availableCredit" });
+
+            if ( !vm.invoiceSummary.isAnyCreditAvailable() ) {
+                return {
+                    options: globals.LANDING.CHART.options,
+                    labels : [ availableCreditData.label ],
+                    colors : [ vm.chartColors.availableCreditNegative ],
+                    data   : [ globals.LANDING.CHART.constants.negativeCreditData ]
+                };
+            }
+
+            if ( vm.invoiceSummary.isAllCreditAvailable() ) {
+                return {
+                    options: globals.LANDING.CHART.options,
+                    labels : [ availableCreditData.label ],
+                    colors : [ availableCreditData.color ],
+                    data   : [ availableCreditData.data ]
+                };
+            }
 
             return {
                 options: globals.LANDING.CHART.options,
-                labels:  chartConfig.labels,
-                colors:  chartConfig.colors,
-                data:    chartConfig.data
+                labels:  _.map( vm.chartDisplay.collection, "label" ),
+                colors:  _.map( vm.chartDisplay.collection, "color" ),
+                data:    _.map( vm.chartDisplay.collection, "data" )
             };
-
         }
 
         function goToCards() {

@@ -28,13 +28,9 @@
             <div class="item item-text-wrap">
               <div class="chart-wrapper">
                 <div class="labels">
-                  <div class="label" style="color: {{ vm.chartColors.pendingAmount }};">
-                    <div class="text-amount" ng-bind-html="vm.invoiceSummary.pendingAmount | currency | wexSupText"></div>
-                    <div class="text-title">{{ ::vm.config.pendingAmount }}</div>
-                  </div>
-                  <div class="label" style="color: {{ vm.chartColors.unbilledAmount }};">
-                    <div class="text-amount" ng-bind-html="vm.invoiceSummary.unbilledAmount | currency | wexSupText"></div>
-                    <div class="text-title">{{ ::vm.config.unbilledAmount }}</div>
+                  <div class="label" ng-repeat="chart in vm.chartDisplay.left" style="color: {{ chart.color }};">
+                    <div class="text-amount" ng-bind-html="chart.data | currency | wexSupText"></div>
+                    <div class="text-title">{{ ::chart.label }}</div>
                   </div>
                 </div>
 
@@ -50,13 +46,9 @@
                 </div>
 
                 <div class="labels">
-                  <div class="label" style="color: {{ vm.chartColors.availableCreditPositive }};">
-                    <div class="text-amount" ng-bind-html="vm.invoiceSummary.availableCredit | currency | wexSupText"></div>
-                    <div class="text-title">{{ ::vm.config.availableCredit }}</div>
-                  </div>
-                  <div class="label" style="color: {{ vm.chartColors.billedAmount }};">
-                    <div class="text-amount" ng-bind-html="vm.invoiceSummary.billedAmount | currency | wexSupText"></div>
-                    <div class="text-title">{{ ::vm.config.billedAmount }}</div>
+                  <div class="label" ng-repeat="chart in vm.chartDisplay.right" style="color: {{ chart.color }};">
+                    <div class="text-amount" ng-bind-html="chart.data | currency | wexSupText"></div>
+                    <div class="text-title">{{ ::chart.label }}</div>
                   </div>
                 </div>
               </div>
