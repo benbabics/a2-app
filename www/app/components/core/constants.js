@@ -246,7 +246,7 @@
             "cardNumber"       : "Card No",
             "embossing"        : "Embossing",
             "status"           : "Status",
-            "reloadDistance"   : "5%",
+            "reloadDistance"   : "50%",
             "emptyList"        : "No Records Found."
         },
         "SEARCH_OPTIONS": {
