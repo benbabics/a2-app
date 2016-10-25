@@ -5,7 +5,7 @@
     // jshint maxparams:11
 
     /* @ngInject */
-    function SettingsController($q, $scope, $localStorage, $cordovaDialogs, $timeout, globals, PlatformUtil, Fingerprint, UserAuthorizationManager, SecureStorage, sessionCredentials, wexTruncateStringFilter) {
+    function SettingsController($q, $scope, $localStorage, $cordovaDialogs, $timeout, globals, PlatformUtil, Fingerprint, UserAuthorizationManager, SecureStorage, sessionCredentials, wexTruncateStringFilter, AnalyticsUtil) {
 
         var USERNAME_KEY             = globals.LOCALSTORAGE.KEYS.USERNAME,
             USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION_TYPES;

@@ -39,15 +39,27 @@
                     "ANALYTICS"   : {
                         "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
                         "events"     : {
-                            "successfulLogin"       : [
+                            "AcceptTerms": [
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10),
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10)
                             ],
-                            "inactiveStatus"        : [
+                            "DeclineTerms": [
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10),
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10)
                             ],
-                            "accountNotReadyStatus" : [
+                            "successfulLoginManual": [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "successfulLoginBiometric": [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "inactiveStatus": [
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                            ],
+                            "accountNotReadyStatus": [
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10),
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10)
                             ],
@@ -55,7 +67,7 @@
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10),
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10)
                             ],
-                            "lockedPasswordStatus"  : [
+                            "lockedPasswordStatus": [
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10),
                                 TestUtils.getRandomStringThatIsAlphaNumeric(10)
                             ]
@@ -718,7 +730,7 @@
 
                 beforeEach(function () {
                     ctrl.fingerprintProfileAvailable = true;
-
+                    ctrl.fingerprintAuthAvailable    = true;
                     ctrl.logInUser(true);
                 });
 
@@ -806,6 +818,18 @@
                     expect(LoginManager.logIn).toHaveBeenCalled();
                 });
 
+                describe("when FingerprintAuthTerms dialog is presented", function () {
+                    it("should call AnalyticsUtil.trackEvent with the expected events", function () {
+                        $rootScope.$emit( "FingerprintAuthTerms.accepted" );
+                        $rootScope.$digest();
+                        verifyEventTracked( mockConfig.ANALYTICS.events.AcceptTerms );
+
+                        $rootScope.$emit( "FingerprintAuthTerms.rejected" );
+                        $rootScope.$digest();
+                        verifyEventTracked( mockConfig.ANALYTICS.events.DeclineTerms );
+                    });
+                });
+
                 describe("when the login completes successfully", function () {
 
                     beforeEach(function () {
@@ -835,8 +859,9 @@
                         });
 
                         it("should call AnalyticsUtil.trackEvent with the expected event", function () {
+                            var eventId = ctrl.fingerprintProfileAvailable ? "successfulLoginBiometric" : "successfulLoginManual";
                             $scope.$digest();
-                            verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
+                            verifyEventTracked(mockConfig.ANALYTICS.events[ eventId ]);
                         });
 
                         it("should call disable backing up to the login page", function () {
@@ -887,8 +912,9 @@
                         });
 
                         it("should call AnalyticsUtil.trackEvent with the expected event", function () {
+                            var eventId = ctrl.fingerprintProfileAvailable ? "successfulLoginBiometric" : "successfulLoginManual";
                             $scope.$digest();
-                            verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
+                            verifyEventTracked(mockConfig.ANALYTICS.events[ eventId ]);
                         });
 
                         it("should call disable backing up to the login page", function () {

@@ -8,6 +8,7 @@
         Fingerprint,
         UserAuthorizationManager,
         SecureStorage,
+        AnalyticsUtil,
         sessionCredentials,
         ctrl,
         credentials,
@@ -26,6 +27,12 @@
             "SETTINGS": {
                 "CONFIG": {
                     "title": "Settings",
+                    "events": {
+                        "AcceptTerms" : ["BiometricSettings", "EnableBiometrics", "AcceptTerms"],
+                        "DeclineTerms": ["BiometricSettings", "EnableBiometrics", "DeclineTerms"],
+                        "YesConfirm"  : ["BiometricSettings", "DisableBiometrics", "YesConfirm"],
+                        "NoConfirm"   : ["BiometricSettings", "DisableBiometrics", "NoConfirm"]
+                    },
                     "platformContent": {
                         "android": {
                             "fingerprintAuthName": "fingerprint authentication"
@@ -56,6 +63,7 @@
             SecureStorage            = jasmine.createSpyObj( "SecureStorage", ["get", "remove"] );
             sessionCredentials       = jasmine.createSpyObj( "sessionCredentials", ["get"] );
             UserAuthorizationManager = jasmine.createSpyObj( "UserAuthorizationManager", ["verify"] );
+            AnalyticsUtil            = jasmine.createSpyObj( "AnalyticsUtil", ["trackEvent"] );
 
             module("app.shared");
             module("app.components");
@@ -86,6 +94,7 @@
                     SecureStorage:            SecureStorage,
                     sessionCredentials:       sessionCredentials,
                     UserAuthorizationManager: UserAuthorizationManager,
+                    AnalyticsUtil:            AnalyticsUtil,
                 });
             });
         });
@@ -169,6 +178,7 @@
 
                     expect( sessionCredentials.get ).toHaveBeenCalled();
                     expect( UserAuthorizationManager.verify ).toHaveBeenCalledWith( credentials, { bypassFingerprint: false } );
+                    expect( AnalyticsUtil.trackEvent ).toHaveBeenCalled();
                 });
             });
 
@@ -180,6 +190,7 @@
 
                     expect( sessionCredentials.get ).toHaveBeenCalled();
                     expect( SecureStorage.remove ).toHaveBeenCalledWith( credentials.clientId );
+                    expect( AnalyticsUtil.trackEvent ).toHaveBeenCalled();
                 });
             });
         });
