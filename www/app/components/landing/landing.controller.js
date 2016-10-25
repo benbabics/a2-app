@@ -62,7 +62,7 @@
 
         function getChartDisplayConfiguration() {
             var datasets = { collection: [] },
-                dataIds  = [ "pendingAmount", "availableCredit", "billedAmount", "unbilledAmount" ];
+                dataIds  = [ "pendingAmount", "unbilledAmount", "availableCredit", "billedAmount" ];
 
             _.each(dataIds, function(id) {
                 if ( vm.invoiceSummary[ id ] > 0 ) {
