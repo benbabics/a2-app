@@ -172,7 +172,7 @@
         },
         "CHART" : {
             "options"  : {
-                animation            : false,
+                animation            : true,
                 percentageInnerCutout: 70,
                 showTooltips         : false,
                 segmentStrokeWidth   : 1,

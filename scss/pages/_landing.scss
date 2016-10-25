@@ -61,6 +61,10 @@
     }
 
     .list {
+      opacity: 0;
+      animation:         linksFade 2s 1 forwards;
+      -webkit-animation: linksFade 2s 1 forwards;
+
       .item:not(:first-of-type) {
         border-top: 1px solid #e4e4e4;
       }
@@ -103,6 +107,20 @@
         .label {
           position: relative;
           padding: 15px 25px;
+
+          opacity: 0;
+          animation:         chartSlideFade 2s 1 forwards;
+          -webkit-animation: chartSlideFade 2s 1 forwards;
+
+          &:nth-of-type(2) {
+            animation-delay:         .75s;
+            -webkit-animation-delay: .75s;
+          }
+
+          &:nth-of-type(3) {
+            animation-delay:         1.5s;
+            -webkit-animation-delay: 1.5s;
+          }
 
           .text-amount,
           .text-title {
@@ -155,5 +173,47 @@
         }
       }
     }
+  }
+}
+
+
+/**
+ * Animation
+**/
+@keyframes chartSlideFade {
+  0% {
+    transform: translateY(25%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes chartSlideFade {
+  0% {
+   -webkit-transform: translateY(25%);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes linksFade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes linksFade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
