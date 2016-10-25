@@ -149,7 +149,6 @@
             LoadingIndicator.begin();
 
             return AuthenticationManager.authenticate(clientId, clientSecret)
-                .then(logFingerprintTermsAcceptance)
                 .catch(function (error) {
                     return $q.reject({
                         reason: USER_AUTHORIZATION_ERRORS.AUTHENTICATION_ERROR,

@@ -8,9 +8,9 @@
     var appGlobals = {},
         appGlobalsAndroid = {},
         appGlobalsIos = {},
-        globals = function (_, sharedGlobals, sharedGlobalsAndroid, sharedGlobalsIos, PlatformUtil) {
+        globals = function (_, sharedGlobals, sharedGlobalsAndroid, sharedGlobalsIos) {
             var platformGlobals = (function () {
-                switch (_.toLower(PlatformUtil.getPlatform())) {
+                switch ("@@@STRING_REPLACE_PLATFORM@@@") {
                     case "android":
                         return  _.merge({}, sharedGlobalsAndroid, appGlobalsAndroid);
                     case "ios":

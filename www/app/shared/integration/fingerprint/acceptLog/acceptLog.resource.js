@@ -19,11 +19,11 @@
         //////////////////////
 
         function activate() {
-            gkResource = ConfigurationApiRestangular.service(CONFIGURATION_API.BASE_URL);
+            gkResource = ConfigurationApiRestangular.service(CONFIGURATION_API.ACCEPT_TOUCH_ID.BASE);
         }
 
         function post() {
-            return $q.when(gkResource.post(CONFIGURATION_API.ACCEPT_TOUCH_ID.BASE));
+            return $q.when(gkResource.post());
         }
     }
 

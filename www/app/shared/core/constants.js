@@ -4,9 +4,9 @@
     var sharedGlobals = {},
         sharedGlobalsAndroid = {},
         sharedGlobalsIos = {},
-        globals = function (_, PlatformUtil) {
+        globals = function (_) {
             var platformGlobals = (function () {
-                switch (_.toLower(PlatformUtil.getPlatform())) {
+                switch ("@@@STRING_REPLACE_PLATFORM@@@") {
                     case "android":
                         return sharedGlobalsAndroid;
                     case "ios":
