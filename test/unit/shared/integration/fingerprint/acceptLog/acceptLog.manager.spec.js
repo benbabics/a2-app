@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    fdescribe("A Fingerprint Accept Log Manager", function () {
+    describe("A Fingerprint Accept Log Manager", function () {
 
         beforeEach(function () {
             var self = this;
