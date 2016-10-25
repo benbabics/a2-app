@@ -984,9 +984,6 @@
     appGlobals.FINGERPRINT_AUTH = {
         CONFIG: {
             "registerSuccessBanner": "is now setup for your username"
-        },
-        TERMS_ACCEPTANCE_LOG: {
-            "template": "Username: ${username}, Date: ${date}, Device ID: ${deviceId}, Device Model: ${deviceModel}"
         }
     };
 

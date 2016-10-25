@@ -4,12 +4,10 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function UserAuthorizationManager(_, $cordovaDevice, $q, $rootScope, globals, AuthenticationManager, Fingerprint,
-                                      FingerprintProfileUtil, LoadingIndicator, Modal, PlatformUtil, ServiceLogManager) {
+    function UserAuthorizationManager(_, $q, $rootScope, globals, AuthenticationManager, Fingerprint, FingerprintProfileUtil,
+                                      LoadingIndicator, Modal, PlatformUtil, FingerprintAcceptLogManager) {
         var USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION.TYPES,
-            USER_AUTHORIZATION_ERRORS = globals.USER_AUTHORIZATION.ERRORS,
-            TERMS_ACCEPTANCE_LOG = globals.FINGERPRINT_AUTH.TERMS_ACCEPTANCE_LOG,
-            termsAcceptanceLogTemplate = _.template(TERMS_ACCEPTANCE_LOG.template);
+            USER_AUTHORIZATION_ERRORS = globals.USER_AUTHORIZATION.ERRORS;
 
         var service = {
             verify: verify
@@ -50,16 +48,11 @@
             }
         }
 
-        function logFingerprintTermsAcceptance(clientId) {
+        function logFingerprintTermsAcceptance() {
             LoadingIndicator.begin();
 
             //log the user's acceptance of the terms
-            return ServiceLogManager.log(termsAcceptanceLogTemplate({
-                username: clientId,
-                date: new Date(),
-                deviceId: $cordovaDevice.getUUID(),
-                deviceModel: $cordovaDevice.getModel()
-            }))
+            return FingerprintAcceptLogManager.log()
                 .catch(function (error) {
                     return $q.reject({
                         reason: USER_AUTHORIZATION_ERRORS.TERMS_LOG_FAILED,
@@ -107,7 +100,7 @@
 
                             return $q.reject(error);
                         })
-                        .then(_.partial(logFingerprintTermsAcceptance, clientId))
+                        .then(logFingerprintTermsAcceptance)
                         .finally(function () {
                             return termsModal.remove();
                         });
@@ -156,6 +149,7 @@
             LoadingIndicator.begin();
 
             return AuthenticationManager.authenticate(clientId, clientSecret)
+                .then(logFingerprintTermsAcceptance)
                 .catch(function (error) {
                     return $q.reject({
                         reason: USER_AUTHORIZATION_ERRORS.AUTHENTICATION_ERROR,

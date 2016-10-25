@@ -118,12 +118,12 @@
      */
     sharedGlobals.CONFIGURATION_API = {
         BASE_URL: "@@@STRING_REPLACE_APP_URL_CONFIGURATION_API@@@",
+        ACCEPT_TOUCH_ID: {
+            "BASE": "accept-touch-id"
+        },
         BRANDS  : {
             "BASE"  : "brands",
             "ASSETS": "assets"
-        },
-        SERVICE_LOG: {
-            "BASE": "service-log"
         },
         VERSIONS   : {
             "BASE"         : "versions",

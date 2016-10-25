@@ -14,7 +14,7 @@
         credentials,
         globals;
 
-    fdescribe("A Settings Controller", function () {
+    describe("A Settings Controller", function () {
         credentials = {
             clientId:     TestUtils.getRandomStringThatIsAlphaNumeric( 8 ),
             clientSecret: TestUtils.getRandomStringThatIsAlphaNumeric( 16 )
