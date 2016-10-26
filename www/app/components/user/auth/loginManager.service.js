@@ -20,15 +20,15 @@
         //////////////////////
 
         function logIn() {
-            $rootScope.$emit("app:login");
-
-            return doLoginInitialization();
+            return doLoginInitialization().then(function () {
+                $rootScope.$emit("app:login");
+            });
         }
 
         function logOut() {
-            $rootScope.$emit("app:logout");
-
-            return doLogoutCleanup();
+            return doLogoutCleanup().then(function () {
+                $rootScope.$emit("app:logout");
+            });
         }
 
         function doLoginInitialization() {

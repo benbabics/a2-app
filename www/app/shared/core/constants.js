@@ -139,7 +139,8 @@
         STATUS: {
             "READ": "READ",
             "UNREAD": "UNREAD"
-        }
+        },
+        REGISTER: "register"
     };
 
     /**

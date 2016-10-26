@@ -130,10 +130,6 @@
                 $rootScope.$digest();
             });
 
-            it("should emit an app:login event", function () {
-                expect($rootScope.$emit).toHaveBeenCalledWith("app:login");
-            });
-
             it("should call LoadingIndicator.begin", function () {
                 expect(LoadingIndicator.begin).toHaveBeenCalledWith();
             });
@@ -180,6 +176,11 @@
                     it("should call LoadingIndicator.complete", function () {
                         expect(LoadingIndicator.complete).toHaveBeenCalledWith();
                     });
+
+                    it("should emit an app:login event", function () {
+                        expect($rootScope.$emit).toHaveBeenCalledWith("app:login");
+                    });
+
                 });
 
                 describe("when BrandManager.updateBrandCache fails", function () {
