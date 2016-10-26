@@ -1,12 +1,14 @@
 (function () {
     "use strict";
-    fdescribe("A Notification Manager", function () {
+    describe("A Notification Manager", function () {
 
         beforeEach(function () {
 
             module("app.shared");
             module("app.html");
             module("app.components");
+
+            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _)]);
 
             var self = this;
 
