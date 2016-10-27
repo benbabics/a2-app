@@ -76,6 +76,9 @@
                wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink">
             <i class="icon fa fa-bank"></i>
             {{ ::vm.config.makePayment }}
+            <span class="badge" ng-if="vm.scheduledPaymentsCount > 0">
+              {{ vm.scheduledPaymentsCount }} {{ ::vm.config.scheduledPayments }}
+            </span>
             <i class="icon fa fa-chevron-right"></i>
           </div>
 

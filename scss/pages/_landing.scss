@@ -10,6 +10,15 @@
     margin-left: 1px;
   }
 
+  .item {
+    .badge {
+      color: #888;
+      font-size: 12px;
+      font-weight: 300;
+      text-transform: uppercase;
+    }
+  }
+
   .company-details {
     .card {
       display: table;
