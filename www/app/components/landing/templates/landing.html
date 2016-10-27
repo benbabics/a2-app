@@ -29,7 +29,7 @@
               <div class="chart-wrapper">
                 <div class="labels">
                   <div class="label" ng-repeat="chart in vm.chartDisplay.left" style="color: {{ chart.color }};">
-                    <div class="text-amount" ng-bind-html="chart.data | currency | wexSupText"></div>
+                    <div class="text-amount" ng-bind-html="chart.data | currency | wexSuperText"></div>
                     <div class="text-title">{{ ::chart.label }}</div>
                   </div>
                 </div>
@@ -47,7 +47,7 @@
 
                 <div class="labels">
                   <div class="label" ng-repeat="chart in vm.chartDisplay.right" style="color: {{ chart.color }};">
-                    <div class="text-amount" ng-bind-html="chart.data | currency | wexSupText"></div>
+                    <div class="text-amount" ng-bind-html="chart.data | currency | wexSuperText"></div>
                     <div class="text-title">{{ ::chart.label }}</div>
                   </div>
                 </div>
@@ -56,11 +56,11 @@
             <div class="list">
               <div class="item balance-current">
                 {{ ::vm.config.currentBalance }}
-                <span class="item-currency" ng-bind-html="vm.invoiceSummary.currentBalance | currency | wexSupText"></span>
+                <span class="item-currency" ng-bind-html="vm.invoiceSummary.currentBalance | currency | wexSuperText"></span>
               </div>
               <div class="item balance-statement">
                 {{ ::vm.config.statementBalance }}
-                <span class="item-currency" ng-bind-html="vm.invoiceSummary.statementBalance | currency | wexSupText"></span>
+                <span class="item-currency" ng-bind-html="vm.invoiceSummary.statementBalance | currency | wexSuperText"></span>
               </div>
               <div class="item due-date">
                 {{ ::vm.config.paymentDueDate }}

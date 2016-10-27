@@ -2,7 +2,7 @@
     "use strict";
 
     /* @ngInject */
-    function wexSupText($sce) {
+    function wexSuperText($sce) {
         return function(text, delimiter, displayDelimiter) {
             var segments, delimiterChar;
 
@@ -22,5 +22,5 @@
 
     angular
         .module("app.shared.widgets")
-        .filter("wexSupText", wexSupText);
+        .filter("wexSuperText", wexSuperText);
 })();
