@@ -23,8 +23,6 @@
     "gulp-util": "^3.0.7",
     "gulp-webserver": "^0.9.1",
     "ionic": "^1.7.14",
-    "ios-deploy": "^1.8.5",
-    "ios-sim": "^5.0.6",
     "jasmine-core": "^2.4.1",
     "jscs": "^2.10.1",
     "jshint": "^2.8.0",
