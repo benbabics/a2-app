@@ -75,8 +75,8 @@
             "ANALYTICS"   : {
                 "pageName"   : "Login",
                 "events"     : {
-                    "AcceptTerms"             : ["SetUpBiometrics", "AcceptTerms"],
-                    "DeclineTerms"            : ["SetUpBiometrics", "DeclineTerms"],
+                    "acceptTerms"             : ["SetUpBiometrics", "AcceptTerms"],
+                    "declineTerms"            : ["SetUpBiometrics", "DeclineTerms"],
                     "successfulLoginManual"   : ["Login", "LoginSuccessfulManual"],
                     "successfulLoginBiometric": ["Login", "LoginSuccessfulBiometric"],
                     "inactiveStatus"          : ["Login", "InactiveStatus"],
@@ -802,8 +802,8 @@
         "CONFIG": {
             "title": "Settings",
             "events": {
-                "AcceptTerms" : ["BiometricSettings", "EnableBiometrics", "AcceptTerms"],
-                "DeclineTerms": ["BiometricSettings", "EnableBiometrics", "DeclineTerms"],
+                "acceptTerms" : ["BiometricSettings", "EnableBiometrics", "AcceptTerms"],
+                "declineTerms": ["BiometricSettings", "EnableBiometrics", "DeclineTerms"],
                 "YesConfirm"  : ["BiometricSettings", "DisableBiometrics", "YesConfirm"],
                 "NoConfirm"   : ["BiometricSettings", "DisableBiometrics", "NoConfirm"]
             },

@@ -132,8 +132,8 @@
             }
 
             // track accepted/rejected terms
-            acceptTermsListener = $rootScope.$on("FingerprintAuthTerms.accepted", function() { trackEvent( "AcceptTerms" ); });
-            rejectTermsListener = $rootScope.$on("FingerprintAuthTerms.rejected", function() { trackEvent( "DeclineTerms" ); });
+            acceptTermsListener = $rootScope.$on("FingerprintAuthTerms.accepted", function() { trackEvent( "acceptTerms" ); });
+            rejectTermsListener = $rootScope.$on("FingerprintAuthTerms.rejected", function() { trackEvent( "declineTerms" ); });
 
             return UserAuthorizationManager.verify({
                     clientId: clientId,
@@ -309,8 +309,7 @@
             var errorEvent;
             if (_.has(vm.config.ANALYTICS.errorEvents, errorReason)) {
                 errorEvent = vm.config.ANALYTICS.errorEvents[errorReason];
-
-                _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events[errorEvent]);
+                trackEvent( errorEvent );
             }
         }
 

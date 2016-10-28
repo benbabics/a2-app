@@ -77,11 +77,11 @@
             UserAuthorizationManager.verify( credentials, { bypassFingerprint: false } )
                 .then(function() {
                     renderFingerprintProfileSuccessMessage( credentials.clientId );
-                    trackEvent( "AcceptTerms" );
+                    trackEvent( "acceptTerms" );
                 })
                 .catch(function() {
                     vm.fingerprintProfileAvailable = false;
-                    trackEvent( "DeclineTerms" );
+                    trackEvent( "declineTerms" );
                 });
         }
 
