@@ -2,6 +2,7 @@
     "use strict";
 
     var HttpResponseReporterInterceptor,
+        Network,
         $rootScope,
         MOCK_REMOTE_REQUEST_CONFIG = {
             method: "POST",
@@ -22,7 +23,12 @@
 
         beforeEach(function () {
 
-            module("app.shared.network");
+            //create mock dependencies
+            Network = jasmine.createSpyObj("Network", ["isServerConnectionError"]);
+
+            module(function ($provide) {
+                $provide.value("Network", Network);
+            });
 
             inject(function (_HttpResponseReporterInterceptor_, _$rootScope_) {
                 HttpResponseReporterInterceptor = _HttpResponseReporterInterceptor_;
@@ -43,10 +49,10 @@
                     mockResponse.config = MOCK_REMOTE_REQUEST_CONFIG;
                 });
 
-                describe("when the status code is 404", function () {
+                describe("when the status code is a server connection error", function () {
 
                     beforeEach(function () {
-                        mockResponse.status = 404;
+                        Network.isServerConnectionError.and.returnValue(true);
 
                         errorResult = HttpResponseReporterInterceptor.responseError(mockResponse);
                         $rootScope.$digest();
@@ -61,28 +67,10 @@
                     });
                 });
 
-                describe("when the status code is 503", function () {
+                describe("when the status code is NOT a server connection error", function () {
 
                     beforeEach(function () {
-                        mockResponse.status = 503;
-
-                        errorResult = HttpResponseReporterInterceptor.responseError(mockResponse);
-                        $rootScope.$digest();
-                    });
-
-                    it("should emit an event that a server error occurred", function () {
-                        expect($rootScope.$emit).toHaveBeenCalledWith("network:serverConnectionError");
-                    });
-
-                    it("should return true", function () {
-                        expect(errorResult).toBeTruthy();
-                    });
-                });
-
-                describe("when the status code is NOT 404 OR 503", function () {
-
-                    beforeEach(function () {
-                        mockResponse.status = 500;
+                        Network.isServerConnectionError.and.returnValue(false);
 
                         errorResult = HttpResponseReporterInterceptor.responseError(mockResponse);
                         $rootScope.$digest();
@@ -95,7 +83,6 @@
                     it("should return true", function () {
                         expect(errorResult).toBeTruthy();
                     });
-
                 });
             });
 
@@ -107,10 +94,10 @@
                     mockResponse.config = MOCK_LOCAL_REQUEST_CONFIG;
                 });
 
-                describe("when the status code is 404", function () {
+                describe("when the status code is a server connection error", function () {
 
                     beforeEach(function () {
-                        mockResponse.status = 404;
+                        Network.isServerConnectionError.and.returnValue(true);
 
                         errorResult = HttpResponseReporterInterceptor.responseError(mockResponse);
                         $rootScope.$digest();
@@ -125,10 +112,10 @@
                     });
                 });
 
-                describe("when the status code is 503", function () {
+                describe("when the status code is NOT a server connection error", function () {
 
                     beforeEach(function () {
-                        mockResponse.status = 503;
+                        Network.isServerConnectionError.and.returnValue(false);
 
                         errorResult = HttpResponseReporterInterceptor.responseError(mockResponse);
                         $rootScope.$digest();
@@ -141,25 +128,6 @@
                     it("should return true", function () {
                         expect(errorResult).toBeTruthy();
                     });
-                });
-
-                describe("when the status code is NOT 404 OR 503", function () {
-
-                    beforeEach(function () {
-                        mockResponse.status = 500;
-
-                        errorResult = HttpResponseReporterInterceptor.responseError(mockResponse);
-                        $rootScope.$digest();
-                    });
-
-                    it("should NOT emit an event that a server error occurred", function () {
-                        expect($rootScope.$emit).not.toHaveBeenCalledWith("network:serverConnectionError");
-                    });
-
-                    it("should return true", function () {
-                        expect(errorResult).toBeTruthy();
-                    });
-
                 });
             });
         });

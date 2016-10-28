@@ -11,8 +11,11 @@
 
     describe("A Logger Service", function () {
 
+        beforeAll(function () {
+            this.commonSharedMockExclusions = ["Logger"];
+        });
+
         beforeEach(function () {
-            module("app.shared.logger");
 
             inject(function (_$log_, _Logger_) {
                 $log = _$log_;

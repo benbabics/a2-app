@@ -11,10 +11,6 @@
   /**
    * Alerts
   **/
-  [notification-bar-class=has-header] {
-    top: 0 !important; // override until we refactor alerts priority
-  }
-
   .alerts-wrapper {
     position: absolute;
     left: 0;
@@ -28,14 +24,6 @@
 
     .bar {
       position: relative;
-
-      &.bar-notification .title-container h1[fittext] {
-        font-size: 12px !important;
-        line-height: normal;
-      }
-    }
-    .card.card-error {
-      margin: 0;
     }
   }
 
@@ -52,6 +40,10 @@
     @media (min-width: 321px) {
       padding-left:  30px;
       padding-right: 30px;
+    }
+
+    &.has-header, &.has-subheader {
+      top: 0;
     }
 
     .title-bar {

@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function HttpResponseReporterInterceptor($rootScope) {
+    function HttpResponseReporterInterceptor($rootScope, Network) {
 
         // Revealed Public members
         var service = {
@@ -17,7 +17,7 @@
 
         function responseError(responseObject) {
 
-            if (isRemoteResponse(responseObject) && (responseObject.status === 404 || responseObject.status === 503)) {
+            if (isRemoteResponse(responseObject) && Network.isServerConnectionError(responseObject)) {
                 $rootScope.$emit("network:serverConnectionError");
             }
 

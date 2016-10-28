@@ -7,17 +7,10 @@
             $q,
             $rootScope,
             FingerprintProfileUtil,
-            SecureStorage,
             resolveHandler,
             rejectHandler;
 
         beforeEach(function () {
-
-            module("app.shared", function ($provide) {
-                TestUtils.provideCommonMockDependencies($provide, function (mocks) {
-                    SecureStorage = mocks.SecureStorage;
-                });
-            });
 
             inject(function (___, _$q_, _$rootScope_, _FingerprintProfileUtil_) {
                 _ = ___;
@@ -39,18 +32,18 @@
                 username = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 removeDeferred = $q.defer();
 
-                SecureStorage.remove.and.returnValue(removeDeferred.promise);
+                this.SecureStorage.remove.and.returnValue(removeDeferred.promise);
 
                 FingerprintProfileUtil.clearProfile(username)
                     .then(resolveHandler)
                     .catch(rejectHandler);
             });
 
-            it("should call SecureStorage.remove with the expected values", function () {
-                expect(SecureStorage.remove).toHaveBeenCalledWith(_.toLower(username));
+            it("should call this.SecureStorage.remove with the expected values", function () {
+                expect(this.SecureStorage.remove).toHaveBeenCalledWith(_.toLower(username));
             });
 
-            describe("when SecureStorage.remove resolves", function () {
+            describe("when this.SecureStorage.remove resolves", function () {
                 var result;
 
                 beforeEach(function () {
@@ -65,7 +58,7 @@
                 });
             });
 
-            describe("when SecureStorage.remove rejects", function () {
+            describe("when this.SecureStorage.remove rejects", function () {
                 var result;
 
                 beforeEach(function () {
@@ -89,18 +82,18 @@
                 username = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 getDeferred = $q.defer();
 
-                SecureStorage.get.and.returnValue(getDeferred.promise);
+                this.SecureStorage.get.and.returnValue(getDeferred.promise);
 
                 FingerprintProfileUtil.getProfile(username)
                     .then(resolveHandler)
                     .catch(rejectHandler);
             });
 
-            it("should call SecureStorage.get with the expected values", function () {
-                expect(SecureStorage.get).toHaveBeenCalledWith(_.toLower(username));
+            it("should call this.SecureStorage.get with the expected values", function () {
+                expect(this.SecureStorage.get).toHaveBeenCalledWith(_.toLower(username));
             });
 
-            describe("when SecureStorage.get resolves", function () {
+            describe("when this.SecureStorage.get resolves", function () {
                 var result;
 
                 beforeEach(function () {
@@ -115,7 +108,7 @@
                 });
             });
 
-            describe("when SecureStorage.get rejects", function () {
+            describe("when this.SecureStorage.get rejects", function () {
                 var result;
 
                 beforeEach(function () {
@@ -141,18 +134,18 @@
                 password = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 setDeferred = $q.defer();
 
-                SecureStorage.set.and.returnValue(setDeferred.promise);
+                this.SecureStorage.set.and.returnValue(setDeferred.promise);
 
                 FingerprintProfileUtil.setProfile(username, password)
                     .then(resolveHandler)
                     .catch(rejectHandler);
             });
 
-            it("should call SecureStorage.set with the expected values", function () {
-                expect(SecureStorage.set).toHaveBeenCalledWith(_.toLower(username), password);
+            it("should call this.SecureStorage.set with the expected values", function () {
+                expect(this.SecureStorage.set).toHaveBeenCalledWith(_.toLower(username), password);
             });
 
-            describe("when SecureStorage.set resolves", function () {
+            describe("when this.SecureStorage.set resolves", function () {
                 var result;
 
                 beforeEach(function () {
@@ -167,7 +160,7 @@
                 });
             });
 
-            describe("when SecureStorage.set rejects", function () {
+            describe("when this.SecureStorage.set rejects", function () {
                 var result;
 
                 beforeEach(function () {

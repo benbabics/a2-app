@@ -2,6 +2,19 @@
 
 /* jshint -W003 */
 
+/* Helps to debug "Error: spawn ENOENT" issues */
+(function() {
+    var childProcess = require("child_process");
+    var oldSpawn = childProcess.spawn;
+    function mySpawn() {
+        console.log('spawn called');
+        console.log(arguments);
+        var result = oldSpawn.apply(this, arguments);
+        return result;
+    }
+    childProcess.spawn = mySpawn;
+})();
+
 var gulp = require("gulp");
 var gutil = require("gulp-util");
 var bower = require("bower");
@@ -17,6 +30,7 @@ var jshint = require("gulp-jshint");
 var jscs = require("gulp-jscs");
 var webserver = require("gulp-webserver");
 var gulpsync = require("gulp-sync")(gulp);
+var KarmaServer = require("karma").Server;
 
 var sourcePaths = {
     root: {
@@ -37,6 +51,9 @@ var destPaths = {
 };
 
 var config = {
+    test: {
+        dir: "test"
+    },
     webserver: {
         host: "127.0.0.1",
         port: 8100,
@@ -71,7 +88,7 @@ gulp.task("bower-install", ["git-check"], function () {
 });
 
 gulp.task("npm-install", function (done) {
-    sh.exec("npm install", done);
+    sh.exec("yarn", done);
 });
 
 gulp.task("ionic-restore", function (done) {
@@ -237,6 +254,20 @@ gulp.task("ionic-prod-run-android", ["ionic-build-prepare"], function (done) {
 gulp.task("ionic-prod-run-ios", ["ionic-build-prepare"], function (done) {
     sh.env.TARGET = "prod";
     sh.exec("ionic run ios --device", done);
+});
+
+/**
+ * Test Tasks
+ */
+gulp.task("test", function (done) {
+    new KarmaServer({
+        configFile: __dirname + "/" + config.test.dir + "/karma.conf.js",
+        singleRun: true,
+        browsers: ["PhantomJS"],
+        browserNoActivityTimeout: 60000
+    }, function() {
+        done();
+    }).start();
 });
 
 /**

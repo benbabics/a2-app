@@ -1,5 +1,7 @@
 (function () {
     "use strict";
 
-    angular.module("app.shared.integration.fingerprint", []);
+    angular.module("app.shared.integration.fingerprint", [
+        "app.shared.integration.fingerprint.acceptLog"
+    ]);
 })();

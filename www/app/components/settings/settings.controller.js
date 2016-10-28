@@ -8,7 +8,7 @@
     function SettingsController($q, $scope, $localStorage, $cordovaDialogs, $timeout, globals, PlatformUtil, Fingerprint, UserAuthorizationManager, SecureStorage, sessionCredentials, wexTruncateStringFilter, AnalyticsUtil) {
 
         var USERNAME_KEY             = globals.LOCALSTORAGE.KEYS.USERNAME,
-            USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION_TYPES;
+            USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION.TYPES;
 
         var platform,
             vm = this;

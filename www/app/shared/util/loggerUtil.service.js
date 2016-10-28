@@ -35,11 +35,16 @@
             }
             // if an Error class object
             else if (_.has(errorObject, "message")) {
-                errorMessage = errorObject.message;
+                errorMessage = getErrorMessage(errorObject.message);
             }
-            else if (_.has(errorObject, "data") && _.isObject(errorObject.data)) {
-                errorMessage += errorObject.data.error ? errorObject.data.error + ": " : "";
-                errorMessage += errorObject.data.error_description || "";
+            else if (_.has(errorObject, "error")) {
+                errorMessage += getErrorMessage(errorObject.error);
+            }
+            else if (_.has(errorObject, "error_description")) {
+                errorMessage += ": " + getErrorMessage(errorObject.error_description);
+            }
+            else if (_.has(errorObject, "data")) {
+                errorMessage += getErrorMessage(errorObject.data);
             }
 
             if (_.isEmpty(errorMessage)) {

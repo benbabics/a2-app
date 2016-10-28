@@ -37,27 +37,15 @@
 
     describe("An Authentication Manager", function () {
 
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+        });
+
         beforeEach(function () {
 
-            module("app.shared", function ($provide, sharedGlobals) {
+            module(function ($provide, sharedGlobals) {
                 $provide.value("globals", angular.extend({}, sharedGlobals, globals));
             });
-
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
-            });
-
-            module("app.shared.network");
-            module("app.shared.auth");
-            module("app.shared.api");
-            module("app.shared.integration");
-            module("app.shared.logger");
 
             // mock dependencies
             FormEncoder = jasmine.createSpyObj("FormEncoder", ["encode"]);

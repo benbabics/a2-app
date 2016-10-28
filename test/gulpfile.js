@@ -8,6 +8,7 @@ var sh = require("shelljs");
 var angularFilesort = require("gulp-angular-filesort");
 var inject = require("gulp-inject");
 var protractor = require("gulp-protractor").protractor;
+var Testserver = require('karma').Server;
 
 // the source paths
 var sourcePaths = {

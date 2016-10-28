@@ -17,7 +17,7 @@
         // Controller initialization
         function activate() {
             infiniteListController = $controller("WexInfiniteListController", {
-                $scope: vm,
+                $scope: $scope,
                 $attrs: {
                     isGreeking: true,
                     cacheKey  : "alerts-inbox"
@@ -31,11 +31,11 @@
             });
 
             vm.alertPrefixMap = globals.ALERTS_LIST.REASON_PREFIX;
-            vm.alerts = vm.infiniteScrollService.model;
+            vm.alerts = $scope.infiniteScrollService.model;
 
             // if we're dealing with cached results, check for updates
             if (vm.alerts.collection.length > 0) {
-                vm.resetSearchResults({skipGreeking: true});
+                $scope.resetSearchResults({ skipGreeking: true });
             }
         }
 

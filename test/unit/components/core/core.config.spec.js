@@ -11,11 +11,14 @@
             appGlobals,
             sharedGlobals;
 
+        beforeAll(function () {
+            this.deferIncludes = true;
+            this.includeHtml = true;
+        });
+
         beforeEach(function () {
 
-            module("app.shared");
-
-            module(function (_$compileProvider_, _$ionicConfigProvider_, _$urlRouterProvider_, _IdleProvider_, _ionicDatePickerProvider_) {
+            module("app.shared", function (_$compileProvider_, _$ionicConfigProvider_, _$urlRouterProvider_, _IdleProvider_, _ionicDatePickerProvider_) {
                 $ionicConfigProvider = _$ionicConfigProvider_;
                 $urlRouterProvider = _$urlRouterProvider_;
                 $compileProvider = _$compileProvider_;
@@ -31,8 +34,7 @@
                 ionicDatePickerProvider.configDatePicker = jasmine.createSpy("configDatePicker");
             });
 
-            module("app.components");
-            module("app.shared");
+            this.includeDependencies();
 
             inject(function(_appGlobals_, _sharedGlobals_) {
                 appGlobals = _appGlobals_;

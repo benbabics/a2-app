@@ -3,11 +3,11 @@
   <ion-content ion-sticky>
 
       <div class="widget-filter-transaction-list widget-filter-card-transaction-list">
-          <ion-refresher class="wex-refresher" on-refresh="vm.resetSearchResults()"></ion-refresher>
+          <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
 
-          <wex-infinite-list on-reload="vm.loadNextPage"
+          <wex-infinite-list on-reload="loadNextPage"
                              reload-distance="::config.reloadDistance"
-                             loading-complete="vm.infiniteScrollService.isLoadingComplete">
+                             loading-complete="infiniteScrollService.isLoadingComplete">
 
               <!-- Notifications Banner -->
               <ion-item class="notifications-banner-wrapper">
@@ -23,7 +23,7 @@
           </wex-infinite-list>
       </div>
 
-      <div ng-show="vm.infiniteScrollService.isLoadingComplete && vm.infiniteScrollService.model.collection.length <= 0" class="no-transactions">{{::vm.config.emptyList}}</div>
+      <div ng-show="infiniteScrollService.isLoadingComplete && vm.alerts.collection.length <= 0" class="no-transactions">{{::vm.config.emptyList}}</div>
 
   </ion-content>
 

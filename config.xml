@@ -9,6 +9,7 @@
     </author>
     <hook src="scripts/initDirectories.js" type="before_platform_add" />
     <hook src="scripts/addExecutePermissions.js" type="before_build" />
+    <hook src="scripts/copyIosScheme.js" type="before_build" />
     <hook src="scripts/addPlatformClass.js" type="after_prepare" />
     <hook src="scripts/removeSassFromPlatforms.js" type="after_prepare" />
     <hook src="scripts/setEnvironment.js" type="after_prepare" />
@@ -125,4 +126,5 @@
     <preference name="xwalkMultipleApk" value="true" />
     <plugin name="cordova-plugin-dialogs" spec="~1.2.1" />
     <plugin name="com.phonegap.plugins.nativesettingsopener" spec="https://github.com/selahssea/cordova-open-native-settings" />
+    <plugin name="cordova-plugin-ignore-lint-translation" spec="~0.0.1" />
 </widget>

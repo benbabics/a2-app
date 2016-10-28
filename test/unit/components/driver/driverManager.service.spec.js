@@ -9,7 +9,6 @@
             DriverManager,
             DriverModel,
             DriversResource,
-            Logger,
             resolveHandler,
             rejectHandler;
 
@@ -20,23 +19,17 @@
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.account");
-            module("app.components.driver", function ($provide) {
+            module(function ($provide) {
                 $provide.value("DriversResource", DriversResource);
             });
 
-            inject(function (___, _$q_, _$rootScope_, _DriverManager_, _DriverModel_, _Logger_) {
+            inject(function (___, _$q_, _$rootScope_, _DriverManager_, _DriverModel_) {
                 _ = ___;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 DriverManager = _DriverManager_;
                 DriverModel = _DriverModel_;
-                Logger = _Logger_;
             });
-
-            spyOn(Logger, "error");
         });
 
         describe("has a clearCachedValues function that", function () {
@@ -137,7 +130,7 @@
                 it("should log and throw an error", function () {
                     TestUtils.digestError($rootScope);
 
-                    expect(Logger.error).toHaveBeenCalledWith(error);
+                    expect(this.Logger.error).toHaveBeenCalledWith(error);
 
                     expect(rejectHandler).toHaveBeenCalledWith(new Error(error));
                 });
@@ -167,7 +160,7 @@
                         DriverManager.fetchDrivers(accountId, params);
                     }).toThrowError(error);
 
-                    expect(Logger.error).toHaveBeenCalledWith(error);
+                    expect(this.Logger.error).toHaveBeenCalledWith(error);
                 });
             });
 
@@ -188,7 +181,7 @@
                         DriverManager.fetchDrivers(accountId, params);
                     }).toThrowError(error);
 
-                    expect(Logger.error).toHaveBeenCalledWith(error);
+                    expect(this.Logger.error).toHaveBeenCalledWith(error);
                 });
             });
 
@@ -338,7 +331,7 @@
 
                         TestUtils.digestError($rootScope);
 
-                        expect(Logger.error).toHaveBeenCalledWith(expectedError);
+                        expect(this.Logger.error).toHaveBeenCalledWith(expectedError);
 
                         expect(rejectHandler).toHaveBeenCalledWith(new Error(expectedError));
                     });

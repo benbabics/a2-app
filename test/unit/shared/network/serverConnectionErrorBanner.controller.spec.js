@@ -6,22 +6,13 @@
         ctrl;
 
     describe("A ServerConnectionErrorBannerController", function () {
+
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+        });
+
         beforeEach(function () {
 
-            module("app.shared");
-
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
-            });
-
-            // INJECT! This part is critical
-            // $rootScope - injected to create a new $scope instance.
-            // $controller - injected to create an instance of our controller.
             inject(function (_$rootScope_, $controller) {
 
                 $rootScope = _$rootScope_;

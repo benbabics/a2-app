@@ -11,6 +11,10 @@
         //Private members:
         var CONSTANTS = globals.FINGERPRINT_AUTH,
             NOT_SUPPORTED_ERROR = "Fingerprint authentication is not available on this platform.",
+            ANDROID_USER_CANCELED = "Cancelled",
+            ANDROID_EXCEEDED_ATTEMPTS = "Too many attempts. Try again later.",
+            IOS_EXCEEDED_ATTEMPTS = -1,
+            IOS_USER_CANCELED = -2,
             IOS_PASSCODE_NOT_SET = -5,
             IOS_TOUCH_ID_NOT_AVAILABLE = -6,
             IOS_TOUCH_ID_NOT_ENROLLED = -7,
@@ -112,6 +116,24 @@
                     return promise.then(function (response) {
                         return _.extend(response, authResponse);
                     });
+                })
+                .catch(function (error) {
+                    var errorResult = {
+                        exceededAttempts: false,
+                        userCanceled: false,
+                        data: error
+                    };
+
+                    if (platform === PLATFORM_ANDROID) {
+                        errorResult.exceededAttempts = (error === ANDROID_EXCEEDED_ATTEMPTS);
+                        errorResult.userCanceled = (error === ANDROID_USER_CANCELED);
+                    }
+                    else if (platform === PLATFORM_IOS) {
+                        errorResult.exceededAttempts = (error.code === IOS_EXCEEDED_ATTEMPTS);
+                        errorResult.userCanceled = (error.code === IOS_USER_CANCELED);
+                    }
+
+                    return $q.reject(errorResult);
                 });
         }
 

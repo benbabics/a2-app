@@ -9,7 +9,6 @@
             $state,
             mockAlertItem,
             AlertsManager,
-            AnalyticsUtil,
             mockGlobals = {
                 ALERTS_LIST: {
                     "CONFIG": {
@@ -20,19 +19,20 @@
                 }
             };
 
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+            this.includeHtml = true;
+        });
+
         beforeEach(function () {
 
-            module("app.shared");
             module("app.components.alerts");
-            module("app.html");
 
             // mock dependencies
             AlertsManager = jasmine.createSpyObj("AlertsManager", ["fetchAlerts"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
 
             module(function ($provide, sharedGlobals) {
                 $provide.value("AlertsManager", AlertsManager);
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
@@ -106,7 +106,7 @@
                 });
 
                 xit("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.ALERTS_LIST.CONFIG.ANALYTICS.pageName);
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.ALERTS_LIST.CONFIG.ANALYTICS.pageName);
                 });
 
             });

@@ -12,10 +12,11 @@
             navBar,
             rootNavView;
 
-        beforeEach(function () {
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+        });
 
-            module("app.shared");
-            module("app.html");
+        beforeEach(function () {
 
             inject(function (___, _$compile_, _$rootScope_, _ElementUtil_) {
                 _ = ___;
@@ -1364,7 +1365,7 @@
                 });
 
                 it("should return the content", function () {
-                    expect(ElementUtil.getViewContent()).toEqual(content);
+                    expect(ElementUtil.getViewContent()[0].outerHTML).toEqual(content[0].outerHTML);
                 });
             });
 
@@ -1412,7 +1413,7 @@
                     });
 
                     it("should return the content", function () {
-                        expect(ElementUtil.getViewContent(view)).toEqual(content);
+                        expect(ElementUtil.getViewContent(view)[0].outerHTML).toEqual(content[0].outerHTML);
                     });
                 });
             });

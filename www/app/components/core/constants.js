@@ -6,8 +6,21 @@
     // jscs:disable maximumLineLength
 
     var appGlobals = {},
-        globals = function (sharedGlobals) {
-            return angular.extend({}, sharedGlobals, appGlobals);
+        appGlobalsAndroid = {},
+        appGlobalsIos = {},
+        globals = function (_, sharedGlobals, sharedGlobalsAndroid, sharedGlobalsIos) {
+            var platformGlobals = (function () {
+                switch ("@@@STRING_REPLACE_PLATFORM@@@") {
+                    case "android":
+                        return  _.merge({}, sharedGlobalsAndroid, appGlobalsAndroid);
+                    case "ios":
+                        return _.merge({}, sharedGlobalsIos, appGlobalsIos);
+                    default:
+                        return {};
+                }
+            })();
+
+            return _.merge({}, sharedGlobals, appGlobals, platformGlobals);
         };
 
     appGlobals.DEFAULT_ROUTE = "/version/status";
@@ -79,10 +92,12 @@
                     "declineTerms"            : ["SetUpBiometrics", "DeclineTerms"],
                     "successfulLoginManual"   : ["Login", "LoginSuccessfulManual"],
                     "successfulLoginBiometric": ["Login", "LoginSuccessfulBiometric"],
-                    "inactiveStatus"          : ["Login", "InactiveStatus"],
-                    "accountNotReadyStatus"   : ["Login", "AccountNotReadyStatus"],
-                    "wrongCredentialsStatus"  : ["Login", "WrongCredentialsStatus"],
-                    "lockedPasswordStatus"    : ["Login", "LockedPasswordStatus"]
+                    "inactiveStatus"        : ["Login", "InactiveStatus"],
+                    "accountNotReadyStatus" : ["Login", "AccountNotReadyStatus"],
+                    "wrongCredentialsStatus": ["Login", "WrongCredentialsStatus"],
+                    "lockedPasswordStatus"  : ["Login", "LockedPasswordStatus"],
+                    "passwordChangedStatus" : ["Login", "PasswordChangedStatus"],
+                    "connectionErrorStatus" : ["Login", "ConnectionErrorStatus"]
                 },
                 "errorEvents": {
                     "USER_MUST_ACCEPT_TERMS"            : "inactiveStatus",
@@ -90,7 +105,9 @@
                     "USER_NOT_ACTIVE"                   : "inactiveStatus",
                     "AUTHORIZATION_FAILED"              : "accountNotReadyStatus",
                     "DEFAULT"                           : "wrongCredentialsStatus",
-                    "USER_LOCKED"                       : "lockedPasswordStatus"
+                    "USER_LOCKED"                       : "lockedPasswordStatus",
+                    "PASSWORD_CHANGED"                  : "passwordChangedStatus",
+                    "CONNECTION_ERROR"                  : "connectionErrorStatus"
                 }
             },
             "title"       : "Fleet SmartHub",
@@ -133,17 +150,16 @@
             "serverErrors": {
                 "AUTHORIZATION_FAILED"              : "We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.",
                 "DEFAULT"                           : "Invalid login information. Please check your username and password or go online to set up or recover your username and password.",
+                "PASSWORD_CHANGED"                  : "Invalid login information. Please re-enter your username and password.",
                 "PASSWORD_EXPIRED"                  : "Invalid login information. Go online to set up or recover your username and password.",
+                "CONNECTION_ERROR"                  : "Login failed. Please try again later.",
                 "TOKEN_EXPIRED"                     : "Your session has expired. Please login again.",
                 "USER_LOCKED"                       : "You have exceeded the number of allowable login attempts. You will need to access your online account to retrieve your username and password.",
                 "USER_MUST_ACCEPT_TERMS"            : "Invalid login information. Go online to set up or recover your username and password.",
                 "USER_MUST_SETUP_SECURITY_QUESTIONS": "Invalid login information. Go online to set up or recover your username and password.",
                 "USER_NOT_ACTIVE"                   : "Invalid login information. Go online to set up or recover your username and password."
             },
-            "sessionTimeOut": {
-                "line1": "Your session has timed out due to 15 minutes of",
-                "line2": "inactivity. Please login to access your account."
-            },
+            "sessionTimeOut": "Your session has timed out due to 15 minutes of inactivity. Please login to access your account.",
             "enrollment": {
                 "label": "Enroll Now"
             }
@@ -249,7 +265,7 @@
             "cardNumber"       : "Card No",
             "embossing"        : "Embossing",
             "status"           : "Status",
-            "reloadDistance"   : "5%",
+            "reloadDistance"   : "50%",
             "emptyList"        : "No Records Found."
         },
         "SEARCH_OPTIONS": {
@@ -960,9 +976,24 @@
         }
     };
 
-    appGlobals.USER_AUTHORIZATION_TYPES = {
-        "FINGERPRINT": "FINGERPRINT",
-        "SECRET"     : "SECRET"
+    appGlobals.USER_AUTHORIZATION = {
+        ERRORS: {
+            "AUTHENTICATION_ERROR": "AUTHENTICATION_ERROR",
+            "EXCEEDED_ATTEMPTS"   : "EXCEEDED_ATTEMPTS",
+            "TERMS_LOG_FAILED"    : "TERMS_LOG_FAILED",
+            "USER_CANCELED"       : "USER_CANCELED",
+            "UNKNOWN"             : "UNKNOWN"
+        },
+        TYPES: {
+            "FINGERPRINT": "FINGERPRINT",
+            "SECRET"     : "SECRET"
+        }
+    };
+
+    appGlobals.FINGERPRINT_AUTH = {
+        CONFIG: {
+            "registerSuccessBanner": "is now setup for your username"
+        }
     };
 
     appGlobals.USER_IDLE_TIMEOUT = 900; //in seconds
@@ -970,6 +1001,8 @@
     angular
         .module("app.components.core")
         .constant("appGlobals", appGlobals)
+        .constant("appGlobalsAndroid", appGlobalsAndroid)
+        .constant("appGlobalsIos", appGlobalsIos)
         .factory("globals", globals);
 
 })();
