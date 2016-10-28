@@ -9,7 +9,6 @@
             $state,
             mockPostedTransaction,
             TransactionManager,
-            AnalyticsUtil,
             CardManager,
             DriverManager,
             CardModel,
@@ -44,17 +43,19 @@
                 }
             };
 
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+            this.includeHtml = true;
+        });
+
         beforeEach(function () {
 
-            module("app.shared");
             module("app.components.card");
             module("app.components.driver");
             module("app.components.transaction");
-            module("app.html");
 
             // mock dependencies
             TransactionManager = jasmine.createSpyObj("TransactionManager", ["fetchPostedTransaction"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
             CardManager = jasmine.createSpyObj("CardManager", ["fetchCard"]);
             DriverManager = jasmine.createSpyObj("DriverManager", ["fetchDriver"]);
 
@@ -62,7 +63,6 @@
                 $provide.value("TransactionManager", TransactionManager);
                 $provide.value("CardManager", CardManager);
                 $provide.value("DriverManager", DriverManager);
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
@@ -149,8 +149,8 @@
                     expect($state.current.name).toBe(stateName);
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.TRANSACTION_LIST.CONFIG.ANALYTICS.pageName);
+                it("should call this.AnalyticsUtil.trackView", function () {
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.TRANSACTION_LIST.CONFIG.ANALYTICS.pageName);
                 });
 
             });
@@ -335,8 +335,8 @@
                         });
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.POSTED_TRANSACTION_DETAIL.CONFIG.ANALYTICS.pageName);
+                it("should call this.AnalyticsUtil.trackView", function () {
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.POSTED_TRANSACTION_DETAIL.CONFIG.ANALYTICS.pageName);
                 });
 
             });

@@ -10,9 +10,11 @@
                 LOGIN_STATE: TestUtils.getRandomStringThatIsAlphaNumeric(10)
             };
 
-        beforeEach(function () {
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+        });
 
-            module("app.shared");
+        beforeEach(function () {
 
             module(function ($provide, sharedGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));

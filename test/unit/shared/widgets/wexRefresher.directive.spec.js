@@ -15,9 +15,11 @@
 
     describe("A Wex Refresher Directive", function () {
 
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+        });
+
         beforeEach(function () {
-            module("app.shared");
-            module("app.html");
 
             module(function ($provide, sharedGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));

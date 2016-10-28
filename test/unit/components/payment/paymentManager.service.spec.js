@@ -34,10 +34,13 @@
 
     describe("A Payment Manager", function () {
 
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+            this.includeHtml = true;
+        });
+
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
             module("app.components.bank");
             module("app.components.payment");
 

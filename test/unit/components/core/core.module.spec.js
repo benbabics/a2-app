@@ -103,7 +103,6 @@
             FlowUtil,
             PaymentManager,
             UserManager,
-            AnalyticsUtil,
             BrandManager,
             VersionManager,
             $cordovaDevice,
@@ -124,8 +123,6 @@
             $ionicPlatform = jasmine.createSpyObj("$ionicPlatform", ["ready", "registerBackButtonAction"]);
             FlowUtil = jasmine.createSpyObj("FlowUtil", ["exitApp", "goToBackState"]);
             VersionManager = jasmine.createSpyObj("VersionManager", ["determineVersionStatus"]);
-
-            module("app.shared");
 
             module("app.components", function ($provide) {
                 $provide.constant("globals", mockGlobals);
@@ -159,12 +156,6 @@
                 $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, globals));
             });
 
-            module("app.shared");
-            module("app.html");
-            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
-                AnalyticsUtil = mocks.AnalyticsUtil;
-            })]);
-
             inject(function (_$q_, _$rootScope_, _$state_) {
                 $q = _$q_;
                 $rootScope = _$rootScope_;
@@ -178,8 +169,8 @@
             //TODO - figure out how to test this
         });
 
-        it("should call AnalyticsUtil.startTracker with the expected tracking ID", function () {
-            expect(AnalyticsUtil.startTracker).toHaveBeenCalledWith(genericTrackingId);
+        it("should call this.AnalyticsUtil.startTracker with the expected tracking ID", function () {
+            expect(this.AnalyticsUtil.startTracker).toHaveBeenCalledWith(genericTrackingId);
         });
 
         describe("when running the app from Chrome", function () {

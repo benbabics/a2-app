@@ -45,6 +45,7 @@ module.exports = function(context) {
                 "@@@STRING_REPLACE_APP_DATASTORE_NAME@@@"          : configObj.all.datastore.name,
                 "@@@STRING_REPLACE_GCM_APP_ID@@@"                  : configObj.all.gcm.app_id,
                 "@@@STRING_REPLACE_LOGIN_STATE@@@"                 : configObj.all.auth.login_state,
+                "@@@STRING_REPLACE_PLATFORM@@@"                    : platform.toLowerCase(),
                 "@@@STRING_REPLACE_URBANAIRSHIP_APP_KEY_PROD@@@"   : configObj.all.notifications.urbanairship.app_key_prod,
                 "@@@STRING_REPLACE_URBANAIRSHIP_APP_SECRET_PROD@@@": configObj.all.notifications.urbanairship.app_secret_prod,
                 "@@@STRING_REPLACE_URBANAIRSHIP_APP_KEY_DEV@@@"    : configObj.all.notifications.urbanairship.app_key_dev,

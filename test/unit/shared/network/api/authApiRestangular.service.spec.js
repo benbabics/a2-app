@@ -23,19 +23,9 @@
 
         beforeEach(function () {
 
-            module("app.shared.dependencies");
-            module("app.shared.util");
-            module("app.shared.core");
-
-            module(function ($provide) {
-                $provide.value("globals", mockGlobals);
+            module(function ($provide, appGlobals, sharedGlobals) {
+                $provide.constant("globals", angular.extend({}, appGlobals, sharedGlobals, mockGlobals));
             });
-
-            module("app.shared.network");
-            module("app.shared.auth");
-            module("app.shared.api");
-            module("app.shared.integration");
-            module("app.shared.logger");
 
             inject(function (_AuthApiRestangular_, _Restangular_, _$base64_) {
                 AuthApiRestangular = _AuthApiRestangular_;

@@ -9,8 +9,11 @@
             ionNavView,
             mockTransitionType = "Mock transition type";
 
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+        });
+
         beforeEach(function () {
-            module("app.shared");
 
             inject(function (_$rootScope_, $compile, _$document_) {
                 var $scope = _$rootScope_.$new();
