@@ -11,7 +11,7 @@
             displayDelimiter = displayDelimiter || false;
             delimiterChar    = displayDelimiter ? delimiter : "";
 
-            if ( segments[1] !== "" ) {
+            if ( segments[1] ) {
                 text = segments[0] + "<sup>" + delimiterChar + segments[1] + "</sup>";
                 text = $sce.trustAsHtml( text );
             }
