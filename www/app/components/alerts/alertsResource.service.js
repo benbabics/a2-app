@@ -13,7 +13,8 @@
             getAlerts:   getAlerts,
             deleteAlert: deleteAlert,
             getUnreadAlertsCount: getUnreadAlertsCount,
-            setAlertsRead: setAlertsRead
+            setAlertsRead: setAlertsRead,
+            registerUserForNotifications : registerUserForNotifications
         };
 
         activate();
@@ -41,6 +42,9 @@
             return $q.when(notificationsResource.one(alertIds.join()).put());
         }
 
+        function registerUserForNotifications(channelId) {
+            return $q.when(notificationsResource.one().doPOST(null, globals.NOTIFICATIONS_API.REGISTER, {channelId: channelId}));
+        }
     }
 
     angular
