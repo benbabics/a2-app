@@ -530,17 +530,20 @@
                 mockBrandAssetCollection.by.and.callFake(function (key, value) {
                     return _.find(existingAssets, _.zipObject([key], [value]));
                 });
+                mockBrandAssetCollection.remove.and.callFake(function (value) {
+                    return _.remove(existingAssets, {brandAssetId: value.brandAssetId});
+                });
             });
 
             beforeEach(function () {
                 result = BrandManager.storeBrandAssets(brandAssets);
             });
 
-            it("should call update on the expected assets", function () {
+            it("should call remove on the expected assets", function () {
                 _.forEach(existingAssets, function (existingAsset) {
                     var expectedAsset = _.find(brandAssets, {brandAssetId: existingAsset.brandAssetId});
 
-                    expect(mockBrandAssetCollection.update).toHaveBeenCalledWith(jasmine.objectContaining(expectedAsset));
+                    expect(mockBrandAssetCollection.remove).toHaveBeenCalledWith(jasmine.objectContaining(expectedAsset));
                 });
             });
 
@@ -1248,6 +1251,10 @@
                     ));
 
                 BrandUtil.removeAssetResourceFile.and.returnValue(removeAssetResourceFileDeferred.promise);
+
+                mockBrandAssetCollection.remove.and.callFake(function (value) {
+                    return _.remove(brandAssets, {brandAssetId: value.brandAssetId});
+                });
 
                 jasmine.clock().mockDate(currentDate);
             });
