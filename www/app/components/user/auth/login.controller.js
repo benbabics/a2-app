@@ -2,18 +2,17 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:22
+    // jshint maxparams:23
 
     /* @ngInject */
-    function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $ionicHistory, $interval, $localStorage, $q,
+    function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $cordovaStatusbar, $ionicHistory, $localStorage, $q,
                              $rootScope, $scope, $state, $stateParams, globals, sessionCredentials, AnalyticsUtil,
-                             Fingerprint, FingerprintProfileUtil, LoadingIndicator, LoginManager, Logger,
+                             Fingerprint, FingerprintProfileUtil, FlowUtil, LoadingIndicator, LoginManager, Logger,
                              Network, PlatformUtil, UserAuthorizationManager) {
 
         var BAD_CREDENTIALS = "BAD_CREDENTIALS",
             PASSWORD_CHANGED = "PASSWORD_CHANGED",
             CONNECTION_ERROR = "CONNECTION_ERROR",
-            FINGERPRINT_PROMPT_RESUME_DELAY = 500,
             USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION.TYPES,
             USER_AUTHORIZATION_ERRORS = globals.USER_AUTHORIZATION.ERRORS,
             USERNAME_KEY = globals.LOCALSTORAGE.KEYS.USERNAME,
@@ -48,17 +47,17 @@
                 removeCordovaPauseListener = $rootScope.$on("app:cordovaPause", handleOnCordovaPause),
                 removeCordovaResumeListener = $rootScope.$on("app:cordovaResume", handleOnCordovaResume);
 
-            $scope.$on("$destroy", removeKeyboardShowListener);
-            $scope.$on("$destroy", removeKeyboardHideListener);
-            $scope.$on("$destroy", removeCordovaPauseListener);
-            $scope.$on("$destroy", removeCordovaResumeListener);
-            $scope.$on("$destroy", toggleDisableScroll);
+            FlowUtil.onPageLeave(removeKeyboardShowListener, $scope);
+            FlowUtil.onPageLeave(removeKeyboardHideListener, $scope);
+            FlowUtil.onPageLeave(removeCordovaPauseListener, $scope);
+            FlowUtil.onPageLeave(removeCordovaResumeListener, $scope);
+            FlowUtil.onPageLeave(toggleDisableScroll, $scope);
         }
 
         function toggleStatusBarOverlaysWebView(shouldOverlay) {
-            if ( !!window.StatusBar ) {
-                StatusBar.overlaysWebView( !!shouldOverlay );
-            }
+            PlatformUtil.waitForCordovaPlatform(function () {
+                $cordovaStatusbar.overlaysWebView(shouldOverlay);
+            });
         }
 
         function addKeyboardOpenClass() {
@@ -66,9 +65,9 @@
         }
 
         function toggleDisableScroll(shouldDisabled) {
-            if ( !!window.cordova ) {
-                cordova.plugins.Keyboard.disableScroll( !!shouldDisabled );
-            }
+            PlatformUtil.waitForCordovaPlatform(function () {
+                $cordovaKeyboard.disableScroll(shouldDisabled);
+            });
         }
 
         function beforeEnter() {
@@ -94,7 +93,7 @@
                 .then(function () {
                     if (vm.fingerprintProfileAvailable && !$stateParams.logOut) {
                         //show the fingerprint prompt
-                        $interval(_.partial(logInUser, true), FINGERPRINT_PROMPT_RESUME_DELAY, 1);
+                        logInUser(true);
                     }
                 })
                 .catch(function (error) {
@@ -273,9 +272,8 @@
 
         function handleOnCordovaResume() {
             //show the fingerprint login prompt if there's a fingerprint profile
-            //NOTE: A delay is needed as showing the prompt too early results in occasional app crashes.
             if (vm.fingerprintProfileAvailable && !vm.isLoggingIn) {
-                $interval(_.partial(logInUser, true), FINGERPRINT_PROMPT_RESUME_DELAY, 1);
+                logInUser(true);
             }
         }
 

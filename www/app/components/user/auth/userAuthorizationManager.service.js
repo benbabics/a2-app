@@ -52,14 +52,15 @@
             LoadingIndicator.begin();
 
             //log the user's acceptance of the terms
-            return FingerprintAcceptLogManager.log()
+            /*return FingerprintAcceptLogManager.log()
                 .catch(function (error) {
                     return $q.reject({
                         reason: USER_AUTHORIZATION_ERRORS.TERMS_LOG_FAILED,
                         data: error
                     });
                 })
-                .finally(LoadingIndicator.complete);
+                .finally(LoadingIndicator.complete);*/
+            LoadingIndicator.complete();
         }
 
         function verifyWithFingerprint(clientId, clientSecret, options) {
@@ -85,12 +86,18 @@
                             return termsModal.show();
                         })
                         .then(function () {
-                            var acceptedTermsDeferred = $q.defer();
+                            var acceptedTermsDeferred = $q.defer(),
+                                listenerRemovers = [];
 
-                            $rootScope.$on("FingerprintAuthTerms.accepted", acceptedTermsDeferred.resolve);
-                            $rootScope.$on("FingerprintAuthTerms.rejected", acceptedTermsDeferred.reject);
+                            listenerRemovers.push($rootScope.$on("FingerprintAuthTerms.accepted", acceptedTermsDeferred.resolve));
+                            listenerRemovers.push($rootScope.$on("FingerprintAuthTerms.rejected", acceptedTermsDeferred.reject));
 
-                            return acceptedTermsDeferred.promise;
+                            return acceptedTermsDeferred.promise
+                                .finally(function () {
+                                    _.forEach(listenerRemovers, function (remover) {
+                                        remover();
+                                    });
+                                })
                         })
                         .catch(function (error) {
                             if (_.isNull(bypassFingerprint) && termsModal && termsModal.isShown()) {
