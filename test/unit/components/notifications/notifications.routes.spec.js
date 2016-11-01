@@ -1,14 +1,14 @@
 (function () {
     "use strict";
 
-    describe("An Alert Module Route Config", function () {
+    describe("An Notification Module Route Config", function () {
 
         var $injector,
             $q,
             $rootScope,
             $state,
-            mockAlertItem,
-            AlertsManager,
+            mockNotificationItem,
+            NotificationItemsManager,
             mockGlobals = {
                 ALERTS_LIST: {
                     "CONFIG": {
@@ -26,29 +26,29 @@
 
         beforeEach(function () {
 
-            module("app.components.alerts");
+            module("app.components.notifications");
 
             // mock dependencies
-            AlertsManager = jasmine.createSpyObj("AlertsManager", ["fetchAlerts"]);
+            NotificationItemsManager = jasmine.createSpyObj("NotificationItemsManager", ["fetchNotifications"]);
 
             module(function ($provide, sharedGlobals) {
-                $provide.value("AlertsManager", AlertsManager);
+                $provide.value("NotificationItemsManager", NotificationItemsManager);
                 $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
-            inject(function (_$injector_, _$q_, _$rootScope_, _$state_, AlertModel) {
+            inject(function (_$injector_, _$q_, _$rootScope_, _$state_, NotificationModel) {
                 $injector = _$injector_;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
 
-                mockAlertItem = TestUtils.getRandomPostedTransaction(AlertModel);
+                mockNotificationItem = TestUtils.getRandomPostedTransaction(NotificationModel);
             });
         });
 
-        describe("has an alerts state that", function () {
+        describe("has an notifications state that", function () {
             var state,
-                stateName = "alerts";
+                stateName = "notifications";
 
             beforeEach(function() {
                 state = $state.get(stateName);
@@ -64,7 +64,7 @@
             });
 
             it("should have the expected URL", function() {
-                expect(state.url).toEqual("/alerts");
+                expect(state.url).toEqual("/notifications");
             });
 
             it("should define a view on the root container", function() {
@@ -73,9 +73,9 @@
             });
         });
 
-        describe("has a alerts.list state that", function () {
+        describe("has a notifications.list state that", function () {
             var state,
-                stateName = "alerts.list";
+                stateName = "notifications.list";
 
             beforeEach(function () {
                 state = $state.get(stateName);
