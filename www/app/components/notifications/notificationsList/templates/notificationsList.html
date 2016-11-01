@@ -14,16 +14,16 @@
                   <enable-notifications-banner />
               </ion-item>
 
-              <div collection-repeat="alert in vm.alerts.collection | groupAlertsByDate : 'data.authorizationDate'"
-                   item-height="alert.renderHeight">
+              <div collection-repeat="notification in vm.notifications.collection | groupNotificationsByDate : 'data.authorizationDate'"
+                   item-height="notification.renderHeight">
 
-                      <alert-item />
+                      <notification-item />
 
               </div>
           </wex-infinite-list>
       </div>
 
-      <div ng-show="infiniteScrollService.isLoadingComplete && vm.alerts.collection.length <= 0" class="no-transactions">{{::vm.config.emptyList}}</div>
+      <div ng-show="infiniteScrollService.isLoadingComplete && vm.notifications.collection.length <= 0" class="no-transactions">{{::vm.config.emptyList}}</div>
 
   </ion-content>
 

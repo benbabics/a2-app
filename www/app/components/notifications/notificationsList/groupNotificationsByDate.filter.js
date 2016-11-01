@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    function groupAlertsByDate(_, moment) {
+    function groupNotificationsByDate(_, moment) {
 
         return function (input, dateKeyName) {
             var previousDate, currentDate;
@@ -37,6 +37,6 @@
         };
     }
 
-    angular.module("app.components.alerts")
-        .filter("groupAlertsByDate", groupAlertsByDate);
+    angular.module("app.components.notifications")
+        .filter("groupNotificationsByDate", groupNotificationsByDate);
 })();

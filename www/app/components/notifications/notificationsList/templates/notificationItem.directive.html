@@ -1,0 +1,18 @@
+<div>
+    <ion-item class="item-alt-divider" ng-if="notification.hasDivider">
+      {{ notification.displayDate | wexDefaultDateFormat }}
+    </ion-item>
+
+    <ion-item class="item item-icon-right widget-transaction-result-as-date" ng-class="{ 'ui-greeking': notification.isGreekLoading }">
+        <div class="row date-filter-list">
+            <div class="col greek-block-group">
+                <span class="text-block" style="color: red;">{{ vm.notificationPrefixMap[notification.type] }}{{ notification.data.notificationReason }} &nbsp;</span>
+                <span class="text-block text-strong">{{ notification.data.cardNumber | wexCardNumber }} &nbsp;</span>
+                <span class="text-block">{{ notification.data.driverLastName }}, {{ notification.data.driverFirstName }} &nbsp;</span>
+                <span class="text-block">{{ notification.data.merchantName }} &nbsp;</span>
+            </div>
+        </div>
+
+        <ion-option-button ng-click="vm.removeItem(notification)" class="button-positive">{{ ::vm.config.labelDeleteNotification }}</ion-option-button>
+    </ion-item>
+</div>

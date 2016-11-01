@@ -5,7 +5,7 @@
     // jshint maxparams:5
 
     /* @ngInject */
-    function NotificationsController($window, $scope, globals, AnalyticsUtil, NotificationsManager) {
+    function EnableNotificationsController($window, $scope, globals, AnalyticsUtil, NotificationsManager) {
 
         //////////////////////
         // Controller initialization
@@ -43,5 +43,5 @@
     }
 
     angular.module("app.components.notifications")
-        .controller("NotificationsController", NotificationsController);
+        .controller("EnableNotificationsController", EnableNotificationsController);
 })();

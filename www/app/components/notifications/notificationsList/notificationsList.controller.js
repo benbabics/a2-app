@@ -5,10 +5,10 @@
     // jshint maxparams:9
 
     /* @ngInject */
-    function AlertsListController(_, $scope, $stateParams, $controller, $ionicListDelegate, globals, AnalyticsUtil, AlertsManager, UserManager) {
+    function NotificationsListController(_, $scope, $stateParams, $controller, $ionicListDelegate, globals, AnalyticsUtil, NotificationItemsManager, UserManager) {
 
         var vm = this, infiniteListController;
-        vm.config = globals.ALERTS_LIST.CONFIG;
+        vm.config = globals.NOTIFICATIONS_LIST.CONFIG;
         vm.handleLoadSubsequentData = handleLoadSubsequentData;
 
         activate();
@@ -20,7 +20,7 @@
                 $scope: $scope,
                 $attrs: {
                     isGreeking: true,
-                    cacheKey  : "alerts-inbox"
+                    cacheKey  : "notifications-inbox"
                 }
             });
 
@@ -30,11 +30,11 @@
                 onError    : handleOnError
             });
 
-            vm.alertPrefixMap = globals.ALERTS_LIST.REASON_PREFIX;
-            vm.alerts = $scope.infiniteScrollService.model;
+            vm.notificationPrefixMap = globals.NOTIFICATIONS_LIST.REASON_PREFIX;
+            vm.notifications = $scope.infiniteScrollService.model;
 
             // if we're dealing with cached results, check for updates
-            if (vm.alerts.collection.length > 0) {
+            if (vm.notifications.collection.length > 0) {
                 $scope.resetSearchResults({ skipGreeking: true });
             }
         }
@@ -42,11 +42,11 @@
         function handleMakeRequest(requestConfig) {
             // if ( requestConfig.currentPage > 0 ) handleLoadSubsequentData();
 
-            return AlertsManager.fetchAlerts(
+            return NotificationItemsManager.fetchNotifications(
                 requestConfig.currentPage, requestConfig.pageSize
             )
-                .then(setAlertsRead)
-                .then(sortAlertsByDate);
+                .then(setNotificationsRead)
+                .then(sortNotificationsByDate);
         }
 
         function handleOnError() {
@@ -57,22 +57,22 @@
             trackEvent("scroll");
         }
 
-        function setAlertsRead(alerts) {
-            var alertIds = _.map(alerts, function (alert) {
-                return alert.id;
+        function setNotificationsRead(notifications) {
+            var notificationIds = _.map(notifications, function (notification) {
+                return notification.id;
             });
-            AlertsManager.setAlertsRead(alertIds);
-            return alerts;
+            NotificationItemsManager.setNotificationsRead(notificationIds);
+            return notifications;
         }
 
-        function sortAlertsByDate(alerts) {
-            return _.sortBy(alerts, function (alert) {
-                return alert.data.authorizationDate;
+        function sortNotificationsByDate(notifications) {
+            return _.sortBy(notifications, function (notification) {
+                return notification.data.authorizationDate;
             }).reverse();
         }
 
-        function handleRemoveItem(alert) {
-            return AlertsManager.deleteAlert(alert).then(function () {
+        function handleRemoveItem(notification) {
+            return NotificationItemsManager.deleteNotification(notification).then(function () {
                 $ionicListDelegate.closeOptionButtons();
             });
         }
@@ -87,6 +87,6 @@
 
     }
 
-    angular.module("app.components.alerts")
-        .controller("AlertsListController", AlertsListController);
+    angular.module("app.components.notifications")
+        .controller("NotificationsListController", NotificationsListController);
 })();

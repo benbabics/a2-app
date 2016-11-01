@@ -3,7 +3,6 @@
 
     angular.module("app.components", [
         /* app component modules */
-        "app.components.alerts",
         "app.components.account",
         "app.components.bank",
         "app.components.brand",

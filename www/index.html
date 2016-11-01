@@ -34,7 +34,7 @@
                 <ion-nav-buttons side="right">
                     <button menu-toggle="right"
                             class="button button-clear icon ion-navicon">
-                        <span ng-show="vm.getUnreadAlertsCount() > 0" class="badge badge-assertive">{{vm.getUnreadAlertsCount()}}</span><span ng-show="vm.getUnreadAlertsCount() > 0" class="badge badge-assertive">{{vm.getUnreadAlertsCount()}}</span>
+                        <span ng-show="vm.getUnreadNotificationsCount() > 0" class="badge badge-assertive">{{vm.getUnreadNotificationsCount()}}</span><span ng-show="vm.getUnreadNotificationsCount() > 0" class="badge badge-assertive">{{vm.getUnreadNotificationsCount()}}</span>
                     </button>
                 </ion-nav-buttons>
             </ion-nav-bar>
@@ -261,10 +261,17 @@
         <script src="app/components/payment/paymentAddAvailabilityModel.service.js"></script>
         <script src="app/components/payment/payment.routes.js"></script>
         <script src="app/components/notifications/notifications.module.js"></script>
+        <script src="app/components/notifications/notificationsResource.service.js"></script>
         <script src="app/components/notifications/notificationsManager.service.js"></script>
-        <script src="app/components/notifications/notifications.controller.js"></script>
-        <script src="app/components/notifications/enableNotificationsPrompt.directive.js"></script>
-        <script src="app/components/notifications/enableNotificationsBanner.directive.js"></script>
+        <script src="app/components/notifications/notificationsList/notificationsList.controller.js"></script>
+        <script src="app/components/notifications/notificationsList/notificationModel.service.js"></script>
+        <script src="app/components/notifications/notificationsList/notificationItemsManager.service.js"></script>
+        <script src="app/components/notifications/notificationsList/notificationItem.directive.js"></script>
+        <script src="app/components/notifications/notificationsList/groupNotificationsByDate.filter.js"></script>
+        <script src="app/components/notifications/notifications.routes.js"></script>
+        <script src="app/components/notifications/enableNotifications/notifications.controller.js"></script>
+        <script src="app/components/notifications/enableNotifications/enableNotificationsPrompt.directive.js"></script>
+        <script src="app/components/notifications/enableNotifications/enableNotificationsBanner.directive.js"></script>
         <script src="app/components/navigation/navigation.module.js"></script>
         <script src="app/components/navigation/navigation.service.js"></script>
         <script src="app/components/navBar/navBar.module.js"></script>
@@ -315,14 +322,6 @@
         <script src="app/components/bank/banksResource.service.js"></script>
         <script src="app/components/bank/bankModel.service.js"></script>
         <script src="app/components/bank/bankManager.service.js"></script>
-        <script src="app/components/alerts/alerts.module.js"></script>
-        <script src="app/components/alerts/groupAlertsByDate.filter.js"></script>
-        <script src="app/components/alerts/alertsResource.service.js"></script>
-        <script src="app/components/alerts/alertsManager.service.js"></script>
-        <script src="app/components/alerts/alertsList.controller.js"></script>
-        <script src="app/components/alerts/alerts.routes.js"></script>
-        <script src="app/components/alerts/alertModel.service.js"></script>
-        <script src="app/components/alerts/alertItem.directive.js"></script>
         <script src="app/components/account/account.module.js"></script>
         <script src="app/components/account/shippingMethodModel.service.js"></script>
         <script src="app/components/account/shippingCarrierModel.service.js"></script>
