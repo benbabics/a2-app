@@ -23,10 +23,12 @@
 .widget-infinite-list {
 
   .item {
-    .item-content {
+    &:not(.no-inverse-padding) .item-content {
       margin:  -16px;
       padding: 16px;
+    }
 
+    .item-content {
       &.activated {
         @extend %list-item-activated;
       }

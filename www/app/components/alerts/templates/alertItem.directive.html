@@ -3,7 +3,7 @@
       {{ alert.displayDate | wexDefaultDateFormat }}
     </ion-item>
 
-    <ion-item class="item item-icon-right widget-transaction-result-as-date" ng-class="{ 'ui-greeking': alert.isGreekLoading }">
+    <ion-item class="item item-icon-right no-inverse-padding widget-transaction-result-as-date" ng-class="{ 'ui-greeking': alert.isGreekLoading }">
         <div class="row date-filter-list">
             <div class="col greek-block-group">
                 <span class="text-block" style="color: red;">{{ vm.alertPrefixMap[alert.type] }}{{ alert.data.alertReason }} &nbsp;</span>
