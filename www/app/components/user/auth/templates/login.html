@@ -1,18 +1,19 @@
 <ion-view view-title="{{ ::vm.config.title }}" hide-nav-bar="true" class="page-login" wex-back-state="app.exit">
+    <div class="alerts-wrapper">
+        <wex-notification-bar priority="0"
+                              ng-if="vm.timedOut"
+                              text="{{::vm.config.sessionTimeOut}}">
+        </wex-notification-bar>
+
+        <wex-notification-bar class="bar-error"
+                              priority="1"
+                              id="errorMessage"
+                              ng-if="vm.globalError"
+                              text="{{vm.globalError}}">
+        </wex-notification-bar>
+    </div>
+
     <ion-content scroll="false">
-        <div class="alerts-wrapper">
-            <wex-notification-bar ng-if="vm.timedOut"
-                                  text="{{ ::vm.config.sessionTimeOut.line1 }}"
-                                  subtext="{{ ::vm.config.sessionTimeOut.line2 }}">
-            </wex-notification-bar>
-
-            <div class="card card-error padding"
-                 id="errorMessage"
-                 ng-if="vm.globalError">
-                {{ vm.globalError }}
-            </div>
-        </div>
-
         <div class="title-bar">
             <img src="img/pages/login/logo.png"/>
         </div>

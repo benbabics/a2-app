@@ -11,8 +11,11 @@
 
     describe("A Hateoas Resource service", function () {
 
+        beforeAll(function () {
+            this.includeAppDependencies = false;
+        });
+
         beforeEach(function () {
-            module("app.shared");
 
             //mock dependencies:
             SecureApiRestangular = jasmine.createSpyObj("SecureApiRestangular", ["oneUrl"]);

@@ -7,7 +7,6 @@
         $window,
         $ionicLoading,
         $cordovaToast,
-        PlatformUtil,
         mockMessage = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
     describe("A Toast Service", function () {
@@ -25,17 +24,11 @@
                 "show"
             ]);
             $ionicLoading = jasmine.createSpyObj("$ionicLoading", ["show"]);
-
-            module("app.shared.core");
-            module("app.shared.dependencies");
-            module("app.shared.logger");
-            module("app.shared.integration", function ($provide) {
+            
+            module(function ($provide) {
                 $provide.value("$ionicLoading", $ionicLoading);
                 $provide.value("$cordovaToast", $cordovaToast);
             });
-            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
-                PlatformUtil = mocks.PlatformUtil;
-            })]);
 
             inject(function (_$window_) {
                 $window = _$window_;
@@ -45,7 +38,7 @@
         describe("when Cordova plugins are available", function () {
 
             beforeEach(function () {
-                PlatformUtil.platformHasCordova.and.returnValue(true);
+                this.PlatformUtil.platformHasCordova.and.returnValue(true);
 
                 inject(function (_Toast_) {
                     Toast = _Toast_;
@@ -60,7 +53,7 @@
         describe("when Cordova plugins are not available", function () {
 
             beforeEach(function () {
-                PlatformUtil.platformHasCordova.and.returnValue(false);
+                this.PlatformUtil.platformHasCordova.and.returnValue(false);
 
                 inject(function (_Toast_) {
                     Toast = _Toast_;

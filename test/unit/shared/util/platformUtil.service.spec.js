@@ -6,16 +6,18 @@
         var $cordovaDevice,
             $cordovaNetwork,
             PlatformUtil,
-            Logger,
             $ionicPlatform,
             $rootScope,
             $q,
             resolveHandler,
             rejectHandler;
+        
+        beforeAll(function () {
+            this.commonSharedMockExclusions = ["PlatformUtil"];
+            this.includeAppDependencies = false;
+        });
 
         beforeEach(function () {
-
-            module("app.shared");
 
             //mock dependencies
             $cordovaDevice = jasmine.createSpyObj("$cordovaDevice", ["getPlatform"]);
@@ -25,11 +27,6 @@
                 $provide.value("$cordovaDevice", $cordovaDevice);
                 $provide.value("$cordovaNetwork", $cordovaNetwork);
             });
-            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
-                delete mocks.PlatformUtil;
-
-                Logger = mocks.Logger;
-            })]);
 
             inject(function (_$ionicPlatform_, _$q_, _$rootScope_, _PlatformUtil_) {
                 PlatformUtil = _PlatformUtil_;
@@ -283,7 +280,7 @@
                         });
 
                         it("should log the expected debug message", function () {
-                            expect(Logger.debug).toHaveBeenCalledWith(
+                            expect(this.Logger.debug).toHaveBeenCalledWith(
                                 "waitForCordovaPlatform callback function skipped: Cordova is not available on this platform. " +
                                 "Note: All future callbacks will also be skipped."
                             );
@@ -296,7 +293,7 @@
                             });
 
                             it("should NOT log the expected debug message again", function () {
-                                expect(Logger.debug).toHaveBeenCalledTimes(1);
+                                expect(this.Logger.debug).toHaveBeenCalledTimes(1);
                             });
                         });
                     });
@@ -323,7 +320,7 @@
                             });
 
                             it("should NOT log the expected debug message again", function () {
-                                expect(Logger.debug).toHaveBeenCalledTimes(1);
+                                expect(this.Logger.debug).toHaveBeenCalledTimes(1);
                             });
                         });
                     });

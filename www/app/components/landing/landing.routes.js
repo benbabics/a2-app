@@ -5,7 +5,7 @@
     function configureRoutes($stateProvider) {
 
         $stateProvider.state("landing", {
-            url: "/landing",
+            url: "/landing?{showFingerprintBanner:bool}",
             cache: false,
             views: {
                 "@": {

@@ -7,6 +7,10 @@
             $ionicLoading,
             $rootScope;
 
+        beforeAll(function () {
+            this.commonSharedMockExclusions = ["LoadingIndicator"];
+        });
+
         beforeEach(function () {
             //mock dependencies
             $ionicLoading = jasmine.createSpyObj("$ionicLoading", ["hide", "show"]);

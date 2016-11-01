@@ -8,8 +8,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-
             inject(function (___, _LoggerUtil_) {
                 _ = ___;
                 LoggerUtil = _LoggerUtil_;
@@ -45,7 +43,7 @@
             describe("when the error object param is a string", function () {
 
                 beforeEach(function () {
-                    errorObjectArg = "There was a specific error";
+                    errorObjectArg = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                     errorMessageResult = LoggerUtil.getErrorMessage(errorObjectArg);
                 });
@@ -56,74 +54,66 @@
 
             });
 
-            describe("when the error object param is an object of the Error class", function () {
+            describe("when the error object has a message property", function () {
 
                 beforeEach(function () {
                     errorObjectArg = {
-                        message: "There is a description for this error"
+                        message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     };
 
                     errorMessageResult = LoggerUtil.getErrorMessage(errorObjectArg);
                 });
 
                 it("should return the message property in the error object", function () {
-                    expect(errorMessageResult).toMatch(errorObjectArg.message);
+                    expect(errorMessageResult).toMatch(LoggerUtil.getErrorMessage(errorObjectArg.message));
                 });
-
             });
 
-            describe("when the error object param is a failed response object", function () {
+            describe("when the error object has a data property", function () {
 
-                describe("when the response object has an error property", function () {
+                beforeEach(function () {
+                    errorObjectArg = {
+                        data: {
+                            error: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    };
 
-                    beforeEach(function () {
-                        errorObjectArg = {
-                            data: {
-                                error: "There is a type for this error"
-                            }
-                        };
-
-                        errorMessageResult = LoggerUtil.getErrorMessage(errorObjectArg);
-                    });
-
-                    it("should return the error property in the error object", function () {
-                        expect(errorMessageResult).toMatch(errorObjectArg.data.error);
-                    });
-
+                    errorMessageResult = LoggerUtil.getErrorMessage(errorObjectArg);
                 });
 
-                describe("when the response object has an error_description property", function () {
+                it("should return the expected value", function () {
+                    expect(errorMessageResult).toMatch(LoggerUtil.getErrorMessage(errorObjectArg.data));
+                });
+            });
 
-                    beforeEach(function () {
-                        errorObjectArg = {
-                            data: {
-                                error_description: "There is a description for this error"
-                            }
-                        };
+            describe("when the error object has an error property", function () {
 
-                        errorMessageResult = LoggerUtil.getErrorMessage(errorObjectArg);
-                    });
+                beforeEach(function () {
+                    errorObjectArg = {
+                        error: {
+                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        }
+                    };
 
-                    it("should return the error_description property in the error object", function () {
-                        expect(errorMessageResult).toMatch(errorObjectArg.data.error_description);
-                    });
-
+                    errorMessageResult = LoggerUtil.getErrorMessage(errorObjectArg);
                 });
 
-                describe("when the response object does not have an error or an error_description property", function () {
+                it("should return the expected value", function () {
+                    expect(errorMessageResult).toMatch(LoggerUtil.getErrorMessage(errorObjectArg.error));
+                });
+            });
 
-                    beforeEach(function () {
-                        errorObjectArg = {};
+            describe("when the error object has an error_description property", function () {
 
-                        errorMessageResult = LoggerUtil.getErrorMessage(errorObjectArg);
-                    });
+                beforeEach(function () {
+                    errorObjectArg = {error_description: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                    it("should return an Unknown Exception error message", function () {
-                        expect(errorMessageResult).toEqual("ERROR: cause unknown.");
-                    });
-
+                    errorMessageResult = LoggerUtil.getErrorMessage(errorObjectArg);
                 });
 
+                it("should return the expected value", function () {
+                    expect(errorMessageResult).toMatch(LoggerUtil.getErrorMessage(errorObjectArg.error_description));
+                });
             });
 
             describe("when the error object param is NOT a string or a failed response object", function () {

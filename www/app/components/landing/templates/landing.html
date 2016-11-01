@@ -1,4 +1,11 @@
-  <ion-view view-title="{{::vm.config.title}}" class="page-landing" wex-hide-back-button="true">
+<ion-view view-title="{{::vm.config.title}}" class="page-landing" wex-hide-back-button="true">
+    <wex-notification-bar class="bar-success"
+                          ng-if="vm.params.showFingerprintBanner"
+                          wex-toast-timer
+                          wex-toast-on-hide="vm.params.showFingerprintBanner = false"
+                          text="{{::vm.config.platformName}} {{::vm.config.registerSuccessBanner}} {{vm.user.username | wexTruncateString}}">
+    </wex-notification-bar>
+
     <ion-content class="padding">
 
         <!-- Display Notifications Prompt -->

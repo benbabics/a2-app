@@ -11,115 +11,26 @@
         $cordovaDialogs,
         $cordovaKeyboard,
         $interval,
-        AnalyticsUtil,
-        LoginManager,
         authenticateDeferred,
         ctrl,
         logInDeferred,
         AuthenticationManager,
-        PlatformUtil,
         Fingerprint,
         UserAuthorizationManager,
+        Network,
         FingerprintProfileUtil,
         fingerprintAvailableDeferred,
         sessionCredentials,
         cordovaPluginsKeyboard,
         cordovaPluginSettings,
-        mockGlobals = {
-            "LOCALSTORAGE" : {
-                "CONFIG": {
-                    "keyPrefix": "FLEET_MANAGER-"
-                },
-                "KEYS": {
-                    "USERNAME": "USERNAME"
-                }
-            },
-            "USER_LOGIN": {
-                "CONFIG": {
-                    "ANALYTICS"   : {
-                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "events"     : {
-                            "successfulLogin"       : [
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            ],
-                            "inactiveStatus"        : [
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            ],
-                            "accountNotReadyStatus" : [
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            ],
-                            "wrongCredentialsStatus": [
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            ],
-                            "lockedPasswordStatus"  : [
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            ]
-                        }
-                    },
-                    "title"       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "userName"    : {
-                        "label"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "maxLength": TestUtils.getRandomInteger(1, 100)
-                    },
-                    "password"    : {
-                        "label"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "maxLength": TestUtils.getRandomInteger(1, 100)
-                    },
-                    "rememberMe"    : {
-                        "label"    : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    },
-                    "submitButton": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "serverErrors": {
-                        "AUTHORIZATION_FAILED"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "DEFAULT"                           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "PASSWORD_EXPIRED"                  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "TOKEN_EXPIRED"                     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "USER_LOCKED"                       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "USER_MUST_ACCEPT_TERMS"            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "USER_MUST_SETUP_SECURITY_QUESTIONS": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "USER_NOT_ACTIVE"                   : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    },
-                    "touchId": {
-                        "disabled": {
-                            "labelAndroid": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                            "labelIos": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                        },
-                        "settingsPrompt": {
-                            "title": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                            "messageAndroid": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                            "messageIos": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                            "buttons": {
-                                "cancel": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                "settings": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            }
-                        },
-                        "warningPrompt": {
-                            "title": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                            "messageAndroid": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                            "messageIos": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                            "buttons": {
-                                "cancel": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                "ok": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            }
-                        }
-                    }
-                }
-            },
-            USER_AUTHORIZATION_TYPES: {
-                "FINGERPRINT": "FINGERPRINT",
-                "SECRET"     : "SECRET"
-            }
-        },
-        mockConfig = mockGlobals.USER_LOGIN.CONFIG;
+        globals,
+        config,
+        self;
 
     describe("A Login Controller", function () {
 
         beforeEach(function () {
+            self = this;
 
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["authenticate"]);
@@ -132,14 +43,10 @@
             $cordovaDialogs = jasmine.createSpyObj("$cordovaDialogs", ["confirm"]);
             cordovaPluginsKeyboard = jasmine.createSpyObj("cordova.plugins.Keyboard", ["disableScroll"]);
             cordovaPluginSettings = jasmine.createSpyObj("cordova.plugins.settings", ["openSetting", "open"]);
+            Network = jasmine.createSpyObj("Network", ["isServerConnectionError"]);
 
             _.set(window, "cordova.plugins.settings", cordovaPluginSettings);
             _.set(window, "cordova.plugins.Keyboard", cordovaPluginsKeyboard);
-
-            module("app.shared");
-            module("app.components", function($provide) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
-            });
 
             // stub the routing and template loading
             module(function ($urlRouterProvider) {
@@ -151,40 +58,36 @@
                 });
             });
 
-            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
-                AnalyticsUtil = mocks.AnalyticsUtil;
-                PlatformUtil = mocks.PlatformUtil;
-                LoginManager = mocks.LoginManager;
-            })]);
-
             inject(function (_$rootScope_, $controller, _$ionicHistory_, _$interval_,  _$localStorage_, _$q_, BrandAssetModel, UserAccountModel, UserModel,
-                             globals) {
+                             _globals_) {
                 $ionicHistory = _$ionicHistory_;
                 $localStorage = _$localStorage_;
                 $scope = _$rootScope_.$new();
                 $q = _$q_;
                 $rootScope = _$rootScope_;
                 $interval = _$interval_;
+                globals = _globals_;
                 authenticateDeferred = $q.defer();
 
-                mockConfig.ANALYTICS.errorEvents = globals.USER_LOGIN.CONFIG.ANALYTICS.errorEvents;
+                config = globals.USER_LOGIN.CONFIG;
 
                 ctrl = $controller("LoginController", {
                     $localStorage           : $localStorage,
                     $scope                  : $scope,
                     $state                  : $state,
                     $stateParams            : $stateParams,
-                    AnalyticsUtil           : AnalyticsUtil,
+                    AnalyticsUtil           : this.AnalyticsUtil,
                     $cordovaDialogs         : $cordovaDialogs,
                     $cordovaKeyboard        : $cordovaKeyboard,
-                    globals                 : mockGlobals,
                     AuthenticationManager   : AuthenticationManager,
-                    LoginManager            : LoginManager,
-                    PlatformUtil            : PlatformUtil,
+                    LoginManager            : this.LoginManager,
+                    Logger                  : this.Logger,
+                    PlatformUtil            : this.PlatformUtil,
                     Fingerprint             : Fingerprint,
                     UserAuthorizationManager: UserAuthorizationManager,
                     FingerprintProfileUtil  : FingerprintProfileUtil,
-                    sessionCredentials      : sessionCredentials
+                    sessionCredentials      : sessionCredentials,
+                    Network                 : Network
                 });
 
                 //setup spies:
@@ -192,7 +95,7 @@
                 fingerprintAvailableDeferred = $q.defer();
 
                 //setup mocks:
-                LoginManager.logIn.and.returnValue(logInDeferred.promise);
+                this.LoginManager.logIn.and.returnValue(logInDeferred.promise);
                 Fingerprint.isAvailable.and.returnValue(fingerprintAvailableDeferred.promise);
             });
 
@@ -293,7 +196,7 @@
                         expect(ctrl.fingerprintAuthAvailable).toBe(true);
                     });
 
-                    describe("when the user logged out", function () {
+                    describe("when the user was logged out", function () {
 
                         beforeEach(function () {
                             $stateParams.logOut = true;
@@ -301,12 +204,20 @@
                             $rootScope.$digest();
                         });
 
-                        it("should NOT start the fingerprint login process", function () {
-                            expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
+                        describe("when 2000 ms has elapsed", function () {
+
+                            beforeEach(function () {
+                                $interval.flush(2000);
+                                $rootScope.$digest();
+                            });
+
+                            it("should NOT start the fingerprint login process", function () {
+                                expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
+                            });
                         });
                     });
 
-                    describe("when the user has NOT logged out", function () {
+                    describe("when the user was NOT logged out", function () {
 
                         beforeEach(function () {
                             $stateParams.logOut = false;
@@ -314,10 +225,29 @@
                             $rootScope.$digest();
                         });
 
-                        it("should start the fingerprint login process", function () {
-                            expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
-                                method: mockGlobals.USER_AUTHORIZATION_TYPES.FINGERPRINT
-                            }));
+                        describe("when 2000 ms has elapsed", function () {
+
+                            beforeEach(function () {
+                                $interval.flush(2000);
+                                $rootScope.$digest();
+                            });
+
+                            it("should start the fingerprint login process", function () {
+                                expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
+                                    method: globals.USER_AUTHORIZATION.TYPES.FINGERPRINT
+                                }));
+                            });
+                        });
+
+                        describe("when 2000 ms has NOT elapsed", function () {
+
+                            beforeEach(function () {
+                                $rootScope.$digest();
+                            });
+
+                            it("should NOT start the fingerprint login process", function () {
+                                expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
+                            });
                         });
                     });
                 });
@@ -360,7 +290,7 @@
 
                         beforeEach(function () {
                             platform = "android";
-                            PlatformUtil.getPlatform.and.returnValue(platform);
+                            this.PlatformUtil.getPlatform.and.returnValue(platform);
                         });
 
                         describe("will behave such that", commonTests);
@@ -369,7 +299,7 @@
                     describe("when the platform is NOT Android", function () {
                         beforeEach(function () {
                             platform = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                            PlatformUtil.getPlatform.and.returnValue(platform);
+                            this.PlatformUtil.getPlatform.and.returnValue(platform);
                         });
 
                         describe("will behave such that", commonTests);
@@ -397,9 +327,9 @@
                         it("should call $cordovaDialogs.confirm with the expected values", function () {
                             expect($cordovaDialogs.confirm).toHaveBeenCalledWith(
                                 getFingerprintSettingsPromptText(platform),
-                                mockConfig.touchId.settingsPrompt.title, [
-                                    mockConfig.touchId.settingsPrompt.buttons.settings,
-                                    mockConfig.touchId.settingsPrompt.buttons.cancel
+                                config.touchId.settingsPrompt.title, [
+                                    config.touchId.settingsPrompt.buttons.settings,
+                                    config.touchId.settingsPrompt.buttons.cancel
                                 ]);
                         });
 
@@ -474,11 +404,11 @@
                 });
 
                 it("should set the error", function () {
-                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.TOKEN_EXPIRED);
+                    expect(ctrl.globalError).toEqual(config.serverErrors.TOKEN_EXPIRED);
                 });
 
-                it("should NOT call AnalyticsUtil.trackEvent", function () {
-                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                    expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -502,8 +432,8 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
-                it("should NOT call AnalyticsUtil.trackEvent", function () {
-                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                    expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -524,8 +454,8 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
-                it("should NOT call AnalyticsUtil.trackEvent", function () {
-                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                    expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -546,8 +476,8 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
-                it("should NOT call AnalyticsUtil.trackEvent", function () {
-                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                    expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -568,8 +498,8 @@
                     expect(ctrl.globalError).toBeFalsy();
                 });
 
-                it("should NOT call AnalyticsUtil.trackEvent", function () {
-                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                    expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
@@ -580,8 +510,6 @@
 
             beforeEach(function () {
                 ctrl.globalError = "an existing error.";
-
-                UserAuthorizationManager.verify.and.returnValue($q.resolve());
             });
 
             it("should set globalError property to false", function () {
@@ -589,6 +517,13 @@
                 $rootScope.$digest();
 
                 expect(ctrl.globalError).toBe(false);
+            });
+        });
+
+        describe("has a app:cordovaResume event handler function that", function () {
+
+            beforeEach(function () {
+                UserAuthorizationManager.verify.and.returnValue($q.resolve());
             });
 
             describe("when there is a fingerprint profile set", function () {
@@ -601,7 +536,7 @@
 
                     beforeEach(function () {
                         ctrl.isLoggingIn = true;
-                        $rootScope.$broadcast("app:cordovaPause");
+                        $rootScope.$broadcast("app:cordovaResume");
                         $rootScope.$digest();
                     });
 
@@ -622,7 +557,7 @@
 
                     beforeEach(function () {
                         ctrl.isLoggingIn = false;
-                        $rootScope.$broadcast("app:cordovaPause");
+                        $rootScope.$broadcast("app:cordovaResume");
                         $rootScope.$digest();
                     });
 
@@ -635,7 +570,7 @@
 
                         it("should start the fingerprint login process", function () {
                             expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
-                                method: mockGlobals.USER_AUTHORIZATION_TYPES.FINGERPRINT
+                                method: globals.USER_AUTHORIZATION.TYPES.FINGERPRINT
                             }));
                         });
                     });
@@ -700,33 +635,34 @@
 
         describe("has an logInUser function that", function () {
 
-            var mockUser = {
-                username: "someusername",
-                password: "12345adfg"
-            };
-
             beforeEach(function () {
                 // clear Local Storage to start
                 delete $localStorage.USERNAME;
 
                 UserAuthorizationManager.verify.and.returnValue(authenticateDeferred.promise);
 
-                ctrl.user = mockUser;
+                this.userDetails = {
+                    username: _.toLower(TestUtils.getRandomStringThatIsAlphaNumeric(10)),
+                    password: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+
+                _.set(ctrl, "user.username", this.userDetails.username);
             });
 
             describe("when using fingerprint authentication", function () {
 
                 beforeEach(function () {
                     ctrl.fingerprintProfileAvailable = true;
+                    this.usingFingerprintAuth = true;
+                    this.settingUpFingerprintAuth = false;
 
                     ctrl.logInUser(true);
                 });
 
                 it("should authorize the User", function () {
                     expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
-                        clientId: ctrl.user.username,
-                        clientSecret: ctrl.user.password,
-                        method: mockGlobals.USER_AUTHORIZATION_TYPES.FINGERPRINT
+                        clientId: this.userDetails.username,
+                        method: globals.USER_AUTHORIZATION.TYPES.FINGERPRINT
                     }));
                 });
 
@@ -739,7 +675,7 @@
                 });
 
                 describe("when the User is NOT Authenticated successfully with a BAD_CREDENTIALS error", function () {
-                    var errorObjectArg = new Error("BAD_CREDENTIALS");
+                    var errorObjectArg = {data: {message: "BAD_CREDENTIALS"}};
 
                     beforeEach(function () {
                         authenticateDeferred.reject(errorObjectArg);
@@ -751,7 +687,7 @@
                     });
 
                     it("should call FingerprintProfileUtil.clearProfile with the expected value", function () {
-                        expect(FingerprintProfileUtil.clearProfile).toHaveBeenCalledWith(ctrl.user.username);
+                        expect(FingerprintProfileUtil.clearProfile).toHaveBeenCalledWith(this.userDetails.username);
                     });
                 });
 
@@ -761,14 +697,19 @@
             describe("when NOT using fingerprint authentication", function () {
 
                 beforeEach(function () {
+                    this.usingFingerprintAuth = false;
+                    this.settingUpFingerprintAuth = false;
+
+                    _.set(ctrl, "user.password", this.userDetails.password);
+
                     ctrl.logInUser(false);
                 });
 
                 it("should authorize the User", function () {
                     expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
-                        clientId: ctrl.user.username,
-                        clientSecret: ctrl.user.password,
-                        method: mockGlobals.USER_AUTHORIZATION_TYPES.SECRET
+                        clientId: this.userDetails.username,
+                        clientSecret: this.userDetails.password,
+                        method: globals.USER_AUTHORIZATION.TYPES.SECRET
                     }));
                 });
 
@@ -777,7 +718,7 @@
                 });
 
                 it("should call FingerprintProfileUtil.clearProfile with the expected value", function () {
-                    expect(FingerprintProfileUtil.clearProfile).toHaveBeenCalledWith(ctrl.user.username);
+                    expect(FingerprintProfileUtil.clearProfile).toHaveBeenCalledWith(this.userDetails.username);
                 });
 
                 describe("when authorizing", logInUserAuthTests);
@@ -802,15 +743,15 @@
                     $rootScope.$digest();
                 });
 
-                it("should call LoginManager.logIn", function () {
-                    expect(LoginManager.logIn).toHaveBeenCalled();
+                it("should call this.LoginManager.logIn", function () {
+                    expect(this.LoginManager.logIn).toHaveBeenCalled();
                 });
 
                 describe("when the login completes successfully", function () {
 
                     beforeEach(function () {
                         spyOn($ionicHistory, "nextViewOptions");
-                        FingerprintProfileUtil.getProfile.and.returnValue($q.resolve(ctrl.user.password));
+                        FingerprintProfileUtil.getProfile.and.returnValue($q.resolve({clientSecret: this.userDetails.password}));
 
                         logInDeferred.resolve();
                     });
@@ -823,20 +764,21 @@
 
                         it("should set the username in Local Storage", function () {
                             $scope.$digest();
-                            expect($localStorage.USERNAME).toEqual(ctrl.user.username);
+                            expect($localStorage.USERNAME).toEqual(this.userDetails.username);
                         });
 
                         it("should store credentials in sessionCredentials service", function () {
                             $scope.$digest();
-                            expect( sessionCredentials.set ).toHaveBeenCalledWith({
-                                clientId:     ctrl.user.username,
-                                clientSecret: ctrl.user.password
+
+                            expect(sessionCredentials.set).toHaveBeenCalledWith({
+                                clientId: this.userDetails.username,
+                                clientSecret: this.userDetails.password
                             });
                         });
 
-                        it("should call AnalyticsUtil.trackEvent with the expected event", function () {
+                        it("should call this.AnalyticsUtil.trackEvent with the expected event", function () {
                             $scope.$digest();
-                            verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
+                            verifyEventTracked(config.ANALYTICS.events.successfulLogin);
                         });
 
                         it("should call disable backing up to the login page", function () {
@@ -870,7 +812,7 @@
                             });
 
                             it("should navigate to the landing page", function () {
-                                expect($state.go).toHaveBeenCalledWith("landing");
+                                expect($state.go).toHaveBeenCalledWith("landing", {showFingerprintBanner: this.settingUpFingerprintAuth});
                             });
                         });
                     });
@@ -886,9 +828,18 @@
                             expect($localStorage.USERNAME).not.toBeDefined();
                         });
 
-                        it("should call AnalyticsUtil.trackEvent with the expected event", function () {
+                        it("should store credentials in sessionCredentials service", function () {
                             $scope.$digest();
-                            verifyEventTracked(mockConfig.ANALYTICS.events.successfulLogin);
+
+                            expect(sessionCredentials.set).toHaveBeenCalledWith({
+                                clientId: this.userDetails.username,
+                                clientSecret: this.userDetails.password
+                            });
+                        });
+
+                        it("should call this.AnalyticsUtil.trackEvent with the expected event", function () {
+                            $scope.$digest();
+                            verifyEventTracked(config.ANALYTICS.events.successfulLogin);
                         });
 
                         it("should call disable backing up to the login page", function () {
@@ -922,7 +873,7 @@
                             });
 
                             it("should navigate to the landing page", function () {
-                                expect($state.go).toHaveBeenCalledWith("landing");
+                                expect($state.go).toHaveBeenCalledWith("landing", {showFingerprintBanner: this.settingUpFingerprintAuth});
                             });
                         });
                     });
@@ -931,37 +882,91 @@
 
                 describe("when the login does NOT complete successfully", function () {
 
-                    var errorObjectArg = new Error("Something bad happened");
+                    describe("when the user auth error reason is USER_CANCELED", function () {
 
-                    beforeEach(function () {
-                        //reject with an error message
-                        logInDeferred.reject(errorObjectArg);
-                        $scope.$digest();
+                        beforeEach(function () {
+                            this.errorObjectArg = {reason: globals.USER_AUTHORIZATION.ERRORS.USER_CANCELED};
+
+                            //reject with an error message
+                            logInDeferred.reject(this.errorObjectArg);
+                            $scope.$digest();
+                        });
+
+                        it("should call this.LoginManager.logOut", function () {
+                            expect(this.LoginManager.logOut).toHaveBeenCalledWith();
+                        });
+
+                        it("should NOT have an error message", function () {
+                            expect(ctrl.globalError).toBeFalsy();
+                        });
+
+                        it("should NOT navigate away from the login page", function () {
+                            expect($state.go).not.toHaveBeenCalled();
+                        });
+
+                        it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                            expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                        });
                     });
 
-                    it("should call LoginManager.logOut", function () {
-                        expect(LoginManager.logOut).toHaveBeenCalledWith();
+                    describe("when the user auth error reason is EXCEEDED_ATTEMPTS", function () {
+
+                        beforeEach(function () {
+                            this.errorObjectArg = {reason: globals.USER_AUTHORIZATION.ERRORS.EXCEEDED_ATTEMPTS};
+
+                            //reject with an error message
+                            logInDeferred.reject(this.errorObjectArg);
+                            $scope.$digest();
+                        });
+
+                        it("should call this.LoginManager.logOut", function () {
+                            expect(this.LoginManager.logOut).toHaveBeenCalledWith();
+                        });
+
+                        it("should NOT have an error message", function () {
+                            expect(ctrl.globalError).toBeFalsy();
+                        });
+
+                        it("should NOT navigate away from the login page", function () {
+                            expect($state.go).not.toHaveBeenCalled();
+                        });
+
+                        it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                            expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                        });
                     });
 
-                    it("should have an error message", function () {
-                        expect(ctrl.globalError).toEqual(mockConfig.serverErrors.DEFAULT);
-                    });
+                    describe("when the user auth error reason is NOT ignored", function () {
+                        var errorObjectArg = new Error("Something bad happened");
 
-                    it("should NOT navigate away from the login page", function () {
-                        expect($state.go).not.toHaveBeenCalled();
-                    });
+                        beforeEach(function () {
+                            //reject with an error message
+                            logInDeferred.reject(errorObjectArg);
+                            $scope.$digest();
+                        });
 
-                    it("should call AnalyticsUtil.trackEvent with the expected event", function () {
-                        verifyEventTracked(mockConfig.ANALYTICS.events.wrongCredentialsStatus);
-                    });
+                        it("should call this.LoginManager.logOut", function () {
+                            expect(this.LoginManager.logOut).toHaveBeenCalledWith();
+                        });
 
+                        it("should have an error message", function () {
+                            expect(ctrl.globalError).toEqual(config.serverErrors.DEFAULT);
+                        });
+
+                        it("should NOT navigate away from the login page", function () {
+                            expect($state.go).not.toHaveBeenCalled();
+                        });
+
+                        it("should call this.AnalyticsUtil.trackEvent with the expected event", function () {
+                            verifyEventTracked(config.ANALYTICS.events.wrongCredentialsStatus);
+                        });
+                    });
                 });
-
             });
 
             describe("when the User is NOT Authenticated successfully with a BAD_CREDENTIALS error", function () {
 
-                var errorObjectArg = new Error("BAD_CREDENTIALS");
+                var errorObjectArg = {data: {message: "BAD_CREDENTIALS"}};
 
                 beforeEach(function () {
                     //reject with an error message
@@ -969,27 +974,27 @@
                     $scope.$digest();
                 });
 
-                it("should call LoginManager.logOut", function () {
-                    expect(LoginManager.logOut).toHaveBeenCalledWith();
+                it("should call this.LoginManager.logOut", function () {
+                    expect(this.LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.DEFAULT);
+                    expect(ctrl.globalError).toEqual(_.get(config.serverErrors, this.usingFingerprintAuth ? "PASSWORD_CHANGED" : "DEFAULT"));
                 });
 
                 it("should NOT navigate away from the login page", function () {
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
-                    verifyEventTracked(mockConfig.ANALYTICS.events.wrongCredentialsStatus);
+                it("should call this.AnalyticsUtil.trackEvent with the expected event", function () {
+                    verifyEventTracked(_.get(config.ANALYTICS.events, this.usingFingerprintAuth ? "passwordChangedStatus" : "wrongCredentialsStatus"));
                 });
 
             });
 
             describe("when the User is NOT Authenticated successfully with a USER_NOT_ACTIVE error", function () {
 
-                var errorObjectArg = new Error("USER_NOT_ACTIVE");
+                var errorObjectArg = {data: {message: "USER_NOT_ACTIVE"}};
 
                 beforeEach(function () {
                     //reject with an error message
@@ -997,27 +1002,27 @@
                     $scope.$digest();
                 });
 
-                it("should call LoginManager.logOut", function () {
-                    expect(LoginManager.logOut).toHaveBeenCalledWith();
+                it("should call this.LoginManager.logOut", function () {
+                    expect(this.LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.USER_NOT_ACTIVE);
+                    expect(ctrl.globalError).toEqual(config.serverErrors.USER_NOT_ACTIVE);
                 });
 
                 it("should NOT navigate away from the login page", function () {
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
-                    verifyEventTracked(mockConfig.ANALYTICS.events.inactiveStatus);
+                it("should call this.AnalyticsUtil.trackEvent with the expected event", function () {
+                    verifyEventTracked(config.ANALYTICS.events.inactiveStatus);
                 });
 
             });
 
             describe("when the User is NOT Authenticated successfully with a USER_MUST_ACCEPT_TERMS error", function () {
 
-                var errorObjectArg = new Error("USER_MUST_ACCEPT_TERMS");
+                var errorObjectArg = {data: {message: "USER_MUST_ACCEPT_TERMS"}};
 
                 beforeEach(function () {
                     //reject with an error message
@@ -1025,27 +1030,27 @@
                     $scope.$digest();
                 });
 
-                it("should call LoginManager.logOut", function () {
-                    expect(LoginManager.logOut).toHaveBeenCalledWith();
+                it("should call this.LoginManager.logOut", function () {
+                    expect(this.LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.USER_MUST_ACCEPT_TERMS);
+                    expect(ctrl.globalError).toEqual(config.serverErrors.USER_MUST_ACCEPT_TERMS);
                 });
 
                 it("should NOT navigate away from the login page", function () {
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
-                    verifyEventTracked(mockConfig.ANALYTICS.events.inactiveStatus);
+                it("should call this.AnalyticsUtil.trackEvent with the expected event", function () {
+                    verifyEventTracked(config.ANALYTICS.events.inactiveStatus);
                 });
 
             });
 
             describe("when the User is NOT Authenticated successfully with a USER_MUST_SETUP_SECURITY_QUESTIONS error", function () {
 
-                var errorObjectArg = new Error("USER_MUST_SETUP_SECURITY_QUESTIONS");
+                var errorObjectArg = {data: {message: "USER_MUST_SETUP_SECURITY_QUESTIONS"}};
 
                 beforeEach(function () {
                     //reject with an error message
@@ -1053,27 +1058,27 @@
                     $scope.$digest();
                 });
 
-                it("should call LoginManager.logOut", function () {
-                    expect(LoginManager.logOut).toHaveBeenCalledWith();
+                it("should call this.LoginManager.logOut", function () {
+                    expect(this.LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.USER_MUST_SETUP_SECURITY_QUESTIONS);
+                    expect(ctrl.globalError).toEqual(config.serverErrors.USER_MUST_SETUP_SECURITY_QUESTIONS);
                 });
 
                 it("should NOT navigate away from the login page", function () {
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
-                    verifyEventTracked(mockConfig.ANALYTICS.events.inactiveStatus);
+                it("should call this.AnalyticsUtil.trackEvent with the expected event", function () {
+                    verifyEventTracked(config.ANALYTICS.events.inactiveStatus);
                 });
 
             });
 
             describe("when the User is NOT Authenticated successfully with a PASSWORD_EXPIRED error", function () {
 
-                var errorObjectArg = new Error("PASSWORD_EXPIRED");
+                var errorObjectArg = {data: {message: "PASSWORD_EXPIRED"}};
 
                 beforeEach(function () {
                     //reject with an error message
@@ -1081,27 +1086,27 @@
                     $scope.$digest();
                 });
 
-                it("should call LoginManager.logOut", function () {
-                    expect(LoginManager.logOut).toHaveBeenCalledWith();
+                it("should call this.LoginManager.logOut", function () {
+                    expect(this.LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.PASSWORD_EXPIRED);
+                    expect(ctrl.globalError).toEqual(config.serverErrors.PASSWORD_EXPIRED);
                 });
 
                 it("should NOT navigate away from the login page", function () {
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should NOT call AnalyticsUtil.trackEvent", function () {
-                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                    expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
             });
 
             describe("when the User is NOT Authenticated successfully with a USER_LOCKED error", function () {
 
-                var errorObjectArg = new Error("USER_LOCKED");
+                var errorObjectArg = {data: {message: "USER_LOCKED"}};
 
                 beforeEach(function () {
                     //reject with an error message
@@ -1109,27 +1114,27 @@
                     $scope.$digest();
                 });
 
-                it("should call LoginManager.logOut", function () {
-                    expect(LoginManager.logOut).toHaveBeenCalledWith();
+                it("should call this.LoginManager.logOut", function () {
+                    expect(this.LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.USER_LOCKED);
+                    expect(ctrl.globalError).toEqual(config.serverErrors.USER_LOCKED);
                 });
 
                 it("should NOT navigate away from the login page", function () {
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
-                    verifyEventTracked(mockConfig.ANALYTICS.events.lockedPasswordStatus);
+                it("should call this.AnalyticsUtil.trackEvent with the expected event", function () {
+                    verifyEventTracked(config.ANALYTICS.events.lockedPasswordStatus);
                 });
 
             });
 
             describe("when the User is NOT Authenticated successfully with a AUTHORIZATION_FAILED error", function () {
 
-                var errorObjectArg = new Error("AUTHORIZATION_FAILED");
+                var errorObjectArg = {data: {message: "AUTHORIZATION_FAILED"}};
 
                 beforeEach(function () {
                     //reject with an error message
@@ -1137,22 +1142,78 @@
                     $scope.$digest();
                 });
 
-                it("should call LoginManager.logOut", function () {
-                    expect(LoginManager.logOut).toHaveBeenCalledWith();
+                it("should call this.LoginManager.logOut", function () {
+                    expect(this.LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual(mockConfig.serverErrors.AUTHORIZATION_FAILED);
+                    expect(ctrl.globalError).toEqual(config.serverErrors.AUTHORIZATION_FAILED);
                 });
 
                 it("should NOT navigate away from the login page", function () {
                     expect($state.go).not.toHaveBeenCalled();
                 });
 
-                it("should call AnalyticsUtil.trackEvent with the expected event", function () {
-                    verifyEventTracked(mockConfig.ANALYTICS.events.accountNotReadyStatus);
+                it("should call this.AnalyticsUtil.trackEvent with the expected event", function () {
+                    verifyEventTracked(config.ANALYTICS.events.accountNotReadyStatus);
                 });
 
+            });
+
+            describe("when the User is NOT Authenticated successfully with a server error", function () {
+
+                var errorObjectArg = {data: {message: TestUtils.getRandomStringThatIsAlphaNumeric(10)}};
+
+                beforeEach(function () {
+                    Network.isServerConnectionError.and.returnValue(true);
+
+                    //reject with an error message
+                    authenticateDeferred.reject(errorObjectArg);
+                    $scope.$digest();
+                });
+
+                it("should call this.LoginManager.logOut", function () {
+                    expect(this.LoginManager.logOut).toHaveBeenCalledWith();
+                });
+
+                it("should have an error message", function () {
+                    expect(ctrl.globalError).toEqual(config.serverErrors.CONNECTION_ERROR);
+                });
+
+                it("should NOT navigate away from the login page", function () {
+                    expect($state.go).not.toHaveBeenCalled();
+                });
+
+                it("should call this.AnalyticsUtil.trackEvent with the expected event", function () {
+                    verifyEventTracked(config.ANALYTICS.events.connectionErrorStatus);
+                });
+            });
+
+            describe("when the User is NOT Authenticated successfully with an error reason of TERMS_LOG_FAILED", function () {
+
+                beforeEach(function () {
+                    this.errorObjectArg = {reason: globals.USER_AUTHORIZATION.ERRORS.TERMS_LOG_FAILED};
+
+                    //reject with an error message
+                    authenticateDeferred.reject(this.errorObjectArg);
+                    $scope.$digest();
+                });
+
+                it("should call this.LoginManager.logOut", function () {
+                    expect(this.LoginManager.logOut).toHaveBeenCalledWith();
+                });
+
+                it("should have an error message", function () {
+                    expect(ctrl.globalError).toEqual(config.serverErrors.CONNECTION_ERROR);
+                });
+
+                it("should NOT navigate away from the login page", function () {
+                    expect($state.go).not.toHaveBeenCalled();
+                });
+
+                it("should call this.AnalyticsUtil.trackEvent with the expected event", function () {
+                    verifyEventTracked(config.ANALYTICS.events.connectionErrorStatus);
+                });
             });
         }
 
@@ -1161,7 +1222,7 @@
             describe("when Cordova is available", function () {
 
                 beforeEach(function () {
-                    PlatformUtil.platformHasCordova.and.returnValue(true);
+                    this.PlatformUtil.platformHasCordova.and.returnValue(true);
                 });
 
                 describe("when the keyboard is visible", function () {
@@ -1190,7 +1251,7 @@
             describe("when Cordova is NOT available", function () {
 
                 beforeEach(function () {
-                    PlatformUtil.platformHasCordova.and.returnValue(false);
+                    this.PlatformUtil.platformHasCordova.and.returnValue(false);
                 });
 
                 it("should return false", function () {
@@ -1213,7 +1274,7 @@
                     platform = TestUtils.getRandomBoolean() ? "android" : "ios";
                     confirmDeferred = $q.defer();
 
-                    PlatformUtil.getPlatform.and.returnValue(platform);
+                    this.PlatformUtil.getPlatform.and.returnValue(platform);
                     $cordovaDialogs.confirm.and.returnValue(confirmDeferred.promise);
                 });
 
@@ -1254,9 +1315,9 @@
                     it("should call $cordovaDialogs.confirm with the expected values", function () {
                         expect($cordovaDialogs.confirm).toHaveBeenCalledWith(
                             getFingerprintWarningPromptText(platform),
-                            mockConfig.touchId.warningPrompt.title, [
-                                mockConfig.touchId.warningPrompt.buttons.ok,
-                                mockConfig.touchId.warningPrompt.buttons.cancel
+                            config.touchId.warningPrompt.title, [
+                                config.touchId.warningPrompt.buttons.ok,
+                                config.touchId.warningPrompt.buttons.cancel
                             ]
                         );
                     });
@@ -1304,11 +1365,11 @@
                 function getFingerprintWarningPromptText(platform) {
                     switch (_.toLower(platform)) {
                         case "android":
-                            return _.get(mockConfig, "touchId.warningPrompt.messageAndroid");
+                            return _.get(config, "touchId.warningPrompt.messageAndroid");
                         case "ios":
-                            return _.get(mockConfig, "touchId.warningPrompt.messageIos");
+                            return _.get(config, "touchId.warningPrompt.messageIos");
                         default:
-                            return _.get(mockConfig, "touchId.warningPrompt.messageAndroid");
+                            return _.get(config, "touchId.warningPrompt.messageAndroid");
                     }
                 }
             });
@@ -1341,7 +1402,7 @@
             beforeEach(function () {
                 platform = TestUtils.getRandomBoolean() ? "android" : "ios";
 
-                PlatformUtil.getPlatform.and.returnValue(platform);
+                this.PlatformUtil.getPlatform.and.returnValue(platform);
             });
 
             it("should return the correct label for the current platform", function () {
@@ -1351,11 +1412,11 @@
             function getFingerprintDisabledLabel(platform) {
                 switch (_.toLower(platform)) {
                     case "android":
-                        return _.get(mockConfig, "touchId.disabled.labelAndroid");
+                        return _.get(config, "touchId.disabled.labelAndroid");
                     case "ios":
-                        return _.get(mockConfig, "touchId.disabled.labelIos");
+                        return _.get(config, "touchId.disabled.labelIos");
                     default:
-                        return _.get(mockConfig, "touchId.disabled.labelAndroid");
+                        return _.get(config, "touchId.disabled.labelAndroid");
                 }
             }
         });
@@ -1364,16 +1425,16 @@
     function getFingerprintSettingsPromptText(platform) {
         switch (_.toLower(platform)) {
             case "android":
-                return _.get(mockConfig, "touchId.settingsPrompt.messageAndroid");
+                return _.get(config, "touchId.settingsPrompt.messageAndroid");
             case "ios":
-                return _.get(mockConfig, "touchId.settingsPrompt.messageIos");
+                return _.get(config, "touchId.settingsPrompt.messageIos");
             default:
-                return _.get(mockConfig, "touchId.settingsPrompt.messageAndroid");
+                return _.get(config, "touchId.settingsPrompt.messageAndroid");
         }
     }
 
     function verifyEventTracked(event) {
-        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
+        expect(self.AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
     }
 
 }());

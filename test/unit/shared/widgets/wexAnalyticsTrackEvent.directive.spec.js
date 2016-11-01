@@ -5,23 +5,12 @@
         $rootScope,
         $compile,
         $q,
-        AnalyticsUtil,
         wexAnalyticsTrackEvent,
         event;
 
     describe("A Wex Analytics Track Event Directive", function () {
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.html");
-
-            //mock dependencies:
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackEvent"]);
-
-            module(function ($provide) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
-            });
-
             inject(function (___, _$rootScope_, _$compile_, _$q_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
@@ -40,8 +29,8 @@
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 });
 
-                it("should NOT call AnalyticsUtil.trackEvent", function () {
-                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                    expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
                 describe("when the parent element is clicked", function () {
@@ -51,8 +40,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call AnalyticsUtil.trackEvent with the expected values", function () {
-                        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
+                    it("should call this.AnalyticsUtil.trackEvent with the expected values", function () {
+                        expect(this.AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
                     });
                 });
             });
@@ -65,8 +54,8 @@
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 });
 
-                it("should NOT call AnalyticsUtil.trackEvent", function () {
-                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                    expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
                 describe("when the parent element is clicked", function () {
@@ -76,8 +65,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call AnalyticsUtil.trackEvent with the expected values", function () {
-                        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
+                    it("should call this.AnalyticsUtil.trackEvent with the expected values", function () {
+                        expect(this.AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
                     });
                 });
             });
@@ -90,8 +79,8 @@
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 });
 
-                it("should NOT call AnalyticsUtil.trackEvent", function () {
-                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                    expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
                 describe("when the parent element is clicked", function () {
@@ -101,8 +90,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call AnalyticsUtil.trackEvent with the expected values", function () {
-                        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
+                    it("should call this.AnalyticsUtil.trackEvent with the expected values", function () {
+                        expect(this.AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
                     });
                 });
             });
@@ -115,8 +104,8 @@
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 });
 
-                it("should NOT call AnalyticsUtil.trackEvent", function () {
-                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                it("should NOT call this.AnalyticsUtil.trackEvent", function () {
+                    expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
 
                 describe("when the parent element is clicked", function () {
@@ -126,8 +115,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call AnalyticsUtil.trackEvent with the expected values", function () {
-                        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
+                    it("should call this.AnalyticsUtil.trackEvent with the expected values", function () {
+                        expect(this.AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
                     });
                 });
             });
@@ -143,7 +132,7 @@
                         createWexAnalyticsTrackEvent(event);
                     }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
-                    expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                    expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
             });
         });
@@ -159,7 +148,7 @@
                     createWexAnalyticsTrackEvent(event);
                 }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
-                expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
             });
         });
 
@@ -174,7 +163,7 @@
                     createWexAnalyticsTrackEvent(event);
                 }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
-                expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
             });
         });
 
@@ -189,7 +178,7 @@
                     createWexAnalyticsTrackEvent(event);
                 }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
-                expect(AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
+                expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
             });
         });
     });

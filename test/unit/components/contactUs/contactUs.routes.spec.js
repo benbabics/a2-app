@@ -9,15 +9,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.contactUs");
-            module("app.html");
-
-            // mock dependencies
-            module(function ($provide, sharedGlobals) {
-                $provide.value("globals", sharedGlobals);
-            });
-
             inject(function (_$injector_, _$rootScope_, _$state_) {
                 $injector = _$injector_;
                 $rootScope = _$rootScope_;

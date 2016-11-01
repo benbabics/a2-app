@@ -18,7 +18,6 @@
         BrandUtil,
         LoggerUtil,
         UserManager,
-        AnalyticsUtil,
         user,
         moment,
         globals,
@@ -59,25 +58,13 @@
 
     describe("A Brand Manager", function () {
 
+        beforeAll(function () {
+            this.commonSharedMockExclusions = ["PlatformUtil"];
+        });
+
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.core");
-            module("app.components.brand");
-            module("app.components.user");
-            module("app.components.navigation");
-            module("app.components.widgets");
-
             // mock dependencies
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
             BrandsResource = jasmine.createSpyObj("BrandsResource", ["getBrandAssets"]);
             BrandAssetCollection = jasmine.createSpyObj("BrandAssetCollection", ["getCollection"]);
             mockBrandAssetCollection = jasmine.createSpyObj("mockBrandAssetCollection", ["by", "find", "insert", "remove", "update"]);
@@ -96,7 +83,6 @@
                 $provide.value("BrandAssetCollection", BrandAssetCollection);
                 $provide.value("UserManager", UserManager);
                 $provide.value("BrandUtil", BrandUtil);
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
 
                 $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
             });
