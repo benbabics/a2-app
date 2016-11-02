@@ -52,15 +52,14 @@
             LoadingIndicator.begin();
 
             //log the user's acceptance of the terms
-            /*return FingerprintAcceptLogManager.log()
+            return FingerprintAcceptLogManager.log()
                 .catch(function (error) {
                     return $q.reject({
                         reason: USER_AUTHORIZATION_ERRORS.TERMS_LOG_FAILED,
                         data: error
                     });
                 })
-                .finally(LoadingIndicator.complete);*/
-            LoadingIndicator.complete();
+                .finally(LoadingIndicator.complete);
         }
 
         function verifyWithFingerprint(clientId, clientSecret, options) {
