@@ -178,6 +178,7 @@
             "billedAmount"       : "Billed",
             "unbilledAmount"     : "Unbilled",
             "paymentDueDate"     : "Due Date",
+            "pendingAmount"      : "Pending",
             "currentBalance"     : "Current Balance",
             "statementBalance"   : "Statement Balance",
             "makePayment"        : "Make Payment",
@@ -187,7 +188,7 @@
         },
         "CHART" : {
             "options"  : {
-                animation            : false,
+                animation            : true,
                 percentageInnerCutout: 70,
                 showTooltips         : false,
                 segmentStrokeWidth   : 1,
@@ -195,10 +196,11 @@
                 responsive           : false
             },
             "colors"   : {
-                availableCreditPositive: "#3eb049",
+                availableCredit        : "#3eb049",
                 availableCreditNegative: "#ff0000",
                 billedAmount           : "#324e5d",
-                unbilledAmount         : "#34b39d"
+                unbilledAmount         : "#34b39d",
+                pendingAmount          : "#efcc57"
             },
             "constants": {
                 "negativeCreditData": 1 //forces angular-chart.js to render negative/zero credit data as a solid/filled graph
