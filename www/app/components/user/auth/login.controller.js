@@ -124,7 +124,8 @@
         }
 
         function logInUser(useFingerprintAuth) {
-            var clientId = _.toLower(vm.user.username),
+            var acceptTermsListener, rejectTermsListener,
+                clientId = _.toLower(vm.user.username),
                 clientSecret = vm.user.password,
                 settingUpFingerprintAuth = useFingerprintAuth && !vm.fingerprintProfileAvailable;
 
@@ -137,6 +138,10 @@
                 clearFingerprintProfile(clientId);
             }
 
+            // track accepted/rejected terms
+            acceptTermsListener = $rootScope.$on("FingerprintAuthTerms.accepted", function() { trackEvent( "acceptTerms" ); });
+            rejectTermsListener = $rootScope.$on("FingerprintAuthTerms.rejected", function() { trackEvent( "declineTerms" ); });
+
             return UserAuthorizationManager.verify({
                     clientId: clientId,
                     clientSecret: clientSecret,
@@ -145,7 +150,11 @@
                 .then(LoadingIndicator.begin)
                 .then(LoginManager.logIn)
                 .then(function () {
-                    trackSuccessEvent();
+                    // track if login was biometric or manual
+                    if ( vm.fingerprintAuthAvailable && vm.fingerprintProfileAvailable ) {
+                        trackEvent( "successfulLoginBiometric" );
+                    }
+                    else { trackEvent( "successfulLoginManual" ); }
 
                     // Store the Username or not based on Remember Me checkbox
                     rememberUsername(vm.rememberMeToggle, vm.user.username);
@@ -215,8 +224,11 @@
                 })
                 .finally(function () {
                     LoadingIndicator.complete();
-
                     vm.isLoggingIn = false;
+
+                    // remove listeners for accepted/rejected terms
+                    acceptTermsListener();
+                    rejectTermsListener();
                 });
         }
 
@@ -327,13 +339,12 @@
             var errorEvent;
             if (_.has(vm.config.ANALYTICS.errorEvents, errorReason)) {
                 errorEvent = vm.config.ANALYTICS.errorEvents[errorReason];
-
-                _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events[errorEvent]);
+                trackEvent( errorEvent );
             }
         }
 
-        function trackSuccessEvent() {
-            _.spread(AnalyticsUtil.trackEvent)(vm.config.ANALYTICS.events.successfulLogin);
+        function trackEvent(eventId) {
+            _.spread( AnalyticsUtil.trackEvent )( vm.config.ANALYTICS.events[ eventId ] );
         }
 
         function verifyFingerprintRemoval(model) {

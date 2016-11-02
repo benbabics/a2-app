@@ -5,7 +5,7 @@
     // jshint maxparams:11
 
     /* @ngInject */
-    function SettingsController($q, $scope, $localStorage, $cordovaDialogs, $timeout, globals, PlatformUtil, Fingerprint, UserAuthorizationManager, SecureStorage, sessionCredentials, wexTruncateStringFilter) {
+    function SettingsController($q, $scope, $localStorage, $cordovaDialogs, $timeout, globals, PlatformUtil, Fingerprint, UserAuthorizationManager, SecureStorage, sessionCredentials, wexTruncateStringFilter, AnalyticsUtil) {
 
         var USERNAME_KEY             = globals.LOCALSTORAGE.KEYS.USERNAME,
             USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION.TYPES;
@@ -75,8 +75,14 @@
         function createFingerprintProfile(credentials) {
             _.extend( credentials, { method: USER_AUTHORIZATION_TYPES.FINGERPRINT } );
             UserAuthorizationManager.verify( credentials, { bypassFingerprint: false } )
-                .then( _.partial(renderFingerprintProfileSuccessMessage, credentials.clientId) )
-                .catch(function() { vm.fingerprintProfileAvailable = false; });
+                .then(function() {
+                    renderFingerprintProfileSuccessMessage( credentials.clientId );
+                    trackEvent( "acceptTerms" );
+                })
+                .catch(function() {
+                    vm.fingerprintProfileAvailable = false;
+                    trackEvent( "declineTerms" );
+                });
         }
 
         function destroyFingerprintProfile(clientId) {
@@ -90,8 +96,14 @@
                 message, "", [ content.noButton, content.yesButton ]
             )
             .then(function (btnIndex) {
-                if ( btnIndex === 2 ) { SecureStorage.remove( clientId ); }
-                else { vm.fingerprintProfileAvailable = true; }
+                if ( btnIndex === 2 ) {
+                    SecureStorage.remove( clientId );
+                    trackEvent( "YesConfirm" );
+                }
+                else {
+                    vm.fingerprintProfileAvailable = true;
+                    trackEvent( "NoConfirm" );
+                }
             });
         }
 
@@ -106,6 +118,10 @@
             $timeout(function() {
                 vm.fingerprintProfileSuccessMessage = "";
             }, 3000);
+        }
+
+        function trackEvent(eventId) {
+            _.spread( AnalyticsUtil.trackEvent )( vm.config.events[ eventId ] );
         }
 
     }
