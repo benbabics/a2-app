@@ -204,16 +204,8 @@
                             $rootScope.$digest();
                         });
 
-                        describe("when 2000 ms has elapsed", function () {
-
-                            beforeEach(function () {
-                                $interval.flush(2000);
-                                $rootScope.$digest();
-                            });
-
-                            it("should NOT start the fingerprint login process", function () {
-                                expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
-                            });
+                        it("should NOT start the fingerprint login process", function () {
+                            expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
                         });
                     });
 
@@ -225,29 +217,10 @@
                             $rootScope.$digest();
                         });
 
-                        describe("when 2000 ms has elapsed", function () {
-
-                            beforeEach(function () {
-                                $interval.flush(2000);
-                                $rootScope.$digest();
-                            });
-
-                            it("should start the fingerprint login process", function () {
-                                expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
-                                    method: globals.USER_AUTHORIZATION.TYPES.FINGERPRINT
-                                }));
-                            });
-                        });
-
-                        describe("when 2000 ms has NOT elapsed", function () {
-
-                            beforeEach(function () {
-                                $rootScope.$digest();
-                            });
-
-                            it("should NOT start the fingerprint login process", function () {
-                                expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
-                            });
+                        it("should start the fingerprint login process", function () {
+                            expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
+                                method: globals.USER_AUTHORIZATION.TYPES.FINGERPRINT
+                            }));
                         });
                     });
                 });
@@ -540,16 +513,8 @@
                         $rootScope.$digest();
                     });
 
-                    describe("when 2000 ms has elapsed", function () {
-
-                        beforeEach(function () {
-                            $interval.flush(2000);
-                            $rootScope.$digest();
-                        });
-
-                        it("should NOT start the fingerprint login process", function () {
-                            expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
-                        });
+                    it("should NOT start the fingerprint login process", function () {
+                        expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
                     });
                 });
 
@@ -561,29 +526,10 @@
                         $rootScope.$digest();
                     });
 
-                    describe("when 2000 ms has elapsed", function () {
-
-                        beforeEach(function () {
-                            $interval.flush(2000);
-                            $rootScope.$digest();
-                        });
-
-                        it("should start the fingerprint login process", function () {
-                            expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
-                                method: globals.USER_AUTHORIZATION.TYPES.FINGERPRINT
-                            }));
-                        });
-                    });
-
-                    describe("when 2000 ms has NOT elapsed", function () {
-
-                        beforeEach(function () {
-                            $rootScope.$digest();
-                        });
-
-                        it("should NOT start the fingerprint login process", function () {
-                            expect(UserAuthorizationManager.verify).not.toHaveBeenCalled();
-                        });
+                    it("should start the fingerprint login process", function () {
+                        expect(UserAuthorizationManager.verify).toHaveBeenCalledWith(jasmine.objectContaining({
+                            method: globals.USER_AUTHORIZATION.TYPES.FINGERPRINT
+                        }));
                     });
                 });
             });

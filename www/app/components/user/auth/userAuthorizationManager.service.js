@@ -85,12 +85,18 @@
                             return termsModal.show();
                         })
                         .then(function () {
-                            var acceptedTermsDeferred = $q.defer();
+                            var acceptedTermsDeferred = $q.defer(),
+                                listenerRemovers = [];
 
-                            $rootScope.$on("FingerprintAuthTerms.accepted", acceptedTermsDeferred.resolve);
-                            $rootScope.$on("FingerprintAuthTerms.rejected", acceptedTermsDeferred.reject);
+                            listenerRemovers.push($rootScope.$on("FingerprintAuthTerms.accepted", acceptedTermsDeferred.resolve));
+                            listenerRemovers.push($rootScope.$on("FingerprintAuthTerms.rejected", acceptedTermsDeferred.reject));
 
-                            return acceptedTermsDeferred.promise;
+                            return acceptedTermsDeferred.promise
+                                .finally(function () {
+                                    _.forEach(listenerRemovers, function (remover) {
+                                        remover();
+                                    });
+                                })
                         })
                         .catch(function (error) {
                             if (_.isNull(bypassFingerprint) && termsModal && termsModal.isShown()) {
