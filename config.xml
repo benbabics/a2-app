@@ -22,8 +22,8 @@
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="android-minSdkVersion" value="14" />
-    <preference name="android-targetSdkVersion" value="23" />
+    <preference name="android-minSdkVersion" value="16" />
+    <preference name="android-targetSdkVersion" value="24" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
     <preference name="AutoHideSplashScreen" value="false" />
@@ -117,7 +117,7 @@
     <plugin name="ionic-plugin-keyboard" spec="~2.2.0" />
     <plugin name="cordova-plugin-ios-no-export-compliance" spec="https://github.com/WEXInc/cordova-plugin-ios-no-export-compliance.git" />
     <plugin name="cordova-plugin-touch-id" spec="~3.2.0" />
-    <plugin name="cordova-plugin-android-fingerprint-auth" spec="~0.0.10" />
+    <plugin name="cordova-plugin-android-fingerprint-auth" spec="~0.3.1" />
     <plugin name="urbanairship-cordova" spec="6.2.0" />
     <plugin name="cordova-plugin-secure-storage" spec="~2.4.1" />
     <preference name="xwalkVersion" value="16+" />
