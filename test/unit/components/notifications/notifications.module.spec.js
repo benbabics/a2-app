@@ -3,23 +3,23 @@
 
     var $rootScope,
         $ionicPlatform,
-        AlertsManager;
+        NotificationItemsManager;
 
-    describe("A Transaction Module", function () {
+    describe("A Notifications Module", function () {
 
         beforeEach(function () {
 
             module("app.shared");
             module("app.html");
-            module("app.components.alerts");
+            module("app.components.notifications");
 
-            inject(function (_$rootScope_, _$ionicPlatform_, _AlertsManager_) {
+            inject(function (_$rootScope_, _$ionicPlatform_, _NotificationItemsManager_) {
                 $rootScope = _$rootScope_;
                 $ionicPlatform = _$ionicPlatform_;
-                AlertsManager = _AlertsManager_;
+                NotificationItemsManager = _NotificationItemsManager_;
             });
 
-            spyOn(AlertsManager, "clearCachedValues");
+            spyOn(NotificationItemsManager, "clearCachedValues");
         });
 
         describe("has a run function that", function () {
@@ -36,8 +36,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should clear all cached values in AlertsManager", function () {
-                    expect(AlertsManager.clearCachedValues).toHaveBeenCalledWith();
+                it("should clear all cached values in NotificationItemsManager", function () {
+                    expect(NotificationItemsManager.clearCachedValues).toHaveBeenCalledWith();
                 });
 
             });

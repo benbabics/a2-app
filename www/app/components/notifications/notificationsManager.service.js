@@ -5,7 +5,7 @@
     // jshint maxparams:5
 
     /* @ngInject */
-    function NotificationsManager($q, $rootScope, $localStorage, Logger, PlatformUtil, UrbanAirship, AlertsResource, LoggerUtil) {
+    function NotificationsManager($q, $rootScope, $localStorage, Logger, PlatformUtil, UrbanAirship, NotificationsResource, LoggerUtil) {
 
         var deferred, storage, service;
 
@@ -84,8 +84,8 @@
 
         function registerUserForNotifications() {
             return UrbanAirship.ready()
-                .then(getChannelID)
-                .then(AlertsResource.registerUserForNotifications)
+                .then(getChannelId)
+                .then(NotificationsResource.registerUserForNotifications)
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
                     var error = "Registering username for push notifications failed: " + LoggerUtil.getErrorMessage(failureResponse);

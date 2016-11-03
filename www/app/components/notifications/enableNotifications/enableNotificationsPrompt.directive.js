@@ -5,13 +5,13 @@
 
     /* @ngInject */
     function enableNotificationsPrompt($rootScope, $ionicModal, $timeout) {
-        var TEMPLATE_URL = "app/components/notifications/templates/enableNotificationsPrompt.directive.html";
+        var TEMPLATE_URL = "app/components/notifications/enableNotifications/templates/enableNotificationsPrompt.directive.html";
 
         return {
             restrict:    "E",
             replace:     true,
             link:        linkFn,
-            controller:  "NotificationsController"
+            controller:  "EnableNotificationsController"
         };
 
         function linkFn(scope) {

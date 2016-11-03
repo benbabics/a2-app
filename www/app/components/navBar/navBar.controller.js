@@ -4,14 +4,14 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function NavBarController(globals, AlertsManager) {
+    function NavBarController(globals, NotificationItemsManager) {
 
         var vm = this;
         vm.config = globals.NAV_BAR.CONFIG;
-        vm.getUnreadAlertsCount = getUnreadAlertsCount;
+        vm.getUnreadNotificationsCount = getUnreadNotificationsCount;
 
-        function getUnreadAlertsCount() {
-            return AlertsManager.getUnreadAlertsCount();
+        function getUnreadNotificationsCount() {
+            return NotificationItemsManager.getUnreadNotificationsCount();
         }
     }
 

@@ -216,28 +216,6 @@
         }
     };
 
-    appGlobals.ALERTS_LIST = {
-        "CONFIG": {
-            "ANALYTICS": {
-                "pageName": "Alerts",
-                "events": {
-                    "scroll": ["Alerts", "InfiniteScroll"]
-                }
-            },
-            "title":            "Alerts",
-            "emptyList":        "There are no alerts at this time.",
-            "reloadDistance":   "5%",
-            "labelDeleteAlert": "Delete"
-        },
-        "SEARCH_OPTIONS": {
-            "PAGE_SIZE": 25,
-            "STATUS_ACTIVE": "active"
-        },
-        "REASON_PREFIX": {
-            "TRANSACTION_DECLINE" : "Decline: "
-        }
-    };
-
     appGlobals.CARD_DETAIL = {
         "CONFIG": {
             "ANALYTICS"                : {
@@ -414,6 +392,28 @@
                     "decline": "No Thanks"
                 }
             }
+        }
+    };
+
+    appGlobals.NOTIFICATIONS_LIST = {
+        "CONFIG": {
+            "ANALYTICS": {
+                "pageName": "Alerts",
+                "events": {
+                    "scroll": ["Alerts", "InfiniteScroll"]
+                }
+            },
+            "title":            "Alerts",
+            "emptyList":        "There are no alerts at this time.",
+            "reloadDistance":   "5%",
+            "labelDeleteAlert": "Delete"
+        },
+        "SEARCH_OPTIONS": {
+            "PAGE_SIZE": 25,
+            "STATUS_ACTIVE": "active"
+        },
+        "REASON_PREFIX": {
+            "TRANSACTION_DECLINE" : "Decline: "
         }
     };
 
@@ -863,7 +863,7 @@
                 "payments"           : "Payment Activity",
                 "transactionActivity": "Transactions",
                 "cards"              : "Cards",
-                "alerts"             : "Alerts",
+                "notifications"      : "Alerts",
                 "contactUs"          : "Contact Us",
                 "settings"           : "Settings",
                 "terms"              : "Terms of Use",
@@ -876,7 +876,7 @@
                 "payments"           : "payment.activity",
                 "transactionActivity": "transaction",
                 "cards"              : "card",
-                "alerts"             : "alerts",
+                "notifications"      : "notifications",
                 "contactUs"          : "contactUs",
                 "terms"              : "termsOfUse",
                 "privacyPolicy"      : "privacyPolicy",
