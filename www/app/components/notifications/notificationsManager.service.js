@@ -84,7 +84,7 @@
 
         function registerUserForNotifications() {
             return UrbanAirship.ready()
-                .then(getChannelId)
+                .then(getChannelID)
                 .then(AlertsResource.registerUserForNotifications)
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
@@ -94,9 +94,9 @@
                 });
         }
 
-        function getChannelId(airship) {
+        function getChannelID(airship) {
             var deferred = $q.defer();
-            airship.getChannelId(deferred.resolve, deferred.reject);
+            airship.getChannelID(deferred.resolve, deferred.reject);
             return deferred.promise;
         }
     }

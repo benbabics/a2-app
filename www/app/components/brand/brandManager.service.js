@@ -250,8 +250,8 @@
             var existingAsset = getBrandAssets().by("brandAssetId", brandAsset.brandAssetId);
 
             if (existingAsset && _.has(existingAsset, "brandAssetId")) {
-                angular.extend(existingAsset, brandAsset);
-                getBrandAssets().update(existingAsset);
+                removeBrandAsset(existingAsset);
+                updateBrandAsset(brandAsset);
             }
             else {
                 getBrandAssets().insert(brandAsset);

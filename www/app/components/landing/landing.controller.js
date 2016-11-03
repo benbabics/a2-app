@@ -2,10 +2,10 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:13
+    // jshint maxparams:14
 
     /* @ngInject */
-    function LandingController($scope, $stateParams, $interval, $ionicHistory, $ionicPlatform,
+    function LandingController(_, $scope, $stateParams, $interval, $ionicHistory, $ionicPlatform,
                                currentInvoiceSummary, brandLogo, globals, scheduledPaymentsCount,
                                FlowUtil, Navigation, Toast, UserManager) {
 
@@ -53,40 +53,62 @@
             // the scheduledPaymentsCount object should be bound now to the object returned by fetchScheduledPaymentsCount
             vm.scheduledPaymentsCount = scheduledPaymentsCount;
 
-            vm.chart = getChartConfiguration();
+            vm.chartDisplay = getChartDisplayConfiguration();
+            vm.chart        = getChartConfiguration();
 
             vm.branding.logo = brandLogo;
 
             vm.greeting = "Hello, " + vm.user.firstName;
         }
 
-        function getChartConfiguration() {
+        function getChartDisplayConfiguration() {
+            var datasets = { collection: [] },
+                dataIds  = [ "pendingAmount", "unbilledAmount", "availableCredit", "billedAmount" ];
 
-            if (!vm.invoiceSummary.isAnyCreditAvailable()) {
+            _.each(dataIds, function(id) {
+                if ( vm.invoiceSummary[ id ] > 0 ) {
+                    datasets.collection.push({
+                        id:    id,
+                        label: vm.config[ id ],
+                        color: vm.chartColors[ id ],
+                        data:  vm.invoiceSummary[ id ]
+                    });
+                }
+            });
+
+            datasets.right = angular.copy( datasets.collection );
+            datasets.left  = datasets.right.splice(0, Math.ceil( datasets.right.length / 2 ));
+
+            return datasets;
+        }
+
+        function getChartConfiguration() {
+            var availableCreditData = _.find( vm.chartDisplay.collection, { id: "availableCredit" });
+
+            if ( !vm.invoiceSummary.isAnyCreditAvailable() ) {
                 return {
                     options: globals.LANDING.CHART.options,
-                    labels : [vm.config.availableCredit],
-                    colors : [vm.chartColors.availableCreditNegative],
-                    data   : [globals.LANDING.CHART.constants.negativeCreditData]
+                    labels : [ availableCreditData.label ],
+                    colors : [ vm.chartColors.availableCreditNegative ],
+                    data   : [ globals.LANDING.CHART.constants.negativeCreditData ]
                 };
             }
 
-            if (vm.invoiceSummary.isAllCreditAvailable()) {
+            if ( vm.invoiceSummary.isAllCreditAvailable() ) {
                 return {
                     options: globals.LANDING.CHART.options,
-                    labels : [vm.config.availableCredit],
-                    colors : [vm.chartColors.availableCreditPositive],
-                    data   : [vm.invoiceSummary.availableCredit]
+                    labels : [ availableCreditData.label ],
+                    colors : [ availableCreditData.color ],
+                    data   : [ availableCreditData.data ]
                 };
             }
 
             return {
                 options: globals.LANDING.CHART.options,
-                labels : [vm.config.availableCredit, vm.config.billedAmount, vm.config.unbilledAmount],
-                colors : [vm.chartColors.availableCreditPositive, vm.chartColors.billedAmount, vm.chartColors.unbilledAmount],
-                data   : [vm.invoiceSummary.availableCredit, vm.invoiceSummary.billedAmount, vm.invoiceSummary.unbilledAmount]
+                labels:  _.map( vm.chartDisplay.collection, "label" ),
+                colors:  _.map( vm.chartDisplay.collection, "color" ),
+                data:    _.map( vm.chartDisplay.collection, "data" )
             };
-
         }
 
         function goToCards() {

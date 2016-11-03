@@ -14,7 +14,7 @@
 
             // mock dependencies
             this.UrbanAirship = jasmine.createSpyObj("UrbanAirship", ["ready"]);
-            this.airShip = jasmine.createSpyObj("airShip", ["getChannelId"]);
+            this.airShip = jasmine.createSpyObj("airShip", ["getChannelID"]);
             this.AlertsResource = jasmine.createSpyObj("AlertsResource", ["registerUserForNotifications"]);
 
             module(function ($provide) {
@@ -39,7 +39,7 @@
             beforeEach(function () {
                 var self = this;
                 this.channelId = TestUtils.getRandomStringThatIsAlphaNumeric(50);
-                this.airShip.getChannelId.and.callFake(function (success, error) {
+                this.airShip.getChannelID.and.callFake(function (success, error) {
                     self.channelIdResolve = success;
                     self.channelIdReject = error;
                 });
@@ -51,7 +51,7 @@
                 this.$rootScope.$digest();
             });
 
-            describe("when airship.getChannelId fails", function () {
+            describe("when airship.getChannelID fails", function () {
                 beforeEach(function () {
                     this.channelIdResolve();
                     this.$rootScope.$digest();
@@ -64,7 +64,7 @@
 
             });
 
-            describe("when airship.getChannelId succeeds", function () {
+            describe("when airship.getChannelID succeeds", function () {
                 beforeEach(function () {
                     this.registerDeferred = this.$q.defer();
                     this.AlertsResource.registerUserForNotifications.and.returnValue(this.registerDeferred.promise);
