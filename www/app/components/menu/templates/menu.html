@@ -32,13 +32,13 @@
             {{::vm.config.options.transactionActivity}}
         </wex-menu-item>
 
-        <wex-menu-item id="option-alerts"
-                       ng-click="vm.goToAlerts()"
+        <wex-menu-item id="option-notifications"
+                       ng-click="vm.goToNotifications()"
                        icon="fa-bell"
-                       root-state="{{::vm.config.rootStates.alerts}}"
-                       no-chevron="{{vm.getUnreadAlertsCount() > 0}}">
-            {{::vm.config.options.alerts}}
-            <i class="badge badge-assertive" ng-hide="vm.getUnreadAlertsCount() == 0">{{vm.getUnreadAlertsCount()}}</i>
+                       root-state="{{::vm.config.rootStates.notifications}}"
+                       no-chevron="{{vm.getUnreadNotificationsCount() > 0}}">
+            {{::vm.config.options.notifications}}
+            <i class="badge badge-assertive" ng-hide="vm.getUnreadNotificationsCount() == 0">{{vm.getUnreadNotificationsCount()}}</i>
         </wex-menu-item>
 
         <wex-menu-item id="option-cards"

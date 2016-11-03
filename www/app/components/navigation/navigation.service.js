@@ -7,7 +7,7 @@
     /* @ngInject */
     function Navigation(_, $ionicHistory, $location, $q, $state, globals, LoginManager) {
         var service = {
-            goToAlerts             : goToAlerts,
+            goToNotifications      : goToNotifications,
             goToCards              : goToCards,
             goToContactUs          : goToContactUs,
             goToHome               : goToHome,
@@ -24,8 +24,8 @@
         return service;
         //////////////////////
 
-        function goToAlerts() {
-            return $state.go("alerts.list");
+        function goToNotifications() {
+            return $state.go("notifications.list");
         }
 
         function goToCards(params) {

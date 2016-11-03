@@ -9,8 +9,8 @@
             restrict:    "E",
             replace:     true,
             link:        linkFn,
-            controller:  "NotificationsController",
-            templateUrl: "app/components/notifications/templates/enableNotificationsBanner.directive.html"
+            controller:  "EnableNotificationsController",
+            templateUrl: "app/components/notifications/enableNotifications/templates/enableNotificationsBanner.directive.html"
         };
 
         function linkFn(scope) {

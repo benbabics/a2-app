@@ -10,7 +10,7 @@ var TestUtils = (function () {
             digestError                        : digestError,
             getRandomAccount                   : getRandomAccount,
             getRandomAddress                   : getRandomAddress,
-            getRandomAlert                     : getRandomAlert,
+            getRandomNotification              : getRandomNotification,
             getRandomAnalyticsEvent            : getRandomAnalyticsEvent,
             getRandomArray                     : getRandomArray,
             getRandomBank                      : getRandomBank,
@@ -124,14 +124,14 @@ var TestUtils = (function () {
         return address;
     }
 
-    function getRandomAlert(AlertModel) {
-        var randomAlertItem = new AlertModel();
+    function getRandomNotification(NotificationModel) {
+        var randomNotificationItem = new NotificationModel();
 
-        randomAlertItem.set({
+        randomNotificationItem.set({
             id: getRandomStringThatIsAlphaNumeric(10)
         });
 
-        return randomAlertItem;
+        return randomNotificationItem;
     }
 
     function getRandomAnalyticsEvent() {

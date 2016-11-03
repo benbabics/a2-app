@@ -4,16 +4,16 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function AlertsResource($q, globals, NotificationsRestangular) {
+    function NotificationsResource($q, globals, NotificationsRestangular) {
         // Private members
         var notificationsResource;
 
         // Revealed Public members
         var service = {
-            getAlerts:   getAlerts,
-            deleteAlert: deleteAlert,
-            getUnreadAlertsCount: getUnreadAlertsCount,
-            setAlertsRead: setAlertsRead,
+            getNotifications:   getNotifications,
+            deleteNotification: deleteNotification,
+            getUnreadNotificationsCount: getUnreadNotificationsCount,
+            setNotificationsRead: setNotificationsRead,
             registerUserForNotifications : registerUserForNotifications
         };
 
@@ -26,20 +26,20 @@
             notificationsResource = NotificationsRestangular.service("");
         }
 
-        function getAlerts(params) {
+        function getNotifications(params) {
             return $q.when(notificationsResource.one().get(params));
         }
 
-        function deleteAlert(alertId) {
-            return $q.when(notificationsResource.one(alertId).remove());
+        function deleteNotification(notificationId) {
+            return $q.when(notificationsResource.one(notificationId).remove());
         }
 
-        function getUnreadAlertsCount() {
+        function getUnreadNotificationsCount() {
             return $q.when(notificationsResource.one(globals.NOTIFICATIONS_API.UNREAD).get());
         }
 
-        function setAlertsRead(alertIds) {
-            return $q.when(notificationsResource.one(alertIds.join()).put());
+        function setNotificationsRead(notificationIds) {
+            return $q.when(notificationsResource.one(notificationIds.join()).put());
         }
 
         function registerUserForNotifications(channelId) {
@@ -48,6 +48,6 @@
     }
 
     angular
-        .module("app.components.alerts")
-        .factory("AlertsResource", AlertsResource);
+        .module("app.components.notifications")
+        .factory("NotificationsResource", NotificationsResource);
 })();

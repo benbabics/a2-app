@@ -5,7 +5,7 @@
     // jshint maxparams:8
 
     /* @ngInject */
-    function MenuController(_, $ionicSideMenuDelegate, $state, $timeout, globals, Navigation, AlertsManager, Fingerprint) {
+    function MenuController(_, $ionicSideMenuDelegate, $state, $timeout, globals, Navigation, NotificationItemsManager, Fingerprint) {
 
         var vm = this;
         vm.config = globals.MENU.CONFIG;
@@ -15,7 +15,7 @@
         vm.goToHome = goToHome;
         vm.goToMakePayment = goToMakePayment;
         vm.goToPaymentActivity = goToPaymentActivity;
-        vm.goToAlerts = goToAlerts;
+        vm.goToNotifications = goToNotifications;
         vm.goToTransactionActivity = goToTransactionActivity;
         vm.goToCards = goToCards;
         vm.goToContactUs = goToContactUs;
@@ -24,7 +24,7 @@
         vm.goToSettings = goToSettings;
         vm.goToLogOut = goToLogOut;
         vm.currentStateHasRoot = currentStateHasRoot;
-        vm.getUnreadAlertsCount = getUnreadAlertsCount;
+        vm.getUnreadNotificationsCount = getUnreadNotificationsCount;
 
         $timeout( activate );
 
@@ -67,8 +67,8 @@
             return Navigation.goToSettings();
         }
 
-        function goToAlerts() {
-            return Navigation.goToAlerts();
+        function goToNotifications() {
+            return Navigation.goToNotifications();
         }
 
         function goToPrivacyPolicy() {
@@ -87,8 +87,8 @@
             return _.startsWith($state.current.name, rootState);
         }
 
-        function getUnreadAlertsCount() {
-            return AlertsManager.getUnreadAlertsCount();
+        function getUnreadNotificationsCount() {
+            return NotificationItemsManager.getUnreadNotificationsCount();
         }
     }
 
