@@ -28,9 +28,9 @@
         scope.maskedValue   = "";
         scope.isMaskVisible = toggleIsMaskVisible();
 
-        scope.handleClearValue = handleClearValue;
-        scope.handleClickMask  = handleClickMask;
-        scope.checkIsEditable = checkIsEditable;
+        scope.handleClearValue      = handleClearValue;
+        scope.handleClickMask       = handleClickMask;
+        scope.handleCheckIsEditable = handleCheckIsEditable;
 
         // toggle reset value button
         field.on("blur", function (evt) {
@@ -53,18 +53,20 @@
             field.val( "" ).triggerHandler( "change" );
             setTimeout(function() { field[0].focus(); });
         }
+
         function handleClickMask() {
             setTimeout(function() { field[0].focus(); });
         }
 
-        function checkIsEditable() {
-            toggleIsEditable(field.attr("disabled") !== "disabled");
+        function handleCheckIsEditable() {
+            toggleIsEditable( field.attr("disabled") !== "disabled" );
         }
 
         // update properties
         function toggleIsEditable(isEditable) {
             scope.isEditable = isEditable;
         }
+
         function toggleIsMaskVisible() {
             if ( scope.maskText ) {
                 var hasMaskedValue = (scope.maskedValue || "").length > 0;

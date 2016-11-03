@@ -43,12 +43,10 @@
             //note: Ionic adds and removes this class by default, but it adds a 400ms delay first which is unacceptable here.
             //see http://ionicframework.com/docs/api/page/keyboard/
             var removeKeyboardShowListener = $rootScope.$on("$cordovaKeyboard:show", addKeyboardOpenClass),
-                removeKeyboardHideListener = $rootScope.$on("$cordovaKeyboard:hide", removeKeyboardOpenClass),
                 removeCordovaPauseListener = $rootScope.$on("app:cordovaPause", handleOnCordovaPause),
                 removeCordovaResumeListener = $rootScope.$on("app:cordovaResume", handleOnCordovaResume);
 
             FlowUtil.onPageLeave(removeKeyboardShowListener, $scope);
-            FlowUtil.onPageLeave(removeKeyboardHideListener, $scope);
             FlowUtil.onPageLeave(removeCordovaPauseListener, $scope);
             FlowUtil.onPageLeave(removeCordovaResumeListener, $scope);
             FlowUtil.onPageLeave(toggleDisableScroll, $scope);
@@ -269,10 +267,6 @@
             else {
                 delete $localStorage[USERNAME_KEY];
             }
-        }
-
-        function removeKeyboardOpenClass() {
-            document.body.classList.remove("keyboard-open");
         }
 
         function handleOnCordovaPause() {

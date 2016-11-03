@@ -5,7 +5,7 @@
   $color-black:     #000;
   $color-dark-gray: #444;
 
-  $checkbox-width: 16px;
+  $checkbox-width:  16px;
   $checkbox-height: 16px;
 
   /**
@@ -70,7 +70,7 @@
       -webkit-transition: top .2s ease-in-out;
       transition:         top .2s ease-in-out;
 
-      &.is-active {
+      .keyboard-open & {
         top: -65px;
 
         @media (min-height: 640px) {
