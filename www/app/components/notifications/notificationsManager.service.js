@@ -94,9 +94,9 @@
                 });
         }
 
-        function getChannelId(airship) {
+        function getChannelID(airship) {
             var deferred = $q.defer();
-            airship.getChannelId(deferred.resolve, deferred.reject);
+            airship.getChannelID(deferred.resolve, deferred.reject);
             return deferred.promise;
         }
     }

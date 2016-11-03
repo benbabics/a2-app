@@ -88,7 +88,10 @@
             "ANALYTICS"   : {
                 "pageName"   : "Login",
                 "events"     : {
-                    "successfulLogin"       : ["Login", "LoginSuccessful"],
+                    "acceptTerms"             : ["SetUpBiometrics", "AcceptTerms"],
+                    "declineTerms"            : ["SetUpBiometrics", "DeclineTerms"],
+                    "successfulLoginManual"   : ["Login", "LoginSuccessfulManual"],
+                    "successfulLoginBiometric": ["Login", "LoginSuccessfulBiometric"],
                     "inactiveStatus"        : ["Login", "InactiveStatus"],
                     "accountNotReadyStatus" : ["Login", "AccountNotReadyStatus"],
                     "wrongCredentialsStatus": ["Login", "WrongCredentialsStatus"],
@@ -178,6 +181,7 @@
             "billedAmount"       : "Billed",
             "unbilledAmount"     : "Unbilled",
             "paymentDueDate"     : "Due Date",
+            "pendingAmount"      : "Pending",
             "currentBalance"     : "Current Balance",
             "statementBalance"   : "Statement Balance",
             "makePayment"        : "Make Payment",
@@ -187,7 +191,7 @@
         },
         "CHART" : {
             "options"  : {
-                animation            : false,
+                animation            : true,
                 percentageInnerCutout: 70,
                 showTooltips         : false,
                 segmentStrokeWidth   : 1,
@@ -195,10 +199,11 @@
                 responsive           : false
             },
             "colors"   : {
-                availableCreditPositive: "#3eb049",
+                availableCredit        : "#3eb049",
                 availableCreditNegative: "#ff0000",
                 billedAmount           : "#324e5d",
-                unbilledAmount         : "#34b39d"
+                unbilledAmount         : "#34b39d",
+                pendingAmount          : "#efcc57"
             },
             "constants": {
                 "negativeCreditData": 1 //forces angular-chart.js to render negative/zero credit data as a solid/filled graph
@@ -814,6 +819,12 @@
     appGlobals.SETTINGS = {
         "CONFIG": {
             "title": "Settings",
+            "events": {
+                "acceptTerms" : ["BiometricSettings", "EnableBiometrics", "AcceptTerms"],
+                "declineTerms": ["BiometricSettings", "EnableBiometrics", "DeclineTerms"],
+                "YesConfirm"  : ["BiometricSettings", "DisableBiometrics", "YesConfirm"],
+                "NoConfirm"   : ["BiometricSettings", "DisableBiometrics", "NoConfirm"]
+            },
             "platformContent": {
                 "android": {
                     "fingerprintAuthName": "fingerprint authentication"

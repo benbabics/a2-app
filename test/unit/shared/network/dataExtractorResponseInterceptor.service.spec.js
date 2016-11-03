@@ -21,6 +21,59 @@
                 data,
                 operation;
 
+            describe("when the data is a non-nil primitive type", function () {
+
+                describe("when the data is a number", function() {
+                    beforeEach(function() {
+                        data = TestUtils.getRandomNumber(Number.MIN_VALUE, Number.MAX_VALUE);
+
+                        responseResult = DataExtractorResponseInterceptor.response(data, operation);
+                    });
+
+                    it("should set the result to the data", function() {
+                        expect(responseResult).toEqual(data);
+                    });
+                });
+
+                describe("when the data is a boolean", function() {
+                    beforeEach(function() {
+                        data = TestUtils.getRandomBoolean();
+
+                        responseResult = DataExtractorResponseInterceptor.response(data, operation);
+                    });
+
+                    it("should set the result to the data", function() {
+                        expect(responseResult).toEqual(data);
+                    });
+                });
+
+                describe("when the data is a string", function() {
+                    describe("when the string is empty", function() {
+                        beforeEach(function() {
+                            data = "";
+
+                            responseResult = DataExtractorResponseInterceptor.response(data, operation);
+                        });
+
+                        it("should set the result to the data", function() {
+                            expect(responseResult).toEqual(data);
+                        });
+                    });
+
+                    describe("when the string is not empty", function() {
+                        beforeEach(function() {
+                            data = TestUtils.getRandomStringThatIsAlphaNumeric(50);
+
+                            responseResult = DataExtractorResponseInterceptor.response(data, operation);
+                        });
+
+                        it("should set the result to the data", function() {
+                            expect(responseResult).toEqual(data);
+                        });
+                    });
+                });
+            });
+
             describe("when the data is NOT empty", function () {
 
                 describe("when the data is an object", function () {
@@ -149,7 +202,7 @@
                 describe("when the data is NOT an object", function () {
 
                     beforeEach(function () {
-                        data = TestUtils.getRandomStringThatIsAlphaNumeric(50);
+                        data = TestUtils.getRandomStringThatIsAlphaNumeric(0);
 
                         responseResult = DataExtractorResponseInterceptor.response(data, operation);
                     });

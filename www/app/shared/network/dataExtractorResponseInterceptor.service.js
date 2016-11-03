@@ -18,6 +18,12 @@
 
             var extractedData = operation === "getList" ? [{}] : {};
 
+            // This check allows for primitive types (number, boolean) and 0-length strings as response data.
+            // Otherwise the response would become {} .
+            if (!_.isNil(responseData) && !_.isObject(responseData) ) {
+                return responseData;
+            }
+
             if (!_.isEmpty(responseData)) {
 
                 if (_.isObject(responseData)) {
