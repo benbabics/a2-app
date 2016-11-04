@@ -84,7 +84,7 @@
 
         function registerUserForNotifications() {
             return UrbanAirship.ready()
-                .then(getChannelId)
+                .then(getChannelID)
                 .then(NotificationsResource.registerUserForNotifications)
                 .catch(function (failureResponse) {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
