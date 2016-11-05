@@ -1,0 +1,8 @@
+.wex-cache-icon-loading {
+  height: inherit;
+  min-height: inherit;
+
+  @include flexbox();
+  @include align-items(center);
+  @include justify-content(center);
+}
