@@ -1,12 +1,16 @@
 (function () {
     "use strict";
 
-    var CACHE_KEY_GLOBAL = "GLOBAL",
+    var CACHE_KEY_DATE = "DATE",
+        CACHE_KEY_GLOBAL = "GLOBAL",
         CACHE_KEY_PREFIX = "CACHE",
         CACHE_KEY_SEPARATOR = ".",
-        CACHE_KEY_SHARED = "SHARED";
+        CACHE_KEY_SHARED = "SHARED",
+        CACHE_KEY_TTL = "$TTL",
+        DEFAULT_TTL = 0, //no ttl
+        TTL_UNITS = "m";
 
-    describe("A WEX Cache service", function () {
+    fdescribe("A WEX Cache service", function () {
 
         beforeEach(function () {
             var self = this;
@@ -38,13 +42,21 @@
 
             beforeEach(function () {
                 this.propertyKey = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                this.WexCache.storePropertyValue(this.propertyKey, TestUtils.getRandomStringThatIsAlphaNumeric(10));
+                this.WexCache.storePropertyValue(this.propertyKey, TestUtils.getRandomStringThatIsAlphaNumeric(10), {ttl: TestUtils.getRandomInteger(0, 100)});
 
                 this.WexCache.clearPropertyValue(this.propertyKey);
             });
 
-            it("should clear the property from local storage", function () {
+            it("should clear the property value from local storage", function () {
                 expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey))).not.toBeDefined();
+            });
+
+            it("should clear the property ttl from local storage", function () {
+                expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey, {ttlKey: true}))).not.toBeDefined();
+            });
+
+            it("should clear the property cache date from local storage", function () {
+                expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey, {cacheDateKey: true}))).not.toBeDefined();
             });
         });
 
@@ -55,75 +67,345 @@
                 this.propertyKey = TestUtils.getRandomStringThatIsAlphaNumeric(10);
             });
 
-            describe("when the user is logged in", function () {
+            describe("when ttlKey is true", function () {
 
                 beforeEach(function () {
-                    this.user = TestUtils.getRandomUser(this.UserModel, this.UserAccountModel, this.ONLINE_APPLICATION);
-                    this.UserManager.getUser.and.returnValue(this.user);
+                    this.options.ttlKey = true;
                 });
 
-                describe("when given a view name", function () {
+                describe("when cacheDateKey is true", function () {
 
                     beforeEach(function () {
-                        this.viewName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                        this.options.viewName = this.viewName;
+                        this.options.cacheDateKey = true;
                     });
 
-                    it("should return the expected value", function () {
-                        expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
-                            CACHE_KEY_PREFIX,
-                            this.user.username,
-                            this.viewName.replace(/\./g, "_"),
-                            this.propertyKey
-                        ].join(CACHE_KEY_SEPARATOR));
+                    describe("when the user is logged in", function () {
+
+                        beforeEach(function () {
+                            this.user = TestUtils.getRandomUser(this.UserModel, this.UserAccountModel, this.ONLINE_APPLICATION);
+                            this.UserManager.getUser.and.returnValue(this.user);
+                        });
+
+                        describe("when given a view name", function () {
+
+                            beforeEach(function () {
+                                this.viewName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                                this.options.viewName = this.viewName;
+                            });
+
+                            it("should return the expected value", function () {
+                                expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                    CACHE_KEY_PREFIX,
+                                    CACHE_KEY_TTL,
+                                    CACHE_KEY_DATE,
+                                    this.user.username,
+                                    this.viewName.replace(/\./g, "_"),
+                                    this.propertyKey
+                                ].join(CACHE_KEY_SEPARATOR));
+                            });
+                        });
+
+                        describe("when NOT given a view name", function () {
+
+                            it("should return the expected value", function () {
+                                expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                    CACHE_KEY_PREFIX,
+                                    CACHE_KEY_TTL,
+                                    CACHE_KEY_DATE,
+                                    this.user.username,
+                                    CACHE_KEY_GLOBAL,
+                                    this.propertyKey
+                                ].join(CACHE_KEY_SEPARATOR));
+                            });
+                        });
+                    });
+
+                    describe("when the user is NOT logged in", function () {
+
+                        beforeEach(function () {
+                            this.UserManager.getUser.and.returnValue(null);
+                        });
+
+                        describe("when given a view name", function () {
+
+                            beforeEach(function () {
+                                this.viewName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                                this.options.viewName = this.viewName;
+                            });
+
+                            it("should return the expected value", function () {
+                                expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                    CACHE_KEY_PREFIX,
+                                    CACHE_KEY_TTL,
+                                    CACHE_KEY_DATE,
+                                    CACHE_KEY_SHARED,
+                                    this.viewName.replace(/\./g, "_"),
+                                    this.propertyKey
+                                ].join(CACHE_KEY_SEPARATOR));
+                            });
+                        });
+
+                        describe("when NOT given a view name", function () {
+
+                            it("should return the expected value", function () {
+                                expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                    CACHE_KEY_PREFIX,
+                                    CACHE_KEY_TTL,
+                                    CACHE_KEY_DATE,
+                                    CACHE_KEY_SHARED,
+                                    CACHE_KEY_GLOBAL,
+                                    this.propertyKey
+                                ].join(CACHE_KEY_SEPARATOR));
+                            });
+                        });
                     });
                 });
 
-                describe("when NOT given a view name", function () {
+                describe("when cacheDateKey is false", function () {
 
-                    it("should return the expected value", function () {
-                        expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
-                            CACHE_KEY_PREFIX,
-                            this.user.username,
-                            CACHE_KEY_GLOBAL,
-                            this.propertyKey
-                        ].join(CACHE_KEY_SEPARATOR));
+                    beforeEach(function () {
+                        this.options.cacheDateKey = false;
+                    });
+
+                    describe("when the user is logged in", function () {
+
+                        beforeEach(function () {
+                            this.user = TestUtils.getRandomUser(this.UserModel, this.UserAccountModel, this.ONLINE_APPLICATION);
+                            this.UserManager.getUser.and.returnValue(this.user);
+                        });
+
+                        describe("when given a view name", function () {
+
+                            beforeEach(function () {
+                                this.viewName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                                this.options.viewName = this.viewName;
+                            });
+
+                            it("should return the expected value", function () {
+                                expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                    CACHE_KEY_PREFIX,
+                                    CACHE_KEY_TTL,
+                                    this.user.username,
+                                    this.viewName.replace(/\./g, "_"),
+                                    this.propertyKey
+                                ].join(CACHE_KEY_SEPARATOR));
+                            });
+                        });
+
+                        describe("when NOT given a view name", function () {
+
+                            it("should return the expected value", function () {
+                                expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                    CACHE_KEY_PREFIX,
+                                    CACHE_KEY_TTL,
+                                    this.user.username,
+                                    CACHE_KEY_GLOBAL,
+                                    this.propertyKey
+                                ].join(CACHE_KEY_SEPARATOR));
+                            });
+                        });
+                    });
+
+                    describe("when the user is NOT logged in", function () {
+
+                        beforeEach(function () {
+                            this.UserManager.getUser.and.returnValue(null);
+                        });
+
+                        describe("when given a view name", function () {
+
+                            beforeEach(function () {
+                                this.viewName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                                this.options.viewName = this.viewName;
+                            });
+
+                            it("should return the expected value", function () {
+                                expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                    CACHE_KEY_PREFIX,
+                                    CACHE_KEY_TTL,
+                                    CACHE_KEY_SHARED,
+                                    this.viewName.replace(/\./g, "_"),
+                                    this.propertyKey
+                                ].join(CACHE_KEY_SEPARATOR));
+                            });
+                        });
+
+                        describe("when NOT given a view name", function () {
+
+                            it("should return the expected value", function () {
+                                expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                    CACHE_KEY_PREFIX,
+                                    CACHE_KEY_TTL,
+                                    CACHE_KEY_SHARED,
+                                    CACHE_KEY_GLOBAL,
+                                    this.propertyKey
+                                ].join(CACHE_KEY_SEPARATOR));
+                            });
+                        });
                     });
                 });
             });
 
-            describe("when the user is NOT logged in", function () {
+            describe("when cacheDateKey is true", function () {
 
                 beforeEach(function () {
-                    this.UserManager.getUser.and.returnValue(null);
+                    this.options.cacheDateKey = true;
                 });
 
-                describe("when given a view name", function () {
+                describe("when the user is logged in", function () {
 
                     beforeEach(function () {
-                        this.viewName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                        this.options.viewName = this.viewName;
+                        this.user = TestUtils.getRandomUser(this.UserModel, this.UserAccountModel, this.ONLINE_APPLICATION);
+                        this.UserManager.getUser.and.returnValue(this.user);
                     });
 
-                    it("should return the expected value", function () {
-                        expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
-                            CACHE_KEY_PREFIX,
-                            CACHE_KEY_SHARED,
-                            this.viewName.replace(/\./g, "_"),
-                            this.propertyKey
-                        ].join(CACHE_KEY_SEPARATOR));
+                    describe("when given a view name", function () {
+
+                        beforeEach(function () {
+                            this.viewName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                            this.options.viewName = this.viewName;
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                CACHE_KEY_PREFIX,
+                                CACHE_KEY_TTL,
+                                CACHE_KEY_DATE,
+                                this.user.username,
+                                this.viewName.replace(/\./g, "_"),
+                                this.propertyKey
+                            ].join(CACHE_KEY_SEPARATOR));
+                        });
+                    });
+
+                    describe("when NOT given a view name", function () {
+
+                        it("should return the expected value", function () {
+                            expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                CACHE_KEY_PREFIX,
+                                CACHE_KEY_TTL,
+                                CACHE_KEY_DATE,
+                                this.user.username,
+                                CACHE_KEY_GLOBAL,
+                                this.propertyKey
+                            ].join(CACHE_KEY_SEPARATOR));
+                        });
                     });
                 });
 
-                describe("when NOT given a view name", function () {
+                describe("when the user is NOT logged in", function () {
 
-                    it("should return the expected value", function () {
-                        expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
-                            CACHE_KEY_PREFIX,
-                            CACHE_KEY_SHARED,
-                            CACHE_KEY_GLOBAL,
-                            this.propertyKey
-                        ].join(CACHE_KEY_SEPARATOR));
+                    beforeEach(function () {
+                        this.UserManager.getUser.and.returnValue(null);
+                    });
+
+                    describe("when given a view name", function () {
+
+                        beforeEach(function () {
+                            this.viewName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                            this.options.viewName = this.viewName;
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                CACHE_KEY_PREFIX,
+                                CACHE_KEY_TTL,
+                                CACHE_KEY_DATE,
+                                CACHE_KEY_SHARED,
+                                this.viewName.replace(/\./g, "_"),
+                                this.propertyKey
+                            ].join(CACHE_KEY_SEPARATOR));
+                        });
+                    });
+
+                    describe("when NOT given a view name", function () {
+
+                        it("should return the expected value", function () {
+                            expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                CACHE_KEY_PREFIX,
+                                CACHE_KEY_TTL,
+                                CACHE_KEY_DATE,
+                                CACHE_KEY_SHARED,
+                                CACHE_KEY_GLOBAL,
+                                this.propertyKey
+                            ].join(CACHE_KEY_SEPARATOR));
+                        });
+                    });
+                });
+            });
+
+            describe("when ttlKey is false and cacheDateKey is false", function () {
+
+                describe("when the user is logged in", function () {
+
+                    beforeEach(function () {
+                        this.user = TestUtils.getRandomUser(this.UserModel, this.UserAccountModel, this.ONLINE_APPLICATION);
+                        this.UserManager.getUser.and.returnValue(this.user);
+                    });
+
+                    describe("when given a view name", function () {
+
+                        beforeEach(function () {
+                            this.viewName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                            this.options.viewName = this.viewName;
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                CACHE_KEY_PREFIX,
+                                this.user.username,
+                                this.viewName.replace(/\./g, "_"),
+                                this.propertyKey
+                            ].join(CACHE_KEY_SEPARATOR));
+                        });
+                    });
+
+                    describe("when NOT given a view name", function () {
+
+                        it("should return the expected value", function () {
+                            expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                CACHE_KEY_PREFIX,
+                                this.user.username,
+                                CACHE_KEY_GLOBAL,
+                                this.propertyKey
+                            ].join(CACHE_KEY_SEPARATOR));
+                        });
+                    });
+                });
+
+                describe("when the user is NOT logged in", function () {
+
+                    beforeEach(function () {
+                        this.UserManager.getUser.and.returnValue(null);
+                    });
+
+                    describe("when given a view name", function () {
+
+                        beforeEach(function () {
+                            this.viewName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                            this.options.viewName = this.viewName;
+                        });
+
+                        it("should return the expected value", function () {
+                            expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                CACHE_KEY_PREFIX,
+                                CACHE_KEY_SHARED,
+                                this.viewName.replace(/\./g, "_"),
+                                this.propertyKey
+                            ].join(CACHE_KEY_SEPARATOR));
+                        });
+                    });
+
+                    describe("when NOT given a view name", function () {
+
+                        it("should return the expected value", function () {
+                            expect(this.WexCache.getPropertyKey(this.propertyKey, this.options)).toEqual([
+                                CACHE_KEY_PREFIX,
+                                CACHE_KEY_SHARED,
+                                CACHE_KEY_GLOBAL,
+                                this.propertyKey
+                            ].join(CACHE_KEY_SEPARATOR));
+                        });
                     });
                 });
             });
@@ -343,35 +625,176 @@
                 this.propertyKey = TestUtils.getRandomStringThatIsAlphaNumeric(10);
             });
 
-            describe("when the value exists", function () {
+            describe("when ttl is true", function () {
 
                 beforeEach(function () {
-                    this.WexCache.storePropertyValue(this.propertyKey, TestUtils.getRandomStringThatIsAlphaNumeric(10));
+                    this.options.ttl = true;
                 });
 
-                it("should read the property from local storage", function () {
-                    expect(this.WexCache.readPropertyValue(this.propertyKey, this.options))
-                        .toEqual(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey)));
+                describe("when the value exists", function () {
+
+                    beforeEach(function () {
+                        this.ttl = TestUtils.getRandomInteger(1, 100);
+                        this.WexCache.storePropertyValue(this.propertyKey, TestUtils.getRandomStringThatIsAlphaNumeric(10), {ttl: this.ttl});
+                    });
+
+                    it("should read the property ttl from local storage", function () {
+                        expect(this.WexCache.readPropertyValue(this.propertyKey, this.options))
+                            .toEqual(this.ttl);
+                    });
+                });
+
+                describe("when the value does NOT exist", function () {
+
+                    describe("when a defaultValue is given", function () {
+
+                        beforeEach(function () {
+                            this.options.defaultValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                        });
+
+                        it("should return the default value", function () {
+                            expect(this.WexCache.readPropertyValue(this.propertyKey, this.options)).toEqual(this.options.defaultValue);
+                        });
+                    });
+
+                    describe("when a defaultValue is NOT given", function () {
+
+                        it("should return undefined", function () {
+                            expect(this.WexCache.readPropertyValue(this.propertyKey, this.options)).toEqual(undefined);
+                        });
+                    });
                 });
             });
 
-            describe("when the value does NOT exist", function () {
+            describe("when cacheDate is true", function () {
 
-                describe("when a defaultValue is given", function () {
+                beforeEach(function () {
+                    this.options.cacheDate = true;
+                    this.baseDate = new Date();
+
+                    jasmine.clock().install();
+                    jasmine.clock().mockDate(this.baseDate);
+                });
+
+                afterEach(function () {
+                    jasmine.clock().uninstall();
+                });
+
+                describe("when the value exists", function () {
 
                     beforeEach(function () {
-                        this.options.defaultValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                        this.WexCache.storePropertyValue(this.propertyKey, TestUtils.getRandomStringThatIsAlphaNumeric(10));
                     });
 
-                    it("should return the default value", function () {
-                        expect(this.WexCache.readPropertyValue(this.propertyKey, this.options)).toEqual(this.options.defaultValue);
+                    it("should read the property cache date from local storage", function () {
+                        expect(this.WexCache.readPropertyValue(this.propertyKey, this.options))
+                            .toEqual(this.baseDate);
                     });
                 });
 
-                describe("when a defaultValue is NOT given", function () {
+                describe("when the value does NOT exist", function () {
 
-                    it("should return undefined", function () {
-                        expect(this.WexCache.readPropertyValue(this.propertyKey, this.options)).toEqual(undefined);
+                    describe("when a defaultValue is given", function () {
+
+                        beforeEach(function () {
+                            this.options.defaultValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                        });
+
+                        it("should return the default value", function () {
+                            expect(this.WexCache.readPropertyValue(this.propertyKey, this.options)).toEqual(this.options.defaultValue);
+                        });
+                    });
+
+                    describe("when a defaultValue is NOT given", function () {
+
+                        it("should return undefined", function () {
+                            expect(this.WexCache.readPropertyValue(this.propertyKey, this.options)).toEqual(undefined);
+                        });
+                    });
+                });
+            });
+
+            describe("when ttl is NOT true and cacheDate is NOT true", function () {
+
+                describe("when the value exists", function () {
+
+                    beforeEach(function () {
+                        this.value = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                    });
+
+                    beforeEach(function () {
+                        this.baseDate = new Date();
+
+                        jasmine.clock().install();
+                        jasmine.clock().mockDate(this.baseDate);
+                    });
+
+                    afterEach(function () {
+                        jasmine.clock().uninstall();
+                    });
+
+                    describe("when the value is stale", function () {
+
+                        beforeEach(function () {
+                            this.ttl = TestUtils.getRandomInteger(1, 100);
+                            this.WexCache.storePropertyValue(this.propertyKey, this.value, {ttl: this.ttl});
+
+                            jasmine.clock().tick((this.ttl*60000)+1);
+
+                            this.result = this.WexCache.readPropertyValue(this.propertyKey, this.options);
+                        });
+
+                        it("should clear the property value from local storage", function () {
+                            expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey))).not.toBeDefined();
+                        });
+
+                        it("should clear the property ttl from local storage", function () {
+                            expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey, {ttlKey: true}))).not.toBeDefined();
+                        });
+
+                        it("should clear the property cache date from local storage", function () {
+                            expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey, {cacheDateKey: true}))).not.toBeDefined();
+                        });
+
+                        it("should return undefined", function () {
+                            expect(this.result).toEqual(undefined);
+                        });
+                    });
+
+                    describe("when the value is NOT stale", function () {
+
+                        beforeEach(function () {
+                            this.ttl = TestUtils.getRandomInteger(1, 100);
+                            this.WexCache.storePropertyValue(this.propertyKey, this.value, {ttl: this.ttl});
+
+                            jasmine.clock().tick((this.ttl*60000)-1);
+                        });
+
+                        it("should read the property from local storage", function () {
+                            expect(this.WexCache.readPropertyValue(this.propertyKey, this.options))
+                                .toEqual(this.value);
+                        });
+                    });
+                });
+
+                describe("when the value does NOT exist", function () {
+
+                    describe("when a defaultValue is given", function () {
+
+                        beforeEach(function () {
+                            this.options.defaultValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                        });
+
+                        it("should return the default value", function () {
+                            expect(this.WexCache.readPropertyValue(this.propertyKey, this.options)).toEqual(this.options.defaultValue);
+                        });
+                    });
+
+                    describe("when a defaultValue is NOT given", function () {
+
+                        it("should return undefined", function () {
+                            expect(this.WexCache.readPropertyValue(this.propertyKey, this.options)).toEqual(undefined);
+                        });
                     });
                 });
             });
@@ -383,16 +806,67 @@
                 this.options = {};
                 this.propertyKey = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 this.value = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-
-                this.result = this.WexCache.storePropertyValue(this.propertyKey, this.value, this.options);
             });
 
-            it("should set the property value in local storage", function () {
-                expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey))).toEqual(this.value);
+            beforeEach(function () {
+                this.baseDate = new Date();
+
+                jasmine.clock().install();
+                jasmine.clock().mockDate(this.baseDate);
             });
 
-            it("should return the value", function () {
-                expect(this.result).toEqual(this.value);
+            afterEach(function () {
+                jasmine.clock().uninstall();
+            });
+
+            describe("when given a ttl", function () {
+
+                beforeEach(function () {
+                    this.options.ttl = TestUtils.getRandomInteger(1, 100);
+                });
+
+                beforeEach(function () {
+                    this.result = this.WexCache.storePropertyValue(this.propertyKey, this.value, this.options);
+                });
+
+                it("should set the property value in local storage", function () {
+                    expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey))).toEqual(this.value);
+                });
+
+                it("should set the property date in local storage", function () {
+                    expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey, {cacheDateKey: true}))).toEqual(this.baseDate);
+                });
+
+                it("should set the property ttl in local storage", function () {
+                    expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey, {ttlKey: true}))).toEqual(this.options.ttl);
+                });
+
+                it("should return the value", function () {
+                    expect(this.result).toEqual(this.value);
+                });
+            });
+
+            describe("when NOT given a ttl", function () {
+
+                beforeEach(function () {
+                    this.result = this.WexCache.storePropertyValue(this.propertyKey, this.value, this.options);
+                });
+
+                it("should set the property value in local storage", function () {
+                    expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey))).toEqual(this.value);
+                });
+
+                it("should set the property date in local storage", function () {
+                    expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey, {cacheDateKey: true}))).toEqual(this.baseDate);
+                });
+
+                it("should set the default property ttl in local storage", function () {
+                    expect(_.get(this.$localStorage, this.WexCache.getPropertyKey(this.propertyKey, {ttlKey: true}))).toEqual(DEFAULT_TTL);
+                });
+
+                it("should return the value", function () {
+                    expect(this.result).toEqual(this.value);
+                });
             });
         });
 
