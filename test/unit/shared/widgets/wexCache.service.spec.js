@@ -10,7 +10,7 @@
         DEFAULT_TTL = 0, //no ttl
         TTL_UNITS = "m";
 
-    fdescribe("A WEX Cache service", function () {
+    describe("A WEX Cache service", function () {
 
         beforeEach(function () {
             var self = this;
