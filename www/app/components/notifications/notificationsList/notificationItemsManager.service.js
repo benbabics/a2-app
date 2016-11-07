@@ -57,8 +57,18 @@
             return NotificationsResource.getNotifications(params)
                 .then(function (response) {
                     if (response && response.data) {
-                        // map the notifications data to model objects
-                        var fetchedNotifications = _.map(response.data.notifications, createNotification);
+
+                        var fetchedNotifications = [];
+
+                        // There will always be an element even if no results are returned,
+                        // so check for if there's any JSON data.
+                        if (response.data[0].data === undefined) {
+                            fetchedNotifications = [];
+                        }
+                        else {
+                            // map the notifications data to model objects
+                            fetchedNotifications = _.map(response.data, createNotification);
+                        }
 
                         // reset the cache if we're fetching the first page of results
                         if (pageNumber === 0) {
