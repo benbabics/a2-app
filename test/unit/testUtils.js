@@ -519,6 +519,7 @@ var TestUtils = (function () {
 
     function provideCommonSharedMockDependencies($provide, setter, exclusions) {
         var mocks = {
+            $cordovaSplashscreen: jasmine.createSpyObj("$cordovaSplashscreen", ["show", "hide"]),
             AnalyticsUtil: jasmine.createSpyObj("AnalyticsUtil", [
                 "getActiveTrackerId",
                 "hasActiveTracker",
