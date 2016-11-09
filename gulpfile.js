@@ -270,6 +270,17 @@ gulp.task("test", function (done) {
     }).start();
 });
 
+gulp.task("test-debug", function (done) {
+    new KarmaServer({
+        configFile: __dirname + "/" + config.test.dir + "/karma.conf.js",
+        singleRun: false,
+        browsers: [],
+        browserNoActivityTimeout: 60000
+    }, function() {
+        done();
+    }).start();
+});
+
 /**
  * Code Analysis Tasks
  */
