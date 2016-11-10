@@ -62,7 +62,7 @@
 
                         // There will always be an element even if no results are returned,
                         // so check for if there's any JSON data.
-                        if (response.data[0].data !== undefined) {
+                        if (!_.isNil(response.data[0].data)) {
                             // map the notifications data to model objects
                             fetchedNotifications = _.map(response.data, createNotification);
                         }
