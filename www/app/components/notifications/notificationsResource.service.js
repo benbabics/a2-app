@@ -27,7 +27,7 @@
         }
 
         function getNotifications(params) {
-            return $q.when(notificationsResource.one().get(params));
+            return $q.when(notificationsResource.one().doGETLIST("", params));
         }
 
         function deleteNotification(notificationId) {

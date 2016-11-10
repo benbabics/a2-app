@@ -61,7 +61,9 @@
             var notificationIds = _.map(notifications, function (notification) {
                 return notification.id;
             });
-            NotificationItemsManager.setNotificationsRead(notificationIds);
+            if (notifications.length > 0) {
+                NotificationItemsManager.setNotificationsRead(notificationIds);
+            }
             return notifications;
         }
 
