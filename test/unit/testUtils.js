@@ -11,6 +11,7 @@ var TestUtils = (function () {
             getRandomAccount                   : getRandomAccount,
             getRandomAddress                   : getRandomAddress,
             getRandomNotification              : getRandomNotification,
+            getRandomNotificationResponse      : getRandomNotificationResponse,
             getRandomAnalyticsEvent            : getRandomAnalyticsEvent,
             getRandomArray                     : getRandomArray,
             getRandomBank                      : getRandomBank,
@@ -124,14 +125,18 @@ var TestUtils = (function () {
         return address;
     }
 
+    // Returns a notification after it is parsed into a NotificationModel.
     function getRandomNotification(NotificationModel) {
         var randomNotificationItem = new NotificationModel();
 
-        randomNotificationItem.set({
-            id: getRandomStringThatIsAlphaNumeric(10)
-        });
+        randomNotificationItem.set(getRandomNotificationResponse());
 
         return randomNotificationItem;
+    }
+
+    // Returns a notification as it is received from NotificationsResource.getNotifications().
+    function getRandomNotificationResponse() {
+        return {data: JSON.stringify(getRandomMap(3)), id: getRandomStringThatIsAlphaNumeric(5), status: getRandomStringThatIsAlphaNumeric(10), type: getRandomStringThatIsAlphaNumeric(10)};
     }
 
     function getRandomAnalyticsEvent() {

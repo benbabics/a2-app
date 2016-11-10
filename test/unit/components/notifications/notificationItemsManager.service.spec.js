@@ -10,7 +10,8 @@
         NotificationsResource,
         NotificationItemsManager,
         mockNotificationsCollection,
-        mockCachedNotificationsCollection;
+        mockCachedNotificationsCollection,
+        mockCachedNotificationsResponseCollection;
 
     describe("An Notifications Items Manager", function () {
 
@@ -43,15 +44,19 @@
             var numModels, i;
 
             mockNotificationsCollection = [];
-            numModels = TestUtils.getRandomInteger(1, 100);
+            numModels = TestUtils.getRandomInteger(1, 50);
             for (i = 0; i < numModels; ++i) {
                 mockNotificationsCollection.push(TestUtils.getRandomNotification(NotificationModel));
             }
 
             mockCachedNotificationsCollection = [];
-            numModels = TestUtils.getRandomInteger(1, 100);
+            mockCachedNotificationsResponseCollection = [];
+            numModels = TestUtils.getRandomInteger(1, 50);
             for (i = 0; i < numModels; ++i) {
-                mockCachedNotificationsCollection.push(TestUtils.getRandomNotification(NotificationModel));
+                mockCachedNotificationsResponseCollection.push(TestUtils.getRandomNotificationResponse());
+                var model = new NotificationModel();
+                model.set(mockCachedNotificationsResponseCollection[i]);
+                mockCachedNotificationsCollection.push(model);
             }
         });
 
@@ -103,10 +108,20 @@
             });
 
             describe("when the notifications are fetched successfully", function () {
-                var mockNotifications = {data: {notifications: []}};
+                var mockResponse = {};
+                var mockNotificationsModels = [];
 
                 beforeEach(function () {
-                    mockNotifications.data.notifications = mockNotificationsCollection.slice();
+                    var notificationCount = TestUtils.getRandomInteger(1, mockPageSize);
+                    mockResponse = { config: {}, data: [], status: 200, statusText: ""};
+                    for (var i = 0; i < notificationCount; i++) {
+                        mockResponse.data[i] = TestUtils.getRandomNotificationResponse();
+                    }
+                    mockNotificationsModels = _.map(mockResponse.data, function(resource) {
+                        var notificationModel = new NotificationModel();
+                        notificationModel.set(resource);
+                        return notificationModel;
+                    });
                 });
 
                 describe("when there is data in the response", function () {
@@ -120,12 +135,12 @@
                         });
 
                         beforeEach(function () {
-                            getNotificationsDeferred.resolve(mockNotifications);
+                            getNotificationsDeferred.resolve(mockResponse);
                             $rootScope.$digest();
                         });
 
                         it("should resolve", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(mockNotifications.data.notifications);
+                            expect(resolveHandler).toHaveBeenCalledWith(mockNotificationsModels);
                             expect(rejectHandler).not.toHaveBeenCalled();
                         });
                     });
@@ -141,30 +156,31 @@
 
                         describe("when there are notifications in the fetched data that are already cached", function () {
                             beforeEach(function () {
-                                Array.prototype.push.apply(mockNotifications.data, mockCachedNotificationsCollection);
-                                getNotificationsDeferred.resolve(mockNotifications);
+                                Array.prototype.push.apply(mockResponse.data, mockCachedNotificationsResponseCollection);
+                                Array.prototype.push.apply(mockNotificationsModels, mockCachedNotificationsCollection);
+                                getNotificationsDeferred.resolve(mockResponse);
                                 $rootScope.$digest();
                             });
 
                             it("should resolve", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(mockNotifications.data.notifications);
+                                expect(resolveHandler).toHaveBeenCalledWith(mockNotificationsModels);
                                 expect(rejectHandler).not.toHaveBeenCalled();
                             });
 
                             it("should add only the uncached notifications from the data to the notifications cache", function () {
-                                var expectedValues = _.uniqBy(mockCachedNotificationsCollection.concat(mockNotifications.data.notifications), "id");
+                                var expectedValues = _.uniqBy(mockCachedNotificationsCollection.concat(mockNotificationsModels), "id");
                                 expect(NotificationItemsManager.getNotifications()).toEqual(expectedValues);
                             });
                         });
 
                         describe("when there are no notifications in the fetched data that are already cached", function () {
                             beforeEach(function () {
-                                getNotificationsDeferred.resolve(mockNotifications);
+                                getNotificationsDeferred.resolve(mockResponse);
                                 $rootScope.$digest();
                             });
 
                             it("should resolve", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(mockNotifications.data.notifications);
+                                expect(resolveHandler).toHaveBeenCalledWith(mockNotificationsModels);
                                 expect(rejectHandler).not.toHaveBeenCalled();
                             });
                         });
