@@ -6,9 +6,23 @@
     };
 
     var urlConfig = function ($urlRouterProvider, appGlobals) {
+        // ensure active session for secure routes
+        $urlRouterProvider.rule(function($injector, $location) {
+            var AuthenticationManager = $injector.get( "AuthenticationManager" ),
+                Navigation            = $injector.get( "Navigation" ),
+                stateName             = $injector.get( "$state" ).current.name;
 
-        //set default route
-        $urlRouterProvider.otherwise(appGlobals.DEFAULT_ROUTE);
+            // when navigating to any page that is secured, validate that the user is logged in
+            if ( !Navigation.isUnsecuredState(stateName) ) {
+                // user is not logged in and is trying to access secured content so redirect to the login page
+                if ( !AuthenticationManager.userLoggedIn() ) {
+                    return appGlobals.LOGIN_STATE;
+                }
+            }
+        });
+
+        // set default route
+        $urlRouterProvider.otherwise( appGlobals.DEFAULT_ROUTE );
     };
 
     var ionicConfig = function ($ionicConfigProvider) {
