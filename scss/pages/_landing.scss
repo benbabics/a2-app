@@ -56,6 +56,11 @@
   }
 
   .account-overview {
+
+    [wex-cache] {
+      min-height: 15vh;
+    }
+
     .item {
       @extend .text-sm;
       @extend .color-gray;

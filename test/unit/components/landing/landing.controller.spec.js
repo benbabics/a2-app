@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    var $scope,
+    var DEFAULT_CACHE_TTL = 4320,
+        $scope,
         $ionicHistory,
         $ionicPlatform,
         $interval,
@@ -13,6 +14,10 @@
         mockScheduledPaymentCount,
         mockBrandLogo,
         mockGreeting,
+        fetchCurrentInvoiceSummary,
+        fetchScheduledPaymentsCount,
+        fetchPropertyScheduledPaymentsCountDeferred,
+        fetchPropertyCurrentInvoiceSummaryDeferred,
         UserAccountModel,
         InvoiceSummaryModel,
         UserManager,
@@ -20,47 +25,8 @@
         Navigation,
         Toast,
         FlowUtil,
-        mockGlobals = {
-            "LANDING": {
-                "CONFIG": {
-                    "ANALYTICS"          : {
-                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    },
-                    "title"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "availableCredit"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "billedAmount"       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "unbilledAmount"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "paymentDueDate"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "currentBalance"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "statementBalance"   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "makePayment"        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "transactionActivity": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "cards"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "scheduledPayments"  : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                },
-                "CHART" : {
-                    "options": {
-                        animation            : TestUtils.getRandomBoolean(),
-                        percentageInnerCutout: TestUtils.getRandomInteger(1, 50),
-                        showTooltips         : TestUtils.getRandomBoolean(),
-                        segmentStrokeWidth   : TestUtils.getRandomInteger(1, 10),
-                        scaleOverride        : TestUtils.getRandomBoolean(),
-                        responsive           : TestUtils.getRandomBoolean()
-                    },
-                    "colors" : {
-                        availableCreditPositive: TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        availableCreditNegative: TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        billedAmount           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        unbilledAmount         : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    }
-                },
-                "BACK_TO_EXIT": {
-                    "duration": TestUtils.getRandomInteger(1, 1000),
-                    "position": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "message" : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                }
-            }
-        };
+        WexCache,
+        globals;
 
     describe("A Landing Controller", function () {
 
@@ -74,14 +40,18 @@
             FlowUtil = jasmine.createSpyObj("FlowUtil", ["exitApp"]);
             Toast = jasmine.createSpyObj("Toast", ["show"]);
             $stateParams = {param: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
+            WexCache = jasmine.createSpyObj("WexCache", ["fetchPropertyValue"]);
+            fetchCurrentInvoiceSummary = jasmine.createSpy("fetchCurrentInvoiceSummary");
+            fetchScheduledPaymentsCount = jasmine.createSpy("fetchScheduledPaymentsCount");
 
             inject(function ($controller, _$interval_, $rootScope, $q,
-                             _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, PlatformUtil, globals) {
+                             _UserAccountModel_, _InvoiceSummaryModel_, _UserModel_, PlatformUtil, _globals_) {
 
                 UserAccountModel = _UserAccountModel_;
                 InvoiceSummaryModel = _InvoiceSummaryModel_;
                 UserModel = _UserModel_;
                 $interval = _$interval_;
+                globals = _globals_;
 
                 //setup mocks
                 mockCurrentInvoiceSummary = TestUtils.getRandomInvoiceSummary(InvoiceSummaryModel);
@@ -89,6 +59,8 @@
                 UserManager.getUser.and.returnValue(mockUser);
                 mockBrandLogo = TestUtils.getRandomStringThatIsAlphaNumeric(50);
                 mockGreeting = "Hello, " + mockUser.firstName;
+                fetchPropertyScheduledPaymentsCountDeferred = $q.defer();
+                fetchPropertyCurrentInvoiceSummaryDeferred = $q.defer();
 
                 //setup spies
                 PlatformUtil.waitForCordovaPlatform = jasmine.createSpy("waitForCordovaPlatform").and.callFake(function(callback) {
@@ -104,21 +76,72 @@
                     doBackButtonAction = callback;
                 });
 
+                WexCache.fetchPropertyValue.and.returnValues(
+                    fetchPropertyScheduledPaymentsCountDeferred.promise,
+                    fetchPropertyCurrentInvoiceSummaryDeferred.promise
+                );
+
                 ctrl = $controller("LandingController", {
-                    $scope                : $scope,
-                    $ionicHistory         : $ionicHistory,
-                    $ionicPlatform        : $ionicPlatform,
-                    $stateParams          : $stateParams,
-                    Navigation            : Navigation,
-                    UserManager           : UserManager,
-                    Toast                 : Toast,
-                    FlowUtil              : FlowUtil,
-                    currentInvoiceSummary : mockCurrentInvoiceSummary,
-                    scheduledPaymentsCount: mockScheduledPaymentCount,
-                    globals               : angular.extend({}, globals, mockGlobals),
-                    brandLogo             : mockBrandLogo
+                    $scope                     : $scope,
+                    $ionicHistory              : $ionicHistory,
+                    $ionicPlatform             : $ionicPlatform,
+                    $stateParams               : $stateParams,
+                    Navigation                 : Navigation,
+                    UserManager                : UserManager,
+                    Toast                      : Toast,
+                    FlowUtil                   : FlowUtil,
+                    WexCache                   : WexCache,
+                    fetchCurrentInvoiceSummary : fetchCurrentInvoiceSummary,
+                    fetchScheduledPaymentsCount: fetchScheduledPaymentsCount,
+                    brandLogo                  : mockBrandLogo
                 });
             });
+        });
+
+        it("should set the invoice summary", function () {
+            expect(ctrl.invoiceSummary).toEqual(new InvoiceSummaryModel());
+        });
+
+        it("should set the scheduled payments count", function () {
+            expect(ctrl.scheduledPaymentsCount).toEqual(0);
+        });
+
+        it("should fetch the scheduledPaymentsCount in the background", function () {
+            expect(WexCache.fetchPropertyValue).toHaveBeenCalledWith("scheduledPaymentsCount", fetchScheduledPaymentsCount, {ttl: DEFAULT_CACHE_TTL});
+        });
+
+        it("should fetch the invoiceSummary in the background", function () {
+            expect(WexCache.fetchPropertyValue).toHaveBeenCalledWith("invoiceSummary", fetchCurrentInvoiceSummary, {ttl: DEFAULT_CACHE_TTL, ValueType: InvoiceSummaryModel});
+        });
+
+        describe("when scheduledPaymentsCount has been fetched", function () {
+
+            beforeEach(function () {
+                mockScheduledPaymentCount = TestUtils.getRandomInteger(0, 100);
+
+                fetchPropertyScheduledPaymentsCountDeferred.resolve(mockScheduledPaymentCount);
+                $scope.$digest();
+            });
+
+            it("should update scheduledPaymentsCount", function () {
+                expect(ctrl.scheduledPaymentsCount).toEqual(mockScheduledPaymentCount);
+            });
+        });
+
+        describe("when invoiceSummary has been fetched", function () {
+
+            beforeEach(function () {
+                mockCurrentInvoiceSummary = TestUtils.getRandomInvoiceSummary(InvoiceSummaryModel);
+
+                fetchPropertyCurrentInvoiceSummaryDeferred.resolve(mockCurrentInvoiceSummary);
+                $scope.$digest();
+            });
+
+            it("should update invoiceSummary", function () {
+                expect(ctrl.invoiceSummary).toEqual(mockCurrentInvoiceSummary);
+            });
+
+            describe("should configure the chart such that", chartTests);
         });
 
         describe("has a back button action that", function () {
@@ -129,9 +152,9 @@
 
             it("should call Toast.show with the expected values", function () {
                 expect(Toast.show).toHaveBeenCalledWith(
-                    mockGlobals.LANDING.BACK_TO_EXIT.message,
-                    mockGlobals.LANDING.BACK_TO_EXIT.duration,
-                    mockGlobals.LANDING.BACK_TO_EXIT.position
+                    globals.LANDING.BACK_TO_EXIT.message,
+                    globals.LANDING.BACK_TO_EXIT.duration,
+                    globals.LANDING.BACK_TO_EXIT.position
                 );
             });
 
@@ -156,7 +179,7 @@
             describe("while the timer is NOT active", function () {
 
                 beforeEach(function () {
-                    $interval.flush(mockGlobals.LANDING.BACK_TO_EXIT.duration);
+                    $interval.flush(globals.LANDING.BACK_TO_EXIT.duration);
                     $scope.$digest();
                 });
 
@@ -168,9 +191,9 @@
 
                     it("should call Toast.show with the expected values", function () {
                         expect(Toast.show.calls.argsFor(1)).toEqual([
-                            mockGlobals.LANDING.BACK_TO_EXIT.message,
-                            mockGlobals.LANDING.BACK_TO_EXIT.duration,
-                            mockGlobals.LANDING.BACK_TO_EXIT.position
+                            globals.LANDING.BACK_TO_EXIT.message,
+                            globals.LANDING.BACK_TO_EXIT.duration,
+                            globals.LANDING.BACK_TO_EXIT.position
                         ]);
                     });
 
@@ -196,22 +219,8 @@
                 expect(ctrl.user).toEqual(mockUser);
             });
 
-            it("should set the invoice summary", function () {
-                expect(ctrl.invoiceSummary).toEqual(mockCurrentInvoiceSummary);
-            });
-
-            it("should set the scheduled payments count", function () {
-                expect(ctrl.scheduledPaymentsCount).toEqual(mockScheduledPaymentCount);
-            });
-
             it("should clear the navigation history", function () {
                 expect($ionicHistory.clearHistory).toHaveBeenCalledWith();
-            });
-
-            it("should set the branding", function () {
-                expect(ctrl.branding).toEqual({
-                    logo: mockBrandLogo
-                });
             });
 
             it("should set the greeting", function () {
@@ -221,91 +230,8 @@
             it("should set the params", function () {
                 expect(ctrl.params).toEqual($stateParams);
             });
-            
-            it("should set the chart options", function () {
 
-                describe("when no credit is available", function () {
-
-                    beforeEach(function () {
-                        ctrl.invoiceSummary.availableCredit = -TestUtils.getRandomNumber(0.1, 9999.99);
-                    });
-
-                    it("should show the available credit with a color of #b30308", function () {
-
-                        expect(ctrl.chart).toEqual({
-                            options: {
-                                animation            : false,
-                                percentageInnerCutout: 40,
-                                showTooltips         : false,
-                                segmentStrokeWidth   : 1,
-                                scaleOverride        : true,
-                                responsive           : false
-                            },
-                            labels : ["Available"],
-                            colors : ["#b30308"],
-                            data   : [1]
-                        });
-
-                    });
-
-                });
-
-                describe("when all credit is available", function () {
-
-                    beforeEach(function () {
-                        ctrl.invoiceSummary.creditLimit = TestUtils.getRandomNumber(10.0, 9999.0);
-                        ctrl.invoiceSummary.availableCredit = TestUtils.getRandomNumber(ctrl.invoiceSummary.creditLimit, 9999.99);
-                    });
-
-                    it("should show the available credit with a color of #39802b", function () {
-
-                        expect(ctrl.chart).toEqual({
-                            options: {
-                                animation            : false,
-                                percentageInnerCutout: 40,
-                                showTooltips         : false,
-                                segmentStrokeWidth   : 1,
-                                scaleOverride        : true,
-                                responsive           : false
-                            },
-                            labels : ["Available"],
-                            colors : ["#39802b"],
-                            data   : [mockCurrentInvoiceSummary.availableCredit]
-                        });
-
-                    });
-
-                });
-
-                describe("when some credit is available", function () {
-
-                    beforeEach(function () {
-                        ctrl.invoiceSummary.creditLimit = TestUtils.getRandomNumber(10.0, 9999.0);
-                        ctrl.invoiceSummary.availableCredit = TestUtils.getRandomNumber(10.0, ctrl.invoiceSummary.creditLimit);
-                    });
-
-                    it("should show the available credit, billed amount and unbilled amount", function () {
-
-                        expect(ctrl.chart).toEqual({
-                            options: {
-                                animation            : false,
-                                percentageInnerCutout: 40,
-                                showTooltips         : false,
-                                segmentStrokeWidth   : 1,
-                                scaleOverride        : true,
-                                responsive           : false
-                            },
-                            labels : ["Available", "Billed", "Unbilled"],
-                            colors : ["#39802b", "#334c5b", "#3799b3"],
-                            data   : [mockCurrentInvoiceSummary.availableCredit, mockCurrentInvoiceSummary.billedAmount, mockCurrentInvoiceSummary.unbilledAmount]
-                        });
-
-                    });
-
-                });
-
-            });
-
+            describe("should configure the chart such that", chartTests);
         });
 
         describe("has a goToCards function that", function () {
@@ -344,6 +270,40 @@
 
         });
 
-    });
+        function chartTests() {
 
+            it("should show the available credit with the availableCreditNegative color when no credit is available", function () {
+                if (ctrl.invoiceSummary.availableCredit <= 0) {
+                    expect(ctrl.chart).toEqual({
+                        options: globals.LANDING.CHART.options,
+                        labels: ["Available"],
+                        colors: [globals.LANDING.CHART.colors.availableCreditNegative],
+                        data: [1]
+                    });
+                }
+            });
+
+            it("should show the available credit with a color of #3eb049 when all credit is available", function () {
+                if (ctrl.invoiceSummary.creditLimit > 0.0 && ctrl.invoiceSummary.availableCredit >= ctrl.invoiceSummary.creditLimit) {
+                    expect(ctrl.chart).toEqual({
+                        options: globals.LANDING.CHART.options,
+                        labels: ["Available"],
+                        colors: ["#3eb049"],
+                        data: [mockCurrentInvoiceSummary.availableCredit]
+                    });
+                }
+            });
+
+            it("should show the available credit, billed amount and unbilled amount when some credit is available", function () {
+                if (ctrl.invoiceSummary.creditLimit > 0.0 && ctrl.invoiceSummary.availableCredit < ctrl.invoiceSummary.creditLimit) {
+                    expect(ctrl.chart).toEqual({
+                        options: globals.LANDING.CHART.options,
+                        labels: ["Unbilled", "Available", "Billed"],
+                        colors: ["#34b39d", "#3eb049", "#324e5d"],
+                        data: [mockCurrentInvoiceSummary.unbilledAmount, mockCurrentInvoiceSummary.availableCredit, mockCurrentInvoiceSummary.billedAmount]
+                    });
+                }
+            });
+        }
+    });
 }());
