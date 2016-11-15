@@ -6,6 +6,9 @@
         "app.shared",
 
         /* app components */
-        "app.components"
+        "app.components",
+
+        /* app templates */
+        "app.templates"
     ]);
 })();
