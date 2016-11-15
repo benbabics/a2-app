@@ -34,9 +34,17 @@ module.exports = function(context) {
                 .replace(/(> <)/g, '><');         // remove spaces between tags
         }))
         .pipe(tap(function() {
-            var script = '(function(){"use strict";angular.module("app.templates",[]).run(function($templateCache){var templates=' +
-                stringify(templates, { indent: '' }) +
-                ';var templateNames=Object.keys(templates);templateNames.forEach(function(templateName){$templateCache.put(templateName,templates[templateName]);});});})();\n';
+            var script = [
+                '(function() {',
+                    '"use strict";',
+                    'angular.module("app.templates", []).run(function($templateCache) {',
+                        'var templates = ', stringify(templates, { indent: '' }), ';',
+                        'var templateNames = Object.keys(templates);',
+                        'templateNames.forEach(function(templateName) {',
+                            '$templateCache.put(templateName, templates[templateName]);',
+                        '});',
+                    '});',
+                '})();'].join('\n');
 
             fs.writeFileSync(path.join(dir, "app", "templates.module.js"), script, "utf8");
         }));
