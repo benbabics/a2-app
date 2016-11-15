@@ -44,7 +44,7 @@ module.exports = function(context) {
                             '$templateCache.put(templateName, templates[templateName]);',
                         '});',
                     '});',
-                '})();'].join('\n');
+                '})();'].join('');
 
             fs.writeFileSync(path.join(dir, "app", "templates.module.js"), script, "utf8");
         }));
