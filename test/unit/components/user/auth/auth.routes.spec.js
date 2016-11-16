@@ -5,40 +5,17 @@
 
         var $rootScope,
             $state,
-            AnalyticsUtil,
             AuthenticationManager,
-            LoginManager,
             $q,
-            globals,
-            mockGlobals = {
-                LOGIN_STATE: "user.auth.login",
-                USER_LOGIN: {
-                    CONFIG: {
-                        ANALYTICS: {
-                            pageName: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                        }
-                    }
-                }
-            };
+            globals;
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.user");
-            module("app.components.user.auth");
-            module("app.components.alerts");
-            module("app.html");
-
             //mock dependencies:
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn"]);
-            LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
 
-            module(function($provide, sharedGlobals) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
+            module(function($provide) {
                 $provide.value("AuthenticationManager", AuthenticationManager);
-                $provide.value("LoginManager", LoginManager);
-                $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
             inject(function (_$rootScope_, _$state_, _$q_, _globals_) {
@@ -46,7 +23,10 @@
                 $state = _$state_;
                 $q = _$q_;
                 globals = _globals_;
+                globals.LOGIN_STATE = "user.auth.login"
             });
+
+            AuthenticationManager.userLoggedIn.and.returnValue(true);
 
         });
 
@@ -110,7 +90,7 @@
                 });
 
                 it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.USER_LOGIN.CONFIG.ANALYTICS.pageName);
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(globals.USER_LOGIN.CONFIG.ANALYTICS.pageName);
                 });
 
                 it("should transition successfully", function () {
@@ -118,7 +98,7 @@
                 });
 
                 it("should log the user out", function () {
-                    expect(LoginManager.logOut).toHaveBeenCalledWith();
+                    expect(this.LoginManager.logOut).toHaveBeenCalledWith();
                 });
 
             });
@@ -153,14 +133,10 @@
                 var toState;
 
                 beforeEach(function () {
-                    toState = "alerts.list";
+                    toState = "notifications.list";
                 });
 
                 describe("when the user is logged in", function () {
-
-                    beforeEach(function () {
-                        AuthenticationManager.userLoggedIn.and.returnValue(true);
-                    });
 
                     beforeEach(function () {
                         $state.go(stateName, {state: toState});
@@ -176,9 +152,6 @@
 
                     beforeEach(function () {
                         AuthenticationManager.userLoggedIn.and.returnValue(false);
-                    });
-
-                    beforeEach(function () {
                         $state.go(stateName, {state: toState});
                         $rootScope.$digest();
                     });
