@@ -7,17 +7,12 @@
             DriverModel,
             driver;
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.components.driver");
+        beforeEach(inject(function (___, _DriverModel_) {
+            _ = ___;
 
-            inject(function (___, _DriverModel_) {
-                _ = ___;
-
-                DriverModel = _DriverModel_;
-                driver = new DriverModel();
-            });
-        });
+            DriverModel = _DriverModel_;
+            driver = new DriverModel();
+        }));
 
         describe("has a set function that", function () {
 

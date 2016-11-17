@@ -7,12 +7,9 @@
             this.SERVER_ERROR_CODES = [404, 503];
         });
 
-        beforeEach(function () {
-
-            inject(function (_Network_) {
-                this.Network = _Network_;
-            });
-        });
+        beforeEach(inject(function (_Network_) {
+            this.Network = _Network_;
+        }));
 
         describe("has a isServerConnectionError function that", function () {
 

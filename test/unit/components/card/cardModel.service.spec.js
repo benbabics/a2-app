@@ -6,16 +6,11 @@
         var _,
             card;
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.components.card");
+        beforeEach(inject(function (___, CardModel) {
+            _ = ___;
 
-            inject(function (___, CardModel) {
-                _ = ___;
-
-                card = new CardModel();
-            });
-        });
+            card = new CardModel();
+        }));
 
         describe("has a set function that", function () {
 

@@ -17,11 +17,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.account");
-            module("app.components.bank");
-
             // mock dependencies
             BanksResource = jasmine.createSpyObj("BanksResource", ["getActiveBanks"]);
 

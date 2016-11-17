@@ -17,11 +17,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.card");
-            module("app.components.user");
-
             // mock dependencies
             CardsResource = jasmine.createSpyObj("CardsResource", [
                 "getCards",

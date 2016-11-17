@@ -12,8 +12,6 @@
           mockItems;
 
       beforeEach(function () {
-          module( "app.shared" );
-
           mockItems = [ {name: 'a'}, {name: 'b'}, {name: 'c'} ];
           delegate  = { makeRequest: function() {} };
 

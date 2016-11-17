@@ -12,8 +12,10 @@
 
     describe("A WEX Cache service", function () {
 
+        var self;
+
         beforeEach(function () {
-            var self = this;
+            self = this;
 
             //mock dependencies:
             self.UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
@@ -36,6 +38,10 @@
             //mocks:
             this.rejectHandler = jasmine.createSpy("rejectHandler");
             this.resolveHandler = jasmine.createSpy("resolveHandler");
+        });
+
+        afterEach(function () {
+            self = null;
         });
 
         describe("has a clearPropertyValue function that", function () {

@@ -29,11 +29,10 @@
                 property: TestUtils.getRandomStringThatIsAlphaNumeric(10)
             };
 
-            module("app.shared", function ($provide) {
+            module(function ($provide) {
                 $provide.value("ElementUtil", ElementUtil);
                 $provide.value("FlowUtil", FlowUtil);
             });
-            module("app.html");
 
             inject(function (_$rootScope_, _$compile_, _$interval_) {
                 $rootScope = _$rootScope_;

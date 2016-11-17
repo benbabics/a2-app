@@ -5,14 +5,9 @@
 
         var _;
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.components.user");
-
-            inject(function (___) {
-                _ = ___;
-            });
-        });
+        beforeEach(inject(function (___) {
+            _ = ___;
+        }));
 
         describe("has a set function that", function () {
 

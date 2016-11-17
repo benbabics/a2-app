@@ -15,9 +15,6 @@
           isGreeking = true;
 
         beforeEach(function () {
-            module( "app.shared" );
-            module( "app.html" );
-
             delegate = {
               makeRequest:  jasmine.createSpy( "makeRequest" ),
               onError:      jasmine.createSpy( "onError" ),

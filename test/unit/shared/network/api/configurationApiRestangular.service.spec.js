@@ -10,9 +10,6 @@
     describe("A Configuration Restangular Service", function () {
 
         beforeEach(function () {
-
-            module("app.shared");
-
             // mock dependencies
             AuthorizationHeaderRequestInterceptor = jasmine.createSpyObj("AuthorizationHeaderRequestInterceptor", ["request"]);
             DataExtractorResponseInterceptor = jasmine.createSpyObj("DataExtractorResponseInterceptor", ["response"]);

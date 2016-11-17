@@ -12,8 +12,6 @@
             poBoxUnacceptableValues = ["P Box", "P Box", "PBox", "Pb", "PB", "pB", "pb", "Po", "PO", "pO", "po"];
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.components.account");
 
             inject(function (___, _AddressUtil_, AddressModel) {
                 AddressUtil = _AddressUtil_;

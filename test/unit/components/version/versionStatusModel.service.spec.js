@@ -8,18 +8,13 @@
             moment,
             globals;
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.components.version");
+        beforeEach(inject(function (___, _globals_, _moment_, VersionStatusModel) {
+            _ = ___;
+            globals = _globals_;
+            moment = _moment_;
 
-            inject(function (___, _globals_, _moment_, VersionStatusModel) {
-                _ = ___;
-                globals = _globals_;
-                moment = _moment_;
-
-                versionStatus = new VersionStatusModel();
-            });
-        });
+            versionStatus = new VersionStatusModel();
+        }));
 
         describe("has a set function that", function () {
 

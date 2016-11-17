@@ -17,14 +17,10 @@
 
     describe("A DataStore", function () {
 
-        beforeEach(function () {
-            module("app.shared");
-
-            inject(function (_DataStore_, _Loki_) {
-                DataStore = _DataStore_;
-                Loki = _Loki_;
-            });
-        });
+        beforeEach(inject(function (_DataStore_, _Loki_) {
+            DataStore = _DataStore_;
+            Loki = _Loki_;
+        }));
 
         describe("has a addCollection function that", function () {
 

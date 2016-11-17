@@ -8,20 +8,14 @@
             BankModel,
             PaymentModel;
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.components.bank");
-            module("app.components.payment");
+        beforeEach(inject(function (___, _BankModel_, _PaymentModel_) {
+            _ = ___;
 
-            inject(function (___, _BankModel_, _PaymentModel_) {
-                _ = ___;
+            BankModel = _BankModel_;
+            PaymentModel = _PaymentModel_;
 
-                BankModel = _BankModel_;
-                PaymentModel = _PaymentModel_;
-
-                payment = new PaymentModel();
-            });
-        });
+            payment = new PaymentModel();
+        }));
 
         describe("has a set function that", function () {
 

@@ -65,23 +65,8 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components", function ($provide, sharedGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
-            });
-
             module(function ($provide, sharedGlobals, appGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
-            });
-
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
             });
 
             //mock dependencies:

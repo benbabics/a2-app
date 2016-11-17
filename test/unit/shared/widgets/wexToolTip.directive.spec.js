@@ -13,10 +13,6 @@
     describe("A WEX ToolTip Directive", function () {
 
         beforeEach(function () {
-
-            module("app.shared");
-            module("app.html");
-
             // mock dependencies
             $ionicModal = jasmine.createSpyObj("$ionicModal", ["fromTemplateUrl"]);
 

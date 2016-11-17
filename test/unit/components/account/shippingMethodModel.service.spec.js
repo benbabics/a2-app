@@ -6,8 +6,6 @@
         var _;
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.components.account");
 
             inject(function (___) {
                 _ = ___;

@@ -10,14 +10,12 @@
 
     describe("A Wex Analytics Track Event Directive", function () {
 
-        beforeEach(function () {
-            inject(function (___, _$rootScope_, _$compile_, _$q_) {
-                $rootScope = _$rootScope_;
-                $compile = _$compile_;
-                $q = _$q_;
-                _ = ___;
-            });
-        });
+        beforeEach(inject(function (___, _$rootScope_, _$compile_, _$q_) {
+            $rootScope = _$rootScope_;
+            $compile = _$compile_;
+            $q = _$q_;
+            _ = ___;
+        }));
 
         describe("when the given event is an array", function () {
 

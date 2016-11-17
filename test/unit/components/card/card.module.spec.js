@@ -9,10 +9,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.card");
-
             inject(function (_$rootScope_, _$ionicPlatform_, _CardManager_) {
                 $rootScope = _$rootScope_;
                 $ionicPlatform = _$ionicPlatform_;
