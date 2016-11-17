@@ -31,11 +31,20 @@ module.exports = function(context) {
     };
 
     var rootdir = context.opts.projectRoot;
-    var iosPlatformsDir = path.join(rootdir, "platforms/ios/www/lib/ionic/scss");
-    var androidPlatformsDir = path.join(rootdir, "platforms/android/assets/www/lib/ionic/scss");
 
-    deleteFolderRecursive(iosPlatformsDir);
-    deleteFolderRecursive(androidPlatformsDir);
+    var iosPlatformsDir = path.join(rootdir, "platforms/ios/www");
+    var androidPlatformsDir = path.join(rootdir, "platforms/android/assets/www");
+    var browserPlatformsDir = path.join(rootdir, "platforms/browser/www");
+
+    var scssDir = "/lib/ionic/scss";
+    var scriptsDir = "/app";
+
+    deleteFolderRecursive(path.join(iosPlatformsDir, scssDir));
+    deleteFolderRecursive(path.join(androidPlatformsDir, scssDir));
+
+    deleteFolderRecursive(path.join(iosPlatformsDir, scriptsDir));
+    deleteFolderRecursive(path.join(androidPlatformsDir, scriptsDir));
+    deleteFolderRecursive(path.join(browserPlatformsDir, scriptsDir));
 
     console.log(context.hook + " hook has finished running script " + context.scriptLocation);
 };
