@@ -33,6 +33,7 @@
         </wex-menu-item>
 
         <wex-menu-item id="option-notifications"
+                       wex-feature-flag="PUSH_NOTIFICATIONS"
                        ng-click="vm.goToNotifications()"
                        icon="fa-bell"
                        root-state="{{::vm.config.rootStates.notifications}}"
