@@ -3,108 +3,19 @@
 
     describe("A User Model Service", function () {
 
-        var _,
-            $q,
+        var $q,
             $rootScope,
             user,
             BRAND,
             ONLINE_APPLICATION;
 
-        beforeEach(inject(function (___, sharedGlobals, _$rootScope_, _$q_, UserModel) {
-            _ = ___;
+        beforeEach(inject(function (sharedGlobals, _$rootScope_, _$q_, UserModel) {
             BRAND = sharedGlobals.BRAND;
             ONLINE_APPLICATION = sharedGlobals.USER.ONLINE_APPLICATION;
             $q = _$q_;
             $rootScope = _$rootScope_;
             user = new UserModel();
         }));
-
-        describe("has a set function that", function () {
-
-            var userResource,
-                userModelKeys,
-                userResourceKeys;
-
-            beforeEach(inject(function (UserModel, UserAccountModel) {
-                userResource = angular.extend(TestUtils.getRandomUser(UserModel, UserAccountModel), {
-                    newField1: TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    newField2: TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    newField3: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                });
-
-                // set all values to "default" to more easily detect any changes
-                for (var property in user) {
-                    if (_.has(user, property)) {
-                        user[property] = "default";
-                    }
-                }
-
-                userModelKeys = _.keys(user);
-                userResourceKeys = _.keys(userResource);
-            }));
-
-            it("should set the UserModel object with the fields from the passed in userResource object that they have in common", function () {
-                var key,
-                    keysIntersection = _.intersection(userModelKeys, userResourceKeys);
-
-                user.set(userResource);
-
-                for (var i = 0; i < keysIntersection.length; i++) {
-                    key = keysIntersection[i];
-                    expect(user[key]).toEqual(userResource[key]);
-                }
-            });
-
-            it("should NOT change the UserModel object fields that the userResource object does not have", function () {
-                var key,
-                    keysDifference = _.difference(userModelKeys, userResourceKeys);
-
-                user.set(userResource);
-
-                for (var i = 0; i < keysDifference.length; i++) {
-                    key = keysDifference[i];
-                    expect(user[key]).toEqual("default");
-                }
-            });
-
-            it("should extend the UserModel object with the fields from the passed in userResource object that the UserModel does not have", function () {
-                var key,
-                    keysDifference = _.difference(userResourceKeys, userModelKeys);
-
-                user.set(userResource);
-
-                for (var i = 0; i < keysDifference.length; i++) {
-                    key = keysDifference[i];
-                    expect(_.has(user, key)).toBeTruthy();
-                    expect(user[key]).toEqual(userResource[key]);
-                }
-            });
-
-            it("should set the UserModel brand with 'GENERIC' when the passed in userResource object is empty", function () {
-                userResource.brand = "";
-
-                user.set(userResource);
-
-                expect(user.brand).toEqual(BRAND.GENERIC);
-            });
-
-            it("should set the UserModel brand with 'GENERIC' when the passed in userResource object is null", function () {
-                userResource.brand = null;
-
-                user.set(userResource);
-
-                expect(user.brand).toEqual(BRAND.GENERIC);
-            });
-
-            it("should set the UserModel brand with 'GENERIC' when the passed in userResource object is undefined", function () {
-                delete userResource.brand;
-
-                user.set(userResource);
-
-                expect(user.brand).toEqual(BRAND.GENERIC);
-            });
-
-        });
 
         describe("has a getDisplayAccountNumber function that", function () {
 
