@@ -5,7 +5,8 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function UrbanAirship(_, $q, Logger, PlatformUtil) {
+    function UrbanAirship(_, $q, globals, Logger, PlatformUtil) {
+        var FEATURE_FLAGS = globals.FEATURE_FLAGS;
 
         init();
 
@@ -15,11 +16,20 @@
         function ready() {
             return PlatformUtil.waitForCordovaPlatform()
                 .then(function () {
+                    var error;
+
                     if (!_.isNil(_.get(window, "UAirship"))) {
-                        return window.UAirship;
+                        if (FEATURE_FLAGS.PUSH_NOTIFICATIONS) {
+                            return window.UAirship;
+                        }
+                        else {
+                            error = "UrbanAirship is not currently enabled on this client.";
+                            Logger.info(error);
+                            return $q.reject(error);
+                        }
                     }
                     else {
-                        var error = "UrbanAirship is not available on this platform.";
+                        error = "UrbanAirship is not available on this platform.";
                         Logger.info(error);
                         return $q.reject(error);
                     }
