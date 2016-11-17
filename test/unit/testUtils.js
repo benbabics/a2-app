@@ -516,7 +516,8 @@ var TestUtils = (function () {
 
     function provideCommonAppMockDependencies($provide, setter, exclusions) {
         var mocks = {
-            LoginManager: jasmine.createSpyObj("LoginManager", ["logIn", "logOut"])
+            LoginManager: jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]),
+            NotificationsManager: jasmine.createSpyObj("NotificationsManager", ["onReady", "enableNotifications", "rejectBanner", "rejectPrompt", "registerUserForNotifications"])
         };
 
         provideCommonMockDependencies($provide, mocks, setter, exclusions);

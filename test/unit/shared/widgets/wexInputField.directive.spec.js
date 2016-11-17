@@ -20,33 +20,27 @@
                 required: TestUtils.getRandomStringThatIsAlphaNumeric(10)
             };
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.html");
+        beforeEach(inject(function (___, _$rootScope_, $compile) {
+            $rootScope = _$rootScope_;
+            _ = ___;
 
-            inject(function (___, _$rootScope_, $compile) {
-                $rootScope = _$rootScope_;
-                _ = ___;
+            $scope = $rootScope.$new();
 
-                $scope = $rootScope.$new();
+            //Compile the angular markup to get an instance of the directive
+            element = "<form name=\"form\">" +
+                "<wex-input-field label=\"{{label}}\" " +
+                "errors=\"{{errors}}\" " +
+                "tool-tip=\"{{toolTip}}\" tool-tip-options=\"{{toolTipOptions}}\">" +
+                mockInputField +
+                "</wex-input-field>" +
+                "</form>";
+            directive = $compile(element)($scope);
 
-                //Compile the angular markup to get an instance of the directive
-                element = "<form name=\"form\">" +
-                    "<wex-input-field label=\"{{label}}\" " +
-                    "errors=\"{{errors}}\" " +
-                    "tool-tip=\"{{toolTip}}\" tool-tip-options=\"{{toolTipOptions}}\">" +
-                    mockInputField +
-                    "</wex-input-field>" +
-                    "</form>";
-                directive = $compile(element)($scope);
-
-                $scope.label = mockLabelText;
-                $scope.errors = mockErrors;
-                $scope.toolTip = true;
-                $scope.toolTipOptions = {};
-            });
-
-        });
+            $scope.label = mockLabelText;
+            $scope.errors = mockErrors;
+            $scope.toolTip = true;
+            $scope.toolTipOptions = {};
+        }));
 
         describe("creates an input field element", function () {
 

@@ -7,8 +7,6 @@
             shippingCarrier;
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.components.account");
 
             inject(function (___, ShippingCarrierModel, ShippingMethodModel) {
                 _ = ___;

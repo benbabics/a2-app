@@ -9,9 +9,6 @@
     describe("An API Module", function () {
 
         beforeEach(function () {
-
-            module("app.shared");
-
             // mock dependencies
             HttpResponseReporterInterceptor = jasmine.createSpyObj("HttpResponseReporterInterceptor", ["response", "responseError"]);
             AuthenticationErrorInterceptor = jasmine.createSpyObj("AuthenticationErrorInterceptor", ["responseError"]);

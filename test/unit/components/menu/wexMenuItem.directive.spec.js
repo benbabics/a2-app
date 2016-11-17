@@ -9,11 +9,6 @@
     describe("A WEX Menu Item directive", function () {
 
         beforeEach(function() {
-            module("app.shared");
-            module("app.html");
-            module("app.components", function ($provide) {
-                TestUtils.provideCommonMockDependencies($provide);
-            });
 
             inject(function(_$rootScope_, _$compile_, _$state_) {
                 $rootScope = _$rootScope_;

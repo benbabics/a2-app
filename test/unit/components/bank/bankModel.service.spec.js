@@ -7,8 +7,6 @@
             bank;
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.components.bank");
 
             inject(function (___, BankModel) {
                 _ = ___;

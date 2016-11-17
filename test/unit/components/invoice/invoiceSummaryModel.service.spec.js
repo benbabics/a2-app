@@ -7,17 +7,12 @@
             account,
             InvoiceSummaryModel;
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.components.invoice");
+        beforeEach(inject(function (___, _InvoiceSummaryModel_) {
+            _ = ___;
+            InvoiceSummaryModel = _InvoiceSummaryModel_;
 
-            inject(function (___, _InvoiceSummaryModel_) {
-                _ = ___;
-                InvoiceSummaryModel = _InvoiceSummaryModel_;
-
-                account = new InvoiceSummaryModel();
-            });
-        });
+            account = new InvoiceSummaryModel();
+        }));
 
         describe("has a set function that", function () {
 

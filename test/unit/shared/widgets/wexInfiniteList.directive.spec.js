@@ -12,9 +12,6 @@
     describe("A WEX Infinite List Directive", function () {
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.html");
-
             inject(function (_$rootScope_, _$compile_, _$q_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;

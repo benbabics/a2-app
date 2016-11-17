@@ -9,9 +9,6 @@
             cardReissueDetails;
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.components.account");
-            module("app.components.card");
 
             inject(function (___, CardReissueModel, AccountModel, AddressModel, CardModel,
                              ShippingCarrierModel, _ShippingMethodModel_, _sharedGlobals_) {

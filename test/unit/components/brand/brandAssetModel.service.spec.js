@@ -10,8 +10,6 @@
             globals;
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.components.brand");
 
             inject(function (___, _globals_, _moment_, BrandAssetModel, _HateoasResource_) {
                 HateoasResource = _HateoasResource_;

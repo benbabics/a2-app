@@ -18,10 +18,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.transaction");
-
             // mock dependencies
             TransactionsResource = jasmine.createSpyObj("TransactionsResource", ["getPendingTransactions", "getPostedTransactions"]);
 

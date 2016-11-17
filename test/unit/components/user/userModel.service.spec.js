@@ -10,21 +10,14 @@
             BRAND,
             ONLINE_APPLICATION;
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.components.account");
-            module("app.components.user");
-            module("app.html");
-
-            inject(function (___, sharedGlobals, _$rootScope_, _$q_, UserModel) {
-                _ = ___;
-                BRAND = sharedGlobals.BRAND;
-                ONLINE_APPLICATION = sharedGlobals.USER.ONLINE_APPLICATION;
-                $q = _$q_;
-                $rootScope = _$rootScope_;
-                user = new UserModel();
-            });
-        });
+        beforeEach(inject(function (___, sharedGlobals, _$rootScope_, _$q_, UserModel) {
+            _ = ___;
+            BRAND = sharedGlobals.BRAND;
+            ONLINE_APPLICATION = sharedGlobals.USER.ONLINE_APPLICATION;
+            $q = _$q_;
+            $rootScope = _$rootScope_;
+            user = new UserModel();
+        }));
 
         describe("has a set function that", function () {
 

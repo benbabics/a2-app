@@ -31,7 +31,9 @@
             var eventArgs = attrs.wexAnalyticsTrackEvent ? scope.$eval(attrs.wexAnalyticsTrackEvent) : null;
 
             if (_.isArray(eventArgs) && _.size(eventArgs) >= 2) {
-                elem.on("click", _.partial(_.spread(AnalyticsUtil.trackEvent), eventArgs));
+                elem.on("click", function () {
+                    _.spread(AnalyticsUtil.trackEvent)(eventArgs);
+                });
             }
             else {
                 throw new Error("Malformed analytics tracking event arguments: " + eventArgs);

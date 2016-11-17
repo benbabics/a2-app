@@ -10,21 +10,16 @@
             resolveHandler,
             rejectHandler;
 
-        beforeEach(function () {
-
-            module("app.shared");
-
-            inject(function (___, _$rootScope_, _$q_, _PromiseUtil_) {
-                _ = ___;
-                $q = _$q_;
-                $rootScope = _$rootScope_;
-                PromiseUtil = _PromiseUtil_;
-            });
+        beforeEach(inject(function (___, _$rootScope_, _$q_, _PromiseUtil_) {
+            _ = ___;
+            $q = _$q_;
+            $rootScope = _$rootScope_;
+            PromiseUtil = _PromiseUtil_;
 
             //setup spies:
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
-        });
+        }));
 
         describe("has an allFinished function that", function () {
             var deferred,

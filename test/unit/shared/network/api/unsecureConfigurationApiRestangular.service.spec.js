@@ -9,9 +9,6 @@
     describe("An Unsecure Configuration Restangular Service", function () {
 
         beforeEach(function () {
-
-            module("app.shared");
-
             // mock dependencies
             DataExtractorResponseInterceptor = jasmine.createSpyObj("DataExtractorResponseInterceptor", ["response"]);
 

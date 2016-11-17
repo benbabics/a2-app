@@ -18,7 +18,7 @@
             $cordovaKeyboard = jasmine.createSpyObj("$cordovaKeyboard", ["close"]);
             $ionicModal = jasmine.createSpyObj("$ionicModal", ["fromTemplate", "fromTemplateUrl"]);
 
-            module("app.shared", function ($provide) {
+            module(function ($provide) {
                 $provide.value("$cordovaKeyboard", $cordovaKeyboard);
                 $provide.value("$ionicModal", $ionicModal);
             });

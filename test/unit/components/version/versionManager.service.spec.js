@@ -11,9 +11,7 @@
         resolveHandler,
         rejectHandler,
         versionNumber,
-        Logger,
         LoggerUtil,
-        PlatformUtil,
         VersionManager,
         VersionStatusModel,
         VersionsResource,
@@ -22,14 +20,6 @@
     describe("A Version Manager", function () {
 
         beforeEach(function () {
-
-            module("app.shared");
-            module("app.html");
-            module("app.components.version");
-            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
-                PlatformUtil = mocks.PlatformUtil;
-                Logger = mocks.Logger;
-            })]);
 
             // mock dependencies
             $cordovaAppVersion = jasmine.createSpyObj("$cordovaAppVersion", ["getVersionNumber"]);
@@ -54,7 +44,7 @@
             //setup spies
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
-            PlatformUtil.waitForCordovaPlatform.and.callFake(function(callback) {
+            this.PlatformUtil.waitForCordovaPlatform.and.callFake(function(callback) {
                 //just execute the callback directly
                 return $q.when((callback || function() {})());
             });
@@ -66,10 +56,10 @@
 
         describe("has a determineVersionStatus function that", function () {
 
-            describe("when PlatformUtil.platformSupportsAppVersion returns false", function () {
+            describe("when this.PlatformUtil.platformSupportsAppVersion returns false", function () {
 
                 beforeEach(function () {
-                    PlatformUtil.platformSupportsAppVersion.and.returnValue(false);
+                    this.PlatformUtil.platformSupportsAppVersion.and.returnValue(false);
 
                     VersionManager.determineVersionStatus()
                         .then(resolveHandler)
@@ -78,16 +68,16 @@
                     $rootScope.$digest();
                 });
 
-                it("should call PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith();
+                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith();
                 });
 
-                it("should call PlatformUtil.platformSupportsAppVersion", function () {
-                    expect(PlatformUtil.platformSupportsAppVersion).toHaveBeenCalledWith();
+                it("should call this.PlatformUtil.platformSupportsAppVersion", function () {
+                    expect(this.PlatformUtil.platformSupportsAppVersion).toHaveBeenCalledWith();
                 });
 
-                it("should call Logger.warn", function () {
-                    expect(Logger.warn).toHaveBeenCalledWith("Platform does not support application versioning");
+                it("should call this.Logger.warn", function () {
+                    expect(this.Logger.warn).toHaveBeenCalledWith("Platform does not support application versioning");
                 });
 
                 it("should resolve with NO_UPDATE", function () {
@@ -96,7 +86,7 @@
 
             });
 
-            describe("when PlatformUtil.platformSupportsAppVersion returns true", function () {
+            describe("when this.PlatformUtil.platformSupportsAppVersion returns true", function () {
 
                 var versionManagerFetchVersionStatusDeferred;
 
@@ -104,7 +94,7 @@
                     versionManagerFetchVersionStatusDeferred = $q.defer();
                     spyOn(VersionManager, "fetchVersionStatus").and.returnValue(versionManagerFetchVersionStatusDeferred.promise);
 
-                    PlatformUtil.platformSupportsAppVersion.and.returnValue(true);
+                    this.PlatformUtil.platformSupportsAppVersion.and.returnValue(true);
 
                     VersionManager.determineVersionStatus()
                         .then(resolveHandler)
@@ -125,7 +115,7 @@
                         platform = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                         versionNumber = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
-                        PlatformUtil.getPlatform.and.returnValue(platform);
+                        this.PlatformUtil.getPlatform.and.returnValue(platform);
                         cordovaGetVersionNumberDeferred.resolve(versionNumber);
 
                         $rootScope.$digest();
@@ -163,10 +153,10 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call Logger.warn", function () {
+                        it("should call this.Logger.warn", function () {
                             var expectedError = "Determining Version Status failed: " + LoggerUtil.getErrorMessage(error);
 
-                            expect(Logger.warn).toHaveBeenCalledWith(expectedError);
+                            expect(this.Logger.warn).toHaveBeenCalledWith(expectedError);
                         });
 
                         it("should resolve with NO_UPDATE", function () {
@@ -188,10 +178,10 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call Logger.warn", function () {
+                    it("should call this.Logger.warn", function () {
                         var expectedError = "Determining Version Status failed: " + LoggerUtil.getErrorMessage(error);
 
-                        expect(Logger.warn).toHaveBeenCalledWith(expectedError);
+                        expect(this.Logger.warn).toHaveBeenCalledWith(expectedError);
                     });
 
                     it("should resolve with NO_UPDATE", function () {

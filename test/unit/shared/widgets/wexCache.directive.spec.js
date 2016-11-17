@@ -3,8 +3,10 @@
 
     describe("A WEX Cache directive", function () {
 
+        var self;
+
         beforeEach(function () {
-            var self = this;
+            self = this;
 
             //test functions:
             self.createDirective = function(options) {
@@ -52,6 +54,10 @@
 
             //setup mocks:
             self.cachedValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+        });
+
+        afterEach(function () {
+            self = null;
         });
 
         describe("if there is a model", function () {

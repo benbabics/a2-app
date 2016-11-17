@@ -17,11 +17,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.account");
-            module("app.components.invoice");
-
             // mock dependencies
             InvoicesResource = jasmine.createSpyObj("InvoicesResource", ["getCurrentInvoiceSummary"]);
             mockInvoiceSummary = jasmine.createSpyObj("InvoiceSummaryModel", ["InvoiceSummaryModel", "set"]);
