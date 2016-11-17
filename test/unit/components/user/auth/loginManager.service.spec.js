@@ -6,14 +6,11 @@
         $q,
         $rootScope,
         LoginManager,
-        AnalyticsUtil,
         AuthenticationManager,
-        LoadingIndicator,
         LoggerUtil,
         UserManager,
         BrandManager,
         BrandAssetModel,
-        Logger,
         Popup,
         userDetails,
         fetchCurrentUserDetailsDeferred,
@@ -23,36 +20,32 @@
 
     describe("A Login Manager", function () {
 
+        beforeAll(function () {
+            this.commonAppMockExclusions = ["LoginManager"];
+        });
+
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.user");
-            module("app.components.brand");
-
             //mock dependencies
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["setUserId", "startTracker"]);
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn"]);
             BrandManager = jasmine.createSpyObj("BrandManager", [
                 "getGenericBrandAssetBySubtype",
                 "getGenericAnalyticsTrackingId",
                 "getUserBrandAssetBySubtype",
+                "loadBundledBrand",
                 "updateBrandCache"
             ]);
-            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
             $ionicSideMenuDelegate = jasmine.createSpyObj("$ionicSideMenuDelegate", ["toggleRight"]);
             Popup = jasmine.createSpyObj("Popup", ["closeAllPopups"]);
 
             module(function ($provide) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("BrandManager", BrandManager);
-                $provide.value("LoadingIndicator", LoadingIndicator);
                 $provide.value("Popup", Popup);
                 $provide.value("$ionicSideMenuDelegate", $ionicSideMenuDelegate);
             });
 
-            inject(function (___, _$q_, _$rootScope_, globals, _BrandAssetModel_, _LoggerUtil_, _Logger_, _LoginManager_,
+            inject(function (___, _$q_, _$rootScope_, globals, _BrandAssetModel_, _LoggerUtil_, _LoginManager_,
                              UserAccountModel, _UserManager_, UserModel) {
                 _ = ___;
                 $q = _$q_;
@@ -61,7 +54,6 @@
                 LoginManager = _LoginManager_;
                 UserManager = _UserManager_;
                 BrandAssetModel = _BrandAssetModel_;
-                Logger = _Logger_;
 
                 userDetails = TestUtils.getRandomUser(UserModel, UserAccountModel, globals.USER.ONLINE_APPLICATION);
             });
@@ -73,7 +65,6 @@
             updateBrandCacheDeferred = $q.defer();
             spyOn(UserManager, "fetchCurrentUserDetails").and.returnValue(fetchCurrentUserDetailsDeferred.promise);
             spyOn(UserManager, "getUser").and.returnValue(userDetails);
-            spyOn(Logger, "error");
 
             //setup mocks
             UserManager.fetchCurrentUserDetails.and.returnValue(fetchCurrentUserDetailsDeferred.promise);
@@ -100,8 +91,8 @@
                 expect($rootScope.$emit).toHaveBeenCalledWith("app:logout");
             });
 
-            it("should call AnalyticsUtil.startTracker with the generic tracker ID", function () {
-                expect(AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId);
+            it("should call this.AnalyticsUtil.startTracker with the generic tracker ID", function () {
+                expect(this.AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId);
             });
 
             it("should call Popup.closeAllPopups", function () {
@@ -130,8 +121,8 @@
                 $rootScope.$digest();
             });
 
-            it("should call LoadingIndicator.begin", function () {
-                expect(LoadingIndicator.begin).toHaveBeenCalledWith();
+            it("should call this.LoadingIndicator.begin", function () {
+                expect(this.LoadingIndicator.begin).toHaveBeenCalledWith();
             });
 
             it("should call UserManager.fetchCurrentUserDetails", function () {
@@ -161,20 +152,20 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call AnalyticsUtil.startTracker with the user's branded tracker ID", function () {
-                        expect(AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId.assetValue);
+                    it("should call this.AnalyticsUtil.startTracker with the user's branded tracker ID", function () {
+                        expect(this.AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId.assetValue);
                     });
 
-                    it("should call AnalyticsUtil.setUserId with the expected value", function () {
-                        expect(AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
+                    it("should call this.AnalyticsUtil.setUserId with the expected value", function () {
+                        expect(this.AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
                     });
 
                     it("should resolve the initialization promise", function () {
                         expect(resolveHandler).toHaveBeenCalled();
                     });
 
-                    it("should call LoadingIndicator.complete", function () {
-                        expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                    it("should call this.LoadingIndicator.complete", function () {
+                        expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
                     });
 
                     it("should emit an app:login event", function () {
@@ -196,23 +187,23 @@
                     });
 
                     it("should log the error", function () {
-                        expect(Logger.error).toHaveBeenCalledWith(LoggerUtil.getErrorMessage(error));
+                        expect(this.Logger.error).toHaveBeenCalledWith(LoggerUtil.getErrorMessage(error));
                     });
 
-                    it("should call AnalyticsUtil.startTracker with the user's branded tracker ID", function () {
-                        expect(AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId.assetValue);
+                    it("should call this.AnalyticsUtil.startTracker with the user's branded tracker ID", function () {
+                        expect(this.AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId.assetValue);
                     });
 
-                    it("should call AnalyticsUtil.setUserId with the expected value", function () {
-                        expect(AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
+                    it("should call this.AnalyticsUtil.setUserId with the expected value", function () {
+                        expect(this.AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
                     });
 
                     it("should resolve the initialization promise", function () {
                         expect(resolveHandler).toHaveBeenCalled();
                     });
 
-                    it("should call LoadingIndicator.complete", function () {
-                        expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                    it("should call this.LoadingIndicator.complete", function () {
+                        expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
                     });
                 });
             });
@@ -241,10 +232,10 @@
                     expect(rejectHandler).toHaveBeenCalledWith(new Error(expectedError));
                 });
 
-                it("should call LoadingIndicator.complete", function () {
+                it("should call this.LoadingIndicator.complete", function () {
                     TestUtils.digestError($rootScope);
 
-                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                    expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
         });

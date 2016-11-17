@@ -14,9 +14,6 @@
             confirmPromise;
 
         beforeEach(function () {
-
-            module("app.shared");
-
             //mock dependencies
             $ionicPopup = jasmine.createSpyObj("$ionicPopup", ["alert", "confirm"]);
 

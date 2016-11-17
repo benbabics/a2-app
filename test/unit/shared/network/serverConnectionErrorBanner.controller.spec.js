@@ -11,20 +11,15 @@
             this.includeAppDependencies = false;
         });
 
-        beforeEach(function () {
+        beforeEach(inject(function (_$rootScope_, $controller) {
+            $rootScope = _$rootScope_;
+            $scope = $rootScope.$new();
 
-            inject(function (_$rootScope_, $controller) {
-
-                $rootScope = _$rootScope_;
-
-                $scope = $rootScope.$new();
-
-                ctrl = $controller("ServerConnectionErrorBannerController", {
-                    $scope    : $scope,
-                    $rootScope: $rootScope
-                });
+            ctrl = $controller("ServerConnectionErrorBannerController", {
+                $scope: $scope,
+                $rootScope: $rootScope
             });
-        });
+        }));
 
         describe("has a network:serverConnectionSuccess event handler function that", function () {
             beforeEach(function () {

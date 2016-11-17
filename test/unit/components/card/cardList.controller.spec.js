@@ -4,8 +4,6 @@
     var $rootScope,
         $scope,
         $q,
-        AnalyticsUtil,
-        LoadingIndicator,
         ElementUtil,
         CardManager,
         UserManager,
@@ -16,51 +14,19 @@
         resolveHandler,
         rejectHandler,
         mockUser,
-        mockGlobals = {
-            CARD_LIST: {
-                "CONFIG"        : {
-                    "ANALYTICS"         : {
-                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "events": {
-                            "searchSubmitted": [
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            ]
-                        }
-                    },
-                    "title"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "reloadDistance": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                },
-                "SEARCH_OPTIONS": {
-                    "PAGE_SIZE": TestUtils.getRandomInteger(1, 100),
-                    "STATUSES": TestUtils.getRandomStringThatIsAlphaNumeric(50)
-                }
-            }
-        },
-        mockConfig = mockGlobals.CARD_LIST.CONFIG;
+        globals,
+        config,
+        self;
 
     describe("A Card List Controller", function () {
 
         beforeEach(function () {
+            self = this;
 
             //mock dependencies:
             CardManager = jasmine.createSpyObj("CardManager", ["fetchCards"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
-            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
             ElementUtil = jasmine.createSpyObj("ElementUtil", ["getFocusedView", "resetInfiniteList"]);
-
-            module("app.shared");
-            module("app.components", function ($provide) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
-            });
 
             // stub the routing and template loading
             module(function ($urlRouterProvider) {
@@ -72,23 +38,22 @@
                 });
             });
 
-            inject(function (_$rootScope_, _$q_, $controller,_UserModel_, _UserAccountModel_, _CardModel_) {
+            inject(function (_$rootScope_, _$q_, $controller, _globals_, _UserModel_, _UserAccountModel_, _CardModel_) {
                 $rootScope = _$rootScope_;
                 $q = _$q_;
                 UserModel = _UserModel_;
                 UserAccountModel = _UserAccountModel_;
                 CardModel = _CardModel_;
+                globals = _globals_;
+                config = globals.CARD_LIST.CONFIG;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("CardListController", {
                     $scope          : $scope,
-                    AnalyticsUtil   : AnalyticsUtil,
-                    globals         : mockGlobals,
                     CardManager     : CardManager,
                     ElementUtil     : ElementUtil,
-                    LoadingIndicator: LoadingIndicator,
                     UserManager     : UserManager
                 });
 
@@ -103,8 +68,27 @@
             UserManager.getUser.and.returnValue(mockUser);
         });
 
-        it("should call LoadingIndicator.begin", function () {
-            expect(LoadingIndicator.begin).toHaveBeenCalledWith();
+        afterEach(function () {
+            $rootScope =
+                $scope =
+                $q =
+                ElementUtil =
+                CardManager =
+                UserManager =
+                UserModel =
+                UserAccountModel =
+                CardModel =
+                ctrl =
+                resolveHandler =
+                rejectHandler =
+                mockUser =
+                globals =
+                config =
+                self = null;
+        });
+
+        it("should call this.LoadingIndicator.begin", function () {
+            expect(this.LoadingIndicator.begin).toHaveBeenCalledWith();
         });
 
         describe("has an applySearchFilter function that", function () {
@@ -165,8 +149,8 @@
                     //TODO figure out how to test this
                 });
 
-                it("should call AnalyticsUtil.trackEvent", function () {
-                    verifyEventTracked(mockConfig.ANALYTICS.events.searchSubmitted);
+                it("should call this.AnalyticsUtil.trackEvent", function () {
+                    verifyEventTracked(config.ANALYTICS.events.searchSubmitted);
                 });
             });
         });
@@ -202,9 +186,9 @@
                     activeSearchFilter,
                     activeSearchFilter,
                     activeSearchFilter,
-                    mockGlobals.CARD_LIST.SEARCH_OPTIONS.STATUSES,
+                    globals.CARD_LIST.SEARCH_OPTIONS.STATUSES,
                     0,
-                    mockGlobals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE
+                    globals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE
                 );
             });
 
@@ -228,8 +212,8 @@
                     expect(rejectHandler).not.toHaveBeenCalled();
                 });
 
-                it("should call LoadingIndicator.complete", function () {
-                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                it("should call this.LoadingIndicator.complete", function () {
+                    expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
 
@@ -237,7 +221,7 @@
                 var mockCards;
 
                 beforeEach(function () {
-                    var numCards = TestUtils.getRandomInteger(1, mockGlobals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE);
+                    var numCards = TestUtils.getRandomInteger(1, globals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE);
                     mockCards = [];
                     for (var i = 0; i < numCards; ++i) {
                         mockCards.push(TestUtils.getRandomCard(CardModel));
@@ -270,8 +254,8 @@
                     expect(rejectHandler).not.toHaveBeenCalled();
                 });
 
-                it("should call LoadingIndicator.complete", function () {
-                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                it("should call this.LoadingIndicator.complete", function () {
+                    expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
 
@@ -279,7 +263,7 @@
                 var mockCards;
 
                 beforeEach(function () {
-                    var numCards = mockGlobals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE;
+                    var numCards = globals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE;
                     mockCards = [];
                     for (var i = 0; i < numCards; ++i) {
                         mockCards.push(TestUtils.getRandomCard(CardModel));
@@ -316,8 +300,8 @@
                     expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
                 });
 
-                it("should call LoadingIndicator.complete", function () {
-                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                it("should call this.LoadingIndicator.complete", function () {
+                    expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
 
@@ -341,8 +325,8 @@
                     expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
                 });
 
-                it("should call LoadingIndicator.complete", function () {
-                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
+                it("should call this.LoadingIndicator.complete", function () {
+                    expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
                 });
             });
         });
@@ -371,7 +355,7 @@
     });
 
     function verifyEventTracked(event) {
-        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
+        expect(self.AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
     }
 
 }());

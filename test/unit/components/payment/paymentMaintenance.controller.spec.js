@@ -15,17 +15,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.core");
-            module("app.components.payment");
-            module("app.components.bank");
-            module("app.components.invoice");
-            module("app.components.brand");
-            module("app.components.util");
-            module("app.components.user");
-            module("app.components.navigation");
-            module("app.components.widgets");
-
             //mock dependencies:
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             PaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", ["isAddState"]);

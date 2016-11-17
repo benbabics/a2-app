@@ -10,14 +10,11 @@
 
     describe("A Wex Toast Timer Directive", function () {
 
-        beforeEach(function () {
-
-            inject(function (_$rootScope_, _$compile_, _$interval_) {
-                $rootScope = _$rootScope_;
-                $compile = _$compile_;
-                $interval = _$interval_;
-            });
-        });
+        beforeEach(inject(function (_$rootScope_, _$compile_, _$interval_) {
+            $rootScope = _$rootScope_;
+            $compile = _$compile_;
+            $interval = _$interval_;
+        }));
 
         afterEach(function () {
             if (wexToastTimer) {

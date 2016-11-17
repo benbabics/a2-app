@@ -5,15 +5,9 @@
 
     describe("A Shared Module", function () {
 
-        beforeEach(function () {
-
-            module("app.shared");
-
-            inject(function (_$rootScope_) {
-                $rootScope = _$rootScope_;
-            });
-
-        });
+        beforeEach(inject(function (_$rootScope_) {
+            $rootScope = _$rootScope_;
+        }));
 
         describe("has a run function that", function () {
 

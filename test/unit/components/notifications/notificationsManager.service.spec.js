@@ -1,16 +1,16 @@
 (function () {
     "use strict";
+
     describe("A Notification Manager", function () {
 
+        var self;
+
+        beforeAll(function () {
+            this.commonAppMockExclusions = ["NotificationsManager"];
+        });
+
         beforeEach(function () {
-
-            module("app.shared");
-            module("app.html");
-            module("app.components");
-
-            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _)]);
-
-            var self = this;
+            self = this;
 
             // mock dependencies
             this.UrbanAirship = jasmine.createSpyObj("UrbanAirship", ["ready"]);
@@ -35,9 +35,12 @@
             this.UrbanAirship.ready.and.returnValue(this.$q.resolve(this.airShip));
         });
 
+        afterEach(function () {
+            self = null;
+        });
+
         describe("has a registerUserForNotifications function that", function () {
             beforeEach(function () {
-                var self = this;
                 this.channelId = TestUtils.getRandomStringThatIsAlphaNumeric(50);
                 this.airShip.getChannelID.and.callFake(function (success, error) {
                     self.channelIdResolve = success;

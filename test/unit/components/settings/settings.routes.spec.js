@@ -7,15 +7,11 @@
             $rootScope,
             $state;
 
-        beforeEach(function () {
-
-            inject(function (_$injector_, _$rootScope_, _$state_) {
-                $injector = _$injector_;
-                $rootScope = _$rootScope_;
-                $state = _$state_;
-            });
-
-        });
+        beforeEach(inject(function (_$injector_, _$rootScope_, _$state_) {
+            $injector = _$injector_;
+            $rootScope = _$rootScope_;
+            $state = _$state_;
+        }));
 
         describe("has a settings state that", function () {
             var state,

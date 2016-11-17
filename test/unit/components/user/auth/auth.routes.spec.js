@@ -5,7 +5,6 @@
 
         var $rootScope,
             $state,
-            AnalyticsUtil,
             AuthenticationManager,
             LoginManager,
             $q,
@@ -23,19 +22,11 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.user");
-            module("app.components.user.auth");
-            module("app.components.alerts");
-            module("app.html");
-
             //mock dependencies:
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", ["trackView"]);
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn"]);
             LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
 
             module(function($provide, sharedGlobals) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
                 $provide.value("AuthenticationManager", AuthenticationManager);
                 $provide.value("LoginManager", LoginManager);
                 $provide.value("globals", angular.extend({}, sharedGlobals, mockGlobals));
@@ -109,8 +100,8 @@
                     $rootScope.$digest();
                 });
 
-                it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.USER_LOGIN.CONFIG.ANALYTICS.pageName);
+                it("should call this.AnalyticsUtil.trackView", function () {
+                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.USER_LOGIN.CONFIG.ANALYTICS.pageName);
                 });
 
                 it("should transition successfully", function () {

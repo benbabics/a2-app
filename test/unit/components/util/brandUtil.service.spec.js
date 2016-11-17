@@ -47,16 +47,10 @@
                 "writeFile"
             ]);
 
-            module("app.shared");
-            module("app.components", function ($provide) {
+            module(function ($provide) {
                 $provide.value("BrandManager", BrandManager);
                 $provide.value("FileUtil", FileUtil);
             });
-            module("app.html");
-
-            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _, function (mocks) {
-                AnalyticsUtil = mocks.AnalyticsUtil;
-            })]);
 
             inject(function (_$localStorage_, _$rootScope_, _$state_, _$q_, _$window_, _globals_, _moment_,
                              _BrandAssetModel_, _BrandUtil_, _LoggerUtil_) {

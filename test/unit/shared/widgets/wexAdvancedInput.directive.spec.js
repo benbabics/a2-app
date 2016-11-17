@@ -8,15 +8,10 @@
     describe("A Wex Advanced Input Directive", function () {
         var button, field, tContent;
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.html");
-
-            inject(function (_$rootScope_, _$compile_) {
-                $rootScope = _$rootScope_;
-                $compile   = _$compile_;
-            });
-        });
+        beforeEach(inject(function (_$rootScope_, _$compile_) {
+            $rootScope = _$rootScope_;
+            $compile   = _$compile_;
+        }));
 
         describe("has a clear value button that", function () {
             beforeEach(function () {

@@ -34,7 +34,11 @@
                 <ion-nav-buttons side="right">
                     <button menu-toggle="right"
                             class="button button-clear icon ion-navicon">
-                        <span ng-show="vm.getUnreadNotificationsCount() > 0" class="badge badge-assertive">{{vm.getUnreadNotificationsCount()}}</span><span ng-show="vm.getUnreadNotificationsCount() > 0" class="badge badge-assertive">{{vm.getUnreadNotificationsCount()}}</span>
+                        <span wex-feature-flag="PUSH_NOTIFICATIONS"
+                              ng-show="vm.getUnreadNotificationsCount() > 0"
+                              class="badge badge-assertive">
+                            {{vm.getUnreadNotificationsCount()}}
+                        </span>
                     </button>
                 </ion-nav-buttons>
             </ion-nav-bar>

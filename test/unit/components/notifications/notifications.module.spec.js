@@ -9,10 +9,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.notifications");
-
             inject(function (_$rootScope_, _$ionicPlatform_, _NotificationItemsManager_) {
                 $rootScope = _$rootScope_;
                 $ionicPlatform = _$ionicPlatform_;
