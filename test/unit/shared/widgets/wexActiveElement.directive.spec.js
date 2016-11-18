@@ -6,15 +6,10 @@
         mocks;
 
     describe("A Wex Active Element Directive", function () {
-        beforeEach(function () {
-            module("app.shared");
-            module("app.html");
-
-            inject(function (_$rootScope_, _$compile_) {
-                $rootScope = _$rootScope_;
-                $compile   = _$compile_;
-            });
-        });
+        beforeEach(inject(function (_$rootScope_, _$compile_) {
+            $rootScope = _$rootScope_;
+            $compile   = _$compile_;
+        }));
 
         describe("has an isActive property that", function () {
             var inputs;

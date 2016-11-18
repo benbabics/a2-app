@@ -7,19 +7,14 @@
             $filter,
             svgSrc;
 
-        beforeEach(function () {
+        beforeEach(inject(function (___, _$filter_) {
+            _ = ___;
+            $filter = _$filter_;
 
-            module("app.shared");
-
-            inject(function (___, _$filter_) {
-                _ = ___;
-                $filter = _$filter_;
-
-                filter = $filter("wexSvg");
-            });
+            filter = $filter("wexSvg");
 
             svgSrc = "<svg>" + TestUtils.getRandomStringThatIsAlphaNumeric(20) + "</svg>";
-        });
+        }));
 
         describe("when the SVG source has a DOCTYPE", function () {
             var result;

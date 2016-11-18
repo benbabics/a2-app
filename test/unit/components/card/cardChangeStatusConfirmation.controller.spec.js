@@ -32,9 +32,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.card");
-
             //mock dependencies
             Navigation = jasmine.createSpyObj("Navigation", ["goToCards"]);
 

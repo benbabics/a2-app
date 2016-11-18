@@ -5,15 +5,9 @@
 
     describe("A DataExtractor Response Interceptor", function () {
 
-        beforeEach(function () {
-
-            module("app.shared");
-
-            inject(function (_DataExtractorResponseInterceptor_) {
-                DataExtractorResponseInterceptor = _DataExtractorResponseInterceptor_;
-            });
-
-        });
+        beforeEach(inject(function (_DataExtractorResponseInterceptor_) {
+            DataExtractorResponseInterceptor = _DataExtractorResponseInterceptor_;
+        }));
 
         describe("has a response function that", function () {
 

@@ -29,9 +29,12 @@
         //////////////////////
 
         function activate() {
-            // Get the initial unread count after login.
-            $rootScope.$on("app:login", fetchUnreadNotificationsCount);
             clearCachedValues();
+
+            if (globals.FEATURE_FLAGS.PUSH_NOTIFICATIONS) {
+                // Get the initial unread count after login.
+                $rootScope.$on("app:login", fetchUnreadNotificationsCount);
+            }
         }
 
         function clearCachedValues() {

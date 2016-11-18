@@ -19,10 +19,9 @@
             mockBackButtonScope = jasmine.createSpyObj("WexBackButton", ["isHidden", "setHidden"]);
             mockHide = TestUtils.getRandomBoolean();
 
-            module("app.shared", function ($provide) {
+            module(function ($provide) {
                 $provide.value("ElementUtil", ElementUtil);
             });
-            module("app.html");
 
             inject(function (_$rootScope_, _$compile_, _$interval_) {
                 $rootScope = _$rootScope_;

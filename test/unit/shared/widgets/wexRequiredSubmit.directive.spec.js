@@ -11,35 +11,31 @@
             mockInput,
             mockSubmitText = "mock submit";
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.html");
+        beforeEach(inject(function (_$rootScope_, $compile) {
+            $rootScope = _$rootScope_;
 
-            inject(function (_$rootScope_, $compile) {
-                $rootScope = _$rootScope_;
+            $scope = $rootScope.$new();
 
-                $scope = $rootScope.$new();
+            $scope.mockSubmitText = mockSubmitText;
 
-                $scope.mockSubmitText = mockSubmitText;
+            //Compile the angular markup to get an instance of the directive
+            directiveForm = $compile([
+                "<form novalidate name='formModel'>",
+                "<input type='text' name='mockInput' ng-model='mockInputModel' required>",
+                "<wex-required-submit text='{{mockSubmitText}}'></wex-required-submit>",
+                "</form>"
+            ].join(""))($scope);
 
-                //Compile the angular markup to get an instance of the directive
-                directiveForm = $compile([
-                    "<form novalidate name='formModel'>",
-                    "<input type='text' name='mockInput' ng-model='mockInputModel' required>",
-                    "<wex-required-submit text='{{mockSubmitText}}'></wex-required-submit>",
-                    "</form>"
-                ].join(""))($scope);
+            $rootScope.$digest();
 
-                $rootScope.$digest();
+            formModel = $scope.formModel;
 
-                formModel = $scope.formModel;
-
-                submitButton = directiveForm.find("button");
-                mockInput = directiveForm.find("input");
-            });
-        });
+            submitButton = directiveForm.find("button");
+            mockInput = directiveForm.find("input");
+        }));
 
         describe("should add a submit button that", function() {
+
             it("should exist", function() {
                 expect(submitButton).toBeDefined();
                 expect(submitButton).not.toBeNull();

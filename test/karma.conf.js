@@ -50,7 +50,8 @@ module.exports = function(config) {
             "../test/unit/testUtils.js",
 
             // Helpers
-            "../test/unit/helpers/**/*.js",
+            "../test/unit/helpers/common_mocks.js",
+            "../test/unit/helpers/enable_feature_flags.js",
 
             // Source code
             "app/**/*.module.js",

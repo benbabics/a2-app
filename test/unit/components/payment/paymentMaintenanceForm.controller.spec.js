@@ -91,8 +91,7 @@
         },
         moment,
         UserManager,
-        ionicDatePicker,
-        AnalyticsUtil;
+        ionicDatePicker;
 
     describe("A Payment Maintenance Form Controller", function () {
 
@@ -104,33 +103,9 @@
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             MockPaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", ["getConfig", "go", "isAddState"]);
             ionicDatePicker = jasmine.createSpyObj("ionicDatePicker", ["openDatePicker"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
-
-            module("app.shared");
-            module("app.components", function ($provide, sharedGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
-                $provide.value("AnalyticsUtil", AnalyticsUtil)
-            });
 
             module(function ($provide, sharedGlobals, appGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
-            });
-
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
             });
 
             inject(function (___, $controller, $rootScope, $q, _moment_, _BankModel_, appGlobals, _PaymentMaintenanceUtil_) {

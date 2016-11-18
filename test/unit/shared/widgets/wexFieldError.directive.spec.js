@@ -7,24 +7,18 @@
             directive,
             mockErrorText = "Mock error text.";
 
-        beforeEach(function () {
+        beforeEach(inject(function ($rootScope, $compile) {
+            $scope = $rootScope.$new();
 
-            module("app.shared.widgets");
-            module("app.html");
+            //Compile the angular markup to get an instance of the directive
+            directive = $compile([
+                '<div wex-field-error>',
+                mockErrorText,
+                '</div>'
+            ].join(""))($scope);
 
-            inject(function ($rootScope, $compile) {
-                $scope = $rootScope.$new();
-
-                //Compile the angular markup to get an instance of the directive
-                directive = $compile([
-                    '<div wex-field-error>',
-                    mockErrorText,
-                    '</div>'
-                ].join(""))($scope);
-
-                $rootScope.$digest();
-            });
-        });
+            $rootScope.$digest();
+        }));
 
         describe("creates an error element that", function () {
             var errorMessageElem;

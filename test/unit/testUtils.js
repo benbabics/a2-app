@@ -46,7 +46,9 @@ var TestUtils = (function () {
             provideCommonAppMockDependencies   : provideCommonAppMockDependencies,
             provideCommonSharedMockDependencies: provideCommonSharedMockDependencies,
             rejectedPromise                    : rejectedPromise,
-            resolvedPromise                    : resolvedPromise
+            resolvedPromise                    : resolvedPromise,
+            setFeatureFlagEnabled              : setFeatureFlagEnabled,
+            setFeatureFlagsEnabled             : setFeatureFlagsEnabled
         };
 
     return TestUtils;
@@ -534,7 +536,8 @@ var TestUtils = (function () {
 
     function provideCommonAppMockDependencies($provide, setter, exclusions) {
         var mocks = {
-            LoginManager: jasmine.createSpyObj("LoginManager", ["logIn", "logOut"])
+            LoginManager: jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]),
+            NotificationsManager: jasmine.createSpyObj("NotificationsManager", ["onReady", "enableNotifications", "rejectBanner", "rejectPrompt", "registerUserForNotifications"])
         };
 
         provideCommonMockDependencies($provide, mocks, setter, exclusions);
@@ -542,6 +545,7 @@ var TestUtils = (function () {
 
     function provideCommonSharedMockDependencies($provide, setter, exclusions) {
         var mocks = {
+            $cordovaSplashscreen: jasmine.createSpyObj("$cordovaSplashscreen", ["show", "hide"]),
             AnalyticsUtil: jasmine.createSpyObj("AnalyticsUtil", [
                 "getActiveTrackerId",
                 "hasActiveTracker",
@@ -566,6 +570,16 @@ var TestUtils = (function () {
         mocks.PlatformUtil.waitForCordovaPlatform.and.returnValue(rejectedPromise("Cordova disabled by default."));
 
         provideCommonMockDependencies($provide, mocks, setter, exclusions);
+    }
+
+    function setFeatureFlagEnabled(globals, featureFlag, enabled) {
+        globals.FEATURE_FLAGS[featureFlag] = !!enabled;
+    }
+
+    function setFeatureFlagsEnabled(globals, enabled) {
+        for(var featureFlag in globals.FEATURE_FLAGS) {
+            setFeatureFlagEnabled(globals, featureFlag, enabled);
+        };
     }
 
 })();

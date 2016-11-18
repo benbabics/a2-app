@@ -4,14 +4,9 @@
     describe("A WEX Payment Amount filter", function () {
         var filter;
 
-        beforeEach(function () {
-
-            module("app.shared");
-
-            inject(function ($injector) {
-                filter = $injector.get("wexPaymentAmountFilter");
-            });
-        });
+        beforeEach(inject(function ($injector) {
+            filter = $injector.get("wexPaymentAmountFilter");
+        }));
 
         describe("when the amount is 0", function () {
             var amount = 0;

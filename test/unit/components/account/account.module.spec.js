@@ -9,9 +9,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.account");
-
             inject(function (_$rootScope_, _$ionicPlatform_, _AccountManager_) {
                 $rootScope = _$rootScope_;
                 $ionicPlatform = _$ionicPlatform_;

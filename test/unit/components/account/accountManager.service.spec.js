@@ -16,8 +16,6 @@
     describe("An Account Manager", function () {
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.components.account");
 
             //mock dependencies:
             AccountsResource = jasmine.createSpyObj("AccountsResource", ["getAccount"]);

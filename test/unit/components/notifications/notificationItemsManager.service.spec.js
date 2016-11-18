@@ -17,10 +17,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.notifications");
-
             // mock dependencies
             NotificationsResource = jasmine.createSpyObj("NotificationsResource", ["getNotifications", "deleteNotification", "getUnreadNotificationsCount", "setNotificationsRead"]);
 

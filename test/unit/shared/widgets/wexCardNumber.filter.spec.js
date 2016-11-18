@@ -5,14 +5,9 @@
 
         var wexCardNumberFilter;
 
-        beforeEach(function () {
-
-            module("app.shared");
-
-            inject(function ($injector) {
-                wexCardNumberFilter = $injector.get("wexCardNumberFilter");
-            });
-        });
+        beforeEach(inject(function ($injector) {
+            wexCardNumberFilter = $injector.get("wexCardNumberFilter");
+        }));
 
         it("should return a properly formatted Card Number", function () {
             expect(wexCardNumberFilter("1234567890123")).toBe("****90123");

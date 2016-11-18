@@ -78,16 +78,16 @@
           <section id="sectionEight">
             <p>
               <span ng-bind-html="vm.config.sectionEight.content"></span>
-              <a href="#" ng-click=vm.openUrl("https://www.google.com/policies/privacy/partners/")>{{ ::vm.config.sectionEight.hereText }}</a>.
+              <a href="#" ng-click="vm.openUrl('https://www.google.com/policies/privacy/partners/')">{{ ::vm.config.sectionEight.hereText }}</a>.
             </p>
           </section>
 
           <section id="sectionNine">
             <p>
               <span ng-bind-html="vm.config.sectionNine.content"></span>
-              <a href="#" ng-click=vm.openUrl("https://www.google.com")>{{ ::vm.config.sectionNine.websiteNetworkAdvertising }}</a>
+              <a href="#" ng-click="vm.openUrl('https://www.google.com')">{{ ::vm.config.sectionNine.websiteNetworkAdvertising }}</a>
               {{ ::vm.config.sectionNine.andThe }}
-              <a href="#" ng-click=vm.openUrl("https://www.google.com")>{{ ::vm.config.sectionNine.websiteDigitalAdvertising }}</a>
+              <a href="#" ng-click="vm.openUrl('https://www.google.com')">{{ ::vm.config.sectionNine.websiteDigitalAdvertising }}</a>
             </p>
           </section>
 

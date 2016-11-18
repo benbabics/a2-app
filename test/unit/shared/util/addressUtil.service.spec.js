@@ -10,15 +10,10 @@
                 "POST OFFICE BOX", "Post Office Box"],
             poBoxUnacceptableValues = ["P Box", "P Box", "PBox", "Pb", "PB", "pB", "pb", "Po", "PO", "pO", "po"];
 
-        beforeEach(function () {
-
-            module("app.shared");
-
-            inject(function (___, _AddressUtil_) {
-                _ = ___;
-                AddressUtil = _AddressUtil_;
-            });
-        });
+        beforeEach(inject(function (___, _AddressUtil_) {
+            _ = ___;
+            AddressUtil = _AddressUtil_;
+        }));
 
         describe("has an isPoBox function that", function () {
 

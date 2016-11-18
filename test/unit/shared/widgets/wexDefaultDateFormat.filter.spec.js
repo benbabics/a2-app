@@ -5,16 +5,11 @@
         var filter,
             $filter;
 
-        beforeEach(function () {
+        beforeEach(inject(function ($injector, _$filter_) {
+            $filter = _$filter_;
 
-            module("app.shared");
-
-            inject(function ($injector, _$filter_) {
-                $filter = _$filter_;
-
-                filter = $injector.get("wexDefaultDateFormatFilter");
-            });
-        });
+            filter = $injector.get("wexDefaultDateFormatFilter");
+        }));
 
         it("should format a date to the expected string", function () {
             var date = TestUtils.getRandomDate();

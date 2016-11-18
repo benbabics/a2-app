@@ -1,27 +1,20 @@
 (function () {
+    "use strict";
+
     describe("A Validate Email Directive", function () {
         var form, $scope, element;
 
-        beforeEach(function () {
+        beforeEach(inject(function ($rootScope, $compile) {
+            $scope = $rootScope.$new();
 
-            module("app.shared.widgets");
+            //null out the input value to start
+            $scope.model = {emailAddress: null};
 
-            // INJECT! This part is critical
-            // $rootScope - injected to create a new $scope instance.
-            // $compile - injected to allow us test snippets produced by the directive
-            inject(function ($rootScope, $compile) {
-                $scope = $rootScope.$new();
-
-                //null out the input value to start
-                $scope.model = {emailAddress: null};
-
-                //Compile the angular markup to get a form that uses the directive
-                element = angular.element("<form name='form'><input name='emailAddress' type='email' validate-email ng-model='model.emailAddress'></form>");
-                $compile(element)($scope);
-                form = $scope.form;
-            });
-
-        });
+            //Compile the angular markup to get a form that uses the directive
+            element = angular.element("<form name='form'><input name='emailAddress' type='email' validate-email ng-model='model.emailAddress'></form>");
+            $compile(element)($scope);
+            form = $scope.form;
+        }));
 
         describe("modifies an input field that", function () {
             it("should pass validation when the input is null", function () {

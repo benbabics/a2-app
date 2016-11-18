@@ -12,9 +12,6 @@
     describe("A Wex Back Button Directive", function () {
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.html");
-
             //mock dependencies:
             $state = jasmine.createSpyObj("$state", ["go"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack", "backView"]);

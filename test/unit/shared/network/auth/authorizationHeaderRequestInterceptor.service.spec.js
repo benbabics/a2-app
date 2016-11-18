@@ -11,17 +11,6 @@
     describe("A AuthorizationHeader Request Interceptor", function () {
 
         beforeEach(function () {
-
-            module("app.shared");
-
-            // stub the routing and template loading
-            module(function($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-            module(function($provide) {
-                $provide.value("$ionicTemplateCache", function (){ });
-            });
-
             // mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn", "getAuthorizationHeader"]);
 

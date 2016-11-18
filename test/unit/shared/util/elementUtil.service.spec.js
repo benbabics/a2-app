@@ -24,21 +24,28 @@
                 $rootScope = _$rootScope_;
                 ElementUtil = _ElementUtil_;
 
-                navBar = $compile("<ion-nav-bar class='bar-wex'></ion-nav-bar>")($rootScope);
-                rootNavView = $compile("<ion-nav-view class='nav-view-root'></ion-nav-view>")($rootScope);
+                if (!navBar) {
+                    navBar = $compile("<ion-nav-bar class='bar-wex'></ion-nav-bar>")($rootScope);
+                    angular.element(document.body).append(navBar);
+                }
 
-                angular.element(document.body).append(navBar);
-                angular.element(document.body).append(rootNavView);
+                if (!rootNavView) {
+                    rootNavView = $compile("<ion-nav-view class='nav-view-root'></ion-nav-view>")($rootScope);
+                    angular.element(document.body).append(rootNavView);
+                }
 
                 $rootScope.$digest();
             });
         });
 
-        afterEach(function () {
-            navBar.remove();
-            rootNavView.remove();
+        afterAll(function () {
+            if (navBar) {
+                navBar.remove();
+            }
 
-            $rootScope.$digest();
+            if (rootNavView) {
+                rootNavView.remove();
+            }
         });
 
         describe("has a fieldHasError function that", function () {
@@ -112,6 +119,13 @@
                     $rootScope.$digest();
                 });
 
+                afterEach(function () {
+                    navBar.remove();
+                    navBar = null;
+
+                    $rootScope.$digest();
+                });
+
                 it("should return false", function () {
                     expect(ElementUtil.pageHasNavBar()).toBeFalsy();
                 });
@@ -138,6 +152,10 @@
                     $rootScope.$digest();
                 });
 
+                afterEach(function () {
+                    navBar = null;
+                });
+
                 it("should return false", function () {
                     expect(ElementUtil.pageHasNavBar()).toBeFalsy();
                 });
@@ -159,6 +177,10 @@
                     rootNavView.remove();
 
                     $rootScope.$digest();
+                });
+
+                afterEach(function () {
+                    rootNavView = null;
                 });
 
                 it("should return null", function () {

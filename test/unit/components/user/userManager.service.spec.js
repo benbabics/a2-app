@@ -16,12 +16,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.account");
-            module("app.components.user");
-            module("app.components.brand");
-
             // mock dependencies
             UsersResource = jasmine.createSpyObj("UsersResource", ["getDetails"]);
 

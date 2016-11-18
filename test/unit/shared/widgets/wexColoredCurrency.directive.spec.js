@@ -7,26 +7,17 @@
             element,
             model;
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.html");
+        beforeEach(inject(function ($rootScope, $compile) {
+            $scope = $rootScope.$new();
 
-            // INJECT! This part is critical
-            // $rootScope - injected to create a new $scope instance.
-            // $compile - injected to allow us test snippets produced by the directive
-            inject(function($rootScope, $compile) {
-                $scope = $rootScope.$new();
+            // null out the amount value to start
+            $scope.model = {amount: null};
 
-                // null out the amount value to start
-                $scope.model = { amount: null };
-
-                // Compile the angular markup to get an element that uses the directive
-                element = angular.element("<span wex-colored-currency ng-model='model.amount'></span>");
-                $compile(element)($scope);
-                model = $scope.model;
-            });
-
-        });
+            // Compile the angular markup to get an element that uses the directive
+            element = angular.element("<span wex-colored-currency ng-model='model.amount'></span>");
+            $compile(element)($scope);
+            model = $scope.model;
+        }));
 
         describe("modifies an element that", function () {
 

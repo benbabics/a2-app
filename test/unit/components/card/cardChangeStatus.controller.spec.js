@@ -43,13 +43,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.account");
-            module("app.components.user");
-            module("app.components.card");
-            module("app.components.brand");
-            module("app.html");
-
             //mock dependencies:
             CardManager = jasmine.createSpyObj("CardManager", [
                 "updateStatus"
