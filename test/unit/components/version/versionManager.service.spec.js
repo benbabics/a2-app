@@ -56,7 +56,7 @@
 
         describe("has a determineVersionStatus function that", function () {
 
-            describe("when this.PlatformUtil.platformSupportsAppVersion returns false", function () {
+            describe("when PlatformUtil.platformSupportsAppVersion returns false", function () {
 
                 beforeEach(function () {
                     this.PlatformUtil.platformSupportsAppVersion.and.returnValue(false);
@@ -68,15 +68,15 @@
                     $rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
+                it("should call PlatformUtil.waitForCordovaPlatform", function () {
                     expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith();
                 });
 
-                it("should call this.PlatformUtil.platformSupportsAppVersion", function () {
+                it("should call PlatformUtil.platformSupportsAppVersion", function () {
                     expect(this.PlatformUtil.platformSupportsAppVersion).toHaveBeenCalledWith();
                 });
 
-                it("should call this.Logger.warn", function () {
+                it("should call Logger.warn", function () {
                     expect(this.Logger.warn).toHaveBeenCalledWith("Platform does not support application versioning");
                 });
 
@@ -86,7 +86,7 @@
 
             });
 
-            describe("when this.PlatformUtil.platformSupportsAppVersion returns true", function () {
+            describe("when PlatformUtil.platformSupportsAppVersion returns true", function () {
 
                 var versionManagerFetchVersionStatusDeferred;
 
@@ -153,7 +153,7 @@
                             $rootScope.$digest();
                         });
 
-                        it("should call this.Logger.warn", function () {
+                        it("should call Logger.warn", function () {
                             var expectedError = "Determining Version Status failed: " + LoggerUtil.getErrorMessage(error);
 
                             expect(this.Logger.warn).toHaveBeenCalledWith(expectedError);
@@ -178,7 +178,7 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call this.Logger.warn", function () {
+                    it("should call Logger.warn", function () {
                         var expectedError = "Determining Version Status failed: " + LoggerUtil.getErrorMessage(error);
 
                         expect(this.Logger.warn).toHaveBeenCalledWith(expectedError);

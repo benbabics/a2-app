@@ -41,6 +41,7 @@ var TestUtils = (function () {
             getRandomValueFromArray            : getRandomValueFromArray,
             getRandomValueFromMap              : getRandomValueFromMap,
             getRandomVersionStatus             : getRandomVersionStatus,
+            getRandomNotificationModel         : getRandomNotificationModel,
             provideCommonMockDependencies      : provideCommonMockDependencies,
             provideCommonAppMockDependencies   : provideCommonAppMockDependencies,
             provideCommonSharedMockDependencies: provideCommonSharedMockDependencies,
@@ -459,6 +460,10 @@ var TestUtils = (function () {
         return result;
     }
 
+    function getRandomJsonString(length) {
+        return JSON.stringify(getRandomStringThatIsAlphaNumeric(length));
+    }
+
     function getRandomUser(UserModel, UserAccountModel, ONLINE_APPLICATION) {
         var user = new UserModel();
 
@@ -505,6 +510,19 @@ var TestUtils = (function () {
         });
 
         return versionStatus;
+    }
+
+    function getRandomNotificationModel(NotificationModel) {
+        var notification = new NotificationModel();
+
+        notification.set({
+            id      : getRandomStringThatIsAlphaNumeric(10),
+            data    : getRandomJsonString(10),
+            status  : getRandomStringThatIsAlphaNumeric(5),
+            type    : getRandomStringThatIsAlphaNumeric(5)
+        });
+
+        return notification;
     }
 
     function provideCommonMockDependencies($provide, mocks, setter, exclusions) {

@@ -32,9 +32,7 @@
                 mockVersionStatus = TestUtils.getRandomVersionStatus(VersionStatusModel);
             });
 
-            //setup spies:
-            spyOn(PlatformUtil, "waitForCordovaPlatform").and.callFake(function(callback) {
-                //just execute the callback directly
+            this.PlatformUtil.waitForCordovaPlatform.and.callFake(function(callback) {
                 return $q.when((callback || function() {})());
             });
 
