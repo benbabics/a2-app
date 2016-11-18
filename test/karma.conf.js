@@ -51,7 +51,6 @@ module.exports = function(config) {
 
             // Helpers
             "../test/unit/helpers/common_mocks.js",
-            "../test/unit/helpers/enable_feature_flags.js",
 
             // Source code
             "app/**/*.module.js",
