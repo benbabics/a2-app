@@ -15,7 +15,7 @@
 
         NotificationModel.prototype.set = function (notificationResource) {
             this.id = notificationResource.id;
-            this.data = JSON.parse(notificationResource.data || "{}");
+            this.data = JSON.parse(notificationResource.data);
             this.status = notificationResource.status;
             this.type = notificationResource.type;
         };
