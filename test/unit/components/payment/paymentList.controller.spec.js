@@ -33,9 +33,7 @@
         PaymentManager,
         LoadingIndicator,
         AnalyticsUtil,
-        fetchPaymentsDeferred,
-        resolveHandler,
-        rejectHandler;
+        fetchPaymentsDeferred;
 
     describe("A Payment List Controller", function () {
 
@@ -70,7 +68,6 @@
             });
 
             inject(function (___, globals, $controller, _$rootScope_, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
-
                 _ = ___;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
@@ -90,142 +87,84 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("PaymentListController", {
-                    $scope          : $scope,
-                    globals         : mockGlobals,
+                    $scope:           $scope,
+                    globals:          mockGlobals,
                     LoadingIndicator: LoadingIndicator,
-                    PaymentManager  : PaymentManager,
-                    UserManager     : UserManager
+                    PaymentManager:   PaymentManager,
+                    UserManager:      UserManager
                 });
-
             });
-
-            //setup spies
-            resolveHandler = jasmine.createSpy("resolveHandler");
-            rejectHandler = jasmine.createSpy("rejectHandler");
         });
 
         describe("has an activate function that", function () {
-
-            it("should call LoadingIndicator.begin", function () {
-                expect(LoadingIndicator.begin).toHaveBeenCalledWith();
+            it("should have infiniteListController methods on $scope", function () {
+                expect( $scope.loadNextPage ).toBeDefined();
+                expect( $scope.resetSearchResults ).toBeDefined();
             });
 
-            it("should call PaymentManager.fetchPayments", function () {
-                expect(PaymentManager.fetchPayments).toHaveBeenCalledWith(mockUser.billingCompany.accountId,
-                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
-                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE);
+            it("should have infiniteScrollService defined on $scope", function () {
+                expect( $scope.infiniteScrollService ).toBeDefined();
             });
 
-            describe("when the payments are successfully fetched", function () {
-
-                beforeEach(function () {
-                    fetchPaymentsDeferred.resolve(mockPayments);
-                    $rootScope.$digest();
-                });
-
-                it("should set the completed payments", function () {
-                    expect(ctrl.completedPayments).toEqual(_.orderBy(mockCompletedPayments, ["scheduledDate"], ["desc"]));
-                });
-
-                it("should set the scheduled payments", function () {
-                    expect(ctrl.scheduledPayments).toEqual(_.orderBy(mockScheduledPayments, ["scheduledDate"], ["asc"]));
-                });
-
-                it("should call LoadingIndicator.complete", function () {
-                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
-                });
-            });
-
-            describe("when the payments are NOT successfully fetched", function () {
-
-                beforeEach(function () {
-                    fetchPaymentsDeferred.reject();
-                    $rootScope.$digest();
-                });
-
-                it("should NOT set the completed payments", function () {
-                    expect(ctrl.completedPayments).toEqual({});
-                });
-
-                it("should NOT set the scheduled payments", function () {
-                    expect(ctrl.scheduledPayments).toEqual({});
-                });
-
-                it("should call LoadingIndicator.complete", function () {
-                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
-                });
+            it("should have vm.payments equal model", function () {
+                expect( ctrl.payments ).toEqual( $scope.infiniteScrollService.model );
             });
         });
 
-        describe("has a fetchPayments function that", function () {
-
+        describe("has a handleMakeRequest function that", function () {
             beforeEach(function () {
-                spyOn($scope, "$broadcast").and.callThrough();
-
-                ctrl.fetchPayments()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-            });
-
-            it("should broadcast 'scroll.refreshComplete'", function () {
-                expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
+                $scope.loadNextPage();
             });
 
             it("should call LoadingIndicator.begin", function () {
-                expect(LoadingIndicator.begin).toHaveBeenCalledWith();
+                expect( LoadingIndicator.begin ).toHaveBeenCalled();
             });
 
             it("should call PaymentManager.fetchPayments", function () {
-                expect(PaymentManager.fetchPayments).toHaveBeenCalledWith(mockUser.billingCompany.accountId,
-                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
-                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE);
+                expect( PaymentManager.fetchPayments ).toHaveBeenCalledWith(
+                    mockUser.billingCompany.accountId,
+                    $scope.infiniteScrollService.settings.currentPage,
+                    $scope.infiniteScrollService.settings.pageSize
+                );
             });
 
             describe("when the payments are successfully fetched", function () {
-
                 beforeEach(function () {
-                    fetchPaymentsDeferred.resolve(mockPayments);
+                    fetchPaymentsDeferred.resolve( mockPayments );
                     $rootScope.$digest();
                 });
 
                 it("should set the completed payments", function () {
-                    expect(ctrl.completedPayments).toEqual(_.orderBy(mockCompletedPayments, ["scheduledDate"], ["desc"]));
+                    var payments = _.orderBy( mockCompletedPayments, ["scheduledDate"], ["desc"] );
+                    expect( ctrl.payments.completed ).toEqual( payments );
                 });
 
                 it("should set the scheduled payments", function () {
-                    expect(ctrl.scheduledPayments).toEqual(_.orderBy(mockScheduledPayments, ["scheduledDate"], ["asc"]));
+                    var payments = _.orderBy( mockScheduledPayments, ["scheduledDate"], ["asc"] );
+                    expect( ctrl.payments.scheduled ).toEqual( payments );
                 });
 
                 it("should call LoadingIndicator.complete", function () {
-                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
-                });
-
-                it("should resolve", function () {
-                    expect(resolveHandler).toHaveBeenCalled();
+                    expect( LoadingIndicator.complete ).toHaveBeenCalled();
                 });
             });
 
             describe("when the payments are NOT successfully fetched", function () {
-
                 beforeEach(function () {
                     fetchPaymentsDeferred.reject();
                     $rootScope.$digest();
                 });
 
                 it("should NOT set the completed payments", function () {
-                    expect(ctrl.completedPayments).toEqual({});
+                    expect( ctrl.payments.completed ).toEqual([]);
                 });
 
                 it("should NOT set the scheduled payments", function () {
-                    expect(ctrl.scheduledPayments).toEqual({});
+                    expect( ctrl.payments.scheduled ).toEqual([]);
                 });
 
                 it("should call LoadingIndicator.complete", function () {
-                    expect(LoadingIndicator.complete).toHaveBeenCalledWith();
-                });
-
-                it("should reject", function () {
-                    expect(rejectHandler).toHaveBeenCalled();
+                    expect( LoadingIndicator.complete ).toHaveBeenCalled();
                 });
             });
         });
