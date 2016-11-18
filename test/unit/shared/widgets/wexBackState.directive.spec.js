@@ -50,6 +50,10 @@
             });
         });
 
+        afterEach(function() {
+            wexBackState.element.remove();
+        });
+
         it("should set prevState to null", function () {
             expect(wexBackState.vm.prevState).toEqual(null);
         });
@@ -84,6 +88,10 @@
                 wexBackState = createWexBackState({backState: mockState});
             });
 
+            afterEach(function() {
+                wexBackState.element.remove();
+            });
+
             it("should set wexBackState to the provided value", function () {
                 expect(wexBackState.vm.wexBackState).toEqual(mockState);
             });
@@ -93,6 +101,10 @@
 
             beforeEach(function () {
                 wexBackState = createWexBackState();
+            });
+
+            afterEach(function() {
+                wexBackState.element.remove();
             });
 
             it("wexBackState should be falsy", function () {
@@ -110,6 +122,10 @@
                 wexBackState = createWexBackState({backParams: backParams});
             });
 
+            afterEach(function() {
+                wexBackState.element.remove();
+            });
+
             it("should set backParams to the provided value", function () {
                 expect(wexBackState.vm.wexBackParams).toEqual(backParams);
             });
@@ -119,6 +135,10 @@
 
             beforeEach(function () {
                 wexBackState = createWexBackState();
+            });
+
+            afterEach(function() {
+                wexBackState.element.remove();
             });
 
             it("should set backParams to null", function () {
@@ -136,6 +156,10 @@
                 wexBackState = createWexBackState({backOptions: backOptions});
             });
 
+            afterEach(function() {
+                wexBackState.element.remove();
+            });
+
             it("should set backOptions to the provided value", function () {
                 expect(wexBackState.vm.wexBackOptions).toEqual(backOptions);
             });
@@ -145,6 +169,10 @@
 
             beforeEach(function () {
                 wexBackState = createWexBackState();
+            });
+
+            afterEach(function() {
+                wexBackState.element.remove();
             });
 
             it("should set backOptions to null", function () {
@@ -242,6 +270,10 @@
                     spyOn(wexBackState.vm, "applyBackState");
                 });
 
+                afterEach(function() {
+                    wexBackState.element.remove();
+                });
+
                 xdescribe("when the active state is NOT the current state", function () {
 
                     beforeEach(function () {
@@ -291,6 +323,10 @@
                     spyOn(wexBackState.vm, "applyBackState");
 
                     wexBackState.vm.onEnter();
+                });
+
+                afterEach(function() {
+                    wexBackState.element.remove();
                 });
 
                 xdescribe("when the active state is NOT the current state", function () {
@@ -345,6 +381,10 @@
                     spyOn(wexBackState.vm, "removeBackState");
                 });
 
+                afterEach(function() {
+                    wexBackState.element.remove();
+                });
+
                 xdescribe("when the active state is the current state", function () {
 
                     beforeEach(function () {
@@ -383,6 +423,10 @@
                     spyOn(wexBackState.vm, "applyBackState");
 
                     wexBackState.vm.onLeave();
+                });
+
+                afterEach(function() {
+                    wexBackState.element.remove();
                 });
 
                 xdescribe("when the active state is the current state", function () {

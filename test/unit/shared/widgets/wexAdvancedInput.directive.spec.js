@@ -25,6 +25,10 @@
                 button = wexAdvancedInput.element.find( ".ion-close-circled" );
             });
 
+            afterEach(function() {
+                wexAdvancedInput.element.remove();
+            });
+
             describe("when a field is NOT clicked", function () {
 
                 it("should be invisible", function () {
@@ -84,6 +88,10 @@
                 maskWrapper  = wexAdvancedInput.element.find( ".mask-wrapper" );
 
                 originalValue = wexAdvancedInput.scope.$parent.myModel.text;
+            });
+
+            afterEach(function() {
+                wexAdvancedInput.element.remove();
             });
 
             describe("when a field is NOT clicked", function () {

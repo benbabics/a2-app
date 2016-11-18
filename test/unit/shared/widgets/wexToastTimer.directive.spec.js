@@ -38,6 +38,10 @@
                     });
                 });
 
+                afterEach(function() {
+                    wexToastTimer.remove();
+                });
+
                 describe("will behave such that", commonTimeoutTests);
 
                 describe("when the given timeout elapses", function () {
@@ -70,6 +74,10 @@
                     timeout = DEFAULT_TIMEOUT;
 
                     wexToastTimer = createWexToastTimer({onHide: onHide});
+                });
+
+                afterEach(function() {
+                    wexToastTimer.remove();
                 });
 
                 describe("will behave such that", commonTimeoutTests);
@@ -107,6 +115,10 @@
                     wexToastTimer = createWexToastTimer({timeout: timeout = TestUtils.getRandomInteger(1, 2000)});
                 });
 
+                afterEach(function() {
+                    wexToastTimer.remove();
+                });
+
                 describe("will behave such that", commonTimeoutTests);
             });
 
@@ -116,6 +128,10 @@
                     timeout = DEFAULT_TIMEOUT;
 
                     wexToastTimer = createWexToastTimer();
+                });
+
+                afterEach(function() {
+                    wexToastTimer.remove();
                 });
 
                 describe("will behave such that", commonTimeoutTests);

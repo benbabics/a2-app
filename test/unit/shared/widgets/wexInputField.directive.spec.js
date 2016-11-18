@@ -42,6 +42,10 @@
             $scope.toolTipOptions = {};
         }));
 
+        afterEach(function() {
+            directive.remove();
+        });
+
         describe("creates an input field element", function () {
 
             var inputElement,

@@ -27,6 +27,10 @@
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 });
 
+                afterEach(function() {
+                    wexAnalyticsTrackEvent.element.remove();
+                });
+
                 it("should NOT call this.AnalyticsUtil.trackEvent", function () {
                     expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
@@ -50,6 +54,10 @@
                     event = createEvent(3);
 
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
+                });
+
+                afterEach(function() {
+                    wexAnalyticsTrackEvent.element.remove();
                 });
 
                 it("should NOT call this.AnalyticsUtil.trackEvent", function () {
@@ -77,6 +85,10 @@
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 });
 
+                afterEach(function() {
+                    wexAnalyticsTrackEvent.element.remove();
+                });
+
                 it("should NOT call this.AnalyticsUtil.trackEvent", function () {
                     expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
@@ -102,6 +114,10 @@
                     wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 });
 
+                afterEach(function() {
+                    wexAnalyticsTrackEvent.element.remove();
+                });
+
                 it("should NOT call this.AnalyticsUtil.trackEvent", function () {
                     expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
                 });
@@ -125,9 +141,15 @@
                     event = createEvent(TestUtils.getRandomInteger(0, 2));
                 });
 
+                afterEach(function() {
+                    if (wexAnalyticsTrackEvent && wexAnalyticsTrackEvent.element) {
+                        wexAnalyticsTrackEvent.element.remove();
+                    }
+                });
+
                 it("should throw the expected error and not track the event", function () {
                     expect(function () {
-                        createWexAnalyticsTrackEvent(event);
+                        wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                     }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
                     expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
@@ -141,9 +163,15 @@
                 event = TestUtils.getRandomStringThatIsAlphaNumeric(10);
             });
 
+            afterEach(function() {
+                if (wexAnalyticsTrackEvent && wexAnalyticsTrackEvent.element) {
+                    wexAnalyticsTrackEvent.element.remove();
+                }
+            });
+
             it("should throw the expected error and not track the event", function () {
                 expect(function () {
-                    createWexAnalyticsTrackEvent(event);
+                    wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
                 expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
@@ -156,9 +184,15 @@
                 event = null;
             });
 
+            afterEach(function() {
+                if (wexAnalyticsTrackEvent && wexAnalyticsTrackEvent.element) {
+                    wexAnalyticsTrackEvent.element.remove();
+                }
+            });
+
             it("should throw the expected error and not track the event", function () {
                 expect(function () {
-                    createWexAnalyticsTrackEvent(event);
+                    wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
                 expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();
@@ -171,9 +205,15 @@
                 event = undefined;
             });
 
+            afterEach(function() {
+                if (wexAnalyticsTrackEvent && wexAnalyticsTrackEvent.element) {
+                    wexAnalyticsTrackEvent.element.remove();
+                }
+            });
+
             it("should throw the expected error and not track the event", function () {
                 expect(function () {
-                    createWexAnalyticsTrackEvent(event);
+                    wexAnalyticsTrackEvent = createWexAnalyticsTrackEvent(event);
                 }).toThrowError("Malformed analytics tracking event arguments: " + event);
 
                 expect(this.AnalyticsUtil.trackEvent).not.toHaveBeenCalled();

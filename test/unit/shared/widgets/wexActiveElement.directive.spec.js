@@ -20,6 +20,10 @@
                 spyOn( document.body, "addEventListener" ).and.callThrough();
             });
 
+            afterEach(function() {
+                mocks.container.element.remove();
+            });
+
             it("should have defalut value of false", function () {
                 expect( mocks.form.scope.isActive ).toBe( false );
             });

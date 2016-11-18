@@ -20,6 +20,10 @@
             $rootScope.$digest();
         }));
 
+        afterEach(function() {
+            directive.remove();
+        });
+
         describe("creates an error element that", function () {
             var errorMessageElem;
 

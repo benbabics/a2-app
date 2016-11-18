@@ -38,6 +38,10 @@
             modalDeferred.resolve(mockToolTip);
         });
 
+        afterEach(function() {
+            directive.remove();
+        });
+
         it("should replace the wex-tool-tip element with a help button", function () {
             $scope.$digest();
 

@@ -118,6 +118,10 @@
                 spyOn(angular.element.prototype, "scope").and.returnValue(mockScope);
             });
 
+            afterEach(function() {
+                datePicker.remove();
+            });
+
             describe("should NOT close an alert when none have been displayed", function () {
 
                 beforeEach(function () {
@@ -543,6 +547,10 @@
                 popup = jasmine.createSpyObj("popup", ["close"]);
 
                 spyOn(angular.element.prototype, "scope").and.returnValue(mockScope);
+            });
+
+            afterEach(function() {
+                datePicker.remove();
             });
 
             describe("when there is an open date picker", function () {
