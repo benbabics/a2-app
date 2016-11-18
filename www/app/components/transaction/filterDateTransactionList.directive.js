@@ -30,7 +30,6 @@
 
             requestParams = {
                 billingAccountId: UserManager.getUser().billingCompany.accountId,
-                fromDate:         moment().subtract( scope.searchOptions.MAX_DAYS, 'days' ).toDate(),
                 toDate:           moment().toDate()
             };
 
