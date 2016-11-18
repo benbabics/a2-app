@@ -9,7 +9,7 @@
 
             $ionicPlatform.ready(function () {
                 //setup event listeners:
-                $rootScope.$on( "app:logout", handleApplicationLogOut );
+                $rootScope.$on("app:logout", handleApplicationLogOut);
             });
         });
 })();
