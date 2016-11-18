@@ -39,6 +39,9 @@
                 spyOn(angular.element.prototype, "on").and.callThrough();
                 spyOn(window, "addEventListener").and.callThrough();
 
+                spyOn(window, "removeEventListener").and.callThrough();
+                spyOn(angular.element.prototype, "off").and.callThrough();
+
                 scope = $rootScope.$new();
                 scope.model = "";
 
@@ -513,9 +516,6 @@
         describe("has a removeEventListeners function that", function () {
 
             beforeEach(function () {
-                spyOn(window, "removeEventListener").and.callThrough();
-                spyOn(angular.element.prototype, "off").and.callThrough();
-
                 isolateScope.removeEventListeners();
             });
 
