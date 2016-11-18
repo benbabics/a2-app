@@ -15,11 +15,11 @@
             // mock dependencies
             this.UrbanAirship = jasmine.createSpyObj("UrbanAirship", ["ready"]);
             this.airShip = jasmine.createSpyObj("airShip", ["getChannelID"]);
-            this.AlertsResource = jasmine.createSpyObj("AlertsResource", ["registerUserForNotifications"]);
+            this.NotificationsResource = jasmine.createSpyObj("NotificationsResource", ["registerUserForNotifications"]);
 
             module(function ($provide) {
                 $provide.value("UrbanAirship", self.UrbanAirship);
-                $provide.value("AlertsResource", self.AlertsResource);
+                $provide.value("NotificationsResource", self.NotificationsResource);
             });
 
             inject(function (_$q_, _$rootScope_, _NotificationsManager_) {
@@ -70,16 +70,16 @@
             describe("when airship.getChannelID succeeds", function () {
                 beforeEach(function () {
                     this.registerDeferred = this.$q.defer();
-                    this.AlertsResource.registerUserForNotifications.and.returnValue(this.registerDeferred.promise);
+                    this.NotificationsResource.registerUserForNotifications.and.returnValue(this.registerDeferred.promise);
                     this.channelIdResolve(this.channelId);
                     this.$rootScope.$digest();
                 });
 
-                it("should call AlertsResource.registerUserForNotifications", function () {
-                    expect(this.AlertsResource.registerUserForNotifications).toHaveBeenCalledWith(this.channelId);
+                it("should call NotificationsResource.registerUserForNotifications", function () {
+                    expect(this.NotificationsResource.registerUserForNotifications).toHaveBeenCalledWith(this.channelId);
                 });
 
-                describe("when AlertsResource.registerUserForNotifications fails", function () {
+                describe("when NotificationsResource.registerUserForNotifications fails", function () {
                     beforeEach(function () {
                         this.registerDeferred.reject();
                         this.$rootScope.$digest();
@@ -91,7 +91,7 @@
                     });
                 });
 
-                describe("when AlertsResource.registerUserForNotifications succeeds", function () {
+                describe("when NotificationsResource.registerUserForNotifications succeeds", function () {
                     beforeEach(function () {
                         this.registerDeferred.resolve();
                         this.$rootScope.$digest();
