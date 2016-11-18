@@ -35,6 +35,10 @@
             wexHideBackButton = createWexHideBackButton({hide: mockHide});
         });
 
+        afterEach(function() {
+            wexHideBackButton.element.remove();
+        });
+
         it("should set prevState to null", function () {
             expect(wexHideBackButton.vm.prevState).toEqual(null);
         });
@@ -65,6 +69,10 @@
                 wexHideBackButton = createWexHideBackButton({hide: mockHide});
             });
 
+            afterEach(function() {
+                wexHideBackButton.element.remove();
+            });
+
             it("should set wexHideBackButton to the provided value", function () {
                 expect(wexHideBackButton.vm.wexHideBackButton).toEqual(mockHide);
             });
@@ -74,6 +82,10 @@
 
             beforeEach(function () {
                 wexHideBackButton = createWexHideBackButton();
+            });
+
+            afterEach(function() {
+                wexHideBackButton.element.remove();
             });
 
             it("wexHideBackButton should be falsy", function () {

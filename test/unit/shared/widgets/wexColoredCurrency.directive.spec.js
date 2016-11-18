@@ -19,6 +19,10 @@
             model = $scope.model;
         }));
 
+        afterEach(function() {
+            element.remove();
+        });
+
         describe("modifies an element that", function () {
 
             describe("when the amount is greater than zero", function () {

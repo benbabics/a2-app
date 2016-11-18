@@ -16,6 +16,10 @@
             form = $scope.form;
         }));
 
+        afterEach(function() {
+            element.remove();
+        });
+
         describe("modifies an input field that", function () {
             it("should pass validation when the input is null", function () {
                 form.emailAddress.$setViewValue(null);

@@ -34,6 +34,10 @@
             mockInput = directiveForm.find("input");
         }));
 
+        afterEach(function() {
+            directiveForm.remove();
+        });
+
         describe("should add a submit button that", function() {
 
             it("should exist", function() {

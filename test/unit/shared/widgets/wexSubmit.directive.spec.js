@@ -11,6 +11,10 @@
             $scope.$digest();
         }));
 
+        afterEach(function() {
+            form.remove();
+        });
+
         describe("creates a button that", function () {
             var button;
 

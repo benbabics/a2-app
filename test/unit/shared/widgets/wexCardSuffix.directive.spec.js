@@ -14,6 +14,10 @@
             form = $scope.form;
         }));
 
+        afterEach(function() {
+            element.remove();
+        });
+
         describe("modifies an input field that", function () {
 
             it("should pass validation when the input is formatted as a card suffix", function () {

@@ -21,6 +21,10 @@
             $rootScope.$digest();
         }));
 
+        afterEach(function() {
+            directiveElem.remove();
+        });
+
         describe("should create an element that", function() {
 
             it("should have the img-scalable CSS class", function() {

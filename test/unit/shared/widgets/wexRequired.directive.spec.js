@@ -37,6 +37,10 @@
             });
         }));
 
+        afterEach(function() {
+            directiveFormInput.remove();
+        });
+
         describe("when the form has NOT been submitted", function () {
 
             describe("when the user has modified the field and left data", function () {

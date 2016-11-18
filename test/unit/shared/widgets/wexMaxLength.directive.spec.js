@@ -17,6 +17,10 @@
             form = $scope.form;
         }));
 
+        afterEach(function() {
+            element.remove();
+        });
+
         describe("modifies an input field that", function () {
 
             it("should NOT modify the value when the input length is less than the max length", function () {

@@ -73,6 +73,10 @@
                     });
                 });
 
+                afterEach(function() {
+                    this.directive.element.remove();
+                });
+
                 it("should update the model with the cached value", function () {
                     expect(this.directive.scope.mockModel).toEqual(this.cachedValue);
                 });
@@ -89,6 +93,10 @@
                         useKey: true,
                         useModel: true
                     });
+                });
+
+                afterEach(function() {
+                    this.directive.element.remove();
                 });
 
                 it("should NOT render the content", function () {
@@ -134,6 +142,10 @@
                     });
                 });
 
+                afterEach(function() {
+                    this.directive.element.remove();
+                });
+
                 it("should render the content", function () {
                     expect(this.directive.element[0].querySelector(".mock-content")).toBeDefined();
                 });
@@ -146,6 +158,10 @@
                         useKey: true,
                         useModel: false
                     });
+                });
+
+                afterEach(function() {
+                    this.directive.element.remove();
                 });
 
                 it("should NOT render the content", function () {

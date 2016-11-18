@@ -33,6 +33,7 @@
 
         afterEach(function () {
             ionNavView.remove();
+            directiveElem.remove();
         });
 
         describe("when the directive element has been clicked", function () {

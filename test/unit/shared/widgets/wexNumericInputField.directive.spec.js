@@ -47,6 +47,11 @@
             });
         });
 
+        afterEach(function() {
+            view.remove();
+            directive.remove();
+        });
+
         it("should allow decimals by default", function () {
             expect(isolateScope.allowDecimal()).toBeTruthy();
         });
@@ -83,6 +88,10 @@
                 isolateScope = directive.isolateScope();
             });
 
+            afterEach(function() {
+                directive.remove();
+            });
+
             it("should allow decimals", function () {
                 expect(isolateScope.allowDecimal()).toBeTruthy();
             });
@@ -95,6 +104,10 @@
                     allowDecimal: false
                 });
                 isolateScope = directive.isolateScope();
+            });
+
+            afterEach(function() {
+                directive.remove();
             });
 
             it("should not allow decimals", function () {
@@ -111,6 +124,10 @@
                 isolateScope = directive.isolateScope();
             });
 
+            afterEach(function() {
+                directive.remove();
+            });
+
             it("should allow keypad toggling", function () {
                 expect(isolateScope.allowKeypadToggle()).toBeTruthy();
             });
@@ -123,6 +140,10 @@
                     allowKeypadToggle: false
                 });
                 isolateScope = directive.isolateScope();
+            });
+
+            afterEach(function() {
+                directive.remove();
             });
 
             it("should NOT allow keypad toggling", function () {
@@ -157,6 +178,10 @@
                 modelElem = directive.children();
             });
 
+            afterEach(function() {
+                directive.remove();
+            });
+
             it("should apply the filter to the model", function () {
                 expect(modelElem.text()).toEqual("{{model | " + mockFilter + "}}");
             });
@@ -176,6 +201,10 @@
                 modelElem = directive.children();
             });
 
+            afterEach(function() {
+                directive.remove();
+            });
+
             it("should apply the filters to the model in order", function () {
                 expect(modelElem.text()).toEqual("{{model | " + mockFilters[0] + " | " + mockFilters[1] + "}}");
             });
@@ -188,6 +217,10 @@
                     nestedModelDisplayElem: true
                 });
                 isolateScope = directive.isolateScope();
+            });
+
+            afterEach(function() {
+                directive.remove();
             });
 
             //TODO figure out a better way to test this
@@ -206,6 +239,10 @@
                     nestedModelDisplayElem: false
                 });
                 isolateScope = directive.isolateScope();
+            });
+
+            afterEach(function() {
+                directive.remove();
             });
 
             //TODO figure out a better way to test this
@@ -461,6 +498,10 @@
 
                     input = TestUtils.getRandomInteger(0, 9);
                     isolateScope.onKeyPress(input);
+                });
+
+                afterEach(function() {
+                    directive.remove();
                 });
 
                 it("should call the callback with the expected values", function () {
