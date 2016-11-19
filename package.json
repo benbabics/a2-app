@@ -45,7 +45,8 @@
     "shelljs": "^0.6.0",
     "stringify-object": "^3.0.0",
     "wiredep": "^4.0.0",
-    "wiredep-cli": "^0.1.0"
+    "wiredep-cli": "^0.1.0",
+    "karma-es6-shim": "^1.0.0"
   },
   "cordovaPlugins": [
     "cordova-ios-requires-fullscreen@~0.0.2",
