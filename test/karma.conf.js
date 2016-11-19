@@ -11,7 +11,8 @@ module.exports = function(config) {
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: [
-            "jasmine"
+            "jasmine",
+            "es6-shim"
         ],
 
 
@@ -112,7 +113,8 @@ module.exports = function(config) {
             "karma-firefox-launcher",
             "karma-phantomjs-launcher",
             "karma-jasmine",
-            "karma-ng-html2js-preprocessor"
+            "karma-ng-html2js-preprocessor",
+            "karma-es6-shim"
         ],
 
         junitReporter: {
