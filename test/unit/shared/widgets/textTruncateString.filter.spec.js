@@ -5,13 +5,9 @@
 
         var wexTruncateStringFilter;
 
-        beforeEach(function () {
-            module( "app.shared" );
-
-            inject(function($injector) {
-                wexTruncateStringFilter = $injector.get( "wexTruncateStringFilter" );
-            });
-        });
+        beforeEach(inject(function($injector) {
+            wexTruncateStringFilter = $injector.get("wexTruncateStringFilter");
+        }));
 
         describe("properly truncates a string that", function () {
             it("should work with default settings", function () {

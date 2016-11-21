@@ -42,7 +42,7 @@
                 $rootScope = _$rootScope_;
                 $state = _$state_;
 
-                mockNotificationItem = TestUtils.getRandomPostedTransaction(NotificationModel);
+                mockNotificationItem = TestUtils.getRandomNotificationModel(NotificationModel);
             });
         });
 

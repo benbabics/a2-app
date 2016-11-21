@@ -9,251 +9,8 @@
             $q,
             $rootScope,
             $state,
+            globals,
             mockBankAccounts,
-            mockGlobals = {
-                PAYMENT_MAINTENANCE: {
-                    STATES: {
-                        "ADD"   : "add",
-                        "UPDATE": "update"
-                    },
-                    WARNINGS: {
-                        BANK_ACCOUNTS_NOT_SETUP  : "Banks Not Setup",
-                        DIRECT_DEBIT_SETUP       : "Direct Debit Enabled",
-                        NO_BALANCE_DUE           : "No Current Balance",
-                        PAYMENT_ALREADY_SCHEDULED: "Payment Already Scheduled",
-                        DEFAULT                  : "We are unable to process your changes at this time."
-                    }
-                },
-                LOCALSTORAGE : {
-                    "CONFIG": {
-                        "keyPrefix": "FLEET_MANAGER-"
-                    },
-                    "KEYS": {
-                        "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE"
-                    }
-                },
-                PAYMENT_MAINTENANCE_FORM: {
-                    "CONFIG": {
-                        "invoiceNumber"            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "invoiceNumberNotAvailable": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "paymentDueDate"           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "currentBalance"           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "statementBalance"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "enterAmount"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "amount"                   : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "bankAccount"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "scheduledDate"            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "scheduledDatePickerTitle" : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "submitButton"             : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    },
-                    "INPUTS": {
-                        "AMOUNT"      : {
-                            "CONFIG": {
-                                "title": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            },
-                            "ERRORS": {
-                                "zeroPayment"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                "paymentTooLarge": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            },
-                            "ADD"   : {
-                                "CONFIG": {
-                                    "ANALYTICS": {
-                                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                    }
-                                }
-                            },
-                            "UPDATE": {
-                                "CONFIG": {
-                                    "ANALYTICS": {
-                                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                    }
-                                }
-                            }
-                        },
-                        "DATE"        : {
-                            "CONFIG": {
-                                "maxFutureDays": TestUtils.getRandomInteger(1, 360)
-                            }
-                        },
-                        "BANK_ACCOUNT": {
-                            "CONFIG": {
-                                "title"            : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                "instructionalText": TestUtils.getRandomStringThatIsAlphaNumeric(20)
-                            },
-                            "ADD"   : {
-                                "CONFIG": {
-                                    "ANALYTICS": {
-                                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                    }
-                                }
-                            },
-                            "UPDATE": {
-                                "CONFIG": {
-                                    "ANALYTICS": {
-                                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "ADD"   : {
-                        "CONFIG": {
-                            "ANALYTICS": {
-                                "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            },
-                            "title"    : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                        }
-                    },
-                    "UPDATE": {
-                        "CONFIG": {
-                            "ANALYTICS": {
-                                "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            },
-                            "title"    : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                        }
-                    }
-                },
-
-                PAYMENT_LIST: {
-                    "CONFIG"        : {
-                        "ANALYTICS"                 : {
-                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                            "events"  : {
-                                "paymentAddBankAccountsNotSetup"   : [
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                ],
-                                "paymentAddDirectDebitSetup"       : [
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                ],
-                                "paymentAddNoBalanceDue"           : [
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                ],
-                                "paymentAddPaymentAlreadyScheduled": [
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                ]
-                            }
-                        },
-                        "title"                     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "scheduledPaymentsHeading"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "noScheduledPaymentsMessage": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "completedPaymentsHeading"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "noCompletedPaymentsMessage": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    },
-                    "SEARCH_OPTIONS": {
-                        "PAGE_NUMBER": TestUtils.getRandomInteger(0, 20),
-                        "PAGE_SIZE"  : TestUtils.getRandomInteger(10, 100)
-                    }
-                },
-
-                PAYMENT_VIEW: {
-                    CONFIG: {
-                        ANALYTICS: {
-                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                        }
-                    }
-                },
-
-                PAYMENT_MAINTENANCE_CONFIRMATION: {
-                    "CONFIG": {
-                        "title"           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "confirmationText": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "amount"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "bankAccount"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "scheduledDate"   : TestUtils.getRandomDate(),
-                        "activityButton"  : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    },
-                    "ADD"   : {
-                        "CONFIG": {
-                            "ANALYTICS"                 : {
-                                "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            }
-                        }
-                    },
-
-                    "UPDATE": {
-                        "CONFIG": {
-                            "ANALYTICS"                 : {
-                                "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            }
-                        }
-                    }
-                },
-
-                PAYMENT_MAINTENANCE_SUMMARY: {
-                    "CONFIG"  : {
-                        "title"                : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "processingWarning"    : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "amount"               : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "bankAccount"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "scheduledDate"        : TestUtils.getRandomDate(),
-                        "cancelButton"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "submitButton"         : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    },
-                    "WARNINGS": {
-                        "PAYMENT_AMOUNT_LESS_THAN_MINIMUM": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "PAYMENT_DATE_PAST_DUE_DATE"      : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    },
-                    "ADD"     : {
-                        "CONFIG": {
-                            "ANALYTICS"                 : {
-                                "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            }
-                        }
-                    },
-                    "UPDATE"  : {
-                        "CONFIG": {
-                            "ANALYTICS"                 : {
-                                "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            }
-                        }
-                    }
-                },
-
-                "USER_LOGIN": {
-                    "CONFIG": {
-                        "ANALYTICS": {
-                            "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                            "events"  : {
-                                "successfulLogin"       : [
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                ],
-                                "inactiveStatus"        : [
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                ],
-                                "accountNotReadyStatus" : [
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                ],
-                                "wrongCredentialsStatus": [
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                ],
-                                "lockedPasswordStatus"  : [
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                    TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                                ]
-                            }
-                        }
-                    }
-                },
-
-                BUTTONS: {
-                    "CONFIG": {
-                        "cancel": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "done"  : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    }
-                },
-
-                GOOGLE_ANALYTICS: {
-                    TRACKING_ID: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                }
-            },
             mockPayment,
             mockPayments,
             mockUser,
@@ -275,17 +32,6 @@
             PaymentMaintenanceUtil;
 
         beforeEach(function () {
-
-            module("app.shared");
-            module("app.components", function ($provide, sharedGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
-            });
-
-            module(function ($provide, sharedGlobals, appGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
-            });
-
-            module("app.html");
 
             // mock dependencies
             BankManager = jasmine.createSpyObj("BankManager", ["getActiveBanks", "hasMultipleBanks", "getDefaultBank"]);
@@ -311,7 +57,7 @@
             });
 
             inject(function (___, _$injector_, _$location_, _$q_, _$rootScope_, _$state_, _BankModel_, _InvoiceSummaryModel_,
-                             _PaymentModel_, _PaymentMaintenanceUtil_, UserAccountModel, UserModel) {
+                             _PaymentModel_, _PaymentMaintenanceUtil_, _globals_, UserAccountModel, UserModel) {
                 _ = ___;
                 $injector = _$injector_;
                 $location = _$location_;
@@ -322,6 +68,7 @@
                 PaymentModel = _PaymentModel_;
                 InvoiceSummaryModel = _InvoiceSummaryModel_;
                 PaymentMaintenanceUtil = _PaymentMaintenanceUtil_;
+                globals = _globals_;
 
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
             });
@@ -519,7 +266,7 @@
                 });
 
                 it("should call AnalyticsUtil.trackView", function () {
-                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.PAYMENT_VIEW.CONFIG.ANALYTICS.pageName);
+                    expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(globals.PAYMENT_VIEW.CONFIG.ANALYTICS.pageName);
                 });
 
             });
@@ -559,7 +306,7 @@
 
                     $injector.invoke(function ($stateParams) {
                         expect($stateParams).toEqual(jasmine.objectContaining({
-                            maintenanceState: mockGlobals.PAYMENT_MAINTENANCE.STATES.ADD
+                            maintenanceState: globals.PAYMENT_MAINTENANCE.STATES.ADD
                         }));
                     });
                 });
@@ -599,7 +346,7 @@
 
                     $injector.invoke(function ($stateParams) {
                         expect($stateParams).toEqual(jasmine.objectContaining({
-                            maintenanceState: mockGlobals.PAYMENT_MAINTENANCE.STATES.UPDATE,
+                            maintenanceState: globals.PAYMENT_MAINTENANCE.STATES.UPDATE,
                             paymentId: mockPayment.id
                         }));
                     });
@@ -641,7 +388,7 @@
                 describe("when the maintenance state is ADD", function () {
 
                     beforeEach(function () {
-                        maintenanceState = mockGlobals.PAYMENT_MAINTENANCE.STATES.ADD;
+                        maintenanceState = globals.PAYMENT_MAINTENANCE.STATES.ADD;
 
                         $state.go(childStateName, {
                             maintenanceState: maintenanceState,
@@ -692,7 +439,7 @@
                 describe("when the maintenance state is UPDATE", function () {
 
                     beforeEach(function () {
-                        maintenanceState = mockGlobals.PAYMENT_MAINTENANCE.STATES.UPDATE;
+                        maintenanceState = globals.PAYMENT_MAINTENANCE.STATES.UPDATE;
 
                         $state.go(childStateName, {
                             maintenanceState: maintenanceState,
@@ -818,7 +565,7 @@
 
                 it("should call AnalyticsUtil.trackView", function () {
                     expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(
-                        PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM, maintenanceState).ANALYTICS.pageName
+                        PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_FORM, maintenanceState).ANALYTICS.pageName
                     );
                 });
 
@@ -876,7 +623,7 @@
 
                 it("should call AnalyticsUtil.trackView", function () {
                     expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(
-                        PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_SUMMARY, maintenanceState).ANALYTICS.pageName
+                        PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_SUMMARY, maintenanceState).ANALYTICS.pageName
                     );
                 });
 
@@ -934,7 +681,7 @@
 
                 it("should call AnalyticsUtil.trackView", function () {
                     expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(
-                        PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_CONFIRMATION, maintenanceState).ANALYTICS.pageName
+                        PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_CONFIRMATION, maintenanceState).ANALYTICS.pageName
                     );
                 });
             });
@@ -1021,7 +768,7 @@
 
                 it("should call AnalyticsUtil.trackView", function () {
                     expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(
-                        PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT, maintenanceState).ANALYTICS.pageName
+                        PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_FORM.INPUTS.AMOUNT, maintenanceState).ANALYTICS.pageName
                     );
                 });
             });
@@ -1081,7 +828,7 @@
 
                 it("should call AnalyticsUtil.trackView", function () {
                     expect(AnalyticsUtil.trackView).toHaveBeenCalledWith(
-                        PaymentMaintenanceUtil.getConfig(mockGlobals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT, maintenanceState).ANALYTICS.pageName
+                        PaymentMaintenanceUtil.getConfig(globals.PAYMENT_MAINTENANCE_FORM.INPUTS.BANK_ACCOUNT, maintenanceState).ANALYTICS.pageName
                     );
                 });
 
@@ -1190,8 +937,8 @@
 
                 it("should call PaymentMaintenanceUtil.showPaymentError with the expected values", function () {
                     expect(PaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(
-                        mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
-                        mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddBankAccountsNotSetup
+                        globals.PAYMENT_MAINTENANCE.WARNINGS.BANK_ACCOUNTS_NOT_SETUP,
+                        globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddBankAccountsNotSetup
                     );
                 });
             });
@@ -1225,8 +972,8 @@
 
                 it("should call PaymentMaintenanceUtil.showPaymentError with the expected values", function () {
                     expect(PaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(
-                        mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.DIRECT_DEBIT_SETUP,
-                        mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddDirectDebitSetup
+                        globals.PAYMENT_MAINTENANCE.WARNINGS.DIRECT_DEBIT_SETUP,
+                        globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddDirectDebitSetup
                     );
                 });
             });
@@ -1259,8 +1006,8 @@
 
                 it("should call PaymentMaintenanceUtil.showPaymentError with the expected values", function () {
                     expect(PaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(
-                        mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
-                        mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddPaymentAlreadyScheduled
+                        globals.PAYMENT_MAINTENANCE.WARNINGS.PAYMENT_ALREADY_SCHEDULED,
+                        globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddPaymentAlreadyScheduled
                     );
                 });
             });
@@ -1293,8 +1040,8 @@
 
                 it("should call PaymentMaintenanceUtil.showPaymentError with the expected values", function () {
                     expect(PaymentMaintenanceUtil.showPaymentError).toHaveBeenCalledWith(
-                        mockGlobals.PAYMENT_MAINTENANCE.WARNINGS.NO_BALANCE_DUE,
-                        mockGlobals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddNoBalanceDue
+                        globals.PAYMENT_MAINTENANCE.WARNINGS.NO_BALANCE_DUE,
+                        globals.PAYMENT_LIST.CONFIG.ANALYTICS.events.paymentAddNoBalanceDue
                     );
                 });
             });
@@ -1382,7 +1129,7 @@
         }
 
         function getRandomMaintenanceState() {
-            return TestUtils.getRandomValueFromMap(mockGlobals.PAYMENT_MAINTENANCE.STATES);
+            return TestUtils.getRandomValueFromMap(globals.PAYMENT_MAINTENANCE.STATES);
         }
 
         function getRandomPayments(PaymentModel, BankModel) {

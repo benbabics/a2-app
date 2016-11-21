@@ -17,43 +17,37 @@
                         },
 
                         //jshint maxparams:5
-                        brandLogo: function($q, globals, BrandManager, BrandUtil, LoadingIndicator) {
-                            var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
-                                brandLogoAsset = BrandManager.getUserBrandAssetBySubtype(ASSET_SUBTYPES.BRAND_LOGO);
+                        fetchBrandLogo: function($q, globals, BrandManager, BrandUtil) {
+                            return function () {
+                                var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
+                                    brandLogoAsset = BrandManager.getUserBrandAssetBySubtype(ASSET_SUBTYPES.BRAND_LOGO);
 
-                            //if this brand has a logo associated with it then get its data
-                            if (brandLogoAsset) {
-                                LoadingIndicator.begin();
-
-                                return BrandUtil.getAssetResourceData(brandLogoAsset)
-                                    .catch(function () {
-                                        //we couldn't get the brand logo file data, so just resolve with no logo
-                                        return $q.resolve("");
-                                    })
-                                    .finally(LoadingIndicator.complete);
-                            }
-                            else {
-                                return "";
+                                //if this brand has a logo associated with it then get its data
+                                if (brandLogoAsset) {
+                                    return BrandUtil.getAssetResourceData(brandLogoAsset)
+                                        .catch(function () {
+                                            //we couldn't get the brand logo file data, so just resolve with no logo
+                                            return $q.resolve("");
+                                        });
+                                }
+                                else {
+                                    return $q.resolve("");
+                                }
                             }
                         },
 
-                        currentInvoiceSummary: function (accountId, InvoiceManager, LoadingIndicator) {
-                            LoadingIndicator.begin();
-
-                            // Return the current invoice summary
-                            return InvoiceManager.fetchCurrentInvoiceSummary(accountId)
-                                .finally(function() {
-                                    LoadingIndicator.complete();
-                                });
+                        fetchCurrentInvoiceSummary: function (_, accountId, InvoiceManager) {
+                            return _.partial(InvoiceManager.fetchCurrentInvoiceSummary, accountId);
                         },
 
-                        scheduledPaymentsCount: function (accountId, globals, PaymentManager, LoadingIndicator) {
-                            LoadingIndicator.begin();
+                        fetchScheduledPaymentsCount: function (_, accountId, globals, PaymentManager) {
+                            return _.partial(PaymentManager.fetchScheduledPaymentsCount, accountId);
+                        },
 
-                            return PaymentManager.fetchScheduledPaymentsCount(accountId)
-                                .finally(function () {
-                                    LoadingIndicator.complete();
-                                });
+                        brandLogo: function (fetchBrandLogo, LoadingIndicator, WexCache) {
+                            LoadingIndicator.begin();
+                            return WexCache.fetchPropertyValue("brandLogo", fetchBrandLogo)
+                                .finally(LoadingIndicator.complete);
                         }
                     }
                 }

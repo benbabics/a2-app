@@ -12,9 +12,6 @@
     describe("A Wex Back Button Directive", function () {
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.html");
-
             //mock dependencies:
             $state = jasmine.createSpyObj("$state", ["go"]);
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack", "backView"]);
@@ -34,12 +31,20 @@
             wexBackButton = createWexBackButton();
         });
 
+        afterEach(function() {
+            wexBackButton.element.remove();
+        });
+
         describe("when a backState value is provided", function () {
             var mockState;
 
             beforeEach(function () {
                 mockState = TestUtils.getRandomNumberWithLength(10);
                 wexBackButton = createWexBackButton({backState: mockState});
+            });
+
+            afterEach(function() {
+                wexBackButton.element.remove();
             });
 
             it("should set the backState to the provided value", function () {
@@ -51,6 +56,10 @@
 
             beforeEach(function () {
                 wexBackButton = createWexBackButton();
+            });
+
+            afterEach(function() {
+                wexBackButton.element.remove();
             });
 
             it("the backState should be falsy", function () {
@@ -66,6 +75,10 @@
                 wexBackButton = createWexBackButton({hide: mockHide});
             });
 
+            afterEach(function() {
+                wexBackButton.element.remove();
+            });
+
             it("should set hide to a getter function returning the provided value", function () {
                 expect(wexBackButton.scope.hide()).toEqual(mockHide);
             });
@@ -75,6 +88,10 @@
 
             beforeEach(function () {
                 wexBackButton = createWexBackButton();
+            });
+
+            afterEach(function() {
+                wexBackButton.element.remove();
             });
 
             it("should set hide to a function returning false", function () {
@@ -92,6 +109,10 @@
                 wexBackButton = createWexBackButton({backParams: backParams});
             });
 
+            afterEach(function() {
+                wexBackButton.element.remove();
+            });
+
             it("should set backParams to a getter function returning the provided value", function () {
                 expect(wexBackButton.scope.backParams()).toEqual(backParams);
             });
@@ -101,6 +122,10 @@
 
             beforeEach(function () {
                 wexBackButton = createWexBackButton();
+            });
+
+            afterEach(function() {
+                wexBackButton.element.remove();
             });
 
             it("should set hide to a function returning null", function () {
@@ -118,6 +143,10 @@
                 wexBackButton = createWexBackButton({backOptions: backOptions});
             });
 
+            afterEach(function() {
+                wexBackButton.element.remove();
+            });
+
             it("should set backOptions to a getter function returning the provided value", function () {
                 expect(wexBackButton.scope.backOptions()).toEqual(backOptions);
             });
@@ -127,6 +156,10 @@
 
             beforeEach(function () {
                 wexBackButton = createWexBackButton();
+            });
+
+            afterEach(function() {
+                wexBackButton.element.remove();
             });
 
             it("should set hide to a function returning null", function () {
@@ -210,6 +243,10 @@
                     wexBackButton = createWexBackButton({hide: mockHide});
                 });
 
+                afterEach(function() {
+                    wexBackButton.element.remove();
+                });
+
                 it("should return the provided value", function () {
                     expect(wexBackButton.scope.isHidden()).toEqual(mockHide);
                 });
@@ -219,6 +256,10 @@
 
                 beforeEach(function () {
                     wexBackButton = createWexBackButton();
+                });
+
+                afterEach(function() {
+                    wexBackButton.element.remove();
                 });
 
                 it("should return false", function () {
@@ -364,6 +405,10 @@
                     wexBackButton = createWexBackButton({hide: true});
                 });
 
+                afterEach(function() {
+                    wexBackButton.element.remove();
+                });
+
                 it("should return false", function () {
                     expect(wexBackButton.scope.pageHasBack()).toBeFalsy();
                 });
@@ -373,6 +418,10 @@
 
                 beforeEach(function () {
                     wexBackButton = createWexBackButton({hide: false});
+                });
+
+                afterEach(function() {
+                    wexBackButton.element.remove();
                 });
 
                 describe("when there is a back state", function () {

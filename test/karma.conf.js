@@ -11,7 +11,8 @@ module.exports = function(config) {
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: [
-            "jasmine"
+            "jasmine",
+            "es6-shim"
         ],
 
 
@@ -50,7 +51,7 @@ module.exports = function(config) {
             "../test/unit/testUtils.js",
 
             // Helpers
-            "../test/unit/helpers/**/*.js",
+            "../test/unit/helpers/common_mocks.js",
 
             // Source code
             "app/**/*.module.js",
@@ -79,7 +80,7 @@ module.exports = function(config) {
 
         // test results reporter to use
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ["progress", "coverage", "teamcity", "junit"],
+        reporters: ["progress", "coverage", "teamcity", "junit", "kjhtml"],
 
 
         // web server port
@@ -101,16 +102,19 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ["Chrome", "PhantomJS"],
+        browsers: ["PhantomJS"],
 
         plugins: [
             "karma-teamcity-reporter",
             "karma-coverage",
+            "karma-jasmine-html-reporter",
             "karma-junit-reporter",
             "karma-chrome-launcher",
+            "karma-firefox-launcher",
             "karma-phantomjs-launcher",
             "karma-jasmine",
-            "karma-ng-html2js-preprocessor"
+            "karma-ng-html2js-preprocessor",
+            "karma-es6-shim"
         ],
 
         junitReporter: {

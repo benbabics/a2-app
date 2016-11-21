@@ -3,31 +3,21 @@
 
     describe("A Version Module Route Config", function () {
 
-        var $cordovaSplashscreen,
-            $injector,
+        var $injector,
             $interval,
             $q,
             $rootScope,
             $state,
             mockVersionStatus,
-            LoadingIndicator,
             PlatformUtil,
             VersionManager;
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.version");
-            module("app.html");
-
             // mock dependencies
-            $cordovaSplashscreen = jasmine.createSpyObj("$cordovaSplashscreen", ["hide"]);
-            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
             VersionManager = jasmine.createSpyObj("VersionManager", ["determineVersionStatus"]);
 
             module(function ($provide) {
-                $provide.value("$cordovaSplashscreen", $cordovaSplashscreen);
-                $provide.value("LoadingIndicator", LoadingIndicator);
                 $provide.value("VersionManager", VersionManager);
             });
 
@@ -42,9 +32,7 @@
                 mockVersionStatus = TestUtils.getRandomVersionStatus(VersionStatusModel);
             });
 
-            //setup spies:
-            spyOn(PlatformUtil, "waitForCordovaPlatform").and.callFake(function(callback) {
-                //just execute the callback directly
+            this.PlatformUtil.waitForCordovaPlatform.and.callFake(function(callback) {
                 return $q.when((callback || function() {})());
             });
 
@@ -135,8 +123,8 @@
                         });
                 });
 
-                it("should NOT call $cordovaSplashscreen.hide", function () {
-                    expect($cordovaSplashscreen.hide).not.toHaveBeenCalled();
+                it("should NOT call this.$cordovaSplashscreen.hide", function () {
+                    expect(this.$cordovaSplashscreen.hide).not.toHaveBeenCalled();
                 });
 
                 describe("after 2000ms have passed", function () {
@@ -146,8 +134,8 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call $cordovaSplashscreen.hide", function () {
-                        expect($cordovaSplashscreen.hide).toHaveBeenCalledWith();
+                    it("should call this.$cordovaSplashscreen.hide", function () {
+                        expect(this.$cordovaSplashscreen.hide).toHaveBeenCalledWith();
                     });
                 });
 

@@ -11,6 +11,7 @@ var TestUtils = (function () {
             getRandomAccount                   : getRandomAccount,
             getRandomAddress                   : getRandomAddress,
             getRandomNotification              : getRandomNotification,
+            getRandomNotificationResponse      : getRandomNotificationResponse,
             getRandomAnalyticsEvent            : getRandomAnalyticsEvent,
             getRandomArray                     : getRandomArray,
             getRandomBank                      : getRandomBank,
@@ -40,11 +41,14 @@ var TestUtils = (function () {
             getRandomValueFromArray            : getRandomValueFromArray,
             getRandomValueFromMap              : getRandomValueFromMap,
             getRandomVersionStatus             : getRandomVersionStatus,
+            getRandomNotificationModel         : getRandomNotificationModel,
             provideCommonMockDependencies      : provideCommonMockDependencies,
             provideCommonAppMockDependencies   : provideCommonAppMockDependencies,
             provideCommonSharedMockDependencies: provideCommonSharedMockDependencies,
             rejectedPromise                    : rejectedPromise,
-            resolvedPromise                    : resolvedPromise
+            resolvedPromise                    : resolvedPromise,
+            setFeatureFlagEnabled              : setFeatureFlagEnabled,
+            setFeatureFlagsEnabled             : setFeatureFlagsEnabled
         };
 
     return TestUtils;
@@ -124,14 +128,18 @@ var TestUtils = (function () {
         return address;
     }
 
+    // Returns a notification after it is parsed into a NotificationModel.
     function getRandomNotification(NotificationModel) {
         var randomNotificationItem = new NotificationModel();
 
-        randomNotificationItem.set({
-            id: getRandomStringThatIsAlphaNumeric(10)
-        });
+        randomNotificationItem.set(getRandomNotificationResponse());
 
         return randomNotificationItem;
+    }
+
+    // Returns a notification as it is received from NotificationsResource.getNotifications().
+    function getRandomNotificationResponse() {
+        return {data: JSON.stringify(getRandomMap(3)), id: getRandomStringThatIsAlphaNumeric(5), status: getRandomStringThatIsAlphaNumeric(10), type: getRandomStringThatIsAlphaNumeric(10)};
     }
 
     function getRandomAnalyticsEvent() {
@@ -453,6 +461,10 @@ var TestUtils = (function () {
         return result;
     }
 
+    function getRandomJsonString(length) {
+        return JSON.stringify(getRandomStringThatIsAlphaNumeric(length));
+    }
+
     function getRandomUser(UserModel, UserAccountModel, ONLINE_APPLICATION) {
         var user = new UserModel();
 
@@ -501,6 +513,19 @@ var TestUtils = (function () {
         return versionStatus;
     }
 
+    function getRandomNotificationModel(NotificationModel) {
+        var notification = new NotificationModel();
+
+        notification.set({
+            id      : getRandomStringThatIsAlphaNumeric(10),
+            data    : getRandomJsonString(10),
+            status  : getRandomStringThatIsAlphaNumeric(5),
+            type    : getRandomStringThatIsAlphaNumeric(5)
+        });
+
+        return notification;
+    }
+
     function provideCommonMockDependencies($provide, mocks, setter, exclusions) {
         mocks = _.omit(mocks, exclusions);
         _.merge(mocks, (setter || _.noop)(mocks));
@@ -512,7 +537,19 @@ var TestUtils = (function () {
 
     function provideCommonAppMockDependencies($provide, setter, exclusions) {
         var mocks = {
-            LoginManager: jasmine.createSpyObj("LoginManager", ["logIn", "logOut"])
+            LoginManager: jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]),
+            NotificationItemsManager: jasmine.createSpyObj("NotificationItemsManager", [
+                "fetchNotifications",
+                "deleteNotification",
+                "clearCachedValues",
+                "getNotifications",
+                "setNotifications",
+                "getUnreadNotificationsCount",
+                "setUnreadNotificationsCount",
+                "setNotificationsRead",
+                "fetchUnreadNotificationsCount"
+            ]),
+            NotificationsManager: jasmine.createSpyObj("NotificationsManager", ["onReady", "enableNotifications", "rejectBanner", "rejectPrompt", "registerUserForNotifications"])
         };
 
         provideCommonMockDependencies($provide, mocks, setter, exclusions);
@@ -520,6 +557,7 @@ var TestUtils = (function () {
 
     function provideCommonSharedMockDependencies($provide, setter, exclusions) {
         var mocks = {
+            $cordovaSplashscreen: jasmine.createSpyObj("$cordovaSplashscreen", ["show", "hide"]),
             AnalyticsUtil: jasmine.createSpyObj("AnalyticsUtil", [
                 "getActiveTrackerId",
                 "hasActiveTracker",
@@ -544,6 +582,16 @@ var TestUtils = (function () {
         mocks.PlatformUtil.waitForCordovaPlatform.and.returnValue(rejectedPromise("Cordova disabled by default."));
 
         provideCommonMockDependencies($provide, mocks, setter, exclusions);
+    }
+
+    function setFeatureFlagEnabled(globals, featureFlag, enabled) {
+        globals.FEATURE_FLAGS[featureFlag] = !!enabled;
+    }
+
+    function setFeatureFlagsEnabled(globals, enabled) {
+        for(var featureFlag in globals.FEATURE_FLAGS) {
+            setFeatureFlagEnabled(globals, featureFlag, enabled);
+        };
     }
 
 })();

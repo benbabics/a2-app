@@ -4,28 +4,11 @@
     var $rootScope,
         $ionicPlatform,
         $state,
-        PaymentManager,
-        AnalyticsUtil;
+        PaymentManager;
 
     describe("A Payment Module", function () {
 
         beforeEach(function () {
-
-            //mock dependencies
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
-
-            module("app.shared");
-            module("app.html");
-            module("app.components", function ($provide) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
-            });
 
             inject(function (_$rootScope_, _$ionicPlatform_, _$state_, _PaymentManager_) {
                 $rootScope = _$rootScope_;
@@ -55,11 +38,7 @@
                 it("should clear all cached values in PaymentManager", function () {
                     expect(PaymentManager.clearCachedValues).toHaveBeenCalledWith();
                 });
-
             });
-
         });
-
     });
-
 })();

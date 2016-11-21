@@ -9,12 +9,6 @@
     describe("A WEX Menu Item directive", function () {
 
         beforeEach(function() {
-            module("app.shared");
-            module("app.html");
-            module("app.components", function ($provide) {
-                TestUtils.provideCommonMockDependencies($provide);
-            });
-
             inject(function(_$rootScope_, _$compile_, _$state_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
@@ -22,6 +16,10 @@
 
                 menuItem = createWexMenuItem();
             });
+        });
+
+        afterEach(function() {
+            menuItem.parentMenu.remove();
         });
 
         it("should set menu on the scope to the menu's controller", function () {
@@ -39,6 +37,10 @@
                         $rootScope.$digest();
                     });
 
+                    afterEach(function() {
+                        menuItem.parentMenu.remove();
+                    });
+
                     it("does hide the chevron container element", function() {
                         expect(menuItem.element[0].querySelector(".chevron-container.ng-hide")).toBeTruthy();
                     });
@@ -49,6 +51,10 @@
                     beforeEach(function () {
                         menuItem = createWexMenuItem({noChevron: TestUtils.getRandomStringThatIsAlphaNumeric(5)});
                         $rootScope.$digest();
+                    });
+
+                    afterEach(function() {
+                        menuItem.parentMenu.remove();
                     });
 
                     it("does NOT hide the chevron container element", function() {
@@ -62,6 +68,10 @@
                 beforeEach(function () {
                     menuItem = createWexMenuItem();
                     $rootScope.$digest();
+                });
+
+                afterEach(function() {
+                    menuItem.parentMenu.remove();
                 });
 
                 it("shows the chevron container element", function() {
@@ -82,6 +92,10 @@
                     $rootScope.$digest();
                 });
 
+                afterEach(function() {
+                    menuItem.parentMenu.remove();
+                });
+
                 it("shows the icon element", function() {
                     expect(menuItem.element[0].querySelector("i.menu-icon")).toBeTruthy();
                 });
@@ -96,7 +110,11 @@
                 beforeEach(function() {
                     menuItem = createWexMenuItem();
                     $rootScope.$digest();
-                })
+                });
+
+                afterEach(function() {
+                    menuItem.parentMenu.remove();
+                });
 
                 it("removes the icon element", function() {
                     expect(menuItem.element[0].querySelector("i.menu-icon")).toBeNull();
@@ -118,6 +136,10 @@
                         $rootScope.$digest();
                     });
 
+                    afterEach(function() {
+                        menuItem.parentMenu.remove();
+                    });
+
                     it("does apply the 'current' class to the root element", function() {
                         expect(menuItem.element.hasClass("current")).toBe(true);
                     });
@@ -131,6 +153,10 @@
                         $rootScope.$digest();
                     });
 
+                    afterEach(function() {
+                        menuItem.parentMenu.remove();
+                    });
+
                     it("does NOT apply the 'current' class to the root element", function() {
                         expect(menuItem.element.hasClass("current")).toBe(false);
                     });
@@ -142,6 +168,10 @@
                 beforeEach(function() {
                     menuItem = createWexMenuItem();
                     $rootScope.$digest();
+                });
+
+                afterEach(function() {
+                    menuItem.parentMenu.remove();
                 });
 
                 it("does NOT apply the 'current' class to the root element", function() {
@@ -159,7 +189,11 @@
                 $rootScope.$digest();
             });
 
-           it("that contains the transcluded content", function() {
+            afterEach(function() {
+                menuItem.parentMenu.remove();
+            });
+
+            it("that contains the transcluded content", function() {
                var element = menuItem.element[0].querySelector("span[ng-transclude]");
                expect(element.textContent).toEqual(mockContent);
            });
@@ -169,10 +203,10 @@
 
     function createWexMenuItem(options) {
         var scope = $rootScope.$new();
-        var menuElement,
+        var parentMenu,
             menuItemElement;
 
-        menuElement = $compile("<div wex-menu></div>")($rootScope);
+        parentMenu = $compile("<div wex-menu></div>")($rootScope);
         $rootScope.$digest();
 
         options = options || {};
@@ -198,10 +232,11 @@
         markup.push("</wex-menu-item>");
 
         menuItemElement = $compile(markup.join(""))(scope);
-        menuElement.append(menuItemElement);
+        parentMenu.append(menuItemElement);
         $rootScope.$digest();
 
         return {
+            parentMenu : parentMenu,
             element: menuItemElement,
             scope: menuItemElement.scope()
         };

@@ -5,34 +5,15 @@
         $rootScope,
         $scope,
         $q,
+        globals,
         ctrl,
         mockCompletedPayments,
         mockPayments,
         mockScheduledPayments,
-        mockGlobals = {
-            "PAYMENT_LIST": {
-                "CONFIG"        : {
-                    "ANALYTICS"                 : {
-                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    },
-                    "title"                     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "scheduledPaymentsHeading"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "noScheduledPaymentsMessage": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "completedPaymentsHeading"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "noCompletedPaymentsMessage": TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                },
-                "SEARCH_OPTIONS": {
-                    "PAGE_NUMBER": TestUtils.getRandomInteger(0, 20),
-                    "PAGE_SIZE"  : TestUtils.getRandomInteger(1, 100)
-                }
-            }
-        },
-        mockConfig = mockGlobals.PAYMENT_LIST.CONFIG,
         mockUser,
         UserManager,
         PaymentManager,
         LoadingIndicator,
-        AnalyticsUtil,
         fetchPaymentsDeferred,
         resolveHandler,
         rejectHandler;
@@ -45,35 +26,12 @@
             UserManager = jasmine.createSpyObj("UserManager", ["getUser", "userLoggedIn"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayments"]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
 
-            module("app.shared");
-            module("app.components", function ($provide) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
-            });
-
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
-            });
-
-            inject(function (___, globals, $controller, _$rootScope_, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
-
+            inject(function (___, $controller, _$rootScope_, _$q_, _globals_, BankModel, PaymentModel, UserAccountModel, UserModel) {
                 _ = ___;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
+                globals = _globals_;
 
                 // setup mock objects
                 mockCompletedPayments = getRandomNotScheduledPayments(PaymentModel, BankModel);
@@ -91,7 +49,6 @@
 
                 ctrl = $controller("PaymentListController", {
                     $scope          : $scope,
-                    globals         : mockGlobals,
                     LoadingIndicator: LoadingIndicator,
                     PaymentManager  : PaymentManager,
                     UserManager     : UserManager
@@ -112,8 +69,8 @@
 
             it("should call PaymentManager.fetchPayments", function () {
                 expect(PaymentManager.fetchPayments).toHaveBeenCalledWith(mockUser.billingCompany.accountId,
-                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
-                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE);
+                    globals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
+                    globals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE);
             });
 
             describe("when the payments are successfully fetched", function () {
@@ -177,8 +134,8 @@
 
             it("should call PaymentManager.fetchPayments", function () {
                 expect(PaymentManager.fetchPayments).toHaveBeenCalledWith(mockUser.billingCompany.accountId,
-                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
-                    mockGlobals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE);
+                    globals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_NUMBER,
+                    globals.PAYMENT_LIST.SEARCH_OPTIONS.PAGE_SIZE);
             });
 
             describe("when the payments are successfully fetched", function () {

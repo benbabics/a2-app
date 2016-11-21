@@ -5,24 +5,20 @@
 
         var form, $scope, element;
 
-        beforeEach(function () {
-            module("app.shared.widgets");
+        beforeEach(inject(function ($rootScope, $compile) {
+            $scope = $rootScope.$new();
 
-            // INJECT! This part is critical
-            // $rootScope - injected to create a new $scope instance.
-            // $compile - injected to allow us test snippets produced by the directive
-            inject(function($rootScope, $compile) {
-                $scope = $rootScope.$new();
+            //null out the input value to start
+            $scope.model = {textInput: null};
 
-                //null out the input value to start
-                $scope.model = { textInput: null };
+            //Compile the angular markup to get a form that uses the directive
+            element = angular.element("<form name='form'><input name='textInput' wex-max-length='10' ng-model='model.textInput'></form>");
+            $compile(element)($scope);
+            form = $scope.form;
+        }));
 
-                //Compile the angular markup to get a form that uses the directive
-                element = angular.element("<form name='form'><input name='textInput' wex-max-length='10' ng-model='model.textInput'></form>");
-                $compile(element)($scope);
-                form = $scope.form;
-            });
-
+        afterEach(function() {
+            element.remove();
         });
 
         describe("modifies an input field that", function () {

@@ -3,7 +3,7 @@
       {{ notification.displayDate | wexDefaultDateFormat }}
     </ion-item>
 
-    <ion-item class="item item-icon-right widget-transaction-result-as-date" ng-class="{ 'ui-greeking': notification.isGreekLoading }">
+    <ion-item class="item no-inverse-padding item-icon-right widget-transaction-result-as-date" ng-class="{ 'ui-greeking': notification.isGreekLoading }">
         <div class="row date-filter-list">
             <div class="col greek-block-group">
                 <span class="text-block" style="color: red;">{{ vm.notificationPrefixMap[notification.type] }}{{ notification.data.notificationReason }} &nbsp;</span>
@@ -13,6 +13,6 @@
             </div>
         </div>
 
-        <ion-option-button ng-click="vm.removeItem(notification)" class="button-positive">{{ ::vm.config.labelDeleteNotification }}</ion-option-button>
+        <ion-option-button ng-click="removeItem(notification)" class="button-positive">{{ ::vm.config.labelDeleteNotification }}</ion-option-button>
     </ion-item>
 </div>

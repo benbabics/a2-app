@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="45" id="com.wex.fleetsmarthub" ios-CFBundleVersion="45" version="3.0" xmlns="http://www.w3.org/ns/widgets">
+<widget android-versionCode="46" id="com.wex.fleetsmarthub" ios-CFBundleVersion="46" version="3.0" xmlns="http://www.w3.org/ns/widgets">
     <name>Fleet SmartHub</name>
     <description>
         App for managing WEX fleet accounts
@@ -10,8 +10,9 @@
     <hook src="scripts/initDirectories.js" type="before_platform_add" />
     <hook src="scripts/addExecutePermissions.js" type="before_build" />
     <hook src="scripts/copyIosScheme.js" type="before_build" />
+    <hook src="scripts/concatScripts.js" type="before_build" />
     <hook src="scripts/addPlatformClass.js" type="after_prepare" />
-    <hook src="scripts/removeSassFromPlatforms.js" type="after_prepare" />
+    <hook src="scripts/removeSassAndAppScriptsFromPlatforms.js" type="after_build" />
     <hook src="scripts/setEnvironment.js" type="after_prepare" />
     <hook src="scripts/setCommonConstants.js" type="after_prepare" />
     <hook src="scripts/changeMavenRepos.js" type="after_prepare" />

@@ -2,23 +2,23 @@
     "use strict";
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
-    // jshint maxparams:14
+    // jshint maxparams:15
 
     /* @ngInject */
-    function LandingController(_, $scope, $stateParams, $interval, $ionicHistory, $ionicPlatform,
-                               currentInvoiceSummary, brandLogo, globals, scheduledPaymentsCount,
-                               FlowUtil, Navigation, Toast, UserManager) {
+    function LandingController(_, $scope, $stateParams, $interval, $ionicHistory, $ionicPlatform, fetchCurrentInvoiceSummary,
+                               fetchScheduledPaymentsCount, globals, FlowUtil, InvoiceSummaryModel, Navigation, Toast,
+                               UserManager, WexCache) {
 
         var BACK_TO_EXIT_ACTION_PRIORITY = 102,
+            DEFAULT_CACHE_TTL = 4320, //72 hours
             removeBackButtonAction,
             exitTimerPromise,
             vm = this;
 
-        vm.config = _.merge({}, globals.LANDING.CONFIG, globals.FINGERPRINT_AUTH.CONFIG)
+        vm.config = _.merge({}, globals.LANDING.CONFIG, globals.FINGERPRINT_AUTH.CONFIG);
         vm.chartColors = globals.LANDING.CHART.colors;
-        vm.invoiceSummary = {};
+        vm.invoiceSummary = new InvoiceSummaryModel();
         vm.billingCompany = {};
-        vm.branding = {};
         vm.greeting = "";
         vm.params = $stateParams;
         vm.scheduledPaymentsCount = 0;
@@ -31,6 +31,16 @@
         //////////////////////
         // Controller initialization
         function activate() {
+            //fetch property updates asynchronously
+            WexCache.fetchPropertyValue("scheduledPaymentsCount", fetchScheduledPaymentsCount, {ttl: DEFAULT_CACHE_TTL})
+                .then(_.partial(_.set, vm, "scheduledPaymentsCount", _));
+            WexCache.fetchPropertyValue("invoiceSummary", fetchCurrentInvoiceSummary, {
+                ttl: DEFAULT_CACHE_TTL,
+                ValueType: InvoiceSummaryModel
+            })
+                .then(_.partial(_.set, vm, "invoiceSummary", _))
+                .then(updateChartConfiguration);
+
             startToastMessageBackAction();
 
             // set event listeners
@@ -47,31 +57,23 @@
 
             vm.user = UserManager.getUser();
 
-            // the invoiceSummary object should be bound now to the object returned by fetchCurrentInvoiceSummary
-            vm.invoiceSummary = currentInvoiceSummary;
-
-            // the scheduledPaymentsCount object should be bound now to the object returned by fetchScheduledPaymentsCount
-            vm.scheduledPaymentsCount = scheduledPaymentsCount;
-
-            vm.chartDisplay = getChartDisplayConfiguration();
-            vm.chart        = getChartConfiguration();
-
-            vm.branding.logo = brandLogo;
-
             vm.greeting = "Hello, " + vm.user.firstName;
+
+            updateChartConfiguration();
         }
 
         function getChartDisplayConfiguration() {
-            var datasets = { collection: [] },
-                dataIds  = [ "pendingAmount", "unbilledAmount", "availableCredit", "billedAmount" ];
+            var datasets = {collection: []},
+                dataIds  = ["pendingAmount", "unbilledAmount", "availableCredit", "billedAmount"],
+                requiredDataIds = ["availableCredit"];
 
             _.each(dataIds, function(id) {
-                if ( vm.invoiceSummary[ id ] > 0 ) {
+                if (vm.invoiceSummary[id] > 0 || _.includes(requiredDataIds, id)) {
                     datasets.collection.push({
                         id:    id,
-                        label: vm.config[ id ],
-                        color: vm.chartColors[ id ],
-                        data:  vm.invoiceSummary[ id ]
+                        label: vm.config[id],
+                        color: vm.chartColors[id],
+                        data:  vm.invoiceSummary[id]
                     });
                 }
             });
@@ -157,6 +159,11 @@
 
                 startExitBackAction();
             });
+        }
+
+        function updateChartConfiguration() {
+            vm.chartDisplay = getChartDisplayConfiguration();
+            vm.chart = getChartConfiguration();
         }
 
     }

@@ -5,17 +5,13 @@
         $scope,
         $stateParams = {},
         $q,
-        $stateParams,
         $localStorage,
         $ionicScrollDelegateMock,
         wexInfiniteListService,
-        AnalyticsUtil,
         moment,
         LoadingIndicator,
         TransactionManager,
         UserManager,
-        UserModel,
-        UserAccountModel,
         PostedTransactionModel,
         ElementUtil,
         cardIdFilter,
@@ -59,37 +55,13 @@
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
             LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
             wexInfiniteListService = jasmine.createSpyObj("wexInfiniteListService", ["emptyCache"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
             ElementUtil = jasmine.createSpyObj("ElementUtil", ["resetInfiniteList"]);
             $ionicScrollDelegateMock = jasmine.createSpyObj("$ionicScrollDelegate", ["scrollTop"]);
 
-            module("app.shared");
-            module("app.components", function ($provide) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
-            });
-
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
-            });
-
-            inject(function (_$rootScope_, _$stateParams_, $controller, _$localStorage_, _AnalyticsUtil_) {
+            inject(function (_$rootScope_, _$stateParams_, $controller, _$localStorage_) {
                 $rootScope             = _$rootScope_;
                 $stateParams           = _$stateParams_;
                 $localStorage          = _$localStorage_;
-                AnalyticsUtil          = _AnalyticsUtil_;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
@@ -105,7 +77,6 @@
                     $localStorage         : $localStorage,
                     $ionicScrollDelegate  : $ionicScrollDelegateMock,
                     wexInfiniteListService: wexInfiniteListService,
-                    AnalyticsUtil         : AnalyticsUtil
                 });
 
             });
@@ -136,13 +107,14 @@
         });
 
         describe("has a handleLoadSubsequentData function that", function () {
-          it("should send a message to AnalyticsUtil.trackEvent", function () {
+          it("should send a message to this.AnalyticsUtil.trackEvent", function () {
             var params = mockGlobals.TRANSACTION_LIST.CONFIG.ANALYTICS.events.scroll;
             ctrl.handleLoadSubsequentData();
-            expect(AnalyticsUtil.trackEvent).toHaveBeenCalledWith( params[0], params[1] );
+            expect(this.AnalyticsUtil.trackEvent).toHaveBeenCalledWith( params[0], params[1] );
           });
         });
 
+        //TODO - Why is this ignored/broken?
         xdescribe("has a loadNextPage function that", function () {
             var fetchPostedTransactionsDeferred,
                 currentDate = TestUtils.getRandomDate();
@@ -318,6 +290,7 @@
             });
         });
 
+        //TODO - Why is this ignored/broken?
         xdescribe("has a resetSearchResults function that", function () {
 
             beforeEach(function () {
