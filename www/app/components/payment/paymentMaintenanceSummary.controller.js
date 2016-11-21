@@ -120,7 +120,7 @@
             if (parseFloat(vm.payment.amount) < parseFloat(invoiceSummary.minimumPaymentDue)) {
                 vm.warnings.push(paymentMaintenanceSummary.WARNINGS.PAYMENT_AMOUNT_LESS_THAN_MINIMUM);
             }
-            if (moment(vm.payment.scheduledDate).isAfter(invoiceSummary.paymentDueDate)) {
+            if (moment(vm.payment.scheduledDate).isAfter(invoiceSummary.paymentDueDateObject)) {
                 vm.warnings.push(paymentMaintenanceSummary.WARNINGS.PAYMENT_DATE_PAST_DUE_DATE);
             }
         }
