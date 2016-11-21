@@ -10,7 +10,6 @@
     <hook src="scripts/initDirectories.js" type="before_platform_add" />
     <hook src="scripts/addExecutePermissions.js" type="before_build" />
     <hook src="scripts/copyIosScheme.js" type="before_build" />
-    <hook src="scripts/concatScripts.js" type="before_build" />
     <hook src="scripts/addPlatformClass.js" type="after_prepare" />
     <hook src="scripts/removeSassFromPlatforms.js" type="after_build" />
     <hook src="scripts/setEnvironment.js" type="after_prepare" />
