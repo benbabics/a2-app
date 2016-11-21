@@ -15,6 +15,10 @@
 
     describe("An Notifications Items Manager", function () {
 
+        beforeAll(function () {
+            this.commonAppMockExclusions = ["NotificationItemsManager"];
+        });
+
         beforeEach(function () {
 
             // mock dependencies

@@ -27,7 +27,7 @@
         beforeEach(function () {
 
             //mock dependencies
-            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["userLoggedIn"]);
+            AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["getAuthorizationHeader", "userLoggedIn"]);
             BrandManager = jasmine.createSpyObj("BrandManager", [
                 "getGenericBrandAssetBySubtype",
                 "getGenericAnalyticsTrackingId",
