@@ -26,7 +26,8 @@ module.exports = function(context) {
         // Constants
         var FILE_PATHS = {
             constants: {
-                appScripts     : "/www/scripts.js",
+                sharedConstants: "/www/app/shared/core/constants.js",
+                appConstants   : "/www/app/components/core/constants.js",
                 config         : "config.xml",
                 configAndroid  : "/res/xml/config.xml",
                 configIos      : "/Fleet SmartHub/config.xml"

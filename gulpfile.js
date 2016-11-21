@@ -23,6 +23,8 @@ var cleanCss = require("gulp-clean-css");
 var rename = require("gulp-rename");
 var sh = require("shelljs");
 var wiredep = require("wiredep").stream;
+var angularFilesort = require("gulp-angular-filesort");
+var naturalSort = require("gulp-natural-sort");
 var inject = require("gulp-inject");
 var jshint = require("gulp-jshint");
 var jscs = require("gulp-jscs");
@@ -127,6 +129,7 @@ gulp.task("bower", function (done) {
 
 gulp.task("index", function (done) {
     gulp.src(sourcePaths.root.indexPage)
+        .pipe(inject(gulp.src(sourcePaths.root.scripts).pipe(naturalSort()).pipe(angularFilesort()), {relative: true}))
         .pipe(inject(gulp.src(sourcePaths.root.cssMin, {read: false}), {relative: true}))
         .pipe(gulp.dest(destPaths.root.root))
         .on("end", done);
