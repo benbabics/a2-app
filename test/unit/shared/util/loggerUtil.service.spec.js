@@ -6,13 +6,10 @@
         var _,
             LoggerUtil;
 
-        beforeEach(function () {
-
-            inject(function (___, _LoggerUtil_) {
-                _ = ___;
-                LoggerUtil = _LoggerUtil_;
-            });
-        });
+        beforeEach(inject(function (___, _LoggerUtil_) {
+            _ = ___;
+            LoggerUtil = _LoggerUtil_;
+        }));
 
         describe("has a getErrorMessage function that", function () {
 

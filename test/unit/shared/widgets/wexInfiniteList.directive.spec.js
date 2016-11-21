@@ -12,9 +12,6 @@
     describe("A WEX Infinite List Directive", function () {
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.html");
-
             inject(function (_$rootScope_, _$compile_, _$q_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
@@ -28,6 +25,10 @@
                 onPageLoaded: mockPageLoadedCallback,
                 onReload    : mockReloadCallback
             });
+        });
+
+        afterEach(function() {
+            wexInfiniteList.parentElement.remove();
         });
 
         it("should initialize allDataLoaded to false", function () {
@@ -47,6 +48,10 @@
                 });
             });
 
+            afterEach(function() {
+                wexInfiniteList.parentElement.remove();
+            });
+
             it("should initialize reloadDistance to the given value", function () {
                 expect(wexInfiniteList.scope.reloadDistance).toEqual(reloadDistance);
             });
@@ -59,6 +64,10 @@
                     onPageLoaded: mockPageLoadedCallback,
                     onReload    : mockReloadCallback
                 });
+            });
+
+            afterEach(function() {
+                wexInfiniteList.parentElement.remove();
             });
 
             it("should initialize reloadDistance to the default value", function () {
@@ -79,6 +88,10 @@
                 });
             });
 
+            afterEach(function() {
+                wexInfiniteList.parentElement.remove();
+            });
+
             it("should initialize loadingComplete to a getter for the given value", function () {
                 expect(wexInfiniteList.scope.loadingComplete).toBeDefined();
                 expect(wexInfiniteList.scope.loadingComplete()).toEqual(loadingComplete);
@@ -92,6 +105,10 @@
                     onPageLoaded: mockPageLoadedCallback,
                     onReload    : mockReloadCallback
                 });
+            });
+
+            afterEach(function() {
+                wexInfiniteList.parentElement.remove();
             });
 
             it("should initialize loadingComplete to a getter for allDataLoaded", function () {
@@ -120,6 +137,10 @@
                         wexInfiniteList.scope.loadMore();
 
                         $rootScope.$digest();
+                    });
+
+                    afterEach(function() {
+                        wexInfiniteList.parentElement.remove();
                     });
 
                     it("should NOT call onReload", function () {
@@ -158,6 +179,10 @@
                         wexInfiniteList.scope.loadMore();
 
                         $rootScope.$digest();
+                    });
+
+                    afterEach(function() {
+                        wexInfiniteList.parentElement.remove();
                     });
 
                     it("should call onReload", function () {
@@ -261,6 +286,10 @@
 
                 beforeEach(function () {
                     spyOn(wexInfiniteList.scope, "$broadcast");
+                });
+
+                afterEach(function() {
+                    wexInfiniteList.parentElement.remove();
                 });
 
                 describe("when allDataLoaded is true", function () {
@@ -399,6 +428,7 @@
     function createWexInfiniteList(options) {
         var scope = $rootScope.$new(),
             element,
+            parent,
             createIonContent = function () {
                 return $compile("<ion-content></ion-content>")(scope);
             };
@@ -429,10 +459,11 @@
         markup.push("</wex-infinite-list>");
 
         element = $compile(markup.join(""))(scope);
-        createIonContent().append(element);
+        parent = createIonContent().append(element);
         $rootScope.$digest();
 
         return {
+            parentElement : parent,
             element: element,
             scope  : element.isolateScope()
         };

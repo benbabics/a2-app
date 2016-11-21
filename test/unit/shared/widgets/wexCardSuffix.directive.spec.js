@@ -2,28 +2,24 @@
     describe("A Wex Card Suffix Directive", function () {
         var form, $scope, element;
 
-        beforeEach(function () {
+        beforeEach(inject(function ($rootScope, $compile) {
+            $scope = $rootScope.$new();
 
-            module("app.shared.widgets");
+            //null out the input value to start
+            $scope.model = {integerInput: null};
 
-            // INJECT! This part is critical
-            // $rootScope - injected to create a new $scope instance.
-            // $compile - injected to allow us test snippets produced by the directive
-            inject(function($rootScope, $compile) {
-                $scope = $rootScope.$new();
+            //Compile the angular markup to get a form that uses the directive
+            element = angular.element("<form name='form'><input name='cardSuffixInput' wex-card-suffix ng-model='model.cardSuffixInput'></form>");
+            $compile(element)($scope);
+            form = $scope.form;
+        }));
 
-                //null out the input value to start
-                $scope.model = { integerInput: null };
-
-                //Compile the angular markup to get a form that uses the directive
-                element   = angular.element("<form name='form'><input name='cardSuffixInput' wex-card-suffix ng-model='model.cardSuffixInput'></form>");
-                $compile(element)($scope);
-                form = $scope.form;
-            });
-
+        afterEach(function() {
+            element.remove();
         });
 
         describe("modifies an input field that", function () {
+
             it("should pass validation when the input is formatted as a card suffix", function () {
                 form.cardSuffixInput.$setViewValue("4444-4");
                 $scope.$digest();

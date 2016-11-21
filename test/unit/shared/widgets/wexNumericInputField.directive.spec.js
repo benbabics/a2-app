@@ -19,10 +19,9 @@
             //mock dependencies
             ElementUtil = jasmine.createSpyObj("ElementUtil", ["getFocusedView", "getViewContent"]);
 
-            module("app.shared", function ($provide) {
+            module(function ($provide) {
                 $provide.value("ElementUtil", ElementUtil);
             });
-            module("app.html");
 
             inject(function (___, _$rootScope_, _$compile_) {
                 $rootScope = _$rootScope_;
@@ -40,12 +39,20 @@
                 spyOn(angular.element.prototype, "on").and.callThrough();
                 spyOn(window, "addEventListener").and.callThrough();
 
+                spyOn(window, "removeEventListener").and.callThrough();
+                spyOn(angular.element.prototype, "off").and.callThrough();
+
                 scope = $rootScope.$new();
                 scope.model = "";
 
                 directive = createDirective();
                 isolateScope = directive.isolateScope();
             });
+        });
+
+        afterEach(function() {
+            view.remove();
+            directive.remove();
         });
 
         it("should allow decimals by default", function () {
@@ -84,6 +91,10 @@
                 isolateScope = directive.isolateScope();
             });
 
+            afterEach(function() {
+                directive.remove();
+            });
+
             it("should allow decimals", function () {
                 expect(isolateScope.allowDecimal()).toBeTruthy();
             });
@@ -96,6 +107,10 @@
                     allowDecimal: false
                 });
                 isolateScope = directive.isolateScope();
+            });
+
+            afterEach(function() {
+                directive.remove();
             });
 
             it("should not allow decimals", function () {
@@ -112,6 +127,10 @@
                 isolateScope = directive.isolateScope();
             });
 
+            afterEach(function() {
+                directive.remove();
+            });
+
             it("should allow keypad toggling", function () {
                 expect(isolateScope.allowKeypadToggle()).toBeTruthy();
             });
@@ -124,6 +143,10 @@
                     allowKeypadToggle: false
                 });
                 isolateScope = directive.isolateScope();
+            });
+
+            afterEach(function() {
+                directive.remove();
             });
 
             it("should NOT allow keypad toggling", function () {
@@ -158,6 +181,10 @@
                 modelElem = directive.children();
             });
 
+            afterEach(function() {
+                directive.remove();
+            });
+
             it("should apply the filter to the model", function () {
                 expect(modelElem.text()).toEqual("{{model | " + mockFilter + "}}");
             });
@@ -177,6 +204,10 @@
                 modelElem = directive.children();
             });
 
+            afterEach(function() {
+                directive.remove();
+            });
+
             it("should apply the filters to the model in order", function () {
                 expect(modelElem.text()).toEqual("{{model | " + mockFilters[0] + " | " + mockFilters[1] + "}}");
             });
@@ -189,6 +220,10 @@
                     nestedModelDisplayElem: true
                 });
                 isolateScope = directive.isolateScope();
+            });
+
+            afterEach(function() {
+                directive.remove();
             });
 
             //TODO figure out a better way to test this
@@ -207,6 +242,10 @@
                     nestedModelDisplayElem: false
                 });
                 isolateScope = directive.isolateScope();
+            });
+
+            afterEach(function() {
+                directive.remove();
             });
 
             //TODO figure out a better way to test this
@@ -464,6 +503,10 @@
                     isolateScope.onKeyPress(input);
                 });
 
+                afterEach(function() {
+                    directive.remove();
+                });
+
                 it("should call the callback with the expected values", function () {
                     expect(mockInputCallback).toHaveBeenCalledWith(input, isolateScope.model, initialModelValue);
                 });
@@ -473,9 +516,6 @@
         describe("has a removeEventListeners function that", function () {
 
             beforeEach(function () {
-                spyOn(window, "removeEventListener").and.callThrough();
-                spyOn(angular.element.prototype, "off").and.callThrough();
-
                 isolateScope.removeEventListeners();
             });
 

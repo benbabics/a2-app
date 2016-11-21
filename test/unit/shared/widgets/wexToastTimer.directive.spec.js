@@ -10,14 +10,11 @@
 
     describe("A Wex Toast Timer Directive", function () {
 
-        beforeEach(function () {
-
-            inject(function (_$rootScope_, _$compile_, _$interval_) {
-                $rootScope = _$rootScope_;
-                $compile = _$compile_;
-                $interval = _$interval_;
-            });
-        });
+        beforeEach(inject(function (_$rootScope_, _$compile_, _$interval_) {
+            $rootScope = _$rootScope_;
+            $compile = _$compile_;
+            $interval = _$interval_;
+        }));
 
         afterEach(function () {
             if (wexToastTimer) {
@@ -39,6 +36,10 @@
                         timeout: timeout = TestUtils.getRandomInteger(1, 2000),
                         onHide: onHide
                     });
+                });
+
+                afterEach(function() {
+                    wexToastTimer.remove();
                 });
 
                 describe("will behave such that", commonTimeoutTests);
@@ -73,6 +74,10 @@
                     timeout = DEFAULT_TIMEOUT;
 
                     wexToastTimer = createWexToastTimer({onHide: onHide});
+                });
+
+                afterEach(function() {
+                    wexToastTimer.remove();
                 });
 
                 describe("will behave such that", commonTimeoutTests);
@@ -110,6 +115,10 @@
                     wexToastTimer = createWexToastTimer({timeout: timeout = TestUtils.getRandomInteger(1, 2000)});
                 });
 
+                afterEach(function() {
+                    wexToastTimer.remove();
+                });
+
                 describe("will behave such that", commonTimeoutTests);
             });
 
@@ -119,6 +128,10 @@
                     timeout = DEFAULT_TIMEOUT;
 
                     wexToastTimer = createWexToastTimer();
+                });
+
+                afterEach(function() {
+                    wexToastTimer.remove();
                 });
 
                 describe("will behave such that", commonTimeoutTests);

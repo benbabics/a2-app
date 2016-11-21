@@ -3,8 +3,10 @@
 
     describe("A WEX Cache directive", function () {
 
+        var self;
+
         beforeEach(function () {
-            var self = this;
+            self = this;
 
             //test functions:
             self.createDirective = function(options) {
@@ -54,6 +56,10 @@
             self.cachedValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
         });
 
+        afterEach(function () {
+            self = null;
+        });
+
         describe("if there is a model", function () {
 
             describe("when the value is initially cached", function () {
@@ -65,6 +71,10 @@
                         useKey: true,
                         useModel: true
                     });
+                });
+
+                afterEach(function() {
+                    this.directive.element.remove();
                 });
 
                 it("should update the model with the cached value", function () {
@@ -83,6 +93,10 @@
                         useKey: true,
                         useModel: true
                     });
+                });
+
+                afterEach(function() {
+                    this.directive.element.remove();
                 });
 
                 it("should NOT render the content", function () {
@@ -128,6 +142,10 @@
                     });
                 });
 
+                afterEach(function() {
+                    this.directive.element.remove();
+                });
+
                 it("should render the content", function () {
                     expect(this.directive.element[0].querySelector(".mock-content")).toBeDefined();
                 });
@@ -140,6 +158,10 @@
                         useKey: true,
                         useModel: false
                     });
+                });
+
+                afterEach(function() {
+                    this.directive.element.remove();
                 });
 
                 it("should NOT render the content", function () {

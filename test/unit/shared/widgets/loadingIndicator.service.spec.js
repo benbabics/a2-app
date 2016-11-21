@@ -15,7 +15,7 @@
             //mock dependencies
             $ionicLoading = jasmine.createSpyObj("$ionicLoading", ["hide", "show"]);
 
-            module("app.shared", function ($provide) {
+            module(function ($provide) {
                 $provide.value("$ionicLoading", $ionicLoading);
             });
 

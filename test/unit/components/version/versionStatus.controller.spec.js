@@ -23,13 +23,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.version");
-
-            module("app.components", function ($provide, sharedGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
-            });
-
             module(function ($provide, sharedGlobals, appGlobals) {
                 globals = angular.merge({}, sharedGlobals, appGlobals, mockGlobals);
                 $provide.constant("globals", globals);

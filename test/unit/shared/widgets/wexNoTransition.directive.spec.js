@@ -13,29 +13,27 @@
             this.includeAppDependencies = false;
         });
 
-        beforeEach(function () {
+        beforeEach(inject(function (_$rootScope_, $compile, _$document_) {
+            var $scope = _$rootScope_.$new();
 
-            inject(function (_$rootScope_, $compile, _$document_) {
-                var $scope = _$rootScope_.$new();
+            $rootScope = _$rootScope_;
 
-                $rootScope = _$rootScope_;
+            $document = _$document_;
 
-                $document = _$document_;
+            spyOn($rootScope, "$on").and.callThrough();
 
-                spyOn($rootScope, "$on").and.callThrough();
+            ionNavView = $compile("<ion-nav-view></ion-nav-view>")($scope);
+            $document.find("body").eq(0).append(ionNavView);
 
-                ionNavView = $compile("<ion-nav-view></ion-nav-view>")($scope);
-                $document.find("body").eq(0).append(ionNavView);
+            //Compile the angular markup to get an instance of the directive
+            directiveElem = $compile("<div wex-no-transition></div>")($scope);
 
-                //Compile the angular markup to get an instance of the directive
-                directiveElem = $compile("<div wex-no-transition></div>")($scope);
-
-                $scope.$digest();
-            });
-        });
+            $scope.$digest();
+        }));
 
         afterEach(function () {
             ionNavView.remove();
+            directiveElem.remove();
         });
 
         describe("when the directive element has been clicked", function () {

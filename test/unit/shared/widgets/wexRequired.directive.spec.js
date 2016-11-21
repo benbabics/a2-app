@@ -11,35 +11,34 @@
             mockInput,
             mockText = "Mock text";
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.html");
+        beforeEach(inject(function (_$rootScope_, $compile) {
+            $rootScope = _$rootScope_;
 
-            inject(function (_$rootScope_, $compile) {
-                $rootScope = _$rootScope_;
+            $scope = $rootScope.$new();
 
-                $scope = $rootScope.$new();
+            //Compile the angular markup to get an instance of the directive
+            directiveFormInput = $compile([
+                "<form novalidate name='formModel'>",
+                "<input type='text' ng-model='mockInputModel' name='mockInput' class='wex-required' required>",
+                "</form>"
+            ].join(""))($scope);
 
-                //Compile the angular markup to get an instance of the directive
-                directiveFormInput = $compile([
-                    "<form novalidate name='formModel'>",
-                    "<input type='text' ng-model='mockInputModel' name='mockInput' class='wex-required' required>",
-                    "</form>"
-                ].join(""))($scope);
+            $rootScope.$digest();
 
-                $rootScope.$digest();
+            //get the form and mock input object
+            directiveForm = $scope.formModel;
+            mockInput = directiveForm.mockInput;
 
-                //get the form and mock input object
-                directiveForm = $scope.formModel;
-                mockInput = directiveForm.mockInput;
-
-                //get the form input element
-                _.each(directiveFormInput.children(), function (child) {
-                    if (child.className.indexOf("wex-required") !== -1) {
-                        targetInput = angular.element(child);
-                    }
-                });
+            //get the form input element
+            _.each(directiveFormInput.children(), function (child) {
+                if (child.className.indexOf("wex-required") !== -1) {
+                    targetInput = angular.element(child);
+                }
             });
+        }));
+
+        afterEach(function() {
+            directiveFormInput.remove();
         });
 
         describe("when the form has NOT been submitted", function () {

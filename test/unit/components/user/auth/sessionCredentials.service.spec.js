@@ -13,10 +13,6 @@
     describe("A Session Credentials Service", function () {
 
         beforeEach(function () {
-            module( "app.shared" );
-            module( "app.html" );
-            module( "app.components.user" );
-            module( "app.components.brand" );
 
             // mock dependencies
             SecureStorage = jasmine.createSpy( "SecureStorage" );

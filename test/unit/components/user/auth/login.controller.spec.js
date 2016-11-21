@@ -48,16 +48,6 @@
             _.set(window, "cordova.plugins.settings", cordovaPluginSettings);
             _.set(window, "cordova.plugins.Keyboard", cordovaPluginsKeyboard);
 
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
-            });
-
             inject(function (_$rootScope_, $controller, _$ionicHistory_, _$interval_,  _$localStorage_, _$q_, BrandAssetModel, UserAccountModel, UserModel,
                              _globals_) {
                 $ionicHistory = _$ionicHistory_;
@@ -99,6 +89,10 @@
                 Fingerprint.isAvailable.and.returnValue(fingerprintAvailableDeferred.promise);
             });
 
+        });
+
+        afterEach(function () {
+            self = null;
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -560,22 +554,6 @@
 
             it("should add the 'keyboard-open' class to the body", function () {
                 expect(document.body.classList.contains("keyboard-open")).toBeTruthy();
-            });
-        });
-
-        describe("has a $cordovaKeyboard:hide event handler function that", function () {
-
-            beforeEach(function () {
-                document.body.classList.add("keyboard-open");
-            });
-
-            beforeEach(function () {
-                $rootScope.$broadcast("$cordovaKeyboard:hide");
-                $rootScope.$digest();
-            });
-
-            it("should remove the 'keyboard-open' class from the body", function () {
-                expect(document.body.classList.contains("keyboard-open")).toBeFalsy();
             });
         });
 

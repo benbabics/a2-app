@@ -2,24 +2,16 @@
     "use strict";
 
     var $rootScope,
-        $ionicPlatform,
-        NotificationItemsManager;
+        $ionicPlatform;
 
     describe("A Notifications Module", function () {
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.notifications");
-
-            inject(function (_$rootScope_, _$ionicPlatform_, _NotificationItemsManager_) {
+            inject(function (_$rootScope_, _$ionicPlatform_) {
                 $rootScope = _$rootScope_;
                 $ionicPlatform = _$ionicPlatform_;
-                NotificationItemsManager = _NotificationItemsManager_;
             });
-
-            spyOn(NotificationItemsManager, "clearCachedValues");
         });
 
         describe("has a run function that", function () {
@@ -37,7 +29,7 @@
                 });
 
                 it("should clear all cached values in NotificationItemsManager", function () {
-                    expect(NotificationItemsManager.clearCachedValues).toHaveBeenCalledWith();
+                    expect(this.NotificationItemsManager.clearCachedValues).toHaveBeenCalledWith();
                 });
 
             });
