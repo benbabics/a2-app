@@ -33,7 +33,7 @@
                         return _.map(results, "value");
                     }
                     else {
-                        throw _.map(rejections, "reason");
+                        return $q.reject(_.map(rejections, "reason"));
                     }
                 });
         }

@@ -3,36 +3,46 @@
 
     describe("A FlowUtil service", function () {
 
-        var FlowUtil,
-            $rootScope,
-            $state,
-            mockGlobals = {
+        module.sharedInjector();
+
+        var mockGlobals = {
                 LOGIN_STATE: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-            };
+            },
+            mocks = {};
 
         beforeAll(function () {
-            this.includeAppDependencies = false;
-        });
-
-        beforeEach(function () {
+            this.includeDependencies({
+                includeAppDependencies: false,
+                mocks: mocks
+            }, this);
 
             module(function ($provide, sharedGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
-            inject(function (_$rootScope_, _$state_, _FlowUtil_) {
-                FlowUtil = _FlowUtil_;
-                $state = _$state_;
-                $rootScope = _$rootScope_;
+            inject(function ($rootScope, $state, FlowUtil) {
+                mocks.FlowUtil = FlowUtil;
+                mocks.$state = $state;
+                mocks.$rootScope = $rootScope;
             });
 
-            spyOn($state, "go").and.callThrough();
+            spyOn(mocks.$state, "go").and.callThrough();
+        });
+
+        afterEach(function () {
+            //reset all mocks
+            _.forEach(mocks, TestUtils.resetMock);
+        });
+        
+        afterAll(function () {
+            mockGlobals = null;
+            mocks = null;
         });
 
         describe("has an exitApp function that", function () {
 
             beforeEach(function () {
-                $state.go.and.stub();
+                mocks.$state.go.and.stub();
             });
 
             describe("when on a platform that supports app self-termination", function () {
@@ -42,7 +52,7 @@
                 });
 
                 beforeEach(function () {
-                    FlowUtil.exitApp();
+                    mocks.FlowUtil.exitApp();
                 });
 
                 it("should call navigator.app.exitApp()", function () {
@@ -50,7 +60,7 @@
                 });
 
                 it("should redirect to the login state", function () {
-                    expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
+                    expect(mocks.$state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
                 });
             });
 
@@ -61,11 +71,11 @@
                 });
 
                 beforeEach(function () {
-                    FlowUtil.exitApp();
+                    mocks.FlowUtil.exitApp();
                 });
 
                 it("should redirect to the login state", function () {
-                    expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
+                    expect(mocks.$state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE);
                 });
             });
         });
@@ -80,6 +90,12 @@
                 isolateScope = jasmine.createSpyObj("IsolateScope", ["goBack"]);
             });
 
+            afterAll(function () {
+                backButton = null;
+                isolateScope = null;
+                result = null;
+            });
+
             describe("when given a back button", function () {
 
                 describe("when the given back button is valid", function () {
@@ -91,7 +107,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.goToBackState(backButton);
+                            result = mocks.FlowUtil.goToBackState(backButton);
                         });
 
                         it("should call the back button's goBack function", function () {
@@ -106,7 +122,7 @@
                     describe("when the given back button does NOT have an isolate scope", function () {
 
                         it("should return false", function () {
-                            expect(FlowUtil.goToBackState(backButton)).toBeFalsy();
+                            expect(mocks.FlowUtil.goToBackState(backButton)).toBeFalsy();
                         });
                     });
                 });
@@ -118,7 +134,7 @@
                     });
 
                     it("should return false", function () {
-                        expect(FlowUtil.goToBackState(backButton)).toBeFalsy();
+                        expect(mocks.FlowUtil.goToBackState(backButton)).toBeFalsy();
                     });
                 });
             });
@@ -138,7 +154,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.goToBackState();
+                            result = mocks.FlowUtil.goToBackState();
                         });
 
                         it("should call the back button's goBack function", function () {
@@ -153,7 +169,7 @@
                     describe("when the active back button does NOT have an accessible isolate scope", function () {
 
                         it("should return false", function () {
-                            expect(FlowUtil.goToBackState()).toBeFalsy();
+                            expect(mocks.FlowUtil.goToBackState()).toBeFalsy();
                         });
                     });
                 });
@@ -161,7 +177,7 @@
                 describe("when an active back button is NOT found", function () {
 
                     it("should return false", function () {
-                        expect(FlowUtil.goToBackState()).toBeFalsy();
+                        expect(mocks.FlowUtil.goToBackState()).toBeFalsy();
                     });
                 });
             });
@@ -173,7 +189,11 @@
             beforeEach(function () {
                 callback = jasmine.createSpy("callback");
 
-                spyOn($rootScope, "$on").and.callThrough();
+                spyOn(mocks.$rootScope, "$on").and.callThrough();
+            });
+
+            afterAll(function () {
+                callback = null;
             });
 
             describe("when given a scope", function () {
@@ -182,8 +202,14 @@
                     result;
 
                 beforeEach(function () {
-                    scope = $rootScope.$new();
+                    scope = mocks.$rootScope.$new();
                     options = {};
+                });
+
+                afterAll(function () {
+                    scope = null;
+                    options = null;
+                    result = null;
                 });
 
                 describe("when the 'global' option is true", function () {
@@ -199,7 +225,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, scope, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.enter", function () {
@@ -210,16 +236,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -233,8 +259,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.enter", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -248,8 +278,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -266,7 +296,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, scope, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.enter", function () {
@@ -277,16 +307,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -301,7 +331,11 @@
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
                                 scope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -316,7 +350,7 @@
 
                                 beforeEach(function () {
                                     scope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should invoke the callback again", function () {
@@ -333,7 +367,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, scope, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.enter", function () {
@@ -344,16 +378,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -367,8 +401,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.enter", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -382,8 +420,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -407,7 +445,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, scope, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.enter", function () {
@@ -430,7 +468,11 @@
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
                                 scope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -445,7 +487,7 @@
 
                                 beforeEach(function () {
                                     scope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -462,7 +504,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, scope, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.enter", function () {
@@ -485,7 +527,11 @@
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
                                 scope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -500,7 +546,7 @@
 
                                 beforeEach(function () {
                                     scope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should invoke the callback again", function () {
@@ -517,7 +563,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, scope, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.enter", function () {
@@ -540,7 +586,11 @@
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
                                 scope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -555,7 +605,7 @@
 
                                 beforeEach(function () {
                                     scope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -579,7 +629,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, scope, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.enter", function () {
@@ -590,16 +640,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -613,8 +663,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.enter", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -628,8 +682,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -646,7 +700,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, scope, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.enter", function () {
@@ -657,16 +711,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -681,7 +735,11 @@
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
                                 scope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -696,7 +754,7 @@
 
                                 beforeEach(function () {
                                     scope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should invoke the callback again", function () {
@@ -713,7 +771,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, scope, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.enter", function () {
@@ -724,16 +782,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -747,8 +805,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.enter", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -762,8 +824,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -783,6 +845,11 @@
                     options = {};
                 });
 
+                afterAll(function () {
+                    options = null;
+                    result = null;
+                });
+
                 describe("when the 'global' option is true", function () {
 
                     beforeEach(function () {
@@ -796,19 +863,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, null, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -822,8 +889,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.enter", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -837,8 +908,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -855,19 +926,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, null, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -881,8 +952,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.enter", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -896,8 +971,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should invoke the callback again", function () {
@@ -914,19 +989,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, null, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -940,8 +1015,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.enter", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -955,8 +1034,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -980,7 +1059,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, null, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, null, options);
                         });
 
                         it("should return an empty array", function () {
@@ -996,7 +1075,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, null, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, null, options);
                         });
 
                         it("should return an empty array", function () {
@@ -1012,7 +1091,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, null, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, null, options);
                         });
 
                         it("should return an empty array", function () {
@@ -1035,19 +1114,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, null, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1061,8 +1140,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.enter", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1076,8 +1159,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -1094,19 +1177,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, null, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1120,8 +1203,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.enter", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1135,8 +1222,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should invoke the callback again", function () {
@@ -1153,19 +1240,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageEnter(callback, null, options);
+                            result = mocks.FlowUtil.onPageEnter(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.enter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.enter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.enter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.afterEnter", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.afterEnter", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.afterEnter", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1179,8 +1266,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.enter", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.enter", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1194,8 +1285,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.afterEnter", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -1214,7 +1305,11 @@
             beforeEach(function () {
                 callback = jasmine.createSpy("callback");
 
-                spyOn($rootScope, "$on").and.callThrough();
+                spyOn(mocks.$rootScope, "$on").and.callThrough();
+            });
+
+            afterAll(function () {
+                callback = null;
             });
 
             describe("when given a scope", function () {
@@ -1223,8 +1318,14 @@
                     result;
 
                 beforeEach(function () {
-                    scope = $rootScope.$new();
+                    scope = mocks.$rootScope.$new();
                     options = {};
+                });
+
+                afterAll(function () {
+                    scope = null;
+                    options = null;
+                    result = null;
                 });
 
                 describe("when the 'global' option is true", function () {
@@ -1240,7 +1341,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, scope, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.leave", function () {
@@ -1251,16 +1352,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1274,8 +1375,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.leave", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1289,8 +1394,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -1307,7 +1412,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, scope, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.leave", function () {
@@ -1318,16 +1423,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1342,7 +1447,11 @@
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
                                 scope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1357,7 +1466,7 @@
 
                                 beforeEach(function () {
                                     scope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should invoke the callback again", function () {
@@ -1374,7 +1483,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, scope, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.leave", function () {
@@ -1385,16 +1494,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1408,8 +1517,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.leave", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1423,8 +1536,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -1448,7 +1561,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, scope, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.leave", function () {
@@ -1471,7 +1584,11 @@
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
                                 scope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1486,7 +1603,7 @@
 
                                 beforeEach(function () {
                                     scope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -1503,7 +1620,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, scope, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.leave", function () {
@@ -1526,7 +1643,11 @@
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
                                 scope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1541,7 +1662,7 @@
 
                                 beforeEach(function () {
                                     scope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should invoke the callback again", function () {
@@ -1558,7 +1679,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, scope, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.leave", function () {
@@ -1581,7 +1702,11 @@
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
                                 scope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1596,7 +1721,7 @@
 
                                 beforeEach(function () {
                                     scope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -1620,7 +1745,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, scope, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.leave", function () {
@@ -1631,16 +1756,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1654,8 +1779,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.leave", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1669,8 +1798,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -1687,7 +1816,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, scope, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.leave", function () {
@@ -1698,16 +1827,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1722,7 +1851,11 @@
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
                                 scope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1737,7 +1870,7 @@
 
                                 beforeEach(function () {
                                     scope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should invoke the callback again", function () {
@@ -1754,7 +1887,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, scope, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, scope, options);
                         });
 
                         it("should set a listener on scope for $ionicView.leave", function () {
@@ -1765,16 +1898,16 @@
                             expect(scope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1788,8 +1921,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.leave", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1803,8 +1940,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -1824,6 +1961,11 @@
                     options = {};
                 });
 
+                afterAll(function () {
+                    options = null;
+                    result = null;
+                });
+
                 describe("when the 'global' option is true", function () {
 
                     beforeEach(function () {
@@ -1837,19 +1979,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, null, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1863,8 +2005,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.leave", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1878,8 +2024,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -1896,19 +2042,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, null, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1922,8 +2068,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.leave", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1937,8 +2087,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should invoke the callback again", function () {
@@ -1955,19 +2105,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, null, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -1981,8 +2131,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.leave", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -1996,8 +2150,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -2021,7 +2175,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, null, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, null, options);
                         });
 
                         it("should return an empty array", function () {
@@ -2037,7 +2191,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, null, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, null, options);
                         });
 
                         it("should return an empty array", function () {
@@ -2053,7 +2207,7 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, null, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, null, options);
                         });
 
                         it("should return an empty array", function () {
@@ -2076,19 +2230,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, null, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -2102,8 +2256,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.leave", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -2117,8 +2275,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {
@@ -2135,19 +2293,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, null, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -2161,8 +2319,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.leave", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -2176,8 +2338,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should invoke the callback again", function () {
@@ -2194,19 +2356,19 @@
                         });
 
                         beforeEach(function () {
-                            result = FlowUtil.onPageLeave(callback, null, options);
+                            result = mocks.FlowUtil.onPageLeave(callback, null, options);
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.leave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.leave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.leave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $ionicView.beforeLeave", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $ionicView.beforeLeave", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$ionicView.beforeLeave", jasmine.any(Function));
                         });
 
-                        it("should set a listener on $rootScope for $stateChangeSuccess", function () {
-                            expect($rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
+                        it("should set a listener on mocks.$rootScope for $stateChangeSuccess", function () {
+                            expect(mocks.$rootScope.$on).toHaveBeenCalledWith("$stateChangeSuccess", jasmine.any(Function));
                         });
 
                         it("should return an array of remove functions for the listeners", function () {
@@ -2220,8 +2382,12 @@
                             beforeEach(function () {
                                 mockStateInfo = {stateName: TestUtils.getRandomStringThatIsAlphaNumeric(10)};
 
-                                $rootScope.$broadcast("$ionicView.leave", mockStateInfo);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$broadcast("$ionicView.leave", mockStateInfo);
+                                mocks.$rootScope.$digest();
+                            });
+
+                            afterAll(function () {
+                                mockStateInfo = null;
                             });
 
                             it("should invoke the callback", function () {
@@ -2235,8 +2401,8 @@
                             describe("when another event is subsequently fired", function () {
 
                                 beforeEach(function () {
-                                    $rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$broadcast("$ionicView.beforeLeave", mockStateInfo);
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should NOT invoke the callback again", function () {

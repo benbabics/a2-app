@@ -72,7 +72,7 @@
                     // no data in the response
                     else {
                         Logger.error("No data in Response from getting the Brand Assets");
-                        throw new Error("No data in Response from getting the Brand Assets");
+                        return $q.reject("No data in Response from getting the Brand Assets");
                     }
                 })
                 // getting brand assets failed
@@ -103,7 +103,7 @@
                             " - " + LoggerUtil.getErrorMessage(failureResponse);
 
                         Logger.error(error);
-                        throw new Error(error);
+                        return $q.reject(error);
                     }
                 });
         }
@@ -203,7 +203,7 @@
 
             return $q.all(promises)
                 .catch(function (error) {
-                    throw new Error("Failed to load bundled brand '" + brandName + "': " + LoggerUtil.getErrorMessage(error));
+                    return $q.reject("Failed to load bundled brand '" + brandName + "': " + LoggerUtil.getErrorMessage(error));
                 });
         }
 
@@ -224,7 +224,12 @@
                 if (brandAsset.isExpired()) {
                     return BrandUtil.removeAssetResourceFile(brandAsset)
                         .then(function () {
-                            removeBrandAsset(brandAsset);
+                            try {
+                                removeBrandAsset(brandAsset);
+                            }
+                            catch (error) {
+                                return $q.reject(error);
+                            }
                         });
                 }
 
@@ -290,7 +295,7 @@
                     BrandUtil.setLastBrandUpdateDate(brandName);
                 })
                 .catch(function (error) {
-                    throw new Error("Failed to update brand cache: " + LoggerUtil.getErrorMessage(error));
+                    return $q.reject("Failed to update brand cache: " + LoggerUtil.getErrorMessage(error));
                 });
         }
     }

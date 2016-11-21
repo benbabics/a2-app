@@ -1,28 +1,13 @@
 (function () {
     "use strict";
 
-    var AnalyticsUtil,
-        BrandUtil,
-        BrandManager,
-        BrandAssetModel,
-        FileUtil,
-        LoggerUtil,
-        moment,
-        globals,
-        $q,
-        $rootScope,
-        $window,
-        $state,
-        $localStorage,
-        brandAssets,
+    var brandAssets,
         brandAsset,
         binary,
         data,
         bundledAssetDirectory,
         resourcePath,
         fetchResourceDeferred,
-        resolveHandler,
-        rejectHandler,
         writeFileDeferred,
         checkDirectoryExistsDeferred,
         checkFileExistsDeferred,
@@ -30,15 +15,19 @@
         createDirectoryDeferred,
         removeFileDeferred,
         LAST_BRAND_UPDATE_DATE,
-        BRAND;
+        BRAND,
+        mocks = {};
 
     describe("A Brand Util service", function () {
 
-        beforeEach(function () {
+        module.sharedInjector();
+
+        beforeAll(function () {
+            this.includeDependencies({mocks: mocks}, this);
 
             //mock dependencies:
-            BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericAnalyticsTrackingId", "getGenericBrandAssets", "loadBundledBrand"]);
-            FileUtil = jasmine.createSpyObj("FileUtil", [
+            mocks.BrandManager = jasmine.createSpyObj("BrandManager", ["getGenericAnalyticsTrackingId", "getGenericBrandAssets", "loadBundledBrand"]);
+            mocks.FileUtil = jasmine.createSpyObj("FileUtil", [
                 "checkFileExists",
                 "checkDirectoryExists",
                 "createDirectory",
@@ -48,95 +37,124 @@
             ]);
 
             module(function ($provide) {
-                $provide.value("BrandManager", BrandManager);
-                $provide.value("FileUtil", FileUtil);
+                $provide.value("BrandManager", mocks.BrandManager);
+                $provide.value("FileUtil", mocks.FileUtil);
             });
 
-            inject(function (_$localStorage_, _$rootScope_, _$state_, _$q_, _$window_, _globals_, _moment_,
-                             _BrandAssetModel_, _BrandUtil_, _LoggerUtil_) {
+            inject(function ($localStorage, $rootScope, $state, $q, $window, globals, moment, BrandAssetModel, BrandUtil, LoggerUtil) {
+                mocks.BrandUtil = BrandUtil;
+                mocks.LoggerUtil = LoggerUtil;
+                mocks.BrandAssetModel = BrandAssetModel;
+                mocks.$q = $q;
+                mocks.$rootScope = $rootScope;
+                mocks.$window = $window;
+                mocks.$localStorage = $localStorage;
+                mocks.globals = globals;
+                mocks.moment = moment;
+                mocks.$state = $state;
 
-                BrandUtil = _BrandUtil_;
-                LoggerUtil = _LoggerUtil_;
-                BrandAssetModel = _BrandAssetModel_;
-                $q = _$q_;
-                $rootScope = _$rootScope_;
-                $window = _$window_;
-                $localStorage = _$localStorage_;
-                globals = _globals_;
-                moment = _moment_;
-                $state = _$state_;
+                LAST_BRAND_UPDATE_DATE = mocks.globals.LOCALSTORAGE.KEYS.LAST_BRAND_UPDATE_DATE;
+                BRAND = mocks.globals.BRAND;
 
-                LAST_BRAND_UPDATE_DATE = globals.LOCALSTORAGE.KEYS.LAST_BRAND_UPDATE_DATE;
-                BRAND = globals.BRAND;
-
-                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
-                brandAsset = TestUtils.getRandomValueFromArray(brandAssets);
-                binary = TestUtils.getRandomBoolean();
-                data = TestUtils.getRandomStringThatIsAlphaNumeric(20);
-                resourcePath = getAssetResourceSubPath(brandAsset);
-                bundledAssetDirectory = getDefaultBundledBrandPath();
+                mocks.rejectHandler = jasmine.createSpy("mocks.rejectHandler");
+                mocks.resolveHandler = jasmine.createSpy("mocks.resolveHandler");
             });
+        });
 
+        beforeEach(function () {
             //setup mocks:
-            fetchResourceDeferred = $q.defer();
-            writeFileDeferred = $q.defer();
-            checkDirectoryExistsDeferred = $q.defer();
-            checkFileExistsDeferred = $q.defer();
-            readFileDeferred = $q.defer();
-            createDirectoryDeferred = $q.defer();
-            removeFileDeferred = $q.defer();
+            brandAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
+            brandAsset = TestUtils.getRandomValueFromArray(brandAssets);
+            binary = TestUtils.getRandomBoolean();
+            data = TestUtils.getRandomStringThatIsAlphaNumeric(20);
+            resourcePath = getAssetResourceSubPath(brandAsset);
+            bundledAssetDirectory = getDefaultBundledBrandPath();
+            
+            fetchResourceDeferred = mocks.$q.defer();
+            writeFileDeferred = mocks.$q.defer();
+            checkDirectoryExistsDeferred = mocks.$q.defer();
+            checkFileExistsDeferred = mocks.$q.defer();
+            readFileDeferred = mocks.$q.defer();
+            createDirectoryDeferred = mocks.$q.defer();
+            removeFileDeferred = mocks.$q.defer();
 
-            FileUtil.writeFile.and.returnValue(writeFileDeferred.promise);
-            FileUtil.checkDirectoryExists.and.returnValue(checkDirectoryExistsDeferred.promise);
-            FileUtil.checkFileExists.and.returnValue(checkFileExistsDeferred.promise);
-            FileUtil.readFile.and.returnValue(readFileDeferred.promise);
-            FileUtil.createDirectory.and.returnValue(createDirectoryDeferred.promise);
-            FileUtil.removeFile.and.returnValue(removeFileDeferred.promise);
+            mocks.FileUtil.writeFile.and.returnValue(writeFileDeferred.promise);
+            mocks.FileUtil.checkDirectoryExists.and.returnValue(checkDirectoryExistsDeferred.promise);
+            mocks.FileUtil.checkFileExists.and.returnValue(checkFileExistsDeferred.promise);
+            mocks.FileUtil.readFile.and.returnValue(readFileDeferred.promise);
+            mocks.FileUtil.createDirectory.and.returnValue(createDirectoryDeferred.promise);
+            mocks.FileUtil.removeFile.and.returnValue(removeFileDeferred.promise);
 
             //setup spies:
-            rejectHandler = jasmine.createSpy("rejectHandler");
-            resolveHandler = jasmine.createSpy("resolveHandler");
             spyOn(brandAsset, "fetchResource").and.returnValue(fetchResourceDeferred.promise);
-            spyOn($state, "transitionTo").and.stub();
+            spyOn(mocks.$state, "transitionTo").and.stub();
+        });
+
+        afterEach(function () {
+            //reset all mocks
+            _.forEach(mocks, TestUtils.resetMock);
+        });
+
+        afterAll(function () {
+            brandAssets = null;
+            brandAsset = null;
+            binary = null;
+            data = null;
+            bundledAssetDirectory = null;
+            resourcePath = null;
+            fetchResourceDeferred = null;
+            writeFileDeferred = null;
+            checkDirectoryExistsDeferred = null;
+            checkFileExistsDeferred = null;
+            readFileDeferred = null;
+            createDirectoryDeferred = null;
+            removeFileDeferred = null;
+            LAST_BRAND_UPDATE_DATE = null;
+            BRAND = null;
+            mocks = null;
         });
 
         describe("has a getAssetResourceData function that", function () {
 
             beforeEach(function () {
-                BrandUtil.getAssetResourceData(brandAsset, binary)
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
+                mocks.BrandUtil.getAssetResourceData(brandAsset, binary)
+                    .then(mocks.resolveHandler)
+                    .catch(mocks.rejectHandler);
             });
 
-            it("should call FileUtil.checkFileExists with the expected values", function () {
-                expect(FileUtil.checkFileExists).toHaveBeenCalledWith(getAssetResourceSubPath(brandAsset));
+            it("should call mocks.FileUtil.checkFileExists with the expected values", function () {
+                expect(mocks.FileUtil.checkFileExists).toHaveBeenCalledWith(getAssetResourceSubPath(brandAsset));
             });
 
             describe("when the resource data file already exists", function () {
 
                 beforeEach(function () {
                     checkFileExistsDeferred.resolve();
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
                 it("should read the file", function () {
-                    expect(FileUtil.readFile).toHaveBeenCalledWith(resourcePath, binary);
+                    expect(mocks.FileUtil.readFile).toHaveBeenCalledWith(resourcePath, binary);
                 });
 
                 describe("when reading the file is successful", function () {
 
                     beforeEach(function () {
                         readFileDeferred.resolve(data);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise resolving with the resource data", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(data);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(data);
                     });
                 });
 
                 describe("when reading the file is NOT successful", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -144,12 +162,13 @@
                         };
 
                         readFileDeferred.reject(error);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "Failed to get brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "Resource data file not found for brand asset: " + brandAsset.assetSubtypeId;
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -158,12 +177,13 @@
 
                 beforeEach(function () {
                     checkFileExistsDeferred.reject();
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should throw an error", function () {
+                it("should reject", function () {
                     var expectedError = "Resource data file not found for brand asset: " + brandAsset.assetSubtypeId;
 
-                    expect($rootScope.$digest).toThrowError(expectedError);
+                    expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                 });
             });
         });
@@ -173,28 +193,28 @@
             describe("when given a valid brandAsset", function () {
 
                 it("should return the expected resourceDirectory", function () {
-                    expect(BrandUtil.getAssetResourceDirectory(brandAsset)).toEqual(getAssetResourceDirectory(brandAsset));
+                    expect(mocks.BrandUtil.getAssetResourceDirectory(brandAsset)).toEqual(getAssetResourceDirectory(brandAsset));
                 });
             });
 
             describe("when given a null brandAsset", function () {
 
-                it("should throw an error", function () {
+                it("should reject", function () {
                     var expectedError = "Failed to get brand asset resource directory.";
 
                     expect(function () {
-                        BrandUtil.getAssetResourceDirectory(null);
+                        mocks.BrandUtil.getAssetResourceDirectory(null);
                     }).toThrowError(expectedError);
                 });
             });
 
             describe("when given an undefined brandAsset", function () {
 
-                it("should throw an error", function () {
+                it("should reject", function () {
                     var expectedError = "Failed to get brand asset resource directory.";
 
                     expect(function () {
-                        BrandUtil.getAssetResourceDirectory(undefined);
+                        mocks.BrandUtil.getAssetResourceDirectory(undefined);
                     }).toThrowError(expectedError);
                 });
             });
@@ -203,40 +223,44 @@
         describe("has a getAssetResourceFile function that", function () {
 
             beforeEach(function () {
-                BrandUtil.getAssetResourceFile(brandAsset, binary)
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
+                mocks.BrandUtil.getAssetResourceFile(brandAsset, binary)
+                    .then(mocks.resolveHandler)
+                    .catch(mocks.rejectHandler);
             });
 
-            it("should call FileUtil.checkFileExists with the expected values", function () {
-                expect(FileUtil.checkFileExists).toHaveBeenCalledWith(getAssetResourceSubPath(brandAsset));
+            it("should call mocks.FileUtil.checkFileExists with the expected values", function () {
+                expect(mocks.FileUtil.checkFileExists).toHaveBeenCalledWith(getAssetResourceSubPath(brandAsset));
             });
 
             describe("when the resource data file already exists", function () {
 
                 beforeEach(function () {
                     checkFileExistsDeferred.resolve();
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
                 it("should read the file", function () {
-                    expect(FileUtil.readFile).toHaveBeenCalledWith(resourcePath, binary);
+                    expect(mocks.FileUtil.readFile).toHaveBeenCalledWith(resourcePath, binary);
                 });
 
                 describe("when reading the file is successful", function () {
 
                     beforeEach(function () {
                         readFileDeferred.resolve(data);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise resolving with the resource data", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(data);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(data);
                     });
                 });
 
                 describe("when reading the file is NOT successful", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -244,12 +268,13 @@
                         };
 
                         readFileDeferred.reject(error);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "Failed to get brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "Failed to get brand asset resource file '" + resourcePath + "': " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -257,18 +282,23 @@
             describe("when the resource data file does NOT already exist", function () {
                 var error;
 
+                afterAll(function () {
+                    error = null;
+                });
+
                 beforeEach(function () {
                     error = {
                         message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     };
 
                     checkFileExistsDeferred.reject(error);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should throw an error", function () {
-                    var expectedError = "Failed to get brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
+                it("should reject", function () {
+                    var expectedError = "Failed to get brand asset resource file '" + resourcePath + "': " + mocks.LoggerUtil.getErrorMessage(error);
 
-                    expect($rootScope.$digest).toThrowError(expectedError);
+                    expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                 });
             });
         });
@@ -276,60 +306,68 @@
         describe("has a getAssetResourceFilePath function that", function () {
             var localFileSystemUrl;
 
+            afterAll(function () {
+                localFileSystemUrl = null;
+            });
+
             beforeEach(function () {
                 localFileSystemUrl = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
-                $window.resolveLocalFileSystemURL = jasmine.createSpy("resolveLocalFileSystemURL").and.callFake(function (path, callback) {
+                mocks.$window.resolveLocalFileSystemURL = jasmine.createSpy("resolveLocalFileSystemURL").and.callFake(function (path, callback) {
                     var entry = jasmine.createSpyObj("entry", ["toInternalURL"]);
                     entry.toInternalURL.and.returnValue(localFileSystemUrl);
 
                     callback(entry);
                 });
 
-                BrandUtil.getAssetResourceFilePath(brandAsset)
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
-                $rootScope.$digest();
+                mocks.BrandUtil.getAssetResourceFilePath(brandAsset)
+                    .then(mocks.resolveHandler)
+                    .catch(mocks.rejectHandler);
+                mocks.$rootScope.$digest();
             });
 
             it("should resolve a promise with the expected value", function () {
-                expect(resolveHandler).toHaveBeenCalledWith(localFileSystemUrl);
+                expect(mocks.resolveHandler).toHaveBeenCalledWith(localFileSystemUrl);
             });
         });
 
         describe("has a storeAssetResourceFile function that", function () {
 
             beforeEach(function () {
-                BrandUtil.storeAssetResourceFile(brandAsset, data)
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
+                mocks.BrandUtil.storeAssetResourceFile(brandAsset, data)
+                    .then(mocks.resolveHandler)
+                    .catch(mocks.rejectHandler);
             });
 
             describe("when the brand directory exists", function () {
 
                 beforeEach(function () {
                     checkDirectoryExistsDeferred.resolve();
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call FileUtil.writeFile with the expected values", function () {
-                    expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                it("should call mocks.FileUtil.writeFile with the expected values", function () {
+                    expect(mocks.FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
                 });
 
                 describe("when writing the file succeeds", function () {
 
                     beforeEach(function () {
                         writeFileDeferred.resolve();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the data", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(data);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(data);
                     });
                 });
 
                 describe("when writing the file fails", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -337,12 +375,13 @@
                         };
 
                         writeFileDeferred.reject(error);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -351,38 +390,42 @@
 
                 beforeEach(function () {
                     checkDirectoryExistsDeferred.reject();
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call FileUtil.createDirectory with the expected value", function () {
-                    expect(FileUtil.createDirectory).toHaveBeenCalledWith(getAssetResourceDirectory(brandAsset));
+                it("should call mocks.FileUtil.createDirectory with the expected value", function () {
+                    expect(mocks.FileUtil.createDirectory).toHaveBeenCalledWith(getAssetResourceDirectory(brandAsset));
                 });
 
                 describe("when creating the directory succeeds", function () {
 
                     beforeEach(function () {
                         createDirectoryDeferred.resolve();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call FileUtil.writeFile with the expected values", function () {
-                        expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                    it("should call mocks.FileUtil.writeFile with the expected values", function () {
+                        expect(mocks.FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
                     });
 
                     describe("when writing the file succeeds", function () {
 
                         beforeEach(function () {
                             writeFileDeferred.resolve();
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return a promise that resolves", function () {
-                            expect(resolveHandler).toHaveBeenCalled();
+                            expect(mocks.resolveHandler).toHaveBeenCalled();
                         });
                     });
 
                     describe("when writing the file fails", function () {
                         var error;
+
+                        afterAll(function () {
+                            error = null;
+                        });
 
                         beforeEach(function () {
                             error = {
@@ -390,12 +433,13 @@
                             };
 
                             writeFileDeferred.reject(error);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
+                        it("should reject", function () {
+                            var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + mocks.LoggerUtil.getErrorMessage(error);
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                         });
                     });
                 });
@@ -403,18 +447,23 @@
                 describe("when creating the directory fails", function () {
                     var error;
 
+                    afterAll(function () {
+                        error = null;
+                    });
+
                     beforeEach(function () {
                         error = {
                             message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                         };
 
                         createDirectoryDeferred.reject(error);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -425,27 +474,31 @@
             describe("when given a bundledAssetDirectory", function () {
                 var bundledAssetDirectory;
 
+                afterAll(function () {
+                    bundledAssetDirectory = null;
+                });
+
                 beforeEach(function () {
                     bundledAssetDirectory = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
-                    BrandUtil.loadBundledAsset(brandAsset, bundledAssetDirectory)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
+                    mocks.BrandUtil.loadBundledAsset(brandAsset, bundledAssetDirectory)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
                 });
 
-                it("should call FileUtil.checkFileExists with the expected values", function () {
-                    expect(FileUtil.checkFileExists).toHaveBeenCalledWith(brandAsset.getResourceLink(), bundledAssetDirectory);
+                it("should call mocks.FileUtil.checkFileExists with the expected values", function () {
+                    expect(mocks.FileUtil.checkFileExists).toHaveBeenCalledWith(brandAsset.getResourceLink(), bundledAssetDirectory);
                 });
 
                 describe("when the FILE asset exists on the file system", function () {
 
                     beforeEach(function () {
                         checkFileExistsDeferred.resolve();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call FileUtil.readFile with the expected values", function () {
-                        expect(FileUtil.readFile).toHaveBeenCalledWith(brandAsset.getResourceLink(), true, bundledAssetDirectory);
+                    it("should call mocks.FileUtil.readFile with the expected values", function () {
+                        expect(mocks.FileUtil.readFile).toHaveBeenCalledWith(brandAsset.getResourceLink(), true, bundledAssetDirectory);
                     });
 
                     describe("when reading the file is successful", function () {
@@ -453,27 +506,31 @@
                         beforeEach(function () {
                             readFileDeferred.resolve(data);
                             checkDirectoryExistsDeferred.resolve();
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should store the asset resource data", function () {
-                            expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                            expect(mocks.FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
                         });
 
                         describe("when the asset resource data is successfully stored", function () {
 
                             beforeEach(function () {
                                 writeFileDeferred.resolve();
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should return a promise that resolves with the resource data", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(data);
+                                expect(mocks.resolveHandler).toHaveBeenCalledWith(data);
                             });
                         });
 
                         describe("when the asset resource data is NOT successfully stored", function () {
                             var error;
+
+                            afterAll(function () {
+                                error = null;
+                            });
 
                             beforeEach(function () {
                                 error = {
@@ -481,14 +538,13 @@
                                 };
 
                                 writeFileDeferred.reject(error);
+                                mocks.$rootScope.$digest();
                             });
 
-                            it("should throw an error", function () {
+                            it("should reject", function () {
                                 var expectedError = new RegExp("Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "':.+");
 
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrowError(expectedError);
+                                expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
                             });
                         });
                     });
@@ -497,7 +553,7 @@
 
                         beforeEach(function () {
                             readFileDeferred.reject();
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should try to fetch the resource", function () {
@@ -509,27 +565,31 @@
                             beforeEach(function () {
                                 checkDirectoryExistsDeferred.resolve();
                                 fetchResourceDeferred.resolve(data);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should store the asset resource data", function () {
-                                expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                                expect(mocks.FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
                             });
 
                             describe("when the asset resource data is successfully stored", function () {
 
                                 beforeEach(function () {
                                     writeFileDeferred.resolve();
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should return a promise that resolves with the resource data", function () {
-                                    expect(resolveHandler).toHaveBeenCalledWith(data);
+                                    expect(mocks.resolveHandler).toHaveBeenCalledWith(data);
                                 });
                             });
 
                             describe("when the asset resource data is NOT successfully stored", function () {
                                 var error;
+
+                                afterAll(function () {
+                                    error = null;
+                                });
 
                                 beforeEach(function () {
                                     error = {
@@ -537,14 +597,15 @@
                                     };
 
                                     writeFileDeferred.reject(error);
+                                    mocks.$rootScope.$digest();
                                 });
 
-                                it("should throw an error", function () {
-                                    var expectedError = "Failed to store brand asset resource file '" +
-                                        getAssetResourceSubPath(brandAsset) +
-                                        "': " + LoggerUtil.getErrorMessage(error);
+                                it("should reject", function () {
+                                    var expectedError = "Failed to load bundled brand asset with subtype '" +
+                                        brandAsset.assetSubtypeId +
+                                        "': " + "Failed to store brand asset resource file '" + resourcePath + "': " + mocks.LoggerUtil.getErrorMessage(error);
 
-                                    expect($rootScope.$digest).toThrowError(expectedError);
+                                    expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                                 });
                             });
                         });
@@ -552,18 +613,23 @@
                         describe("when fetching the resource fails", function () {
                             var error;
 
+                            afterAll(function () {
+                                error = null;
+                            });
+
                             beforeEach(function () {
                                 error = {
                                     message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                                 };
 
                                 fetchResourceDeferred.reject(error);
+                                mocks.$rootScope.$digest();
                             });
 
-                            it("should throw an error", function () {
+                            it("should reject", function () {
                                 var expectedError = new RegExp("Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "':.+");
 
-                                expect($rootScope.$digest).toThrowError(expectedError);
+                                expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
                             });
                         });
                     });
@@ -573,7 +639,7 @@
 
                     beforeEach(function () {
                         checkFileExistsDeferred.reject();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should try to fetch the resource", function () {
@@ -585,27 +651,31 @@
                         beforeEach(function () {
                             checkDirectoryExistsDeferred.resolve();
                             fetchResourceDeferred.resolve(data);
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should store the asset resource data", function () {
-                            expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                            expect(mocks.FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
                         });
 
                         describe("when the asset resource data is successfully stored", function () {
 
                             beforeEach(function () {
                                 writeFileDeferred.resolve();
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should return a promise that resolves with he resource data", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(data);
+                                expect(mocks.resolveHandler).toHaveBeenCalledWith(data);
                             });
                         });
 
                         describe("when the asset resource data is NOT successfully stored", function () {
                             var error;
+
+                            afterAll(function () {
+                                error = null;
+                            });
 
                             beforeEach(function () {
                                 error = {
@@ -613,14 +683,15 @@
                                 };
 
                                 writeFileDeferred.reject(error);
+                                mocks.$rootScope.$digest();
                             });
 
-                            it("should throw an error", function () {
-                                var expectedError = "Failed to store brand asset resource file '" +
-                                    getAssetResourceSubPath(brandAsset) +
-                                    "': " + LoggerUtil.getErrorMessage(error);
+                            it("should reject", function () {
+                                var expectedError = "Failed to load bundled brand asset with subtype '" +
+                                    brandAsset.assetSubtypeId +
+                                    "': " + "Failed to store brand asset resource file '" + resourcePath + "': " + mocks.LoggerUtil.getErrorMessage(error);
 
-                                expect($rootScope.$digest).toThrowError(expectedError);
+                                expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                             });
                         });
                     });
@@ -628,18 +699,23 @@
                     describe("when fetching the resource fails", function () {
                         var error;
 
+                        afterAll(function () {
+                            error = null;
+                        });
+
                         beforeEach(function () {
                             error = {
                                 message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                             };
 
                             fetchResourceDeferred.reject(error);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
+                        it("should reject", function () {
                             var expectedError = new RegExp("Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "':.+");
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
                         });
                     });
                 });
@@ -648,25 +724,29 @@
             describe("when not given a bundledAssetDirectory", function () {
                 var bundledAssetDirectory = getDefaultBundledBrandPath();
 
-                beforeEach(function () {
-                    BrandUtil.loadBundledAsset(brandAsset)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
+                afterAll(function () {
+                    bundledAssetDirectory = null;
                 });
 
-                it("should call FileUtil.checkFileExists with the expected values", function () {
-                    expect(FileUtil.checkFileExists).toHaveBeenCalledWith(brandAsset.getResourceLink(), bundledAssetDirectory);
+                beforeEach(function () {
+                    mocks.BrandUtil.loadBundledAsset(brandAsset)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                });
+
+                it("should call mocks.FileUtil.checkFileExists with the expected values", function () {
+                    expect(mocks.FileUtil.checkFileExists).toHaveBeenCalledWith(brandAsset.getResourceLink(), bundledAssetDirectory);
                 });
 
                 describe("when the FILE asset exists on the file system", function () {
 
                     beforeEach(function () {
                         checkFileExistsDeferred.resolve();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call FileUtil.readFile with the expected values", function () {
-                        expect(FileUtil.readFile).toHaveBeenCalledWith(brandAsset.getResourceLink(), true, bundledAssetDirectory);
+                    it("should call mocks.FileUtil.readFile with the expected values", function () {
+                        expect(mocks.FileUtil.readFile).toHaveBeenCalledWith(brandAsset.getResourceLink(), true, bundledAssetDirectory);
                     });
 
                     describe("when reading the file is successful", function () {
@@ -674,27 +754,31 @@
                         beforeEach(function () {
                             readFileDeferred.resolve(data);
                             checkDirectoryExistsDeferred.resolve();
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should store the asset resource data", function () {
-                            expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                            expect(mocks.FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
                         });
 
                         describe("when the asset resource data is successfully stored", function () {
 
                             beforeEach(function () {
                                 writeFileDeferred.resolve();
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should return a promise that resolves with the resource data", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(data);
+                                expect(mocks.resolveHandler).toHaveBeenCalledWith(data);
                             });
                         });
 
                         describe("when the asset resource data is NOT successfully stored", function () {
                             var error;
+
+                            afterAll(function () {
+                                error = null;
+                            });
 
                             beforeEach(function () {
                                 error = {
@@ -702,14 +786,13 @@
                                 };
 
                                 writeFileDeferred.reject(error);
+                                mocks.$rootScope.$digest();
                             });
 
-                            it("should throw an error", function () {
+                            it("should reject", function () {
                                 var expectedError = new RegExp("Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "':.+");
 
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrowError(expectedError);
+                                expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
                             });
                         });
                     });
@@ -718,7 +801,7 @@
 
                         beforeEach(function () {
                             readFileDeferred.reject();
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should try to fetch the resource", function () {
@@ -730,27 +813,31 @@
                             beforeEach(function () {
                                 checkDirectoryExistsDeferred.resolve();
                                 fetchResourceDeferred.resolve(data);
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should store the asset resource data", function () {
-                                expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                                expect(mocks.FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
                             });
 
                             describe("when the asset resource data is successfully stored", function () {
 
                                 beforeEach(function () {
                                     writeFileDeferred.resolve();
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should return a promise that resolves with the resource data", function () {
-                                    expect(resolveHandler).toHaveBeenCalledWith(data);
+                                    expect(mocks.resolveHandler).toHaveBeenCalledWith(data);
                                 });
                             });
 
                             describe("when the asset resource data is NOT successfully stored", function () {
                                 var error;
+
+                                afterAll(function () {
+                                    error = null;
+                                });
 
                                 beforeEach(function () {
                                     error = {
@@ -758,14 +845,15 @@
                                     };
 
                                     writeFileDeferred.reject(error);
+                                    mocks.$rootScope.$digest();
                                 });
 
-                                it("should throw an error", function () {
-                                    var expectedError = "Failed to store brand asset resource file '" +
-                                        getAssetResourceSubPath(brandAsset) +
-                                        "': " + LoggerUtil.getErrorMessage(error);
+                                it("should reject", function () {
+                                    var expectedError = "Failed to load bundled brand asset with subtype '" +
+                                        brandAsset.assetSubtypeId +
+                                        "': " + "Failed to store brand asset resource file '" + resourcePath + "': " + mocks.LoggerUtil.getErrorMessage(error);
 
-                                    expect($rootScope.$digest).toThrowError(expectedError);
+                                    expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                                 });
                             });
                         });
@@ -773,18 +861,23 @@
                         describe("when fetching the resource fails", function () {
                             var error;
 
+                            afterAll(function () {
+                                error = null;
+                            });
+
                             beforeEach(function () {
                                 error = {
                                     message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                                 };
 
                                 fetchResourceDeferred.reject(error);
+                                mocks.$rootScope.$digest();
                             });
 
-                            it("should throw an error", function () {
+                            it("should reject", function () {
                                 var expectedError = new RegExp("Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "':.+");
 
-                                expect($rootScope.$digest).toThrowError(expectedError);
+                                expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
                             });
                         });
                     });
@@ -794,7 +887,7 @@
 
                     beforeEach(function () {
                         checkFileExistsDeferred.reject();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should try to fetch the resource", function () {
@@ -806,27 +899,31 @@
                         beforeEach(function () {
                             checkDirectoryExistsDeferred.resolve();
                             fetchResourceDeferred.resolve(data);
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should store the asset resource data", function () {
-                            expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                            expect(mocks.FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
                         });
 
                         describe("when the asset resource data is successfully stored", function () {
 
                             beforeEach(function () {
                                 writeFileDeferred.resolve();
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should return a promise that resolves with he resource data", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(data);
+                                expect(mocks.resolveHandler).toHaveBeenCalledWith(data);
                             });
                         });
 
                         describe("when the asset resource data is NOT successfully stored", function () {
                             var error;
+
+                            afterAll(function () {
+                                error = null;
+                            });
 
                             beforeEach(function () {
                                 error = {
@@ -834,14 +931,15 @@
                                 };
 
                                 writeFileDeferred.reject(error);
+                                mocks.$rootScope.$digest();
                             });
 
-                            it("should throw an error", function () {
-                                var expectedError = "Failed to store brand asset resource file '" +
-                                    getAssetResourceSubPath(brandAsset) +
-                                    "': " + LoggerUtil.getErrorMessage(error);
+                            it("should reject", function () {
+                                var expectedError = "Failed to load bundled brand asset with subtype '" +
+                                    brandAsset.assetSubtypeId +
+                                    "': " + "Failed to store brand asset resource file '" + resourcePath + "': " + mocks.LoggerUtil.getErrorMessage(error);
 
-                                expect($rootScope.$digest).toThrowError(expectedError);
+                                expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                             });
                         });
                     });
@@ -849,18 +947,23 @@
                     describe("when fetching the resource fails", function () {
                         var error;
 
+                        afterAll(function () {
+                            error = null;
+                        });
+
                         beforeEach(function () {
                             error = {
                                 message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                             };
 
                             fetchResourceDeferred.reject(error);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
+                        it("should reject", function () {
                             var expectedError = new RegExp("Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "':.+");
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
                         });
                     });
                 });
@@ -870,6 +973,10 @@
         describe("has a getAssetBySubtype function that", function () {
             var assetSubtypeId;
 
+            afterAll(function () {
+                assetSubtypeId = null;
+            });
+
             describe("when the given brandAssets contain an asset with the given subtype", function () {
 
                 beforeEach(function () {
@@ -877,7 +984,7 @@
                 });
 
                 it("should return that asset", function () {
-                    expect(BrandUtil.getAssetBySubtype(brandAssets, assetSubtypeId)).toEqual(brandAsset);
+                    expect(mocks.BrandUtil.getAssetBySubtype(brandAssets, assetSubtypeId)).toEqual(brandAsset);
                 });
             });
 
@@ -891,21 +998,21 @@
                 });
 
                 it("should return null", function () {
-                    expect(BrandUtil.getAssetBySubtype(brandAssets, assetSubtypeId)).toBeNull();
+                    expect(mocks.BrandUtil.getAssetBySubtype(brandAssets, assetSubtypeId)).toBeNull();
                 });
             });
 
             describe("when the given brandAssets are null", function () {
 
                 it("should return null", function () {
-                    expect(BrandUtil.getAssetBySubtype(null, assetSubtypeId)).toBeNull();
+                    expect(mocks.BrandUtil.getAssetBySubtype(null, assetSubtypeId)).toBeNull();
                 });
             });
 
             describe("when the given brandAssets are undefined", function () {
 
                 it("should return null", function () {
-                    expect(BrandUtil.getAssetBySubtype(undefined, assetSubtypeId)).toBeNull();
+                    expect(mocks.BrandUtil.getAssetBySubtype(undefined, assetSubtypeId)).toBeNull();
                 });
             });
         });
@@ -915,11 +1022,11 @@
             describe("when forceUpdate is true", function () {
 
                 beforeEach(function () {
-                    BrandUtil.cacheAssetResourceData(brandAsset, true)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
+                    mocks.BrandUtil.cacheAssetResourceData(brandAsset, true)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
 
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
                 it("should call brandAsset.fetchResource", function () {
@@ -931,27 +1038,31 @@
                     beforeEach(function () {
                         fetchResourceDeferred.resolve(data);
                         checkDirectoryExistsDeferred.resolve();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should store the asset resource data", function () {
-                        expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                        expect(mocks.FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
                     });
 
                     describe("when the asset resource data is successfully stored", function () {
 
                         beforeEach(function () {
                             writeFileDeferred.resolve();
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return a promise resolving with the resource data", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(data);
+                            expect(mocks.resolveHandler).toHaveBeenCalledWith(data);
                         });
                     });
 
                     describe("when the asset resource data is NOT successfully stored", function () {
                         var error;
+
+                        afterAll(function () {
+                            error = null;
+                        });
 
                         beforeEach(function () {
                             error = {
@@ -959,12 +1070,13 @@
                             };
 
                             writeFileDeferred.reject(error);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
+                        it("should reject", function () {
+                            var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + mocks.LoggerUtil.getErrorMessage(error);
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                         });
                     });
                 });
@@ -975,18 +1087,18 @@
                 describe("when there is a brand asset with a resource", function () {
 
                     beforeEach(function () {
-                        BrandUtil.cacheAssetResourceData(brandAsset, false)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
+                        mocks.BrandUtil.cacheAssetResourceData(brandAsset, false)
+                            .then(mocks.resolveHandler)
+                            .catch(mocks.rejectHandler);
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     describe("if the resource is already cached", function () {
 
                         beforeEach(function () {
                             checkFileExistsDeferred.resolve();
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should NOT call brandAsset.fetchResource", function () {
@@ -994,11 +1106,11 @@
                         });
 
                         it("should NOT store the asset resource data", function () {
-                            expect(FileUtil.writeFile).not.toHaveBeenCalled();
+                            expect(mocks.FileUtil.writeFile).not.toHaveBeenCalled();
                         });
 
                         it("should resolve", function () {
-                            expect(resolveHandler).toHaveBeenCalled();
+                            expect(mocks.resolveHandler).toHaveBeenCalled();
                         });
                     });
 
@@ -1006,7 +1118,7 @@
 
                         beforeEach(function () {
                             checkFileExistsDeferred.reject();
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should call brandAsset.fetchResource", function () {
@@ -1018,27 +1130,31 @@
                             beforeEach(function () {
                                 fetchResourceDeferred.resolve(data);
                                 checkDirectoryExistsDeferred.resolve();
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should store the asset resource data", function () {
-                                expect(FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
+                                expect(mocks.FileUtil.writeFile).toHaveBeenCalledWith(resourcePath, data, true);
                             });
 
                             describe("when the asset resource data is successfully stored", function () {
 
                                 beforeEach(function () {
                                     writeFileDeferred.resolve();
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should return a promise resolving with the resource data", function () {
-                                    expect(resolveHandler).toHaveBeenCalledWith(data);
+                                    expect(mocks.resolveHandler).toHaveBeenCalledWith(data);
                                 });
                             });
 
                             describe("when the asset resource data is NOT successfully stored", function () {
                                 var error;
+
+                                afterAll(function () {
+                                    error = null;
+                                });
 
                                 beforeEach(function () {
                                     error = {
@@ -1046,12 +1162,13 @@
                                     };
 
                                     writeFileDeferred.reject(error);
+                                    mocks.$rootScope.$digest();
                                 });
 
-                                it("should throw an error", function () {
-                                    var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error);
+                                it("should reject", function () {
+                                    var expectedError = "Failed to store brand asset resource file '" + resourcePath + "': " + mocks.LoggerUtil.getErrorMessage(error);
 
-                                    expect($rootScope.$digest).toThrowError(expectedError);
+                                    expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                                 });
                             });
                         });
@@ -1063,6 +1180,10 @@
         describe("has a getLastBrandUpdateDate function that", function () {
             var brandName;
 
+            afterAll(function () {
+                brandName = null;
+            });
+
             beforeEach(function () {
                 brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
             });
@@ -1070,31 +1191,35 @@
             describe("when there is already a list of last update dates", function () {
 
                 beforeEach(function () {
-                    $localStorage[LAST_BRAND_UPDATE_DATE] = {};
+                    mocks.$localStorage[LAST_BRAND_UPDATE_DATE] = {};
                 });
 
                 describe("when the given brand is in the list of last update dates", function () {
                     var expectedDate;
 
+                    afterAll(function () {
+                        expectedDate = null;
+                    });
+
                     beforeEach(function () {
                         expectedDate = TestUtils.getRandomDate();
 
-                        $localStorage[LAST_BRAND_UPDATE_DATE][brandName] = expectedDate;
+                        mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName] = expectedDate;
                     });
 
                     it("should return the last update date for the given brand", function () {
-                        expect(BrandUtil.getLastBrandUpdateDate(brandName)).toEqual(expectedDate);
+                        expect(mocks.BrandUtil.getLastBrandUpdateDate(brandName)).toEqual(expectedDate);
                     });
                 });
 
                 describe("when the given brand is NOT in the list of last update dates", function () {
 
                     beforeEach(function () {
-                        delete $localStorage[LAST_BRAND_UPDATE_DATE][brandName];
+                        delete mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName];
                     });
 
                     it("should return null", function () {
-                        expect(BrandUtil.getLastBrandUpdateDate(brandName)).toBeNull();
+                        expect(mocks.BrandUtil.getLastBrandUpdateDate(brandName)).toBeNull();
                     });
                 });
             });
@@ -1102,17 +1227,21 @@
             describe("when there is NOT already a list of last update dates", function () {
 
                 beforeEach(function () {
-                    delete $localStorage[LAST_BRAND_UPDATE_DATE];
+                    delete mocks.$localStorage[LAST_BRAND_UPDATE_DATE];
                 });
 
                 it("should return null", function () {
-                    expect(BrandUtil.getLastBrandUpdateDate(brandName)).toBeNull();
+                    expect(mocks.BrandUtil.getLastBrandUpdateDate(brandName)).toBeNull();
                 });
             });
         });
 
         describe("has a setLastBrandUpdateDate function that", function () {
             var brandName;
+
+            afterAll(function () {
+                brandName = null;
+            });
 
             beforeEach(function () {
                 brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
@@ -1121,6 +1250,10 @@
             describe("when given a date", function () {
                 var date;
 
+                afterAll(function () {
+                    date = null;
+                });
+
                 beforeEach(function () {
                     date = TestUtils.getRandomDate();
                 });
@@ -1128,39 +1261,43 @@
                 describe("when there is already a list of last update dates", function () {
 
                     beforeEach(function () {
-                        $localStorage[LAST_BRAND_UPDATE_DATE] = {};
+                        mocks.$localStorage[LAST_BRAND_UPDATE_DATE] = {};
                     });
 
                     describe("when the given brand is in the list of last update dates", function () {
                         var oldDate;
 
+                        afterAll(function () {
+                            oldDate = null;
+                        });
+
                         beforeEach(function () {
                             oldDate = TestUtils.getRandomDate();
 
-                            $localStorage[LAST_BRAND_UPDATE_DATE][brandName] = oldDate;
+                            mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName] = oldDate;
                         });
 
                         beforeEach(function () {
-                            BrandUtil.setLastBrandUpdateDate(brandName, date);
+                            mocks.BrandUtil.setLastBrandUpdateDate(brandName, date);
                         });
 
                         it("should update the entry with the given date", function () {
-                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(date);
+                            expect(mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(date);
                         });
                     });
 
                     describe("when the given brand is NOT in the list of last update dates", function () {
 
                         beforeEach(function () {
-                            delete $localStorage[LAST_BRAND_UPDATE_DATE][brandName];
+                            delete mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName];
                         });
 
                         beforeEach(function () {
-                            BrandUtil.setLastBrandUpdateDate(brandName, date);
+                            mocks.BrandUtil.setLastBrandUpdateDate(brandName, date);
                         });
 
                         it("should add the entry with the given date", function () {
-                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(date);
+                            expect(mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(date);
                         });
                     });
                 });
@@ -1168,25 +1305,29 @@
                 describe("when there is NOT already a list of last update dates", function () {
 
                     beforeEach(function () {
-                        delete $localStorage[LAST_BRAND_UPDATE_DATE];
+                        delete mocks.$localStorage[LAST_BRAND_UPDATE_DATE];
                     });
 
                     beforeEach(function () {
-                        BrandUtil.setLastBrandUpdateDate(brandName, date);
+                        mocks.BrandUtil.setLastBrandUpdateDate(brandName, date);
                     });
 
                     it("should create a list of last update dates", function () {
-                        expect($localStorage[LAST_BRAND_UPDATE_DATE]).toBeDefined();
+                        expect(mocks.$localStorage[LAST_BRAND_UPDATE_DATE]).toBeDefined();
                     });
 
                     it("should add the entry with the given date", function () {
-                        expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(date);
+                        expect(mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(date);
                     });
                 });
             });
 
             describe("when NOT given a date", function () {
                 var currentDate;
+
+                afterAll(function () {
+                    currentDate = null;
+                });
 
                 beforeEach(function () {
                     currentDate = TestUtils.getRandomDate();
@@ -1195,43 +1336,47 @@
                 describe("when there is already a list of last update dates", function () {
 
                     beforeEach(function () {
-                        $localStorage[LAST_BRAND_UPDATE_DATE] = {};
+                        mocks.$localStorage[LAST_BRAND_UPDATE_DATE] = {};
                     });
 
                     describe("when the given brand is in the list of last update dates", function () {
                         var oldDate;
 
+                        afterAll(function () {
+                            oldDate = null;
+                        });
+
                         beforeEach(function () {
                             oldDate = TestUtils.getRandomDate();
 
-                            $localStorage[LAST_BRAND_UPDATE_DATE][brandName] = oldDate;
+                            mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName] = oldDate;
                         });
 
                         beforeEach(function () {
                             jasmine.clock().mockDate(currentDate);
 
-                            BrandUtil.setLastBrandUpdateDate(brandName);
+                            mocks.BrandUtil.setLastBrandUpdateDate(brandName);
                         });
 
                         it("should update the entry with the current date", function () {
-                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                            expect(mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
                         });
                     });
 
                     describe("when the given brand is NOT in the list of last update dates", function () {
 
                         beforeEach(function () {
-                            delete $localStorage[LAST_BRAND_UPDATE_DATE][brandName];
+                            delete mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName];
                         });
 
                         beforeEach(function () {
                             jasmine.clock().mockDate(currentDate);
 
-                            BrandUtil.setLastBrandUpdateDate(brandName);
+                            mocks.BrandUtil.setLastBrandUpdateDate(brandName);
                         });
 
                         it("should add the entry with the current date", function () {
-                            expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                            expect(mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
                         });
                     });
                 });
@@ -1239,21 +1384,21 @@
                 describe("when there is NOT already a list of last update dates", function () {
 
                     beforeEach(function () {
-                        delete $localStorage[LAST_BRAND_UPDATE_DATE];
+                        delete mocks.$localStorage[LAST_BRAND_UPDATE_DATE];
                     });
 
                     beforeEach(function () {
                         jasmine.clock().mockDate(currentDate);
 
-                        BrandUtil.setLastBrandUpdateDate(brandName);
+                        mocks.BrandUtil.setLastBrandUpdateDate(brandName);
                     });
 
                     it("should create a list of last update dates", function () {
-                        expect($localStorage[LAST_BRAND_UPDATE_DATE]).toBeDefined();
+                        expect(mocks.$localStorage[LAST_BRAND_UPDATE_DATE]).toBeDefined();
                     });
 
                     it("should add the entry with the current date", function () {
-                        expect($localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
+                        expect(mocks.$localStorage[LAST_BRAND_UPDATE_DATE][brandName]).toEqual(currentDate);
                     });
                 });
             });
@@ -1262,60 +1407,60 @@
         describe("has a removeAssetResourceFile function that", function () {
 
             beforeEach(function () {
-                BrandUtil.removeAssetResourceFile(brandAsset)
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
+                mocks.BrandUtil.removeAssetResourceFile(brandAsset)
+                    .then(mocks.resolveHandler)
+                    .catch(mocks.rejectHandler);
             });
 
-            it("should call FileUtil.checkFileExists with the expected values", function () {
-                expect(FileUtil.checkFileExists).toHaveBeenCalledWith(resourcePath);
+            it("should call mocks.FileUtil.checkFileExists with the expected values", function () {
+                expect(mocks.FileUtil.checkFileExists).toHaveBeenCalledWith(resourcePath);
             });
 
             describe("when the resource file exists", function () {
 
                 beforeEach(function () {
                     checkFileExistsDeferred.resolve();
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call FileUtil.removeFile with the expected value", function () {
-                    expect(FileUtil.removeFile).toHaveBeenCalledWith(resourcePath);
+                it("should call mocks.FileUtil.removeFile with the expected value", function () {
+                    expect(mocks.FileUtil.removeFile).toHaveBeenCalledWith(resourcePath);
                 });
 
-                describe("when FileUtil.removeFile succeeds", function () {
+                describe("when mocks.FileUtil.removeFile succeeds", function () {
 
                     beforeEach(function () {
                         removeFileDeferred.resolve();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalled();
+                        expect(mocks.resolveHandler).toHaveBeenCalled();
                     });
                 });
 
-                describe("when FileUtil.removeFile fails", function () {
+                describe("when mocks.FileUtil.removeFile fails", function () {
                     var error,
                         expectedError;
+
+                    afterAll(function () {
+                        error = null;
+                        expectedError = null;
+                    });
 
                     beforeEach(function () {
                         error = {
                             message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                         };
 
-                        expectedError = "Failed to remove asset resource file " + resourcePath + ": " + LoggerUtil.getErrorMessage(error);
+                        expectedError = "Failed to remove asset resource file " + resourcePath + ": " + mocks.LoggerUtil.getErrorMessage(error);
 
                         removeFileDeferred.reject(error);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw the expected error", function () {
-                        expect($rootScope.$digest).toThrowError(expectedError);
-                    });
-
-                    it("should reject with the expected error", function () {
-                        TestUtils.digestError($rootScope);
-
-                        expect(rejectHandler).toHaveBeenCalledWith(new Error(expectedError));
+                    it("should reject", function () {
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -1323,18 +1468,23 @@
             describe("when the resource file does NOT exist", function () {
                 var error;
 
+                afterAll(function () {
+                    error = null;
+                });
+
                 beforeEach(function () {
                     error = {
                         message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                     };
 
                     checkFileExistsDeferred.reject(error);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should throw an error", function () {
-                    var expectedError = "Failed to remove asset resource file " + resourcePath + ": " + LoggerUtil.getErrorMessage(error);
+                it("should reject", function () {
+                    var expectedError = "Failed to remove asset resource file " + resourcePath + ": " + mocks.LoggerUtil.getErrorMessage(error);
 
-                    expect($rootScope.$digest).toThrowError(expectedError);
+                    expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                 });
             });
         });

@@ -3,31 +3,47 @@
 
     var self;
 
-    beforeEach(function () {
-        self = this;
+    beforeAll(function () {
+        this.includeDependencies = function (options, scope) {
+            options = options || {};
 
-        self.includeDependencies = function () {
-            if (self.includeSharedDependencies) {
+            if (options.includeSharedDependencies === undefined) {
+                options.includeSharedDependencies = true;
+            }
+
+            if (options.includeAppDependencies === undefined) {
+                options.includeAppDependencies = true;
+            }
+
+            if (options.includeHtml === undefined) {
+                options.includeHtml = false;
+            }
+
+            if (options.includeSharedDependencies) {
                 module("app.shared", ["$provide", _.partial(TestUtils.provideCommonSharedMockDependencies, _, function (mocks) {
                     //add all common mocks to the currently executing test suite
-                    _.forEach(mocks, function (mock, name) {
-                        _.set(self, name, mock);
-                    });
-                }, self.commonSharedMockExclusions)]);
+                    if (scope) {
+                        _.forEach(mocks, function (mock, name) {
+                            _.set(options.mocks || scope, name, mock);
+                        });
+                    }
+                }, options.commonSharedMockExclusions)]);
             }
 
-            if (self.includeAppDependencies) {
-                self.includeHtml = true;
+            if (options.includeAppDependencies) {
+                options.includeHtml = true;
 
                 module("app.components", ["$provide", _.partial(TestUtils.provideCommonAppMockDependencies, _, function (mocks) {
-                    //add all common mocks to the currently executing test suite
-                    _.forEach(mocks, function (mock, name) {
-                        _.set(self, name, mock);
-                    });
-                }, self.commonAppMockExclusions)]);
+                    if (scope) {
+                        //add all common mocks to the currently executing test suite
+                        _.forEach(mocks, function (mock, name) {
+                            _.set(options.mocks || scope, name, mock);
+                        });
+                    }
+                }, options.commonAppMockExclusions)]);
             }
 
-            if (self.includeHtml) {
+            if (options.includeHtml) {
                 module("app.html");
             }
             else {
@@ -40,22 +56,26 @@
                     $provide.value("$ionicTemplateCache", _.noop);
                 });
             }
+
+            if (scope) {
+                scope.$dependenciesIncluded = true;
+            }
         };
+    });
 
-        if (self.includeSharedDependencies === undefined) {
-            self.includeSharedDependencies = true;
-        }
+    beforeEach(function () {
+        self = this;
 
-        if (self.includeAppDependencies === undefined) {
-            self.includeAppDependencies = true;
-        }
+        if (!self.deferIncludes && !self.$dependenciesIncluded) {
+            self.includeDependencies({
+                includeSharedDependencies : self.includeSharedDependencies,
+                includeAppDependencies    : self.includeAppDependencies,
+                includeHtml               : self.includeHtml,
+                commonSharedMockExclusions: self.commonSharedMockExclusions,
+                commonAppMockExclusions   : self.commonAppMockExclusions
+            }, self);
 
-        if (self.includeHtml === undefined) {
-            self.includeHtml = false;
-        }
-
-        if (!self.deferIncludes) {
-            self.includeDependencies();
+            self.$dependenciesIncluded = false;
         }
     });
 
