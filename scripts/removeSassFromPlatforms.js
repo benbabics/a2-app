@@ -37,14 +37,9 @@ module.exports = function(context) {
     var browserPlatformsDir = path.join(rootdir, "platforms/browser/www");
 
     var scssDir = "/lib/ionic/scss";
-    var scriptsDir = "/app";
 
     deleteFolderRecursive(path.join(iosPlatformsDir, scssDir));
     deleteFolderRecursive(path.join(androidPlatformsDir, scssDir));
-
-    deleteFolderRecursive(path.join(iosPlatformsDir, scriptsDir));
-    deleteFolderRecursive(path.join(androidPlatformsDir, scriptsDir));
-    deleteFolderRecursive(path.join(browserPlatformsDir, scriptsDir));
 
     console.log(context.hook + " hook has finished running script " + context.scriptLocation);
 };
