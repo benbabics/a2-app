@@ -21,7 +21,7 @@
 
                 <p class="padding-top divider">
                     <span id="paymentDueDateLabel" class="block_align black">{{::vm.config.paymentDueDate}}</span>
-                    <span id="paymentDueDate" class="content_align black">{{vm.invoiceSummary.paymentDueDate | wexDefaultDateFormat}}</span>
+                    <span id="paymentDueDate" class="content_align black">{{vm.invoiceSummary.paymentDueDateObject | wexDefaultDateFormat : true}}</span>
                 </p>
             </div>
         </div>

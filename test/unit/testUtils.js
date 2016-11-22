@@ -295,6 +295,7 @@ var TestUtils = (function () {
         randomInvoiceSummary.invoiceNumber = getRandomStringThatIsAlphaNumeric(10);
         randomInvoiceSummary.minimumPaymentDue = getRandomNumberWithLength(5);
         randomInvoiceSummary.paymentDueDate = getRandomDate();
+        randomInvoiceSummary.paymentDueDateObject = randomInvoiceSummary.paymentDueDate;
         randomInvoiceSummary.statementBalance = getRandomNumberWithLength(5);
         randomInvoiceSummary.unbilledAmount = getRandomNumberWithLength(5);
 
