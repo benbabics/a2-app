@@ -5,104 +5,120 @@
 
     describe("An ElementUtil service", function () {
 
-        var _,
-            $compile,
-            $rootScope,
-            ElementUtil,
-            navBar,
-            rootNavView;
+        var mocks = {};
+
+        module.sharedInjector();
 
         beforeAll(function () {
-            this.includeAppDependencies = false;
-        });
+            this.includeDependencies({
+                includeAppDependencies: false,
+                mocks: mocks
+            }, this);
 
-        beforeEach(function () {
-
-            inject(function (___, _$compile_, _$rootScope_, _ElementUtil_) {
-                _ = ___;
-                $compile = _$compile_;
-                $rootScope = _$rootScope_;
-                ElementUtil = _ElementUtil_;
-
-                if (!navBar) {
-                    navBar = $compile("<ion-nav-bar class='bar-wex'></ion-nav-bar>")($rootScope);
-                    angular.element(document.body).append(navBar);
-                }
-
-                if (!rootNavView) {
-                    rootNavView = $compile("<ion-nav-view class='nav-view-root'></ion-nav-view>")($rootScope);
-                    angular.element(document.body).append(rootNavView);
-                }
-
-                $rootScope.$digest();
+            inject(function (_, $compile, $rootScope, ElementUtil) {
+                mocks._ = _;
+                mocks.$compile = $compile;
+                mocks.$rootScope = $rootScope;
+                mocks.ElementUtil = ElementUtil;
             });
         });
 
-        afterAll(function () {
-            if (navBar) {
-                navBar.remove();
+        beforeEach(function () {
+            if (!mocks.navBar) {
+                mocks.navBar = mocks.$compile("<ion-nav-bar class='bar-wex'></ion-nav-bar>")(mocks.$rootScope);
+                angular.element(document.body).append(mocks.navBar);
             }
 
-            if (rootNavView) {
-                rootNavView.remove();
+            if (!mocks.rootNavView) {
+                mocks.rootNavView = mocks.$compile("<ion-nav-view class='nav-view-root'></ion-nav-view>")(mocks.$rootScope);
+                angular.element(document.body).append(mocks.rootNavView);
             }
+
+            mocks.$rootScope.$digest();
+        });
+        
+        afterEach(function () {
+            //reset all mocks
+            mocks._.forEach(mocks, TestUtils.resetMock);
+        });
+
+        afterAll(function () {
+            if (mocks.navBar) {
+                mocks.navBar.remove();
+            }
+
+            if (mocks.rootNavView) {
+                mocks.rootNavView.remove();
+            }
+
+            mocks = null;
         });
 
         describe("has a fieldHasError function that", function () {
+            var field;
+
+            afterAll(function () {
+                field = null;
+            });
 
             describe("when the field is not defined", function () {
-                var field;
 
                 it("should return false", function () {
-                    expect(ElementUtil.fieldHasError(field)).toBeFalsy();
+                    expect(mocks.ElementUtil.fieldHasError(field)).toBeFalsy();
                 });
             });
 
             describe("when the field is null", function () {
-                var field = null;
 
                 it("should return false", function () {
-                    expect(ElementUtil.fieldHasError(field)).toBeFalsy();
+                    field = null;
+
+                    expect(mocks.ElementUtil.fieldHasError(field)).toBeFalsy();
                 });
             });
 
             describe("when the field is a valid object", function () {
-                var field = {};
 
                 describe("when field.$error is undefined", function () {
+
                     it("should return false", function () {
-                        expect(ElementUtil.fieldHasError(field)).toBeFalsy();
+                        field = {};
+
+                        expect(mocks.ElementUtil.fieldHasError(field)).toBeFalsy();
                     });
                 });
 
                 describe("when field.$error is null", function () {
+
                     beforeAll(function () {
                         field.$error = null;
                     });
 
                     it("should return false", function () {
-                        expect(ElementUtil.fieldHasError(field)).toBeFalsy();
+                        expect(mocks.ElementUtil.fieldHasError(field)).toBeFalsy();
                     });
                 });
 
                 describe("when field.$error is a valid object", function () {
+
                     beforeAll(function () {
                         field.$error = {};
                     });
 
                     describe("when field.$error is empty", function () {
                         it("should return false", function () {
-                            expect(ElementUtil.fieldHasError(field)).toBeFalsy();
+                            expect(mocks.ElementUtil.fieldHasError(field)).toBeFalsy();
                         });
                     });
 
                     describe("when field.$error contains properties", function () {
+
                         beforeAll(function () {
                             field.$error.mockProperty = "Mock property value";
                         });
 
                         it("should return true", function () {
-                            expect(ElementUtil.fieldHasError(field)).toBeTruthy();
+                            expect(mocks.ElementUtil.fieldHasError(field)).toBeTruthy();
                         });
                     });
                 });
@@ -114,50 +130,50 @@
             describe("when the nav bar is hidden", function () {
 
                 beforeEach(function () {
-                    navBar.addClass("hide");
+                    mocks.navBar.addClass("hide");
 
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
                 afterEach(function () {
-                    navBar.remove();
-                    navBar = null;
+                    mocks.navBar.remove();
+                    mocks.navBar = null;
 
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
                 it("should return false", function () {
-                    expect(ElementUtil.pageHasNavBar()).toBeFalsy();
+                    expect(mocks.ElementUtil.pageHasNavBar()).toBeFalsy();
                 });
             });
 
             describe("when the nav bar is NOT hidden", function () {
 
                 beforeEach(function () {
-                    navBar.removeClass("hide");
+                    mocks.navBar.removeClass("hide");
 
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
                 it("should return true", function () {
-                    expect(ElementUtil.pageHasNavBar()).toBeTruthy();
+                    expect(mocks.ElementUtil.pageHasNavBar()).toBeTruthy();
                 });
             });
 
             describe("when there is no nav bar", function () {
 
                 beforeEach(function () {
-                    navBar.remove();
+                    mocks.navBar.remove();
 
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
                 afterEach(function () {
-                    navBar = null;
+                    mocks.navBar = null;
                 });
 
                 it("should return false", function () {
-                    expect(ElementUtil.pageHasNavBar()).toBeFalsy();
+                    expect(mocks.ElementUtil.pageHasNavBar()).toBeFalsy();
                 });
             });
         });
@@ -167,24 +183,24 @@
             describe("when there is a nav view", function () {
 
                 it("should return the nav view", function () {
-                    expect(ElementUtil.getActiveNavView()).toEqual(rootNavView);
+                    expect(mocks.ElementUtil.getActiveNavView()).toEqual(mocks.rootNavView);
                 });
             });
 
             describe("when there is NOT a nav view", function () {
 
                 beforeEach(function () {
-                    rootNavView.remove();
+                    mocks.rootNavView.remove();
 
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
                 afterEach(function () {
-                    rootNavView = null;
+                    mocks.rootNavView = null;
                 });
 
                 it("should return null", function () {
-                    expect(ElementUtil.getActiveNavView()).toEqual(null);
+                    expect(mocks.ElementUtil.getActiveNavView()).toEqual(null);
                 });
             });
         });
@@ -197,19 +213,24 @@
                         return view.attr("nav-view") === state;
                     };
 
+                afterAll(function () {
+                    state = null;
+                    predicate = null;
+                });
+
                 describe("when there is no view at the root", function () {
 
                     describe("when firstView is true", function () {
 
                         it("should return null", function () {
-                            expect(ElementUtil.findViews(predicate, true)).toEqual(null);
+                            expect(mocks.ElementUtil.findViews(predicate, true)).toEqual(null);
                         });
                     });
 
                     describe("when firstView is false", function () {
 
                         it("should return an empty array", function () {
-                            expect(ElementUtil.findViews(predicate, false)).toEqual([]);
+                            expect(mocks.ElementUtil.findViews(predicate, false)).toEqual([]);
                         });
                     });
 
@@ -219,28 +240,29 @@
                         beforeEach(function () {
                             decoyView = createView("decoyState");
 
-                            rootNavView.append(decoyView);
+                            mocks.rootNavView.append(decoyView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             decoyView.remove();
+                            decoyView = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         describe("when firstView is true", function () {
 
                             it("should return null", function () {
-                                expect(ElementUtil.findViews(predicate, true)).toEqual(null);
+                                expect(mocks.ElementUtil.findViews(predicate, true)).toEqual(null);
                             });
                         });
 
                         describe("when firstView is false", function () {
 
                             it("should return an empty array", function () {
-                                expect(ElementUtil.findViews(predicate, false)).toEqual([]);
+                                expect(mocks.ElementUtil.findViews(predicate, false)).toEqual([]);
                             });
                         });
                     });
@@ -252,28 +274,29 @@
                     beforeEach(function () {
                         view = createView(state);
 
-                        rootNavView.append(view);
+                        mocks.rootNavView.append(view);
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     afterEach(function () {
                         view.remove();
+                        view = null;
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     describe("when firstView is true", function () {
 
                         it("should return the view", function () {
-                            expect(ElementUtil.findViews(predicate, true)).toEqual(view);
+                            expect(mocks.ElementUtil.findViews(predicate, true)).toEqual(view);
                         });
                     });
 
                     describe("when firstView is false", function () {
 
                         it("should return an array containing the view", function () {
-                            expect(ElementUtil.findViews(predicate, false)).toEqual([view]);
+                            expect(mocks.ElementUtil.findViews(predicate, false)).toEqual([view]);
                         });
                     });
 
@@ -283,28 +306,29 @@
                         beforeEach(function () {
                             decoyView = createView("decoyState");
 
-                            rootNavView.append(decoyView);
+                            mocks.rootNavView.append(decoyView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             decoyView.remove();
+                            decoyView = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         describe("when firstView is true", function () {
 
                             it("should return the specified view", function () {
-                                expect(ElementUtil.findViews(predicate, true)).toEqual(view);
+                                expect(mocks.ElementUtil.findViews(predicate, true)).toEqual(view);
                             });
                         });
 
                         describe("when firstView is false", function () {
 
                             it("should return an array containing only the specified view", function () {
-                                expect(ElementUtil.findViews(predicate, false)).toEqual([view]);
+                                expect(mocks.ElementUtil.findViews(predicate, false)).toEqual([view]);
                             });
                         });
                     });
@@ -320,28 +344,32 @@
                             navView = createNavView(state);
                             embeddedView = createView(state, navView);
 
-                            rootNavView.append(navView);
+                            mocks.rootNavView.append(navView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             navView.remove();
+                            navView = null;
 
-                            $rootScope.$digest();
+                            embeddedView.remove();
+                            embeddedView = null;
+
+                            mocks.$rootScope.$digest();
                         });
 
                         describe("when firstView is true", function () {
 
                             it("should return the embedded view", function () {
-                                expect(ElementUtil.findViews(predicate, true)).toEqual(embeddedView);
+                                expect(mocks.ElementUtil.findViews(predicate, true)).toEqual(embeddedView);
                             });
                         });
 
                         describe("when firstView is false", function () {
 
                             it("should return an array containing the embedded view", function () {
-                                expect(ElementUtil.findViews(predicate, false)).toEqual([embeddedView]);
+                                expect(mocks.ElementUtil.findViews(predicate, false)).toEqual([embeddedView]);
                             });
                         });
 
@@ -351,28 +379,29 @@
                             beforeEach(function () {
                                 decoyView = createView("decoyState");
 
-                                rootNavView.append(decoyView);
+                                mocks.rootNavView.append(decoyView);
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             afterEach(function () {
                                 decoyView.remove();
+                                decoyView = null;
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             describe("when firstView is true", function () {
 
                                 it("should return the specified view", function () {
-                                    expect(ElementUtil.findViews(predicate, true)).toEqual(embeddedView);
+                                    expect(mocks.ElementUtil.findViews(predicate, true)).toEqual(embeddedView);
                                 });
                             });
 
                             describe("when firstView is false", function () {
 
                                 it("should return an array containing only the specified view", function () {
-                                    expect(ElementUtil.findViews(predicate, false)).toEqual([embeddedView]);
+                                    expect(mocks.ElementUtil.findViews(predicate, false)).toEqual([embeddedView]);
                                 });
                             });
                         });
@@ -383,14 +412,14 @@
                     describe("when firstView is true", function () {
 
                         it("should return null", function () {
-                            expect(ElementUtil.findViews(predicate, true, null)).toEqual(null);
+                            expect(mocks.ElementUtil.findViews(predicate, true, null)).toEqual(null);
                         });
                     });
 
                     describe("when firstView is false", function () {
 
                         it("should return an empty array", function () {
-                            expect(ElementUtil.findViews(predicate, false, null)).toEqual([]);
+                            expect(mocks.ElementUtil.findViews(predicate, false, null)).toEqual([]);
                         });
                     });
                 });
@@ -403,28 +432,29 @@
                         beforeEach(function () {
                             view = createView(state);
 
-                            rootNavView.append(view);
+                            mocks.rootNavView.append(view);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             view.remove();
+                            view = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         describe("when firstView is true", function () {
 
                             it("should return the view", function () {
-                                expect(ElementUtil.findViews(predicate, true, rootNavView)).toEqual(view);
+                                expect(mocks.ElementUtil.findViews(predicate, true, mocks.rootNavView)).toEqual(view);
                             });
                         });
 
                         describe("when firstView is false", function () {
 
                             it("should return an array containing the view", function () {
-                                expect(ElementUtil.findViews(predicate, false, rootNavView)).toEqual([view]);
+                                expect(mocks.ElementUtil.findViews(predicate, false, mocks.rootNavView)).toEqual([view]);
                             });
                         });
                     });
@@ -446,19 +476,24 @@
                     states.pop();
                 });
 
+                afterAll(function () {
+                    states = null;
+                    state1 = null;
+                });
+
                 describe("when there is no view at the root", function () {
 
                     describe("when firstView is true", function () {
 
                         it("should return null", function () {
-                            expect(ElementUtil.findViewsMatching(states, true)).toEqual(null);
+                            expect(mocks.ElementUtil.findViewsMatching(states, true)).toEqual(null);
                         });
                     });
 
                     describe("when firstView is false", function () {
 
                         it("should return an empty array", function () {
-                            expect(ElementUtil.findViewsMatching(states, false)).toEqual([]);
+                            expect(mocks.ElementUtil.findViewsMatching(states, false)).toEqual([]);
                         });
                     });
 
@@ -468,28 +503,29 @@
                         beforeEach(function () {
                             decoyView = createView("decoyState");
 
-                            rootNavView.append(decoyView);
+                            mocks.rootNavView.append(decoyView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             decoyView.remove();
+                            decoyView = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         describe("when firstView is true", function () {
 
                             it("should return null", function () {
-                                expect(ElementUtil.findViewsMatching(states, true)).toEqual(null);
+                                expect(mocks.ElementUtil.findViewsMatching(states, true)).toEqual(null);
                             });
                         });
 
                         describe("when firstView is false", function () {
 
                             it("should return an empty array", function () {
-                                expect(ElementUtil.findViewsMatching(states, false)).toEqual([]);
+                                expect(mocks.ElementUtil.findViewsMatching(states, false)).toEqual([]);
                             });
                         });
                     });
@@ -501,28 +537,29 @@
                     beforeEach(function () {
                         view = createView(state1);
 
-                        rootNavView.append(view);
+                        mocks.rootNavView.append(view);
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     afterEach(function () {
                         view.remove();
+                        view = null;
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     describe("when firstView is true", function () {
 
                         it("should return the view", function () {
-                            expect(ElementUtil.findViewsMatching(states, true)).toEqual(view);
+                            expect(mocks.ElementUtil.findViewsMatching(states, true)).toEqual(view);
                         });
                     });
 
                     describe("when firstView is false", function () {
 
                         it("should return an array containing the view", function () {
-                            expect(ElementUtil.findViewsMatching(states, false)).toEqual([view]);
+                            expect(mocks.ElementUtil.findViewsMatching(states, false)).toEqual([view]);
                         });
                     });
 
@@ -532,28 +569,29 @@
                         beforeEach(function () {
                             decoyView = createView("decoyState");
 
-                            rootNavView.append(decoyView);
+                            mocks.rootNavView.append(decoyView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             decoyView.remove();
+                            decoyView = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         describe("when firstView is true", function () {
 
                             it("should return the specified view", function () {
-                                expect(ElementUtil.findViewsMatching(states, true)).toEqual(view);
+                                expect(mocks.ElementUtil.findViewsMatching(states, true)).toEqual(view);
                             });
                         });
 
                         describe("when firstView is false", function () {
 
                             it("should return an array containing only the specified view", function () {
-                                expect(ElementUtil.findViewsMatching(states, false)).toEqual([view]);
+                                expect(mocks.ElementUtil.findViewsMatching(states, false)).toEqual([view]);
                             });
                         });
                     });
@@ -569,28 +607,32 @@
                             navView = createNavView(state1);
                             embeddedView = createView(state1, navView);
 
-                            rootNavView.append(navView);
+                            mocks.rootNavView.append(navView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             navView.remove();
+                            navView = null;
 
-                            $rootScope.$digest();
+                            embeddedView.remove();
+                            embeddedView = null;
+
+                            mocks.$rootScope.$digest();
                         });
 
                         describe("when firstView is true", function () {
 
                             it("should return the embedded view", function () {
-                                expect(ElementUtil.findViewsMatching(states, true)).toEqual(embeddedView);
+                                expect(mocks.ElementUtil.findViewsMatching(states, true)).toEqual(embeddedView);
                             });
                         });
 
                         describe("when firstView is false", function () {
 
                             it("should return an array containing the embedded view", function () {
-                                expect(ElementUtil.findViewsMatching(states, false)).toEqual([embeddedView]);
+                                expect(mocks.ElementUtil.findViewsMatching(states, false)).toEqual([embeddedView]);
                             });
                         });
 
@@ -600,28 +642,29 @@
                             beforeEach(function () {
                                 decoyView = createView("decoyState");
 
-                                rootNavView.append(decoyView);
+                                mocks.rootNavView.append(decoyView);
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             afterEach(function () {
                                 decoyView.remove();
+                                decoyView = null;
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             describe("when firstView is true", function () {
 
                                 it("should return the specified view", function () {
-                                    expect(ElementUtil.findViewsMatching(states, true)).toEqual(embeddedView);
+                                    expect(mocks.ElementUtil.findViewsMatching(states, true)).toEqual(embeddedView);
                                 });
                             });
 
                             describe("when firstView is false", function () {
 
                                 it("should return an array containing only the specified view", function () {
-                                    expect(ElementUtil.findViewsMatching(states, false)).toEqual([embeddedView]);
+                                    expect(mocks.ElementUtil.findViewsMatching(states, false)).toEqual([embeddedView]);
                                 });
                             });
                         });
@@ -632,14 +675,14 @@
                     describe("when firstView is true", function () {
 
                         it("should return null", function () {
-                            expect(ElementUtil.findViewsMatching(states, true, null)).toEqual(null);
+                            expect(mocks.ElementUtil.findViewsMatching(states, true, null)).toEqual(null);
                         });
                     });
 
                     describe("when firstView is false", function () {
 
                         it("should return an empty array", function () {
-                            expect(ElementUtil.findViewsMatching(states, false, null)).toEqual([]);
+                            expect(mocks.ElementUtil.findViewsMatching(states, false, null)).toEqual([]);
                         });
                     });
                 });
@@ -652,28 +695,29 @@
                         beforeEach(function () {
                             view = createView(state1);
 
-                            rootNavView.append(view);
+                            mocks.rootNavView.append(view);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             view.remove();
+                            view = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         describe("when firstView is true", function () {
 
                             it("should return the view", function () {
-                                expect(ElementUtil.findViewsMatching(states, true, rootNavView)).toEqual(view);
+                                expect(mocks.ElementUtil.findViewsMatching(states, true, mocks.rootNavView)).toEqual(view);
                             });
                         });
 
                         describe("when firstView is false", function () {
 
                             it("should return an array containing the view", function () {
-                                expect(ElementUtil.findViewsMatching(states, false, rootNavView)).toEqual([view]);
+                                expect(mocks.ElementUtil.findViewsMatching(states, false, mocks.rootNavView)).toEqual([view]);
                             });
                         });
                     });
@@ -690,6 +734,10 @@
                         states.pop();
                     });
 
+                    afterAll(function () {
+                        state2 = null;
+                    });
+
                     describe("when views with both specified states are present on the root", function () {
                         var view1, view2;
 
@@ -697,30 +745,33 @@
                             view1 = createView(state1);
                             view2 = createView(state2);
 
-                            rootNavView.append(view1);
-                            rootNavView.append(view2);
+                            mocks.rootNavView.append(view1);
+                            mocks.rootNavView.append(view2);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             view1.remove();
                             view2.remove();
 
-                            $rootScope.$digest();
+                            view1 = null;
+                            view2 = null;
+
+                            mocks.$rootScope.$digest();
                         });
 
                         describe("when firstView is true", function () {
 
                             it("should return the first view", function () {
-                                expect(ElementUtil.findViewsMatching(states, true)).toEqual(view1);
+                                expect(mocks.ElementUtil.findViewsMatching(states, true)).toEqual(view1);
                             });
                         });
 
                         describe("when firstView is false", function () {
 
                             it("should return an array containing the first and second views", function () {
-                                expect(ElementUtil.findViewsMatching(states, false)).toEqual([view1, view2]);
+                                expect(mocks.ElementUtil.findViewsMatching(states, false)).toEqual([view1, view2]);
                             });
                         });
 
@@ -730,28 +781,29 @@
                             beforeEach(function () {
                                 decoyView = createView("decoyState");
 
-                                rootNavView.append(decoyView);
+                                mocks.rootNavView.append(decoyView);
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             afterEach(function () {
                                 decoyView.remove();
+                                decoyView = null;
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             describe("when firstView is true", function () {
 
                                 it("should return the first view", function () {
-                                    expect(ElementUtil.findViewsMatching(states, true)).toEqual(view1);
+                                    expect(mocks.ElementUtil.findViewsMatching(states, true)).toEqual(view1);
                                 });
                             });
 
                             describe("when firstView is false", function () {
 
                                 it("should return an array containing the first and second views", function () {
-                                    expect(ElementUtil.findViewsMatching(states, false)).toEqual([view1, view2]);
+                                    expect(mocks.ElementUtil.findViewsMatching(states, false)).toEqual([view1, view2]);
                                 });
                             });
                         });
@@ -773,30 +825,35 @@
                             navView2 = createNavView(state2);
                             embeddedView2 = createView(state2, navView2);
 
-                            rootNavView.append(navView1);
-                            rootNavView.append(navView2);
+                            mocks.rootNavView.append(navView1);
+                            mocks.rootNavView.append(navView2);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             navView1.remove();
                             navView2.remove();
 
-                            $rootScope.$digest();
+                            navView1 = null;
+                            navView2 = null;
+                            embeddedView1 = null;
+                            embeddedView2 = null;
+
+                            mocks.$rootScope.$digest();
                         });
 
                         describe("when firstView is true", function () {
 
                             it("should return the first embedded view", function () {
-                                expect(ElementUtil.findViewsMatching(states, true)).toEqual(embeddedView1);
+                                expect(mocks.ElementUtil.findViewsMatching(states, true)).toEqual(embeddedView1);
                             });
                         });
 
                         describe("when firstView is false", function () {
 
                             it("should return an array containing the first and second embedded views", function () {
-                                expect(ElementUtil.findViewsMatching(states, false)).toEqual([
+                                expect(mocks.ElementUtil.findViewsMatching(states, false)).toEqual([
                                     embeddedView1,
                                     embeddedView2
                                 ]);
@@ -809,28 +866,29 @@
                             beforeEach(function () {
                                 decoyView = createView("decoyState");
 
-                                rootNavView.append(decoyView);
+                                mocks.rootNavView.append(decoyView);
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             afterEach(function () {
                                 decoyView.remove();
+                                decoyView = null;
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             describe("when firstView is true", function () {
 
                                 it("should return the first embedded view", function () {
-                                    expect(ElementUtil.findViewsMatching(states, true)).toEqual(embeddedView1);
+                                    expect(mocks.ElementUtil.findViewsMatching(states, true)).toEqual(embeddedView1);
                                 });
                             });
 
                             describe("when firstView is false", function () {
 
                                 it("should return an array containing the first and second embedded views", function () {
-                                    expect(ElementUtil.findViewsMatching(states, false)).toEqual([
+                                    expect(mocks.ElementUtil.findViewsMatching(states, false)).toEqual([
                                         embeddedView1,
                                         embeddedView2
                                     ]);
@@ -851,12 +909,16 @@
         describe("has a findViewByState function that", function () {
             var state = "mockState";
 
+            afterAll(function () {
+                state = null;
+            });
+
             describe("when searching for the specified state", function () {
 
                 describe("when there is no view at the root", function () {
 
                     it("should return null", function () {
-                        expect(ElementUtil.findViewByState(state)).toEqual(null);
+                        expect(mocks.ElementUtil.findViewByState(state)).toEqual(null);
                     });
 
                     describe("when there is a view with a state we aren't looking for on the root", function () {
@@ -865,19 +927,20 @@
                         beforeEach(function () {
                             decoyView = createView("decoyState");
 
-                            rootNavView.append(decoyView);
+                            mocks.rootNavView.append(decoyView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             decoyView.remove();
+                            decoyView = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return null", function () {
-                            expect(ElementUtil.findViewByState(state)).toEqual(null);
+                            expect(mocks.ElementUtil.findViewByState(state)).toEqual(null);
                         });
                     });
                 });
@@ -888,19 +951,20 @@
                     beforeEach(function () {
                         view = createView(state);
 
-                        rootNavView.append(view);
+                        mocks.rootNavView.append(view);
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     afterEach(function () {
                         view.remove();
+                        view = null;
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return the view", function () {
-                        expect(ElementUtil.findViewByState(state)).toEqual(view);
+                        expect(mocks.ElementUtil.findViewByState(state)).toEqual(view);
                     });
 
                     describe("when there is a view with a state we aren't looking for on the root", function () {
@@ -909,27 +973,28 @@
                         beforeEach(function () {
                             decoyView = createView("decoyState");
 
-                            rootNavView.append(decoyView);
+                            mocks.rootNavView.append(decoyView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             decoyView.remove();
+                            decoyView = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return the specified view", function () {
-                            expect(ElementUtil.findViewByState(state)).toEqual(view);
+                            expect(mocks.ElementUtil.findViewByState(state)).toEqual(view);
                         });
 
                     });
                 });
 
                 describe("when there is a nav-view with the specified state at the root with an embedded view",
-                    function () {
 
+                    function () {
                         var navView,
                             embeddedView;
 
@@ -937,19 +1002,21 @@
                             navView = createNavView(state);
                             embeddedView = createView(state, navView);
 
-                            rootNavView.append(navView);
+                            mocks.rootNavView.append(navView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             navView.remove();
+                            navView = null;
+                            embeddedView = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return the embedded view", function () {
-                            expect(ElementUtil.findViewByState(state)).toEqual(embeddedView);
+                            expect(mocks.ElementUtil.findViewByState(state)).toEqual(embeddedView);
                         });
 
                         describe("when there is a view with a state we aren't looking for on the root", function () {
@@ -958,19 +1025,20 @@
                             beforeEach(function () {
                                 decoyView = createView("decoyState");
 
-                                rootNavView.append(decoyView);
+                                mocks.rootNavView.append(decoyView);
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             afterEach(function () {
                                 decoyView.remove();
+                                decoyView = null;
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should return the specified view", function () {
-                                expect(ElementUtil.findViewByState(state)).toEqual(embeddedView);
+                                expect(mocks.ElementUtil.findViewByState(state)).toEqual(embeddedView);
                             });
                         });
                     });
@@ -978,7 +1046,7 @@
                 describe("given a navView that is null", function () {
 
                     it("should return null", function () {
-                        expect(ElementUtil.findViewByState(state, null)).toEqual(null);
+                        expect(mocks.ElementUtil.findViewByState(state, null)).toEqual(null);
                     });
                 });
 
@@ -990,19 +1058,20 @@
                         beforeEach(function () {
                             view = createView(state);
 
-                            rootNavView.append(view);
+                            mocks.rootNavView.append(view);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             view.remove();
+                            view = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return the view", function () {
-                            expect(ElementUtil.findViewByState(state, rootNavView)).toEqual(view);
+                            expect(mocks.ElementUtil.findViewByState(state, mocks.rootNavView)).toEqual(view);
                         });
                     });
                 });
@@ -1016,10 +1085,16 @@
                     state2 = "state2",
                     states = [state1, state2];
 
+                afterAll(function () {
+                    states = null;
+                    state1 = null;
+                    state2 = null;
+                });
+
                 describe("when there is no view at the root", function () {
 
                     it("should return null", function () {
-                        expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(null);
+                        expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(null);
                     });
 
                     describe("when there is a view with a state we aren't looking for on the root", function () {
@@ -1028,19 +1103,20 @@
                         beforeEach(function () {
                             decoyView = createView("decoyState");
 
-                            rootNavView.append(decoyView);
+                            mocks.rootNavView.append(decoyView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             decoyView.remove();
+                            decoyView = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return null", function () {
-                            expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(null);
+                            expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(null);
                         });
                     });
                 });
@@ -1051,19 +1127,20 @@
                     beforeEach(function () {
                         view1 = createView(state1);
 
-                        rootNavView.append(view1);
+                        mocks.rootNavView.append(view1);
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     afterEach(function () {
                         view1.remove();
+                        view1 = null;
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return the view", function () {
-                        expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(view1);
+                        expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(view1);
                     });
 
                     describe("when there is a view with a state we aren't looking for on the root", function () {
@@ -1072,19 +1149,20 @@
                         beforeEach(function () {
                             decoyView = createView("decoyState");
 
-                            rootNavView.append(decoyView);
+                            mocks.rootNavView.append(decoyView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             decoyView.remove();
+                            decoyView = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return the specified view", function () {
-                            expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(view1);
+                            expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(view1);
                         });
                     });
                 });
@@ -1095,19 +1173,20 @@
                     beforeEach(function () {
                         view2 = createView(state2);
 
-                        rootNavView.append(view2);
+                        mocks.rootNavView.append(view2);
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     afterEach(function () {
                         view2.remove();
+                        view2 = null;
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return the view", function () {
-                        expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(view2);
+                        expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(view2);
                     });
 
                     describe("when there is a view with a state we aren't looking for on the root", function () {
@@ -1116,19 +1195,20 @@
                         beforeEach(function () {
                             decoyView = createView("decoyState");
 
-                            rootNavView.append(decoyView);
+                            mocks.rootNavView.append(decoyView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             decoyView.remove();
+                            decoyView = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return the specified view", function () {
-                            expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(view2);
+                            expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(view2);
                         });
                     });
                 });
@@ -1140,21 +1220,22 @@
                         view1 = createView(state1);
                         view2 = createView(state2);
 
-                        rootNavView.append(view1);
-                        rootNavView.append(view2);
+                        mocks.rootNavView.append(view1);
+                        mocks.rootNavView.append(view2);
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     afterEach(function () {
                         view1.remove();
                         view2.remove();
+                        view1 = view2 = null;
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return the first view", function () {
-                        expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(view1);
+                        expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(view1);
                     });
 
                     describe("when there is a view with a state we aren't looking for on the root", function () {
@@ -1163,26 +1244,27 @@
                         beforeEach(function () {
                             decoyView = createView("decoyState");
 
-                            rootNavView.append(decoyView);
+                            mocks.rootNavView.append(decoyView);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             decoyView.remove();
+                            decoyView = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return the first specified view", function () {
-                            expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(view1);
+                            expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(view1);
                         });
                     });
                 });
 
                 describe("when there are nav-views with both specified states at the root with embedded views",
-                    function () {
 
+                    function () {
                         var navView1,
                             embeddedView1,
                             navView2,
@@ -1192,17 +1274,19 @@
                             navView1 = createNavView(state1);
                             navView2 = createNavView(state2);
 
-                            rootNavView.append(navView1);
-                            rootNavView.append(navView2);
+                            mocks.rootNavView.append(navView1);
+                            mocks.rootNavView.append(navView2);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             navView1.remove();
                             navView2.remove();
+                            navView1 = navView2 = null;
+                            embeddedView1 = embeddedView2 = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         describe("when the embedded views contain the same state types", function () {
@@ -1211,11 +1295,11 @@
                                 embeddedView1 = createView(state1, navView1);
                                 embeddedView2 = createView(state2, navView2);
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should return the first embedded view", function () {
-                                expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(embeddedView1);
+                                expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(embeddedView1);
                             });
 
                             describe("when there is a view with a state we aren't looking for on the root", function () {
@@ -1224,19 +1308,20 @@
                                 beforeEach(function () {
                                     decoyView = createView("decoyState");
 
-                                    rootNavView.append(decoyView);
+                                    mocks.rootNavView.append(decoyView);
 
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 afterEach(function () {
                                     decoyView.remove();
+                                    decoyView = null;
 
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should return the first specified view", function () {
-                                    expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(embeddedView1);
+                                    expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(embeddedView1);
                                 });
                             });
                         });
@@ -1247,11 +1332,11 @@
                                 embeddedView1 = createView(state2, navView1);
                                 embeddedView2 = createView(state1, navView2);
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should return the second opposite embedded view", function () {
-                                expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(embeddedView2);
+                                expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(embeddedView2);
                             });
 
                             describe("when there is a view with a state we aren't looking for on the root", function () {
@@ -1260,19 +1345,20 @@
                                 beforeEach(function () {
                                     decoyView = createView("decoyState");
 
-                                    rootNavView.append(decoyView);
+                                    mocks.rootNavView.append(decoyView);
 
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 afterEach(function () {
                                     decoyView.remove();
+                                    decoyView = null;
 
-                                    $rootScope.$digest();
+                                    mocks.$rootScope.$digest();
                                 });
 
                                 it("should return the second specified opposite view", function () {
-                                    expect(ElementUtil.findViewByStatesInOrder(states)).toEqual(embeddedView2);
+                                    expect(mocks.ElementUtil.findViewByStatesInOrder(states)).toEqual(embeddedView2);
                                 });
                             });
                         });
@@ -1281,7 +1367,7 @@
                 describe("given a navView that is null", function () {
 
                     it("should return null", function () {
-                        expect(ElementUtil.findViewByStatesInOrder(states, null)).toEqual(null);
+                        expect(mocks.ElementUtil.findViewByStatesInOrder(states, null)).toEqual(null);
                     });
                 });
 
@@ -1293,19 +1379,20 @@
                         beforeEach(function () {
                             view1 = createView(state1);
 
-                            rootNavView.append(view1);
+                            mocks.rootNavView.append(view1);
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         afterEach(function () {
                             view1.remove();
+                            view1 = null;
 
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return the view", function () {
-                            expect(ElementUtil.findViewByStatesInOrder(states, rootNavView)).toEqual(view1);
+                            expect(mocks.ElementUtil.findViewByStatesInOrder(states, mocks.rootNavView)).toEqual(view1);
                         });
 
                         describe("when there is a view with a state we aren't looking for on the root", function () {
@@ -1314,19 +1401,20 @@
                             beforeEach(function () {
                                 decoyView = createView("decoyState");
 
-                                rootNavView.append(decoyView);
+                                mocks.rootNavView.append(decoyView);
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             afterEach(function () {
                                 decoyView.remove();
+                                decoyView = null;
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should return the specified view", function () {
-                                expect(ElementUtil.findViewByStatesInOrder(states, rootNavView)).toEqual(view1);
+                                expect(mocks.ElementUtil.findViewByStatesInOrder(states, mocks.rootNavView)).toEqual(view1);
                             });
                         });
                     });
@@ -1355,15 +1443,16 @@
                 var view;
 
                 beforeEach(function () {
-                    view = createView("active", rootNavView);
+                    view = createView("active", mocks.rootNavView);
                 });
 
                 afterEach(function () {
                     view.remove();
+                    view = null;
                 });
 
                 it("should return null", function () {
-                    expect(ElementUtil.getViewContent()).toEqual(null);
+                    expect(mocks.ElementUtil.getViewContent()).toEqual(null);
                 });
             });
 
@@ -1372,29 +1461,32 @@
                     content;
 
                 beforeEach(function () {
-                    view = createView("active", rootNavView);
-                    content = $compile("<ion-content></ion-content>")($rootScope);
+                    view = createView("active", mocks.rootNavView);
+                    content = mocks.$compile("<ion-content></ion-content>")(mocks.$rootScope);
 
                     view.append(content);
 
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
                 afterEach(function () {
                     view.remove();
+                    view = null;
 
-                    $rootScope.$digest();
+                    content = null;
+
+                    mocks.$rootScope.$digest();
                 });
 
                 it("should return the content", function () {
-                    expect(ElementUtil.getViewContent()[0].outerHTML).toEqual(content[0].outerHTML);
+                    expect(mocks.ElementUtil.getViewContent()[0].outerHTML).toEqual(content[0].outerHTML);
                 });
             });
 
             describe("when passed a null view", function () {
 
                 it("should return null", function () {
-                    expect(ElementUtil.getViewContent(null)).toEqual(null);
+                    expect(mocks.ElementUtil.getViewContent(null)).toEqual(null);
                 });
             });
 
@@ -1409,10 +1501,11 @@
 
                     afterEach(function () {
                         view.remove();
+                        view = null;
                     });
 
                     it("should return null", function () {
-                        expect(ElementUtil.getViewContent(view)).toEqual(null);
+                        expect(mocks.ElementUtil.getViewContent(view)).toEqual(null);
                     });
                 });
 
@@ -1421,21 +1514,23 @@
 
                     beforeEach(function () {
                         view = createView("mockState");
-                        content = $compile("<ion-content></ion-content>")($rootScope);
+                        content = mocks.$compile("<ion-content></ion-content>")(mocks.$rootScope);
 
                         view.append(content);
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     afterEach(function () {
                         view.remove();
+                        view = null;
+                        content = null;
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return the content", function () {
-                        expect(ElementUtil.getViewContent(view)[0].outerHTML).toEqual(content[0].outerHTML);
+                        expect(mocks.ElementUtil.getViewContent(view)[0].outerHTML).toEqual(content[0].outerHTML);
                     });
                 });
             });
@@ -1460,7 +1555,7 @@
         describe("has a getFocusedNavBar function that", function () {
 
             beforeEach(function () {
-                ElementUtil.getFocusedNavBar();
+                mocks.ElementUtil.getFocusedNavBar();
             });
 
             //TODO figure out how to test this
@@ -1471,7 +1566,7 @@
         describe("has a getUnfocusedNavBar function that", function () {
 
             beforeEach(function () {
-                ElementUtil.getUnfocusedNavBar();
+                mocks.ElementUtil.getUnfocusedNavBar();
             });
 
             //TODO figure out how to test this
@@ -1487,7 +1582,11 @@
                 beforeEach(function () {
                     mockNavView = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
-                    ElementUtil.getUnfocusedView(mockNavView);
+                    mocks.ElementUtil.getUnfocusedView(mockNavView);
+                });
+
+                afterAll(function () {
+                    mockNavView = null;
                 });
 
                 //TODO figure out how to test this
@@ -1497,7 +1596,7 @@
 
             describe("when NOT passed a navView", function () {
                 beforeEach(function () {
-                    ElementUtil.getUnfocusedView();
+                    mocks.ElementUtil.getUnfocusedView();
                 });
 
                 //TODO figure out how to test this
@@ -1519,6 +1618,10 @@
                     side = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 });
 
+                afterAll(function () {
+                    side = null;
+                });
+
                 describe("when there is a menu with the given side", function () {
                     var sideMenu,
                         result;
@@ -1527,7 +1630,13 @@
                         sideMenu = createSideMenu(side);
                         document.querySelector.and.returnValue(sideMenu);
 
-                        result = ElementUtil.getSideMenu(side);
+                        result = mocks.ElementUtil.getSideMenu(side);
+                    });
+
+                    afterEach(function () {
+                        sideMenu.remove();
+                        sideMenu = null;
+                        result = null;
                     });
 
                     it("should return the side menu", function () {
@@ -1539,7 +1648,11 @@
                     var result;
 
                     beforeEach(function () {
-                        result = ElementUtil.getSideMenu(side);
+                        result = mocks.ElementUtil.getSideMenu(side);
+                    });
+
+                    afterAll(function () {
+                        result = null;
                     });
 
                     it("should return the side menu", function () {
@@ -1558,7 +1671,13 @@
                         sideMenu = createSideMenu();
                         document.querySelector.and.returnValue(sideMenu);
 
-                        result = ElementUtil.getSideMenu();
+                        result = mocks.ElementUtil.getSideMenu();
+                    });
+
+                    afterEach(function () {
+                        sideMenu.remove();
+                        sideMenu = null;
+                        result = null;
                     });
 
                     it("should return the side menu", function () {
@@ -1570,7 +1689,11 @@
                     var result;
 
                     beforeEach(function () {
-                        result = ElementUtil.getSideMenu();
+                        result = mocks.ElementUtil.getSideMenu();
+                    });
+
+                    afterAll(function () {
+                        result = null;
                     });
 
                     it("should return the side menu", function () {
@@ -1581,7 +1704,7 @@
         });
 
         function createNavView(state) {
-            return $compile("<ion-nav-view nav-view='" + state + "'></ion-nav-view>")($rootScope);
+            return mocks.$compile("<ion-nav-view nav-view='" + state + "'></ion-nav-view>")(mocks.$rootScope);
         }
 
         function createSideMenu(side) {
@@ -1594,17 +1717,17 @@
                 template = "<ion-side-menus><ion-side-menu></ion-side-menu></ion-side-menus>";
             }
 
-            return $compile(template)($rootScope).find("ion-side-menu");
+            return mocks.$compile(template)(mocks.$rootScope).find("ion-side-menu");
         }
 
         function createView(state, parent) {
-            var view = $compile("<ion-view nav-view='" + state + "'></ion-view>")($rootScope);
+            var view = mocks.$compile("<ion-view nav-view='" + state + "'></ion-view>")(mocks.$rootScope);
 
             if (parent) {
                 parent.append(view);
             }
 
-            $rootScope.$digest();
+            mocks.$rootScope.$digest();
 
             return view;
         }

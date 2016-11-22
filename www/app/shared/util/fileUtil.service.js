@@ -7,7 +7,7 @@
     // NOTE: This service will only work on platforms with Cordova.
 
     /* @ngInject */
-    function FileUtil(_, $cordovaFile, LoggerUtil, PlatformUtil) {
+    function FileUtil(_, $cordovaFile, $q, LoggerUtil, PlatformUtil) {
 
         // Revealed Public members
         var service = {
@@ -66,7 +66,7 @@
         }
 
         function handleFileError(error) {
-            throw new Error("File operation failed: " + LoggerUtil.getErrorMessage(error));
+            return $q.reject("File operation failed: " + LoggerUtil.getErrorMessage(error));
         }
 
         function makeValidDirectory(directory) {

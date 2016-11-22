@@ -48,7 +48,8 @@ var TestUtils = (function () {
             rejectedPromise                    : rejectedPromise,
             resolvedPromise                    : resolvedPromise,
             setFeatureFlagEnabled              : setFeatureFlagEnabled,
-            setFeatureFlagsEnabled             : setFeatureFlagsEnabled
+            setFeatureFlagsEnabled             : setFeatureFlagsEnabled,
+            resetMock                          : resetMock
         };
 
     return TestUtils;
@@ -191,7 +192,7 @@ var TestUtils = (function () {
     }
 
     function getRandomBrandAssets(BrandAssetModel) {
-        return getRandomArray(getRandomInteger(1, 20), getRandomBrandAsset, BrandAssetModel);
+        return getRandomArray(getRandomInteger(1, 5), getRandomBrandAsset, BrandAssetModel);
     }
 
     function getRandomBoolean() {
@@ -304,7 +305,7 @@ var TestUtils = (function () {
 
     function getRandomMap(numEntries) {
         var map = {};
-        numEntries = numEntries || getRandomInteger(1, 10);
+        numEntries = numEntries || getRandomInteger(1, 5);
 
         for (var i = 0; i < numEntries; ++i) {
             map[getRandomStringThatIsAlphaNumeric(10)] = getRandomStringThatIsAlphaNumeric(10);
@@ -584,6 +585,27 @@ var TestUtils = (function () {
         provideCommonMockDependencies($provide, mocks, setter, exclusions);
     }
 
+    function resetMock(mock) {
+        var isMock = function (object) {
+            return _.isFunction(_.get(object, "calls.reset"));
+        };
+
+        if (isMock(mock)) {
+            //reset the call record
+            mock.calls.reset();
+        }
+        else {
+            //look for mocked properties
+            for(var property in mock) {
+                var value = mock[property];
+
+                if (isMock(value)) {
+                    value.calls.reset();
+                }
+            }
+        }
+    }
+
     function setFeatureFlagEnabled(globals, featureFlag, enabled) {
         globals.FEATURE_FLAGS[featureFlag] = !!enabled;
     }
@@ -591,7 +613,7 @@ var TestUtils = (function () {
     function setFeatureFlagsEnabled(globals, enabled) {
         for(var featureFlag in globals.FEATURE_FLAGS) {
             setFeatureFlagEnabled(globals, featureFlag, enabled);
-        };
+        }
     }
 
 })();

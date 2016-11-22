@@ -29,7 +29,14 @@
         //////////////////////
 
         function cacheAssetResourceData(brandAsset, forceUpdate) {
-            var checkFileExists = forceUpdate ? $q.reject() : FileUtil.checkFileExists(getAssetResourceSubPath(brandAsset));
+            var checkFileExists;
+
+            try {
+                checkFileExists = forceUpdate ? $q.reject() : FileUtil.checkFileExists(getAssetResourceSubPath(brandAsset));
+            }
+            catch (error) {
+                return $q.reject(error);
+            }
 
             return checkFileExists.catch(function () {
                 //fetch and cache the current asset resource
@@ -50,13 +57,22 @@
         }
 
         function getAssetResourceData(brandAsset, binary) {
-            return FileUtil.checkFileExists(getAssetResourceSubPath(brandAsset))
+            var resourceSubPath;
+
+            try {
+                resourceSubPath = getAssetResourceSubPath(brandAsset);
+            }
+            catch (error) {
+                return $q.reject(error);
+            }
+
+            return FileUtil.checkFileExists(resourceSubPath)
                 .then(function () {
                     //get the resource data from the cached file if it exists
                     return getAssetResourceFile(brandAsset, binary);
                 })
                 .catch(function () {
-                    throw new Error("Resource data file not found for brand asset: " + brandAsset.assetSubtypeId);
+                    return $q.reject("Resource data file not found for brand asset: " + brandAsset.assetSubtypeId);
                 });
         }
 
@@ -79,21 +95,36 @@
         }
 
         function getAssetResourceFile(brandAsset, binary) {
-            var resourcePath = getAssetResourceSubPath(brandAsset);
+            var resourcePath;
+
+            try {
+                resourcePath = getAssetResourceSubPath(brandAsset);
+            }
+            catch (error) {
+                return $q.reject(error);
+            }
 
             return FileUtil.checkFileExists(resourcePath)
                 .then(function () {
                     return FileUtil.readFile(resourcePath, binary);
                 })
                 .catch(function (error) {
-                    throw new Error("Failed to get brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error));
+                    return $q.reject("Failed to get brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error));
                 });
         }
 
         function getAssetResourceFilePath(brandAsset) {
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
+                resourcePath;
 
-            $window.resolveLocalFileSystemURL(getAssetResourceSubPath(brandAsset), function (entry) {
+            try {
+                resourcePath = getAssetResourceSubPath(brandAsset);
+            }
+            catch (error) {
+                return $q.reject(error);
+            }
+
+            $window.resolveLocalFileSystemURL(resourcePath, function (entry) {
                 deferred.resolve(entry.toInternalURL());
             });
 
@@ -141,19 +172,26 @@
                     return storeAssetResourceFile(brandAsset, resourceData);
                 })
                 .catch(function (error) {
-                    throw new Error("Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "': " + LoggerUtil.getErrorMessage(error));
+                    return $q.reject("Failed to load bundled brand asset with subtype '" + brandAsset.assetSubtypeId + "': " + LoggerUtil.getErrorMessage(error));
                 });
         }
 
         function removeAssetResourceFile(brandAsset) {
-            var resourcePath = getAssetResourceSubPath(brandAsset);
+            var resourcePath;
+
+            try {
+                resourcePath = getAssetResourceSubPath(brandAsset);
+            }
+            catch (error) {
+                return $q.reject(error);
+            }
 
             return FileUtil.checkFileExists(resourcePath)
                 .then(function () {
                     return FileUtil.removeFile(resourcePath);
                 })
                 .catch(function (error) {
-                    throw new Error("Failed to remove asset resource file " + resourcePath + ": " + LoggerUtil.getErrorMessage(error));
+                    return $q.reject("Failed to remove asset resource file " + resourcePath + ": " + LoggerUtil.getErrorMessage(error));
                 });
         }
 
@@ -168,8 +206,16 @@
         }
 
         function storeAssetResourceFile(brandAsset, resourceData) {
-            var resourceDirectory = getAssetResourceDirectory(brandAsset),
+            var resourceDirectory,
+                resourcePath;
+
+            try {
+                resourceDirectory = getAssetResourceDirectory(brandAsset);
                 resourcePath = getAssetResourceSubPath(brandAsset);
+            }
+            catch (error) {
+                return $q.reject(error);
+            }
 
             return FileUtil.checkDirectoryExists(resourceDirectory)
                 .catch(function () {
@@ -183,7 +229,7 @@
                 })
                 .catch(function (error) {
                     if (error) {
-                        throw new Error("Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error));
+                        return $q.reject("Failed to store brand asset resource file '" + resourcePath + "': " + LoggerUtil.getErrorMessage(error));
                     }
                 });
         }
