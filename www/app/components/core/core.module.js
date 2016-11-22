@@ -23,20 +23,6 @@
             };
         }
 
-        function validateRoutePreconditions(event, toState) { // args: event, toState, toParams, fromState, fromParams
-
-            var stateName = toState.name;
-
-            if (!Navigation.isUnsecuredState(stateName)) {
-                // when navigating to any page that is secured, validate that the user is logged in
-                if (!AuthenticationManager.userLoggedIn()) {
-                    // user is not logged in and is trying to access secured content so redirect to the login page
-                    event.preventDefault();
-                    $state.go(globals.LOGIN_STATE);
-                }
-            }
-        }
-
         function handleApplicationLogOut() {
             // clear any data in memory tied to the user
             AuthenticationManager.logOut();
@@ -80,7 +66,6 @@
             $window.ionic.Platform.fullScreen(true, true);
         });
 
-        $rootScope.$on("$stateChangeStart", validateRoutePreconditions);
         $rootScope.$on("app:logout", handleApplicationLogOut);
 
         //make the hardware back button go to the same state as the back button by default
