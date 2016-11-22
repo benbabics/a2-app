@@ -1,0 +1,21 @@
+.page-payments-list {
+  .collapsible-item {
+    &.open .body {
+      overflow: visible;
+    }
+    &.items-completed .body .content {
+      padding: 0;
+    }
+  }
+
+  wex-payment-list-item {
+    display: block;
+
+    .item {
+      font-size: 14px;
+      color: #000;
+      border-top: none;
+      background: none;
+    }
+  }
+}

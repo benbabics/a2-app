@@ -1,12 +1,18 @@
-<a ui-sref="payment.activity.detail({ paymentId: payment.id })"
-     class="widget-payment-list-item">
-    <span class="list_align ellipsis">
-        {{payment.getBankAccountDisplayName()}}
-        <br>
-        {{payment.scheduledDate | wexDefaultDateFormat}}
-    </span>
-    <span class="value_align">
-        {{payment.amount | currency}}
-        <i class="icon ion-chevron-right"></i>
-    </span>
-</a>
+<ion-item class="item item-icon-right widget-transaction-result-as-date"
+          ng-class="{ 'item-last': $last }">
+
+    <a class="item-content" ui-sref="payment.activity.detail({ paymentId: payment.id })">
+        <span class="list_align ellipsis">
+            {{ payment.getBankAccountDisplayName() }}
+            <br>
+            {{ payment.scheduledDate | wexDefaultDateFormat }}
+        </span>
+
+        <span class="value_align">
+            {{ payment.amount | currency }}
+        </span>
+
+        <i class="icon fa fa-chevron-right"></i>
+    </a>
+
+</ion-item>

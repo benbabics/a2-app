@@ -1,10 +1,13 @@
 <collapsible-item
-        item-title="{{title}}"
+        item-title="{{ title }}"
         initially-open="true">
+
     <p ng-if="payments.length == 0">
-        <span class="no-payments">{{noPaymentsMessage}}</span>
+        <span class="no-payments">{{ noPaymentsMessage }}</span>
     </p>
+
     <div ng-if="payments.length > 0" ng-repeat="payment in payments">
         <wex-payment-list-item payment="payment"></wex-payment-list-item>
     </div>
+
 </collapsible-item>

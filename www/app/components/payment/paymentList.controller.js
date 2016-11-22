@@ -5,7 +5,74 @@
     // jshint maxparams:6
 
     /* @ngInject */
-    function PaymentListController(_, $scope, globals, LoadingIndicator, PaymentManager, UserManager) {
+    function PaymentListController(_, $scope, $controller, globals, PaymentManager, UserManager, LoadingIndicator) {
+        var vm = this, infiniteListController;
+            vm.config  = globals.PAYMENT_LIST.CONFIG;
+            vm.options = globals.PAYMENT_LIST.SEARCH_OPTIONS;
+
+        activate();
+
+        //////////////////////
+        // Controller initialization
+        function activate() {
+            infiniteListController = $controller("WexInfiniteListController", {
+                $scope: $scope,
+                $attrs: {
+                    isGreeking: false,
+                    cacheKey  : "payments-list"
+                }
+            });
+
+            infiniteListController.assignServiceDelegate({
+                makeRequest: handleMakeRequest,
+                onError:     handleOnError
+            });
+
+            vm.payments = _.extend($scope.infiniteScrollService.model, {
+                completed: [],
+                scheduled: []
+            });
+        }
+
+        function handleMakeRequest(requestConfig) {
+            var billingAccountId = UserManager.getUser().billingCompany.accountId;
+
+            LoadingIndicator.begin();
+
+            return PaymentManager.fetchPayments( billingAccountId, requestConfig.currentPage, requestConfig.pageSize )
+              .then( filterPayments )
+              .finally( LoadingIndicator.complete );
+        }
+
+        function handleOnError() {
+            //
+        }
+
+        function filterPayments(payments) {
+            var unsortedScheduledPayments,
+                unsortedCompletedPayments;
+
+            // Get the list of scheduled payments from payments into unsortedScheduledPayments
+            unsortedScheduledPayments = _.filter(payments, function(payment) {
+                return payment.isScheduled();
+            });
+
+            // Get the list of completed payments from payments into unsortedCompletedPayments
+            unsortedCompletedPayments = _.filter(payments, function(payment) {
+                return !payment.isScheduled();
+            });
+
+            // Sort the scheduled payments by scheduled date ascending
+            vm.payments.scheduled = _.orderBy( unsortedScheduledPayments, ["scheduledDate"], ["asc"] );
+
+            // Sort the rest of the payments by scheduled date descending
+            vm.payments.completed = _.orderBy( unsortedCompletedPayments, ["scheduledDate"], ["desc"] );
+
+            return payments;
+        }
+    }
+
+    function PaymentListControllerOld(_, $scope, globals, LoadingIndicator, PaymentManager, UserManager) {
 
         var vm = this;
 

@@ -4,6 +4,10 @@
     @extend .text-block;
   }
 
+  &.item-icon-right .fa-chevron-right {
+    font-size: 16px;
+  }
+
   &.ui-greeking {
     .greek-block,
     .greek-block-group .text-block {
