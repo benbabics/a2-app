@@ -31,7 +31,7 @@ module.exports = function(context) {
         try {
             var data = fs.readFileSync(filename, "utf8");
 
-            var result = data.replace(toReplace, replaceWith);
+            var result = data.replace(new RegExp(toReplace, 'g'), replaceWith);
             fs.writeFileSync(filename, result, "utf8");
         }
         catch (e) {
