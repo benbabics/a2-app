@@ -240,6 +240,7 @@
                 beforeEach(function () {
                     mockCurrentInvoiceSummary.minimumPaymentDue = mockPaymentProcess.amount;
                     mockCurrentInvoiceSummary.paymentDueDate = moment(mockPaymentProcess.scheduledDate).subtract(1, "day");
+                    mockCurrentInvoiceSummary.paymentDueDateObject = moment(mockPaymentProcess.scheduledDate).subtract(1, "day");
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -256,6 +257,7 @@
                 beforeEach(function () {
                     mockCurrentInvoiceSummary.minimumPaymentDue = mockPaymentProcess.amount + 0.01;
                     mockCurrentInvoiceSummary.paymentDueDate = moment(mockPaymentProcess.scheduledDate).subtract(1, "day");
+                    mockCurrentInvoiceSummary.paymentDueDateObject = moment(mockPaymentProcess.scheduledDate).subtract(1, "day");
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
