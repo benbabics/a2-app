@@ -6,16 +6,10 @@
 
     describe("A Form Encoder", function () {
 
-        beforeEach(function () {
-
-            module("app.shared");
-
-            inject(function (___, _FormEncoder_) {
-                _ = ___;
-                FormEncoder = _FormEncoder_;
-            });
-
-        });
+        beforeEach(inject(function (___, _FormEncoder_) {
+            _ = ___;
+            FormEncoder = _FormEncoder_;
+        }));
 
         describe("has an encode function that", function () {
 

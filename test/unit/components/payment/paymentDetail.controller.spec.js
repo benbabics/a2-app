@@ -5,7 +5,6 @@
         $rootScope,
         $scope,
         $state,
-        AnalyticsUtil,
         Navigation,
         $q,
         ctrl,
@@ -16,100 +15,31 @@
         removePaymentDeferred,
         mockPayment,
         mockIsPaymentEditable = TestUtils.getRandomBoolean(),
-        mockGlobals = {
-            LOCALSTORAGE : {
-                "CONFIG": {
-                    "keyPrefix": "FLEET_MANAGER-"
-                },
-                "KEYS": {
-                    "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE"
-                }
-            },
-            PAYMENT_VIEW: {
-                "CONFIG": {
-                    "ANALYTICS"   : {
-                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "events": {
-                            "cancelPaymentLink"   : [
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            ],
-                            "editPaymentLink"     : [
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            ],
-                            "confirmPaymentCancel": [
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                                TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                            ]
-                        }
-                    },
-                    "title"               : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "amount"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "bankAccount"         : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "postedDate"          : TestUtils.getRandomDate(),
-                    "scheduledDate"       : TestUtils.getRandomDate(),
-                    "inProcess"           : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "method"              : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "editButton"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "cancelButton"        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "cancelPaymentConfirm": {
-                        "content"  : TestUtils.getRandomStringThatIsAlphaNumeric(20),
-                        "yesButton": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "noButton" : TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                    }
-                }
-            }
-        },
-        mockConfig = mockGlobals.PAYMENT_VIEW.CONFIG,
-        mockUser;
+        globals,
+        config,
+        mockUser,
+        self;
 
     describe("A Payment View Controller", function () {
 
         beforeEach(function () {
+            self = this;
 
             // mock dependencies
             $state = jasmine.createSpyObj("$state", ["go"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["removePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
             Popup = jasmine.createSpyObj("Popup", ["displayConfirm"]);
             Navigation = jasmine.createSpyObj("Navigation", ["goToPaymentActivity"]);
 
-            module("app.shared");
-            module("app.components", function ($provide, sharedGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
-
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
-            });
-
-            module(function ($provide, sharedGlobals, appGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
-            });
-
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
-            });
-
-            inject(function (___, _$rootScope_, $controller, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
+            inject(function (___, _$rootScope_, $controller, _$q_, _globals_, BankModel, PaymentModel, UserAccountModel, UserModel) {
                 _ = ___;
                 $rootScope = _$rootScope_;
                 $q = _$q_;
+                globals = _globals_;
                 confirmDeferred = $q.defer();
                 removePaymentDeferred = $q.defer();
+                config = globals.PAYMENT_VIEW.CONFIG;
 
                 mockPayment = TestUtils.getRandomPayment(PaymentModel, BankModel);
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
@@ -120,7 +50,6 @@
                 ctrl = $controller("PaymentDetailController", {
                     $scope           : $scope,
                     $state           : $state,
-                    AnalyticsUtil    : AnalyticsUtil,
                     Navigation       : Navigation,
                     PaymentManager   : PaymentManager,
                     Popup            : Popup,
@@ -136,6 +65,27 @@
 
             //setup spies:
             Popup.displayConfirm.and.returnValue(confirmDeferred.promise);
+        });
+
+        afterEach(function () {
+            _ =
+            $rootScope =
+            $scope =
+            $state =
+            Navigation =
+            $q =
+            ctrl =
+            Popup =
+            PaymentManager =
+            UserManager =
+            confirmDeferred =
+            removePaymentDeferred =
+            mockPayment =
+            mockIsPaymentEditable =
+            globals =
+            config =
+            mockUser =
+            self = null;
         });
 
         describe("has an $ionicView.beforeEnter event handler function that", function () {
@@ -168,9 +118,9 @@
 
             it("should call Popup.displayConfirm with the expected values", function () {
                 expect(Popup.displayConfirm).toHaveBeenCalledWith({
-                    content             : mockConfig.cancelPaymentConfirm.content,
-                    okButtonText        : mockConfig.cancelPaymentConfirm.yesButton,
-                    cancelButtonText    : mockConfig.cancelPaymentConfirm.noButton,
+                    content             : config.cancelPaymentConfirm.content,
+                    okButtonText        : config.cancelPaymentConfirm.yesButton,
+                    cancelButtonText    : config.cancelPaymentConfirm.noButton,
                     okButtonCssClass    : "button-primary",
                     cancelButtonCssClass: "button-secondary"
                 });
@@ -190,8 +140,8 @@
                     );
                 });
 
-                it("should call AnalyticsUtil.trackEvent", function () {
-                    verifyEventTracked(mockConfig.ANALYTICS.events.confirmPaymentCancel);
+                it("should call this.AnalyticsUtil.trackEvent", function () {
+                    verifyEventTracked(config.ANALYTICS.events.confirmPaymentCancel);
                 });
 
                 describe("when removing the payment is successful", function () {
@@ -252,7 +202,7 @@
     });
 
     function verifyEventTracked(event) {
-        expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
+        expect(self.AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
     }
 
 }());

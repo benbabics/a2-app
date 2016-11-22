@@ -2,9 +2,13 @@
     "use strict";
 
     /* @ngInject */
-    function wexDefaultDateFormat($filter, globals) {
+    function wexDefaultDateFormat($filter, moment, globals) {
 
-        function filter(date) {
+        function filter(date, ignoreOffset) {
+            if ( !!ignoreOffset ) {
+                return moment.parseZone( date ).format( globals.GENERAL.defaultDateFormat );
+            }
+
             return $filter("amDateFormat")(date, globals.GENERAL.defaultDateFormat);
         }
 

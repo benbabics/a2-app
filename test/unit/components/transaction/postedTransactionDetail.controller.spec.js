@@ -32,19 +32,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components");
-
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
-            });
-
             inject(function ($controller, $rootScope, $q, PostedTransactionModel) {
 
                 // create a scope object for us to use.

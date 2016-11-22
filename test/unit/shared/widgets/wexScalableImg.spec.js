@@ -8,22 +8,21 @@
             directiveElem,
             mockSrc = "mockSrc";
 
-        beforeEach(function () {
-            module("app.shared");
-            module("app.html");
+        beforeEach(inject(function (_$rootScope_, $compile) {
+            $rootScope = _$rootScope_;
 
-            inject(function (_$rootScope_, $compile) {
-                $rootScope = _$rootScope_;
+            $scope = $rootScope.$new();
 
-                $scope = $rootScope.$new();
+            $scope.mockSrc = mockSrc;
 
-                $scope.mockSrc = mockSrc;
+            //Compile the angular markup to get an instance of the directive
+            directiveElem = $compile("<wex-scalable-img src='{{mockSrc}}'></wex-scalable-img>")($scope);
 
-                //Compile the angular markup to get an instance of the directive
-                directiveElem = $compile("<wex-scalable-img src='{{mockSrc}}'></wex-scalable-img>")($scope);
+            $rootScope.$digest();
+        }));
 
-                $rootScope.$digest();
-            });
+        afterEach(function() {
+            directiveElem.remove();
         });
 
         describe("should create an element that", function() {

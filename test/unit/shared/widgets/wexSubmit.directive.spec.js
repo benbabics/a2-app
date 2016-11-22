@@ -2,23 +2,17 @@
     describe("A Wex Submit Directive", function () {
         var form, $scope;
 
-        beforeEach(function () {
-            module("app.shared.widgets");
-            module("app.html");
-        });
+        beforeEach(inject(function ($rootScope, $compile) {
+            $scope = $rootScope.$new();
 
-        beforeEach(function () {
-            // INJECT! This part is critical
-            // $rootScope - injected to create a new $scope instance.
-            // $compile - injected to allow us test snippets produced by the directive
-            inject(function($rootScope, $compile) {
-                $scope = $rootScope.$new();
+            //Compile the angular markup to get a form that uses the directive
+            form = angular.element("<form name='form'><wex-submit>Submit</wex-submit></form>");
+            $compile(form)($scope);
+            $scope.$digest();
+        }));
 
-                //Compile the angular markup to get a form that uses the directive
-                form   = angular.element("<form name='form'><wex-submit>Submit</wex-submit></form>");
-                $compile(form)($scope);
-                $scope.$digest();
-            });
+        afterEach(function() {
+            form.remove();
         });
 
         describe("creates a button that", function () {

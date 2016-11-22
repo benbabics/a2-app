@@ -9,7 +9,6 @@
         Fingerprint,
         UserAuthorizationManager,
         SecureStorage,
-        AnalyticsUtil,
         sessionCredentials,
         ctrl,
         credentials,
@@ -22,18 +21,10 @@
         };
 
         beforeEach(function () {
-            module("app.shared");
-            module("app.components");
-
-            // stub the routing and template loading
-            module(function($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
             Fingerprint = jasmine.createSpyObj("Fingerprint", ["isAvailable"]);
             SecureStorage = jasmine.createSpyObj("SecureStorage", ["get", "remove"]);
             sessionCredentials = jasmine.createSpyObj("sessionCredentials", ["get"]);
             UserAuthorizationManager = jasmine.createSpyObj("UserAuthorizationManager", ["verify"]);
-            AnalyticsUtil            = jasmine.createSpyObj( "AnalyticsUtil", ["trackEvent"] );
             $cordovaDialogs = jasmine.createSpyObj("$cordovaDialogs", ["confirm"]);
 
             inject(function ($controller, _$rootScope_, _$q_, _$localStorage_, _globals_) {
@@ -51,7 +42,6 @@
                     Fingerprint:              Fingerprint,
                     SecureStorage:            SecureStorage,
                     sessionCredentials:       sessionCredentials,
-                    AnalyticsUtil:            AnalyticsUtil,
                     UserAuthorizationManager: UserAuthorizationManager
                 });
             });
@@ -139,7 +129,7 @@
 
                     expect( sessionCredentials.get ).toHaveBeenCalled();
                     expect( UserAuthorizationManager.verify ).toHaveBeenCalledWith( credentials, { bypassFingerprint: false } );
-                    expect( AnalyticsUtil.trackEvent ).toHaveBeenCalled();
+                    expect( this.AnalyticsUtil.trackEvent ).toHaveBeenCalled();
                 });
             });
 
@@ -151,7 +141,7 @@
 
                     expect( sessionCredentials.get ).toHaveBeenCalled();
                     expect( SecureStorage.remove ).toHaveBeenCalledWith( credentials.clientId );
-                    expect( AnalyticsUtil.trackEvent ).toHaveBeenCalled();
+                    expect( this.AnalyticsUtil.trackEvent ).toHaveBeenCalled();
                 });
             });
         });

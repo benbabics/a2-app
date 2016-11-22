@@ -15,9 +15,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.brand");
-
             inject(function (_BrandAssetCollection_, _globals_, _BrandAssetModel_, _DataStore_) {
                 BrandAssetCollection = _BrandAssetCollection_;
                 globals = _globals_;

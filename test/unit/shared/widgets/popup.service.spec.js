@@ -14,9 +14,6 @@
             confirmPromise;
 
         beforeEach(function () {
-
-            module("app.shared");
-
             //mock dependencies
             $ionicPopup = jasmine.createSpyObj("$ionicPopup", ["alert", "confirm"]);
 
@@ -119,6 +116,10 @@
                 popup = jasmine.createSpyObj("popup", ["close"]);
 
                 spyOn(angular.element.prototype, "scope").and.returnValue(mockScope);
+            });
+
+            afterEach(function() {
+                datePicker.remove();
             });
 
             describe("should NOT close an alert when none have been displayed", function () {
@@ -546,6 +547,10 @@
                 popup = jasmine.createSpyObj("popup", ["close"]);
 
                 spyOn(angular.element.prototype, "scope").and.returnValue(mockScope);
+            });
+
+            afterEach(function() {
+                datePicker.remove();
             });
 
             describe("when there is an open date picker", function () {

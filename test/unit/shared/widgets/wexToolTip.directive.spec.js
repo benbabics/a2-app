@@ -13,10 +13,6 @@
     describe("A WEX ToolTip Directive", function () {
 
         beforeEach(function () {
-
-            module("app.shared");
-            module("app.html");
-
             // mock dependencies
             $ionicModal = jasmine.createSpyObj("$ionicModal", ["fromTemplateUrl"]);
 
@@ -40,6 +36,10 @@
             mockToolTip = jasmine.createSpyObj("toolTip", ["show", "hide", "remove"]);
             $ionicModal.fromTemplateUrl.and.returnValue(modalDeferred.promise);
             modalDeferred.resolve(mockToolTip);
+        });
+
+        afterEach(function() {
+            directive.remove();
         });
 
         it("should replace the wex-tool-tip element with a help button", function () {

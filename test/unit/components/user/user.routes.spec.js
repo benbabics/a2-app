@@ -6,17 +6,10 @@
         var $rootScope,
             $state;
 
-        beforeEach(function () {
-
-            module("app.shared");
-            module("app.components.user");
-            module("app.html");
-
-            inject(function (_$rootScope_, _$state_) {
-                $rootScope = _$rootScope_;
-                $state = _$state_;
-            });
-        });
+        beforeEach(inject(function (_$rootScope_, _$state_) {
+            $rootScope = _$rootScope_;
+            $state = _$state_;
+        }));
 
         describe("has a user state that", function () {
             var state,

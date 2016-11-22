@@ -26,10 +26,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.card");
-            module("app.components.account");
-
             //mock dependencies:
             $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["goBack"]);
 

@@ -1,8 +1,7 @@
 (function () {
     "use strict";
 
-    var _,
-        $rootScope,
+    var $rootScope,
         $compile,
         wexRefresher,
         mockGlobals = {
@@ -25,13 +24,16 @@
                 $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
             });
 
-            inject(function (___, _$rootScope_, _$compile_) {
+            inject(function (_$rootScope_, _$compile_) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
-                _ = ___;
             });
 
             wexRefresher = createWexRefresher();
+        });
+
+        afterEach(function() {
+            wexRefresher.remove();
         });
 
         it("should add the expected attributes to the element's scope", function () {

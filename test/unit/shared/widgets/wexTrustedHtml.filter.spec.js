@@ -6,18 +6,13 @@
             $sce,
             html;
 
-        beforeEach(function () {
+        beforeEach(inject(function ($filter, _$sce_) {
+            $sce = _$sce_;
 
-            module("app.shared");
-
-            inject(function ($filter, _$sce_) {
-                $sce = _$sce_;
-
-                filter = $filter("wexTrustedHtml");
-            });
+            filter = $filter("wexTrustedHtml");
 
             html = "<body>" + TestUtils.getRandomStringThatIsAlphaNumeric(20) + "</body>";
-        });
+        }));
 
         it("should call $sce.trustAsHtml with the expected value", function () {
             spyOn($sce, "trustAsHtml").and.callThrough();

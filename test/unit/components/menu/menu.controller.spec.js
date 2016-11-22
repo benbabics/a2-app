@@ -86,20 +86,11 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.html");
-
-
-            module("app.components", function ($provide, sharedGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
-            });
-
             module(function ($provide, sharedGlobals, appGlobals) {
                 $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
             });
 
             module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _)]);
-
 
             // mock dependencies
             Navigation = jasmine.createSpyObj("Navigation", ["goToCards", "goToContactUs", "goToHome", "goToLogOut", "goToMakePayment",

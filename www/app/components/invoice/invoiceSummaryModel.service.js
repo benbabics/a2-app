@@ -16,6 +16,7 @@
             this.invoiceNumber = "";
             this.minimumPaymentDue = "";
             this.paymentDueDate = "";
+            this.paymentDueDateObject = null;
             this.statementBalance = "";
             this.unbilledAmount = "";
         }
@@ -27,6 +28,7 @@
             this.billingDate = moment(invoiceSummaryResource.billingDate).toDate();
             this.closingDate = moment(invoiceSummaryResource.closingDate).toDate();
             this.paymentDueDate = moment(invoiceSummaryResource.paymentDueDate).toDate();
+            this.paymentDueDateObject = invoiceSummaryResource.paymentDueDate;
         };
 
         InvoiceSummaryModel.prototype.isAllCreditAvailable = function () {

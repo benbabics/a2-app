@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="45" id="com.wex.fleetsmarthub" ios-CFBundleVersion="45" version="3.0" xmlns="http://www.w3.org/ns/widgets">
+<widget android-versionCode="49" id="com.wex.fleetsmarthub" ios-CFBundleVersion="49" version="3.0" xmlns="http://www.w3.org/ns/widgets">
     <name>Fleet SmartHub</name>
     <description>
         App for managing WEX fleet accounts
@@ -11,7 +11,7 @@
     <hook src="scripts/addExecutePermissions.js" type="before_build" />
     <hook src="scripts/copyIosScheme.js" type="before_build" />
     <hook src="scripts/addPlatformClass.js" type="after_prepare" />
-    <hook src="scripts/removeSassFromPlatforms.js" type="after_prepare" />
+    <hook src="scripts/removeSassFromPlatforms.js" type="after_build" />
     <hook src="scripts/setEnvironment.js" type="after_prepare" />
     <hook src="scripts/setCommonConstants.js" type="after_prepare" />
     <hook src="scripts/changeMavenRepos.js" type="after_prepare" />
@@ -113,7 +113,6 @@
     <plugin name="cordova-plugin-whitelist" spec="~1.2.1" />
     <plugin name="cordova-plugin-x-toast" spec="~2.4.2" />
     <plugin name="cordova-plugin-file" spec="~4.1.1" />
-    <plugin name="cordova-plugin-inappbrowser" spec="~1.3.0" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.0" />
     <plugin name="cordova-plugin-ios-no-export-compliance" spec="https://github.com/WEXInc/cordova-plugin-ios-no-export-compliance.git" />
     <plugin name="cordova-plugin-touch-id" spec="~3.2.0" />
@@ -127,4 +126,5 @@
     <plugin name="cordova-plugin-dialogs" spec="~1.2.1" />
     <plugin name="com.phonegap.plugins.nativesettingsopener" spec="https://github.com/selahssea/cordova-open-native-settings" />
     <plugin name="cordova-plugin-ignore-lint-translation" spec="~0.0.1" />
+    <plugin name="cordova-plugin-inappbrowser" spec="http://bitbucket.int.wrightexpress.com/scm/mob/wex-cordova-inappbrowser.git" />
 </widget>

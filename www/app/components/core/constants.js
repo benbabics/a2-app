@@ -997,6 +997,10 @@
         }
     };
 
+    appGlobals.FEATURE_FLAGS = {
+        "PUSH_NOTIFICATIONS": false
+    };
+
     appGlobals.USER_IDLE_TIMEOUT = 900; //in seconds
 
     angular

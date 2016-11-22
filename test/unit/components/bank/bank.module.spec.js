@@ -9,9 +9,6 @@
 
         beforeEach(function () {
 
-            module("app.shared");
-            module("app.components.bank");
-
             inject(function (_$rootScope_, _$ionicPlatform_, _BankManager_) {
                 $rootScope = _$rootScope_;
                 $ionicPlatform = _$ionicPlatform_;

@@ -46,7 +46,10 @@ var TestUtils = (function () {
             provideCommonAppMockDependencies   : provideCommonAppMockDependencies,
             provideCommonSharedMockDependencies: provideCommonSharedMockDependencies,
             rejectedPromise                    : rejectedPromise,
-            resolvedPromise                    : resolvedPromise
+            resolvedPromise                    : resolvedPromise,
+            setFeatureFlagEnabled              : setFeatureFlagEnabled,
+            setFeatureFlagsEnabled             : setFeatureFlagsEnabled,
+            resetMock                          : resetMock
         };
 
     return TestUtils;
@@ -189,7 +192,7 @@ var TestUtils = (function () {
     }
 
     function getRandomBrandAssets(BrandAssetModel) {
-        return getRandomArray(getRandomInteger(1, 20), getRandomBrandAsset, BrandAssetModel);
+        return getRandomArray(getRandomInteger(1, 5), getRandomBrandAsset, BrandAssetModel);
     }
 
     function getRandomBoolean() {
@@ -293,6 +296,7 @@ var TestUtils = (function () {
         randomInvoiceSummary.invoiceNumber = getRandomStringThatIsAlphaNumeric(10);
         randomInvoiceSummary.minimumPaymentDue = getRandomNumberWithLength(5);
         randomInvoiceSummary.paymentDueDate = getRandomDate();
+        randomInvoiceSummary.paymentDueDateObject = randomInvoiceSummary.paymentDueDate;
         randomInvoiceSummary.statementBalance = getRandomNumberWithLength(5);
         randomInvoiceSummary.unbilledAmount = getRandomNumberWithLength(5);
 
@@ -301,7 +305,7 @@ var TestUtils = (function () {
 
     function getRandomMap(numEntries) {
         var map = {};
-        numEntries = numEntries || getRandomInteger(1, 10);
+        numEntries = numEntries || getRandomInteger(1, 5);
 
         for (var i = 0; i < numEntries; ++i) {
             map[getRandomStringThatIsAlphaNumeric(10)] = getRandomStringThatIsAlphaNumeric(10);
@@ -534,7 +538,19 @@ var TestUtils = (function () {
 
     function provideCommonAppMockDependencies($provide, setter, exclusions) {
         var mocks = {
-            LoginManager: jasmine.createSpyObj("LoginManager", ["logIn", "logOut"])
+            LoginManager: jasmine.createSpyObj("LoginManager", ["logIn", "logOut"]),
+            NotificationItemsManager: jasmine.createSpyObj("NotificationItemsManager", [
+                "fetchNotifications",
+                "deleteNotification",
+                "clearCachedValues",
+                "getNotifications",
+                "setNotifications",
+                "getUnreadNotificationsCount",
+                "setUnreadNotificationsCount",
+                "setNotificationsRead",
+                "fetchUnreadNotificationsCount"
+            ]),
+            NotificationsManager: jasmine.createSpyObj("NotificationsManager", ["onReady", "enableNotifications", "rejectBanner", "rejectPrompt", "registerUserForNotifications"])
         };
 
         provideCommonMockDependencies($provide, mocks, setter, exclusions);
@@ -542,6 +558,7 @@ var TestUtils = (function () {
 
     function provideCommonSharedMockDependencies($provide, setter, exclusions) {
         var mocks = {
+            $cordovaSplashscreen: jasmine.createSpyObj("$cordovaSplashscreen", ["show", "hide"]),
             AnalyticsUtil: jasmine.createSpyObj("AnalyticsUtil", [
                 "getActiveTrackerId",
                 "hasActiveTracker",
@@ -566,6 +583,37 @@ var TestUtils = (function () {
         mocks.PlatformUtil.waitForCordovaPlatform.and.returnValue(rejectedPromise("Cordova disabled by default."));
 
         provideCommonMockDependencies($provide, mocks, setter, exclusions);
+    }
+
+    function resetMock(mock) {
+        var isMock = function (object) {
+            return _.isFunction(_.get(object, "calls.reset"));
+        };
+
+        if (isMock(mock)) {
+            //reset the call record
+            mock.calls.reset();
+        }
+        else {
+            //look for mocked properties
+            for(var property in mock) {
+                var value = mock[property];
+
+                if (isMock(value)) {
+                    value.calls.reset();
+                }
+            }
+        }
+    }
+
+    function setFeatureFlagEnabled(globals, featureFlag, enabled) {
+        globals.FEATURE_FLAGS[featureFlag] = !!enabled;
+    }
+
+    function setFeatureFlagsEnabled(globals, enabled) {
+        for(var featureFlag in globals.FEATURE_FLAGS) {
+            setFeatureFlagEnabled(globals, featureFlag, enabled);
+        }
     }
 
 })();

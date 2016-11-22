@@ -15,11 +15,11 @@
 
     describe("An Notifications Items Manager", function () {
 
-        beforeEach(function () {
+        beforeAll(function () {
+            this.commonAppMockExclusions = ["NotificationItemsManager"];
+        });
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.notifications");
+        beforeEach(function () {
 
             // mock dependencies
             NotificationsResource = jasmine.createSpyObj("NotificationsResource", ["getNotifications", "deleteNotification", "getUnreadNotificationsCount", "setNotificationsRead"]);

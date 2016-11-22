@@ -92,8 +92,7 @@
         InvoiceManager,
         PaymentManager,
         PaymentModel,
-        UserManager,
-        AnalyticsUtil;
+        UserManager;
 
     describe("A Payment Maintenance Summary Controller", function () {
 
@@ -105,14 +104,6 @@
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["getInvoiceSummary"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["addPayment", "fetchScheduledPaymentsCount", "updatePayment"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
             MockPaymentMaintenanceUtil = jasmine.createSpyObj("PaymentMaintenanceUtil", [
                 "getConfig",
                 "go",
@@ -121,24 +112,12 @@
                 "showPaymentError"
             ]);
 
-            module("app.shared");
-            module("app.components", function ($provide) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
+            module(function ($provide) {
                 $provide.value("$state", $state);
                 $provide.value("$ionicHistory", $ionicHistory);
                 $provide.value("InvoiceManager", InvoiceManager);
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
-            });
-
-            // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
-            });
-
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
             });
 
             inject(function (___, $controller, _$q_, $rootScope, _appGlobals_, _moment_, _BankModel_,
@@ -261,6 +240,7 @@
                 beforeEach(function () {
                     mockCurrentInvoiceSummary.minimumPaymentDue = mockPaymentProcess.amount;
                     mockCurrentInvoiceSummary.paymentDueDate = moment(mockPaymentProcess.scheduledDate).subtract(1, "day");
+                    mockCurrentInvoiceSummary.paymentDueDateObject = moment(mockPaymentProcess.scheduledDate).subtract(1, "day");
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });
@@ -277,6 +257,7 @@
                 beforeEach(function () {
                     mockCurrentInvoiceSummary.minimumPaymentDue = mockPaymentProcess.amount + 0.01;
                     mockCurrentInvoiceSummary.paymentDueDate = moment(mockPaymentProcess.scheduledDate).subtract(1, "day");
+                    mockCurrentInvoiceSummary.paymentDueDateObject = moment(mockPaymentProcess.scheduledDate).subtract(1, "day");
 
                     $scope.$broadcast("$ionicView.beforeEnter");
                 });

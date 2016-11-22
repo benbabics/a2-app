@@ -6,7 +6,6 @@
         $q,
         $rootScope,
         $state,
-        AnalyticsUtil,
         Navigation,
         PaymentMaintenanceUtil,
         Popup,
@@ -17,25 +16,13 @@
 
         beforeEach(function () {
             //mock dependencies
-            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
-                "getActiveTrackerId",
-                "hasActiveTracker",
-                "setUserId",
-                "startTracker",
-                "trackEvent",
-                "trackView"
-            ]);
             Navigation = jasmine.createSpyObj("Navigation", ["goToPaymentActivity", "isUnsecuredState"]);
             Popup = jasmine.createSpyObj("Popup", ["closeAllPopups", "displayAlert"]);
-
-            module("app.shared");
-            module("app.components", function($provide) {
-                $provide.value("AnalyticsUtil", AnalyticsUtil);
+            
+            module(function($provide) {
                 $provide.value("Navigation", Navigation);
                 $provide.value("Popup", Popup);
-
             });
-            module("app.html");
 
             inject(function (___, _$q_, _$rootScope_, _$state_, _appGlobals_, Navigation, _PaymentMaintenanceUtil_) {
                 _ = ___;
@@ -219,8 +206,8 @@
                         .catch(rejectHandler);
                 });
 
-                it("should call AnalyticsUtil.trackEvent with the expected values", function () {
-                    expect(AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(analyticsEvent);
+                it("should call this.AnalyticsUtil.trackEvent with the expected values", function () {
+                    expect(this.AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(analyticsEvent);
                 });
 
                 describe("when going to the payment activity page succeeds", function () {
@@ -376,14 +363,14 @@
 
             if (options.hasMaintenanceConfigs) {
                 //create a maintenance and config object for each maintenance state that has a subset of keys from the main config
-                _.each(_.keys(appGlobals.PAYMENT_MAINTENANCE.STATES), function (maintenanceState) {
+                for(var maintenanceState in appGlobals.PAYMENT_MAINTENANCE.STATES) {
                     var maintenanceConfigKeys = _.slice(configKeys, TestUtils.getRandomInteger(1, numKeys));
                     constants[maintenanceState] = {};
 
                     constants[maintenanceState].CONFIG = _.zipObject(maintenanceConfigKeys, _.map(maintenanceConfigKeys, function () {
                         return TestUtils.getRandomStringThatIsAlphaNumeric(10);
                     }));
-                });
+                }
             }
 
             return constants;

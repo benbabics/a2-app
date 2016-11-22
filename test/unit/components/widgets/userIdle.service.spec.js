@@ -5,32 +5,25 @@
         $rootScope,
         $state,
         Idle,
-        LoginManager,
         UserIdle,
-        mockGlobals = {
-            LOGIN_STATE: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-        };
+        globals;
 
     describe("A UserIdle service", function () {
 
         beforeEach(function () {
             //mock dependencies
             Idle = jasmine.createSpyObj("Idle", ["unwatch", "idling", "running", "watch"]);
-            LoginManager = jasmine.createSpyObj("LoginManager", ["logOut"]);
 
-            module("app.shared");
-            module("app.html");
-            module("app.components.widgets", function ($provide, sharedGlobals) {
-                $provide.constant("globals", angular.extend({}, sharedGlobals, mockGlobals));
+            module(function ($provide) {
                 $provide.value("Idle", Idle);
-                $provide.value("LoginManager", LoginManager);
             });
 
-            inject(function (___, _$rootScope_, _$state_, _UserIdle_) {
+            inject(function (___, _$rootScope_, _$state_, _globals_, _UserIdle_) {
                 _ = ___;
                 $rootScope = _$rootScope_;
                 $state = _$state_;
                 UserIdle = _UserIdle_;
+                globals = _globals_;
 
                 spyOn($state, "go").and.callThrough();
                 spyOn($state, "transitionTo");
@@ -45,11 +38,11 @@
             });
 
             it("should call LoginManager.logOut", function () {
-                expect(LoginManager.logOut).toHaveBeenCalledWith();
+                expect(this.LoginManager.logOut).toHaveBeenCalledWith();
             });
 
             it("should redirect to the login page with the timedOut flag set", function () {
-                expect($state.go).toHaveBeenCalledWith(mockGlobals.LOGIN_STATE, {timedOut: true});
+                expect($state.go).toHaveBeenCalledWith(globals.LOGIN_STATE, {timedOut: true});
             });
         });
 

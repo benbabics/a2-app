@@ -13,10 +13,6 @@
     describe("A Session Credentials Service", function () {
 
         beforeEach(function () {
-            module( "app.shared" );
-            module( "app.html" );
-            module( "app.components.user" );
-            module( "app.components.brand" );
 
             // mock dependencies
             SecureStorage = jasmine.createSpy( "SecureStorage" );
@@ -45,13 +41,13 @@
 
             it("should successfully accept clientId and clientSecret values", function () {
                 sessionCredentials.set({ clientId: "foo", clientSecret: "bar" }).then( handlerResolve );
-                $q.flush();
+                $rootScope.$digest();
                 expect( handlerResolve ).toHaveBeenCalled();
             });
 
             it("should fail if clientId or clientSecret are NOT present", function () {
                 sessionCredentials.set({ clientId: "foo" }).then( handlerResolve ).catch( handlerReject );
-                $q.flush();
+                $rootScope.$digest();
                 expect( handlerReject ).toHaveBeenCalled();
                 expect( handlerResolve ).not.toHaveBeenCalled();
             });
@@ -79,7 +75,7 @@
 
             it("should return an object with properties clientId and a clientSecret", function () {
                 sessionCredentials.get().then( handlerResolve );
-                $q.flush();
+                $rootScope.$digest();
                 expect( handlerResolve ).toHaveBeenCalledWith( credentials );
             });
         });
@@ -92,7 +88,7 @@
 
             it("should clear the clientId and clientSecret values", function () {
                 sessionCredentials.reset().then( handlerResolve );
-                $q.flush();
+                $rootScope.$digest();
                 expect( handlerResolve ).toHaveBeenCalledWith({ clientId: undefined, clientSecret: undefined });
             });
         });

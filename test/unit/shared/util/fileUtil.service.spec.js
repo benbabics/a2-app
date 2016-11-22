@@ -1,17 +1,10 @@
 (function () {
     "use strict";
 
-    var FileUtil,
-        LoggerUtil,
-        $cordovaFile,
-        $q,
-        $rootScope,
-        file,
+    var file,
         directory,
         parentDirectory,
         defaultDirectory = "cdvfile:///",
-        resolveHandler,
-        rejectHandler,
         writeExistingFileDeferred,
         checkDirDeferred,
         checkFileDeferred,
@@ -23,14 +16,21 @@
         removeRecursivelyDeferred,
         removeDirDeferred,
         removeFileDeferred,
-        writeFileDeferred;
+        writeFileDeferred,
+        mocks = {};
 
     describe("A File Util service", function () {
 
-        beforeEach(function () {
+        module.sharedInjector();
+
+        beforeAll(function () {
+            this.includeDependencies({
+                includeAppDependencies: false,
+                mocks: mocks
+            }, this);
 
             //mock dependencies:
-            $cordovaFile = jasmine.createSpyObj("$cordovaFile", [
+            mocks.$cordovaFile = jasmine.createSpyObj("$cordovaFile", [
                 "writeExistingFile",
                 "checkDir",
                 "checkFile",
@@ -46,62 +46,94 @@
             ]);
 
             module(function ($provide) {
-                $provide.value("$cordovaFile", $cordovaFile);
+                $provide.value("$cordovaFile", mocks.$cordovaFile);
             });
 
-            inject(function (_$rootScope_, _$q_, _FileUtil_, _LoggerUtil_) {
-                FileUtil = _FileUtil_;
-                LoggerUtil = _LoggerUtil_;
-                $q = _$q_;
-                $rootScope = _$rootScope_;
+            inject(function ($rootScope, $q, FileUtil, LoggerUtil) {
+                mocks.FileUtil = FileUtil;
+                mocks.LoggerUtil = LoggerUtil;
+                mocks.$q = $q;
+                mocks.$rootScope = $rootScope;
             });
 
             //setup spies:
-            this.PlatformUtil.waitForCordovaPlatform.and.callFake(function(callback) {
+            mocks.PlatformUtil.waitForCordovaPlatform.and.callFake(function (callback) {
                 //just execute the callback directly
-                return $q.when((callback || function() {})());
+                return mocks.$q.when((callback || function () {
+                })());
             });
-            resolveHandler = jasmine.createSpy("resolveHandler");
-            rejectHandler = jasmine.createSpy("rejectHandler");
+            mocks.resolveHandler = jasmine.createSpy("resolveHandler");
+            mocks.rejectHandler = jasmine.createSpy("rejectHandler");
 
             window.cordova = {
                 file: {
                     dataDirectory: defaultDirectory
                 }
             };
+        });
+
+        beforeEach(function () {
             file = TestUtils.getRandomStringThatIsAlphaNumeric(15);
             directory = TestUtils.getRandomStringThatIsAlphaNumeric(10) + "/";
             parentDirectory = TestUtils.getRandomStringThatIsAlphaNumeric(10) + "/";
-            writeExistingFileDeferred = $q.defer();
-            checkDirDeferred = $q.defer();
-            checkFileDeferred = $q.defer();
-            createDirDeferred = $q.defer();
-            createFileDeferred = $q.defer();
-            readAsBinaryStringDeferred = $q.defer();
-            readAsTextDeferred = $q.defer();
-            readAsDataURLDeferred = $q.defer();
-            removeRecursivelyDeferred = $q.defer();
-            removeDirDeferred = $q.defer();
-            removeFileDeferred = $q.defer();
-            writeFileDeferred = $q.defer();
+            writeExistingFileDeferred = mocks.$q.defer();
+            checkDirDeferred = mocks.$q.defer();
+            checkFileDeferred = mocks.$q.defer();
+            createDirDeferred = mocks.$q.defer();
+            createFileDeferred = mocks.$q.defer();
+            readAsBinaryStringDeferred = mocks.$q.defer();
+            readAsTextDeferred = mocks.$q.defer();
+            readAsDataURLDeferred = mocks.$q.defer();
+            removeRecursivelyDeferred = mocks.$q.defer();
+            removeDirDeferred = mocks.$q.defer();
+            removeFileDeferred = mocks.$q.defer();
+            writeFileDeferred = mocks.$q.defer();
 
             //setup mocks:
-            $cordovaFile.writeExistingFile.and.returnValue(writeExistingFileDeferred.promise);
-            $cordovaFile.checkDir.and.returnValue(checkDirDeferred.promise);
-            $cordovaFile.checkFile.and.returnValue(checkFileDeferred.promise);
-            $cordovaFile.createDir.and.returnValue(createDirDeferred.promise);
-            $cordovaFile.createFile.and.returnValue(createFileDeferred.promise);
-            $cordovaFile.readAsBinaryString.and.returnValue(readAsBinaryStringDeferred.promise);
-            $cordovaFile.readAsText.and.returnValue(readAsTextDeferred.promise);
-            $cordovaFile.readAsDataURL.and.returnValue(readAsDataURLDeferred.promise);
-            $cordovaFile.removeRecursively.and.returnValue(removeRecursivelyDeferred.promise);
-            $cordovaFile.removeDir.and.returnValue(removeDirDeferred.promise);
-            $cordovaFile.removeFile.and.returnValue(removeFileDeferred.promise);
-            $cordovaFile.writeFile.and.returnValue(writeFileDeferred.promise);
+            mocks.$cordovaFile.writeExistingFile.and.returnValue(writeExistingFileDeferred.promise);
+            mocks.$cordovaFile.checkDir.and.returnValue(checkDirDeferred.promise);
+            mocks.$cordovaFile.checkFile.and.returnValue(checkFileDeferred.promise);
+            mocks.$cordovaFile.createDir.and.returnValue(createDirDeferred.promise);
+            mocks.$cordovaFile.createFile.and.returnValue(createFileDeferred.promise);
+            mocks.$cordovaFile.readAsBinaryString.and.returnValue(readAsBinaryStringDeferred.promise);
+            mocks.$cordovaFile.readAsText.and.returnValue(readAsTextDeferred.promise);
+            mocks.$cordovaFile.readAsDataURL.and.returnValue(readAsDataURLDeferred.promise);
+            mocks.$cordovaFile.removeRecursively.and.returnValue(removeRecursivelyDeferred.promise);
+            mocks.$cordovaFile.removeDir.and.returnValue(removeDirDeferred.promise);
+            mocks.$cordovaFile.removeFile.and.returnValue(removeFileDeferred.promise);
+            mocks.$cordovaFile.writeFile.and.returnValue(writeFileDeferred.promise);
+        });
+
+        afterEach(function () {
+            //reset all mocks
+            _.forEach(mocks, TestUtils.resetMock);
+        });
+
+        afterAll(function () {
+            file = null;
+            directory = null;
+            parentDirectory = null;
+            writeExistingFileDeferred = null;
+            checkDirDeferred = null;
+            checkFileDeferred = null;
+            createDirDeferred = null;
+            createFileDeferred = null;
+            readAsBinaryStringDeferred = null;
+            readAsTextDeferred = null;
+            readAsDataURLDeferred = null;
+            removeRecursivelyDeferred = null;
+            removeDirDeferred = null;
+            removeFileDeferred = null;
+            writeFileDeferred = null;
+            mocks = null;
         });
 
         describe("has an appendFile function that", function () {
             var data;
+
+            afterAll(function () {
+                data = null;
+            });
 
             beforeEach(function () {
                 data = TestUtils.getRandomStringThatIsAlphaNumeric(20);
@@ -110,38 +142,46 @@
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.appendFile(file, data, parentDirectory)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
+                    mocks.FileUtil.appendFile(file, data, parentDirectory)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
 
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.writeExistingFile with the expected values", function () {
-                    expect($cordovaFile.writeExistingFile).toHaveBeenCalledWith(parentDirectory, file, data);
+                it("should call mocks.$cordovaFile.writeExistingFile with the expected values", function () {
+                    expect(mocks.$cordovaFile.writeExistingFile).toHaveBeenCalledWith(parentDirectory, file, data);
                 });
 
-                describe("when $cordovaFile.writeExistingFile resolves with a value", function () {
+                describe("when mocks.$cordovaFile.writeExistingFile resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         writeExistingFileDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.writeExistingFile rejects with an error", function () {
+                describe("when mocks.$cordovaFile.writeExistingFile rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -149,12 +189,18 @@
                         };
 
                         writeExistingFileDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -162,37 +208,45 @@
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.appendFile(file, data)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.appendFile(file, data)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.writeExistingFile with the expected values", function () {
-                    expect($cordovaFile.writeExistingFile).toHaveBeenCalledWith(defaultDirectory, file, data);
+                it("should call mocks.$cordovaFile.writeExistingFile with the expected values", function () {
+                    expect(mocks.$cordovaFile.writeExistingFile).toHaveBeenCalledWith(defaultDirectory, file, data);
                 });
 
-                describe("when $cordovaFile.writeExistingFile resolves with a value", function () {
+                describe("when mocks.$cordovaFile.writeExistingFile resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         writeExistingFileDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.writeExistingFile rejects with an error", function () {
+                describe("when mocks.$cordovaFile.writeExistingFile rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -200,12 +254,18 @@
                         };
 
                         writeExistingFileDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -216,44 +276,48 @@
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.checkDirectoryExists(directory, parentDirectory)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.checkDirectoryExists(directory, parentDirectory)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.checkDir with the expected values", function () {
-                    expect($cordovaFile.checkDir).toHaveBeenCalledWith(parentDirectory, directory);
+                it("should call mocks.$cordovaFile.checkDir with the expected values", function () {
+                    expect(mocks.$cordovaFile.checkDir).toHaveBeenCalledWith(parentDirectory, directory);
                 });
 
-                describe("when $cordovaFile.checkDir resolves with a value", function () {
+                describe("when mocks.$cordovaFile.checkDir resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         checkDirDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.checkDir rejects", function () {
+                describe("when mocks.$cordovaFile.checkDir rejects", function () {
 
                     beforeEach(function () {
                         checkDirDeferred.reject();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that rejects", function () {
-                        expect(rejectHandler).toHaveBeenCalled();
+                        expect(mocks.rejectHandler).toHaveBeenCalled();
                     });
                 });
             });
@@ -261,44 +325,48 @@
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.checkDirectoryExists(directory)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.checkDirectoryExists(directory)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.checkDir with the expected values", function () {
-                    expect($cordovaFile.checkDir).toHaveBeenCalledWith(defaultDirectory, directory);
+                it("should call mocks.$cordovaFile.checkDir with the expected values", function () {
+                    expect(mocks.$cordovaFile.checkDir).toHaveBeenCalledWith(defaultDirectory, directory);
                 });
 
-                describe("when $cordovaFile.checkDir resolves with a value", function () {
+                describe("when mocks.$cordovaFile.checkDir resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         checkDirDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.checkDir rejects", function () {
+                describe("when mocks.$cordovaFile.checkDir rejects", function () {
 
                     beforeEach(function () {
                         checkDirDeferred.reject();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that rejects", function () {
-                        expect(rejectHandler).toHaveBeenCalled();
+                        expect(mocks.rejectHandler).toHaveBeenCalled();
                     });
                 });
             });
@@ -309,44 +377,48 @@
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.checkFileExists(file, parentDirectory)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.checkFileExists(file, parentDirectory)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.checkFile with the expected values", function () {
-                    expect($cordovaFile.checkFile).toHaveBeenCalledWith(parentDirectory, file);
+                it("should call mocks.$cordovaFile.checkFile with the expected values", function () {
+                    expect(mocks.$cordovaFile.checkFile).toHaveBeenCalledWith(parentDirectory, file);
                 });
 
-                describe("when $cordovaFile.checkFile resolves with a value", function () {
+                describe("when mocks.$cordovaFile.checkFile resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         checkFileDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.checkFile rejects", function () {
+                describe("when mocks.$cordovaFile.checkFile rejects", function () {
 
                     beforeEach(function () {
                         checkFileDeferred.reject();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that rejects", function () {
-                        expect(rejectHandler).toHaveBeenCalled();
+                        expect(mocks.rejectHandler).toHaveBeenCalled();
                     });
                 });
             });
@@ -354,44 +426,48 @@
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.checkFileExists(file)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.checkFileExists(file)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.checkFile with the expected values", function () {
-                    expect($cordovaFile.checkFile).toHaveBeenCalledWith(defaultDirectory, file);
+                it("should call mocks.$cordovaFile.checkFile with the expected values", function () {
+                    expect(mocks.$cordovaFile.checkFile).toHaveBeenCalledWith(defaultDirectory, file);
                 });
 
-                describe("when $cordovaFile.checkFile resolves with a value", function () {
+                describe("when mocks.$cordovaFile.checkFile resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         checkFileDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.checkFile rejects", function () {
+                describe("when mocks.$cordovaFile.checkFile rejects", function () {
 
                     beforeEach(function () {
                         checkFileDeferred.reject();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that rejects", function () {
-                        expect(rejectHandler).toHaveBeenCalled();
+                        expect(mocks.rejectHandler).toHaveBeenCalled();
                     });
                 });
             });
@@ -400,6 +476,10 @@
         describe("has a createDirectory function that", function () {
             var replaceIfExists;
 
+            afterAll(function () {
+                replaceIfExists = null;
+            });
+
             beforeEach(function () {
                 replaceIfExists = TestUtils.getRandomBoolean();
             });
@@ -407,37 +487,45 @@
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.createDirectory(directory, replaceIfExists, parentDirectory)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.createDirectory(directory, replaceIfExists, parentDirectory)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.createDir with the expected values", function () {
-                    expect($cordovaFile.createDir).toHaveBeenCalledWith(parentDirectory, directory, replaceIfExists);
+                it("should call mocks.$cordovaFile.createDir with the expected values", function () {
+                    expect(mocks.$cordovaFile.createDir).toHaveBeenCalledWith(parentDirectory, directory, replaceIfExists);
                 });
 
-                describe("when $cordovaFile.createDir resolves with a value", function () {
+                describe("when mocks.$cordovaFile.createDir resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         createDirDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.createDir rejects with an error", function () {
+                describe("when mocks.$cordovaFile.createDir rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -445,12 +533,18 @@
                         };
 
                         createDirDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -458,37 +552,45 @@
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.createDirectory(directory, replaceIfExists)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.createDirectory(directory, replaceIfExists)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.createDir with the expected values", function () {
-                    expect($cordovaFile.createDir).toHaveBeenCalledWith(defaultDirectory, directory, replaceIfExists);
+                it("should call mocks.$cordovaFile.createDir with the expected values", function () {
+                    expect(mocks.$cordovaFile.createDir).toHaveBeenCalledWith(defaultDirectory, directory, replaceIfExists);
                 });
 
-                describe("when $cordovaFile.createDir resolves with a value", function () {
+                describe("when mocks.$cordovaFile.createDir resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         createDirDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.createDir rejects with an error", function () {
+                describe("when mocks.$cordovaFile.createDir rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -496,12 +598,18 @@
                         };
 
                         createDirDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -510,6 +618,10 @@
         describe("has a createFile function that", function () {
             var replaceIfExists;
 
+            afterAll(function () {
+                replaceIfExists = null;
+            });
+
             beforeEach(function () {
                 replaceIfExists = TestUtils.getRandomBoolean();
             });
@@ -517,37 +629,45 @@
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.createFile(file, replaceIfExists, parentDirectory)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.createFile(file, replaceIfExists, parentDirectory)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.createFile with the expected values", function () {
-                    expect($cordovaFile.createFile).toHaveBeenCalledWith(parentDirectory, file, replaceIfExists);
+                it("should call mocks.$cordovaFile.createFile with the expected values", function () {
+                    expect(mocks.$cordovaFile.createFile).toHaveBeenCalledWith(parentDirectory, file, replaceIfExists);
                 });
 
-                describe("when $cordovaFile.createFile resolves with a value", function () {
+                describe("when mocks.$cordovaFile.createFile resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         createFileDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.createFile rejects with an error", function () {
+                describe("when mocks.$cordovaFile.createFile rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -555,12 +675,18 @@
                         };
 
                         createFileDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -568,37 +694,45 @@
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.createFile(file, replaceIfExists)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.createFile(file, replaceIfExists)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.createFile with the expected values", function () {
-                    expect($cordovaFile.createFile).toHaveBeenCalledWith(defaultDirectory, file, replaceIfExists);
+                it("should call mocks.$cordovaFile.createFile with the expected values", function () {
+                    expect(mocks.$cordovaFile.createFile).toHaveBeenCalledWith(defaultDirectory, file, replaceIfExists);
                 });
 
-                describe("when $cordovaFile.createFile resolves with a value", function () {
+                describe("when mocks.$cordovaFile.createFile resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         createFileDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.createFile rejects with an error", function () {
+                describe("when mocks.$cordovaFile.createFile rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -606,12 +740,18 @@
                         };
 
                         createFileDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -619,6 +759,10 @@
 
         describe("has a readFile function that", function () {
             var binary;
+
+            afterAll(function () {
+                binary = null;
+            });
 
             describe("when binary is true", function () {
 
@@ -629,37 +773,45 @@
                 describe("when given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        FileUtil.readFile(file, binary, parentDirectory)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
+                        mocks.FileUtil.readFile(file, binary, parentDirectory)
+                            .then(mocks.resolveHandler)
+                            .catch(mocks.rejectHandler);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                        expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
-                    it("should call $cordovaFile.readAsBinaryString with the expected values", function () {
-                        expect($cordovaFile.readAsBinaryString).toHaveBeenCalledWith(parentDirectory, file);
+                    it("should call mocks.$cordovaFile.readAsBinaryString with the expected values", function () {
+                        expect(mocks.$cordovaFile.readAsBinaryString).toHaveBeenCalledWith(parentDirectory, file);
                     });
 
-                    describe("when $cordovaFile.readAsBinaryString resolves with a value", function () {
+                    describe("when mocks.$cordovaFile.readAsBinaryString resolves with a value", function () {
                         var resolveValue;
+
+                        afterAll(function () {
+                            resolveValue = null;
+                        });
 
                         beforeEach(function () {
                             resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                             readAsBinaryStringDeferred.resolve(resolveValue);
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return a promise that resolves with the same value", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                            expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                         });
                     });
 
-                    describe("when $cordovaFile.readAsBinaryString rejects with an error", function () {
+                    describe("when mocks.$cordovaFile.readAsBinaryString rejects with an error", function () {
                         var error;
+
+                        afterAll(function () {
+                            error = null;
+                        });
 
                         beforeEach(function () {
                             error = {
@@ -667,12 +819,18 @@
                             };
 
                             readAsBinaryStringDeferred.reject(error);
+
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                        it("should reject", function () {
+                            var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            afterAll(function () {
+                                expectedError = null;
+                            });
+
+                            expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                         });
                     });
                 });
@@ -680,37 +838,45 @@
                 describe("when NOT given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        FileUtil.readFile(file, binary)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
+                        mocks.FileUtil.readFile(file, binary)
+                            .then(mocks.resolveHandler)
+                            .catch(mocks.rejectHandler);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                        expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
-                    it("should call $cordovaFile.readAsBinaryString with the expected values", function () {
-                        expect($cordovaFile.readAsBinaryString).toHaveBeenCalledWith(defaultDirectory, file);
+                    it("should call mocks.$cordovaFile.readAsBinaryString with the expected values", function () {
+                        expect(mocks.$cordovaFile.readAsBinaryString).toHaveBeenCalledWith(defaultDirectory, file);
                     });
 
-                    describe("when $cordovaFile.readAsBinaryString resolves with a value", function () {
+                    describe("when mocks.$cordovaFile.readAsBinaryString resolves with a value", function () {
                         var resolveValue;
+
+                        afterAll(function () {
+                            resolveValue = null;
+                        });
 
                         beforeEach(function () {
                             resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                             readAsBinaryStringDeferred.resolve(resolveValue);
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return a promise that resolves with the same value", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                            expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                         });
                     });
 
-                    describe("when $cordovaFile.readAsBinaryString rejects with an error", function () {
+                    describe("when mocks.$cordovaFile.readAsBinaryString rejects with an error", function () {
                         var error;
+
+                        afterAll(function () {
+                            error = null;
+                        });
 
                         beforeEach(function () {
                             error = {
@@ -718,12 +884,18 @@
                             };
 
                             readAsBinaryStringDeferred.reject(error);
+
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                        it("should reject", function () {
+                            var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            afterAll(function () {
+                                expectedError = null;
+                            });
+
+                            expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                         });
                     });
                 });
@@ -738,37 +910,45 @@
                 describe("when given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        FileUtil.readFile(file, binary, parentDirectory)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
+                        mocks.FileUtil.readFile(file, binary, parentDirectory)
+                            .then(mocks.resolveHandler)
+                            .catch(mocks.rejectHandler);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                        expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
-                    it("should call $cordovaFile.readAsText with the expected values", function () {
-                        expect($cordovaFile.readAsText).toHaveBeenCalledWith(parentDirectory, file);
+                    it("should call mocks.$cordovaFile.readAsText with the expected values", function () {
+                        expect(mocks.$cordovaFile.readAsText).toHaveBeenCalledWith(parentDirectory, file);
                     });
 
-                    describe("when $cordovaFile.readAsText resolves with a value", function () {
+                    describe("when mocks.$cordovaFile.readAsText resolves with a value", function () {
                         var resolveValue;
+
+                        afterAll(function () {
+                            resolveValue = null;
+                        });
 
                         beforeEach(function () {
                             resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                             readAsTextDeferred.resolve(resolveValue);
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return a promise that resolves with the same value", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                            expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                         });
                     });
 
-                    describe("when $cordovaFile.readAsText rejects with an error", function () {
+                    describe("when mocks.$cordovaFile.readAsText rejects with an error", function () {
                         var error;
+
+                        afterAll(function () {
+                            error = null;
+                        });
 
                         beforeEach(function () {
                             error = {
@@ -776,12 +956,18 @@
                             };
 
                             readAsTextDeferred.reject(error);
+
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                        it("should reject", function () {
+                            var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            afterAll(function () {
+                                expectedError = null;
+                            });
+
+                            expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                         });
                     });
                 });
@@ -789,37 +975,45 @@
                 describe("when NOT given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        FileUtil.readFile(file, binary)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
+                        mocks.FileUtil.readFile(file, binary)
+                            .then(mocks.resolveHandler)
+                            .catch(mocks.rejectHandler);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                        expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
-                    it("should call $cordovaFile.readAsText with the expected values", function () {
-                        expect($cordovaFile.readAsText).toHaveBeenCalledWith(defaultDirectory, file);
+                    it("should call mocks.$cordovaFile.readAsText with the expected values", function () {
+                        expect(mocks.$cordovaFile.readAsText).toHaveBeenCalledWith(defaultDirectory, file);
                     });
 
-                    describe("when $cordovaFile.readAsText resolves with a value", function () {
+                    describe("when mocks.$cordovaFile.readAsText resolves with a value", function () {
                         var resolveValue;
+
+                        afterAll(function () {
+                            resolveValue = null;
+                        });
 
                         beforeEach(function () {
                             resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                             readAsTextDeferred.resolve(resolveValue);
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return a promise that resolves with the same value", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                            expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                         });
                     });
 
-                    describe("when $cordovaFile.readAsText rejects with an error", function () {
+                    describe("when mocks.$cordovaFile.readAsText rejects with an error", function () {
                         var error;
+
+                        afterAll(function () {
+                            error = null;
+                        });
 
                         beforeEach(function () {
                             error = {
@@ -827,12 +1021,18 @@
                             };
 
                             readAsTextDeferred.reject(error);
+
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                        it("should reject", function () {
+                            var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            afterAll(function () {
+                                expectedError = null;
+                            });
+
+                            expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                         });
                     });
                 });
@@ -844,37 +1044,45 @@
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.readFileAsDataUrl(file, parentDirectory)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.readFileAsDataUrl(file, parentDirectory)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.readAsDataURL with the expected values", function () {
-                    expect($cordovaFile.readAsDataURL).toHaveBeenCalledWith(parentDirectory, file);
+                it("should call mocks.$cordovaFile.readAsDataURL with the expected values", function () {
+                    expect(mocks.$cordovaFile.readAsDataURL).toHaveBeenCalledWith(parentDirectory, file);
                 });
 
-                describe("when $cordovaFile.readAsDataURL resolves with a value", function () {
+                describe("when mocks.$cordovaFile.readAsDataURL resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         readAsDataURLDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.readAsDataURL rejects with an error", function () {
+                describe("when mocks.$cordovaFile.readAsDataURL rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -882,12 +1090,18 @@
                         };
 
                         readAsDataURLDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -895,37 +1109,45 @@
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.readFileAsDataUrl(file)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.readFileAsDataUrl(file)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.readAsDataURL with the expected values", function () {
-                    expect($cordovaFile.readAsDataURL).toHaveBeenCalledWith(defaultDirectory, file);
+                it("should call mocks.$cordovaFile.readAsDataURL with the expected values", function () {
+                    expect(mocks.$cordovaFile.readAsDataURL).toHaveBeenCalledWith(defaultDirectory, file);
                 });
 
-                describe("when $cordovaFile.readAsDataURL resolves with a value", function () {
+                describe("when mocks.$cordovaFile.readAsDataURL resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         readAsDataURLDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.readAsDataURL rejects with an error", function () {
+                describe("when mocks.$cordovaFile.readAsDataURL rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -933,12 +1155,18 @@
                         };
 
                         readAsDataURLDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -946,6 +1174,10 @@
 
         describe("has a removeDirectory function that", function () {
             var recursive;
+
+            afterAll(function () {
+                recursive = null;
+            });
 
             describe("when recursive is true", function () {
 
@@ -956,37 +1188,45 @@
                 describe("when given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        FileUtil.removeDirectory(directory, recursive, parentDirectory)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
+                        mocks.FileUtil.removeDirectory(directory, recursive, parentDirectory)
+                            .then(mocks.resolveHandler)
+                            .catch(mocks.rejectHandler);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                        expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
-                    it("should call $cordovaFile.removeRecursively with the expected values", function () {
-                        expect($cordovaFile.removeRecursively).toHaveBeenCalledWith(parentDirectory, directory);
+                    it("should call mocks.$cordovaFile.removeRecursively with the expected values", function () {
+                        expect(mocks.$cordovaFile.removeRecursively).toHaveBeenCalledWith(parentDirectory, directory);
                     });
 
-                    describe("when $cordovaFile.removeRecursively resolves with a value", function () {
+                    describe("when mocks.$cordovaFile.removeRecursively resolves with a value", function () {
                         var resolveValue;
+
+                        afterAll(function () {
+                            resolveValue = null;
+                        });
 
                         beforeEach(function () {
                             resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                             removeRecursivelyDeferred.resolve(resolveValue);
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return a promise that resolves with the same value", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                            expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                         });
                     });
 
-                    describe("when $cordovaFile.removeRecursively rejects with an error", function () {
+                    describe("when mocks.$cordovaFile.removeRecursively rejects with an error", function () {
                         var error;
+
+                        afterAll(function () {
+                            error = null;
+                        });
 
                         beforeEach(function () {
                             error = {
@@ -994,12 +1234,18 @@
                             };
 
                             removeRecursivelyDeferred.reject(error);
+
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                        it("should reject", function () {
+                            var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            afterAll(function () {
+                                expectedError = null;
+                            });
+
+                            expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                         });
                     });
                 });
@@ -1007,37 +1253,45 @@
                 describe("when NOT given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        FileUtil.removeDirectory(directory, recursive)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
+                        mocks.FileUtil.removeDirectory(directory, recursive)
+                            .then(mocks.resolveHandler)
+                            .catch(mocks.rejectHandler);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                        expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
-                    it("should call $cordovaFile.removeRecursively with the expected values", function () {
-                        expect($cordovaFile.removeRecursively).toHaveBeenCalledWith(defaultDirectory, directory);
+                    it("should call mocks.$cordovaFile.removeRecursively with the expected values", function () {
+                        expect(mocks.$cordovaFile.removeRecursively).toHaveBeenCalledWith(defaultDirectory, directory);
                     });
 
-                    describe("when $cordovaFile.removeRecursively resolves with a value", function () {
+                    describe("when mocks.$cordovaFile.removeRecursively resolves with a value", function () {
                         var resolveValue;
+
+                        afterAll(function () {
+                            resolveValue = null;
+                        });
 
                         beforeEach(function () {
                             resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                             removeRecursivelyDeferred.resolve(resolveValue);
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return a promise that resolves with the same value", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                            expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                         });
                     });
 
-                    describe("when $cordovaFile.removeRecursively rejects with an error", function () {
+                    describe("when mocks.$cordovaFile.removeRecursively rejects with an error", function () {
                         var error;
+
+                        afterAll(function () {
+                            error = null;
+                        });
 
                         beforeEach(function () {
                             error = {
@@ -1045,12 +1299,18 @@
                             };
 
                             removeRecursivelyDeferred.reject(error);
+
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                        it("should reject", function () {
+                            var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            afterAll(function () {
+                                expectedError = null;
+                            });
+
+                            expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                         });
                     });
                 });
@@ -1065,37 +1325,45 @@
                 describe("when given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        FileUtil.removeDirectory(directory, recursive, parentDirectory)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
+                        mocks.FileUtil.removeDirectory(directory, recursive, parentDirectory)
+                            .then(mocks.resolveHandler)
+                            .catch(mocks.rejectHandler);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                        expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
-                    it("should call $cordovaFile.removeDir with the expected values", function () {
-                        expect($cordovaFile.removeDir).toHaveBeenCalledWith(parentDirectory, directory);
+                    it("should call mocks.$cordovaFile.removeDir with the expected values", function () {
+                        expect(mocks.$cordovaFile.removeDir).toHaveBeenCalledWith(parentDirectory, directory);
                     });
 
-                    describe("when $cordovaFile.removeDir resolves with a value", function () {
+                    describe("when mocks.$cordovaFile.removeDir resolves with a value", function () {
                         var resolveValue;
+
+                        afterAll(function () {
+                            resolveValue = null;
+                        });
 
                         beforeEach(function () {
                             resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                             removeDirDeferred.resolve(resolveValue);
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return a promise that resolves with the same value", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                            expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                         });
                     });
 
-                    describe("when $cordovaFile.removeDir rejects with an error", function () {
+                    describe("when mocks.$cordovaFile.removeDir rejects with an error", function () {
                         var error;
+
+                        afterAll(function () {
+                            error = null;
+                        });
 
                         beforeEach(function () {
                             error = {
@@ -1103,12 +1371,18 @@
                             };
 
                             removeDirDeferred.reject(error);
+
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                        it("should reject", function () {
+                            var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            afterAll(function () {
+                                expectedError = null;
+                            });
+
+                            expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                         });
                     });
                 });
@@ -1116,37 +1390,45 @@
                 describe("when NOT given a parentDirectory", function () {
 
                     beforeEach(function () {
-                        FileUtil.removeDirectory(directory, recursive)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
-                        $rootScope.$digest();
+                        mocks.FileUtil.removeDirectory(directory, recursive)
+                            .then(mocks.resolveHandler)
+                            .catch(mocks.rejectHandler);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                        expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                    it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                        expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                     });
 
-                    it("should call $cordovaFile.removeDir with the expected values", function () {
-                        expect($cordovaFile.removeDir).toHaveBeenCalledWith(defaultDirectory, directory);
+                    it("should call mocks.$cordovaFile.removeDir with the expected values", function () {
+                        expect(mocks.$cordovaFile.removeDir).toHaveBeenCalledWith(defaultDirectory, directory);
                     });
 
-                    describe("when $cordovaFile.removeDir resolves with a value", function () {
+                    describe("when mocks.$cordovaFile.removeDir resolves with a value", function () {
                         var resolveValue;
+
+                        afterAll(function () {
+                            resolveValue = null;
+                        });
 
                         beforeEach(function () {
                             resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                             removeDirDeferred.resolve(resolveValue);
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should return a promise that resolves with the same value", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                            expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                         });
                     });
 
-                    describe("when $cordovaFile.removeDir rejects with an error", function () {
+                    describe("when mocks.$cordovaFile.removeDir rejects with an error", function () {
                         var error;
+
+                        afterAll(function () {
+                            error = null;
+                        });
 
                         beforeEach(function () {
                             error = {
@@ -1154,12 +1436,18 @@
                             };
 
                             removeDirDeferred.reject(error);
+
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                        it("should reject", function () {
+                            var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            afterAll(function () {
+                                expectedError = null;
+                            });
+
+                            expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                         });
                     });
                 });
@@ -1171,37 +1459,45 @@
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.removeFile(file, parentDirectory)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.removeFile(file, parentDirectory)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.removeFile with the expected values", function () {
-                    expect($cordovaFile.removeFile).toHaveBeenCalledWith(parentDirectory, file);
+                it("should call mocks.$cordovaFile.removeFile with the expected values", function () {
+                    expect(mocks.$cordovaFile.removeFile).toHaveBeenCalledWith(parentDirectory, file);
                 });
 
-                describe("when $cordovaFile.removeFile resolves with a value", function () {
+                describe("when mocks.$cordovaFile.removeFile resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         removeFileDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.removeFile rejects with an error", function () {
+                describe("when mocks.$cordovaFile.removeFile rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -1209,12 +1505,18 @@
                         };
 
                         removeFileDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -1222,37 +1524,45 @@
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.removeFile(file)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.removeFile(file)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.removeFile with the expected values", function () {
-                    expect($cordovaFile.removeFile).toHaveBeenCalledWith(defaultDirectory, file);
+                it("should call mocks.$cordovaFile.removeFile with the expected values", function () {
+                    expect(mocks.$cordovaFile.removeFile).toHaveBeenCalledWith(defaultDirectory, file);
                 });
 
-                describe("when $cordovaFile.removeFile resolves with a value", function () {
+                describe("when mocks.$cordovaFile.removeFile resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         removeFileDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.removeFile rejects with an error", function () {
+                describe("when mocks.$cordovaFile.removeFile rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -1260,12 +1570,18 @@
                         };
 
                         removeFileDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -1275,6 +1591,11 @@
             var data,
                 replaceIfExists;
 
+            afterAll(function () {
+                data = null;
+                replaceIfExists = null;
+            });
+
             beforeEach(function () {
                 data = TestUtils.getRandomStringThatIsAlphaNumeric(20);
                 replaceIfExists = TestUtils.getRandomBoolean();
@@ -1283,37 +1604,45 @@
             describe("when given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.writeFile(file, data, replaceIfExists, parentDirectory)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.writeFile(file, data, replaceIfExists, parentDirectory)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.writeFile with the expected values", function () {
-                    expect($cordovaFile.writeFile).toHaveBeenCalledWith(parentDirectory, file, data, replaceIfExists);
+                it("should call mocks.$cordovaFile.writeFile with the expected values", function () {
+                    expect(mocks.$cordovaFile.writeFile).toHaveBeenCalledWith(parentDirectory, file, data, replaceIfExists);
                 });
 
-                describe("when $cordovaFile.writeFile resolves with a value", function () {
+                describe("when mocks.$cordovaFile.writeFile resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         writeFileDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.writeFile rejects with an error", function () {
+                describe("when mocks.$cordovaFile.writeFile rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -1321,12 +1650,18 @@
                         };
 
                         writeFileDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });
@@ -1334,37 +1669,45 @@
             describe("when NOT given a parentDirectory", function () {
 
                 beforeEach(function () {
-                    FileUtil.writeFile(file, data, replaceIfExists)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.FileUtil.writeFile(file, data, replaceIfExists)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call this.PlatformUtil.waitForCordovaPlatform", function () {
-                    expect(this.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
+                it("should call mocks.PlatformUtil.waitForCordovaPlatform", function () {
+                    expect(mocks.PlatformUtil.waitForCordovaPlatform).toHaveBeenCalledWith(jasmine.any(Function));
                 });
 
-                it("should call $cordovaFile.writeFile with the expected values", function () {
-                    expect($cordovaFile.writeFile).toHaveBeenCalledWith(defaultDirectory, file, data, replaceIfExists);
+                it("should call mocks.$cordovaFile.writeFile with the expected values", function () {
+                    expect(mocks.$cordovaFile.writeFile).toHaveBeenCalledWith(defaultDirectory, file, data, replaceIfExists);
                 });
 
-                describe("when $cordovaFile.writeFile resolves with a value", function () {
+                describe("when mocks.$cordovaFile.writeFile resolves with a value", function () {
                     var resolveValue;
+
+                    afterAll(function () {
+                        resolveValue = null;
+                    });
 
                     beforeEach(function () {
                         resolveValue = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
                         writeFileDeferred.resolve(resolveValue);
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should return a promise that resolves with the same value", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(resolveValue);
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(resolveValue);
                     });
                 });
 
-                describe("when $cordovaFile.writeFile rejects with an error", function () {
+                describe("when mocks.$cordovaFile.writeFile rejects with an error", function () {
                     var error;
+
+                    afterAll(function () {
+                        error = null;
+                    });
 
                     beforeEach(function () {
                         error = {
@@ -1372,12 +1715,18 @@
                         };
 
                         writeFileDeferred.reject(error);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        var expectedError = "File operation failed: " + LoggerUtil.getErrorMessage(error);
+                    it("should reject", function () {
+                        var expectedError = "File operation failed: " + mocks.LoggerUtil.getErrorMessage(error);
 
-                        expect($rootScope.$digest).toThrowError(expectedError);
+                        afterAll(function () {
+                            expectedError = null;
+                        });
+
+                        expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                     });
                 });
             });

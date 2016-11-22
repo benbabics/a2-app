@@ -1,75 +1,23 @@
 (function () {
     "use strict";
 
-    var _,
-        $q,
-        $rootScope,
-        $state,
-        brandId,
-        getBrandAssetsFirstCallDeferred,
-        getBrandAssetsSecondCallDeferred,
-        mockBrandAssetCollection,
-        resolveHandler,
-        rejectHandler,
-        BrandManager,
-        BrandAssetModel,
-        BrandsResource,
-        BrandAssetCollection,
-        BrandUtil,
-        LoggerUtil,
-        UserManager,
-        user,
-        moment,
-        globals,
-        mockGlobals = {
-            BRANDS: {
-                "GENERIC": [
-                    {
-                        "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
-                        "assetTypeId"    : "TEXT",
-                        "assetValue"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "clientBrandName": "GENERIC",
-                        "links": []
-                    }
-                ],
-                "WEX"    : [
-                    {
-                        "assetSubtypeId" : "BRAND_LOGO",
-                        "assetTypeId"    : "FILE",
-                        "assetValue"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "clientBrandName": "WEX",
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": TestUtils.getRandomStringThatIsAlphaNumeric(15)
-                            }
-                        ]
-                    },
-                    {
-                        "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
-                        "assetTypeId"    : "TEXT",
-                        "assetValue"     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "clientBrandName": "WEX",
-                        "links": []
-                    }
-                ]
-            }
-        };
+    var mocks = {};
 
     describe("A Brand Manager", function () {
 
-        beforeAll(function () {
-            this.commonSharedMockExclusions = ["PlatformUtil"];
-        });
+        module.sharedInjector();
 
-        beforeEach(function () {
+        beforeAll(function () {
+            this.includeDependencies({
+                commonSharedMockExclusions: ["PlatformUtil"],
+                mocks: mocks
+            }, this);
 
             // mock dependencies
-            BrandsResource = jasmine.createSpyObj("BrandsResource", ["getBrandAssets"]);
-            BrandAssetCollection = jasmine.createSpyObj("BrandAssetCollection", ["getCollection"]);
-            mockBrandAssetCollection = jasmine.createSpyObj("mockBrandAssetCollection", ["by", "find", "insert", "remove", "update"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            BrandUtil = jasmine.createSpyObj("BrandUtil", [
+            mocks.BrandsResource = jasmine.createSpyObj("BrandsResource", ["getBrandAssets"]);
+            mocks.BrandAssetCollection = jasmine.createSpyObj("BrandAssetCollection", ["getCollection"]);
+            mocks.UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            mocks.BrandUtil = jasmine.createSpyObj("BrandUtil", [
                 "cacheAssetResourceData",
                 "getAssetBySubtype",
                 "getLastBrandUpdateDate",
@@ -78,39 +26,50 @@
                 "setLastBrandUpdateDate"
             ]);
 
-            module(function ($provide, appGlobals, sharedGlobals) {
-                $provide.value("BrandsResource", BrandsResource);
-                $provide.value("BrandAssetCollection", BrandAssetCollection);
-                $provide.value("UserManager", UserManager);
-                $provide.value("BrandUtil", BrandUtil);
-
-                $provide.constant("globals", angular.extend({}, sharedGlobals, appGlobals, mockGlobals));
+            module(function ($provide) {
+                $provide.value("BrandsResource", mocks.BrandsResource);
+                $provide.value("BrandAssetCollection", mocks.BrandAssetCollection);
+                $provide.value("UserManager", mocks.UserManager);
+                $provide.value("BrandUtil", mocks.BrandUtil);
             });
 
-            inject(function (___, _$q_, _$rootScope_, _$state_, _globals_, _moment_,
-                             _BrandManager_, _BrandAssetModel_, _LoggerUtil_, UserModel, UserAccountModel) {
-                _ = ___;
-                LoggerUtil = _LoggerUtil_;
-                $q = _$q_;
-                $rootScope = _$rootScope_;
-                $state = _$state_;
-                moment = _moment_;
-                globals = _globals_;
-                BrandManager = _BrandManager_;
-                BrandAssetModel = _BrandAssetModel_;
+            inject(function (___, _$q_, _$rootScope_, _$state_, _globals_, _moment_, _BrandManager_, _BrandAssetModel_, _LoggerUtil_) {
+                mocks._ = ___;
+                mocks.LoggerUtil = _LoggerUtil_;
+                mocks.$q = _$q_;
+                mocks.$rootScope = _$rootScope_;
+                mocks.$state = _$state_;
+                mocks.moment = _moment_;
+                mocks.globals = _globals_;
+                mocks.BrandManager = _BrandManager_;
+                mocks.BrandAssetModel = _BrandAssetModel_;
 
-                user = TestUtils.getRandomUser(UserModel, UserAccountModel, globals.USER.ONLINE_APPLICATION);
+                spyOn(mocks.$state, "transitionTo");
             });
 
             // set up spies
-            resolveHandler = jasmine.createSpy("resolveHandler");
-            rejectHandler = jasmine.createSpy("rejectHandler");
-            spyOn($state, "transitionTo");
+            mocks.resolveHandler = jasmine.createSpy("mocks.resolveHandler");
+            mocks.rejectHandler = jasmine.createSpy("mocks.rejectHandler");
+        });
 
+        beforeEach(inject(function (UserModel, UserAccountModel) {
             // set up mocks
-            brandId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-            BrandAssetCollection.getCollection.and.returnValue(mockBrandAssetCollection);
-            UserManager.getUser.and.returnValue(user);
+            mocks.user = TestUtils.getRandomUser(UserModel, UserAccountModel, mocks.globals.ONLINE_APPLICATION);
+            mocks.brandId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+            mocks.mockBrandAssetCollection = jasmine.createSpyObj("mockBrandAssetCollection", ["by", "find", "insert", "remove", "update"]);
+            mocks.BrandAssetCollection.getCollection.and.returnValue(mocks.mockBrandAssetCollection);
+            mocks.UserManager.getUser.and.returnValue(mocks.user);
+
+            mocks.BrandManager.setBrandAssets(mocks.mockBrandAssetCollection);
+        }));
+
+        afterEach(function () {
+            //reset all mocks
+            _.forEach(mocks, TestUtils.resetMock);
+        });
+
+        afterAll(function () {
+            mocks = null;
         });
 
         describe("has an activate function that", function () {
@@ -131,34 +90,42 @@
 
             beforeEach(function () {
                 alreadyCalled = false;
-                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                brandAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
                 brandAssetsObject = {};
-                brandAssetsObject[brandId] = brandAssets;
+                brandAssetsObject[mocks.brandId] = brandAssets;
                 ifModifiedSince = TestUtils.getRandomDate();
 
-                getBrandAssetsFirstCallDeferred = $q.defer();
-                getBrandAssetsSecondCallDeferred = $q.defer();
+                mocks.getBrandAssetsFirstCallDeferred = mocks.$q.defer();
+                mocks.getBrandAssetsSecondCallDeferred = mocks.$q.defer();
 
-                BrandsResource.getBrandAssets.and.callFake(function () {
+                mocks.BrandsResource.getBrandAssets.and.callFake(function () {
                     if (alreadyCalled) {
-                        return getBrandAssetsSecondCallDeferred.promise;
+                        return mocks.getBrandAssetsSecondCallDeferred.promise;
                     }
 
                     alreadyCalled = true;
-                    return getBrandAssetsFirstCallDeferred.promise;
+                    return mocks.getBrandAssetsFirstCallDeferred.promise;
                 });
-                mockBrandAssetCollection[brandId] = [];
-                mockBrandAssetCollection.find.and.returnValue(brandAssets);
-                mockBrandAssetCollection.insert.and.callFake(_.bind(Array.prototype.push, mockBrandAssetCollection[brandId], _));
+                mocks.mockBrandAssetCollection[mocks.brandId] = [];
+                mocks.mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                mocks.mockBrandAssetCollection.insert.and.callFake(mocks._.bind(Array.prototype.push, mocks.mockBrandAssetCollection[mocks.brandId], mocks._));
 
-                BrandManager.fetchBrandAssets(brandId, ifModifiedSince)
-                    .then(resolveHandler, rejectHandler);
+                mocks.BrandManager.fetchBrandAssets(mocks.brandId, ifModifiedSince)
+                    .then(mocks.resolveHandler, mocks.rejectHandler);
+            });
+
+            afterAll(function () {
+                alreadyCalled = null;
+                brandAssets = null;
+                brandAssetsObject = null;
+                ifModifiedSince =  null;
+                mockError = null;
             });
 
             describe("when getting the brand assets", function () {
 
-                it("should call BrandsResource.getBrandAssets", function () {
-                    expect(BrandsResource.getBrandAssets).toHaveBeenCalledWith(brandId, ifModifiedSince);
+                it("should call mocks.BrandsResource.getBrandAssets", function () {
+                    expect(mocks.BrandsResource.getBrandAssets).toHaveBeenCalledWith(mocks.brandId, ifModifiedSince);
                 });
 
             });
@@ -167,22 +134,26 @@
 
                 var mockRemoteBrandAssets = {data: {}};
 
+                afterAll(function () {
+                    mockRemoteBrandAssets = null;
+                });
+
                 describe("when there is data in the response", function () {
 
                     beforeEach(function () {
                         mockRemoteBrandAssets.data = brandAssets.slice();
-                        getBrandAssetsFirstCallDeferred.resolve(mockRemoteBrandAssets);
+                        mocks.getBrandAssetsFirstCallDeferred.resolve(mockRemoteBrandAssets);
 
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should set the brand assets", function () {
-                        expect(BrandManager.getBrandAssetsByBrand(brandId)).toEqual(brandAssets);
+                        expect(mocks.BrandManager.getBrandAssetsByBrand(mocks.brandId)).toEqual(brandAssets);
                     });
 
                     it("should resolve", function () {
-                        expect(resolveHandler).toHaveBeenCalledWith(mockRemoteBrandAssets.data);
-                        expect(rejectHandler).not.toHaveBeenCalled();
+                        expect(mocks.resolveHandler).toHaveBeenCalledWith(mockRemoteBrandAssets.data);
+                        expect(mocks.rejectHandler).not.toHaveBeenCalled();
                     });
 
                 });
@@ -190,15 +161,17 @@
                 describe("when there is no data in the response", function () {
 
                     beforeEach(function () {
-                        getBrandAssetsFirstCallDeferred.resolve(null);
+                        mocks.getBrandAssetsFirstCallDeferred.resolve(null);
+
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        expect($rootScope.$digest).toThrow();
+                    it("should reject", function () {
+                        expect(mocks.rejectHandler).toHaveBeenCalled();
                     });
 
                     it("should NOT update the brand assets", function () {
-                        expect(BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
+                        expect(mocks.BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
                     });
 
                 });
@@ -208,17 +181,17 @@
 
                 beforeEach(function () {
                     mockError.status = 400;
-                    getBrandAssetsFirstCallDeferred.reject(mockError);
+                    mocks.getBrandAssetsFirstCallDeferred.reject(mockError);
 
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
                 describe("should try to fetch brand assets for 'GENERIC' that", function () {
 
                     describe("when getting the brand assets", function () {
 
-                        it("should call BrandsResource.getBrandAssets for 'GENERIC'", function () {
-                            expect(BrandsResource.getBrandAssets).toHaveBeenCalledWith("GENERIC", undefined);
+                        it("should call mocks.BrandsResource.getBrandAssets for 'GENERIC'", function () {
+                            expect(mocks.BrandsResource.getBrandAssets).toHaveBeenCalledWith("GENERIC", undefined);
                         });
 
                     });
@@ -227,22 +200,26 @@
 
                         var mockRemoteBrandAssets = {data: {}};
 
+                        afterAll(function () {
+                            mockRemoteBrandAssets = null;
+                        });
+
                         describe("when there is data in the response", function () {
 
                             beforeEach(function () {
                                 mockRemoteBrandAssets.data = brandAssets.slice();
-                                getBrandAssetsSecondCallDeferred.resolve(mockRemoteBrandAssets);
+                                mocks.getBrandAssetsSecondCallDeferred.resolve(mockRemoteBrandAssets);
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should set the brand assets", function () {
-                                expect(BrandManager.getBrandAssetsByBrand(brandId)).toEqual(brandAssets);
+                                expect(mocks.BrandManager.getBrandAssetsByBrand(mocks.brandId)).toEqual(brandAssets);
                             });
 
                             it("should resolve", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(mockRemoteBrandAssets.data);
-                                expect(rejectHandler).not.toHaveBeenCalled();
+                                expect(mocks.resolveHandler).toHaveBeenCalledWith(mockRemoteBrandAssets.data);
+                                expect(mocks.rejectHandler).not.toHaveBeenCalled();
                             });
 
                         });
@@ -250,15 +227,16 @@
                         describe("when there is no data in the response", function () {
 
                             beforeEach(function () {
-                                getBrandAssetsSecondCallDeferred.resolve(null);
+                                mocks.getBrandAssetsSecondCallDeferred.resolve(null);
+                                mocks.$rootScope.$digest();
                             });
 
-                            it("should throw an error", function () {
-                                expect($rootScope.$digest).toThrow();
+                            it("should reject", function () {
+                                expect(mocks.rejectHandler).toHaveBeenCalled();
                             });
 
                             it("should NOT update the brand assets", function () {
-                                expect(BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
+                                expect(mocks.BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
                             });
 
                         });
@@ -268,15 +246,16 @@
 
                         beforeEach(function () {
                             mockError.status = 400;
-                            getBrandAssetsSecondCallDeferred.reject(mockError);
+                            mocks.getBrandAssetsSecondCallDeferred.reject(mockError);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            expect($rootScope.$digest).toThrow();
+                        it("should reject", function () {
+                            expect(mocks.rejectHandler).toHaveBeenCalled();
                         });
 
                         it("should NOT update the brand assets", function () {
-                            expect(BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
+                            expect(mocks.BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
                         });
 
                     });
@@ -285,15 +264,16 @@
 
                         beforeEach(function () {
                             mockError.status = 422;
-                            getBrandAssetsSecondCallDeferred.reject(mockError);
+                            mocks.getBrandAssetsSecondCallDeferred.reject(mockError);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            expect($rootScope.$digest).toThrow();
+                        it("should reject", function () {
+                            expect(mocks.rejectHandler).toHaveBeenCalled();
                         });
 
                         it("should NOT update the brand assets", function () {
-                            expect(BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
+                            expect(mocks.BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
                         });
 
                     });
@@ -302,15 +282,16 @@
 
                         beforeEach(function () {
                             mockError.status = 500;
-                            getBrandAssetsFirstCallDeferred.reject(mockError);
+                            mocks.getBrandAssetsSecondCallDeferred.reject(mockError);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            expect($rootScope.$digest).toThrow();
+                        it("should reject", function () {
+                            expect(mocks.rejectHandler).toHaveBeenCalled();
                         });
 
                         it("should NOT update the brand assets", function () {
-                            expect(BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
+                            expect(mocks.BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
                         });
 
                     });
@@ -322,17 +303,17 @@
 
                 beforeEach(function () {
                     mockError.status = 422;
-                    getBrandAssetsFirstCallDeferred.reject(mockError);
+                    mocks.getBrandAssetsFirstCallDeferred.reject(mockError);
 
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
                 describe("should try to fetch brand assets for 'WEX' that", function () {
 
                     describe("when getting the brand assets", function () {
 
-                        it("should call BrandsResource.getBrandAssets for 'WEX'", function () {
-                            expect(BrandsResource.getBrandAssets).toHaveBeenCalledWith("WEX", undefined);
+                        it("should call mocks.BrandsResource.getBrandAssets for 'WEX'", function () {
+                            expect(mocks.BrandsResource.getBrandAssets).toHaveBeenCalledWith("WEX", undefined);
                         });
 
                     });
@@ -341,22 +322,26 @@
 
                         var mockRemoteBrandAssets = {data: {}};
 
+                        afterAll(function () {
+                            mockRemoteBrandAssets = null;
+                        });
+
                         describe("when there is data in the response", function () {
 
                             beforeEach(function () {
                                 mockRemoteBrandAssets.data = brandAssets.slice();
-                                getBrandAssetsSecondCallDeferred.resolve(mockRemoteBrandAssets);
+                                mocks.getBrandAssetsSecondCallDeferred.resolve(mockRemoteBrandAssets);
 
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
                             it("should set the brand assets", function () {
-                                expect(BrandManager.getBrandAssetsByBrand(brandId)).toEqual(brandAssets);
+                                expect(mocks.BrandManager.getBrandAssetsByBrand(mocks.brandId)).toEqual(brandAssets);
                             });
 
                             it("should resolve", function () {
-                                expect(resolveHandler).toHaveBeenCalledWith(mockRemoteBrandAssets.data);
-                                expect(rejectHandler).not.toHaveBeenCalled();
+                                expect(mocks.resolveHandler).toHaveBeenCalledWith(mockRemoteBrandAssets.data);
+                                expect(mocks.rejectHandler).not.toHaveBeenCalled();
                             });
 
                         });
@@ -364,15 +349,16 @@
                         describe("when there is no data in the response", function () {
 
                             beforeEach(function () {
-                                getBrandAssetsSecondCallDeferred.resolve(null);
+                                mocks.getBrandAssetsSecondCallDeferred.resolve(null);
+                                mocks.$rootScope.$digest();
                             });
 
-                            it("should throw an error", function () {
-                                expect($rootScope.$digest).toThrow();
+                            it("should reject", function () {
+                                expect(mocks.rejectHandler).toHaveBeenCalled();
                             });
 
                             it("should NOT update the brand assets", function () {
-                                expect(BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
+                                expect(mocks.BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
                             });
 
                         });
@@ -382,15 +368,16 @@
 
                         beforeEach(function () {
                             mockError.status = 400;
-                            getBrandAssetsSecondCallDeferred.reject(mockError);
+                            mocks.getBrandAssetsSecondCallDeferred.reject(mockError);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            expect($rootScope.$digest).toThrow();
+                        it("should reject", function () {
+                            expect(mocks.rejectHandler).toHaveBeenCalled();
                         });
 
                         it("should NOT update the brand assets", function () {
-                            expect(BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
+                            expect(mocks.BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
                         });
 
                     });
@@ -399,15 +386,16 @@
 
                         beforeEach(function () {
                             mockError.status = 422;
-                            getBrandAssetsSecondCallDeferred.reject(mockError);
+                            mocks.getBrandAssetsSecondCallDeferred.reject(mockError);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            expect($rootScope.$digest).toThrow();
+                        it("should reject", function () {
+                            expect(mocks.rejectHandler).toHaveBeenCalled();
                         });
 
                         it("should NOT update the brand assets", function () {
-                            expect(BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
+                            expect(mocks.BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
                         });
 
                     });
@@ -416,15 +404,16 @@
 
                         beforeEach(function () {
                             mockError.status = 500;
-                            getBrandAssetsFirstCallDeferred.reject(mockError);
+                            mocks.getBrandAssetsSecondCallDeferred.reject(mockError);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            expect($rootScope.$digest).toThrow();
+                        it("should reject", function () {
+                            expect(mocks.rejectHandler).toHaveBeenCalled();
                         });
 
                         it("should NOT update the brand assets", function () {
-                            expect(BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
+                            expect(mocks.BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
                         });
 
                     });
@@ -436,15 +425,16 @@
 
                 beforeEach(function () {
                     mockError.status = 500;
-                    getBrandAssetsFirstCallDeferred.reject(mockError);
+                    mocks.getBrandAssetsFirstCallDeferred.reject(mockError);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should throw an error", function () {
-                    expect($rootScope.$digest).toThrow();
+                it("should reject", function () {
+                    expect(mocks.rejectHandler).toHaveBeenCalled();
                 });
 
                 it("should NOT update the brand assets", function () {
-                    expect(BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
+                    expect(mocks.BrandManager.getBrandAssets()).not.toEqual(jasmine.objectContaining(brandAssetsObject));
                 });
 
             });
@@ -456,10 +446,10 @@
             it("should return the brand assets passed to setBrandAssets", function () {
                 var result;
 
-                mockBrandAssetCollection[brandId] = TestUtils.getRandomBrandAssets(BrandAssetModel);
-                result = BrandManager.getBrandAssets();
+                mocks.mockBrandAssetCollection[mocks.brandId] = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
+                result = mocks.BrandManager.getBrandAssets();
 
-                expect(result).toEqual(mockBrandAssetCollection);
+                expect(result).toEqual(mocks.mockBrandAssetCollection);
             }) ;
 
             // TODO: figure out how to test this without using setBrandAssets
@@ -470,10 +460,10 @@
             it("should update the brand assets returned by getBrandAssets", function () {
                 var result;
 
-                mockBrandAssetCollection[brandId] = TestUtils.getRandomBrandAssets(BrandAssetModel);
-                result = BrandManager.getBrandAssets();
+                mocks.mockBrandAssetCollection[mocks.brandId] = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
+                result = mocks.BrandManager.getBrandAssets();
 
-                expect(result).toEqual(mockBrandAssetCollection);
+                expect(result).toEqual(mocks.mockBrandAssetCollection);
             }) ;
 
             // TODO: figure out how to test this without using getBrandAssets
@@ -481,37 +471,42 @@
 
         describe("has a getBrandAssetsByBrand function that", function () {
 
-            describe("when there are brand assets for the given brandId", function () {
+            describe("when there are brand assets for the given mocks.brandId", function () {
                 var brandAssets,
                     result;
 
                 beforeEach(function () {
-                    brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                    brandAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
 
-                    mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                    mocks.mockBrandAssetCollection.find.and.returnValue(brandAssets);
 
-                    result = BrandManager.getBrandAssetsByBrand(brandId);
+                    result = mocks.BrandManager.getBrandAssetsByBrand(mocks.brandId);
                 });
 
-                it("should call mockBrandAssetCollection.find with the expected values", function () {
-                    var searchRegex = new RegExp(brandId, "i");
-
-                    expect(mockBrandAssetCollection.find).toHaveBeenCalledWith({"clientBrandName" :{"$regex" : searchRegex}});
+                afterAll(function () {
+                    brandAssets = null;
+                    result = null;
                 });
 
-                it("should return the brand assets for the given brandId", function () {
+                it("should call mocks.mockBrandAssetCollection.find with the expected values", function () {
+                    var searchRegex = new RegExp(mocks.brandId, "i");
+
+                    expect(mocks.mockBrandAssetCollection.find).toHaveBeenCalledWith({"clientBrandName" :{"$regex" : searchRegex}});
+                });
+
+                it("should return the brand assets for the given mocks.brandId", function () {
                     expect(result).toEqual(brandAssets);
                 });
             });
 
-            describe("when there are NOT brand assets for the given brandId", function () {
+            describe("when there are NOT brand assets for the given mocks.brandId", function () {
 
                 beforeEach(function () {
-                    mockBrandAssetCollection.find.and.returnValue(null);
+                    mocks.mockBrandAssetCollection.find.and.returnValue(null);
                 });
 
                 it("should return null", function () {
-                    expect(BrandManager.getBrandAssetsByBrand(brandId)).toBeNull();
+                    expect(mocks.BrandManager.getBrandAssetsByBrand(mocks.brandId)).toBeNull();
                 });
             });
         });
@@ -522,34 +517,40 @@
                 result;
 
             beforeEach(function () {
-                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
-                existingAssets = _.filter(brandAssets, TestUtils.getRandomBoolean);
+                brandAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
+                existingAssets = mocks._.filter(brandAssets, TestUtils.getRandomBoolean);
 
-                mockBrandAssetCollection[brandId] = [];
-                mockBrandAssetCollection[brandId].concat(existingAssets);
-                mockBrandAssetCollection.by.and.callFake(function (key, value) {
-                    return _.find(existingAssets, _.zipObject([key], [value]));
+                mocks.mockBrandAssetCollection[mocks.brandId] = [];
+                mocks.mockBrandAssetCollection[mocks.brandId].concat(existingAssets);
+                mocks.mockBrandAssetCollection.by.and.callFake(function (key, value) {
+                    return mocks._.find(existingAssets, mocks._.zipObject([key], [value]));
                 });
-                mockBrandAssetCollection.remove.and.callFake(function (value) {
-                    return _.remove(existingAssets, {brandAssetId: value.brandAssetId});
+                mocks.mockBrandAssetCollection.remove.and.callFake(function (value) {
+                    return mocks._.remove(existingAssets, {brandAssetId: value.brandAssetId});
                 });
             });
 
             beforeEach(function () {
-                result = BrandManager.storeBrandAssets(brandAssets);
+                result = mocks.BrandManager.storeBrandAssets(brandAssets);
+            });
+
+            afterAll(function () {
+                brandAssets = null;
+                existingAssets = null;
+                result = null;
             });
 
             it("should call remove on the expected assets", function () {
-                _.forEach(existingAssets, function (existingAsset) {
-                    var expectedAsset = _.find(brandAssets, {brandAssetId: existingAsset.brandAssetId});
+                mocks._.forEach(existingAssets, function (existingAsset) {
+                    var expectedAsset = mocks._.find(brandAssets, {brandAssetId: existingAsset.brandAssetId});
 
-                    expect(mockBrandAssetCollection.remove).toHaveBeenCalledWith(jasmine.objectContaining(expectedAsset));
+                    expect(mocks.mockBrandAssetCollection.remove).toHaveBeenCalledWith(jasmine.objectContaining(expectedAsset));
                 });
             });
 
             it("should call insert on the expected assets", function () {
-                _.forEach(_.difference(brandAssets, existingAssets), function (newAsset) {
-                    expect(mockBrandAssetCollection.insert).toHaveBeenCalledWith(newAsset);
+                mocks._.forEach(mocks._.difference(brandAssets, existingAssets), function (newAsset) {
+                    expect(mocks.mockBrandAssetCollection.insert).toHaveBeenCalledWith(newAsset);
                 });
             });
 
@@ -562,33 +563,37 @@
             var brandAsset;
 
             beforeEach(function () {
-                brandAsset = TestUtils.getRandomBrandAsset(BrandAssetModel);
+                brandAsset = TestUtils.getRandomBrandAsset(mocks.BrandAssetModel);
+            });
+
+            afterAll(function () {
+                brandAsset = null;
             });
 
             describe("when the given asset exists", function () {
 
                 beforeEach(function () {
-                    mockBrandAssetCollection.by.and.returnValue(brandAsset);
+                    mocks.mockBrandAssetCollection.by.and.returnValue(brandAsset);
 
-                    BrandManager.removeBrandAsset(brandAsset);
+                    mocks.BrandManager.removeBrandAsset(brandAsset);
                 });
 
                 it("should call remove on the collection with the asset", function () {
-                    expect(mockBrandAssetCollection.remove).toHaveBeenCalledWith(brandAsset);
+                    expect(mocks.mockBrandAssetCollection.remove).toHaveBeenCalledWith(brandAsset);
                 });
             });
 
             describe("when the given asset does NOT exist", function () {
 
                 beforeEach(function () {
-                    mockBrandAssetCollection.by.and.returnValue(null);
+                    mocks.mockBrandAssetCollection.by.and.returnValue(null);
                 });
 
                 it("should throw an error", function () {
                     var expectedError = "Failed to remove brand asset: " + brandAsset.asset + " not found";
 
                     expect(function () {
-                        BrandManager.removeBrandAsset(brandAsset);
+                        mocks.BrandManager.removeBrandAsset(brandAsset);
                     }).toThrowError(expectedError);
                 });
             });
@@ -601,39 +606,49 @@
 
             beforeEach(function () {
                 brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                brandAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
                 brandAsset = TestUtils.getRandomValueFromArray(brandAssets);
+            });
+
+            afterAll(function () {
+                brandAssets = null;
+                brandAsset = null;
+                brandName = null;
             });
 
             describe("when there is an expired asset", function () {
                 var removeAssetResourceFileDeferred;
 
                 beforeEach(function () {
-                    removeAssetResourceFileDeferred = $q.defer();
-                    BrandUtil.removeAssetResourceFile.and.returnValue(removeAssetResourceFileDeferred.promise);
+                    removeAssetResourceFileDeferred = mocks.$q.defer();
+                    mocks.BrandUtil.removeAssetResourceFile.and.returnValue(removeAssetResourceFileDeferred.promise);
 
                     //make brandAsset the only asset that's expired
-                    _.forEach(brandAssets, function (brandAsset) {
-                        brandAsset.endDate = moment().add(1, "days").toDate();
+                    mocks._.forEach(brandAssets, function (brandAsset) {
+                        brandAsset.endDate = mocks.moment().add(1, "days").toDate();
                     });
 
-                    brandAsset.endDate = moment().subtract(1, "days").toDate();
+                    brandAsset.endDate = mocks.moment().subtract(1, "days").toDate();
                 });
 
                 beforeEach(function () {
-                    mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                    mocks.mockBrandAssetCollection.find.and.returnValue(brandAssets);
 
-                    BrandManager.removeExpiredBrandAssets(brandName)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.BrandManager.removeExpiredBrandAssets(brandName)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call BrandUtil.removeAssetResourceFile with the expected values", function () {
-                    expect(BrandUtil.removeAssetResourceFile).toHaveBeenCalledWith(brandAsset);
+                afterAll(function () {
+                    removeAssetResourceFileDeferred = null;
                 });
 
-                describe("when BrandUtil.removeAssetResourceFile succeeds", function () {
+                it("should call mocks.BrandUtil.removeAssetResourceFile with the expected values", function () {
+                    expect(mocks.BrandUtil.removeAssetResourceFile).toHaveBeenCalledWith(brandAsset);
+                });
+
+                describe("when mocks.BrandUtil.removeAssetResourceFile succeeds", function () {
 
                     beforeEach(function () {
                         removeAssetResourceFileDeferred.resolve();
@@ -642,34 +657,35 @@
                     describe("when the given asset exists", function () {
 
                         beforeEach(function () {
-                            mockBrandAssetCollection.by.and.returnValue(brandAsset);
-                            $rootScope.$digest();
+                            mocks.mockBrandAssetCollection.by.and.returnValue(brandAsset);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should call BrandAssetCollection.remove with the expected value", function () {
-                            expect(mockBrandAssetCollection.remove).toHaveBeenCalledWith(brandAsset);
+                        it("should call mocks.BrandAssetCollection.remove with the expected value", function () {
+                            expect(mocks.mockBrandAssetCollection.remove).toHaveBeenCalledWith(brandAsset);
                         });
 
                         it("should resolve the promise", function () {
-                            expect(resolveHandler).toHaveBeenCalled();
+                            expect(mocks.resolveHandler).toHaveBeenCalled();
                         });
                     });
 
                     describe("when the given asset doesn't exist", function () {
 
                         beforeEach(function () {
-                            mockBrandAssetCollection.by.and.returnValue(null);
+                            mocks.mockBrandAssetCollection.by.and.returnValue(null);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
-                            var expectedError = "Failed to remove brand asset: " + brandAsset.asset + " not found";
+                        it("should reject", function () {
+                            var expectedError = new Error("Failed to remove brand asset: " + brandAsset.asset + " not found");
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            expect(mocks.rejectHandler).toHaveBeenCalledWith(expectedError);
                         });
                     });
                 });
 
-                describe("when BrandUtil.removeAssetResourceFile fails", function () {
+                describe("when mocks.BrandUtil.removeAssetResourceFile fails", function () {
                     var error;
 
                     beforeEach(function () {
@@ -678,10 +694,15 @@
                         };
 
                         removeAssetResourceFileDeferred.reject(error);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should throw an error", function () {
-                        expect($rootScope.$digest).toThrow();
+                    afterAll(function () {
+                        error = null;
+                    });
+
+                    it("should reject the promise", function () {
+                        expect(mocks.rejectHandler).toHaveBeenCalled();
                     });
                 });
             });
@@ -689,54 +710,54 @@
             describe("when there is NOT an expired asset", function () {
 
                 beforeEach(function () {
-                    _.forEach(brandAssets, function (brandAsset) {
-                        brandAsset.endDate = moment().add(1, "days").toDate();
+                    mocks._.forEach(brandAssets, function (brandAsset) {
+                        brandAsset.endDate = mocks.moment().add(1, "days").toDate();
                     });
                 });
 
                 beforeEach(function () {
-                    mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                    mocks.mockBrandAssetCollection.find.and.returnValue(brandAssets);
 
-                    BrandManager.removeExpiredBrandAssets(brandName)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.BrandManager.removeExpiredBrandAssets(brandName)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
                 it("should resolve", function () {
-                    expect(resolveHandler).toHaveBeenCalled();
+                    expect(mocks.resolveHandler).toHaveBeenCalled();
                 });
             });
 
             describe("when the asset list is empty", function () {
 
                 beforeEach(function () {
-                    mockBrandAssetCollection.find.and.returnValue([]);
+                    mocks.mockBrandAssetCollection.find.and.returnValue([]);
 
-                    BrandManager.removeExpiredBrandAssets(brandName)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.BrandManager.removeExpiredBrandAssets(brandName)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
                 it("should resolve", function () {
-                    expect(resolveHandler).toHaveBeenCalled();
+                    expect(mocks.resolveHandler).toHaveBeenCalled();
                 });
             });
 
             describe("when there are no assets for the brand", function () {
 
                 beforeEach(function () {
-                    mockBrandAssetCollection.find.and.returnValue(null);
+                    mocks.mockBrandAssetCollection.find.and.returnValue(null);
 
-                    BrandManager.removeExpiredBrandAssets(brandName)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
-                    $rootScope.$digest();
+                    mocks.BrandManager.removeExpiredBrandAssets(brandName)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
+                    mocks.$rootScope.$digest();
                 });
 
                 it("should resolve", function () {
-                    expect(resolveHandler).toHaveBeenCalled();
+                    expect(mocks.resolveHandler).toHaveBeenCalled();
                 });
             });
         });
@@ -745,32 +766,36 @@
             var brandAssets;
 
             beforeEach(function () {
-                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                brandAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
 
-                mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                mocks.mockBrandAssetCollection.find.and.returnValue(brandAssets);
+            });
+
+            afterAll(function () {
+                brandAssets = null;
             });
 
             describe("when the user is logged in", function () {
 
                 beforeEach(function () {
-                    UserManager.getUser.and.returnValue(user);
+                    mocks.UserManager.getUser.and.returnValue(mocks.user);
                 });
 
                 it("should return that assets", function () {
-                    expect(BrandManager.getUserBrandAssets()).toEqual(brandAssets);
+                    expect(mocks.BrandManager.getUserBrandAssets()).toEqual(brandAssets);
                 });
             });
 
             describe("when the user is NOT logged in", function () {
 
                 beforeEach(function () {
-                    UserManager.getUser.and.returnValue(null);
+                    mocks.UserManager.getUser.and.returnValue(null);
                 });
 
                 it("should throw an error", function () {
                     var expectedError = "User must be logged in to get user brand assets";
 
-                    expect(BrandManager.getUserBrandAssets).toThrowError(expectedError);
+                    expect(mocks.BrandManager.getUserBrandAssets).toThrowError(expectedError);
                 });
             });
         });
@@ -781,32 +806,42 @@
                 brandAsset;
 
             beforeEach(function () {
-                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                brandAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
                 brandAsset = TestUtils.getRandomValueFromArray(brandAssets);
 
-                mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                mocks.mockBrandAssetCollection.find.and.returnValue(brandAssets);
+            });
+
+            afterAll(function () {
+                brandAssets = null;
+                brandAsset = null;
+                assetSubtypeId = null;
             });
 
             describe("when the user is logged in", function () {
 
                 beforeEach(function () {
-                    UserManager.getUser.and.returnValue(user);
+                    mocks.UserManager.getUser.and.returnValue(mocks.user);
                 });
 
                 describe("when an asset with the assetSubtypeId is found", function () {
                     var result;
 
                     beforeEach(function () {
-                        BrandUtil.getAssetBySubtype.and.returnValue(brandAsset);
+                        mocks.BrandUtil.getAssetBySubtype.and.returnValue(brandAsset);
 
-                        result = BrandManager.getUserBrandAssetBySubtype(assetSubtypeId);
+                        result = mocks.BrandManager.getUserBrandAssetBySubtype(assetSubtypeId);
                     });
 
-                    it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
-                        expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(brandAssets, assetSubtypeId);
+                    afterAll(function () {
+                        result = null;
                     });
 
-                    it("should return the value from BrandUtil.getAssetBySubtype", function () {
+                    it("should call mocks.BrandUtil.getAssetBySubtype with the expected values", function () {
+                        expect(mocks.BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(brandAssets, assetSubtypeId);
+                    });
+
+                    it("should return the value from mocks.BrandUtil.getAssetBySubtype", function () {
                         expect(result).toEqual(brandAsset);
                     });
                 });
@@ -816,15 +851,20 @@
                         genericEquivalent;
 
                     beforeEach(function () {
-                        genericEquivalent = TestUtils.getRandomBrandAsset(BrandAssetModel);
+                        genericEquivalent = TestUtils.getRandomBrandAsset(mocks.BrandAssetModel);
 
-                        BrandUtil.getAssetBySubtype.and.returnValues(null, genericEquivalent);
+                        mocks.BrandUtil.getAssetBySubtype.and.returnValues(null, genericEquivalent);
 
-                        result = BrandManager.getUserBrandAssetBySubtype(assetSubtypeId);
+                        result = mocks.BrandManager.getUserBrandAssetBySubtype(assetSubtypeId);
                     });
 
-                    it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
-                        expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(brandAssets, assetSubtypeId);
+                    afterAll(function () {
+                        result = null;
+                        genericEquivalent = null;
+                    });
+
+                    it("should call mocks.BrandUtil.getAssetBySubtype with the expected values", function () {
+                        expect(mocks.BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(brandAssets, assetSubtypeId);
                     });
 
                     it("should return a generic equivalent", function () {
@@ -836,13 +876,13 @@
             describe("when the user is NOT logged in", function () {
 
                 beforeEach(function () {
-                    UserManager.getUser.and.returnValue(null);
+                    mocks.UserManager.getUser.and.returnValue(null);
                 });
 
                 it("should throw an error", function () {
                     var expectedError = "User must be logged in to get user brand assets";
 
-                    expect(BrandManager.getUserBrandAssetBySubtype).toThrowError(expectedError);
+                    expect(mocks.BrandManager.getUserBrandAssetBySubtype).toThrowError(expectedError);
                 });
             });
         });
@@ -853,24 +893,28 @@
                 var genericAssets;
 
                 beforeEach(function () {
-                    genericAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                    genericAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
 
-                    mockBrandAssetCollection.find.and.returnValue(genericAssets);
+                    mocks.mockBrandAssetCollection.find.and.returnValue(genericAssets);
+                });
+
+                afterAll(function () {
+                    genericAssets = null;
                 });
 
                 it("should return the generic brand assets", function () {
-                    expect(BrandManager.getGenericBrandAssets()).toEqual(genericAssets);
+                    expect(mocks.BrandManager.getGenericBrandAssets()).toEqual(genericAssets);
                 });
             });
 
             describe("when there are NOT generic brand assets", function () {
 
                 beforeEach(function () {
-                    mockBrandAssetCollection.find.and.returnValue(null);
+                    mocks.mockBrandAssetCollection.find.and.returnValue(null);
                 });
 
                 it("should return null", function () {
-                    expect(BrandManager.getGenericBrandAssets()).toBeNull();
+                    expect(mocks.BrandManager.getGenericBrandAssets()).toBeNull();
                 });
             });
         });
@@ -881,24 +925,28 @@
                 var wexAssets;
 
                 beforeEach(function () {
-                    wexAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                    wexAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
 
-                    mockBrandAssetCollection.find.and.returnValue(wexAssets);
+                    mocks.mockBrandAssetCollection.find.and.returnValue(wexAssets);
+                });
+
+                afterAll(function () {
+                    wexAssets = null;
                 });
 
                 it("should return the wex brand assets", function () {
-                    expect(BrandManager.getWexBrandAssets()).toEqual(wexAssets);
+                    expect(mocks.BrandManager.getWexBrandAssets()).toEqual(wexAssets);
                 });
             });
 
             describe("when there are NOT wex brand assets", function () {
 
                 beforeEach(function () {
-                    mockBrandAssetCollection.find.and.returnValue(null);
+                    mocks.mockBrandAssetCollection.find.and.returnValue(null);
                 });
 
                 it("should return null", function () {
-                    expect(BrandManager.getWexBrandAssets()).toBeNull();
+                    expect(mocks.BrandManager.getWexBrandAssets()).toBeNull();
                 });
             });
         });
@@ -909,7 +957,12 @@
 
             beforeEach(function () {
                 brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                brandResource = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                brandResource = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
+            });
+
+            afterAll(function () {
+                brandName = null;
+                brandResource = null;
             });
 
             describe("when there is a FILE asset", function () {
@@ -918,8 +971,8 @@
                     loadBundledAssetDeferred;
 
                 beforeEach(function () {
-                    fileAsset = TestUtils.getRandomBrandAsset(BrandAssetModel);
-                    fileAsset.assetTypeId = globals.BRAND.ASSET_TYPES.FILE;
+                    fileAsset = TestUtils.getRandomBrandAsset(mocks.BrandAssetModel);
+                    fileAsset.assetTypeId = mocks.globals.BRAND.ASSET_TYPES.FILE;
                     fileAsset.links = [
                         {
                             rel: "self",
@@ -927,44 +980,54 @@
                         }
                     ];
 
-                    fileAssetFetchResourceDeferred = $q.defer();
-                    loadBundledAssetDeferred = $q.defer();
+                    fileAssetFetchResourceDeferred = mocks.$q.defer();
+                    loadBundledAssetDeferred = mocks.$q.defer();
                     spyOn(fileAsset, "fetchResource").and.returnValue(fileAssetFetchResourceDeferred.promise);
-                    BrandUtil.loadBundledAsset.and.returnValue(loadBundledAssetDeferred.promise);
+                    mocks.BrandUtil.loadBundledAsset.and.returnValue(loadBundledAssetDeferred.promise);
 
                     brandResource.push(fileAsset);
                 });
 
                 beforeEach(function () {
-                    BrandManager.loadBundledBrand(brandName, brandResource)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
+                    mocks.BrandManager.loadBundledBrand(brandName, brandResource)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
                 });
 
-                it("should call BrandAssetCollection.insert with the expected values", function () {
-                    _.forEach(brandResource, function (brandAsset) {
-                        expect(mockBrandAssetCollection.insert).toHaveBeenCalledWith(brandAsset);
+                afterAll(function () {
+                    fileAsset = null;
+                    fileAssetFetchResourceDeferred = null;
+                    loadBundledAssetDeferred = null;
+                });
+
+                it("should call mocks.BrandAssetCollection.insert with the expected values", function () {
+                    mocks._.forEach(brandResource, function (brandAsset) {
+                        expect(mocks.mockBrandAssetCollection.insert).toHaveBeenCalledWith(brandAsset);
                     });
                 });
 
                 describe("when loading a FILE asset", function () {
 
-                    it("should call BrandUtil.loadBundledAsset with the file asset", function () {
-                        expect(BrandUtil.loadBundledAsset).toHaveBeenCalledWith(fileAsset);
+                    it("should call mocks.BrandUtil.loadBundledAsset with the file asset", function () {
+                        expect(mocks.BrandUtil.loadBundledAsset).toHaveBeenCalledWith(fileAsset);
                     });
 
-                    describe("when BrandUtil.loadBundledAsset succeeds", function () {
+                    describe("when mocks.BrandUtil.loadBundledAsset succeeds", function () {
                         var data;
 
                         beforeEach(function () {
                             data = TestUtils.getRandomStringThatIsAlphaNumeric(30);
 
                             loadBundledAssetDeferred.resolve(data);
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
+                        });
+
+                        afterAll(function () {
+                            data = null;
                         });
 
                         it("should return a promise that resolves with an array containing the resource data", function () {
-                            expect(resolveHandler).toHaveBeenCalledWith(jasmine.arrayContaining([data]));
+                            expect(mocks.resolveHandler).toHaveBeenCalledWith(jasmine.arrayContaining([data]));
                         });
                     });
 
@@ -977,12 +1040,17 @@
                             };
 
                             loadBundledAssetDeferred.reject(error);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should throw an error", function () {
+                        afterAll(function () {
+                            error = null;
+                        });
+
+                        it("should reject", function () {
                             var expectedError = new RegExp("Failed to load bundled brand '" + brandName + "':.+");
 
-                            expect($rootScope.$digest).toThrowError(expectedError);
+                            expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
                         });
                     });
                 });
@@ -991,25 +1059,25 @@
             describe("when there are no FILE assets", function () {
 
                 beforeEach(function () {
-                    _.remove(brandResource, {assetTypeId: globals.BRAND.ASSET_TYPES.FILE});
+                    mocks._.remove(brandResource, {assetTypeId: mocks.globals.BRAND.ASSET_TYPES.FILE});
                 });
 
                 beforeEach(function () {
-                    BrandManager.loadBundledBrand(brandName, brandResource)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
+                    mocks.BrandManager.loadBundledBrand(brandName, brandResource)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
 
-                    $rootScope.$digest();
+                    mocks.$rootScope.$digest();
                 });
 
-                it("should call BrandAssetCollection.insert with the expected values", function () {
-                    _.forEach(brandResource, function (brandAsset) {
-                        expect(mockBrandAssetCollection.insert).toHaveBeenCalledWith(brandAsset);
+                it("should call mocks.BrandAssetCollection.insert with the expected values", function () {
+                    mocks._.forEach(brandResource, function (brandAsset) {
+                        expect(mocks.mockBrandAssetCollection.insert).toHaveBeenCalledWith(brandAsset);
                     });
                 });
 
                 it("should return a promise that resolves", function () {
-                    expect(resolveHandler).toHaveBeenCalled();
+                    expect(mocks.resolveHandler).toHaveBeenCalled();
                 });
             });
         });
@@ -1024,37 +1092,48 @@
                 cacheAssetResourceDataDeferred2,
                 removeAssetResourceFileDeferred;
 
+            afterAll(function () {
+                brandName = null;
+                brandAssets = null;
+                currentDate = null;
+                numFileAssets = null;
+                getBrandAssetsDeferred = null;
+                cacheAssetResourceDataDeferred = null;
+                cacheAssetResourceDataDeferred2 = null;
+                removeAssetResourceFileDeferred = null;
+            });
+
             function testUpdateBrandCacheWithoutDate() {
 
-                it("should call BrandsResource.getBrandAssets with the expected values", function () {
-                    expect(BrandsResource.getBrandAssets).toHaveBeenCalledWith(brandName, null);
+                it("should call mocks.BrandsResource.getBrandAssets with the expected values", function () {
+                    expect(mocks.BrandsResource.getBrandAssets).toHaveBeenCalledWith(brandName, null);
                 });
 
-                describe("when BrandUtil.removeAssetResourceFile succeeds", function () {
+                describe("when mocks.BrandUtil.removeAssetResourceFile succeeds", function () {
 
                     beforeEach(function () {
                         removeAssetResourceFileDeferred.resolve();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call BrandAssetCollection.remove with the expected values", function () {
-                        _.forEach(brandAssets, function (brandAsset) {
+                    it("should call mocks.BrandAssetCollection.remove with the expected values", function () {
+                        mocks._.forEach(brandAssets, function (brandAsset) {
                             if (brandAsset.isExpired()) {
-                                expect(mockBrandAssetCollection.remove).toHaveBeenCalledWith(brandAsset);
+                                expect(mocks.mockBrandAssetCollection.remove).toHaveBeenCalledWith(brandAsset);
                             }
                         });
                     });
                 });
 
-                describe("when BrandUtil.removeAssetResourceFile fails", function () {
+                describe("when mocks.BrandUtil.removeAssetResourceFile fails", function () {
 
                     beforeEach(function () {
                         removeAssetResourceFileDeferred.reject();
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
                     it("should NOT reject the promise", function () {
-                        expect(rejectHandler).not.toHaveBeenCalled();
+                        expect(mocks.rejectHandler).not.toHaveBeenCalled();
                     });
                 });
 
@@ -1062,46 +1141,51 @@
                     var brandAssetResources;
 
                     beforeEach(function () {
-                        brandAssetResources = _.clone(brandAssets);
+                        brandAssetResources = mocks._.clone(brandAssets);
 
-                        if(_.isEmpty(brandAssetResources)) {
-                            var addedResource = TestUtils.getRandomBrandAsset(BrandAssetModel);
-                            addedResource.assetTypeId = globals.BRAND.ASSET_TYPES.FILE;
+                        if(mocks._.isEmpty(brandAssetResources)) {
+                            var addedResource = TestUtils.getRandomBrandAsset(mocks.BrandAssetModel);
+                            addedResource.assetTypeId = mocks.globals.BRAND.ASSET_TYPES.FILE;
                             brandAssetResources.push(addedResource);
+                            addedResource = null;
                         }
 
                         getBrandAssetsDeferred.resolve({data: brandAssetResources});
-                        $rootScope.$digest();
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should call BrandUtil.cacheAssetResourceData with the expected values", function () {
-                        _.forEach(brandAssetResources, function (brandAsset) {
+                    afterAll(function () {
+                        brandAssetResources = null;
+                    });
+
+                    it("should call mocks.BrandUtil.cacheAssetResourceData with the expected values", function () {
+                        mocks._.forEach(brandAssetResources, function (brandAsset) {
                             if (brandAsset.hasResource()) {
-                                expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(brandAsset, false);
+                                expect(mocks.BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(brandAsset, false);
                             }
                             else {
-                                expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(brandAsset, false);
+                                expect(mocks.BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(brandAsset, false);
                             }
                         });
                     });
 
-                    describe("when BrandUtil.cacheAssetResourceData succeeds", function () {
+                    describe("when mocks.BrandUtil.cacheAssetResourceData succeeds", function () {
 
                         beforeEach(function () {
                             cacheAssetResourceDataDeferred.resolve();
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should call BrandUtil.setLastBrandUpdateDate with the brand name", function () {
-                            expect(BrandUtil.setLastBrandUpdateDate).toHaveBeenCalledWith(brandName);
+                        it("should call mocks.BrandUtil.setLastBrandUpdateDate with the brand name", function () {
+                            expect(mocks.BrandUtil.setLastBrandUpdateDate).toHaveBeenCalledWith(brandName);
                         });
 
                         it("should resolve", function () {
-                            expect(resolveHandler).toHaveBeenCalled();
+                            expect(mocks.resolveHandler).toHaveBeenCalled();
                         });
                     });
 
-                    describe("when BrandUtil.cacheAssetResourceData fails", function () {
+                    describe("when mocks.BrandUtil.cacheAssetResourceData fails", function () {
                         var error,
                             genericAssets;
 
@@ -1109,89 +1193,72 @@
                             error = {
                                 message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                             };
-                            genericAssets = _.map(brandAssetResources, function (brandAsset) {
-                                return angular.extend(new BrandAssetModel(), brandAsset);
+                            genericAssets = mocks._.map(brandAssetResources, function (brandAsset) {
+                                return angular.extend(new mocks.BrandAssetModel(), brandAsset);
                             });
 
-                            mockBrandAssetCollection.find.and.returnValue(genericAssets);
+                            mocks.mockBrandAssetCollection.find.and.returnValue(genericAssets);
                             cacheAssetResourceDataDeferred.reject(error);
                         });
 
-                        describe("when BrandUtil.cacheAssetResourceData succeeds with the generic asset", function () {
+                        afterAll(function () {
+                            error = null;
+                            genericAssets = null;
+                        });
+
+                        describe("when mocks.BrandUtil.cacheAssetResourceData succeeds with the generic asset", function () {
 
                             beforeEach(function () {
                                 cacheAssetResourceDataDeferred2.resolve();
+                                mocks.$rootScope.$digest();
                             });
 
-                            it("should throw an error", function () {
+                            it("should reject the promise", function () {
                                 var expectedError = new RegExp("Failed to update brand cache:.+");
 
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrowError(expectedError);
-
-                                expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
                             });
 
                             it("should NOT update the last update date", function () {
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrow();
-
-                                expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                expect(mocks.BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
                             });
 
-                            it("should call BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrow();
-
-                                _.forEach(genericAssets, function (genericAsset) {
+                            it("should call mocks.BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
+                                mocks._.forEach(genericAssets, function (genericAsset) {
                                     if (genericAsset.hasResource()) {
-                                        expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, false);
+                                        expect(mocks.BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, false);
                                     }
                                     else {
-                                        expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, false);
+                                        expect(mocks.BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, false);
                                     }
                                 });
                             });
                         });
 
-                        describe("when BrandUtil.cacheAssetResourceData fails with the generic asset", function () {
+                        describe("when mocks.BrandUtil.cacheAssetResourceData fails with the generic asset", function () {
 
                             beforeEach(function () {
                                 cacheAssetResourceDataDeferred2.reject(error);
+                                mocks.$rootScope.$digest();
                             });
 
-                            it("should throw an error", function () {
+                            it("should reject", function () {
                                 var expectedError = new RegExp("Failed to update brand cache:.+");
 
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrowError(expectedError);
-
-                                expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
                             });
 
                             it("should NOT update the last update date", function () {
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrow();
-
-                                expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                expect(mocks.BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
                             });
 
-                            it("should call BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
-                                expect(function () {
-                                    TestUtils.digestError($rootScope);
-                                }).toThrow();
-
-                                _.forEach(genericAssets, function (genericAsset) {
+                            it("should call mocks.BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
+                                mocks._.forEach(genericAssets, function (genericAsset) {
                                     if (genericAsset.hasResource()) {
-                                        expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, false);
+                                        expect(mocks.BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, false);
                                     }
                                     else {
-                                        expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, false);
+                                        expect(mocks.BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, false);
                                     }
                                 });
                             });
@@ -1208,52 +1275,57 @@
                         };
 
                         getBrandAssetsDeferred.reject(error);
+                        mocks.$rootScope.$digest();
                     });
 
-                    it("should NOT update the last update date and throw an error", function () {
-                        var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + LoggerUtil.getErrorMessage(error) + ".*?$");
+                    afterAll(function () {
+                        error = null;
+                    });
 
-                        expect(function () {
-                            TestUtils.digestError($rootScope);
-                        }).toThrowError(expectedError);
+                    it("should reject", function () {
+                        var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + mocks.LoggerUtil.getErrorMessage(error) + ".*?$");
 
-                        expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                        expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
+                    });
+
+                    it("should NOT update the last update date", function () {
+                        expect(mocks.BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
                     });
                 });
             }
 
             beforeEach(function () {
                 brandName = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                brandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                brandAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
                 currentDate = TestUtils.getRandomDate();
                 numFileAssets = 0;
-                getBrandAssetsDeferred = $q.defer();
-                cacheAssetResourceDataDeferred = $q.defer();
-                cacheAssetResourceDataDeferred2 = $q.defer();
-                removeAssetResourceFileDeferred = $q.defer();
+                getBrandAssetsDeferred = mocks.$q.defer();
+                cacheAssetResourceDataDeferred = mocks.$q.defer();
+                cacheAssetResourceDataDeferred2 = mocks.$q.defer();
+                removeAssetResourceFileDeferred = mocks.$q.defer();
 
-                _.forEach(_.filter(brandAssets, TestUtils.getRandomBoolean), function (brandAsset) {
-                    brandAsset.assetTypeId = globals.BRAND.ASSET_TYPES.FILE;
+                mocks._.forEach(mocks._.filter(brandAssets, TestUtils.getRandomBoolean), function (brandAsset) {
+                    brandAsset.assetTypeId = mocks.globals.BRAND.ASSET_TYPES.FILE;
                     ++numFileAssets;
                 });
 
                 //make sure there is at least 1 file asset
                 if (numFileAssets === 0) {
-                    brandAssets[0].assetTypeId = globals.BRAND.ASSET_TYPES.FILE;
+                    brandAssets[0].assetTypeId = mocks.globals.BRAND.ASSET_TYPES.FILE;
                     numFileAssets = 1;
                 }
 
-                BrandsResource.getBrandAssets.and.returnValue(getBrandAssetsDeferred.promise);
+                mocks.BrandsResource.getBrandAssets.and.returnValue(getBrandAssetsDeferred.promise);
                 //return cacheAssetResourceDataDeferred/cacheAssetResourceDataDeferred2 x number of times based on the number of assets
-                _.spread(BrandUtil.cacheAssetResourceData.and.returnValues)(
-                    _.fill(new Array(numFileAssets), cacheAssetResourceDataDeferred.promise).concat(
-                        _.fill(new Array(numFileAssets), cacheAssetResourceDataDeferred2.promise)
+                mocks._.spread(mocks.BrandUtil.cacheAssetResourceData.and.returnValues)(
+                    mocks._.fill(new Array(numFileAssets), cacheAssetResourceDataDeferred.promise).concat(
+                        mocks._.fill(new Array(numFileAssets), cacheAssetResourceDataDeferred2.promise)
                     ));
 
-                BrandUtil.removeAssetResourceFile.and.returnValue(removeAssetResourceFileDeferred.promise);
+                mocks.BrandUtil.removeAssetResourceFile.and.returnValue(removeAssetResourceFileDeferred.promise);
 
-                mockBrandAssetCollection.remove.and.callFake(function (value) {
-                    return _.remove(brandAssets, {brandAssetId: value.brandAssetId});
+                mocks.mockBrandAssetCollection.remove.and.callFake(function (value) {
+                    return mocks._.remove(brandAssets, {brandAssetId: value.brandAssetId});
                 });
 
                 jasmine.clock().mockDate(currentDate);
@@ -1262,45 +1334,49 @@
             describe("when there is a last update date", function () {
                 var lastUpdateDate;
 
+                afterAll(function () {
+                    lastUpdateDate = null;
+                });
+
                 function testUpdateBrandCacheWithDate() {
 
-                    it("should call BrandsResource.getBrandAssets with the expected values", function () {
-                        expect(BrandsResource.getBrandAssets).toHaveBeenCalledWith(brandName, lastUpdateDate);
+                    it("should call mocks.BrandsResource.getBrandAssets with the expected values", function () {
+                        expect(mocks.BrandsResource.getBrandAssets).toHaveBeenCalledWith(brandName, lastUpdateDate);
                     });
 
-                    it("should call BrandUtil.removeAssetResourceFile with the expected values", function () {
-                        _.forEach(brandAssets, function (brandAsset) {
+                    it("should call mocks.BrandUtil.removeAssetResourceFile with the expected values", function () {
+                        mocks._.forEach(brandAssets, function (brandAsset) {
                             if (brandAsset.isExpired()) {
-                                expect(BrandUtil.removeAssetResourceFile).toHaveBeenCalledWith(brandAsset);
+                                expect(mocks.BrandUtil.removeAssetResourceFile).toHaveBeenCalledWith(brandAsset);
                             }
                         });
                     });
 
-                    describe("when BrandUtil.removeAssetResourceFile succeeds", function () {
+                    describe("when mocks.BrandUtil.removeAssetResourceFile succeeds", function () {
 
                         beforeEach(function () {
                             removeAssetResourceFileDeferred.resolve();
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should call BrandAssetCollection.remove with the expected values", function () {
-                            _.forEach(brandAssets, function (brandAsset) {
+                        it("should call mocks.BrandAssetCollection.remove with the expected values", function () {
+                            mocks._.forEach(brandAssets, function (brandAsset) {
                                 if (brandAsset.isExpired()) {
-                                    expect(mockBrandAssetCollection.remove).toHaveBeenCalledWith(brandAsset);
+                                    expect(mocks.mockBrandAssetCollection.remove).toHaveBeenCalledWith(brandAsset);
                                 }
                             });
                         });
                     });
 
-                    describe("when BrandUtil.removeAssetResourceFile fails", function () {
+                    describe("when mocks.BrandUtil.removeAssetResourceFile fails", function () {
 
                         beforeEach(function () {
                             removeAssetResourceFileDeferred.reject();
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
                         it("should NOT reject the promise", function () {
-                            expect(rejectHandler).not.toHaveBeenCalled();
+                            expect(mocks.rejectHandler).not.toHaveBeenCalled();
                         });
                     });
 
@@ -1308,37 +1384,37 @@
 
                         beforeEach(function () {
                             getBrandAssetsDeferred.resolve({data: brandAssets});
-                            $rootScope.$digest();
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should call BrandUtil.cacheAssetResourceData with the expected values", function () {
-                            _.forEach(brandAssets, function (brandAsset) {
+                        it("should call mocks.BrandUtil.cacheAssetResourceData with the expected values", function () {
+                            mocks._.forEach(brandAssets, function (brandAsset) {
                                 if (brandAsset.hasResource()) {
-                                    expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(brandAsset, true);
+                                    expect(mocks.BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(brandAsset, true);
                                 }
                                 else {
-                                    expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(brandAsset, true);
+                                    expect(mocks.BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(brandAsset, true);
                                 }
                             });
                         });
 
-                        describe("when BrandUtil.cacheAssetResourceData succeeds", function () {
+                        describe("when mocks.BrandUtil.cacheAssetResourceData succeeds", function () {
 
                             beforeEach(function () {
                                 cacheAssetResourceDataDeferred.resolve();
-                                $rootScope.$digest();
+                                mocks.$rootScope.$digest();
                             });
 
-                            it("should call BrandUtil.setLastBrandUpdateDate with the brand name", function () {
-                                expect(BrandUtil.setLastBrandUpdateDate).toHaveBeenCalledWith(brandName);
+                            it("should call mocks.BrandUtil.setLastBrandUpdateDate with the brand name", function () {
+                                expect(mocks.BrandUtil.setLastBrandUpdateDate).toHaveBeenCalledWith(brandName);
                             });
 
                             it("should resolve", function () {
-                                expect(resolveHandler).toHaveBeenCalled();
+                                expect(mocks.resolveHandler).toHaveBeenCalled();
                             });
                         });
 
-                        describe("when BrandUtil.cacheAssetResourceData fails", function () {
+                        describe("when mocks.BrandUtil.cacheAssetResourceData fails", function () {
                             var error,
                                 genericAssets;
 
@@ -1346,89 +1422,72 @@
                                 error = {
                                     message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
                                 };
-                                genericAssets = _.map(brandAssets, function (brandAsset) {
-                                    return angular.extend(new BrandAssetModel(), brandAsset);
+                                genericAssets = mocks._.map(brandAssets, function (brandAsset) {
+                                    return angular.extend(new mocks.BrandAssetModel(), brandAsset);
                                 });
 
-                                mockBrandAssetCollection.find.and.returnValue(genericAssets);
+                                mocks.mockBrandAssetCollection.find.and.returnValue(genericAssets);
                                 cacheAssetResourceDataDeferred.reject(error);
                             });
 
-                            describe("when BrandUtil.cacheAssetResourceData succeeds with the generic asset", function () {
+                            afterAll(function () {
+                                error = null;
+                                genericAssets = null;
+                            });
+
+                            describe("when mocks.BrandUtil.cacheAssetResourceData succeeds with the generic asset", function () {
 
                                 beforeEach(function () {
                                     cacheAssetResourceDataDeferred2.resolve();
+                                    mocks.$rootScope.$digest();
                                 });
 
-                                it("should throw an error", function () {
+                                it("should reject", function () {
                                     var expectedError = new RegExp("Failed to update brand cache:.+");
 
-                                    expect(function () {
-                                        TestUtils.digestError($rootScope);
-                                    }).toThrowError(expectedError);
-
-                                    expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                    expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
                                 });
 
                                 it("should NOT update the last update date", function () {
-                                    expect(function () {
-                                        TestUtils.digestError($rootScope);
-                                    }).toThrow();
-
-                                    expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                    expect(mocks.BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
                                 });
 
-                                it("should call BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
-                                    expect(function () {
-                                        TestUtils.digestError($rootScope);
-                                    }).toThrow();
-
-                                    _.forEach(genericAssets, function (genericAsset) {
+                                it("should call mocks.BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
+                                    mocks._.forEach(genericAssets, function (genericAsset) {
                                         if (genericAsset.hasResource()) {
-                                            expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, true);
+                                            expect(mocks.BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, true);
                                         }
                                         else {
-                                            expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, true);
+                                            expect(mocks.BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, true);
                                         }
                                     });
                                 });
                             });
 
-                            describe("when BrandUtil.cacheAssetResourceData fails with the generic asset", function () {
+                            describe("when mocks.BrandUtil.cacheAssetResourceData fails with the generic asset", function () {
 
                                 beforeEach(function () {
                                     cacheAssetResourceDataDeferred2.reject(error);
+                                    mocks.$rootScope.$digest();
                                 });
 
-                                it("should throw an error", function () {
+                                it("should reject", function () {
                                     var expectedError = new RegExp("Failed to update brand cache:.+");
 
-                                    expect(function () {
-                                        TestUtils.digestError($rootScope);
-                                    }).toThrowError(expectedError);
-
-                                    expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                    expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
                                 });
 
                                 it("should NOT update the last update date", function () {
-                                    expect(function () {
-                                        TestUtils.digestError($rootScope);
-                                    }).toThrow();
-
-                                    expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                                    expect(mocks.BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
                                 });
 
-                                it("should call BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
-                                    expect(function () {
-                                        TestUtils.digestError($rootScope);
-                                    }).toThrow();
-
-                                    _.forEach(genericAssets, function (genericAsset) {
+                                it("should call mocks.BrandUtil.cacheAssetResourceData again with a generic equivalent", function () {
+                                    mocks._.forEach(genericAssets, function (genericAsset) {
                                         if (genericAsset.hasResource()) {
-                                            expect(BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, true);
+                                            expect(mocks.BrandUtil.cacheAssetResourceData).toHaveBeenCalledWith(genericAsset, true);
                                         }
                                         else {
-                                            expect(BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, true);
+                                            expect(mocks.BrandUtil.cacheAssetResourceData).not.toHaveBeenCalledWith(genericAsset, true);
                                         }
                                     });
                                 });
@@ -1445,38 +1504,43 @@
                             };
 
                             getBrandAssetsDeferred.reject(error);
+                            mocks.$rootScope.$digest();
                         });
 
-                        it("should NOT update the last update date and throw an error", function () {
-                            var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + LoggerUtil.getErrorMessage(error) + ".*?$");
+                        afterAll(function () {
+                            error = null;
+                        });
 
-                            expect(function () {
-                                TestUtils.digestError($rootScope);
-                            }).toThrowError(expectedError);
+                        it("should reject", function () {
+                            var expectedError = new RegExp("^.*?(Failed to update brand cache:).*?" + mocks.LoggerUtil.getErrorMessage(error) + ".*?$");
 
-                            expect(BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
+                            expect(mocks.rejectHandler.calls.mostRecent().args[0]).toMatch(expectedError);
+                        });
+
+                        it("should NOT update the last update date", function () {
+                            expect(mocks.BrandUtil.setLastBrandUpdateDate).not.toHaveBeenCalled();
                         });
                     });
                 }
 
                 beforeEach(function () {
                     lastUpdateDate = TestUtils.getRandomDate();
-                    BrandUtil.getLastBrandUpdateDate.and.returnValue(lastUpdateDate);
+                    mocks.BrandUtil.getLastBrandUpdateDate.and.returnValue(lastUpdateDate);
                 });
 
                 describe("when there are assets for the given brand in the cache", function () {
 
                     beforeEach(function () {
-                        mockBrandAssetCollection.find.and.returnValue(brandAssets);
-                        mockBrandAssetCollection.by.and.callFake(function (key, value) {
-                            return _.find(brandAssets, _.zipObject([key], [value]));
+                        mocks.mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                        mocks.mockBrandAssetCollection.by.and.callFake(function (key, value) {
+                            return mocks._.find(brandAssets, mocks._.zipObject([key], [value]));
                         });
                     });
 
                     beforeEach(function () {
-                        BrandManager.updateBrandCache(brandName)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
+                        mocks.BrandManager.updateBrandCache(brandName)
+                            .then(mocks.resolveHandler)
+                            .catch(mocks.rejectHandler);
                     });
 
                     describe("should update the brand assets using the last update date: ", testUpdateBrandCacheWithDate);
@@ -1486,13 +1550,13 @@
 
                     beforeEach(function () {
                         brandAssets = [];
-                        mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                        mocks.mockBrandAssetCollection.find.and.returnValue(brandAssets);
                     });
 
                     beforeEach(function () {
-                        BrandManager.updateBrandCache(brandName)
-                            .then(resolveHandler)
-                            .catch(rejectHandler);
+                        mocks.BrandManager.updateBrandCache(brandName)
+                            .then(mocks.resolveHandler)
+                            .catch(mocks.rejectHandler);
                     });
 
                     describe("should update the brand assets using the last update date: ", testUpdateBrandCacheWithoutDate);
@@ -1502,18 +1566,18 @@
             describe("when there is NOT a last update date", function () {
 
                 beforeEach(function () {
-                    BrandUtil.getLastBrandUpdateDate.and.returnValue(null);
+                    mocks.BrandUtil.getLastBrandUpdateDate.and.returnValue(null);
 
-                    mockBrandAssetCollection.find.and.returnValue(brandAssets);
-                    mockBrandAssetCollection.by.and.callFake(function (key, value) {
-                        return _.find(brandAssets, _.zipObject([key], [value]));
+                    mocks.mockBrandAssetCollection.find.and.returnValue(brandAssets);
+                    mocks.mockBrandAssetCollection.by.and.callFake(function (key, value) {
+                        return mocks._.find(brandAssets, mocks._.zipObject([key], [value]));
                     });
                 });
 
                 beforeEach(function () {
-                    BrandManager.updateBrandCache(brandName)
-                        .then(resolveHandler)
-                        .catch(rejectHandler);
+                    mocks.BrandManager.updateBrandCache(brandName)
+                        .then(mocks.resolveHandler)
+                        .catch(mocks.rejectHandler);
                 });
 
                 describe("should update the brand assets NOT using the last update date: ", testUpdateBrandCacheWithoutDate);
@@ -1527,20 +1591,27 @@
                 result;
 
             beforeEach(function () {
-                genericBrandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                genericBrandAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
                 brandAsset = TestUtils.getRandomValueFromArray(genericBrandAssets);
 
-                mockBrandAssetCollection.find.and.returnValue(genericBrandAssets);
-                BrandUtil.getAssetBySubtype.and.returnValue(brandAsset);
+                mocks.mockBrandAssetCollection.find.and.returnValue(genericBrandAssets);
+                mocks.BrandUtil.getAssetBySubtype.and.returnValue(brandAsset);
 
-                result = BrandManager.getGenericBrandAssetBySubtype(assetSubtypeId);
+                result = mocks.BrandManager.getGenericBrandAssetBySubtype(assetSubtypeId);
             });
 
-            it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
-                expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(genericBrandAssets, assetSubtypeId);
+            afterAll(function () {
+                assetSubtypeId = null;
+                genericBrandAssets = null;
+                brandAsset = null;
+                result = null;
             });
 
-            it("should return the value from BrandUtil.getAssetBySubtype", function () {
+            it("should call mocks.BrandUtil.getAssetBySubtype with the expected values", function () {
+                expect(mocks.BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(genericBrandAssets, assetSubtypeId);
+            });
+
+            it("should return the value from mocks.BrandUtil.getAssetBySubtype", function () {
                 expect(result).toEqual(brandAsset);
             });
         });
@@ -1552,20 +1623,27 @@
                 result;
 
             beforeEach(function () {
-                wexBrandAssets = TestUtils.getRandomBrandAssets(BrandAssetModel);
+                wexBrandAssets = TestUtils.getRandomBrandAssets(mocks.BrandAssetModel);
                 brandAsset = TestUtils.getRandomValueFromArray(wexBrandAssets);
 
-                mockBrandAssetCollection.find.and.returnValue(wexBrandAssets);
-                BrandUtil.getAssetBySubtype.and.returnValue(brandAsset);
+                mocks.mockBrandAssetCollection.find.and.returnValue(wexBrandAssets);
+                mocks.BrandUtil.getAssetBySubtype.and.returnValue(brandAsset);
 
-                result = BrandManager.getWexBrandAssetBySubtype(assetSubtypeId);
+                result = mocks.BrandManager.getWexBrandAssetBySubtype(assetSubtypeId);
             });
 
-            it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
-                expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(wexBrandAssets, assetSubtypeId);
+            afterAll(function () {
+                assetSubtypeId = null;
+                wexBrandAssets = null;
+                brandAsset = null;
+                result = null;
             });
 
-            it("should return the value from BrandUtil.getAssetBySubtype", function () {
+            it("should call mocks.BrandUtil.getAssetBySubtype with the expected values", function () {
+                expect(mocks.BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(wexBrandAssets, assetSubtypeId);
+            });
+
+            it("should return the value from mocks.BrandUtil.getAssetBySubtype", function () {
                 expect(result).toEqual(brandAsset);
             });
         });
@@ -1577,14 +1655,19 @@
                     result;
 
                 beforeEach(function () {
-                    trackingId = TestUtils.getRandomBrandAsset(BrandAssetModel);
-                    BrandUtil.getAssetBySubtype.and.returnValue(trackingId);
+                    trackingId = TestUtils.getRandomBrandAsset(mocks.BrandAssetModel);
+                    mocks.BrandUtil.getAssetBySubtype.and.returnValue(trackingId);
 
-                    result = BrandManager.getGenericAnalyticsTrackingId();
+                    result = mocks.BrandManager.getGenericAnalyticsTrackingId();
                 });
 
-                it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
-                    expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(globals.BRANDS.GENERIC, globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+                afterAll(function () {
+                    trackingId = null;
+                    result = null;
+                });
+
+                it("should call mocks.BrandUtil.getAssetBySubtype with the expected values", function () {
+                    expect(mocks.BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(mocks.globals.BRANDS.GENERIC, mocks.globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
                 });
 
                 it("should return the expected value", function () {
@@ -1596,11 +1679,17 @@
                 var result;
 
                 beforeEach(function () {
-                    result = BrandManager.getGenericAnalyticsTrackingId();
+                    mocks.BrandUtil.getAssetBySubtype.and.returnValue(null);
+
+                    result = mocks.BrandManager.getGenericAnalyticsTrackingId();
                 });
 
-                it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
-                    expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(globals.BRANDS.GENERIC, globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+                afterAll(function () {
+                    result = null;
+                });
+
+                it("should call mocks.BrandUtil.getAssetBySubtype with the expected values", function () {
+                    expect(mocks.BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(mocks.globals.BRANDS.GENERIC, mocks.globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
                 });
 
                 it("should return null", function () {
@@ -1616,14 +1705,19 @@
                     result;
 
                 beforeEach(function () {
-                    trackingId = TestUtils.getRandomBrandAsset(BrandAssetModel);
-                    BrandUtil.getAssetBySubtype.and.returnValue(trackingId);
+                    trackingId = TestUtils.getRandomBrandAsset(mocks.BrandAssetModel);
+                    mocks.BrandUtil.getAssetBySubtype.and.returnValue(trackingId);
 
-                    result = BrandManager.getWexAnalyticsTrackingId();
+                    result = mocks.BrandManager.getWexAnalyticsTrackingId();
                 });
 
-                it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
-                    expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(globals.BRANDS.WEX, globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+                afterAll(function () {
+                    trackingId = null;
+                    result = null;
+                });
+
+                it("should call mocks.BrandUtil.getAssetBySubtype with the expected values", function () {
+                    expect(mocks.BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(mocks.globals.BRANDS.WEX, mocks.globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
                 });
 
                 it("should return the expected value", function () {
@@ -1635,11 +1729,17 @@
                 var result;
 
                 beforeEach(function () {
-                    result = BrandManager.getWexAnalyticsTrackingId();
+                    mocks.BrandUtil.getAssetBySubtype.and.returnValue(null);
+
+                    result = mocks.BrandManager.getWexAnalyticsTrackingId();
                 });
 
-                it("should call BrandUtil.getAssetBySubtype with the expected values", function () {
-                    expect(BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(globals.BRANDS.WEX, globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
+                afterAll(function () {
+                    result = null;
+                });
+
+                it("should call mocks.BrandUtil.getAssetBySubtype with the expected values", function () {
+                    expect(mocks.BrandUtil.getAssetBySubtype).toHaveBeenCalledWith(mocks.globals.BRANDS.WEX, mocks.globals.BRAND.ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
                 });
 
                 it("should return null", function () {
