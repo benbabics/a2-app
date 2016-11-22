@@ -40,7 +40,6 @@
                     }
                 },
                 "SEARCH_OPTIONS": {
-                    "MAX_DAYS" : TestUtils.getRandomInteger(1, 100),
                     "PAGE_SIZE": TestUtils.getRandomInteger(1, 100)
                 }
             }
@@ -135,7 +134,6 @@
             it("should call TransactionManager.fetchPostedTransactions with the expected values", function () {
                 expect(TransactionManager.fetchPostedTransactions).toHaveBeenCalledWith(
                     mockUser.billingCompany.accountId,
-                    moment(currentDate).subtract(mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.MAX_DAYS, "days").toDate(),
                     currentDate,
                     0,
                     mockGlobals.TRANSACTION_LIST.SEARCH_OPTIONS.PAGE_SIZE,
@@ -290,7 +288,7 @@
             });
         });
 
-        //TODO - Why is this ignored/broken?
+        // TODO - Why are these x'd out?
         xdescribe("has a resetSearchResults function that", function () {
 
             beforeEach(function () {
