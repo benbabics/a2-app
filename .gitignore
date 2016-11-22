@@ -8,3 +8,5 @@ www/lib/
 www/css/
 www/test/
 test/results/
+www/scripts.js
+www/app/templates.module.js

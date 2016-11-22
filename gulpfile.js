@@ -25,6 +25,11 @@ var sh = require("shelljs");
 var wiredep = require("wiredep").stream;
 var angularFilesort = require("gulp-angular-filesort");
 var naturalSort = require("gulp-natural-sort");
+var concat = require("gulp-concat");
+var tap = require('gulp-tap');
+var path = require("path");
+var fs = require('fs');
+var stringify = require('stringify-object');
 var inject = require("gulp-inject");
 var jshint = require("gulp-jshint");
 var jscs = require("gulp-jscs");
@@ -38,6 +43,7 @@ var sourcePaths = {
         css: ["./www/css/**/*.css"],
         cssMin: ["./www/css/**/*min.css"],
         scripts: ["./www/app/**/*.js"],
+        templates: ["./www/app/**/*.html"],
         indexPage: ["./www/index.html"]
     },
     browser: ["./platforms/browser/www"]
@@ -46,6 +52,7 @@ var sourcePaths = {
 var destPaths = {
     root: {
         root: "./www/",
+        js: "./www/app/",
         css: "./www/css/"
     }
 };
@@ -127,9 +134,46 @@ gulp.task("bower", function (done) {
         .on("end", done);
 });
 
-gulp.task("index", function (done) {
+gulp.task("concat-html", function (done) {
+    var templates = {};
+
+    gulp.src(sourcePaths.root.templates)
+        .pipe(naturalSort())
+        .pipe(tap(function (file) {
+            templates["app/" + file.relative.replace(/\\/g, "/")] = fs.readFileSync(file.path, "utf8")
+                .replace(/[\u0000-\u0019]+/g, "") // remove unprintable characters
+                .replace(/<!--[\s\S]*?-->/g, "")  // remove html comments
+                .replace(/(\s\s+)/g, " ")         // collapse spaces
+                .replace(/(> <)/g, "><");         // remove spaces between tags
+        }))
+        .on("end", function() {
+            var script = [
+                "(function() {",
+                    "\"use strict\";",
+                    "angular.module(\"app.templates\", []).run(function($templateCache) {",
+                        "var templates = ", stringify(templates, {indent: ""}), ";",
+                        "var templateNames = Object.keys(templates);",
+                        "templateNames.forEach(function(templateName) {",
+                            "$templateCache.put(templateName, templates[templateName]);",
+                        "});",
+                    "});",
+                "})();"].join("");
+
+            fs.writeFile(path.join(destPaths.root.js, "templates.module.js"), script, "utf8", done);
+        });
+});
+
+gulp.task("concat-scripts", ["concat-html"], function (done) {
+    gulp.src(sourcePaths.root.scripts)
+        .pipe(naturalSort())
+        .pipe(angularFilesort())
+        .pipe(concat("scripts.js"))
+        .pipe(gulp.dest(destPaths.root.root))
+        .on("end", done);
+});
+
+gulp.task("index", ["concat-scripts"], function (done) {
     gulp.src(sourcePaths.root.indexPage)
-        .pipe(inject(gulp.src(sourcePaths.root.scripts).pipe(naturalSort()).pipe(angularFilesort()), {relative: true}))
         .pipe(inject(gulp.src(sourcePaths.root.cssMin, {read: false}), {relative: true}))
         .pipe(gulp.dest(destPaths.root.root))
         .on("end", done);
