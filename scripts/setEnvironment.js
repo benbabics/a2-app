@@ -26,8 +26,7 @@ module.exports = function(context) {
         // Constants
         var FILE_PATHS = {
             constants: {
-                sharedConstants: "/www/app/shared/core/constants.js",
-                appConstants   : "/www/app/components/core/constants.js",
+                appScripts     : "/www/scripts.js",
                 config         : "config.xml",
                 configAndroid  : "/res/xml/config.xml",
                 configIos      : "/Fleet SmartHub/config.xml"
@@ -144,7 +143,7 @@ module.exports = function(context) {
                 try {
                     var data = fs.readFileSync(targetFile, "utf8");
 
-                    var result = data.replace(toReplace, replaceWith);
+                    var result = data.replace(new RegExp(toReplace, 'g'), replaceWith);
                     fs.writeFileSync(targetFile, result, "utf8");
                 }
                 catch (e) {
