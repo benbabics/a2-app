@@ -77,7 +77,7 @@
                     </div>
                     <div class="item due-date">
                         {{ ::vm.config.paymentDueDate }}
-                        <span class="item-currency">{{ vm.invoiceSummary.paymentDueDate | wexDefaultDateFormat }}</span>
+                        <span class="item-currency">{{ vm.invoiceSummary.paymentDueDateObject | wexDefaultDateFormat : true }}</span>
                     </div>
                 </div>
             </div>
