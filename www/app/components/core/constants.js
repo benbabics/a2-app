@@ -185,7 +185,7 @@
             "currentBalance"     : "Current Balance",
             "statementBalance"   : "Statement Balance",
             "makePayment"        : "Make Payment",
-            "transactionActivity": "Transaction Activity",
+            "transactions"       : "Transactions",
             "cards"              : "Cards",
             "scheduledPayments"  : "Scheduled"
         },
