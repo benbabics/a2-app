@@ -11,8 +11,8 @@
         },
         "notifications": {
             "urbanairship": {
-                "app_key_prod": "Your Production App Key",
-                "app_secret_prod": "Your Production Secret",
+                "app_key_prod": "YourProductionAppKey",
+                "app_secret_prod": "YourProductionSecret",
                 "app_key_dev": "XIpIXl6WS_aH2UToNP2A2g",
                 "app_secret_dev": "IGmxPOmzQMWYJtJ1NxAFVw"
             }
