@@ -7,8 +7,13 @@
         &.item-last {
           border-bottom-color: #aaa;
         }
-        &.item-icon-right .icon {
-          color: #3a97b5;
+        &.item-icon-right {
+          .icon {
+            color: #3a97b5;
+          }
+          .activated .icon {
+            color: #fff;
+          }
         }
       }
     }
