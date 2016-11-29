@@ -627,7 +627,10 @@
     appGlobals.PRIVACY_POLICY = {
         "CONFIG": {
             "title"        : "Privacy Policy",
+            "appName"      : "WEX SmartHub Mobile Application",
+            "privacyNotice": "Privacy Notice",
             "lastUpdated"  : "Last Updated",
+            "lastUpdatedDate" : "Tue Nov 29 2016 11:05:00 GMT-0500 (EST)",
             "introduction" : "This privacy notice (this <b>\"Privacy Notice\"</b>) governs your use of the WEX&reg; Fleet SmartHub&trade; mobile application (the <b>\"Application\"</b> or <b>\"App\"</b>). The App is owned by WEX, Inc. (collectively, \"WEX\" or \"we,\" \"us,\" or \"our\") for its commercial customers (each, a <b>\"Customer\"</b>) in connection with the Fleet SmartHub mobile application and services (the <b>\"SmartHub Services\"</b>). ",
             "sectionOne"   : {
                 "content": "This Privacy Notice describes:",
@@ -685,10 +688,10 @@
                     {
                         "content": "Disclosure of information. We disclose Individual Information and Usage Data as described below; however, we will not sell, rent or lease your Individual Information to any third party. We are not limited in our use of Aggregate Information that does not permit direct association with any specific individual or non-identifiable aggregate information about our users.",
                         "items"  : [
-                            { "content": "<b>Service Providers/Affiliates.</b> We may share the information we collect with companies that provide support services to us. These companies may need the information to perform their functions." },
-                            { "content": "<b>Acquirors.</b> As with any other business, it is possible that in the future we could merge with or be purchased by another company. If we are acquired, the company that acquires us would have access to the information maintained by us but would continue to be bound by this Privacy Notice unless and until it is amended." },
-                            { "content": "<b>Court Orders and Legal Processes.</b> We disclose information, including Individual Information and Usage Data, in response to a subpoena, court order or other comparable legal process." },
-                            { "content": "<b>Other.</b> We may also disclose information in order to (i) protect and defend our rights or property, and/or the rights or property of our Customers, or third parties, as permitted by law, (ii) to detect, prevent or otherwise address fraud, security or technical issues, or (iii) to enforce our Terms of Service." }
+                            { "content": "<b><em>Service Providers/Affiliates.</em></b> We may share the information we collect with companies that provide support services to us. These companies may need the information to perform their functions." },
+                            { "content": "<b><em>Acquirors.</em></b> As with any other business, it is possible that in the future we could merge with or be purchased by another company. If we are acquired, the company that acquires us would have access to the information maintained by us but would continue to be bound by this Privacy Notice unless and until it is amended." },
+                            { "content": "<b><em>Court Orders and Legal Processes.</em></b> We disclose information, including Individual Information and Usage Data, in response to a subpoena, court order or other comparable legal process." },
+                            { "content": "<b><em>Other.</em></b> We may also disclose information in order to (i) protect and defend our rights or property, and/or the rights or property of our Customers, or third parties, as permitted by law, (ii) to detect, prevent or otherwise address fraud, security or technical issues, or (iii) to enforce our Terms of Service." }
                         ]
                     }
                 ]
@@ -708,11 +711,11 @@
                 ]
             },
             "sectionEight": {
-                "content" : "<b>OUR ANALYTICS PARTNERS.</b> WEX uses Analytics Partners who can analyze information regarding your use of the App and help us to improve the quality and relevance of our App and its features. Most Analytics Partners use a variety of techniques to collect de-identified, non-personal information about users of an App such as ours, such as cookies (or mobile cookies), web beacons, and other tracking technologies. These techniques are discussed in the \"INFORMATION COLLECTION (AND TRACKING) TECHNOLOGIES\" section above. For information about the privacy practices of Google Analytics, please go",
+                "content" : "<b>OUR ANALYTICS PARTNERS.</b> WEX uses Analytics Partners who can analyze information regarding your use of the App and help us to improve the quality and relevance of our App and its features. Most Analytics Partners use a variety of techniques to collect de-identified, non-personal information about users of an App such as ours, such as cookies (or mobile cookies), web beacons, and other tracking technologies. These techniques are discussed in the \"INFORMATION COLLECTION (AND TRACKING) TECHNOLOGIES\" section above. For information about the privacy practices of Google Analytics, please go ",
                 "hereText": "here"
             },
             "sectionNine": {
-                "content": "<b>OUR DO NOT TRACK POLICY.</b> You can opt out of being tracked during your use of the App using your mobile device settings. However, the App’s access to certain information about your use, including your mobile device’s unique device identifier, can only be limited by uninstalling the App. To learn more about internet-based advertising or to opt-out of internet based advertising, please visit the",
+                "content": "<b>OUR DO NOT TRACK POLICY.</b> You can opt out of being tracked during your use of the App using your mobile device settings. However, the App’s access to certain information about your use, including your mobile device’s unique device identifier, can only be limited by uninstalling the App. To learn more about internet-based advertising or to opt-out of internet based advertising, please visit the ",
                 "websiteNetworkAdvertising": "Network Advertising Initiative website",
                 "andThe": "and the",
                 "websiteDigitalAdvertising": "Digital Advertising Alliance website"
@@ -739,10 +742,13 @@
             "sectionFourteen": {
                 "content": "<b>CONTACT US.</b> To contact us with your questions or comments regarding this Privacy Notice or the information collection and dissemination practices of the App, please contact us using one of the following options:",
                 "contents": [
-                    { "content": "By e-mail: <a href=\"mailto:MobileApplications@wexinc.com\">MobileApplications@wexinc.com</a>" },
-                    { "content": "By phone: 1-866-544-5796" },
-                    { "content": "By mail: WEXONLINE PO<br>BOX 639<br>PORTLAND, ME 04140" }
+                    { "content": "By e-mail: <a href=\"mailto:MobileApplications@wexinc.com\">MobileApplications@wexinc.com</a><br><br>" },
+                    { "content": "By phone: 1-866-544-5796<br><br>" },
+                    { "content": "By mail: WEXONLINE<br><br>PO BOX 639<br><br>PORTLAND, ME 04140" }
                 ]
+            },
+            "sectionFifteen": {
+                "content": "© COPYRIGHT 2016 | WEX, Inc. ALL RIGHTS RESERVED."
             }
         }
     };
