@@ -10,11 +10,12 @@
     <hook src="scripts/initDirectories.js" type="before_platform_add" />
     <hook src="scripts/addExecutePermissions.js" type="before_build" />
     <hook src="scripts/copyIosScheme.js" type="before_build" />
-    <hook src="scripts/addPlatformClass.js" type="after_prepare" />
-    <hook src="scripts/removeSassAndAppScriptsFromPlatforms.js" type="after_build" />
-    <hook src="scripts/setEnvironment.js" type="after_prepare" />
-    <hook src="scripts/setCommonConstants.js" type="after_prepare" />
-    <hook src="scripts/changeMavenRepos.js" type="after_prepare" />
+    <hook src="scripts/expandBuildFiles.js" type="after_prepare" />
+    <hook src="scripts/addPlatformClass.js" type="before_compile" />
+    <hook src="scripts/setEnvironment.js" type="before_compile" />
+    <hook src="scripts/setCommonConstants.js" type="before_compile" />
+    <hook src="scripts/changeMavenRepos.js" type="before_compile" />
+    <hook src="scripts/removeDevFilesFromPlatforms.js" type="before_compile" />
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="mailto:*" />
