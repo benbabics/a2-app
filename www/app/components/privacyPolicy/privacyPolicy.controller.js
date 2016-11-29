@@ -9,7 +9,6 @@
         var vm = this;
         vm.openUrl = openUrl;
         vm.config = globals.PRIVACY_POLICY.CONFIG;
-        vm.releaseDate = new Date();
         vm.scrollTo = handleScrollTo;
 
         //////////////////////

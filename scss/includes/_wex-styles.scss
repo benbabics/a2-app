@@ -103,6 +103,7 @@ wex-notification-bar {
   &.bar-error > .bar {
     border-color: $error-message-color;
     background-color: $error-message-fill;
+    color: $error-message-color;
 
     .icon-container {
       display: none;

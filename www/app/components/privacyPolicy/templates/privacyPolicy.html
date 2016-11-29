@@ -4,8 +4,10 @@
           wex-back-state="landing">
     <ion-content>
         <div class="content padding">
+            <h5 align="center">{{::vm.config.appName}}</h5>
+            <h5 align="center">{{::vm.config.privacyNotice}}</h5>
 
-          <p>{{ ::vm.config.lastUpdated }} {{ ::vm.releaseDate | wexDefaultDateFormat }}</p>
+          <h5 align="center">{{ ::vm.config.lastUpdated }} {{ ::vm.config.lastUpdatedDate | wexDefaultDateFormat }}</h5>
 
           <p ng-bind-html="vm.config.introduction"></p>
 
@@ -25,8 +27,6 @@
             <li><a ng-click="vm.scrollTo('#sectionTen')">{{ ::vm.config.sectionThree.link7 }}</a></li>
             <li><a ng-click="vm.scrollTo('#sectionEleven')">{{ ::vm.config.sectionThree.link8 }}</a></li>
             <li><a ng-click="vm.scrollTo('#sectionTwelve')">{{ ::vm.config.sectionThree.link9 }}</a></li>
-            <li><a href="#">{{ ::vm.config.sectionThree.link10 }}</a></li>
-            <li><a href="#">{{ ::vm.config.sectionThree.link11 }}</a></li>
             <li><a ng-click="vm.scrollTo('#sectionThirteen')">{{ ::vm.config.sectionThree.link12 }}</a></li>
             <li><a ng-click="vm.scrollTo('#sectionFourteen')">{{ ::vm.config.sectionThree.link13 }}</a></li>
           </ul>
@@ -46,7 +46,7 @@
           </section>
 
           <section id="sectionFive">
-            <h3>{{ ::vm.config.sectionFive.title }}</h3>
+            <h5>{{ ::vm.config.sectionFive.title }}</h5>
 
             <ul>
               <li ng-repeat="parent in vm.config.sectionFive.items">
@@ -68,7 +68,7 @@
           </section>
 
           <section id="sectionSeven">
-            <h3 ng-bind-html="vm.config.sectionSeven.title"></h3>
+            <h5  ng-bind-html="vm.config.sectionSeven.title"></h5>
 
             <ul>
               <li ng-repeat="item in vm.config.sectionSeven.items" ng-bind-html="item.content"></li>
@@ -78,21 +78,21 @@
           <section id="sectionEight">
             <p>
               <span ng-bind-html="vm.config.sectionEight.content"></span>
-              <a href="#" ng-click="vm.openUrl('https://www.google.com/policies/privacy/partners/')">{{ ::vm.config.sectionEight.hereText }}</a>.
+              <a ng-click="vm.openUrl('https://www.google.com/policies/privacy/partners/')">{{ ::vm.config.sectionEight.hereText }}</a>.
             </p>
           </section>
 
           <section id="sectionNine">
             <p>
               <span ng-bind-html="vm.config.sectionNine.content"></span>
-              <a href="#" ng-click="vm.openUrl('https://www.google.com')">{{ ::vm.config.sectionNine.websiteNetworkAdvertising }}</a>
+              <a ng-click="vm.openUrl('http://www.networkadvertising.org/choices/')">{{ ::vm.config.sectionNine.websiteNetworkAdvertising }}</a>
               {{ ::vm.config.sectionNine.andThe }}
-              <a href="#" ng-click="vm.openUrl('https://www.google.com')">{{ ::vm.config.sectionNine.websiteDigitalAdvertising }}</a>
+              <a ng-click="vm.openUrl('http://www.aboutads.info/')">{{ ::vm.config.sectionNine.websiteDigitalAdvertising }}</a>
             </p>
           </section>
 
           <section id="sectionTen">
-            <h3 ng-bind-html="vm.config.sectionTen.title"></h3>
+            <h5 ng-bind-html="vm.config.sectionTen.title"></h5>
             <p ng-repeat="item in vm.config.sectionTen.contents" ng-bind-html="item.content"></p>
           </section>
 
@@ -100,7 +100,7 @@
             <p>
               <span ng-bind-html="vm.config.sectionEleven.content"></span>
               <span ng-bind-html="vm.config.sectionEleven.effectiveDateOfNotice"></span>
-              {{ ::vm.releaseDate | wexDefaultDateFormat }}.
+              {{ ::vm.config.lastUpdatedDate | wexDefaultDateFormat }}.
               <span ng-bind-html="vm.config.sectionEleven.content2"></span>
             </p>
           </section>
@@ -117,6 +117,10 @@
             <p ng-bind-html="vm.config.sectionFourteen.content"></p>
             <div ng-repeat="item in vm.config.sectionFourteen.contents" ng-bind-html="item.content"></div>
           </section>
+
+         <section id="sectionFifteen">
+             <div class="copyright" ng-bind-html="vm.config.sectionFifteen.content"></div>
+         </section>
 
         </div>
     </ion-content>
