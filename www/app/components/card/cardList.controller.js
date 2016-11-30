@@ -46,12 +46,24 @@
             return CardManager.fetchCards(
                 billingAccountId, activeSearchFilter, activeSearchFilter, activeSearchFilter,
                 vm.searchOptions.STATUSES, requestConfig.currentPage, requestConfig.pageSize
-            );
+            )
+            .then( filterCards );
         }
 
         function handleOnError(errorResponse) {
             // TODO - What do we do here?
             Logger.error( "Failed to fetch next page of cards: " + errorResponse );
+        }
+
+        function filterCards(cards) {
+            return cards.sort(function(a, b) {
+                var id = "embossedCardNumber",
+                    isActiveA = a.isActive(),
+                    sortStatus     = isActiveA === b.isActive() ? 0 : isActiveA ? -1 : 1,
+                    sortCardNumber = a[id] > b[id] ? 1 : a[id] < b[id] ? -1 : 0;
+
+                return 2 * ( sortStatus ) + 1 * ( sortCardNumber );
+            });
         }
 
         function applySearchFilter() {
