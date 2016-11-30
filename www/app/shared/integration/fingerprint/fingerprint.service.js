@@ -215,7 +215,7 @@
                     _.set(configObject, "clientSecret", _.get(configObject, "clientSecret", configObject.clientId));
 
                     //only enable fallback password if DEFAULT is specified
-                    configObject.disableBackup = _.get(options, "passwordFallback") !== CONSTANTS.PASSWORD_FALLBACK.DEFAULT;
+                    configObject.disableBackup = _.get(options, "passwordFallback", CONSTANTS.PASSWORD_FALLBACK.DEFAULT) !== CONSTANTS.PASSWORD_FALLBACK.DEFAULT;
 
                     return [configObject];
                 default:
