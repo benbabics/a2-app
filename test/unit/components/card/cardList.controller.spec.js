@@ -51,12 +51,11 @@
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("CardListController", {
-                    $scope          : $scope,
-                    CardManager     : CardManager,
-                    ElementUtil     : ElementUtil,
-                    UserManager     : UserManager
+                    $scope:      $scope,
+                    CardManager: CardManager,
+                    ElementUtil: ElementUtil,
+                    UserManager: UserManager
                 });
-
             });
 
             //setup spies
@@ -87,8 +86,19 @@
                 self = null;
         });
 
-        it("should call this.LoadingIndicator.begin", function () {
-            expect(this.LoadingIndicator.begin).toHaveBeenCalledWith();
+        describe("has an activate function that", function () {
+            it("should have infiniteListController methods on $scope", function () {
+                expect( $scope.loadNextPage ).toBeDefined();
+                expect( $scope.resetSearchResults ).toBeDefined();
+            });
+
+            it("should have infiniteScrollService defined on $scope", function () {
+                expect( $scope.infiniteScrollService ).toBeDefined();
+            });
+
+            it("should have vm.payments equal model", function () {
+                expect( ctrl.cards ).toEqual( $scope.infiniteScrollService.model );
+            });
         });
 
         describe("has an applySearchFilter function that", function () {
@@ -96,21 +106,18 @@
 
             beforeEach(function () {
                 searchFilter = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-
-                ctrl.loadingComplete = true;
                 ctrl.cards = [TestUtils.getRandomCard(CardModel)];
             });
 
             describe("when the filter is equal to the active filter", function () {
-
                 beforeEach(function () {
                     ctrl.searchFilter = ctrl.getActiveSearchFilter();
-
                     ctrl.applySearchFilter();
+                    $scope.infiniteScrollService.isLoadingComplete = true;
                 });
 
                 it("should NOT set loadingComplete to false", function () {
-                    expect(ctrl.loadingComplete).not.toBeFalsy();
+                    expect( $scope.infiniteScrollService.isLoadingComplete ).not.toBeFalsy();
                 });
 
                 xit("should NOT set currentPage to 0", function () {
@@ -127,12 +134,9 @@
             });
 
             describe("when the filter is NOT equal to the active filter", function () {
-
                 beforeEach(function () {
                     CardManager.fetchCards.and.returnValue($q.resolve());
-
                     ctrl.searchFilter = searchFilter;
-
                     ctrl.applySearchFilter();
                 });
 
@@ -142,7 +146,7 @@
                 });
 
                 it("should set loadingComplete to false", function () {
-                    expect(ctrl.loadingComplete).toBeFalsy();
+                    expect( $scope.infiniteScrollService.isLoadingComplete ).toBeFalsy();
                 });
 
                 xit("should set currentPage to 0", function () {
@@ -156,13 +160,12 @@
         });
 
         describe("has a getActiveSearchFilter function that", function () {
-
             xit("should return the active search filter", function () {
                 //TODO figure out how to test this
             });
         });
 
-        describe("has a loadNextPage function that", function () {
+        describe("has a handleMakeRequest function that", function () {
             var fetchCardsDeferred,
                 activeSearchFilter = "";
 
@@ -172,9 +175,7 @@
             });
 
             beforeEach(function () {
-                spyOn($scope, "$broadcast");
-
-                ctrl.loadNextPage()
+                $scope.loadNextPage()
                     .then(resolveHandler)
                     .catch(rejectHandler);
             });
@@ -187,37 +188,31 @@
                     activeSearchFilter,
                     activeSearchFilter,
                     globals.CARD_LIST.SEARCH_OPTIONS.STATUSES,
-                    0,
-                    globals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE
+                    $scope.infiniteScrollService.settings.currentPage,
+                    $scope.infiniteScrollService.settings.pageSize
                 );
             });
 
             describe("when fetchCards resolves with an empty list of cards", function () {
-
                 beforeEach(function () {
                     fetchCardsDeferred.resolve([]);
-
                     $rootScope.$digest();
                 });
 
-                it("should resolve with a value of true", function () {
-                    expect(resolveHandler).toHaveBeenCalledWith(true);
+                it("resolveHandler should resolve", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
                 });
 
-                it("should set loadingComplete to true", function () {
-                    expect(ctrl.loadingComplete).toBeTruthy();
+                it("should have isLoadingComplete be true", function () {
+                    expect( $scope.infiniteScrollService.isLoadingComplete ).toBeTruthy();
                 });
 
                 it("should NOT reject", function () {
                     expect(rejectHandler).not.toHaveBeenCalled();
                 });
-
-                it("should call this.LoadingIndicator.complete", function () {
-                    expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
-                });
             });
 
-            describe("when fetchCards resolves with a non-empty, non-full list of cards", function () {
+            describe("when makeRequest resolves with a non-empty, non-full list of cards", function () {
                 var mockCards;
 
                 beforeEach(function () {
@@ -230,36 +225,23 @@
 
                 beforeEach(function () {
                     fetchCardsDeferred.resolve(mockCards);
-
                     $rootScope.$digest();
                 });
 
                 it("should add the cards to the list", function () {
-                    expect(ctrl.cards).toEqual(mockCards);
+                    expect( ctrl.cards.collection.length ).toEqual( mockCards.length );
                 });
 
                 xit("should increment the current page", function () {
                     //TODO figure out how to test this
                 });
 
-                it("should resolve with a value of true", function () {
-                    expect(resolveHandler).toHaveBeenCalledWith(true);
-                });
-
                 it("should set loadingComplete to true", function () {
-                    expect(ctrl.loadingComplete).toBeTruthy();
-                });
-
-                it("should NOT reject", function () {
-                    expect(rejectHandler).not.toHaveBeenCalled();
-                });
-
-                it("should call this.LoadingIndicator.complete", function () {
-                    expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
+                    expect( $scope.infiniteScrollService.isLoadingComplete ).toBeTruthy();
                 });
             });
 
-            describe("when fetchCards resolves with a full list of cards", function () {
+            describe("when makeRequest resolves with a full list of cards", function () {
                 var mockCards;
 
                 beforeEach(function () {
@@ -272,44 +254,59 @@
 
                 beforeEach(function () {
                     fetchCardsDeferred.resolve(mockCards);
-
                     $rootScope.$digest();
                 });
 
                 it("should add the cards to the list", function () {
-                    expect(ctrl.cards).toEqual(mockCards);
+                    expect( ctrl.cards.collection.length ).toEqual( mockCards.length );
                 });
 
                 xit("should increment the current page", function () {
                     //TODO figure out how to test this
                 });
+            });
 
-                it("should resolve with a value of false", function () {
-                    expect(resolveHandler).toHaveBeenCalledWith(false);
+            describe("when makeRequest resolves with a full list of cards", function () {
+                var mockCards;
+
+                beforeEach(function () {
+                    var numCards = 4;
+                    mockCards = [];
+                    for (var i = 0; i < numCards; ++i) {
+                        mockCards.push( TestUtils.getRandomCard(CardModel) );
+                    }
+
+                    _.extend(mockCards[0], { status: "ACTIVE",   embossedCardNumber: "0003" });
+                    _.extend(mockCards[1], { status: "INACTIVE", embossedCardNumber: "0004" });
+                    _.extend(mockCards[2], { status: "ACTIVE",   embossedCardNumber: "0001" });
+                    _.extend(mockCards[3], { status: "INACTIVE", embossedCardNumber: "0002" });
                 });
 
-                it("should set loadingComplete to false", function () {
-                    expect(ctrl.loadingComplete).toBeFalsy();
+                beforeEach(function () {
+                    // mockCards will be sorted messing up original indexes
+                    var collection = _.cloneDeep( mockCards );
+                    // resolve with cloned collection
+                    fetchCardsDeferred.resolve( collection );
+                    $rootScope.$digest();
                 });
 
-                it("should NOT reject", function () {
-                    expect(rejectHandler).not.toHaveBeenCalled();
-                });
+                it("should sort cards by 'isActive' then 'embossedCardNumber'", function () {
+                    var result = ctrl.cards.collection;
 
-                it("should broadcast the 'scroll.refreshComplete' event", function () {
-                    expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
-                });
+                    function getAttrs(resource, n) {
+                        return [ resource[n].isActive(), resource[n].embossedCardNumber ];
+                    }
 
-                it("should call this.LoadingIndicator.complete", function () {
-                    expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
+                    expect( getAttrs(result, 0) ).toEqual( getAttrs(mockCards, 2) );
+                    expect( getAttrs(result, 1) ).toEqual( getAttrs(mockCards, 0) );
+                    expect( getAttrs(result, 2) ).toEqual( getAttrs(mockCards, 3) );
+                    expect( getAttrs(result, 3) ).toEqual( getAttrs(mockCards, 1) );
                 });
             });
 
-            describe("when fetchCards rejects", function () {
-
+            describe("when makeRequest rejects", function () {
                 beforeEach(function () {
                     fetchCardsDeferred.reject();
-
                     $rootScope.$digest();
                 });
 
@@ -320,27 +317,14 @@
                 it("should resolve with a value of true", function () {
                     expect(resolveHandler).toHaveBeenCalledWith(true);
                 });
-
-                it("should broadcast the 'scroll.refreshComplete' event", function () {
-                    expect($scope.$broadcast).toHaveBeenCalledWith("scroll.refreshComplete");
-                });
-
-                it("should call this.LoadingIndicator.complete", function () {
-                    expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
-                });
             });
         });
 
         describe("has a resetSearchResults function that", function () {
-
             beforeEach(function () {
-                CardManager.fetchCards.and.returnValue($q.resolve());
-
-                ctrl.resetSearchResults();
-            });
-
-            it("should set loadingComplete to false", function () {
-                expect(ctrl.loadingComplete).toBeFalsy();
+                CardManager.fetchCards.and.returnValue($q.resolve([]));
+                $scope.resetSearchResults();
+                $scope.$apply();
             });
 
             xit("should set currentPage to 0", function () {
@@ -348,7 +332,7 @@
             });
 
             it("should set cards to an empty array", function () {
-                expect(ctrl.cards).toEqual([]);
+                expect( ctrl.cards.collection ).toEqual([]);
             });
         });
 
