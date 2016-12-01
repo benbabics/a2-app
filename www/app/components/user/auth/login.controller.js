@@ -8,7 +8,7 @@
     function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $cordovaStatusbar, $ionicHistory, $localStorage, $q,
                              $rootScope, $scope, $state, $stateParams, globals, sessionCredentials, AnalyticsUtil,
                              Fingerprint, FingerprintProfileUtil, FlowUtil, LoadingIndicator, LoginManager, Logger,
-                             Network, PlatformUtil, UserAuthorizationManager) {
+                             Network, PlatformUtil, UserAuthorizationManager, wexTruncateStringFilter) {
 
         var BAD_CREDENTIALS = "BAD_CREDENTIALS",
             PASSWORD_CHANGED = "PASSWORD_CHANGED",
@@ -31,6 +31,8 @@
         vm.isKeyboardVisible = isKeyboardVisible;
         vm.logInUser = logInUser;
         vm.verifyFingerprintRemoval = verifyFingerprintRemoval;
+        vm.maskableUsername = maskableUsername;
+        vm.onClearInput = onClearInput;
 
         activate();
 
@@ -245,6 +247,25 @@
             rememberUsername(false);
         }
 
+        // Clears the contents of and refocuses on an input.
+        function onClearInput(inputName) {
+            var input = document.querySelector("input[name=" + inputName + "]");
+
+            if (input.name === "userName") {
+                vm.user.username = "";
+            }
+            else if (input.name === "password") {
+                vm.user.password = "";
+            }
+            else {
+                var error = "Unknown input name: '" + inputName + "'";
+                Logger.error(error);
+                throw new Error(error);
+            }
+
+            setTimeout(function() { input.focus(); });
+        }
+
         function getFingerprintDisabledLabel() {
             switch (_.toLower(PlatformUtil.getPlatform())) {
                 case "android":
@@ -292,6 +313,22 @@
             if (_.has($localStorage, USERNAME_KEY)) {
                 vm.user.username = $localStorage[USERNAME_KEY];
                 vm.rememberMe = vm.rememberMeToggle = true;
+            }
+        }
+
+        // Combination getter/setter. Passing a parameter invokes the setter.
+        // Passing no parameters gets a masked or unmasked value depending on if the input is in focus.
+        function maskableUsername() {
+            if(arguments.length > 0) {
+                vm.user.username = arguments[0];
+            }
+            else {
+                if(vm.usernameIsFocused) {
+                    return vm.user.username;
+                }
+                else {
+                    return wexTruncateStringFilter(vm.user.username);
+                }
             }
         }
 
