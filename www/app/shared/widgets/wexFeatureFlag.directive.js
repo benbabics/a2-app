@@ -6,8 +6,9 @@
     /* @ngInject */
     function wexFeatureFlag(_, globals) {
         var directive = {
+            priority: 1,
             restrict: "A",
-            link    : link
+            link    : {pre: link}
         };
 
         return directive;
