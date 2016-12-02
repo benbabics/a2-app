@@ -94,9 +94,7 @@
             vm.removeHideState = _.bind(removeHideState, vm);
 
             //event listeners:
-            scope.$on("$ionicView.afterEnter", function(event, stateInfo) {
-                vm.onEnter(stateInfo.stateName);
-            });
+            scope.$on("$ionicView.afterEnter", (event, stateInfo) => vm.onEnter(stateInfo.stateName));
 
             removeLeaveListener = $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams, fromState) { // args: event, toState, toParams, fromState, fromParams
                 //only fire this listener once

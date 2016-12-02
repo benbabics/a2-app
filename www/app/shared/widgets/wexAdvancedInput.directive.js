@@ -33,15 +33,13 @@
         scope.handleCheckIsEditable = handleCheckIsEditable;
 
         // toggle reset value button
-        field.on("blur", function (evt) {
-            scope.$apply(function() { toggleIsEditable(evt.type === "focus"); });
-        });
+        field.on("blur", (evt) => scope.$apply(() => toggleIsEditable(evt.type === "focus")));
 
         // toggle isMaskVisible
         scope.$watchCollection( "[maskedValue, isEditable]", toggleIsMaskVisible );
 
         // set maskedValue property from input ng-model
-        scope.$parent.$watch(modelPath, function (val) {
+        scope.$parent.$watch(modelPath, (val) => {
             if ( scope.maskText ) {
                 scope.maskedValue = val;
             }
@@ -51,11 +49,11 @@
         function handleClearValue(evt) {
             evt.preventDefault();
             field.val( "" ).triggerHandler( "change" );
-            setTimeout(function() { field[0].focus(); });
+            setTimeout(() => field[0].focus());
         }
 
         function handleClickMask() {
-            setTimeout(function() { field[0].focus(); });
+            setTimeout(() => field[0].focus());
         }
 
         function handleCheckIsEditable() {

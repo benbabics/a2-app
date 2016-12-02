@@ -43,9 +43,7 @@
             cache      : true,
             templateUrl: "app/components/payment/templates/paymentList.html",
             controller : "PaymentListController as vm",
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.PAYMENT_LIST.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.PAYMENT_LIST.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("payment.activity.detail", {
@@ -62,9 +60,7 @@
                             LoadingIndicator.begin();
 
                             return PaymentManager.fetchPayment(paymentId)
-                                .finally(function () {
-                                    LoadingIndicator.complete();
-                                });
+                                .finally(LoadingIndicator.complete);
                         },
 
                         // jshint maxparams:5
@@ -74,16 +70,12 @@
                             LoadingIndicator.begin();
 
                             return PaymentManager.isPaymentEditable(billingAccountId, payment)
-                                .finally(function () {
-                                    LoadingIndicator.complete();
-                                });
+                                .finally(LoadingIndicator.complete);
                         }
                     }
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.PAYMENT_VIEW.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.PAYMENT_VIEW.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("payment.add", {
@@ -176,9 +168,7 @@
                             billingAccountId = UserManager.getUser().billingCompany.accountId;
 
                             return BankManager.hasMultipleBanks(billingAccountId)
-                                .finally(function () {
-                                    LoadingIndicator.complete();
-                                });
+                                .finally(LoadingIndicator.complete);
                         }
                     }
                 }
@@ -327,9 +317,7 @@
 
                     Navigation.goToPaymentActivity();
                 })
-                .finally(function () {
-                    LoadingIndicator.complete();
-                });
+                .finally(LoadingIndicator.complete);
         }
 
     }

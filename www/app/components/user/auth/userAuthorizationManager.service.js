@@ -93,9 +93,7 @@
 
                             return acceptedTermsDeferred.promise
                                 .finally(function () {
-                                    _.forEach(listenerRemovers, function (remover) {
-                                        remover();
-                                    });
+                                    _.forEach(listenerRemovers, (remover) => remover());
                                 })
                         })
                         .catch(function (error) {
@@ -112,12 +110,11 @@
                         });
                 })
                 //verify the user's fingerprint
-                .then(_.partial(Fingerprint.verify, verificationOptions))
-                .then(_.partial(_.get, _, "clientSecret"))
+                .then(() => Fingerprint.verify(verificationOptions))
                 .catch(function (error) {
                     if (bypassFingerprint) {
                         //user changed their mind about using fingerprint auth, so login regularly
-                        return $q.resolve(clientSecret);
+                        return $q.resolve(verificationOptions);
                     }
                     else if (error.userCanceled) {
                         error = {
@@ -140,7 +137,7 @@
 
                     return $q.reject(error);
                 })
-                .then(_.partial(verifyWithSecret, clientId, _, options));
+                .then((authDetails) => verifyWithSecret(clientId, authDetails.clientSecret, options));
         }
 
         function verifyWithSecret(clientId, clientSecret, options) {

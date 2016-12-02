@@ -143,9 +143,7 @@
 
         function setNotificationsRead(notificationIds) {
             return NotificationsResource.setNotificationsRead(notificationIds)
-                .then(function () {
-                    service.fetchUnreadNotificationsCount();
-                })
+                .then(() => service.fetchUnreadNotificationsCount())
                 .catch(function (response) {
                     var error = "Setting notifications as read failed: " + LoggerUtil.getErrorMessage(response);
                     Logger.error(error);

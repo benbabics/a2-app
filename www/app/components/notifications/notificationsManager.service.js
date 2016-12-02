@@ -37,12 +37,10 @@
         //////////////////////
 
         function activate() {
-            PlatformUtil.waitForCordovaPlatform(function () {
+            PlatformUtil.waitForCordovaPlatform(() => {
                 checkPlatformEnableNotifications();
                 deferred.resolve();
-            }, function () {
-                deferred.resolve();
-            });
+            }, deferred.resolve);
 
             $rootScope.$on("app:login", registerUserForNotifications);
         }
@@ -64,7 +62,7 @@
         function enableNotifications() {
             storage.notificationsFlags.hasEnabled = true;
 
-            UrbanAirship.ready().then(function (airship) {
+            UrbanAirship.ready().then((airship) => {
                 airship.setUserNotificationsEnabled(true);
                 Logger.log("UrbanAirship.setUserNotificationsEnabled", true);
             });
@@ -86,7 +84,7 @@
             return UrbanAirship.ready()
                 .then(getChannelID)
                 .then(NotificationsResource.registerUserForNotifications)
-                .catch(function (failureResponse) {
+                .catch((failureResponse) => {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
                     var error = "Registering username for push notifications failed: " + LoggerUtil.getErrorMessage(failureResponse);
                     Logger.error(error);

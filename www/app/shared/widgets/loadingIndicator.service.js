@@ -30,9 +30,7 @@
                 });
             });
 
-            $rootScope.$on("app:loadingComplete", function () {
-                $ionicLoading.hide();
-            });
+            $rootScope.$on("app:loadingComplete", () => $ionicLoading.hide());
         }
 
         function begin() {

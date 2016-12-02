@@ -52,9 +52,7 @@
 
             if (url) {
                 PlatformUtil.waitForCordovaPlatform()
-                    .then(function() {
-                        window.cordova.plugins.market.open(url);
-                    });
+                    .then(() => window.cordova.plugins.market.open(url));
             }
         }
     }

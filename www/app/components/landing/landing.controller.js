@@ -33,12 +33,12 @@
         function activate() {
             //fetch property updates asynchronously
             WexCache.fetchPropertyValue("scheduledPaymentsCount", fetchScheduledPaymentsCount, {ttl: DEFAULT_CACHE_TTL})
-                .then(_.partial(_.set, vm, "scheduledPaymentsCount", _));
+                .then((scheduledPaymentsCount) => vm.scheduledPaymentsCount = scheduledPaymentsCount);
             WexCache.fetchPropertyValue("invoiceSummary", fetchCurrentInvoiceSummary, {
                 ttl: DEFAULT_CACHE_TTL,
                 ValueType: InvoiceSummaryModel
             })
-                .then(_.partial(_.set, vm, "invoiceSummary", _))
+                .then((invoiceSummary) => vm.invoiceSummary = invoiceSummary)
                 .then(updateChartConfiguration);
 
             startToastMessageBackAction();

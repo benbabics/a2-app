@@ -34,15 +34,11 @@
         }
 
         function remove() {
-            var self = this;
+            _.remove(banners, this);
 
-            _.remove(banners, self);
+            $timeout(() => this.$emit("notificationBar:closed"));
 
-            $timeout(function () {
-                self.$emit("notificationBar:closed");
-            });
-
-            self.setVisible(false);
+            this.setVisible(false);
             updateBanners();
         }
 
@@ -77,9 +73,7 @@
                 //global banners always take priority over page banners
                 var highestPriorityBanner = getHighestPriorityBanner({global: true}) || getHighestPriorityBanner({global: false});
 
-                _.forEach(banners, function (banner) {
-                    banner.setVisible(banner === highestPriorityBanner);
-                });
+                banners.forEach((banner) => banner.setVisible(banner === highestPriorityBanner));
 
                 applyContentClass(highestPriorityBanner);
             });

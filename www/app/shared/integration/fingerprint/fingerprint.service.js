@@ -35,7 +35,7 @@
             };
 
         var fingerprint = {
-            didFingerprintDatabaseChange: _.partial(doPluginCommand, "didFingerprintDatabaseChange"),
+            didFingerprintDatabaseChange: () => doPluginCommand("didFingerprintDatabaseChange"),
             isAvailable                 : isAvailable,
             verify                      : verify
         };
@@ -48,7 +48,7 @@
         function isAvailable() {
             return isSupportedPlatform()
                 .then(SecureStorage.isAvailable)
-                .then(_.partial(doPluginCommand, "isAvailable"))
+                .then(() => doPluginCommand("isAvailable"))
                 .catch(function (availabilityDetails) {
                     var options = {
                         isDeviceSupported: false,

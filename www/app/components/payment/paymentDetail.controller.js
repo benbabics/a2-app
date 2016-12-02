@@ -34,9 +34,7 @@
 
         function confirmPaymentCancel() {
             PaymentManager.removePayment(UserManager.getUser().billingCompany.accountId, vm.payment.id)
-                .then(function () {
-                    Navigation.goToPaymentActivity();
-                })
+                .then(() => Navigation.goToPaymentActivity())
                 .catch(function (errorResponse) {
                     //TODO - What do we do here?
                     Logger.error("Failed to remove payment: " + errorResponse);
