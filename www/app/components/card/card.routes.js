@@ -23,9 +23,7 @@
                     controller : "CardListController as vm"
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.CARD_LIST.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_LIST.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("card.detail", {
@@ -42,16 +40,12 @@
                             LoadingIndicator.begin();
 
                             return CardManager.fetchCard(cardId)
-                                .finally(function () {
-                                    LoadingIndicator.complete();
-                                });
+                                .finally(LoadingIndicator.complete);
                         }
                     }
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.CARD_DETAIL.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_DETAIL.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("card.changeStatus", {
@@ -64,14 +58,10 @@
                     LoadingIndicator.begin();
 
                     return CardManager.fetchCard(cardId)
-                        .finally(function () {
-                            LoadingIndicator.complete();
-                        });
+                        .finally(LoadingIndicator.complete);
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.CARD_CHANGE_STATUS.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_CHANGE_STATUS.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("card.changeStatus.form", {
@@ -94,9 +84,7 @@
                     controller : "CardChangeStatusConfirmationController as vm"
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("card.reissue", {
@@ -143,9 +131,7 @@
                     controller : "CardReissueFormController as vm"
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.CARD_REISSUE.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("card.reissue.shippingMethod", {
@@ -157,9 +143,7 @@
                     controller : "CardReissueShippingMethodInputController as vm"
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.CARD_REISSUE_INPUTS.SHIPPING_METHOD.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE_INPUTS.SHIPPING_METHOD.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("card.reissue.reason", {
@@ -171,9 +155,7 @@
                     controller : "CardReissueReasonInputController as vm"
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("card.reissue.confirmation", {
@@ -185,9 +167,7 @@
                     controller : "CardReissueConfirmationController as vm"
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.CARD_REISSUE_CONFIRMATION.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE_CONFIRMATION.CONFIG.ANALYTICS.pageName)
         });
     }
 

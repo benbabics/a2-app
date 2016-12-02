@@ -3,9 +3,7 @@
 
     function configureRoutes($urlRouterProvider, $stateProvider) {
 
-        $urlRouterProvider.when("/app/exit", function (FlowUtil) {
-            FlowUtil.exitApp();
-        });
+        $urlRouterProvider.when("/app/exit", (FlowUtil) => FlowUtil.exitApp());
 
         $stateProvider.state("app", {
             abstract: true,

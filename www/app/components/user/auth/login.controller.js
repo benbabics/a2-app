@@ -85,9 +85,7 @@
         }
 
         function toggleDisableScroll(shouldDisabled) {
-            PlatformUtil.waitForCordovaPlatform(function () {
-                $cordovaKeyboard.disableScroll(shouldDisabled);
-            });
+            PlatformUtil.waitForCordovaPlatform(() => $cordovaKeyboard.disableScroll(shouldDisabled));
         }
 
         function beforeEnter() {
@@ -140,8 +138,8 @@
                 .then(function () {
                     //enable fingerprint login if there is an existing fingerprint profile for this user
                     return FingerprintProfileUtil.getProfile(vm.user.username)
-                        .then(_.partial(_.set, vm, "fingerprintProfileAvailable", true))
-                        .finally(_.partial(_.set, vm, "fingerprintAuthAvailable", true));
+                        .then(() => vm.fingerprintProfileAvailable = true)
+                        .finally(() => vm.fingerprintAuthAvailable = true);
                 });
         }
 
@@ -251,9 +249,7 @@
                     }
 
                     return $q.reject(errorMessageCode)
-                        .finally(function () {
-                            LoginManager.logOut();
-                        });
+                        .finally(() => LoginManager.logOut());
                 })
                 .finally(function () {
                     LoadingIndicator.complete();

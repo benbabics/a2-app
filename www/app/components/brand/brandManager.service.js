@@ -244,9 +244,7 @@
         }
 
         function storeBrandAssets(brandAssetsForBrand) {
-            _.forEach(brandAssetsForBrand, function (brandAsset) {
-                updateBrandAsset(brandAsset);
-            });
+            _.forEach(brandAssetsForBrand, (brandAsset) => updateBrandAsset(brandAsset));
 
             return brandAssetsForBrand;
         }

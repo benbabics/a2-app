@@ -23,9 +23,7 @@
                     controller : "TransactionListController as vm"
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.TRANSACTION_LIST.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.TRANSACTION_LIST.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("transaction.filterBy", {
@@ -72,14 +70,10 @@
                     LoadingIndicator.begin();
 
                     return TransactionManager.fetchPostedTransaction(transactionId)
-                        .finally(function () {
-                            LoadingIndicator.complete();
-                        });
+                        .finally(() => LoadingIndicator.complete());
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.POSTED_TRANSACTION_DETAIL.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.POSTED_TRANSACTION_DETAIL.CONFIG.ANALYTICS.pageName)
         });
 
     }

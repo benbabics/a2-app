@@ -20,12 +20,12 @@
                     show(options.message, options.duration);
                 },
                 show           : show,
-                showShortTop   : _.partial(show, _, "short"),
-                showShortCenter: _.partial(show, _, "short"),
-                showShortBottom: _.partial(show, _, "short"),
-                showLongTop    : _.partial(show, _, "long"),
-                showLongCenter : _.partial(show, _, "long"),
-                showLongBottom : _.partial(show, _, "long")
+                showShortTop   : (message) => show(message, "short"),
+                showShortCenter: (message) => show(message, "short"),
+                showShortBottom: (message) => show(message, "short"),
+                showLongTop    : (message) => show(message, "long"),
+                showLongCenter : (message) => show(message, "long"),
+                showLongBottom : (message) => show(message, "long")
             };
         }
 

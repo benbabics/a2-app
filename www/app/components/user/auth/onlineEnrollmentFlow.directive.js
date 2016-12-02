@@ -29,9 +29,7 @@
           // inject scripts
         });
 
-        $rootScope.$on('$cordovaInAppBrowser:loaderror', function(e, evt) {
-          closeOnlineEnrollmentAppWithErrorAlert();
-        });
+        $rootScope.$on('$cordovaInAppBrowser:loaderror', () => closeOnlineEnrollmentAppWithErrorAlert());
       }
 
       /**
@@ -53,7 +51,7 @@
         LoadingIndicator.begin();
 
         return $http.get( ENROLLMENT_PING_URL )
-          .finally(function() { LoadingIndicator.complete(); });
+          .finally(LoadingIndicator.complete);
       }
 
       function loadOnlineEnrollmentApp() {

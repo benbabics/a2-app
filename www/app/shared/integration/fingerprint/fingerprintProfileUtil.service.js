@@ -24,7 +24,7 @@
             var clientId = _.toLower(username);
 
             return StorageManager.get(clientId, {secure: true})
-                .then(_.partial(createProfileResponse, _));
+                .then((password) => createProfileResponse(password));
         }
 
         function setProfile(username, password) {
@@ -34,7 +34,7 @@
             StorageManager.set(globals.LOCALSTORAGE.KEYS.USERNAME, username);
 
             return StorageManager.set(clientId, password, {secure: true})
-                .then(_.partial(createProfileResponse, password));
+                .then(() => createProfileResponse(password));
         }
         //////////////////////
         //Private functions:

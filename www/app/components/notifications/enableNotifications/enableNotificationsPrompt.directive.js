@@ -24,15 +24,13 @@
                     $ionicModal.fromTemplateUrl( TEMPLATE_URL, { scope: scope } )
                       .then(function(modal) {
                           scope.modal = modal;
-                          $timeout(function() { scope.modal.show(); }, 300);
+                          $timeout(() => scope.modal.show(), 300);
                       });
                 }
             });
 
             // hide modal
-            scope.closeModal = function() {
-                scope.modal.hide();
-            };
+            scope.closeModal = () => scope.modal.hide();
 
             // hide modal on idlestart event
             $rootScope.$on( "IdleStart", scope.closeModal );

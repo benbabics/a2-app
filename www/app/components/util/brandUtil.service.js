@@ -124,9 +124,7 @@
                 return $q.reject(error);
             }
 
-            $window.resolveLocalFileSystemURL(resourcePath, function (entry) {
-                deferred.resolve(entry.toInternalURL());
-            });
+            $window.resolveLocalFileSystemURL(resourcePath, (entry) => deferred.resolve(entry.toInternalURL()));
 
             return deferred.promise;
         }

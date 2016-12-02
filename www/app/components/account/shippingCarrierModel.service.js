@@ -11,16 +11,14 @@
         }
 
         ShippingCarrierModel.prototype.set = function (shippingCarrierResource) {
-            var self = this;
-
             angular.extend(this, shippingCarrierResource);
 
-            self.shippingMethods = [];
-            _.forEach(shippingCarrierResource.shippingMethods, function(shippingMethodResource) {
-                var shippingMethod = new ShippingMethodModel();
+            this.shippingMethods = [];
+            _.forEach(shippingCarrierResource.shippingMethods, (shippingMethodResource) => {
+                let shippingMethod = new ShippingMethodModel();
                 shippingMethod.set(shippingMethodResource);
 
-                self.shippingMethods.push(shippingMethod);
+                this.shippingMethods.push(shippingMethod);
             });
         };
 

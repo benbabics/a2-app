@@ -17,7 +17,7 @@
                         },
 
                         //jshint maxparams:5
-                        fetchBrandLogo: function($q, globals, BrandManager, BrandUtil) {
+                        fetchBrandLogo: function ($q, globals, BrandManager, BrandUtil) {
                             return function () {
                                 var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
                                     brandLogoAsset = BrandManager.getUserBrandAssetBySubtype(ASSET_SUBTYPES.BRAND_LOGO);
@@ -36,12 +36,12 @@
                             }
                         },
 
-                        fetchCurrentInvoiceSummary: function (_, accountId, InvoiceManager) {
-                            return _.partial(InvoiceManager.fetchCurrentInvoiceSummary, accountId);
+                        fetchCurrentInvoiceSummary: function (accountId, InvoiceManager) {
+                            return () => InvoiceManager.fetchCurrentInvoiceSummary(accountId);
                         },
 
-                        fetchScheduledPaymentsCount: function (_, accountId, globals, PaymentManager) {
-                            return _.partial(PaymentManager.fetchScheduledPaymentsCount, accountId);
+                        fetchScheduledPaymentsCount: function (accountId, globals, PaymentManager) {
+                            return () => PaymentManager.fetchScheduledPaymentsCount(accountId);
                         },
 
                         brandLogo: function (fetchBrandLogo, LoadingIndicator, WexCache) {
@@ -52,9 +52,7 @@
                     }
                 }
             },
-            onEnter: function(globals, AnalyticsUtil) {
-                AnalyticsUtil.trackView(globals.LANDING.CONFIG.ANALYTICS.pageName);
-            }
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.LANDING.CONFIG.ANALYTICS.pageName)
         });
     }
 

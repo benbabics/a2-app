@@ -35,18 +35,14 @@
         //////////////////////
 
         function loadMore() {
-            var self = this;
-
-            $q.when(self.loadingComplete() || self.onReload())
-                .then(function (allDataLoaded) {
-                    self.allDataLoaded = allDataLoaded;
-                })
-                .finally(function () {
-                    if (self.onPageLoaded) {
-                        self.onPageLoaded();
+            $q.when(this.loadingComplete() || this.onReload())
+                .then((allDataLoaded) => this.allDataLoaded = allDataLoaded)
+                .finally(() => {
+                    if (this.onPageLoaded) {
+                        this.onPageLoaded();
                     }
 
-                    self.$broadcast("scroll.infiniteScrollComplete");
+                    this.$broadcast("scroll.infiniteScrollComplete");
                 });
         }
 

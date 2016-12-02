@@ -62,9 +62,7 @@
 
             //realign the header elements
             if (headerController) {
-                $interval(function () {
-                    headerController.align();
-                }, 35, 1);
+                $interval(() => headerController.align(), 35, 1);
             }
         }
 
