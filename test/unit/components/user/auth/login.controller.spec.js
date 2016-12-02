@@ -29,7 +29,7 @@
             _.set(window, "cordova.plugins.settings", mocks.cordovaPluginSettings);
             _.set(window, "cordova.plugins.Keyboard", mocks.cordovaPluginsKeyboard);
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, _$interval_, _$q_, BrandAssetModel, UserAccountModel, UserModel, _globals_) {
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, _$interval_, _$q_, BrandAssetModel, UserAccountModel, UserModel, _wexTruncateStringFilter_, _globals_) {
                 mocks.$ionicHistory = _$ionicHistory_;
                 mocks.$scope = _$rootScope_.$new();
                 mocks.$q = _$q_;
@@ -38,6 +38,7 @@
                 mocks.globals = _globals_;
                 mocks.$stateParams = {};
                 mocks.$localStorage = {};
+                mocks.wexTruncateStringFilter = _wexTruncateStringFilter_;
 
                 ctrl = $controller("LoginController", {
                     $localStorage           : mocks.$localStorage,
@@ -1448,6 +1449,120 @@
                 }
             }
         });
+
+        describe("has a maskableUsername function that", function() {
+
+            beforeEach(function() {
+                self.userDetails = {
+                    username: _.toLower(TestUtils.getRandomStringThatIsAlphaNumeric(10)),
+                    password: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+
+                _.set(ctrl, "user.username", self.userDetails.username);
+            });
+
+            describe("when called with a parameter", function() {
+                it("sets the username to the given value", function() {
+                    var newUsername = TestUtils.getRandomStringThatIsAlphaNumeric(10);
+                    ctrl.maskableUsername(newUsername);
+                    expect(ctrl.user.username).toEqual(newUsername);
+                });
+            });
+
+            describe("when called without a parameter", function() {
+                describe("when the username input is focused", function() {
+                    beforeEach(function() {
+                        ctrl.usernameIsFocused = true;
+                    });
+
+                    it("returns the unmasked username", function() {
+                        expect(ctrl.maskableUsername()).toEqual(ctrl.user.username);
+                    });
+                });
+
+                describe("when the username input is NOT focused", function() {
+                    beforeEach(function() {
+                        ctrl.usernameIsFocused = false;
+                    });
+
+                    it("returns the masked username", function() {
+                        expect(ctrl.maskableUsername()).toEqual(mocks.wexTruncateStringFilter(ctrl.user.username));
+                    });
+                });
+            });
+        });
+
+        describe("has an onClearInput function that", function() {
+
+            beforeEach(function() {
+                self.userDetails = {
+                    username: _.toLower(TestUtils.getRandomStringThatIsAlphaNumeric(10)),
+                    password: TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                };
+
+                _.set(ctrl, "user.username", self.userDetails.username);
+                _.set(ctrl, "user.password", self.userDetails.password);
+
+                jasmine.clock().install();
+            });
+
+            afterEach(function() {
+                jasmine.clock().uninstall();
+            });
+
+            describe("for the userName input", function() {
+                var query = "input[name=userName]";
+                var mockInput;
+
+                beforeEach(function() {
+                    mockInput = createInput(query);
+                    spyOn(document, "querySelector").and.returnValue(mockInput);
+                    spyOn(mockInput, "focus");
+                });
+
+                it("should clear the username field", function() {
+                    expect(ctrl.user.username !== "");
+                    ctrl.onClearInput("userName");
+                    expect(document.querySelector).toHaveBeenCalledWith(query);
+                    expect(ctrl.user.username === "");
+                });
+
+                it("should focus on the userName input", function() {
+                    ctrl.onClearInput("userName");
+                    jasmine.clock().tick(1);
+                    expect(mockInput.focus).toHaveBeenCalled();
+                });
+            });
+
+            describe("for the password input", function() {
+                var query = "input[name=password]";
+                var mockInput;
+
+                beforeEach(function() {
+                    mockInput = createInput(query);
+                    spyOn(document, "querySelector").and.returnValue(mockInput);
+                    spyOn(mockInput, "focus");
+                });
+
+                it("should clear the password field", function() {
+                    expect(ctrl.user.password !== "");
+                    ctrl.onClearInput("password");
+                    expect(ctrl.user.password === "");
+                });
+
+                it("should focus on the password input", function() {
+                    ctrl.onClearInput("password");
+                    jasmine.clock().tick(1);
+                    expect(mockInput.focus).toHaveBeenCalled();
+                });
+            });
+
+            describe("for an unknown input", function() {
+                it("throws an exception", function() {
+                    expect(function() { ctrl.onClearInput(TestUtils.getRandomStringThatIsAlphaNumeric(10)); }).toThrow();
+                });
+            });
+        });
     });
 
     function getFingerprintSettingsPromptText(platform) {
@@ -1463,6 +1578,17 @@
 
     function verifyEventTracked(event) {
         expect(mocks.AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
+    }
+
+    function createInput(query) {
+        var nameIndexStart = query.indexOf("name=") + "name=".length;
+        var nameIndexEnd = query.indexOf("]", nameIndexStart);
+        var inputName = query.substring(nameIndexStart, nameIndexEnd);
+
+        if(inputName === "userName" || inputName === "password") {
+            return { name: inputName, focus: function() {} };
+        }
+        return null;
     }
 
 }());

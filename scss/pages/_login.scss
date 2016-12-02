@@ -87,10 +87,11 @@
         box-shadow: 0 2px 3px rgba(0,0,0,.4);
         content: "";
       }
-    }
 
-    .widget-wex-advanced-input {
       i.ion-close-circled {
+        position: absolute;
+        top:   calc(50% - 9px);
+        right: 0px;
         font-size: 20px;
         color: #7f7f7f;
       }
@@ -220,17 +221,6 @@
       }
     }
 
-    .item-input input,
-    .masked-field {
-      color: #333;
-      font-family: 'open_sansbold';
-    }
-    .masked-field {
-      padding-top:    2px;
-      padding-bottom: 3px;
-      font-size: 14px;
-      line-height: 29px;
-    }
     .item-input {
       padding: 0;
       border-width: 0 0 1px;
@@ -241,6 +231,8 @@
       }
 
       input {
+        color: #333;
+        font-family: 'open_sansbold';
         padding-top:    0;
         padding-bottom: 0;
         background-color: transparent;
@@ -249,6 +241,12 @@
           padding-top:    2px;
           padding-bottom: 3px;
         }
+      }
+
+      input[disabled][name=userName] {
+        -webkit-text-fill-color: #333;
+        -webkit-user-select: none;
+        user-select: none;
       }
     }
 
