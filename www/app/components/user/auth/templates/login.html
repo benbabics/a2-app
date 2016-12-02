@@ -36,7 +36,6 @@
                 <div class="item item-input item-stacked-label">
                     <wex-advanced-input>
                         <input ng-model="vm.user.password"
-                               ng-disabled="vm.fingerprintProfileAvailable"
                                name="password"
                                type="password"
                                required
@@ -48,22 +47,19 @@
             </div>
 
             <div class="row login-controls">
-                <div class="col col-50 checkbox-remember-me">
-                    <ion-checkbox ng-model="vm.rememberMeToggle" ng-click="vm.verifyFingerprintRemoval('rememberMe')">
-                        <span fittext fittext-min="inherit" ng-bind="::vm.config.rememberMe.label"></span>
-                    </ion-checkbox>
-                </div>
+                <ion-checkbox ng-model="vm.rememberMeToggle" ng-click="vm.verifyFingerprintRemoval('rememberMe')" class="item-checkbox-right">
+                    <span ng-bind="::vm.config.rememberMe.label"></span>
+                </ion-checkbox>
 
-                <div class="col col-50 checkbox-touch-id">
-                    <ion-checkbox ng-if="vm.fingerprintAuthAvailable && !vm.fingerprintProfileAvailable"
-                                  ng-disabled="!vm.rememberMe"
-                                  ng-model="vm.setupFingerprintAuth">
-                        <span fittext fittext-min="inherit" ng-bind="::vm.getFingerprintDisabledLabel()"></span>
-                    </ion-checkbox>
-                    <div class="fingerprint-indicator icon-fingerprint"
-                         ng-if="vm.fingerprintProfileAvailable"
-                         ng-click="vm.logInUser(true)">
-                    </div>
+                <ion-checkbox ng-if="vm.fingerprintAuthAvailable && !vm.fingerprintProfileAvailable"
+                        ng-disabled="!vm.rememberMe"
+                        ng-model="vm.setupFingerprintAuth"
+                        class="item-checkbox-right justify-right">
+                    <span ng-bind="::vm.getFingerprintDisabledLabel()"></span>
+                </ion-checkbox>
+                <div class="fingerprint-indicator icon-fingerprint justify-right"
+                        ng-if="vm.fingerprintProfileAvailable"
+                        ng-click="vm.logInUser(true)">
                 </div>
             </div>
 

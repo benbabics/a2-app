@@ -5,7 +5,7 @@
     // jshint maxparams:6
 
     /* @ngInject */
-    function PaymentListController(_, $scope, $controller, globals, PaymentManager, UserManager, LoadingIndicator) {
+    function PaymentListController(_, $scope, $controller, globals, PaymentManager, UserManager) {
         var vm = this, infiniteListController;
             vm.config  = globals.PAYMENT_LIST.CONFIG;
             vm.options = globals.PAYMENT_LIST.SEARCH_OPTIONS;
@@ -18,7 +18,7 @@
             infiniteListController = $controller("WexInfiniteListController", {
                 $scope: $scope,
                 $attrs: {
-                    isGreeking: false,
+                    isGreeking: true,
                     cacheKey  : "payments-list"
                 }
             });
@@ -37,15 +37,13 @@
         function handleMakeRequest(requestConfig) {
             var billingAccountId = UserManager.getUser().billingCompany.accountId;
 
-            LoadingIndicator.begin();
-
             return PaymentManager.fetchPayments( billingAccountId, requestConfig.currentPage, requestConfig.pageSize )
-              .then( filterPayments )
-              .finally( LoadingIndicator.complete );
+                .then( filterPayments );
         }
 
-        function handleOnError() {
-            //
+        function handleOnError(errorResponse) {
+            // TODO - What do we do here?
+            Logger.error( "Failed to fetch next page of payments: " + errorResponse );
         }
 
         function filterPayments(payments) {
@@ -70,61 +68,6 @@
 
             return payments;
         }
-    }
-
-    function PaymentListControllerOld(_, $scope, globals, LoadingIndicator, PaymentManager, UserManager) {
-
-        var vm = this;
-
-        vm.config = globals.PAYMENT_LIST.CONFIG;
-
-        vm.completedPayments = {};
-        vm.scheduledPayments = {};
-
-        vm.fetchPayments = fetchPayments;
-
-        activate();
-
-        //////////////////////
-        // Controller initialization
-        function activate() {
-            fetchPayments();
-        }
-
-        function fetchPayments() {
-            var billingAccountId = UserManager.getUser().billingCompany.accountId,
-                options = globals.PAYMENT_LIST.SEARCH_OPTIONS;
-
-            //note: due to an issue with collection-repeat and ion-refresher, we hide the refresher before refreshing the list to match how the infinite list pages work
-            $scope.$broadcast("scroll.refreshComplete");
-            LoadingIndicator.begin();
-
-            return PaymentManager.fetchPayments(billingAccountId, options.PAGE_NUMBER, options.PAGE_SIZE)
-                .then(filterPayments)
-                .finally(LoadingIndicator.complete);
-        }
-
-        function filterPayments(payments) {
-            var unsortedScheduledPayments,
-                unsortedCompletedPayments;
-
-            // Get the list of scheduled payments from payments into unsortedScheduledPayments
-            unsortedScheduledPayments = _.filter(payments, function (payment) {
-                return payment.isScheduled();
-            });
-
-            // Get the list of completed payments from payments into unsortedCompletedPayments
-            unsortedCompletedPayments = _.filter(payments, function (payment) {
-                return !payment.isScheduled();
-            });
-
-            // Sort the scheduled payments by scheduled date ascending
-            vm.scheduledPayments = _.orderBy(unsortedScheduledPayments, ["scheduledDate"], ["asc"]);
-
-            // Sort the rest of the payments by scheduled date descending
-            vm.completedPayments = _.orderBy(unsortedCompletedPayments, ["scheduledDate"], ["desc"]);
-        }
-
     }
 
     angular.module("app.components.payment")

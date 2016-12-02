@@ -79,8 +79,8 @@
       "id": "cordova-plugin-ios-no-export-compliance"
     },
     "cordova-plugin-touch-id@~3.2.0",
-    "cordova-plugin-android-fingerprint-auth@~0.3.1",
-    "cordova-plugin-secure-storage@~2.4.1",
+    "cordova-plugin-android-fingerprint-auth@~0.3.4",
+    "cordova-plugin-secure-storage@~2.6.3",
     "cordova-plugin-dialogs",
     {
       "locator": "https://github.com/selahssea/cordova-open-native-settings",
@@ -90,6 +90,10 @@
     {
       "locator": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.5",
       "id": "com.telerik.plugins.nativepagetransitions"
+    },
+    {
+      "locator": "https://github.com/driftyco/cordova-plugin-wkwebview-engine.git",
+      "id": "cordova-plugin-wkwebview-engine"
     }
   ],
   "cordovaPlatforms": [

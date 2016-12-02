@@ -1,4 +1,6 @@
 .page-payments-list {
+  @extend %ui-page;
+
   .collapsible-item {
     &.open .body {
       overflow: visible;
@@ -10,12 +12,6 @@
 
   wex-payment-list-item {
     display: block;
-
-    .item {
-      font-size: 14px;
-      color: #000;
-      border-top: none;
-      background: none;
-    }
   }
+
 }

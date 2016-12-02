@@ -8,46 +8,51 @@
 @import "settings";
 @import "transactions";
 
-.ui-page {
-  $color-blue:       #3a97b5;
-  $color-gray:       #7f7f7f;
-  $color-gray-light: #ccc;
-  $color-gray-dark:  #333;
 
+$color-blue:       #3a97b5;
+$color-gray:       #7f7f7f;
+$color-gray-light: #ccc;
+$color-gray-dark:  #333;
+
+.color-blue {
+  color: $color-blue;
+}
+.color-gray {
+  color: $color-gray;
+}
+.color-gray-light {
+  color: $color-gray-light;
+}
+.color-gray-dark {
+  color: $color-gray-dark;
+}
+
+.text-sm {
+  font-size: 12px;
+}
+.text-md {
+  font-size: 14px;
+}
+.text-lg {
+  font-size: 16px;
+}
+.text-xl {
+  font-size: 18px;
+}
+.text-xxl {
+  font-size: 22px;
+}
+
+%ui-page {
   font-family: 'open_sansregular';
   background-color: #e2e3e4;
 
+  .inner-container {
+    background-color: transparent;
+  }
+
   .scroll-refresher {
     background-color: #fff;
-  }
-
-  .color-blue {
-    color: $color-blue;
-  }
-  .color-gray {
-    color: $color-gray;
-  }
-  .color-gray-light {
-    color: $color-gray-light;
-  }
-  .color-gray-dark {
-    color: $color-gray-dark;
-  }
-
-  .text-sm {
-    font-size: 12px;
-  }
-  .text-md {
-    font-size: 14px;
-  }
-  .text-lg {
-    font-size: 16px;
-  }
-  .text-xl {
-    font-size: 18px;
-  }
-  .text-xxl {
-    font-size: 22px;
   }
 
   .list {

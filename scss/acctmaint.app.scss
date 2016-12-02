@@ -225,6 +225,8 @@ $badge-color: #e51937;
     }
     .fa-chevron-right {
         font-size: 0.7em;
+        position: relative;
+        top: -1px;
     }
     .menu-icon {
         color: #fff;
@@ -480,7 +482,6 @@ body.menu-open .nav-view-root::before {
 
     .row {
         padding: 5px;
-        font-size: 15px;
 
         &.list-header {
             background-color: $wex-blue;
