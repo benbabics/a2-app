@@ -6,13 +6,15 @@
         $state,
         menuItem;
 
-    describe("A WEX Menu Item directive", function () {
+    fdescribe("A WEX Menu Item directive", function () {
 
         beforeEach(function() {
-            inject(function(_$rootScope_, _$compile_, _$state_) {
+            inject(function(_$rootScope_, _$compile_, _$state_, globals) {
                 $rootScope = _$rootScope_;
                 $compile = _$compile_;
                 $state = _$state_;
+
+                globals.FEATURE_FLAGS.PUSH_NOTIFICATIONS = true;
 
                 menuItem = createWexMenuItem();
             });
