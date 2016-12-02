@@ -127,4 +127,9 @@
     <plugin name="com.phonegap.plugins.nativesettingsopener" spec="https://github.com/selahssea/cordova-open-native-settings" />
     <plugin name="cordova-plugin-ignore-lint-translation" spec="~0.0.1" />
     <plugin name="cordova-plugin-inappbrowser" spec="http://bitbucket.int.wrightexpress.com/scm/mob/wex-cordova-inappbrowser.git" />
+    <plugin name="cordova-plugin-wkwebview-engine" spec="https://github.com/driftyco/cordova-plugin-wkwebview-engine.git" />
+    <feature name="CDVWKWebViewEngine">
+        <param name="ios-package" value="CDVWKWebViewEngine" />
+    </feature>
+    <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
 </widget>

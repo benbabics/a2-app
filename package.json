@@ -85,7 +85,11 @@
       "locator": "https://github.com/selahssea/cordova-open-native-settings",
       "id": "com.phonegap.plugins.nativesettingsopener"
     },
-    "urbanairship-cordova@6.2.0"
+    "urbanairship-cordova@6.2.0",
+    {
+      "locator": "https://github.com/driftyco/cordova-plugin-wkwebview-engine.git",
+      "id": "cordova-plugin-wkwebview-engine"
+    }
   ],
   "cordovaPlatforms": [
     {
