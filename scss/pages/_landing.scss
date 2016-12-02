@@ -111,17 +111,9 @@
         justify-content: center;
         text-align: left;
 
-        &:first-of-type {
-          order: 2;
-        }
-        &:last-of-type {
-          order: 3;
-        }
-
         .label {
           position: relative;
           padding: 15px 25px;
-
           opacity: 0;
           animation:         chartSlideFade 2s 1 forwards;
           -webkit-animation: chartSlideFade 2s 1 forwards;
@@ -160,13 +152,21 @@
             content: "\f111";
           }
         }
+
+        &:first-of-type {
+          order: 2;
+        }
+
+        &:last-of-type {
+          order: 3;
+        }
       }
       .chart {
         order: 1;
         text-align: center;
       }
 
-      @media (min-width: 380px) {
+      @media (min-width: 375px) {
         flex-direction: row;
 
         .labels {
@@ -180,6 +180,21 @@
               left:  auto;
               right: 10px;
             }
+          }
+
+          &:first-of-type,
+          &:last-of-type {
+            padding: 15px 0;
+          }
+
+          &:first-of-type .label {
+            padding-right: 25px;
+            padding-left: 0;
+          }
+
+          &:last-of-type .label {
+            padding-left: 25px;
+            padding-right: 0;
           }
         }
         .chart {
