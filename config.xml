@@ -65,6 +65,7 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
         <preference name="StatusBarBackgroundColor" value="#424242" />
         <preference name="com.urbanairship.gcm_sender" value="@@@STRING_REPLACE_GCM_APP_ID@@@" />
+        <preference name="CrosswalkAnimatable" value="true" />
     </platform>
     <platform name="ios">
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
