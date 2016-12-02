@@ -44,7 +44,7 @@
             }
 
             if (options.includeHtml) {
-                module("app.html");
+                module("app.templates");
             }
             else {
                 // stub the routing and template loading
