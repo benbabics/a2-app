@@ -54,14 +54,10 @@ module.exports = function(config) {
             "../test/unit/helpers/common_mocks.js",
 
             // Source code
-            "app/**/*.module.js",
-            "app/**/*!(.module).js",
+            "build/scripts.js",
 
             // Unit Tests
             "../test/unit/**/*.spec.js",
-
-            // HTML files
-            "app/**/*.html"
         ],
 
 
@@ -73,8 +69,7 @@ module.exports = function(config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            "app/**/*.js": "coverage",
-            "**/*.html": "ng-html2js"
+            "app/**/*.js": "coverage"
         },
 
 
@@ -113,7 +108,6 @@ module.exports = function(config) {
             "karma-firefox-launcher",
             "karma-phantomjs-launcher",
             "karma-jasmine",
-            "karma-ng-html2js-preprocessor",
             "karma-es6-shim"
         ],
 
@@ -126,10 +120,6 @@ module.exports = function(config) {
         coverageReporter: {
             dir: "../test/results/unit/coverage/",
             type: "html"
-        },
-
-        ngHtml2JsPreprocessor: {
-            moduleName: "app.html"
         },
 
         // Continuous Integration mode

@@ -330,7 +330,7 @@ gulp.task("ionic-prod-run-ios", ["build-src"], function (done) {
 /**
  * Test Tasks
  */
-gulp.task("test", function (done) {
+gulp.task("test", ["build-src"], function (done) {
     new KarmaServer({
         configFile: __dirname + "/" + config.test.dir + "/karma.conf.js",
         singleRun: true,
@@ -341,7 +341,9 @@ gulp.task("test", function (done) {
     }).start();
 });
 
-gulp.task("test-debug", function (done) {
+gulp.task("test-debug", ["build-src"], function (done) {
+    gulp.watch([sourcePaths.root.scripts], ["build-src"]);
+
     new KarmaServer({
         configFile: __dirname + "/" + config.test.dir + "/karma.conf.js",
         singleRun: false,
