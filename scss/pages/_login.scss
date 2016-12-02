@@ -174,9 +174,7 @@
         color: $color-dark-gray;
         font-size: .75em;
         padding-right: 1em;
-        flex-basis: -webkit-min-content;
-        flex-basis: -moz-min-content;
-        flex-basis: min-content;
+        @include flex-basis(min-content);
       }
 
       i.checkbox-icon {
