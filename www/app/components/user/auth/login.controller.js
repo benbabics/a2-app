@@ -251,16 +251,17 @@
         function onClearInput(inputName) {
             var input = document.querySelector("input[name=" + inputName + "]");
 
+            if (_.isNil(input)) {
+                var error = "Unknown input name: '" + inputName + "'";
+                Logger.error(error);
+                throw new Error(error);
+            }
+
             if (input.name === "userName") {
                 vm.user.username = "";
             }
             else if (input.name === "password") {
                 vm.user.password = "";
-            }
-            else {
-                var error = "Unknown input name: '" + inputName + "'";
-                Logger.error(error);
-                throw new Error(error);
             }
 
             setTimeout(function() { input.focus(); });
@@ -319,11 +320,11 @@
         // Combination getter/setter. Passing a parameter invokes the setter.
         // Passing no parameters gets a masked or unmasked value depending on if the input is in focus.
         function maskableUsername() {
-            if(arguments.length > 0) {
+            if (arguments.length > 0) {
                 vm.user.username = arguments[0];
             }
             else {
-                if(vm.usernameIsFocused) {
+                if (vm.usernameIsFocused) {
                     return vm.user.username;
                 }
                 else {
