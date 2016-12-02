@@ -143,6 +143,10 @@
       padding: 0 8px;
     }
 
+    .justify-right {
+      justify-content: flex-end;
+    }
+
     .item-checkbox {
       display: flex;
       align-items: center;
@@ -157,7 +161,7 @@
         order: 1;
         position: static;
         margin:  0;
-        padding: 0 $checkbox-width;
+        padding: 0;
         width: $checkbox-width;
         height: $checkbox-height;
       }
@@ -166,13 +170,11 @@
         order: 0;
         text-overflow: initial;
         white-space:   initial;
-        text-align: center;
+        text-align: left;
         color: $color-dark-gray;
-
-        //min label size for ngFitText
-        & span.ng-binding[fittext] {
-          font-size: 0.8em;
-        }
+        font-size: .75em;
+        padding-right: 1em;
+        @include flex-basis(min-content);
       }
 
       i.checkbox-icon {
@@ -216,15 +218,6 @@
           content: "";
         }
       }
-    }
-    .checkbox-remember-me {
-      .item-checkbox .item-content {
-        flex: 2;
-      }
-    }
-    .checkbox-touch-id {
-      display: flex;
-      align-items: center;
     }
 
     .item-input input,
