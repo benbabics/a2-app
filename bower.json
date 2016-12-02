@@ -21,7 +21,8 @@
     "ngCordova": "0.1.20-alpha",
     "ngFitText": "~4.1.0",
     "ngstorage": "~0.3.9",
-    "restangular": "~1"
+    "restangular": "~1",
+    "ionic-native-transitions": "shprink/ionic-native-transitions#^1.0.2"
   },
   "resolutions": {
     "angular": ">=1.4.6",

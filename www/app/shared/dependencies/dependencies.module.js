@@ -21,6 +21,7 @@
         "lokijs",                     // From https://github.com/techfort/LokiJS/
         "ngPromiseExtras",            // From https://github.com/ohjames/angular-promise-extras
         "ngIdle",                     // From https://github.com/HackedByChinese/ng-idle,
-        "ion-sticky"                  // From https://github.com/Poordeveloper/ion-sticky
+        "ion-sticky",                 // From https://github.com/Poordeveloper/ion-sticky
+        "ionic-native-transitions"   // From https://github.com/shprink/ionic-native-transitions
     ]);
 })();

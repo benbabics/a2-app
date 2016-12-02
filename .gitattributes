@@ -119,6 +119,7 @@ TODO         text
 *.yml          text
 Makefile       text
 makefile       text
+*.lock         text
 
 ## HEROKU
 Procfile       text

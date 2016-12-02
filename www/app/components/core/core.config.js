@@ -33,6 +33,9 @@
         // do not show the title of the previous page
         $ionicConfigProvider.backButton.previousTitleText(false);
 
+        // disable built-in ionic transitions
+        $ionicConfigProvider.views.transition("none");
+
     };
 
     var ionicDatePickerConfig = function (ionicDatePickerProvider, sharedGlobals) {
@@ -51,6 +54,13 @@
         $localStorageProvider.setKeyPrefix(appGlobals.LOCALSTORAGE.CONFIG.keyPrefix);
     };
 
+    var ionicNativeTransitionsConfig = function($ionicNativeTransitionsProvider) {
+        $ionicNativeTransitionsProvider.setDefaultTransition({
+            type: "slide",
+            direction: "right"
+        });
+    };
+
     angular
         .module("app.components.core")
         .config(angularConfig)
@@ -58,5 +68,6 @@
         .config(ionicConfig)
         .config(ionicDatePickerConfig)
         .config(ngStorageConfig)
-        .config(ngIdleConfig);
+        .config(ngIdleConfig)
+        .config(ionicNativeTransitionsConfig);
 })();
