@@ -1,4 +1,5 @@
 <ion-item class="item item-icon-right widget-transaction-result-as-date"
+          ng-hide="payment.isGreekLoading"
           ng-class="{ 'item-last': $last }">
 
     <a class="item-content" ui-sref="payment.activity.detail({ paymentId: payment.id })">
