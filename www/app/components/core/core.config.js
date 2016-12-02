@@ -62,7 +62,7 @@
     };
 
     angular
-        .module("app.components.core", ["ionic-native-transitions"])
+        .module("app.components.core")
         .config(angularConfig)
         .config(urlConfig)
         .config(ionicConfig)
