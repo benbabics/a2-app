@@ -1,5 +1,5 @@
 .page-settings {
-  @extend .ui-page;
+  @extend %ui-page;
 
   .alert {
     overflow: hidden;

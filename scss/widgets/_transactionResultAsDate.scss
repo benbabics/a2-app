@@ -2,13 +2,7 @@
   &.item {
     &.item-icon-right {
       .icon {
-        right: 0;
-        align-items:         flex-start;
-        -webkit-align-items: flex-start;
-
-        &:before {
-          margin-top: 18px;
-        }
+        @extend %icon-align-top;
       }
     }
   }
