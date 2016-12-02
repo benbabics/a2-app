@@ -6,7 +6,7 @@
         $state,
         menuItem;
 
-    fdescribe("A WEX Menu Item directive", function () {
+    describe("A WEX Menu Item directive", function () {
 
         beforeEach(function() {
             inject(function(_$rootScope_, _$compile_, _$state_, globals) {
