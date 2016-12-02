@@ -43,6 +43,7 @@ module.exports = function(config) {
             "lib/angular-promise-extras/angular-promise-extras.js",
             "lib/ng-idle/angular-idle.js",
             "lib/ion-sticky/ion-sticky.js",
+            "lib/ionic-native-transitions/dist/ionic-native-transitions.js",
 
             // Test libraries
             "../test/lib/**/*.js",
