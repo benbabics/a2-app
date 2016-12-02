@@ -31,7 +31,6 @@
         mockUser,
         UserManager,
         PaymentManager,
-        LoadingIndicator,
         AnalyticsUtil,
         fetchPaymentsDeferred;
 
@@ -42,7 +41,6 @@
             //create mock dependencies
             UserManager = jasmine.createSpyObj("UserManager", ["getUser", "userLoggedIn"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchPayments"]);
-            LoadingIndicator = jasmine.createSpyObj("LoadingIndicator", ["begin", "complete"]);
             AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
                 "getActiveTrackerId",
                 "hasActiveTracker",
@@ -89,7 +87,6 @@
                 ctrl = $controller("PaymentListController", {
                     $scope:           $scope,
                     globals:          mockGlobals,
-                    LoadingIndicator: LoadingIndicator,
                     PaymentManager:   PaymentManager,
                     UserManager:      UserManager
                 });
@@ -116,10 +113,6 @@
                 $scope.loadNextPage();
             });
 
-            it("should call LoadingIndicator.begin", function () {
-                expect( LoadingIndicator.begin ).toHaveBeenCalled();
-            });
-
             it("should call PaymentManager.fetchPayments", function () {
                 expect( PaymentManager.fetchPayments ).toHaveBeenCalledWith(
                     mockUser.billingCompany.accountId,
@@ -143,10 +136,6 @@
                     var payments = _.orderBy( mockScheduledPayments, ["scheduledDate"], ["asc"] );
                     expect( ctrl.payments.scheduled ).toEqual( payments );
                 });
-
-                it("should call LoadingIndicator.complete", function () {
-                    expect( LoadingIndicator.complete ).toHaveBeenCalled();
-                });
             });
 
             describe("when the payments are NOT successfully fetched", function () {
@@ -163,9 +152,6 @@
                     expect( ctrl.payments.scheduled ).toEqual([]);
                 });
 
-                it("should call LoadingIndicator.complete", function () {
-                    expect( LoadingIndicator.complete ).toHaveBeenCalled();
-                });
             });
         });
 
