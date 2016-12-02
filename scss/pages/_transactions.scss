@@ -1,5 +1,5 @@
 .page-transactions {
-  @extend .ui-page;
+  @extend %ui-page;
 
   .widget-filter-transaction-list {
     .collection-repeat-container {

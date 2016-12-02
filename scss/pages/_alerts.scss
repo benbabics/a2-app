@@ -1,5 +1,5 @@
 .page-alerts {
-  @extend .ui-page;
+  @extend %ui-page;
 
   .widget-infinite-list .item.item-icon-right .item-content {
     margin-right: 0;

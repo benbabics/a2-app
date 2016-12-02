@@ -12,10 +12,10 @@
         <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
 
         <div class="row divider list-header"
-             ng-if="vm.cards.length > 0">
-            <div class="col col-25">{{::vm.config.cardNumber}}</div>
-            <div class="col col-50">{{::vm.config.embossing}}</div>
-            <div class="col right-align">{{::vm.config.status}}</div>
+             ng-if="vm.cards.collection.length > 0">
+            <div class="col col-25">{{ ::vm.config.cardNumber }}</div>
+            <div class="col col-50">{{ ::vm.config.embossing }}</div>
+            <div class="col right-align">{{ ::vm.config.status }}</div>
         </div>
 
         <wex-infinite-list class="card-list"

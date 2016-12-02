@@ -1,5 +1,5 @@
 .page-landing {
-  @extend .ui-page;
+  @extend %ui-page;
 
   section {
     margin-bottom: 10px;
