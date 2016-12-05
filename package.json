@@ -4,7 +4,7 @@
   "description": "Fleet SmartHub: An Ionic project",
   "devDependencies": {
     "bower": "^1.7.0",
-    "cordova": "^6.0.0",
+    "cordova": "^6.3.1",
     "elementtree": "^0.1.6",
     "fs-extra": "^0.30.0",
     "gulp": "^3.9.0",
