@@ -1509,9 +1509,9 @@ cordova-serve@^1.0.0:
     express "^4.13.3"
     q "^1.4.1"
 
-cordova@^6.0.0:
+cordova@^6.3.1:
   version "6.4.0"
-  resolved "https://registry.yarnpkg.com/cordova/-/cordova-6.4.0.tgz#3fd9e8b9ad77a6a93ec76947704de21ac2991776"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/cordova/-/cordova-6.4.0.tgz#3fd9e8b9ad77a6a93ec76947704de21ac2991776"
   dependencies:
     cordova-common "1.5.x"
     cordova-lib "6.4.0"
