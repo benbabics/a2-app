@@ -598,11 +598,16 @@
             describe("when using fingerprint authentication", function () {
 
                 beforeEach(function () {
-                    ctrl.fingerprintProfileAvailable = true;
+                    ctrl.fingerprintProfileAvailable = false;
                     ctrl.fingerprintAuthAvailable    = true;
                     self.usingFingerprintAuth = true;
-                    self.settingUpFingerprintAuth = false;
+                    self.settingUpFingerprintAuth = true;
                     ctrl.logInUser(true);
+                    mocks.$rootScope.$digest();
+                });
+
+                it("should call FingerprintProfileUtil.clearProfile with the expected value", function () {
+                    expect(mocks.FingerprintProfileUtil.clearProfile).toHaveBeenCalledWith(self.userDetails.username);
                 });
 
                 it("should authorize the User", function () {
@@ -610,14 +615,6 @@
                         clientId: self.userDetails.username,
                         method: mocks.globals.USER_AUTHORIZATION.TYPES.FINGERPRINT
                     }));
-                });
-
-                it("should NOT set vm.fingerprintProfileAvailable to false", function () {
-                    expect(ctrl.fingerprintProfileAvailable).not.toBe(false);
-                });
-
-                it("should NOT call FingerprintProfileUtil.clearProfile with the expected value", function () {
-                    expect(mocks.FingerprintProfileUtil.clearProfile).not.toHaveBeenCalled();
                 });
 
                 describe("when the User is NOT Authenticated successfully with a BAD_CREDENTIALS error", function () {
@@ -653,6 +650,7 @@
                     _.set(ctrl, "user.password", self.userDetails.password);
 
                     ctrl.logInUser(false);
+                    mocks.$rootScope.$digest();
                 });
 
                 it("should authorize the User", function () {
@@ -665,10 +663,6 @@
 
                 it("should set vm.fingerprintProfileAvailable to false", function () {
                     expect(ctrl.fingerprintProfileAvailable).toBe(false);
-                });
-
-                it("should call FingerprintProfileUtil.clearProfile with the expected value", function () {
-                    expect(mocks.FingerprintProfileUtil.clearProfile).toHaveBeenCalledWith(self.userDetails.username);
                 });
 
                 describe("when authorizing", logInUserAuthTests);
@@ -960,7 +954,7 @@
                 });
 
                 it("should have an error message", function () {
-                    expect(ctrl.globalError).toEqual(_.get(mocks.globals.USER_LOGIN.CONFIG.serverErrors, self.usingFingerprintAuth ? "PASSWORD_CHANGED" : "DEFAULT"));
+                    expect(ctrl.globalError).toEqual(_.get(mocks.globals.USER_LOGIN.CONFIG.serverErrors, self.usingFingerprintAuth && !self.settingUpFingerprintAuth ? "PASSWORD_CHANGED" : "DEFAULT"));
                 });
 
                 it("should NOT navigate away from the login page", function () {
@@ -968,7 +962,7 @@
                 });
 
                 it("should call self.AnalyticsUtil.trackEvent with the expected event", function () {
-                    verifyEventTracked(_.get(mocks.globals.USER_LOGIN.CONFIG.ANALYTICS.events, self.usingFingerprintAuth ? "passwordChangedStatus" : "wrongCredentialsStatus"));
+                    verifyEventTracked(_.get(mocks.globals.USER_LOGIN.CONFIG.ANALYTICS.events, self.usingFingerprintAuth && !self.settingUpFingerprintAuth ? "passwordChangedStatus" : "wrongCredentialsStatus"));
                 });
 
             });
