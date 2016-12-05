@@ -132,28 +132,30 @@
 
             clearErrorMessage();
 
-            if (!useFingerprintAuth) {
-                //remove the previous fingerprint profile for this user (if any)
-                clearFingerprintProfile(clientId);
-            }
-
             // track accepted/rejected terms
             acceptTermsListener = $rootScope.$on("FingerprintAuthTerms.accepted", function() { trackEvent( "acceptTerms" ); });
             rejectTermsListener = $rootScope.$on("FingerprintAuthTerms.rejected", function() { trackEvent( "declineTerms" ); });
 
-            return UserAuthorizationManager.verify({
-                    clientId: clientId,
-                    clientSecret: clientSecret,
-                    method: useFingerprintAuth ? USER_AUTHORIZATION_TYPES.FINGERPRINT : USER_AUTHORIZATION_TYPES.SECRET
+
+            return $q.when(settingUpFingerprintAuth ? clearFingerprintProfile(clientId) : true)
+                .catch($q.resolve)
+                .then(function () {
+                    return UserAuthorizationManager.verify({
+                        clientId: clientId,
+                        clientSecret: clientSecret,
+                        method: useFingerprintAuth ? USER_AUTHORIZATION_TYPES.FINGERPRINT : USER_AUTHORIZATION_TYPES.SECRET
+                    });
                 })
                 .then(LoadingIndicator.begin)
                 .then(LoginManager.logIn)
                 .then(function () {
                     // track if login was biometric or manual
-                    if ( vm.fingerprintAuthAvailable && vm.fingerprintProfileAvailable ) {
-                        trackEvent( "successfulLoginBiometric" );
+                    if (vm.fingerprintAuthAvailable && vm.fingerprintProfileAvailable) {
+                        trackEvent("successfulLoginBiometric");
                     }
-                    else { trackEvent( "successfulLoginManual" ); }
+                    else {
+                        trackEvent("successfulLoginManual");
+                    }
 
                     // Store the Username or not based on Remember Me checkbox
                     rememberUsername(vm.rememberMeToggle, vm.user.username);
@@ -162,7 +164,7 @@
                     $ionicHistory.nextViewOptions({disableBack: true});
 
                     // toggle StatusBar as fixed
-                    toggleStatusBarOverlaysWebView( false );
+                    toggleStatusBarOverlaysWebView(false);
 
                     return FingerprintProfileUtil.getProfile(clientId)
                         .then(function (fingerprintProfile) {
