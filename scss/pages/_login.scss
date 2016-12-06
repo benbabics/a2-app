@@ -161,7 +161,7 @@
         text-align: left;
         color: $color-dark-gray;
         font-size: .9em;
-        width: min-content;
+        width: -webkit-min-content;
       }
 
       i.checkbox-icon {
