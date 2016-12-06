@@ -5,8 +5,7 @@
   $color-black:     #000;
   $color-dark-gray: #444;
 
-  $checkbox-width:  16px;
-  $checkbox-height: 16px;
+  $checkbox-size: 16px;
 
   /**
    * Alerts
@@ -99,72 +98,60 @@
 
     .login-controls {
       padding: 0;
-
-      .col {
-        padding-top:    0;
-        padding-bottom: 0;
-
-        @media (min-height: 640px) {
-          padding-top:    5px;
-          padding-bottom: 5px;
-        }
-
-        &:first-of-type {
-          padding-left: 0;
-        }
-      }
-    }
-
-    .fingerprint-indicator {
       display: flex;
       align-items: center;
-      width:  100%;
-      height: 100%;
-      padding: 0 8px;
-      text-align: right;
-      color: $color-dark-gray;
-
-      &:after {
-        flex: 1;
-        font-size:   30px;
-        line-height: 30px;
-        color: $color-primary;
-      }
     }
 
-    .list {
-      margin-bottom: 10px;
-
-      @media (min-height: 640px) {
-        margin-bottom: 20px;
-      }
+    .justify-left, .justify-right, .fingerprint-indicator {
+      display: flex;
+      width: 50%;
+      align-items: center;
     }
 
-    .col {
-      padding: 0 8px;
+    .justify-left {
+      justify-content: flex-start;
+      order: 0;
     }
 
     .justify-right {
       justify-content: flex-end;
+      order: 1;
+    }
+
+    .fingerprint-indicator {
+      color: $color-dark-gray;
+
+      &:after {
+        font-size:   34px;
+        line-height: 34px;
+        padding-left: $checkbox-size;
+        color: $color-primary;
+      }
+    }
+
+    .list, .login-controls {
+      margin-bottom: 8px;
+
+      @media (min-height: 640px) {
+        margin-bottom: 12px;
+      }
     }
 
     .item-checkbox {
-      display: flex;
-      align-items: center;
       overflow: visible;
       padding: 0;
-      width: 100%;
-      height: 100%;
       border-color:     transparent;
       background-color: transparent;
 
       .checkbox {
         order: 1;
-        position: static;
+        position: relative;
+        left: auto;
+        right: auto;
+        top: auto;
+        bottom: auto;
         margin:  0;
-        padding: 0;
-        width: $checkbox-width;
-        height: $checkbox-height;
+        padding: 0 0 0 $checkbox-size;
       }
 
       .item-content {
@@ -173,9 +160,8 @@
         white-space:   initial;
         text-align: left;
         color: $color-dark-gray;
-        font-size: .75em;
-        padding-right: 1em;
-        @include flex-basis(min-content);
+        font-size: .9em;
+        width: min-content;
       }
 
       i.checkbox-icon {
@@ -183,8 +169,8 @@
 
         &,
         &:before {
-          width:  $checkbox-width;
-          height: $checkbox-height;
+          width:  $checkbox-size;
+          height: $checkbox-size;
         }
         &:before {
           margin: 0;
@@ -195,15 +181,12 @@
         &:after {
           opacity: 1;
           transform: rotate(0deg);
-          top:  2px;
-          left: 2px;
+          top:  0;
+          left: 0;
           border: none;
           line-height: normal;
           font-family: 'FontAwesome';
-          font-size: 13px;
-        }
-        .platform-ios &:after {
-          top: 1px;
+          font-size: $checkbox-size;
         }
       }
 
@@ -262,4 +245,15 @@
     }
   }
 
+  /* overrides ionic's .item font-size to fix inheritance discrepencies */
+  .item {
+    font-size: inherit;
+  }
+}
+
+/* fix for FF's lack of min-content support */
+@-moz-document url-prefix() {
+  .item-checkbox .item-content {
+    width: -moz-min-content;
+  }
 }
