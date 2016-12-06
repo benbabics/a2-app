@@ -7,8 +7,9 @@
     function wexFeatureFlag(_, globals) {
         var directive = {
             priority: 1,
+            terminal: true,
             restrict: "A",
-            link    : {pre: link}
+            link    : link
         };
 
         return directive;
