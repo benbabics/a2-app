@@ -36,7 +36,7 @@
             onEnter: function($cordovaSplashscreen, $interval, PlatformUtil) {
                 //make sure the ionic platform is ready before hiding the splash screen
                 PlatformUtil.waitForCordovaPlatform(function() {
-                        $cordovaSplashscreen.hide();
+                    $cordovaSplashscreen.hide();
                 });
             }
         });
