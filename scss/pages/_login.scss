@@ -157,7 +157,7 @@
       .item-content {
         order: 0;
         text-overflow: initial;
-        white-space:   initial;
+        white-space:   pre;
         text-align: left;
         color: $color-dark-gray;
         font-size: .9em;
@@ -246,9 +246,10 @@
     }
   }
 
-  /* overrides ionic's .item font-size to fix inheritance discrepencies */
+  /* overrides ionic's .item font-size and margin to fix inheritance discrepencies */
   .item {
     font-size: inherit;
+    margin: 0;
   }
 }
 

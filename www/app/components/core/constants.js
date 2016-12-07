@@ -120,12 +120,12 @@
                 "maxLength": 30
             },
             "rememberMe"  : {
-                "label"    : "Remember Username"
+                "label"    : "Remember<br/>Username"
             },
             "touchId": {
                 "disabled": {
-                    "labelAndroid": "Set Up Fingerprint",
-                    "labelIos": "Set Up Touch ID"
+                    "labelAndroid": "Set Up<br/>Fingerprint",
+                    "labelIos": "Set Up<br/>Touch ID"
                 },
                 "settingsPrompt": {
                     "title": "",

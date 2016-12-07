@@ -53,14 +53,14 @@
 
             <div class="row-no-padding login-controls">
                 <ion-checkbox ng-model="vm.rememberMeToggle" ng-click="vm.verifyFingerprintRemoval('rememberMe')" class="justify-left">
-                    <span ng-bind="::vm.config.rememberMe.label"></span>
+                    <span ng-bind-html="::vm.config.rememberMe.label"></span>
                 </ion-checkbox>
 
                 <ion-checkbox ng-if="vm.fingerprintAuthAvailable && !vm.fingerprintProfileAvailable"
                         ng-disabled="!vm.rememberMe"
                         ng-model="vm.setupFingerprintAuth"
                         class="justify-right">
-                    <span ng-bind="::vm.getFingerprintDisabledLabel()"></span>
+                    <span ng-bind-html="::vm.getFingerprintDisabledLabel()"></span>
                 </ion-checkbox>
                 <div class="fingerprint-indicator icon-fingerprint justify-right"
                         ng-if="vm.fingerprintProfileAvailable"
