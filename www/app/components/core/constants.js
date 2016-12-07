@@ -643,7 +643,7 @@
                 "content": "Use of the App is governed by our SmartHub Application Terms of Use (the <b>\"Terms of Use\"</b>) for the App. <b>BY INSTALLING, USING OR OTHERWISE ACCESSING THE APP FROM ANY DEVICE, MOBILE OR OTHERWISE, YOU ARE AGREEING TO ABIDE BY THE TERMS AND CONDITIONS OF OUR TERMS OF USE AND THIS PRIVACY NOTICE. IF YOU DO NOT AGREE TO THESE TERMS AND CONDITIONS, DO NOT DOWNLOAD AND/OR ACCESS OUR APP.</b>"
             },
             "sectionThree": {
-                "content": "Here are some to help you navigate our Privacy Notice:",
+                "content": "Here are some links to help you navigate our Privacy Notice:",
                 "link1"  : "Information we collect",
                 "link2"  : "How information is used and shared",
                 "link3"  : "Information collection (and tracking) technologies",
