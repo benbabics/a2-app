@@ -7,10 +7,11 @@
             ANDROID_USER_CANCELED = "Cancelled",
             ANDROID_EXCEEDED_ATTEMPTS = "Too many attempts. Try again later.",
             IOS_EXCEEDED_ATTEMPTS = -1,
-            IOS_USER_CANCELED = -2,
+            IOS_USER_CANCELED = -128,
             IOS_PASSCODE_NOT_SET = -5,
             IOS_TOUCH_ID_NOT_AVAILABLE = -6,
             IOS_TOUCH_ID_NOT_ENROLLED = -7,
+            IOS_SEC_AUTH_FAILED = -25293,
             $q,
             $rootScope,
             globals,
@@ -586,10 +587,28 @@
                     });
                 });
 
-                describe("when the plugin rejects due to the user canceling", function () {
+                describe("when the plugin rejects due to the user canceling via the cancel button", function () {
 
                     beforeEach(function () {
                         this.error = {code: IOS_USER_CANCELED};
+
+                        pluginReject(this.error);
+                        $rootScope.$digest();
+                    });
+
+                    it("should reject with the expected value", function () {
+                        expect(rejectHandler).toHaveBeenCalledWith({
+                            exceededAttempts: false,
+                            userCanceled: true,
+                            data: this.error
+                        });
+                    });
+                });
+
+                describe("when the plugin rejects due to the user canceling via the home button or other means", function () {
+
+                    beforeEach(function () {
+                        this.error = {code: IOS_SEC_AUTH_FAILED};
 
                         pluginReject(this.error);
                         $rootScope.$digest();
