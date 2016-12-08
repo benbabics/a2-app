@@ -45,15 +45,9 @@
                         </div>
 
                         <div class="chart">
-                            <canvas width="110"
-                                    class="chart chart-doughnut"
-                                    chart-options="vm.chart.options"
-                                    chart-data="vm.chart.data"
-                                    chart-colours="vm.chart.colors"
-                                    chart-labels="vm.chart.labels">
-                            </canvas>
+                            <wex-doughnut-chart chart-config="vm.chart">
+                            </wex-doughnut-chart>
                         </div>
-
                         <div class="labels">
                             <div class="label" ng-repeat="chart in vm.chartDisplay.right"
                                  style="color: {{ chart.color }};">
