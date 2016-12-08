@@ -24,6 +24,8 @@
                     <span ng-click="vm.verifyFingerprintRemoval('user.username')">
                         <input ng-model="vm.maskableUsername"
                                ng-model-options="{getterSetter: true}"
+                               ng-blur="vm.usernameIsFocused = false"
+                               ng-focus="vm.usernameIsFocused = true"
                                ng-disabled="vm.fingerprintProfileAvailable"
                                name="userName"
                                type="text"
