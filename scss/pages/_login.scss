@@ -162,6 +162,8 @@
         color: $color-dark-gray;
         font-size: .9em;
         width: -webkit-min-content;
+        width: -moz-min-content;
+        width: min-content;
       }
 
       i.checkbox-icon {
@@ -250,12 +252,5 @@
   .item {
     font-size: inherit;
     margin: 0;
-  }
-}
-
-/* fix for FF's lack of min-content support */
-@-moz-document url-prefix() {
-  .item-checkbox .item-content {
-    width: -moz-min-content;
   }
 }
