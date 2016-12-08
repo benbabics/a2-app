@@ -153,11 +153,13 @@
       .item-content {
         order: 0;
         text-overflow: initial;
-        white-space:   initial;
+        white-space:   pre;
         text-align: left;
         color: $color-dark-gray;
         font-size: .9em;
         width: -webkit-min-content;
+        width: -moz-min-content;
+        width: min-content;
       }
 
       i.checkbox-icon {
@@ -246,15 +248,9 @@
     }
   }
 
-  /* overrides ionic's .item font-size to fix inheritance discrepencies */
+  /* overrides ionic's .item font-size and margin to fix inheritance discrepencies */
   .item {
     font-size: inherit;
-  }
-}
-
-/* fix for FF's lack of min-content support */
-@-moz-document url-prefix() {
-  .item-checkbox .item-content {
-    width: -moz-min-content;
+    margin: 0;
   }
 }
