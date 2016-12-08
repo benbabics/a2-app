@@ -24,8 +24,6 @@
                     <span ng-click="vm.verifyFingerprintRemoval('user.username')">
                         <input ng-model="vm.maskableUsername"
                                ng-model-options="{getterSetter: true}"
-                               ng-blur="vm.usernameIsFocused = false"
-                               ng-focus="vm.usernameIsFocused = true"
                                ng-disabled="vm.fingerprintProfileAvailable"
                                name="userName"
                                type="text"
@@ -34,20 +32,18 @@
                                placeholder="{{ ::vm.config.userName.label }}"
                                wex-max-length="{{ ::vm.config.userName.maxLength }}">
                     </span>
-                    <i class="ion-close-circled" ng-show="vm.usernameIsFocused" ng-click="vm.onClearInput('userName')"></i>
+                    <i class="ion-close-circled" ng-hide="!vm.user.username" ng-click="vm.onClearInput('userName')"></i>
                 </div>
 
                 <div class="item item-input item-stacked-label">
                     <input ng-model="vm.user.password"
-                           ng-blur="vm.passwordIsFocused = false"
-                           ng-focus="vm.passwordIsFocused = true"
                            name="password"
                            type="password"
                            required
                            autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                            placeholder="{{ ::vm.config.password.label }}"
                            wex-max-length="{{ ::vm.config.password.maxLength }}">
-                    <i class="ion-close-circled" ng-show="vm.passwordIsFocused" ng-click="vm.onClearInput('password')"></i>
+                    <i class="ion-close-circled" ng-hide="!vm.user.password" ng-click="vm.onClearInput('password')"></i>
                 </div>
             </div>
 
