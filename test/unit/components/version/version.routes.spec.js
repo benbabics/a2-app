@@ -123,22 +123,6 @@
                         });
                 });
 
-                it("should NOT call this.$cordovaSplashscreen.hide", function () {
-                    expect(this.$cordovaSplashscreen.hide).not.toHaveBeenCalled();
-                });
-
-                describe("after 2000ms have passed", function () {
-
-                    beforeEach(function () {
-                        $interval.flush(2000);
-                        $rootScope.$digest();
-                    });
-
-                    it("should call this.$cordovaSplashscreen.hide", function () {
-                        expect(this.$cordovaSplashscreen.hide).toHaveBeenCalledWith();
-                    });
-                });
-
             });
         });
     });
