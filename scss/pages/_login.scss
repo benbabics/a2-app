@@ -238,6 +238,10 @@
       .button-primary {
         color:            $color-white;
         background-color: $color-primary;
+
+        &[disabled] {
+          opacity: .7;
+        }
       }
     }
 
