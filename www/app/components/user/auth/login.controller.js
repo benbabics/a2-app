@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $cordovaStatusbar, $ionicHistory, $localStorage, $q,
-                             $rootScope, $scope, $state, $stateParams, globals, sessionCredentials, AnalyticsUtil,
+                             $rootScope, $scope, $state, $stateParams, $window, globals, sessionCredentials, AnalyticsUtil,
                              Fingerprint, FingerprintProfileUtil, FlowUtil, LoadingIndicator, LoginManager, Logger,
                              Network, PlatformUtil, UserAuthorizationManager, wexTruncateStringFilter) {
 
@@ -71,8 +71,9 @@
         }
 
         function beforeEnter() {
-            // toggle StatusBar as overlay
-            toggleStatusBarOverlaysWebView( true );
+            // toggle StatusBar as overlay, make fullscreen
+            $window.ionic.Platform.fullScreen(true, true);
+            toggleStatusBarOverlaysWebView(true);
 
             clearErrorMessage();
             toggleDisableScroll( true );
@@ -140,6 +141,8 @@
             return $q.when(settingUpFingerprintAuth ? clearFingerprintProfile(clientId) : true)
                 .catch($q.resolve)
                 .then(function () {
+                    // Set fullscreen to false so the modal displays correctly.
+                    $window.ionic.Platform.fullScreen(false, true);
                     return UserAuthorizationManager.verify({
                         clientId: clientId,
                         clientSecret: clientSecret,
@@ -191,6 +194,9 @@
                         });
                 })
                 .catch(function (loginError) {
+                    // Set fullscreen back to true for any error banners that may display.
+                    $window.ionic.Platform.fullScreen(true, true);
+
                     var IGNORED_USER_AUTH_ERRORS = [
                             USER_AUTHORIZATION_ERRORS.USER_CANCELED,
                             USER_AUTHORIZATION_ERRORS.EXCEEDED_ATTEMPTS

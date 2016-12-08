@@ -211,6 +211,12 @@ $badge-color: #e51937;
 /**------------------------------------------------------
  Side Menu
  ------------------------------------------------------**/
+.platform-ios {
+    .menu {
+        margin-top: $ios-statusbar-height;
+    }
+}
+
 .menu-view {
     $tap-state-text-color: #8c8c8c;
     background-color: $charcoal-light;
