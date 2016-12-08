@@ -28,6 +28,10 @@ wex-notification-bar {
     line-height: normal;
     overflow: hidden;
 
+    .platform-ios & {
+      top: $ios-statusbar-height;
+    }
+
     .icon-container {
       margin-right: 8px;
     }
