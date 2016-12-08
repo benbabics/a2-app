@@ -99,7 +99,7 @@
     .chart-wrapper {
       display: flex;
       width: 100%;
-      flex-direction: column;
+      flex-direction: row;
 
       .labels,
       .chart {
@@ -107,7 +107,7 @@
       }
       .labels {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: center;
         text-align: left;
 
@@ -154,52 +154,38 @@
         }
 
         &:first-of-type {
-          order: 2;
+          order: 1;
+          text-align: right;
+
+          .label:before {
+            left:  auto;
+            right: 10px;
+          }
         }
 
         &:last-of-type {
           order: 3;
         }
+
+        &:first-of-type,
+        &:last-of-type {
+          padding: 15px 0;
+        }
+
+        &:first-of-type .label {
+          padding-right: 25px;
+          padding-left: 0;
+        }
+
+        &:last-of-type .label {
+          padding-left: 25px;
+          padding-right: 0;
+        }
+
       }
       .chart {
-        order: 1;
+        order: 2;
         text-align: center;
-      }
-
-      @media (min-width: 350px) {
-        flex-direction: row;
-
-        .labels {
-          flex-direction: column;
-
-          &:first-of-type {
-            order: 1;
-            text-align: right;
-
-            .label:before {
-              left:  auto;
-              right: 10px;
-            }
-          }
-
-          &:first-of-type,
-          &:last-of-type {
-            padding: 15px 0;
-          }
-
-          &:first-of-type .label {
-            padding-right: 25px;
-            padding-left: 0;
-          }
-
-          &:last-of-type .label {
-            padding-left: 25px;
-            padding-right: 0;
-          }
-        }
-        .chart {
-          order: 2;
-        }
       }
     }
   }
