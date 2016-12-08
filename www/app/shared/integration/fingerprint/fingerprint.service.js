@@ -14,11 +14,11 @@
             ANDROID_USER_CANCELED = "Cancelled",
             ANDROID_EXCEEDED_ATTEMPTS = "Too many attempts. Try again later.",
             IOS_EXCEEDED_ATTEMPTS = -1,
-            IOS_USER_CANCELED = -2,
+            IOS_USER_CANCELED = -128,
             IOS_PASSCODE_NOT_SET = -5,
             IOS_TOUCH_ID_NOT_AVAILABLE = -6,
             IOS_TOUCH_ID_NOT_ENROLLED = -7,
-            IOS_GENERIC_ERROR = -128, // Returned by Touch ID plugin when the user cancels the fingerprint prompt.
+            IOS_SEC_AUTH_FAILED = -25293,
             PLATFORM_ANDROID = "android",
             PLATFORM_IOS = "ios",
             platform,
@@ -131,7 +131,7 @@
                     }
                     else if (platform === PLATFORM_IOS) {
                         errorResult.exceededAttempts = (error.code === IOS_EXCEEDED_ATTEMPTS);
-                        errorResult.userCanceled = (error.code === IOS_USER_CANCELED || error.code === IOS_GENERIC_ERROR);
+                        errorResult.userCanceled = (error.code === IOS_USER_CANCELED || error.code === IOS_SEC_AUTH_FAILED);
                     }
 
                     return $q.reject(errorResult);
