@@ -34,7 +34,7 @@
             scope.inputController = ctrl;
             scope.inputElement = elem;
 
-            elem.on("change keydown keyup", _.partial(onFieldTextChange, scope));
+            elem.on("change keydown keyup", () => onFieldTextChange(scope));
         }
     }
 

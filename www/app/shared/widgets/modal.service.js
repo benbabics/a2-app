@@ -29,9 +29,7 @@
          * Closes all open modals registered with this service.
          */
         function closeAll() {
-            _.forEach(modals, function (modal) {
-                modal.hide();
-            });
+            _.forEach(modals, (modal) => modal.hide());
         }
 
         function createByType(type, options) {
@@ -88,7 +86,7 @@
 
             return function () {
                 //remove the modal from the array and then remove from the DOM
-                return remove().then(_.partial(_.remove, modals, modal));
+                return remove().then(() => _.remove(modals, modal));
             };
         }
 

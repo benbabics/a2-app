@@ -15,8 +15,6 @@
         }
 
         CardReissueModel.prototype.set = function (cardReissueResource) {
-            var self = this;
-
             angular.extend(this, cardReissueResource);
 
             this.account = new AccountModel();
@@ -35,11 +33,11 @@
             this.selectedShippingMethod.set(cardReissueResource.selectedShippingMethod);
 
             this.shippingMethods = [];
-            _.forEach(cardReissueResource.shippingMethods, function(shippingMethodResource) {
+            _.forEach(cardReissueResource.shippingMethods, (shippingMethodResource) => {
                 var shippingMethod = new ShippingMethodModel();
                 shippingMethod.set(shippingMethodResource);
 
-                self.shippingMethods.push(shippingMethod);
+                this.shippingMethods.push(shippingMethod);
             });
         };
 

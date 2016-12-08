@@ -40,9 +40,7 @@
 
                     resolveAddPaymentError();
                 })
-                .finally(function () {
-                    LoadingIndicator.complete();
-                });
+                .finally(LoadingIndicator.complete);
 
         }
 
@@ -106,9 +104,7 @@
 
                     PaymentMaintenanceUtil.showPaymentError(globals.PAYMENT_MAINTENANCE.WARNINGS.DEFAULT);
                 })
-                .finally(function () {
-                    LoadingIndicator.complete();
-                });
+                .finally(() => LoadingIndicator.complete());
 
         }
 

@@ -25,17 +25,15 @@
 
         function determineVersionStatus() {
 
-            var self = this;
-
-            var fetchVersionStatus = function(versionNumber) {
+            var fetchVersionStatus = (versionNumber) => {
                 var clientId = globals.AUTH_API.CLIENT_CREDENTIALS.CLIENT_ID,
                     platform = PlatformUtil.getPlatform();
 
-                return self.fetchVersionStatus(clientId, platform, versionNumber);
+                return this.fetchVersionStatus(clientId, platform, versionNumber);
             };
 
             return PlatformUtil.waitForCordovaPlatform()
-                .then(function() {
+                .then(() => {
                     if (!PlatformUtil.platformSupportsAppVersion()) {
                         Logger.warn("Platform does not support application versioning");
 
@@ -45,7 +43,7 @@
 
                     return $cordovaAppVersion.getVersionNumber().then(fetchVersionStatus);
                 })
-                .catch(function(failureResponse) {
+                .catch((failureResponse) => {
                     // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
 
                     var error = "Determining Version Status failed: " + LoggerUtil.getErrorMessage(failureResponse);

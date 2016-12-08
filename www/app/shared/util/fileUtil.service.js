@@ -27,33 +27,26 @@
         //////////////////////
 
         function appendFile(file, data, parentDirectory) {
-            return PlatformUtil.waitForCordovaPlatform(
-                _.partial($cordovaFile.writeExistingFile, makeValidDirectory(parentDirectory), file, data)
-            ).catch(handleFileError);
+            return PlatformUtil.waitForCordovaPlatform(() => $cordovaFile.writeExistingFile(makeValidDirectory(parentDirectory), file, data))
+                .catch(handleFileError);
         }
 
         function checkDirectoryExists(directory, parentDirectory) {
-            return PlatformUtil.waitForCordovaPlatform(
-                _.partial($cordovaFile.checkDir, makeValidDirectory(parentDirectory), directory)
-            );
+            return PlatformUtil.waitForCordovaPlatform(() => $cordovaFile.checkDir(makeValidDirectory(parentDirectory), directory));
         }
 
         function checkFileExists(file, parentDirectory) {
-            return PlatformUtil.waitForCordovaPlatform(
-                _.partial($cordovaFile.checkFile, makeValidDirectory(parentDirectory), file)
-            );
+            return PlatformUtil.waitForCordovaPlatform(() => $cordovaFile.checkFile(makeValidDirectory(parentDirectory), file));
         }
 
         function createDirectory(directory, replaceIfExists, parentDirectory) {
-            return PlatformUtil.waitForCordovaPlatform(
-                _.partial($cordovaFile.createDir, makeValidDirectory(parentDirectory), directory, replaceIfExists)
-            ).catch(handleFileError);
+            return PlatformUtil.waitForCordovaPlatform(() => $cordovaFile.createDir(makeValidDirectory(parentDirectory), directory, replaceIfExists))
+                .catch(handleFileError);
         }
 
         function createFile(file, replaceIfExists, parentDirectory) {
-            return PlatformUtil.waitForCordovaPlatform(
-                _.partial($cordovaFile.createFile, makeValidDirectory(parentDirectory), file, replaceIfExists)
-            ).catch(handleFileError);
+            return PlatformUtil.waitForCordovaPlatform(() => $cordovaFile.createFile(makeValidDirectory(parentDirectory), file, replaceIfExists))
+                .catch(handleFileError);
         }
 
         function getDefaultDirectory() {
@@ -85,15 +78,13 @@
 
             var operation = isBinary ? $cordovaFile.readAsBinaryString : $cordovaFile.readAsText;
 
-            return PlatformUtil.waitForCordovaPlatform(
-                _.partial(operation, makeValidDirectory(parentDirectory), file)
-            ).catch(handleFileError);
+            return PlatformUtil.waitForCordovaPlatform(() => operation(makeValidDirectory(parentDirectory), file))
+                .catch(handleFileError);
         }
 
         function readFileAsDataUrl(file, parentDirectory) {
-            return PlatformUtil.waitForCordovaPlatform(
-                _.partial($cordovaFile.readAsDataURL, makeValidDirectory(parentDirectory), file)
-            ).catch(handleFileError);
+            return PlatformUtil.waitForCordovaPlatform(() => $cordovaFile.readAsDataURL(makeValidDirectory(parentDirectory), file))
+                .catch(handleFileError);
         }
 
         function removeDirectory(directory, isRecursive, parentDirectory) {
@@ -101,21 +92,18 @@
 
             var operation = isRecursive ? $cordovaFile.removeRecursively : $cordovaFile.removeDir;
 
-            return PlatformUtil.waitForCordovaPlatform(
-                _.partial(operation, makeValidDirectory(parentDirectory), directory)
-            ).catch(handleFileError);
+            return PlatformUtil.waitForCordovaPlatform(() => operation(makeValidDirectory(parentDirectory), directory))
+                .catch(handleFileError);
         }
 
         function removeFile(file, parentDirectory) {
-            return PlatformUtil.waitForCordovaPlatform(
-                _.partial($cordovaFile.removeFile, makeValidDirectory(parentDirectory), file)
-            ).catch(handleFileError);
+            return PlatformUtil.waitForCordovaPlatform(() => $cordovaFile.removeFile(makeValidDirectory(parentDirectory), file))
+                .catch(handleFileError);
         }
 
         function writeFile(file, data, replaceIfExists, parentDirectory) {
-            return PlatformUtil.waitForCordovaPlatform(
-                _.partial($cordovaFile.writeFile, makeValidDirectory(parentDirectory), file, data, replaceIfExists)
-            ).catch(handleFileError);
+            return PlatformUtil.waitForCordovaPlatform(() => $cordovaFile.writeFile(makeValidDirectory(parentDirectory), file, data, replaceIfExists))
+                .catch(handleFileError);
         }
     }
 

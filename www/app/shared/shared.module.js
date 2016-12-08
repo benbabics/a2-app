@@ -35,14 +35,10 @@
                  * Set up Event Listeners
                  */
                 //apply a proxy event for the cordova pause event
-                document.addEventListener("pause", function () {
-                    $rootScope.$emit("app:cordovaPause");
-                }, false);
+                document.addEventListener("pause", () => $rootScope.$emit("app:cordovaPause"), false);
 
                 //apply a proxy event for the cordova resume event
-                document.addEventListener("resume", function () {
-                    $rootScope.$emit("app:cordovaResume");
-                }, false);
+                document.addEventListener("resume", () => $rootScope.$emit("app:cordovaResume"), false);
             });
 
         });

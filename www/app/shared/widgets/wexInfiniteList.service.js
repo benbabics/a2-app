@@ -28,8 +28,7 @@
      * Privileged Methods
     **/
     function loadNextPage(collection) {
-      var self = this,
-          requestConfig  = _.clone( this.settings ),
+      var requestConfig  = _.clone( this.settings ),
           requestPromise = this.delegate.makeRequest( requestConfig ),
           greekingCollection;
 
@@ -39,33 +38,32 @@
       greekingCollection = greekResultsPre.call( this, collection ) || [];
 
       return requestPromise
-        .then(function(items) {
+        .then((items) => {
           var collectionSize, hasItems = !_.isEmpty( items );
           if ( hasItems ) {
             //add the fetched items to the collection
-            if ( !self.settings.isGreeking ) {
+            if ( !this.settings.isGreeking ) {
               Array.prototype.push.apply( collection, items );
             }
 
-            ++self.settings.currentPage;
+            ++this.settings.currentPage;
           }
 
           // if enabled, ungreek the results after loading
-          greekResultsPost.call( self, collection, greekingCollection, items );
+          greekResultsPost.call( this, collection, greekingCollection, items );
 
           collectionSize = _.size( items );
-          return checkIfIsLoadingComplete.call( self, collectionSize );
+          return checkIfIsLoadingComplete.call( this, collectionSize );
         })
-        .catch(function() {
+        .catch(() => {
           // if enabled, ungreek the results after loading
-          greekResultsPost.call( self, collection, greekingCollection, [] );
-          return self.isLoadingComplete = true;
+          greekResultsPost.call( this, collection, greekingCollection, [] );
+          return this.isLoadingComplete = true;
         });
     }
 
     function resetCollection(options) {
-      var self = this,
-          collectionBuffer = [];
+      var collectionBuffer = [];
 
       resetProperties.call( this );
 
@@ -75,9 +73,7 @@
         this.model.collection = collectionBuffer;
       }
 
-      return this.loadNextPage( collectionBuffer ).finally(function() {
-        self.model.collection = collectionBuffer;
-      });
+      return this.loadNextPage(collectionBuffer).finally(() => this.model.collection = collectionBuffer);
     }
 
     function removeItem(item) {

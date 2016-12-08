@@ -153,9 +153,7 @@
 
             if (vm.formatters) {
                 if (_.isArray(vm.formatters)) {
-                    _.each(vm.formatters, function (filter) {
-                        addFilter(filter);
-                    });
+                    _.each(vm.formatters, (filter) => addFilter(filter));
                 }
                 else {
                     addFilter(vm.formatters);
@@ -201,7 +199,7 @@
             vm.toggleKeypad = toggleKeypad;
             vm.onKeyPress = onKeyPress;
             vm.removeEventListeners = removeEventListeners;
-            vm.closeKeypad = _.partial(vm.showKeypad, false);
+            vm.closeKeypad = () => vm.showKeypad(false);
 
             //event listeners:
             directiveElem.on("click", vm.toggleKeypad);

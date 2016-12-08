@@ -12,7 +12,7 @@
         };
 
         // on session end, reset session credentials
-        $rootScope.$on("app:logout", function() { service.reset(); });
+        $rootScope.$on("app:logout", () => service.reset());
 
         return service;
 

@@ -24,14 +24,14 @@
             var clientId = _.toLower(username);
 
             return SecureStorage.get(clientId)
-                .then(_.partial(createProfileResponse, _));
+                .then((password) => createProfileResponse(password));
         }
 
         function setProfile(username, password) {
             var clientId = _.toLower(username);
 
             return SecureStorage.set(clientId, password)
-                .then(_.partial(createProfileResponse, password));
+                .then(() => createProfileResponse(password));
         }
         //////////////////////
         //Private functions:

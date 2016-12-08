@@ -80,27 +80,17 @@
             //We need to listen to a combination of all of them to capture every possible scenario for a page being transitioned away from.
 
             if (scope) {
-                removeListeners.push(scope.$on("$ionicView.enter", function (event, stateInfo) {
-                    handler(stateInfo.stateName);
-                }));
+                removeListeners.push(scope.$on("$ionicView.enter", (event, stateInfo) => handler(stateInfo.stateName)));
 
-                removeListeners.push(scope.$on("$ionicView.afterEnter", function (event, stateInfo) {
-                    handler(stateInfo.stateName);
-                }));
+                removeListeners.push(scope.$on("$ionicView.afterEnter", (event, stateInfo) => handler(stateInfo.stateName)));
             }
 
             if (options.global) {
-                removeListeners.push($rootScope.$on("$ionicView.enter", function (event, stateInfo) {
-                    handler(stateInfo.stateName);
-                }));
+                removeListeners.push($rootScope.$on("$ionicView.enter", (event, stateInfo) => handler(stateInfo.stateName)));
 
-                removeListeners.push($rootScope.$on("$ionicView.afterEnter", function (event, stateInfo) {
-                    handler(stateInfo.stateName);
-                }));
+                removeListeners.push($rootScope.$on("$ionicView.afterEnter", (event, stateInfo) => handler(stateInfo.stateName)));
 
-                removeListeners.push($rootScope.$on("$stateChangeSuccess", function (event, toState) { // args: event, toState, toParams, fromState, fromParams
-                    handler(toState.name);
-                }));
+                removeListeners.push($rootScope.$on("$stateChangeSuccess", (event, toState) => handler(toState.name)));
             }
 
             return removeListeners;
@@ -136,27 +126,17 @@
             //We need to listen to a combination of all of them to capture every possible scenario for a page being transitioned away from.
 
             if (scope) {
-                removeListeners.push(scope.$on("$ionicView.leave", function (event, stateInfo) {
-                    handler(stateInfo.stateName);
-                }));
+                removeListeners.push(scope.$on("$ionicView.leave", (event, stateInfo) => handler(stateInfo.stateName)));
 
-                removeListeners.push(scope.$on("$ionicView.beforeLeave", function (event, stateInfo) {
-                    handler(stateInfo.stateName);
-                }));
+                removeListeners.push(scope.$on("$ionicView.beforeLeave", (event, stateInfo) => handler(stateInfo.stateName)));
             }
 
             if (options.global) {
-                removeListeners.push($rootScope.$on("$ionicView.leave", function (event, stateInfo) {
-                    handler(stateInfo.stateName);
-                }));
+                removeListeners.push($rootScope.$on("$ionicView.leave", (event, stateInfo) => handler(stateInfo.stateName)));
 
-                removeListeners.push($rootScope.$on("$ionicView.beforeLeave", function (event, stateInfo) {
-                    handler(stateInfo.stateName);
-                }));
+                removeListeners.push($rootScope.$on("$ionicView.beforeLeave", (event, stateInfo) => handler(stateInfo.stateName)));
 
-                removeListeners.push($rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState) { // args: event, toState, toParams, fromState, fromParams
-                    handler(fromState.name);
-                }));
+                removeListeners.push($rootScope.$on("$stateChangeSuccess", (event, toState, toParams, fromState) => handler(fromState.name)));
             }
 
             return removeListeners;

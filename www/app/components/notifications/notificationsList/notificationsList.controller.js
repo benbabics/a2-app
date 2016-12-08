@@ -74,9 +74,8 @@
         }
 
         function handleRemoveItem(notification) {
-            return NotificationItemsManager.deleteNotification(notification).then(function () {
-                $ionicListDelegate.closeOptionButtons();
-            });
+            return NotificationItemsManager.deleteNotification(notification)
+                .then(() => $ionicListDelegate.closeOptionButtons());
         }
 
         /**
