@@ -23,7 +23,7 @@
                            reload-distance="::vm.config.reloadDistance"
                            loading-complete="infiniteScrollService.isLoadingComplete">
 
-            <ion-item collection-repeat="card in vm.cards.collection" class="item item-icon-right">
+            <wex-item collection-repeat="card in vm.cards.collection" class="item item-icon-right">
                 <a class="item-content" ui-sref="card.detail({ cardId: card.cardId })">
                   <div ng-show="card.isGreekLoading">
                     <wex-ui-greeking item-height="15px">
@@ -44,7 +44,7 @@
                     <i class="icon fa fa-chevron-right"></i>
                   </div>
                 </a>
-            </ion-item>
+            </wex-item>
         </wex-infinite-list>
 
         <div ng-show="infiniteScrollService.isLoadingComplete && vm.cards.collection.length == 0" class="no-cards">

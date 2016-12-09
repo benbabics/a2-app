@@ -3,8 +3,8 @@
       {{ transaction.displayDate | wexDefaultDateFormat }}
     </ion-item>
 
-    <ion-item class="item item-icon-right widget-transaction-result-as-date" ng-class="{ 'item-last': $last }">
-        <a class="item-content">
+    <wex-item class="item item-icon-right widget-transaction-result-as-date" ng-class="{ 'item-last': $last }">
+        <a class="item-content" ui-sref="transaction.postedDetail({ transactionId: transaction.transactionId, isGreeking: transaction.isGreekLoading })">
             <div ng-show="transaction.isGreekLoading">
                 <wex-ui-greeking item-height="88px">
                    <rect height="88" width="45" y="0" x="250"></rect>
@@ -34,5 +34,5 @@
 
             <i class="icon fa fa-chevron-right" ng-show="displayChevron"></i>
         </a>
-    </ion-item>
+    </wex-item>
 </div>

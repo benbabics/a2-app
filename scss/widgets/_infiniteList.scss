@@ -68,10 +68,15 @@
       padding: 16px;
     }
 
-    .item-content {
-      &.activated {
-        @extend %list-item-activated;
-      }
+    //override Ionic's buggy activated with our own
+    //see https://github.com/driftyco/ionic/issues/814
+    .activated {
+      background-color: #fff;
+      color: #000;
+    }
+
+    a.wex-item-activated {
+      @extend %list-item-activated;
     }
 
     &.item-icon-left,
@@ -101,7 +106,7 @@
         }
       }
 
-      .activated .icon {
+      .wex-item-activated .icon {
         color: #fff;
       }
     }
