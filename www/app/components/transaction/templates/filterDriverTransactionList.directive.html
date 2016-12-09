@@ -6,23 +6,18 @@
                        reload-distance="::config.reloadDistance"
                        loading-complete="infiniteScrollService.isLoadingComplete">
 
-        <div class="item item-icon-right"
-             collection-repeat="driver in drivers.collection"
-             ng-class="{ 'item-last': $last }"
-             ui-sref="transaction.filterBy({ filterBy: 'driver', filterValue: driver.promptId, isGreeking: driver.isGreekLoading })">
+        <wex-item class="item item-icon-right" collection-repeat="driver in drivers.collection" ng-class="{ 'item-last': $last }">
+            <a class="item-content" ui-sref="transaction.filterBy({ filterBy: 'driver', filterValue: driver.promptId, isGreeking: driver.isGreekLoading })">
+                <div ng-show="driver.isGreekLoading">
+                    <wex-ui-greeking/>
+                </div>
 
-                <a class="item-content">
-                    <div ng-show="driver.isGreekLoading">
-                        <wex-ui-greeking />
-                    </div>
-
-                    <div ng-hide="driver.isGreekLoading">
-                        <span class="greek-block">{{ driver.lastName }}, {{ driver.firstName }}</span>
-                        <i class="icon fa fa-chevron-right"></i>
-                    </div>
-                </a>
-
-        </div>
+                <div ng-hide="driver.isGreekLoading">
+                    <span class="greek-block">{{ driver.lastName }}, {{ driver.firstName }}</span>
+                    <i class="icon fa fa-chevron-right"></i>
+                </div>
+            </a>
+        </wex-item>
     </wex-infinite-list>
 
     <div ng-show="infiniteScrollService.isLoadingComplete && infiniteScrollService.model.collection.length <= 0" class="no-transactions">{{::config.emptyList}}</div>
