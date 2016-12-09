@@ -1,0 +1,30 @@
+<ion-modal-view view-title="{{::CONFIG.title}}" hide-nav-bar="true" class="version-update-view">
+    <ion-content scroll="false">
+        <div class="title-bar"></div>
+        <br>
+        <div class="padding align_center">
+            <h3 class="title">{{::CONFIG.title}}</h3>
+
+            <div class="padding">
+                <span>{{::CONFIG.instructionalText1}}</span>
+                <br>
+                <span>{{::CONFIG.instructionalText2}}</span>
+            </div>
+            <br>
+            <div class="padding align_center">
+                <a id="update"
+                   class="button button-block button-link button-width"
+                   ng-click="update()">
+                    {{::CONFIG.update.label}}
+                </a>
+                <button id="cancel"
+                        class="button button-block button-width"
+                        ng-if="CONFIG.later.visible"
+                        ng-click="skipUpdate()">
+                    {{::CONFIG.later.label}}
+                </button>
+            </div>
+
+        </div>
+    </ion-content>
+</ion-modal-view>
