@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    var _$q;
+
     /**
     * Constructor
     **/
@@ -10,6 +12,8 @@
       options = options || {};
       this.model = {collection: []};
       delete options.cacheKey;
+
+      this.isPending = false;
 
       this.settings = angular.extend({
         pageSize:    25,
@@ -29,10 +33,17 @@
     **/
     function loadNextPage(collection) {
       var self = this,
-          requestConfig  = _.clone( this.settings ),
-          requestPromise = this.delegate.makeRequest( requestConfig ),
+          requestConfig = _.clone( this.settings ),
+          requestPromise,
           greekingCollection;
 
+      // cancel request, if greeking and currently pending
+      if ( this.settings.isGreeking && this.isPending ) {
+          return _$q.reject(); // not a fan of this approach ಠ_ಠ
+      }
+
+      this.isPending = true;
+      requestPromise = this.delegate.makeRequest( requestConfig ),
       collection = collection || this.model.collection;
 
       // if enabled, greek the results while loading
@@ -60,6 +71,9 @@
           // if enabled, ungreek the results after loading
           greekResultsPost.call( self, collection, greekingCollection, [] );
           return self.isLoadingComplete = true;
+        })
+        .finally(function() {
+            self.isPending = false;
         });
     }
 
@@ -164,5 +178,8 @@
 
     angular
       .module("app.shared.widgets")
-      .factory("wexInfiniteListService", function() { return WexInfiniteListService; });
+      .factory("wexInfiniteListService", function($q) {
+          _$q = $q;
+          return WexInfiniteListService;
+      });
 })();
