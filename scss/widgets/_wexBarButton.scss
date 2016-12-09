@@ -1,8 +1,10 @@
 .wex-bar-button-group {
-  padding: 0;
-  height: 85px;
+  $bar-button-height: 85px;
 
-  > .bar-header {
+  padding: 0;
+  height: $bar-button-height;
+
+  > .button-bar {
    height: auto;
    padding: 15px 15px 20px;
    background: transparent;
@@ -10,6 +12,9 @@
 
   + .has-subheader {
    top: 130px;
+    @at-root .platform-ios & {
+      top: $bar-button-height + $bar-height + $ios-statusbar-height !important;
+    }
   }
 }
 
