@@ -141,8 +141,11 @@
             return $q.when(settingUpFingerprintAuth ? clearFingerprintProfile(clientId) : true)
                 .catch($q.resolve)
                 .then(function () {
-                    // Set fullscreen to false so the modal displays correctly.
-                    $window.ionic.Platform.fullScreen(false, true);
+                    // Set fullscreen to false when the modal will display, so that the styling is correct.
+                    // Leave fullscreen true when the modal will NOT display, or the changed styling could show through the system's Touch ID dialog.
+                    if (settingUpFingerprintAuth) {
+                        $window.ionic.Platform.fullScreen(false, true);
+                    }
                     return UserAuthorizationManager.verify({
                         clientId: clientId,
                         clientSecret: clientSecret,
@@ -166,7 +169,8 @@
                     // Do not allow backing up to the login page.
                     $ionicHistory.nextViewOptions({disableBack: true});
 
-                    // toggle StatusBar as fixed
+                    // toggle StatusBar as fixed, set fullscreen to false
+                    $window.ionic.Platform.fullScreen(false, true);
                     toggleStatusBarOverlaysWebView(false);
 
                     return FingerprintProfileUtil.getProfile(clientId)
