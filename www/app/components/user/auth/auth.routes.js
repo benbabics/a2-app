@@ -19,9 +19,14 @@
                 }
             },
             // jshint maxparams:5
-            onEnter: function($cordovaSplashscreen, $interval, globals, AnalyticsUtil, LoginManager) {
+            onEnter: function($cordovaSplashscreen, $interval, globals, AnalyticsUtil, LoginManager, PlatformUtil) {
                 //log out the user
                 LoginManager.logOut();
+
+                //make sure the ionic platform is ready before hiding the splash screen
+                PlatformUtil.waitForCordovaPlatform(function() {
+                    $cordovaSplashscreen.hide();
+                });
 
                 AnalyticsUtil.trackView(globals.USER_LOGIN.CONFIG.ANALYTICS.pageName);
             }

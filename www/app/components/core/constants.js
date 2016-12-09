@@ -23,7 +23,7 @@
             return _.merge({}, sharedGlobals, appGlobals, platformGlobals);
         };
 
-    appGlobals.DEFAULT_ROUTE = "/version/status";
+    appGlobals.DEFAULT_ROUTE = "/user/auth/login";
 
 
     // Login state by nature is unsecure and does not need to be listed here
@@ -50,36 +50,6 @@
         "NAME"      : "brandAssetsCollection",
         "OPTIONS": {
             "unique": "brandAssetId"
-        }
-    };
-
-    appGlobals.VERSION_STATUS = {
-        "APP_STORES": {
-            android: "com.wex.fleetsmarthub",
-            ios    : "id1051414868?ls=1&mt=8"
-        },
-        "CONFIG"    : {
-            "title" : "Update Available",
-            "update": {
-                label: "Update"
-            },
-            "later" : {
-                label: "Not Now"
-            }
-        },
-        "FAIL"      : {
-            "instructionalText1": "A new version of Fleet SmartHub is available.",
-            "instructionalText2": "Please Update to continue using Fleet SmartHub.",
-            "later"             : {
-                visible: false
-            }
-        },
-        "WARN"      : {
-            "instructionalText1": "A new version of Fleet SmartHub is available.",
-            "instructionalText2": "Please Update.",
-            "later"             : {
-                visible: true
-            }
         }
     };
 
@@ -980,6 +950,43 @@
                 }
             },
             "animation"  : "slide-in-down"
+        },
+        VERSION_CHECK: {
+            "templateUrl": "app/components/user/auth/templates/versionCheckModal.html",
+            "options": {
+                "backdropClickToClose": false,
+                "hardwareBackButtonClose" : false,
+                "scopeVars": {
+                    "APP_STORES": {
+                        android: "com.wex.fleetsmarthub",
+                        ios: "id1051414868?ls=1&mt=8"
+                    },
+                    "CONFIG": {
+                        "title": "Update Available",
+                        "update": {
+                            label: "Update"
+                        },
+                        "later": {
+                            label: "Not Now"
+                        }
+                    },
+                    "FAIL": {
+                        "instructionalText1": "A new version of Fleet SmartHub is available.",
+                        "instructionalText2": "Please Update to continue using Fleet SmartHub.",
+                        "later": {
+                            visible: false
+                        }
+                    },
+                    "WARN": {
+                        "instructionalText1": "A new version of Fleet SmartHub is available.",
+                        "instructionalText2": "Please Update.",
+                        "later": {
+                            visible: true
+                        }
+                    }
+                }
+            },
+            "animation": "slide-in-down"
         }
     };
 
