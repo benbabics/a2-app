@@ -260,23 +260,17 @@
         }
 
         // Clears the contents of and refocuses on an input.
-        function onClearInput(inputName) {
-            var input = document.querySelector("input[name=" + inputName + "]");
+        function onClearInput($event) {
+            var input = $event.target;
 
-            if (_.isNil(input)) {
-                var error = "Unknown input name: '" + inputName + "'";
-                Logger.error(error);
-                throw new Error(error);
+            if (!input.disabled && input.offsetWidth - $event.layerX < 20) {
+                if (input.name === "userName") {
+                    vm.user.username = "";
+                }
+                else if (input.name === "password") {
+                    vm.user.password = "";
+                }
             }
-
-            if (input.name === "userName") {
-                vm.user.username = "";
-            }
-            else if (input.name === "password") {
-                vm.user.password = "";
-            }
-
-            setTimeout(function() { input.focus(); });
         }
 
         function getFingerprintDisabledLabel() {

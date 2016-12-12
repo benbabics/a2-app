@@ -20,21 +20,21 @@
 
         <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.logInUser(vm.setupFingerprintAuth)">
             <div class="list">
-                <div class="item item-input item-stacked-label">
-                    <span ng-click="vm.verifyFingerprintRemoval('user.username')">
-                        <input ng-model="vm.maskableUsername"
-                               ng-model-options="{getterSetter: true}"
-                               ng-blur="vm.usernameIsFocused = false"
-                               ng-focus="vm.usernameIsFocused = true"
-                               ng-disabled="vm.fingerprintProfileAvailable"
-                               name="userName"
-                               type="text"
-                               required
-                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                               placeholder="{{ ::vm.config.userName.label }}"
-                               wex-max-length="{{ ::vm.config.userName.maxLength }}">
-                    </span>
-                    <i class="ion-close-circled" ng-hide="!vm.user.username" ng-click="vm.onClearInput('userName')"></i>
+                <div class="item item-input item-stacked-label"
+                     ng-click="vm.verifyFingerprintRemoval('user.username')">
+                    <input ng-model="vm.maskableUsername"
+                           ng-model-options="{getterSetter: true}"
+                           ng-blur="vm.usernameIsFocused = false"
+                           ng-focus="vm.usernameIsFocused = true"
+                           ng-disabled="vm.fingerprintProfileAvailable"
+                           name="userName"
+                           type="text"
+                           required
+                           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                           placeholder="{{ ::vm.config.userName.label }}"
+                           ng-class="{ 'xclear' : vm.user.username }"
+                           ng-click="vm.onClearInput($event)"
+                           wex-max-length="{{ ::vm.config.userName.maxLength }}">
                 </div>
 
                 <div class="item item-input item-stacked-label">
@@ -44,8 +44,9 @@
                            required
                            autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                            placeholder="{{ ::vm.config.password.label }}"
+                           ng-click="vm.onClearInput($event)"
+                           ng-class="{ 'xclear' : vm.user.password }"
                            wex-max-length="{{ ::vm.config.password.maxLength }}">
-                    <i class="ion-close-circled" ng-hide="!vm.user.password" ng-click="vm.onClearInput('password')"></i>
                 </div>
             </div>
 
