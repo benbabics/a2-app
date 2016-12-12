@@ -30,7 +30,7 @@
         }
 
         function navigate(target) {
-            Navigation[target]();
+            return Navigation[target]();
         }
 
         function currentStateHasRoot(rootState) {
