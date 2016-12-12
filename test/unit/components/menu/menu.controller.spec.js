@@ -164,7 +164,7 @@
         describe("has a goToCards function that", function () {
 
             beforeEach(function () {
-                ctrl.goToCards();
+                ctrl.navigate("goToCards");
             });
 
             it("should navigate to the card list page", function () {
@@ -176,7 +176,7 @@
         describe("has a goToContactUs function that", function () {
 
             beforeEach(function () {
-                ctrl.goToContactUs();
+                ctrl.navigate("goToContactUs");
             });
 
             it("should navigate to the contact us page", function () {
@@ -188,7 +188,7 @@
         describe("has a goToHome function that", function () {
 
             beforeEach(function () {
-                ctrl.goToHome();
+                ctrl.navigate("goToHome");
             });
 
             it("should navigate to the home page", function () {
@@ -200,7 +200,7 @@
         describe("has a goToLogOut function that", function () {
 
             beforeEach(function () {
-                ctrl.goToLogOut();
+                ctrl.navigate("goToLogOut");
             });
 
             it("should navigate to the login page", function () {
@@ -212,7 +212,7 @@
         describe("has a goToMakePayment function that", function () {
 
             beforeEach(function () {
-                ctrl.goToMakePayment();
+                ctrl.navigate("goToMakePayment");
             });
 
             it("should navigate to the make payment page", function () {
@@ -224,7 +224,7 @@
         describe("has a goToPaymentActivity function that", function () {
 
             beforeEach(function () {
-                ctrl.goToPaymentActivity();
+                ctrl.navigate("goToPaymentActivity");
             });
 
             it("should navigate to the payment list page", function () {
@@ -236,7 +236,7 @@
         describe("has a goToPrivacyPolicy function that", function () {
 
             beforeEach(function () {
-                ctrl.goToPrivacyPolicy();
+                ctrl.navigate("goToPrivacyPolicy");
             });
 
             it("should navigate to the privacy policy page", function () {
@@ -248,7 +248,7 @@
         describe("has a goToSettings function that", function () {
 
             beforeEach(function () {
-                ctrl.goToSettings();
+                ctrl.navigate("goToSettings");
             });
 
             it("should navigate to the settings page", function () {
@@ -260,7 +260,7 @@
         describe("has a goToTermsOfUse function that", function () {
 
             beforeEach(function () {
-                ctrl.goToTermsOfUse();
+                ctrl.navigate("goToTermsOfUse");
             });
 
             it("should navigate to the terms of use page", function () {
@@ -272,7 +272,7 @@
         describe("has a goToTransactionActivity function that", function () {
 
             beforeEach(function () {
-                ctrl.goToTransactionActivity();
+                ctrl.navigate("goToTransactionActivity");
             });
 
             it("should navigate to the transaction activity list page", function () {
