@@ -37,6 +37,7 @@
 
       // if enabled, greek the results while loading
       greekingCollection = greekResultsPre.call( this, collection ) || [];
+      this.delegate.onRequestItems( collection );
 
       return requestPromise
         .then(function(items) {
