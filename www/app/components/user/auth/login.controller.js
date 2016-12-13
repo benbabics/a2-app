@@ -7,8 +7,8 @@
     /* @ngInject */
     function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $cordovaStatusbar, $ionicHistory, $localStorage, $q,
                              $rootScope, $scope, $state, $stateParams, $window, globals, sessionCredentials, AnalyticsUtil,
-                             Fingerprint, FingerprintProfileUtil, FlowUtil, LoadingIndicator, LoginManager, Logger,
-                             Network, PlatformUtil, UserAuthorizationManager, wexTruncateStringFilter) {
+                             Fingerprint, FingerprintProfileUtil, FlowUtil, LoadingIndicator, LoginManager, Logger, Modal,
+                             Network, PlatformUtil, UserAuthorizationManager, VersionManager, wexTruncateStringFilter) {
 
         var BAD_CREDENTIALS = "BAD_CREDENTIALS",
             PASSWORD_CHANGED = "PASSWORD_CHANGED",
@@ -16,7 +16,8 @@
             USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION.TYPES,
             USER_AUTHORIZATION_ERRORS = globals.USER_AUTHORIZATION.ERRORS,
             USERNAME_KEY = globals.LOCALSTORAGE.KEYS.USERNAME,
-            vm = this;
+            vm = this,
+            versionModal;
 
         vm.config = globals.USER_LOGIN.CONFIG;
         vm.fingerprintAuthAvailable = false;
@@ -39,6 +40,12 @@
         /////////////////////
         // Controller initialization
         function activate() {
+            LoadingIndicator.begin();
+
+            VersionManager.determineVersionStatus()
+                .then(createVersionCheckModal)
+                .finally(LoadingIndicator.complete);
+
             // set event listeners
             $scope.$on("$ionicView.beforeEnter", beforeEnter);
 
@@ -418,6 +425,49 @@
                 if (model === "rememberMe") {
                     vm.rememberMe = vm.rememberMeToggle;
                 }
+            }
+        }
+
+        function createVersionCheckModal(versionStatus) {
+            var VERSION_STATUS = globals.MODAL_TYPES.VERSION_CHECK.options.scopeVars,
+                scopeVars = {};
+
+            if (versionStatus.status === globals.CONFIGURATION_API.VERSIONS.STATUS_VALUES.CAN_UPDATE) {
+                scopeVars.CONFIG = VERSION_STATUS.WARN;
+            }
+            else if (versionStatus.status === globals.CONFIGURATION_API.VERSIONS.STATUS_VALUES.MUST_UPDATE) {
+                scopeVars.CONFIG = VERSION_STATUS.FAIL;
+            }
+            else {
+                return;
+            }
+
+            scopeVars.skipUpdate = skipVersionUpdate;
+            scopeVars.update = versionUpdate;
+
+            return Modal.createByType(globals.MODAL_TYPES.VERSION_CHECK, {
+                scopeVars: scopeVars
+            })
+                .then(function (modal) {
+                    modal.show();
+                    versionModal = modal;
+                });
+        }
+
+        function skipVersionUpdate() {
+            versionModal.hide();
+        }
+
+        function versionUpdate() {
+            var VERSION_STATUS = globals.MODAL_TYPES.VERSION_CHECK.options.scopeVars,
+                platform = PlatformUtil.getPlatform().toLowerCase(),
+                url = VERSION_STATUS.APP_STORES[platform];
+
+            if (url) {
+                PlatformUtil.waitForCordovaPlatform()
+                    .then(function () {
+                        window.cordova.plugins.market.open(url);
+                    });
             }
         }
     }

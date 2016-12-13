@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    describe("A Version Module Route Config", function () {
+    xdescribe("A Version Module Route Config", function () {
 
         var $injector,
             $interval,
