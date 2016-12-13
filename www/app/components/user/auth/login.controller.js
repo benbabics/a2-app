@@ -44,11 +44,12 @@
 
             //note: Ionic adds and removes this class by default, but it adds a 400ms delay first which is unacceptable here.
             //see http://ionicframework.com/docs/api/page/keyboard/
-            var removeKeyboardShowListener = $rootScope.$on("$cordovaKeyboard:show", addKeyboardOpenClass),
-                removeCordovaPauseListener = $rootScope.$on("app:cordovaPause", handleOnCordovaPause),
+            var removeCordovaPauseListener = $rootScope.$on("app:cordovaPause", handleOnCordovaPause),
                 removeCordovaResumeListener = $rootScope.$on("app:cordovaResume", handleOnCordovaResume);
 
-            FlowUtil.onPageLeave(removeKeyboardShowListener, $scope);
+            $window.addEventListener('native.keyboardshow', addKeyboardOpenFn);
+            $window.addEventListener('native.keyboardhide', addKeyboardCloseFn);
+
             FlowUtil.onPageLeave(removeCordovaPauseListener, $scope);
             FlowUtil.onPageLeave(removeCordovaResumeListener, $scope);
             FlowUtil.onPageLeave(toggleDisableScroll, $scope);
@@ -60,8 +61,31 @@
             });
         }
 
-        function addKeyboardOpenClass() {
-            document.body.classList.add("keyboard-open");
+        function addKeyboardOpenFn(event) {
+            var formObj = document.querySelector("#login-content form");
+            var formBottom = formObj.getBoundingClientRect().bottom;
+
+            var keyboardTop = $window.innerHeight - event.keyboardHeight;
+
+            // only move the form if it's covered by the keyboard
+            if (formBottom > keyboardTop) {
+                var offset = formBottom - keyboardTop;
+                getLoginContentObj().css("margin-bottom", offset + "px");
+                getHeadingText().addClass("open");
+            }
+        }
+
+        function addKeyboardCloseFn() {
+            getLoginContentObj().css("margin-bottom", "0px");
+            getHeadingText().removeClass("open");
+        }
+
+        function getLoginContentObj() {
+            return angular.element(document.getElementById("login-content"));
+        }
+
+        function getHeadingText() {
+            return angular.element(document.getElementById("title-heading-bar"));
         }
 
         function toggleDisableScroll(shouldDisabled) {
