@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Service above the scroll
 
     /* @ngInject */
-    function FingerprintProfileUtil(_, SecureStorage) {
+    function FingerprintProfileUtil(_, globals, StorageManager) {
 
         var service = {
             clearProfile: clearProfile,
@@ -17,20 +17,23 @@
         //Public functions:
 
         function clearProfile(username) {
-            return SecureStorage.remove(_.toLower(username));
+            return StorageManager.remove(_.toLower(username), {secure: true});
         }
 
         function getProfile(username) {
             var clientId = _.toLower(username);
 
-            return SecureStorage.get(clientId)
+            return StorageManager.get(clientId, {secure: true})
                 .then(_.partial(createProfileResponse, _));
         }
 
         function setProfile(username, password) {
             var clientId = _.toLower(username);
 
-            return SecureStorage.set(clientId, password)
+            //automatically enable remember me
+            StorageManager.set(globals.LOCALSTORAGE.KEYS.USERNAME, username);
+
+            return StorageManager.set(clientId, password, {secure: true})
                 .then(_.partial(createProfileResponse, password));
         }
         //////////////////////
