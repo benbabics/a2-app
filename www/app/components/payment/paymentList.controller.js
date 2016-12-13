@@ -38,8 +38,7 @@
 
         function handleMakeRequest(requestConfig) {
             var billingAccountId = UserManager.getUser().billingCompany.accountId;
-            var request = PaymentManager.fetchPayments( billingAccountId, requestConfig.currentPage, requestConfig.pageSize );
-            return request;
+            return PaymentManager.fetchPayments( billingAccountId, requestConfig.currentPage, requestConfig.pageSize );
         }
 
         function handleOnError(errorResponse) {
