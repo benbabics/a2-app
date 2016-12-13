@@ -600,7 +600,7 @@
             "appName"      : "WEX SmartHub Mobile Application",
             "privacyNotice": "Privacy Notice",
             "lastUpdated"  : "Last Updated",
-            "lastUpdatedDate" : "Tue Nov 29 2016 11:05:00 GMT-0500 (EST)",
+            "lastUpdatedDate" : "2016-11-29T11:05:00-0500",
             "introduction" : "This privacy notice (this <b>\"Privacy Notice\"</b>) governs your use of the WEX&reg; Fleet SmartHub&trade; mobile application (the <b>\"Application\"</b> or <b>\"App\"</b>). The App is owned by WEX, Inc. (collectively, \"WEX\" or \"we,\" \"us,\" or \"our\") for its commercial customers (each, a <b>\"Customer\"</b>) in connection with the Fleet SmartHub mobile application and services (the <b>\"SmartHub Services\"</b>). ",
             "sectionOne"   : {
                 "content": "This Privacy Notice describes:",
