@@ -22,7 +22,7 @@
             <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.logInUser(vm.setupFingerprintAuth)">
                 <div class="list">
                     <div class="item item-input item-stacked-label"
-                         ng-click="vm.verifyFingerprintRemoval('user.username')">
+                         ng-click="vm.verifyFingerprintRemoval()">
                         <input ng-model="vm.maskableUsername"
                                ng-model-options="{getterSetter: true}"
                                ng-blur="vm.usernameIsFocused = false"
@@ -52,13 +52,16 @@
                 </div>
 
                 <div class="row-no-padding login-controls">
-                    <ion-checkbox ng-model="vm.rememberMeToggle" ng-click="vm.verifyFingerprintRemoval('rememberMe')" class="justify-left">
+                    <ion-checkbox ng-model="vm.rememberMeToggle"
+                                  ng-model-options="{getterSetter: true}"
+                                  ng-disabled="vm.setupFingerprintAuth"
+                                  class="justify-left">
                         <span ng-bind-html="::vm.config.rememberMe.label"></span>
                     </ion-checkbox>
 
                     <ion-checkbox ng-if="vm.fingerprintAuthAvailable && !vm.fingerprintProfileAvailable"
-                            ng-disabled="!vm.rememberMe"
-                            ng-model="vm.setupFingerprintAuth"
+                            ng-model="vm.setupFingerprintAuthToggle"
+                            ng-model-options="{getterSetter: true}"
                             class="justify-right">
                         <span ng-bind-html="::vm.getFingerprintDisabledLabel()"></span>
                     </ion-checkbox>
