@@ -1,19 +1,23 @@
 <wex-item class="item item-icon-right widget-transaction-result-as-date"
-          ng-hide="payment.isGreekLoading"
           ng-class="{ 'item-last': $last }">
 
-    <a class="item-content" ui-sref="payment.activity.detail({ paymentId: payment.id })">
-        <span class="list_align ellipsis">
-            {{ payment.getBankAccountDisplayName() }}
-            <br>
-            {{ payment.scheduledDate | wexDefaultDateFormat }}
-        </span>
+    <a class="item-content" ui-sref="payment.activity.detail({ paymentId: payment.id, isGreeking: payment.isGreekLoading })">
+        <div ng-show="payment.isGreekLoading">
+            <wex-ui-greeking item-height="40px">
+                <rect height="15" width="70" y="0" x="250"></rect>
+                <rect height="25" width="100%" y="15" x="0"></rect>
+            </wex-ui-greeking>
+        </div>
 
-        <span class="value_align">
-            {{ payment.amount | currency }}
-        </span>
-
-        <i class="icon fa fa-chevron-right"></i>
+        <div ng-hide="payment.isGreekLoading">
+            <span class="list_align ellipsis">
+                {{ payment.getBankAccountDisplayName() }}
+                <br>
+                {{ payment.scheduledDate | wexDefaultDateFormat }}
+            </span>
+            <span class="value_align">{{ payment.amount | currency }}</span>
+            <i class="icon fa fa-chevron-right"></i>
+        </div>
     </a>
 
 </wex-item>

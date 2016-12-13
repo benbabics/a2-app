@@ -9,6 +9,7 @@
               makeRequest:      angular.noop,
               removeItem:       angular.noop,
               onError:          angular.noop,
+              onRequestItems:   angular.noop,
               onResetItems:     angular.noop,
               onRenderComplete: angular.noop
           },
@@ -51,7 +52,21 @@
       }
 
       function loadNextPage() {
-          return respondToRequest( $scope.infiniteScrollService.loadNextPage() );
+          var request = respondToRequest( $scope.infiniteScrollService.loadNextPage() );
+
+          // onRequestItems may fiddle with greeking items in the model.collection
+          // which can wreak havoc on rendering and scrolling, so tell $ionicScrollDelegate
+          // to re-calc rendered items until we clean up and run it again
+          if ( serviceDelegate.onRequestItems !== angular.noop ) {
+              $timeout(function() {
+                  if ( settings.isGreeking ) {
+                      $ionicScrollDelegate.resize(); // recalc rendered ion-items
+                  }
+                  $scope.$broadcast( "scroll.refreshComplete" );
+              }, 100);
+          }
+
+          return request;
       }
 
       function resetSearchResults(options) {

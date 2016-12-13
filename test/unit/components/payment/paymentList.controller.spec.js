@@ -5,6 +5,7 @@
         $rootScope,
         $scope,
         $q,
+        $timeout,
         ctrl,
         mockCompletedPayments,
         mockPayments,
@@ -65,10 +66,11 @@
                 });
             });
 
-            inject(function (___, globals, $controller, _$rootScope_, _$q_, BankModel, PaymentModel, UserAccountModel, UserModel) {
+            inject(function (___, globals, $controller, _$rootScope_, _$q_, _$timeout_, BankModel, PaymentModel, UserAccountModel, UserModel) {
                 _ = ___;
                 $q = _$q_;
                 $rootScope = _$rootScope_;
+                $timeout = _$timeout_;
 
                 // setup mock objects
                 mockCompletedPayments = getRandomNotScheduledPayments(PaymentModel, BankModel);
@@ -125,16 +127,23 @@
                 beforeEach(function () {
                     fetchPaymentsDeferred.resolve( mockPayments );
                     $rootScope.$digest();
-                });
-
-                it("should set the completed payments", function () {
-                    var payments = _.orderBy( mockCompletedPayments, ["scheduledDate"], ["desc"] );
-                    expect( ctrl.payments.completed ).toEqual( payments );
+                    $timeout.flush();
                 });
 
                 it("should set the scheduled payments", function () {
-                    var payments = _.orderBy( mockScheduledPayments, ["scheduledDate"], ["asc"] );
-                    expect( ctrl.payments.scheduled ).toEqual( payments );
+                    var payments  = _.orderBy( mockScheduledPayments, ["scheduledDate"], ["asc"] ),
+                        modelIds  = _.map( payments, 'id' ),
+                        resultIds = _.map( ctrl.payments.scheduled, 'id' );
+
+                    expect( resultIds ).toEqual( modelIds );
+                });
+
+                it("should set the completed payments", function () {
+                    var payments  = _.orderBy( mockCompletedPayments, ["scheduledDate"], ["desc"] ),
+                        modelIds  = _.map( payments, 'id' ),
+                        resultIds = _.map( ctrl.payments.completed, 'id' );
+
+                    expect( resultIds ).toEqual( modelIds );
                 });
             });
 
@@ -142,6 +151,7 @@
                 beforeEach(function () {
                     fetchPaymentsDeferred.reject();
                     $rootScope.$digest();
+                    $timeout.flush();
                 });
 
                 it("should NOT set the completed payments", function () {
@@ -163,7 +173,7 @@
             numModels;
 
         mockPaymentCollection = [];
-        numModels = TestUtils.getRandomInteger(1, 100);
+        numModels = TestUtils.getRandomInteger(1, 10);
         for (i = 0; i < numModels; ++i) {
             mockPaymentCollection.push(TestUtils.getRandomPayment(PaymentModel, BankModel));
         }
@@ -185,7 +195,7 @@
             numModels;
 
         mockPaymentCollection = [];
-        numModels = TestUtils.getRandomInteger(1, 100);
+        numModels = TestUtils.getRandomInteger(1, 10);
         for (i = 0; i < numModels; ++i) {
             mockPaymentCollection.push(getRandomScheduledPayment(PaymentModel, BankModel));
         }
