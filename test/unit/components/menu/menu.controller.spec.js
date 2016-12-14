@@ -149,136 +149,27 @@
             });
         });
 
-        describe("has a closeMenu function that", function () {
+        describe("has a navigate function that", function () {
 
-            beforeEach(function () {
-                ctrl.closeMenu();
+            ["goToCards",
+                "goToContactUs",
+                "goToHome",
+                "goToLogOut",
+                "goToMakePayment",
+                "goToPaymentActivity",
+                "goToPrivacyPolicy",
+                "goToSettings",
+                "goToTermsOfUse",
+                "goToTransactionActivity"
+            ].forEach(function (target) {
+
+                it("should navigate to the correct target page: " + target, function () {
+                    ctrl.navigate(target);
+                    $timeout.flush(100);
+                    expect(Navigation[target]).toHaveBeenCalledWith();
+                });
+
             });
-
-            it("should close the menu", function () {
-                expect($ionicSideMenuDelegate.toggleRight).toHaveBeenCalledWith(false);
-            });
-
-        });
-
-        describe("has a goToCards function that", function () {
-
-            beforeEach(function () {
-                ctrl.navigate("goToCards");
-            });
-
-            it("should navigate to the card list page", function () {
-                expect(Navigation.goToCards).toHaveBeenCalledWith();
-            });
-
-        });
-
-        describe("has a goToContactUs function that", function () {
-
-            beforeEach(function () {
-                ctrl.navigate("goToContactUs");
-            });
-
-            it("should navigate to the contact us page", function () {
-                expect(Navigation.goToContactUs).toHaveBeenCalledWith();
-            });
-
-        });
-
-        describe("has a goToHome function that", function () {
-
-            beforeEach(function () {
-                ctrl.navigate("goToHome");
-            });
-
-            it("should navigate to the home page", function () {
-                expect(Navigation.goToHome).toHaveBeenCalledWith();
-            });
-
-        });
-
-        describe("has a goToLogOut function that", function () {
-
-            beforeEach(function () {
-                ctrl.navigate("goToLogOut");
-            });
-
-            it("should navigate to the login page", function () {
-                expect(Navigation.goToLogOut).toHaveBeenCalledWith();
-            });
-
-        });
-
-        describe("has a goToMakePayment function that", function () {
-
-            beforeEach(function () {
-                ctrl.navigate("goToMakePayment");
-            });
-
-            it("should navigate to the make payment page", function () {
-                expect(Navigation.goToMakePayment).toHaveBeenCalledWith();
-            });
-
-        });
-
-        describe("has a goToPaymentActivity function that", function () {
-
-            beforeEach(function () {
-                ctrl.navigate("goToPaymentActivity");
-            });
-
-            it("should navigate to the payment list page", function () {
-                expect(Navigation.goToPaymentActivity).toHaveBeenCalledWith();
-            });
-
-        });
-
-        describe("has a goToPrivacyPolicy function that", function () {
-
-            beforeEach(function () {
-                ctrl.navigate("goToPrivacyPolicy");
-            });
-
-            it("should navigate to the privacy policy page", function () {
-                expect(Navigation.goToPrivacyPolicy).toHaveBeenCalledWith();
-            });
-
-        });
-
-        describe("has a goToSettings function that", function () {
-
-            beforeEach(function () {
-                ctrl.navigate("goToSettings");
-            });
-
-            it("should navigate to the settings page", function () {
-                expect(Navigation.goToSettings).toHaveBeenCalledWith();
-            });
-
-        });
-
-        describe("has a goToTermsOfUse function that", function () {
-
-            beforeEach(function () {
-                ctrl.navigate("goToTermsOfUse");
-            });
-
-            it("should navigate to the terms of use page", function () {
-                expect(Navigation.goToTermsOfUse).toHaveBeenCalledWith();
-            });
-
-        });
-
-        describe("has a goToTransactionActivity function that", function () {
-
-            beforeEach(function () {
-                ctrl.navigate("goToTransactionActivity");
-            });
-
-            it("should navigate to the transaction activity list page", function () {
-                expect(Navigation.goToTransactionActivity).toHaveBeenCalledWith();
-            });
-
         });
 
         describe("has a currentStateHasRoot function that", function () {
