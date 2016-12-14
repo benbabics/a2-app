@@ -16,9 +16,10 @@
 
         beforeEach(function () {
             delegate = {
-              makeRequest:  jasmine.createSpy( "makeRequest" ),
-              onError:      jasmine.createSpy( "onError" ),
-              onResetItems: jasmine.createSpy( "onResetItems" )
+              makeRequest:    jasmine.createSpy( "makeRequest" ),
+              onError:        jasmine.createSpy( "onError" ),
+              onResetItems:   jasmine.createSpy( "onResetItems" ),
+              onRequestItems: jasmine.createSpy( "onRequestItems" )
             };
 
             inject(function (_$rootScope_, _$timeout_, _$q_, $controller) {
@@ -102,6 +103,7 @@
               expect( ctrl.serviceDelegate.makeRequest ).toBe( delegate.makeRequest );
               expect( ctrl.serviceDelegate.onError ).toBe( delegate.onError );
               expect( ctrl.serviceDelegate.onResetItems ).toBe( delegate.onResetItems );
+              expect( ctrl.serviceDelegate.onRequestItems ).toBe( delegate.onRequestItems );
           });
         });
 
