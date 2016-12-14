@@ -54,13 +54,6 @@
         $localStorageProvider.setKeyPrefix(appGlobals.LOCALSTORAGE.CONFIG.keyPrefix);
     };
 
-    var ionicNativeTransitionsConfig = function($ionicNativeTransitionsProvider) {
-        $ionicNativeTransitionsProvider.setDefaultTransition({
-            type: "slide",
-            direction: "right"
-        });
-    };
-
     angular
         .module("app.components.core")
         .config(angularConfig)
@@ -68,6 +61,5 @@
         .config(ionicConfig)
         .config(ionicDatePickerConfig)
         .config(ngStorageConfig)
-        .config(ngIdleConfig)
-        .config(ionicNativeTransitionsConfig);
+        .config(ngIdleConfig);
 })();
