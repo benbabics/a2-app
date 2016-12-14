@@ -26,6 +26,7 @@
                 onReload       : "=",
                 onPageLoaded   : "=?",
                 reloadDistance : "=?",
+                isPending      : "=?",
                 loadingComplete: "&?"
             }
         };
