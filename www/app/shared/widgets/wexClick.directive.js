@@ -8,6 +8,7 @@
         var ACTIVATED_DURATION = 150, //ms
             TAP_DELAY = 120, //ms
             SCROLL_TIMEOUT = 80, //ms
+            TOUCHMOVE_EPSILON = 1.0, //arbitrary value
             CSS_CLASS_ACTIVATED = "wex-click-activated";
 
         return {
@@ -20,6 +21,7 @@
         function pre(scope, element) {
             var interval,
                 touchCoords,
+                cancelNextClick = true,
                 scrollArea = ElementUtil.getViewContent(),
                 lastScrollTime = new Date(),
                 scrollInterval,
@@ -43,7 +45,7 @@
 
             element.on("click", function (event) {
                 //disable clicking of the anchor until the activated state has been toggled
-                if (interval) {
+                if (interval || cancelNextClick) {
                     event.preventDefault();
                     event.stopPropagation();
                     event.stopImmediatePropagation();
@@ -62,7 +64,10 @@
                             element.removeClass(CSS_CLASS_ACTIVATED);
 
                             //trigger the click handler after the activated state has been toggled
+                            //wrap in cancelNextClick so only our click event will be handled
+                            cancelNextClick = false;
                             element.triggerHandler("click");
+                            cancelNextClick = true;
                         }, ACTIVATED_DURATION, 1);
 
                         interval = null;
@@ -78,7 +83,7 @@
                     lastTouchCoords = touchCoords || curTouchCoords;
 
                 //if the user's finger has moved since the start of the touch event, cancel the activated interval
-                if (interval && !_.isEmpty(_.difference(curTouchCoords, lastTouchCoords))) {
+                if (interval && !_.isEmpty(_.differenceWith(curTouchCoords, lastTouchCoords, compareTouchCoords))) {
                     $interval.cancel(interval);
                     interval = null;
                 }
@@ -96,6 +101,11 @@
                 .map(_.partial(_.values, _))
                 .flatten()
                 .value();
+        }
+
+        //allows minor changes in coordinates to not count as movement
+        function compareTouchCoords(touchA, touchB) {
+            return Math.abs(touchA - touchB) < TOUCHMOVE_EPSILON;
         }
     }
 
