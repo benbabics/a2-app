@@ -24,6 +24,7 @@
     "gulp-util": "^3.0.7",
     "gulp-webserver": "^0.9.1",
     "ionic": "^1.7.14",
+    "ionic-native-transitions": "^1.0.2",
     "jasmine-core": "^2.4.1",
     "jscs": "^2.10.1",
     "jshint": "^2.8.0",
@@ -85,7 +86,11 @@
       "locator": "https://github.com/selahssea/cordova-open-native-settings",
       "id": "com.phonegap.plugins.nativesettingsopener"
     },
-    "urbanairship-cordova@6.2.0"
+    "urbanairship-cordova@6.2.0",
+    {
+      "locator": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.5",
+      "id": "com.telerik.plugins.nativepagetransitions"
+    }
   ],
   "cordovaPlatforms": [
     {
