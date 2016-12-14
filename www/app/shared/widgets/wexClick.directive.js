@@ -3,50 +3,63 @@
 
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
-    function wexItem(_, $interval) {
+    //Workaround for Ionic list anchor scrolling issue described here: https://github.com/driftyco/ionic/issues/814
+    function wexClick(_, $interval, moment, ElementUtil) {
         var ACTIVATED_DURATION = 150, //ms
-            TAP_DELAY = 40; //ms
+            TAP_DELAY = 120, //ms
+            SCROLL_TIMEOUT = 80, //ms
+            CSS_CLASS_ACTIVATED = "wex-click-activated";
 
-        var directive = {
-            restrict: "ACE",
-            link: link
+        return {
+            restrict: "A",
+            link    : {pre: pre}
         };
-
-        return directive;
         //////////////////////
         //Public functions:
 
-        function link(scope, elem) {
-            //override the touch events for each anchor element
-            angular.forEach(elem.find("a"), function (anchorElement) {
-                applyAnchorElementFix(angular.element(anchorElement));
-            });
-        }
-        //////////////////////
-        //Private functions:
-
-        //Workaround for Ionic ion-item anchor issue described in https://github.com/driftyco/ionic/issues/814
-        function applyAnchorElementFix(element) {
+        function pre(scope, element) {
             var interval,
-                touchCoords;
+                touchCoords,
+                scrollArea = ElementUtil.getViewContent(),
+                lastScrollTime = new Date(),
+                scrollInterval,
+                onScroll = function () {
+                    if (!scrollInterval) {
+                        scrollInterval = $interval(function () {
+                            //update the last scroll time
+                            lastScrollTime = new Date();
+                            scrollInterval = null;
+                        }, 10, 1);
+                    }
+                };
+
+            if (scrollArea) {
+                scrollArea.on("scroll", onScroll);
+
+                scope.$on("$destroy", function () {
+                    scrollArea.off("scroll", onScroll);
+                });
+            }
 
             element.on("click", function (event) {
                 //disable clicking of the anchor until the activated state has been toggled
                 if (interval) {
                     event.preventDefault();
                     event.stopPropagation();
+                    event.stopImmediatePropagation();
                 }
             });
 
             element.on("touchstart mousedown", function () {
-                if (!interval) {
+                //make sure the user wasn't scrolling
+                if (!interval && moment(lastScrollTime).isBefore(moment().subtract(SCROLL_TIMEOUT, "ms"))) {
                     //start the interval for the activated state
                     interval = $interval(function () {
-                        element.addClass("wex-item-activated");
+                        element.addClass(CSS_CLASS_ACTIVATED);
 
                         //start the interval for removing the activated state
                         $interval(function () {
-                            element.removeClass("wex-item-activated");
+                            element.removeClass(CSS_CLASS_ACTIVATED);
 
                             //trigger the click handler after the activated state has been toggled
                             element.triggerHandler("click");
@@ -74,6 +87,8 @@
                 touchCoords = curTouchCoords;
             });
         }
+        //////////////////////
+        //Private functions:
 
         function getTouchCoords(event) {
             return _(event.touches)
@@ -86,5 +101,5 @@
 
     angular
         .module("app.shared.widgets")
-        .directive("wexItem", wexItem);
+        .directive("wexClick", wexClick);
 })();
