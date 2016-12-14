@@ -193,6 +193,27 @@ $user-login-error-message-animation: all linear 0.5s;
 }
 
 /**------------------------------------------------------
+ iOS-specific styling
+ ------------------------------------------------------**/
+.platform-ios {
+  .menu {
+    margin-top: $ios-statusbar-height;
+  }
+
+  #status-bar-overlay {
+    position: absolute;
+    background-color: $charcoal;
+    width: 100%;
+    height: $ios-statusbar-height;
+    z-index: 1000000;
+
+    &.overlaying {
+      opacity: 0;
+    }
+  }
+}
+
+/**------------------------------------------------------
  Navigation Bar
  ------------------------------------------------------**/
 $badge-color: #e51937;
@@ -207,16 +228,9 @@ $badge-color: #e51937;
     }
 }
 
-
 /**------------------------------------------------------
  Side Menu
  ------------------------------------------------------**/
-.platform-ios {
-    .menu {
-        margin-top: $ios-statusbar-height;
-    }
-}
-
 // close the menu faster - default 200ms defined in lib/ionic/scss/_variables.scss:$menu-animation-speed
 .menu-animated {
     @include transition-transform(100ms ease);
