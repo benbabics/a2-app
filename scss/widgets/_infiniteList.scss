@@ -1,25 +1,3 @@
-%list-item-activated {
-  $activated-color: #3a97b5;
-
-  color: #fff;
-  background-color: $activated-color;
-
-  .ion-chevron-right {
-    color: #fff;
-  }
-
-  .widget-ui-greeking {
-    svg {
-      @include ui-greeking-gradient-color(#386878, $activated-color);
-    }
-
-    rect {
-      fill:   $activated-color;
-      stroke: $activated-color;
-    }
-  }
-}
-
 %list-item-divider {
   .item-divider,
   .item-alt-divider,
@@ -68,12 +46,6 @@
       padding: 16px;
     }
 
-    .item-content {
-      &.activated {
-        @extend %list-item-activated;
-      }
-    }
-
     &.item-icon-left,
     &.item-icon-right {
       .icon {
@@ -99,10 +71,6 @@
         &.icon-align-top {
           @extend %icon-align-top;
         }
-      }
-
-      .activated .icon {
-        color: #fff;
       }
     }
   }

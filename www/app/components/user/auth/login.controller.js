@@ -7,8 +7,8 @@
     /* @ngInject */
     function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $cordovaStatusbar, $ionicHistory, $localStorage, $q,
                              $rootScope, $scope, $state, $stateParams, $window, globals, sessionCredentials, AnalyticsUtil,
-                             Fingerprint, FingerprintProfileUtil, FlowUtil, LoadingIndicator, LoginManager, Logger,
-                             Network, PlatformUtil, UserAuthorizationManager, wexTruncateStringFilter) {
+                             Fingerprint, FingerprintProfileUtil, FlowUtil, LoadingIndicator, LoginManager, Logger, Modal,
+                             Network, PlatformUtil, UserAuthorizationManager, VersionManager, wexTruncateStringFilter) {
 
         var BAD_CREDENTIALS = "BAD_CREDENTIALS",
             PASSWORD_CHANGED = "PASSWORD_CHANGED",
@@ -16,7 +16,8 @@
             USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION.TYPES,
             USER_AUTHORIZATION_ERRORS = globals.USER_AUTHORIZATION.ERRORS,
             USERNAME_KEY = globals.LOCALSTORAGE.KEYS.USERNAME,
-            vm = this;
+            vm = this,
+            versionModal;
 
         vm.config = globals.USER_LOGIN.CONFIG;
         vm.fingerprintAuthAvailable = false;
@@ -24,7 +25,6 @@
         vm.isLoggingIn = false;
         vm.setupFingerprintAuth = false;
         vm.rememberMe = false;
-        vm.rememberMeToggle = false;
         vm.timedOut = false;
         vm.user = { password: "" };
         vm.getFingerprintDisabledLabel = getFingerprintDisabledLabel;
@@ -33,22 +33,31 @@
         vm.verifyFingerprintRemoval = verifyFingerprintRemoval;
         vm.maskableUsername = maskableUsername;
         vm.onClearInput = onClearInput;
+        vm.rememberMeToggle = rememberMeToggle;
+        vm.setupFingerprintAuthToggle = setupFingerprintAuthToggle;
 
         activate();
 
         /////////////////////
         // Controller initialization
         function activate() {
+            LoadingIndicator.begin();
+
+            VersionManager.determineVersionStatus()
+                .then(createVersionCheckModal)
+                .finally(LoadingIndicator.complete);
+
             // set event listeners
             $scope.$on("$ionicView.beforeEnter", beforeEnter);
 
             //note: Ionic adds and removes this class by default, but it adds a 400ms delay first which is unacceptable here.
             //see http://ionicframework.com/docs/api/page/keyboard/
-            var removeKeyboardShowListener = $rootScope.$on("$cordovaKeyboard:show", addKeyboardOpenClass),
-                removeCordovaPauseListener = $rootScope.$on("app:cordovaPause", handleOnCordovaPause),
+            var removeCordovaPauseListener = $rootScope.$on("app:cordovaPause", handleOnCordovaPause),
                 removeCordovaResumeListener = $rootScope.$on("app:cordovaResume", handleOnCordovaResume);
 
-            FlowUtil.onPageLeave(removeKeyboardShowListener, $scope);
+            $window.addEventListener('native.keyboardshow', addKeyboardOpenFn);
+            $window.addEventListener('native.keyboardhide', addKeyboardCloseFn);
+
             FlowUtil.onPageLeave(removeCordovaPauseListener, $scope);
             FlowUtil.onPageLeave(removeCordovaResumeListener, $scope);
             FlowUtil.onPageLeave(toggleDisableScroll, $scope);
@@ -60,8 +69,31 @@
             });
         }
 
-        function addKeyboardOpenClass() {
-            document.body.classList.add("keyboard-open");
+        function addKeyboardOpenFn(event) {
+            var formObj = document.querySelector("#login-content form");
+            var formBottom = formObj.getBoundingClientRect().bottom;
+
+            var keyboardTop = $window.innerHeight - event.keyboardHeight;
+
+            // only move the form if it's covered by the keyboard
+            if (formBottom > keyboardTop) {
+                var offset = formBottom - keyboardTop;
+                getLoginContentObj().css("margin-bottom", offset + "px");
+                getHeadingText().addClass("open");
+            }
+        }
+
+        function addKeyboardCloseFn() {
+            getLoginContentObj().css("margin-bottom", "0px");
+            getHeadingText().removeClass("open");
+        }
+
+        function getLoginContentObj() {
+            return angular.element(document.getElementById("login-content"));
+        }
+
+        function getHeadingText() {
+            return angular.element(document.getElementById("title-heading-bar"));
         }
 
         function toggleDisableScroll(shouldDisabled) {
@@ -141,8 +173,11 @@
             return $q.when(settingUpFingerprintAuth ? clearFingerprintProfile(clientId) : true)
                 .catch($q.resolve)
                 .then(function () {
-                    // Set fullscreen to false so the modal displays correctly.
-                    $window.ionic.Platform.fullScreen(false, true);
+                    // Set fullscreen to false when the modal will display, so that the styling is correct.
+                    // Leave fullscreen true when the modal will NOT display, or the changed styling could show through the system's Touch ID dialog.
+                    if (settingUpFingerprintAuth) {
+                        $window.ionic.Platform.fullScreen(false, true);
+                    }
                     return UserAuthorizationManager.verify({
                         clientId: clientId,
                         clientSecret: clientSecret,
@@ -161,12 +196,13 @@
                     }
 
                     // Store the Username or not based on Remember Me checkbox
-                    rememberUsername(vm.rememberMeToggle, vm.user.username);
+                    rememberUsername(vm.rememberMe, vm.user.username);
 
                     // Do not allow backing up to the login page.
                     $ionicHistory.nextViewOptions({disableBack: true});
 
-                    // toggle StatusBar as fixed
+                    // toggle StatusBar as fixed, set fullscreen to false
+                    $window.ionic.Platform.fullScreen(false, true);
                     toggleStatusBarOverlaysWebView(false);
 
                     return FingerprintProfileUtil.getProfile(clientId)
@@ -248,7 +284,7 @@
         }
 
         function clearForm() {
-            vm.rememberMe = vm.rememberMeToggle = false;
+            vm.rememberMe = false;
             vm.user.username = "";
             vm.user.password = "";
 
@@ -256,23 +292,17 @@
         }
 
         // Clears the contents of and refocuses on an input.
-        function onClearInput(inputName) {
-            var input = document.querySelector("input[name=" + inputName + "]");
+        function onClearInput($event) {
+            var input = $event.target;
 
-            if (_.isNil(input)) {
-                var error = "Unknown input name: '" + inputName + "'";
-                Logger.error(error);
-                throw new Error(error);
+            if (!input.disabled && input.offsetWidth - $event.layerX < 20) {
+                if (input.name === "userName") {
+                    vm.user.username = "";
+                }
+                else if (input.name === "password") {
+                    vm.user.password = "";
+                }
             }
-
-            if (input.name === "userName") {
-                vm.user.username = "";
-            }
-            else if (input.name === "password") {
-                vm.user.password = "";
-            }
-
-            setTimeout(function() { input.focus(); });
         }
 
         function getFingerprintDisabledLabel() {
@@ -315,13 +345,13 @@
 
         function setupUsername() {
             // default the checkbox to false
-            vm.rememberMe = vm.rememberMeToggle = false;
+            vm.rememberMe = false;
 
             // if the Remember Me option was selected previously
             // populate the Username and set the checkbox
             if (_.has($localStorage, USERNAME_KEY)) {
                 vm.user.username = $localStorage[USERNAME_KEY];
-                vm.rememberMe = vm.rememberMeToggle = true;
+                vm.rememberMe = true;
             }
         }
 
@@ -385,7 +415,7 @@
             _.spread( AnalyticsUtil.trackEvent )( vm.config.ANALYTICS.events[ eventId ] );
         }
 
-        function verifyFingerprintRemoval(model) {
+        function verifyFingerprintRemoval() {
             var getFingerprintWarningPromptText = function () {
                 switch (_.toLower(PlatformUtil.getPlatform())) {
                     case "android":
@@ -398,11 +428,6 @@
             };
 
             if (vm.fingerprintProfileAvailable) {
-                //delay the unchecking of the remember me box
-                if (model === "rememberMe") {
-                    vm.rememberMeToggle = true;
-                }
-
                 return $cordovaDialogs.confirm(
                     getFingerprintWarningPromptText(),
                     vm.config.touchId.warningPrompt.title, [
@@ -417,9 +442,78 @@
                     });
             }
             else {
-                if (model === "rememberMe") {
-                    vm.rememberMe = vm.rememberMeToggle;
+                return $q.resolve();
+            }
+        }
+
+        function rememberMeToggle(rememberMe) {
+            if (_.isUndefined(rememberMe)) {
+                return vm.rememberMe;
+            }
+            else {
+                if (!rememberMe && vm.fingerprintProfileAvailable) {
+                    verifyFingerprintRemoval();
                 }
+                else {
+                    vm.rememberMe = rememberMe;
+                }
+            }
+        }
+
+        function setupFingerprintAuthToggle(setupFingerprintAuth) {
+            if (_.isUndefined(setupFingerprintAuth)) {
+                return vm.setupFingerprintAuth;
+            }
+            else {
+                if (setupFingerprintAuth) {
+                    //automatically enable remember me
+                    vm.rememberMe = true;
+                }
+
+                vm.setupFingerprintAuth = setupFingerprintAuth;
+            }
+        }
+
+        function createVersionCheckModal(versionStatus) {
+            var VERSION_STATUS = globals.MODAL_TYPES.VERSION_CHECK.options.scopeVars,
+                scopeVars = {};
+
+            if (versionStatus.status === globals.CONFIGURATION_API.VERSIONS.STATUS_VALUES.CAN_UPDATE) {
+                scopeVars.CONFIG = VERSION_STATUS.WARN;
+            }
+            else if (versionStatus.status === globals.CONFIGURATION_API.VERSIONS.STATUS_VALUES.MUST_UPDATE) {
+                scopeVars.CONFIG = VERSION_STATUS.FAIL;
+            }
+            else {
+                return;
+            }
+
+            scopeVars.skipUpdate = skipVersionUpdate;
+            scopeVars.update = versionUpdate;
+
+            return Modal.createByType(globals.MODAL_TYPES.VERSION_CHECK, {
+                scopeVars: scopeVars
+            })
+                .then(function (modal) {
+                    modal.show();
+                    versionModal = modal;
+                });
+        }
+
+        function skipVersionUpdate() {
+            versionModal.hide();
+        }
+
+        function versionUpdate() {
+            var VERSION_STATUS = globals.MODAL_TYPES.VERSION_CHECK.options.scopeVars,
+                platform = PlatformUtil.getPlatform().toLowerCase(),
+                url = VERSION_STATUS.APP_STORES[platform];
+
+            if (url) {
+                PlatformUtil.waitForCordovaPlatform()
+                    .then(function () {
+                        window.cordova.plugins.market.open(url);
+                    });
             }
         }
     }

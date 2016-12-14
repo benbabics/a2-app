@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="53" id="com.wex.fleetsmarthub" ios-CFBundleVersion="53" version="3.0" xmlns="http://www.w3.org/ns/widgets">
+<widget android-versionCode="55" id="com.wex.fleetsmarthub" ios-CFBundleVersion="55" version="3.0" xmlns="http://www.w3.org/ns/widgets">
     <name>Fleet SmartHub</name>
     <description>
         App for managing WEX fleet accounts
@@ -10,6 +10,7 @@
     <hook src="scripts/initDirectories.js" type="before_platform_add" />
     <hook src="scripts/addExecutePermissions.js" type="before_build" />
     <hook src="scripts/copyIosScheme.js" type="before_build" />
+    <hook src="scripts/changeAndroidManifest.js" type="before_build" />
     <hook src="scripts/addPlatformClass.js" type="after_prepare" />
     <hook src="scripts/removeSassAndAppScriptsFromPlatforms.js" type="after_build" />
     <hook src="scripts/setEnvironment.js" type="after_prepare" />
@@ -27,10 +28,10 @@
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
     <preference name="AutoHideSplashScreen" value="false" />
-    <preference name="SplashScreenDelay" value="10000" />
+    <preference name="SplashScreenDelay" value="1000" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="FadeSplashScreen" value="true" />
-    <preference name="FadeSplashScreenDuration" value="1000" />
+    <preference name="FadeSplashScreenDuration" value="900" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
     <preference name="com.urbanairship.production_app_key" value="@@@STRING_REPLACE_URBANAIRSHIP_APP_KEY_PROD@@@" />
@@ -77,6 +78,7 @@
         <icon height="152" src="resources/ios/icon/icon-76@2x.png" width="152" />
         <icon height="29" src="resources/ios/icon/icon-small.png" width="29" />
         <icon height="58" src="resources/ios/icon/icon-small@2x.png" width="58" />
+        <icon height="87" src="resources/ios/icon/icon-small@3x.png" width="87" />
         <splash height="1136" src="resources/ios/splash/Default-568h@2x~iphone.png" width="640" />
         <splash height="1334" src="resources/ios/splash/Default-667h.png" width="750" />
         <splash height="2208" src="resources/ios/splash/Default-736h.png" width="1242" />

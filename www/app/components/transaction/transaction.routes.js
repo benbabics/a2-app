@@ -62,11 +62,8 @@
             views: {
               "view": {
                 templateUrl: "app/components/transaction/templates/postedTransactionDetail.html",
-                controller : "PostedTransactionDetailController as vm",
+                controller : "PostedTransactionDetailController as vm"
               }
-            },
-            params: {
-                isGreeking: false
             },
             resolve: {
                 postedTransaction: function ($stateParams, LoadingIndicator, TransactionManager) {

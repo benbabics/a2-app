@@ -14,14 +14,15 @@
     </div>
 
     <ion-content scroll="false">
-        <div class="title-bar">
+        <div id="title-heading-bar">
             <img src="img/pages/login/logo.png"/>
         </div>
 
-        <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.logInUser(vm.setupFingerprintAuth)">
-            <div class="list">
-                <div class="item item-input item-stacked-label">
-                    <span ng-click="vm.verifyFingerprintRemoval('user.username')">
+        <div id="login-content">
+            <form novalidate name="vm.userLoginForm" ng-submit="vm.userLoginForm.$valid && vm.logInUser(vm.setupFingerprintAuth)">
+                <div class="list">
+                    <div class="item item-input item-stacked-label"
+                         ng-click="vm.verifyFingerprintRemoval()">
                         <input ng-model="vm.maskableUsername"
                                ng-model-options="{getterSetter: true}"
                                ng-blur="vm.usernameIsFocused = false"
@@ -32,47 +33,52 @@
                                required
                                autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                                placeholder="{{ ::vm.config.userName.label }}"
+                               ng-class="{ 'xclear' : vm.user.username }"
+                               ng-click="vm.onClearInput($event)"
                                wex-max-length="{{ ::vm.config.userName.maxLength }}">
-                    </span>
-                    <i class="ion-close-circled" ng-hide="!vm.user.username" ng-click="vm.onClearInput('userName')"></i>
+                    </div>
+
+                    <div class="item item-input item-stacked-label">
+                        <input ng-model="vm.user.password"
+                               name="password"
+                               type="password"
+                               required
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                               placeholder="{{ ::vm.config.password.label }}"
+                               ng-click="vm.onClearInput($event)"
+                               ng-class="{ 'xclear' : vm.user.password }"
+                               wex-max-length="{{ ::vm.config.password.maxLength }}">
+                    </div>
                 </div>
 
-                <div class="item item-input item-stacked-label">
-                    <input ng-model="vm.user.password"
-                           name="password"
-                           type="password"
-                           required
-                           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                           placeholder="{{ ::vm.config.password.label }}"
-                           wex-max-length="{{ ::vm.config.password.maxLength }}">
-                    <i class="ion-close-circled" ng-hide="!vm.user.password" ng-click="vm.onClearInput('password')"></i>
+                <div class="row-no-padding login-controls">
+                    <ion-checkbox ng-model="vm.rememberMeToggle"
+                                  ng-model-options="{getterSetter: true}"
+                                  ng-disabled="vm.setupFingerprintAuth"
+                                  class="justify-left">
+                        <span ng-bind-html="::vm.config.rememberMe.label"></span>
+                    </ion-checkbox>
+
+                    <ion-checkbox ng-if="vm.fingerprintAuthAvailable && !vm.fingerprintProfileAvailable"
+                            ng-model="vm.setupFingerprintAuthToggle"
+                            ng-model-options="{getterSetter: true}"
+                            class="justify-right">
+                        <span ng-bind-html="::vm.getFingerprintDisabledLabel()"></span>
+                    </ion-checkbox>
+                    <div class="fingerprint-indicator icon-fingerprint justify-right"
+                            ng-if="vm.fingerprintProfileAvailable"
+                            ng-click="vm.logInUser(true)">
+                    </div>
                 </div>
-            </div>
 
-            <div class="row-no-padding login-controls">
-                <ion-checkbox ng-model="vm.rememberMeToggle" ng-click="vm.verifyFingerprintRemoval('rememberMe')" class="justify-left">
-                    <span ng-bind-html="::vm.config.rememberMe.label"></span>
-                </ion-checkbox>
-
-                <ion-checkbox ng-if="vm.fingerprintAuthAvailable && !vm.fingerprintProfileAvailable"
-                        ng-disabled="!vm.rememberMe"
-                        ng-model="vm.setupFingerprintAuth"
-                        class="justify-right">
-                    <span ng-bind-html="::vm.getFingerprintDisabledLabel()"></span>
-                </ion-checkbox>
-                <div class="fingerprint-indicator icon-fingerprint justify-right"
-                        ng-if="vm.fingerprintProfileAvailable"
-                        ng-click="vm.logInUser(true)">
+                <div class="actions">
+                    <wex-required-submit text="{{ ::vm.config.submitButton }}"></wex-required-submit>
                 </div>
-            </div>
+            </form>
 
-            <div class="actions">
-                <wex-required-submit text="{{ ::vm.config.submitButton }}"></wex-required-submit>
+            <div class="padding align_center">
+                <online-enrollment-flow>{{ ::vm.config.enrollment.label }}</online-enrollment-flow>
             </div>
-        </form>
-
-        <div class="padding align_center">
-            <online-enrollment-flow>{{ ::vm.config.enrollment.label }}</online-enrollment-flow>
         </div>
     </ion-content>
 </ion-view>

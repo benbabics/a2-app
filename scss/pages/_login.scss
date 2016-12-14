@@ -25,53 +25,57 @@
   /**
    * Content
   **/
+  .scroll-content, #title-heading-bar, #login-content {
+    display: flex;
+    flex-direction: column;
+  }
+
   .scroll-content {
     padding-left:  16px;
     padding-right: 16px;
     background: $color-white url('../img/pages/login/background-street.jpg') no-repeat;
     background-size: 100%;
     font-family: 'open_sansregular';
-
-    @media (min-width: 321px) {
-      padding-left:  30px;
-      padding-right: 30px;
-    }
+    align-items: center;
 
     &.has-header, &.has-subheader {
       top: 0;
     }
 
-    .title-bar {
-      padding-top: 100px;
-      text-align: center;
+    #title-heading-bar {
+      justify-content: center;
+      height: 50%;
+      transition: height .2s ease-in-out;
 
       img {
         max-width: 80%;
+        align-self: center;
+        transition: margin .2s ease-in-out;
+        margin-top: -50px;
       }
+
+      &.open {
+        height: 25%;
+
+        img {
+          margin-top: 50px;
+        }
+      }
+    }
+
+    #login-content {
+      justify-content: flex-start;
+      height: 50%;
+      width: 100%;
+      max-width: 20rem;
+      transition: margin .2s ease-in-out;
     }
 
     form {
       position: relative;
       top: 0;
-      margin-top: 60px;
-      padding: 5px 16px;
+      padding: 8px 16px;
       background-color: #eee;
-
-      @media (min-height: 640px) {
-        margin-top: 130px;
-        padding: 16px;
-      }
-
-      -webkit-transition: top .2s ease-in-out;
-      transition:         top .2s ease-in-out;
-
-      .keyboard-open & {
-        top: -65px;
-
-        @media (min-height: 640px) {
-          top: -80px;
-        }
-      }
 
       &:after {
         position: absolute;
@@ -81,14 +85,6 @@
         height: 1px;
         box-shadow: 0 2px 3px rgba(0,0,0,.4);
         content: "";
-      }
-
-      i.ion-close-circled {
-        position: absolute;
-        top:   calc(50% - 9px);
-        right: 0px;
-        font-size: 20px;
-        color: #7f7f7f;
       }
     }
 
@@ -127,10 +123,6 @@
 
     .list, .login-controls {
       margin-bottom: 8px;
-
-      @media (min-height: 640px) {
-        margin-bottom: 12px;
-      }
     }
 
     .item-checkbox {
@@ -203,24 +195,19 @@
     }
 
     .item-input {
-      padding: 0;
+      padding: 4px 0;
       border-width: 0 0 1px;
       border-color: #b9b9b9;
-
-      @media (min-height: 640px) {
-        padding: 6px 0 5px;
-      }
 
       input {
         color: #333;
         font-family: 'open_sansbold';
-        padding-top:    0;
-        padding-bottom: 0;
         background-color: transparent;
+        padding: 0;
 
-        @media (min-height: 640px) {
-          padding-top:    2px;
-          padding-bottom: 3px;
+        &.xclear {
+          padding-right: 2em;
+          background: url("../img/x-circle.svg") center right no-repeat;
         }
       }
 

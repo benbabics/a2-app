@@ -24,7 +24,7 @@
                            loading-complete="infiniteScrollService.isLoadingComplete">
 
             <ion-item collection-repeat="card in vm.cards.collection" class="item item-icon-right">
-                <a class="item-content" ui-sref="card.detail({ cardId: card.cardId })">
+                <a class="item-content" ui-sref="card.detail({ cardId: card.cardId })" wex-click>
                   <div ng-show="card.isGreekLoading">
                     <wex-ui-greeking item-height="15px">
                        <rect height="15" width="70" y="0" x="250"></rect>

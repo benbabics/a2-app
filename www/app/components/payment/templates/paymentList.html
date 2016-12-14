@@ -2,42 +2,22 @@
     <ion-content class="inner-container" ion-sticky>
         <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
 
-        <ang-accordion icon-position="left"
-                       close-icon-class="ion-android-add"
-                       open-icon-class="ion-minus">
+        <wex-infinite-list on-reload="loadNextPage"
+                           reload-distance="::vm.config.reloadDistance"
+                           loading-complete="infiniteScrollService.isLoadingComplete">
 
-            <wex-infinite-list on-reload="loadNextPage"
-                               reload-distance="::vm.config.reloadDistance"
-                               loading-complete="infiniteScrollService.isLoadingComplete">
+            <!-- Scheduled Payments: Header, Messaging & Results -->
+            <ion-item class="item-divider">{{ ::vm.config.scheduledPaymentsHeading }}</ion-item>
+            <ion-item ng-if="infiniteScrollService.isLoadingComplete && vm.payments.scheduled.length == 0" class="no-payments">{{ ::vm.config.noScheduledPaymentsMessage }}</ion-item>
+            <wex-payment-list-item ng-repeat="payment in vm.payments.scheduled"
+                                   payment="payment"></wex-payment-list-item>
 
-                <!-- Scheduled Payments: Header, Messaging & Results -->
-                <ion-item class="item-divider">{{ ::vm.config.scheduledPaymentsHeading }}</ion-item>
-                <ion-item ng-if="infiniteScrollService.isLoadingComplete && vm.payments.scheduled.length == 0" class="no-payments">{{ ::vm.config.noScheduledPaymentsMessage }}</ion-item>
-                <wex-payment-list-item ng-repeat="payment in vm.payments.scheduled"
-                                       payment="payment"></wex-payment-list-item>
+            <!-- Completed Payments: Header, Messaging & Results -->
+            <ion-item class="item-divider">{{ ::vm.config.completedPaymentsHeading }}</ion-item>
+            <ion-item ng-if="infiniteScrollService.isLoadingComplete && vm.payments.completed.length == 0" class="no-payments">{{ ::vm.config.noCompletedPaymentsMessage }}</ion-item>
+            <wex-payment-list-item collection-repeat="payment in vm.payments.completed"
+                                   payment="payment"></wex-payment-list-item>
 
-                <!-- Scheduled Payments: Greeking -->
-                <ion-item ng-show="vm.payments.collection[0].isGreekLoading">
-                    <wex-ui-greeking item-height="15px">
-                        <rect height="15" width="70" y="0" x="250"></rect>
-                    </wex-ui-greeking>
-                </ion-item>
-
-                <!-- Completed Payments: Header, Messaging & Results -->
-                <ion-item class="item-divider">{{ ::vm.config.completedPaymentsHeading }}</ion-item>
-                <ion-item ng-if="infiniteScrollService.isLoadingComplete && vm.payments.completed.length == 0" class="no-payments">{{ ::vm.config.noCompletedPaymentsMessage }}</ion-item>
-                <wex-payment-list-item collection-repeat="payment in vm.payments.completed"
-                                       payment="payment"></wex-payment-list-item>
-
-                <!-- Completed Payments: Greeking -->
-                <ion-item ng-repeat="payment in vm.payments.collection"
-                          ng-show="payment.isGreekLoading">
-                    <wex-ui-greeking item-height="15px">
-                        <rect height="15" width="70" y="0" x="250"></rect>
-                    </wex-ui-greeking>
-                </ion-item>
-
-            </wex-infinite-list>
-        </ang-accordion>
+        </wex-infinite-list>
     </ion-content>
 </ion-view>
