@@ -13,7 +13,7 @@
 
       beforeEach(function () {
           mockItems = [ {name: 'a'}, {name: 'b'}, {name: 'c'} ];
-          delegate  = { makeRequest: function() {} };
+          delegate  = { makeRequest: function() {}, onRequestItems: function() {} };
 
           inject(function (___, _$rootScope_, _$q_, _wexInfiniteListService_) {
               _                      = ___;
@@ -23,6 +23,7 @@
               wexInfiniteListService = _wexInfiniteListService_;
 
               spyOn( delegate, "makeRequest" ).and.returnValue( deferred.promise ); // expecting a promise
+              spyOn( delegate, "onRequestItems" );
           });
       });
 
@@ -58,16 +59,19 @@
       });
 
       describe("has a loadNextPage function that", function () {
-          var mockResponse;
+          var instance, mockResponse;
 
           beforeEach(function () {
               mockResponse = [ {name: 'x'}, {name: 'y'}, {name: 'z'} ];
+              instance = new wexInfiniteListService( delegate );
+              instance.loadNextPage();
+          });
+
+          it("should send a message to delegate.onRequestItems to handle pre-response rendering", function () {
+              expect( instance.delegate.onRequestItems ).toHaveBeenCalled();
           });
 
           it("should send a message to delegate.makeRequest", function () {
-              var instance = new wexInfiniteListService( delegate );
-
-              instance.loadNextPage();
               expect( instance.delegate.makeRequest ).toHaveBeenCalled();
           });
 

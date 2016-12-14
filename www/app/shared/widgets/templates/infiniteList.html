@@ -2,7 +2,7 @@
 </ion-list>
 
 <ion-infinite-scroll
-        ng-if="!loadingComplete()"
+        ng-if="!isPending && !loadingComplete()"
         on-infinite="loadMore()"
         distance="{{reloadDistance}}"
         icon="hide">

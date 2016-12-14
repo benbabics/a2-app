@@ -3,6 +3,7 @@
         <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
 
         <wex-infinite-list on-reload="loadNextPage"
+                           is-pending="infiniteScrollService.isPending"
                            reload-distance="::vm.config.reloadDistance"
                            loading-complete="infiniteScrollService.isLoadingComplete">
 

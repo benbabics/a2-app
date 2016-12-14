@@ -26,16 +26,16 @@
 
             // event handlers
             scope.handleDrag = function(evt) {
-                var isVisible = !element[0].closest( '.ng-hide' ),
+                var isVisible = !element[0].closest( ".ng-hide" ),
                     isDragUp  = evt.gesture.direction === "up";
 
                 if ( isVisible && isDragUp ) {
                     $ionicScrollDelegate.freezeAllScrolls( true );
                 }
-            }
-            scope.handleRelease = function(evt) {
+            };
+            scope.handleRelease = function() {
                 $ionicScrollDelegate.freezeAllScrolls( true );
-            }
+            };
 
             // bind for drag & release on `.item`
             gestureDrag    = $ionicGesture.on( "drag",    scope.handleDrag,    $item );

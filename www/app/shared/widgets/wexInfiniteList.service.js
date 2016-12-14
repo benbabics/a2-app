@@ -37,11 +37,6 @@
           requestPromise,
           greekingCollection;
 
-      // cancel request, if greeking and currently pending
-      if ( this.settings.isGreeking && this.isPending ) {
-          return _$q.reject(); // not a fan of this approach ಠ_ಠ
-      }
-
       this.isPending = true;
       requestPromise = this.delegate.makeRequest( requestConfig ),
       collection = collection || this.model.collection;
