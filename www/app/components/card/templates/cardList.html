@@ -19,6 +19,7 @@
         </div>
 
         <wex-infinite-list class="card-list"
+                           is-pending="infiniteScrollService.isPending"
                            on-reload="loadNextPage"
                            reload-distance="::vm.config.reloadDistance"
                            loading-complete="infiniteScrollService.isLoadingComplete">
