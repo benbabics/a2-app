@@ -217,6 +217,11 @@ $badge-color: #e51937;
     }
 }
 
+// close the menu faster - default 200ms defined in lib/ionic/scss/_variables.scss:$menu-animation-speed
+.menu-animated {
+    @include transition-transform(100ms ease);
+}
+
 .menu-view {
     $tap-state-text-color: #8c8c8c;
     background-color: $charcoal-light;

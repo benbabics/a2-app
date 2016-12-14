@@ -5,13 +5,12 @@
     // jshint maxparams:8
 
     /* @ngInject */
-    function MenuController(_, $ionicSideMenuDelegate, $state, $timeout, globals, Navigation, NotificationItemsManager, Fingerprint) {
+    function MenuController(_, $state, $timeout, globals, Navigation, NotificationItemsManager, Fingerprint) {
 
         var vm = this;
         vm.config = globals.MENU.CONFIG;
         vm.fingerprintAuthAvailable = false;
 
-        vm.closeMenu = closeMenu;
         vm.navigate = navigate;
         vm.currentStateHasRoot = currentStateHasRoot;
         vm.getUnreadNotificationsCount = getUnreadNotificationsCount;
@@ -25,12 +24,9 @@
                 .then(function () { vm.fingerprintAuthAvailable = true; });
         }
 
-        function closeMenu() {
-            $ionicSideMenuDelegate.toggleRight(false);
-        }
-
         function navigate(target) {
-            return Navigation[target]();
+            // using .menu-animated value
+            $timeout(Navigation[target], 100);
         }
 
         function currentStateHasRoot(rootState) {
