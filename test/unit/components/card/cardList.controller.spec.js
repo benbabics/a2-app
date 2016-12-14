@@ -167,7 +167,8 @@
 
         describe("has a handleMakeRequest function that", function () {
             var fetchCardsDeferred,
-                activeSearchFilter = "";
+                activeSearchFilter = "",
+                orderby = "status";
 
             beforeEach(function () {
                 fetchCardsDeferred = $q.defer();
@@ -189,7 +190,8 @@
                     activeSearchFilter,
                     globals.CARD_LIST.SEARCH_OPTIONS.STATUSES,
                     $scope.infiniteScrollService.settings.currentPage,
-                    $scope.infiniteScrollService.settings.pageSize
+                    $scope.infiniteScrollService.settings.pageSize,
+                    orderby
                 );
             });
 
@@ -288,19 +290,6 @@
                     // resolve with cloned collection
                     fetchCardsDeferred.resolve( collection );
                     $rootScope.$digest();
-                });
-
-                it("should sort cards by 'isActive' then 'embossedCardNumber'", function () {
-                    var result = ctrl.cards.collection;
-
-                    function getAttrs(resource, n) {
-                        return [ resource[n].isActive(), resource[n].embossedCardNumber ];
-                    }
-
-                    expect( getAttrs(result, 0) ).toEqual( getAttrs(mockCards, 2) );
-                    expect( getAttrs(result, 1) ).toEqual( getAttrs(mockCards, 0) );
-                    expect( getAttrs(result, 2) ).toEqual( getAttrs(mockCards, 3) );
-                    expect( getAttrs(result, 3) ).toEqual( getAttrs(mockCards, 1) );
                 });
             });
 
