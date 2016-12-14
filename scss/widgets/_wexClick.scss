@@ -1,0 +1,40 @@
+%list-item-activated {
+  $activated-color: #3a97b5;
+
+  color: #fff;
+  background-color: $activated-color;
+
+  .ion-chevron-right,
+  .icon {
+    color: #fff;
+  }
+
+  .widget-ui-greeking {
+    svg {
+      @include ui-greeking-gradient-color(#386878, $activated-color);
+    }
+
+    rect {
+      fill:   $activated-color;
+      stroke: $activated-color;
+    }
+  }
+}
+
+.item {
+  &, & > a {
+    //override Ionic's buggy activated styling
+    &[wex-click] {
+      &.activated {
+        background-color: #fff;
+        color: #000;
+      }
+
+      &.wex-click-activated {
+        &, &.activated {
+          @extend %list-item-activated;
+        }
+      }
+    }
+  }
+}
