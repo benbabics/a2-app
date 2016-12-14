@@ -8,9 +8,21 @@
             $rootScope,
             FingerprintProfileUtil,
             resolveHandler,
-            rejectHandler;
+            rejectHandler,
+            self;
 
         beforeEach(function () {
+            self = this;
+
+            self.StorageManager = jasmine.createSpyObj("StorageManager", [
+                "get",
+                "set",
+                "remove"
+            ]);
+
+            module(function ($provide) {
+                $provide.value("StorageManager", self.StorageManager);
+            });
 
             inject(function (___, _$q_, _$rootScope_, _FingerprintProfileUtil_) {
                 _ = ___;
@@ -24,6 +36,10 @@
             rejectHandler = jasmine.createSpy("rejectHandler");
         });
 
+        afterEach(function () {
+            self = null;
+        });
+
         describe("has a clearProfile function that", function () {
             var username,
                 removeDeferred;
@@ -32,18 +48,18 @@
                 username = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 removeDeferred = $q.defer();
 
-                this.SecureStorage.remove.and.returnValue(removeDeferred.promise);
+                this.StorageManager.remove.and.returnValue(removeDeferred.promise);
 
                 FingerprintProfileUtil.clearProfile(username)
                     .then(resolveHandler)
                     .catch(rejectHandler);
             });
 
-            it("should call this.SecureStorage.remove with the expected values", function () {
-                expect(this.SecureStorage.remove).toHaveBeenCalledWith(_.toLower(username));
+            it("should call this.StorageManager.remove with the expected values", function () {
+                expect(this.StorageManager.remove).toHaveBeenCalledWith(_.toLower(username), {secure: true});
             });
 
-            describe("when this.SecureStorage.remove resolves", function () {
+            describe("when this.StorageManager.remove resolves", function () {
                 var result;
 
                 beforeEach(function () {
@@ -58,7 +74,7 @@
                 });
             });
 
-            describe("when this.SecureStorage.remove rejects", function () {
+            describe("when this.StorageManager.remove rejects", function () {
                 var result;
 
                 beforeEach(function () {
@@ -82,18 +98,18 @@
                 username = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 getDeferred = $q.defer();
 
-                this.SecureStorage.get.and.returnValue(getDeferred.promise);
+                this.StorageManager.get.and.returnValue(getDeferred.promise);
 
                 FingerprintProfileUtil.getProfile(username)
                     .then(resolveHandler)
                     .catch(rejectHandler);
             });
 
-            it("should call this.SecureStorage.get with the expected values", function () {
-                expect(this.SecureStorage.get).toHaveBeenCalledWith(_.toLower(username));
+            it("should call this.StorageManager.get with the expected values", function () {
+                expect(this.StorageManager.get).toHaveBeenCalledWith(_.toLower(username), {secure: true});
             });
 
-            describe("when this.SecureStorage.get resolves", function () {
+            describe("when this.StorageManager.get resolves", function () {
                 var result;
 
                 beforeEach(function () {
@@ -108,7 +124,7 @@
                 });
             });
 
-            describe("when this.SecureStorage.get rejects", function () {
+            describe("when this.StorageManager.get rejects", function () {
                 var result;
 
                 beforeEach(function () {
@@ -134,18 +150,19 @@
                 password = TestUtils.getRandomStringThatIsAlphaNumeric(10);
                 setDeferred = $q.defer();
 
-                this.SecureStorage.set.and.returnValue(setDeferred.promise);
+                this.StorageManager.set.and.returnValue(setDeferred.promise);
 
                 FingerprintProfileUtil.setProfile(username, password)
                     .then(resolveHandler)
                     .catch(rejectHandler);
             });
 
-            it("should call this.SecureStorage.set with the expected values", function () {
-                expect(this.SecureStorage.set).toHaveBeenCalledWith(_.toLower(username), password);
+            it("should call this.StorageManager.set with the expected values", function () {
+                expect(this.StorageManager.set).toHaveBeenCalledWith("USERNAME", username);
+                expect(this.StorageManager.set).toHaveBeenCalledWith(_.toLower(username), password, {secure: true});
             });
 
-            describe("when this.SecureStorage.set resolves", function () {
+            describe("when this.StorageManager.set resolves", function () {
                 var result;
 
                 beforeEach(function () {
@@ -160,7 +177,7 @@
                 });
             });
 
-            describe("when this.SecureStorage.set rejects", function () {
+            describe("when this.StorageManager.set rejects", function () {
                 var result;
 
                 beforeEach(function () {
