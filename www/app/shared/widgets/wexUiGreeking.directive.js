@@ -26,20 +26,24 @@
 
             // event handlers
             scope.handleDrag = function(evt) {
-                if ( element[0].closest('.ng-hide') ) { return; }
-                gestureDrag = $ionicScrollDelegate.freezeAllScrolls( true );
+                var isVisible = !element[0].closest( '.ng-hide' ),
+                    isDragUp  = evt.gesture.direction === "up";
+
+                if ( isVisible && isDragUp ) {
+                    $ionicScrollDelegate.freezeAllScrolls( true );
+                }
             }
             scope.handleRelease = function(evt) {
-                gestureRelease = $ionicScrollDelegate.freezeAllScrolls( true );
+                $ionicScrollDelegate.freezeAllScrolls( true );
             }
 
             // bind for drag & release on `.item`
-            $ionicGesture.on( "drag",    scope.handleDrag,    $item );
-            $ionicGesture.on( "release", scope.handleRelease, $item );
+            gestureDrag    = $ionicGesture.on( "drag",    scope.handleDrag,    $item );
+            gestureRelease = $ionicGesture.on( "release", scope.handleRelease, $item );
 
             // unbind for drag & release, on destroyed directive
             element.on("$destroy", function() {
-                $ionicGesture.off( gestureDrag,    "drag",    scope.handleDrag );
+                $ionicGesture.off( gestureDrag, "drag", scope.handleDrag );
                 $ionicGesture.off( gestureRelease, "release", scope.handleRelease );
             });
         }
