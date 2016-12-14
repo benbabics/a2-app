@@ -13,6 +13,7 @@
         vm.config = globals.CARD_LIST.CONFIG;
         vm.searchFilter = "";
         vm.searchOptions = globals.CARD_LIST.SEARCH_OPTIONS;
+        vm.searchOptions.ORDER_BY = "status";
 
         vm.applySearchFilter     = applySearchFilter;
         vm.getActiveSearchFilter = getActiveSearchFilter;
@@ -45,9 +46,8 @@
             // card number, embossing line 1 and embossing line 2 and it doesn't seem right to have the manager know that
             return CardManager.fetchCards(
                 billingAccountId, activeSearchFilter, activeSearchFilter, activeSearchFilter,
-                vm.searchOptions.STATUSES, requestConfig.currentPage, requestConfig.pageSize
-            )
-            .then( filterCards );
+                vm.searchOptions.STATUSES, requestConfig.currentPage, requestConfig.pageSize, vm.searchOptions.ORDER_BY
+            );
         }
 
         function handleOnError(errorResponse) {
@@ -55,16 +55,6 @@
             Logger.error( "Failed to fetch next page of cards: " + errorResponse );
         }
 
-        function filterCards(cards) {
-            return cards.sort(function(a, b) {
-                var id = "embossedCardNumber",
-                    isActiveA = a.isActive(),
-                    sortStatus     = isActiveA === b.isActive() ? 0 : isActiveA ? -1 : 1,
-                    sortCardNumber = a[id] > b[id] ? 1 : a[id] < b[id] ? -1 : 0;
-
-                return 2 * ( sortStatus ) + 1 * ( sortCardNumber );
-            });
-        }
 
         function applySearchFilter() {
             if (vm.searchFilter !== activeSearchFilter) {
