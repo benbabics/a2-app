@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    fdescribe("A FingerprintProfileUtil Service", function () {
+    describe("A FingerprintProfileUtil Service", function () {
 
         var _,
             $q,
