@@ -8,7 +8,7 @@
     function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $cordovaStatusbar, $ionicHistory, $localStorage, $q,
                              $rootScope, $scope, $state, $stateParams, $window, globals, sessionCredentials, AnalyticsUtil,
                              Fingerprint, FingerprintProfileUtil, FlowUtil, LoadingIndicator, LoginManager, Logger, Modal,
-                             Network, PlatformUtil, UserAuthorizationManager, VersionManager, wexTruncateStringFilter) {
+                             Network, PlatformUtil, StatusBar, UserAuthorizationManager, VersionManager, wexTruncateStringFilter) {
 
         var BAD_CREDENTIALS = "BAD_CREDENTIALS",
             PASSWORD_CHANGED = "PASSWORD_CHANGED",
@@ -49,6 +49,7 @@
 
             // set event listeners
             $scope.$on("$ionicView.beforeEnter", beforeEnter);
+            $scope.$on("$ionicView.afterEnter", afterEnter);
 
             //note: Ionic adds and removes this class by default, but it adds a 400ms delay first which is unacceptable here.
             //see http://ionicframework.com/docs/api/page/keyboard/
@@ -61,12 +62,6 @@
             FlowUtil.onPageLeave(removeCordovaPauseListener, $scope);
             FlowUtil.onPageLeave(removeCordovaResumeListener, $scope);
             FlowUtil.onPageLeave(toggleDisableScroll, $scope);
-        }
-
-        function toggleStatusBarOverlaysWebView(shouldOverlay) {
-            PlatformUtil.waitForCordovaPlatform(function () {
-                $cordovaStatusbar.overlaysWebView(shouldOverlay);
-            });
         }
 
         function addKeyboardOpenFn(event) {
@@ -103,10 +98,6 @@
         }
 
         function beforeEnter() {
-            // toggle StatusBar as overlay, make fullscreen
-            $window.ionic.Platform.fullScreen(true, true);
-            toggleStatusBarOverlaysWebView(true);
-
             clearErrorMessage();
             toggleDisableScroll( true );
 
@@ -137,6 +128,12 @@
                             .finally(doFingerprintAuthCheck);
                     }
                 });
+        }
+
+        function afterEnter() {
+            // set status bar to overlay, make fullscreen
+            $window.ionic.Platform.fullScreen(true, true);
+            StatusBar.setOverlaysApp(true);
         }
 
         function clearFingerprintProfile(username) {
@@ -201,9 +198,9 @@
                     // Do not allow backing up to the login page.
                     $ionicHistory.nextViewOptions({disableBack: true});
 
-                    // toggle StatusBar as fixed, set fullscreen to false
+                    // set status bar to solid, set fullscreen to false
                     $window.ionic.Platform.fullScreen(false, true);
-                    toggleStatusBarOverlaysWebView(false);
+                    StatusBar.setOverlaysApp(false);
 
                     return FingerprintProfileUtil.getProfile(clientId)
                         .then(function (fingerprintProfile) {
