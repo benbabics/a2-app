@@ -6,6 +6,7 @@
 
         $stateProvider.state("settings", {
             url  : "/settings",
+            cache: false,
             views: {
                 "@": {
                     templateUrl: "app/components/settings/templates/settings.html",
