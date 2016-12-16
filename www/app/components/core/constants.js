@@ -584,9 +584,8 @@
             },
             "title"                     : "Payment Activity",
             "scheduledPaymentsHeading"  : "Scheduled Payments",
-            "noScheduledPaymentsMessage": "There are currently no payments scheduled.",
             "completedPaymentsHeading"  : "Completed Payments",
-            "noCompletedPaymentsMessage": "There are currently no payments completed."
+            "emptyList"                 : "No Records Found."
         },
         "SEARCH_OPTIONS": {
             "PAGE_NUMBER": 0,
