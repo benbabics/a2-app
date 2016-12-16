@@ -26,8 +26,9 @@
             infiniteListController.assignServiceDelegate({
                 makeRequest:      handleMakeRequest,
                 onError:          handleOnError,
-                onRequestItems:   handlOnRequestItems,
-                onRenderComplete: handleOnRenderComplete
+                onRequestItems:   handleOnRequestItems,
+                onRenderComplete: handleOnRenderComplete,
+                onResetItems    : onResetItems
             });
 
             vm.payments = _.extend($scope.infiniteScrollService.model, {
@@ -46,19 +47,22 @@
             Logger.error( "Failed to fetch next page of payments: " + errorResponse );
         }
 
-        function handlOnRequestItems() {
-            // grab items that are currently greeking
-            var payments = _.filter(vm.payments.collection, function(payment) {
+        function handleOnRequestItems() {
+
+            if (!isGreeking()) {
+                // grab items that are currently greeking
+                var payments = _.filter(vm.payments.collection, function (payment) {
                     return payment.isGreekLoading;
                 });
 
-            // since we're rendingering vm.payments.scheduled & vm.payments.completed
-            // instead of vm.payments.collection
-            // we will feed in greeking results into scheduled and completed collections
-            // onRenderComplete is delegated the responsibility to sort and
-            // reassign the appropriate items to which collections
-            Array.prototype.push.apply( vm.payments.scheduled, payments.splice(-1) );
-            Array.prototype.push.apply( vm.payments.completed, payments.splice(-12) );
+                // since we're rendering vm.payments.scheduled & vm.payments.completed
+                // instead of vm.payments.collection
+                // we will feed in greeking results into scheduled and completed collections
+                // onRenderComplete is delegated the responsibility to sort and
+                // reassign the appropriate items to which collections
+                Array.prototype.push.apply(vm.payments.scheduled, payments.splice(-1));
+                Array.prototype.push.apply(vm.payments.completed, payments.splice(-12));
+            }
         }
 
         function handleOnRenderComplete() {
@@ -93,6 +97,18 @@
 
             return payments;
         }
+
+        function onResetItems() {
+            vm.payments.scheduled = [];
+            vm.payments.completed = [];
+        }
+        
+        function isGreeking() {
+            return _.find(vm.payments.scheduled, function (payment) {
+                return payment.isGreekLoading;
+            });
+        }
+        
     }
 
     angular.module("app.components.payment")

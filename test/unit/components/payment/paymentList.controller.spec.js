@@ -18,9 +18,7 @@
                     },
                     "title"                     : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "scheduledPaymentsHeading"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "noScheduledPaymentsMessage": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "completedPaymentsHeading"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "noCompletedPaymentsMessage": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    "completedPaymentsHeading"  : TestUtils.getRandomStringThatIsAlphaNumeric(10)
                 },
                 "SEARCH_OPTIONS": {
                     "PAGE_NUMBER": TestUtils.getRandomInteger(0, 20),
