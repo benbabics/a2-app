@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Directive above the scroll
 
     //Workaround for Ionic list anchor scrolling issue described here: https://github.com/driftyco/ionic/issues/814
-    function wexClick(_, $interval, moment, ElementUtil) {
+    function wexClick(_, $interval, $timeout, moment, ElementUtil) {
         var ACTIVATED_DURATION = 150, //ms
             TAP_DELAY = 120, //ms
             SCROLL_TIMEOUT = 80, //ms
@@ -12,6 +12,7 @@
             CSS_CLASS_ACTIVATED = "wex-click-activated";
 
         return {
+            priority: 1,
             restrict: "A",
             link    : {pre: pre}
         };
@@ -59,8 +60,9 @@
                     interval = $interval(function () {
                         element.addClass(CSS_CLASS_ACTIVATED);
 
-                        //start the interval for removing the activated state
-                        $interval(function () {
+                        //start the timer for removing the activated state
+                        $timeout(function () {
+                            interval = null;
                             element.removeClass(CSS_CLASS_ACTIVATED);
 
                             //trigger the click handler after the activated state has been toggled
@@ -68,9 +70,7 @@
                             cancelNextClick = false;
                             element.triggerHandler("click");
                             cancelNextClick = true;
-                        }, ACTIVATED_DURATION, 1);
-
-                        interval = null;
+                        }, ACTIVATED_DURATION);
                     }, TAP_DELAY, 1);
 
                     //clear the last saved touch coords
