@@ -25,6 +25,7 @@
             mocks.cordovaPluginSettings = jasmine.createSpyObj("cordova.plugins.settings", ["openSetting", "open"]);
             mocks.Network = jasmine.createSpyObj("Network", ["isServerConnectionError"]);
             mocks.FlowUtil = jasmine.createSpyObj("FlowUtil", ["onPageLeave"]);
+            mocks.StatusBar = jasmine.createSpyObj("StatusBar", ["setOverlaysApp"]);
 
             _.set(window, "cordova.plugins.settings", mocks.cordovaPluginSettings);
             _.set(window, "cordova.plugins.Keyboard", mocks.cordovaPluginsKeyboard);
@@ -53,7 +54,8 @@
                     FingerprintProfileUtil  : mocks.FingerprintProfileUtil,
                     sessionCredentials      : mocks.sessionCredentials,
                     Network                 : mocks.Network,
-                    FlowUtil                : mocks.FlowUtil
+                    FlowUtil                : mocks.FlowUtil,
+                    StatusBar               : mocks.StatusBar
                 });
             });
         });
