@@ -51,44 +51,37 @@
             $scope.$on("$ionicView.beforeEnter", beforeEnter);
             $scope.$on("$ionicView.afterEnter", afterEnter);
 
-            //note: Ionic adds and removes this class by default, but it adds a 400ms delay first which is unacceptable here.
-            //see http://ionicframework.com/docs/api/page/keyboard/
             var removeCordovaPauseListener = $rootScope.$on("app:cordovaPause", handleOnCordovaPause),
                 removeCordovaResumeListener = $rootScope.$on("app:cordovaResume", handleOnCordovaResume);
 
-            $window.addEventListener('native.keyboardshow', addKeyboardOpenFn);
-            $window.addEventListener('native.keyboardhide', addKeyboardCloseFn);
+            $window.addEventListener('native.keyboardshow', onKeyboardOpenFn);
+            $window.addEventListener('native.keyboardhide', onKeyboardCloseFn);
 
             FlowUtil.onPageLeave(removeCordovaPauseListener, $scope);
             FlowUtil.onPageLeave(removeCordovaResumeListener, $scope);
             FlowUtil.onPageLeave(toggleDisableScroll, $scope);
         }
 
-        function addKeyboardOpenFn(event) {
-            var formObj = document.querySelector("#login-content form");
-            var formBottom = formObj.getBoundingClientRect().bottom;
+        function onKeyboardOpenFn(event) {
+            //note: Ionic adds and removes this class by default, but it adds a 400ms delay first which is unacceptable here.
+            //see http://ionicframework.com/docs/api/page/keyboard/
+            getScrollContent().addClass("keyboard-open");
 
-            var keyboardTop = $window.innerHeight - event.keyboardHeight;
-
-            // only move the form if it's covered by the keyboard
-            if (formBottom > keyboardTop) {
-                var offset = formBottom - keyboardTop;
-                getLoginContentObj().css("margin-bottom", offset + "px");
-                getHeadingText().addClass("open");
-            }
+            getKeyboardPlaceHolder().css("height", event.keyboardHeight + "px");
         }
 
-        function addKeyboardCloseFn() {
-            getLoginContentObj().css("margin-bottom", "0px");
-            getHeadingText().removeClass("open");
+        function onKeyboardCloseFn() {
+            getScrollContent().removeClass("keyboard-open");
+
+            getKeyboardPlaceHolder().css("height", "0px");
         }
 
-        function getLoginContentObj() {
-            return angular.element(document.getElementById("login-content"));
+        function getKeyboardPlaceHolder() {
+            return angular.element(document.querySelector("#keyboard-spacer"));
         }
 
-        function getHeadingText() {
-            return angular.element(document.getElementById("title-heading-bar"));
+        function getScrollContent() {
+            return angular.element(document.querySelector(".scroll-content"));
         }
 
         function toggleDisableScroll(shouldDisabled) {
