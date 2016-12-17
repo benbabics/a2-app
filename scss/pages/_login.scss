@@ -66,10 +66,11 @@
     }
 
     #title-heading-bar {
+      @include flex-grow(1);
+
       background: no-repeat center top url("../img/pages/login/logo.png");
       background-size: contain;
 
-      height: 43%;
       width: 70%;
     }
 
@@ -79,6 +80,7 @@
       height: 42%;
       width: 100%;
       max-width: 20rem;
+      max-height: 20rem;
     }
 
     form {
@@ -227,6 +229,7 @@
       border-color: #b9b9b9;
 
       input {
+        height: 100%;
         color: #333;
         font-family: 'open_sansbold';
         background-color: transparent;
@@ -250,10 +253,13 @@
       .button-primary {
         color: $color-white;
         background-color: $color-primary;
-        margin: 0;
 
         &[disabled] {
           opacity: .7;
+        }
+
+        @media (max-height: $small-device) {
+          margin: 0;
         }
       }
     }
