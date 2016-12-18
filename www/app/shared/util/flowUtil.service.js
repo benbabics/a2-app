@@ -5,7 +5,7 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function FlowUtil(_, $rootScope, $state, globals, ElementUtil, PlatformUtil) {
+    function FlowUtil(_, $ionicSideMenuDelegate, $rootScope, $state, globals, ElementUtil, PlatformUtil) {
         // Private variables
         var transitionPending;
         var transitionPlugin;
@@ -45,7 +45,8 @@
                 transitionPending = true;
                 // Tell the plugin to grab a screenshot
                 transitionPlugin.slide({ direction: "right" }, function() {
-                    // When the screenshot is taken, redo the transition.
+                    // When the screenshot is taken, close the menu and redo the transition.
+                    $ionicSideMenuDelegate.toggleRight(false);
                     $state.go(toState.name, toParams, options);
                 });
             }

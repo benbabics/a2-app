@@ -25,8 +25,7 @@
         }
 
         function navigate(target) {
-            // using .menu-animated value
-            $timeout(Navigation[target], 100);
+            return Navigation[target]();
         }
 
         function currentStateHasRoot(rootState) {
