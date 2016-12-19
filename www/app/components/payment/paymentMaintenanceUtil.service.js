@@ -26,7 +26,7 @@
             }
 
             return Navigation.goToPaymentActivity()
-                .then(function () {
+                .finally(function () {
                     return Popup.displayAlert({
                         content       : errorMessage,
                         buttonCssClass: "button-primary"
