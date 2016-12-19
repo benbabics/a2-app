@@ -7,7 +7,7 @@
     function wexClick(_, $interval, $timeout, moment, ElementUtil) {
         var ACTIVATED_DURATION = 150, //ms
             TAP_DELAY = 120, //ms
-            SCROLL_TIMEOUT = 80, //ms
+            SCROLL_TIMEOUT = 200, //ms
             TOUCHMOVE_EPSILON = 1.0, //arbitrary value
             CSS_CLASS_ACTIVATED = "wex-click-activated";
 
@@ -22,6 +22,7 @@
         function pre(scope, element) {
             var interval,
                 touchCoords,
+                lastClickCoords,
                 cancelNextClick = true,
                 scrollArea = ElementUtil.getViewContent(),
                 lastScrollTime = new Date(),
@@ -32,7 +33,7 @@
                             //update the last scroll time
                             lastScrollTime = new Date();
                             scrollInterval = null;
-                        }, 10, 1);
+                        }, 50, 1);
                     }
                 };
 
@@ -53,9 +54,15 @@
                 }
             });
 
-            element.on("touchstart mousedown", function () {
-                //make sure the user wasn't scrolling
-                if (!interval && moment(lastScrollTime).isBefore(moment().subtract(SCROLL_TIMEOUT, "ms"))) {
+            element.on("touchstart mousedown", function (event) {
+                //make sure the user wasn't scrolling and wasn't just clicking the exact same spot
+                if (_.every([
+                        !interval,
+                        moment(lastScrollTime).isBefore(moment().subtract(SCROLL_TIMEOUT, "ms")),
+                        !touchCoordsEqual(getTouchCoords(event), lastClickCoords)
+                    ])) {
+                    lastClickCoords = getTouchCoords(event);
+
                     //start the interval for the activated state
                     interval = $interval(function () {
                         element.addClass(CSS_CLASS_ACTIVATED);
@@ -83,7 +90,7 @@
                     lastTouchCoords = touchCoords || curTouchCoords;
 
                 //if the user's finger has moved since the start of the touch event, cancel the activated interval
-                if (interval && !_.isEmpty(_.differenceWith(curTouchCoords, lastTouchCoords, compareTouchCoords))) {
+                if (interval && !touchCoordsEqual(curTouchCoords, lastTouchCoords)) {
                     $interval.cancel(interval);
                     interval = null;
                 }
@@ -106,6 +113,10 @@
         //allows minor changes in coordinates to not count as movement
         function compareTouchCoords(touchA, touchB) {
             return Math.abs(touchA - touchB) < TOUCHMOVE_EPSILON;
+        }
+
+        function touchCoordsEqual(touchA, touchB) {
+            return _.isEmpty(_.differenceWith(touchA, touchB, compareTouchCoords));
         }
     }
 
