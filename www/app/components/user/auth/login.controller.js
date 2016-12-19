@@ -5,7 +5,7 @@
     // jshint maxparams:23
 
     /* @ngInject */
-    function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $cordovaStatusbar, $ionicHistory, $localStorage, $q,
+    function LoginController(_, $cordovaDialogs, $cordovaKeyboard, $ionicHistory, $localStorage, $q,
                              $rootScope, $scope, $state, $stateParams, $window, globals, sessionCredentials, AnalyticsUtil,
                              Fingerprint, FingerprintProfileUtil, FlowUtil, LoadingIndicator, LoginManager, Logger, Modal,
                              Network, PlatformUtil, StatusBar, UserAuthorizationManager, VersionManager, wexTruncateStringFilter) {

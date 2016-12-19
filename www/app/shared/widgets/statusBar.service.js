@@ -2,7 +2,7 @@
     "use strict";
 
     // Service for controlling the iOS status bar overlaying the app
-    function StatusBar(PlatformUtil) {
+    function StatusBar($document) {
         //Private members
         var element;
 
@@ -10,14 +10,15 @@
             setOverlaysApp: setOverlaysApp
         };
 
-        PlatformUtil.waitForCordovaPlatform()
-            .then(activate);
+        activate();
 
         return service;
 
         function activate() {
-            element = angular.element(document.querySelector("#status-bar-overlay"));
-            setOverlaysApp(true);
+            $document.ready(function() {
+                element = angular.element(document.querySelector("#status-bar-overlay"));
+                setOverlaysApp(true);
+            });
         }
 
         // If TRUE is passed, the status bar will appear over the web view.
