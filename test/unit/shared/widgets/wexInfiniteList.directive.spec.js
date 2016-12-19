@@ -7,7 +7,7 @@
         wexInfiniteList,
         mockPageLoadedCallback,
         mockReloadCallback,
-        DEFAULT_RELOAD_DISTANCE = "1%";
+        DEFAULT_RELOAD_DISTANCE = "20%";
 
     describe("A WEX Infinite List Directive", function () {
 
