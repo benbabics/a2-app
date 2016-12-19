@@ -117,9 +117,11 @@
                 .then(function (paymentsResponse) {
                     if (paymentsResponse && paymentsResponse.data) {
                         // map the payment data to model objects
-                        payments = _.map(paymentsResponse.data, createPayment);
 
-                        return payments;
+                        var fetchedPayments = _.map(paymentsResponse.data, createPayment);
+                        payments = _.unionBy(fetchedPayments, payments, "id");
+
+                        return fetchedPayments;
                     }
                     // no data in the response
                     else {
