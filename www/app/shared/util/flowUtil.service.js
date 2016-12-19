@@ -5,7 +5,11 @@
     /* jshint -W106 */ // Ignore variables with underscores that were not created by us
 
     /* @ngInject */
-    function FlowUtil($rootScope, $state, globals, ElementUtil) {
+    function FlowUtil(_, $ionicSideMenuDelegate, $rootScope, $state, globals, ElementUtil, PlatformUtil) {
+        // Private variables
+        var transitionPending;
+        var transitionPlugin;
+
         // Revealed Public members
         var service = {
             exitApp      : exitApp,
@@ -14,7 +18,55 @@
             onPageLeave  : onPageLeave
         };
 
+        PlatformUtil.waitForCordovaPlatform()
+            .then(activate);
+
         return service;
+
+        //////////////////////
+        // Native transitions plugin fixes
+
+        function activate() {
+            // Browser does not support native transitions
+            if (_.toLower(PlatformUtil.getPlatform()) === "browser") {
+                $rootScope.$on("$stateChangeStart", function() {
+                    $ionicSideMenuDelegate.toggleRight(false);
+                });
+                return;
+            }
+
+            $rootScope.$on("$stateChangeStart", onStateChangeStart);
+            $rootScope.$on("$ionicView.afterEnter", onAfterEnter);
+
+            transitionPending = false;
+            transitionPlugin = window.plugins.nativepagetransitions;
+
+            // Take manual control of the plugin grabbing screenshots and performing transitions.
+            transitionPlugin.globalOptions.iosdelay = -1;
+            transitionPlugin.globalOptions.androiddelay = -1;
+        }
+
+        function onStateChangeStart(event, toState, toParams, fromState, fromParams, options) {
+            if(!transitionPending) {
+                // Cancel the transition so Ionic doesn't update the view while the plugin is trying to get a screenshot.
+                event.preventDefault();
+                transitionPending = true;
+                // Tell the plugin to grab a screenshot
+                transitionPlugin.slide({ direction: "right" }, function() {
+                    // When the screenshot is taken, close the menu and redo the transition.
+                    $ionicSideMenuDelegate.toggleRight(false);
+                    $state.go(toState.name, toParams, options);
+                });
+            }
+        }
+
+        function onAfterEnter() {
+            // Perform the actual transition animation.
+            transitionPlugin.executePendingTransition();
+            transitionPending = false;
+        }
+
+        // End plugin fixes
         //////////////////////
 
         function exitApp() {

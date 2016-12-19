@@ -55,10 +55,9 @@
     };
 
     var ionicNativeTransitionsConfig = function($ionicNativeTransitionsProvider) {
-        $ionicNativeTransitionsProvider.setDefaultTransition({
-            type: "slide",
-            direction: "right"
-        });
+        $ionicNativeTransitionsProvider.enable(false);
+        $ionicNativeTransitionsProvider.$get().unregisterToStateChangeStartEvent();
+        $ionicNativeTransitionsProvider.$get().unregisterToRouteEvents();
     };
 
     angular

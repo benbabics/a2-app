@@ -27,7 +27,15 @@
             $rootScope.$on("app:loadingBegin", function () {
                 $ionicLoading.show({
                     template: "<ion-spinner class='spinner-light'></ion-spinner>"
-                });
+                })
+                    .then(function() {
+                        // There is a race condition where .hide() may finish before .show() and not cancel it,
+                        // resulting in .show() completing successfully, putting up a loading indicator, and effectively freezing the app.
+                        // So we check after any successful .show()s to see if the loading indicator should really be up.
+                        if (loadingIndicatorCount === 0) {
+                            complete();
+                        }
+                    });
             });
 
             $rootScope.$on("app:loadingComplete", function () {
