@@ -27,6 +27,14 @@
         // Native transitions plugin fixes
 
         function activate() {
+            // Browser does not support native transitions
+            if (_.toLower(PlatformUtil.getPlatform()) === "browser") {
+                $rootScope.$on("$stateChangeStart", function() {
+                    $ionicSideMenuDelegate.toggleRight(false);
+                });
+                return;
+            }
+
             $rootScope.$on("$stateChangeStart", onStateChangeStart);
             $rootScope.$on("$ionicView.afterEnter", onAfterEnter);
 
