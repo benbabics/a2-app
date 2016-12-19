@@ -4,12 +4,12 @@
         <wex-menu-item id="option-home"
                        icon="fa-home"
                        root-state="{{::vm.config.rootStates.home}}"
-                       navigation-target="goToHome">
+                       ng-click="vm.goToHome()">
             {{::vm.config.options.home}}
         </wex-menu-item>
 
         <wex-menu-item id="option-add-payment"
-                       navigation-target="goToMakePayment"
+                       ng-click="vm.goToMakePayment()"
                        icon="fa-bank"
                        root-state="{{::vm.config.rootStates.addPayment}}"
                        wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink">
@@ -17,7 +17,7 @@
         </wex-menu-item>
 
         <wex-menu-item id="option-payments"
-                       navigation-target="goToPaymentActivity"
+                       ng-click="vm.goToPaymentActivity()"
                        icon="fa-usd"
                        root-state="{{::vm.config.rootStates.payments}}"
                        wex-analytics-track-event="vm.config.ANALYTICS.events.paymentActivityLink">
@@ -25,16 +25,16 @@
         </wex-menu-item>
 
         <wex-menu-item id="option-transaction-activity"
-                       navigation-target="goToTransactionActivity"
+                       ng-click="vm.goToTransactionActivity()"
                        icon="fa-exchange"
                        root-state="{{::vm.config.rootStates.transactionActivity}}"
-                       wex-analytics-track-event="vm.config.ANALYTICS.events.transactionActivityLink">
+                  wex-analytics-track-event="vm.config.ANALYTICS.events.transactionActivityLink">
             {{::vm.config.options.transactionActivity}}
         </wex-menu-item>
 
         <wex-menu-item id="option-notifications"
                        wex-feature-flag="PUSH_NOTIFICATIONS"
-                       navigation-target="goToNotifications"
+                       ng-click="vm.goToNotifications()"
                        icon="fa-bell"
                        root-state="{{::vm.config.rootStates.notifications}}"
                        no-chevron="{{vm.getUnreadNotificationsCount() > 0}}">
@@ -43,7 +43,7 @@
         </wex-menu-item>
 
         <wex-menu-item id="option-cards"
-                       navigation-target="goToCards"
+                       ng-click="vm.goToCards()"
                        icon="fa-credit-card-alt"
                        root-state="{{::vm.config.rootStates.cards}}"
                        wex-analytics-track-event="vm.config.ANALYTICS.events.cardsLink">
@@ -52,14 +52,14 @@
 
         <wex-menu-item id="option-settings"
                        ng-if="vm.fingerprintAuthAvailable"
-                       navigation-target="goToSettings"
+                       ng-click="vm.goToSettings()"
                        icon="fa-cog"
                        root-state="{{::vm.config.rootStates.settings}}">
             {{::vm.config.options.settings}}
         </wex-menu-item>
 
         <wex-menu-item id="option-contact-us"
-                       navigation-target="goToContactUs"
+                       ng-click="vm.goToContactUs()"
                        icon="fa-comments"
                        root-state="{{::vm.config.rootStates.contactUs}}">
             {{::vm.config.options.contactUs}}
@@ -67,18 +67,18 @@
 
         <wex-menu-item id="option-terms"
                        root-state="{{::vm.config.rootStates.terms}}"
-                       navigation-target="goToTermsOfUse">
+                       ng-click="vm.goToTermsOfUse()">
             {{::vm.config.options.terms}}
         </wex-menu-item>
 
         <wex-menu-item id="option-privacy-policy"
-                       navigation-target="goToPrivacyPolicy"
+                       ng-click="vm.goToPrivacyPolicy()"
                        root-state="{{::vm.config.rootStates.privacyPolicy}}">
             {{::vm.config.options.privacyPolicy}}
         </wex-menu-item>
 
         <wex-menu-item id="option-log-out"
-                       navigation-target="goToLogOut">
+                       ng-click="vm.goToLogOut()">
             {{::vm.config.options.logOut}}
         </wex-menu-item>
 

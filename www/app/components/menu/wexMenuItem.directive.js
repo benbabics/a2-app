@@ -25,10 +25,6 @@
                 scope.noChevron = (value.toUpperCase() === "TRUE");
             });
             scope.menu = ctrl;
-
-            elem.on("click", function() {
-                ctrl.navigate(attrs.navigationTarget);
-            });
         }
     }
 
