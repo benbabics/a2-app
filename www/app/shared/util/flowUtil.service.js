@@ -209,5 +209,5 @@
 
     angular
         .module("app.shared.util")
-        .factory("FlowUtil", FlowUtil)
+        .factory("FlowUtil", FlowUtil);
 })();
