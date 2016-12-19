@@ -15,7 +15,7 @@
 
     /* @ngInject */
     function wexInfiniteList(_, $q) {
-        var DEFAULT_RELOAD_DISTANCE = "1%";
+        var DEFAULT_RELOAD_DISTANCE = "20%";
 
         var directive = {
             restrict   : "E",
