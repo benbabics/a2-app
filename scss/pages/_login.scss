@@ -7,75 +7,91 @@
 
   $checkbox-size: 16px;
 
+  $small-device: 480px;
+
   /**
    * Alerts
   **/
   .alerts-wrapper {
     position: absolute;
-    left: 0;
     width: 100%;
-    font-size: 12px;
-    line-height: normal;
 
     .bar {
       position: relative;
+    }
+
+    @media (max-height: $small-device) {
+      @at-root .keyboard-open & {
+        display: none;
+      }
     }
   }
 
   /**
    * Content
   **/
-  .scroll-content, #title-heading-bar, #login-content {
-    display: flex;
-    flex-direction: column;
-  }
-
   .scroll-content {
+    $scroll-offset: $wex-notification-bar-height;
+    $scroll-offset-statusbar-ios: $ios-statusbar-height;
+    $scroll-offset-ios: $scroll-offset + $scroll-offset-statusbar-ios;
+
+    @include flexbox();
+    @include flex-direction(column);
+    @include align-items(center);
+    @include justify-content(flex-end);
+
+    padding-top: $scroll-offset;
     padding-left:  16px;
     padding-right: 16px;
     background: $color-white url('../img/pages/login/background-street.jpg') no-repeat;
     background-size: 100%;
     font-family: 'open_sansregular';
-    align-items: center;
+
+    @at-root .platform-ios & {
+      padding-top: $scroll-offset-ios;
+    }
 
     &.has-header, &.has-subheader {
       top: 0;
     }
 
-    #title-heading-bar {
-      justify-content: center;
-      height: 50%;
-      transition: height .2s ease-in-out;
+    &.keyboard-open {
+      @media (max-height: $small-device) {
+        padding-top: 0;
 
-      img {
-        max-width: 80%;
-        align-self: center;
-        transition: margin .2s ease-in-out;
-        margin-top: -50px;
-      }
-
-      &.open {
-        height: 25%;
-
-        img {
-          margin-top: 50px;
+        @at-root .platform-ios & {
+          padding-top: $scroll-offset-statusbar-ios;
         }
       }
     }
 
+    #title-heading-bar {
+      @include flex-grow(1);
+
+      background: no-repeat center top url("../img/pages/login/logo.png");
+      background-size: contain;
+
+      width: 70%;
+    }
+
     #login-content {
-      justify-content: flex-start;
-      height: 50%;
+      @include flex-shrink(0);
+
+      height: 42%;
       width: 100%;
       max-width: 20rem;
-      transition: margin .2s ease-in-out;
+      max-height: 20rem;
     }
 
     form {
-      position: relative;
-      top: 0;
+      @include flexbox();
+      @include flex-direction(column);
+      @include justify-content(space-between);
+
+      height: 95%;
       padding: 8px 16px;
       background-color: #eee;
+      margin-bottom: -8px;
 
       &:after {
         position: absolute;
@@ -86,28 +102,30 @@
         box-shadow: 0 2px 3px rgba(0,0,0,.4);
         content: "";
       }
-    }
 
-    .login-controls {
-      padding: 0;
-      display: flex;
-      align-items: center;
-    }
+      .login-controls {
+        @include flexbox();
+        @include align-items(center);
 
-    .justify-left, .justify-right, .fingerprint-indicator {
-      display: flex;
-      width: 50%;
-      align-items: center;
-    }
+        padding: 0;
+      }
 
-    .justify-left {
-      justify-content: flex-start;
-      order: 0;
-    }
+      .justify-left, .justify-right, .fingerprint-indicator {
+        @include flexbox();
+        @include align-items(center);
 
-    .justify-right {
-      justify-content: flex-end;
-      order: 1;
+        width: 50%;
+      }
+
+      .justify-left {
+        @include justify-content(flex-start);
+        @include order(0);
+      }
+
+      .justify-right {
+        @include justify-content(flex-end);
+        @include order(1);
+      }
     }
 
     .fingerprint-indicator {
@@ -121,8 +139,17 @@
       }
     }
 
-    .list, .login-controls {
+    .list-input, .login-controls {
       margin-bottom: 8px;
+    }
+
+    .list-input {
+      $num-items: 2;
+      height: 40%;
+
+      & > .item {
+        height: 100% / $num-items;
+      }
     }
 
     .item-checkbox {
@@ -132,7 +159,8 @@
       background-color: transparent;
 
       .checkbox {
-        order: 1;
+        @include order(1);
+
         position: relative;
         left: auto;
         right: auto;
@@ -143,9 +171,10 @@
       }
 
       .item-content {
-        order: 0;
+        @include order(0);
+
         text-overflow: initial;
-        white-space:   pre;
+        white-space: pre;
         text-align: left;
         color: $color-dark-gray;
         font-size: .9em;
@@ -200,6 +229,7 @@
       border-color: #b9b9b9;
 
       input {
+        height: 100%;
         color: #333;
         font-family: 'open_sansbold';
         background-color: transparent;
@@ -221,17 +251,39 @@
 
     .actions {
       .button-primary {
-        color:            $color-white;
+        color: $color-white;
         background-color: $color-primary;
 
         &[disabled] {
           opacity: .7;
+        }
+
+        @media (max-height: $small-device) {
+          margin: 0;
         }
       }
     }
 
     .button-positive {
       color: $color-primary;
+    }
+
+    #enrollment-link {
+      width: 100%;
+      height: 5%;
+
+      @at-root .keyboard-open & {
+        visibility: hidden;
+      }
+    }
+
+    #keyboard-spacer {
+      @include flex-shrink(0);
+
+      width: 100%;
+      height: 0;
+      min-height: 15%;
+      transition: height .2s ease-in-out;
     }
   }
 
