@@ -39,7 +39,7 @@
             options = options || {};
 
             if (options.secure) {
-                SecureStorage.remove(key);
+                return SecureStorage.remove(key);
             }
             else {
                 delete $localStorage[key];
