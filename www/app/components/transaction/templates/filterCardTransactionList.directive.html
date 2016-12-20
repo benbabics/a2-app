@@ -8,16 +8,16 @@
                        loading-complete="infiniteScrollService.isLoadingComplete">
 
         <ion-item class="item item-icon-right" collection-repeat="card in cards.collection" ng-class="{ 'item-last': $last }">
-            <a class="item-content" ui-sref="transaction.filterBy({ filterBy: 'card', filterValue: card.cardId, isGreeking: card.isGreekLoading })" wex-click>
-                <div ng-show="card.isGreekLoading">
-                    <wex-ui-greeking />
-                </div>
+            <div ng-show="card.isGreekLoading">
+                <wex-ui-greeking/>
+            </div>
 
-                <div ng-hide="card.isGreekLoading">
+            <div ng-hide="card.isGreekLoading">
+                <a class="item-content" ui-sref="transaction.filterBy({filterBy: 'card', filterValue: card.cardId})" wex-click>
                     <span class="greek-block">{{ card.embossedCardNumber | wexCardNumber }}</span>
                     <i class="icon fa fa-chevron-right"></i>
-                </div>
-            </a>
+                </a>
+            </div>
         </ion-item>
     </wex-infinite-list>
 

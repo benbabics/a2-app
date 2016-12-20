@@ -1,7 +1,6 @@
 <ion-item class="item item-icon-right widget-transaction-result-as-date"
           ng-class="{ 'item-last': $last }">
 
-    <a class="item-content" ui-sref="payment.activity.detail({ paymentId: payment.id, isGreeking: payment.isGreekLoading })" wex-click>
         <div ng-show="payment.isGreekLoading">
             <wex-ui-greeking item-height="40px">
                 <rect height="15" width="70" y="0" x="250"></rect>
@@ -10,14 +9,14 @@
         </div>
 
         <div ng-hide="payment.isGreekLoading">
-            <span class="list_align ellipsis">
-                {{ payment.getBankAccountDisplayName() }}
-                <br>
-                {{ payment.scheduledDate | wexDefaultDateFormat }}
-            </span>
-            <span class="value_align">{{ payment.amount | currency }}</span>
-            <i class="icon fa fa-chevron-right"></i>
+            <a class="item-content" ui-sref="payment.activity.detail({ paymentId: payment.id, isGreeking: payment.isGreekLoading })" wex-click>
+                <span class="list_align ellipsis">
+                    {{ payment.getBankAccountDisplayName() }}
+                    <br>
+                    {{ payment.scheduledDate | wexDefaultDateFormat }}
+                </span>
+                <span class="value_align">{{ payment.amount | currency }}</span>
+                <i class="icon fa fa-chevron-right"></i>
+            </a>
         </div>
-    </a>
-
 </ion-item>

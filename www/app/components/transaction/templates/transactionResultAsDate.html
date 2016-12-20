@@ -4,7 +4,6 @@
     </ion-item>
 
     <ion-item class="item item-icon-right widget-transaction-result-as-date" ng-class="{ 'item-last': $last }">
-        <a class="item-content" ui-sref="transaction.postedDetail({ transactionId: transaction.transactionId, isGreeking: transaction.isGreekLoading })" wex-click>
             <div ng-show="transaction.isGreekLoading">
                 <wex-ui-greeking item-height="88px">
                    <rect height="88" width="45" y="0" x="250"></rect>
@@ -13,26 +12,29 @@
                    <rect height="15" width="250" y="45" x="0"></rect>
                    <rect height="13" width="250" y="75" x="0"></rect>
                 </wex-ui-greeking>
+
+                <i class="icon fa fa-chevron-right" ng-show="displayChevron"></i>
             </div>
 
             <div ng-hide="transaction.isGreekLoading">
-                <div class="row date-filter-list">
-                    <div class="col col-65 greek-block-group">
-                        <span class="text-block text-strong" ng-hide="isCard">{{ transaction.embossedCardNumber | wexCardNumber }} &nbsp;</span>
-                        <span class="text-block text-strong" ng-show="isCard">{{ transaction.driverLastName }}, {{ transaction.driverFirstName }} &nbsp;</span>
-                        <span class="text-block">{{ transaction.customVehicleId }} &nbsp;</span>
-                        <span class="text-block">{{ transaction.merchantName }} &nbsp;</span>
-                        <span class="text-block">{{ transaction.productDescription }} &nbsp;</span>
-                    </div>
-                    <div class="col col-35 greek-block-group">
-                        <div class="chevron">
-                            <span class="currency text-block">{{ transaction.netCost | currency }} &nbsp;</span>
+                <a class="item-content" ui-sref="transaction.postedDetail({ transactionId: transaction.transactionId, isGreeking: transaction.isGreekLoading })" wex-click>
+                    <div class="row date-filter-list">
+                        <div class="col col-65 greek-block-group">
+                            <span class="text-block text-strong" ng-hide="isCard">{{ transaction.embossedCardNumber | wexCardNumber }} &nbsp;</span>
+                            <span class="text-block text-strong" ng-show="isCard">{{ transaction.driverLastName }}, {{ transaction.driverFirstName }} &nbsp;</span>
+                            <span class="text-block">{{ transaction.customVehicleId }} &nbsp;</span>
+                            <span class="text-block">{{ transaction.merchantName }} &nbsp;</span>
+                            <span class="text-block">{{ transaction.productDescription }} &nbsp;</span>
+                        </div>
+                        <div class="col col-35 greek-block-group">
+                            <div class="chevron">
+                                <span class="currency text-block">{{ transaction.netCost | currency }} &nbsp;</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <i class="icon fa fa-chevron-right" ng-show="displayChevron"></i>
-        </a>
+                    <i class="icon fa fa-chevron-right" ng-show="displayChevron"></i>
+                </a>
+            </div>
     </ion-item>
 </div>

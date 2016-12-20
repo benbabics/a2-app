@@ -8,16 +8,16 @@
                        loading-complete="infiniteScrollService.isLoadingComplete">
 
         <ion-item class="item item-icon-right" collection-repeat="driver in drivers.collection" ng-class="{ 'item-last': $last }">
-            <a class="item-content" ui-sref="transaction.filterBy({ filterBy: 'driver', filterValue: driver.promptId, isGreeking: driver.isGreekLoading })" wex-click>
-                <div ng-show="driver.isGreekLoading">
-                    <wex-ui-greeking/>
-                </div>
+            <div ng-show="driver.isGreekLoading">
+                <wex-ui-greeking/>
+            </div>
 
-                <div ng-hide="driver.isGreekLoading">
+            <div ng-hide="driver.isGreekLoading">
+                <a class="item-content" ui-sref="transaction.filterBy({filterBy: 'driver', filterValue: driver.promptId})" wex-click>
                     <span class="greek-block">{{ driver.lastName }}, {{ driver.firstName }}</span>
                     <i class="icon fa fa-chevron-right"></i>
-                </div>
-            </a>
+                </a>
+            </div>
         </ion-item>
     </wex-infinite-list>
 
