@@ -51,9 +51,6 @@
         $stateProvider.state("payment.activity.detail", {
             url        : "/detail/:paymentId",
             cache      : false,
-            params     : {
-                isGreeking: false
-            },
             views: {
                 "view@payment": {
                     templateUrl: "app/components/payment/templates/paymentDetail.html",

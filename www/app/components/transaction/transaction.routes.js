@@ -65,9 +65,6 @@
                 controller : "PostedTransactionDetailController as vm"
               }
             },
-            params: {
-                isGreeking: false
-            },
             resolve: {
                 postedTransaction: function ($stateParams, LoadingIndicator, TransactionManager) {
                     var transactionId = $stateParams.transactionId;

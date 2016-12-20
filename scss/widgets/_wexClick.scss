@@ -22,7 +22,7 @@
 }
 
 .item {
-  &, & > a {
+  &, & * {
     //override Ionic's buggy activated styling
     &[wex-click] {
       &.activated {
