@@ -215,7 +215,6 @@
             "cardNumber"       : "Card No",
             "embossing"        : "Embossing",
             "status"           : "Status",
-            "reloadDistance"   : "50%",
             "emptyList"        : "No Records Found."
         },
         "SEARCH_OPTIONS": {
@@ -375,7 +374,6 @@
             },
             "title":                   "Alerts",
             "emptyList":               "There are no alerts at this time.",
-            "reloadDistance":          "5%",
             "labelDeleteNotification": "Delete"
         },
         "SEARCH_OPTIONS": {
@@ -754,7 +752,6 @@
                 }
             },
             "title"         : "Transactions",
-            "reloadDistance": "50%",
             "emptyList"     : "No Records Found.",
             "buttonLabels"  : {
                 "date"  : "Date",

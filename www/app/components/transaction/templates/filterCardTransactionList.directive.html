@@ -4,7 +4,6 @@
 
     <wex-infinite-list on-reload="loadNextPage"
                        is-pending="infiniteScrollService.isPending"
-                       reload-distance="::config.reloadDistance"
                        loading-complete="infiniteScrollService.isLoadingComplete">
 
         <ion-item class="item item-icon-right" collection-repeat="card in cards.collection" ng-class="{ 'item-last': $last }">
