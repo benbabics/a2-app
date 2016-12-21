@@ -4,7 +4,7 @@
     <ion-content>
         <div class="content padding">
             <p>
-              {{::vm.config.lastUpdated}} {{::vm.releaseDate | wexDefaultDateFormat}}
+              {{::vm.config.lastUpdated}} {{::vm.config.lastUpdatedDate | wexDefaultDateFormat}}
             </p>
             <p id="introduction">
                 <span ng-bind-html="vm.config.introduction"></span>
