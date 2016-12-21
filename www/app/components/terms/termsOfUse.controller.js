@@ -8,8 +8,6 @@
 
         var vm = this;
         vm.config = globals.TERMS_OF_USE.CONFIG;
-        vm.releaseDate = new Date();
-
         //////////////////////
 
     }
