@@ -5,6 +5,7 @@
 
         var LoadingIndicator,
             $ionicLoading,
+            $q,
             $rootScope;
 
         beforeAll(function () {
@@ -19,28 +20,78 @@
                 $provide.value("$ionicLoading", $ionicLoading);
             });
 
-            inject(function (_$rootScope_, _LoadingIndicator_) {
+            inject(function (_$q_, _$rootScope_, _LoadingIndicator_) {
                 LoadingIndicator = _LoadingIndicator_;
+                $q = _$q_;
                 $rootScope = _$rootScope_;
             });
         });
 
         describe("has an app:loadingBegin event handler function that", function () {
+            var showDeferred;
 
-            beforeEach(function () {
-                $rootScope.$emit("app:loadingBegin");
+            beforeEach(function() {
+                showDeferred = $q.defer();
+                $ionicLoading.show.and.returnValue(showDeferred.promise);
             });
 
-            //TODO - Fix
-            xit("should call $ionicLoading.show", function () {
-                expect($ionicLoading.show).toHaveBeenCalled();
+            describe("when the loadingIndicatorCount > 0", function() {
+                beforeEach(function() {
+                    LoadingIndicator.begin(); // Increments loadingIndicatorCount
+                    $rootScope.$emit("app:loadingBegin");
+                });
+
+                it("should call $ionicLoading.show", function () {
+                    expect($ionicLoading.show).toHaveBeenCalled();
+                });
+
+                it("should display an ion-spinner", function () {
+                    expect($ionicLoading.show.calls.mostRecent().args).toEqual([{
+                        template: "<ion-spinner class='spinner-light'></ion-spinner>"
+                    }]);
+                });
+
+                describe("when the $ionicLoading.show promise is resolved", function() {
+                    beforeEach(function() {
+                        spyOn($rootScope, "$emit");
+                        spyOn(LoadingIndicator, "complete");
+                        showDeferred.resolve();
+                        $rootScope.$digest();
+                    });
+
+                    it("should NOT call complete()", function() {
+                        expect($rootScope.$emit).not.toHaveBeenCalledWith("app:loadingComplete");
+                    });
+                });
             });
 
-            //TODO - Fix
-            xit("should display an ion-spinner", function () {
-                expect($ionicLoading.show.calls.mostRecent().args).toEqual([{
-                    template: "<ion-spinner class='spinner-light'></ion-spinner>"
-                }]);
+            describe("when the loadingIndicatorCount == 0", function() {
+                beforeEach(function() {
+                    $rootScope.$emit("app:loadingBegin");
+                });
+
+                it("should call $ionicLoading.show", function () {
+                    expect($ionicLoading.show).toHaveBeenCalled();
+                });
+
+                it("should display an ion-spinner", function () {
+                    expect($ionicLoading.show.calls.mostRecent().args).toEqual([{
+                        template: "<ion-spinner class='spinner-light'></ion-spinner>"
+                    }]);
+                });
+
+                describe("when the $ionicLoading.show promise is resolved", function() {
+                    beforeEach(function() {
+                        spyOn($rootScope, "$emit");
+                        spyOn(LoadingIndicator, "complete");
+                        showDeferred.resolve();
+                        $rootScope.$digest();
+                    });
+
+                    it("should call complete()", function() {
+                        expect($rootScope.$emit).toHaveBeenCalledWith("app:loadingComplete");
+                    });
+                });
             });
         });
 
