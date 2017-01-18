@@ -28,9 +28,6 @@ module.exports = function(context) {
 
     var PATHS_TO_REMOVE = [
             "lib/ionic/scss",
-            "app",
-            "build",
-            "test",
             "templates.module.js"
         ],
         rootDir = context.opts.projectRoot;

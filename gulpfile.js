@@ -62,22 +62,23 @@ var config = {
 
 var sourcePaths = {
     root: {
-        root: "./www/",
+        root: "./src/",
         sass: ["./scss/*.scss"],
-        scripts: ["./www/app/**/*.js"],
-        templates: ["./www/app/**/*.html"],
-        indexPage: ["./www/index.html"]
+        scripts: ["./src/app/**/*.js"],
+        templates: ["./src/app/**/*.html"],
+        indexPage: ["./src/index.html"],
+        dependencies: ["src/lib/**/*", "src/fonts/**/*", "src/img/**/*"]
     },
     browser: ["./platforms/browser/www"]
 };
 
 var destPaths = {
-    rootDir: "./www/build/",
-    cssDir: "./www/build/css/",
-    cssFiles: ["./www/build/**/*.css"],
-    cssMinFiles: ["./www/build/**/*min.css"],
-    scriptFile: path.join("./www/build/", config.compile.scriptName),
-    templatesFile: path.join("./www/build/", config.compile.templateScriptName)
+    rootDir: "./www/",
+    cssDir: "./www/css/",
+    cssFiles: ["./www/**/*.css"],
+    cssMinFiles: ["./www/**/*min.css"],
+    scriptFile: path.join("./www/", config.compile.scriptName),
+    templatesFile: path.join("./www/", config.compile.templateScriptName)
 };
 
 gulp.task("default", gulpsync.sync(["ionic-build-browser", "watch", "serve-browser"]));
@@ -152,6 +153,12 @@ gulp.task("index", function (done) {
         .on("end", done);
 });
 
+gulp.task("copy-deps", function (done) {
+    gulp.src(sourcePaths.root.dependencies, {base: sourcePaths.root.root})
+        .pipe(gulp.dest(destPaths.rootDir))
+        .on("end", done);
+});
+
 gulp.task("concat-html", function (done) {
     var templates = {};
 
@@ -200,7 +207,7 @@ gulp.task("compile", ["concat-html"], function (done) {
         });
 });
 
-gulp.task("link", gulpsync.sync(["sass", "bower", "index"]));
+gulp.task("link", gulpsync.sync(["sass", "bower", "index", "copy-deps"]));
 
 /**
  * Cordova Tasks
