@@ -120,7 +120,7 @@ gulp.task("prepare-environment", gulpsync.sync(["npm-install", "bower-install", 
  * Dependency building and compilation Tasks
  */
 gulp.task("clean", function () {
-    return del(destPaths.root);
+    return del(destPaths.rootDir);
 });
 
 gulp.task("sass", function (done) {
