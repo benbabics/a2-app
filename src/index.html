@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <meta name="format-detection" content="telephone=no">
+        <meta http-equiv="Content-Security-Policy" content="@@@STRING_REPLACE_CSP@@@">
+        <title></title>
+
+        <!-- bower:css -->
+        <link rel="stylesheet" href="lib/ang-accordion/css/ang-accordion.css" />
+        <link rel="stylesheet" href="lib/angular-chart.js/dist/angular-chart.css" />
+        <link rel="stylesheet" href="lib/ionic/release/css/ionic.css" />
+        <!-- endbower -->
+
+        <!-- compiled css output - generated during compilation -->
+        <!-- inject:css -->
+        <!-- endinject -->
+    </head>
+    <body ng-app="app">
+
+    <div id="status-bar-overlay"></div>
+
+    <ion-side-menus enable-menu-with-back-views="true">
+        <ion-side-menu-content drag-content="false">
+            <!--
+            The nav bar that will be updated as we navigate between views.
+            -->
+            <ion-nav-bar class="bar-wex" ng-controller="NavBarController as vm" ng-cloak>
+                <ion-nav-buttons side="left">
+                    <wex-back-button class="button-wex-back">
+                    </wex-back-button>
+                </ion-nav-buttons>
+
+                <ion-nav-buttons side="right">
+                    <button menu-toggle="right"
+                            class="button button-clear icon ion-navicon">
+                        <span wex-feature-flag="PUSH_NOTIFICATIONS"
+                              ng-show="vm.getUnreadNotificationsCount() > 0"
+                              class="badge badge-assertive">
+                            {{vm.getUnreadNotificationsCount()}}
+                        </span>
+                    </button>
+                </ion-nav-buttons>
+            </ion-nav-bar>
+
+            <div ng-controller="NetworkStatusController as networkStatus">
+                <wex-notification-bar text="{{networkStatus.bannerText}}"
+                                      ng-if="!networkStatus.isOnline"
+                                      closeable="false"
+                                      priority="0">
+                </wex-notification-bar>
+                <div ng-controller="ServerConnectionErrorBannerController as serverConnection">
+                    <wex-notification-bar class="sever-connection-banner"
+                                          text="{{serverConnection.bannerText}}"
+                                          ng-if="networkStatus.isOnline && !serverConnection.isConnected"
+                                          closeable="false"
+                                          priority="1">
+                    </wex-notification-bar>
+                </div>
+            </div>
+
+            <!--
+            The views will be rendered in the <ion-nav-view> directive below
+            -->
+            <ion-nav-view class="nav-view-root"></ion-nav-view>
+        </ion-side-menu-content>
+
+        <ion-side-menu side="right" wex-menu></ion-side-menu>
+    </ion-side-menus>
+
+        <!-- libraries -->
+
+        <!-- Note: angular must come first as many of the other libraries depend on it -->
+        <script src="lib/angular/angular.js"></script>
+
+        <!-- Note: ngCordova must go after ionic and before cordova -->
+        <!-- bower:js -->
+        <script src="lib/ang-accordion/js/ang-accordion.js"></script>
+        <script src="lib/angular-base64/angular-base64.js"></script>
+        <script src="lib/Chart.js/Chart.js"></script>
+        <script src="lib/angular-chart.js/dist/angular-chart.js"></script>
+        <script src="lib/angular-mocks/angular-mocks.js"></script>
+        <script src="lib/moment/moment.js"></script>
+        <script src="lib/angular-moment/angular-moment.js"></script>
+        <script src="lib/angular-promise-extras/angular-promise-extras.js"></script>
+        <script src="lib/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="lib/ion-sticky/ion-sticky.js"></script>
+        <script src="lib/angular-animate/angular-animate.js"></script>
+        <script src="lib/angular-sanitize/angular-sanitize.js"></script>
+        <script src="lib/ionic/release/js/ionic.js"></script>
+        <script src="lib/ionic/release/js/ionic-angular.js"></script>
+        <script src="lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script>
+        <script src="lib/lodash/lodash.js"></script>
+        <script src="lib/lokijs/src/lokijs.js"></script>
+        <script src="lib/moment-timezone/builds/moment-timezone-with-data-2010-2020.js"></script>
+        <script src="lib/ng-idle/angular-idle.js"></script>
+        <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+        <script src="lib/ngFitText/dist/ng-FitText.min.js"></script>
+        <script src="lib/ngstorage/ngStorage.js"></script>
+        <script src="lib/restangular/dist/restangular.js"></script>
+        <script src="lib/ionic-native-transitions/dist/ionic-native-transitions.js"></script>
+        <!-- endbower -->
+
+        <!-- Scripts not picked up by bower wiredep -->
+        <script src="lib/lokijs/src/loki-angular.js"></script>
+
+        <!-- cordova script (this will be a 404 during development) -->
+        <script src="cordova.js"></script>
+
+        <!-- app script (this will be a 404 during development) -->
+        <script src="scripts.js"></script>
+    </body>
+</html>
