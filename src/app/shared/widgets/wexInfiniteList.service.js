@@ -67,9 +67,7 @@
           greekResultsPost.call( this, collection, greekingCollection, [] );
           return this.isLoadingComplete = true;
         })
-        .finally(function() {
-            this.isPending = false;
-        });
+        .finally(() => this.isPending = false);
     }
 
     function resetCollection(options) {
