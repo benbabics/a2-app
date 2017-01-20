@@ -55,7 +55,7 @@ module.exports = function(config) {
             "../test/unit/helpers/common_mocks.js",
 
             // Source code
-            "build/scripts.js",
+            "scripts.js",
 
             // Unit Tests
             "../test/unit/**/*.spec.js",
