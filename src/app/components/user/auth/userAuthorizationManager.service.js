@@ -84,6 +84,7 @@
 
                             return termsModal.show();
                         })
+                        .catch($q.reject)
                         .then(function () {
                             var acceptedTermsDeferred = $q.defer(),
                                 listenerRemovers = [];
@@ -106,7 +107,9 @@
                         })
                         .then(logFingerprintTermsAcceptance)
                         .finally(function () {
-                            return termsModal.remove();
+                            if (termsModal) {
+                                return termsModal.remove();
+                            }
                         });
                 })
                 //verify the user's fingerprint
