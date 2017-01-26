@@ -268,31 +268,6 @@
                 });
             });
 
-            describe("when makeRequest resolves with a full list of cards", function () {
-                var mockCards;
-
-                beforeEach(function () {
-                    var numCards = 4;
-                    mockCards = [];
-                    for (var i = 0; i < numCards; ++i) {
-                        mockCards.push( TestUtils.getRandomCard(CardModel) );
-                    }
-
-                    _.extend(mockCards[0], { status: "ACTIVE",   embossedCardNumber: "0003" });
-                    _.extend(mockCards[1], { status: "INACTIVE", embossedCardNumber: "0004" });
-                    _.extend(mockCards[2], { status: "ACTIVE",   embossedCardNumber: "0001" });
-                    _.extend(mockCards[3], { status: "INACTIVE", embossedCardNumber: "0002" });
-                });
-
-                beforeEach(function () {
-                    // mockCards will be sorted messing up original indexes
-                    var collection = _.cloneDeep( mockCards );
-                    // resolve with cloned collection
-                    fetchCardsDeferred.resolve( collection );
-                    $rootScope.$digest();
-                });
-            });
-
             describe("when makeRequest rejects", function () {
                 beforeEach(function () {
                     fetchCardsDeferred.reject();
