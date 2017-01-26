@@ -1,6 +1,10 @@
 .widget-ui-greeking {
   background-color: #f4f4f4;
 
+  .item-icon-right & {
+    margin-right: -25px; // make up for `padding-right: 50px;` indentation from .item-icon-right
+  }
+
   svg {
     display: block;
     width: 100%;
