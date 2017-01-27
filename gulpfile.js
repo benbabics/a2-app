@@ -111,7 +111,9 @@ gulp.task("npm-install", function (done) {
 });
 
 gulp.task("create-www", function () {
-   fs.mkdir(destPaths.rootDir);
+    if (!fs.existsSync(destPaths.rootDir)) {
+        fs.mkdir(destPaths.rootDir);
+    }
 });
 
 gulp.task("ionic-restore", function (done) {
