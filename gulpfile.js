@@ -110,11 +110,15 @@ gulp.task("npm-install", function (done) {
     sh.exec("yarn", done);
 });
 
+gulp.task("create-www", function () {
+   fs.mkdir(destPaths.rootDir);
+});
+
 gulp.task("ionic-restore", function (done) {
     sh.exec("ionic state reset", done);
 });
 
-gulp.task("prepare-environment", gulpsync.sync(["npm-install", "bower-install", "ionic-restore"]));
+gulp.task("prepare-environment", gulpsync.sync(["npm-install", "bower-install", "create-www", "ionic-restore"]));
 
 /**
  * Dependency building and compilation Tasks
