@@ -70,7 +70,20 @@ module.exports = function(config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            "app/**/*.js": "coverage"
+            "app/**/*.js": "coverage",
+            "../test/unit/**/*.spec.js" : "babel"
+        },
+        babelPreprocessor: {
+            options: {
+                presets: "es2015",
+                sourceMap: "inline"
+            },
+            filename: function (file) {
+                return file.originalPath.replace(/\.js$/, ".es5.js");
+            },
+            sourceFileName: function (file) {
+                return file.originalPath;
+            }
         },
 
 
@@ -102,6 +115,7 @@ module.exports = function(config) {
 
         plugins: [
             "karma-teamcity-reporter",
+            "karma-babel-preprocessor",
             "karma-coverage",
             "karma-jasmine-html-reporter",
             "karma-junit-reporter",
