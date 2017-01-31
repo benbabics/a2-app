@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Fleet SmartHub: An Ionic project",
   "devDependencies": {
-    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-es2015": "^6.22.0",
     "bower": "^1.7.0",
     "cordova": "^6.3.1",
     "del": "^2.2.2",
@@ -35,6 +35,7 @@
     "jshint": "^2.8.0",
     "jshint-stylish": "^2.1.0",
     "karma": "^0.13.15",
+    "karma-babel-preprocessor": "^6.0.1",
     "karma-chrome-launcher": "^0.2.2",
     "karma-coverage": "^0.5.3",
     "karma-es6-shim": "^1.0.0",
