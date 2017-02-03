@@ -115,6 +115,11 @@
 
           <section id="sectionFourteen">
             <p ng-bind-html="vm.config.sectionFourteen.content"></p>
+
+            {{ vm.config.sectionFourteen.byEmailLabel }}
+            <a href="{{ vm.sendEmailLink }}">{{ vm.config.sectionFourteen.byEmailDisplay }}</a>
+            <br><br>
+
             <div ng-repeat="item in vm.config.sectionFourteen.contents" ng-bind-html="item.content"></div>
           </section>
 
