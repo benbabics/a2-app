@@ -91,10 +91,6 @@
                 expect($rootScope.$emit).toHaveBeenCalledWith("app:logout");
             });
 
-            it("should call this.AnalyticsUtil.startTracker with the generic tracker ID", function () {
-                expect(this.AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId);
-            });
-
             it("should call Popup.closeAllPopups", function () {
                 expect(Popup.closeAllPopups).toHaveBeenCalledWith();
             });
@@ -152,10 +148,6 @@
                         $rootScope.$digest();
                     });
 
-                    it("should call this.AnalyticsUtil.startTracker with the user's branded tracker ID", function () {
-                        expect(this.AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId.assetValue);
-                    });
-
                     it("should call this.AnalyticsUtil.setUserId with the expected value", function () {
                         expect(this.AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
                     });
@@ -188,10 +180,6 @@
 
                     it("should log the error", function () {
                         expect(this.Logger.error).toHaveBeenCalledWith(LoggerUtil.getErrorMessage(error));
-                    });
-
-                    it("should call this.AnalyticsUtil.startTracker with the user's branded tracker ID", function () {
-                        expect(this.AnalyticsUtil.startTracker).toHaveBeenCalledWith(trackingId.assetValue);
                     });
 
                     it("should call this.AnalyticsUtil.setUserId with the expected value", function () {
