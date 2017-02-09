@@ -1,4 +1,6 @@
-<ion-view view-title="{{ ::vm.config.title }}" class="page-settings">
+<ion-view class="page-settings" view-title="{{ ::vm.config.title }}"
+                                wex-hide-back-button="true"
+                                wex-back-state="landing">
     <ion-content>
         <div class="content">
             <div class="alert alert-success" ng-class="{ 'is-visible': vm.fingerprintProfileSuccessMessage }">
