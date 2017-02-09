@@ -39,7 +39,7 @@
                             //eat the error
                         });
                 })
-                .then(startBrandedTracker)
+                .then(startGenericTracker)
                 .then(setTrackerUserId)
                 .catch(function (error) {
                     throw new Error("Failed to complete login initialization: " + LoggerUtil.getErrorMessage(error));
@@ -54,9 +54,6 @@
             //close the side menu
             $ionicSideMenuDelegate.toggleRight(false);
 
-            //start the generic analytics tracker
-            startGenericTracker();
-
             return $q.resolve();
         }
 
@@ -67,6 +64,11 @@
             AnalyticsUtil.setUserId(user.id);
         }
 
+        /**
+         * MOBACCTMGT-998 Track generic as smarthub universal tracking id (no longer by brand)
+         * keeping this method for a future story when GA Universal Tracking is implemented
+         * it seems that the brand will be custom dimensions this can hook into
+         */
         function startBrandedTracker() {
             var trackingId = BrandManager.getUserBrandAssetBySubtype(ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
 
