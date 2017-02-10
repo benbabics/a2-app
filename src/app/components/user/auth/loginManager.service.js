@@ -39,7 +39,6 @@
                             //eat the error
                         });
                 })
-                .then(startGenericTracker)
                 .then(setTrackerUserId)
                 .catch(function (error) {
                     throw new Error("Failed to complete login initialization: " + LoggerUtil.getErrorMessage(error));
