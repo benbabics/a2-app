@@ -5,7 +5,6 @@
         $q,
         $cordovaInAppBrowser,
         $cordovaAppVersion,
-        cordovaGetVersionNumberDeferred,
         ctrl;
 
     describe("A Privacy Policy Controller", function () {
@@ -22,6 +21,9 @@
                 $scope = $rootScope.$new();
                 $q = _$q_;
 
+                //setup mocks
+                $cordovaAppVersion.getVersionNumber.and.returnValue($q.resolve(1));
+
                 ctrl = $controller("PrivacyPolicyController", {
                     $scope              : $scope,
                     $cordovaInAppBrowser: $cordovaInAppBrowser,
@@ -29,11 +31,6 @@
                 });
 
             });
-
-            cordovaGetVersionNumberDeferred = $q.defer();
-
-            //setup mocks
-            $cordovaAppVersion.getVersionNumber.and.returnValue(cordovaGetVersionNumberDeferred.promise);
 
         });
 
