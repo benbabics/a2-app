@@ -11,6 +11,7 @@
 
         // Revealed Public members
         var service = {
+            fetchBrandLogo: fetchBrandLogo,
             getBrandAssets: getBrandAssets
         };
 
@@ -22,6 +23,16 @@
         function activate() {
             brandsResource = ConfigurationApiRestangular.service(globals.CONFIGURATION_API.BRANDS.BASE);
         }
+
+
+        function fetchBrandLogo(brandName){
+
+            var brandNameUpperCase = brandName.toUpperCase();
+            var logoUrl = `${globals.CONFIGURATION_API.BASE_URL}/${globals.CONFIGURATION_API.BRANDS.BASE}/logo/${brandNameUpperCase}.svg`;
+            return ConfigurationApiRestangular.oneUrl("brandLogo", logoUrl).get();
+
+        }
+        
 
         function forBrand(brandId) {
             return brandsResource.one(brandId);

@@ -6,7 +6,7 @@
 
     /* @ngInject */
     function BrandManager(_, $q, globals, BrandAssetModel, BrandAssetCollection, BrandUtil, BrandsResource,
-                          Logger, LoggerUtil, PromiseUtil, UserManager) {
+                          Logger, LoggerUtil, PromiseUtil, UserManager, WexCache ) {
 
         // Private members
         var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
@@ -14,6 +14,7 @@
 
         // Revealed Public members
         var service = {
+            fetchBrandLogo : fetchBrandLogo,
             fetchBrandAssets             : fetchBrandAssets,
             getBrandAssets               : getBrandAssets,
             getBrandAssetsByBrand        : getBrandAssetsByBrand,
@@ -35,6 +36,19 @@
 
         return service;
         //////////////////////
+
+        function fetchBrandLogo( onCompleteAction ){
+
+            var userDetails = UserManager.getUser();
+            return BrandsResource.fetchBrandLogo( userDetails.brand, onCompleteAction )
+                   .then(function( resolvedValue ){
+                        WexCache.storePropertyValue( "brandLogo", resolvedValue.data);
+                        return resolvedValue.data;
+                        })
+                    .finally( onCompleteAction );
+
+
+        }
 
         function cacheBrandAssetResource(brandAsset, forceUpdate) {
             return BrandUtil.cacheAssetResourceData(brandAsset, forceUpdate)

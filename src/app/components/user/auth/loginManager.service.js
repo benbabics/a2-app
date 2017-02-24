@@ -31,14 +31,6 @@
             LoadingIndicator.begin();
 
             return UserManager.fetchCurrentUserDetails()
-                .then(function (userDetails) {
-                    return BrandManager.updateBrandCache(userDetails.brand)
-                        .catch(function (error) {
-                            Logger.error(LoggerUtil.getErrorMessage(error));
-
-                            //eat the error
-                        });
-                })
                 .then(setTrackerUserId)
                 .catch(function (error) {
                     throw new Error("Failed to complete login initialization: " + LoggerUtil.getErrorMessage(error));

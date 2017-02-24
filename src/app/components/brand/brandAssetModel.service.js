@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    var BrandAssetModel = function (globals, moment, HateoasResource) {
+    var BrandAssetModel = function (globals, moment, HateoasResource, SecureApiRestangular) {
 
         function BrandAssetModel() {
             HateoasResource.call(this);
@@ -17,6 +17,8 @@
         }
 
         BrandAssetModel.prototype = Object.create(HateoasResource.prototype);
+
+        BrandAssetModel.prototype.fetchResource = function (resourceType) {};
 
         BrandAssetModel.prototype.set = function (brandAssetResource) {
             angular.extend(this, brandAssetResource);

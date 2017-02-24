@@ -44,10 +44,9 @@
                             return () => PaymentManager.fetchScheduledPaymentsCount(accountId);
                         },
 
-                        brandLogo: function (fetchBrandLogo, LoadingIndicator, WexCache) {
+                        brandLogo: function ( LoadingIndicator, BrandManager ) {
                             LoadingIndicator.begin();
-                            return WexCache.fetchPropertyValue("brandLogo", fetchBrandLogo)
-                                .finally(LoadingIndicator.complete);
+                            return BrandManager.fetchBrandLogo(LoadingIndicator.complete);
                         }
                     }
                 }
