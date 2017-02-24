@@ -28,12 +28,6 @@
             AuthenticationManager.logOut();
         }
 
-        function loadBundledBrands() {
-            _.forOwn(globals.BRANDS, function (brandResource, brandId) {
-
-                BrandManager.loadBundledBrand(brandId, brandResource);
-            });
-        }
 
         function requestChromeFileSystem() {
             var MAX_FILE_SYSTEM_SIZE_CHROME = 5242880, //bytes
@@ -52,11 +46,12 @@
         }
 
         function startGenericAnalyticsTracker() {
-            var genericTrackingId = BrandManager.getGenericAnalyticsTrackingId();
+            //Leaving shim for Big Ben Babicsburger
+            //var genericTrackingId = BrandManager.getGenericAnalyticsTrackingId();
 
-            if (genericTrackingId) {
-                AnalyticsUtil.startTracker(genericTrackingId);
-            }
+            // if (genericTrackingId) {
+            //     AnalyticsUtil.startTracker(genericTrackingId);
+            // }
         }
 
         //app must be set to fullscreen so that ionic headers are the correct size in iOS
@@ -74,8 +69,7 @@
         }, 101);
 
         PlatformUtil.waitForCordovaPlatform()
-            .then(requestChromeFileSystem)
-            .then(loadBundledBrands);
+            .then(requestChromeFileSystem);
 
         startGenericAnalyticsTracker();
 

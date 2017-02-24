@@ -5,10 +5,10 @@
     // jshint maxparams:11
 
     /* @ngInject */
-    function LoginManager($q, $ionicSideMenuDelegate, $rootScope, globals,
-                          AnalyticsUtil, BrandManager, LoadingIndicator, Logger, LoggerUtil, Popup, UserManager) {
+    function LoginManager($q, $ionicSideMenuDelegate, $rootScope,
+                          AnalyticsUtil, LoadingIndicator, LoggerUtil, Popup, UserManager) {
         // Private members
-        var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES;
+
 
         // Revealed Public members
         var service = {
@@ -55,27 +55,6 @@
             AnalyticsUtil.setUserId(user.id);
         }
 
-        /**
-         * MOBACCTMGT-998 Track generic as smarthub universal tracking id (no longer by brand)
-         * keeping this method for a future story when GA Universal Tracking is implemented
-         * it seems that the brand will be custom dimensions this can hook into
-         */
-        function startBrandedTracker() {
-            var trackingId = BrandManager.getUserBrandAssetBySubtype(ASSET_SUBTYPES.GOOGLE_ANALYTICS_TRACKING_ID);
-
-            //use the user's branded tracker
-            if (trackingId) {
-                AnalyticsUtil.startTracker(trackingId.assetValue);
-            }
-        }
-
-        function startGenericTracker() {
-            var trackingId = BrandManager.getGenericAnalyticsTrackingId();
-
-            if (trackingId) {
-                AnalyticsUtil.startTracker(trackingId);
-            }
-        }
     }
 
     angular
