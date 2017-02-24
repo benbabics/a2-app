@@ -43,15 +43,6 @@
         }
     };
 
-    /**
-     * Brand Asset Collection
-     */
-    appGlobals.BRAND_ASSET_COLLECTION = {
-        "NAME"      : "brandAssetsCollection",
-        "OPTIONS": {
-            "unique": "brandAssetId"
-        }
-    };
 
     appGlobals.USER_LOGIN = {
         "CONFIG": {
@@ -905,14 +896,6 @@
                         "href": "img/brands/wex/brand_logo/wex_logo.svg"
                     }
                 ]
-            },
-            {
-                "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
-                "assetTypeId"    : "TEXT",
-                "assetValue"     : "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_WEX@@@",
-                "brandAssetId"   : "31",
-                "clientBrandName": "WEX",
-                "links": []
             }
         ]
     };
