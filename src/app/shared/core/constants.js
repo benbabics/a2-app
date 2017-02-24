@@ -129,9 +129,9 @@
             "BASE"         : "versions",
             "STATUS"       : "status",
             "STATUS_VALUES": {
-                "NO_UPDATE"  : "ok",
-                "CAN_UPDATE" : "warn",
-                "MUST_UPDATE": "fail"
+                "NO_UPDATE"  : "OK",
+                "CAN_UPDATE" : "DEPRECATED",
+                "MUST_UPDATE": "UNSUPPORTED"
             }
         }
     };

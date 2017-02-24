@@ -18,7 +18,9 @@
 
         function createVersionStatus(versionStatusResource) {
             var versionStatus = new VersionStatusModel();
-            versionStatus.set(versionStatusResource);
+
+            versionStatus["version"] = versionStatusResource.versionNumber;
+            versionStatus["status"] = versionStatusResource.status;
 
             return versionStatus;
         }
