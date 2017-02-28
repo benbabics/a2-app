@@ -14,8 +14,7 @@
             PaymentManager,
             UserManager,
             BrandManager,
-            mockAccountId,
-            WexCache;
+            mockAccountId;
 
         beforeAll(function () {
             this.includeHtml = true;
