@@ -15,15 +15,14 @@
         return service;
         //////////////////////
 
-        function fetchBrandLogo( onCompleteAction ){
+        function fetchBrandLogo(){
 
             var userDetails = UserManager.getUser();
-            return BrandsResource.fetchBrandLogo( userDetails.brand, onCompleteAction )
+            return BrandsResource.fetchBrandLogo( userDetails.brand )
                    .then(function( resolvedValue ){
                         WexCache.storePropertyValue( "brandLogo", resolvedValue.data);
                         return resolvedValue.data;
-                        })
-                    .finally( onCompleteAction );
+                        });
         }
 
     }

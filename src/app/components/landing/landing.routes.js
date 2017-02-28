@@ -26,7 +26,7 @@
 
                         brandLogo: function ( LoadingIndicator, BrandManager ) {
                             LoadingIndicator.begin();
-                            return BrandManager.fetchBrandLogo(LoadingIndicator.complete);
+                            return BrandManager.fetchBrandLogo().finally(LoadingIndicator.complete);
                         }
                     }
                 }

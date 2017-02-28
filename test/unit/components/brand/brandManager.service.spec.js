@@ -22,7 +22,7 @@
                 $provide.value("BrandUtil", mocks.BrandUtil);
             });
 
-            inject(function (___, _$q_, _$rootScope_, _$state_, _globals_, _moment_, _BrandManager_, _BrandAssetModel_, _LoggerUtil_) {
+            inject(function (___, _$q_, _$rootScope_, _$state_, _globals_, _moment_, _BrandManager_, _LoggerUtil_) {
                 mocks._ = ___;
                 mocks.LoggerUtil = _LoggerUtil_;
                 mocks.$q = _$q_;

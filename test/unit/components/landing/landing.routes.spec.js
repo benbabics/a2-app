@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    fdescribe("A Landing Module Route Config", function () {
+    describe("A Landing Module Route Config", function () {
 
         var $injector,
             $q,
@@ -27,8 +27,7 @@
             InvoiceManager = jasmine.createSpyObj("InvoiceManager", ["fetchCurrentInvoiceSummary"]);
             PaymentManager = jasmine.createSpyObj("PaymentManager", ["fetchScheduledPaymentsCount"]);
             UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            BrandManager = jasmine.createSpyObj("BrandManager ", ["getUserBrandAssetBySubtype", "getGenericAnalyticsTrackingId", "loadBundledBrand"]);
-            WexCache = jasmine.createSpyObj("WexCache", ["clearPropertyValue", "fetchPropertyValue"]);
+            BrandManager = jasmine.createSpyObj("BrandManager ", ["fetchBrandLogo"]);
             mockAccountId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
             module(function($provide) {
@@ -37,7 +36,6 @@
                 $provide.value("PaymentManager", PaymentManager);
                 $provide.value("UserManager", UserManager);
                 $provide.value("BrandManager", BrandManager);
-                $provide.value("WexCache", WexCache);
             });
 
             inject(function (_$injector_, _$q_, _$rootScope_, _$state_, _globals_,
@@ -91,11 +89,11 @@
 
             describe("when navigated to", function () {
 
+                var fetchBrandLogoDeferred;
                 beforeEach(function () {
-                    WexCache.fetchPropertyValue.and.callFake(function (key, callback) {
-                        return callback();
-                    });
-
+                    fetchBrandLogoDeferred = $q.defer();
+                    BrandManager.fetchBrandLogo.and.returnValue(fetchBrandLogoDeferred.promise);
+                    fetchBrandLogoDeferred.resolve();
                     $state.go(stateName);
                 });
 
@@ -114,7 +112,7 @@
 
                 it("should resolve a fetchCurrentInvoiceSummary function", function () {
                     $rootScope.$digest();
-
+                    console.log( $state.current.name);
                     expect($injector.invoke($state.current.views["@"].resolve.fetchCurrentInvoiceSummary)).toBeDefined();
                 });
 
