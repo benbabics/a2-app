@@ -103,11 +103,11 @@
                 //     expect($state.current.name).toBe(stateName);
                 // });
 
-                // it("should resolve a fetchBrandLogo function", function () {
-                //     $rootScope.$digest();
-                //
-                //     expect($injector.invoke($state.current.views["@"].resolve.fetchBrandLogo)).toBeDefined();
-                // });
+                it("should resolve a brandLogo function", function () {
+                    $rootScope.$digest();
+
+                    expect($injector.invoke($state.current.views["@"].resolve.brandLogo)).toBeDefined();
+                });
 
                 it("should resolve a fetchCurrentInvoiceSummary function", function () {
                     $rootScope.$digest();
@@ -121,6 +121,7 @@
                     expect($injector.invoke($state.current.views["@"].resolve.fetchScheduledPaymentsCount)).toBeDefined();
                 });
 
+                //TODO:  Does Ben need this? - steve
                 // it("should call this.AnalyticsUtil.trackView", function () {
                 //     $rootScope.$digest();
                 //
