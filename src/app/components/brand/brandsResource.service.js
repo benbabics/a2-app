@@ -23,7 +23,6 @@
 
 
         function fetchBrandLogo(brandName){
-
             var brandNameUpperCase = brandName.toUpperCase();
             var logoUrl = `${globals.CONFIGURATION_API.BASE_URL}/${globals.CONFIGURATION_API.BRANDS.BASE}/logo/${brandNameUpperCase}.svg`;
             return ConfigurationApiRestangular.oneUrl("brandLogo", logoUrl).get();

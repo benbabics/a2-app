@@ -5,7 +5,7 @@
         self,
         mocks = {};
 
-    fdescribe("A Login Controller", function () {
+    describe("A Login Controller", function () {
 
         module.sharedInjector();
 
