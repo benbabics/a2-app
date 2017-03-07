@@ -16,12 +16,13 @@
             // mock dependencies
             mocks.BrandsResource = jasmine.createSpyObj("BrandsResource", ["fetchBrandLogo"]);
             mocks.UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
+            mocks.WexCache = jasmine.createSpyObj("WexCache", ["storePropertyValue", "clearPropertyValue"]);
             mocks.brandId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
 
             module(function ($provide) {
                 $provide.value("BrandsResource", mocks.BrandsResource);
                 $provide.value("UserManager", mocks.UserManager);
-                $provide.value("BrandUtil", mocks.BrandUtil);
+                $provide.value("WexCache", mocks.WexCache);
             });
 
             inject(function (___, _$q_, _$rootScope_, _$state_, _globals_, _moment_, _BrandManager_, _LoggerUtil_) {
@@ -47,6 +48,7 @@
             mocks.user = TestUtils.getRandomUser(UserModel, UserAccountModel, mocks.globals.ONLINE_APPLICATION);
             mocks.user.brand = mocks.brandId;
             mocks.UserManager.getUser.and.returnValue(mocks.user);
+
         }));
 
         afterEach(function () {
@@ -59,23 +61,28 @@
         });
 
 
-        describe("has a fetchBrandAssets function that", function () {
+        describe("has a fetchBrandLogo function that", function () {
 
             var alreadyCalled,
                 mockError = {
                     status: ""
                 };
+            var q;
 
             beforeEach(function () {
 
-                mocks.getBrandAssetsFirstCallDeferred = mocks.$q.defer();
+                mocks.getBrandLogoCallDeferred = mocks.$q.defer();
 
                 mocks.BrandsResource.fetchBrandLogo.and.callFake(function () {
-                    return mocks.getBrandAssetsFirstCallDeferred.promise;
+                    return mocks.getBrandLogoCallDeferred.promise;
                 });
 
-                mocks.BrandManager.fetchBrandLogo()
-                    .then(mocks.resolveHandler);
+                q = mocks.BrandManager.fetchBrandLogo();
+                q.then(mocks.resolveHandler);
+
+                mocks.WexCache.storePropertyValue.and.returnValue( "<svg><!-- fake logo --></svg>" );
+                mocks.WexCache.clearPropertyValue.and.returnValue(undefined);
+
             });
 
             afterAll(function () {
@@ -85,9 +92,15 @@
 
             describe("when getting the brand logo", function () {
 
-                // it("should call mocks.BrandsResource.fetchBrandLogo", function () {
-                //     expect(mocks.BrandsResource.fetchBrandLogo).toHaveBeenCalledWith(mocks.brandId);
-                // });
+                it("should call mocks.BrandsResource.fetchBrandLogo", function () {
+                    expect(mocks.BrandsResource.fetchBrandLogo).toHaveBeenCalledWith(mocks.brandId);
+                });
+
+
+                it("BrandManager.fetchBrandLogo returns a promise", function () {
+                    expect(q).toBeDefined();
+                    expect(q).toBeDefined();
+                });
 
             });
 
