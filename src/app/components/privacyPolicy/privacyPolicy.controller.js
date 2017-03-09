@@ -4,12 +4,19 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function PrivacyPolicyController($cordovaInAppBrowser, $ionicPosition, $ionicScrollDelegate, globals) {
+    function PrivacyPolicyController($cordovaInAppBrowser, $ionicPosition, $ionicScrollDelegate, $ionicPlatform, $cordovaAppVersion, globals) {
 
         var vm = this;
-        vm.openUrl = openUrl;
-        vm.config = globals.PRIVACY_POLICY.CONFIG;
+
+        vm.openUrl  = openUrl;
+        vm.config   = globals.PRIVACY_POLICY.CONFIG;
         vm.scrollTo = handleScrollTo;
+
+        $ionicPlatform.ready(function () {
+            $cordovaAppVersion.getVersionNumber().then(function (version) {
+                vm.sendEmailLink = vm.config.sendEmailLink + version;
+            });
+        });
 
         //////////////////////
 

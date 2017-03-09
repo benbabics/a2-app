@@ -598,6 +598,7 @@
             "privacyNotice": "Privacy Notice",
             "lastUpdated"  : "Last Updated",
             "lastUpdatedDate" : "2016-11-29T11:05:00-0500",
+            "sendEmailLink"   : "mailto:MobileApplications@wexinc.com?subject=Fleet SmartHub version ",
             "introduction" : "This privacy notice (this <b>\"Privacy Notice\"</b>) governs your use of the WEX&reg; Fleet SmartHub&trade; mobile application (the <b>\"Application\"</b> or <b>\"App\"</b>). The App is owned by WEX, Inc. (collectively, \"WEX\" or \"we,\" \"us,\" or \"our\") for its commercial customers (each, a <b>\"Customer\"</b>) in connection with the Fleet SmartHub mobile application and services (the <b>\"SmartHub Services\"</b>). ",
             "sectionOne"   : {
                 "content": "This Privacy Notice describes:",
@@ -708,8 +709,9 @@
             },
             "sectionFourteen": {
                 "content": "<b>CONTACT US.</b> To contact us with your questions or comments regarding this Privacy Notice or the information collection and dissemination practices of the App, please contact us using one of the following options:",
+                "byEmailLabel":   "By e-mail:",
+                "byEmailDisplay": "MobileApplications@wexinc.com",
                 "contents": [
-                    { "content": "By e-mail: <a href=\"mailto:MobileApplications@wexinc.com\">MobileApplications@wexinc.com</a><br><br>" },
                     { "content": "By phone: 1-866-544-5796<br><br>" },
                     { "content": "By mail: WEXONLINE<br><br>PO BOX 639<br><br>PORTLAND, ME 04140" }
                 ]

@@ -2,7 +2,9 @@
     "use strict";
 
     var $scope,
+        $q,
         $cordovaInAppBrowser,
+        $cordovaAppVersion,
         ctrl;
 
     describe("A Privacy Policy Controller", function () {
@@ -11,15 +13,21 @@
 
             // mock dependencies
             $cordovaInAppBrowser = jasmine.createSpyObj("$cordovaInAppBrowser", ["open"]);
+            $cordovaAppVersion = jasmine.createSpyObj("$cordovaAppVersion", ["getVersionNumber"]);
 
-            inject(function ($controller, $rootScope) {
+            inject(function ($controller, $rootScope, _$q_) {
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
+                $q = _$q_;
+
+                //setup mocks
+                $cordovaAppVersion.getVersionNumber.and.returnValue($q.resolve(1));
 
                 ctrl = $controller("PrivacyPolicyController", {
                     $scope              : $scope,
-                    $cordovaInAppBrowser: $cordovaInAppBrowser
+                    $cordovaInAppBrowser: $cordovaInAppBrowser,
+                    $cordovaAppVersion  : $cordovaAppVersion,
                 });
 
             });
@@ -32,7 +40,6 @@
 
             beforeEach(function () {
                 mockUrl = TestUtils.getRandomStringThatIsAlphaNumeric(50);
-
                 ctrl.openUrl(mockUrl);
             });
 
