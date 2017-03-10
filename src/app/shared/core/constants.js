@@ -121,9 +121,6 @@
         ACCEPT_TOUCH_ID: {
             "BASE": "accept-touch-id"
         },
-        BRANDS  : {
-            "BASE"  : "brands"
-        },
         VERSIONS   : {
             "BASE"         : "versions",
             "STATUS"       : "status",
