@@ -143,6 +143,7 @@
                 "events": {
                     "makePaymentLink"        : ["Payment", "MakePaymentLinkHome"],
                     "cardsLink"              : ["Cards", "CardsLinkHome"],
+                    "driversLink"            : ["Drivers", "DriversLinkHome"],
                     "transactionActivityLink": ["Transaction", "TransactionActivityLinkHome"]
                 }
             },
@@ -157,6 +158,7 @@
             "makePayment"        : "Make Payment",
             "transactions"       : "Transactions",
             "cards"              : "Cards",
+            "drivers"            : "Drivers",
             "scheduledPayments"  : "Scheduled"
         },
         "CHART" : {
@@ -828,7 +830,8 @@
                     "makePaymentLink"        : ["Payment", "MakePaymentLinkMenu"],
                     "paymentActivityLink"    : ["Payment", "PaymentActivityLinkMenu"],
                     "transactionActivityLink": ["Transaction", "TransactionActivityLinkMenu"],
-                    "cardsLink"              : ["Cards", "CardsLinkMenu"]
+                    "cardsLink"              : ["Cards", "CardsLinkMenu"],
+                    "driversLink"            : ["Drivers", "DriversLinkMenu"]
                 }
             },
             "options": {
@@ -837,6 +840,7 @@
                 "payments"           : "Payment Activity",
                 "transactionActivity": "Transactions",
                 "cards"              : "Cards",
+                "drivers"            : "Drivers",
                 "notifications"      : "Alerts",
                 "contactUs"          : "Contact Us",
                 "settings"           : "Settings",
@@ -850,6 +854,7 @@
                 "payments"           : "payment.activity",
                 "transactionActivity": "transaction",
                 "cards"              : "card",
+                "drivers"            : "driver",
                 "notifications"      : "notifications",
                 "contactUs"          : "contactUs",
                 "terms"              : "termsOfUse",

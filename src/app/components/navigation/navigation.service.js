@@ -9,6 +9,7 @@
         var service = {
             goToNotifications      : goToNotifications,
             goToCards              : goToCards,
+            goToDrivers            : goToDrivers,
             goToContactUs          : goToContactUs,
             goToHome               : goToHome,
             goToLogOut             : goToLogOut,
@@ -33,6 +34,20 @@
             return $ionicHistory.clearCache(["card"])
                 .then(function () {
                     return $state.go("card.list", params, {
+                        reload : true,
+                        inherit: false,
+                        notify : true
+                    });
+                });
+        }
+
+        function goToDrivers(params) {
+            return; //Todo: remove once drivers list is implemented.
+
+            //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
+            return $ionicHistory.clearCache(["driver"])
+                .then(function () {
+                    return $state.go("driver.list", params, {
                         reload : true,
                         inherit: false,
                         notify : true
