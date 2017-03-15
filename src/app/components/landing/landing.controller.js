@@ -23,6 +23,7 @@
         vm.params = $stateParams;
         vm.scheduledPaymentsCount = 0;
         vm.goToCards = goToCards;
+        vm.goToDrivers = goToDrivers;
         vm.goToMakePayment = goToMakePayment;
         vm.goToTransactionActivity = goToTransactionActivity;
 
@@ -115,6 +116,10 @@
 
         function goToCards() {
             return Navigation.goToCards();
+        }
+
+        function goToDrivers() {
+            return Navigation.goToDrivers();
         }
 
         function goToMakePayment() {

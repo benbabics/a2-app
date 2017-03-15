@@ -106,6 +106,14 @@
                 {{ ::vm.config.cards }}
                 <i class="icon fa fa-chevron-right"></i>
             </div>
+
+            <div class="item item-icon-left item-icon-right"
+                 ng-click="vm.goToDrivers()"
+                 wex-analytics-track-event="vm.config.ANALYTICS.events.driversLink">
+                <i class="icon fontello-icon fontello-steering-wheel"></i>
+                {{ ::vm.config.drivers }}
+                <i class="icon fa fa-chevron-right"></i>
+            </div>
         </div>
 
     </ion-content>
