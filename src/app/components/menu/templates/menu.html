@@ -50,6 +50,14 @@
             {{::vm.config.options.cards}}
         </wex-menu-item>
 
+        <wex-menu-item id="option-drivers"
+                       ng-click="vm.goToDrivers()"
+                       icon="fontello-icon fontello-steering-wheel"
+                       root-state="{{::vm.config.rootStates.drivers}}"
+                       wex-analytics-track-event="vm.config.ANALYTICS.events.driversLink">
+            {{::vm.config.options.drivers}}
+        </wex-menu-item>
+
         <wex-menu-item id="option-settings"
                        ng-if="vm.fingerprintAuthAvailable"
                        ng-click="vm.goToSettings()"
