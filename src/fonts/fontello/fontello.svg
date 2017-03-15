@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2017 by original authors @ fontello.com</metadata>
+<defs>
+<font id="fontello" horiz-adv-x="1000" >
+<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="steering-wheel" unicode="&#xe800;" d="M465 797q184 0 315-131t131-316-131-315-315-132-316 132-131 315 131 316 316 131z m0-112q-107 0-193-62t-122-161l629 0q-36 99-122 161t-192 62z m-1-390q24 0 41 16t16 40q0 24-17 40t-39 16-39-16-17-40 17-40 38-16z m-334 56q0-124 79-217t199-112q-2 137-83 233t-195 96z m391-329q120 20 199 112t79 217q-114 0-195-96t-83-233z" horiz-adv-x="928" />
+</font>
+</defs>
+</svg>
