@@ -6,7 +6,7 @@
     "angular": ">=1.4.6",
     "angular-base64": "~2",
     "angular-chart.js": "~0.8.2",
-    "angular-mocks": "^1.5.7",
+    "angular-mocks": "~1.4",
     "angular-moment": "~0",
     "angular-promise-extras": "~0.1.5",
     "angular-ui-router": ">=0.2.15",
