@@ -37,6 +37,7 @@ $infinite-list-padding-with-icon: 30px;
   @include flexbox();
   @include align-items(center);
   padding-left:  $infinite-list-padding;
+  background-image: none;
 }
 .infinte-list-header {
   padding-right: $infinite-list-padding;
