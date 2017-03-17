@@ -1,8 +1,17 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="landing" class="page-drivers-list">
-    <div class="bar bar-subheader infinte-list-header-with-icon" ng-hide="vm.drivers.active.length == 0 && vm.drivers.terminated.length == 0 && infiniteScrollService.isLoadingComplete">
+    <ion-header class="bar bar-subheader item-input-inset search-header">
+        <form novalidate name="vm.searchFilterForm" ng-submit="vm.applySearchFilter()">
+            <ion-input class="item-input-wrapper">
+                <i class="icon icon-search placeholder-icon"></i>
+                <input type="search" name="searchFilter" ng-model="vm.searchFilter" placeholder="{{::vm.config.searchPlaceholder}}">
+            </ion-input>
+        </form>
+    </ion-header>
+
+    <ion-header class="bar bar-subheader infinte-list-header-with-icon" ng-hide="vm.drivers.active.length == 0 && vm.drivers.terminated.length == 0 && infiniteScrollService.isLoadingComplete">
         <span class="content-name">{{ ::vm.config.listName }}</span>
         <span class="content-driver-id">{{ ::vm.config.listDriverId }}</span>
-    </div>
+    </ion-header>
 
     <ion-content class="has-subheader inner-container" ion-sticky>
         <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
