@@ -10,11 +10,9 @@
         LoggerUtil,
         UserManager,
         BrandManager,
-        BrandAssetModel,
         Popup,
         userDetails,
         fetchCurrentUserDetailsDeferred,
-        updateBrandCacheDeferred,
         rejectHandler,
         resolveHandler;
 
@@ -28,13 +26,7 @@
 
             //mock dependencies
             AuthenticationManager = jasmine.createSpyObj("AuthenticationManager", ["getAuthorizationHeader", "userLoggedIn", "logOut"]);
-            BrandManager = jasmine.createSpyObj("BrandManager", [
-                "getGenericBrandAssetBySubtype",
-                "getGenericAnalyticsTrackingId",
-                "getUserBrandAssetBySubtype",
-                "loadBundledBrand",
-                "updateBrandCache"
-            ]);
+            BrandManager = jasmine.createSpyObj("BrandManager", ["fetchBrandLogo"]);
             $ionicSideMenuDelegate = jasmine.createSpyObj("$ionicSideMenuDelegate", ["toggleRight"]);
             Popup = jasmine.createSpyObj("Popup", ["closeAllPopups"]);
 
@@ -45,7 +37,7 @@
                 $provide.value("$ionicSideMenuDelegate", $ionicSideMenuDelegate);
             });
 
-            inject(function (___, _$q_, _$rootScope_, globals, _BrandAssetModel_, _LoggerUtil_, _LoginManager_,
+            inject(function (___, _$q_, _$rootScope_, globals, _LoggerUtil_, _LoginManager_,
                              UserAccountModel, _UserManager_, UserModel) {
                 _ = ___;
                 $q = _$q_;
@@ -53,7 +45,6 @@
                 LoggerUtil = _LoggerUtil_;
                 LoginManager = _LoginManager_;
                 UserManager = _UserManager_;
-                BrandAssetModel = _BrandAssetModel_;
 
                 userDetails = TestUtils.getRandomUser(UserModel, UserAccountModel, globals.USER.ONLINE_APPLICATION);
             });
@@ -62,21 +53,16 @@
             resolveHandler = jasmine.createSpy("resolveHandler");
             rejectHandler = jasmine.createSpy("rejectHandler");
             fetchCurrentUserDetailsDeferred = $q.defer();
-            updateBrandCacheDeferred = $q.defer();
             spyOn(UserManager, "fetchCurrentUserDetails").and.returnValue(fetchCurrentUserDetailsDeferred.promise);
             spyOn(UserManager, "getUser").and.returnValue(userDetails);
 
             //setup mocks
             UserManager.fetchCurrentUserDetails.and.returnValue(fetchCurrentUserDetailsDeferred.promise);
-            BrandManager.updateBrandCache.and.returnValue(updateBrandCacheDeferred.promise);
         });
 
         describe("has a logOut function that", function () {
-            var trackingId;
 
             beforeEach(function () {
-                trackingId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                BrandManager.getGenericAnalyticsTrackingId.and.returnValue(trackingId);
                 AuthenticationManager.userLoggedIn.and.returnValue(false);
 
                 spyOn($rootScope, "$emit");
@@ -126,74 +112,35 @@
             });
 
             describe("when UserManager.fetchCurrentUserDetails succeeds", function () {
-                var trackingId;
 
                 beforeEach(function () {
-                    trackingId = TestUtils.getRandomBrandAsset(BrandAssetModel);
-                    BrandManager.getUserBrandAssetBySubtype.and.returnValue(trackingId);
 
                     fetchCurrentUserDetailsDeferred.resolve(userDetails);
                 });
 
-                it("should call BrandManager.updateBrandCache with the expected value", function () {
+
+                beforeEach(function () {
                     $rootScope.$digest();
-
-                    expect(BrandManager.updateBrandCache).toHaveBeenCalledWith(userDetails.brand);
                 });
 
-                describe("when BrandManager.updateBrandCache succeeds", function () {
-
-                    beforeEach(function () {
-                        updateBrandCacheDeferred.resolve();
-                        $rootScope.$digest();
-                    });
-
-                    it("should call this.AnalyticsUtil.setUserId with the expected value", function () {
-                        expect(this.AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
-                    });
-
-                    it("should resolve the initialization promise", function () {
-                        expect(resolveHandler).toHaveBeenCalled();
-                    });
-
-                    it("should call this.LoadingIndicator.complete", function () {
-                        expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
-                    });
-
-                    it("should emit an app:login event", function () {
-                        expect($rootScope.$emit).toHaveBeenCalledWith("app:login");
-                    });
-
+                it("should call this.AnalyticsUtil.setUserId with the expected value", function () {
+                    expect(this.AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
                 });
 
-                describe("when BrandManager.updateBrandCache fails", function () {
-                    var error;
-
-                    beforeEach(function () {
-                        error = {
-                            message: TestUtils.getRandomStringThatIsAlphaNumeric(10)
-                        };
-
-                        updateBrandCacheDeferred.reject(error);
-                        TestUtils.digestError($rootScope);
-                    });
-
-                    it("should log the error", function () {
-                        expect(this.Logger.error).toHaveBeenCalledWith(LoggerUtil.getErrorMessage(error));
-                    });
-
-                    it("should call this.AnalyticsUtil.setUserId with the expected value", function () {
-                        expect(this.AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
-                    });
-
-                    it("should resolve the initialization promise", function () {
-                        expect(resolveHandler).toHaveBeenCalled();
-                    });
-
-                    it("should call this.LoadingIndicator.complete", function () {
-                        expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
-                    });
+                it("should resolve the initialization promise", function () {
+                    expect(resolveHandler).toHaveBeenCalled();
                 });
+
+                it("should call this.LoadingIndicator.complete", function () {
+                    expect(this.LoadingIndicator.complete).toHaveBeenCalledWith();
+                });
+
+                it("should emit an app:login event", function () {
+                    expect($rootScope.$emit).toHaveBeenCalledWith("app:login");
+                });
+
+
+
             });
 
             describe("when UserManager.fetchCurrentUserDetails fails", function () {

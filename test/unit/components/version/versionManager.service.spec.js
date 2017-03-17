@@ -199,7 +199,8 @@
             var getVersionStatusDeferred,
                 mockVersionStatusResponse = {
                     data: {
-                        status: TestUtils.getRandomStringThatIsAlphaNumeric(5)
+                        status: TestUtils.getRandomStringThatIsAlphaNumeric(5),
+                        version: versionNumber
                     }
                 };
 

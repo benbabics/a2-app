@@ -16,26 +16,6 @@
                             return UserManager.getUser().billingCompany.accountId;
                         },
 
-                        //jshint maxparams:5
-                        fetchBrandLogo: function ($q, globals, BrandManager, BrandUtil) {
-                            return function () {
-                                var ASSET_SUBTYPES = globals.BRAND.ASSET_SUBTYPES,
-                                    brandLogoAsset = BrandManager.getUserBrandAssetBySubtype(ASSET_SUBTYPES.BRAND_LOGO);
-
-                                //if this brand has a logo associated with it then get its data
-                                if (brandLogoAsset) {
-                                    return BrandUtil.getAssetResourceData(brandLogoAsset)
-                                        .catch(function () {
-                                            //we couldn't get the brand logo file data, so just resolve with no logo
-                                            return $q.resolve("");
-                                        });
-                                }
-                                else {
-                                    return $q.resolve("");
-                                }
-                            }
-                        },
-
                         fetchCurrentInvoiceSummary: function (accountId, InvoiceManager) {
                             return () => InvoiceManager.fetchCurrentInvoiceSummary(accountId);
                         },
@@ -44,10 +24,9 @@
                             return () => PaymentManager.fetchScheduledPaymentsCount(accountId);
                         },
 
-                        brandLogo: function (fetchBrandLogo, LoadingIndicator, WexCache) {
+                        brandLogo: function ( LoadingIndicator, BrandManager ) {
                             LoadingIndicator.begin();
-                            return WexCache.fetchPropertyValue("brandLogo", fetchBrandLogo)
-                                .finally(LoadingIndicator.complete);
+                            return BrandManager.fetchBrandLogo().finally(LoadingIndicator.complete);
                         }
                     }
                 }

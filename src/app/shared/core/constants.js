@@ -121,17 +121,13 @@
         ACCEPT_TOUCH_ID: {
             "BASE": "accept-touch-id"
         },
-        BRANDS  : {
-            "BASE"  : "brands",
-            "ASSETS": "assets"
-        },
         VERSIONS   : {
             "BASE"         : "versions",
             "STATUS"       : "status",
             "STATUS_VALUES": {
-                "NO_UPDATE"  : "ok",
-                "CAN_UPDATE" : "warn",
-                "MUST_UPDATE": "fail"
+                "NO_UPDATE"  : "SUPPORTED",
+                "CAN_UPDATE" : "DEPRECATED",
+                "MUST_UPDATE": "UNSUPPORTED"
             }
         }
     };
@@ -143,14 +139,6 @@
         GENERIC: "GENERIC",
         WEX    : "WEX",
 
-        ASSET_TYPES: {
-            "FILE": "FILE",
-            "TEXT": "TEXT"
-        },
-        ASSET_SUBTYPES: {
-            "BRAND_LOGO"                  : "BRAND_LOGO",
-            "GOOGLE_ANALYTICS_TRACKING_ID": "GOOGLE_ANALYTICS_TRACKING_ID"
-        }
     };
 
     /**

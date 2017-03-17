@@ -16,8 +16,6 @@ var TestUtils = (function () {
             getRandomArray                     : getRandomArray,
             getRandomBank                      : getRandomBank,
             getRandomBoolean                   : getRandomBoolean,
-            getRandomBrandAsset                : getRandomBrandAsset,
-            getRandomBrandAssets               : getRandomBrandAssets,
             getRandomCard                      : getRandomCard,
             getRandomCardReissueDetails        : getRandomCardReissueDetails,
             getRandomDate                      : getRandomDate,
@@ -176,24 +174,6 @@ var TestUtils = (function () {
         return randomBank;
     }
 
-    function getRandomBrandAsset(BrandAssetModel) {
-        var randomBrandAsset = new BrandAssetModel();
-
-        randomBrandAsset.assetSubtypeId = getRandomStringThatIsAlphaNumeric(5);
-        randomBrandAsset.assetTypeId = getRandomStringThatIsAlphaNumeric(5);
-        randomBrandAsset.assetValue = getRandomStringThatIsAlphaNumeric(15);
-        randomBrandAsset.brandAssetId = getRandomStringThatIsAlphaNumeric(15);
-        randomBrandAsset.clientBrandId = getRandomStringThatIsAlphaNumeric(15);
-        randomBrandAsset.clientBrandName = getRandomStringThatIsAlphaNumeric(15);
-        randomBrandAsset.endDate = getRandomDate();
-        randomBrandAsset.startDate = getRandomDate();
-
-        return randomBrandAsset;
-    }
-
-    function getRandomBrandAssets(BrandAssetModel) {
-        return getRandomArray(getRandomInteger(1, 5), getRandomBrandAsset, BrandAssetModel);
-    }
 
     function getRandomBoolean() {
         return Math.random() >= 0.5;

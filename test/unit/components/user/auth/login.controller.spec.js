@@ -30,7 +30,7 @@
             _.set(window, "cordova.plugins.settings", mocks.cordovaPluginSettings);
             _.set(window, "cordova.plugins.Keyboard", mocks.cordovaPluginsKeyboard);
 
-            inject(function (_$rootScope_, $controller, _$ionicHistory_, _$interval_, _$q_, BrandAssetModel, UserAccountModel, UserModel, _wexTruncateStringFilter_, _globals_) {
+            inject(function (_$rootScope_, $controller, _$ionicHistory_, _$interval_, _$q_, UserAccountModel, UserModel, _wexTruncateStringFilter_, _globals_) {
                 mocks.$ionicHistory = _$ionicHistory_;
                 mocks.$scope = _$rootScope_.$new();
                 mocks.$q = _$q_;
