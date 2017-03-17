@@ -42,8 +42,6 @@
         }
 
         function goToDrivers(params) {
-            return; //Todo: remove once drivers list is implemented.
-
             //Note: for some reason the controller won't get reinitialized unless we call $ionicHistory.clearCache
             return $ionicHistory.clearCache(["driver"])
                 .then(function () {

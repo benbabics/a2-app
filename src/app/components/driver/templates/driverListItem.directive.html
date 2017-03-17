@@ -1,0 +1,18 @@
+<ion-item class="item item-icon-right widget-transaction-result-as-date"
+          ng-class="{ 'item-last': $last }">
+
+    <div ng-show="driver.isGreekLoading">
+        <wex-ui-greeking item-height="40px">
+            <rect height="15" width="70" y="0" x="250"></rect>
+            <rect height="25" width="100%" y="15" x="0"></rect>
+        </wex-ui-greeking>
+    </div>
+
+    <div ng-hide="driver.isGreekLoading">
+        <a class="item-content">
+            <span class="list_align ellipsis">{{ driver.lastName | lowercase }}, {{ driver.firstName | lowercase }}</span>
+            <span class="value_align">{{ driver.driverId }}</span>
+            <i class="icon fa fa-chevron-right"></i>
+        </a>
+    </div>
+</ion-item>

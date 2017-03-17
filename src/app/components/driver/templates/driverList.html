@@ -1,0 +1,28 @@
+<ion-view view-title="{{::vm.config.title}}" wex-back-state="landing" class="page-drivers-list">
+    <div class="bar bar-subheader infinte-list-header-with-icon" ng-hide="vm.drivers.active.length == 0 && vm.drivers.terminated.length == 0 && infiniteScrollService.isLoadingComplete">
+        <span class="content-name">{{ ::vm.config.listName }}</span>
+        <span class="content-driver-id">{{ ::vm.config.listDriverId }}</span>
+    </div>
+
+    <ion-content class="has-subheader inner-container" ion-sticky>
+        <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
+
+        <wex-infinite-list on-reload="loadNextPage"
+                           is-pending="infiniteScrollService.isPending"
+                           loading-complete="infiniteScrollService.isLoadingComplete">
+
+            <!-- Active Drivers: Header, Messaging & Results -->
+            <ion-item ng-hide="vm.drivers.active.length == 0 && infiniteScrollService.isLoadingComplete" class="item-divider active">{{ ::vm.config.listDriversActive }}</ion-item>
+            <driver-list-item ng-repeat="driver in vm.drivers.active" driver="driver" class="component-list-item"></driver-list-item>
+
+            <!-- Terminated Drivers: Header, Messaging & Results -->
+            <ion-item ng-hide="vm.drivers.terminated.length == 0 && infiniteScrollService.isLoadingComplete" class="item-divider terminated">{{ ::vm.config.listDriversTerminated }}</ion-item>
+            <driver-list-item collection-repeat="driver in vm.drivers.terminated" driver="driver" class="component-list-item"></driver-list-item>
+
+        </wex-infinite-list>
+
+        <div ng-show="vm.drivers.active.length == 0 && vm.drivers.terminated.length == 0 && infiniteScrollService.isLoadingComplete" class="no-payments">
+            {{ ::vm.config.emptyList }}
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,15 @@
+{
+  "name": "Fleet SmartHub",
+  "app_id": "",
+  "gulpStartupTasks": [
+    "sass",
+    "index",
+    "watch"
+  ],
+  "defaultBrowser": "chrome",
+  "documentRoot": "platforms/browser/www",
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
+}

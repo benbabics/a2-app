@@ -1,0 +1,50 @@
+.page-drivers-list {
+  @extend %ui-page;
+
+  /**
+   * Headers
+  **/
+  .infinte-list-header-with-icon,
+  .widget-infinite-list .item.item-icon-right .item-content {
+    padding-right: 60px;
+  }
+
+  .infinte-list-header-with-icon {
+    height: auto;
+    color:            #fff;
+    background-color: #7f7f7f;
+
+    .content-name,
+    .content-driver-id {
+      font-family: 'open_sanssemibold';
+    }
+    .content-name {
+      @include flex-grow(10);
+    }
+  }
+
+  .item-divider {
+    border: none;
+
+    &.active     { background-color: #008b00; }
+    &.terminated { background-color: #f00000; }
+  }
+
+  .platform-android.platform-cordova:not(.fullscreen) & .has-subheader {
+    top: 74px;
+  }
+  .platform-ios.platform-cordova:not(.fullscreen) & .has-subheader {
+    top: 94px;
+  }
+
+  /**
+   * List
+  **/
+  .widget-infinite-list .item {
+    border-top: none;
+
+    .item-content {
+      text-transform: capitalize;
+    }
+  }
+}
