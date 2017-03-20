@@ -245,6 +245,10 @@ $badge-color: #e51937;
         color: $inverse-font-color;
         border-color: $charcoal;
     }
+    .fontello-icon::before {
+      margin: 0;
+      font-size: 23px;
+    }
     .chevron-container {
         float: right;
     }

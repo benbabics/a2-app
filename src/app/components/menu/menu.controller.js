@@ -18,6 +18,7 @@
         vm.goToNotifications = goToNotifications;
         vm.goToTransactionActivity = goToTransactionActivity;
         vm.goToCards = goToCards;
+        vm.goToDrivers = goToDrivers;
         vm.goToContactUs = goToContactUs;
         vm.goToTermsOfUse = goToTermsOfUse;
         vm.goToPrivacyPolicy = goToPrivacyPolicy;
@@ -41,6 +42,10 @@
 
         function goToCards() {
             return Navigation.goToCards();
+        }
+
+        function goToDrivers() {
+            return Navigation.goToDrivers();
         }
 
         function goToContactUs() {
