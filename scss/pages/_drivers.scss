@@ -23,7 +23,6 @@
     }
 
     .item-input-wrapper {
-      border: 1px solid #bbb;
       background-color: #fff;
 
       .placeholder-icon {
@@ -45,8 +44,14 @@
     }
   }
 
+  .infinte-list-empty {
+    align-items:     center;
+    justify-content: center;
+    font-style: italic;
+  }
+
   .infinte-list-header-with-icon {
-    height: 30px;;
+    height: 30px;
     color:            #fff;
     background-color: #7f7f7f;
 
@@ -70,6 +75,7 @@
    * Platform heading & content layout
   **/
   .platform-android.platform-cordova:not(.fullscreen) & {
+    .infinte-list-empty,
     .infinte-list-header-with-icon {
       top: $titlebar-height-android + $subheader-search-header-height;
     }
@@ -79,6 +85,7 @@
     }
   }
   .platform-ios.platform-cordova:not(.fullscreen) & {
+    .infinte-list-empty,
     .infinte-list-header-with-icon {
       top: $titlebar-height-ios + $subheader-search-header-height;
     }

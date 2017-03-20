@@ -1,6 +1,6 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="landing" class="page-drivers-list">
     <ion-header class="bar bar-subheader item-input-inset search-header">
-        <form novalidate name="vm.searchFilterForm" ng-submit="vm.applySearchFilter()">
+        <form>
             <ion-input class="item-input-wrapper">
                 <i class="icon icon-search placeholder-icon"></i>
                 <input type="search" name="searchFilter" ng-model="vm.searchFilter" placeholder="{{::vm.config.searchPlaceholder}}">
@@ -8,9 +8,16 @@
         </form>
     </ion-header>
 
-    <ion-header class="bar bar-subheader infinte-list-header-with-icon" ng-hide="vm.drivers.active.length == 0 && vm.drivers.terminated.length == 0 && infiniteScrollService.isLoadingComplete">
+    <ion-header class="bar bar-subheader infinte-list-header-with-icon"
+                ng-hide="vm.filteredDriversActive.length == 0 && vm.filteredDriversTerminated.length == 0">
         <span class="content-name">{{ ::vm.config.listName }}</span>
         <span class="content-driver-id">{{ ::vm.config.listDriverId }}</span>
+    </ion-header>
+
+    <!-- && infiniteScrollService.isLoadingComplete -->
+    <ion-header class="bar bar-subheader infinte-list-empty"
+                ng-show="vm.filteredDriversActive.length == 0 && vm.filteredDriversTerminated.length == 0">
+        {{ ::vm.config.emptyList }}
     </ion-header>
 
     <ion-content class="has-subheader inner-container" ion-sticky>
@@ -21,17 +28,17 @@
                            loading-complete="infiniteScrollService.isLoadingComplete">
 
             <!-- Active Drivers: Header, Messaging & Results -->
-            <ion-item ng-hide="vm.drivers.active.length == 0 && infiniteScrollService.isLoadingComplete" class="item-divider active">{{ ::vm.config.listDriversActive }}</ion-item>
-            <driver-list-item ng-repeat="driver in vm.drivers.active" driver="driver" class="component-list-item"></driver-list-item>
+            <ion-item ng-hide="vm.filteredDriversActive.length == 0" class="item-divider active">{{ ::vm.config.listDriversActive }}</ion-item>
+            <driver-list-item class="component-list-item"
+                              driver="driver"
+                              ng-repeat="driver in vm.filteredDriversActive = ( vm.drivers.active | filter : vm.searchFilter : vm.driversComparator )"></driver-list-item>
 
             <!-- Terminated Drivers: Header, Messaging & Results -->
-            <ion-item ng-hide="vm.drivers.terminated.length == 0 && infiniteScrollService.isLoadingComplete" class="item-divider terminated">{{ ::vm.config.listDriversTerminated }}</ion-item>
-            <driver-list-item collection-repeat="driver in vm.drivers.terminated" driver="driver" class="component-list-item"></driver-list-item>
+            <ion-item ng-hide="vm.filteredDriversTerminated.length == 0" class="item-divider terminated">{{ ::vm.config.listDriversTerminated }}</ion-item>
+            <driver-list-item class="component-list-item"
+                              driver="driver"
+                              collection-repeat="driver in vm.filteredDriversTerminated = ( vm.drivers.terminated | filter : vm.searchFilter : vm.driversComparator )"></driver-list-item>
 
         </wex-infinite-list>
-
-        <div ng-show="vm.drivers.active.length == 0 && vm.drivers.terminated.length == 0 && infiniteScrollService.isLoadingComplete" class="no-payments">
-            {{ ::vm.config.emptyList }}
-        </div>
     </ion-content>
 </ion-view>

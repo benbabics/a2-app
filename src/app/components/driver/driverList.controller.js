@@ -6,16 +6,14 @@
 
     /* @ngInject */
     function DriverListController(_, $scope, globals, $controller, UserManager, DriverManager, Logger) {
-        var vm = this,
-            _activeSearchFilter = "";
+        var vm = this;
 
         vm.config        = globals.DRIVER_LIST.CONFIG;
         vm.searchOptions = globals.DRIVER_LIST.SEARCH_OPTIONS;
         vm.searchFilter           = "";
         vm.searchOptions.ORDER_BY = "status";
 
-        vm.applySearchFilter     = applySearchFilter;
-        vm.getActiveSearchFilter = getActiveSearchFilter;
+        vm.driversComparator = driversComparator;
 
         activate();
 
@@ -99,22 +97,30 @@
             return drivers;
         }
 
-        function applySearchFilter() {
-            if ( vm.searchFilter !== _activeSearchFilter ) {
-                _activeSearchFilter = vm.searchFilter;
-                $scope.resetSearchResults();
-            }
-        }
-
-        function getActiveSearchFilter() {
-            return _activeSearchFilter;
-        }
-
         function isGreeking() {
             let driverActive     = _.find( vm.drivers.active, driver => driver.isGreekLoading ) || [],
                 driverTerminated = _.find( vm.drivers.terminated, driver => driver.isGreekLoading ) || [];
 
             return ( driverActive.length && driverTerminated.length ) > 0;
+        }
+
+        function driversComparator(driver, term) {
+            // term doesn't yet exist, display each item in the collection
+            if ( !term ) { return true; }
+
+            // use driver data to compare against the term
+            if ( _.isObject(driver) ) {
+                let firstName = _.get( driver, 'firstName', '' ).toLowerCase(),
+                    lastName  = _.get( driver, 'lastName', '' ).toLowerCase(),
+                    driverId  = _.get( driver, 'driverId', '' );
+
+                // not case-sensitive
+                term = term.toLowerCase();
+
+                return firstName.indexOf( term ) >= 0 ||
+                       lastName.indexOf( term )  >= 0 ||
+                       driverId.indexOf( term )  >= 0;
+            }
         }
     }
 
