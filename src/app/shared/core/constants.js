@@ -233,6 +233,25 @@
     };
 
     /**
+     * Driver Constants
+     */
+    sharedGlobals.DRIVER = {
+        STATUS: {
+            ACTIVE:     "active",
+            SUSPENDED:  "suspended",
+            TERMINATED: "terminated"
+        },
+        DISPLAY_MAPPINGS: {
+            STATUS: {
+                ACTIVE:     "Active",
+                SUSPENDED:  "Suspended",
+                TERMINATED: "Terminated",
+                UNKNOWN:    "Unknown"
+            }
+        }
+    };
+
+    /**
      * App-level notifications
      */
     sharedGlobals.GLOBAL_NOTIFICATIONS = {

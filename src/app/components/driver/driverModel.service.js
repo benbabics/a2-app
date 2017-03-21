@@ -1,7 +1,10 @@
 (function () {
     "use strict";
 
-    var DriverModel = function (_, moment) {
+    var DriverModel = function (_, moment, globals) {
+
+        // Constants
+        const DRIVER_STATUS = globals.CARD.STATUS;
 
         function DriverModel() {
             angular.extend(this, _.zipObject([
@@ -22,6 +25,14 @@
             if (!_.isNil(driverResource.statusDate)) {
                 this.statusDate = moment(driverResource.statusDate).toDate();
             }
+        };
+
+        DriverModel.prototype.isActive = function () {
+            return this.status && this.status.toLowerCase() === DRIVER_STATUS.ACTIVE;
+        };
+
+        DriverModel.prototype.isTerminated = function () {
+            return this.status && this.status.toLowerCase() === DRIVER_STATUS.TERMINATED;
         };
 
         return DriverModel;

@@ -29,8 +29,30 @@
   }
 }
 
+$infinite-list-padding:           16px;
+$infinite-list-padding-with-icon: 30px;
+
+.infinte-list-header,
+.infinte-list-header-with-icon {
+  @include flexbox();
+  @include align-items(center);
+  padding-left:  $infinite-list-padding;
+  background-image: none;
+}
+.infinte-list-header {
+  padding-right: $infinite-list-padding;
+}
+.infinte-list-header-with-icon {
+  padding-right: $infinite-list-padding-with-icon;
+}
+
 .widget-infinite-list {
   @extend %list-item-divider;
+
+  .component-list-item,
+  .widget-list-item {
+    display: block;
+  }
 
   .item,
   .item-content {
@@ -42,8 +64,8 @@
     }
 
     &:not(.no-inverse-padding) .item-content {
-      margin:  -16px;
-      padding: 16px;
+      margin:  -$infinite-list-padding;
+      padding: $infinite-list-padding;
     }
 
     &.item-icon-left,
@@ -56,7 +78,7 @@
     &.item-icon-right {
       .item-content {
         margin-right:  -54px;
-        padding-right: 30px;
+        padding-right: $infinite-list-padding-with-icon;
 
         .ion-chevron-right {
           right: 0;

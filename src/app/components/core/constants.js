@@ -323,9 +323,24 @@
     };
 
     appGlobals.DRIVER_LIST = {
+        "CONFIG": {
+            "ANALYTICS": {
+                "pageName": "Drivers",
+                "events": {
+                    "searchSubmitted": [ "Drivers", "SearchDriverLink" ]
+                }
+            },
+            "title":                 "Drivers",
+            "emptyList":             "No Records Found.",
+            "listName":              "Name",
+            "listDriverId":          "Driver ID",
+            "listDriversActive":     "Active Drivers",
+            "listDriversTerminated": "Terminated Drivers",
+            "searchPlaceholder":     "Search Name or Driver ID"
+        },
         "SEARCH_OPTIONS": {
-            "PAGE_SIZE": 25,
-            "STATUSES" : "active,suspended,terminated",
+            "PAGE_SIZE":     999, //Number.MAX_VALUE,
+            "STATUSES":      "active,suspended,terminated",
             "STATUS_ACTIVE": "active"
         }
     };

@@ -219,6 +219,15 @@ $user-login-error-message-animation: all linear 0.5s;
 $badge-color: #e51937;
 
 .bar-wex {
+    background-image: none;
+
+    .header-item {
+      &.title {
+        font-size: 21px;
+        font-family: tablet_gothic_semibold;
+      }
+    }
+
     .badge {
         position: absolute;
         font-size: 0.7em;
