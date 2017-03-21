@@ -11,3 +11,5 @@ src/test/
 test/results/
 *.log
 *.iml
+
+ionic.config.json
