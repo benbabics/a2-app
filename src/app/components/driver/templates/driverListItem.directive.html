@@ -9,7 +9,7 @@
     </div>
 
     <div ng-hide="driver.isGreekLoading">
-        <a class="item-content">
+        <a class="item-content" ui-sref="driver.detail({ driver: driver, isGreeking: driver.isGreekLoading })">
             <span class="list_align ellipsis">{{ driver.lastName | lowercase }}, {{ driver.firstName | lowercase }}</span>
             <span class="value_align">{{ driver.driverId }}</span>
             <i class="icon fa fa-chevron-right"></i>

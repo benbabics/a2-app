@@ -345,6 +345,25 @@
         }
     };
 
+    appGlobals.DRIVER_DETAILS = {
+        "CONFIG": {
+            "title":                     "Driver Details",
+            "actionStatusTitle":         "Change driver status",
+            "actionStatusCancel":        "Cancel",
+            "bannerStatusChangeSuccess": "Status change successful.",
+            "bannerStatusChangeFailure": "Status change failed. Please try again.",
+            "detailDriverId":            "Driver ID",
+            "detailEmail":               "Email Address",
+            "detailMobile":              "Mobile Number",
+            "labelChangeStatus":         "Change Status",
+            "labelTransactions":         "Transactions",
+            "statuses": [
+                { "id": "ACTIVE", "label": "Active" },
+                { "id": "TERMINATED", "label": "Terminated" }
+            ]
+        }
+    };
+
     appGlobals.NOTIFICATIONS = {
         "CONFIG": {
             "ANALYTICS": {
