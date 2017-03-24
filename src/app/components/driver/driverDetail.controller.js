@@ -9,10 +9,10 @@
 
         vm.config = globals.DRIVER_DETAILS.CONFIG;
         vm.driver = $stateParams.driver;
-        vm.params = {
-            "displayStatusChangeBannerSuccess": false,
-            "displayStatusChangeBannerFailure": false
-        };
+
+        vm.isChangeStatusLoading            = false;
+        vm.displayStatusChangeBannerSuccess = false;
+        vm.displayStatusChangeBannerFailure = false;
 
         vm.goToTransactionActivity = goToTransactionActivity;
         vm.handleClickChangeStatus = handleClickChangeStatus;
@@ -63,12 +63,14 @@
         function updateDriverStatus(statusId) {
             if ( !statusId ) { return; }
 
-            // immediately reflect the status change
-            vm.driver.status = statusId;
-
             // make request to update driver status; if failure, revert
             //Todo- remove; temporarily simulate successful response
-            $timeout( () => { vm.params.displayStatusChangeBannerSuccess = true; }, 1000 );
+            vm.isChangeStatusLoading = true;
+            $timeout(() => {
+                vm.isChangeStatusLoading = false;
+                vm.driver.status         = statusId;
+                vm.displayStatusChangeBannerSuccess = true;
+            }, 1000);
         }
     }
 

@@ -66,6 +66,7 @@
 
   .item-divider {
     border: none;
+    font-family: 'open_sanssemibold';
 
     &.active     { background-color: #008b00; }
     &.terminated { background-color: #f00000; }
@@ -126,6 +127,10 @@
   .bar-notification {
     z-index: 10;
     height: $subheader-notification-height;
+    animation:         notificationSlideDown .5s;
+    -webkit-animation: notificationSlideDown .5s;
+    animation-timing-function:         ease-in-out;
+    -webkit-animation-timing-function: ease-in-out;
   }
 
   .subheader-driver-details {
@@ -172,11 +177,13 @@
         text-transform: capitalize;
 
         &.activated {
-          line-height: $button-height - 3px;
-          border-bottom: none;
-          border-top-width: 3px;
-          border-top-style: solid;
-          color: #fff !important; // override !important in base styling ಠ_ಠ
+          color: #eee !important;
+        }
+
+        ion-spinner svg {
+          margin-right: 5px;
+          width: 16px;
+          vertical-align: middle;
         }
       }
     }
@@ -186,11 +193,6 @@
       .button-change-status {
         background-color:           $color-active;
         border-bottom-color: darken($color-active, 10%);
-
-        &.activated {
-          background-color:           $color-active;
-          border-top-color: darken($color-active, 10%);
-        }
       }
     }
     &.ui-terminated {
@@ -198,11 +200,14 @@
       .button-change-status {
         background-color:           $color-terminated;
         border-bottom-color: darken($color-terminated, 10%);
-
-        &.activated {
-          background-color:           $color-terminated;
-          border-top-color: darken($color-terminated, 10%);
-        }
+      }
+    }
+    &.ui-loading {
+      .content-driver-status { color: #666; }
+      .button-change-status {
+        color:               #666;
+        background-color:    #ccc;
+        border-bottom-color: #aaa;
       }
     }
   }
@@ -289,5 +294,30 @@
         top: $titlebar-height-ios + $subheader-notification-height + $subheader-height;
       }
     }
+  }
+}
+
+
+/**
+ * Animation
+**/
+@keyframes notificationSlideDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes notificationSlideDown {
+  0% {
+   -webkit-transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0%);
+    opacity: 1;
   }
 }
