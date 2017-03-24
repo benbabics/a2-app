@@ -24,6 +24,18 @@
                 }
             }
         });
+
+        $stateProvider.state("driver.detail", {
+            url:   "/detail",
+            cache: false,
+            params: { driver: null },
+            views: {
+                "view@driver": {
+                    templateUrl: "app/components/driver/templates/driverDetail.html",
+                    controller:  "DriverDetailController as vm"
+                }
+            }
+        });
     }
 
     angular.module( "app.components.driver" )

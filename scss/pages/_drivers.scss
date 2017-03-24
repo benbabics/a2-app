@@ -1,8 +1,8 @@
+/**
+ * Drivers List
+**/
 .page-drivers-list {
   @extend %ui-page;
-
-  $titlebar-height-android: 44px;
-  $titlebar-height-ios:     64px;
 
   $subheader-search-header-height: 44px;
   $subheader-list-header-height:   30px;
@@ -103,6 +103,191 @@
 
     .item-content {
       text-transform: capitalize;
+    }
+  }
+}
+
+/**
+ * Driver Details
+**/
+.page-drivers-detail {
+  $subheader-height: 190px;
+  $button-height: 50px;
+  $subheader-notification-height: 44px;
+  $color-active:     #008b00;
+  $color-terminated: #f00000;
+  $color-background: #efefef;
+
+  background-color: $color-background;
+
+  /**
+   * Subheaders
+  **/
+  .bar-notification {
+    z-index: 10;
+    height: $subheader-notification-height;
+  }
+
+  .subheader-driver-details {
+    position: relative;
+    flex-direction:  column;
+    justify-content: flex-start;
+    align-items:     center;
+    padding-top:    $button-height - 10px;
+    padding-bottom: $button-height / 2;
+    height: $subheader-height;
+    background-color: $color-background;
+    background-image: none;
+
+    .content-driver-name,
+    .content-driver-status {
+      flex-grow: 1;
+      font-size: 27px;
+    }
+    .content-driver-name {
+      color: #333;
+      text-align: center;
+      font-family: 'open_sanslight';
+      text-transform: capitalize;
+    }
+    .content-driver-status {
+      font-family: 'open_sansregular';
+    }
+    .content-driver-controls {
+      position: absolute;
+      bottom: -($button-height / 2);
+
+      .button-change-status {
+        margin: 0;
+        height:        $button-height;
+        line-height:   $button-height;
+        padding-left:  $button-height / 2;
+        padding-right: $button-height / 2;
+        border-radius: $button-height / 2;
+        border-bottom-width: 3px;
+        border-bottom-style: solid;
+        color: #fff;
+        font-family: 'open_sanssemibold';
+        font-size: 14px;
+        text-transform: capitalize;
+
+        &.activated {
+          line-height: $button-height - 3px;
+          border-bottom: none;
+          border-top-width: 3px;
+          border-top-style: solid;
+          color: #fff !important; // override !important in base styling ಠ_ಠ
+        }
+      }
+    }
+
+    &.ui-active {
+      .content-driver-status { color: $color-active; }
+      .button-change-status {
+        background-color:           $color-active;
+        border-bottom-color: darken($color-active, 10%);
+
+        &.activated {
+          background-color:           $color-active;
+          border-top-color: darken($color-active, 10%);
+        }
+      }
+    }
+    &.ui-terminated {
+      .content-driver-status { color: $color-terminated; }
+      .button-change-status {
+        background-color:           $color-terminated;
+        border-bottom-color: darken($color-terminated, 10%);
+
+        &.activated {
+          background-color:           $color-terminated;
+          border-top-color: darken($color-terminated, 10%);
+        }
+      }
+    }
+  }
+
+  /**
+   * Content
+  **/
+  ion-content {
+    .list-driver-details {
+      padding-top:    30px;
+      padding-bottom: 10px;
+      background-color: #fff;
+
+      .item {
+        &:first-of-type { border-top:    none; }
+        &:last-of-type  { border-bottom: none; }
+
+        .item-note {
+          font-size: 16px;
+          color: $default-dark;
+        }
+
+        a {
+          color: $wex-blue;
+        }
+      }
+    }
+
+    .list-transactions {
+      border: 1px solid #ccc;
+      box-shadow: none;
+
+      .item {
+        .icon:first-of-type {
+          font-size: 18px;
+        }
+
+        .icon:last-of-type {
+          color: $wex-blue;
+        }
+      }
+    }
+  }
+
+  // animate layout
+  ion-content,
+  .subheader-driver-details {
+    -webkit-transition: top .5s ease-in-out;
+    transition:         top .5s ease-in-out;
+  }
+
+  /**
+   * Platform heading & content layout
+  **/
+  .platform-android.platform-cordova:not(.fullscreen) & {
+    // without notification-bar
+    ion-content {
+      top: $titlebar-height-android + $subheader-height;
+    }
+
+    // with notification-bar
+    wex-notification-bar {
+      ~ .subheader-driver-details {
+        top: $titlebar-height-android + $subheader-notification-height;
+      }
+      ~ ion-content {
+        top: $titlebar-height-android + $subheader-notification-height + $subheader-height;
+      }
+    }
+  }
+
+  .platform-ios.platform-cordova:not(.fullscreen) & {
+    // without notification-bar
+    ion-content {
+      top: $titlebar-height-ios + $subheader-height;
+    }
+
+    // with notification-bar
+    wex-notification-bar {
+      ~ .subheader-driver-details {
+        top: $titlebar-height-ios + $subheader-notification-height;
+      }
+      ~ ion-content {
+        top: $titlebar-height-ios + $subheader-notification-height + $subheader-height;
+      }
     }
   }
 }
