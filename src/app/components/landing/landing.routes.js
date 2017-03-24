@@ -24,9 +24,14 @@
                             return () => PaymentManager.fetchScheduledPaymentsCount(accountId);
                         },
 
-                        brandLogo: function ( LoadingIndicator, BrandManager ) {
+                        brandLogo: function ($q, LoadingIndicator, BrandManager) {
                             LoadingIndicator.begin();
-                            return BrandManager.fetchBrandLogo().finally(LoadingIndicator.complete);
+                            return BrandManager.fetchBrandLogo()
+                                .catch(function () {
+                                    //we couldn't get the brand logo file data, so just resolve with no logo
+                                    return $q.resolve("");
+                                })
+                                .finally(LoadingIndicator.complete);
                         }
                     }
                 }
