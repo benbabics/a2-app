@@ -48,6 +48,13 @@
             ]);
         }
 
+        function validateCoupledSearchParams(params={}, ...keys) {
+            let isNil  = key => _.isNil( params[ key ] );
+            let values = _( keys ).map( isNil ).compact().value();
+
+            return values.length === 0 || values.length === keys.length;
+        }
+
         //Public methods:
         function clearCachedValues() {
             drivers = [];
@@ -61,16 +68,13 @@
             var searchParams = mapSearchParams(params),
                 error;
 
-            if (_.isNil(searchParams.pageSize)) {
-                error = "Failed to fetch drivers: pageSize is a required field.";
-                Logger.error(error);
-                throw new Error(error);
-            }
-
-            if (_.isNil(searchParams.pageNumber)) {
-                error = "Failed to fetch drivers: pageNumber is a required field.";
-                Logger.error(error);
-                throw new Error(error);
+            // search params are only required as a couple; repsonse contains paginated results
+            // without search params, response contains entire collection of results
+            let requiredSearchParams = [ 'pageSize', 'pageNumber' ];
+            if ( !validateCoupledSearchParams(params, ...requiredSearchParams) ) {
+                error = `Failed to fetch drivers: intent of pagination requires presence of coupled fields ${requiredSearchParams.join(' & ')}.`;
+                Logger.error( error );
+                throw new Error( error );
             }
 
             return DriversResource.getDrivers(accountId, searchParams)
