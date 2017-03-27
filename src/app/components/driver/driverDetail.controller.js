@@ -16,6 +16,7 @@
 
         vm.goToTransactionActivity = goToTransactionActivity;
         vm.handleClickChangeStatus = handleClickChangeStatus;
+        vm.updateDriverStatus      = updateDriverStatus;
 
         function goToTransactionActivity() {
             return; //Todo- remove; temporary for current story
@@ -34,8 +35,21 @@
             let actions = _.filter( vm.config.statuses, item => item.id !== vm.driver.status );
             displayChangeStatusActions( actions ).then(label => {
                 let action = _.find( actions, { label } );
-                updateDriverStatus( action.id );
+                vm.updateDriverStatus( action.id );
             });
+        }
+
+        function updateDriverStatus(statusId) {
+            if ( !statusId ) { return; }
+
+            // make request to update driver status; if failure, revert
+            //Todo- remove; temporarily simulate successful response
+            vm.isChangeStatusLoading = true;
+            $timeout(() => {
+                vm.isChangeStatusLoading = false;
+                vm.driver.status         = statusId;
+                vm.displayStatusChangeBannerSuccess = true;
+            }, 1000);
         }
 
         /**
@@ -58,19 +72,6 @@
             });
 
             return deferred.promise;
-        }
-
-        function updateDriverStatus(statusId) {
-            if ( !statusId ) { return; }
-
-            // make request to update driver status; if failure, revert
-            //Todo- remove; temporarily simulate successful response
-            vm.isChangeStatusLoading = true;
-            $timeout(() => {
-                vm.isChangeStatusLoading = false;
-                vm.driver.status         = statusId;
-                vm.displayStatusChangeBannerSuccess = true;
-            }, 1000);
         }
     }
 
