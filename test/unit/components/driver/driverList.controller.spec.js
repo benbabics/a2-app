@@ -42,7 +42,7 @@
             // stub the routing and template loading
             module( $urlRouterProvider => $urlRouterProvider.deferIntercept() );
 
-            module( $provide => {
+            module($provide => {
                 $provide.value( "$ionicTemplateCache", () => {} );
             });
 
