@@ -25,7 +25,7 @@
         driversActive,
         driversTerminated;
 
-    fdescribe("A Driver List Controller", () => {
+    describe("A Driver List Controller", () => {
 
         beforeEach(() => {
             self = this;

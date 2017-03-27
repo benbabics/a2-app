@@ -13,7 +13,7 @@
         ctrl,
         mockDriver;
 
-    fdescribe("A Driver Detail Controller", () => {
+    describe("A Driver Detail Controller", () => {
 
         beforeEach(() => {
 
