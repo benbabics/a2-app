@@ -19,14 +19,12 @@
         vm.updateDriverStatus      = updateDriverStatus;
 
         function goToTransactionActivity() {
-            return; //Todo- remove; temporary for current story
-
             //Clear the cache to work around issue where transaction page shows up before transition
-            return $ionicHistory.clearCache(["transaction"])
-                .then(function () {
+            return $ionicHistory.clearCache([ "transaction" ])
+                .then(() => {
                     $state.go("transaction.filterBy", {
                         filterBy:    "driver",
-                        filterValue: vm.driver.driverId
+                        filterValue: vm.driver.promptId
                     });
                 });
         }
