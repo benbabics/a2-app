@@ -2,109 +2,10 @@
  * Drivers List
 **/
 .page-drivers-list {
-  @extend %ui-page;
+  @extend %ui-management-list;
 
-  $subheader-search-header-height: 44px;
-  $subheader-list-header-height:   30px;
-
-  /**
-   * Headers
-  **/
-  .infinte-list-header-with-icon,
-  .widget-infinite-list .item.item-icon-right .item-content {
-    padding-right: 60px;
-  }
-
-  .search-header {
-    background-color: #e2e3e4;
-
-    form {
-      width: 100%;
-    }
-
-    .item-input-wrapper {
-      background-color: #fff;
-
-      .placeholder-icon {
-        color: #888;
-      }
-
-      input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-        color: #888;
-      }
-      input::-moz-placeholder { /* Firefox 19+ */
-        color: #888;
-      }
-      input:-ms-input-placeholder { /* IE 10+ */
-        color: #888;
-      }
-      input:-moz-placeholder { /* Firefox 18- */
-        color: #888;
-      }
-    }
-  }
-
-  .infinte-list-empty {
-    align-items:     center;
-    justify-content: center;
-    font-style: italic;
-  }
-
-  .infinte-list-header-with-icon {
-    height: 30px;
-    color:            #fff;
-    background-color: #7f7f7f;
-
-    .content-name,
-    .content-driver-id {
-      font-family: 'open_sanssemibold';
-    }
-    .content-name {
-      @include flex-grow(10);
-    }
-  }
-
-  .item-divider {
-    border: none;
-    font-family: 'open_sanssemibold';
-
-    &.active     { background-color: #008b00; }
-    &.terminated { background-color: #f00000; }
-  }
-
-  /**
-   * Platform heading & content layout
-  **/
-  .platform-android.platform-cordova:not(.fullscreen) & {
-    .infinte-list-empty,
-    .infinte-list-header-with-icon {
-      top: $titlebar-height-android + $subheader-search-header-height;
-    }
-
-    .has-subheader {
-      top: $titlebar-height-android + $subheader-search-header-height + $subheader-list-header-height; //74px;
-    }
-  }
-  .platform-ios.platform-cordova:not(.fullscreen) & {
-    .infinte-list-empty,
-    .infinte-list-header-with-icon {
-      top: $titlebar-height-ios + $subheader-search-header-height;
-    }
-
-    .has-subheader {
-      top: $titlebar-height-ios + $subheader-search-header-height + $subheader-list-header-height; //94px;
-    }
-  }
-
-  /**
-   * List
-  **/
-  .widget-infinite-list .item {
-    border-top: none;
-
-    .item-content {
-      text-transform: capitalize;
-    }
+  .bar-header-list .content-name {
+    @include flex-grow(10);
   }
 }
 
@@ -112,38 +13,12 @@
  * Driver Details
 **/
 .page-drivers-detail {
-  $subheader-height: 190px;
-  $button-height: 50px;
-  $subheader-notification-height: 44px;
   $color-active:     #008b00;
   $color-terminated: #f00000;
-  $color-background: #efefef;
 
-  background-color: $color-background;
+  @extend %ui-management-detail;
 
-  /**
-   * Subheaders
-  **/
-  .bar-notification {
-    z-index: 10;
-    height: $subheader-notification-height;
-    animation:         notificationSlideDown .5s;
-    -webkit-animation: notificationSlideDown .5s;
-    animation-timing-function:         ease-in-out;
-    -webkit-animation-timing-function: ease-in-out;
-  }
-
-  .subheader-driver-details {
-    position: relative;
-    flex-direction:  column;
-    justify-content: flex-start;
-    align-items:     center;
-    padding-top:    $button-height - 10px;
-    padding-bottom: $button-height / 2;
-    height: $subheader-height;
-    background-color: $color-background;
-    background-image: none;
-
+  .bar-header-details {
     .content-driver-name,
     .content-driver-status {
       flex-grow: 1;
@@ -158,166 +33,28 @@
     .content-driver-status {
       font-family: 'open_sansregular';
     }
-    .content-driver-controls {
-      position: absolute;
-      bottom: -($button-height / 2);
-
-      .button-change-status {
-        margin: 0;
-        height:        $button-height;
-        line-height:   $button-height;
-        padding-left:  $button-height / 2;
-        padding-right: $button-height / 2;
-        border-radius: $button-height / 2;
-        border-bottom-width: 3px;
-        border-bottom-style: solid;
-        color: #fff;
-        font-family: 'open_sanssemibold';
-        font-size: 14px;
-        text-transform: capitalize;
-
-        &.activated {
-          color: #eee !important;
-        }
-
-        ion-spinner svg {
-          margin-right: 5px;
-          width: 16px;
-          vertical-align: middle;
-        }
-      }
-    }
 
     &.ui-active {
       .content-driver-status { color: $color-active; }
-      .button-change-status {
+      .button-control.button-primary {
         background-color:           $color-active;
         border-bottom-color: darken($color-active, 10%);
       }
     }
     &.ui-terminated {
       .content-driver-status { color: $color-terminated; }
-      .button-change-status {
+      .button-control.button-primary {
         background-color:           $color-terminated;
         border-bottom-color: darken($color-terminated, 10%);
       }
     }
     &.ui-loading {
       .content-driver-status { color: #666; }
-      .button-change-status {
+      .button-control.button-primary {
         color:               #666;
         background-color:    #ccc;
         border-bottom-color: #aaa;
       }
     }
-  }
-
-  /**
-   * Content
-  **/
-  ion-content {
-    .list-driver-details {
-      padding-top:    30px;
-      padding-bottom: 10px;
-      background-color: #fff;
-
-      .item {
-        &:first-of-type { border-top:    none; }
-        &:last-of-type  { border-bottom: none; }
-
-        .item-note {
-          font-size: 16px;
-          color: $default-dark;
-        }
-
-        a {
-          color: $wex-blue;
-        }
-      }
-    }
-
-    .list-transactions {
-      border: 1px solid #ccc;
-      box-shadow: none;
-
-      .item {
-        .icon:first-of-type {
-          font-size: 18px;
-        }
-
-        .icon:last-of-type {
-          color: $wex-blue;
-        }
-      }
-    }
-  }
-
-  // animate layout
-  ion-content,
-  .subheader-driver-details {
-    -webkit-transition: top .5s ease-in-out;
-    transition:         top .5s ease-in-out;
-  }
-
-  /**
-   * Platform heading & content layout
-  **/
-  .platform-android.platform-cordova:not(.fullscreen) & {
-    // without notification-bar
-    ion-content {
-      top: $titlebar-height-android + $subheader-height;
-    }
-
-    // with notification-bar
-    wex-notification-bar {
-      ~ .subheader-driver-details {
-        top: $titlebar-height-android + $subheader-notification-height;
-      }
-      ~ ion-content {
-        top: $titlebar-height-android + $subheader-notification-height + $subheader-height;
-      }
-    }
-  }
-
-  .platform-ios.platform-cordova:not(.fullscreen) & {
-    // without notification-bar
-    ion-content {
-      top: $titlebar-height-ios + $subheader-height;
-    }
-
-    // with notification-bar
-    wex-notification-bar {
-      ~ .subheader-driver-details {
-        top: $titlebar-height-ios + $subheader-notification-height;
-      }
-      ~ ion-content {
-        top: $titlebar-height-ios + $subheader-notification-height + $subheader-height;
-      }
-    }
-  }
-}
-
-
-/**
- * Animation
-**/
-@keyframes notificationSlideDown {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0%);
-    opacity: 1;
-  }
-}
-@-webkit-keyframes notificationSlideDown {
-  0% {
-   -webkit-transform: translateY(-100%);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateY(0%);
-    opacity: 1;
   }
 }

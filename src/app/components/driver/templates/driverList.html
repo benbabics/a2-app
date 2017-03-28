@@ -1,5 +1,5 @@
 <ion-view view-title="{{::vm.config.title}}" wex-back-state="landing" class="page-drivers-list">
-    <ion-header class="bar bar-subheader item-input-inset search-header">
+    <ion-header class="bar-header-search">
         <form>
             <ion-input class="item-input-wrapper">
                 <i class="icon icon-search placeholder-icon"></i>
@@ -8,14 +8,14 @@
         </form>
     </ion-header>
 
-    <ion-header class="bar bar-subheader infinte-list-header-with-icon"
+    <ion-header class="bar-header-list"
                 ng-hide="vm.filteredDriversActive.length == 0 && vm.filteredDriversTerminated.length == 0">
         <span class="content-name">{{ ::vm.config.listName }}</span>
         <span class="content-driver-id">{{ ::vm.config.listDriverId }}</span>
     </ion-header>
 
     <!-- && infiniteScrollService.isLoadingComplete -->
-    <ion-header class="bar bar-subheader infinte-list-empty"
+    <ion-header class="bar-header-message"
                 ng-show="vm.filteredDriversActive.length == 0 && vm.filteredDriversTerminated.length == 0">
         {{ ::vm.config.emptyList }}
     </ion-header>
