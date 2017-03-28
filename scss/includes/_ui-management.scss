@@ -1,0 +1,281 @@
+/**
+  * Management List UI
+**/
+%ui-management-list {
+  @extend %ui-page;
+
+  $subheader-search-header-height: 44px;
+  $subheader-list-header-height:   30px;
+  $indentation-for-icon:           60px;
+
+  /**
+   * Headers
+  **/
+  .bar-header-search,
+  .bar-header-list,
+  .bar-header-message {
+    @extend .bar;
+    @extend .bar-subheader;
+  }
+
+  .bar-header-search {
+    @extend .item-input-inset;
+
+    height: $subheader-search-header-height;
+    background-color: #e2e3e4;
+
+    form { width: 100%; }
+
+    .item-input-wrapper {
+      background-color: $default-light;
+      .placeholder-icon,
+      input::-webkit-input-placeholder { color: #888; }
+    }
+  }
+
+  .bar-header-list {
+    @extend .infinte-list-header-with-icon;
+
+    height: $subheader-list-header-height;
+    color: $default-light;
+    background-color: #7f7f7f;
+
+    [class*="content-"] {
+      font-family: 'open_sanssemibold';
+    }
+  }
+
+  .bar-header-message {
+    align-items:     center;
+    justify-content: center;
+    font-style: italic;
+  }
+
+  .bar-header-list,
+  .widget-infinite-list .item.item-icon-right .item-content {
+    padding-right: $indentation-for-icon !important;
+  }
+
+
+  /**
+   * Platform heading & content layout
+  **/
+  .platform-android.platform-cordova:not(.fullscreen) & {
+    .bar-header-list,
+    .bar-header-message {
+      top: $titlebar-height-android + $subheader-search-header-height;
+    }
+
+    .has-subheader {
+      top: $titlebar-height-android + $subheader-search-header-height + $subheader-list-header-height;
+    }
+  }
+  .platform-ios.platform-cordova:not(.fullscreen) & {
+    .bar-header-list,
+    .bar-header-message {
+      top: $titlebar-height-ios + $subheader-search-header-height;
+    }
+
+    .has-subheader {
+      top: $titlebar-height-ios + $subheader-search-header-height + $subheader-list-header-height;
+    }
+  }
+
+
+  /**
+   * List
+  **/
+  .item-divider {
+    border: none;
+    font-family: 'open_sanssemibold';
+
+    &.active     { background-color: #008b00; }
+    &.terminated { background-color: #f00000; }
+  }
+
+  .widget-infinite-list .item {
+    border-top: none;
+    .item-content { text-transform: capitalize; }
+  }
+}
+
+
+
+/**
+  * Management Detail UI
+**/
+%ui-management-detail {
+  $subheader-height: 190px;
+  $button-height: 50px;
+  $subheader-notification-height: 44px;
+  $color-background: #efefef;
+
+  background-color: $color-background;
+
+  /**
+   * Subheaders
+  **/
+  .bar-notification {
+    z-index: 10;
+    height: $subheader-notification-height;
+    animation:         managementNotificationSlideDown .5s;
+    -webkit-animation: managementNotificationSlideDown .5s;
+    animation-timing-function:         ease-in-out;
+    -webkit-animation-timing-function: ease-in-out;
+  }
+
+  .bar-header-details {
+    @extend .bar;
+    @extend .bar-subheader;
+
+    position: relative;
+    flex-direction:  column;
+    justify-content: flex-start;
+    align-items:     center;
+    padding-top:    $button-height - 10px;
+    padding-bottom: $button-height / 2;
+    height: $subheader-height;
+    background-color: $color-background;
+    background-image: none;
+
+    .content-controls {
+      position: absolute;
+      bottom: -($button-height / 2);
+
+      .button-control {
+        @extend .button;
+        @extend .button-block;
+
+        margin: 0;
+        height:        $button-height;
+        line-height:   $button-height;
+        padding-left:  $button-height / 2;
+        padding-right: $button-height / 2;
+        border-radius: $button-height / 2;
+        border-bottom-width: 3px;
+        border-bottom-style: solid;
+        font-family: 'open_sanssemibold';
+        font-size: 14px;
+        text-transform: capitalize;
+
+        &, &.button-primary { color: #fff; }
+        &.activated         { color: #eee !important; }
+
+        ion-spinner svg {
+          margin-right: 5px;
+          width: 16px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+
+  /**
+   * Content
+  **/
+  ion-content {
+    .list-details {
+      @extend .list;
+
+      padding-top:    30px;
+      padding-bottom: 10px;
+      background-color: #fff;
+
+      .item {
+        &:first-of-type { border-top:    none; }
+        &:last-of-type  { border-bottom: none; }
+
+        .item-note {
+          font-size: 16px;
+          color: $default-dark;
+        }
+
+        a { color: $wex-blue; }
+      }
+    }
+
+    .list-secondary {
+      @extend .card;
+      @extend .list;
+
+      border: 1px solid #ccc;
+      box-shadow: none;
+
+      .item {
+        .icon:first-of-type { font-size: 18px; }
+        .icon:last-of-type  { color: $wex-blue; }
+      }
+    }
+  }
+
+  // animate layout
+  ion-content,
+  .bar-header-details {
+    -webkit-transition: top .5s ease-in-out;
+    transition:         top .5s ease-in-out;
+  }
+
+
+  /**
+   * Platform heading & content layout
+  **/
+  .platform-android.platform-cordova:not(.fullscreen) & {
+    // without notification-bar
+    ion-content {
+      top: $titlebar-height-android + $subheader-height;
+    }
+
+    // with notification-bar
+    wex-notification-bar {
+      ~ .bar-header-details {
+        top: $titlebar-height-android + $subheader-notification-height;
+      }
+      ~ ion-content {
+        top: $titlebar-height-android + $subheader-notification-height + $subheader-height;
+      }
+    }
+  }
+
+  .platform-ios.platform-cordova:not(.fullscreen) & {
+    // without notification-bar
+    ion-content {
+      top: $titlebar-height-ios + $subheader-height;
+    }
+
+    // with notification-bar
+    wex-notification-bar {
+      ~ .bar-header-details {
+        top: $titlebar-height-ios + $subheader-notification-height;
+      }
+      ~ ion-content {
+        top: $titlebar-height-ios + $subheader-notification-height + $subheader-height;
+      }
+    }
+  }
+}
+
+
+
+/**
+ * Animation
+**/
+@keyframes managementNotificationSlideDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes managementNotificationSlideDown {
+  0% {
+   -webkit-transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0%);
+    opacity: 1;
+  }
+}
