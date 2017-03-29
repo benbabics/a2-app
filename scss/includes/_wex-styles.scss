@@ -142,6 +142,16 @@ wex-notification-bar {
 }
 
 /**------------------------------------------------------
+ Text
+ ------------------------------------------------------**/
+ .text-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+
+/**------------------------------------------------------
  Images
  ------------------------------------------------------**/
 /* scales the source image to the size of the element */
