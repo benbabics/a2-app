@@ -348,7 +348,7 @@
     appGlobals.DRIVER_DETAILS = {
         "CONFIG": {
             "title":                     "Driver Details",
-            "actionStatusTitle":         "Change driver status",
+            "actionStatusTitle":         "Change Driver Status",
             "actionStatusCancel":        "Cancel",
             "bannerStatusChangeSuccess": "Status change successful.",
             "bannerStatusChangeFailure": "Status change failed. Please try again.",

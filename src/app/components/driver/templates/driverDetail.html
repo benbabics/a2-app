@@ -1,12 +1,12 @@
 <ion-view view-title="{{ ::vm.config.title }}" class="page-drivers-detail">
     <wex-notification-bar class="bar-success"
-                          ng-if="vm.params.displayStatusChangeBannerSuccess"
+                          ng-if="vm.displayStatusChangeBannerSuccess"
                           wex-toast-timer
-                          wex-toast-on-hide="vm.params.displayStatusChangeBannerSuccess = false"
+                          wex-toast-on-hide="vm.displayStatusChangeBannerSuccess = false"
                           text="{{ ::vm.config.bannerStatusChangeSuccess }}">
     </wex-notification-bar>
 
-    <ion-header class="bar bar-subheader subheader-driver-details" ng-class="{ 'ui-active': vm.driver.isActive(), 'ui-terminated': vm.driver.isTerminated() }">
+    <ion-header class="bar bar-subheader subheader-driver-details" ng-class="{ 'ui-active': vm.driver.isActive(), 'ui-terminated': vm.driver.isTerminated(), 'ui-loading': vm.isChangeStatusLoading }">
         <div class="content-driver-name">
             {{ vm.driver.firstName | lowercase }} {{ vm.driver.lastName | lowercase }}
         </div>
@@ -14,8 +14,12 @@
         <div class="content-driver-status">{{ vm.driver.status }}</div>
 
         <div class="content-driver-controls">
-            <a class="button button-block button-primary button-change-status"
-               ng-click="vm.handleClickChangeStatus()">{{ ::vm.config.labelChangeStatus }}</a>
+            <button class="button button-block button-primary button-change-status"
+                    ng-disabled="vm.isChangeStatusLoading"
+                    ng-click="vm.handleClickChangeStatus()">
+                <ion-spinner icon="spiral" ng-show="vm.isChangeStatusLoading"></ion-spinner>
+                {{ ::vm.config.labelChangeStatus }}
+            </button>
         </div>
     </ion-header>
 
@@ -38,7 +42,7 @@
         </ul>
 
         <ul class="card list list-transactions">
-            <li class="item item-icon-left item-icon-right">
+            <li class="item item-icon-left item-icon-right" ng-click="vm.goToTransactionActivity()">
                 <i class="icon fa fa-exchange"></i>
                 {{ ::vm.config.labelTransactions }}
                 <i class="icon fa fa-chevron-right"></i>

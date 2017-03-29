@@ -9,20 +9,19 @@
 
         vm.config = globals.DRIVER_DETAILS.CONFIG;
         vm.driver = $stateParams.driver;
-        vm.params = {
-            "displayStatusChangeBannerSuccess": false,
-            "displayStatusChangeBannerFailure": false
-        };
+
+        vm.isChangeStatusLoading            = false;
+        vm.displayStatusChangeBannerSuccess = false;
+        vm.displayStatusChangeBannerFailure = false;
 
         vm.goToTransactionActivity = goToTransactionActivity;
         vm.handleClickChangeStatus = handleClickChangeStatus;
+        vm.updateDriverStatus      = updateDriverStatus;
 
         function goToTransactionActivity() {
-            return; //Todo- remove; temporary for current story
-
             //Clear the cache to work around issue where transaction page shows up before transition
-            return $ionicHistory.clearCache(["transaction"])
-                .then(function () {
+            return $ionicHistory.clearCache([ "transaction" ])
+                .then(() => {
                     $state.go("transaction.filterBy", {
                         filterBy:    "driver",
                         filterValue: vm.driver.driverId
@@ -34,8 +33,21 @@
             let actions = _.filter( vm.config.statuses, item => item.id !== vm.driver.status );
             displayChangeStatusActions( actions ).then(label => {
                 let action = _.find( actions, { label } );
-                updateDriverStatus( action.id );
+                vm.updateDriverStatus( action.id );
             });
+        }
+
+        function updateDriverStatus(statusId) {
+            if ( !statusId ) { return; }
+
+            // make request to update driver status; if failure, revert
+            //Todo- remove; temporarily simulate successful response
+            vm.isChangeStatusLoading = true;
+            $timeout(() => {
+                vm.isChangeStatusLoading = false;
+                vm.driver.status         = statusId;
+                vm.displayStatusChangeBannerSuccess = true;
+            }, 1000);
         }
 
         /**
@@ -58,17 +70,6 @@
             });
 
             return deferred.promise;
-        }
-
-        function updateDriverStatus(statusId) {
-            if ( !statusId ) { return; }
-
-            // immediately reflect the status change
-            vm.driver.status = statusId;
-
-            // make request to update driver status; if failure, revert
-            //Todo- remove; temporarily simulate successful response
-            $timeout( () => { vm.params.displayStatusChangeBannerSuccess = true; }, 1000 );
         }
     }
 

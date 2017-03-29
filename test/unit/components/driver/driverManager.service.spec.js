@@ -64,7 +64,7 @@
                     beforeEach(function () {
                         driverToFetch = TestUtils.getRandomValueFromArray(cachedDrivers);
 
-                        DriverManager.fetchDriver(driverToFetch.promptId)
+                        DriverManager.fetchDriver(driverToFetch.driverId)
                             .then(resolveHandler);
 
                         $rootScope.$digest();
@@ -80,7 +80,7 @@
                     beforeEach(function () {
                         driverToFetch = TestUtils.getRandomDriver(DriverModel);
 
-                        DriverManager.fetchDriver(driverToFetch.promptId)
+                        DriverManager.fetchDriver(driverToFetch.driverId)
                             .then(resolveHandler);
 
                         $rootScope.$digest();
@@ -102,7 +102,7 @@
                 beforeEach(function () {
                     driverToFetch = TestUtils.getRandomDriver(DriverModel);
 
-                    DriverManager.fetchDriver(driverToFetch.promptId)
+                    DriverManager.fetchDriver(driverToFetch.driverId)
                         .then(resolveHandler);
 
                     $rootScope.$digest();
@@ -143,8 +143,8 @@
                 DriversResource.getDrivers.and.returnValue(getDriversDeferred.promise);
             });
 
-            describe("when a pageSize is NOT given as a parameter", function () {
-                var error = "Failed to fetch drivers: pageSize is a required field.";
+            describe("when a pageSize is the ONLY given parameter for paging", function () {
+                var error = "Failed to fetch drivers: intent of pagination requires presence of coupled fields pageSize & pageNumber.";
 
                 beforeEach(function () {
                     params = {
@@ -164,8 +164,8 @@
                 });
             });
 
-            describe("when a pageNumber is NOT given as a parameter", function () {
-                var error = "Failed to fetch drivers: pageNumber is a required field.";
+            describe("when a pageNumber is the ONLY given parameter for paging", function () {
+                var error = "Failed to fetch drivers: intent of pagination requires presence of coupled fields pageSize & pageNumber.";
 
                 beforeEach(function () {
                     params = {
