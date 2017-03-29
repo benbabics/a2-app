@@ -100,7 +100,7 @@
                 }
 
                 TransactionManager.fetchPendingTransactions(
-                    requestParams.billingAccountId, requestConfig.fromDate, requestConfig.toDate, requestConfig.currentPage, requestConfig.pageSize, requestConfig.filterBy, requestConfig.filterValue, scope.filterBy, scope.filterValue, scope.cardId
+                    requestParams.billingAccountId, requestConfig.fromDate, requestConfig.toDate, requestConfig.currentPage, requestConfig.pageSize, scope.filterBy, scope.filterValue, scope.cardId
                 )
                     .then(function(transactionsCollection) {
                         scope.transactions.pendingCollection = transactionsCollection;
