@@ -28,8 +28,9 @@
             this.billingCompany = new UserAccountModel();
             this.billingCompany.set(userResource.billingCompany);
 
-            this.isOnlineAppWolNp   = this.onlineApplication === ONLINE_APPLICATION.WOL_NP;
-            this.isOnlineAppClassic = this.onlineApplication === ONLINE_APPLICATION.CLASSIC;
+            this.isOnlineAppWolNp       = this.onlineApplication === ONLINE_APPLICATION.WOL_NP;
+            this.isOnlineAppClassic     = this.onlineApplication === ONLINE_APPLICATION.CLASSIC;
+            this.isOnlineAppDistributor = this.onlineApplication === ONLINE_APPLICATION.DISTRIBUTOR;
         };
 
         UserModel.prototype.getDisplayAccountNumber = function () {
@@ -37,6 +38,7 @@
 
             switch (this.onlineApplication) {
                 case ONLINE_APPLICATION.WOL_NP:
+                case ONLINE_APPLICATION.DISTRIBUTOR:
                     return this.billingCompany.accountNumber;
                 case ONLINE_APPLICATION.CLASSIC:
                     return this.billingCompany.wexAccountNumber;

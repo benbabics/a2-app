@@ -261,8 +261,9 @@
 
     sharedGlobals.USER = {
         ONLINE_APPLICATION: {
-            WOL_NP : "WOL_NP",
-            CLASSIC: "CLASSIC"
+            WOL_NP     : "WOL_NP",
+            CLASSIC    : "CLASSIC",
+            DISTRIBUTOR: "DISTRIBUTOR"
         }
     };
 
