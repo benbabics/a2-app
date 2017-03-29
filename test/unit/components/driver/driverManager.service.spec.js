@@ -64,7 +64,7 @@
                     beforeEach(function () {
                         driverToFetch = TestUtils.getRandomValueFromArray(cachedDrivers);
 
-                        DriverManager.fetchDriver(driverToFetch.promptId)
+                        DriverManager.fetchDriver(driverToFetch.driverId)
                             .then(resolveHandler);
 
                         $rootScope.$digest();
@@ -80,7 +80,7 @@
                     beforeEach(function () {
                         driverToFetch = TestUtils.getRandomDriver(DriverModel);
 
-                        DriverManager.fetchDriver(driverToFetch.promptId)
+                        DriverManager.fetchDriver(driverToFetch.driverId)
                             .then(resolveHandler);
 
                         $rootScope.$digest();
@@ -102,7 +102,7 @@
                 beforeEach(function () {
                     driverToFetch = TestUtils.getRandomDriver(DriverModel);
 
-                    DriverManager.fetchDriver(driverToFetch.promptId)
+                    DriverManager.fetchDriver(driverToFetch.driverId)
                         .then(resolveHandler);
 
                     $rootScope.$digest();
