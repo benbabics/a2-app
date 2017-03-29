@@ -1,6 +1,6 @@
-<ion-view class="card-list-view page-cards" view-title="{{::vm.config.title}}" wex-back-state="landing">
-    <ion-header class="bar bar-subheader item-input-inset card-search-header">
-        <form novalidate name="vm.searchFilterForm" ng-submit="vm.applySearchFilter()">
+<ion-view view-title="{{::vm.config.title}}" wex-back-state="landing" class="page-cards-list">
+    <ion-header class="bar-header-search">
+        <form>
             <ion-input class="item-input-wrapper">
                 <i class="icon icon-search placeholder-icon"></i>
                 <input type="search" name="searchFilter" ng-model="vm.searchFilter" placeholder="{{::vm.config.searchPlaceholder}}">
@@ -8,48 +8,44 @@
         </form>
     </ion-header>
 
-    <ion-content class="has-subheader">
+    <ion-header class="bar-header-list"
+                ng-hide="vm.filteredCardsActive.length == 0 && vm.filteredCardsSuspended.length == 0 && vm.filteredCardsTerminated.length == 0">
+        <div class="row">
+            <span class="col col-35 content-card-number">{{ ::vm.config.cardNumber }}</span>
+            <span class="col col-65 content-embossing">{{ ::vm.config.embossing }}</span>
+        </div>
+    </ion-header>
+
+    <ion-header class="bar-header-message"
+                ng-show="vm.filteredCardsActive.length == 0 && vm.filteredCardsSuspended.length == 0 && vm.filteredCardsTerminated.length == 0">
+        {{ ::vm.config.emptyList }}
+    </ion-header>
+
+    <ion-content class="has-subheader inner-container" ion-sticky>
         <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
 
-        <div class="row divider list-header"
-             ng-if="vm.cards.collection.length > 0">
-            <div class="col col-25">{{ ::vm.config.cardNumber }}</div>
-            <div class="col col-50">{{ ::vm.config.embossing }}</div>
-            <div class="col right-align">{{ ::vm.config.status }}</div>
-        </div>
-
-        <wex-infinite-list class="card-list"
+        <wex-infinite-list on-reload="loadNextPage"
                            is-pending="infiniteScrollService.isPending"
-                           on-reload="loadNextPage"
                            loading-complete="infiniteScrollService.isLoadingComplete">
 
-            <ion-item collection-repeat="card in vm.cards.collection" class="item item-icon-right item-icon-top">
-                  <div ng-show="card.isGreekLoading">
-                    <wex-ui-greeking item-height="15px">
-                      <rect height="15" width="20" y="0" x="70"></rect>
-                      <rect height="15" width="50" y="0" x="270"></rect>
-                    </wex-ui-greeking>
-                  </div>
+            <!-- Active Cards: Header, Messaging & Results -->
+            <ion-item ng-hide="vm.filteredCardsActive.length == 0" class="item-divider active">{{ ::vm.config.listCardsActive }}</ion-item>
+            <card-list-item class="component-list-item"
+                            card="card"
+                            ng-repeat="card in vm.filteredCardsActive = ( vm.cards.active | filter : vm.searchFilter : vm.cardsComparator )"></card-list-item>
 
-                <div ng-hide="card.isGreekLoading">
-                    <a class="item-content" ui-sref="card.detail({ cardId: card.cardId })" wex-click>
-                        <div class="row">
-                            <div class="col col-25 text-ellipsis">{{ card.embossedCardNumber | wexCardNumber }}</div>
-                            <div class="col col-50">
-                                <div class="text-ellipsis" ng-if="card.embossingValue2">{{ card.embossingValue2 }}</div>
-                                <div class="text-ellipsis" ng-if="card.embossingValue1">{{ card.embossingValue1 }}</div>
-                            </div>
-                            <div class="col right-align">{{ card.getStatusDisplayName() }}</div>
-                        </div>
+            <!-- Suspended Cards: Header, Messaging & Results -->
+            <ion-item ng-hide="vm.filteredCardsSuspended.length == 0" class="item-divider suspended">{{ ::vm.config.listCardsSuspended }}</ion-item>
+            <card-list-item class="component-list-item"
+                            card="card"
+                            ng-repeat="card in vm.filteredCardsSuspended = ( vm.cards.suspended | filter : vm.searchFilter : vm.cardsComparator )"></card-list-item>
 
-                        <i class="icon fa fa-chevron-right"></i>
-                    </a>
-                </div>
-            </ion-item>
+            <!-- Terminated Cards: Header, Messaging & Results -->
+            <ion-item ng-hide="vm.filteredCardsTerminated.length == 0" class="item-divider terminated">{{ ::vm.config.listCardsTerminated }}</ion-item>
+            <card-list-item class="component-list-item"
+                            card="card"
+                            collection-repeat="card in vm.filteredCardsTerminated = ( vm.cards.terminated | filter : vm.searchFilter : vm.cardsComparator )"></card-list-item>
+
         </wex-infinite-list>
-
-        <div ng-show="infiniteScrollService.isLoadingComplete && vm.cards.collection.length == 0" class="no-cards">
-          {{ ::vm.config.emptyList }}
-        </div>
     </ion-content>
 </ion-view>

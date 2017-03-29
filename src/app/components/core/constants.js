@@ -196,23 +196,26 @@
     };
 
     appGlobals.CARD_LIST = {
-        "CONFIG"        : {
-            "ANALYTICS"        : {
+        "CONFIG": {
+            "ANALYTICS": {
                 "pageName": "Cards",
                 "events": {
-                    "searchSubmitted": ["Cards", "SearchCardLink"]
+                    "searchSubmitted": [ "Cards", "SearchCardLink" ]
                 }
             },
-            "title"            : "Cards",
-            "searchPlaceholder": "Search Card No & Embossing",
-            "cardNumber"       : "Card No",
-            "embossing"        : "Embossing",
-            "status"           : "Status",
-            "emptyList"        : "No Records Found."
+            "title":               "Cards",
+            "searchPlaceholder":   "Search Card Number or Embossing",
+            "cardNumber":          "Card No",
+            "embossing":           "Embossing",
+            "status":              "Status",
+            "listCardsActive":     "Active Cards",
+            "listCardsSuspended":  "Suspended Cards",
+            "listCardsTerminated": "Terminated Cards",
+            "emptyList":           "No Records Found."
         },
         "SEARCH_OPTIONS": {
             "PAGE_SIZE": 25,
-            "STATUSES" : "active,suspended,terminated",
+            "STATUSES":  "active,suspended,terminated",
             "STATUS_ACTIVE": "active"
         }
     };
