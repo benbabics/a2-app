@@ -40,6 +40,11 @@
     color: $default-light;
     background-color: #7f7f7f;
 
+    .row, .col {
+      padding-left:  0;
+      padding-right: 0;
+    }
+
     [class*="content-"] {
       font-family: 'open_sanssemibold';
     }
@@ -90,12 +95,23 @@
     font-family: 'open_sanssemibold';
 
     &.active     { background-color: #008b00; }
+    &.suspended  { background-color: #ffbf3b; color: #333; }
     &.terminated { background-color: #f00000; }
   }
 
-  .widget-infinite-list .item {
-    border-top: none;
-    .item-content { text-transform: capitalize; }
+  .widget-infinite-list {
+    .item {
+      border: none;
+      border-top: 1px solid #ccc;
+
+      .item-content { text-transform: capitalize; }
+      .item-content .row { align-items: center; }
+    }
+
+    .item-divider,
+    .item-divider + .component-list-item .item {
+      border-top: none;
+    }
   }
 }
 
