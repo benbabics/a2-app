@@ -60,8 +60,8 @@
             drivers = [];
         }
 
-        function fetchDriver(promptId) {
-            return $q.when(_.find(drivers, {promptId: promptId}));
+        function fetchDriver(driverId) {
+            return $q.when(_.find(drivers, { driverId }));
         }
 
         function fetchDrivers(accountId, params) {
