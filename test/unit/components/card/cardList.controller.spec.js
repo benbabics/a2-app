@@ -26,7 +26,7 @@
         cardsSuspended,
         cardsTerminated;
 
-    fdescribe("A Card List Controller", () => {
+    describe("A Card List Controller", () => {
 
         beforeEach(() => {
             self = this;

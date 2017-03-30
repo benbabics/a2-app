@@ -35,9 +35,6 @@
 
         function createCard(cardResource) {
             var cardModel = new CardModel();
-            if ( Math.random() >= 0.5 ) {
-                cardResource.status = "SUSPENDED";
-            }
             cardModel.set(cardResource);
 
             return cardModel;
