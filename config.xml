@@ -19,6 +19,7 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="mailto:*" />
+    <allow-intent href="tel:*" />
     <preference name="Orientation" value="portrait" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
