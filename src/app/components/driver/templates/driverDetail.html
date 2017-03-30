@@ -30,12 +30,12 @@
                 <span class="item-note">{{ ::vm.driver.promptId }}</span>
             </li>
             <li wex-application-flag="vm.config.phoneAndEmailApplications" class="item">
-                {{ ::vm.config.detailEmail }}
+                {{ ::vm.config.detailMobile }}
                 <span class="item-note"><a href="tel:{{ ::vm.driver.cellPhoneNumber }}">{{ ::vm.driver.cellPhoneNumber }}</a></span>
             </li>
 
             <li wex-application-flag="vm.config.phoneAndEmailApplications" class="item">
-                {{ ::vm.config.detailMobile }}
+                {{ ::vm.config.detailEmail }}
                 <span class="item-note"><a href="mailto:{{ ::vm.driver.emailAddress }}">{{ ::vm.driver.emailAddress }}</a></span>
             </li>
         </ul>
