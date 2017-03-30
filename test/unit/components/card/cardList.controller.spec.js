@@ -4,306 +4,269 @@
     var $rootScope,
         $scope,
         $q,
+        $timeout,
+        _,
+        filter,
         ElementUtil,
         CardManager,
         UserManager,
         UserModel,
         UserAccountModel,
         CardModel,
+        Logger,
         ctrl,
         resolveHandler,
         rejectHandler,
         mockUser,
         globals,
         config,
-        self;
+        self,
+        fetchCardsDeferred,
+        cardsActive,
+        cardsSuspended,
+        cardsTerminated;
 
-    describe("A Card List Controller", function () {
+    fdescribe("A Card List Controller", () => {
 
-        beforeEach(function () {
+        beforeEach(() => {
             self = this;
 
-            //mock dependencies:
-            CardManager = jasmine.createSpyObj("CardManager", ["fetchCards"]);
-            UserManager = jasmine.createSpyObj("UserManager", ["getUser"]);
-            ElementUtil = jasmine.createSpyObj("ElementUtil", ["getFocusedView", "resetInfiniteList"]);
+            // mock deps
+            CardManager = jasmine.createSpyObj( "CardManager", [ "fetchCards" ] );
+            UserManager   = jasmine.createSpyObj( "UserManager", [ "getUser" ] );
+            ElementUtil   = jasmine.createSpyObj( "ElementUtil", [ "getFocusedView", "resetInfiniteList" ] );
 
             // stub the routing and template loading
-            module(function ($urlRouterProvider) {
-                $urlRouterProvider.deferIntercept();
+            module( "app.shared" );
+            module( "app.components", $provide => {} );
+
+            // stub the routing and template loading
+            module( $urlRouterProvider => $urlRouterProvider.deferIntercept() );
+
+            module($provide => {
+                $provide.value( "$ionicTemplateCache", () => {} );
             });
 
-            module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
-            });
-
-            inject(function (_$rootScope_, _$q_, $controller, _globals_, _UserModel_, _UserAccountModel_, _CardModel_) {
-                $rootScope = _$rootScope_;
-                $q = _$q_;
-                UserModel = _UserModel_;
+            inject((___, _$q_, _$rootScope_, _$timeout_, $controller, _globals_, _UserModel_, _UserAccountModel_, _CardModel_, _filterFilter_, _Logger_) => {
+                _                = ___;
+                $q               = _$q_;
+                $timeout         = _$timeout_;
+                $rootScope       = _$rootScope_;
+                globals          = _globals_;
+                config           = globals.CARD_LIST.CONFIG;
+                UserModel        = _UserModel_;
                 UserAccountModel = _UserAccountModel_;
-                CardModel = _CardModel_;
-                globals = _globals_;
-                config = globals.CARD_LIST.CONFIG;
+                CardModel        = _CardModel_;
+                filter           = _filterFilter_;
+                Logger           = _Logger_;
 
                 // create a scope object for us to use.
                 $scope = $rootScope.$new();
 
                 ctrl = $controller("CardListController", {
-                    $scope:      $scope,
-                    CardManager: CardManager,
-                    ElementUtil: ElementUtil,
-                    UserManager: UserManager
+                    _:             _,
+                    $scope:        $scope,
+                    globals:       globals,
+                    UserManager:   UserManager,
+                    CardManager:   CardManager,
+                    Logger:        Logger
                 });
             });
 
-            //setup spies
-            resolveHandler = jasmine.createSpy("resolveHandler");
-            rejectHandler = jasmine.createSpy("rejectHandler");
+            // setup spies
+            resolveHandler = jasmine.createSpy( "resolveHandler" );
+            rejectHandler  = jasmine.createSpy( "rejectHandler" );
 
-            //setup mocks
-            mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
-            UserManager.getUser.and.returnValue(mockUser);
+            // setup mocks
+            mockUser = TestUtils.getRandomUser( UserModel, UserAccountModel );
+            UserManager.getUser.and.returnValue( mockUser );
+
+            fetchCardsDeferred = $q.defer();
+            CardManager.fetchCards.and.returnValue( fetchCardsDeferred.promise );
+
+            // mock data
+            cardsActive = populateCards([
+                { embossedCardNumber: "0001", embossingValue2: "abc-Value2-Active", embossingValue1: "abc-Value1-Active", status: "ACTIVE" },
+                { embossedCardNumber: "0002", embossingValue2: "def-Value2-Active", embossingValue1: "def-Value1-Active", status: "ACTIVE" },
+                { embossedCardNumber: "0003", embossingValue2: "xyz-Value2-Active", embossingValue1: "xyz-Value1-Active", status: "ACTIVE" }
+            ]);
+
+            cardsSuspended = populateCards([
+                { embossedCardNumber: "0001", embossingValue2: "abc-Value2-Suspended", embossingValue1: "abc-Value1-Suspended", status: "SUSPENDED" },
+                { embossedCardNumber: "0002", embossingValue2: "def-Value2-Suspended", embossingValue1: "def-Value1-Suspended", status: "SUSPENDED" },
+                { embossedCardNumber: "0003", embossingValue2: "xyz-Value2-Suspended", embossingValue1: "xyz-Value1-Suspended", status: "SUSPENDED" }
+            ]);
+
+            cardsTerminated = populateCards([
+                { embossedCardNumber: "0001", embossingValue2: "abc-Value2-Terminated", embossingValue1: "abc-Value1-Terminated", status: "TERMINATED" },
+                { embossedCardNumber: "0002", embossingValue2: "def-Value2-Terminated", embossingValue1: "def-Value1-Terminated", status: "TERMINATED" },
+                { embossedCardNumber: "0003", embossingValue2: "xyz-Value2-Terminated", embossingValue1: "xyz-Value1-Terminated", status: "TERMINATED" }
+            ]);
         });
 
-        afterEach(function () {
+        afterEach(() => {
             $rootScope =
-                $scope =
-                $q =
-                ElementUtil =
-                CardManager =
-                UserManager =
-                UserModel =
-                UserAccountModel =
-                CardModel =
-                ctrl =
-                resolveHandler =
-                rejectHandler =
-                mockUser =
-                globals =
-                config =
-                self = null;
+            $scope =
+            $q =
+            $timeout =
+            filter =
+            ElementUtil =
+            CardManager =
+            UserManager =
+            UserModel =
+            UserAccountModel =
+            CardModel =
+            ctrl =
+            resolveHandler =
+            rejectHandler =
+            mockUser =
+            globals =
+            config =
+            self =
+            fetchCardsDeferred =
+            cardsActive =
+            cardsSuspended =
+            cardsTerminated = null;
         });
 
-        describe("has an activate function that", function () {
-            it("should have infiniteListController methods on $scope", function () {
+        describe("has an activate function that", () => {
+            it("should have infiniteListController methods on $scope", () => {
                 expect( $scope.loadNextPage ).toBeDefined();
                 expect( $scope.resetSearchResults ).toBeDefined();
             });
 
-            it("should have infiniteScrollService defined on $scope", function () {
+            it("should have infiniteScrollService defined on $scope", () => {
                 expect( $scope.infiniteScrollService ).toBeDefined();
             });
 
-            it("should have vm.payments equal model", function () {
+            it("should have vm.cards equal model", () => {
                 expect( ctrl.cards ).toEqual( $scope.infiniteScrollService.model );
             });
-        });
 
-        describe("has an applySearchFilter function that", function () {
-            var searchFilter;
-
-            beforeEach(function () {
-                searchFilter = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-                ctrl.cards = [TestUtils.getRandomCard(CardModel)];
-            });
-
-            describe("when the filter is equal to the active filter", function () {
-                beforeEach(function () {
-                    ctrl.searchFilter = ctrl.getActiveSearchFilter();
-                    ctrl.applySearchFilter();
-                    $scope.infiniteScrollService.isLoadingComplete = true;
-                });
-
-                it("should NOT set loadingComplete to false", function () {
-                    expect( $scope.infiniteScrollService.isLoadingComplete ).not.toBeFalsy();
-                });
-
-                xit("should NOT set currentPage to 0", function () {
-                    //TODO figure out how to test this
-                });
-
-                it("should NOT set cards to an empty array", function () {
-                    expect(ctrl.cards).not.toEqual([]);
-                });
-
-                it("should NOT call ElementUtil.resetInfiniteList", function () {
-                    expect(ElementUtil.resetInfiniteList).not.toHaveBeenCalled();
-                });
-            });
-
-            describe("when the filter is NOT equal to the active filter", function () {
-                beforeEach(function () {
-                    CardManager.fetchCards.and.returnValue($q.resolve());
-                    ctrl.searchFilter = searchFilter;
-                    ctrl.applySearchFilter();
-                });
-
-                //TODO figure out how to test without getActiveSearchFilter
-                it("should set the active filter to the search filter", function () {
-                    expect(ctrl.getActiveSearchFilter()).toEqual(searchFilter);
-                });
-
-                it("should set loadingComplete to false", function () {
-                    expect( $scope.infiniteScrollService.isLoadingComplete ).toBeFalsy();
-                });
-
-                xit("should set currentPage to 0", function () {
-                    //TODO figure out how to test this
-                });
-
-                it("should call this.AnalyticsUtil.trackEvent", function () {
-                    verifyEventTracked(config.ANALYTICS.events.searchSubmitted);
-                });
+            it("should have vm.cards divided into 'active', 'suspended' and 'terminated' collections", () => {
+                expect( ctrl.cards.active ).toEqual( [] );
+                expect( ctrl.cards.suspended ).toEqual( [] );
+                expect( ctrl.cards.terminated ).toEqual( [] );
             });
         });
 
-        describe("has a getActiveSearchFilter function that", function () {
-            xit("should return the active search filter", function () {
-                //TODO figure out how to test this
+        describe("has a handleMakeRequest function that", () => {
+            beforeEach(() => {
+                $scope.loadNextPage().then( resolveHandler );
+                fetchCardsDeferred.resolve([ ...cardsActive, ...cardsSuspended, ...cardsTerminated ]);
+                $rootScope.$digest();
+            });
+
+            it("should send a message to CardManager.fetchCards with the expected params", () => {
+                // Todo: update once service makes these optional
+                expect( CardManager.fetchCards ).toHaveBeenCalled();
+            });
+
+            it("should call resolveHandler when resolved", () => {
+                expect( resolveHandler ).toHaveBeenCalled();
             });
         });
 
-        describe("has a handleMakeRequest function that", function () {
-            var fetchCardsDeferred,
-                activeSearchFilter = "",
-                orderby = "status";
-
-            beforeEach(function () {
-                fetchCardsDeferred = $q.defer();
-                CardManager.fetchCards.and.returnValue(fetchCardsDeferred.promise);
+        describe("has divided cards into 'active', 'suspended' and 'terminated' collections", () => {
+            beforeEach(() => {
+                fetchCardsDeferred.resolve([ ...cardsActive, ...cardsSuspended, ...cardsTerminated ]);
+                $scope.loadNextPage();
+                $rootScope.$digest();
+                $timeout.flush();
             });
 
-            beforeEach(function () {
-                $scope.loadNextPage()
-                    .then(resolveHandler)
-                    .catch(rejectHandler);
+            it("should have populated the vm.cards.active collection", () => {
+                expect( ctrl.cards.active.length ).toEqual( cardsActive.length );
+                expect( getCardsDetails(ctrl.cards.active) ).toEqual( getCardsDetails(cardsActive) );
             });
 
-            it("should call CardManager.fetchCards with the expected values", function () {
-                //TODO figure out how to test activeSearchFilter
-                expect(CardManager.fetchCards).toHaveBeenCalledWith(
-                    mockUser.billingCompany.accountId,
-                    activeSearchFilter,
-                    activeSearchFilter,
-                    activeSearchFilter,
-                    globals.CARD_LIST.SEARCH_OPTIONS.STATUSES,
-                    $scope.infiniteScrollService.settings.currentPage,
-                    $scope.infiniteScrollService.settings.pageSize,
-                    orderby
-                );
+            it("should have populated the vm.cards.suspended collection", () => {
+                expect( ctrl.cards.suspended.length ).toEqual( cardsSuspended.length );
+                expect( getCardsDetails(ctrl.cards.suspended) ).toEqual( getCardsDetails(cardsSuspended) );
             });
 
-            describe("when fetchCards resolves with an empty list of cards", function () {
-                beforeEach(function () {
-                    fetchCardsDeferred.resolve([]);
-                    $rootScope.$digest();
-                });
-
-                it("resolveHandler should resolve", function () {
-                    expect(resolveHandler).toHaveBeenCalled();
-                });
-
-                it("should have isLoadingComplete be true", function () {
-                    expect( $scope.infiniteScrollService.isLoadingComplete ).toBeTruthy();
-                });
-
-                it("should NOT reject", function () {
-                    expect(rejectHandler).not.toHaveBeenCalled();
-                });
-            });
-
-            describe("when makeRequest resolves with a non-empty, non-full list of cards", function () {
-                var mockCards;
-
-                beforeEach(function () {
-                    var numCards = TestUtils.getRandomInteger(1, globals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE);
-                    mockCards = [];
-                    for (var i = 0; i < numCards; ++i) {
-                        mockCards.push(TestUtils.getRandomCard(CardModel));
-                    }
-                });
-
-                beforeEach(function () {
-                    fetchCardsDeferred.resolve(mockCards);
-                    $rootScope.$digest();
-                });
-
-                it("should add the cards to the list", function () {
-                    expect( ctrl.cards.collection.length ).toEqual( mockCards.length );
-                });
-
-                xit("should increment the current page", function () {
-                    //TODO figure out how to test this
-                });
-
-                it("should set loadingComplete to true", function () {
-                    expect( $scope.infiniteScrollService.isLoadingComplete ).toBeTruthy();
-                });
-            });
-
-            describe("when makeRequest resolves with a full list of cards", function () {
-                var mockCards;
-
-                beforeEach(function () {
-                    var numCards = globals.CARD_LIST.SEARCH_OPTIONS.PAGE_SIZE;
-                    mockCards = [];
-                    for (var i = 0; i < numCards; ++i) {
-                        mockCards.push(TestUtils.getRandomCard(CardModel));
-                    }
-                });
-
-                beforeEach(function () {
-                    fetchCardsDeferred.resolve(mockCards);
-                    $rootScope.$digest();
-                });
-
-                it("should add the cards to the list", function () {
-                    expect( ctrl.cards.collection.length ).toEqual( mockCards.length );
-                });
-
-                xit("should increment the current page", function () {
-                    //TODO figure out how to test this
-                });
-            });
-
-            describe("when makeRequest rejects", function () {
-                beforeEach(function () {
-                    fetchCardsDeferred.reject();
-                    $rootScope.$digest();
-                });
-
-                it("should throw an error", function () {
-                    expect($rootScope.$digest).toThrow();
-                });
-
-                it("should resolve with a value of true", function () {
-                    expect(resolveHandler).toHaveBeenCalledWith(true);
-                });
+            it("should have populated the vm.cards.terminated collection", () => {
+                expect( ctrl.cards.terminated.length ).toEqual( cardsTerminated.length );
+                expect( getCardsDetails(ctrl.cards.terminated) ).toEqual( getCardsDetails(cardsTerminated) );
             });
         });
 
-        describe("has a resetSearchResults function that", function () {
-            beforeEach(function () {
-                CardManager.fetchCards.and.returnValue($q.resolve([]));
-                $scope.resetSearchResults();
-                $scope.$apply();
+        describe("has cardsComparator function that", () => {
+            it("should filter search term by embossedCardNumber", () => {
+                // Embossed Card Number: 0001, 0002, 0003
+                let results = filter( cardsActive, '0', ctrl.cardsComparator );
+                expect( getCardsDetails(results) ).toEqual( getCardsDetails(cardsActive) );
+
+                results = filter( cardsActive, '01', ctrl.cardsComparator );
+                expect( getCardDetails(results[0]) ).toEqual( getCardDetails(cardsActive[0]) );
+
+                results = filter( cardsSuspended, '002', ctrl.cardsComparator );
+                expect( getCardDetails(results[0]) ).toEqual( getCardDetails(cardsSuspended[1]) );
+
+                results = filter( cardsTerminated, '0003', ctrl.cardsComparator );
+                expect( getCardDetails(results[0]) ).toEqual( getCardDetails(cardsTerminated[2]) );
+
+                results = filter( cardsActive, ' 000 3 ', ctrl.cardsComparator );
+                expect( getCardDetails(results[0]) ).toEqual( getCardDetails(cardsActive[2]) );
+
+                results = filter( cardsActive, '****0003', ctrl.cardsComparator );
+                expect( getCardDetails(results[0]) ).toEqual( getCardDetails(cardsActive[2]) );
+
+                results = filter( cardsActive, '99', ctrl.cardsComparator );
+                expect( results ).toEqual( [] );
             });
 
-            xit("should set currentPage to 0", function () {
-                //TODO figure out how to test this
+            it("should filter search term by embossingValue2", () => {
+                // Embossing Value 2: abc-Value2-Active, def-Value2-Active, xyz-Value2-Active
+                let results = filter( cardsActive, 'Value2-ACTIVE', ctrl.cardsComparator );
+                expect( getCardsDetails(results) ).toEqual( getCardsDetails(cardsActive) );
+
+                results = filter( cardsActive, 'abc-Value2', ctrl.cardsComparator );
+                expect( getCardDetails(results[0]) ).toEqual( getCardDetails(cardsActive[0]) );
+
+                results = filter( cardsSuspended, 'def-Value2', ctrl.cardsComparator );
+                expect( getCardDetails(results[0]) ).toEqual( getCardDetails(cardsSuspended[1]) );
+
+                results = filter( cardsTerminated, 'xyz-Value2', ctrl.cardsComparator );
+
+                results = filter( cardsActive, 'xxx-Value2', ctrl.cardsComparator );
+                expect( results ).toEqual( [] );
             });
 
-            it("should set cards to an empty array", function () {
-                expect( ctrl.cards.collection ).toEqual([]);
+            it("should filter search term by embossingValue1", () => {
+                // Embossing Value 1: abc-Value1-Active, def-Value1-Active, xyz-Value1-Active
+                let results = filter( cardsActive, 'Value1-ACTIVE', ctrl.cardsComparator );
+                expect( getCardsDetails(results) ).toEqual( getCardsDetails(cardsActive) );
+
+                results = filter( cardsActive, 'abc-Value1', ctrl.cardsComparator );
+                expect( getCardDetails(results[0]) ).toEqual( getCardDetails(cardsActive[0]) );
+
+                results = filter( cardsSuspended, 'def-Value1', ctrl.cardsComparator );
+                expect( getCardDetails(results[0]) ).toEqual( getCardDetails(cardsSuspended[1]) );
+
+                results = filter( cardsTerminated, 'xyz-Value1', ctrl.cardsComparator );
+
+                results = filter( cardsActive, 'xxx-Value1', ctrl.cardsComparator );
+                expect( results ).toEqual( [] );
             });
         });
-
     });
 
-    function verifyEventTracked(event) {
-        expect(self.AnalyticsUtil.trackEvent.calls.mostRecent().args).toEqual(event);
+
+    // helper methods
+    function populateCards(attrs = []) {
+        return attrs.map( populateCard );
+    }
+    function populateCard(data = {}) {
+        let model = new CardModel();
+        model.set( data );
+        return model;
     }
 
+    function getCardsDetails(cards = []) {
+        return _.map( cards, getCardDetails );
+    }
+    function getCardDetails(card = {}) {
+        return _.pick( card, 'embossedCardNumber', 'embossingValue2', 'embossingValue1' );
+    }
 }());
