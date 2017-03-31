@@ -1,0 +1,73 @@
+<!--
+  Generated template for the Login page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content #content padding>
+  <div id="title-heading-bar"></div>
+
+  <div id="login-content">
+    <ion-card id="card-form">
+      <form novalidate #form="ngForm" (ngSubmit)="logIn($event, setupFingerprintAuth)">
+        <ion-list id="input-list" class="list">
+          <ion-item (click)="verifyFingerprintRemoval()">
+            <ion-input [(ngModel)]="maskableUsername"
+                  (blur)="usernameIsFocused = false"
+                  (focus)="usernameIsFocused = true"
+                  [disabled]="fingerprintProfileAvailable"
+                  name="userName"
+                  type="text"
+                  required
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  [placeholder]="CONSTANTS.userName.label"
+                  [clearInput]="true"
+                  [maxlength]="CONSTANTS.userName.maxLength"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input [(ngModel)]="user.password"
+                  name="password"
+                  type="password"
+                  required
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  [placeholder]="CONSTANTS.password.label"
+                  [clearInput]="true"
+                  [maxlength]="CONSTANTS.password.maxLength"></ion-input>
+          </ion-item>
+        </ion-list>
+
+        <div id="login-controls" class="row-no-padding">
+          <div class="justify-left">
+            <ion-label [innerHtml]="CONSTANTS.rememberMe.label" class="justify-left"></ion-label>
+            <ion-checkbox name="rememberMeToggle" [(ngModel)]="rememberMeToggle" [disabled]="setupFingerprintAuth" class="justify-left"></ion-checkbox>
+          </div>
+
+          <div *ngIf="fingerprintAuthAvailable && !fingerprintProfileAvailable" class="justify-right">
+            <ion-label [innerHtml]="fingerprintDisabledLabel" class="justify-right"></ion-label>
+            <ion-checkbox name="setupFingerprintAuthToggle" [(ngModel)]="setupFingerprintAuthToggle" class="justify-right"></ion-checkbox>
+          </div>
+
+          <div class="fingerprint-indicator icon-fingerprint justify-right" *ngIf="fingerprintProfileAvailable" (click)="logInUser(true)"></div>
+        </div>
+
+        <div class="actions">
+          <button ion-button block type="submit" [disabled]="!form.valid">{{ CONSTANTS.submitButton }}</button>
+        </div>
+      </form>
+    </ion-card>
+
+    <div id="enrollment-link" class="padding align_center">
+      <!-- <online-enrollment-flow>{{ ::vm.config.enrollment.label }}</online-enrollment-flow> -->
+      <button ion-button block clear>{{ CONSTANTS.enrollment.label }}</button>
+    </div>
+  </div>
+
+  <div #keyboardSpacer id="keyboard-spacer"></div>
+</ion-content>
