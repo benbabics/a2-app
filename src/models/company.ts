@@ -1,10 +1,10 @@
-export class Account {
+export class Company {
     accountId: string;
     accountNumber: string;
     wexAccountNumber: string;
     name: string;
 }
 
-export namespace Account {
-    export type Details = Account;
+export namespace Company {
+    export type Details = Company;
 }

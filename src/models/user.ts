@@ -1,13 +1,13 @@
 import { OnlineApplication } from "./online-application";
-import { Account } from "./account";
+import { Company } from "./company";
 
 export class User {
     id: string;
     username: string;
     firstName: string;
     onlineApplication: OnlineApplication;
-    company?: Account;
-    billingCompany?: Account;
+    company?: Company;
+    billingCompany?: Company;
     brand?: string;
     email?: string;
 }
