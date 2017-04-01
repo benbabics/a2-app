@@ -17,10 +17,10 @@ export class UserProvider extends ApiProvider {
 
   public current(): Observable<User> {
     return this.http.get([this.BASE_URL, this.CURRENT].join("/"))
-    .map((response: Response): User => response.json())
-    .catch((error: Response | any) => {
-      console.log(error);
-      return Observable.throw(error);
-    });
+      .map((response: Response): User => response.json())
+      .catch((error: Response | any) => {
+        console.log(error);
+        return Observable.throw(error);
+      });
   }
 }

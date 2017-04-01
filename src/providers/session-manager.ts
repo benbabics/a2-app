@@ -11,9 +11,7 @@ export class SessionManager {
 
   private static _currentSession: Session;
 
-  constructor(private authProvider: AuthProvider, private userProvider: UserProvider) {
-    console.log("Hello Session Provider");
-  }
+  constructor(private authProvider: AuthProvider, private userProvider: UserProvider) { }
 
   public static get currentSession(): Session {
     return this._currentSession;
