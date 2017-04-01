@@ -1,0 +1,7 @@
+@mixin action-indicator-color($color) {
+  .action-indicator {
+    ion-spinner.action-spinner * {
+      stroke: $color;
+    }
+  }
+}

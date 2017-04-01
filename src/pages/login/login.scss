@@ -1,8 +1,4 @@
 page-login {
-  $color-primary:   #3a97b5;
-  $color-white:     #fff;
-  $color-black:     #000;
-  $color-dark-gray: #444;
 
   $checkbox-size: 16px;
 
@@ -43,7 +39,7 @@ page-login {
     padding-left:  16px;
     padding-right: 16px;
     padding-bottom: 0 !important;
-    background: $color-white url('../assets/pages/login/background-street.jpg') no-repeat;
+    background: white url('../assets/pages/login/background-street.jpg') no-repeat;
     background-size: 100%;
     //font-family: 'open_sansregular';
 
@@ -123,13 +119,13 @@ page-login {
     }
 
     .fingerprint-indicator {
-      color: $color-dark-gray;
+      color: color($colors, dark-gray);
 
       &:after {
         font-size:   34px;
         line-height: 34px;
         padding-left: $checkbox-size;
-        color: $color-primary;
+        color: color($colors, login);
       }
     }
 
@@ -151,7 +147,7 @@ page-login {
         text-overflow: initial;
         overflow: initial;
         white-space: pre;
-        color: $color-dark-gray;
+        color: color($colors, dark-gray);
       }
 
       ion-checkbox .checkbox-icon:not(.checkbox-checked) {
@@ -177,8 +173,9 @@ page-login {
 
     .actions {
       button {
-        color: $color-white;
-        background-color: $color-primary;
+        @include action-indicator-color(white);
+        color: white;
+        background-color: color($colors, login);
 
         &[disabled] {
           opacity: .7;
@@ -196,6 +193,10 @@ page-login {
 
       @at-root .keyboard-open & {
         visibility: hidden;
+      }
+
+      button {
+        color: color($colors, login);
       }
     }
 
