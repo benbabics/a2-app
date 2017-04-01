@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "1.1.4",
+    "@types/lodash": "^4.14.61",
     "typescript": "2.2.2"
   },
   "cordovaPlugins": [
