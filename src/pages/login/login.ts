@@ -1,3 +1,5 @@
+import { UserCredentials } from './../../models/user-credentials';
+import { SessionManager } from './../../providers/session-manager';
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { NavController, NavParams, Platform, Content } from "ionic-angular";
@@ -26,9 +28,9 @@ export class LoginPage {
   public rememberMe: boolean = false;
   public timedOut: boolean = false;
   public usernameIsFocused: boolean = false;
-  public user: {username: string, password: string} = { username: "", password: "" };
+  public user: UserCredentials = { username: "", password: "" };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private platform: Platform) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams, private platform: Platform, private sessionManager: SessionManager) {}
 
   public get fingerprintDisabledLabel(): string {
     return this.resolvePlatformConstant(this.CONSTANTS.touchId.disabled.label);
@@ -107,8 +109,7 @@ export class LoginPage {
   }
 
   public logIn(event: Event, setupFingerprintAuth?: boolean) {
-
-
+    this.sessionManager.initSession(this.user).subscribe();
 
     event.preventDefault();
   }

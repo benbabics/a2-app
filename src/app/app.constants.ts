@@ -96,7 +96,7 @@ export namespace ConstantsInfo {
 
 ConstantsInfo.Env.set("local", {
   AUTH: {
-    client_secret: "fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
   },
   APIS: {
     AMREST: {
@@ -110,7 +110,7 @@ ConstantsInfo.Env.set("local", {
 
 ConstantsInfo.Env.set("dit", {
   AUTH: {
-    client_secret: "fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
   },
   APIS: {
     AMREST: {
@@ -124,7 +124,7 @@ ConstantsInfo.Env.set("dit", {
 
 ConstantsInfo.Env.set("stage-wex", {
   AUTH: {
-    client_secret: "fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
   },
   APIS: {
     AMREST: {
@@ -138,7 +138,7 @@ ConstantsInfo.Env.set("stage-wex", {
 
 ConstantsInfo.Env.set("production-wex", {
   AUTH: {
-    client_secret: "fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
   },
   APIS: {
     AMREST: {
