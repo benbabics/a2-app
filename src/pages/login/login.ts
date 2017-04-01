@@ -4,6 +4,7 @@ import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { NavController, NavParams, Platform, Content } from "ionic-angular";
 import { Value } from "../../decorators/value";
+import { LandingPage } from "../landing/landing";
 
 /*
   Generated class for the Login page.
@@ -109,7 +110,13 @@ export class LoginPage {
   }
 
   public logIn(event: Event, setupFingerprintAuth?: boolean) {
-    this.sessionManager.initSession(this.user).subscribe();
+    this.isLoggingIn = true;
+
+    this.sessionManager.initSession(this.user)
+      .finally(() => this.isLoggingIn = false)
+      .subscribe(null, null, () => {
+        this.navCtrl.push(LandingPage);
+      });
 
     event.preventDefault();
   }

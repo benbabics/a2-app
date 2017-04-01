@@ -51,7 +51,7 @@ page-login {
       top: 0;
     }
 
-    &.keyboard-open {
+    @at-root .keyboard-open & {
       @media (max-height: $small-device) {
         padding-top: 0;
 
