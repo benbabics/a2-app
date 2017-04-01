@@ -3,8 +3,8 @@ import { SessionManager } from './../../providers/session-manager';
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { NavController, NavParams, Platform, Content } from "ionic-angular";
-import { Value } from "../../decorators/value";
 import { LandingPage } from "../landing/landing";
+import { Page } from "../page";
 
 /*
   Generated class for the Login page.
@@ -16,11 +16,9 @@ import { LandingPage } from "../landing/landing";
   selector: "page-login",
   templateUrl: "login.html"
 })
-export class LoginPage {
+export class LoginPage extends Page {
   @ViewChild("content") content: Content;
   @ViewChild("keyboardSpacer") keyboardSpacer: ElementRef;
-
-  @Value("PAGES.LOGIN.CONSTANTS") public CONSTANTS: any;
 
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
@@ -31,7 +29,9 @@ export class LoginPage {
   public usernameIsFocused: boolean = false;
   public user: UserCredentials = { username: "", password: "" };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private platform: Platform, private sessionManager: SessionManager) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams, private platform: Platform, private sessionManager: SessionManager) {
+    super("Login");
+  }
 
   public get fingerprintDisabledLabel(): string {
     return this.resolvePlatformConstant(this.CONSTANTS.touchId.disabled.label);
