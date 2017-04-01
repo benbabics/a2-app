@@ -27,7 +27,7 @@ export class InvoiceSummary extends InvoiceSummaryDetails {
     }
 
     public get billingDate(): Date {
-      return moment(this._billingDate).toDate();
+      return this._billingDate ? moment(this._billingDate).toDate() : null;
     }
 
     public set billingDate(billingDate: Date) {
@@ -35,7 +35,7 @@ export class InvoiceSummary extends InvoiceSummaryDetails {
     }
 
     public get closingDate(): Date {
-      return moment(this._closingDate).toDate();
+      return this._closingDate ? moment(this._closingDate).toDate() : null;
     }
 
     public set closingDate(closingDate: Date) {
@@ -43,7 +43,7 @@ export class InvoiceSummary extends InvoiceSummaryDetails {
     }
 
     public get paymentDueDate(): Date {
-      return moment(this._paymentDueDate).toDate();
+      return this._paymentDueDate ? moment(this._paymentDueDate).toDate() : null;
     }
 
     public set paymentDueDate(paymentDueDate: Date) {

@@ -12,7 +12,8 @@ import { ActionIndicator } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
-import { AuthProvider, SecureHttp, SessionManager, UserProvider } from "../providers";
+import { AuthProvider, SecureHttp, SessionManager, UserProvider, InvoiceProvider } from "../providers";
+import { WexCurrency, WexDate } from "../pipes";
 
 @NgModule({
   declarations: [
@@ -23,7 +24,9 @@ import { AuthProvider, SecureHttp, SessionManager, UserProvider } from "../provi
     TabsPage,
     LoginPage,
     LandingPage,
-    ActionIndicator
+    ActionIndicator,
+    WexCurrency,
+    WexDate
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -48,8 +51,11 @@ import { AuthProvider, SecureHttp, SessionManager, UserProvider } from "../provi
       deps: [XHRBackend, RequestOptions]
     },
     AuthProvider,
+    InvoiceProvider,
     UserProvider,
-    SessionManager
+    SessionManager,
+    WexCurrency,
+    WexDate
   ]
 })
 export class AppModule {}
