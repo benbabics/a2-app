@@ -5,7 +5,7 @@
     // jshint maxparams:7
 
     /* @ngInject */
-    function DriverListController(_, $scope, globals, $controller, UserManager, DriverManager, Logger) {
+    function DriverListController(_, $rootScope, $scope, globals, $controller, UserManager, DriverManager, Logger) {
         var vm = this;
 
         vm.config        = globals.DRIVER_LIST.CONFIG;
@@ -32,12 +32,15 @@
                 makeRequest:      handleMakeRequest,
                 onError:          handleOnError,
                 onRequestItems:   handleOnRequestItems,
-                onRenderComplete: handleOnRenderComplete,
+                onRenderComplete: handleRenderingItems,
                 onResetItems:     handleOnResetItems
             });
 
             vm.drivers = $scope.infiniteScrollService.model;
             handleOnResetItems(); // initially add collections
+
+            // avoid adding an additional watcher on deeply nested attrs
+            $rootScope.$on( "driver:statusChange", handleRenderingItems );
         }
 
         function handleOnResetItems() {
@@ -46,13 +49,8 @@
         }
 
         function handleMakeRequest(requestConfig) {
-            var billingAccountId = UserManager.getUser().billingCompany.accountId,
-                searchParams = {
-                    pageSize:   vm.searchOptions.PAGE_SIZE,
-                    pageNumber: 0
-                };
-
-            return DriverManager.fetchDrivers( billingAccountId, searchParams );
+            var billingAccountId = UserManager.getUser().billingCompany.accountId;
+            return DriverManager.fetchDrivers( billingAccountId );
         }
 
         function handleOnRequestItems() {
@@ -74,12 +72,9 @@
             Logger.error( `Failed to fetch next page of drivers: ${errorResponse}` );
         }
 
-        function handleOnRenderComplete() {
-            // ensure we do not receive any greeking items
-            var drivers = _.filter( vm.drivers.collection, driver => !driver.isGreekLoading );
-
-            // now reassign schedule and completed collections their appropriate items
-            filterDrivers( drivers );
+        function handleRenderingItems() {
+            filterDrivers( DriverManager.getDrivers() );
+            $scope.$broadcast( "scroll.refreshComplete" ); // redraw colleciton headers
         }
 
         function filterDrivers(drivers) {
@@ -110,12 +105,13 @@
 
             // use driver data to compare against the term
             if ( _.isObject(driver) ) {
-                let firstName = _.get( driver, 'firstName', '' ).toLowerCase(),
-                    lastName  = _.get( driver, 'lastName', '' ).toLowerCase(),
-                    driverId  = _.get( driver, 'driverId', '' );
+                let firstName = _.get( driver, "firstName", "" ).toLowerCase(),
+                    lastName  = _.get( driver, "lastName", "" ).toLowerCase(),
+                    driverId  = _.get( driver, "driverId", "" ).toLowerCase();
 
-                // not case-sensitive
-                term = term.toLowerCase();
+                // not case-sensitive; strip away unnecessary chars
+                term = term.toLowerCase().replace( /\-|\s/g, "" );
+                driverId = driverId.replace( /\-/g, "" );
 
                 return firstName.indexOf( term ) >= 0 ||
                        lastName.indexOf( term )  >= 0 ||

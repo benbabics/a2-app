@@ -8,7 +8,6 @@
         var directive = {
             restrict:    "E",
             templateUrl: "app/components/driver/templates/driverListItem.directive.html",
-            transclude:  true,
             scope: {
                 driver: "="
             }
