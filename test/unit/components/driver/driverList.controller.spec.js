@@ -31,8 +31,8 @@
             self = this;
 
             // mock deps
-            DriverManager = jasmine.createSpyObj( "DriverManager", [ "fetchDrivers" ] );
             UserManager   = jasmine.createSpyObj( "UserManager", [ "getUser" ] );
+            DriverManager = jasmine.createSpyObj( "DriverManager", [ "fetchDrivers", "getDrivers" ] );
             ElementUtil   = jasmine.createSpyObj( "ElementUtil", [ "getFocusedView", "resetInfiniteList" ] );
 
             // stub the routing and template loading
@@ -149,10 +149,7 @@
             });
 
             it("should send a message to DriverManager.fetchDrivers with the expected params", () => {
-                expect( DriverManager.fetchDrivers ).toHaveBeenCalledWith(
-                    mockUser.billingCompany.accountId,
-                    { pageSize: 999, pageNumber: 0 } // Todo: remove once service makes these optional
-                );
+                expect( DriverManager.fetchDrivers ).toHaveBeenCalledWith( mockUser.billingCompany.accountId );
             });
 
             it("should call resolveHandler when resolved", () => {
@@ -163,6 +160,7 @@
         describe("has divided drivers into 'active' and 'terminated' collections", () => {
             beforeEach(() => {
                 fetchDriversDeferred.resolve([ ...driversActive, ...driversTerminated ]);
+                DriverManager.getDrivers.and.returnValue([ ...driversActive, ...driversTerminated ]);
                 $scope.loadNextPage();
                 $rootScope.$digest();
                 $timeout.flush();
