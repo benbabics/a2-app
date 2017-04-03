@@ -10,7 +10,7 @@
   <div id="login-content">
     <ion-card id="card-form">
       <form novalidate #form="ngForm" (ngSubmit)="logIn($event, setupFingerprintAuth)">
-        <ion-list id="input-list" class="list">
+        <ion-item-group id="input-list">
           <ion-item (click)="verifyFingerprintRemoval()">
             <ion-input [(ngModel)]="maskableUsername"
                   (blur)="usernameIsFocused = false"
@@ -41,21 +41,21 @@
                   [clearInput]="true"
                   [maxlength]="CONSTANTS.password.maxLength"></ion-input>
           </ion-item>
-        </ion-list>
+        </ion-item-group>
 
-        <div id="login-controls" class="row-no-padding">
-          <div class="justify-left">
-            <ion-label [innerHtml]="CONSTANTS.rememberMe.label" class="justify-left"></ion-label>
-            <ion-checkbox name="rememberMeToggle" [(ngModel)]="rememberMeToggle" [disabled]="setupFingerprintAuth" class="justify-left"></ion-checkbox>
-          </div>
+        <ion-item-group id="login-controls">
+          <ion-item>
+            <ion-label text-wrap item-left [innerHtml]="CONSTANTS.rememberMe.label" ></ion-label>
+            <ion-checkbox name="rememberMeToggle" [(ngModel)]="rememberMeToggle" [disabled]="setupFingerprintAuth"></ion-checkbox>
+          </ion-item>
 
-          <div *ngIf="fingerprintAuthAvailable && !fingerprintProfileAvailable" class="justify-right">
-            <ion-label [innerHtml]="fingerprintDisabledLabel" class="justify-right"></ion-label>
-            <ion-checkbox name="setupFingerprintAuthToggle" [(ngModel)]="setupFingerprintAuthToggle" class="justify-right"></ion-checkbox>
-          </div>
+          <ion-item *ngIf="fingerprintAuthAvailable && !fingerprintProfileAvailable">
+            <ion-label text-wrap [innerHtml]="fingerprintDisabledLabel"></ion-label>
+            <ion-checkbox item-right name="setupFingerprintAuthToggle" [(ngModel)]="setupFingerprintAuthToggle"></ion-checkbox>
+          </ion-item>
 
-          <div class="fingerprint-indicator icon-fingerprint justify-right" *ngIf="fingerprintProfileAvailable" (click)="logInUser(true)"></div>
-        </div>
+          <div *ngIf="fingerprintProfileAvailable" class="fingerprint-indicator icon-fingerprint" (click)="logInUser(true)"></div>
+        </ion-item-group>
 
         <div class="actions">
           <button ion-button block type="submit" [disabled]="!form.valid">

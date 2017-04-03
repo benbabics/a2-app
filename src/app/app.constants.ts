@@ -101,13 +101,13 @@ export namespace ConstantsInfo {
           "maxLength": 30
         },
         "rememberMe": {
-          "label": "Remember<br/>Username"
+          "label": "Remember Username"
         },
         "touchId": {
           "disabled": {
             "label": {
-              "android": "Set Up<br/>Fingerprint",
-              "ios": "Set Up<br/>Touch ID"
+              "android": "Set Up Fingerprint",
+              "ios": "Set Up Touch ID"
             }
           },
           "settingsPrompt": {
