@@ -5,7 +5,7 @@ export abstract class Page {
 
   public readonly CONSTANTS: any;
 
-  constructor(pageName: string) {
+  constructor(public readonly pageName: string) {
     this.CONSTANTS = _.get(Constants, `PAGES.${pageName.toUpperCase()}`);
   }
 }

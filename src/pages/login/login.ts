@@ -2,9 +2,10 @@ import { UserCredentials } from './../../models/user-credentials';
 import { SessionManager } from './../../providers/session-manager';
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
-import { NavController, NavParams, Platform, Content } from "ionic-angular";
+import { NavParams, Platform, Content } from "ionic-angular";
 import { LandingPage } from "../landing/landing";
 import { Page } from "../page";
+import { WexNavController } from "../../providers";
 
 /*
   Generated class for the Login page.
@@ -29,7 +30,7 @@ export class LoginPage extends Page {
   public usernameIsFocused: boolean = false;
   public user: UserCredentials = { username: "", password: "" };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private platform: Platform, private sessionManager: SessionManager) {
+  constructor(public navCtrl: WexNavController, public navParams: NavParams, private platform: Platform, private sessionManager: SessionManager) {
     super("Login");
   }
 

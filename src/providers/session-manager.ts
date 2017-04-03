@@ -21,6 +21,10 @@ export class SessionManager {
     return !!this._currentSession;
   }
 
+  public static get hasActiveSession(): boolean {
+    return this._currentSession && !!this._currentSession.user;
+  }
+
   public initSession(userCredentials: UserCredentials): Observable<Session> {
     if (SessionManager.hasSession) {
       this.invalidateSession();

@@ -4,7 +4,7 @@ import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 
 import { LoginPage } from "../pages/login/login";
-
+import { SessionManager } from "./../providers/session-manager";
 
 @Component({
   templateUrl: "app.html"
@@ -21,7 +21,11 @@ export class MyApp {
     });
   }
 
-  public get rootPage(): any {
+  public get isUserLoggedIn(): boolean {
+    return SessionManager.hasActiveSession;
+  }
+
+  public get rootPage() {
     return LoginPage;
   }
 }
