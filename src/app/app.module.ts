@@ -33,7 +33,8 @@ import { WexCurrency, WexDate } from "../pipes";
     WexNavBar
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    ChartsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

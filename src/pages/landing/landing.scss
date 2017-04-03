@@ -96,7 +96,16 @@ page-landing {
       @extend .text-lg;
     }
 
-    .chart-wrapper {
+
+  }
+
+  .card.list {
+    .item.item-icon-left.item-icon-right .icon.fontello-icon {
+      font-size: 23px;
+      left: 6px;
+    }
+  }*/
+  .chart-wrapper {
       display: flex;
       width: 100%;
       flex-direction: row;
@@ -133,11 +142,11 @@ page-landing {
             line-height: normal;
           }
           .text-amount {
-            @extend .text-md;
-            @extend .color-gray-dark;
+            //@extend .text-md;
+            //@extend .color-gray-dark;
           }
           .text-title {
-            @extend .color-gray;
+            //@extend .color-gray;
           }
 
           &:before {
@@ -188,14 +197,6 @@ page-landing {
         text-align: center;
       }
     }
-  }
-
-  .card.list {
-    .item.item-icon-left.item-icon-right .icon.fontello-icon {
-      font-size: 23px;
-      left: 6px;
-    }
-  }*/
 }
 
 

@@ -6,6 +6,8 @@ import { SplashScreen } from "@ionic-native/splash-screen";
 import { LoginPage } from "../pages/login/login";
 import { SessionManager } from "./../providers/session-manager";
 
+import "chart.js";
+
 @Component({
   templateUrl: "app.html"
 })

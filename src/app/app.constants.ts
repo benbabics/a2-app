@@ -40,6 +40,16 @@ export namespace ConstantsInfo {
       DATE_FORMAT: "MM/DD/YYYY",
       LOCALE: "en-US"
     },
+    NAVIGATION: {
+      LABELS: {
+        "login": "Login",
+        "landing": "Home",
+        "payments": "Payments",
+        "transactions": "Transactions",
+        "cards": "Cards",
+        "drivers": "Drivers"
+      }
+    },
     PAGES: {
       //# Landing page
       LANDING: {
@@ -50,7 +60,7 @@ export namespace ConstantsInfo {
         },
         CHART: {
           OPTIONS: {
-            animation: true,
+            animation: false,
             percentageInnerCutout: 70,
             showTooltips: false,
             segmentStrokeWidth: 1,
@@ -76,10 +86,6 @@ export namespace ConstantsInfo {
         "pendingAmount": "Pending",
         "currentBalance": "Current Balance",
         "statementBalance": "Statement Balance",
-        "makePayment": "Make Payment",
-        "transactions": "Transactions",
-        "cards": "Cards",
-        "drivers": "Drivers",
         "scheduledPayments": "Scheduled"
       },
 

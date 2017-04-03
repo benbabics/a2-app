@@ -42,77 +42,66 @@
         Account Overview
       </ion-item-divider>
 
-      <ion-item text-wrap>
-        <div class="chart-wrapper">
-          <div class="labels">
-            <div class="label" *ngFor="let chart of chartDisplay.left" [ngStyle]="{ 'color': chart.color }">
-              <div class="text-amount" [innerHtml]="chart.data | wexCurrency:true"></div>
-              <div class="text-title">{{ chart.label }}</div>
+      <div *ngIf="invoiceSummary">
+        <ion-item text-wrap>
+          <div class="chart-wrapper">
+            <div class="labels">
+              <div class="label" *ngFor="let chart of chartDisplay.left" [ngStyle]="{ 'color': chart.color }">
+                <div class="text-amount" [innerHtml]="chart.data | wexCurrency:true"></div>
+                <div class="text-title">{{ chart.label }}</div>
+              </div>
             </div>
-          </div>
 
-          <div class="chart">
-            <!-- <wex-doughnut-chart [chartConfig]="chart">
-            </wex-doughnut-chart> -->
-          </div>
-          <div class="labels">
-            <div class="label" *ngFor="let chart of chartDisplay.right" [ngStyle]="{ 'color': chart.color }">
-              <div class="text-amount" [innerHtml]="chart.data | wexCurrency:true"></div>
-              <div class="text-title">{{ chart.label }}</div>
+            <div class="chart" style="display:block">
+              <!-- <wex-doughnut-chart [chartConfig]="chart">
+              </wex-doughnut-chart> -->
+              <canvas baseChart
+                      [chartType]="'doughnut'"
+                      [options]="chart.options"
+                      [data]="chart.data"
+                      [colors]="chart.colors"
+                      [labels]="chart.labels">
+              </canvas>
+            </div>
+
+            <div class="labels">
+              <div class="label" *ngFor="let chart of chartDisplay.right" [ngStyle]="{ 'color': chart.color }">
+                <div class="text-amount" [innerHtml]="chart.data | wexCurrency:true"></div>
+                <div class="text-title">{{ chart.label }}</div>
+              </div>
             </div>
           </div>
-        </div>
-      </ion-item>
-      <ion-list>
-        <ion-item class="balance-current">
-          {{ CONSTANTS.currentBalance }}
-          <span item-right class="item-currency" [innerHtml]="invoiceSummary.currentBalance | wexCurrency:true"></span>
         </ion-item>
-        <ion-item class="balance-statement">
-          {{ CONSTANTS.statementBalance }}
-          <span item-right class="item-currency" [innerHtml]="invoiceSummary.statementBalance | wexCurrency:true"></span>
-        </ion-item>
-        <ion-item class="due-date">
-          {{ CONSTANTS.paymentDueDate }}
-          <span item-right class="item-currency">{{ invoiceSummary.paymentDueDateObject | wexDate:true }}</span>
-        </ion-item>
-      </ion-list>
+        <ion-list>
+          <ion-item class="balance-current">
+            {{ CONSTANTS.currentBalance }}
+            <span item-right class="item-currency" [innerHtml]="invoiceSummary.currentBalance | wexCurrency:true"></span>
+          </ion-item>
+          <ion-item class="balance-statement">
+            {{ CONSTANTS.statementBalance }}
+            <span item-right class="item-currency" [innerHtml]="invoiceSummary.statementBalance | wexCurrency:true"></span>
+          </ion-item>
+          <ion-item class="due-date">
+            {{ CONSTANTS.paymentDueDate }}
+            <span item-right class="item-currency">{{ invoiceSummary.paymentDueDateObject | wexDate:true }}</span>
+          </ion-item>
+        </ion-list>
+      </div>
     </ion-card>
   </section>
 
-  <ion-card>
+ <!--  <ion-card>
     <ion-list>
-      <!--wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink"-->
+      <!--wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink"--
       <ion-item (click)="goToMakePayment()">
         <i item-left class="fa fa-bank"></i> {{ CONSTANTS.makePayment }}
-        <!--wex-cache="scheduledPaymentsCount" ng-model="vm.scheduledPaymentsCount"-->
+        <!--wex-cache="scheduledPaymentsCount" ng-model="vm.scheduledPaymentsCount"--
         <span class="badge" [hidden]="scheduledPaymentsCount == 0">
           {{ scheduledPaymentsCount }} {{ CONSTANTS.scheduledPayments }}
         </span>
         <i item-right class="fa fa-chevron-right"></i>
       </ion-item>
-
-      <!--wex-analytics-track-event="vm.config.ANALYTICS.events.transactionActivityLink"-->
-      <ion-item (click)="goToTransactionActivity()">
-        <i item-left class="fa fa-exchange"></i>
-        {{ CONSTANTS.transactions }}
-        <i item-right class="fa fa-chevron-right"></i>
-      </ion-item>
-
-      <!--wex-analytics-track-event="vm.config.ANALYTICS.events.cardsLink"-->
-      <ion-item (click)="goToCards()">
-        <i item-left class="fa fa-credit-card-alt"></i>
-        {{ CONSTANTS.cards }}
-        <i item-right class="fa fa-chevron-right"></i>
-      </ion-item>
-
-      <!--wex-analytics-track-event="vm.config.ANALYTICS.events.driversLink"-->
-      <ion-item (click)="goToDrivers()">
-        <i item-left class="fontello-icon fontello-steering-wheel"></i>
-        {{ CONSTANTS.drivers }}
-        <i item-right class="fa fa-chevron-right"></i>
-      </ion-item>
     </ion-list>
-  </ion-card>
+  </ion-card> -->
 
 </ion-content>
