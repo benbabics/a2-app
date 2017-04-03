@@ -360,6 +360,7 @@
             "detailMobile":              "Mobile Number",
             "labelChangeStatus":         "Change Status",
             "labelTransactions":         "Transactions",
+            "phoneAndEmailApplications": ["WOL_NP", "DISTRIBUTOR"],
             "statuses": [
                 { "id": "ACTIVE", "label": "Active" },
                 { "id": "TERMINATED", "label": "Terminated" }

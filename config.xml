@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="62" id="com.wex.fleetsmarthub" ios-CFBundleVersion="62" version="3.0.1" xmlns="http://www.w3.org/ns/widgets">
+<widget android-versionCode="63" id="com.wex.fleetsmarthub" ios-CFBundleVersion="63" version="4.0" xmlns="http://www.w3.org/ns/widgets">
     <name>Fleet SmartHub</name>
     <description>
         App for managing WEX fleet accounts
@@ -19,6 +19,7 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="mailto:*" />
+    <allow-intent href="tel:*" />
     <preference name="Orientation" value="portrait" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />

@@ -30,13 +30,13 @@
                 <span class="item-note">{{ ::vm.driver.driverId }}</span>
             </li>
 
-            <li class="item">
-                {{ ::vm.config.detailMobile }}
+            <li wex-application-flag="vm.config.phoneAndEmailApplications" class="item">
+                {{ ::vm.config.detailEmail }}
                 <span class="item-note"><a href="tel:207-523-6938">207-523-6938</a></span>
             </li>
 
-            <li class="item">
-                {{ ::vm.config.detailEmail }}
+            <li wex-application-flag="vm.config.phoneAndEmailApplications" class="item">
+                {{ ::vm.config.detailMobile }}
                 <span class="item-note"><a href="mailto:user@example.com">user@example.com</a></span>
             </li>
         </ul>
