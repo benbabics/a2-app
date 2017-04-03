@@ -40,7 +40,10 @@
             handleOnResetItems(); // initially add collections
 
             // avoid adding an additional watcher on deeply nested attrs
-            $rootScope.$on( "driver:statusChange", handleRenderingItems );
+            let statusChangeListener = $rootScope.$on( "driver:statusChange", handleRenderingItems );
+
+            // remove event listener
+            $scope.$on( "$destroy", statusChangeListener );
         }
 
         function handleOnResetItems() {
@@ -107,15 +110,15 @@
             if ( _.isObject(driver) ) {
                 let firstName = _.get( driver, "firstName", "" ).toLowerCase(),
                     lastName  = _.get( driver, "lastName", "" ).toLowerCase(),
-                    driverId  = _.get( driver, "driverId", "" ).toLowerCase();
+                    promptId  = _.get( driver, "promptId", "" ).toLowerCase();
 
                 // not case-sensitive; strip away unnecessary chars
                 term = term.toLowerCase().replace( /\-|\s/g, "" );
-                driverId = driverId.replace( /\-/g, "" );
+                promptId = promptId.replace( /\-/g, "" );
 
                 return firstName.indexOf( term ) >= 0 ||
                        lastName.indexOf( term )  >= 0 ||
-                       driverId.indexOf( term )  >= 0;
+                       promptId.indexOf( term )  >= 0;
             }
         }
     }

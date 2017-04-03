@@ -85,15 +85,15 @@
 
             // mock data
             driversActive = populateDrivers([
-                { firstName: "Alan",    lastName: "Allens-Active",   driverId: "111111", status: "ACTIVE" },
-                { firstName: "Brandon", lastName: "Braindons-Active", driverId: "222222", status: "ACTIVE" },
-                { firstName: "Carl",    lastName: "Karls-Active",    driverId: "333333", status: "ACTIVE" }
+                { firstName: "Alan",    lastName: "Allens-Active",   promptId: "111111", status: "ACTIVE" },
+                { firstName: "Brandon", lastName: "Braindons-Active", promptId: "222222", status: "ACTIVE" },
+                { firstName: "Carl",    lastName: "Karls-Active",    promptId: "333333", status: "ACTIVE" }
             ]);
 
             driversTerminated = populateDrivers([
-                { firstName: "Alan",    lastName: "Allens-Terminated",   driverId: "111111", status: "TERMINATED" },
-                { firstName: "Brandon", lastName: "Braindons-Terminated", driverId: "222222", status: "TERMINATED" },
-                { firstName: "Carl",    lastName: "Karls-Terminated",    driverId: "333333", status: "TERMINATED" }
+                { firstName: "Alan",    lastName: "Allens-Terminated",   promptId: "111111", status: "TERMINATED" },
+                { firstName: "Brandon", lastName: "Braindons-Terminated", promptId: "222222", status: "TERMINATED" },
+                { firstName: "Carl",    lastName: "Karls-Terminated",    promptId: "333333", status: "TERMINATED" }
             ]);
         });
 
@@ -214,7 +214,7 @@
                 expect( results ).toEqual( [] );
             });
 
-            it("should filter search term by driverId", () => {
+            it("should filter search term by promptId", () => {
                 // Driver Id's: 111111, 222222, 333333
                 let results = filter( driversActive, '1', ctrl.driversComparator );
                 expect( getDriverDetails(results[0]) ).toEqual( getDriverDetails(driversActive[0]) );
