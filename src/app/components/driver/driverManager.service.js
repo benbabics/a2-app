@@ -15,7 +15,8 @@
             fetchDriver      : fetchDriver,
             fetchDrivers     : fetchDrivers,
             getDrivers       : getDrivers,
-            setDrivers       : setDrivers
+            setDrivers       : setDrivers,
+            updateStatus     : updateStatus
         };
 
         activate();
@@ -110,6 +111,42 @@
 
         function getDrivers() {
             return drivers;
+        }
+
+        function updateStatus(accountId, driverId, newStatus) {
+            return DriversResource.postStatusChange( accountId, driverId, newStatus )
+                .then(response => {
+                    if ( response && response.data ) {
+                        var cachedDriver = _.find( drivers, { driverId } );
+
+                        if ( cachedDriver ) {
+                            // update the existing driver object in the cache
+                            cachedDriver.set( response.data );
+                        }
+                        else {
+                            // the driver should be in the cache, so log a warning
+                            Logger.warn( "Updated driver was not found in the cache (this should not happen)" );
+
+                            // map the data to a driver model to be returned
+                            cachedDriver = createDriver( response.data );
+                        }
+
+                        return cachedDriver;
+                    }
+
+                    // no data in the response
+                    else {
+                        var error = "No data in Response from updating the Driver Status";
+                        Logger.error( error );
+                        throw new Error( error );
+                    }
+                })
+                .catch(failureResponse => {
+                    // this only gets fired if the error is not caught by any HTTP Response Error Interceptors
+                    var error = "Updating Card Status failed: " + LoggerUtil.getErrorMessage( failureResponse );
+                    Logger.error( error );
+                    throw new Error( error );
+                });
         }
 
         // Caution against using this as it replaces the object versus setting properties on it or extending it

@@ -4,11 +4,11 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function DriverDetailController(_, $scope, $ionicHistory, $state, $stateParams, $q, $ionicActionSheet, $timeout, globals) {
+    function DriverDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, driver, UserManager, DriverManager, globals) {
         var vm = this;
 
         vm.config = globals.DRIVER_DETAILS.CONFIG;
-        vm.driver = $stateParams.driver;
+        vm.driver = driver;
 
         vm.isChangeStatusLoading            = false;
         vm.displayStatusChangeBannerSuccess = false;
@@ -37,17 +37,19 @@
             });
         }
 
-        function updateDriverStatus(statusId) {
-            if ( !statusId ) { return; }
+        function updateDriverStatus(newStatus) {
+            if ( !newStatus ) { return; }
 
             // make request to update driver status; if failure, revert
-            //Todo- remove; temporarily simulate successful response
             vm.isChangeStatusLoading = true;
-            $timeout(() => {
-                vm.isChangeStatusLoading = false;
-                vm.driver.status         = statusId;
-                vm.displayStatusChangeBannerSuccess = true;
-            }, 1000);
+
+            let accountId = UserManager.getUser().billingCompany.accountId;
+            DriverManager.updateStatus( accountId, vm.driver.driverId, newStatus )
+                .then(() => {
+                    vm.isChangeStatusLoading            = false;
+                    vm.displayStatusChangeBannerSuccess = true;
+                    $rootScope.$broadcast( "driver:statusChange" );
+                });
         }
 
         /**

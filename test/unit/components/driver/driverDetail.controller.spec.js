@@ -6,12 +6,13 @@
         $rootScope,
         $scope,
         $state,
-        $stateParams,
         $timeout,
         $ionicActionSheet,
         Navigation,
         ctrl,
-        mockDriver;
+        mockDriver,
+        DriverManager,
+        resolveHandler;
 
     describe("A Driver Detail Controller", () => {
 
@@ -26,30 +27,35 @@
             Navigation        = jasmine.createSpyObj( "Navigation", [ "goToTransactionActivity" ] );
             $ionicHistory     = jasmine.createSpyObj( "$ionicHistory", [ "clearCache" ] );
             $ionicActionSheet = jasmine.createSpyObj( "$ionicActionSheet", [ "show" ] );
+            DriverManager     = jasmine.createSpyObj( "DriverManager", [ "updateStatus" ] );
 
-            inject(($controller, _$rootScope_, _$q_, _$state_, _$stateParams_, _$timeout_, DriverModel) => {
-                $q           = _$q_;
-                $state       = _$state_;
-                $stateParams = _$stateParams_;
-                $timeout     = _$timeout_;
-                $rootScope   = _$rootScope_;
-                $scope       = $rootScope.$new();
+            inject(($controller, _$rootScope_, _$q_, _$state_, _$timeout_, DriverModel) => {
+                $q            = _$q_;
+                $state        = _$state_;
+                $timeout      = _$timeout_;
+                $rootScope    = _$rootScope_;
+                $scope        = $rootScope.$new();
 
                 mockDriver = TestUtils.getRandomDriver( DriverModel );
-                $stateParams.driver = mockDriver;
 
                 ctrl = $controller("DriverDetailController", {
                     $ionicHistory:     $ionicHistory,
+                    $rootScope:        $rootScope,
                     $scope:            $scope,
-                    $stateParams:      $stateParams,
                     $timeout:          $timeout,
                     $ionicActionSheet: $ionicActionSheet,
-                    Navigation:        Navigation
+                    Navigation:        Navigation,
+                    driver:            mockDriver,
+                    DriverManager:     DriverManager
                 });
             });
 
             // setup mocks
             $ionicHistory.clearCache.and.returnValue( $q.resolve() );
+            DriverManager.updateStatus.and.callFake((accountId, driverId, newStatus) => {
+                ctrl.driver.status = newStatus;
+                return $q.resolve();
+            });
         });
 
         it("should set the driver", () => {

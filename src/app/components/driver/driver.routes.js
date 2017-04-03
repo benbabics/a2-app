@@ -26,9 +26,13 @@
         });
 
         $stateProvider.state("driver.detail", {
-            url:   "/detail",
+            url:   "/detail/:driverId",
             cache: false,
-            params: { driver: null },
+            resolve: {
+                driver: ($stateParams, DriverManager) => {
+                    return DriverManager.fetchDriver( $stateParams.driverId )
+                }
+            },
             views: {
                 "view@driver": {
                     templateUrl: "app/components/driver/templates/driverDetail.html",

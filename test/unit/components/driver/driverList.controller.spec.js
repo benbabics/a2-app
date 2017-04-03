@@ -31,8 +31,8 @@
             self = this;
 
             // mock deps
-            DriverManager = jasmine.createSpyObj( "DriverManager", [ "fetchDrivers" ] );
             UserManager   = jasmine.createSpyObj( "UserManager", [ "getUser" ] );
+            DriverManager = jasmine.createSpyObj( "DriverManager", [ "fetchDrivers", "getDrivers" ] );
             ElementUtil   = jasmine.createSpyObj( "ElementUtil", [ "getFocusedView", "resetInfiniteList" ] );
 
             // stub the routing and template loading
@@ -85,15 +85,15 @@
 
             // mock data
             driversActive = populateDrivers([
-                { firstName: "Alan",    lastName: "Allens-Active",   driverId: "111111", status: "ACTIVE" },
-                { firstName: "Brandon", lastName: "Braindons-Active", driverId: "222222", status: "ACTIVE" },
-                { firstName: "Carl",    lastName: "Karls-Active",    driverId: "333333", status: "ACTIVE" }
+                { firstName: "Alan",    lastName: "Allens-Active",   promptId: "111111", status: "ACTIVE" },
+                { firstName: "Brandon", lastName: "Braindons-Active", promptId: "222222", status: "ACTIVE" },
+                { firstName: "Carl",    lastName: "Karls-Active",    promptId: "333333", status: "ACTIVE" }
             ]);
 
             driversTerminated = populateDrivers([
-                { firstName: "Alan",    lastName: "Allens-Terminated",   driverId: "111111", status: "TERMINATED" },
-                { firstName: "Brandon", lastName: "Braindons-Terminated", driverId: "222222", status: "TERMINATED" },
-                { firstName: "Carl",    lastName: "Karls-Terminated",    driverId: "333333", status: "TERMINATED" }
+                { firstName: "Alan",    lastName: "Allens-Terminated",   promptId: "111111", status: "TERMINATED" },
+                { firstName: "Brandon", lastName: "Braindons-Terminated", promptId: "222222", status: "TERMINATED" },
+                { firstName: "Carl",    lastName: "Karls-Terminated",    promptId: "333333", status: "TERMINATED" }
             ]);
         });
 
@@ -149,10 +149,7 @@
             });
 
             it("should send a message to DriverManager.fetchDrivers with the expected params", () => {
-                expect( DriverManager.fetchDrivers ).toHaveBeenCalledWith(
-                    mockUser.billingCompany.accountId,
-                    { pageSize: 999, pageNumber: 0 } // Todo: remove once service makes these optional
-                );
+                expect( DriverManager.fetchDrivers ).toHaveBeenCalledWith( mockUser.billingCompany.accountId );
             });
 
             it("should call resolveHandler when resolved", () => {
@@ -163,6 +160,7 @@
         describe("has divided drivers into 'active' and 'terminated' collections", () => {
             beforeEach(() => {
                 fetchDriversDeferred.resolve([ ...driversActive, ...driversTerminated ]);
+                DriverManager.getDrivers.and.returnValue([ ...driversActive, ...driversTerminated ]);
                 $scope.loadNextPage();
                 $rootScope.$digest();
                 $timeout.flush();
@@ -216,7 +214,7 @@
                 expect( results ).toEqual( [] );
             });
 
-            it("should filter search term by driverId", () => {
+            it("should filter search term by promptId", () => {
                 // Driver Id's: 111111, 222222, 333333
                 let results = filter( driversActive, '1', ctrl.driversComparator );
                 expect( getDriverDetails(results[0]) ).toEqual( getDriverDetails(driversActive[0]) );

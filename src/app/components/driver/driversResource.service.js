@@ -9,7 +9,8 @@
 
         // Revealed Public members
         var service = {
-            getDrivers: getDrivers
+            getDrivers:       getDrivers,
+            postStatusChange: postStatusChange
         };
 
         activate();
@@ -23,6 +24,12 @@
 
         function getDrivers(accountId, searchParams) {
             return $q.when(accountsResource.forAccount(accountId).getList(globals.ACCOUNT_MAINTENANCE_API.DRIVERS.BASE, searchParams));
+        }
+
+        function postStatusChange(accountId, driverId, newStatus) {
+            const URL = `${globals.ACCOUNT_MAINTENANCE_API.DRIVERS.BASE}/${driverId}/${globals.ACCOUNT_MAINTENANCE_API.DRIVERS.STATUS}`;
+            let request = accountsResource.forAccount( accountId ).doPOST( null, URL , { newStatus } );
+            return $q.when( request );
         }
     }
 
