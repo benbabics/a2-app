@@ -6,15 +6,15 @@
                           text="{{ ::vm.config.bannerStatusChangeSuccess }}">
     </wex-notification-bar>
 
-    <ion-header class="bar bar-subheader subheader-driver-details" ng-class="{ 'ui-active': vm.driver.isActive(), 'ui-terminated': vm.driver.isTerminated(), 'ui-loading': vm.isChangeStatusLoading }">
+    <ion-header class="bar-header-details" ng-class="{ 'ui-active': vm.driver.isActive(), 'ui-terminated': vm.driver.isTerminated(), 'ui-loading': vm.isChangeStatusLoading }">
         <div class="content-driver-name">
             {{ vm.driver.firstName | lowercase }} {{ vm.driver.lastName | lowercase }}
         </div>
 
         <div class="content-driver-status">{{ vm.driver.status }}</div>
 
-        <div class="content-driver-controls">
-            <button class="button button-block button-primary button-change-status"
+        <div class="content-controls">
+            <button class="button-primary button-control"
                     ng-disabled="vm.isChangeStatusLoading"
                     ng-click="vm.handleClickChangeStatus()">
                 <ion-spinner icon="spiral" ng-show="vm.isChangeStatusLoading"></ion-spinner>
@@ -24,7 +24,7 @@
     </ion-header>
 
     <ion-content class="has-subheader inner-container">
-        <ul class="list list-driver-details">
+        <ul class="list-details">
             <li class="item">
                 {{ ::vm.config.detailDriverId }}
                 <span class="item-note">{{ ::vm.driver.driverId }}</span>
@@ -41,7 +41,7 @@
             </li>
         </ul>
 
-        <ul class="card list list-transactions">
+        <ul class="list-secondary">
             <li class="item item-icon-left item-icon-right" ng-click="vm.goToTransactionActivity()">
                 <i class="icon fa fa-exchange"></i>
                 {{ ::vm.config.labelTransactions }}

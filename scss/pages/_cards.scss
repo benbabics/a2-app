@@ -1,22 +1,3 @@
-.page-cards {
-  @extend %ui-page;
-
-  &.card-list-view {
-    .list-header.row {
-      padding-left:  21px; // .item 16px padding-left + .row 5px padding
-      padding-right: 35px; // .item 30px padding-right + .row 5px padding
-    }
-    .item {
-      .row {
-        padding: 0;
-      }
-    }
-  }
-
-  .text-ellipsis {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
+.page-cards-list {
+  @extend %ui-management-list;
 }
