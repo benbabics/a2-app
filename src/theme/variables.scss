@@ -14,12 +14,6 @@ $fa-font-path: "../assets/fonts";
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
-//# Tabs
-ion-icon.tab-button-icon[aria-label*="fa"] {
-  @extend .fa;
-  font-size: 2.0rem; //scale down fa tab icons to be inline with ionicons
-}
-
 
 
 // Named Color Variables
@@ -46,6 +40,25 @@ black:         #000,
   login:         #3a97b5,
 );
 
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+
+
+
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+
+
+
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+
+
+
 // App Theme
 // --------------------------------------------------
 // Ionic apps can have different themes applied, which can
@@ -56,65 +69,11 @@ black:         #000,
 @import "ionic.theme.default";
 
 
-// App iOS Variables
+// Theme Overrides
 // --------------------------------------------------
-// iOS only Sass variables can go here
+// Any style overrides to the default theme should go in this file.
 
-//# Tabs
-ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
-  padding-top: 0.4rem;
-
-  &[aria-label*="outline"] {
-    color: transparent;
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: $tabs-tab-color-inactive;
-  }
-}
-
-.ion-ios-fa-credit-card-alt,
-.ion-ios-fa-credit-card-alt-outline {
-  @extend .fa-credit-card-alt;
-}
-
-.ion-ios-fa-bank,
-.ion-ios-fa-bank-outline {
-  @extend .fa-bank;
-}
-
-.ion-ios-fa-exchange,
-.ion-ios-fa-exchange-outline {
-  @extend .fa-exchange;
-}
-
-
-
-// App Material Design Variables
-// --------------------------------------------------
-// Material Design only Sass variables can go here
-
-//# Tabs
-ion-icon.icon-md.tab-button-icon[aria-label*="fa"] {
-  padding-bottom: 0.4rem;
-}
-
-.ion-md-fa-credit-card-alt {
-  @extend .fa-credit-card-alt;
-}
-
-.ion-md-fa-bank {
-  @extend .fa-bank;
-}
-
-.ion-md-fa-exchange {
-  @extend .fa-exchange;
-}
-
-
-
-// App Windows Variables
-// --------------------------------------------------
-// Windows only Sass variables can go here
-
+@import "theme";
 
 
 // Ionicons

@@ -1,0 +1,71 @@
+// Shared Styles
+// --------------------------------------------------
+// Shared styles can go here
+
+//# Tabs
+// --------------------------------------------------
+
+//Font Awesome tab icon support
+ion-icon.tab-button-icon[aria-label*="fa"] {
+  @extend .fa;
+  font-size: 2.0rem; //scale down fa tab icons to be inline with ionicons
+}
+
+
+// App iOS Styles
+// --------------------------------------------------
+// iOS only styles can go here
+
+//# Tabs
+// --------------------------------------------------
+
+//Font Awesome tab icon support
+ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
+  padding-top: 0.4rem;
+
+  &[aria-label*="outline"] {
+    color: transparent;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: $tabs-tab-color-inactive;
+  }
+}
+
+.ion-ios-fa-credit-card-alt,
+.ion-ios-fa-credit-card-alt-outline {
+  @extend .fa-credit-card-alt;
+}
+
+.ion-ios-fa-bank,
+.ion-ios-fa-bank-outline {
+  @extend .fa-bank;
+}
+
+.ion-ios-fa-exchange,
+.ion-ios-fa-exchange-outline {
+  @extend .fa-exchange;
+}
+
+
+// App Material Design Styles
+// --------------------------------------------------
+// Material Design only styles can go here
+
+//# Tabs
+// --------------------------------------------------
+
+//Font Awesome tab icon support
+ion-icon.icon-md.tab-button-icon[aria-label*="fa"] {
+  padding-bottom: 0.4rem;
+}
+
+.ion-md-fa-credit-card-alt {
+  @extend .fa-credit-card-alt;
+}
+
+.ion-md-fa-bank {
+  @extend .fa-bank;
+}
+
+.ion-md-fa-exchange {
+  @extend .fa-exchange;
+}
