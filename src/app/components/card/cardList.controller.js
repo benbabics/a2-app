@@ -47,10 +47,7 @@
 
         function handleMakeRequest(requestConfig) {
             let billingAccountId = UserManager.getUser().billingCompany.accountId;
-
-            return CardManager.fetchCards(
-                billingAccountId, "", "", "", vm.searchOptions.STATUSES, 0, 9999, vm.searchOptions.ORDER_BY
-            );
+            return CardManager.fetchCards( billingAccountId );
         }
 
         function handleOnRequestItems() {
