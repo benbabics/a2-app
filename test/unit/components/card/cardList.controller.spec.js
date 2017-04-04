@@ -159,7 +159,7 @@
 
             it("should send a message to CardManager.fetchCards with the expected params", () => {
                 // Todo: update once service makes these optional
-                expect( CardManager.fetchCards ).toHaveBeenCalled();
+                expect( CardManager.fetchCards ).toHaveBeenCalledWith( mockUser.billingCompany.accountId );
             });
 
             it("should call resolveHandler when resolved", () => {
