@@ -157,10 +157,11 @@
     .content-controls {
       position: absolute;
       bottom: -($button-height / 2);
+      width: 100%;
+      text-align: center;
 
       .button-control {
         @extend .button;
-        @extend .button-block;
 
         margin: 0;
         height:        $button-height;
