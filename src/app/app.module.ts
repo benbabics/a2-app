@@ -10,7 +10,7 @@ import { ActionIndicator, WexNavBar } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
-import { AuthProvider, SecureHttp, SessionManager, UserProvider, InvoiceProvider, WexNavController } from "../providers";
+import { AuthProvider, CardProvider, SecureHttp, SessionManager, UserProvider, InvoiceProvider, WexNavController } from "../providers";
 import { WexCurrency, WexDate } from "../pipes";
 
 @NgModule({
@@ -47,6 +47,7 @@ import { WexCurrency, WexDate } from "../pipes";
     AuthProvider,
     InvoiceProvider,
     UserProvider,
+    CardProvider,
     SessionManager,
     WexCurrency,
     WexDate,

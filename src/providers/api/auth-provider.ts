@@ -38,9 +38,7 @@ export class AuthProvider extends ApiProvider {
       })
     })
     .map((response: Response): string => response.json().access_token)
-    .catch((error: Response | any) => {
-      return Observable.throw(error);
-    });
+    .catch(this.handleRequestError);
   }
 
   private encodeRequestParams(data: any): string {

@@ -1,4 +1,4 @@
-import { ApiProvider } from "./api-provider";
+import { AmrestProvider } from "./amrest-provider";
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs";
@@ -7,8 +7,8 @@ import { User } from "../../models";
 import "rxjs/add/operator/map";
 
 @Injectable()
-export class UserProvider extends ApiProvider {
-  @Value("APIS.AMREST.BASE_URL") private BASE_URL: string;
+export class UserProvider extends AmrestProvider {
+
   @Value("APIS.AMREST.ENDPOINTS.USER.CURRENT") private CURRENT: string;
 
   constructor(protected http: Http) {
@@ -18,9 +18,6 @@ export class UserProvider extends ApiProvider {
   public current(): Observable<User> {
     return this.http.get([this.BASE_URL, this.CURRENT].join("/"))
       .map((response: Response): User => new User(response.json()))
-      .catch((error: Response | any) => {
-        console.log(error);
-        return Observable.throw(error);
-      });
+      .catch(this.handleRequestError);
   }
 }

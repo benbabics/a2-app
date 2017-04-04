@@ -8,6 +8,8 @@ import "rxjs/add/operator/map";
 @Injectable()
 export class InvoiceProvider extends AmrestProvider {
 
+  private INVOICES: any = this.ACCOUNTS.INVOICES;
+
   constructor(protected http: Http) {
     super(http);
   }
@@ -15,9 +17,6 @@ export class InvoiceProvider extends AmrestProvider {
   public current(accountId: string): Observable<InvoiceSummary> {
     return this.http.get(this.accountEndpoint(this.INVOICES.CURRENT, accountId))
       .map((response: Response): InvoiceSummary => new InvoiceSummary(response.json()))
-      .catch((error: Response | any) => {
-        console.log(error);
-        return Observable.throw(error);
-      });
+      .catch(this.handleRequestError);
   }
 }

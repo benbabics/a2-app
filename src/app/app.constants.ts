@@ -17,6 +17,9 @@ export namespace ConstantsInfo {
         ENDPOINTS: {
           ACCOUNTS: {
             BASE: "accounts",
+            CARDS: {
+              SEARCH: "cards"
+            },
             DRIVERS: "drivers",
             INVOICES: {
               CURRENT: "payments/currentInvoiceSummary"
