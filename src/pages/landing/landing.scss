@@ -60,64 +60,38 @@ page-landing {
     [wex-cache] {
       min-height: 15vh;
     }
+  }
+  }*/
 
-    .item {
-      @extend .text-sm;
-      @extend .color-gray;
+  #company-details {
 
-      &.item-text-wrap {
-        text-align: center;
-      }
-    }
-    .item-currency {
-      float: right;
-      @extend .color-gray-dark;
-    }
-
-    .list {
-      opacity: 0;
-      animation:         linksFade 2s 1 forwards;
-      -webkit-animation: linksFade 2s 1 forwards;
-
-      .item:not(:first-of-type) {
-        border-top: 1px solid #e4e4e4;
-      }
-    }
-
-    .balance-current {
-      font-family: 'open_sanssemibold';
-
-      .item-currency {
-        @extend .text-xxl;
-        font-family: 'open_sansregular';
-      }
-    }
-    .balance-statement .item-currency {
-      @extend .text-lg;
-    }
-
-
+     .company-name {
+       font-weight: bold;
+       color: color($colors, dark-gray);
+     }
   }
 
-  .card.list {
-    .item.item-icon-left.item-icon-right .icon.fontello-icon {
-      font-size: 23px;
-      left: 6px;
+  #account-overview {
+
+    ion-list {
+      animation:         linksFade 2s 1 forwards;
+      -webkit-animation: linksFade 2s 1 forwards;
     }
-  }*/
-  .chart-wrapper {
-      display: flex;
+
+    .chart-wrapper {
+      @include flexbox();
+      @include flex-direction(row);
       width: 100%;
-      flex-direction: row;
 
       .labels,
       .chart {
-        flex: 1;
+        @include flex(1);
       }
+
       .labels {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        @include flexbox();
+        @include flex-direction(column);
+        @include justify-content(center);
         text-align: left;
 
         .label {
@@ -141,12 +115,13 @@ page-landing {
           .text-title {
             line-height: normal;
           }
+
           .text-amount {
-            //@extend .text-md;
-            //@extend .color-gray-dark;
+            color: color($colors, dark-gray);
           }
+
           .text-title {
-            //@extend .color-gray;
+            color: color($colors, gray);
           }
 
           &:before {
@@ -163,17 +138,17 @@ page-landing {
         }
 
         &:first-of-type {
-          order: 1;
+          @include order(1);
           text-align: right;
 
           .label:before {
-            left:  auto;
+            left: auto;
             right: 10px;
           }
         }
 
         &:last-of-type {
-          order: 3;
+          @include order(3);
         }
 
         &:first-of-type,
@@ -190,13 +165,35 @@ page-landing {
           padding-left: 25px;
           padding-right: 0;
         }
-
       }
+
       .chart {
-        order: 2;
+        canvas {
+          width: 100% !important;
+          height: 100% !important;
+        }
+
+        @include order(2);
         text-align: center;
+        display: block;
+        width: 33%;
       }
     }
+
+    #balance-current {
+      font-weight: bold;
+      font-size: $h6-font-size;
+
+      .item-currency {
+        font-size: $h4-font-size;
+      }
+    }
+
+    .item-currency {
+      color: color($colors, dark-gray);
+      font-size: $h6-font-size;
+    }
+  }
 }
 
 

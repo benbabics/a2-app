@@ -60,12 +60,14 @@ export namespace ConstantsInfo {
         },
         CHART: {
           OPTIONS: {
-            animation: false,
-            percentageInnerCutout: 70,
-            showTooltips: false,
-            segmentStrokeWidth: 1,
-            scaleOverride: true,
-            responsive: false
+            animation: { easing: "easeOutBounce" },
+            elements: {
+              arc: { borderWidth: 1 }
+            },
+            cutoutPercentage: 70,
+            responsive: false,
+            legend: { display: false },
+            tooltips: { enabled: false }
           },
           COLORS: {
             availableCredit: "#3eb049",
@@ -75,7 +77,7 @@ export namespace ConstantsInfo {
             pendingAmount: "#efcc57"
           },
           CONSTANTS: {
-            "negativeCreditData": 1 //forces angular-chart.js to render negative/zero credit data as a solid/filled graph
+            "negativeCreditData": 1 //forces chart to render negative/zero credit data as a solid/filled graph
           }
         },
         "title": "Fleet SmartHub",

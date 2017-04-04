@@ -18,7 +18,6 @@ export class LandingPage extends SecurePage {
 
   public readonly chartColors = this.CONSTANTS.CHART.COLORS;
 
-  public greeting;
   public invoiceSummary;
   public billingCompany = new Company();
   public scheduledPaymentsCount = 0;
@@ -29,9 +28,7 @@ export class LandingPage extends SecurePage {
     super("Landing");
   }
 
-  ionViewDidEnter() {
-    this.greeting = `Hello, ${this.session.user.firstName}`;
-  }
+  ionViewDidEnter() {  }
 
   private createChartDisplayConfiguration(): any {
     let datasets = { collection: [], left: [], right: [] },
@@ -43,7 +40,7 @@ export class LandingPage extends SecurePage {
         datasets.collection.push({
           id: id,
           label: this.CONSTANTS[id],
-          color: this.chartColors[id],
+          color: { backgroundColor: this.chartColors[id] },
           data: this.invoiceSummary[id]
         });
       }
@@ -62,7 +59,7 @@ export class LandingPage extends SecurePage {
       return {
         options: this.CONSTANTS.CHART.OPTIONS,
         labels: [availableCreditData.label],
-        colors: [this.chartColors.availableCreditNegative],
+        colors: [{ backgroundColor: this.chartColors.availableCreditNegative }],
         data: [this.CONSTANTS.CHART.CONSTANTS.negativeCreditData]
       };
     }
@@ -91,6 +88,8 @@ export class LandingPage extends SecurePage {
 
         this.chartDisplay = this.createChartDisplayConfiguration();
         this.chart = this.createChartConfiguration();
+
+        this.chart.width = Math.round(window.innerWidth * 0.3);
       });
   }
 }

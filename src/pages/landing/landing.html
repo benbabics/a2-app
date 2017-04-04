@@ -18,11 +18,14 @@
   <!-- Display Notifications Prompt -->
   <!-- <enable-notifications-prompt wex-feature-flag="PUSH_NOTIFICATIONS"></enable-notifications-prompt> -->
 
-  <section class="company-details">
+  <section id="company-details">
     <ion-card>
       <!--<div class="card-detail">-->
         <ion-item-divider>
-          {{ greeting }}
+          <!-- TODO replace when lastName is returned from service
+          {{ session.user.fullName }}
+          -->
+          Rick Sanchez
         </ion-item-divider>
         <ion-item text-wrap>
           <p class="company-name">{{ session.user.billingCompany.name }}</p>
@@ -35,7 +38,7 @@
     </ion-card>
   </section>
 
-  <section class="account-overview">
+  <section id="account-overview">
     <!-- <div class="card" wex-cache="invoiceSummary" ng-model="vm.invoiceSummary"> -->
     <ion-card>
       <ion-item-divider>
@@ -46,17 +49,17 @@
         <ion-item text-wrap>
           <div class="chart-wrapper">
             <div class="labels">
-              <div class="label" *ngFor="let chart of chartDisplay.left" [ngStyle]="{ 'color': chart.color }">
+              <div class="label" *ngFor="let chart of chartDisplay.left" [ngStyle]="{ 'color': chart.color.backgroundColor }">
                 <div class="text-amount" [innerHtml]="chart.data | wexCurrency:true"></div>
                 <div class="text-title">{{ chart.label }}</div>
               </div>
             </div>
 
-            <div class="chart" style="display:block">
+            <div class="chart">
               <!-- <wex-doughnut-chart [chartConfig]="chart">
               </wex-doughnut-chart> -->
               <canvas baseChart
-                      [chartType]="'doughnut'"
+                      chartType="doughnut"
                       [options]="chart.options"
                       [data]="chart.data"
                       [colors]="chart.colors"
@@ -65,7 +68,7 @@
             </div>
 
             <div class="labels">
-              <div class="label" *ngFor="let chart of chartDisplay.right" [ngStyle]="{ 'color': chart.color }">
+              <div class="label" *ngFor="let chart of chartDisplay.right" [ngStyle]="{ 'color': chart.color.backgroundColor }">
                 <div class="text-amount" [innerHtml]="chart.data | wexCurrency:true"></div>
                 <div class="text-title">{{ chart.label }}</div>
               </div>
@@ -73,18 +76,18 @@
           </div>
         </ion-item>
         <ion-list>
-          <ion-item class="balance-current">
+          <ion-item-divider id="balance-current">
             {{ CONSTANTS.currentBalance }}
             <span item-right class="item-currency" [innerHtml]="invoiceSummary.currentBalance | wexCurrency:true"></span>
-          </ion-item>
-          <ion-item class="balance-statement">
+          </ion-item-divider>
+          <ion-item-divider id="balance-statement">
             {{ CONSTANTS.statementBalance }}
             <span item-right class="item-currency" [innerHtml]="invoiceSummary.statementBalance | wexCurrency:true"></span>
-          </ion-item>
-          <ion-item class="due-date">
+          </ion-item-divider>
+          <ion-item-divider id="due-date">
             {{ CONSTANTS.paymentDueDate }}
             <span item-right class="item-currency">{{ invoiceSummary.paymentDueDateObject | wexDate:true }}</span>
-          </ion-item>
+          </ion-item-divider>
         </ion-list>
       </div>
     </ion-card>

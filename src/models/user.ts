@@ -8,6 +8,7 @@ export class UserDetails extends Model<UserDetails> {
     id: string;
     username: string;
     firstName: string;
+    lastName: string;
     onlineApplication: OnlineApplication;
     company?: Company;
     billingCompany?: Company;
@@ -31,6 +32,10 @@ export class User extends UserDetails {
         default:
           return this.billingCompany.accountNumber;
       }
+    }
+
+    public get fullName(): string {
+      return `${this.firstName} ${this.lastName}`;
     }
 }
 
