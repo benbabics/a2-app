@@ -1,3 +1,21 @@
 page-cards {
 
+  #cards-list {
+
+    ion-label {
+      & .card-id {
+        width: 20%;
+        text-align: left;
+      }
+
+      & .embossing {
+        width: 57%;
+      }
+
+      & .status {
+        width: 23%;
+        text-align: right;
+      }
+    }
+  }
 }
