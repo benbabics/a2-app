@@ -36,6 +36,11 @@ export namespace ConstantsInfo {
         }
       }
     },
+    COMPONENTS: {
+      LIST: {
+        emptySearchLabel: "No Records Found"
+      }
+    },
     CURRENCY: {
       FORMAT: "USD"
     },
@@ -54,12 +59,18 @@ export namespace ConstantsInfo {
       }
     },
     PAGES: {
+      //# Cards page
+      CARDS: {
+        listLabels: ["Card No", "Embossing", "Status"],
+        searchLabel: "Search Card Number or Embossing"
+      },
+
       //# Landing page
       LANDING: {
         BACK_TO_EXIT: {
-            "duration": 3000, //ms
-            "position": "bottom",
-            "message" : "Press again to exit."
+          "duration": 3000, //ms
+          "position": "bottom",
+          "message" : "Press again to exit."
         },
         CHART: {
           OPTIONS: {

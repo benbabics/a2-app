@@ -1,0 +1,11 @@
+wex-list-item {
+
+  //chevron icon
+  & .wex-list-arrow {
+    color: color($colors, primary);
+  }
+
+  &:not([active]) .wex-list-arrow {
+    display: none;
+  }
+}

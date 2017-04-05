@@ -6,7 +6,7 @@ import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
-import { ActionIndicator, WexNavBar } from "../components";
+import { ActionIndicator, WexList, WexListItem, WexNavBar } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
@@ -22,7 +22,9 @@ import { WexCurrency, WexDate } from "../pipes";
     ActionIndicator,
     WexCurrency,
     WexDate,
-    WexNavBar
+    WexNavBar,
+    WexList,
+    WexListItem
   ],
   imports: [
     IonicModule.forRoot(MyApp),
