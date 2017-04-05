@@ -7,7 +7,7 @@
         <div class="col title-container">
             <!-- Note: The title elements needs to be wrapped with a div for ngFitText to work correctly -->
             <div>
-                <h1 fittext fittext-min="inherit" fittext-max="18" ng-bind="text"></h1>
+                <h1 fittext fittext-min="inherit" fittext-max="18" ng-bind-html="text"></h1>
             </div>
         </div>
         <div class="col button-container" ng-if="closeable">
