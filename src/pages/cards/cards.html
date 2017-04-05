@@ -4,10 +4,13 @@
                  [(ngModel)]="searchFilter"
                  (ionInput)="updateList()">
   </ion-searchbar>
+
+  <wex-list-header [fields]="CONSTANTS.listLabels">
+  </wex-list-header>
 </ion-header>
 
-<ion-content padding>
-  <wex-list id="cards-list" [items]="filteredCards" [headerFields]="CONSTANTS.listLabels" [loading]="fetchingCards">
+<ion-content>
+  <wex-list id="cards-list" [items]="filteredCards" [loading]="fetchingCards">
     <template #itemTemplate let-item>
       <wex-list-item active (click)="goToDetailPage(item)">
         <span class="card-id">{{ item.cardId }}</span>

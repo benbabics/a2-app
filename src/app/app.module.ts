@@ -6,11 +6,25 @@ import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
-import { ActionIndicator, WexList, WexListItem, WexNavBar } from "../components";
+import {
+  ActionIndicator,
+  WexList,
+  WexListItem,
+  WexListHeader,
+  WexNavBar
+} from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
-import { AuthProvider, CardProvider, SecureHttp, SessionManager, UserProvider, InvoiceProvider, WexNavController } from "../providers";
+import {
+  AuthProvider,
+  CardProvider,
+  SecureHttp,
+  SessionManager,
+  UserProvider,
+  InvoiceProvider,
+  WexNavController
+} from "../providers";
 import { WexCurrency, WexDate } from "../pipes";
 
 @NgModule({
@@ -24,7 +38,8 @@ import { WexCurrency, WexDate } from "../pipes";
     WexDate,
     WexNavBar,
     WexList,
-    WexListItem
+    WexListItem,
+    WexListHeader
   ],
   imports: [
     IonicModule.forRoot(MyApp),

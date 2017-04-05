@@ -1,4 +1,21 @@
+%wex-list-item-content {
+  @include flexbox();
+  @include flex-direction(row);
+  @include justify-content(space-between);
+  @include align-items(center);
+
+  & > * {
+    text-align: center;
+  }
+}
+
 wex-list-item {
+
+  & .item .item-inner ion-label {
+    @extend %wex-list-item-content;
+
+    padding: 1rem 0;
+  }
 
   //chevron icon
   & .wex-list-arrow {

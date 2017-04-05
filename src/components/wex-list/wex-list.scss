@@ -1,28 +1,5 @@
 wex-list {
 
-  //header styling
-  & ion-list > ion-list-header.item.list-header {
-    background-color: color($colors, primary);
-    color: color($colors, white);
-    font-size: $h5-font-size;
-    padding: 0 2rem;
-  }
-
-  //list item and header content styling
-  & wex-list-item, ion-list-header.item.list-header {
-    & .item-inner ion-label {
-      @include flexbox();
-      @include flex-direction(row);
-      @include justify-content(space-between);
-      @include align-items(center);
-
-      & > * {
-        text-align: center;
-      }
-    }
-  }
-
-  //no records message
   & .no-records {
     text-align: center;
     font-weight: bold;

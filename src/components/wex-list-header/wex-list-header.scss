@@ -1,0 +1,17 @@
+wex-list-header {
+
+  & ion-list-header.item.list-header {
+    background-color: color($colors, primary);
+    color: color($colors, white);
+    font-size: $h5-font-size;
+    padding: 0 2.5rem;
+
+    @at-root ion-header > & {
+      margin-bottom: 0;
+    }
+
+    & .item-inner ion-label {
+      @extend %wex-list-item-content;
+    }
+  }
+}
