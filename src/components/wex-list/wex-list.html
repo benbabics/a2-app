@@ -2,12 +2,25 @@
   <wex-list-header *ngIf="headerFields" [fields]="headerFields">
   </wex-list-header>
 
-  <span *ngFor="let item of items">
-    <template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></template>
+  <span *ngIf="dividers">
+    <span *ngFor="let divider of dividers; let i = index">
+      <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky [ngClass]="divider.toLowerCase()">
+        {{ divider }}
+      </ion-item-divider>
+      <span *ngFor="let item of getListForDivider(i)">
+        <template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></template>
+      </span>
+    </span>
+  </span>
+
+  <span *ngIf="!dividers">
+    <span *ngFor="let item of items">
+      <template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></template>
+    </span>
   </span>
 </ion-list>
 
-<ion-card *ngIf="hasNoRecords" class="no-records">
+<ion-card *ngIf="hasNoItems" class="no-records">
   <ion-item>
     <ion-icon item-left name="information-circle" color="dark-gray"></ion-icon>
     {{ CONSTANTS.emptySearchLabel }}
