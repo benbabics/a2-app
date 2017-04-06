@@ -1,4 +1,4 @@
-import { Injectable, Pipe, Inject } from "@angular/core";
+import { Injectable, Pipe } from "@angular/core";
 import { CurrencyPipe } from "@angular/common";
 import { Value } from "../decorators/value";
 

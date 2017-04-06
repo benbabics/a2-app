@@ -61,7 +61,7 @@ export namespace ConstantsInfo {
     PAGES: {
       //# Cards page
       CARDS: {
-        listLabels: ["Card No", "Embossing", "Status"],
+        listLabels: ["Card Number", "Embossing"],
         searchLabel: "Search Card Number or Embossing"
       },
 

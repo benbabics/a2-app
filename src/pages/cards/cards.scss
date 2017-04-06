@@ -3,7 +3,6 @@ page-cards {
   #cards-list {
 
     ion-item-divider {
-      color: color($colors, white);
       font-weight: bold;
 
       &.active {
@@ -19,18 +18,6 @@ page-cards {
       &.terminated {
         color: color($colors, danger-dark);
         background-color: color($colors, danger);
-      }
-    }
-
-    ion-label {
-      & .card-id {
-        width: 20%;
-        text-align: left;
-      }
-
-      & .embossing {
-        width: 80%;
-        text-align: left;
       }
     }
   }

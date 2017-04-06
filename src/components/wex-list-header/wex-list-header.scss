@@ -3,8 +3,8 @@ wex-list-header {
   & ion-list-header.item.list-header {
     background-color: color($colors, primary);
     color: color($colors, white);
-    font-size: $h5-font-size;
-    padding: 0 2.5rem;
+    font-size: $h6-font-size;
+    font-weight: bold;
 
     @at-root ion-header > & {
       margin-bottom: 0;
