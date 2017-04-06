@@ -1,5 +1,6 @@
 <ion-header>
   <ion-searchbar animated="true"
+                 debounce="0"
                  [placeholder]="CONSTANTS.searchLabel"
                  [(ngModel)]="searchFilter"
                  (ionInput)="updateList()">
@@ -10,7 +11,11 @@
 </ion-header>
 
 <ion-content>
-  <wex-list id="cards-list" [items]="filteredCards" [loading]="fetchingCards">
+  <wex-list id="cards-list"
+            [items]="sortedCards"
+            [dividers]="dividerLabels"
+            [loading]="fetchingCards">
+
     <template #itemTemplate let-item>
       <wex-list-item active (click)="goToDetailPage(item)">
         <span class="card-id">{{ item.cardId }}</span>
@@ -18,7 +23,6 @@
           <span *ngIf="item.embossingValue2" class="embossingValue2" text-wrap>{{ item.embossingValue2 }}</span>
           <span *ngIf="item.embossingValue1" class="embossingValue1">{{ item.embossingValue1 }}</span>
         </span>
-        <span class="status">{{ item.statusDisplayName }}</span>
       </wex-list-item>
     </template>
   </wex-list>

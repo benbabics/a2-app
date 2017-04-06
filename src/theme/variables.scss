@@ -27,14 +27,19 @@ $fa-font-path: "../assets/fonts";
 $colors: (
   primary:       #3A97B5,
   secondary:     #333,
+  success:       #5df05d,
+  success-dark:  #2b802b,
+  warning:       #fdfba0,
+  warning-dark:  rgb(129, 103, 53),
   danger:        #f53d3d,
+  danger-dark:   #822020,
   light:         #424242,
   dark:          #222,
 
-white:         #fff,
-black:         #000,
+  white:       #fff,
+  black:       #000,
   dark-gray:     #444,
-gray:          #7f7f7f,
+  gray:        #7f7f7f,
 
   wex-red:       #e51937,
 

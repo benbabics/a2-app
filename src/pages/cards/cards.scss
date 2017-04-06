@@ -2,6 +2,26 @@ page-cards {
 
   #cards-list {
 
+    ion-item-divider {
+      color: color($colors, white);
+      font-weight: bold;
+
+      &.active {
+        color: color($colors, success-dark);
+        background-color: color($colors, success);
+      }
+
+      &.suspended {
+        color: color($colors, warning-dark);
+        background-color: color($colors, warning);
+      }
+
+      &.terminated {
+        color: color($colors, danger-dark);
+        background-color: color($colors, danger);
+      }
+    }
+
     ion-label {
       & .card-id {
         width: 20%;
@@ -9,12 +29,8 @@ page-cards {
       }
 
       & .embossing {
-        width: 57%;
-      }
-
-      & .status {
-        width: 23%;
-        text-align: right;
+        width: 80%;
+        text-align: left;
       }
     }
   }
