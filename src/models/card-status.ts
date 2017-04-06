@@ -1,17 +1,19 @@
 import * as _ from "lodash";
-import { EnumUtil } from "../utils";
 
-export enum CardStatus {
-    ACTIVE,
-    SUSPENDED,
-    TERMINATED
-}
+export type CardStatus = keyof {
+  ACTIVE,
+  SUSPENDED,
+  TERMINATED
+};
 
 export namespace CardStatus {
-    export const names = (): string[] => EnumUtil.names<CardStatus>(CardStatus);
-    export const values = (): CardStatus[] => EnumUtil.values<CardStatus>(CardStatus);
+  export const ACTIVE: CardStatus = "ACTIVE";
+  export const SUSPENDED: CardStatus = "SUSPENDED";
+  export const TERMINATED: CardStatus = "TERMINATED";
 
-    export const displayName = (cardStatus: CardStatus): string => {
-      return _.capitalize(<any>cardStatus);
-    };
+  export const values = (): CardStatus[] => [ACTIVE, SUSPENDED, TERMINATED];
+
+  export const displayName = (cardStatus: CardStatus): string => {
+    return _.capitalize(cardStatus);
+  };
 }
