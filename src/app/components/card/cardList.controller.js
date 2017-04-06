@@ -108,13 +108,9 @@
 
             // use card data to compare against the term
             if ( _.isObject(card) ) {
-                let embossedCardNumber = _.get( card, "embossedCardNumber", "" ).toLowerCase(),
-                    embossingValue2    = _.get( card, "embossingValue2",    "" ),
-                    embossingValue1    = _.get( card, "embossingValue1",    "" );
-
-                // values may be assigned NULL
-                embossingValue2 = ( embossingValue2 || "" ).toLowerCase();
-                embossingValue1 = ( embossingValue1 || "" ).toLowerCase();
+                let embossedCardNumber = ( _.get( card, "embossedCardNumber" ) || "" ).toLowerCase(),
+                    embossingValue2    = ( _.get( card, "embossingValue2"    ) || "" ).toLowerCase(),
+                    embossingValue1    = ( _.get( card, "embossingValue1"    ) || "" ).toLowerCase();
 
                 // not case-sensitive; strip out spaces and possible * char
                 term = term.toLowerCase().replace( /\*|\s/g, "" );
