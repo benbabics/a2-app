@@ -10,7 +10,7 @@
                       *ngIf="params.showFingerprintBanner"
                       wex-toast-timer
                       [wexToastOnHide]="params.showFingerprintBanner = false"
-                      text="{{ CONSTANTS.platformName }} {{ CONSTANTS.registerSuccessBanner }} {{session.user.username | wexTruncateString}}">
+                      text="{{ CONSTANTS.platformName }} {{ CONSTANTS.registerSuccessBanner }} {{session.details.user.username | wexTruncateString}}">
 </wex-notification-bar> -->
 
 <ion-content padding>
@@ -23,13 +23,13 @@
       <!--<div class="card-detail">-->
         <ion-item-divider>
           <!-- TODO replace when lastName is returned from service
-          {{ session.user.fullName }}
+          {{ session.details.user.fullName }}
           -->
           Rick Sanchez
         </ion-item-divider>
         <ion-item text-wrap>
-          <p class="company-name">{{ session.user.billingCompany.name }}</p>
-          <p class="account-number">{{ session.user.displayAccountNumber }}</p>
+          <p class="company-name">{{ session.details.user.billingCompany.details.name }}</p>
+          <p class="account-number">{{ session.details.user.displayAccountNumber }}</p>
         </ion-item>
       <!--</div>-->
       <!-- <div class="logo" wex-cache ng-model="brandLogo" ng-show="brandLogo">
@@ -78,15 +78,15 @@
         <ion-list>
           <ion-item-divider id="balance-current">
             {{ CONSTANTS.currentBalance }}
-            <span item-right class="item-currency" [innerHtml]="invoiceSummary.currentBalance | wexCurrency:true"></span>
+            <span item-right class="item-currency" [innerHtml]="invoiceSummary.details.currentBalance | wexCurrency:true"></span>
           </ion-item-divider>
           <ion-item-divider id="balance-statement">
             {{ CONSTANTS.statementBalance }}
-            <span item-right class="item-currency" [innerHtml]="invoiceSummary.statementBalance | wexCurrency:true"></span>
+            <span item-right class="item-currency" [innerHtml]="invoiceSummary.details.statementBalance | wexCurrency:true"></span>
           </ion-item-divider>
           <ion-item-divider id="due-date">
             {{ CONSTANTS.paymentDueDate }}
-            <span item-right class="item-currency">{{ invoiceSummary.paymentDueDateObject | wexDate:true }}</span>
+            <span item-right class="item-currency">{{ invoiceSummary.details.paymentDueDate | wexDate:true }}</span>
           </ion-item-divider>
         </ion-list>
       </div>

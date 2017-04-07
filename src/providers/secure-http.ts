@@ -34,7 +34,7 @@ export class SecureHttp extends Http {
       }
 
       //options.withCredentials = true;
-      options.headers.append("Authorization", `Bearer ${SessionManager.currentSession.token}`);
+      options.headers.append("Authorization", `Bearer ${SessionManager.currentSession.details.token}`);
     }
     return options;
   }

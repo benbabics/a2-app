@@ -5,6 +5,17 @@ import { NavController, NavParams } from "ionic-angular";
 import { Company, InvoiceSummary } from "../../models";
 import { SecurePage } from "../secure-page";
 
+interface ChartDisplayConfig {
+  [list: string]: any[];
+}
+
+interface ChartConfig {
+  options: object;
+  labels: string[];
+  colors: object[];
+  data: any[];
+}
+
 @Component({
   selector: "page-landing",
   templateUrl: "landing.html"
@@ -21,8 +32,8 @@ export class LandingPage extends SecurePage {
   public invoiceSummary;
   public billingCompany = new Company();
   public scheduledPaymentsCount = 0;
-  public chartDisplay: any = {};
-  public chart: any = {};
+  public chartDisplay: ChartDisplayConfig;
+  public chart: ChartConfig;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private invoiceProvider: InvoiceProvider) {
     super("Landing");
@@ -30,18 +41,18 @@ export class LandingPage extends SecurePage {
 
   ionViewDidEnter() {  }
 
-  private createChartDisplayConfiguration(): any {
-    let datasets = { collection: [], left: [], right: [] },
-        dataIds = ["pendingAmount", "unbilledAmount", "availableCredit", "billedAmount"],
-        requiredDataIds = ["availableCredit"];
+  private createChartDisplayConfiguration(): ChartDisplayConfig {
+    let datasets: ChartDisplayConfig = { collection: [], left: [], right: [] },
+        dataIds: InvoiceSummary.Field[] = ["pendingAmount", "unbilledAmount", "availableCredit", "billedAmount"],
+        requiredDataIds: InvoiceSummary.Field[] = ["availableCredit"];
 
     dataIds.forEach((id: string) => {
-      if (this.invoiceSummary[id] > 0 || _.includes(requiredDataIds, id)) {
+      if (this.invoiceSummary.details[id] > 0 || _.includes(requiredDataIds, id)) {
         datasets.collection.push({
           id: id,
           label: this.CONSTANTS[id],
           color: { backgroundColor: this.chartColors[id] },
-          data: this.invoiceSummary[id]
+          data: this.invoiceSummary.details[id]
         });
       }
     });
@@ -52,7 +63,7 @@ export class LandingPage extends SecurePage {
     return datasets;
   }
 
-  private createChartConfiguration(): any {
+  private createChartConfiguration(): ChartConfig {
     let availableCreditData: any = _.find(this.chartDisplay.collection, { id: "availableCredit" });
 
     if (!this.invoiceSummary.isAnyCreditAvailable) {
@@ -75,21 +86,19 @@ export class LandingPage extends SecurePage {
 
     return {
       options: this.CONSTANTS.CHART.OPTIONS,
-      labels: _.map(this.chartDisplay.collection, "label"),
-      colors: _.map(this.chartDisplay.collection, "color"),
-      data: _.map(this.chartDisplay.collection, "data")
+      labels: _.map<any, string>(this.chartDisplay.collection, "label"),
+      colors: _.map<any, object>(this.chartDisplay.collection, "color"),
+      data: _.map<any, any>(this.chartDisplay.collection, "data")
     };
   }
 
   ionViewWillEnter() {
-    this.invoiceProvider.current(this.session.user.billingCompany.accountId)
+    this.invoiceProvider.current(this.session.details.user.billingCompany.details.accountId)
       .subscribe((invoiceSummary: InvoiceSummary) => {
         this.invoiceSummary = invoiceSummary;
 
         this.chartDisplay = this.createChartDisplayConfiguration();
         this.chart = this.createChartConfiguration();
-
-        this.chart.width = Math.round(window.innerWidth * 0.3);
       });
   }
 }

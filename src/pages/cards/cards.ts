@@ -12,7 +12,7 @@ import { Card, CardStatus } from "../../models";
 export class CardsPage extends ListPage {
 
   private static readonly CARD_STATUSES: CardStatus[] = CardStatus.values();
-  private static readonly SEARCH_FILTER_FIELDS: (keyof Card)[] = [
+  private static readonly SEARCH_FILTER_FIELDS: Card.Field[] = [
     "embossingValue1",
     "embossingValue2",
     "cardId"
@@ -46,11 +46,11 @@ export class CardsPage extends ListPage {
   }
 
   private groupCards(cards: Card[]): GroupedList<Card> {
-    return this.groupBy(cards, "status", CardsPage.CARD_STATUSES);
+    return this.groupByDetails<Card, Card.Details>(cards, "status", CardsPage.CARD_STATUSES);
   }
 
   private sortCards(cards: Card[]): Card[] {
-    return this.sortList(cards, "cardId", "asc");
+    return this.sortListByDetails<Card, Card.Details>(cards, "cardId", "asc");
   }
 
   private sortCardGroups(groupedCards: GroupedList<Card>): GroupedList<Card> {
@@ -63,7 +63,7 @@ export class CardsPage extends ListPage {
   ionViewWillEnter() {
     this.fetchingCards = true;
 
-    this.cardProvider.search(this.session.user.company.accountId)
+    this.cardProvider.search(this.session.details.user.company.details.accountId)
       .finally(() => this.fetchingCards = false)
       .subscribe((cards: Card[]) => {
         this.cards = cards;
@@ -77,7 +77,7 @@ export class CardsPage extends ListPage {
     let searchRegex = new RegExp(_.escapeRegExp(this.searchFilter), "i");
 
     let filteredCards = this.cards.filter((card) => CardsPage.SEARCH_FILTER_FIELDS.some((searchField) => {
-      return String(card[searchField]).search(searchRegex) !== -1;
+      return String(card.details[searchField]).search(searchRegex) !== -1;
     }));
 
     this.sortedCardGroups = this.sortCardGroups(this.groupCards(filteredCards));

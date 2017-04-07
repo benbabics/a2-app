@@ -22,7 +22,7 @@ export class SessionManager {
   }
 
   public static get hasActiveSession(): boolean {
-    return this._currentSession && !!this._currentSession.user;
+    return this._currentSession && !!this._currentSession.details.user;
   }
 
   public initSession(userCredentials: UserCredentials): Observable<Session> {
@@ -39,7 +39,7 @@ export class SessionManager {
       })
       .map((user: User): Session => {
         //create the full session object with the user
-        return SessionManager._currentSession = new Session({ token: SessionManager._currentSession.token, user });
+        return SessionManager._currentSession = new Session({ token: SessionManager._currentSession.details.token, user });
       }, (error: any) => {
         console.error(error);
       });

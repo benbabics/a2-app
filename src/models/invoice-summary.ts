@@ -1,15 +1,13 @@
 import * as moment from "moment";
 import { Model } from "./model";
 
-export type InvoiceSummaryField = keyof InvoiceSummary.Details;
-
-class InvoiceSummaryDetails extends Model<InvoiceSummaryDetails> {
-  _billingDate: string;
-  _closingDate: string;
-  _paymentDueDate: string;
+interface InvoiceSummaryDetails {
+  billingDate: string;
+  closingDate: string;
+  paymentDueDate: string;
   accountNumber: string;
   availableCredit: number;
-  billingAmount: number;
+  billedAmount: number;
   creditLimit: number;
   currentBalance: number;
   currentBalanceAsOf: number;
@@ -18,47 +16,45 @@ class InvoiceSummaryDetails extends Model<InvoiceSummaryDetails> {
   minimumPaymentDue: number;
   statementBalance: number;
   unbilledAmount: number;
+  pendingAmount: number;
 }
 
-export class InvoiceSummary extends InvoiceSummaryDetails {
-
-    public constructor(details?: InvoiceSummaryDetails) {
-        super(details || {} as InvoiceSummaryDetails);
-    }
+export class InvoiceSummary extends Model<InvoiceSummaryDetails> {
 
     public get billingDate(): Date {
-      return this._billingDate ? moment(this._billingDate).toDate() : null;
+      return this.details.billingDate ? moment(this.details.billingDate).toDate() : null;
     }
 
     public set billingDate(billingDate: Date) {
-      this._billingDate = moment(billingDate).toISOString();
+      this.details.billingDate = moment(billingDate).toISOString();
     }
 
     public get closingDate(): Date {
-      return this._closingDate ? moment(this._closingDate).toDate() : null;
+      return this.details.closingDate ? moment(this.details.closingDate).toDate() : null;
     }
 
     public set closingDate(closingDate: Date) {
-      this._closingDate = moment(closingDate).toISOString();
+      this.details.closingDate = moment(closingDate).toISOString();
     }
 
     public get paymentDueDate(): Date {
-      return this._paymentDueDate ? moment(this._paymentDueDate).toDate() : null;
+      return this.details.paymentDueDate ? moment(this.details.paymentDueDate).toDate() : null;
     }
 
     public set paymentDueDate(paymentDueDate: Date) {
-      this._paymentDueDate = moment(paymentDueDate).toISOString();
+      this.details.paymentDueDate = moment(paymentDueDate).toISOString();
     }
 
     public get isAllCreditAvailable(): boolean {
-      return this.availableCredit >= this.creditLimit;
+      return this.details.availableCredit >= this.details.creditLimit;
     }
 
     public get isAnyCreditAvailable(): boolean {
-      return this.availableCredit > 0;
+      return this.details.availableCredit > 0;
     }
 }
 
 export namespace InvoiceSummary {
     export type Details = InvoiceSummaryDetails;
+    export type Field = keyof Details;
 }

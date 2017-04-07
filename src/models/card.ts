@@ -1,9 +1,7 @@
 import { Model } from "./model";
 import { CardStatus } from "./card-status";
 
-export type CardField = keyof Card.Details;
-
-class CardDetails extends Model<CardDetails> {
+interface CardDetails {
    cardId: string;
    accountId: string;
    cardType: string;
@@ -15,29 +13,30 @@ class CardDetails extends Model<CardDetails> {
    status: CardStatus;
 }
 
-export class Card extends CardDetails {
+export class Card extends Model<CardDetails> {
 
     public constructor(details: CardDetails) {
         super(details);
     }
 
     public get isActive(): boolean {
-      return this.status === CardStatus.ACTIVE;
+      return this.details.status === CardStatus.ACTIVE;
     }
 
     public get isSuspended(): boolean {
-      return this.status === CardStatus.SUSPENDED;
+      return this.details.status === CardStatus.SUSPENDED;
     }
 
     public get isTerminated(): boolean {
-      return this.status === CardStatus.TERMINATED;
+      return this.details.status === CardStatus.TERMINATED;
     }
 
     public get statusDisplayName(): string {
-      return CardStatus.displayName(this.status);
+      return CardStatus.displayName(this.details.status);
     }
 }
 
 export namespace Card {
     export type Details = CardDetails;
+    export type Field = keyof Details;
 }
