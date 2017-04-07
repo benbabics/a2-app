@@ -844,7 +844,7 @@
                 "yesButton": "Yes",
                 "noButton":  "No"
             },
-            "createFingerprintAuthMessage": "<%= fingerprintAuthName %> is now setup for your Username <%= username %>."
+            "createFingerprintAuthMessage": "<%= _.capitalize(fingerprintAuthName) %> is now setup for your Username <%= username %>."
         }
     };
 
