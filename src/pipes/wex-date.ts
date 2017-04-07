@@ -15,6 +15,11 @@ export class WexDate {
   private datePipe: DatePipe = new DatePipe(WexDate.LOCALE);
 
   public transform(value: string, ignoreOffset: boolean) {
+
+    if (!value) {
+      return "Unknown";
+    }
+
     if (ignoreOffset) {
       return moment.parseZone(value).format(WexDate.CONSTANTS.DATE_FORMAT);
     }
