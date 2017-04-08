@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-searchbar *ngIf="page.isSearchEnabled"
+                 debounce="0"
+                 [placeholder]="page.CONSTANTS.searchLabel"
+                 [(ngModel)]="page.searchFilter"
+                 (ionInput)="page.updateList()">
+  </ion-searchbar>
+
+  <wex-list-header [fields]="page.CONSTANTS.listLabels">
+  </wex-list-header>
+</ion-header>
+
+<ion-content>
+  <wex-list id="items-list"
+            [items]="page.sortedItemLists"
+            [dividers]="page.dividerLabels"
+            [loading]="page.fetchingItems">
+
+    <template #listItemTemplate let-item>
+      <wex-list-item active (click)="page.goToDetailPage(item)">
+        <template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></template>
+      </wex-list-item>
+    </template>
+  </wex-list>
+</ion-content>

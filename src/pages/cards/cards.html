@@ -1,28 +1,9 @@
-<ion-header>
-  <ion-searchbar debounce="0"
-                 [placeholder]="CONSTANTS.searchLabel"
-                 [(ngModel)]="searchFilter"
-                 (ionInput)="updateList()">
-  </ion-searchbar>
-
-  <wex-list-header [fields]="CONSTANTS.listLabels">
-  </wex-list-header>
-</ion-header>
-
-<ion-content>
-  <wex-list id="cards-list"
-            [items]="sortedCards"
-            [dividers]="dividerLabels"
-            [loading]="fetchingCards">
-
-    <template #itemTemplate let-item>
-      <wex-list-item active (click)="goToDetailPage(item)">
-        <span class="card-id">{{ item.details.cardId }}</span>
-        <span class="embossing">
-          <span *ngIf="item.details.embossingValue2" class="embossingValue2" text-wrap>{{ item.details.embossingValue2 }}</span>
-          <span *ngIf="item.details.embossingValue1" class="embossingValue1">{{ item.details.embossingValue1 }}</span>
-        </span>
-      </wex-list-item>
-    </template>
-  </wex-list>
-</ion-content>
+<wex-static-list-page [page]="this">
+  <template #itemTemplate let-item>
+    <span class="card-id">{{ item.details.cardId }}</span>
+    <span class="embossing">
+      <span *ngIf="item.details.embossingValue2" class="embossingValue2" text-wrap>{{ item.details.embossingValue2 }}</span>
+      <span *ngIf="item.details.embossingValue1" class="embossingValue1">{{ item.details.embossingValue1 }}</span>
+    </span>
+  </template>
+</wex-static-list-page>
