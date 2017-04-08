@@ -2,6 +2,7 @@ import * as _ from "lodash";
 import { Observable } from "rxjs";
 import { ListPage, GroupedList } from "./list-page";
 import { Model } from "../models";
+import { WexGreeking } from "../components";
 
 export { GroupedList } from "./list-page";
 
@@ -14,6 +15,8 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   protected searchFilter: string = "";
   protected sortedItemGroups: GroupedList<T> = {};
   protected items: T[];
+  protected greekingData: WexGreeking.Rect[];
+  protected greekedElementCount: number;
 
   constructor(pageName: string, protected searchFilterFields?: (keyof DetailsT)[]) {
     super(pageName);
@@ -27,15 +30,19 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     return !!this.searchFilterFields;
   }
 
-  ionViewWillEnter() {
+  private fetchResults(): Observable<T[]> {
     this.fetchingItems = true;
+    this.clearList(); //Clear the results for a new search
 
-    this.search()
-      .finally(() => this.fetchingItems = false)
-      .subscribe((items: T[]) => {
+    return this.search()
+      .finally(() => {
+        this.fetchingItems = false;
+      })
+      .map((items: T[]) => {
         this.items = items;
 
         this.updateList();
+        return items;
       });
   }
 
@@ -57,6 +64,21 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
       //sort each grouped list individually
       return sortedGroups[group] = this.sortItems(items);
     }, {});
+  }
+
+  ionViewWillEnter() {
+    this.fetchResults().subscribe();
+  }
+
+  public clearList() {
+    this.items = [];
+    this.sortedItemGroups = {};
+  }
+
+  public onRefresh(refresher) {
+    this.fetchResults()
+    .finally(() => refresher.complete())
+    .subscribe();
   }
 
   public updateList() {

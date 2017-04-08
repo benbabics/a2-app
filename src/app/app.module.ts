@@ -11,7 +11,9 @@ import {
   WexList,
   WexListItem,
   WexListHeader,
-  WexNavBar
+  WexNavBar,
+  WexStaticListPage,
+  WexGreeking
 } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
@@ -23,9 +25,11 @@ import {
   SessionManager,
   UserProvider,
   InvoiceProvider,
-  WexNavController
+  WexNavController,
+  PaymentProvider
 } from "../providers";
 import { WexCurrency, WexDate } from "../pipes";
+import { PaymentsPage } from "../pages/payments/payments";
 
 @NgModule({
   declarations: [
@@ -33,13 +37,16 @@ import { WexCurrency, WexDate } from "../pipes";
     LoginPage,
     LandingPage,
     CardsPage,
+    PaymentsPage,
     ActionIndicator,
     WexCurrency,
     WexDate,
     WexNavBar,
     WexList,
     WexListItem,
-    WexListHeader
+    WexListHeader,
+    WexStaticListPage,
+    WexGreeking
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -50,7 +57,8 @@ import { WexCurrency, WexDate } from "../pipes";
     MyApp,
     LoginPage,
     LandingPage,
-    CardsPage
+    CardsPage,
+    PaymentsPage
   ],
   providers: [
     StatusBar,
@@ -65,6 +73,7 @@ import { WexCurrency, WexDate } from "../pipes";
     InvoiceProvider,
     UserProvider,
     CardProvider,
+    PaymentProvider,
     SessionManager,
     WexCurrency,
     WexDate,

@@ -11,10 +11,16 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher (ionRefresh)="page.onRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <wex-list id="items-list"
             [items]="page.sortedItemLists"
             [dividers]="page.dividerLabels"
-            [loading]="page.fetchingItems">
+            [loading]="page.fetchingItems"
+            [greekingData]="page.greekingData"
+            [greekedElementCount]="page.greekedElementCount">
 
     <template #listItemTemplate let-item>
       <wex-list-item active (click)="page.goToDetailPage(item)">

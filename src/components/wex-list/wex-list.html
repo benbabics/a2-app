@@ -18,6 +18,14 @@
       <template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></template>
     </span>
   </span>
+
+  <span *ngIf="isGreekingVisible">
+    <span *ngFor="let i of greekedElements">
+      <ion-item class="greeking-item">
+        <span [wexGreeking]="greekingData"></span>
+      </ion-item>
+    </span>
+  </span>
 </ion-list>
 
 <ion-card *ngIf="hasNoItems" class="no-records">

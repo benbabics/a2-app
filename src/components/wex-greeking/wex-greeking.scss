@@ -1,0 +1,26 @@
+.wex-greeking-element {
+  $wex-greeking-gradient: color($colors, gray), color($colors, gray) 75%, color($colors, white);
+
+  position: absolute;
+
+  transform: transale3d(0,0,0);
+  animation: animate;
+  animation-duration: 1.15s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+
+  &.wex-greeking-element-left {
+    animation-direction: alternate;
+    background: linear-gradient(to left, $wex-greeking-gradient);
+  }
+
+  &.wex-greeking-element-right {
+    animation-direction: alternate-reverse;
+    background: linear-gradient(to right, $wex-greeking-gradient);
+  }
+
+  @keyframes animate {
+    from { opacity: 1.0 }
+    to   { opacity: 0 }
+  }
+}
