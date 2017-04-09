@@ -45,6 +45,17 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
   @extend .fa-exchange;
 }
 
+//# Items
+// --------------------------------------------------
+
+ion-list .item-ios {
+  padding-left: 0;
+
+  & > .item-inner {
+    padding-left: 16px;
+  }
+}
+
 
 // App Material Design Styles
 // --------------------------------------------------
@@ -68,4 +79,22 @@ ion-icon.icon-md.tab-button-icon[aria-label*="fa"] {
 
 .ion-md-fa-exchange {
   @extend .fa-exchange;
+}
+
+//# Searchbar
+// --------------------------------------------------
+
+ion-header ion-searchbar.searchbar-md {
+  background: #ddd;
+}
+
+//# Items
+// --------------------------------------------------
+
+ion-list .item-md {
+  padding-left: 0;
+
+  & > .item-inner {
+    padding-left: 16px;
+  }
 }

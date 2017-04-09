@@ -21,9 +21,9 @@
 
   <span *ngIf="isGreekingVisible">
     <span *ngFor="let i of greekedElements">
-      <ion-item class="greeking-item">
+      <wex-list-item class="greeking-item">
         <span [wexGreeking]="greekingData"></span>
-      </ion-item>
+      </wex-list-item>
     </span>
   </span>
 </ion-list>

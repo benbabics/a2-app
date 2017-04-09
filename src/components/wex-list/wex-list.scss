@@ -1,5 +1,14 @@
 wex-list {
 
+  & ion-item-divider.item.item-divider {
+    background-color: #f5f5f5;
+
+    & ion-label {
+      font-weight: bold;
+      font-size: $h6-font-size;
+    }
+  }
+
   & .no-records {
     text-align: center;
     font-weight: bold;

@@ -1,4 +1,4 @@
 <ion-list-header>
-  <span *ngFor="let field of fields">{{ field }}</span>
+  <span *ngFor="let field of fields" [ngClass]="'field-' + field.toLowerCase()">{{ field }}</span>
   <ng-content></ng-content>
 </ion-list-header>
