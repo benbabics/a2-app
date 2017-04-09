@@ -1,3 +1,5 @@
+import { WexCardNumberPipe } from './../pipes/wex-card-number';
+import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { Http, XHRBackend, RequestOptions } from "@angular/http";
 import { NgModule, ErrorHandler } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
@@ -38,6 +40,7 @@ import { PaymentsPage } from "../pages/payments/payments";
     LoginPage,
     LandingPage,
     CardsPage,
+    CardsDetailsPage,
     PaymentsPage,
     ActionIndicator,
     WexCurrency,
@@ -48,7 +51,8 @@ import { PaymentsPage } from "../pages/payments/payments";
     WexListHeader,
     WexStaticListPage,
     WexGreeking,
-    WexDetailsView
+    WexDetailsView,
+    WexCardNumberPipe
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -60,6 +64,7 @@ import { PaymentsPage } from "../pages/payments/payments";
     LoginPage,
     LandingPage,
     CardsPage,
+    CardsDetailsPage,
     PaymentsPage
   ],
   providers: [
@@ -77,8 +82,6 @@ import { PaymentsPage } from "../pages/payments/payments";
     CardProvider,
     PaymentProvider,
     SessionManager,
-    WexCurrency,
-    WexDate,
     WexNavController
   ]
 })

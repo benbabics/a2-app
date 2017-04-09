@@ -73,7 +73,41 @@ export namespace ConstantsInfo {
           {left: 20, top: 47, right: 86, bottom: 59},
           {left: 20, top: 74, right: 86, bottom: 86}
         ],
-        greekedElementCount: 15
+        greekedElementCount: 15,
+
+        //# Card Details page
+        DETAILS: {
+          cardNumber: "Card Number",
+          title: "Card Details",
+          details: "Details",
+          actions: "Actions",
+          transactions: "Transactions",
+          reissueCard: "Reissue Card",
+
+          STATUS: {
+            COLOR: {
+              ACTIVE: "success",
+              SUSPENDED: "warning",
+              TERMINATED: "danger"
+            },
+            ICON: {
+              ACTIVE: "checkmark-circle",
+              SUSPENDED: "information-circle",
+              TERMINATED: "close-circle"
+            }
+          },
+
+          LIST: {
+            includedFields: [
+              "embossingValue2",
+              "embossingValue1",
+            ],
+            mappedFieldNames: {
+              embossingValue2: "Standard Embossing",
+              embossingValue1: "Optional Embossing",
+            }
+          }
+        }
       },
 
       //# Landing page

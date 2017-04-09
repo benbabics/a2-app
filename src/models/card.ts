@@ -15,10 +15,6 @@ interface CardDetails {
 
 export class Card extends Model<CardDetails> {
 
-    public constructor(details: CardDetails) {
-        super(details);
-    }
-
     public get isActive(): boolean {
       return this.details.status === CardStatus.ACTIVE;
     }

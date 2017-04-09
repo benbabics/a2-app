@@ -1,6 +1,6 @@
 <wex-static-list-page [page]="this">
   <template #itemTemplate let-item>
-    <span class="card-id">{{ item.details.cardId }}</span>
+    <span class="card-id">{{ item.details.embossedCardNumber | wexCardNumber }}</span>
     <span class="embossing">
       <span *ngIf="item.details.embossingValue2" class="embossingValue2" text-wrap>{{ item.details.embossingValue2 }}</span>
       <span *ngIf="item.details.embossingValue1" class="embossingValue1">{{ item.details.embossingValue1 }}</span>

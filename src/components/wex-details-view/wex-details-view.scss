@@ -1,5 +1,5 @@
 wex-details-view {
-  & .detail-list ion-item ion-label {
+  .detail-list ion-item ion-label {
     @include flexbox();
     @include flex-direction(row);
     @include justify-content(space-between);
@@ -7,6 +7,7 @@ wex-details-view {
     & > * {
       &.property-name {
         text-align: left;
+        color: color($colors, dark-gray);
       }
 
       &.property-value {

@@ -1,10 +1,10 @@
+import { CardsDetailsPage } from "./details/cards-details";
 import { Observable } from "rxjs";
 import { Component } from "@angular/core";
-import { NavParams } from "ionic-angular";
-import { WexNavController, CardProvider } from "../../providers";
+import { NavParams, NavController } from "ionic-angular";
+import { CardProvider } from "../../providers";
 import { StaticListPage, GroupedList } from "../static-list-page";
 import { Card, CardStatus } from "../../models";
-import { WexGreeking } from "../../components";
 
 @Component({
   selector: "page-cards",
@@ -21,7 +21,7 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
 
   public readonly dividerLabels: string[] = CardsPage.CARD_STATUSES.map(CardStatus.displayName);
 
-  constructor(public navCtrl: WexNavController, public navParams: NavParams, private cardProvider: CardProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private cardProvider: CardProvider) {
     super("Cards", CardsPage.SEARCH_FILTER_FIELDS);
   }
 
@@ -51,5 +51,9 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
 
   protected search(): Observable<Card[]> {
     return this.cardProvider.search(this.session.details.user.company.details.accountId)
+  }
+
+  public goToDetailPage(card: Card) {
+    this.navCtrl.push(CardsDetailsPage, { card });
   }
 }
