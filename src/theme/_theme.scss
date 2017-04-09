@@ -1,3 +1,5 @@
+// Ionic theme styling extensions and overrides
+
 // Shared Styles
 // --------------------------------------------------
 // Shared styles can go here
@@ -56,6 +58,11 @@ ion-list .item-ios {
   }
 }
 
+.card-ios .list-ios .item-ios.item-block .item-inner {
+  // Show dividers on ion-list items that are inside ion-cards
+  border-bottom: 1px solid $list-border-color;
+}
+
 
 // App Material Design Styles
 // --------------------------------------------------
@@ -97,4 +104,9 @@ ion-list .item-md {
   & > .item-inner {
     padding-left: 16px;
   }
+}
+
+.card-md .list-md .item-md.item-block .item-inner {
+  // Show dividers on ion-list items that are inside ion-cards
+  border-bottom: 1px solid $list-border-color;
 }

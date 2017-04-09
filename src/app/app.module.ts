@@ -13,7 +13,8 @@ import {
   WexListHeader,
   WexNavBar,
   WexStaticListPage,
-  WexGreeking
+  WexGreeking,
+  WexDetailsView
 } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
@@ -46,7 +47,8 @@ import { PaymentsPage } from "../pages/payments/payments";
     WexListItem,
     WexListHeader,
     WexStaticListPage,
-    WexGreeking
+    WexGreeking,
+    WexDetailsView
   ],
   imports: [
     IonicModule.forRoot(MyApp),

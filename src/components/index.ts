@@ -1,4 +1,5 @@
 export * from "./action-indicator/action-indicator";
+export * from "./wex-details-view/wex-details-view";
 export * from "./wex-greeking/wex-greeking";
 export * from "./wex-list/wex-list";
 export * from "./wex-list-header/wex-list-header";

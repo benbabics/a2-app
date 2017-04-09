@@ -1,0 +1,17 @@
+wex-details-view {
+  & .detail-list ion-item ion-label {
+    @include flexbox();
+    @include flex-direction(row);
+    @include justify-content(space-between);
+
+    & > * {
+      &.property-name {
+        text-align: left;
+      }
+
+      &.property-value {
+        text-align: right;
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+<ion-card class="detail detail-card">
+  <ion-list class="detail-list">
+    <ion-item text-wrap *ngFor="let propertyPair of resolvedPropertyPairs">
+      <span class="property-name" [innerHtml]="propertyPair[0]"></span>
+      <span class="property-value" [innerHtml]="propertyPair[1]"></span>
+    </ion-item>
+  </ion-list>
+</ion-card>
