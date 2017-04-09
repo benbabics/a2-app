@@ -16,10 +16,7 @@ export abstract class ApiProvider {
     let params = new URLSearchParams();
 
     for (let key in object) {
-      let value = object[key];
-      if (value) {
-        params.set(key, value);
-      }
+      params.set(key, object[key]);
     }
     return params;
   }
