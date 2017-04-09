@@ -1,0 +1,6 @@
+<wex-static-list-page [page]="this">
+  <template #itemTemplate let-item>
+    <span item-left class="payment-scheduled-date">{{ item.details.scheduledDate | wexDate }}</span>
+    <span item-right class="payment-amount">{{ item.details.amount | wexCurrency }}</span>
+  </template>
+</wex-static-list-page>

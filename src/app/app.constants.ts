@@ -23,6 +23,9 @@ export namespace ConstantsInfo {
             DRIVERS: "drivers",
             INVOICES: {
               CURRENT: "payments/currentInvoiceSummary"
+            },
+            PAYMENTS: {
+              SEARCH: "payments"
             }
           },
           USER: {
@@ -62,7 +65,15 @@ export namespace ConstantsInfo {
       //# Cards page
       CARDS: {
         listLabels: ["Card Number", "Embossing"],
-        searchLabel: "Search Card Number or Embossing"
+        searchLabel: "Search Card Number or Embossing",
+        greekingData: [
+          {left: 3, top: 10, right: 15, bottom: 35},
+          {left: 3, top: 55, right: 15, bottom: 80},
+          {left: 20, top: 20, right: 86, bottom: 32},
+          {left: 20, top: 47, right: 86, bottom: 59},
+          {left: 20, top: 74, right: 86, bottom: 86}
+        ],
+        greekedElementCount: 15
       },
 
       //# Landing page
@@ -166,7 +177,19 @@ export namespace ConstantsInfo {
         "enrollment": {
           "label": "Enroll Now"
         }
-      }
+      },
+
+      //# Payments page
+      PAYMENTS: {
+        listLabels: ["Date", "Amount"],
+        greekingData: [
+          {left: 3, top: 10, right: 24, bottom: 35},
+          {left: 3, top: 55, right: 24, bottom: 80},
+          {left: 68, top: 10, right: 90, bottom: 35},
+          {left: 68, top: 55, right: 90, bottom: 80},
+        ],
+        greekedElementCount: 15
+      },
     }
   };
 }

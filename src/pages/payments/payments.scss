@@ -1,0 +1,15 @@
+page-payments {
+
+  wex-list-header {
+    .field-amount {
+      text-align: right;
+      margin-right: 16px;
+    }
+  }
+
+  wex-list-item {
+    .payment-amount {
+      text-align: right;
+    }
+  }
+}

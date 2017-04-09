@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { CardsPage } from "../../pages/cards/cards";
 import { LandingPage } from "../../pages/landing/landing";
 import { LoginPage } from "../../pages/login/login";
+import { PaymentsPage } from "../../pages/payments/payments";
 import { Value } from "../../decorators/value";
 
 @Component({
@@ -24,5 +25,9 @@ export class WexNavBar {
 
   public get LoginPage() {
     return LoginPage;
+  }
+
+  public get PaymentsPage() {
+    return PaymentsPage;
   }
 }

@@ -20,14 +20,6 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
   ];
 
   public readonly dividerLabels: string[] = CardsPage.CARD_STATUSES.map(CardStatus.displayName);
-  public readonly greekingData: WexGreeking.Rect[] = [
-    {left: 3, top: 10, right: 15, bottom: 35},
-    {left: 3, top: 55, right: 15, bottom: 80},
-    {left: 20, top: 20, right: 86, bottom: 32},
-    {left: 20, top: 47, right: 86, bottom: 59},
-    {left: 20, top: 74, right: 86, bottom: 86}
-  ];
-  public readonly greekedElementCount: number = 30;
 
   constructor(public navCtrl: WexNavController, public navParams: NavParams, private cardProvider: CardProvider) {
     super("Cards", CardsPage.SEARCH_FILTER_FIELDS);

@@ -19,8 +19,8 @@
             [items]="page.sortedItemLists"
             [dividers]="page.dividerLabels"
             [loading]="page.fetchingItems"
-            [greekingData]="page.greekingData"
-            [greekedElementCount]="page.greekedElementCount">
+            [greekingData]="page.CONSTANTS.greekingData"
+            [greekedElementCount]="page.CONSTANTS.greekedElementCount">
 
     <template #listItemTemplate let-item>
       <wex-list-item active (click)="page.goToDetailPage(item)">

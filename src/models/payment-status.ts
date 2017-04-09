@@ -11,7 +11,7 @@ export namespace PaymentStatus {
 
   export const values = (): PaymentStatus[] => [SCHEDULED, COMPLETE];
 
-  export const displayName = (PaymentStatus: PaymentStatus): string => {
-    return _.capitalize(PaymentStatus);
+  export const displayName = (paymentStatus: PaymentStatus): string => {
+    return _.capitalize(paymentStatus);
   };
 }
