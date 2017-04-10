@@ -75,6 +75,56 @@
               expect( instance.delegate.makeRequest ).toHaveBeenCalled();
           });
 
+          describe("updates isLoadingComplete value that", () => {
+              var instance, len;
+
+              function initAndLoadNextPage(defaults={}, totalResults) {
+                  let settings = _.extend( { isGreeking: true }, defaults );
+                  instance = new wexInfiniteListService( delegate, settings );
+
+                  len = mockResponse.length;
+                  if ( totalResults ) { mockResponse.totalResults = totalResults; }
+
+                  instance.loadNextPage();
+                  deferred.resolve( mockResponse );
+                  $scope.$apply();
+              }
+
+              describe("when response.data.totalResults is undefined", () => {
+                  it("should be assigned false when pageSize is EQ to response length", () => {
+                      initAndLoadNextPage({ pageSize: len });
+                      expect( instance.isLoadingComplete ).toBe( false );
+                  });
+
+                  it("should be assigned false when pageSize is LT response length", () => {
+                      initAndLoadNextPage({ pageSize: len - 1 });
+                      expect( instance.isLoadingComplete ).toBe( false );
+                  });
+
+                  it("should be assigned true when pageSize is GT response length", () => {
+                      initAndLoadNextPage({ pageSize: 25 });
+                      expect( instance.isLoadingComplete ).toBe( true );
+                  });
+              });
+
+              describe("when response.data.totalResults is defined", () => {
+                  it("should be assigned true when totalResults is EQ to response length", () => {
+                      initAndLoadNextPage( {}, len );
+                      expect( instance.isLoadingComplete ).toBe( true );
+                  });
+
+                  it("should be assigned false when totalResults is LT response length", () => {
+                      initAndLoadNextPage( {}, len - 1 );
+                      expect( instance.isLoadingComplete ).toBe( false );
+                  });
+
+                  it("should be assigned false when totalResults is GT response length", () => {
+                      initAndLoadNextPage( {}, len + 1 );
+                      expect( instance.isLoadingComplete ).toBe( false );
+                  });
+              });
+          });
+
           describe("if settings.isGreeking is false then the model.collection", function () {
               var settings, instance, mockModel;
 
