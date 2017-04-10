@@ -82,7 +82,7 @@
 
         function filterDrivers(drivers) {
             var unsortedActiveDrivers, unsortedTerminatedDrivers,
-                sortingCriteria = [ "status", "lastName" ];
+                sortingCriteria = [ driver => ( driver.lastName || "" ).toLowerCase() ];
 
             // filter drivers into collections
             unsortedActiveDrivers     = _.filter( drivers, driver => driver.isActive() );
