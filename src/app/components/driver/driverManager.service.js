@@ -29,6 +29,14 @@
             clearCachedValues();
         }
 
+        function createDrivers(drivers=[]) {
+            // map driver to model
+            var collection = _.map( drivers, createDriver );
+
+            // extend with metadata
+            return _.extend( drivers, collection );
+        }
+
         function createDriver(driverResource) {
             var driverModel = new DriverModel();
             driverModel.set(driverResource);
@@ -81,8 +89,8 @@
             return DriversResource.getDrivers(accountId, searchParams)
                 .then(function (driversResponse) {
                     if (!_.isNil(_.get(driversResponse, "data"))) {
-                        //map the driver data to model objects
-                        var fetchedDrivers = _.map(driversResponse.data, createDriver);
+                        // map driver data to model objects (with metadata)
+                        var fetchedDrivers = createDrivers( driversResponse.data );
 
                         //reset the cache if we're fetching the first page of results
                         if (searchParams.pageNumber === 0) {

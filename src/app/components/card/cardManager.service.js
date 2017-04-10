@@ -33,6 +33,14 @@
             cards = [];
         }
 
+        function createCards(cards=[]) {
+            // map card to model
+            var collection = _.map( cards, createCard );
+
+            // extend with metadata
+            return _.extend( cards, collection );
+        }
+
         function createCard(cardResource) {
             var cardModel = new CardModel();
             cardModel.set(cardResource);
@@ -60,8 +68,8 @@
             return CardsResource.getCards(accountId, params)
                 .then(function (cardsResponse) {
                     if (cardsResponse && cardsResponse.data) {
-                        //map the card data to model objects
-                        var fetchedCards = _.map(cardsResponse.data, createCard);
+                        // map card data to model objects (with metadata)
+                        var fetchedCards = createCards( cardsResponse.data );
 
                         //reset the cache if we're fetching the first page of results
                         if (pageNumber === 0) {
