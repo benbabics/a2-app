@@ -5,7 +5,7 @@ import { Component, ViewChild, ElementRef } from "@angular/core";
 import { NavParams, Platform, Content } from "ionic-angular";
 import { LandingPage } from "../landing/landing";
 import { Page } from "../page";
-import { WexNavController } from "../../providers";
+import { NavBarController } from "../../providers";
 
 /*
   Generated class for the Login page.
@@ -21,7 +21,7 @@ export class LoginPage extends Page {
   @ViewChild("content") content: Content;
   @ViewChild("keyboardSpacer") keyboardSpacer: ElementRef;
 
-  public fingerprintAuthAvailable: boolean = false;
+  public fingerprintAuthAvailable: boolean = true;
   public fingerprintProfileAvailable: boolean = false;
   public isLoggingIn: boolean = false;
   public setupFingerprintAuth: boolean = false;
@@ -30,7 +30,7 @@ export class LoginPage extends Page {
   public usernameIsFocused: boolean = false;
   public user: UserCredentials = { username: "", password: "" };
 
-  constructor(public navCtrl: WexNavController, public navParams: NavParams, private platform: Platform, private sessionManager: SessionManager) {
+  constructor(public navCtrl: NavBarController, public navParams: NavParams, private platform: Platform, private sessionManager: SessionManager) {
     super("Login");
   }
 
@@ -91,14 +91,13 @@ export class LoginPage extends Page {
     let platforms: string[] = this.platform.platforms();
 
     if (_.includes(platforms, "android")) {
-      return _.get(constant, "android", "default");
+      return _.get<string>(constant, "android");
+    }
+    else if (_.includes(platforms, "ios")) {
+      return _.get<string>(constant, "ios");
     }
 
-    if (_.includes(platforms, "ios")) {
-      return _.get(constant, "ios", "default");
-    }
-
-    return constant ? constant.default : undefined;
+    return constant ? constant.android : undefined;
   }
 
   private rememberUsername(shouldRemember: boolean, username?: string) {

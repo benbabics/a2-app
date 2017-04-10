@@ -2,7 +2,7 @@ import { App, Tabs, NavOptions } from "ionic-angular";
 import { Injectable } from "@angular/core";
 
 @Injectable()
-export class WexNavController {
+export class NavBarController {
 
   // Note: This must be defined in the same order as the navbar tab layout (see wex-nav-bar.html)
   public readonly pages: Object[] = [

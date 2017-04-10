@@ -6,4 +6,4 @@ export * from "./api/payment-provider";
 export * from "./api/user-provider";
 export * from "./secure-http";
 export * from "./session-manager";
-export * from "./wex-nav-controller";
+export * from "./nav-bar-controller";

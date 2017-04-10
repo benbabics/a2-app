@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
 import { Component } from "@angular/core";
-import { NavParams } from "ionic-angular";
-import { WexNavController, PaymentProvider } from "../../providers";
+import { NavParams, NavController } from "ionic-angular";
+import { PaymentProvider } from "../../providers";
 import { StaticListPage, GroupedList } from "../static-list-page";
 import { Payment, PaymentStatus } from "../../models";
 
@@ -15,7 +15,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
 
   public readonly dividerLabels: string[] = PaymentsPage.PAYMENT_STATUSES.map(PaymentStatus.displayName);
 
-  constructor(public navCtrl: WexNavController, public navParams: NavParams, private paymentProvider: PaymentProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private paymentProvider: PaymentProvider) {
     super("Payments");
   }
 

@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { NavParams } from "ionic-angular";
-import { WexNavController } from "../../../providers";
+import { NavBarController } from "../../../providers";
 import { SecurePage } from "../../secure-page";
 import { Card } from "../../../models";
 
@@ -12,7 +12,7 @@ export class CardsDetailsPage extends SecurePage {
 
   public card: Card;
 
-  constructor(public navCtrl: WexNavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavBarController, public navParams: NavParams) {
     super("Cards.Details");
 
     this.card = this.navParams.get("card");

@@ -28,7 +28,7 @@ import {
   SessionManager,
   UserProvider,
   InvoiceProvider,
-  WexNavController,
+  NavBarController,
   PaymentProvider
 } from "../providers";
 import { WexCurrency, WexDate } from "../pipes";
@@ -82,7 +82,7 @@ import { PaymentsPage } from "../pages/payments/payments";
     CardProvider,
     PaymentProvider,
     SessionManager,
-    WexNavController
+    NavBarController
   ]
 })
 export class AppModule {}
