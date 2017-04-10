@@ -108,9 +108,9 @@
 
             // use driver data to compare against the term
             if ( _.isObject(driver) ) {
-                let firstName = _.get( driver, "firstName", "" ).toLowerCase(),
-                    lastName  = _.get( driver, "lastName", "" ).toLowerCase(),
-                    promptId  = _.get( driver, "promptId", "" ).toLowerCase();
+                let firstName = ( _.get( driver, "firstName" ) || "" ).toLowerCase(),
+                    lastName  = ( _.get( driver, "lastName"  ) || "" ).toLowerCase(),
+                    promptId  = ( _.get( driver, "promptId"  ) || "" ).toLowerCase();
 
                 // not case-sensitive; strip away unnecessary chars
                 term = term.toLowerCase().replace( /\-|\s/g, "" );
