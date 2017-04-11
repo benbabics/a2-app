@@ -331,6 +331,11 @@ wex-notification-bar {
   }
 }
 
+/* Ionic hides the Cancel button for action sheets on Android. Force it to be shown. */
+.platform-android .action-sheet-cancel {
+  display: block !important;
+}
+
 /**-----------------------------------------------------------
  Error Messaging
  ----------------------------------------------------------**/
