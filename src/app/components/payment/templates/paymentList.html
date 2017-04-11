@@ -7,12 +7,12 @@
                            loading-complete="infiniteScrollService.isLoadingComplete">
 
             <!-- Scheduled Payments: Header, Messaging & Results -->
-            <ion-item ng-hide="vm.payments.completed.length == 0 && vm.payments.scheduled.length == 0 && infiniteScrollService.isLoadingComplete" class="item-divider">{{ ::vm.config.scheduledPaymentsHeading }}</ion-item>
+            <ion-item ng-hide="vm.payments.scheduled.length == 0 && infiniteScrollService.isLoadingComplete" class="item-divider">{{ ::vm.config.scheduledPaymentsHeading }}</ion-item>
             <wex-payment-list-item ng-repeat="payment in vm.payments.scheduled"
                                    payment="payment"></wex-payment-list-item>
 
             <!-- Completed Payments: Header, Messaging & Results -->
-            <ion-item ng-hide="vm.payments.completed.length == 0 && vm.payments.scheduled.length == 0 && infiniteScrollService.isLoadingComplete" class="item-divider">{{ ::vm.config.completedPaymentsHeading }}</ion-item>
+            <ion-item ng-hide="vm.payments.completed.length == 0 && infiniteScrollService.isLoadingComplete" class="item-divider">{{ ::vm.config.completedPaymentsHeading }}</ion-item>
             <wex-payment-list-item collection-repeat="payment in vm.payments.completed"
                                    payment="payment"></wex-payment-list-item>
 
