@@ -46,7 +46,7 @@
 
       return requestPromise
         .then((items) => {
-          var collectionSize, hasItems = !_.isEmpty( items );
+          var totalResultsSize, collectionSize, hasItems = !_.isEmpty( items );
           if ( hasItems ) {
             //add the fetched items to the collection
             if ( !this.settings.isGreeking ) {
@@ -59,8 +59,9 @@
           // if enabled, ungreek the results after loading
           greekResultsPost.call( this, collection, greekingCollection, items );
 
-          collectionSize = _.size( items );
-          return checkIfIsLoadingComplete.call( this, collectionSize );
+          collectionSize   = _.size( items );
+          totalResultsSize = _.get( items, "totalResults" );
+          return checkIfIsLoadingComplete.call( this, collectionSize, totalResultsSize );
         })
         .catch(() => {
           // if enabled, ungreek the results after loading
@@ -122,9 +123,8 @@
       return false;
     }
 
-    function checkIfIsLoadingComplete(collectionSize) {
-        collectionSize = collectionSize || 0;
-        this.isLoadingComplete = collectionSize < this.settings.pageSize;
+    function checkIfIsLoadingComplete(collectionSize=0, totalResultsSize=0) {
+        this.isLoadingComplete = totalResultsSize > 0 ? totalResultsSize === collectionSize : collectionSize < this.settings.pageSize;
     }
 
     function greekResultsPre(collectionBuffer) {
