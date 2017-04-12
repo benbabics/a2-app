@@ -5,7 +5,7 @@
     // jshint maxparams:9
 
     /* @ngInject */
-    function CardListController(_, $scope, globals, $controller, UserManager, CardManager, AnalyticsUtil, Logger) {
+    function CardListController(_, $rootScope, $scope, globals, $controller, UserManager, CardManager, AnalyticsUtil, Logger) {
         var vm = this;
 
         vm.config        = globals.CARD_LIST.CONFIG;
@@ -31,12 +31,18 @@
                 makeRequest:      handleMakeRequest,
                 onError:          handleOnError,
                 onRequestItems:   handleOnRequestItems,
-                onRenderComplete: handleOnRenderComplete,
+                onRenderComplete: handleRenderingItems,
                 onResetItems:     handleOnResetItems
             });
 
             vm.cards = $scope.infiniteScrollService.model;
             handleOnResetItems(); // initially add collections
+
+            // avoid adding an additional watcher on deeply nested attrs
+            let statusChangeListener = $rootScope.$on( "card:statusChange", handleRenderingItems );
+
+            // remove event listener
+            $scope.$on( "$destroy", statusChangeListener );
         }
 
         function handleOnResetItems() {
@@ -69,12 +75,9 @@
             Logger.error( `Failed to fetch next page of cards: ${errorResponse}` );
         }
 
-        function handleOnRenderComplete() {
-            // ensure we do not receive any greeking items
-            var cards = _.filter( vm.cards.collection, card => !card.isGreekLoading );
-
-            // now reassign schedule and completed collections their appropriate items
-            filterCards( cards );
+        function handleRenderingItems() {
+            filterCards( CardManager.getCards() );
+            $scope.$broadcast( "scroll.refreshComplete" ); // redraw colleciton headers
         }
 
         function filterCards(cards) {
