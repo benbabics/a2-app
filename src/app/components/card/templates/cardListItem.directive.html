@@ -9,7 +9,7 @@
     </div>
 
     <div ng-hide="card.isGreekLoading">
-        <a class="item-content" ui-sref="card.detail({ cardId: card.cardId })" wex-click>
+        <a class="item-content" ui-sref="card.detail({ cardId: card.cardId, isGreeking: card.isGreekLoading })">
             <div class="row">
                 <div class="col col-35 text-ellipsis">{{ card.embossedCardNumber | wexCardNumber }}</div>
                 <div class="col col-65">

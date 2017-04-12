@@ -1,3 +1,13 @@
+/**
+ * Cards List
+**/
 .page-cards-list {
   @extend %ui-management-list;
+}
+
+/**
+ * Card Details
+**/
+.page-cards-detail {
+  @extend %ui-management-detail;
 }

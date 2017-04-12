@@ -161,6 +161,10 @@
   }
 
   .bar-header-details {
+    $color-active:     #008b00;
+    $color-suspended:  #ffbf3b;
+    $color-terminated: #f00000;
+
     @extend .bar;
     @extend .bar-subheader;
 
@@ -173,6 +177,16 @@
     height: $subheader-height;
     background-color: $color-background;
     background-image: none;
+
+    .content-detail-title {
+      color: #333;
+      text-align: center;
+      font-family: 'open_sanslight';
+      text-transform: capitalize;
+    }
+    .content-detail-status {
+      font-family: 'open_sansregular';
+    }
 
     .content-controls {
       position: absolute;
@@ -195,14 +209,51 @@
         font-size: 14px;
         text-transform: capitalize;
 
-        &, &.button-primary  { color: #fff; }
-        &:hover, &.activated { color: #eee !important; }
+        &.activated { border-color: transparent; }
 
         ion-spinner svg {
           margin-right: 5px;
           width: 16px;
           vertical-align: middle;
         }
+      }
+    }
+
+    &.ui-active,
+    &.ui-terminated {
+      .button-control.button-primary {
+        color: #fff;
+        &:hover, &.activated { color: #eee !important; }
+      }
+    }
+    &.ui-active {
+      .content-detail-status { color: $color-active; }
+      .button-control.button-primary {
+        background-color:           $color-active;
+        border-bottom-color: darken($color-active, 10%);
+      }
+    }
+    &.ui-suspended {
+      .content-detail-status { color: #000; }
+      .button-control.button-primary {
+        &, &:hover, &.activated { color: #000 !important; }
+        background-color:           $color-suspended;
+        border-bottom-color: darken($color-suspended, 10%);
+      }
+    }
+    &.ui-terminated {
+      .content-detail-status { color: $color-terminated; }
+      .button-control.button-primary {
+        background-color:           $color-terminated;
+        border-bottom-color: darken($color-terminated, 10%);
+      }
+    }
+    &.ui-loading {
+      .content-detail-status { color: #666; }
+      .button-control.button-primary {
+        color:               #666;
+        background-color:    #ccc;
+        border-bottom-color: #aaa;
       }
     }
   }

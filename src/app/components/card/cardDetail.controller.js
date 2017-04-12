@@ -4,24 +4,75 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function CardDetailController($ionicHistory, $state, globals, card) {
+    function CardDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, globals, UserManager, CardManager, card) {
 
         var vm = this;
 
         vm.config = globals.CARD_DETAIL.CONFIG;
         vm.card = card;
 
+        vm.isChangeStatusLoading            = false;
+        vm.displayStatusChangeBannerSuccess = false;
+        vm.displayStatusChangeBannerFailure = false;
+
         vm.goToTransactionActivity = goToTransactionActivity;
+        vm.handleClickChangeStatus = handleClickChangeStatus;
+        vm.updateCardStatus        = updateCardStatus;
 
         function goToTransactionActivity() {
             //Clear the cache to work around issue where transaction page shows up before transition
-            return $ionicHistory.clearCache(["transaction"])
-                .then(function () {
+            return $ionicHistory.clearCache([ "transaction" ])
+                .then(() => {
                     $state.go("transaction.filterBy", {
-                        filterBy: "card",
+                        filterBy:    "card",
                         filterValue: vm.card.cardId
                     });
                 });
+        }
+
+        function handleClickChangeStatus() {
+            let actions = _.filter( vm.config.statuses, item => item.id !== vm.card.status );
+            displayChangeStatusActions( actions ).then(label => {
+                let action = _.find( actions, { label } );
+                vm.updateCardStatus( action.id );
+            });
+        }
+
+        function updateCardStatus(newStatus) {
+            if ( !newStatus ) { return; }
+
+            // make request to update card status; if failure, revert
+            vm.isChangeStatusLoading = true;
+
+            let accountId = UserManager.getUser().billingCompany.accountId;
+            CardManager.updateStatus( accountId, vm.card.cardId, newStatus )
+                .then(() => {
+                    vm.isChangeStatusLoading            = false;
+                    vm.displayStatusChangeBannerSuccess = true;
+                    $rootScope.$broadcast( "card:statusChange" );
+                });
+        }
+
+        /**
+         * Private Methods
+         */
+        function displayChangeStatusActions(actions) {
+            if ( !actions && _.isEmpty(actions) ) { return; }
+
+            let deferred = $q.defer();
+
+            $ionicActionSheet.show({
+                buttons:    _.map( actions, action => { return { text: action.label } } ),
+                titleText:  vm.config.actionStatusTitle,
+                cancelText: vm.config.actionStatusCancel,
+                cancel() { deferred.reject(); },
+                buttonClicked(i, action) {
+                    deferred.resolve( action.text );
+                    return true;
+                }
+            });
+
+            return deferred.promise;
         }
 
     }

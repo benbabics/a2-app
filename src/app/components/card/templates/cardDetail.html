@@ -1,47 +1,54 @@
-<ion-view class="card-list-view" wex-hide-back-button="false" view-title="{{::vm.config.title}}">
-    <ion-content class="padding inner-container">
-        <div class="item item-divider inner-container" style="border:0px">
-            <div class="padding item item-wrap arrow-align">
-                <div class="row divider">
-                    <div class="col col-50 black">{{::vm.config.cardNumber}}</div>
-                    <div class="col col-50 black right-align">{{vm.card.embossedCardNumber | wexCardNumber}}</div>
-                </div>
+<ion-view view-title="{{ ::vm.config.title }}" wex-hide-back-button="false" class="page-drivers-detail">
+    <wex-notification-bar class="bar-success"
+                          ng-if="vm.displayStatusChangeBannerSuccess"
+                          wex-toast-timer
+                          wex-toast-on-hide="vm.displayStatusChangeBannerSuccess = false"
+                          text="{{ ::vm.config.bannerStatusChangeSuccess }}">
+    </wex-notification-bar>
 
-                <div class="row divider">
-                    <div class="col col-50 black wrap">{{::vm.config.standardEmbossing}}</div>
-                    <div class="col col-50 black wordwrap">{{vm.card.embossingValue2}}</div>
-                </div>
+    <ion-header class="bar-header-details" ng-class="{ 'ui-active': vm.card.isActive(), 'ui-suspended': vm.card.isSuspended(), 'ui-terminated': vm.card.isTerminated(), 'ui-loading': vm.isChangeStatusLoading }">
+        <div class="content-detail-title">{{ vm.card.embossedCardNumber | wexCardNumber }}</div>
+        <div class="content-detail-status">{{ vm.card.getStatusDisplayName() }}</div>
 
-                <div class="row divider">
-                    <div class="col col-50 black wrap">{{::vm.config.optionalEmbossing}}</div>
-                    <div class="col col-50 black wordwrap">{{vm.card.embossingValue1}}</div>
-                </div>
-
-                <div class="row divider">
-                    <div class="col col-50 black">{{::vm.config.status}}</div>
-                    <div class="col col-50 black wordwrap">{{vm.card.getStatusDisplayName()}}</div>
-                </div>
-            </div>
-            <br>
-            <div ng-if="vm.card.isActive() || vm.card.isSuspended()">
-                <button class="button button-block button-light item item-icon-right"
-                        ui-sref="card.changeStatus.form({cardId: vm.card.cardId})">
-                    <i class="icon ion-chevron-right"></i>
-                    <span class="btn_align black">{{::vm.config.changeStatusButton}}</span>
-                </button>
-                <button class="button button-block button-light item item-icon-right"
-                        ng-if="vm.card.isActive()"
-                        ui-sref="card.reissue.form({cardId: vm.card.cardId})">
-                    <i class="icon ion-chevron-right"></i>
-                    <span class="btn_align black">{{::vm.config.reissueCardButton}}</span>
-                </button>
-            </div>
-
-            <button class="button button-block button-light item item-icon-right"
-                    ng-click="vm.goToTransactionActivity()">
-                <i class="icon ion-chevron-right"></i>
-                <span class="btn_align black">{{::vm.config.transactionActivityButton}}</span>
+        <div class="content-controls">
+            <button class="button-primary button-control"
+                    ng-disabled="vm.isChangeStatusLoading"
+                    ng-click="vm.handleClickChangeStatus()">
+                <ion-spinner icon="spiral" ng-show="vm.isChangeStatusLoading"></ion-spinner>
+                {{ ::vm.config.labelChangeStatus }}
             </button>
         </div>
+    </ion-header>
+
+    <ion-content class="has-subheader inner-container">
+        <ul class="list-details">
+            <li class="item">
+                <div class="row">
+                    <div class="col col-50">{{ ::vm.config.detailStandardEmbossing }}</div>
+                    <div class="col col-50 wrap text-right">{{ vm.card.embossingValue2 }}</div>
+                </div>
+            </li>
+
+            <li class="item">
+                <div class="row">
+                    <div class="col col-50">{{ ::vm.config.detailOptionalEmbossing }}</div>
+                    <div class="col col-50 wrap text-right">{{ vm.card.embossingValue1 }}</div>
+                </div>
+            </li>
+        </ul>
+
+        <ul class="list-secondary">
+            <li class="item item-icon-left item-icon-right" ng-show="vm.card.isActive()" ui-sref="card.reissue.form({cardId: vm.card.cardId})">
+                <i class="icon fa fa-refresh"></i>
+                {{ ::vm.config.labelReissueCard }}
+                <i class="icon fa fa-chevron-right"></i>
+            </li>
+
+            <li class="item item-icon-left item-icon-right" ng-click="vm.goToTransactionActivity()">
+                <i class="icon fa fa-exchange"></i>
+                {{ ::vm.config.labelTransactions }}
+                <i class="icon fa fa-chevron-right"></i>
+            </li>
+        </ul>
     </ion-content>
 </ion-view>

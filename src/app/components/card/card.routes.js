@@ -27,22 +27,17 @@
         });
 
         $stateProvider.state("card.detail", {
-            url  : "/detail/:cardId",
+            url:   "/detail/:cardId",
             cache: false,
+            resolve: {
+                card: ($stateParams, CardManager) => {
+                    return CardManager.fetchCard( $stateParams.cardId );
+                }
+            },
             views: {
                 "view@card": {
                     templateUrl: "app/components/card/templates/cardDetail.html",
-                    controller : "CardDetailController as vm",
-                    resolve    : {
-                        card: function ($stateParams, CardManager, LoadingIndicator) {
-                            var cardId = $stateParams.cardId;
-
-                            LoadingIndicator.begin();
-
-                            return CardManager.fetchCard(cardId)
-                                .finally(LoadingIndicator.complete);
-                        }
-                    }
+                    controller:  "CardDetailController as vm"
                 }
             },
             onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_DETAIL.CONFIG.ANALYTICS.pageName)
