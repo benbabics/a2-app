@@ -18,6 +18,7 @@
         vm.goToTransactionActivity = goToTransactionActivity;
         vm.handleClickChangeStatus = handleClickChangeStatus;
         vm.updateCardStatus        = updateCardStatus;
+        vm.canChangeStatus         = canChangeStatus;
 
         function goToTransactionActivity() {
             //Clear the cache to work around issue where transaction page shows up before transition
@@ -51,6 +52,12 @@
                     vm.displayStatusChangeBannerSuccess = true;
                     $rootScope.$broadcast( "card:statusChange" );
                 });
+        }
+
+        function canChangeStatus() {
+            let userApplication = UserManager.getUser().onlineApplication;
+            let isDistributor   = userApplication === globals.USER.ONLINE_APPLICATION.DISTRIBUTOR;
+            return isDistributor ? !vm.card.isSuspended() : !vm.card.isTerminated();
         }
 
         /**

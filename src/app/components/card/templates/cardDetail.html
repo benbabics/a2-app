@@ -10,7 +10,7 @@
         <div class="content-detail-title">{{ vm.card.embossedCardNumber | wexCardNumber }}</div>
         <div class="content-detail-status">{{ vm.card.getStatusDisplayName() }}</div>
 
-        <div class="content-controls">
+        <div class="content-controls" ng-show="vm.canChangeStatus()">
             <button class="button-primary button-control"
                     ng-disabled="vm.isChangeStatusLoading"
                     ng-click="vm.handleClickChangeStatus()">
