@@ -178,6 +178,10 @@
     background-color: $color-background;
     background-image: none;
 
+    .content-detail-title,
+    .content-detail-status {
+      font-size: 27px;
+    }
     .content-detail-title {
       color: #333;
       text-align: center;
