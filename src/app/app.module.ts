@@ -29,7 +29,13 @@ import {
   UserProvider,
   InvoiceProvider,
   NavBarController,
-  PaymentProvider
+  PaymentProvider,
+  WexPlatform,
+  SecureStorage,
+  Fingerprint,
+  AndroidFingerprintService,
+  IosFingerprintService,
+  MockFingerprintService
 } from "../providers";
 import { WexCurrency, WexDate } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -82,7 +88,13 @@ import { PaymentsPage } from "../pages/payments/payments";
     CardProvider,
     PaymentProvider,
     SessionManager,
-    NavBarController
+    NavBarController,
+    SecureStorage,
+    WexPlatform,
+    Fingerprint,
+    AndroidFingerprintService,
+    IosFingerprintService,
+    MockFingerprintService
   ]
 })
 export class AppModule {}

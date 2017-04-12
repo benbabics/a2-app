@@ -49,9 +49,23 @@
     "cordova-plugin-statusbar",
     "cordova-plugin-device",
     "cordova-plugin-splashscreen",
-    "ionic-plugin-keyboard"
+    "ionic-plugin-keyboard",
+    "cordova-plugin-secure-storage",
+    "cordova-plugin-android-fingerprint-auth",
+    "cordova-plugin-touch-id"
   ],
-  "cordovaPlatforms": [],
+  "cordovaPlatforms": [
+    {
+      "platform": "android",
+      "version": "",
+      "locator": "android"
+    },
+    {
+      "platform": "ios",
+      "version": "",
+      "locator": "ios"
+    }
+  ],
   "description": "smarthub-2: An Ionic project",
   "config": {
     "ionic_copy": "./config/copy.config.js",

@@ -7,6 +7,7 @@ export namespace ConstantsInfo {
   export let Common: any = {
     ENV: Environment,
     LOCALE: "en-US",
+    STORAGE_ID: "FLEET_MANAGER-",
     AUTH: {
       client_id: "mobileAccountManagement",
       grant_type: "password",
@@ -50,6 +51,9 @@ export namespace ConstantsInfo {
     DATETIME: {
       DATE_FORMAT: "MM/DD/YYYY",
       LOCALE: "en-US"
+    },
+    FINGERPRINT: {
+      defaultDialogMessage: "Scan your fingerprint below to enter your account"
     },
     NAVIGATION: {
       LABELS: {
