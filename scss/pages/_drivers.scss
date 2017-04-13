@@ -14,11 +14,4 @@
 **/
 .page-drivers-detail {
   @extend %ui-management-detail;
-
-  .bar-header-details {
-    .content-detail-title,
-    .content-detail-status {
-      flex-grow: 1;
-    }
-  }
 }
