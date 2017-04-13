@@ -110,15 +110,15 @@
             if ( _.isObject(driver) ) {
                 let firstName = ( _.get( driver, "firstName" ) || "" ).toLowerCase(),
                     lastName  = ( _.get( driver, "lastName"  ) || "" ).toLowerCase(),
-                    promptId  = ( _.get( driver, "promptId"  ) || "" ).toLowerCase();
+                    promptId  = ( _.get( driver, "promptId"  ) || "" ).toLowerCase(),
+                    combined  = lastName + firstName + lastName;
 
                 // not case-sensitive; strip away unnecessary chars
-                term = term.toLowerCase().replace( /\-|\s/g, "" );
-                promptId = promptId.replace( /\-/g, "" );
+                term = term.toLowerCase().replace( /\,|-|\s/g, "" );
+                combined = combined.replace( /\,|-|\s/g, "" );
+                promptId = promptId.replace( /\,|-/g, "" );
 
-                return firstName.indexOf( term ) >= 0 ||
-                       lastName.indexOf( term )  >= 0 ||
-                       promptId.indexOf( term )  >= 0;
+                return combined.indexOf( term )  > -1 || promptId.indexOf( term ) > -1;
             }
         }
     }
