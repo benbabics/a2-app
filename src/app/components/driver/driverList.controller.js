@@ -43,7 +43,10 @@
             let statusChangeListener = $rootScope.$on( "driver:statusChange", handleRenderingItems );
 
             // remove event listener
-            $scope.$on( "$destroy", statusChangeListener );
+            $scope.$on("$destroy", () => {
+                DriverManager.clearCachedValues();
+                statusChangeListener();
+            });
         }
 
         function handleOnResetItems() {
