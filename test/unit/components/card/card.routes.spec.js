@@ -309,11 +309,9 @@
                     expect($state.current.name).toBe(stateName);
                 });
 
-                it("should resolve the card", function () {
-                    $injector.invoke($state.current.views["view@card"].resolve.card)
-                        .then(function (card) {
-                            expect(card).toEqual(mockCard);
-                        });
+                it("should resolve the card", () => {
+                    $injector.invoke( $state.current.resolve.card )
+                        .then( card => expect( card ).toEqual( mockCard ) );
                 });
 
                 it("should call this.AnalyticsUtil.trackView", function () {

@@ -32,7 +32,7 @@
             self = this;
 
             // mock deps
-            CardManager = jasmine.createSpyObj( "CardManager", [ "fetchCards" ] );
+            CardManager = jasmine.createSpyObj( "CardManager", [ "fetchCards", "getCards" ] );
             UserManager   = jasmine.createSpyObj( "UserManager", [ "getUser" ] );
             ElementUtil   = jasmine.createSpyObj( "ElementUtil", [ "getFocusedView", "resetInfiniteList" ] );
 
@@ -170,6 +170,7 @@
         describe("has divided cards into 'active', 'suspended' and 'terminated' collections", () => {
             beforeEach(() => {
                 fetchCardsDeferred.resolve([ ...cardsActive, ...cardsSuspended, ...cardsTerminated ]);
+                CardManager.getCards.and.returnValue([ ...cardsActive, ...cardsSuspended, ...cardsTerminated ]);
                 $scope.loadNextPage();
                 $rootScope.$digest();
                 $timeout.flush();
