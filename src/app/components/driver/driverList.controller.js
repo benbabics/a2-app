@@ -36,6 +36,9 @@
                 onResetItems:     handleOnResetItems
             });
 
+            // force redraw colleciton headers on searchFilter change
+            $scope.$watch( () => vm.searchFilter, listRefreshComplete );
+
             vm.drivers = $scope.infiniteScrollService.model;
             handleOnResetItems(); // initially add collections
 
@@ -77,7 +80,7 @@
 
         function handleRenderingItems() {
             filterDrivers( DriverManager.getDrivers() );
-            $scope.$broadcast( "scroll.refreshComplete" ); // redraw colleciton headers
+            listRefreshComplete();
         }
 
         function filterDrivers(drivers) {
@@ -120,6 +123,10 @@
 
                 return combined.indexOf( term )  > -1 || promptId.indexOf( term ) > -1;
             }
+        }
+
+        function listRefreshComplete() {
+            $scope.$broadcast( "scroll.refreshComplete" );
         }
     }
 
