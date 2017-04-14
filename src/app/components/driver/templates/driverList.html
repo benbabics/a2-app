@@ -3,7 +3,7 @@
         <form>
             <ion-input class="item-input-wrapper">
                 <i class="icon icon-search placeholder-icon"></i>
-                <input type="search" name="searchFilter" ng-model="vm.searchFilter" placeholder="{{::vm.config.searchPlaceholder}}">
+                <input type="search" name="searchFilter" ng-model="vm.searchFilter" autocomplete="off" placeholder="{{::vm.config.searchPlaceholder}}">
             </ion-input>
         </form>
     </ion-header>
@@ -28,13 +28,13 @@
                            loading-complete="infiniteScrollService.isLoadingComplete">
 
             <!-- Active Drivers: Header, Messaging & Results -->
-            <ion-item ng-hide="vm.filteredDriversActive.length == 0" class="item-divider active">{{ ::vm.config.listDriversActive }}</ion-item>
+            <ion-item ng-hide="vm.filteredDriversActive.length == 0" class="item-divider active">{{ ::vm.config.listDriversActive }} ({{ vm.filteredDriversActive.length }})</ion-item>
             <driver-list-item class="component-list-item"
                               driver="driver"
                               ng-repeat="driver in vm.filteredDriversActive = ( vm.drivers.active | filter : vm.searchFilter : vm.driversComparator )"></driver-list-item>
 
             <!-- Terminated Drivers: Header, Messaging & Results -->
-            <ion-item ng-hide="vm.filteredDriversTerminated.length == 0" class="item-divider terminated">{{ ::vm.config.listDriversTerminated }}</ion-item>
+            <ion-item ng-hide="vm.filteredDriversTerminated.length == 0" class="item-divider terminated">{{ ::vm.config.listDriversTerminated }} ({{ vm.filteredDriversTerminated.length }})</ion-item>
             <driver-list-item class="component-list-item"
                               driver="driver"
                               collection-repeat="driver in vm.filteredDriversTerminated = ( vm.drivers.terminated | filter : vm.searchFilter : vm.driversComparator )"></driver-list-item>
