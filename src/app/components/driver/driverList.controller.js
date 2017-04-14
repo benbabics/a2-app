@@ -5,7 +5,7 @@
     // jshint maxparams:7
 
     /* @ngInject */
-    function DriverListController(_, $rootScope, $scope, globals, $controller, UserManager, DriverManager, Logger) {
+    function DriverListController(_, $rootScope, $scope, globals, $controller, $cordovaKeyboard, PlatformUtil, UserManager, DriverManager, Logger) {
         var vm = this;
 
         vm.config        = globals.DRIVER_LIST.CONFIG;
@@ -14,6 +14,7 @@
         vm.searchOptions.ORDER_BY = "status";
 
         vm.driversComparator = driversComparator;
+        vm.handleSwiping     = handleSwiping; //_.throttle( handleSwiping, 500, { 'trailing': false } );
 
         activate();
 
@@ -127,6 +128,11 @@
 
         function listRefreshComplete() {
             $scope.$broadcast( "scroll.refreshComplete" );
+        }
+
+        function handleSwiping() {
+            let isKeyboardVisible = PlatformUtil.platformHasCordova() && $cordovaKeyboard.isVisible();
+            if ( isKeyboardVisible ) { $cordovaKeyboard.close(); }
         }
     }
 

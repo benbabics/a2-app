@@ -20,7 +20,7 @@
         {{ ::vm.config.emptyList }}
     </ion-header>
 
-    <ion-content class="has-subheader inner-container" ion-sticky>
+    <ion-content class="has-subheader inner-container" on-tap="vm.handleSwiping()" on-hold="vm.handleSwiping()" on-swipe-up="vm.handleSwiping()" on-swipe-down="vm.handleSwiping()" ion-sticky>
         <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
 
         <wex-infinite-list on-reload="loadNextPage"
