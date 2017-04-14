@@ -10,17 +10,26 @@ import {
 @Injectable()
 export class MockFingerprintService implements INativeFingerprintService {
 
+  public clearProfile(id: string): Promise<any> {
+    return Promise.reject("Mock fingerprint service has no profiles.")
+  }
+
+  public hasProfile(id: string): Promise<any> {
+    return Promise.reject("Mock fingerprint service has no profiles.");
+  }
+
   public isAvailable(): Promise<FingerprintAvailabilityDetails> {
-    return Promise.resolve({
-      isDeviceSupported: true,
-      isSetup: true
+    return Promise.reject({
+      isDeviceSupported: false,
+      isSetup: false
     });
   }
 
   public verify(options: IFingerprintVerificationOptions): Promise<FingerprintProfile|FingerprintVerificationError> {
-    return Promise.resolve({
-      id: options.id,
-      secret: options.secret
+    return Promise.reject({
+      exceededAttempts: false,
+      userCanceled: false,
+      data: "Mock fingerprint service does not support fingerprint verification."
     });
   }
 }

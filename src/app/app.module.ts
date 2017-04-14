@@ -39,6 +39,7 @@ import {
 } from "../providers";
 import { WexCurrency, WexDate } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
+import { LocalStorageModule } from "angular-2-local-storage";
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { PaymentsPage } from "../pages/payments/payments";
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    ChartsModule
+    ChartsModule,
+    LocalStorageModule.withConfig({ storageType: "localStorage" })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -71,7 +73,8 @@ import { PaymentsPage } from "../pages/payments/payments";
     LandingPage,
     CardsPage,
     CardsDetailsPage,
-    PaymentsPage
+    PaymentsPage,
+    WexNavBar
   ],
   providers: [
     StatusBar,

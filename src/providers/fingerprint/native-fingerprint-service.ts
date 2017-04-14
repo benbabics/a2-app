@@ -1,3 +1,5 @@
+import { SecureStorage } from "../secure-storage";
+
 //# FingerprintPassowrdFallbackMode
 // --------------------------------------------------
 
@@ -46,6 +48,32 @@ export interface FingerprintVerificationError {
 // --------------------------------------------------
 
 export interface INativeFingerprintService {
+  clearProfile(id: string): Promise<any>;
+  hasProfile(id: string): Promise<any>;
   isAvailable(): Promise<FingerprintAvailabilityDetails>;
   verify(options: IFingerprintVerificationOptions): Promise<FingerprintProfile|FingerprintVerificationError>;
+}
+
+export abstract class NativeFingerprintService implements INativeFingerprintService {
+
+  abstract isAvailable(): Promise<FingerprintAvailabilityDetails>;
+  abstract verify(options: IFingerprintVerificationOptions): Promise<FingerprintProfile|FingerprintVerificationError>;
+
+  constructor(protected secureStorage: SecureStorage) { }
+
+  public clearProfile(id: string): Promise<any> {
+    return this.secureStorage.remove(id);
+  }
+
+  public hasProfile(id: string): Promise<any> {
+    return this.secureStorage.get(id)
+      .then((value: any) => {
+        if (value) {
+          return true;
+        }
+        else {
+          return Promise.reject("No profile exists.");
+        }
+      });
+  }
 }

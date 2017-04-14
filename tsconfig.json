@@ -23,7 +23,8 @@
     "node_modules/@types"
   ],
   "types": [
-    "lodash"
+    "lodash",
+    "promise.prototype.finally"
   ],
   "compileOnSave": false,
   "atom": {

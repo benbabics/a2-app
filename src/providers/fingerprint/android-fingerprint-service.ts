@@ -7,10 +7,10 @@ import { Value } from "../../decorators/value";
 import {
   IFingerprintVerificationOptions,
   FingerprintPassowrdFallbackMode,
-  INativeFingerprintService,
   FingerprintAvailabilityDetails,
   FingerprintProfile,
-  FingerprintVerificationError
+  FingerprintVerificationError,
+  NativeFingerprintService
 } from "./native-fingerprint-service";
 import { WexPlatform } from "../platform";
 
@@ -53,14 +53,16 @@ declare var window: {
 };
 
 @Injectable()
-export class AndroidFingerprintService implements INativeFingerprintService {
+export class AndroidFingerprintService extends NativeFingerprintService {
 
   @Value("LOCALE") private static readonly LOCALE: string;
-  @Value("STORAGE_ID") private static readonly STORAGE_ID: string;
+  @Value("STORAGE.ID") private static readonly STORAGE_ID: string;
 
   private cordovaPlugin: InternalAndroidFingerprintService;
 
-  constructor(platform: Platform, wexPlatform: WexPlatform, private secureStorage: SecureStorage) {
+  constructor(secureStorage: SecureStorage, platform: Platform, wexPlatform: WexPlatform) {
+    super(secureStorage);
+
     if (wexPlatform.isAndroid()) {
       platform.ready().then(() => this.cordovaPlugin = window.FingerprintAuth);
     }

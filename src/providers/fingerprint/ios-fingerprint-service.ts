@@ -6,10 +6,10 @@ import { Platform } from "ionic-angular";
 import {
   IFingerprintVerificationOptions,
   FingerprintPassowrdFallbackMode,
-  INativeFingerprintService,
   FingerprintAvailabilityDetails,
   FingerprintProfile,
-  FingerprintVerificationError
+  FingerprintVerificationError,
+  NativeFingerprintService
 } from "./native-fingerprint-service";
 import { WexPlatform } from "../platform";
 
@@ -38,7 +38,7 @@ declare var window: {
 };
 
 @Injectable()
-export class IosFingerprintService implements INativeFingerprintService {
+export class IosFingerprintService extends NativeFingerprintService {
 
   private static readonly IOS_EXCEEDED_ATTEMPTS = -1;
   private static readonly IOS_PASSCODE_NOT_SET = -5;
@@ -49,7 +49,9 @@ export class IosFingerprintService implements INativeFingerprintService {
 
   private cordovaPlugin: InternalIosFingerprintService;
 
-  constructor(platform: Platform, wexPlatform: WexPlatform, private secureStorage: SecureStorage) {
+  constructor(secureStorage: SecureStorage, platform: Platform, wexPlatform: WexPlatform) {
+    super(secureStorage);
+
     if (wexPlatform.isIos()) {
       platform.ready().then(() => this.cordovaPlugin = window.plugins.touchid);
     }

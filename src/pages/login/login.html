@@ -9,7 +9,7 @@
 
   <div id="login-content">
     <ion-card id="card-form">
-      <form novalidate #form="ngForm" (ngSubmit)="logIn($event, setupFingerprintAuth)">
+      <form novalidate #form="ngForm" (ngSubmit)="onLogin($event, setupFingerprintAuth)">
         <ion-item-group id="input-list">
           <ion-item (click)="verifyFingerprintRemoval()">
             <ion-input [(ngModel)]="maskableUsername"
@@ -54,7 +54,9 @@
             <ion-checkbox item-right name="setupFingerprintAuthToggle" [(ngModel)]="setupFingerprintAuthToggle"></ion-checkbox>
           </ion-item>
 
-          <div *ngIf="fingerprintProfileAvailable" class="fingerprint-indicator icon-fingerprint" (click)="logInUser(true)"></div>
+          <ion-item *ngIf="fingerprintProfileAvailable" (click)="onLogin($event, true)">
+            <ion-icon item-right class="fingerprint-indicator" name="finger-print"></ion-icon>
+          </ion-item>
         </ion-item-group>
 
         <div class="actions">

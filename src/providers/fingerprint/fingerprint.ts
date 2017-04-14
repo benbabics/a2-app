@@ -1,5 +1,4 @@
 import { MockFingerprintService } from "./mock-fingerprint-service";
-import * as _ from "lodash";
 import { WexPlatform } from "../platform";
 import { Injectable } from "@angular/core";
 import {
@@ -39,6 +38,14 @@ export class Fingerprint {
     }
 
     return this.nativeService.isAvailable();
+  }
+
+  public clearProfile(id: string): Promise<any> {
+    return this.isAvailable.then(() => this.nativeService.clearProfile(id));
+  }
+
+  public hasProfile(id: string): Promise<any> {
+    return this.isAvailable.then(() => this.nativeService.hasProfile(id));
   }
 
   public verify(options: IFingerprintVerificationOptions): Promise<FingerprintProfile|FingerprintVerificationError> {

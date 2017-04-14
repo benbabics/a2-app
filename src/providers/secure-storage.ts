@@ -22,7 +22,7 @@ declare var cordova: {
 @Injectable()
 export class SecureStorage {
 
-  @Value("STORAGE_ID") private static readonly STORAGE_ID: string;
+  @Value("STORAGE.ID") private static readonly STORAGE_ID: string;
 
   private secureStorage: ISecureStorage;
   private available: Promise<any>;

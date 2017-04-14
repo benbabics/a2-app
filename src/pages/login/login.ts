@@ -1,18 +1,17 @@
-import { UserCredentials } from './../../models/user-credentials';
-import { SessionManager } from './../../providers/session-manager';
+import { WexNavBar } from "../../components/wex-nav-bar/wex-nav-bar";
+import { UserCredentials } from "./../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
-import { NavParams, Platform, Content } from "ionic-angular";
-import { LandingPage } from "../landing/landing";
+import { NavParams, Platform, Content, NavController } from "ionic-angular";
 import { Page } from "../page";
-import { NavBarController } from "../../providers";
+import {
+  SessionManager,
+  SessionAuthenticationMethod,
+  Fingerprint
+} from "../../providers";
+import { LocalStorageService } from "angular-2-local-storage/dist";
+import { Value } from "../../decorators/value";
 
-/*
-  Generated class for the Login page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: "page-login",
   templateUrl: "login.html"
@@ -21,7 +20,9 @@ export class LoginPage extends Page {
   @ViewChild("content") content: Content;
   @ViewChild("keyboardSpacer") keyboardSpacer: ElementRef;
 
-  public fingerprintAuthAvailable: boolean = true;
+  @Value("STORAGE.KEYS.USERNAME") private readonly USERNAME_KEY: string;
+
+  public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
   public isLoggingIn: boolean = false;
   public setupFingerprintAuth: boolean = false;
@@ -30,7 +31,14 @@ export class LoginPage extends Page {
   public usernameIsFocused: boolean = false;
   public user: UserCredentials = { username: "", password: "" };
 
-  constructor(public navCtrl: NavBarController, public navParams: NavParams, private platform: Platform, private sessionManager: SessionManager) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private platform: Platform,
+    private sessionManager: SessionManager,
+    private fingerprint: Fingerprint,
+    private localStorageService: LocalStorageService
+  ) {
     super("Login");
   }
 
@@ -51,20 +59,36 @@ export class LoginPage extends Page {
     this.user.username = username;
   }
 
-  ionViewWillEnter() {
-    window.addEventListener("native.keyboardshow", (event) => this.onKeyboardOpen(event));
-    window.addEventListener("native.keyboardhide", (event) => this.onKeyboardClose(event));
+  public get rememberMeToggle(): boolean {
+    return this.rememberMe;
   }
 
-  ionViewDidEnter() {
+  public set rememberMeToggle(rememberMe: boolean) {
+    if (!rememberMe && this.fingerprintProfileAvailable) {
+      this.verifyFingerprintRemoval();
+    }
+    else {
+      this.rememberMe = rememberMe;
+    }
+  }
 
+  public get setupFingerprintAuthToggle(): boolean {
+    return this.setupFingerprintAuth;
+  }
+
+  public set setupFingerprintAuthToggle(setupFingerprintAuth: boolean) {
+    if (setupFingerprintAuth) {
+      //automatically enable remember me
+      this.rememberMe = true;
+    }
+
+    this.setupFingerprintAuth = setupFingerprintAuth;
   }
 
   private clearFingerprintProfile(username: string): Promise<void> {
     this.fingerprintProfileAvailable = false;
 
-    //return FingerprintProfileUtil.clearProfile(username);
-    return Promise.resolve();
+    return this.fingerprint.clearProfile(username.toLowerCase());
   }
 
   private clearForm() {
@@ -73,6 +97,15 @@ export class LoginPage extends Page {
     this.user.password = "";
 
     this.rememberUsername(false);
+  }
+
+  private doFingerprintAuthCheck() {
+    //enable fingerprint login if there is an existing fingerprint profile for this user
+    return this.platform.ready()
+      .then(() => this.fingerprint.isAvailable)
+      .then(() => this.fingerprintAuthAvailable = true)
+      .then(() => this.fingerprint.hasProfile(this.user.username.toLowerCase()))
+      .then(() => this.fingerprintProfileAvailable = true);
   }
 
   private onKeyboardOpen(event: any) {
@@ -85,6 +118,24 @@ export class LoginPage extends Page {
   private onKeyboardClose(event: any) {
     this.content.getNativeElement().classList.remove("keyboard-open");
     this.keyboardSpacer.nativeElement.style.height = "0px";
+  }
+
+  private login(setupFingerprintAuth?: boolean) {
+    if (!this.isLoggingIn) {
+      let authenticationMethod = setupFingerprintAuth ? SessionAuthenticationMethod.Fingerprint : SessionAuthenticationMethod.Secret;
+
+      this.isLoggingIn = true;
+      this.user.username = this.user.username.toLowerCase();
+
+      this.sessionManager.initSession(this.user, { authenticationMethod })
+        .finally(() => this.isLoggingIn = false)
+        .subscribe(() => {
+          this.rememberUsername(this.rememberMe, this.user.username);
+
+          //Transition to the main app
+          this.navCtrl.setRoot(WexNavBar);
+        });
+    }
   }
 
   private resolvePlatformConstant(constant: any): string {
@@ -101,28 +152,54 @@ export class LoginPage extends Page {
   }
 
   private rememberUsername(shouldRemember: boolean, username?: string) {
-    /*if (shouldRemember) {
-      $localStorage[USERNAME_KEY] = username;
+    if (shouldRemember) {
+      this.localStorageService.set(this.USERNAME_KEY, username);
     }
     else {
-      delete $localStorage[USERNAME_KEY];
-    }*/
+      this.localStorageService.remove(this.USERNAME_KEY);
+    }
   }
 
-  public logIn(event: Event, setupFingerprintAuth?: boolean) {
-    this.isLoggingIn = true;
+  ionViewWillEnter() {
+    window.addEventListener("native.keyboardshow", (event) => this.onKeyboardOpen(event));
+    window.addEventListener("native.keyboardhide", (event) => this.onKeyboardClose(event));
+  }
 
-    this.sessionManager.initSession(this.user)
-      .finally(() => this.isLoggingIn = false)
-      .subscribe(null, null, () => {
-        this.navCtrl.push(LandingPage);
+  ionViewDidEnter() {
+    // Check the status of remember me
+    if (this.localStorageService.get(this.USERNAME_KEY)) {
+      this.user.username = this.localStorageService.get<string>(this.USERNAME_KEY);
+      this.rememberMe = true;
+    }
+
+    // Check the status of fingerprint authentication
+    this.doFingerprintAuthCheck()
+      .then(() => {
+        if (this.fingerprintProfileAvailable /*&& !$stateParams.logOut*/) {
+          //show the fingerprint prompt
+          this.login(true);
+        }
+      })
+      .catch((error) => {
+        if (_.get(error, "isDeviceSupported")) {
+          this.clearFingerprintProfile(this.user.username);
+
+          //this.showUserSettingsPopup().finally(() => this.doFingerprintAuthCheck);
+        }
       });
+  }
+
+  public onLogin(event: Event, setupFingerprintAuth?: boolean) {
+    this.login(setupFingerprintAuth);
 
     event.preventDefault();
   }
 
   public verifyFingerprintRemoval(): Promise<void> {
     if (this.fingerprintProfileAvailable) {
+      this.clearFingerprintProfile(this.user.username);
+      this.clearForm();
+      return Promise.resolve();
       /*return $cordovaDialogs.confirm(
         this.resolvePlatformConstant(this.CONSTANTS.touchId.warningPrompt.message),
         this.CONSTANTS.touchId.warningPrompt.title, [

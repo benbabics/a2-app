@@ -7,7 +7,12 @@ export namespace ConstantsInfo {
   export let Common: any = {
     ENV: Environment,
     LOCALE: "en-US",
-    STORAGE_ID: "FLEET_MANAGER-",
+    STORAGE: {
+      ID: "FLEET_MANAGER-",
+      KEYS: {
+        USERNAME: "USERNAME"
+      }
+    },
     AUTH: {
       client_id: "mobileAccountManagement",
       grant_type: "password",
