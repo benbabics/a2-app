@@ -90,7 +90,7 @@ export namespace ConstantsInfo {
           title: "Card Details",
           details: "Details",
           actions: "Actions",
-          transactions: "Transactions",
+          viewTransactions: "View Transactions",
           reissueCard: "Reissue Card",
 
           STATUS: {

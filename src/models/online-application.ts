@@ -3,7 +3,7 @@ export type OnlineApplication = keyof {
   WOL_NP,
   CLASSIC,
   DISTRIBUTOR
-}
+};
 
 export namespace OnlineApplication {
   export const UNKNOWN: OnlineApplication = "UNKNOWN";

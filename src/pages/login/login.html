@@ -10,7 +10,7 @@
   <div id="login-content">
     <ion-card id="card-form">
       <form novalidate #form="ngForm" (ngSubmit)="onLogin($event, setupFingerprintAuth)">
-        <ion-item-group id="input-list">
+        <ion-list id="input-list">
           <ion-item (click)="verifyFingerprintRemoval()">
             <ion-input [(ngModel)]="maskableUsername"
                   (blur)="usernameIsFocused = false"
@@ -41,7 +41,7 @@
                   [clearInput]="true"
                   [maxlength]="CONSTANTS.password.maxLength"></ion-input>
           </ion-item>
-        </ion-item-group>
+        </ion-list>
 
         <ion-item-group id="login-controls">
           <ion-item>
