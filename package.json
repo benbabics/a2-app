@@ -25,6 +25,7 @@
     "@angular/platform-browser-dynamic": "2.4.8",
     "@angular/platform-server": "2.4.8",
     "@ionic-native/core": "3.1.0",
+    "@ionic-native/dialogs": "^3.4.4",
     "@ionic-native/splash-screen": "3.1.0",
     "@ionic-native/status-bar": "3.1.0",
     "@ionic/storage": "2.0.0",
@@ -55,7 +56,12 @@
     "ionic-plugin-keyboard",
     "cordova-plugin-secure-storage",
     "cordova-plugin-android-fingerprint-auth",
-    "cordova-plugin-touch-id"
+    "cordova-plugin-touch-id",
+    "cordova-plugin-dialogs",
+    {
+      "locator": "https://github.com/selahssea/Cordova-open-native-settings.git",
+      "id": "com.phonegap.plugins.nativesettingsopener"
+    }
   ],
   "cordovaPlatforms": [
     {

@@ -1,3 +1,4 @@
+import { Dialogs } from "@ionic-native/dialogs";
 import { OptionsPopoverPage } from "./../pages/landing/options-popover/options-popover";
 import { WexCardNumberPipe } from "./../pipes/wex-card-number";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
@@ -44,6 +45,8 @@ import { LocalStorageModule } from "angular-2-local-storage";
 
 @NgModule({
   declarations: [
+    //# app delcarations
+    //----------------------
     MyApp,
     LoginPage,
     LandingPage,
@@ -64,7 +67,11 @@ import { LocalStorageModule } from "angular-2-local-storage";
     OptionsPopoverPage
   ],
   imports: [
+    //# ionic
+    //----------------------
     IonicModule.forRoot(MyApp),
+    //# third party dependencies
+    //----------------------
     ChartsModule,
     LocalStorageModule.withConfig({ storageType: "localStorage" })
   ],
@@ -80,9 +87,16 @@ import { LocalStorageModule } from "angular-2-local-storage";
     OptionsPopoverPage
   ],
   providers: [
+    //# ionic
+    //----------------------
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    //# ionic-native
+    //----------------------
+    Dialogs,
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    //# app providers
+    //----------------------
     {
       provide: Http,
       useClass: SecureHttp,

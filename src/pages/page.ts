@@ -8,4 +8,8 @@ export abstract class Page {
   constructor(public readonly pageName: string) {
     this.CONSTANTS = _.get(Constants, `PAGES.${pageName.toUpperCase()}`);
   }
+
+  public resolvePlatformConstant(constant: any): string {
+    return _.get(constant, Constants.PLATFORM, null);
+  }
 }

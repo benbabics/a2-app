@@ -6,6 +6,7 @@ export namespace ConstantsInfo {
 
   export let Common: any = {
     ENV: Environment,
+    PLATFORM: "%%=PLATFORM%%",
     LOCALE: "en-US",
     STORAGE: {
       ID: "FLEET_MANAGER-",

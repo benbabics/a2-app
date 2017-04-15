@@ -52,6 +52,10 @@
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-3.1.0.tgz#77aa905eb468dda3ac5d3885bea21903469ebfb9"
 
+"@ionic-native/dialogs":
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/@ionic-native/dialogs/-/dialogs-3.4.4.tgz#4d81388282f317c9ae7e94483986dba5af7769d3"
+
 "@ionic-native/splash-screen@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-3.1.0.tgz#6905af46dcf1288c6655c351822effddd1e31ee3"

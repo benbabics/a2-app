@@ -11,6 +11,9 @@ import {
 } from "../../providers";
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { Value } from "../../decorators/value";
+import { Dialogs } from "@ionic-native/dialogs";
+
+declare const cordova: any;
 
 @Component({
   selector: "page-login",
@@ -37,7 +40,8 @@ export class LoginPage extends Page {
     private platform: Platform,
     private sessionManager: SessionManager,
     private fingerprint: Fingerprint,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private dialogs: Dialogs
   ) {
     super("Login");
   }
@@ -138,19 +142,6 @@ export class LoginPage extends Page {
     }
   }
 
-  private resolvePlatformConstant(constant: any): string {
-    let platforms: string[] = this.platform.platforms();
-
-    if (_.includes(platforms, "android")) {
-      return _.get<string>(constant, "android");
-    }
-    else if (_.includes(platforms, "ios")) {
-      return _.get<string>(constant, "ios");
-    }
-
-    return constant ? constant.android : undefined;
-  }
-
   private rememberUsername(shouldRemember: boolean, username?: string) {
     if (shouldRemember) {
       this.localStorageService.set(this.USERNAME_KEY, username);
@@ -158,6 +149,27 @@ export class LoginPage extends Page {
     else {
       this.localStorageService.remove(this.USERNAME_KEY);
     }
+  }
+
+  private showUserSettingsPopup(): Promise<any> {
+    return this.dialogs.confirm(
+      this.resolvePlatformConstant(this.CONSTANTS.touchId.settingsPrompt.message),
+      this.CONSTANTS.touchId.settingsPrompt.title, [
+        this.CONSTANTS.touchId.settingsPrompt.buttons.settings,
+        this.CONSTANTS.touchId.settingsPrompt.buttons.cancel
+      ])
+      .then((result: number) => {
+        if (result === 1) {
+          switch (String("%%=PLATFORM%%")) {
+            case "android":
+              cordova.plugins.settings.openSetting("security");
+              break;
+            default:
+              cordova.plugins.settings.open();
+              break;
+          }
+        }
+      });
   }
 
   ionViewWillEnter() {
@@ -184,7 +196,7 @@ export class LoginPage extends Page {
         if (_.get(error, "isDeviceSupported")) {
           this.clearFingerprintProfile(this.user.username);
 
-          //this.showUserSettingsPopup().finally(() => this.doFingerprintAuthCheck);
+          this.showUserSettingsPopup().finally(() => this.doFingerprintAuthCheck());
         }
       });
   }
@@ -197,21 +209,17 @@ export class LoginPage extends Page {
 
   public verifyFingerprintRemoval(): Promise<void> {
     if (this.fingerprintProfileAvailable) {
-      this.clearFingerprintProfile(this.user.username);
-      this.clearForm();
-      return Promise.resolve();
-      /*return $cordovaDialogs.confirm(
-        this.resolvePlatformConstant(this.CONSTANTS.touchId.warningPrompt.message),
-        this.CONSTANTS.touchId.warningPrompt.title, [
-          this.CONSTANTS.touchId.warningPrompt.buttons.ok,
-          this.CONSTANTS.touchId.warningPrompt.buttons.cancel
-        ])
-        .then((result: number) => {
-          if (result === 1) {
-            this.clearFingerprintProfile(this.user.username);
-            this.clearForm();
-          }
-        });*/
+      return this.dialogs.confirm(
+          this.resolvePlatformConstant(this.CONSTANTS.touchId.warningPrompt.message),
+          this.CONSTANTS.touchId.warningPrompt.title, [
+            this.CONSTANTS.touchId.warningPrompt.buttons.ok,
+            this.CONSTANTS.touchId.warningPrompt.buttons.cancel
+          ]).then((result: number) => {
+            if (result === 1) {
+              this.clearFingerprintProfile(this.user.username);
+              this.clearForm();
+            }
+          });
     }
     else {
       return Promise.resolve();
