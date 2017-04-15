@@ -1,9 +1,10 @@
 import * as _ from "lodash";
 import { InvoiceProvider } from "../../providers";
 import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { NavController, NavParams, PopoverController } from "ionic-angular";
 import { Company, InvoiceSummary } from "../../models";
 import { SecurePage } from "../secure-page";
+import { OptionsPopoverPage } from "./options-popover/options-popover";
 
 interface ChartDisplayConfig {
   [list: string]: any[];
@@ -35,7 +36,12 @@ export class LandingPage extends SecurePage {
   public chartDisplay: ChartDisplayConfig;
   public chart: ChartConfig;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private invoiceProvider: InvoiceProvider) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private invoiceProvider: InvoiceProvider,
+    private popoverCtrl: PopoverController
+  ) {
     super("Landing");
   }
 
@@ -100,5 +106,11 @@ export class LandingPage extends SecurePage {
         this.chartDisplay = this.createChartDisplayConfiguration();
         this.chart = this.createChartConfiguration();
       });
+  }
+
+  public onShowOptions($event) {
+    let popover = this.popoverCtrl.create(OptionsPopoverPage);
+
+    popover.present({ ev: $event });
   }
 }

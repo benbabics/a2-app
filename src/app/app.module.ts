@@ -1,4 +1,5 @@
-import { WexCardNumberPipe } from './../pipes/wex-card-number';
+import { OptionsPopoverPage } from "./../pages/landing/options-popover/options-popover";
+import { WexCardNumberPipe } from "./../pipes/wex-card-number";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { Http, XHRBackend, RequestOptions } from "@angular/http";
 import { NgModule, ErrorHandler } from "@angular/core";
@@ -59,7 +60,8 @@ import { LocalStorageModule } from "angular-2-local-storage";
     WexStaticListPage,
     WexGreeking,
     WexDetailsView,
-    WexCardNumberPipe
+    WexCardNumberPipe,
+    OptionsPopoverPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -74,7 +76,8 @@ import { LocalStorageModule } from "angular-2-local-storage";
     CardsPage,
     CardsDetailsPage,
     PaymentsPage,
-    WexNavBar
+    WexNavBar,
+    OptionsPopoverPage
   ],
   providers: [
     StatusBar,

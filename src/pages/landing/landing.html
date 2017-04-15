@@ -2,6 +2,12 @@
 
   <ion-navbar>
     <ion-title>{{ CONSTANTS.title }}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="onShowOptions($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -56,8 +62,6 @@
             </div>
 
             <div class="chart">
-              <!-- <wex-doughnut-chart [chartConfig]="chart">
-              </wex-doughnut-chart> -->
               <canvas baseChart
                       chartType="doughnut"
                       [options]="chart.options"
