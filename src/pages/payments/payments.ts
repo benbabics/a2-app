@@ -11,24 +11,13 @@ import { Payment, PaymentStatus } from "../../models";
 })
 export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
 
-  private static readonly PAYMENT_STATUSES: PaymentStatus[] = PaymentStatus.values();
+  private static readonly PAYMENT_STATUSES: PaymentStatus[] = [PaymentStatus.SCHEDULED, PaymentStatus.COMPLETE];
 
+  protected readonly listGroupDisplayOrder: string[] = PaymentsPage.PAYMENT_STATUSES;
   public readonly dividerLabels: string[] = PaymentsPage.PAYMENT_STATUSES.map(PaymentStatus.displayName);
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private paymentProvider: PaymentProvider) {
     super("Payments");
-  }
-
-  public get scheduledPayments(): Payment[] {
-    return this.sortedItemGroups[PaymentStatus.SCHEDULED];
-  }
-
-  public get completedPayments(): Payment[] {
-    return this.sortedItemGroups[PaymentStatus.COMPLETE];
-  }
-
-  public get sortedItemLists(): Payment[][] {
-    return [this.scheduledPayments, this.completedPayments];
   }
 
   protected groupItems(payments: Payment[]): GroupedList<Payment> {

@@ -8,8 +8,8 @@ export { GroupedList } from "./list-page";
 
 export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extends ListPage {
 
-  abstract dividerLabels: string[];
-  abstract sortedItemLists: T[][];
+  protected abstract listGroupDisplayOrder: string[];
+  public abstract dividerLabels: string[];
 
   protected fetchingItems: boolean = false;
   protected searchFilter: string = "";
@@ -66,7 +66,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     }, {});
   }
 
-  ionViewWillEnter() {
+  ionViewDidLoad() {
     this.fetchResults().subscribe();
   }
 
@@ -79,6 +79,15 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     this.fetchResults()
     .finally(() => refresher.complete())
     .subscribe();
+  }
+
+  public get sortedItemLists(): T[][] {
+    //returns a list of item lists ordered by the list group display order
+    return this.listGroupDisplayOrder.reduce<T[][]>((sortedList: T[][], group: string) => {
+
+      sortedList.push(this.sortedItemGroups[group]);
+      return sortedList;
+    }, []);
   }
 
   public updateList() {
