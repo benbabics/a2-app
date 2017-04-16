@@ -1,5 +1,5 @@
 import { OnlineApplication } from "./online-application";
-import { Company } from "./company";
+import { CompanyStub } from "./company-stub";
 import { Model } from "./model";
 
 interface UserDetails {
@@ -8,8 +8,8 @@ interface UserDetails {
     firstName: string;
     lastName: string;
     onlineApplication: OnlineApplication;
-    company?: Company.Details;
-    billingCompany?: Company.Details;
+    company?: CompanyStub.Details;
+    billingCompany?: CompanyStub.Details;
     brand?: string;
     email?: string;
 }
@@ -28,12 +28,12 @@ export class User extends Model<UserDetails> {
       }
     }
 
-    public get billingCompany(): Company {
-      return this.details.billingCompany ? new Company(this.details.billingCompany) : null;
+    public get billingCompany(): CompanyStub {
+      return this.details.billingCompany ? new CompanyStub(this.details.billingCompany) : null;
     }
 
-    public get company(): Company {
-      return this.details.company ? new Company(this.details.company) : null;
+    public get company(): CompanyStub {
+      return this.details.company ? new CompanyStub(this.details.company) : null;
     }
 
     public get fullName(): string {
