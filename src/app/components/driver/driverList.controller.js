@@ -14,7 +14,7 @@
         vm.searchOptions.ORDER_BY = "status";
 
         vm.driversComparator = driversComparator;
-        vm.handleSwiping     = handleSwiping; //_.throttle( handleSwiping, 500, { 'trailing': false } );
+        vm.handleSwiping     = handleSwiping;
 
         activate();
 
