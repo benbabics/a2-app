@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    describe("A DriverManager", function () {
+    fdescribe("A DriverManager", function () {
 
         var _,
             $q,
@@ -64,7 +64,7 @@
                     beforeEach(function () {
                         driverToFetch = TestUtils.getRandomValueFromArray(cachedDrivers);
 
-                        DriverManager.fetchDriver(driverToFetch.driverId)
+                        DriverManager.fetchDriver(driverToFetch.promptId)
                             .then(resolveHandler);
 
                         $rootScope.$digest();
@@ -80,7 +80,7 @@
                     beforeEach(function () {
                         driverToFetch = TestUtils.getRandomDriver(DriverModel);
 
-                        DriverManager.fetchDriver(driverToFetch.driverId)
+                        DriverManager.fetchDriver(driverToFetch.promptId)
                             .then(resolveHandler);
 
                         $rootScope.$digest();
@@ -102,7 +102,7 @@
                 beforeEach(function () {
                     driverToFetch = TestUtils.getRandomDriver(DriverModel);
 
-                    DriverManager.fetchDriver(driverToFetch.driverId)
+                    DriverManager.fetchDriver(driverToFetch.promptId)
                         .then(resolveHandler);
 
                     $rootScope.$digest();

@@ -26,11 +26,11 @@
         });
 
         $stateProvider.state("driver.detail", {
-            url:   "/detail/:driverId",
+            url:   "/detail/:promptId",
             cache: false,
             resolve: {
                 driver: ($stateParams, DriverManager) => {
-                    return DriverManager.fetchDriver( $stateParams.driverId )
+                    return DriverManager.fetchDriver( $stateParams.promptId )
                 }
             },
             views: {
