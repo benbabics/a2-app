@@ -222,6 +222,11 @@
         &:first-of-type { border-top:    none; }
         &:last-of-type  { border-bottom: none; }
 
+        .row, .col {
+          padding-top:    0;
+          padding-bottom: 0;
+        }
+
         .item-note {
           font-size: 16px;
           color: $default-dark;
