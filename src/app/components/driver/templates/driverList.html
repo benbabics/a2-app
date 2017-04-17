@@ -3,14 +3,14 @@
         <form>
             <ion-input class="item-input-wrapper">
                 <i class="icon icon-search placeholder-icon"></i>
-                <input type="search" name="searchFilter" ng-model="vm.searchFilter" placeholder="{{::vm.config.searchPlaceholder}}">
+                <input type="search" name="searchFilter" ng-model="vm.searchFilter" autocomplete="off" placeholder="{{::vm.config.searchPlaceholder}}">
             </ion-input>
         </form>
     </ion-header>
 
     <ion-header class="bar-header-list"
                 ng-hide="vm.filteredDriversActive.length == 0 && vm.filteredDriversTerminated.length == 0">
-        <span class="content-name">{{ ::vm.config.listName }}</span>
+        <span class="content-driver-name">{{ ::vm.config.listName }}</span>
         <span class="content-driver-id">{{ ::vm.config.listDriverId }}</span>
     </ion-header>
 
@@ -20,7 +20,7 @@
         {{ ::vm.config.emptyList }}
     </ion-header>
 
-    <ion-content class="has-subheader inner-container" ion-sticky>
+    <ion-content class="has-subheader inner-container" on-tap="vm.handleSwiping()" on-hold="vm.handleSwiping()" on-swipe-up="vm.handleSwiping()" on-swipe-down="vm.handleSwiping()" ion-sticky>
         <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
 
         <wex-infinite-list on-reload="loadNextPage"

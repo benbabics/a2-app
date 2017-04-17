@@ -4,8 +4,17 @@
 .page-drivers-list {
   @extend %ui-management-list;
 
-  .bar-header-list .content-name {
+  .widget-infinite-list .item .item-content {
+    @include flexbox();
+  }
+
+  .content-driver-name {
+    @extend .ellipsis;
     @include flex-grow(10);
+  }
+  .content-driver-id {
+    margin-left: 1rem;
+    width: 60px;
   }
 }
 

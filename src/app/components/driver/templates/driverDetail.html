@@ -13,7 +13,7 @@
 
         <div class="content-driver-status">{{ vm.driver.status }}</div>
 
-        <div class="content-controls">
+        <div class="content-controls" ng-hide="vm.driver.shared">
             <button class="button-primary button-control"
                     ng-disabled="vm.isChangeStatusLoading"
                     ng-click="vm.handleClickChangeStatus()">
@@ -26,17 +26,23 @@
     <ion-content class="has-subheader inner-container">
         <ul class="list-details">
             <li class="item">
-                {{ ::vm.config.detailDriverId }}
-                <span class="item-note">{{ ::vm.driver.promptId }}</span>
+                <div class="row">
+                    <div class="col col-50">{{ ::vm.config.detailDriverId }}</div>
+                    <div class="col col-50 wrap text-right">{{ ::vm.driver.promptId }}</div>
+                </div>
             </li>
             <li wex-application-flag="vm.config.phoneAndEmailApplications" class="item">
-                {{ ::vm.config.detailMobile }}
-                <span class="item-note"><a href="tel:{{ ::vm.driver.cellPhoneNumber }}">{{ ::vm.driver.cellPhoneNumber }}</a></span>
+                <div class="row">
+                    <div class="col col-50">{{ ::vm.config.detailMobile }}</div>
+                    <div class="col col-50 wrap text-right"><a href="tel:{{ ::vm.driver.cellPhoneNumber }}">{{ ::vm.driver.cellPhoneNumber }}</a></div>
+                </div>
             </li>
 
             <li wex-application-flag="vm.config.phoneAndEmailApplications" class="item">
-                {{ ::vm.config.detailEmail }}
-                <span class="item-note"><a href="mailto:{{ ::vm.driver.emailAddress }}">{{ ::vm.driver.emailAddress }}</a></span>
+                <div class="row">
+                    <div class="col col-50">{{ ::vm.config.detailEmail }}</div>
+                    <div class="col col-50 text-right ellipsis"><a href="mailto:{{ ::vm.driver.emailAddress }}">{{ ::vm.driver.emailAddress }}</a></div>
+                </div>
             </li>
         </ul>
 

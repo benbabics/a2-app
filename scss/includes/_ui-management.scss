@@ -6,7 +6,7 @@
 
   $subheader-search-header-height: 44px;
   $subheader-list-header-height:   30px;
-  $indentation-for-icon:           60px;
+  $indentation-for-icon:           40px;
 
   /**
    * Headers
@@ -221,6 +221,11 @@
       .item {
         &:first-of-type { border-top:    none; }
         &:last-of-type  { border-bottom: none; }
+
+        .row, .col {
+          padding-top:    0;
+          padding-bottom: 0;
+        }
 
         .item-note {
           font-size: 16px;
