@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    fdescribe("A DriverManager", function () {
+    describe("A DriverManager", function () {
 
         var _,
             $q,
