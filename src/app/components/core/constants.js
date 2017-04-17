@@ -357,7 +357,7 @@
             "bannerStatusChangeFailure": "Status change failed. Please try again.",
             "detailDriverId":            "Driver ID",
             "detailEmail":               "Email Address",
-            "detailMobile":              "Mobile Number",
+            "detailMobile":              "Mobile Phone",
             "labelChangeStatus":         "Change Status",
             "labelTransactions":         "Transactions",
             "phoneAndEmailApplications": ["WOL_NP", "DISTRIBUTOR"],
