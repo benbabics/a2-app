@@ -5,7 +5,7 @@
     // jshint maxparams:9
 
     /* @ngInject */
-    function CardListController(_, $scope, globals, $controller, UserManager, CardManager, AnalyticsUtil, Logger) {
+    function CardListController(_, $scope, globals, $controller, $ionicScrollDelegate, $cordovaKeyboard, PlatformUtil, UserManager, CardManager, Logger) {
         var vm = this;
 
         vm.config        = globals.CARD_LIST.CONFIG;
@@ -13,6 +13,7 @@
         vm.searchFilter  = "";
 
         vm.cardsComparator = cardsComparator;
+        vm.handleSwiping   = handleSwiping;
 
         activate();
 
@@ -34,6 +35,9 @@
                 onRenderComplete: handleOnRenderComplete,
                 onResetItems:     handleOnResetItems
             });
+
+            // force redraw colleciton headers on searchFilter change
+            $scope.$watch( () => vm.searchFilter, listRefreshComplete );
 
             vm.cards = $scope.infiniteScrollService.model;
             handleOnResetItems(); // initially add collections
@@ -70,11 +74,8 @@
         }
 
         function handleOnRenderComplete() {
-            // ensure we do not receive any greeking items
-            var cards = _.filter( vm.cards.collection, card => !card.isGreekLoading );
-
-            // now reassign schedule and completed collections their appropriate items
-            filterCards( cards );
+            filterCards( CardManager.getCards() );
+            listRefreshComplete();
         }
 
         function filterCards(cards) {
@@ -119,6 +120,16 @@
                        embossingValue2.replace( /\s/g, "" ).indexOf( term )    >= 0 ||
                        embossingValue1.replace( /\s/g, "" ).indexOf( term )    >= 0;
             }
+        }
+
+        function listRefreshComplete() {
+            $scope.$broadcast( "scroll.refreshComplete" );
+            $ionicScrollDelegate.resize();
+        }
+
+        function handleSwiping() {
+            let isKeyboardVisible = PlatformUtil.platformHasCordova() && $cordovaKeyboard.isVisible();
+            if ( isKeyboardVisible ) { $cordovaKeyboard.close(); }
         }
     }
 

@@ -21,7 +21,7 @@
         {{ ::vm.config.emptyList }}
     </ion-header>
 
-    <ion-content class="has-subheader inner-container" ion-sticky>
+    <ion-content class="has-subheader inner-container" on-tap="vm.handleSwiping()" on-hold="vm.handleSwiping()" on-swipe-up="vm.handleSwiping()" on-swipe-down="vm.handleSwiping()" ion-sticky>
         <ion-refresher class="wex-refresher" on-refresh="resetSearchResults()"></ion-refresher>
 
         <wex-infinite-list on-reload="loadNextPage"
@@ -29,19 +29,19 @@
                            loading-complete="infiniteScrollService.isLoadingComplete">
 
             <!-- Active Cards: Header, Messaging & Results -->
-            <ion-item ng-hide="vm.filteredCardsActive.length == 0" class="item-divider active">{{ ::vm.config.listCardsActive }}</ion-item>
+            <ion-item ng-if="vm.filteredCardsActive.length > 0" class="item-divider active">{{ ::vm.config.listCardsActive }}</ion-item>
             <card-list-item class="component-list-item"
                             card="card"
                             ng-repeat="card in vm.filteredCardsActive = ( vm.cards.active | filter : vm.searchFilter : vm.cardsComparator )"></card-list-item>
 
             <!-- Suspended Cards: Header, Messaging & Results -->
-            <ion-item ng-hide="vm.filteredCardsSuspended.length == 0" class="item-divider suspended">{{ ::vm.config.listCardsSuspended }}</ion-item>
+            <ion-item ng-if="vm.filteredCardsSuspended.length > 0" class="item-divider suspended">{{ ::vm.config.listCardsSuspended }}</ion-item>
             <card-list-item class="component-list-item"
                             card="card"
                             ng-repeat="card in vm.filteredCardsSuspended = ( vm.cards.suspended | filter : vm.searchFilter : vm.cardsComparator )"></card-list-item>
 
             <!-- Terminated Cards: Header, Messaging & Results -->
-            <ion-item ng-hide="vm.filteredCardsTerminated.length == 0" class="item-divider terminated">{{ ::vm.config.listCardsTerminated }}</ion-item>
+            <ion-item ng-if="vm.filteredCardsTerminated.length > 0" class="item-divider terminated">{{ ::vm.config.listCardsTerminated }}</ion-item>
             <card-list-item class="component-list-item"
                             card="card"
                             collection-repeat="card in vm.filteredCardsTerminated = ( vm.cards.terminated | filter : vm.searchFilter : vm.cardsComparator )"></card-list-item>
