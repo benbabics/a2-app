@@ -1,23 +1,14 @@
 page-login {
 
   $checkbox-size: 16px;
-  $small-device: 480px;
 
   /**
-   * Alerts
+   * Styles to apply when keyboard is open
   **/
-  .alerts-wrapper {
-    position: absolute;
-    width: 100%;
+  .keyboard-open {
 
-    .bar {
-      position: relative;
-    }
-
-    @media (max-height: $small-device) {
-      @at-root .keyboard-open & {
-        display: none;
-      }
+    #enrollment-link {
+      visibility: hidden;
     }
   }
 
@@ -25,39 +16,27 @@ page-login {
    * Content
   **/
   .scroll-content {
-    $scroll-offset: 42px;//$wex-notification-bar-height;
-    $scroll-offset-statusbar-ios: 42px;//$ios-statusbar-height;
-    $scroll-offset-ios: $scroll-offset + $scroll-offset-statusbar-ios;
+    $statusbar-height-ios: 0;
+    $max-banner-height-x: 1.65;
+    $scroll-offset-md: $toolbar-md-height * $max-banner-height-x;
+    $scroll-offset-ios: $toolbar-ios-height * $max-banner-height-x + $statusbar-height-ios;
 
     @include flexbox();
     @include flex-direction(column);
     @include align-items(center);
     @include justify-content(flex-end);
 
-    padding-top: $scroll-offset;
-    padding-left:  16px;
-    padding-right: 16px;
+    padding-top: $toolbar-md-height !important;
     padding-bottom: 0 !important;
     background: white url('../assets/pages/login/background-street.jpg') no-repeat;
     background-size: 100%;
-    //font-family: 'open_sansregular';
 
-    @at-root .platform-ios & {
-      padding-top: $scroll-offset-ios;
+    @at-root .md .has-banner & {
+      padding-top: $scroll-offset-md !important;
     }
 
-    &.has-header, &.has-subheader {
-      top: 0;
-    }
-
-    @at-root .keyboard-open & {
-      @media (max-height: $small-device) {
-        padding-top: 0;
-
-        @at-root .platform-ios & {
-          padding-top: $scroll-offset-statusbar-ios;
-        }
-      }
+    @at-root .ios .has-banner & {
+      padding-top: $scroll-offset-ios !important;
     }
 
     #title-heading-bar {
@@ -152,20 +131,12 @@ page-login {
         &[disabled] {
           opacity: .7;
         }
-
-        @media (max-height: $small-device) {
-          margin: 0;
-        }
       }
     }
 
     #enrollment-link {
       width: 100%;
       height: 5%;
-
-      @at-root .keyboard-open & {
-        visibility: hidden;
-      }
 
       button {
         color: color($colors, login);

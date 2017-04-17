@@ -11,6 +11,7 @@
 
 
 wex-banner {
+
   .banner-content {
     @include flexbox();
     @include align-items(center);
@@ -24,15 +25,19 @@ wex-banner {
     font-weight: bold;
   }
 
-  ion-toolbar[bannerStyle="Success"] {
-    @include wex-banner-style(color($colors, success), color($colors, success-dark));
-  }
+  ion-toolbar {
+    padding: 0 !important;
 
-  ion-toolbar[bannerStyle="Error"] {
-    @include wex-banner-style(color($colors, danger), color($colors, danger-dark));
-  }
+    &[bannerStyle="Success"] {
+      @include wex-banner-style(color($colors, success), color($colors, success-dark));
+    }
 
-  ion-toolbar[bannerStyle="Warning"] {
-    @include wex-banner-style(color($colors, warning), color($colors, warning-dark));
+    &[bannerStyle="Error"] {
+      @include wex-banner-style(color($colors, danger), color($colors, danger-dark));
+    }
+
+    &[bannerStyle="Warning"] {
+      @include wex-banner-style(color($colors, warning), color($colors, warning-dark));
+    }
   }
 }

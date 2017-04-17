@@ -1,4 +1,4 @@
-import { WexNavBar } from "../../components/wex-nav-bar/wex-nav-bar";
+import { WexNavBar, WexAppBannerController } from "../../components";
 import { UserCredentials } from "./../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
@@ -12,6 +12,15 @@ import {
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { Value } from "../../decorators/value";
 import { Dialogs } from "@ionic-native/dialogs";
+import { Response } from "@angular/http";
+
+export type LoginPageNavParams = keyof {
+  fromLogOut
+};
+
+export namespace LoginPageNavParams {
+  export const fromLogOut: LoginPageNavParams = "fromLogOut";
+}
 
 declare const cordova: any;
 
@@ -41,7 +50,8 @@ export class LoginPage extends Page {
     private sessionManager: SessionManager,
     private fingerprint: Fingerprint,
     private localStorageService: LocalStorageService,
-    private dialogs: Dialogs
+    private dialogs: Dialogs,
+    private appBannerController: WexAppBannerController
   ) {
     super("Login");
   }
@@ -131,6 +141,8 @@ export class LoginPage extends Page {
       this.isLoggingIn = true;
       this.user.username = this.user.username.toLowerCase();
 
+      this.appBannerController.clear();
+
       this.sessionManager.initSession(this.user, { authenticationMethod })
         .finally(() => this.isLoggingIn = false)
         .subscribe(() => {
@@ -138,8 +150,16 @@ export class LoginPage extends Page {
 
           //Transition to the main app
           this.navCtrl.setRoot(WexNavBar);
+        }, (error: Response) => {
+          let errorCode: string = error.json().error_description;
+
+          this.appBannerController.error(this.getLoginErrorDisplayText(errorCode));
         });
     }
+  }
+
+  private getLoginErrorDisplayText(errorCode: string): string {
+    return _.get(this.CONSTANTS.serverErrors, errorCode, this.CONSTANTS.serverErrors.DEFAULT);
   }
 
   private rememberUsername(shouldRemember: boolean, username?: string) {
@@ -187,7 +207,7 @@ export class LoginPage extends Page {
     // Check the status of fingerprint authentication
     this.doFingerprintAuthCheck()
       .then(() => {
-        if (this.fingerprintProfileAvailable /*&& !$stateParams.logOut*/) {
+        if (this.fingerprintProfileAvailable && !this.navParams.get(LoginPageNavParams.fromLogOut)) {
           //show the fingerprint prompt
           this.login(true);
         }
