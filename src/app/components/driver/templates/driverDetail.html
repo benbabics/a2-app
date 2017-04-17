@@ -13,7 +13,7 @@
 
         <div class="content-driver-status">{{ vm.driver.status }}</div>
 
-        <div class="content-controls" ng-hide="vm.driver.shared">
+        <div class="content-controls" ng-if="!vm.driver.shared">
             <button class="button-primary button-control"
                     ng-disabled="vm.isChangeStatusLoading"
                     ng-click="vm.handleClickChangeStatus()">

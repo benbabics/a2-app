@@ -1,0 +1,9 @@
+.action-sheet {
+  .platform-android & {
+    .button {
+      padding-left:  16px;
+      padding-right: 16px;
+      font-weight: normal;
+    }
+  }
+}
