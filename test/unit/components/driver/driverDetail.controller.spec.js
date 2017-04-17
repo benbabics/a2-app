@@ -99,7 +99,7 @@
             });
         });
 
-        xdescribe("has a goToTransactionActivity function that", () => {
+        describe("has a goToTransactionActivity function that", () => {
             beforeEach(() => {
                 spyOn( $state, "go" ).and.stub();
 
@@ -114,7 +114,7 @@
             it("should call $state.go with the expected values", () => {
                 expect( $state.go ).toHaveBeenCalledWith("transaction.filterBy", {
                     filterBy:    "driver",
-                    filterValue: mockDriver.driverId
+                    filterValue: mockDriver.promptId
                 });
             });
         });

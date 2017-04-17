@@ -24,7 +24,7 @@
                 .then(() => {
                     $state.go("transaction.filterBy", {
                         filterBy:    "driver",
-                        filterValue: vm.driver.driverId
+                        filterValue: vm.driver.promptId
                     });
                 });
         }
