@@ -5,7 +5,7 @@
     // jshint maxparams:7
 
     /* @ngInject */
-    function DriverListController(_, $rootScope, $scope, globals, $controller, $cordovaKeyboard, PlatformUtil, UserManager, DriverManager, Logger) {
+    function DriverListController(_, $rootScope, $scope, globals, $controller, $cordovaKeyboard, $ionicScrollDelegate, PlatformUtil, UserManager, DriverManager, Logger) {
         var vm = this;
 
         vm.config        = globals.DRIVER_LIST.CONFIG;
@@ -128,6 +128,7 @@
 
         function listRefreshComplete() {
             $scope.$broadcast( "scroll.refreshComplete" );
+            $ionicScrollDelegate.resize();
         }
 
         function handleSwiping() {
