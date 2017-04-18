@@ -19,6 +19,35 @@
     }
   }
 
+  .company-details,
+  .account-overview {
+    .card .item {
+      &.item-divider {
+        min-height: auto;
+        text-transform: uppercase;
+        font-size: 12px;
+        font-family: 'open_sanssemibold';
+        color: #ccc;
+        background-color: transparent;
+        border: none;
+
+        + .item { margin-top: 8px; }
+
+        + .item,
+        ~ .list .item {
+          border-top:    none;
+          border-bottom: none;
+        }
+      }
+    }
+  }
+  .company-details .card .item.item-divider + .item {
+    .account-number { font-size: 12px; }
+  }
+  .account-overview .card .item.item-divider {
+    padding: 8px 16px;
+  }
+
   .company-details {
     .card {
       display: table;

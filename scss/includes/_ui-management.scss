@@ -104,7 +104,10 @@
       border: none;
       border-top: 1px solid #ccc;
 
-      .item-content { text-transform: capitalize; }
+      .item-content {
+        text-transform: capitalize;
+        &.activated { @extend %list-item-activated; }
+      }
       .item-content .row { align-items: center; }
     }
 
