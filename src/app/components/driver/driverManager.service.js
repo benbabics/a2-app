@@ -121,8 +121,8 @@
             return drivers;
         }
 
-        function updateStatus(accountId, driverId, newStatus) {
-            return DriversResource.postStatusChange( accountId, driverId, newStatus )
+        function updateStatus(accountId, driverId, newStatus, promptId) {
+            return DriversResource.postStatusChange( accountId, driverId, newStatus, promptId )
                 .then(response => {
                     if ( response && response.data ) {
                         var cachedDriver = _.find( drivers, { driverId } );
