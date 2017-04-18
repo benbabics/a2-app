@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    fdescribe("A WEX Phone Formatting Filter", () => {
+    describe("A WEX Phone Formatting Filter", () => {
 
         var wexPhoneFormattingFilter;
 
