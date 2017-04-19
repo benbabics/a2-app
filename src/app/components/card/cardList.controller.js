@@ -129,7 +129,12 @@
 
         function handleSwiping() {
             let isKeyboardVisible = PlatformUtil.platformHasCordova() && $cordovaKeyboard.isVisible();
-            if ( isKeyboardVisible ) { $cordovaKeyboard.close(); }
+            if ( isKeyboardVisible ) {
+                $cordovaKeyboard.close();
+
+                // force blur on input, if active
+                document.activeElement && document.activeElement.blur();
+            }
         }
     }
 
