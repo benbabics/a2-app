@@ -917,34 +917,6 @@
       }
     };
 
-    appGlobals.BRANDS = {
-        "GENERIC": [
-            {
-                "assetSubtypeId" : "GOOGLE_ANALYTICS_TRACKING_ID",
-                "assetTypeId"    : "TEXT",
-                "assetValue"     : "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_GENERIC@@@",
-                "brandAssetId"   : "32",
-                "clientBrandName": "GENERIC",
-                "links": []
-            }
-        ],
-        "WEX"    : [
-            {
-                "assetSubtypeId" : "BRAND_LOGO",
-                "assetTypeId"    : "FILE",
-                "assetValue"     : "wex_logo.svg",
-                "brandAssetId"   : "15",
-                "clientBrandName": "WEX",
-                "links": [
-                    {
-                        "rel": "self",
-                        "href": "img/brands/wex/brand_logo/wex_logo.svg"
-                    }
-                ]
-            }
-        ]
-    };
-
     appGlobals.MODAL_TYPES = {
         FINGERPRINT_AUTH_TERMS: {
             "templateUrl": "app/components/user/auth/templates/fingerprintAuthTerms.html",
@@ -1040,6 +1012,8 @@
     };
 
     appGlobals.USER_IDLE_TIMEOUT = 900; //in seconds
+
+    appGlobals.GENERIC_TRACKING_ID = "@@@STRING_REPLACE_GOOGLE_ANALYTICS_TRACKING_ID_GENERIC@@@";
 
     angular
         .module("app.components.core")
