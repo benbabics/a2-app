@@ -125,7 +125,7 @@
             return DriversResource.postStatusChange( accountId, driverId, newStatus, promptId )
                 .then(response => {
                     if ( response && response.data ) {
-                        var cachedDriver = _.find( drivers, { driverId } );
+                        var cachedDriver = _.find( drivers, { promptId } );
 
                         if ( cachedDriver ) {
                             // update the existing driver object in the cache
