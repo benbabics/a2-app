@@ -13,7 +13,7 @@
 
             <div ng-hide="driver.isGreekLoading">
                 <a class="item-content" ui-sref="transaction.filterBy({filterBy: 'driver', filterValue: driver.promptId})" wex-click>
-                    <span class="greek-block">{{ driver.lastName }}, {{ driver.firstName }}</span>
+                    <span class="text-ellipsis greek-block">{{ driver.lastName }}, {{ driver.firstName }}</span>
                     <i class="icon fa fa-chevron-right"></i>
                 </a>
             </div>
