@@ -1,7 +1,18 @@
+import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component } from "@angular/core";
-import { NavParams, NavController } from "ionic-angular";
+import { NavParams, NavController, App } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
-import { Card } from "../../../models";
+import { Card, CardStatus } from "../../../models";
+
+export type CardsDetailsNavParams = keyof {
+  card,
+  reissued
+};
+
+export namespace CardsDetailsNavParams {
+  export const Card: CardsDetailsNavParams = "card";
+  export const Reissued: CardsDetailsNavParams = "reissued";
+}
 
 @Component({
   selector: "page-cards-details",
@@ -10,11 +21,17 @@ import { Card } from "../../../models";
 export class CardsDetailsPage extends DetailsPage {
 
   public card: Card;
+  public reissued: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private app: App) {
     super("Cards.Details", navCtrl);
 
-    this.card = this.navParams.get("card");
+    this.card = this.navParams.get(CardsDetailsNavParams.Card);
+    this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);
+  }
+
+  public get canReissue(): boolean {
+    return this.card.details.status !== CardStatus.TERMINATED;
   }
 
   public get statusColor(): string {
@@ -23,5 +40,9 @@ export class CardsDetailsPage extends DetailsPage {
 
   public get statusIcon(): string {
     return this.CONSTANTS.STATUS.ICON[this.card.details.status] || "information-circled";
+  }
+
+  public goToReissuePage() {
+    this.app.getRootNav().push(CardsReissuePage, { card: this.card });
   }
 }

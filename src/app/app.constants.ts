@@ -120,6 +120,8 @@ export namespace ConstantsInfo {
           actions: "Actions",
           viewTransactions: "View Transactions",
           reissueCard: "Reissue Card",
+          reissueMessage: "Your card has been reissued.",
+          reissueMessageDuration: 5000, //ms
 
           STATUS: {
             COLOR: {

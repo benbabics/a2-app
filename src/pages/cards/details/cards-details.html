@@ -5,6 +5,9 @@
 </ion-header>
 
 <ion-content>
+  <wex-snackbar *ngIf="reissued" [text]="CONSTANTS.reissueMessage" [dismissAfter]="CONSTANTS.reissueMessageDuration">
+  </wex-snackbar>
+
   <ion-card id="card-card-details">
     <ion-card-header>{{ CONSTANTS.details }}</ion-card-header>
 
@@ -31,8 +34,8 @@
         <ion-icon class="fa fa-exchange"></ion-icon>
         {{ CONSTANTS.viewTransactions }}
       </button>
-      <button ion-button icon-left block>
-        <ion-icon class="fa fa-credit-card"></ion-icon>
+      <button *ngIf="canReissue" ion-button icon-left block (click)="goToReissuePage()">
+        <ion-icon class="fa fa-refresh"></ion-icon>
         {{ CONSTANTS.reissueCard }}
       </button>
     </ion-list>
