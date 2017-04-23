@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <wex-list-item>
+      <span text-wrap text-left>{{ CONSTANTS.shippingAddress }}</span>
+      <span text-wrap text-right>
+        {{ shippingAddress.fullName }}
+        <br *ngIf="shippingAddress.details.companyName">
+        {{ shippingAddress.details.companyName }}
+        <br *ngIf="shippingAddress.details.addressLine1">
+        {{ shippingAddress.details.addressLine1 }}
+        <br *ngIf="shippingAddress.details.addressLine2">
+        {{ shippingAddress.details.addressLine2 }}
+        <br *ngIf="shippingAddress.details.city && shippingAddress.details.state">
+        {{ shippingAddress.details.city }}, {{ shippingAddress.details.state }}
+        <br *ngIf="shippingAddress.details.postalCode">
+        {{ shippingAddress.details.postalCode }}
+      </span>
+    </wex-list-item>
+
+    <wex-list-item (click)="onSelectShippingMethod()">
+      <span text-wrap text-left>{{ CONSTANTS.shippingMethod }}</span>
+      <a text-wrap text-right>{{ selectedShippingMethod.getDisplayName(true) }}</a>
+    </wex-list-item>
+
+    <wex-list-item (click)="onSelectReissueReason()">
+      <span text-wrap text-left>{{ CONSTANTS.reason }}</span>
+      <a text-wrap text-right>
+        <span *ngIf="reissueReason">{{ reissueReasonDisplayName }}</span>
+        <span *ngIf="!reissueReason">{{ CONSTANTS.selectReason }}</span>
+      </a>
+    </wex-list-item>
+  </ion-list>
+
+  <wex-info-card>{{ CONSTANTS.orderInfoMessage }}</wex-info-card>
+
+  <wex-info-card *ngIf="shippingAddress.isPoBox">{{ CONSTANTS.poBoxInfoMessage }}</wex-info-card>
+</ion-content>
+
+<ion-footer>
+  <button ion-button full large id="button-reissue" [disabled]="!canReissue" (click)="onConfirmReissue()">
+    <action-indicator large [when]="isReissuing">{{ CONSTANTS.reissueCard }}</action-indicator>
+  </button>
+</ion-footer>

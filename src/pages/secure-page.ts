@@ -4,7 +4,7 @@ import { Session } from "../models";
 
 export abstract class SecurePage extends Page {
 
-  ionViewCanEnter(): boolean {
+  ionViewCanEnter(): Promise<any> | boolean {
     return SessionManager.hasActiveSession; //TODO check if session is valid
   }
 

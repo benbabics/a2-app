@@ -11,18 +11,25 @@
 
 wex-list-item {
 
-  & .item .item-inner ion-label {
+  .item .item-inner ion-label {
     @extend %wex-list-item-content;
 
     padding: 1rem 0;
   }
 
   //chevron icon
-  & .wex-list-arrow {
+  .wex-list-arrow {
     color: color($colors, primary);
   }
 
-  &:not([active]) .wex-list-arrow {
-    display: none;
+  &:not([active]) {
+
+    .wex-list-arrow {
+      display: none;
+    }
+
+    .item, .button-effect {
+      background-color: color($colors, white) !important;
+    }
   }
 }

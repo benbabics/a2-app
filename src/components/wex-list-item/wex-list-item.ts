@@ -5,5 +5,5 @@ import { Component, Input } from "@angular/core";
   templateUrl: "wex-list-item.html"
 })
 export class WexListItem {
-  @Input() active: boolean;
+  @Input() active: null | undefined;
 }

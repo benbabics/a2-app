@@ -17,6 +17,20 @@ export interface CardSearchOptions {
     pageNumber?: number;
 }
 
+export type CardUpdateType = keyof {
+  reissue
+};
+
+export namespace CardUpdateType {
+  export const Reissue: CardUpdateType = "reissue";
+}
+
+export interface CardUpdateRequest {
+  updateType: CardUpdateType;
+  reissueReason?: string;
+  shippingMethodId?: string;
+}
+
 @Injectable()
 export class CardProvider extends AmrestProvider {
 
@@ -27,7 +41,7 @@ export class CardProvider extends AmrestProvider {
   }
 
   public search(accountId: string, searchOptions?: CardSearchOptions): Observable<Card[]> {
-    return this.http.get(this.accountEndpoint(this.CARDS.SEARCH, accountId), { search: this.searchParamsFromObject(searchOptions) })
+    return this.http.get(this.accountEndpoint(this.CARDS.BASE, accountId), { search: this.searchParamsFromObject(searchOptions) })
       .map((response: Response): Card[] | ErrorObservable<any> => {
         let json: any = response.json();
         let data: Card.Details[] = json.data;
@@ -36,7 +50,22 @@ export class CardProvider extends AmrestProvider {
           return data.map<Card>((details: Card.Details) => new Card(details));
         }
         else {
-          return this.handleRequestError(json);
+          return this.handleRequestError(response);
+        }
+      })
+      .catch(this.handleRequestError);
+  }
+
+  public update(accountId: string, cardId: string, updateRequest: CardUpdateRequest): Observable<Card> {
+    return this.http.post(this.accountEndpoint(this.CARDS.BASE, accountId, cardId), updateRequest)
+      .map((response: Response): Card | ErrorObservable<any> => {
+        let data: Card.Details = response.json();
+
+        if (data) {
+          return new Card(data);
+        }
+        else {
+          return this.handleRequestError(response);
         }
       })
       .catch(this.handleRequestError);

@@ -8,24 +8,27 @@ export namespace ConstantsInfo {
     ENV: Environment,
     PLATFORM: "%%=PLATFORM%%",
     LOCALE: "en-US",
+    //# Storage
     STORAGE: {
       ID: "FLEET_MANAGER-",
       KEYS: {
         USERNAME: "USERNAME"
       }
     },
+    //# OAuth
     AUTH: {
       client_id: "mobileAccountManagement",
       grant_type: "password",
       scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id",
     },
+    //# REST service config info
     APIS: {
       AMREST: {
         ENDPOINTS: {
           ACCOUNTS: {
             BASE: "accounts",
             CARDS: {
-              SEARCH: "cards"
+              BASE: "cards"
             },
             DRIVERS: "drivers",
             INVOICES: {
@@ -46,21 +49,26 @@ export namespace ConstantsInfo {
         }
       }
     },
+    //# Components
     COMPONENTS: {
       LIST: {
         emptySearchLabel: "No Records Found"
       }
     },
+    //# Currency
     CURRENCY: {
       FORMAT: "USD"
     },
+    //# Date/Time
     DATETIME: {
       DATE_FORMAT: "MM/DD/YYYY",
       LOCALE: "en-US"
     },
+    //# Fingerprint Authentication
     FINGERPRINT: {
       defaultDialogMessage: "Scan your fingerprint below to enter your account"
     },
+    //# App Navigation
     NAVIGATION: {
       LABELS: {
         "login": "Login",
@@ -71,6 +79,25 @@ export namespace ConstantsInfo {
         "drivers": "Drivers"
       }
     },
+    //# Buttons
+    BUTTONS: {
+      OK: "Ok",
+      CANCEL: "Cancel",
+      YES: "Yes",
+      NO: "No"
+    },
+    //# Card
+    CARD: {
+      REISSUE_REASON: {
+        DISPLAY_NAMES: {
+          "DAMAGED": "Damaged",
+          "LOST": "Lost",
+          "STOLEN": "Stolen",
+          "UNKNOWN": "Unknown"
+        }
+      }
+    },
+    //# App Pages
     PAGES: {
       //# Cards page
       CARDS: {
@@ -117,6 +144,22 @@ export namespace ConstantsInfo {
               embossingValue1: "Optional Embossing",
             }
           }
+        },
+
+        //# Card Reissue page
+        REISSUE: {
+          title: "Reissue Card",
+          shippingAddress: "Shipping Address",
+          shippingMethod: "Shipping Method",
+          reason: "Reason",
+          selectReason: "Select Reason",
+          selectShippingMethod: "Select Shipping Method",
+          reissueCard: "Reissue Card",
+          reissueConfirmationTitle: "Confirmation",
+          reissueConfirmationMessage: "Are you sure you want to reissue this card?",
+          reissueError: "An error has occurred while trying to reissue your card.",
+          orderInfoMessage: "Orders received after 3:00pm Eastern Time may be processed the next business day.",
+          poBoxInfoMessage: "Please Note: You have a P.O. Box address listed. Your card will be delivered via regular mail."
         }
       },
 
