@@ -18,7 +18,12 @@ import {
   WexNavBar,
   WexStaticListPage,
   WexGreeking,
-  WexDetailsView
+  WexDetailsView,
+  WexInfoCard,
+  WexBanner,
+  WexAppBannerController,
+  WexAppBanner,
+  WexSnackbar
 } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
@@ -37,11 +42,13 @@ import {
   Fingerprint,
   AndroidFingerprintService,
   IosFingerprintService,
-  MockFingerprintService
+  MockFingerprintService,
+  AccountProvider
 } from "../providers";
 import { WexCurrency, WexDate } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
 import { LocalStorageModule } from "angular-2-local-storage";
+import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
 
 @NgModule({
   declarations: [
@@ -52,6 +59,7 @@ import { LocalStorageModule } from "angular-2-local-storage";
     LandingPage,
     CardsPage,
     CardsDetailsPage,
+    CardsReissuePage,
     PaymentsPage,
     ActionIndicator,
     WexCurrency,
@@ -64,7 +72,11 @@ import { LocalStorageModule } from "angular-2-local-storage";
     WexGreeking,
     WexDetailsView,
     WexCardNumberPipe,
-    OptionsPopoverPage
+    OptionsPopoverPage,
+    WexInfoCard,
+    WexBanner,
+    WexAppBanner,
+    WexSnackbar
   ],
   imports: [
     //# ionic
@@ -82,6 +94,7 @@ import { LocalStorageModule } from "angular-2-local-storage";
     LandingPage,
     CardsPage,
     CardsDetailsPage,
+    CardsReissuePage,
     PaymentsPage,
     WexNavBar,
     OptionsPopoverPage
@@ -107,6 +120,7 @@ import { LocalStorageModule } from "angular-2-local-storage";
     UserProvider,
     CardProvider,
     PaymentProvider,
+    AccountProvider,
     SessionManager,
     NavBarController,
     SecureStorage,
@@ -114,7 +128,8 @@ import { LocalStorageModule } from "angular-2-local-storage";
     Fingerprint,
     AndroidFingerprintService,
     IosFingerprintService,
-    MockFingerprintService
+    MockFingerprintService,
+    WexAppBannerController
   ]
 })
 export class AppModule {}
