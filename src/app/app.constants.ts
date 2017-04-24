@@ -43,6 +43,11 @@ export namespace ConstantsInfo {
           }
         }
       },
+      GATEKEEPER: {
+        ENDPOINTS: {
+          BRAND_LOGO: "logo"
+        }
+      },
       KEYMASTER: {
         ENDPOINTS: {
           TOKEN: "uaa/oauth/token"
@@ -291,6 +296,9 @@ ConstantsInfo.Env.set("local", {
     AMREST: {
       BASE_URL: "http://127.0.0.1:20080"
     },
+    GATEKEEPER: {
+      BASE_URL: "http://127.0.0.1:29080"
+    },
     KEYMASTER: {
       BASE_URL: "http://127.0.0.1:26080"
     }
@@ -304,6 +312,9 @@ ConstantsInfo.Env.set("dit", {
   APIS: {
     AMREST: {
       BASE_URL: "http://pwm-wex-178.wrightexpress.com:20080"
+    },
+    GATEKEEPER: {
+      BASE_URL: "http://pwm-wex-178.wrightexpress.com:29080"
     },
     KEYMASTER: {
       BASE_URL: "http://pwm-wex-178.wrightexpress.com:26080"
@@ -319,6 +330,9 @@ ConstantsInfo.Env.set("stage-wex", {
     AMREST: {
       BASE_URL: "https://uat.account.wexmobile.com/maintenance"
     },
+    GATEKEEPER: {
+      BASE_URL: "https://uat.account.wexmobile.com/configurationAPI"
+    },
     KEYMASTER: {
       BASE_URL: "https://uat.account.wexmobile.com/authAPI"
     }
@@ -332,6 +346,9 @@ ConstantsInfo.Env.set("production-wex", {
   APIS: {
     AMREST: {
       BASE_URL: "https://account.wexmobile.com/maintenance"
+    },
+    GATEKEEPER: {
+      BASE_URL: "https://account.wexmobile.com/configurationAPI"
     },
     KEYMASTER: {
       BASE_URL: "https://account.wexmobile.com/authAPI"

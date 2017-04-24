@@ -11,10 +11,21 @@ page-landing {
 
   #company-details {
 
-     .company-name {
-       font-weight: bold;
-       color: color($colors, dark-gray);
-     }
+    #company-details-content {
+      @include flexbox();
+      @include flex-direction(row);
+      @include align-items(flex-start);
+    }
+
+    #brand-logo {
+      width: 50%;
+    }
+
+    #company-name {
+      font-weight: bold;
+      font-size: $h6-font-size;
+      color: color($colors, dark-gray);
+    }
   }
 
   #account-overview {

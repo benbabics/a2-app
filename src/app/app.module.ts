@@ -43,9 +43,10 @@ import {
   AndroidFingerprintService,
   IosFingerprintService,
   MockFingerprintService,
-  AccountProvider
+  AccountProvider,
+  BrandProvider
 } from "../providers";
-import { WexCurrency, WexDate } from "../pipes";
+import { WexCurrency, WexDate, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
@@ -76,7 +77,9 @@ import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
     WexInfoCard,
     WexBanner,
     WexAppBanner,
-    WexSnackbar
+    WexSnackbar,
+    WexSvgPipe,
+    WexTrustedHtmlPipe
   ],
   imports: [
     //# ionic
@@ -121,6 +124,7 @@ import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
     CardProvider,
     PaymentProvider,
     AccountProvider,
+    BrandProvider,
     SessionManager,
     NavBarController,
     SecureStorage,

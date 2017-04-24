@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { InvoiceProvider } from "../../providers";
+import { InvoiceProvider, BrandProvider } from "../../providers";
 import { Component } from "@angular/core";
 import { NavController, NavParams, PopoverController } from "ionic-angular";
 import { Company, InvoiceSummary } from "../../models";
@@ -35,17 +35,17 @@ export class LandingPage extends SecurePage {
   public scheduledPaymentsCount = 0;
   public chartDisplay: ChartDisplayConfig;
   public chart: ChartConfig;
+  public brandLogoData: string;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private invoiceProvider: InvoiceProvider,
-    private popoverCtrl: PopoverController
+    private popoverCtrl: PopoverController,
+    private brandProvider: BrandProvider
   ) {
     super("Landing");
   }
-
-  ionViewDidEnter() {  }
 
   private createChartDisplayConfiguration(): ChartDisplayConfig {
     let datasets: ChartDisplayConfig = { collection: [], left: [], right: [] },
@@ -106,6 +106,9 @@ export class LandingPage extends SecurePage {
         this.chartDisplay = this.createChartDisplayConfiguration();
         this.chart = this.createChartConfiguration();
       });
+
+    this.brandProvider.logo(this.session.details.user.details.brand)
+      .subscribe((brandLogoData: string) => this.brandLogoData = brandLogoData);
   }
 
   public onShowOptions($event) {

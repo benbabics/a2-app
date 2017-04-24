@@ -26,21 +26,21 @@
 
   <section id="company-details">
     <ion-card>
-      <!--<div class="card-detail">-->
-        <ion-item-divider>
-          <!-- TODO replace when lastName is returned from service
-          {{ session.details.user.fullName }}
-          -->
-          Rick Sanchez
-        </ion-item-divider>
+      <ion-item-divider>
+        <!-- TODO replace when lastName is returned from service
+        {{ session.details.user.fullName }}
+        -->
+        Rick Sanchez
+      </ion-item-divider>
+      <ion-card-content id="company-details-content">
         <ion-item text-wrap>
-          <p class="company-name">{{ session.details.user.billingCompany.details.name }}</p>
-          <p class="account-number">{{ session.details.user.displayAccountNumber }}</p>
+          <p id="company-name">{{ session.details.user.billingCompany.details.name }}</p>
+          <p id="account-number">{{ session.details.user.displayAccountNumber }}</p>
         </ion-item>
-      <!--</div>-->
-      <!-- <div class="logo" wex-cache ng-model="brandLogo" ng-show="brandLogo">
-        <div ng-bind-html="brandLogo | wexSvg"></div>
-      </div> -->
+        <ion-item id="brand-logo" *ngIf="brandLogoData">
+          <div [innerHTML]="brandLogoData | wexSvg"></div>
+        </ion-item>
+      </ion-card-content>
     </ion-card>
   </section>
 
