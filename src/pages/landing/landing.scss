@@ -1,5 +1,4 @@
 page-landing {
-  //@extend %ui-page;
 
   section {
     margin-bottom: 10px;
@@ -10,59 +9,6 @@ page-landing {
     margin-left: 1px;
   }
 
-  /*.item {
-    .badge {
-      color: #888;
-      font-size: 12px;
-      font-weight: 300;
-      text-transform: uppercase;
-    }
-  }
-
-  .company-details {
-    .card {
-      display: table;
-      width: 100%;
-      border-collapse: collapse;
-
-      .card-detail, .logo {
-        display: table-cell;
-        padding: 10px 13px;
-      }
-
-      .logo {
-        padding-left: 0;
-        text-align: right;
-        vertical-align: middle;
-        width: 35%;
-      }
-
-      .item {
-        padding: 0;
-      }
-    }
-
-    .company-name,
-    .account-number {
-      margin-bottom: 0;
-      @extend .color-gray-dark;
-    }
-    .company-name {
-      @extend .text-lg;
-    }
-    .account-number {
-      @extend .text-sm;
-    }
-  }
-
-  .account-overview {
-
-    [wex-cache] {
-      min-height: 15vh;
-    }
-  }
-  }*/
-
   #company-details {
 
      .company-name {
@@ -72,6 +18,13 @@ page-landing {
   }
 
   #account-overview {
+
+    action-indicator [loading="true"] {
+      @include flexbox();
+      @include align-items(center);
+      @include justify-content(center);
+      min-height: 15vh;
+    }
 
     ion-list {
       animation:         linksFade 2s 1 forwards;
