@@ -29,7 +29,7 @@ export class BrandProvider extends ApiProvider {
       return Observable.of(cachedData);
     }
 
-    return this.http.get([this.BASE_URL, this.BRAND_LOGO, [cacheKey, BrandProvider.LOGO_DATA_FORMAT].join(".")].join("/"))
+    return this.http.get([this.BASE_URL, this.BRAND_LOGO, [brandName, BrandProvider.LOGO_DATA_FORMAT].join(".")].join("/"))
       .map((response: Response) => {
         let data = response.text();
         this.localStorage.set(cacheKey, data);
