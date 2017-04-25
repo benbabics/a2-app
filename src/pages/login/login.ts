@@ -1,5 +1,5 @@
 import { WexNavBar, WexAppBannerController } from "../../components";
-import { UserCredentials } from "./../../models";
+import { UserCredentials, Session } from "./../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { NavParams, Platform, Content, NavController } from "ionic-angular";
@@ -144,6 +144,7 @@ export class LoginPage extends Page {
       this.appBannerController.clear();
 
       this.sessionManager.initSession(this.user, { authenticationMethod })
+        .flatMap(() => this.sessionManager.getSessionInfo([Session.Field.User])) //Pre-fetch the user object for the landing page
         .finally(() => this.isLoggingIn = false)
         .subscribe(() => {
           this.rememberUsername(this.rememberMe, this.user.username);

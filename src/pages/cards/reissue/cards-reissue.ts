@@ -1,18 +1,18 @@
 import { CardsDetailsPage } from "../details/cards-details";
-import { Observable } from "rxjs";
 import * as _ from "lodash";
 import { Component } from "@angular/core";
 import { NavParams, NavController, ActionSheetController, App } from "ionic-angular";
-import { 
-  Address, 
-  Card, 
-  Company, 
-  ShippingMethod, 
-  ShippingCarrier, 
-  CardReissueReason 
+import {
+  Address,
+  Card,
+  Company,
+  ShippingMethod,
+  ShippingCarrier,
+  CardReissueReason,
+  Session
 } from "../../../models";
 import { SecurePage } from "../../secure-page";
-import { AccountProvider, CardProvider, CardUpdateType } from "../../../providers";
+import { AccountProvider, CardProvider, CardUpdateType, SessionManager } from "../../../providers";
 import { Dialogs } from "@ionic-native/dialogs";
 import { WexAppBannerController } from "../../../components";
 import { Value } from "../../../decorators/value";
@@ -28,12 +28,12 @@ export class CardsReissuePage extends SecurePage {
   public readonly CARD_REISSUE_REASONS = [CardReissueReason.DAMAGED, CardReissueReason.LOST, CardReissueReason.STOLEN];
 
   public card: Card;
-  public company: Company;
   public selectedShippingMethod: ShippingMethod = new ShippingMethod();
   public reissueReason: CardReissueReason;
   public isReissuing: boolean = false;
 
   constructor(
+    sessionManager: SessionManager,
     public navCtrl: NavController,
     public navParams: NavParams,
     private accountProvider: AccountProvider,
@@ -43,7 +43,9 @@ export class CardsReissuePage extends SecurePage {
     private app: App,
     private appBannerController: WexAppBannerController
   ) {
-    super("Cards.Reissue");
+    super("Cards.Reissue", sessionManager, [
+      Session.Field.BillingCompany
+    ]);
 
     this.card = this.navParams.get("card");
   }
@@ -60,6 +62,10 @@ export class CardsReissuePage extends SecurePage {
 
   public get canReissue(): boolean {
     return !!this.reissueReason && !!_.get(this.selectedShippingMethod.details, "id");
+  }
+
+  public get company(): Company {
+    return this.session.billingCompany;
   }
 
   public get defaultShippingMethod(): ShippingMethod {
@@ -109,8 +115,10 @@ export class CardsReissuePage extends SecurePage {
       .subscribe((updatedCard) => {
         let cardsNav = this.app.getActiveNav();
 
+        //TODO - Update the list of cached cards
+        //this.sessionManager.getSessionInfo(Session.Field.Cards, { forceRequest: true });
+
         //Show the new details page
-        //TODO - Cache?
         cardsNav.push(CardsDetailsPage, { card: updatedCard, reissued: true })
           .then(() => cardsNav.removeView(this.app.getActiveNav().getPrevious())); //Remove the old details view
 
@@ -123,27 +131,19 @@ export class CardsReissuePage extends SecurePage {
       });
   }
 
-  ionViewCanEnter(): Promise<any> | boolean {
-    if (!super.ionViewCanEnter()) {
-      return false;
-    }
-
-    //get the company info
-    //TODO - Cache the response
-    return this.accountProvider.get(this.session.details.user.billingCompany.details.accountId)
-      .map((company: Company) => this.company = company)
-      .flatMap(() => {
+  ionViewCanEnter(): Promise<boolean> {
+    return super.ionViewCanEnter()
+      .then(() => {
         if (this.shippingAddress.isPoBox && !this.company.hasRegularShippingMethod) {
           //TODO - show user an error
           const error = "Cannot reissue card as the default shipping address is a PO box and user doesn't have regular shipping available";
           console.error(error);
-          return Observable.throw(error);
+          return Promise.reject(error);
         }
         else {
-          return Observable.empty();
+          return Promise.resolve();
         }
-      })
-      .toPromise();
+      });
   }
 
   ionViewDidLoad() {
@@ -152,8 +152,8 @@ export class CardsReissuePage extends SecurePage {
 
   public onConfirmReissue() {
     this.dialogs.confirm(
-      this.CONSTANTS.reissueConfirmationMessage, 
-      this.CONSTANTS.reissueConfirmationTitle, 
+      this.CONSTANTS.reissueConfirmationMessage,
+      this.CONSTANTS.reissueConfirmationTitle,
       [
         this.BUTTONS.YES,
         this.BUTTONS.NO

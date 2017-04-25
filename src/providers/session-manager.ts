@@ -1,11 +1,11 @@
+import { AccountProvider } from "./api/account-provider";
 import { Fingerprint, FingerprintProfile } from "./fingerprint";
 import * as _ from "lodash";
 import { Injectable } from "@angular/core";
-import { Session, User, UserCredentials } from "../models";
+import { Session, UserCredentials, SessionPartial, Model } from "../models";
 import { AuthProvider } from "./api/auth-provider";
 import { UserProvider } from "./api/user-provider";
 import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
 
 export enum SessionAuthenticationMethod {
   Secret,
@@ -22,23 +22,52 @@ export namespace SessionOptions {
   }
 }
 
+export interface SessionInfoOptions {
+  forceRequest?: Session.Field[] | boolean;
+}
+
+export namespace SessionInfoOptions {
+  export const Defaults: SessionInfoOptions = { };
+}
+
+type SessionInfoRequestor<T> = (requiredDetails?: SessionPartial) => Observable<Model<T>>;
+
+type SessionInfoRequestorDictionary = {
+  [sessionField: string]: SessionInfoRequestorDetails;
+};
+
+interface SessionInfoRequestorDetails {
+  requestor: SessionInfoRequestor<any>;
+  requiredFields?: Session.Field[];
+}
+
 @Injectable()
 export class SessionManager {
 
-  private static _currentSession: Session;
+  private static _cachedSession: Session;
 
-  constructor(private authProvider: AuthProvider, private userProvider: UserProvider, private fingerprint: Fingerprint) { }
+  private sessionInfoRequestors: SessionInfoRequestorDictionary = {};
+  private pendingRequests: { [sessionField: string]: Observable<any> } = {};
 
-  public static get currentSession(): Session {
-    return this._currentSession;
+  constructor(
+    private authProvider: AuthProvider,
+    private userProvider: UserProvider,
+    private fingerprint: Fingerprint,
+    private accountProvider: AccountProvider
+  ) {
+    this.registerSessionInfoRequestors();
+  }
+
+  public static get cachedSession(): Session {
+    return this._cachedSession;
   }
 
   public static get hasSession(): boolean {
-    return !!this._currentSession;
+    return !!this.cachedSession;
   }
 
   public static get hasActiveSession(): boolean {
-    return this._currentSession && !!this._currentSession.details.user;
+    return this.hasSession && !!this.cachedSession.user;
   }
 
   private authenticate(userCredentials: UserCredentials, authenticationMethod: SessionAuthenticationMethod): Observable<string> {
@@ -72,27 +101,88 @@ export class SessionManager {
     return secret.flatMap((secret: string) => this.authProvider.requestToken({ username: userCredentials.username, password: secret }));
   }
 
-  public initSession(userCredentials: UserCredentials, options?: SessionOptions): Observable<Session> {
+  private registerSessionInfoRequestors() {
+    this.sessionInfoRequestors[Session.Field.User] = {
+      requestor: () => this.userProvider.current()
+    };
+
+    this.sessionInfoRequestors[Session.Field.BillingCompany] = {
+      requiredFields: [Session.Field.User],
+      requestor: (session: SessionPartial) => Observable.if(() => !!session.user.billingCompany, this.accountProvider.get(session.user.billingCompany.details.accountId), Observable.empty())
+    };
+
+    this.sessionInfoRequestors[Session.Field.UserCompany] = {
+      requiredFields: [Session.Field.User],
+      requestor: (session: SessionPartial) => this.accountProvider.get(session.user.company.details.accountId)
+    };
+  }
+
+  public getSessionInfo(requiredFields?: Session.Field[], options?: SessionInfoOptions): Observable<SessionPartial> {
+    options = _.merge({}, SessionInfoOptions.Defaults, options);
+    requiredFields = _.isNil(requiredFields) ? Session.Field.All : requiredFields;
+    const errorPrefix = "Error: Cannot get session info:";
+
+    if (!SessionManager.hasSession) {
+      return Observable.throw(`${errorPrefix} No active session`);
+    }
+
+    if (requiredFields.length === 0) {
+      return Observable.of(new SessionPartial());
+    }
+
+    // Map each required field to a request to get the value (either from the server or from the cache)
+    return Observable.forkJoin(requiredFields.map<Observable<any>>((requiredField: Session.Field) => {
+      let requestorDetails = this.sessionInfoRequestors[requiredField];
+      let cachedValue = SessionManager._cachedSession.details[requiredField];
+      let pendingRequest = this.pendingRequests[requiredField];
+      let forceRequest = options.forceRequest === true || _.includes(options.forceRequest as Session.Field[], requiredField);
+
+      // Use the existing request if this value is currently being requested
+      if (!!pendingRequest) {
+        return pendingRequest;
+      }
+      // Skip this request if we've already cached this value and we're not forcing a request
+      else if (!!cachedValue && !forceRequest) {
+        return Observable.of(cachedValue);
+      }
+
+      if (_.includes(requestorDetails.requiredFields, requiredField)) {
+        return Observable.throw(`${errorPrefix} Requestor requires a reference to itself.`);
+      }
+
+      // First request any dependencies on this field, then fetch the requested session field value
+      return this.pendingRequests[requiredField] = this.getSessionInfo(requestorDetails.requiredFields || [], options)
+        .flatMap((requiredDetails: SessionPartial) => requestorDetails.requestor(requiredDetails))
+        .map((value: Model<any>): any => SessionManager._cachedSession.details[requiredField] = value.details) // Update the cached session details
+        .finally(() => delete this.pendingRequests[requiredField]) // Remove the pending request
+        .publish().refCount(); // Only execute once
+    })) // Map the values into a SessionPartial object
+      .map((...values: any[]) => new SessionPartial(_.zipObject<any, Partial<Session.Details>>(requiredFields, values[0])));
+  }
+
+  public initSession(userCredentials: UserCredentials, options?: SessionOptions): Observable<string> {
     options = _.merge({}, SessionOptions.Defaults, options);
 
     if (SessionManager.hasSession) {
       this.invalidateSession();
     }
 
-    return this.authenticate(userCredentials, options.authenticationMethod)
-      .flatMap((token: string): Observable<User> => {
-        //create a temporary session to grab the user object
-        SessionManager._currentSession = new Session({ token, user: null });
+    SessionManager._cachedSession = new Session();
 
-        return this.userProvider.current();
-      })
-      .map((user: User): Session => {
-        //create the full session object with the user
-        return SessionManager._currentSession = new Session({ token: SessionManager._currentSession.details.token, user });
+    // Request a new token
+    return this.authenticate(userCredentials, options.authenticationMethod)
+      .map((token: string) => {
+        SessionManager._cachedSession.details.token = token;
+
+        // Pre-fetch remaining session details in the background asynchronously
+        this.getSessionInfo().subscribe();
+
+        return token;
       });
   }
 
   public invalidateSession() {
-    SessionManager._currentSession = null;
+    SessionManager._cachedSession = null;
+    this.pendingRequests = {};
   }
 }

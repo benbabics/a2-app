@@ -1,8 +1,8 @@
 import * as _ from "lodash";
-import { InvoiceProvider, BrandProvider } from "../../providers";
+import { InvoiceProvider, BrandProvider, SessionManager } from "../../providers";
 import { Component } from "@angular/core";
 import { NavController, NavParams, PopoverController } from "ionic-angular";
-import { Company, InvoiceSummary } from "../../models";
+import { Company, InvoiceSummary, User, Session } from "../../models";
 import { SecurePage } from "../secure-page";
 import { OptionsPopoverPage } from "./options-popover/options-popover";
 
@@ -38,13 +38,14 @@ export class LandingPage extends SecurePage {
   public brandLogoData: string;
 
   constructor(
+    sessionManager: SessionManager,
     public navCtrl: NavController,
     public navParams: NavParams,
     private invoiceProvider: InvoiceProvider,
     private popoverCtrl: PopoverController,
     private brandProvider: BrandProvider
   ) {
-    super("Landing");
+    super("Landing", sessionManager);
   }
 
   private createChartDisplayConfiguration(): ChartDisplayConfig {
@@ -99,7 +100,7 @@ export class LandingPage extends SecurePage {
   }
 
   ionViewWillEnter() {
-    this.invoiceProvider.current(this.session.details.user.billingCompany.details.accountId)
+    this.invoiceProvider.current(this.session.user.billingCompany.details.accountId)
       .subscribe((invoiceSummary: InvoiceSummary) => {
         this.invoiceSummary = invoiceSummary;
 
@@ -107,7 +108,7 @@ export class LandingPage extends SecurePage {
         this.chart = this.createChartConfiguration();
       });
 
-    this.brandProvider.logo(this.session.details.user.details.brand)
+    this.brandProvider.logo(this.session.user.details.brand)
       .subscribe((brandLogoData: string) => this.brandLogoData = brandLogoData);
   }
 

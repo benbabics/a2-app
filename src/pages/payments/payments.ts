@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
 import { Component } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
-import { PaymentProvider } from "../../providers";
+import { PaymentProvider, SessionManager } from "../../providers";
 import { StaticListPage, GroupedList } from "../static-list-page";
 import { Payment, PaymentStatus } from "../../models";
 
@@ -16,8 +16,13 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   protected readonly listGroupDisplayOrder: string[] = PaymentsPage.PAYMENT_STATUSES;
   public readonly dividerLabels: string[] = PaymentsPage.PAYMENT_STATUSES.map(PaymentStatus.displayName);
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private paymentProvider: PaymentProvider) {
-    super("Payments");
+  constructor(
+    sessionManager: SessionManager,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private paymentProvider: PaymentProvider
+  ) {
+    super("Payments", sessionManager);
   }
 
   protected groupItems(payments: Payment[]): GroupedList<Payment> {
@@ -29,6 +34,6 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   }
 
   protected search(): Observable<Payment[]> {
-    return this.paymentProvider.search(this.session.details.user.company.details.accountId, {pageSize: 999, pageNumber: 0});
+    return this.paymentProvider.search(this.session.user.company.details.accountId, {pageSize: 999, pageNumber: 0});
   }
 }

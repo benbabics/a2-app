@@ -1,6 +1,8 @@
 import { ViewChild } from "@angular/core";
 import { NavController, Navbar } from "ionic-angular";
 import { SecurePage } from "./secure-page";
+import { SessionManager } from "../providers/session-manager";
+import { Session } from "../models/session";
 
 export abstract class DetailsPage extends SecurePage {
 
@@ -8,8 +10,13 @@ export abstract class DetailsPage extends SecurePage {
 
   private exited = false;
 
-  constructor(pageName: string, protected navCtrl: NavController) {
-    super(pageName);
+  constructor(
+    pageName: string,
+    sessionManager: SessionManager,
+    protected navCtrl: NavController,
+    requiredSessionInfo?: Session.Field[]
+  ) {
+    super(pageName, sessionManager, requiredSessionInfo);
   }
 
   private goBack() {
@@ -26,6 +33,6 @@ export abstract class DetailsPage extends SecurePage {
 
   ionViewDidLeave() {
     // Reset the tab nav stack back to the main list page
-    this.goBack();
+    //this.goBack();
   }
 }

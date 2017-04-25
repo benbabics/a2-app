@@ -1,10 +1,11 @@
 import * as _ from "lodash";
 import { Observable } from "rxjs";
 import { ListPage, GroupedList } from "./list-page";
-import { Model } from "../models";
+import { Model, Session } from "../models";
 import { WexGreeking } from "../components";
 
 export { GroupedList } from "./list-page";
+import { SessionManager } from "../providers/session-manager";
 
 export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extends ListPage {
 
@@ -18,8 +19,13 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   protected greekingData: WexGreeking.Rect[];
   protected greekedElementCount: number;
 
-  constructor(pageName: string, protected searchFilterFields?: (keyof DetailsT)[]) {
-    super(pageName);
+  constructor(
+    pageName: string,
+    sessionManager: SessionManager,
+    protected searchFilterFields?: (keyof DetailsT)[],
+    requiredSessionInfo?: Session.Field[]
+  ) {
+    super(pageName, sessionManager, requiredSessionInfo);
   }
 
   protected abstract sortItems(items: T[]): T[];

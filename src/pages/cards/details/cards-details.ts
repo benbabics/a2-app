@@ -3,6 +3,7 @@ import { Component } from "@angular/core";
 import { NavParams, NavController, App } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
 import { Card, CardStatus } from "../../../models";
+import { SessionManager } from "../../../providers";
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -23,8 +24,13 @@ export class CardsDetailsPage extends DetailsPage {
   public card: Card;
   public reissued: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private app: App) {
-    super("Cards.Details", navCtrl);
+  constructor(
+    sessionManager: SessionManager,
+    navCtrl: NavController,
+    public navParams: NavParams,
+    private app: App
+  ) {
+    super("Cards.Details", sessionManager, navCtrl);
 
     this.card = this.navParams.get(CardsDetailsNavParams.Card);
     this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);

@@ -2,7 +2,7 @@ import { CardsDetailsPage } from "./details/cards-details";
 import { Observable } from "rxjs";
 import { Component } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
-import { CardProvider } from "../../providers";
+import { CardProvider, SessionManager } from "../../providers";
 import { StaticListPage, GroupedList } from "../static-list-page";
 import { Card, CardStatus } from "../../models";
 
@@ -22,8 +22,13 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
   protected readonly listGroupDisplayOrder: string[] = CardsPage.CARD_STATUSES;
   public readonly dividerLabels: string[] = CardsPage.CARD_STATUSES.map(CardStatus.displayName);
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private cardProvider: CardProvider) {
-    super("Cards", CardsPage.SEARCH_FILTER_FIELDS);
+  constructor(
+    sessionManager: SessionManager,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private cardProvider: CardProvider
+  ) {
+    super("Cards", sessionManager, CardsPage.SEARCH_FILTER_FIELDS);
   }
 
   protected groupItems(cards: Card[]): GroupedList<Card> {
@@ -35,7 +40,7 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
   }
 
   protected search(): Observable<Card[]> {
-    return this.cardProvider.search(this.session.details.user.company.details.accountId)
+    return this.cardProvider.search(this.session.user.company.details.accountId)
   }
 
   public goToDetailPage(card: Card) {
