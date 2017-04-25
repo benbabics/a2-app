@@ -31,7 +31,7 @@
             LoadingIndicator.begin();
 
             return UserManager.fetchCurrentUserDetails()
-                .then(setTrackerUserId)
+                .then(sendAnalyticUserDetails)
                 .catch(function (error) {
                     throw new Error("Failed to complete login initialization: " + LoggerUtil.getErrorMessage(error));
                 })
@@ -48,11 +48,12 @@
             return $q.resolve();
         }
 
-        function setTrackerUserId() {
+        function sendAnalyticUserDetails() {
             var user = UserManager.getUser();
 
             //track all events with the user's ID
             AnalyticsUtil.setUserId(user.id);
+            AnalyticsUtil.setUserBrand( user.brand );
         }
 
     }
