@@ -1,9 +1,8 @@
-import { Observable } from "rxjs";
 import { Component } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
-import { PaymentProvider, SessionManager } from "../../providers";
+import { SessionManager } from "../../providers";
 import { StaticListPage, GroupedList } from "../static-list-page";
-import { Payment, PaymentStatus } from "../../models";
+import { Payment, PaymentStatus, Session } from "../../models";
 
 @Component({
   selector: "page-payments",
@@ -13,14 +12,14 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
 
   private static readonly PAYMENT_STATUSES: PaymentStatus[] = [PaymentStatus.SCHEDULED, PaymentStatus.COMPLETE];
 
+  protected readonly listData: Session.Field = Session.Field.Payments;
   protected readonly listGroupDisplayOrder: string[] = PaymentsPage.PAYMENT_STATUSES;
   public readonly dividerLabels: string[] = PaymentsPage.PAYMENT_STATUSES.map(PaymentStatus.displayName);
 
   constructor(
     sessionManager: SessionManager,
     public navCtrl: NavController,
-    public navParams: NavParams,
-    private paymentProvider: PaymentProvider
+    public navParams: NavParams
   ) {
     super("Payments", sessionManager);
   }
@@ -31,9 +30,5 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
 
   protected sortItems(payments: Payment[]): Payment[] {
     return this.defaultItemSort(payments, "id", "asc");
-  }
-
-  protected search(): Observable<Payment[]> {
-    return this.paymentProvider.search(this.session.user.company.details.accountId, {pageSize: 999, pageNumber: 0});
   }
 }

@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import { Observable } from "rxjs";
 import { ListPage, GroupedList } from "./list-page";
-import { Model, Session } from "../models";
+import { Model, Session, SessionPartial } from "../models";
 import { WexGreeking } from "../components";
 
 export { GroupedList } from "./list-page";
@@ -9,6 +9,7 @@ import { SessionManager } from "../providers/session-manager";
 
 export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extends ListPage {
 
+  protected abstract listData: Session.Field;
   protected abstract listGroupDisplayOrder: string[];
   public abstract dividerLabels: string[];
 
@@ -30,25 +31,25 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
 
   protected abstract sortItems(items: T[]): T[];
   protected abstract groupItems(items: T[]): GroupedList<T>;
-  protected abstract search(): Observable<T[]>;
 
   protected get isSearchEnabled(): boolean {
     return !!this.searchFilterFields;
   }
 
-  private fetchResults(): Observable<T[]> {
+  private fetchResults(forceUpdate?: boolean): Observable<T[]> {
     this.fetchingItems = true;
     this.clearList(); //Clear the results for a new search
 
-    return this.search()
+    // get the session info required to display the list
+    return this.sessionManager.getSessionInfo([this.listData], { forceRequest: forceUpdate })
       .finally(() => {
         this.fetchingItems = false;
       })
-      .map((items: T[]) => {
-        this.items = items;
+      .map((sessionDetails: SessionPartial): T[] => {
+        this.items = sessionDetails[this.listData] as T[];
 
         this.updateList();
-        return items;
+        return this.items;
       });
   }
 
@@ -72,7 +73,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     }, {});
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     this.fetchResults().subscribe();
   }
 
@@ -82,9 +83,9 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   }
 
   public onRefresh(refresher) {
-    this.fetchResults()
-    .finally(() => refresher.complete())
-    .subscribe();
+    this.fetchResults(true)
+      .finally(() => refresher.complete())
+      .subscribe();
   }
 
   public get sortedItemLists(): T[][] {

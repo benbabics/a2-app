@@ -115,8 +115,8 @@ export class CardsReissuePage extends SecurePage {
       .subscribe((updatedCard) => {
         let cardsNav = this.app.getActiveNav();
 
-        //TODO - Update the list of cached cards
-        //this.sessionManager.getSessionInfo(Session.Field.Cards, { forceRequest: true });
+        // Force update to the cards list
+        this.sessionManager.getSessionInfo([Session.Field.Cards], { forceRequest: true });
 
         //Show the new details page
         cardsNav.push(CardsDetailsPage, { card: updatedCard, reissued: true })
