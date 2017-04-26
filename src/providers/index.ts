@@ -10,5 +10,6 @@ export * from "./fingerprint";
 export * from "./platform";
 export * from "./secure-http";
 export * from "./secure-storage";
+export * from "./session-info-requestor";
 export * from "./session-manager";
 export * from "./nav-bar-controller";

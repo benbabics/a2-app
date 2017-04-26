@@ -1,6 +1,3 @@
-import { PaymentProvider } from "./api/payment-provider";
-import { CardProvider } from "./api/card-provider";
-import { AccountProvider } from "./api/account-provider";
 import { Fingerprint, FingerprintProfile } from "./fingerprint";
 import * as _ from "lodash";
 import { Injectable } from "@angular/core";
@@ -8,6 +5,7 @@ import { Session, UserCredentials, SessionPartial } from "../models";
 import { AuthProvider } from "./api/auth-provider";
 import { UserProvider } from "./api/user-provider";
 import { Observable } from "rxjs/Observable";
+import { SessionInfoRequestors } from "./session-info-requestor";
 
 export enum SessionAuthenticationMethod {
   Secret,
@@ -32,35 +30,19 @@ export namespace SessionInfoOptions {
   export const Defaults: SessionInfoOptions = { };
 }
 
-type SessionInfoRequestor<T> = (requiredDetails?: SessionPartial) => Observable<T>;
-
-type SessionInfoRequestorDictionary = {
-  [sessionField: string]: SessionInfoRequestorDetails;
-};
-
-interface SessionInfoRequestorDetails {
-  requestor: SessionInfoRequestor<any>;
-  requiredFields?: Session.Field[];
-}
-
 @Injectable()
 export class SessionManager {
 
   private static _cachedSession: Session;
 
-  private sessionInfoRequestors: SessionInfoRequestorDictionary = {};
   private pendingRequests: { [sessionField: string]: Observable<any> } = {};
 
   constructor(
     private authProvider: AuthProvider,
     private userProvider: UserProvider,
     private fingerprint: Fingerprint,
-    private accountProvider: AccountProvider,
-    private cardProvider: CardProvider,
-    private paymentProvider: PaymentProvider
-  ) {
-    this.registerSessionInfoRequestors();
-  }
+    private sessionInfoRequestors: SessionInfoRequestors
+  ) { }
 
   public static get cachedSession(): Session {
     return this._cachedSession;
@@ -102,38 +84,8 @@ export class SessionManager {
       }
     }
 
+    // Request a token with the provided username and secret
     return secret.flatMap((secret: string) => this.authProvider.requestToken({ username: userCredentials.username, password: secret }));
-  }
-
-  //TODO - Abstract these out into a separate service
-  private registerSessionInfoRequestors() {
-    this.sessionInfoRequestors[Session.Field.User] = {
-      requestor: () => this.userProvider.current().map(user => user.details)
-    };
-
-    this.sessionInfoRequestors[Session.Field.BillingCompany] = {
-      requiredFields: [Session.Field.User],
-      requestor: (session: SessionPartial) => Observable.if(() => !!session.user.billingCompany,
-        this.accountProvider.get(session.user.billingCompany.details.accountId).map(company => company.details),
-        Observable.empty()
-      )
-    };
-
-    this.sessionInfoRequestors[Session.Field.UserCompany] = {
-      requiredFields: [Session.Field.User],
-      requestor: (session: SessionPartial) => this.accountProvider.get(session.user.company.details.accountId).map(company => company.details)
-    };
-
-    this.sessionInfoRequestors[Session.Field.Cards] = {
-      requiredFields: [Session.Field.User],
-      requestor: (session: SessionPartial) => this.cardProvider.search(session.user.company.details.accountId).map(cards => cards.map(card => card.details))
-    };
-
-    this.sessionInfoRequestors[Session.Field.Payments] = {
-      requiredFields: [Session.Field.User],
-      requestor: (session: SessionPartial) => this.paymentProvider.search(session.user.company.details.accountId, {pageSize: 999, pageNumber: 0})
-                                                .map(payments => payments.map(payment => payment.details))
-    };
   }
 
   public getSessionInfo(requiredFields?: Session.Field[], options?: SessionInfoOptions): Observable<SessionPartial> {
@@ -151,7 +103,7 @@ export class SessionManager {
 
     // Map each required field to a request to get the value (either from the server or from the cache)
     return Observable.forkJoin(requiredFields.map<Observable<any>>((requiredField: Session.Field) => {
-      let requestorDetails = this.sessionInfoRequestors[requiredField];
+      let requestorDetails = this.sessionInfoRequestors.getRequestor(requiredField);
       let cachedValue = SessionManager._cachedSession.details[requiredField];
       let pendingRequest = this.pendingRequests[requiredField];
       let forceRequest = options.forceRequest === true || _.includes(options.forceRequest as Session.Field[], requiredField);
@@ -177,6 +129,10 @@ export class SessionManager {
         .publish().refCount(); // Only execute once
     })) // Map the values into a SessionPartial object
       .map((...values: any[]) => new SessionPartial(_.zipObject<any, Partial<Session.Details>>(requiredFields, values[0])));
+  }
+
+  public requestSessionInfo(requiredFields?: Session.Field[]): Observable<SessionPartial> {
+    return this.getSessionInfo(requiredFields, { forceRequest: true });
   }
 
   public initSession(userCredentials: UserCredentials, options?: SessionOptions): Observable<string> {

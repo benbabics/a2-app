@@ -44,7 +44,9 @@ import {
   IosFingerprintService,
   MockFingerprintService,
   AccountProvider,
-  BrandProvider
+  BrandProvider,
+  SessionInfoRequestors,
+  DefaultSessionInfoRequestors
 } from "../providers";
 import { WexCurrency, WexDate, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -133,7 +135,11 @@ import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
     AndroidFingerprintService,
     IosFingerprintService,
     MockFingerprintService,
-    WexAppBannerController
+    WexAppBannerController,
+    {
+      provide: SessionInfoRequestors,
+      useClass: DefaultSessionInfoRequestors
+    }
   ]
 })
 export class AppModule {}
