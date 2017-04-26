@@ -1,7 +1,7 @@
 <ion-tabs selectedIndex="0">
-  <ion-tab [root]="LandingPage" tabTitle="{{ CONSTANTS.LABELS.landing }}" tabIcon="home"></ion-tab>
-  <ion-tab [root]="PaymentsPage" tabTitle="{{ CONSTANTS.LABELS.payments }}" tabIcon="fa-bank"></ion-tab>
+  <ion-tab [root]="LandingPage" tabTitle="{{ CONSTANTS.LABELS.landing }}" tabIcon="home" (ionSelect)="resetTab()"></ion-tab>
+  <ion-tab [root]="PaymentsPage" tabTitle="{{ CONSTANTS.LABELS.payments }}" tabIcon="fa-bank" (ionSelect)="resetTab()"></ion-tab>
   <ion-tab tabTitle="{{ CONSTANTS.LABELS.transactions }}" tabIcon="fa-exchange"></ion-tab>
-  <ion-tab [root]="CardsPage" tabTitle="{{ CONSTANTS.LABELS.cards }}" tabIcon="fa-credit-card-alt"></ion-tab>
+  <ion-tab [root]="CardsPage" tabTitle="{{ CONSTANTS.LABELS.cards }}" tabIcon="fa-credit-card-alt" (ionSelect)="resetTab()"></ion-tab>
   <ion-tab tabTitle="{{ CONSTANTS.LABELS.drivers }}" tabIcon="car"></ion-tab>
 </ion-tabs>

@@ -3,6 +3,7 @@ import { CardsPage } from "../../pages/cards/cards";
 import { LandingPage } from "../../pages/landing/landing";
 import { PaymentsPage } from "../../pages/payments/payments";
 import { Value } from "../../decorators/value";
+import { App, Tab } from "ionic-angular";
 
 @Component({
   selector: "wex-nav-bar",
@@ -11,6 +12,8 @@ import { Value } from "../../decorators/value";
 export class WexNavBar {
 
   @Value("NAVIGATION") public CONSTANTS: any;
+
+  constructor(private app: App) { }
 
   public get CardsPage() {
     return CardsPage;
@@ -22,5 +25,13 @@ export class WexNavBar {
 
   public get PaymentsPage() {
     return PaymentsPage;
+  }
+
+  public resetTab() {
+    let activeNav = this.app.getActiveNav();
+
+    if (activeNav instanceof Tab && activeNav.length() > 1) {
+      activeNav.popToRoot();
+    }
   }
 }
