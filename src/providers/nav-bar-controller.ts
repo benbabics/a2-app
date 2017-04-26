@@ -14,6 +14,8 @@ export class NavBarController {
     "DriversPage"
   ];
 
+  public paymentsBadgeText: string;
+
   constructor(private app: App) { }
 
   public get ionTabs(): Tabs {
