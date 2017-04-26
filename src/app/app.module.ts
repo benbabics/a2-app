@@ -53,6 +53,7 @@ import { PaymentsPage } from "../pages/payments/payments";
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
 import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
+import { AppVersion } from "@ionic-native/app-version";
 
 @NgModule({
   declarations: [
@@ -116,6 +117,7 @@ import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
     Dialogs,
     StatusBar,
     SplashScreen,
+    AppVersion,
     //# app providers
     //----------------------
     {

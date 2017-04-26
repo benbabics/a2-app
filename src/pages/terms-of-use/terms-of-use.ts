@@ -1,3 +1,4 @@
+import { AppVersion } from "@ionic-native/app-version";
 import { Component } from "@angular/core";
 import { Page } from "../page";
 
@@ -7,7 +8,16 @@ import { Page } from "../page";
 })
 export class TermsOfUsePage extends Page {
 
-  constructor() {
+  private closing: string;
+
+  constructor(private appVersion: AppVersion) {
     super("Terms of Use");
+  }
+
+  ionViewDidLoad() {
+    this.appVersion.getVersionNumber()
+      .then((versionNumber: string) => {
+        this.closing = this.CONSTANTS.closing.replace("$VERSION_NUMBER$", versionNumber);
+      });
   }
 }
