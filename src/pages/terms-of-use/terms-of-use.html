@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <p>
+    {{ CONSTANTS.lastUpdated }} {{ CONSTANTS.lastUpdatedDate | wexDate }}
+  </p>
+
+  <p id="introduction">
+    <span [innerHtml]="CONSTANTS.introduction"></span>
+  </p>
+
+  <div padding>
+    <p>
+      {{ CONSTANTS.sectionOne }}
+    </p>
+
+    <p>
+      {{ CONSTANTS.sectionTwo }}
+    </p>
+
+    <p>
+      {{ CONSTANTS.sectionThree }}
+    </p>
+
+    <p>
+      {{ CONSTANTS.sectionFour }}
+    </p>
+
+    <p>
+      {{ CONSTANTS.sectionFive }}
+    </p>
+
+    <p>
+      {{ CONSTANTS.sectionSix }}
+    </p>
+
+    <p>
+      {{ CONSTANTS.sectionSeven }}
+    </p>
+
+    <p>
+      {{ CONSTANTS.sectionEight }}
+    </p>
+
+    <p>
+      {{ CONSTANTS.sectionNine }}
+    </p>
+
+    <p>
+      {{ CONSTANTS.sectionTen }}
+    </p>
+
+    <p>
+      {{ CONSTANTS.sectionEleven }}
+    </p>
+  </div>
+
+  <p id="closing">
+    <span [innerHtml]="CONSTANTS.closing"></span>
+  </p>
+</ion-content>

@@ -52,6 +52,7 @@ import { WexCurrency, WexDate, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
+import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
     CardsDetailsPage,
     CardsReissuePage,
     PaymentsPage,
+    TermsOfUsePage,
     ActionIndicator,
     WexCurrency,
     WexDate,
@@ -102,7 +104,8 @@ import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
     CardsReissuePage,
     PaymentsPage,
     WexNavBar,
-    OptionsPopoverPage
+    OptionsPopoverPage,
+    TermsOfUsePage
   ],
   providers: [
     //# ionic
