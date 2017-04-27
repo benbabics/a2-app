@@ -7,7 +7,7 @@
         $q,
         DISPATCH_INTERVAL = 30;
 
-    fdescribe("An Analytics Util service", function () {
+    describe("An Analytics Util service", function () {
 
         beforeAll(function () {
             this.commonSharedMockExclusions = ["AnalyticsUtil"];
