@@ -13,6 +13,20 @@ ion-icon.tab-button-icon[aria-label*="fa"] {
   font-size: 2.0rem; //scale down fa tab icons to be inline with ionicons
 }
 
+//# FABs
+// --------------------------------------------------
+
+ion-fab {
+  @at-root ion-footer & {
+    position: fixed !important;
+
+    @at-root ion-tabs .ion-page &[bottom] {
+      bottom: 64px !important;
+    }
+  }
+}
+
+
 
 //// App iOS Styles
 //// --------------------------------------------------

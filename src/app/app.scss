@@ -16,7 +16,7 @@
 // automatically applied to the <body> element in the app.
 @import "../styles/mixins/flexbox";
 
-.ion-page > ion-content {
+.ion-page ion-content {
   background: #ddd;
   background: linear-gradient(to top right, #ddd, #eee);
 }
