@@ -353,7 +353,7 @@
             "title":                     "Driver Details",
             "actionStatusTitle":         "Change Driver Status",
             "actionStatusCancel":        "Cancel",
-            "bannerStatusChangeSuccess": "<i class='fa fa-check'></i> Status change successful.",
+            "bannerStatusChangeSuccess": "Status change successful.",
             "bannerStatusChangeFailure": "Status change failed. Please try again.",
             "detailDriverId":            "Driver ID",
             "detailEmail":               "Email Address",

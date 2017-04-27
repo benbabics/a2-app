@@ -23,11 +23,17 @@ wex-notification-bar {
     top: $wex-notification-bar-height + $bar-height;
   }
 
+  ion-content & > .bar-notification {
+    position: static;
+    margin-bottom: 20px; // make up for .bar { top: 20px; } for content below
+  }
+
   & > .bar-notification {
     border: 1px solid;
     color: $base-color;
     padding: 10px;
-    height: $wex-notification-bar-height;
+    height: auto;
+    min-height: $wex-notification-bar-height;
     line-height: normal;
     overflow: hidden;
 
@@ -46,8 +52,14 @@ wex-notification-bar {
     }
 
     .row, .col {
+      margin:  0;
       padding: 0;
-      margin: 0;
+    }
+
+    // override ionic level of specificity
+    .platform-ios.platform-cordova:not(.fullscreen) & .row {
+      margin-top: 0 !important;
+      border: 1px solid transparent;
     }
 
     .icon-container {
@@ -67,16 +79,24 @@ wex-notification-bar {
       width: 100%;
 
       h1 {
-        color: inherit !important;
         margin: 0 !important;
-
-        white-space: initial;
+        color: #333 !important;
+        white-space:   initial;
         text-overflow: initial;
+        font-weight: 400;
+        &:not(.has-fittext) { font-size: 15px; }
       }
+    }
 
-      //min font size for ngFitText
-      [fittext] {
-        font-size: $font-size-base;
+    .icon-container > .icon{
+      margin-right: 10px;
+      font-size: 22px;
+
+      &::after {
+        display: inline-block;
+        width: 30px;
+        text-align: center;
+        font-family: 'FontAwesome';
       }
     }
 
@@ -95,42 +115,37 @@ wex-notification-bar {
     }
   }
 
-  & > .bar, &.bar-warning > .bar {
-    border-color: $warning-message-color;
+  /* Warning (default state) */
+  & > .bar,
+  &.bar-warning > .bar {
+    border-color:     $warning-message-color;
     background-color: $warning-message-fill;
 
     .icon-container > .icon::after {
       color: $warning-message-color;
-
-      font-family: ionicons;
-      content: "\f100"; //icon-warning
+      content: "\f071";
     }
   }
 
+  /* Error */
   &.bar-error > .bar {
-    border-color: $error-message-color;
+    border-color:     $error-message-color;
     background-color: $error-message-fill;
-    color: $error-message-color;
 
-    .icon-container {
-      display: none;
-
-      .icon::after {
-        color: $error-message-color;
-      }
+    .icon-container > .icon::after {
+      color: $error-message-color;
+      content: "\f00d";
     }
   }
 
+  /* Success */
   &.bar-success > .bar {
-    border-color: $success-message-color;
+    border-color:     $success-message-color;
     background-color: $success-message-fill;
 
-    .icon-container {
-      display: none;
-
-      .icon::after {
-        color: $success-message-color;
-      }
+    .icon-container > .icon::after {
+      color: $success-message-color;
+      content: "\f00c";
     }
   }
 }
