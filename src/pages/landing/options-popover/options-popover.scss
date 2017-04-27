@@ -1,8 +1,8 @@
 popover-options {
   ion-list {
 
-    &.list-md {
-      margin: 0;
+    &.list-md, &.list-ios {
+      margin-bottom: 0;
     }
 
     ion-icon {

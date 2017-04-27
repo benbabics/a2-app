@@ -80,18 +80,18 @@
             </div>
           </ion-item>
           <ion-list>
-            <ion-item-divider id="balance-current">
+            <ion-item id="balance-current">
               {{ CONSTANTS.currentBalance }}
               <span item-right class="item-currency" [innerHtml]="invoiceSummary.details.currentBalance | wexCurrency:true"></span>
-            </ion-item-divider>
-            <ion-item-divider id="balance-statement">
+            </ion-item>
+            <ion-item id="balance-statement">
               {{ CONSTANTS.statementBalance }}
               <span item-right class="item-currency" [innerHtml]="invoiceSummary.details.statementBalance | wexCurrency:true"></span>
-            </ion-item-divider>
-            <ion-item-divider id="due-date">
+            </ion-item>
+            <ion-item id="due-date">
               {{ CONSTANTS.paymentDueDate }}
               <span item-right class="item-currency">{{ invoiceSummary.details.paymentDueDate | wexDate:true }}</span>
-            </ion-item-divider>
+            </ion-item>
           </ion-list>
         </div>
       </action-indicator>
