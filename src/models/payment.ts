@@ -17,6 +17,14 @@ export class Payment extends Model<PaymentDetails> {
     public get bankAccount(): BankAccount {
       return new BankAccount(this.details.bankAccount);
     }
+
+    public get isComplete(): boolean {
+      return this.details.status === PaymentStatus.COMPLETE;
+    }
+
+    public get isScheduled(): boolean {
+      return this.details.status === PaymentStatus.SCHEDULED;
+    }
 }
 
 export namespace Payment {

@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Fingerprint, FingerprintProfile } from "./fingerprint";
 import * as _ from "lodash";
 import { Injectable } from "@angular/core";
@@ -36,6 +37,7 @@ export class SessionManager {
   private static _cachedSession: Session;
 
   private pendingRequests: { [sessionField: string]: Observable<any> } = {};
+  private _sessionStateObserver = new BehaviorSubject(null);
 
   constructor(
     private authProvider: AuthProvider,
@@ -54,6 +56,10 @@ export class SessionManager {
 
   public static get hasActiveSession(): boolean {
     return this.hasSession && !!this.cachedSession.user;
+  }
+
+  public get sessionStateObserver(): Observable<Session> {
+    return this._sessionStateObserver;
   }
 
   private authenticate(userCredentials: UserCredentials, authenticationMethod: SessionAuthenticationMethod): Observable<string> {
@@ -149,6 +155,8 @@ export class SessionManager {
       .map((token: string) => {
         SessionManager._cachedSession.details.token = token;
 
+        this._sessionStateObserver.next(SessionManager._cachedSession);
+
         // Pre-fetch remaining session details in the background asynchronously
         this.getSessionInfo().subscribe();
 
@@ -159,5 +167,7 @@ export class SessionManager {
   public invalidateSession() {
     SessionManager._cachedSession = null;
     this.pendingRequests = {};
+
+    this._sessionStateObserver.next(null);
   }
 }

@@ -1,5 +1,7 @@
 import { App, Tabs, NavOptions, Tab } from "ionic-angular";
 import { Injectable } from "@angular/core";
+import { SessionManager } from "./session-manager";
+import { Session } from "../models/session";
 
 @Injectable()
 export class NavBarController {
@@ -16,10 +18,19 @@ export class NavBarController {
 
   public paymentsBadgeText: string;
 
-  constructor(private app: App) { }
+  constructor(private app: App, private sessionManager: SessionManager) {
+    this.sessionManager.sessionStateObserver.subscribe(session => this.onSessionStateChanged(session));
+  }
 
   public get ionTabs(): Tabs {
     return this.app.getRootNav().getActiveChildNav() as Tabs;
+  }
+
+  private onSessionStateChanged(session: Session) {
+    // Clear state when session is invalidated
+    if (!session) {
+      this.paymentsBadgeText = "";
+    }
   }
 
   public getTab(page: Function): Tab {
