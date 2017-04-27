@@ -35,6 +35,7 @@ export class WexNavBar {
   public resetTab() {
     let activeNav = this.app.getActiveNav();
 
+    // Go back to the root page of the tab's nav stack when switching to tab
     if (activeNav instanceof Tab && activeNav.length() > 1) {
       activeNav.popToRoot();
     }
