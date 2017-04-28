@@ -112,19 +112,17 @@
             });
 
             describe("when UserManager.fetchCurrentUserDetails succeeds", function () {
-
                 beforeEach(function () {
-
                     fetchCurrentUserDetailsDeferred.resolve(userDetails);
-                });
-
-
-                beforeEach(function () {
                     $rootScope.$digest();
                 });
 
                 it("should call this.AnalyticsUtil.setUserId with the expected value", function () {
                     expect(this.AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
+                });
+
+                it("should call this.AnalyticsUtil.setUserBrand with the expected value", function () {
+                    expect( this.AnalyticsUtil.setUserBrand ).toHaveBeenCalledWith( userDetails.brand );
                 });
 
                 it("should resolve the initialization promise", function () {
@@ -138,9 +136,6 @@
                 it("should emit an app:login event", function () {
                     expect($rootScope.$emit).toHaveBeenCalledWith("app:login");
                 });
-
-
-
             });
 
             describe("when UserManager.fetchCurrentUserDetails fails", function () {
