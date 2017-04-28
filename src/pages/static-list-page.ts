@@ -2,23 +2,27 @@ import * as _ from "lodash";
 import { Observable } from "rxjs";
 import { ListPage, GroupedList } from "./list-page";
 import { Model, Session, SessionPartial } from "../models";
-import { WexGreeking } from "../components";
 
 export { GroupedList } from "./list-page";
 import { SessionManager } from "../providers/session-manager";
 
 export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extends ListPage {
 
+  // The session data to display for this list
   protected abstract listData: Session.Field;
-  protected abstract listGroupDisplayOrder: string[];
-  public abstract dividerLabels: string[];
 
-  protected fetchingItems: boolean = false;
-  protected searchFilter: string = "";
-  protected sortedItemGroups: GroupedList<T> = {};
-  protected items: T[];
-  protected greekingData: WexGreeking.Rect[];
-  protected greekedElementCount: number;
+  private _fetchingItems: boolean = false;
+  private _items: T[];
+  private _displayedItems: T[];
+  private _displayedItemGroups: GroupedList<T> = {};
+
+  // Set this to specify the order that groups should appear in grouped list mode
+  protected listGroupDisplayOrder: string[] = null;
+
+  public searchFilter: string = "";
+
+  // Set this to add header dividers and enable grouped list mode
+  public dividerLabels: string[] = null;
 
   constructor(
     pageName: string,
@@ -30,27 +34,23 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   }
 
   protected abstract sortItems(items: T[]): T[];
-  protected abstract groupItems(items: T[]): GroupedList<T>;
+
+  protected get displayedItemGroups(): GroupedList<T> {
+    return this._displayedItemGroups;
+  }
 
   protected get isSearchEnabled(): boolean {
     return !!this.searchFilterFields;
   }
 
-  private fetchResults(forceUpdate?: boolean): Observable<T[]> {
-    this.fetchingItems = true;
-    this.clearList(); //Clear the results for a new search
+  protected get items(): T[] {
+    return this._items;
+  }
 
-    // get the session info required to display the list
-    return this.sessionManager.getSessionInfo([this.listData], { forceRequest: forceUpdate })
-      .finally(() => {
-        this.fetchingItems = false;
-      })
-      .map((sessionDetails: SessionPartial): T[] => {
-        this.items = sessionDetails[this.listData] as T[];
-
-        this.updateList();
-        return this.items;
-      });
+  protected clearList() {
+    this._items = [];
+    this._displayedItems = [];
+    this._displayedItemGroups = {};
   }
 
   protected createSearchRegex(searchFilter: string) {
@@ -66,6 +66,26 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     return this.groupByDetails<T, DetailsT>(items, groupBy, groups);
   }
 
+  protected fetchResults(forceUpdate?: boolean): Observable<T[]> {
+    this.clearList(); //Clear the results for a new search
+
+    this._fetchingItems = true;
+    // get the session info required to display the list
+    return this.sessionManager.getSessionInfo([this.listData], { forceRequest: forceUpdate })
+      .finally(() => this._fetchingItems = false)
+      .map((sessionDetails: SessionPartial): T[] => {
+        this._items = sessionDetails[this.listData] as T[];
+
+        // build the display lists
+        this.updateList();
+        return this.items;
+      });
+  }
+
+  protected groupItems(items: T[]): GroupedList<T> {
+    throw new Error("StaticListPage.groupItems must be defined when using a grouped list.");
+  }
+
   protected sortItemGroups(groupedItems: GroupedList<T>): GroupedList<T> {
     return _.transform(groupedItems, (sortedGroups: GroupedList<T>, items: T[], group: string) => {
       //sort each grouped list individually
@@ -73,45 +93,58 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     }, {});
   }
 
+  protected updateList() {
+    if (this.isSearchEnabled) {
+      let searchRegex = this.createSearchRegex(this.searchFilter);
+
+      this._displayedItems = this._items.filter((item: T) => this.searchFilterFields.some((searchField) => {
+        return String(item.details[searchField]).search(searchRegex) !== -1;
+      }));
+    }
+    else {
+      this._displayedItems = this._items;
+    }
+
+    if (this.isGrouped) {
+      this._displayedItemGroups = this.sortItemGroups(this.groupItems(this._displayedItems));
+    }
+    else {
+      this._displayedItems = this.sortItems(this._displayedItems);
+    }
+  }
+
   ionViewWillEnter() {
     this.fetchResults().subscribe();
   }
 
-  public clearList() {
-    this.items = [];
-    this.sortedItemGroups = {};
+  public get displayedItems(): T[] {
+    return this.isGrouped ? null : this._displayedItems;
+  }
+
+  public get displayedItemLists(): T[][] {
+    if (this.isGrouped) {
+      //returns a list containing lists of items, ordered by the specified group display order
+      return this.listGroupDisplayOrder.reduce<T[][]>((sortedList: T[][], group: string) => {
+
+        sortedList.push(this._displayedItemGroups[group]);
+        return sortedList;
+      }, []);
+    }
+
+    return null;
+  }
+
+  public get fetchingItems(): boolean {
+    return this._fetchingItems;
+  }
+
+  public get isGrouped(): boolean {
+    return !!this.dividerLabels;
   }
 
   public onRefresh(refresher) {
     this.fetchResults(true)
       .finally(() => refresher.complete())
       .subscribe();
-  }
-
-  public get sortedItemLists(): T[][] {
-    //returns a list of item lists ordered by the list group display order
-    return this.listGroupDisplayOrder.reduce<T[][]>((sortedList: T[][], group: string) => {
-
-      sortedList.push(this.sortedItemGroups[group]);
-      return sortedList;
-    }, []);
-  }
-
-  public updateList() {
-    let filteredItems: T[];
-
-    if (this.isSearchEnabled) {
-      let searchRegex = this.createSearchRegex(this.searchFilter);
-
-      filteredItems = this.items.filter((item: T) => this.searchFilterFields.some((searchField) => {
-        return String(item.details[searchField]).search(searchRegex) !== -1;
-      }));
-    }
-    else {
-      filteredItems = this.items;
-    }
-
-
-    this.sortedItemGroups = this.sortItemGroups(this.groupItems(filteredItems));
   }
 }

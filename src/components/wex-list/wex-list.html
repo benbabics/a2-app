@@ -2,7 +2,7 @@
   <wex-list-header *ngIf="headerFields" [fields]="headerFields">
   </wex-list-header>
 
-  <span *ngIf="dividers">
+  <span *ngIf="isGrouped">
     <span *ngFor="let divider of dividers; let i = index">
       <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky [ngClass]="divider.toLowerCase()">
         {{ divider }}
@@ -13,7 +13,7 @@
     </span>
   </span>
 
-  <span *ngIf="!dividers">
+  <span *ngIf="!isGrouped">
     <span *ngFor="let item of items">
       <template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></template>
     </span>

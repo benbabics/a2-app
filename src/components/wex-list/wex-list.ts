@@ -18,12 +18,19 @@ export class WexList {
 
   @Value("COMPONENTS.LIST") CONSTANTS: any;
 
+  //Items can either be a flat list of items, or a list containing lists of items grouped by dividers
   @Input() items: any[];
+  @Input() itemLists: any[][];
+  //Dividers must be specified if using a list of item lists
   @Input() dividers: string[];
+  //The loading state of the list
   @Input() loading: boolean;
-  @Input() headerFields: string[];
-  @Input() greekingData: WexGreeking.Rect[];
-  @Input() greekedElementCount: number;
+  //The headers to show for the list
+  @Input() headerFields?: string[];
+  //The greeking data displayed for each element.
+  @Input() greekingData?: WexGreeking.Rect[];
+  //The number of default elements to display. Default: DEFAULT_NUM_GREEKED_ELEMENTS
+  @Input() greekedElementCount?: number;
 
   @ContentChild(TemplateRef) itemTemplate: Query;
 
@@ -34,8 +41,8 @@ export class WexList {
   public get hasNoItems(): boolean {
     const hasNoItems = (itemList: any[]) => !(this.loading || _.size(itemList) > 0);
 
-    if (_.size(this.dividers) > 0) {
-      return !this.items || this.items.every(hasNoItems);
+    if (this.isGrouped) {
+      return this.itemLists.every(hasNoItems);
     }
     else {
       return hasNoItems(this.items);
@@ -46,9 +53,13 @@ export class WexList {
     return this.loading && !!this.greekingData;
   }
 
+  public get isGrouped(): boolean {
+    return !!this.dividers;
+  }
+
   public getListForDivider(dividerIndex: number): any[] {
-    if(_.isNumber(dividerIndex) && dividerIndex < this.items.length) {
-      return this.items[dividerIndex];
+    if(this.isGrouped && _.isNumber(dividerIndex) && dividerIndex < this.itemLists.length) {
+      return this.itemLists[dividerIndex];
     }
     else {
       return null;
