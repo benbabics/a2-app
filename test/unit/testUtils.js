@@ -542,6 +542,7 @@ var TestUtils = (function () {
             AnalyticsUtil: jasmine.createSpyObj("AnalyticsUtil", [
                 "getActiveTrackerId",
                 "hasActiveTracker",
+                "setCustomDimension",
                 "setUserId",
                 "startTracker",
                 "trackView",
