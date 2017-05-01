@@ -16,6 +16,7 @@
             USER_AUTHORIZATION_TYPES = globals.USER_AUTHORIZATION.TYPES,
             USER_AUTHORIZATION_ERRORS = globals.USER_AUTHORIZATION.ERRORS,
             USERNAME_KEY = globals.LOCALSTORAGE.KEYS.USERNAME,
+            USER_ID_KEY = globals.LOCALSTORAGE.KEYS.USER_ID,
             vm = this,
             versionModal;
 
@@ -338,6 +339,10 @@
             if (_.has($localStorage, USERNAME_KEY)) {
                 vm.user.username = $localStorage[USERNAME_KEY];
                 vm.rememberMe = true;
+            }
+
+            if (_.has($localStorage, USER_ID_KEY)) {
+                AnalyticsUtil.setUserId($localStorage[USER_ID_KEY]);
             }
         }
 
