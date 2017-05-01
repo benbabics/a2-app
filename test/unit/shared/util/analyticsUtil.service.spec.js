@@ -23,7 +23,8 @@
                 "setTrackingId",
                 "sendEvent",
                 "sendAppView",
-                "setDispatchInterval"
+                "setDispatchInterval",
+                "customDimension"
             ]);
 
             module(function ($provide) {
