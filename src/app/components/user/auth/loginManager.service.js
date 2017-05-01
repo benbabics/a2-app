@@ -53,6 +53,7 @@
 
             //track all events with the user's ID
             AnalyticsUtil.setUserId(user.id);
+            AnalyticsUtil.setCustomDimension(1, user.id);
         }
 
     }

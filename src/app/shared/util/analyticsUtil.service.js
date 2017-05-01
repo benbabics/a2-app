@@ -17,6 +17,7 @@
         var service = {
             "getActiveTrackerId": getActiveTrackerId,
             "hasActiveTracker"  : hasActiveTracker,
+            "setCustomDimension": setCustomDimension,
             "setUserId"         : setUserId,
             "startTracker"      : startTracker,
             "trackEvent"        : trackEvent,
@@ -50,6 +51,12 @@
 
         function hasActiveTracker() {
             return !!activeTrackerId;
+        }
+
+        function setCustomDimension(id, value) {
+            whenReady((analytics) => {
+                analytics.customDimension(id, value, _.noop, handleTrackingError);
+            });
         }
 
         function setUserId(userId) {
