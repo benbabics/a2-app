@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import { InvoiceProvider, BrandProvider, SessionManager, NavBarController } from "../../providers";
 import { Component } from "@angular/core";
 import { NavController, NavParams, PopoverController } from "ionic-angular";
-import { Company, InvoiceSummary, Session, SessionPartial } from "../../models";
+import { Company, InvoiceSummary, Session, Payment } from "../../models";
 import { SecurePage } from "../secure-page";
 import { OptionsPopoverPage } from "./options-popover/options-popover";
 
@@ -112,9 +112,9 @@ export class LandingPage extends SecurePage {
     this.brandProvider.logo(this.session.user.details.brand)
       .subscribe((brandLogoData: string) => this.brandLogoData = brandLogoData);
 
-    this.sessionManager.requestSessionInfo([Session.Field.Payments])
-      .subscribe((details: SessionPartial) => {
-        let scheduledCount = details.payments.filter(payment => payment.isScheduled).length;
+    this.sessionManager.cache.requestSessionDetail(Session.Field.Payments)
+      .subscribe((payments: Payment[]) => {
+        let scheduledCount = payments.filter(payment => payment.isScheduled).length;
 
         // Update the payment tab badge with the scheduled count
         this.navBarController.paymentsBadgeText = scheduledCount > 0 ? String(scheduledCount) : "";

@@ -1,10 +1,11 @@
 import * as _ from "lodash";
 import { Observable } from "rxjs";
 import { ListPage, GroupedList } from "./list-page";
-import { Model, Session, SessionPartial } from "../models";
+import { Model, Session } from "../models";
 
 export { GroupedList } from "./list-page";
 import { SessionManager } from "../providers/session-manager";
+import { WexGreeking } from "../components";
 
 export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extends ListPage {
 
@@ -22,7 +23,15 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   public searchFilter: string = "";
 
   // Set this to add header dividers and enable grouped list mode
-  public dividerLabels: string[] = null;
+  public dividerLabels?: string[] = null;
+  // Labels for the list header
+  public listLabels?: string[] = _.get<string[]>(this.CONSTANTS, "listLabels");
+  // Search field label
+  public searchLabel?: string = _.get<string>(this.CONSTANTS, "searchLabel");
+  //The greeking data displayed for each element
+  public greekingData?: WexGreeking.Rect[] = _.get<WexGreeking.Rect[]>(this.CONSTANTS, "greekingData");
+  //The number of default elements to display
+  public greekedElementCount?: number = _.get<number>(this.CONSTANTS, "greekedElementCount");
 
   constructor(
     pageName: string,
@@ -71,10 +80,10 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
 
     this._fetchingItems = true;
     // get the session info required to display the list
-    return this.sessionManager.getSessionInfo([this.listData], { forceRequest: forceUpdate })
+    return this.sessionManager.cache.getSessionDetail(this.listData, { forceRequest: forceUpdate })
       .finally(() => this._fetchingItems = false)
-      .map((sessionDetails: SessionPartial): T[] => {
-        this._items = sessionDetails[this.listData] as T[];
+      .map((items: T[]): T[] => {
+        this._items = items;
 
         // build the display lists
         this.updateList();

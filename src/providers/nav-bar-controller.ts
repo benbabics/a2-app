@@ -19,16 +19,16 @@ export class NavBarController {
   public paymentsBadgeText: string;
 
   constructor(private app: App, private sessionManager: SessionManager) {
-    this.sessionManager.sessionStateObserver.subscribe(session => this.onSessionStateChanged(session));
+    this.sessionManager.sessionStateObserver.subscribe(created => this.onSessionStateChanged(created));
   }
 
   public get ionTabs(): Tabs {
     return this.app.getRootNav().getActiveChildNav() as Tabs;
   }
 
-  private onSessionStateChanged(session: Session) {
+  private onSessionStateChanged(created: boolean) {
     // Clear state when session is invalidated
-    if (!session) {
+    if (!created) {
       this.paymentsBadgeText = "";
     }
   }

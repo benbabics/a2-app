@@ -16,7 +16,7 @@ export abstract class SecurePage extends Page {
 
   ionViewCanEnter(): Promise<any> {
     // Request all session info required for this page
-    return this.sessionManager.getSessionInfo(this.requiredSessionInfo)
+    return this.sessionManager.cache.getSessionDetails(this.requiredSessionInfo)
       .map((session: Session) => this.session = session)
       .toPromise();
   }

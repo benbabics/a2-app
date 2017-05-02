@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Headers, Http, ConnectionBackend, RequestOptions, RequestOptionsArgs, Response } from "@angular/http";
 import { Observable } from "rxjs";
 import { Value } from "../decorators/value";
+import { SessionCache } from "./session-cache";
 
 @Injectable()
 export class SecureHttp extends Http {
@@ -34,7 +35,7 @@ export class SecureHttp extends Http {
       }
 
       //options.withCredentials = true;
-      options.headers.append("Authorization", `Bearer ${SessionManager.cachedSession.details.token}`);
+      options.headers.append("Authorization", `Bearer ${SessionCache.cachedValues.token}`);
     }
     return options;
   }
