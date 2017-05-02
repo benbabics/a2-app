@@ -5,10 +5,9 @@
     // jshint maxparams:11
 
     /* @ngInject */
-    function LoginManager($q, $localStorage, $ionicSideMenuDelegate, $rootScope, globals,
+    function LoginManager($q, $ionicSideMenuDelegate, $rootScope,
                           AnalyticsUtil, LoadingIndicator, LoggerUtil, Popup, UserManager) {
         // Private members
-        const USER_ID_KEY = globals.LOCALSTORAGE.KEYS.USER_ID;
 
 
         // Revealed Public members
@@ -54,9 +53,6 @@
 
             //track all events with the user's ID
             AnalyticsUtil.setUserId(user.id);
-
-            //store the user id for tracking during login
-            $localStorage[USER_ID_KEY] = user.id;
         }
 
     }
