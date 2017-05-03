@@ -63,8 +63,6 @@
         function setUserId(userId) {
             whenReady(function (analytics) {
                 analytics.set("&uid", userId, _.noop, handleTrackingError);
-
-                setCustomDimension(USER_ID_DIMENSION_ID, userId);
             });
         }
 

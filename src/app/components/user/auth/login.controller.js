@@ -341,9 +341,15 @@
                 vm.rememberMe = true;
             }
 
-            if (_.has($localStorage, USER_ID_KEY)) {
-                AnalyticsUtil.setUserId($localStorage[USER_ID_KEY]);
+            if (!_.has($localStorage, USER_ID_KEY)) {
+                //generate a random guid and persist it to track the user in GA
+                $localStorage[USER_ID_KEY] = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
             }
+
+            AnalyticsUtil.setCustomDimension(1, $localStorage[USER_ID_KEY]);
         }
 
         // Combination getter/setter. Passing a parameter invokes the setter.
