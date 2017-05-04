@@ -10,4 +10,5 @@ export * from "./wex-list-header/wex-list-header";
 export * from "./wex-list-item/wex-list-item";
 export * from "./wex-nav-bar/wex-nav-bar";
 export * from "./wex-snackbar/wex-snackbar";
-export * from "./wex-static-list-page/wex-static-list-page";
+export * from "./wex-static-list-page-content/wex-static-list-page-content";
+export * from "./wex-static-list-page-header/wex-static-list-page-header";

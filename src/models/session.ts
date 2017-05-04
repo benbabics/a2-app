@@ -4,6 +4,9 @@ import { Card } from "./card";
 import { Payment } from "./payment";
 import { Driver } from "./driver";
 import { Transaction } from "./transaction";
+import { DynamicList } from "./dynamic-list";
+
+export type TransactionList = DynamicList<Transaction, Transaction.Details>;
 
 export type Session = Partial<{
     user: User;
@@ -15,6 +18,8 @@ export type Session = Partial<{
     drivers: Driver[];
     pendingTransactions: Transaction[];
     postedTransactions: Transaction[];
+    pendingTransactionsInfo: TransactionList;
+    postedTransactionsInfo: TransactionList;
 }>;
 
 export namespace Session {
@@ -27,6 +32,8 @@ export namespace Session {
       export const Payments: Field = "payments";
       export const PendingTransactions: Field = "pendingTransactions";
       export const PostedTransactions: Field = "postedTransactions";
+      export const PendingTransactionsInfo: Field = "pendingTransactionsInfo";
+      export const PostedTransactionsInfo: Field = "postedTransactionsInfo";
       export const Token: Field = "token";
       export const User: Field = "user";
       export const UserCompany: Field = "userCompany";
@@ -39,7 +46,8 @@ export namespace Session {
         Drivers,
         Payments,
         //PendingTransactions,
-        //PostedTransactions,
+        PostedTransactions,
+        PostedTransactionsInfo,
         UserCompany
       ];
     }

@@ -1,8 +1,10 @@
+import * as moment from "moment";
 import { Observable } from "rxjs";
 import { ErrorObservable } from "rxjs/observable/ErrorObservable";
 import { Http, URLSearchParams } from "@angular/http";
 import "rxjs/add/operator/map";
 
+//TODO Caching
 export abstract class ApiProvider {
 
   constructor(protected http: Http) {}
@@ -16,7 +18,13 @@ export abstract class ApiProvider {
     let params = new URLSearchParams();
 
     for (let key in object) {
-      params.set(key, object[key]);
+      let value = object[key];
+
+      if (value instanceof Date) {
+        value = moment(value).toISOString();
+      }
+
+      params.set(key, value);
     }
     return params;
   }

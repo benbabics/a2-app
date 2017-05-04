@@ -29,7 +29,7 @@ export class MyApp {
   }
 
   public get isUserLoggedIn(): boolean {
-    return SessionManager.hasActiveSession;
+    return SessionManager.hasSession;
   }
 
   public get rootPage() {

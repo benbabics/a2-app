@@ -6,6 +6,8 @@ import { SessionInfoRequestors } from "./session-info-requestor";
 
 export interface SessionInfoOptions {
   forceRequest?: Session.Field[] | boolean;
+  requestParams?: object;
+  clearCache?: boolean;
 }
 
 export namespace SessionInfoOptions {
@@ -23,7 +25,9 @@ export class SessionCache {
     return this._cache;
   }
 
-  constructor(private sessionInfoRequestors: SessionInfoRequestors) { }
+  constructor(private sessionInfoRequestors: SessionInfoRequestors) {
+    this.clear();
+  }
 
   public clear() {
     SessionCache._cache = {};
@@ -39,25 +43,33 @@ export class SessionCache {
     const errorPrefix = "Error: Cannot get session info:";
 
     let requestorDetails = this.sessionInfoRequestors.getRequestor(field);
-    let cachedValue = SessionCache._cache[field];
     let pendingRequest = this.pendingRequests[field];
 
-    // Use the existing request if this value is currently being requested
-    if (!!pendingRequest) {
-      return pendingRequest;
-    }
-    // Skip this request if we have already cached this value and we are not forcing a request
-    else if (!!cachedValue && !options.forceRequest) {
-      return Observable.of(cachedValue);
-    }
+    // Check for cached values/pending requests only if this isn't a dependent requestor
+    if (!requestorDetails.dependentRequestor) {
+      if (options.clearCache) {
+        SessionCache._cache[field] = undefined;
+      }
 
-    if (_.includes(requestorDetails.requiredFields, field)) {
-      return Observable.throw(`${errorPrefix} Requestor requires a reference to itself.`);
+      let cachedValue = SessionCache._cache[field];
+
+      // Use the existing request if this value is currently being requested
+      if (!!pendingRequest) {
+        return pendingRequest;
+      }
+      // Skip this request if we have already cached this value and we are not forcing a request
+      else if (!_.isNil(cachedValue) && !options.forceRequest) {
+        return Observable.of(cachedValue);
+      }
+
+      if (_.includes(requestorDetails.requiredFields, field)) {
+        return Observable.throw(`${errorPrefix} Requestor requires a reference to itself.`);
+      }
     }
 
     // First request any dependencies on this field, then fetch the requested session field value
-    return this.pendingRequests[field] = this.getSessionDetails(requestorDetails.requiredFields || [])
-      .flatMap((requiredDetails: Session) => requestorDetails.requestor(requiredDetails))
+    return this.pendingRequests[field] = this.getSessionDetails(requestorDetails.requiredFields || [], requestorDetails.dependentRequestor ? options : null)
+      .flatMap((requiredDetails: Session) => requestorDetails.requestor(requiredDetails, options.requestParams))
       .map((value: any) => SessionCache._cache[field] = value) // Update the cached session details
       .finally(() => delete this.pendingRequests[field]) // Remove the pending request
       .publishReplay().refCount(); // Only execute once

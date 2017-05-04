@@ -30,12 +30,22 @@ export namespace ConstantsInfo {
             CARDS: {
               BASE: "cards"
             },
-            DRIVERS: "drivers",
+            DRIVERS: {
+              BASE: "drivers"
+            },
             INVOICES: {
               CURRENT: "payments/currentInvoiceSummary"
             },
             PAYMENTS: {
               SEARCH: "payments"
+            },
+            TRANSACTIONS: {
+              PENDING: {
+                BASE: "pendingTransactions"
+              },
+              POSTED: {
+                BASE: "postedTransactions"
+              }
             }
           },
           USER: {
@@ -303,6 +313,32 @@ export namespace ConstantsInfo {
         sectionTen: "10. You must comply with applicable third party terms of agreement when using the App.",
         sectionEleven: "11. You agree that Apple (and its subsidiaries) is a third party beneficiary of these Terms of Use and will have the right to enforce these Terms of Use.",
         closing: "If you have any questions or concerns about WEX&reg; Fleet SmartHub&trade; mobile application or our Terms of Use, please e-mail: <a href=\"mailto:MobileApplications@wexinc.com?subject=Fleet SmartHub version $VERSION_NUMBER$\">MobileApplications@wexinc.com</a>."
+      },
+
+      //# Transactions page
+      TRANSACTIONS: {
+        DATE: {
+          listLabels: ["Transactions"],
+          greekedElementCount: 15
+        },
+        DRIVER_NAME: {
+          listLabels: ["Driver Name"],
+          greekingData: [
+            {left: 3, top: 30, right: 25, bottom: 55},
+          ],
+          greekedElementCount: 15
+        },
+        CARD_NUMBER: {
+          listLabels: ["Card Number", "Embossing"],
+          greekingData: [
+            {left: 3, top: 10, right: 15, bottom: 35},
+            {left: 3, top: 55, right: 15, bottom: 80},
+            {left: 20, top: 20, right: 86, bottom: 32},
+            {left: 20, top: 47, right: 86, bottom: 59},
+            {left: 20, top: 74, right: 86, bottom: 86}
+          ],
+          greekedElementCount: 15
+        }
       }
     }
   };
