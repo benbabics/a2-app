@@ -11,8 +11,10 @@
            tabIcon="fa-bank"
            (ionSelect)="resetTab()">
   </ion-tab>
-  <ion-tab [tabTitle]="CONSTANTS.LABELS.transactions"
-           tabIcon="fa-exchange">
+  <ion-tab [root]="TransactionsPage"
+           [tabTitle]="CONSTANTS.LABELS.transactions"
+           tabIcon="fa-exchange"
+           (ionSelect)="resetTab()">
   </ion-tab>
   <ion-tab [root]="CardsPage"
            [tabTitle]="CONSTANTS.LABELS.cards"

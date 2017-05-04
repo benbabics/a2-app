@@ -3,6 +3,7 @@ import { Component } from "@angular/core";
 import { CardsPage } from "../../pages/cards/cards";
 import { LandingPage } from "../../pages/landing/landing";
 import { PaymentsPage } from "../../pages/payments/payments";
+import { TransactionsPage } from "../../pages/transactions/transactions";
 import { Value } from "../../decorators/value";
 import { App, Tab } from "ionic-angular";
 
@@ -26,6 +27,10 @@ export class WexNavBar {
 
   public get PaymentsPage() {
     return PaymentsPage;
+  }
+
+  public get TransactionsPage() {
+    return TransactionsPage;
   }
 
   public get paymentsBadgeText(): string {

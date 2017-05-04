@@ -319,6 +319,13 @@ export namespace ConstantsInfo {
       TRANSACTIONS: {
         DATE: {
           listLabels: ["Transactions"],
+          greekingData: [
+            {left: 3, top: 10, right: 33, bottom: 22},
+            {left: 3, top: 32, right: 33, bottom: 44},
+            {left: 3, top: 54, right: 33, bottom: 66},
+            {left: 3, top: 76, right: 33, bottom: 88},
+            {left: 67, top: 32, right: 90, bottom: 68},
+          ],
           greekedElementCount: 15
         },
         DRIVER_NAME: {
