@@ -1,8 +1,9 @@
+import { Observable } from "rxjs";
 import { CardsDetailsPage } from "./details/cards-details";
 import { Component } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
 import { SessionManager } from "../../providers";
-import { StaticListPage, GroupedList } from "../static-list-page";
+import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Card, CardStatus, Session } from "../../models";
 
 @Component({
@@ -18,7 +19,6 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
     "cardId"
   ];
 
-  protected readonly listData: Session.Field = Session.Field.Cards;
   protected readonly listGroupDisplayOrder: string[] = CardsPage.CARD_STATUSES;
   public readonly dividerLabels: string[] = CardsPage.CARD_STATUSES.map(CardStatus.displayName);
 
@@ -28,6 +28,10 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
     public navParams: NavParams
   ) {
     super("Cards", sessionManager, CardsPage.SEARCH_FILTER_FIELDS);
+  }
+
+  protected fetch(options?: FetchOptions): Observable<Card[]> {
+    return this.sessionManager.cache.getSessionDetail(Session.Field.Cards, options);
   }
 
   protected groupItems(cards: Card[]): GroupedList<Card> {

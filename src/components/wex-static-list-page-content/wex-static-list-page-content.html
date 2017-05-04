@@ -1,0 +1,16 @@
+<wex-list id="items-list"
+          [items]="page.displayedItems"
+          [itemLists]="page.displayedItemLists"
+          [dividers]="page.dividerLabels"
+          [loading]="page.fetchingItems"
+          [greekingData]="page.greekingData"
+          [greekedElementCount]="page.greekedElementCount">
+
+  <template #listItemTemplate let-item>
+    <wex-list-item active (click)="page.goToDetailPage(item)">
+      <template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></template>
+    </wex-list-item>
+  </template>
+</wex-list>
+
+<ng-content></ng-content>

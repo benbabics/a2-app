@@ -6,15 +6,25 @@ import { Model, Session } from "../models";
 export { GroupedList } from "./list-page";
 import { SessionManager } from "../providers/session-manager";
 import { WexGreeking } from "../components";
+import { SessionInfoOptions } from "../providers";
+
+export interface FetchOptions extends SessionInfoOptions {
+  forceRequest?: boolean;
+  clearItems?: boolean
+}
+
+export namespace FetchOptions {
+  export const Defaults: Partial<FetchOptions> = {
+    forceRequest: false,
+    clearItems: true
+  }
+}
 
 export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extends ListPage {
 
-  // The session data to display for this list
-  protected abstract listData: Session.Field;
-
   private _fetchingItems: boolean = false;
-  private _items: T[];
-  private _displayedItems: T[];
+  private _items: T[] = [];
+  private _displayedItems: T[] = [];
   private _displayedItemGroups: GroupedList<T> = {};
 
   // Set this to specify the order that groups should appear in grouped list mode
@@ -42,6 +52,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     super(pageName, sessionManager, requiredSessionInfo);
   }
 
+  protected abstract fetch(options?: FetchOptions): Observable<T[]>;
   protected abstract sortItems(items: T[]): T[];
 
   protected get displayedItemGroups(): GroupedList<T> {
@@ -75,12 +86,16 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     return this.groupByDetails<T, DetailsT>(items, groupBy, groups);
   }
 
-  protected fetchResults(forceUpdate?: boolean): Observable<T[]> {
-    this.clearList(); //Clear the results for a new search
+  protected fetchResults(options?: FetchOptions): Observable<T[]> {
+    options = _.merge({}, FetchOptions.Defaults, options);
+
+    if (options.clearItems) {
+      this.clearList(); //Clear the results for a new search
+    }
 
     this._fetchingItems = true;
     // get the session info required to display the list
-    return this.sessionManager.cache.getSessionDetail(this.listData, { forceRequest: forceUpdate })
+    return this.fetch(options)
       .finally(() => this._fetchingItems = false)
       .map((items: T[]): T[] => {
         this._items = items;
@@ -152,7 +167,10 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   }
 
   public onRefresh(refresher) {
-    this.fetchResults(true)
+    this.fetchResults({
+      forceRequest: true,
+      clearCache: true
+    })
       .finally(() => refresher.complete())
       .subscribe();
   }

@@ -1,7 +1,8 @@
+import { Observable } from "rxjs";
 import { Component } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
 import { SessionManager } from "../../providers";
-import { StaticListPage, GroupedList } from "../static-list-page";
+import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Payment, PaymentStatus, Session } from "../../models";
 
 @Component({
@@ -12,7 +13,6 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
 
   private static readonly PAYMENT_STATUSES: PaymentStatus[] = [PaymentStatus.SCHEDULED, PaymentStatus.COMPLETE];
 
-  protected readonly listData: Session.Field = Session.Field.Payments;
   protected readonly listGroupDisplayOrder: string[] = PaymentsPage.PAYMENT_STATUSES;
   public readonly dividerLabels: string[] = PaymentsPage.PAYMENT_STATUSES.map(PaymentStatus.displayName);
 
@@ -22,6 +22,10 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
     public navParams: NavParams
   ) {
     super("Payments", sessionManager);
+  }
+
+  protected fetch(options?: FetchOptions): Observable<Payment[]> {
+    return this.sessionManager.cache.getSessionDetail(Session.Field.Payments, options);
   }
 
   protected groupItems(payments: Payment[]): GroupedList<Payment> {

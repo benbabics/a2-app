@@ -16,14 +16,15 @@ import {
   WexListItem,
   WexListHeader,
   WexNavBar,
-  WexStaticListPage,
   WexGreeking,
   WexDetailsView,
   WexInfoCard,
   WexBanner,
   WexAppBannerController,
   WexAppBanner,
-  WexSnackbar
+  WexSnackbar,
+  WexStaticListPageHeader,
+  WexStaticListPageContent
 } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
@@ -46,7 +47,10 @@ import {
   AccountProvider,
   BrandProvider,
   SessionInfoRequestors,
-  DefaultSessionInfoRequestors
+  DefaultSessionInfoRequestors,
+  DriverProvider,
+  TransactionProvider,
+  SessionCache
 } from "../providers";
 import { WexCurrency, WexDate, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -54,6 +58,7 @@ import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
 import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
 import { AppVersion } from "@ionic-native/app-version";
+import { TransactionsPage } from "../pages/transactions/transactions";
 
 @NgModule({
   declarations: [
@@ -67,6 +72,7 @@ import { AppVersion } from "@ionic-native/app-version";
     CardsReissuePage,
     PaymentsPage,
     TermsOfUsePage,
+    TransactionsPage,
     ActionIndicator,
     WexCurrency,
     WexDate,
@@ -74,7 +80,8 @@ import { AppVersion } from "@ionic-native/app-version";
     WexList,
     WexListItem,
     WexListHeader,
-    WexStaticListPage,
+    WexStaticListPageHeader,
+    WexStaticListPageContent,
     WexGreeking,
     WexDetailsView,
     WexCardNumberPipe,
@@ -106,7 +113,8 @@ import { AppVersion } from "@ionic-native/app-version";
     PaymentsPage,
     WexNavBar,
     OptionsPopoverPage,
-    TermsOfUsePage
+    TermsOfUsePage,
+    TransactionsPage
   ],
   providers: [
     //# ionic
@@ -144,7 +152,10 @@ import { AppVersion } from "@ionic-native/app-version";
     {
       provide: SessionInfoRequestors,
       useClass: DefaultSessionInfoRequestors
-    }
+    },
+    DriverProvider,
+    TransactionProvider,
+    SessionCache
   ]
 })
 export class AppModule {}
