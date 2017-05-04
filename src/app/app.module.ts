@@ -1,4 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Dialogs } from "@ionic-native/dialogs";
 import { OptionsPopoverPage } from "./../pages/landing/options-popover/options-popover";
 import { WexCardNumberPipe } from "./../pipes/wex-card-number";
@@ -97,6 +98,7 @@ import { TransactionsPage } from "../pages/transactions/transactions";
   imports: [
     //# Angular
     BrowserModule,
+    BrowserAnimationsModule,
     HttpModule,
     //# ionic
     //----------------------
