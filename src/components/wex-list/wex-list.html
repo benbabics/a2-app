@@ -8,14 +8,14 @@
         {{ divider }}
       </ion-item-divider>
       <span *ngFor="let item of getListForDivider(i)">
-        <template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></template>
+        <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
       </span>
     </span>
   </span>
 
   <span *ngIf="!isGrouped">
     <span *ngFor="let item of items">
-      <template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></template>
+      <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
     </span>
   </span>
 

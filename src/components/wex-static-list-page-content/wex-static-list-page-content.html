@@ -6,11 +6,11 @@
           [greekingData]="page.greekingData"
           [greekedElementCount]="page.greekedElementCount">
 
-  <template #listItemTemplate let-item>
+  <ng-template #listItemTemplate let-item>
     <wex-list-item active (click)="page.goToDetailPage(item)">
-      <template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></template>
+      <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
     </wex-list-item>
-  </template>
+  </ng-template>
 </wex-list>
 
 <ng-content></ng-content>

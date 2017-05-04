@@ -1,8 +1,9 @@
+import { BrowserModule } from "@angular/platform-browser";
 import { Dialogs } from "@ionic-native/dialogs";
 import { OptionsPopoverPage } from "./../pages/landing/options-popover/options-popover";
 import { WexCardNumberPipe } from "./../pipes/wex-card-number";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
-import { Http, XHRBackend, RequestOptions } from "@angular/http";
+import { Http, XHRBackend, RequestOptions, HttpModule } from "@angular/http";
 import { NgModule, ErrorHandler } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
 import { ChartsModule } from "ng2-charts/ng2-charts";
@@ -94,6 +95,9 @@ import { TransactionsPage } from "../pages/transactions/transactions";
     WexTrustedHtmlPipe
   ],
   imports: [
+    //# Angular
+    BrowserModule,
+    HttpModule,
     //# ionic
     //----------------------
     IonicModule.forRoot(MyApp),

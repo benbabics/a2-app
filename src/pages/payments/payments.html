@@ -9,10 +9,10 @@
   </ion-refresher>
 
   <wex-static-list-page-content [page]="this">
-    <template #itemTemplate let-item>
+    <ng-template #itemTemplate let-item>
       <span item-left class="payment-scheduled-date">{{ item.details.scheduledDate | wexDate }}</span>
       <span item-right class="payment-amount">{{ item.details.amount | wexCurrency }}</span>
-    </template>
+    </ng-template>
   </wex-static-list-page-content>
 </ion-content>
 
