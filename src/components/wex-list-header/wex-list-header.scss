@@ -5,10 +5,7 @@ wex-list-header {
     color: color($colors, white);
     font-size: $h6-font-size;
     font-weight: bold;
-
-    @at-root ion-header > & {
-      margin-bottom: 0;
-    }
+    margin-bottom: 0;
 
     & .item-inner {
       margin-right: 32px;

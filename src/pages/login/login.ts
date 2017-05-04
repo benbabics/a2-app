@@ -152,7 +152,9 @@ export class LoginPage extends Page {
           //Transition to the main app
           this.navCtrl.setRoot(WexNavBar);
         }, (error: Response) => {
-          let errorCode: string = error.json().error_description;
+          let errorCode: string = error instanceof Response ? error.json().error_description : error;
+
+          console.error(error instanceof Response ? error.json().error : error);
 
           this.appBannerController.error(this.getLoginErrorDisplayText(errorCode));
         });
