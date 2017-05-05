@@ -116,7 +116,8 @@ export class TransactionsPage extends StaticListPage<any, any> {
   public onInfinite(event: any): Promise<any> {
     return this.fetchResults({
       forceRequest: true,
-      clearItems: false
+      clearItems: false,
+      checkListSize: false
     })
       .toPromise()
       .then(() => event.complete());

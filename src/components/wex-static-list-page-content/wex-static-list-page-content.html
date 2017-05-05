@@ -4,7 +4,8 @@
           [dividers]="page.dividerLabels"
           [loading]="page.fetchingItems"
           [greekingData]="page.greekingData"
-          [greekedElementCount]="page.greekedElementCount">
+          [greekedElementCount]="page.greekedElementCount"
+          [forceGreeking]="page.loadingFacade">
 
   <ng-template #listItemTemplate let-item>
     <wex-list-item active (click)="page.goToDetailPage(item)">

@@ -14,7 +14,7 @@
   </span>
 
   <span *ngIf="!isGrouped">
-    <span *ngFor="let item of items">
+    <span *ngFor="let item of itemsRendered">
       <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
     </span>
   </span>
@@ -28,7 +28,7 @@
   </span>
 </ion-list>
 
-<ion-card *ngIf="hasNoItems" class="no-records">
+<ion-card *ngIf="hasNoItems && !forceGreeking" class="no-records">
   <ion-item>
     <ion-icon item-left name="information-circle" color="dark-gray"></ion-icon>
     {{ CONSTANTS.emptySearchLabel }}

@@ -10,17 +10,25 @@ import { SessionInfoOptions } from "../providers";
 
 export interface FetchOptions extends SessionInfoOptions {
   forceRequest?: boolean;
-  clearItems?: boolean
+  clearItems?: boolean;
+  checkListSize?: boolean;
 }
 
 export namespace FetchOptions {
   export const Defaults: Partial<FetchOptions> = {
     forceRequest: false,
-    clearItems: true
+    clearItems: true,
+    checkListSize: true
   }
 }
 
+type milliseconds = number;
+
 export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extends ListPage {
+
+  // The threshold size that a list is considered large enough to automatically enable a loading facade
+  private static readonly LARGE_LIST_SIZE = 75;
+  private static readonly LARGE_LIST_FACADE_DURATION: milliseconds = 100;
 
   private _fetchingItems: boolean = false;
   private _items: T[] = [];
@@ -42,6 +50,8 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   public greekingData?: WexGreeking.Rect[] = _.get<WexGreeking.Rect[]>(this.CONSTANTS, "greekingData");
   //The number of default elements to display
   public greekedElementCount?: number = _.get<number>(this.CONSTANTS, "greekedElementCount");
+  //Enables a loading facade. This forces the greeking state of the list to be shown instead of the actual items.
+  public loadingFacade?: boolean = false;
 
   constructor(
     pageName: string,
@@ -65,6 +75,14 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
 
   protected get items(): T[] {
     return this._items;
+  }
+
+  protected checkListSize() {
+    // If this is a large list, enable a loading facade to defer list rendering until the view has been entered
+    if (this.totalDisplayedItemCount > StaticListPage.LARGE_LIST_SIZE) {
+      this.loadingFacade = true;
+      window.setTimeout(() => this.loadingFacade = false, StaticListPage.LARGE_LIST_FACADE_DURATION);
+    }
   }
 
   protected clearList() {
@@ -102,6 +120,11 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
 
         // build the display lists
         this.updateList();
+
+        if (options.checkListSize) {
+          this.checkListSize();
+        }
+
         return this.items;
       });
   }
@@ -138,6 +161,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   }
 
   ionViewWillEnter() {
+    this.checkListSize();
     this.fetchResults().subscribe();
   }
 
@@ -164,6 +188,13 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
 
   public get isGrouped(): boolean {
     return !!this.dividerLabels;
+  }
+
+  public get totalDisplayedItemCount(): number {
+    return this.isGrouped ? _.reduce<T[], number>(this._displayedItemGroups, (accumulator: number, list: T[]) => {
+      accumulator += _.size(list);
+      return accumulator;
+    }, 0) : _.size(this._displayedItems);
   }
 
   public onRefresh(refresher) {

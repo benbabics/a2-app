@@ -32,6 +32,8 @@ export class WexList {
   //The number of default elements to display. Default: DEFAULT_NUM_GREEKED_ELEMENTS
   @Input() greekedElementCount?: number;
 
+  @Input() forceGreeking?: boolean;
+
   @ContentChild(TemplateRef) itemTemplate: Query;
 
   public get greekedElements(): undefined[] {
@@ -50,16 +52,32 @@ export class WexList {
   }
 
   public get isGreekingVisible(): boolean {
-    return this.loading && !!this.greekingData;
+    return (this.forceGreeking || this.loading) && !!this.greekingData;
   }
 
   public get isGrouped(): boolean {
-    return !!this.dividers;
+    return !!this.dividers && !this.isGreekingVisible;
+  }
+
+  public get itemsRendered(): any[] {
+    if (!this.forceGreeking) {
+      return this.items;
+    }
+
+    return [];
+  }
+
+  public get itemListsRendered(): any[][] {
+    if(!this.forceGreeking) {
+      return this.itemLists;
+    }
+
+    return [];
   }
 
   public getListForDivider(dividerIndex: number): any[] {
-    if(this.isGrouped && _.isNumber(dividerIndex) && dividerIndex < this.itemLists.length) {
-      return this.itemLists[dividerIndex];
+    if(this.isGrouped && _.isNumber(dividerIndex) && dividerIndex < this.itemListsRendered.length) {
+      return this.itemListsRendered[dividerIndex];
     }
     else {
       return null;
