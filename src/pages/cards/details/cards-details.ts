@@ -1,6 +1,6 @@
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component } from "@angular/core";
-import { NavParams, NavController, App } from "ionic-angular";
+import { NavParams, App } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
 import { Card, CardStatus } from "../../../models";
 import { SessionManager } from "../../../providers";
@@ -26,11 +26,10 @@ export class CardsDetailsPage extends DetailsPage {
 
   constructor(
     sessionManager: SessionManager,
-    navCtrl: NavController,
     public navParams: NavParams,
     private app: App
   ) {
-    super("Cards.Details", sessionManager, navCtrl);
+    super("Cards.Details", sessionManager);
 
     this.card = this.navParams.get(CardsDetailsNavParams.Card);
     this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);
