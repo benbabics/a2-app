@@ -24,7 +24,7 @@
                 .then(() => {
                     $state.go("transaction.filterBy", {
                         filterBy:    "driver",
-                        filterValue: vm.driver.driverId
+                        filterValue: vm.driver.promptId
                     });
                 });
         }
@@ -44,7 +44,7 @@
             vm.isChangeStatusLoading = true;
 
             let accountId = UserManager.getUser().billingCompany.accountId;
-            DriverManager.updateStatus( accountId, vm.driver.driverId, newStatus )
+            DriverManager.updateStatus( accountId, vm.driver.driverId, newStatus, vm.driver.promptId )
                 .then(() => {
                     vm.isChangeStatusLoading            = false;
                     vm.displayStatusChangeBannerSuccess = true;

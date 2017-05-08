@@ -46,12 +46,7 @@
         }
 
         function startGenericAnalyticsTracker() {
-            //Leaving shim for Big Ben Babicsburger
-            //var genericTrackingId = BrandManager.getGenericAnalyticsTrackingId();
-
-            // if (genericTrackingId) {
-            //     AnalyticsUtil.startTracker(genericTrackingId);
-            // }
+            AnalyticsUtil.startTracker(globals.GENERIC_TRACKING_ID);
         }
 
         //app must be set to fullscreen so that ionic headers are the correct size in iOS

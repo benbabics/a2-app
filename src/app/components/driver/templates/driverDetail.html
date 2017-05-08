@@ -13,7 +13,7 @@
 
         <div class="content-detail-status">{{ vm.driver.status }}</div>
 
-        <div class="content-controls">
+        <div class="content-controls" ng-if="!vm.driver.shared">
             <button class="button-primary button-control"
                     ng-disabled="vm.isChangeStatusLoading"
                     ng-click="vm.handleClickChangeStatus()">
@@ -34,14 +34,14 @@
             <li wex-application-flag="vm.config.phoneAndEmailApplications" class="item">
                 <div class="row">
                     <div class="col col-50">{{ ::vm.config.detailMobile }}</div>
-                    <div class="col col-50 wrap text-right"><a href="tel:{{ ::vm.driver.cellPhoneNumber }}">{{ ::vm.driver.cellPhoneNumber }}</a></div>
+                    <div class="col col-50 wrap text-right"><a href="tel:{{ ::vm.driver.cellPhoneNumber }}">{{ ::vm.driver.cellPhoneNumber | wexPhoneFormatting }}</a></div>
                 </div>
             </li>
 
             <li wex-application-flag="vm.config.phoneAndEmailApplications" class="item">
                 <div class="row">
                     <div class="col col-50">{{ ::vm.config.detailEmail }}</div>
-                    <div class="col col-50 wrap text-right"><a href="mailto:{{ ::vm.driver.emailAddress }}">{{ ::vm.driver.emailAddress }}</a></div>
+                    <div class="col col-50 text-right ellipsis"><a href="mailto:{{ ::vm.driver.emailAddress }}">{{ ::vm.driver.emailAddress }}</a></div>
                 </div>
             </li>
         </ul>

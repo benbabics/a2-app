@@ -136,6 +136,7 @@
             //watchers
             scope.$watch(ElementUtil.pageHasNavBar, scope.setSubheader);
             scope.$watch("priority", updateBanners);
+            scope.$watch( "text", val => scope.textIsLong = val && val.length >= 30 );
 
             //event listeners
             scope.$on("$destroy", scope.remove);

@@ -5,7 +5,7 @@
     // jshint maxparams:7
 
     /* @ngInject */
-    function DriverListController(_, $rootScope, $scope, globals, $controller, UserManager, DriverManager, Logger) {
+    function DriverListController(_, $rootScope, $scope, globals, $controller, $cordovaKeyboard, $ionicScrollDelegate, PlatformUtil, UserManager, DriverManager, Logger) {
         var vm = this;
 
         vm.config        = globals.DRIVER_LIST.CONFIG;
@@ -14,6 +14,7 @@
         vm.searchOptions.ORDER_BY = "status";
 
         vm.driversComparator = driversComparator;
+        vm.handleSwiping     = handleSwiping;
 
         activate();
 
@@ -35,6 +36,9 @@
                 onRenderComplete: handleRenderingItems,
                 onResetItems:     handleOnResetItems
             });
+
+            // force redraw colleciton headers on searchFilter change
+            $scope.$watch( () => vm.searchFilter, listRefreshComplete );
 
             vm.drivers = $scope.infiniteScrollService.model;
             handleOnResetItems(); // initially add collections
@@ -77,7 +81,7 @@
 
         function handleRenderingItems() {
             filterDrivers( DriverManager.getDrivers() );
-            $scope.$broadcast( "scroll.refreshComplete" ); // redraw colleciton headers
+            listRefreshComplete();
         }
 
         function filterDrivers(drivers) {
@@ -110,15 +114,30 @@
             if ( _.isObject(driver) ) {
                 let firstName = ( _.get( driver, "firstName" ) || "" ).toLowerCase(),
                     lastName  = ( _.get( driver, "lastName"  ) || "" ).toLowerCase(),
-                    promptId  = ( _.get( driver, "promptId"  ) || "" ).toLowerCase();
+                    promptId  = ( _.get( driver, "promptId"  ) || "" ).toLowerCase(),
+                    combined  = lastName + firstName + lastName;
 
                 // not case-sensitive; strip away unnecessary chars
-                term = term.toLowerCase().replace( /\-|\s/g, "" );
-                promptId = promptId.replace( /\-/g, "" );
+                term = term.toLowerCase().replace( /\,|-|\s/g, "" );
+                combined = combined.replace( /\,|-|\s/g, "" );
+                promptId = promptId.replace( /\,|-/g, "" );
 
-                return firstName.indexOf( term ) >= 0 ||
-                       lastName.indexOf( term )  >= 0 ||
-                       promptId.indexOf( term )  >= 0;
+                return combined.indexOf( term )  > -1 || promptId.indexOf( term ) > -1;
+            }
+        }
+
+        function listRefreshComplete() {
+            $scope.$broadcast( "scroll.refreshComplete" );
+            $ionicScrollDelegate.resize();
+        }
+
+        function handleSwiping() {
+            let isKeyboardVisible = PlatformUtil.platformHasCordova() && $cordovaKeyboard.isVisible();
+            if ( isKeyboardVisible ) {
+                $cordovaKeyboard.close();
+
+                // force blur on input, if active
+                document.activeElement && document.activeElement.blur();
             }
         }
     }

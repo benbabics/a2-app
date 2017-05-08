@@ -214,6 +214,21 @@
                 expect( results ).toEqual( [] );
             });
 
+            it("should filter search term by firstName/lastName combinations", () => {
+                // Last Names: Allens, Braindons, Karls
+                let results = filter( driversActive, 'Alan Allens', ctrl.driversComparator );
+                expect( getDriverDetails(results[0]) ).toEqual( getDriverDetails(driversActive[0]) );
+
+                results = filter( driversActive, 'Alan Allens-Active', ctrl.driversComparator );
+                expect( getDriverDetails(results[0]) ).toEqual( getDriverDetails(driversActive[0]) );
+
+                results = filter( driversActive, 'Allens-Active Alan', ctrl.driversComparator );
+                expect( getDriverDetails(results[0]) ).toEqual( getDriverDetails(driversActive[0]) );
+
+                results = filter( driversActive, 'Allens-Active, Alan', ctrl.driversComparator );
+                expect( getDriverDetails(results[0]) ).toEqual( getDriverDetails(driversActive[0]) );
+            });
+
             it("should filter search term by promptId", () => {
                 // Driver Id's: 111111, 222222, 333333
                 let results = filter( driversActive, '1', ctrl.driversComparator );

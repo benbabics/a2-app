@@ -23,7 +23,8 @@
                 "setTrackingId",
                 "sendEvent",
                 "sendAppView",
-                "setDispatchInterval"
+                "setDispatchInterval",
+                "customDimension"
             ]);
 
             module(function ($provide) {
@@ -64,6 +65,19 @@
 
             it("should call analytics.set with the expected values", function () {
                 expect(analytics.set).toHaveBeenCalledWith("&uid", userId, jasmine.any(Function), jasmine.any(Function));
+            });
+        });
+
+        describe("has a setUserBrand function that", function () {
+            var userBrand;
+
+            beforeEach(function () {
+                userBrand = TestUtils.getRandomStringThatIsAlphaNumeric(7);
+                AnalyticsUtil.setUserBrand( userBrand );
+            });
+
+            it("should call analytics.customDimension with the expected brand", function () {
+                expect( analytics.customDimension ).toHaveBeenCalledWith( "BRAND", userBrand, jasmine.any(Function), jasmine.any(Function) );
             });
         });
 

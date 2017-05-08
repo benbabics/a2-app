@@ -5,7 +5,7 @@
     // jshint maxparams:9
 
     /* @ngInject */
-    function CardListController(_, $rootScope, $scope, globals, $controller, UserManager, CardManager, AnalyticsUtil, Logger) {
+    function CardListController(_, $rootScope, $scope, globals, $controller, $ionicScrollDelegate, $cordovaKeyboard, PlatformUtil, UserManager, CardManager, Logger) {
         var vm = this;
 
         vm.config        = globals.CARD_LIST.CONFIG;
@@ -13,6 +13,7 @@
         vm.searchFilter  = "";
 
         vm.cardsComparator = cardsComparator;
+        vm.handleSwiping   = handleSwiping;
 
         activate();
 
@@ -34,6 +35,9 @@
                 onRenderComplete: handleRenderingItems,
                 onResetItems:     handleOnResetItems
             });
+
+            // force redraw colleciton headers on searchFilter change
+            $scope.$watch( () => vm.searchFilter, listRefreshComplete );
 
             vm.cards = $scope.infiniteScrollService.model;
             handleOnResetItems(); // initially add collections
@@ -77,7 +81,7 @@
 
         function handleRenderingItems() {
             filterCards( CardManager.getCards() );
-            $scope.$broadcast( "scroll.refreshComplete" ); // redraw colleciton headers
+            listRefreshComplete();
         }
 
         function filterCards(cards) {
@@ -121,6 +125,21 @@
                 return embossedCardNumber.replace( /\s/g, "" ).indexOf( term ) >= 0 ||
                        embossingValue2.replace( /\s/g, "" ).indexOf( term )    >= 0 ||
                        embossingValue1.replace( /\s/g, "" ).indexOf( term )    >= 0;
+            }
+        }
+
+        function listRefreshComplete() {
+            $scope.$broadcast( "scroll.refreshComplete" );
+            $ionicScrollDelegate.resize();
+        }
+
+        function handleSwiping() {
+            let isKeyboardVisible = PlatformUtil.platformHasCordova() && $cordovaKeyboard.isVisible();
+            if ( isKeyboardVisible ) {
+                $cordovaKeyboard.close();
+
+                // force blur on input, if active
+                document.activeElement && document.activeElement.blur();
             }
         }
     }
