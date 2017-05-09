@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@angular-wex/mocks": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git",
+    "@angular-wex/models": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git",
     "@angular-wex/validators": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git",
     "@angular/animations": "4.0.2",
     "@angular/common": "4.0.2",
