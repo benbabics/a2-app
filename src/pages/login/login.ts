@@ -1,5 +1,5 @@
 import { WexNavBar, WexAppBannerController } from "../../components";
-import { UserCredentials, Session } from "./../../models";
+import { UserCredentials, Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { NavParams, Platform, Content, NavController } from "ionic-angular";

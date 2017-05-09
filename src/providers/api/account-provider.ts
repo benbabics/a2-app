@@ -2,7 +2,7 @@ import { AmrestProvider } from "./amrest-provider";
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs";
-import { Company } from "../../models";
+import { Company } from "@angular-wex/models";
 
 @Injectable()
 export class AccountProvider extends AmrestProvider {

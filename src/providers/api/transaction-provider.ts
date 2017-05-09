@@ -3,7 +3,7 @@ import { AmrestProvider } from "./amrest-provider";
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs";
-import { Transaction, ListResponse } from "../../models";
+import { Transaction, ListResponse } from "@angular-wex/models";
 
 export interface PostedTransactionSearchOptions {
   fromDate: Date;

@@ -10,6 +10,8 @@ import { SessionCache } from "../session-cache";
 import {
   Transaction,
   ListResponse,
+} from "@angular-wex/models";
+import {
   TransactionList,
   Session
 } from "../../models";

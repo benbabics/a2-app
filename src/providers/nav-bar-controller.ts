@@ -1,7 +1,6 @@
 import { App, Tabs, NavOptions, Tab } from "ionic-angular";
 import { Injectable } from "@angular/core";
 import { SessionManager } from "./session-manager";
-import { Session } from "../models/session";
 
 @Injectable()
 export class NavBarController {

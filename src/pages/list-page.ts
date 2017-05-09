@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import { SecurePage } from "./secure-page";
-import { Model } from "../models";
+import { Model } from "@angular-wex/models";
 
 export type GroupedList<T> = { [group: string]: T[] };
 

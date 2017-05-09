@@ -4,7 +4,8 @@ import { Component } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
 import { SessionManager } from "../../providers";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
-import { Card, CardStatus, Session } from "../../models";
+import { Card, CardStatus } from "@angular-wex/models";
+import { Session } from "../../models";
 
 @Component({
   selector: "page-cards",

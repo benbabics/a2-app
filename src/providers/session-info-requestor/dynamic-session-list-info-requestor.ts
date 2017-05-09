@@ -2,12 +2,14 @@ import * as _ from "lodash";
 import * as moment from "moment";
 import { Observable } from "rxjs";
 import {
-  ListResponse,
   DynamicList,
-  Model,
   ModelT,
   Session
 } from "../../models";
+import {
+  ListResponse,
+  Model
+} from "@angular-wex/models";
 import { SessionInfoRequestorDetails } from "./session-info-requestor";
 
 export abstract class DynamicSessionListInfoRequestor<T extends Model<DetailsT>, DetailsT> implements SessionInfoRequestorDetails {

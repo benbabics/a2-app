@@ -2,7 +2,7 @@ import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component } from "@angular/core";
 import { NavParams, App } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
-import { Card, CardStatus } from "../../../models";
+import { Card, CardStatus } from "@angular-wex/models";
 import { SessionManager } from "../../../providers";
 
 export type CardsDetailsNavParams = keyof {

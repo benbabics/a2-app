@@ -9,8 +9,8 @@ import {
   ShippingMethod,
   ShippingCarrier,
   CardReissueReason,
-  Session
-} from "../../../models";
+} from "@angular-wex/models";
+import { Session } from "../../../models";
 import { SecurePage } from "../../secure-page";
 import { AccountProvider, CardProvider, CardUpdateType, SessionManager } from "../../../providers";
 import { Dialogs } from "@ionic-native/dialogs";

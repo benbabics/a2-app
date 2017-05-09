@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs";
 import { Value } from "../../decorators/value";
-import { User } from "../../models";
+import { User } from "@angular-wex/models";
 import "rxjs/add/operator/map";
 
 @Injectable()

@@ -3,7 +3,7 @@ import { AmrestProvider } from "./amrest-provider";
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs";
-import { Driver, DriverStatus } from "../../models";
+import { Driver, DriverStatus } from "@angular-wex/models";
 
 export interface DriverSearchOptions {
   promptId: string;

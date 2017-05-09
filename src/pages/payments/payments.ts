@@ -3,7 +3,8 @@ import { Component } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
 import { SessionManager } from "../../providers";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
-import { Payment, PaymentStatus, Session } from "../../models";
+import { Payment, PaymentStatus } from "@angular-wex/models";
+import { Session } from "../../models";
 
 @Component({
   selector: "page-payments",

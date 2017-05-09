@@ -360,7 +360,7 @@ ConstantsInfo.Env.set("local", {
       BASE_URL: "http://127.0.0.1:20080"
     },
     GATEKEEPER: {
-      BASE_URL: "http://127.0.0.1:29080"
+      BASE_URL: "https://uat.account.wexmobile.com/configurationAPI"
     },
     KEYMASTER: {
       BASE_URL: "http://127.0.0.1:26080"

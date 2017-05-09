@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs";
-import { InvoiceSummary } from "../../models";
+import { InvoiceSummary } from "@angular-wex/models";
 import { AmrestProvider } from "./amrest-provider";
 import "rxjs/add/operator/map";
 

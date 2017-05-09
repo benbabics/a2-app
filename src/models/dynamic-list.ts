@@ -1,7 +1,7 @@
 import * as moment from "moment";
-import { Model } from "./model";
+import { Model } from "@angular-wex/models";
 
-interface DynamicListDetails<DetailsT> {
+export interface DynamicListDetails<DetailsT> {
   currentPage: number;
   totalResults: number;
   requestDate: string;

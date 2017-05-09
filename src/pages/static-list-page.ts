@@ -1,7 +1,8 @@
 import * as _ from "lodash";
 import { Observable } from "rxjs";
 import { ListPage, GroupedList } from "./list-page";
-import { Model, Session } from "../models";
+import { Model } from "@angular-wex/models";
+import { Session } from "../models";
 
 export { GroupedList } from "./list-page";
 import { SessionManager } from "../providers/session-manager";

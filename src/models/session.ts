@@ -1,9 +1,4 @@
-import { User } from "./user";
-import { Company } from "./company";
-import { Card } from "./card";
-import { Payment } from "./payment";
-import { Driver } from "./driver";
-import { Transaction } from "./transaction";
+import { User, Company, Card, Payment, Driver, Transaction } from "@angular-wex/models";
 import { DynamicList } from "./dynamic-list";
 
 export type TransactionList = DynamicList<Transaction, Transaction.Details>;

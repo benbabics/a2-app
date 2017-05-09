@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import { Component, Input } from "@angular/core";
-import { Model } from "../../models";
+import { Model } from "@angular-wex/models";
 
 type DetailsPropertyDictionary<T> = { [propertyName: string]: T };
 type PipeLike = { transform: (...params: any[]) => any };
