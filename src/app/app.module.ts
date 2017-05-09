@@ -61,6 +61,7 @@ import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
 import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
 import { AppVersion } from "@ionic-native/app-version";
 import { TransactionsPage } from "../pages/transactions/transactions";
+import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
 
 @NgModule({
   declarations: [
@@ -103,6 +104,9 @@ import { TransactionsPage } from "../pages/transactions/transactions";
     //# ionic
     //----------------------
     IonicModule.forRoot(MyApp),
+    //# WEX
+    //----------------------
+    ModelGeneratorsModule,
     //# third party dependencies
     //----------------------
     ChartsModule,
