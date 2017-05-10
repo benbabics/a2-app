@@ -3,7 +3,7 @@
                           ng-if="vm.displayStatusChangeBannerSuccess"
                           wex-toast-timer
                           wex-toast-on-hide="vm.displayStatusChangeBannerSuccess = false"
-                          text="{{ ::vm.config.bannerStatusChangeSuccess }}">
+                          text="{{ ::vm.config.bannerStatusChangeSuccess }} {{ vm.card.status | cardStatusPastTense | lowercase }}.">
     </wex-notification-bar>
 
     <ion-header class="bar-header-details" ng-class="{ 'ui-active': vm.card.isActive(), 'ui-suspended': vm.card.isSuspended(), 'ui-terminated': vm.card.isTerminated(), 'ui-loading': vm.isChangeStatusLoading }">

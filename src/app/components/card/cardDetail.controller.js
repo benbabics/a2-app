@@ -4,9 +4,10 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function CardDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, globals, UserManager, CardManager, card) {
+    function CardDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, $ionicPopup, $window, globals, UserManager, CardManager, PlatformUtil, card) {
 
         var vm = this;
+        var CARD_STATUS = globals.CARD.STATUS;
 
         vm.config = globals.CARD_DETAIL.CONFIG;
         vm.card = card;
@@ -35,7 +36,9 @@
             let actions = _.filter( vm.config.statuses, item => item.id !== vm.card.status );
             displayChangeStatusActions( actions ).then(label => {
                 let action = _.find( actions, { label } );
-                vm.updateCardStatus( action.id );
+                displayChangeStatusConfirm( action.id ).then(() => {
+                    vm.updateCardStatus( action.id );
+                });
             });
         }
 
@@ -80,6 +83,36 @@
             });
 
             return deferred.promise;
+        }
+
+        function displayChangeStatusConfirm(actionId) {
+            let message, deferred = $q.defer();
+
+            switch( actionId.toLowerCase() ) {
+                case CARD_STATUS.TERMINATED:
+                    message = vm.config.confirmMessageTerminate;
+                    break;
+
+                default: return $q.resolve();
+            }
+
+            whenReadyNotification(notification => {
+                let handleConfirm = (btnIndex) => {
+                    deferred[ btnIndex === 1 ? "reject" : "resolve" ]();
+                }
+
+                notification.confirm( message, handleConfirm, "", [ "No", "Yes" ] );
+            });
+
+            return deferred.promise;
+        }
+
+        function whenReadyNotification(callback) {
+            return PlatformUtil.waitForCordovaPlatform(() => {
+                if ( $window.navigator.notification ) {
+                    return $window.navigator.notification;
+                }
+            }).then( callback );
         }
 
     }

@@ -13,6 +13,13 @@
         mockCard,
         CardManager,
         mockGlobals = {
+            "CARD": {
+                "STATUS": {
+                    "ACTIVE":     "active",
+                    "SUSPENDED":  "suspended",
+                    "TERMINATED": "terminated"
+                }
+            },
             "CARD_DETAIL": {
                 "CONFIG": {
                     "ANALYTICS"         : {
@@ -30,7 +37,7 @@
         },
         mockConfig = mockGlobals.CARD_DETAIL.CONFIG;
 
-    describe("A Card Detail Controller", function () {
+    fdescribe("A Card Detail Controller", function () {
 
         beforeEach(function () {
 
