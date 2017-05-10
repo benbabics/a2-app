@@ -185,9 +185,9 @@
                 "pageName": "CardDetails"
             },
             "title":                     "Card Details",
-            "actionStatusTitle":         "Change Card Status",
+            "actionStatusTitle":         "Select Card Status",
             "actionStatusCancel":        "Cancel",
-            "bannerStatusChangeSuccess": "Your card has been",
+            "bannerStatusChangeSuccess": "Status change successful.",
             "bannerStatusChangeFailure": "Status change failed. Please try again.",
             "confirmMessageTerminate":   "Are you sure you want to terminate this card?",
             "detailStandardEmbossing":   "Standard Embossing",
