@@ -13,6 +13,13 @@
         mockCard,
         CardManager,
         mockGlobals = {
+            "USER": {
+                "ONLINE_APPLICATION": {
+                    "WOL_NP"     : "WOL_NP",
+                    "CLASSIC"    : "CLASSIC",
+                    "DISTRIBUTOR": "DISTRIBUTOR"
+                }
+            },
             "CARD": {
                 "STATUS": {
                     "ACTIVE":     "active",
@@ -37,7 +44,7 @@
         },
         mockConfig = mockGlobals.CARD_DETAIL.CONFIG;
 
-    fdescribe("A Card Detail Controller", function () {
+    describe("A Card Detail Controller", function () {
 
         beforeEach(function () {
 

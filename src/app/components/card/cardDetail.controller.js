@@ -5,9 +5,16 @@
 
     /* @ngInject */
     function CardDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, $ionicPopup, $window, globals, UserManager, CardManager, PlatformUtil, card) {
+        const CARD_STATUS      = globals.CARD.STATUS;
+        const USER_APPLICATION = ((appType) => {
+            return {
+                isClassic:     appType === globals.USER.ONLINE_APPLICATION.CLASSIC,
+                isDistributor: appType === globals.USER.ONLINE_APPLICATION.DISTRIBUTOR,
+                isWOLNP:       appType === globals.USER.ONLINE_APPLICATION.WOL_NP
+            };
+        })( UserManager.getUser().onlineApplication );
 
         var vm = this;
-        var CARD_STATUS = globals.CARD.STATUS;
 
         vm.config = globals.CARD_DETAIL.CONFIG;
         vm.card = card;
@@ -33,7 +40,7 @@
         }
 
         function handleClickChangeStatus() {
-            let actions = _.filter( vm.config.statuses, item => item.id !== vm.card.status );
+            let actions = getAvailableCardStatuses();
             displayChangeStatusActions( actions ).then(label => {
                 let action = _.find( actions, { label } );
                 displayChangeStatusConfirm( action.id ).then(() => {
@@ -43,7 +50,7 @@
         }
 
         function updateCardStatus(newStatus) {
-            if ( !newStatus ) { return; }
+            if ( !newStatus || newStatus === vm.card.status ) { return; }
 
             // make request to update card status; if failure, revert
             vm.isChangeStatusLoading = true;
@@ -58,14 +65,24 @@
         }
 
         function canChangeStatus() {
-            let userApplication = UserManager.getUser().onlineApplication;
-            let isDistributor   = userApplication === globals.USER.ONLINE_APPLICATION.DISTRIBUTOR;
-            return isDistributor ? !vm.card.isSuspended() : !vm.card.isTerminated();
+            return USER_APPLICATION.isDistributor ? !vm.card.isSuspended() : !vm.card.isTerminated();
         }
 
         /**
          * Private Methods
          */
+        function getAvailableCardStatuses() {
+            let rejectionAttrs;
+
+            // Only WOL_NP with "Active" status can "Suspended" Cards
+            if ( !USER_APPLICATION.isWOLNP && vm.card.isActive() ) {
+                rejectionAttrs = { id: "SUSPENDED" };
+            }
+
+            // will not reject an iteratee when rejectionAttrs is false
+            return _.reject( vm.config.statuses, rejectionAttrs || false );
+        }
+
         function displayChangeStatusActions(actions) {
             if ( !actions && _.isEmpty(actions) ) { return; }
 
