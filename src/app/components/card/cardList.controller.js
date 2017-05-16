@@ -5,7 +5,7 @@
     // jshint maxparams:9
 
     /* @ngInject */
-    function CardListController(_, $scope, globals, $controller, $ionicScrollDelegate, $cordovaKeyboard, PlatformUtil, UserManager, CardManager, Logger) {
+    function CardListController(_, $rootScope, $scope, globals, $controller, $ionicScrollDelegate, $cordovaKeyboard, PlatformUtil, UserManager, CardManager, Logger) {
         var vm = this;
 
         vm.config        = globals.CARD_LIST.CONFIG;
@@ -32,7 +32,7 @@
                 makeRequest:      handleMakeRequest,
                 onError:          handleOnError,
                 onRequestItems:   handleOnRequestItems,
-                onRenderComplete: handleOnRenderComplete,
+                onRenderComplete: handleRenderingItems,
                 onResetItems:     handleOnResetItems
             });
 
@@ -41,6 +41,12 @@
 
             vm.cards = $scope.infiniteScrollService.model;
             handleOnResetItems(); // initially add collections
+
+            // avoid adding an additional watcher on deeply nested attrs
+            let statusChangeListener = $rootScope.$on( "card:statusChange", handleRenderingItems );
+
+            // remove event listener
+            $scope.$on( "$destroy", statusChangeListener );
         }
 
         function handleOnResetItems() {
@@ -73,7 +79,7 @@
             Logger.error( `Failed to fetch next page of cards: ${errorResponse}` );
         }
 
-        function handleOnRenderComplete() {
+        function handleRenderingItems() {
             filterCards( CardManager.getCards() );
             listRefreshComplete();
         }

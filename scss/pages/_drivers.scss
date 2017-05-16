@@ -22,48 +22,5 @@
  * Driver Details
 **/
 .page-drivers-detail {
-  $color-active:     #008b00;
-  $color-terminated: #f00000;
-
   @extend %ui-management-detail;
-
-  .bar-header-details {
-    .content-driver-name,
-    .content-driver-status {
-      flex-grow: 1;
-      font-size: 27px;
-    }
-    .content-driver-name {
-      color: #333;
-      text-align: center;
-      font-family: 'open_sanslight';
-      text-transform: capitalize;
-    }
-    .content-driver-status {
-      font-family: 'open_sansregular';
-    }
-
-    &.ui-active {
-      .content-driver-status { color: $color-active; }
-      .button-control.button-primary {
-        background-color:           $color-active;
-        border-bottom-color: darken($color-active, 10%);
-      }
-    }
-    &.ui-terminated {
-      .content-driver-status { color: $color-terminated; }
-      .button-control.button-primary {
-        background-color:           $color-terminated;
-        border-bottom-color: darken($color-terminated, 10%);
-      }
-    }
-    &.ui-loading {
-      .content-driver-status { color: #666; }
-      .button-control.button-primary {
-        color:               #666;
-        background-color:    #ccc;
-        border-bottom-color: #aaa;
-      }
-    }
-  }
 }

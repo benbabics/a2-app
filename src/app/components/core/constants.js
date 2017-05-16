@@ -181,17 +181,26 @@
 
     appGlobals.CARD_DETAIL = {
         "CONFIG": {
-            "ANALYTICS"                : {
+            "ANALYTICS": {
                 "pageName": "CardDetails"
             },
-            "title"                    : "Card Details",
-            "cardNumber"               : "Card Number",
-            "standardEmbossing"        : "Standard Embossing",
-            "optionalEmbossing"        : "Optional Embossing",
-            "status"                   : "Status",
-            "changeStatusButton"       : "Change Status",
-            "reissueCardButton"        : "Reissue Card",
-            "transactionActivityButton": "Transaction Activity"
+            "title":                     "Card Details",
+            "actionStatusTitle":         "Select Card Status",
+            "actionStatusCancel":        "Cancel",
+            "bannerStatusChangeSuccess": "Status change successful.",
+            "bannerStatusChangeFailure": "Status change failed. Please try again.",
+            "confirmMessageTerminate":   "Are you sure you want to terminate this card?",
+            "detailStandardEmbossing":   "Standard Embossing",
+            "detailOptionalEmbossing":   "Optional Embossing",
+            "labelChangeStatus":         "Change Status",
+            "labelReissueCard":          "Reissue Card",
+            "labelTransactions":         "Transactions",
+            "phoneAndEmailApplications": ["WOL_NP", "DISTRIBUTOR"],
+            "statuses": [
+                { "id": "ACTIVE", "label": "Active" },
+                { "id": "SUSPENDED", "label": "Suspended" },
+                { "id": "TERMINATED", "label": "Terminated" }
+            ]
         }
     };
 

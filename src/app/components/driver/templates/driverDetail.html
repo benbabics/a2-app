@@ -7,11 +7,11 @@
     </wex-notification-bar>
 
     <ion-header class="bar-header-details" ng-class="{ 'ui-active': vm.driver.isActive(), 'ui-terminated': vm.driver.isTerminated(), 'ui-loading': vm.isChangeStatusLoading }">
-        <div class="content-driver-name">
+        <div class="content-detail-title">
             {{ vm.driver.firstName | lowercase }} {{ vm.driver.lastName | lowercase }}
         </div>
 
-        <div class="content-driver-status">{{ vm.driver.status }}</div>
+        <div class="content-detail-status">{{ vm.driver.status }}</div>
 
         <div class="content-controls" ng-if="!vm.driver.shared">
             <button class="button-primary button-control"
