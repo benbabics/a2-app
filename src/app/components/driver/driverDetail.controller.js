@@ -30,7 +30,7 @@
         }
 
         function handleClickChangeStatus() {
-            let actions = _.filter( vm.config.statuses, item => item.id !== vm.driver.status );
+            let actions = vm.config.statuses;
             displayChangeStatusActions( actions ).then(label => {
                 let action = _.find( actions, { label } );
                 vm.updateDriverStatus( action.id );
@@ -38,7 +38,7 @@
         }
 
         function updateDriverStatus(newStatus) {
-            if ( !newStatus ) { return; }
+            if ( !newStatus || newStatus === vm.driver.status ) { return; }
 
             // make request to update driver status; if failure, revert
             vm.isChangeStatusLoading = true;
