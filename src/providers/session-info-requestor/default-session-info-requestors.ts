@@ -1,9 +1,11 @@
-import { TransactionProvider } from "../api/transaction-provider";
-import { DriverProvider } from "../api/driver-provider";
-import { PaymentProvider } from "../api/payment-provider";
-import { CardProvider } from "../api/card-provider";
-import { AccountProvider } from "../api/account-provider";
-import { UserProvider } from "../api/user-provider";
+import {
+  TransactionProvider,
+  DriverProvider,
+  PaymentProvider,
+  CardProvider,
+  AccountProvider,
+  UserProvider
+} from "@angular-wex/api-providers";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { SessionCache } from "../session-cache";

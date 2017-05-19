@@ -1,11 +1,12 @@
 import * as _ from "lodash";
-import { InvoiceProvider, BrandProvider, SessionManager, NavBarController } from "../../providers";
+import { SessionManager, NavBarController } from "../../providers";
 import { Component } from "@angular/core";
 import { NavController, NavParams, PopoverController } from "ionic-angular";
 import { Company, InvoiceSummary, Payment } from "@angular-wex/models";
 import { Session } from "../../models";
 import { SecurePage } from "../secure-page";
 import { OptionsPopoverPage } from "./options-popover/options-popover";
+import { InvoiceProvider, BrandProvider } from "@angular-wex/api-providers";
 
 interface ChartDisplayConfig {
   [list: string]: any[];

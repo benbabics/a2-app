@@ -12,10 +12,11 @@ import {
 } from "@angular-wex/models";
 import { Session } from "../../../models";
 import { SecurePage } from "../../secure-page";
-import { AccountProvider, CardProvider, CardUpdateType, SessionManager } from "../../../providers";
+import { SessionManager } from "../../../providers";
 import { Dialogs } from "@ionic-native/dialogs";
 import { WexAppBannerController } from "../../../components";
 import { Value } from "../../../decorators/value";
+import { AccountProvider, CardProvider, CardUpdateType } from "@angular-wex/api-providers";
 
 @Component({
   selector: "page-cards-reissue",

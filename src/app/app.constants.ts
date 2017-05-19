@@ -21,49 +21,6 @@ export namespace ConstantsInfo {
       grant_type: "password",
       scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id",
     },
-    //# REST service config info
-    APIS: {
-      AMREST: {
-        ENDPOINTS: {
-          ACCOUNTS: {
-            BASE: "accounts",
-            CARDS: {
-              BASE: "cards"
-            },
-            DRIVERS: {
-              BASE: "drivers"
-            },
-            INVOICES: {
-              CURRENT: "payments/currentInvoiceSummary"
-            },
-            PAYMENTS: {
-              SEARCH: "payments"
-            },
-            TRANSACTIONS: {
-              PENDING: {
-                BASE: "pendingTransactions"
-              },
-              POSTED: {
-                BASE: "postedTransactions"
-              }
-            }
-          },
-          USER: {
-            CURRENT: "users/current"
-          }
-        }
-      },
-      GATEKEEPER: {
-        ENDPOINTS: {
-          BRAND_LOGO: "logo"
-        }
-      },
-      KEYMASTER: {
-        ENDPOINTS: {
-          TOKEN: "uaa/oauth/token"
-        }
-      }
-    },
     //# Components
     COMPONENTS: {
       LIST: {

@@ -1,5 +1,5 @@
 import { WexNavBar, WexAppBannerController } from "../../components";
-import { UserCredentials, Session } from "../../models";
+import { Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { NavParams, Platform, Content, NavController } from "ionic-angular";
@@ -13,6 +13,7 @@ import { LocalStorageService } from "angular-2-local-storage/dist";
 import { Value } from "../../decorators/value";
 import { Dialogs } from "@ionic-native/dialogs";
 import { Response } from "@angular/http";
+import { UserCredentials } from "@angular-wex/models";
 
 export type LoginPageNavParams = keyof {
   fromLogOut

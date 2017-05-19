@@ -2,9 +2,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Fingerprint, FingerprintProfile } from "./fingerprint";
 import * as _ from "lodash";
 import { Injectable } from "@angular/core";
-import { UserCredentials } from "../models";
-import { AuthProvider } from "./api/auth-provider";
-import { UserProvider } from "./api/user-provider";
+import { UserCredentials } from "@angular-wex/models";
+import { AuthProvider, UserProvider } from "@angular-wex/api-providers";
 import { Observable } from "rxjs/Observable";
 import { SessionCache } from "./session-cache";
 

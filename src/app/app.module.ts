@@ -32,26 +32,17 @@ import {
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import {
-  AuthProvider,
-  CardProvider,
   SecureHttp,
   SessionManager,
-  UserProvider,
-  InvoiceProvider,
   NavBarController,
-  PaymentProvider,
   WexPlatform,
   SecureStorage,
   Fingerprint,
   AndroidFingerprintService,
   IosFingerprintService,
   MockFingerprintService,
-  AccountProvider,
-  BrandProvider,
   SessionInfoRequestors,
   DefaultSessionInfoRequestors,
-  DriverProvider,
-  TransactionProvider,
   SessionCache
 } from "../providers";
 import { WexCurrency, WexDate, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
@@ -62,6 +53,8 @@ import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
 import { AppVersion } from "@ionic-native/app-version";
 import { TransactionsPage } from "../pages/transactions/transactions";
 import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
+import { ApiProviders } from "@angular-wex/api-providers";
+import { Constants } from "./app.constants";
 
 @NgModule({
   declarations: [
@@ -106,6 +99,7 @@ import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
     IonicModule.forRoot(MyApp),
     //# WEX
     //----------------------
+    ApiProviders.withConstants(Constants),
     ModelGeneratorsModule,
     //# third party dependencies
     //----------------------
@@ -143,13 +137,6 @@ import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
       useClass: SecureHttp,
       deps: [XHRBackend, RequestOptions]
     },
-    AuthProvider,
-    InvoiceProvider,
-    UserProvider,
-    CardProvider,
-    PaymentProvider,
-    AccountProvider,
-    BrandProvider,
     SessionManager,
     NavBarController,
     SecureStorage,
@@ -163,8 +150,6 @@ import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
       provide: SessionInfoRequestors,
       useClass: DefaultSessionInfoRequestors
     },
-    DriverProvider,
-    TransactionProvider,
     SessionCache
   ]
 })
