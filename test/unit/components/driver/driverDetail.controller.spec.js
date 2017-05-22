@@ -12,7 +12,25 @@
         ctrl,
         mockDriver,
         DriverManager,
-        resolveHandler;
+        resolveHandler,
+        mockGlobals = {
+            "DRIVER_DETAILS": {
+                "CONFIG": {
+                    "ANALYTICS"         : {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "views": {
+                            "statusOptionsOpen":    TestUtils.getRandomStringThatIsAlphaNumeric(5),
+                            "statusOptionsSuccess": TestUtils.getRandomStringThatIsAlphaNumeric(5)
+                        },
+                        "events": {
+                            "statusOptionActive":     [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ],
+                            "statusOptionTerminated": [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ],
+                            "navigateTransactions":   [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ]
+                        }
+                    }
+                }
+            }
+        };
 
     describe("A Driver Detail Controller", () => {
 
@@ -46,7 +64,8 @@
                     $ionicActionSheet: $ionicActionSheet,
                     Navigation:        Navigation,
                     driver:            mockDriver,
-                    DriverManager:     DriverManager
+                    DriverManager:     DriverManager,
+                    globals:           mockGlobals
                 });
             });
 

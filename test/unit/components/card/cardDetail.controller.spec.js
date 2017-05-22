@@ -30,7 +30,17 @@
             "CARD_DETAIL": {
                 "CONFIG": {
                     "ANALYTICS"         : {
-                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "views": {
+                            "statusOptionsOpen":    TestUtils.getRandomStringThatIsAlphaNumeric(5),
+                            "statusOptionsSuccess": TestUtils.getRandomStringThatIsAlphaNumeric(5)
+                        },
+                        "events": {
+                            "statusOptionActive":     [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ],
+                            "statusOptionSuspended":  [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ],
+                            "statusOptionTerminated": [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ],
+                            "navigateTransactions":   [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ]
+                        }
                     },
                     "title"             : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "cardNumber"        : TestUtils.getRandomStringThatIsAlphaNumeric(10),

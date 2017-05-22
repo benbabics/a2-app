@@ -347,7 +347,7 @@
     appGlobals.DRIVER_LIST = {
         "CONFIG": {
             "ANALYTICS": {
-                "pageName": "Drivers",
+                "pageName": "DriversList",
                 "events": {
                     "searchSubmitted": [ "Drivers", "SearchDriverLink" ]
                 }
@@ -369,6 +369,18 @@
 
     appGlobals.DRIVER_DETAILS = {
         "CONFIG": {
+            "ANALYTICS": {
+                "pageName": "DriverDetails",
+                "views": {
+                    "statusOptionsOpen":    "DriverStatusOptions",
+                    "statusOptionsSuccess": "DriverStatusSuccess"
+                },
+                "events": {
+                    "statusOptionActive":     [ "Drivers", "DriverActivateLink" ],
+                    "statusOptionTerminated": [ "Drivers", "DriverTerminateLink" ],
+                    "navigateTransactions":   [ "Drivers", "DriverTransactionLink" ]
+                }
+            },
             "title":                     "Driver Details",
             "actionStatusTitle":         "Change Driver Status",
             "actionStatusCancel":        "Cancel",
@@ -381,8 +393,8 @@
             "labelTransactions":         "Transactions",
             "phoneAndEmailApplications": ["WOL_NP", "DISTRIBUTOR"],
             "statuses": [
-                { "id": "ACTIVE", "label": "Active" },
-                { "id": "TERMINATED", "label": "Terminated" }
+                { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive" },
+                { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated" }
             ]
         }
     };
