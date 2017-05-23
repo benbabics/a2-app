@@ -91,7 +91,6 @@
             "locator": "https://github.com/selahssea/cordova-open-native-settings",
             "id": "com.phonegap.plugins.nativesettingsopener"
         },
-        "urbanairship-cordova@6.7.0",
         {
             "locator": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.5",
             "id": "com.telerik.plugins.nativepagetransitions"
@@ -102,7 +101,7 @@
             "platform": "android",
             "locator": "browser@4.1.0"
         },
-        "android@6.1.2",
+        "android@6.2.3",
         "ios@4.4.0"
     ]
 }
