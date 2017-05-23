@@ -5,7 +5,7 @@
     // jshint maxparams:8
 
     /* @ngInject */
-    function MenuController(_, $ionicSideMenuDelegate, $state, $timeout, globals, Navigation, NotificationItemsManager, Fingerprint) {
+    function MenuController(_, $ionicSideMenuDelegate, $state, $timeout, globals, Navigation, Fingerprint) {
 
         var vm = this;
         vm.config = globals.MENU.CONFIG;
@@ -25,7 +25,6 @@
         vm.goToSettings = goToSettings;
         vm.goToLogOut = goToLogOut;
         vm.currentStateHasRoot = currentStateHasRoot;
-        vm.getUnreadNotificationsCount = getUnreadNotificationsCount;
 
         $timeout( activate );
 
@@ -90,10 +89,6 @@
 
         function currentStateHasRoot(rootState) {
             return _.startsWith($state.current.name, rootState);
-        }
-
-        function getUnreadNotificationsCount() {
-            return NotificationItemsManager.getUnreadNotificationsCount();
         }
     }
 

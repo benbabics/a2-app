@@ -15,7 +15,6 @@
         "app.components.menu",
         "app.components.navBar",
         "app.components.navigation",
-        "app.components.notifications",
         "app.components.payment",
         "app.components.privacyPolicy",
         "app.components.settings",

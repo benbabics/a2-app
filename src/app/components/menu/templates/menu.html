@@ -32,16 +32,6 @@
             {{::vm.config.options.transactionActivity}}
         </wex-menu-item>
 
-        <wex-menu-item id="option-notifications"
-                       wex-feature-flag="PUSH_NOTIFICATIONS"
-                       ng-click="vm.goToNotifications()"
-                       icon="fa-bell"
-                       root-state="{{::vm.config.rootStates.notifications}}"
-                       no-chevron="{{vm.getUnreadNotificationsCount() > 0}}">
-            {{::vm.config.options.notifications}}
-            <i class="badge badge-assertive" ng-hide="vm.getUnreadNotificationsCount() == 0">{{vm.getUnreadNotificationsCount()}}</i>
-        </wex-menu-item>
-
         <wex-menu-item id="option-cards"
                        ng-click="vm.goToCards()"
                        icon="fa-credit-card-alt"
