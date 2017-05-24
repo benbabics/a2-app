@@ -26,6 +26,8 @@
                         filterBy:    "driver",
                         filterValue: vm.driver.promptId
                     });
+
+                    trackEvent( "navigateTransactions" );
                 });
         }
 
@@ -34,7 +36,10 @@
             displayChangeStatusActions( actions ).then(label => {
                 let action = _.find( actions, { label } );
                 vm.updateDriverStatus( action.id );
+                trackEvent( action.trackingId );
             });
+
+            trackView( "statusOptionsOpen" );
         }
 
         function updateDriverStatus(newStatus) {
@@ -49,6 +54,7 @@
                     vm.isChangeStatusLoading            = false;
                     vm.displayStatusChangeBannerSuccess = true;
                     $rootScope.$broadcast( "driver:statusChange" );
+                    trackView( "statusOptionsSuccess" );
                 });
         }
 
@@ -72,6 +78,19 @@
             });
 
             return deferred.promise;
+        }
+
+        /**
+         * Analytics
+         **/
+        function trackEvent(action) {
+            var eventData = vm.config.ANALYTICS.events[ action ];
+            _.spread( AnalyticsUtil.trackEvent )( eventData );
+        }
+
+        function trackView(viewId) {
+            var viewName = vm.config.ANALYTICS.views[ viewId ];
+            AnalyticsUtil.trackView( viewName );
         }
     }
 

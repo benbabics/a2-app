@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function CardDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, $ionicPopup, $window, globals, UserManager, CardManager, PlatformUtil, card) {
+    function CardDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, $ionicPopup, $window, globals, AnalyticsUtil, UserManager, CardManager, PlatformUtil, card) {
         const CARD_STATUS      = globals.CARD.STATUS;
         const USER_APPLICATION = ((appType) => {
             return {
@@ -36,6 +36,8 @@
                         filterBy:    "card",
                         filterValue: vm.card.cardId
                     });
+
+                    trackEvent( "navigateTransactions" );
                 });
         }
 
@@ -46,7 +48,10 @@
                 displayChangeStatusConfirm( action.id ).then(() => {
                     vm.updateCardStatus( action.id );
                 });
+                trackEvent( action.trackingId );
             });
+
+            trackView( "statusOptionsOpen" );
         }
 
         function updateCardStatus(newStatus) {
@@ -61,6 +66,7 @@
                     vm.isChangeStatusLoading            = false;
                     vm.displayStatusChangeBannerSuccess = true;
                     $rootScope.$broadcast( "card:statusChange" );
+                    trackView( "statusOptionsSuccess" );
                 });
         }
 
@@ -130,6 +136,19 @@
                     return $window.navigator.notification;
                 }
             }).then( callback );
+        }
+
+        /**
+         * Analytics
+         **/
+        function trackEvent(action) {
+            var eventData = vm.config.ANALYTICS.events[ action ];
+            _.spread( AnalyticsUtil.trackEvent )( eventData );
+        }
+
+        function trackView(viewId) {
+            var viewName = vm.config.ANALYTICS.views[ viewId ];
+            AnalyticsUtil.trackView( viewName );
         }
 
     }

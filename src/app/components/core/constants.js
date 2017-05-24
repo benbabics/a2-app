@@ -182,7 +182,17 @@
     appGlobals.CARD_DETAIL = {
         "CONFIG": {
             "ANALYTICS": {
-                "pageName": "CardDetails"
+                "pageName": "CardDetails",
+                "views": {
+                    "statusOptionsOpen":    "CardStatusOptions",
+                    "statusOptionsSuccess": "CardStatusSuccess"
+                },
+                "events": {
+                    "statusOptionActive":     [ "Cards", "CardActivateLink" ],
+                    "statusOptionSuspended":  [ "Cards", "CardSuspendLink" ],
+                    "statusOptionTerminated": [ "Cards", "CardTerminateLink" ],
+                    "navigateTransactions":   [ "Cards", "CardTransactionLink" ]
+                }
             },
             "title":                     "Card Details",
             "actionStatusTitle":         "Select Card Status",
@@ -197,9 +207,9 @@
             "labelTransactions":         "Transactions",
             "phoneAndEmailApplications": ["WOL_NP", "DISTRIBUTOR"],
             "statuses": [
-                { "id": "ACTIVE", "label": "Active" },
-                { "id": "SUSPENDED", "label": "Suspended" },
-                { "id": "TERMINATED", "label": "Terminated" }
+                { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive" },
+                { "id": "SUSPENDED",  "label": "Suspended",  "trackingId": "statusOptionSuspended" },
+                { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated" }
             ]
         }
     };
@@ -207,7 +217,7 @@
     appGlobals.CARD_LIST = {
         "CONFIG": {
             "ANALYTICS": {
-                "pageName": "Cards",
+                "pageName": "CardsList",
                 "events": {
                     "searchSubmitted": [ "Cards", "SearchCardLink" ]
                 }
@@ -337,7 +347,7 @@
     appGlobals.DRIVER_LIST = {
         "CONFIG": {
             "ANALYTICS": {
-                "pageName": "Drivers",
+                "pageName": "DriversList",
                 "events": {
                     "searchSubmitted": [ "Drivers", "SearchDriverLink" ]
                 }
@@ -359,6 +369,18 @@
 
     appGlobals.DRIVER_DETAILS = {
         "CONFIG": {
+            "ANALYTICS": {
+                "pageName": "DriverDetails",
+                "views": {
+                    "statusOptionsOpen":    "DriverStatusOptions",
+                    "statusOptionsSuccess": "DriverStatusSuccess"
+                },
+                "events": {
+                    "statusOptionActive":     [ "Drivers", "DriverActivateLink" ],
+                    "statusOptionTerminated": [ "Drivers", "DriverTerminateLink" ],
+                    "navigateTransactions":   [ "Drivers", "DriverTransactionLink" ]
+                }
+            },
             "title":                     "Driver Details",
             "actionStatusTitle":         "Change Driver Status",
             "actionStatusCancel":        "Cancel",
@@ -371,8 +393,8 @@
             "labelTransactions":         "Transactions",
             "phoneAndEmailApplications": ["WOL_NP", "DISTRIBUTOR"],
             "statuses": [
-                { "id": "ACTIVE", "label": "Active" },
-                { "id": "TERMINATED", "label": "Terminated" }
+                { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive" },
+                { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated" }
             ]
         }
     };
