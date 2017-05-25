@@ -1,5 +1,7 @@
 import * as _ from "lodash";
-import { Constants } from "../app/app.constants";
+import { AppConstants } from "../app/app.constants";
+
+const Constants = AppConstants();
 
 export abstract class Page {
 

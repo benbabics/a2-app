@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Constants } from "./../../app/app.constants";
+import { AppConstants } from "./../../app/app.constants";
 import { SecureStorage } from "./../secure-storage";
 import { Injectable } from "@angular/core";
 import { Platform } from "ionic-angular";
@@ -12,6 +12,8 @@ import {
   NativeFingerprintService
 } from "./native-fingerprint-service";
 import { WexPlatform } from "../platform";
+
+const Constants = AppConstants();
 
 export interface IosFingerprintVerificationOptions extends IFingerprintVerificationOptions {
   dialogPasswordLabel?: string;

@@ -1,10 +1,10 @@
 import * as _ from "lodash";
+import { ConstantsConfig } from "@angular-wex/api-providers";
 import { Environment } from "../environments/environment";
 
 export namespace ConstantsInfo {
-  export let Env: Map<string, any> = new Map<string, any>();
 
-  export let Common: any = {
+  export const Common = {
     ENV: Environment,
     PLATFORM: "%%=PLATFORM%%",
     LOCALE: "en-US",
@@ -306,11 +306,20 @@ export namespace ConstantsInfo {
       }
     }
   };
+
+  export type CommonConstants = typeof Common;
+  export type PartialCommonConstants = { [K in keyof CommonConstants]?: Partial<CommonConstants[K]> };
+  export type EnvironmentConstants = ConstantsConfig & PartialCommonConstants;
+
+  export const Env: Map<string, EnvironmentConstants> = new Map<string, EnvironmentConstants>();
 }
 
 ConstantsInfo.Env.set("local", {
   AUTH: {
-    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
+    client_id: "mobileAccountManagement",
+    grant_type: "password",
+    scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id"
   },
   APIS: {
     AMREST: {
@@ -327,7 +336,10 @@ ConstantsInfo.Env.set("local", {
 
 ConstantsInfo.Env.set("dit", {
   AUTH: {
-    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
+    client_id: "mobileAccountManagement",
+    grant_type: "password",
+    scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id"
   },
   APIS: {
     AMREST: {
@@ -344,7 +356,10 @@ ConstantsInfo.Env.set("dit", {
 
 ConstantsInfo.Env.set("stage-wex", {
   AUTH: {
-    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
+    client_id: "mobileAccountManagement",
+    grant_type: "password",
+    scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id"
   },
   APIS: {
     AMREST: {
@@ -361,7 +376,10 @@ ConstantsInfo.Env.set("stage-wex", {
 
 ConstantsInfo.Env.set("production-wex", {
   AUTH: {
-    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&"
+    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
+    client_id: "mobileAccountManagement",
+    grant_type: "password",
+    scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id"
   },
   APIS: {
     AMREST: {
@@ -376,6 +394,12 @@ ConstantsInfo.Env.set("production-wex", {
   }
 });
 
-export let Constants: any = ((): any => {
-  return _.merge({}, ConstantsInfo.Common, ConstantsInfo.Env.get(Environment) || ConstantsInfo.Env.get("local"));
-})();
+export type AppConstants = ConstantsInfo.CommonConstants & ConstantsInfo.EnvironmentConstants;
+
+export function GetCurrentEnvironmentConstants(): ConstantsInfo.EnvironmentConstants {
+  return ConstantsInfo.Env.get(Environment);
+}
+
+export function AppConstants(): AppConstants {
+  return _.merge({}, ConstantsInfo.Common, GetCurrentEnvironmentConstants());
+}

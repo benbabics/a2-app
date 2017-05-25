@@ -54,7 +54,7 @@ import { AppVersion } from "@ionic-native/app-version";
 import { TransactionsPage } from "../pages/transactions/transactions";
 import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
 import { ApiProviders } from "@angular-wex/api-providers";
-import { Constants } from "./app.constants";
+import { GetCurrentEnvironmentConstants } from "./app.constants";
 
 @NgModule({
   declarations: [
@@ -99,7 +99,7 @@ import { Constants } from "./app.constants";
     IonicModule.forRoot(MyApp),
     //# WEX
     //----------------------
-    ApiProviders.withConstants(Constants),
+    ApiProviders.withConstants(GetCurrentEnvironmentConstants()),
     ModelGeneratorsModule,
     //# third party dependencies
     //----------------------
