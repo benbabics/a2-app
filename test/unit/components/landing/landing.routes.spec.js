@@ -111,7 +111,6 @@
 
                 it("should resolve a fetchCurrentInvoiceSummary function", function () {
                     $rootScope.$digest();
-                    console.log( $state.current.name);
                     expect($injector.invoke($state.current.views["@"].resolve.fetchCurrentInvoiceSummary)).toBeDefined();
                 });
 
@@ -120,13 +119,6 @@
 
                     expect($injector.invoke($state.current.views["@"].resolve.fetchScheduledPaymentsCount)).toBeDefined();
                 });
-
-                //TODO:  Does Ben need this? - steve
-                // it("should call this.AnalyticsUtil.trackView", function () {
-                //     $rootScope.$digest();
-                //
-                //     expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(globals.LANDING.CONFIG.ANALYTICS.pageName);
-                // });
 
                 describe("when fetchCurrentInvoiceSummary is called", function () {
 

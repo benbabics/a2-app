@@ -5,7 +5,7 @@
     // jshint maxparams:5
 
     /* @ngInject */
-    function CardReissueController(_, Logger, account, card, cardReissueDetails) {
+    function CardReissueController($window, _, Logger, account, card, cardReissueDetails) {
 
         activate();
 
@@ -25,7 +25,7 @@
                 //note: this check will have to be moved once the user is allowed to modify the selected card shipping address
                 if (account.hasRegularShippingMethod()) {
                     cardReissueDetails.selectedShippingMethod = cardReissueDetails.account.regularCardShippingMethod;
-                    cardReissueDetails.shippingMethods = [cardReissueDetails.selectedShippingMethod];
+                    cardReissueDetails.shippingMethods = [cardReissueDetails.account.regularCardShippingMethod];
                 }
                 else {
                     //TODO - what do we do here?

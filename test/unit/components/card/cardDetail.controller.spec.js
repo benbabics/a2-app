@@ -12,6 +12,7 @@
         ctrl,
         mockCard,
         CardManager,
+        AnalyticsUtil,
         mockGlobals = {
             "USER": {
                 "ONLINE_APPLICATION": {
@@ -58,14 +59,23 @@
 
         beforeEach(function () {
 
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
+
             // stub the routing and template loading
             module(function ($urlRouterProvider) {
                 $urlRouterProvider.deferIntercept();
             });
 
             module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
+                $provide.value( "$ionicTemplateCache", function () {} );
+                $provide.value( "AnalyticsUtil", AnalyticsUtil );
             });
 
             module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _)]);
@@ -145,11 +155,11 @@
                 expect( ctrl.card.status ).toEqual( 'TERMINATED' );
             });
 
-            it("should update vm.displayStatusChangeBannerSuccess appropriately", () => {
-                expect( ctrl.displayStatusChangeBannerSuccess ).toBe( false );
+            it("should update vm.shouldDisplayBannerSuccess appropriately", () => {
+                expect( ctrl.shouldDisplayBannerSuccess ).toBe( false );
                 ctrl.updateCardStatus( 'ACTIVE' );
                 $timeout.flush();
-                expect( ctrl.displayStatusChangeBannerSuccess ).toBe( true );
+                expect( ctrl.shouldDisplayBannerSuccess ).toBe( true );
             });
         });
 
@@ -158,7 +168,7 @@
             beforeEach(function () {
                 spyOn($state, "go").and.stub();
 
-                ctrl.goToTransactionActivity();
+                ctrl.handleNavigateTransactionActivity();
                 $rootScope.$digest();
             });
 

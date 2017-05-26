@@ -199,6 +199,7 @@
             "actionStatusCancel":        "Cancel",
             "bannerStatusChangeSuccess": "Status change successful.",
             "bannerStatusChangeFailure": "Status change failed. Please try again.",
+            "bannerReissueCardSuccess":  "Your card has been reissued.",
             "confirmMessageTerminate":   "Are you sure you want to terminate this card?",
             "detailStandardEmbossing":   "Standard Embossing",
             "detailOptionalEmbossing":   "Optional Embossing",
@@ -288,14 +289,17 @@
             "shippingAddress"    : "Shipping Address",
             "shippingMethod"     : "Shipping Method",
             "reissueReason"      : "Reason",
+            "selectReissueMethod": "Select Method",
             "selectReissueReason": "Select Reason",
             "submitButton"       : "Reissue Card",
             "instructionalText"  : "Orders received after 3:00 pm Eastern Time may be processed the next business day.",
             "poBoxText"          : "Please Note: You have a P.O. Box address listed. Your card will be delivered via regular mail.",
+            "alertPopupMessages" : {
+                "classicMultipleReissues": "This card has been reissued too many times."
+            },
             "confirmationPopup"  : {
-                "content"  : "Are you sure you want to reissue this card?",
-                "yesButton": "Yes",
-                "noButton" : "No"
+                "message": "Are you sure you want to reissue this card?",
+                "buttons": [ "No", "Yes" ]
             }
         }
     };
