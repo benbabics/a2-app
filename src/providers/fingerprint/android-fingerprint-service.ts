@@ -120,10 +120,10 @@ export class AndroidFingerprintService extends NativeFingerprintService {
       }))
       .then((availabilityDetails: InternalAndroidFingerprintServiceAvailabilityResponse) => {
         if (availabilityDetails.isAvailable) {
-          return {
+          return Promise.resolve({
             isDeviceSupported: true,
             isSetup: true
-          };
+          });
         }
 
         return Promise.reject({

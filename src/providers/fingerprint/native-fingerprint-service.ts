@@ -69,7 +69,7 @@ export abstract class NativeFingerprintService implements INativeFingerprintServ
     return this.secureStorage.get(id)
       .then((value: any) => {
         if (value) {
-          return true;
+          return Promise.resolve(true);
         }
         else {
           return Promise.reject("No profile exists.");

@@ -99,7 +99,7 @@ import { GetCurrentEnvironmentConstants } from "./app.constants";
     IonicModule.forRoot(MyApp),
     //# WEX
     //----------------------
-    ApiProviders.withConstants(GetCurrentEnvironmentConstants()),
+    ApiProviders.withConstants(GetCurrentEnvironmentConstants),
     ModelGeneratorsModule,
     //# third party dependencies
     //----------------------
