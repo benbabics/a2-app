@@ -80,7 +80,6 @@
     </feature>
     <engine name="android@6.1.2" />
     <engine name="ios@4.4.0" />
-    <plugin name="com.phonegap.plugins.nativesettingsopener" spec="http://bitbucket.int.wrightexpress.com/scm/mob/cordova-open-native-settings.git#6ff9dec8de1" />
     <plugin name="cordova-plugin-android-fingerprint-auth" spec="~1.2.7" />
     <plugin name="cordova-plugin-app-version" spec="~0.1.9" />
     <plugin name="cordova-plugin-console" spec="1.0.5" />

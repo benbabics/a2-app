@@ -130,11 +130,11 @@
     ws "1.1.1"
     xml2js "^0.4.17"
 
-"@ionic/cli-plugin-cordova":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-cordova/-/cli-plugin-cordova-1.1.2.tgz#8d2aa8896832318d24b051701bc283f52807566c"
+"@ionic/cli-plugin-cordova@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-cordova/-/cli-plugin-cordova-1.2.0.tgz#5d0ab0057ac5a142bdd5d504176cae52c698ec30"
   dependencies:
-    "@ionic/cli-utils" "1.1.2"
+    "@ionic/cli-utils" "1.2.0"
     chalk "^1.1.3"
     xml2js "^0.4.17"
 
@@ -144,25 +144,6 @@
   dependencies:
     "@ionic/cli-utils" "1.2.0"
     chalk "^1.1.3"
-
-"@ionic/cli-utils@1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-utils/-/cli-utils-1.1.2.tgz#9431c35528b4778cc9d914a9ccda36c35b66b310"
-  dependencies:
-    archiver "^1.3.0"
-    chalk "^1.1.3"
-    cross-spawn "^4.0.2"
-    inquirer "^3.0.6"
-    leek "0.0.24"
-    minimist "^1.2.0"
-    ncp "^2.0.0"
-    os-name "^2.0.1"
-    rimraf "^2.5.4"
-    semver "^5.3.0"
-    slice-ansi "0.0.4"
-    string-width "^2.0.0"
-    superagent "^3.5.2"
-    uuid "^3.0.1"
 
 "@ionic/cli-utils@1.2.0":
   version "1.2.0"
