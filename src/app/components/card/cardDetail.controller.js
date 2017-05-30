@@ -26,9 +26,9 @@
 
         vm.handleNavigateTransactionActivity = handleNavigateTransactionActivity;
         vm.handleNavigateReissueCard         = handleNavigateReissueCard;
-        vm.handleClickChangeStatus    = handleClickChangeStatus;
-        vm.updateCardStatus           = updateCardStatus;
-        vm.canChangeStatus            = canChangeStatus;
+        vm.handleClickChangeStatus           = handleClickChangeStatus;
+        vm.updateCardStatus = updateCardStatus;
+        vm.canChangeStatus  = canChangeStatus;
 
         // expose for testing
         vm.displayChangeStatusConfirm = displayChangeStatusConfirm;
