@@ -25,7 +25,7 @@
                 //note: this check will have to be moved once the user is allowed to modify the selected card shipping address
                 if (account.hasRegularShippingMethod()) {
                     cardReissueDetails.selectedShippingMethod = cardReissueDetails.account.regularCardShippingMethod;
-                    cardReissueDetails.shippingMethods = [cardReissueDetails.account.regularCardShippingMethod];
+                    cardReissueDetails.shippingMethods = [cardReissueDetails.selectedShippingMethod];
                 }
                 else {
                     //TODO - what do we do here?
