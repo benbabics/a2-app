@@ -5,7 +5,7 @@
     // jshint maxparams:5
 
     /* @ngInject */
-    function CardReissueController($window, _, Logger, account, card, cardReissueDetails) {
+    function CardReissueController(_, Logger, account, card, cardReissueDetails) {
 
         activate();
 
