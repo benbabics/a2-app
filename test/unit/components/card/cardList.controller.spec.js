@@ -32,7 +32,7 @@
             self = this;
 
             // mock deps
-            CardManager = jasmine.createSpyObj( "CardManager", [ "fetchCards", "getCards" ] );
+            CardManager = jasmine.createSpyObj( "CardManager", [ "fetchCards", "getCards", "clearCachedValues" ] );
             UserManager   = jasmine.createSpyObj( "UserManager", [ "getUser" ] );
             ElementUtil   = jasmine.createSpyObj( "ElementUtil", [ "getFocusedView", "resetInfiniteList" ] );
 

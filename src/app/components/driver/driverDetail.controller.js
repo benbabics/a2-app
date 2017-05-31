@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function DriverDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, driver, UserManager, DriverManager, globals) {
+    function DriverDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, driver, UserManager, DriverManager, AnalyticsUtil, globals) {
         var vm = this;
 
         vm.config = globals.DRIVER_DETAILS.CONFIG;
@@ -17,6 +17,9 @@
         vm.goToTransactionActivity = goToTransactionActivity;
         vm.handleClickChangeStatus = handleClickChangeStatus;
         vm.updateDriverStatus      = updateDriverStatus;
+
+        // expose for testing
+        vm.displayChangeStatusActions = displayChangeStatusActions;
 
         function goToTransactionActivity() {
             //Clear the cache to work around issue where transaction page shows up before transition
@@ -33,7 +36,7 @@
 
         function handleClickChangeStatus() {
             let actions = vm.config.statuses;
-            displayChangeStatusActions( actions ).then(label => {
+            vm.displayChangeStatusActions( actions ).then(label => {
                 let action = _.find( actions, { label } );
                 vm.updateDriverStatus( action.id );
                 trackEvent( action.trackingId );

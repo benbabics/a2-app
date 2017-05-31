@@ -1,9 +1,18 @@
-<ion-view view-title="{{ ::vm.config.title }}" wex-hide-back-button="false" class="page-cards-detail">
+<ion-view view-title="{{ ::vm.config.title }}" class="page-cards-detail" hide-nav-bar="true">
+    <!-- Header bar -->
+    <ion-header-bar class="bar bar-wex">
+        <div class="buttons">
+            <wex-back-button back-state="card.list"></wex-back-button>
+        </div>
+
+        <h1 class="title">{{ ::vm.config.title }}</h1>
+    </ion-header-bar>
+
     <wex-notification-bar class="bar-success"
-                          ng-if="vm.displayStatusChangeBannerSuccess"
+                          ng-if="vm.shouldDisplayBannerSuccess"
                           wex-toast-timer
-                          wex-toast-on-hide="vm.displayStatusChangeBannerSuccess = false"
-                          text="{{ ::vm.config.bannerStatusChangeSuccess }}">
+                          wex-toast-on-hide="vm.shouldDisplayBannerSuccess = false"
+                          text="{{ vm.bannerSuccessMessage }}">
     </wex-notification-bar>
 
     <ion-header class="bar-header-details" ng-class="{ 'ui-active': vm.card.isActive(), 'ui-suspended': vm.card.isSuspended(), 'ui-terminated': vm.card.isTerminated(), 'ui-loading': vm.isChangeStatusLoading }">
@@ -38,13 +47,13 @@
         </ul>
 
         <ul class="list-secondary">
-            <li class="item item-icon-left item-icon-right" ng-show="vm.card.isActive()" ui-sref="card.reissue.form({cardId: vm.card.cardId})">
+            <li class="item item-icon-left item-icon-right" ng-show="vm.card.isActive()" ng-click="vm.handleNavigateReissueCard()">
                 <i class="icon fa fa-refresh"></i>
                 {{ ::vm.config.labelReissueCard }}
                 <i class="icon fa fa-chevron-right"></i>
             </li>
 
-            <li class="item item-icon-left item-icon-right" ng-click="vm.goToTransactionActivity()">
+            <li class="item item-icon-left item-icon-right" ng-click="vm.handleNavigateTransactionActivity()">
                 <i class="icon fa fa-exchange"></i>
                 {{ ::vm.config.labelTransactions }}
                 <i class="icon fa fa-chevron-right"></i>

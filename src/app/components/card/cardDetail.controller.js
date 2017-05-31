@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function CardDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, $ionicPopup, $window, globals, AnalyticsUtil, UserManager, CardManager, PlatformUtil, card) {
+    function CardDetailController(_, $rootScope, $scope, $ionicHistory, $state, $stateParams, $q, $ionicActionSheet, $ionicPopup, $window, globals, AnalyticsUtil, UserManager, CardManager, PlatformUtil, card) {
         const CARD_STATUS      = globals.CARD.STATUS;
         const USER_APPLICATION = ((appType) => {
             return {
@@ -20,15 +20,25 @@
         vm.card = card;
 
         vm.isChangeStatusLoading            = false;
+        vm.shouldDisplayBannerSuccess       = false;
         vm.displayStatusChangeBannerSuccess = false;
         vm.displayStatusChangeBannerFailure = false;
 
-        vm.goToTransactionActivity = goToTransactionActivity;
-        vm.handleClickChangeStatus = handleClickChangeStatus;
-        vm.updateCardStatus        = updateCardStatus;
-        vm.canChangeStatus         = canChangeStatus;
+        vm.handleNavigateTransactionActivity = handleNavigateTransactionActivity;
+        vm.handleNavigateReissueCard         = handleNavigateReissueCard;
+        vm.handleClickChangeStatus           = handleClickChangeStatus;
+        vm.updateCardStatus = updateCardStatus;
+        vm.canChangeStatus  = canChangeStatus;
 
-        function goToTransactionActivity() {
+        // expose for testing
+        vm.displayChangeStatusConfirm = displayChangeStatusConfirm;
+        vm.displayChangeStatusActions = displayChangeStatusActions;
+
+        if ( $stateParams.isReissued ) {
+            displayBannerSuccess( vm.config.bannerReissueCardSuccess );
+        }
+
+        function handleNavigateTransactionActivity() {
             //Clear the cache to work around issue where transaction page shows up before transition
             return $ionicHistory.clearCache([ "transaction" ])
                 .then(() => {
@@ -41,11 +51,23 @@
                 });
         }
 
+        function handleNavigateReissueCard() {
+            if ( canReissueCard() ) {
+                let cardId = vm.card.cardId;
+                return $state.go( "card.reissue.form", { cardId } );
+            }
+
+            whenReadyNotification(notification => {
+                let message = vm.config.alertPopupMessages.classicMultipleReissues;
+                notification.alert( message, _.noop, "" );
+            });
+        }
+
         function handleClickChangeStatus() {
             let actions = getAvailableCardStatuses();
-            displayChangeStatusActions( actions ).then(label => {
+            vm.displayChangeStatusActions( actions ).then(label => {
                 let action = _.find( actions, { label } );
-                displayChangeStatusConfirm( action.id ).then(() => {
+                vm.displayChangeStatusConfirm( action.id ).then(() => {
                     vm.updateCardStatus( action.id );
                 });
                 trackEvent( action.trackingId );
@@ -63,8 +85,8 @@
             let accountId = UserManager.getUser().billingCompany.accountId;
             CardManager.updateStatus( accountId, vm.card.cardId, newStatus )
                 .then(() => {
-                    vm.isChangeStatusLoading            = false;
-                    vm.displayStatusChangeBannerSuccess = true;
+                    vm.isChangeStatusLoading = false;
+                    displayBannerSuccess( vm.config.bannerStatusChangeSuccess );
                     $rootScope.$broadcast( "card:statusChange" );
                     trackView( "statusOptionsSuccess" );
                 });
@@ -77,6 +99,14 @@
         /**
          * Private Methods
          */
+        function canReissueCard() {
+            let isClassic = USER_APPLICATION.isClassic,
+                cardNo    = vm.card.embossedCardNumber,
+                suffixInt = parseInt( cardNo.substr(cardNo.length - 1) );
+
+            return !isClassic || ( isClassic && suffixInt < 9 );
+        }
+
         function getAvailableCardStatuses() {
             let rejectionAttrs;
 
@@ -136,6 +166,11 @@
                     return $window.navigator.notification;
                 }
             }).then( callback );
+        }
+
+        function displayBannerSuccess(message="") {
+            vm.shouldDisplayBannerSuccess = true;
+            vm.bannerSuccessMessage = message;
         }
 
         /**

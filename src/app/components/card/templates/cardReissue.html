@@ -1,4 +1,4 @@
-<ion-view class="card-reissue-form-view" hide-nav-bar="true">
+<ion-view class="page-cards-reissue" hide-nav-bar="true">
 
     <!-- Header bar -->
     <ion-header-bar class="bar bar-wex">
@@ -12,8 +12,8 @@
 
     <ion-content>
         <div class="form-item">
-            <span class="block_align black">{{::vm.config.shippingAddress}}</span>
-            <div  class="right-padding float-right black">
+            <span class="block_align align-top black">{{::vm.config.shippingAddress}}</span>
+            <div  class="float-right black">
                     <span class="wordwrap">{{vm.cardReissueDetails.shippingAddress.firstName}} {{vm.cardReissueDetails.shippingAddress.lastName}}</span>
                     <span class="wordwrap">{{vm.cardReissueDetails.shippingAddress.companyName}}</span>
                     <span class="wordwrap">{{vm.cardReissueDetails.shippingAddress.addressLine1}}</span>
@@ -25,37 +25,44 @@
 
         <div class="form-item">
             <span class="block_align black">{{::vm.config.shippingMethod}}</span>
-            <span ng-switch="vm.cardReissueDetails.shippingMethods.length > 1">
-                <div ng-switch-when="true"
-                     ui-sref="card.reissue.shippingMethod({cardId: vm.cardReissueDetails.originalCard.cardId})">
 
+            <span class="active-link"
+                  ng-if="!vm.cardReissueDetails.selectedShippingMethod"
+                  ng-click="vm.handleSelectShippingMethod()">
+                {{ ::vm.config.selectReissueMethod }}
+            </span>
+
+            <span ng-if="vm.cardReissueDetails.selectedShippingMethod"
+                  ng-switch="vm.cardReissueDetails.shippingMethods.length > 1">
+                <div ng-switch-when="true"
+                     ng-click="vm.handleSelectShippingMethod()">
                     <span class="active-link">{{vm.cardReissueDetails.getShippingMethodDisplayName()}}</span>
-                    <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
                 </div>
-                <div ng-switch-when="false" id="onlyShippingMethod">
-                    <span class="right-padding black">{{vm.cardReissueDetails.getShippingMethodDisplayName()}}</span>
+                <div ng-switch-when="false">
+                    <span class="black">{{vm.cardReissueDetails.getShippingMethodDisplayName()}}</span>
                 </div>
             </span>
         </div>
 
-        <div class="form-item">
+        <div class="form-item no-border">
             <span class="block_align black">{{::vm.config.reissueReason}}</span>
-            <div ui-sref="card.reissue.reason({cardId: vm.cardReissueDetails.originalCard.cardId})">
+            <div ng-click="vm.handleSelectReissueReason()">
                 <span class="active-link" ng-if="vm.cardReissueDetails.reissueReason">{{vm.cardReissueDetails.getReissueReasonDisplayName()}}</span>
                 <span class="active-link" ng-if="!vm.cardReissueDetails.reissueReason">{{::vm.config.selectReissueReason}}</span>
-                <span class="button button-icon icon ion-ios-arrow-forward chevron_align"></span>
             </div>
         </div>
-        <br>
 
-        <div class="padding">{{::vm.config.instructionalText}}</div>
-        <div class="padding" ng-if="vm.cardReissueDetails.shippingAddress.isPoBox()">{{::vm.config.poBoxText}}</div>
-
-        <br>
-        <div class="padding align_center">
-            <button ng-disabled="!vm.isFormComplete()" class="button button-block button-primary button-width" ng-click="vm.promptReissue()">
+        <div class="content-actions">
+            <button class="button button-block button-primary button-width"
+                    ng-disabled="!vm.isFormComplete()"
+                    ng-click="vm.handleReissueConfirm()">
                 {{::vm.config.submitButton}}
             </button>
+        </div>
+
+        <div class="content-instructions">
+            <p>{{::vm.config.instructionalText}}</p>
+            <p ng-if="vm.cardReissueDetails.shippingAddress.isPoBox()">{{::vm.config.poBoxText}}</p>
         </div>
     </ion-content>
 </ion-view>

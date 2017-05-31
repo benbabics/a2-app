@@ -43,13 +43,16 @@
             handleOnResetItems(); // initially add collections
 
             // avoid adding an additional watcher on deeply nested attrs
-            let statusChangeListener = $rootScope.$on( "card:statusChange", handleRenderingItems );
+            let statusChangeListener = $rootScope.$on( "card:statusChange", handleRenderingItems ),
+                reissueCardListener  = $rootScope.$on( "card:reissued", handleReissueCard );
 
             // remove event listener
             $scope.$on( "$destroy", statusChangeListener );
+            $scope.$on( "$destroy", reissueCardListener );
         }
 
         function handleOnResetItems() {
+            CardManager.clearCachedValues();
             vm.cards.active     = [];
             vm.cards.suspended  = [];
             vm.cards.terminated = [];
@@ -82,6 +85,14 @@
         function handleRenderingItems() {
             filterCards( CardManager.getCards() );
             listRefreshComplete();
+        }
+
+        function handleReissueCard(evt, reissueCardDeferredDelegate) {
+            if ( reissueCardDeferredDelegate ) {
+                $scope.resetSearchResults().then(() => {
+                    reissueCardDeferredDelegate.resolve();
+                });
+            }
         }
 
         function filterCards(cards) {

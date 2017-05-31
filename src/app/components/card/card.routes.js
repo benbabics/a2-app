@@ -34,6 +34,9 @@
                     return CardManager.fetchCard( $stateParams.cardId );
                 }
             },
+            params: {
+                isReissued: false
+            },
             views: {
                 "view@card": {
                     templateUrl: "app/components/card/templates/cardDetail.html",
@@ -88,42 +91,6 @@
                 }
             },
             onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE.CONFIG.ANALYTICS.pageName)
-        });
-
-        $stateProvider.state("card.reissue.shippingMethod", {
-            cache: false,
-            url  : "/shippingMethod",
-            views: {
-                "view@card.reissue": {
-                    templateUrl: "app/components/card/templates/cardReissueShippingMethod.input.html",
-                    controller : "CardReissueShippingMethodInputController as vm"
-                }
-            },
-            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE_INPUTS.SHIPPING_METHOD.CONFIG.ANALYTICS.pageName)
-        });
-
-        $stateProvider.state("card.reissue.reason", {
-            cache: false,
-            url  : "/reason",
-            views: {
-                "view@card.reissue": {
-                    templateUrl: "app/components/card/templates/cardReissueReason.input.html",
-                    controller : "CardReissueReasonInputController as vm"
-                }
-            },
-            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG.ANALYTICS.pageName)
-        });
-
-        $stateProvider.state("card.reissue.confirmation", {
-            cache: false,
-            url  : "/confirmation",
-            views: {
-                "view@card.reissue": {
-                    templateUrl: "app/components/card/templates/cardReissueConfirmation.html",
-                    controller : "CardReissueConfirmationController as vm"
-                }
-            },
-            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE_CONFIRMATION.CONFIG.ANALYTICS.pageName)
         });
     }
 
