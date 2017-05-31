@@ -543,6 +543,7 @@ var TestUtils = (function () {
                 "getActiveTrackerId",
                 "hasActiveTracker",
                 "setCustomDimension",
+                "setUserBrand",
                 "setUserId",
                 "startTracker",
                 "trackView",

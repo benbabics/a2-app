@@ -4,12 +4,11 @@
     </ion-header-bar>
 
     <ion-content>
-        <div class="card card-warning padding"
-             ng-if="vm.warnings.length > 0">
-            <div ng-repeat="warning in vm.warnings">
-                {{warning}}
-            </div>
-        </div>
+        <wex-notification-bar class="bar-warning"
+                              ng-if="vm.warnings.length > 0"
+                              ng-repeat="warning in vm.warnings"
+                              text="{{ warning }}">
+        </wex-notification-bar>
 
         <p class="padding body-text">{{::vm.config.processingWarning}}</p>
 

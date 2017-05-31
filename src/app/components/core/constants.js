@@ -182,24 +182,44 @@
 
     appGlobals.CARD_DETAIL = {
         "CONFIG": {
-            "ANALYTICS"                : {
-                "pageName": "CardDetails"
+            "ANALYTICS": {
+                "pageName": "CardDetails",
+                "views": {
+                    "statusOptionsOpen":    "CardStatusOptions",
+                    "statusOptionsSuccess": "CardStatusSuccess"
+                },
+                "events": {
+                    "statusOptionActive":     [ "Cards", "CardActivateLink" ],
+                    "statusOptionSuspended":  [ "Cards", "CardSuspendLink" ],
+                    "statusOptionTerminated": [ "Cards", "CardTerminateLink" ],
+                    "navigateTransactions":   [ "Cards", "CardTransactionLink" ]
+                }
             },
-            "title"                    : "Card Details",
-            "cardNumber"               : "Card Number",
-            "standardEmbossing"        : "Standard Embossing",
-            "optionalEmbossing"        : "Optional Embossing",
-            "status"                   : "Status",
-            "changeStatusButton"       : "Change Status",
-            "reissueCardButton"        : "Reissue Card",
-            "transactionActivityButton": "Transaction Activity"
+            "title":                     "Card Details",
+            "actionStatusTitle":         "Select Card Status",
+            "actionStatusCancel":        "Cancel",
+            "bannerStatusChangeSuccess": "Status change successful.",
+            "bannerStatusChangeFailure": "Status change failed. Please try again.",
+            "bannerReissueCardSuccess":  "Your card has been reissued.",
+            "confirmMessageTerminate":   "Are you sure you want to terminate this card?",
+            "detailStandardEmbossing":   "Standard Embossing",
+            "detailOptionalEmbossing":   "Optional Embossing",
+            "labelChangeStatus":         "Change Status",
+            "labelReissueCard":          "Reissue Card",
+            "labelTransactions":         "Transactions",
+            "phoneAndEmailApplications": ["WOL_NP", "DISTRIBUTOR"],
+            "statuses": [
+                { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive" },
+                { "id": "SUSPENDED",  "label": "Suspended",  "trackingId": "statusOptionSuspended" },
+                { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated" }
+            ]
         }
     };
 
     appGlobals.CARD_LIST = {
         "CONFIG": {
             "ANALYTICS": {
-                "pageName": "Cards",
+                "pageName": "CardsList",
                 "events": {
                     "searchSubmitted": [ "Cards", "SearchCardLink" ]
                 }
@@ -270,14 +290,17 @@
             "shippingAddress"    : "Shipping Address",
             "shippingMethod"     : "Shipping Method",
             "reissueReason"      : "Reason",
+            "selectReissueMethod": "Select Method",
             "selectReissueReason": "Select Reason",
             "submitButton"       : "Reissue Card",
             "instructionalText"  : "Orders received after 3:00 pm Eastern Time may be processed the next business day.",
             "poBoxText"          : "Please Note: You have a P.O. Box address listed. Your card will be delivered via regular mail.",
+            "alertPopupMessages" : {
+                "classicMultipleReissues": "This card has been reissued too many times."
+            },
             "confirmationPopup"  : {
-                "content"  : "Are you sure you want to reissue this card?",
-                "yesButton": "Yes",
-                "noButton" : "No"
+                "message": "Are you sure you want to reissue this card?",
+                "buttons": [ "No", "Yes" ]
             }
         }
     };
@@ -329,7 +352,7 @@
     appGlobals.DRIVER_LIST = {
         "CONFIG": {
             "ANALYTICS": {
-                "pageName": "Drivers",
+                "pageName": "DriversList",
                 "events": {
                     "searchSubmitted": [ "Drivers", "SearchDriverLink" ]
                 }
@@ -351,10 +374,22 @@
 
     appGlobals.DRIVER_DETAILS = {
         "CONFIG": {
+            "ANALYTICS": {
+                "pageName": "DriverDetails",
+                "views": {
+                    "statusOptionsOpen":    "DriverStatusOptions",
+                    "statusOptionsSuccess": "DriverStatusSuccess"
+                },
+                "events": {
+                    "statusOptionActive":     [ "Drivers", "DriverActivateLink" ],
+                    "statusOptionTerminated": [ "Drivers", "DriverTerminateLink" ],
+                    "navigateTransactions":   [ "Drivers", "DriverTransactionLink" ]
+                }
+            },
             "title":                     "Driver Details",
             "actionStatusTitle":         "Change Driver Status",
             "actionStatusCancel":        "Cancel",
-            "bannerStatusChangeSuccess": "<i class='fa fa-check'></i> Status change successful.",
+            "bannerStatusChangeSuccess": "Status change successful.",
             "bannerStatusChangeFailure": "Status change failed. Please try again.",
             "detailDriverId":            "Driver ID",
             "detailEmail":               "Email Address",
@@ -363,8 +398,8 @@
             "labelTransactions":         "Transactions",
             "phoneAndEmailApplications": ["WOL_NP", "DISTRIBUTOR"],
             "statuses": [
-                { "id": "ACTIVE", "label": "Active" },
-                { "id": "TERMINATED", "label": "Terminated" }
+                { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive" },
+                { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated" }
             ]
         }
     };

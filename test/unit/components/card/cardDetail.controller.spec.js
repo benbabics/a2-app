@@ -6,14 +6,42 @@
         $rootScope,
         $scope,
         $state,
+        $timeout,
+        $ionicActionSheet,
         Navigation,
         ctrl,
         mockCard,
+        CardManager,
+        AnalyticsUtil,
         mockGlobals = {
+            "USER": {
+                "ONLINE_APPLICATION": {
+                    "WOL_NP"     : "WOL_NP",
+                    "CLASSIC"    : "CLASSIC",
+                    "DISTRIBUTOR": "DISTRIBUTOR"
+                }
+            },
+            "CARD": {
+                "STATUS": {
+                    "ACTIVE":     "active",
+                    "SUSPENDED":  "suspended",
+                    "TERMINATED": "terminated"
+                }
+            },
             "CARD_DETAIL": {
                 "CONFIG": {
                     "ANALYTICS"         : {
-                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "views": {
+                            "statusOptionsOpen":    TestUtils.getRandomStringThatIsAlphaNumeric(5),
+                            "statusOptionsSuccess": TestUtils.getRandomStringThatIsAlphaNumeric(5)
+                        },
+                        "events": {
+                            "statusOptionActive":     [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ],
+                            "statusOptionSuspended":  [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ],
+                            "statusOptionTerminated": [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ],
+                            "navigateTransactions":   [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ]
+                        }
                     },
                     "title"             : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "cardNumber"        : TestUtils.getRandomStringThatIsAlphaNumeric(10),
@@ -31,47 +59,108 @@
 
         beforeEach(function () {
 
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
+
             // stub the routing and template loading
             module(function ($urlRouterProvider) {
                 $urlRouterProvider.deferIntercept();
             });
 
             module(function ($provide) {
-                $provide.value("$ionicTemplateCache", function () {
-                });
+                $provide.value( "$ionicTemplateCache", function () {} );
+                $provide.value( "AnalyticsUtil", AnalyticsUtil );
             });
 
             module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _)]);
 
             //mock dependencies
-            Navigation = jasmine.createSpyObj("Navigation", ["goToTransactionActivity"]);
-            $ionicHistory = jasmine.createSpyObj("$ionicHistory", ["clearCache"]);
+            Navigation        = jasmine.createSpyObj( "Navigation", [ "goToTransactionActivity" ] );
+            $ionicActionSheet = jasmine.createSpyObj( "$ionicActionSheet", [ "show" ] );
+            $ionicHistory     = jasmine.createSpyObj( "$ionicHistory", [ "clearCache" ] );
+            CardManager       = jasmine.createSpyObj( "CardManager", [ "updateStatus" ] );
 
-            inject(function ($controller, _$rootScope_, _$q_, _$state_, CardModel) {
-
+            inject(($controller, _$rootScope_, _$q_, _$state_, _$timeout_, CardModel) => {
+                $q         = _$q_;
+                $state     = _$state_;
+                $timeout   = _$timeout_;
                 $rootScope = _$rootScope_;
-                $scope = $rootScope.$new();
-                $q = _$q_;
+                $scope     = $rootScope.$new();
 
-                mockCard = TestUtils.getRandomCard(CardModel);
+                mockCard = TestUtils.getRandomCard( CardModel );
                 $state = _$state_;
 
                 ctrl = $controller("CardDetailController", {
-                    $ionicHistory: $ionicHistory,
-                    $scope       : $scope,
-                    card         : mockCard,
-                    globals      : mockGlobals,
-                    Navigation   : Navigation
+                    $ionicHistory:     $ionicHistory,
+                    $rootScope:        $rootScope,
+                    $scope:            $scope,
+                    $timeout:          $timeout,
+                    $ionicActionSheet: $ionicActionSheet,
+                    Navigation:        Navigation,
+                    card:              mockCard,
+                    globals:           mockGlobals,
+                    CardManager:       CardManager
                 });
 
             });
 
-            //setup mocks
+            // setup mocks
             $ionicHistory.clearCache.and.returnValue($q.resolve());
+            CardManager.updateStatus.and.callFake((accountId, cardId, newStatus) => {
+                ctrl.card.status = newStatus;
+                return $q.resolve();
+            });
         });
 
-        it("should set the card", function () {
-            expect(ctrl.card).toEqual(mockCard);
+        it("should set the card", () => {
+            expect( ctrl.card ).toEqual( mockCard );
+        });
+
+        describe("has a handleClickChangeStatus function that", () => {
+            beforeEach(() => {
+                ctrl.handleClickChangeStatus();
+                $rootScope.$digest();
+            });
+
+            it("should make a call to $ionicActionSheet.show()", () => {
+                expect( $ionicActionSheet.show ).toHaveBeenCalled();
+            });
+        });
+
+        describe("has a updateCardStatus function that", () => {
+            it("should update vm.isChangeStatusLoading appropriately", () => {
+                ctrl.updateCardStatus( 'ACTIVE' );
+                expect( ctrl.isChangeStatusLoading ).toBe( true );
+                $timeout.flush();
+                expect( ctrl.isChangeStatusLoading ).toBe( false );
+            });
+
+            it("should update vm.card.status to the appropriate 'statusId'", () => {
+                ctrl.updateCardStatus( 'ACTIVE' );
+                $timeout.flush();
+                expect( ctrl.card.status ).toEqual( 'ACTIVE' );
+
+                ctrl.updateCardStatus( 'SUSPENDED' );
+                $timeout.flush();
+                expect( ctrl.card.status ).toEqual( 'SUSPENDED' );
+
+                ctrl.updateCardStatus( 'TERMINATED' );
+                $timeout.flush();
+                expect( ctrl.card.status ).toEqual( 'TERMINATED' );
+            });
+
+            it("should update vm.shouldDisplayBannerSuccess appropriately", () => {
+                expect( ctrl.shouldDisplayBannerSuccess ).toBe( false );
+                ctrl.updateCardStatus( 'ACTIVE' );
+                $timeout.flush();
+                expect( ctrl.shouldDisplayBannerSuccess ).toBe( true );
+            });
         });
 
         describe("has a goToTransactionActivity function that", function () {
@@ -79,7 +168,7 @@
             beforeEach(function () {
                 spyOn($state, "go").and.stub();
 
-                ctrl.goToTransactionActivity();
+                ctrl.handleNavigateTransactionActivity();
                 $rootScope.$digest();
             });
 

@@ -27,64 +27,23 @@
         });
 
         $stateProvider.state("card.detail", {
-            url  : "/detail/:cardId",
+            url:   "/detail/:cardId",
             cache: false,
+            resolve: {
+                card: ($stateParams, CardManager) => {
+                    return CardManager.fetchCard( $stateParams.cardId );
+                }
+            },
+            params: {
+                isReissued: false
+            },
             views: {
                 "view@card": {
                     templateUrl: "app/components/card/templates/cardDetail.html",
-                    controller : "CardDetailController as vm",
-                    resolve    : {
-                        card: function ($stateParams, CardManager, LoadingIndicator) {
-                            var cardId = $stateParams.cardId;
-
-                            LoadingIndicator.begin();
-
-                            return CardManager.fetchCard(cardId)
-                                .finally(LoadingIndicator.complete);
-                        }
-                    }
+                    controller:  "CardDetailController as vm"
                 }
             },
             onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_DETAIL.CONFIG.ANALYTICS.pageName)
-        });
-
-        $stateProvider.state("card.changeStatus", {
-            abstract: true,
-            url     : "/changeStatus/:cardId",
-            resolve : {
-                card: function ($stateParams, CardManager, LoadingIndicator) {
-                    var cardId = $stateParams.cardId;
-
-                    LoadingIndicator.begin();
-
-                    return CardManager.fetchCard(cardId)
-                        .finally(LoadingIndicator.complete);
-                }
-            },
-            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_CHANGE_STATUS.CONFIG.ANALYTICS.pageName)
-        });
-
-        $stateProvider.state("card.changeStatus.form", {
-            cache: false,
-            url  : "",
-            views: {
-                "view@card": {
-                    templateUrl: "app/components/card/templates/cardChangeStatus.html",
-                    controller : "CardChangeStatusController as vm"
-                }
-            }
-        });
-
-        $stateProvider.state("card.changeStatus.confirmation", {
-            cache: false,
-            url  : "/confirmation",
-            views: {
-                "view@card": {
-                    templateUrl: "app/components/card/templates/cardChangeStatusConfirmation.html",
-                    controller : "CardChangeStatusConfirmationController as vm"
-                }
-            },
-            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("card.reissue", {
@@ -132,42 +91,6 @@
                 }
             },
             onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE.CONFIG.ANALYTICS.pageName)
-        });
-
-        $stateProvider.state("card.reissue.shippingMethod", {
-            cache: false,
-            url  : "/shippingMethod",
-            views: {
-                "view@card.reissue": {
-                    templateUrl: "app/components/card/templates/cardReissueShippingMethod.input.html",
-                    controller : "CardReissueShippingMethodInputController as vm"
-                }
-            },
-            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE_INPUTS.SHIPPING_METHOD.CONFIG.ANALYTICS.pageName)
-        });
-
-        $stateProvider.state("card.reissue.reason", {
-            cache: false,
-            url  : "/reason",
-            views: {
-                "view@card.reissue": {
-                    templateUrl: "app/components/card/templates/cardReissueReason.input.html",
-                    controller : "CardReissueReasonInputController as vm"
-                }
-            },
-            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG.ANALYTICS.pageName)
-        });
-
-        $stateProvider.state("card.reissue.confirmation", {
-            cache: false,
-            url  : "/confirmation",
-            views: {
-                "view@card.reissue": {
-                    templateUrl: "app/components/card/templates/cardReissueConfirmation.html",
-                    controller : "CardReissueConfirmationController as vm"
-                }
-            },
-            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.CARD_REISSUE_CONFIRMATION.CONFIG.ANALYTICS.pageName)
         });
     }
 

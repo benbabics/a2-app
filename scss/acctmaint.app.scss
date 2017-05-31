@@ -222,11 +222,9 @@ $badge-color: #e51937;
 .bar-wex {
     background-image: none;
 
-    .header-item {
-      &.title {
-        font-size: 21px;
-        font-family: tablet_gothic_semibold;
-      }
+    .title {
+      font-size: 21px;
+      font-family: tablet_gothic_semibold;
     }
 
     .badge {
@@ -733,7 +731,7 @@ body.menu-open .nav-view-root::before {
     @include align-items(center);
     @include justify-content(space-between);
 
-    padding: 5px 26px 0;
+    padding: 10px 26px;
 
     span {
         font-size: 14px;
@@ -756,6 +754,16 @@ body.menu-open .nav-view-root::before {
     }
     .wordwrap {
         width:65%;
+    }
+
+    .align-top {
+      @include align-self(flex-start);
+    }
+    .align-middle {
+      @include align-self(center);
+    }
+    .align-bottom {
+      @include align-self(flex-end);
     }
 }
 

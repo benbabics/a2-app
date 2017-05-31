@@ -20,6 +20,7 @@
             "hasActiveTracker"  : hasActiveTracker,
             "setCustomDimension": setCustomDimension,
             "setUserId"         : setUserId,
+            "setUserBrand"      : setUserBrand,
             "startTracker"      : startTracker,
             "trackEvent"        : trackEvent,
             "trackView"         : trackView
@@ -63,6 +64,13 @@
         function setUserId(userId) {
             whenReady(function (analytics) {
                 analytics.set("&uid", userId, _.noop, handleTrackingError);
+            });
+        }
+
+        function setUserBrand(userBrand) {
+            if ( !userBrand ) { return; }
+            whenReady(analytics => {
+                analytics.customDimension( "BRAND", userBrand, _.noop, handleTrackingError );
             });
         }
 

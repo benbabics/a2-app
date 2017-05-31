@@ -125,8 +125,7 @@
 **/
 %ui-management-detail {
   $subheader-height: 190px;
-  $button-height: 50px;
-  $subheader-notification-height: 44px;
+  $button-height:    50px;
   $color-background: #efefef;
 
   background-color: $color-background;
@@ -137,33 +136,19 @@
   wex-notification-bar {
     .bar-notification {
       z-index: 10;
-      height: $subheader-notification-height;
+      height: $wex-notification-bar-height;
       animation:         managementNotificationSlideDown .5s;
       -webkit-animation: managementNotificationSlideDown .5s;
       animation-timing-function:         ease-in-out;
       -webkit-animation-timing-function: ease-in-out;
-
-      h1 {
-        line-height: 20px !important;
-        font-size:   15px !important;
-      }
-
-      i.fa {
-        margin-right: 10px;
-        margin-left:  8px;
-        vertical-align: middle;
-        font-size: 20px;
-      }
-    }
-
-    &.bar-success > .bar-notification {
-      border-color: #6d991c;
-      background-color: #f4fff4;
-      i.fa { color: #6d991c; }
     }
   }
 
   .bar-header-details {
+    $color-active:     #008b00;
+    $color-suspended:  #ffbf3b;
+    $color-terminated: #f00000;
+
     @extend .bar;
     @extend .bar-subheader;
 
@@ -176,6 +161,21 @@
     height: $subheader-height;
     background-color: $color-background;
     background-image: none;
+
+    .content-detail-title,
+    .content-detail-status {
+      flex-grow: 1;
+      font-size: 27px;
+    }
+    .content-detail-title {
+      color: #333;
+      text-align: center;
+      font-family: 'open_sanslight';
+      text-transform: capitalize;
+    }
+    .content-detail-status {
+      font-family: 'open_sansregular';
+    }
 
     .content-controls {
       position: absolute;
@@ -198,14 +198,51 @@
         font-size: 14px;
         text-transform: capitalize;
 
-        &, &.button-primary  { color: #fff; }
-        &:hover, &.activated { color: #eee !important; }
+        &.activated { border-color: transparent; }
 
         ion-spinner svg {
           margin-right: 5px;
           width: 16px;
           vertical-align: middle;
         }
+      }
+    }
+
+    &.ui-active,
+    &.ui-terminated {
+      .button-control.button-primary {
+        color: #fff;
+        &:hover, &.activated { color: #eee !important; }
+      }
+    }
+    &.ui-active {
+      .content-detail-status { color: $color-active; }
+      .button-control.button-primary {
+        background-color:           $color-active;
+        border-bottom-color: darken($color-active, 10%);
+      }
+    }
+    &.ui-suspended {
+      .content-detail-status { color: #000; }
+      .button-control.button-primary {
+        &, &:hover, &.activated { color: #000 !important; }
+        background-color:           $color-suspended;
+        border-bottom-color: darken($color-suspended, 10%);
+      }
+    }
+    &.ui-terminated {
+      .content-detail-status { color: $color-terminated; }
+      .button-control.button-primary {
+        background-color:           $color-terminated;
+        border-bottom-color: darken($color-terminated, 10%);
+      }
+    }
+    &.ui-loading {
+      .content-detail-status { color: #666; }
+      .button-control.button-primary {
+        color:               #666;
+        background-color:    #ccc;
+        border-bottom-color: #aaa;
       }
     }
   }
@@ -273,10 +310,10 @@
     // with notification-bar
     wex-notification-bar {
       ~ .bar-header-details {
-        top: $titlebar-height-android + $subheader-notification-height;
+        top: $titlebar-height-android + $wex-notification-bar-height;
       }
       ~ ion-content {
-        top: $titlebar-height-android + $subheader-notification-height + $subheader-height;
+        top: $titlebar-height-android + $wex-notification-bar-height + $subheader-height;
       }
     }
   }
@@ -290,10 +327,10 @@
     // with notification-bar
     wex-notification-bar {
       ~ .bar-header-details {
-        top: $titlebar-height-ios + $subheader-notification-height;
+        top: $titlebar-height-ios + $wex-notification-bar-height;
       }
       ~ ion-content {
-        top: $titlebar-height-ios + $subheader-notification-height + $subheader-height;
+        top: $titlebar-height-ios + $wex-notification-bar-height + $subheader-height;
       }
     }
   }

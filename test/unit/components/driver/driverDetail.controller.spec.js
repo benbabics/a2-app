@@ -12,16 +12,51 @@
         ctrl,
         mockDriver,
         DriverManager,
-        resolveHandler;
+        AnalyticsUtil,
+        resolveHandler,
+        mockGlobals = {
+            "DRIVER_DETAILS": {
+                "CONFIG": {
+                    "ANALYTICS"         : {
+                        "pageName": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "views": {
+                            "statusOptionsOpen":    TestUtils.getRandomStringThatIsAlphaNumeric(5),
+                            "statusOptionsSuccess": TestUtils.getRandomStringThatIsAlphaNumeric(5)
+                        },
+                        "events": {
+                            "statusOptionActive":     [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ],
+                            "statusOptionTerminated": [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ],
+                            "navigateTransactions":   [ TestUtils.getRandomStringThatIsAlphaNumeric(5) ]
+                        }
+                    }
+                }
+            }
+        };
 
     describe("A Driver Detail Controller", () => {
 
         beforeEach(() => {
 
+            AnalyticsUtil = jasmine.createSpyObj("AnalyticsUtil", [
+                "getActiveTrackerId",
+                "hasActiveTracker",
+                "setUserId",
+                "startTracker",
+                "trackEvent",
+                "trackView"
+            ]);
+
             // stub the routing and template loading
-            module( $urlRouterProvider => $urlRouterProvider.deferIntercept() );
-            module([ "$provide", _.partial( TestUtils.provideCommonMockDependencies, _ ) ]);
-            module($provide => { $provide.value( "$ionicTemplateCache", () => {} ); });
+            module(function ($urlRouterProvider) {
+                $urlRouterProvider.deferIntercept();
+            });
+
+            module(function ($provide) {
+                $provide.value( "$ionicTemplateCache", function () {} );
+                $provide.value( "AnalyticsUtil", AnalyticsUtil );
+            });
+
+            module(["$provide", _.partial(TestUtils.provideCommonMockDependencies, _)]);
 
             // mock dependencies
             Navigation        = jasmine.createSpyObj( "Navigation", [ "goToTransactionActivity" ] );
@@ -46,7 +81,8 @@
                     $ionicActionSheet: $ionicActionSheet,
                     Navigation:        Navigation,
                     driver:            mockDriver,
-                    DriverManager:     DriverManager
+                    DriverManager:     DriverManager,
+                    globals:           mockGlobals
                 });
             });
 
@@ -60,17 +96,6 @@
 
         it("should set the driver", () => {
             expect( ctrl.driver ).toEqual( mockDriver );
-        });
-
-        describe("has a handleClickChangeStatus function that", () => {
-            beforeEach(() => {
-                ctrl.handleClickChangeStatus();
-                $rootScope.$digest();
-            });
-
-            it("should make a call to $ionicActionSheet.show()", () => {
-                expect( $ionicActionSheet.show ).toHaveBeenCalled();
-            });
         });
 
         describe("has a updateDriverStatus function that", () => {

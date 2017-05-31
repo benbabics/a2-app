@@ -4,7 +4,7 @@
     /* jshint -W003, -W026 */ // These allow us to show the definition of the Controller above the scroll
 
     /* @ngInject */
-    function DriverDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, driver, UserManager, DriverManager, globals) {
+    function DriverDetailController(_, $rootScope, $scope, $ionicHistory, $state, $q, $ionicActionSheet, driver, UserManager, DriverManager, AnalyticsUtil, globals) {
         var vm = this;
 
         vm.config = globals.DRIVER_DETAILS.CONFIG;
@@ -18,6 +18,9 @@
         vm.handleClickChangeStatus = handleClickChangeStatus;
         vm.updateDriverStatus      = updateDriverStatus;
 
+        // expose for testing
+        vm.displayChangeStatusActions = displayChangeStatusActions;
+
         function goToTransactionActivity() {
             //Clear the cache to work around issue where transaction page shows up before transition
             return $ionicHistory.clearCache([ "transaction" ])
@@ -26,19 +29,24 @@
                         filterBy:    "driver",
                         filterValue: vm.driver.promptId
                     });
+
+                    trackEvent( "navigateTransactions" );
                 });
         }
 
         function handleClickChangeStatus() {
-            let actions = _.filter( vm.config.statuses, item => item.id !== vm.driver.status );
-            displayChangeStatusActions( actions ).then(label => {
+            let actions = vm.config.statuses;
+            vm.displayChangeStatusActions( actions ).then(label => {
                 let action = _.find( actions, { label } );
                 vm.updateDriverStatus( action.id );
+                trackEvent( action.trackingId );
             });
+
+            trackView( "statusOptionsOpen" );
         }
 
         function updateDriverStatus(newStatus) {
-            if ( !newStatus ) { return; }
+            if ( !newStatus || newStatus === vm.driver.status ) { return; }
 
             // make request to update driver status; if failure, revert
             vm.isChangeStatusLoading = true;
@@ -49,6 +57,7 @@
                     vm.isChangeStatusLoading            = false;
                     vm.displayStatusChangeBannerSuccess = true;
                     $rootScope.$broadcast( "driver:statusChange" );
+                    trackView( "statusOptionsSuccess" );
                 });
         }
 
@@ -72,6 +81,19 @@
             });
 
             return deferred.promise;
+        }
+
+        /**
+         * Analytics
+         **/
+        function trackEvent(action) {
+            var eventData = vm.config.ANALYTICS.events[ action ];
+            _.spread( AnalyticsUtil.trackEvent )( eventData );
+        }
+
+        function trackView(viewId) {
+            var viewName = vm.config.ANALYTICS.views[ viewId ];
+            AnalyticsUtil.trackView( viewName );
         }
     }
 

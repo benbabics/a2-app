@@ -7,6 +7,7 @@
         $q,
         $state,
         $ionicHistory,
+        $window,
         CardManager,
         CardModel,
         Popup,
@@ -31,10 +32,9 @@
                     "submitButton"       : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "instructionalText"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
                     "poBoxText"          : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                    "confirmationPopup": {
-                        "content"  : TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "yesButton": TestUtils.getRandomStringThatIsAlphaNumeric(10),
-                        "noButton" : TestUtils.getRandomStringThatIsAlphaNumeric(10)
+                    "confirmationPopup"  : {
+                        "message": TestUtils.getRandomStringThatIsAlphaNumeric(10),
+                        "buttons": [ TestUtils.getRandomStringThatIsAlphaNumeric(10) ]
                     }
                 }
             }
@@ -66,17 +66,26 @@
 
             Popup = jasmine.createSpyObj("Popup", ["displayConfirm"]);
 
-            inject(function ($controller, _$rootScope_, _$q_, _sharedGlobals_, _AddressModel_, _ShippingMethodModel_,
+            inject(function ($controller, _$window_, _$rootScope_, _$q_, _sharedGlobals_, _AddressModel_, _ShippingMethodModel_,
                              CardReissueModel, AccountModel, _CardModel_, ShippingCarrierModel, UserModel,
-                             UserAccountModel) {
+                             UserAccountModel, PlatformUtil) {
                 $rootScope = _$rootScope_;
                 $q = _$q_;
                 sharedGlobals = _sharedGlobals_;
                 AddressModel = _AddressModel_;
                 ShippingMethodModel = _ShippingMethodModel_;
                 CardModel = _CardModel_;
+                $window = _$window_;
 
                 $scope = $rootScope.$new();
+
+                PlatformUtil.waitForCordovaPlatform = jasmine.createSpy("waitForCordovaPlatform").and.callFake(function(callback) {
+                    let noop = () => {};
+                    return $q.when( (callback || noop)() ); // just execute the callback directly
+                });
+
+                let spyNotification = jasmine.createSpyObj( '$window.navigator.notification', ['confirm'] );
+                $window.navigator.notification = spyNotification;
 
                 mockCardReissueDetails = TestUtils.getRandomCardReissueDetails(CardReissueModel, AccountModel, AddressModel, CardModel, ShippingCarrierModel, ShippingMethodModel);
                 mockUser = TestUtils.getRandomUser(UserModel, UserAccountModel);
@@ -89,8 +98,9 @@
                     cardReissueDetails: mockCardReissueDetails,
                     CardManager       : CardManager,
                     LoadingIndicator  : LoadingIndicator,
-                    Popup         : Popup,
-                    UserManager       : UserManager
+                    Popup             : Popup,
+                    UserManager       : UserManager,
+                    $window           : $window
                 });
             });
 
@@ -221,7 +231,7 @@
             });
         });
 
-        describe("has a promptReissue function that", function () {
+        describe("has a handleReissueConfirm function that", function () {
             var confirmDeferred,
                 reissueDeferred;
 
@@ -229,27 +239,25 @@
                 confirmDeferred = $q.defer();
                 reissueDeferred = $q.defer();
 
+                $window.navigator.notification.confirm.and.returnValue(confirmDeferred.promise);
                 Popup.displayConfirm.and.returnValue(confirmDeferred.promise);
                 CardManager.reissue.and.returnValue(reissueDeferred.promise);
             });
 
             beforeEach(function () {
-                ctrl.promptReissue();
+                ctrl.handleReissueConfirm();
+                $rootScope.$digest();
             });
 
             it("should call Popup.displayConfirm with the expected values", function () {
-                expect(Popup.displayConfirm).toHaveBeenCalledWith({
-                    content             : mockConfig.confirmationPopup.content,
-                    okButtonText        : mockConfig.confirmationPopup.yesButton,
-                    cancelButtonText    : mockConfig.confirmationPopup.noButton,
-                    okButtonCssClass    : "button-primary",
-                    cancelButtonCssClass: "button-secondary"
-                });
+                expect( $window.navigator.notification.confirm ).toHaveBeenCalled();
             });
 
             describe("when the user confirms the change", function () {
 
                 beforeEach(function () {
+                    spyOn( ctrl, "displayReissueConfirm" ).and.returnValue( confirmDeferred.promise );
+                    ctrl.handleReissueConfirm(); // do again now that we're mocking "displayReissueConfirm"
                     confirmDeferred.resolve(true);
                     $rootScope.$digest();
                 });
@@ -275,6 +283,9 @@
                     });
 
                     beforeEach(function () {
+                        // as soon as CardManager.reissue resolves, force refreshListDeferredDelegate to resolve for tests
+                        CardManager.reissue().then( () => ctrl.refreshListDeferredDelegate.resolve() );
+
                         reissueDeferred.resolve(updatedCard);
                         $rootScope.$digest();
                     });
@@ -284,7 +295,10 @@
                     });
 
                     it("should redirect to card.reissue.confirmation", function () {
-                        expect($state.go).toHaveBeenCalledWith("card.reissue.confirmation", {cardId: mockCardReissueDetails.originalCard.cardId});
+                        expect($state.go).toHaveBeenCalledWith("card.detail", {
+                            isReissued: true,
+                            cardId: mockCardReissueDetails.reissuedCard.cardId
+                        });
                     });
 
                     it("should call LoadingIndicator.complete", function () {

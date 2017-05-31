@@ -278,6 +278,11 @@
                 expect(state.cache).toBeFalsy();
             });
 
+            it("should accept isReissued param", function () {
+                expect(state.params.isReissued).toBeDefined();
+                expect(state.params.isReissued).toBeFalsy();
+            })
+
             it("should have the expected URL", function () {
                 expect(state.url).toEqual("/detail/:cardId");
             });
@@ -309,11 +314,9 @@
                     expect($state.current.name).toBe(stateName);
                 });
 
-                it("should resolve the card", function () {
-                    $injector.invoke($state.current.views["view@card"].resolve.card)
-                        .then(function (card) {
-                            expect(card).toEqual(mockCard);
-                        });
+                it("should resolve the card", () => {
+                    $injector.invoke( $state.current.resolve.card )
+                        .then( card => expect( card ).toEqual( mockCard ) );
                 });
 
                 it("should call this.AnalyticsUtil.trackView", function () {
@@ -322,158 +325,6 @@
 
             });
 
-        });
-
-        describe("has a card.changeStatus state that", function () {
-            var state,
-                stateName = "card.changeStatus";
-
-            beforeEach(function () {
-                state = $state.get(stateName);
-            });
-
-            it("should be defined", function () {
-                expect(state).toBeDefined();
-                expect(state).not.toBeNull();
-            });
-
-            it("should be abstract", function () {
-                expect(state.abstract).toBeTruthy();
-            });
-
-            it("should have the expected URL", function () {
-                expect(state.url).toEqual("/changeStatus/:cardId");
-            });
-
-            describe("when a child state is navigated to", function () {
-                var childStateName = "card.changeStatus.form",
-                    fetchCardDeferred;
-
-                beforeEach(function () {
-                    fetchCardDeferred = $q.defer();
-                    CardManager.fetchCard.and.returnValue(fetchCardDeferred.promise);
-                });
-
-                beforeEach(function () {
-                    $state.go(childStateName, {cardId: mockCard.cardId});
-
-                    fetchCardDeferred.resolve(mockCard);
-                    $rootScope.$digest();
-                });
-
-                it("should resolve the expected card", function () {
-                    $injector.invoke($state.$current.parent.resolve.card)
-                        .then(function (card) {
-                            expect(card).toEqual(mockCard);
-                        });
-                });
-            });
-        });
-
-        describe("has a card.changeStatus.form state that", function () {
-            var state,
-                stateName = "card.changeStatus.form";
-
-            beforeEach(function () {
-                state = $state.get(stateName);
-            });
-
-            it("should be valid", function () {
-                expect(state).toBeDefined();
-                expect(state).not.toBeNull();
-            });
-
-            it("should not be abstract", function () {
-                expect(state.abstract).toBeFalsy();
-            });
-
-            it("should not be cached", function () {
-                expect(state.cache).toBeFalsy();
-            });
-
-            it("should use its parent's URL", function () {
-                expect(state.url).toEqual("");
-            });
-
-            it("should respond to the URL", function () {
-                expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/changeStatus/" + mockCard.cardId);
-            });
-
-            describe("when navigated to", function () {
-                var fetchCardDeferred,
-                    mockCardId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-
-                beforeEach(function () {
-                    fetchCardDeferred = $q.defer();
-                    CardManager.fetchCard.and.returnValue(fetchCardDeferred.promise);
-
-                    $state.go(stateName, {cardId: mockCardId});
-
-                    fetchCardDeferred.resolve(mockCard);
-                    $rootScope.$digest();
-                });
-
-                it("should transition successfully", function () {
-                    expect($state.current.name).toBe(stateName);
-                });
-
-                it("should call this.AnalyticsUtil.trackView", function () {
-                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_CHANGE_STATUS.CONFIG.ANALYTICS.pageName);
-                });
-            });
-        });
-
-        describe("has a card.changeStatus.confirmation state that", function () {
-            var state,
-                stateName = "card.changeStatus.confirmation";
-
-            beforeEach(function () {
-                state = $state.get(stateName);
-            });
-
-            it("should be valid", function () {
-                expect(state).toBeDefined();
-                expect(state).not.toBeNull();
-            });
-
-            it("should not be abstract", function () {
-                expect(state.abstract).toBeFalsy();
-            });
-
-            it("should not be cached", function () {
-                expect(state.cache).toBeFalsy();
-            });
-
-            it("should have the expected URL", function () {
-                expect(state.url).toEqual("/confirmation");
-            });
-
-            it("should respond to the URL", function () {
-                expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/changeStatus/" + mockCard.cardId + "/confirmation");
-            });
-
-            describe("when navigated to", function () {
-                var fetchCardDeferred,
-                    mockCardId = TestUtils.getRandomStringThatIsAlphaNumeric(10);
-
-                beforeEach(function () {
-                    fetchCardDeferred = $q.defer();
-                    CardManager.fetchCard.and.returnValue(fetchCardDeferred.promise);
-
-                    $state.go(stateName, {cardId: mockCardId});
-
-                    fetchCardDeferred.resolve(mockCard);
-                    $rootScope.$digest();
-                });
-
-                it("should transition successfully", function () {
-                    expect($state.current.name).toBe(stateName);
-                });
-
-                it("should call this.AnalyticsUtil.trackView", function () {
-                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_CHANGE_STATUS_CONFIRMATION.CONFIG.ANALYTICS.pageName);
-                });
-            });
         });
 
         describe("has a card.reissue state that", function () {
@@ -584,150 +435,6 @@
 
                 it("should call this.AnalyticsUtil.trackView", function () {
                     expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE.CONFIG.ANALYTICS.pageName);
-                });
-            });
-        });
-
-        describe("has a card.reissue.shippingMethod state that", function () {
-            var state,
-                stateName = "card.reissue.shippingMethod";
-
-            beforeEach(function () {
-                state = $state.get(stateName);
-            });
-
-            it("should be valid", function () {
-                expect(state).toBeDefined();
-                expect(state).not.toBeNull();
-            });
-
-            it("should not be abstract", function () {
-                expect(state.abstract).toBeFalsy();
-            });
-
-            it("should not be cached", function () {
-                expect(state.cache).toBeFalsy();
-            });
-
-            it("should have the expected URL", function () {
-                expect(state.url).toEqual("/shippingMethod");
-            });
-
-            it("should respond to the URL", function () {
-                expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/reissue/" + mockCard.cardId + "/shippingMethod");
-            });
-
-            describe("when navigated to", function () {
-
-                beforeEach(function () {
-                    CardManager.fetchCard.and.returnValue($q.when(mockCard));
-                    AccountManager.fetchAccount.and.returnValue($q.when(mockAccount));
-                });
-
-                beforeEach(function () {
-                    $state.go(stateName, {cardId: mockCard.cardId});
-
-                    $rootScope.$digest();
-                });
-
-                it("should call this.AnalyticsUtil.trackView", function () {
-                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_INPUTS.SHIPPING_METHOD.CONFIG.ANALYTICS.pageName);
-                });
-            });
-        });
-
-        describe("has a card.reissue.reason state that", function () {
-            var state,
-                stateName = "card.reissue.reason";
-
-            beforeEach(function () {
-                state = $state.get(stateName);
-            });
-
-            it("should be valid", function () {
-                expect(state).toBeDefined();
-                expect(state).not.toBeNull();
-            });
-
-            it("should not be abstract", function () {
-                expect(state.abstract).toBeFalsy();
-            });
-
-            it("should not be cached", function () {
-                expect(state.cache).toBeFalsy();
-            });
-
-            it("should have the expected URL", function () {
-                expect(state.url).toEqual("/reason");
-            });
-
-            it("should respond to the URL", function () {
-                expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/reissue/" + mockCard.cardId + "/reason");
-            });
-
-            describe("when navigated to", function () {
-
-                beforeEach(function () {
-                    CardManager.fetchCard.and.returnValue($q.when(mockCard));
-                    AccountManager.fetchAccount.and.returnValue($q.when(mockAccount));
-                });
-
-                beforeEach(function () {
-                    $state.go(stateName, {cardId: mockCard.cardId});
-
-                    $rootScope.$digest();
-                });
-
-                it("should call this.AnalyticsUtil.trackView", function () {
-                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG.ANALYTICS.pageName);
-                });
-            });
-        });
-
-        describe("has a card.reissue.confirmation state that", function () {
-            var state,
-                stateName = "card.reissue.confirmation";
-
-            beforeEach(function () {
-                state = $state.get(stateName);
-            });
-
-            it("should be valid", function () {
-                expect(state).toBeDefined();
-                expect(state).not.toBeNull();
-            });
-
-            it("should not be abstract", function () {
-                expect(state.abstract).toBeFalsy();
-            });
-
-            it("should not be cached", function () {
-                expect(state.cache).toBeFalsy();
-            });
-
-            it("should have the expected URL", function () {
-                expect(state.url).toEqual("/confirmation");
-            });
-
-            it("should respond to the URL", function () {
-                expect($state.href(stateName, {cardId: mockCard.cardId})).toEqual("#/card/reissue/" + mockCard.cardId + "/confirmation");
-            });
-
-            describe("when navigated to", function () {
-
-                beforeEach(function () {
-                    CardManager.fetchCard.and.returnValue($q.when(mockCard));
-                    AccountManager.fetchAccount.and.returnValue($q.when(mockAccount));
-                });
-
-                beforeEach(function () {
-                    $state.go(stateName, {cardId: mockCard.cardId});
-
-                    $rootScope.$digest();
-                });
-
-                it("should call this.AnalyticsUtil.trackView", function () {
-                    expect(this.AnalyticsUtil.trackView).toHaveBeenCalledWith(mockGlobals.CARD_REISSUE_CONFIRMATION.CONFIG.ANALYTICS.pageName);
                 });
             });
         });

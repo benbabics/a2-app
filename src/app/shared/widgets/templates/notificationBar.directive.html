@@ -5,10 +5,10 @@
             <span class="icon"></span>
         </div>
         <div class="col title-container">
-            <!-- Note: The title elements needs to be wrapped with a div for ngFitText to work correctly -->
-            <div>
-                <h1 fittext fittext-min="inherit" fittext-max="18" ng-bind-html="text"></h1>
+            <div ng-if="textIsLong">
+                <h1 fittext fittext-min="12" fittext-max="15" ng-class="{ 'has-fittext': textIsLong }" ng-bind-html="text"></h1>
             </div>
+            <h1  ng-if="!textIsLong" ng-bind-html="text"></h1>
         </div>
         <div class="col button-container" ng-if="closeable">
             <button class="button close-button icon ion-close" on-tap="remove()"></button>

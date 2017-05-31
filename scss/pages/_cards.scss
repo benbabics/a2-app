@@ -1,3 +1,47 @@
+/**
+ * Cards List
+**/
 .page-cards-list {
   @extend %ui-management-list;
+}
+
+/**
+ * Card Details
+**/
+.page-cards-detail {
+  @extend %ui-management-detail;
+}
+
+/**
+ * Card ReIssue
+**/
+.page-cards-reissue {
+  @extend %ui-page;
+  background-color: $default-light !important;
+
+  .form-item.no-border {
+    border-bottom: none;
+  }
+
+  .content-actions,
+  .content-instructions {
+    margin-top: 30px;
+    text-align: center;
+  }
+  .content-instructions {
+    margin-left:  auto;
+    margin-right: auto;
+    width: 75%;
+  }
+
+  .button-primary {
+    text-transform: inherit;
+    color: $default-light;
+    background-color: #007cbb;
+
+    &[disabled] {
+      color:            #c1e0ef;
+      background-color: #4da4d0;
+    }
+  }
 }

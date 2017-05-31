@@ -133,7 +133,7 @@
                 var toState;
 
                 beforeEach(function () {
-                    toState = "notifications.list";
+                    toState = "privacyPolicy";
                 });
 
                 describe("when the user is logged in", function () {

@@ -22,7 +22,8 @@
                     templateUrl: "app/components/driver/templates/driverList.html",
                     controller:  "DriverListController as vm"
                 }
-            }
+            },
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.DRIVER_LIST.CONFIG.ANALYTICS.pageName)
         });
 
         $stateProvider.state("driver.detail", {
@@ -38,7 +39,8 @@
                     templateUrl: "app/components/driver/templates/driverDetail.html",
                     controller:  "DriverDetailController as vm"
                 }
-            }
+            },
+            onEnter: (globals, AnalyticsUtil) => AnalyticsUtil.trackView(globals.DRIVER_DETAILS.CONFIG.ANALYTICS.pageName)
         });
     }
 
