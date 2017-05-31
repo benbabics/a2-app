@@ -11,12 +11,14 @@
     function AnalyticsUtil(_, $q, $window, Logger, LoggerUtil, PlatformUtil) {
         // Private members
         var DISPATCH_INTERVAL = 30, //in seconds (Note: Too large of an interval seems to break real-time analytics completely)
+            USER_ID_DIMENSION_ID = 1,
             activeTrackerId;
 
         // Revealed Public members
         var service = {
             "getActiveTrackerId": getActiveTrackerId,
             "hasActiveTracker"  : hasActiveTracker,
+            "setCustomDimension": setCustomDimension,
             "setUserId"         : setUserId,
             "setUserBrand"      : setUserBrand,
             "startTracker"      : startTracker,
@@ -51,6 +53,12 @@
 
         function hasActiveTracker() {
             return !!activeTrackerId;
+        }
+
+        function setCustomDimension(id, value) {
+            whenReady((analytics) => {
+                analytics.customDimension(id, value, _.noop, handleTrackingError);
+            });
         }
 
         function setUserId(userId) {

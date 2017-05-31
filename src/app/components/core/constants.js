@@ -39,7 +39,8 @@
         },
         "KEYS": {
             "LAST_BRAND_UPDATE_DATE": "LAST_BRAND_UPDATE_DATE",
-            "USERNAME"              : "USERNAME"
+            "USERNAME"              : "USERNAME",
+            "USER_ID"               : "USER_ID"
         }
     };
 
