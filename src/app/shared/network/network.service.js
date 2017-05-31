@@ -5,7 +5,7 @@
 
     /* @ngInject */
     function Network(_) {
-        var SERVER_ERROR_CODES = [404, 503];
+        var SERVER_ERROR_CODES = [404, 500, 503];
 
         return {
             "isServerConnectionError": isServerConnectionError
