@@ -60,7 +60,7 @@ export namespace ConstantsInfo {
     },
     INFINITE_LIST: {
       DEFAULT_SEARCH_PERIOD: [2**32-1, "y"],
-      DEFAULT_PAGE_SIZE: 10
+      DEFAULT_PAGE_SIZE: 100
     },
     //# App Navigation
     NAVIGATION: {
