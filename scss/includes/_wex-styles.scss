@@ -23,6 +23,13 @@ wex-notification-bar {
     top: $wex-notification-bar-height + $bar-height;
   }
 
+  .platform-android &.sever-connection-banner >.bar-notification {
+    top: $titlebar-height-android !important;
+  }
+  .platform-ios &.sever-connection-banner >.bar-notification {
+    top: $titlebar-height-ios !important;
+  }
+
   ion-content & > .bar-notification {
     position: static;
     margin-bottom: 20px; // make up for .bar { top: 20px; } for content below
