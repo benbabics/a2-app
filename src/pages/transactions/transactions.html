@@ -1,6 +1,10 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-segment [(ngModel)]="selectedList" color="primary">
+  <ion-navbar *ngIf="isListSelectionLocked">
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar *ngIf="!isListSelectionLocked">
+    <ion-segment [ngModel]="selectedListView.type" color="primary">
       <ion-segment-button #date value="Date" (ionSelect)="onSelectList(date)">
         Date
       </ion-segment-button>
@@ -13,7 +17,7 @@
     </ion-segment>
   </ion-toolbar>
 
-  <wex-static-list-page-header [page]="this" [ngClass]="{ active: isDateView }">
+  <wex-static-list-page-header *ngIf="!isListSelectionLocked" [page]="this" [ngClass]="{ active: isDateView }">
   </wex-static-list-page-header>
 </ion-header>
 
@@ -24,39 +28,36 @@
 
   <wex-static-list-page-content [page]="this">
     <ng-template #itemTemplate let-item>
-      <div [ngSwitch]="selectedList">
 
-        <div *ngSwitchCase="'Date'" class="content">
-          <span class="details">
-            <div class="card-id">{{ item.details.embossedCardNumber | wexCardNumber }}</div>
-            <div text-wrap>{{ item.details.customVehicleId }}</div>
-            <div text-wrap>{{ item.details.merchantName }}</div>
-            <div text-wrap>{{ item.details.productDescription }}</div>
-          </span>
+      <div *ngIf="isDateView" class="content">
+        <span class="details">
+          <div class="card-id">{{ item.details.embossedCardNumber | wexCardNumber }}</div>
+          <div text-wrap>{{ item.details.customVehicleId }}</div>
+          <div text-wrap>{{ item.details.merchantName }}</div>
+          <div text-wrap>{{ item.details.productDescription }}</div>
+        </span>
 
-          <span class="transaction-amount">{{ item.details.netCost | wexCurrency }}</span>
-        </div>
-
-        <div *ngSwitchCase="'DriverName'" class="content">
-          <span class="driver-name">{{ item.listDisplayName }}</span>
-        </div>
-
-        <div *ngSwitchCase="'CardNumber'" class="content">
-          <span class="card-id">{{ item.details.embossedCardNumber | wexCardNumber }}</span>
-          <span class="embossing">
-            <div *ngIf="item.details.embossingValue2" class="embossingValue2" text-wrap>{{ item.details.embossingValue2 }}</div>
-            <div *ngIf="item.details.embossingValue1" class="embossingValue1" text-wrap>{{ item.details.embossingValue1 }}</div>
-          </span>
-        </div>
-
+        <span class="transaction-amount">{{ item.details.netCost | wexCurrency }}</span>
       </div>
+
+      <div *ngIf="isDriverView" class="content">
+        <span class="driver-name">{{ item.listDisplayName }}</span>
+      </div>
+
+      <div *ngIf="isCardView" class="content">
+        <span class="card-id">{{ item.details.embossedCardNumber | wexCardNumber }}</span>
+        <span class="embossing">
+          <div *ngIf="item.details.embossingValue2" class="embossingValue2" text-wrap>{{ item.details.embossingValue2 }}</div>
+          <div *ngIf="item.details.embossingValue1" class="embossingValue1" text-wrap>{{ item.details.embossingValue1 }}</div>
+        </span>
+      </div>
+
     </ng-template>
   </wex-static-list-page-content>
 
 
-  <ion-infinite-scroll *ngIf="hasMoreItems" (ionInfinite)="onInfinite($event)">
-    <ion-infinite-scroll-content
-      loadingText="Loading more data...">
+  <ion-infinite-scroll *ngIf="hasMoreItems" threshold="25%" (ionInfinite)="onInfinite($event)">
+    <ion-infinite-scroll-content>
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>

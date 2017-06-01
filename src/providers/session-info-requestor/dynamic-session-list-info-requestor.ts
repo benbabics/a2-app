@@ -11,8 +11,12 @@ import {
   Model
 } from "@angular-wex/models";
 import { SessionInfoRequestorDetails } from "./session-info-requestor";
+import { Value } from "../../decorators/value";
 
 export abstract class DynamicSessionListInfoRequestor<T extends Model<DetailsT>, DetailsT> implements SessionInfoRequestorDetails {
+
+  @Value("INFINITE_LIST")
+  private readonly INFINITE_LIST: any;
 
   // The field to use for merging list results
   protected abstract listMergeId: keyof DetailsT;
@@ -60,10 +64,12 @@ export abstract class DynamicSessionListInfoRequestor<T extends Model<DetailsT>,
     let currentPage = _.get<number>(this.dynamicList, "details.currentPage", 0);
 
     // Default search parameters (may be overriden by input params)
-    searchParams.fromDate = moment(requestDate).subtract(1, "y").toDate(); //TODO externalize duration
+    searchParams.fromDate = (<any>moment)(requestDate) //TODO: Remove <any>moment cast when the .d.ts is fixed
+      .subtract(...this.INFINITE_LIST.DEFAULT_SEARCH_PERIOD)
+      .toDate();
     searchParams.toDate = requestDate;
     searchParams.pageNumber = currentPage;
-    searchParams.pageSize = 100; //TODO externalize
+    searchParams.pageSize = this.INFINITE_LIST.DEFAULT_PAGE_SIZE;
 
     // Merge default params with input params
     params = _.merge(searchParams, params);

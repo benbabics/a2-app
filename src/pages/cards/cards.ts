@@ -36,11 +36,11 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
   }
 
   protected groupItems(cards: Card[]): GroupedList<Card> {
-    return this.defaultItemGroup(cards, "status", CardsPage.CARD_STATUSES);
+    return StaticListPage.defaultItemGroup<Card, Card.Details>(cards, "status", CardsPage.CARD_STATUSES);
   }
 
   protected sortItems(cards: Card[]): Card[] {
-    return this.defaultItemSort(cards, "cardId", "asc");
+    return StaticListPage.defaultItemSort<Card, Card.Details>(cards, "cardId", "asc");
   }
 
   public goToDetailPage(card: Card) {
