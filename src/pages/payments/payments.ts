@@ -30,10 +30,10 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   }
 
   protected groupItems(payments: Payment[]): GroupedList<Payment> {
-    return this.defaultItemGroup(payments, "status", PaymentsPage.PAYMENT_STATUSES);
+    return StaticListPage.defaultItemGroup<Payment, Payment.Details>(payments, "status", PaymentsPage.PAYMENT_STATUSES);
   }
 
   protected sortItems(payments: Payment[]): Payment[] {
-    return this.defaultItemSort(payments, "id", "asc");
+    return StaticListPage.defaultItemSort<Payment, Payment.Details>(payments, "id", "asc");
   }
 }

@@ -23,6 +23,9 @@ export namespace FetchOptions {
   }
 }
 
+export const _FetchOptions = FetchOptions;
+export type _FetchOptions = FetchOptions;
+
 type milliseconds = number;
 
 export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extends ListPage {
@@ -63,6 +66,14 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     super(pageName, sessionManager, requiredSessionInfo);
   }
 
+  public static defaultItemSort<T extends Model<DetailsT>, DetailsT>(items: T[], sortBy: keyof DetailsT, order: "asc" | "desc" = "asc"): T[] {
+    return ListPage.sortListByDetails<T, DetailsT>(items, sortBy, order);
+  }
+
+  public static defaultItemGroup<T extends Model<DetailsT>, DetailsT>(items: T[], groupBy: keyof DetailsT, groups: string[]): GroupedList<T> {
+    return ListPage.groupByDetails<T, DetailsT>(items, groupBy, groups);
+  }
+
   protected abstract fetch(options?: FetchOptions): Observable<T[]>;
   protected abstract sortItems(items: T[]): T[];
 
@@ -74,7 +85,8 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     return !!this.searchFilterFields;
   }
 
-  protected get items(): T[] {
+  /** @internal */
+  public get items(): T[] {
     return this._items;
   }
 
@@ -95,14 +107,6 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   protected createSearchRegex(searchFilter: string) {
     //do a case-insensitive search
     return new RegExp(_.escapeRegExp(searchFilter), "i");
-  }
-
-  protected defaultItemSort(items: T[], sortBy: keyof DetailsT, order: "asc" | "desc" = "asc"): T[] {
-    return this.sortListByDetails<T, DetailsT>(items, sortBy, order);
-  }
-
-  protected defaultItemGroup(items: T[], groupBy: keyof DetailsT, groups: string[]): GroupedList<T> {
-    return this.groupByDetails<T, DetailsT>(items, groupBy, groups);
   }
 
   protected fetchResults(options?: FetchOptions): Observable<T[]> {
@@ -130,6 +134,19 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
       });
   }
 
+  protected filterItems(items: T[]): T[] {
+    if (this.isSearchEnabled) {
+      let searchRegex = this.createSearchRegex(this.searchFilter);
+
+      return items.filter((item: T) => this.searchFilterFields.some((searchField) => {
+        return String(item.details[searchField]).search(searchRegex) !== -1;
+      }));
+    }
+    else {
+      return this._items;
+    }
+  }
+
   protected groupItems(items: T[]): GroupedList<T> {
     throw new Error("StaticListPage.groupItems must be defined when using a grouped list.");
   }
@@ -142,16 +159,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   }
 
   protected updateList() {
-    if (this.isSearchEnabled) {
-      let searchRegex = this.createSearchRegex(this.searchFilter);
-
-      this._displayedItems = this._items.filter((item: T) => this.searchFilterFields.some((searchField) => {
-        return String(item.details[searchField]).search(searchRegex) !== -1;
-      }));
-    }
-    else {
-      this._displayedItems = this._items;
-    }
+    this._displayedItems = this.filterItems(this._items);
 
     if (this.isGrouped) {
       this._displayedItemGroups = this.sortItemGroups(this.groupItems(this._displayedItems));
@@ -206,4 +214,9 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
       .finally(() => refresher.complete())
       .subscribe();
   }
+}
+
+export namespace StaticListPage {
+  export type FetchOptions = _FetchOptions;
+  export const FetchOptions = _FetchOptions;
 }

@@ -21,6 +21,24 @@ export namespace ConstantsInfo {
       grant_type: "password",
       scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id",
     },
+    //# Buttons
+    BUTTONS: {
+      OK: "Ok",
+      CANCEL: "Cancel",
+      YES: "Yes",
+      NO: "No"
+    },
+    //# Card
+    CARD: {
+      REISSUE_REASON: {
+        DISPLAY_NAMES: {
+          "DAMAGED": "Damaged",
+          "LOST": "Lost",
+          "STOLEN": "Stolen",
+          "UNKNOWN": "Unknown"
+        }
+      }
+    },
     //# Components
     COMPONENTS: {
       LIST: {
@@ -40,6 +58,10 @@ export namespace ConstantsInfo {
     FINGERPRINT: {
       defaultDialogMessage: "Scan your fingerprint below to enter your account"
     },
+    INFINITE_LIST: {
+      DEFAULT_SEARCH_PERIOD: [2**32-1, "y"],
+      DEFAULT_PAGE_SIZE: 10
+    },
     //# App Navigation
     NAVIGATION: {
       LABELS: {
@@ -49,24 +71,6 @@ export namespace ConstantsInfo {
         "transactions": "Transactions",
         "cards": "Cards",
         "drivers": "Drivers"
-      }
-    },
-    //# Buttons
-    BUTTONS: {
-      OK: "Ok",
-      CANCEL: "Cancel",
-      YES: "Yes",
-      NO: "No"
-    },
-    //# Card
-    CARD: {
-      REISSUE_REASON: {
-        DISPLAY_NAMES: {
-          "DAMAGED": "Damaged",
-          "LOST": "Lost",
-          "STOLEN": "Stolen",
-          "UNKNOWN": "Unknown"
-        }
       }
     },
     //# App Pages
@@ -302,7 +306,8 @@ export namespace ConstantsInfo {
             {left: 20, top: 74, right: 86, bottom: 86}
           ],
           greekedElementCount: 15
-        }
+        },
+        title: "Transactions"
       }
     }
   };
