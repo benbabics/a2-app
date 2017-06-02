@@ -108,7 +108,7 @@ class TransactionsPageFilteredListView<T extends Model<DetailsT>, DetailsT> exte
         // (or until we reach the end of the list).
         .expand(() => _.every([
           this.listView.hasMoreItems(),
-          this.filterItems(fetchedItems).length <= TransactionsPageFilteredListView.DEFAULT_PAGE_SIZE
+          this.filterItems(fetchedItems).length < TransactionsPageFilteredListView.DEFAULT_PAGE_SIZE
         ]) ? fetch(FetchOptions.NextPage) : Observable.empty())
         .subscribe(observer);
     });

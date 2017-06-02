@@ -6,7 +6,7 @@
     "scripts": {
         "clean": "ionic-app-scripts clean",
         "build": "ionic-app-scripts build",
-        "ionic:prepare": "yarn global add ionic@3.2.0 cordova@7.0.1 @ionic/cli-plugin-proxy@latest fs-extra superagent strip-ansi && ionic cordova prepare",
+        "ionic:prepare": "yarn global add ionic@3.2.0 cordova@7.0.1 @ionic/cli-plugin-proxy@latest fs-extra superagent strip-ansi && ionic cordova prepare --no-interactive",
         "ionic:serve": "ionic-app-scripts serve",
         "ionic:build:debug": "yarn build -- --debug",
         "ionic:build:release": "yarn build -- --prod --release",
