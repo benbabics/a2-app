@@ -12,6 +12,7 @@ import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
+import { DriversPage } from './../pages/drivers/drivers';
 import {
   ActionIndicator,
   WexList,
@@ -66,6 +67,7 @@ import { GetCurrentEnvironmentConstants } from "./app.constants";
     CardsPage,
     CardsDetailsPage,
     CardsReissuePage,
+    DriversPage,
     PaymentsPage,
     TermsOfUsePage,
     TransactionsPage,
@@ -114,6 +116,7 @@ import { GetCurrentEnvironmentConstants } from "./app.constants";
     CardsPage,
     CardsDetailsPage,
     CardsReissuePage,
+    DriversPage,
     PaymentsPage,
     WexNavBar,
     OptionsPopoverPage,
