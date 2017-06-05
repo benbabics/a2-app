@@ -126,7 +126,7 @@
 
             $ionicActionSheet.show({
                 buttons:    _.map( actions, action => { return { text: action.label } } ),
-                titleText:  vm.config.actionStatusTitle,
+                titleText:  `<b>${vm.config.actionStatusTitle}</b>`,
                 cancelText: vm.config.actionStatusCancel,
                 cancel() { deferred.reject(); },
                 buttonClicked(i, action) {
