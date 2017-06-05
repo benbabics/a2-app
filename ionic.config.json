@@ -1,5 +1,5 @@
 {
-  "name": "smarthub-2",
-  "app_id": "com.wex.smarthub2",
+  "name": "Fleet SmartHub",
+  "app_id": "com.wex.fleetsmarthub",
   "type": "ionic-angular"
 }
