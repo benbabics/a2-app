@@ -17,7 +17,7 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
   private static readonly SEARCH_FILTER_FIELDS: Card.Field[] = [
     "embossingValue1",
     "embossingValue2",
-    "cardId"
+    "embossedCardNumber"
   ];
 
   protected readonly listGroupDisplayOrder: string[] = CardsPage.CARD_STATUSES;
