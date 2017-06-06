@@ -6,7 +6,6 @@ export namespace ConstantsInfo {
 
   export const Common = {
     ENV: Environment,
-    PLATFORM: "%%=PLATFORM%%",
     LOCALE: "en-US",
     //# Storage
     STORAGE: {
@@ -72,6 +71,13 @@ export namespace ConstantsInfo {
         "cards": "Cards",
         "drivers": "Drivers"
       }
+    },
+    //# Platform
+    PLATFORM: {
+      CURRENT: "%%=PLATFORM%%",
+      ANDROID: "android",
+      IOS: "ios",
+      MOCK: "mock"
     },
     //# App Pages
     PAGES: {
@@ -253,7 +259,8 @@ export namespace ConstantsInfo {
           {left: 68, top: 10, right: 90, bottom: 35},
           {left: 68, top: 55, right: 90, bottom: 80},
         ],
-        greekedElementCount: 15
+        greekedElementCount: 15,
+        title: "Payments"
       },
 
       //# Terms of Use page

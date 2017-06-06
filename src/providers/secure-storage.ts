@@ -34,7 +34,7 @@ export class SecureStorage {
             this.secureStorage = new cordova.plugins.SecureStorage(resolve, reject, SecureStorage.STORAGE_ID);
           }
           else {
-            if (wexPlatform.isBrowser) {
+            if (wexPlatform.isMock) {
               console.info("Secure storage is not available on this platform. Using mock implementation");
               this.secureStorage = this.browserMock();
               resolve();

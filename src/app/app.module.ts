@@ -52,9 +52,13 @@ import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
 import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
 import { AppVersion } from "@ionic-native/app-version";
 import { TransactionsPage } from "../pages/transactions/transactions";
-import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
 import { ApiProviders } from "@angular-wex/api-providers";
 import { GetCurrentEnvironmentConstants } from "./app.constants";
+import {
+  WexIfPlatformDirective,
+  WexIfPlatformAndroidDirective,
+  WexIfPlatformIosDirective
+} from "../directives";
 
 @NgModule({
   declarations: [
@@ -87,7 +91,10 @@ import { GetCurrentEnvironmentConstants } from "./app.constants";
     WexAppBanner,
     WexSnackbar,
     WexSvgPipe,
-    WexTrustedHtmlPipe
+    WexTrustedHtmlPipe,
+    WexIfPlatformDirective,
+    WexIfPlatformAndroidDirective,
+    WexIfPlatformIosDirective
   ],
   imports: [
     //# Angular
@@ -100,7 +107,6 @@ import { GetCurrentEnvironmentConstants } from "./app.constants";
     //# WEX
     //----------------------
     ApiProviders.withConstants(GetCurrentEnvironmentConstants),
-    ModelGeneratorsModule,
     //# third party dependencies
     //----------------------
     ChartsModule,

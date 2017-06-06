@@ -8,10 +8,20 @@ export abstract class Page {
   public readonly CONSTANTS: any;
 
   constructor(public readonly pageName: string) {
-    this.CONSTANTS = _.get(Constants, `PAGES.${pageName.toUpperCase().replace(/\s/g, "_")}`);
+    this.CONSTANTS = _.merge(this.defaultConstants, this.pageConstants);
+  }
+
+  private get defaultConstants(): any {
+    return {
+      PLATFORM: Constants.PLATFORM
+    };
+  }
+
+  private get pageConstants(): any {
+    return _.get(Constants, `PAGES.${this.pageName.toUpperCase().replace(/\s/g, "_")}`);
   }
 
   public resolvePlatformConstant(constant: any): string {
-    return _.get(constant, Constants.PLATFORM, null);
+    return _.get(constant, Constants.PLATFORM.CURRENT, null);
   }
 }
