@@ -4,5 +4,14 @@
 </ion-header>
 
 <ion-content>
-  <h1>Yo, Dawg</h1>
+  <ion-refresher (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <wex-static-list-page-content [page]="this">
+    <ng-template #itemTemplate let-item>
+      <span class="driver-name">{{ item.details.lastName }} {{ item.details.firstName}}</span>
+      <span class="driver-id">{{ item.details.promptId }}</span>
+    </ng-template>
+  </wex-static-list-page-content>
 </ion-content>

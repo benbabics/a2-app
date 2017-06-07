@@ -3,7 +3,7 @@ import { SessionManager } from './../../providers/session-manager';
 import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
 import { Driver, DriverStatus } from "@angular-wex/models";
-import { StaticListPage, FetchOptions } from "../static-list-page";
+import { StaticListPage, FetchOptions, GroupedList } from "../static-list-page";
 import { Session } from "../../models";
 
 @Component({
@@ -19,6 +19,9 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
     "promptId"
   ];
 
+  protected readonly listGroupDisplayOrder: string[] = DriversPage.DRIVER_STATUSES;
+  public readonly dividerLabels: string[] = DriversPage.DRIVER_STATUSES.map(DriverStatus.displayName);
+
   constructor(
     sessionManager: SessionManager,
     public navCtrl: NavController,
@@ -29,6 +32,10 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
 
   protected fetch(options?: FetchOptions): Observable<Driver[]> {
     return this.sessionManager.cache.getSessionDetail(Session.Field.Drivers, options);
+  }
+
+  protected groupItems(drivers: Driver[]): GroupedList<Driver> {
+    return StaticListPage.defaultItemGroup<Driver, Driver.Details>(drivers, "status", DriversPage.DRIVER_STATUSES);
   }
 
   protected sortItems(drivers: Driver[]): Driver[] {
