@@ -3,6 +3,7 @@ import { SessionManager } from './../../providers/session-manager';
 import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
 import { Driver, DriverStatus } from "@angular-wex/models";
+import { DriversDetailsPage } from './details/drivers-details';
 import { StaticListPage, FetchOptions, GroupedList } from "../static-list-page";
 import { Session } from "../../models";
 
@@ -40,5 +41,9 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
 
   protected sortItems(drivers: Driver[]): Driver[] {
     return StaticListPage.defaultItemSort<Driver, Driver.Details>(drivers, "lastName", "asc");
+  }
+
+  public goToDetailPage(driver: Driver): void {
+    this.navCtrl.push( DriversDetailsPage, { driver } );
   }
 }

@@ -153,6 +153,33 @@ export namespace ConstantsInfo {
           {left: 20, top: 74, right: 86, bottom: 86}
         ],
         greekedElementCount: 15,
+
+        //# Driver Details page
+        DETAILS: {
+          title:   "Driver Details",
+          details: "Details",
+          actions: "Actions",
+          viewTransactions: "View Transactions",
+
+          STATUS: {
+            COLOR: {
+              ACTIVE:     "success",
+              SUSPENDED:  "warning",
+              TERMINATED: "danger"
+            },
+            ICON: {
+              ACTIVE: "checkmark-circle",
+              SUSPENDED: "information-circle",
+              TERMINATED: "close-circle"
+            }
+          },
+
+          LABELS: {
+            promptId:        "Driver ID",
+            cellPhoneNumber: "Mobile Phone",
+            emailAddress:    "Email Address"
+          }
+        }
       },
 
       //# Landing page

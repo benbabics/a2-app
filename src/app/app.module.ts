@@ -3,7 +3,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Dialogs } from "@ionic-native/dialogs";
 import { OptionsPopoverPage } from "./../pages/landing/options-popover/options-popover";
 import { WexCardNumberPipe } from "./../pipes/wex-card-number";
-import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { Http, XHRBackend, RequestOptions, HttpModule } from "@angular/http";
 import { NgModule, ErrorHandler } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
@@ -12,7 +11,9 @@ import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
+import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { DriversPage } from './../pages/drivers/drivers';
+import { DriversDetailsPage } from './../pages/drivers/details/drivers-details';
 import {
   ActionIndicator,
   WexList,
@@ -68,6 +69,7 @@ import { GetCurrentEnvironmentConstants } from "./app.constants";
     CardsDetailsPage,
     CardsReissuePage,
     DriversPage,
+    DriversDetailsPage,
     PaymentsPage,
     TermsOfUsePage,
     TransactionsPage,
@@ -117,6 +119,7 @@ import { GetCurrentEnvironmentConstants } from "./app.constants";
     CardsDetailsPage,
     CardsReissuePage,
     DriversPage,
+    DriversDetailsPage,
     PaymentsPage,
     WexNavBar,
     OptionsPopoverPage,
