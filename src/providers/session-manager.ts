@@ -6,6 +6,7 @@ import { UserCredentials } from "@angular-wex/models";
 import { AuthProvider, UserProvider } from "@angular-wex/api-providers";
 import { Observable } from "rxjs/Observable";
 import { SessionCache } from "./session-cache";
+import { LocalStorageService } from "angular-2-local-storage/dist";
 
 export enum SessionAuthenticationMethod {
   Secret,
@@ -26,12 +27,14 @@ export namespace SessionOptions {
 export class SessionManager {
 
   private _sessionStateObserver = new BehaviorSubject(null);
+  private _willPersistAuthToken: boolean = /[?&]dev/.test( location.search );
 
   constructor(
     private authProvider: AuthProvider,
     private userProvider: UserProvider,
     private fingerprint: Fingerprint,
-    private sessionCache: SessionCache
+    private sessionCache: SessionCache,
+    private localStorageService: LocalStorageService,
   ) { }
 
   public static get hasSession(): boolean {
@@ -78,6 +81,10 @@ export class SessionManager {
     return this.sessionCache;
   }
 
+  public restore() {
+    SessionCache.cachedValues.token = this.manageAuthToken();
+  }
+
   public initSession(userCredentials: UserCredentials, options?: SessionOptions): Observable<string> {
     options = _.merge({}, SessionOptions.Defaults, options);
 
@@ -89,6 +96,7 @@ export class SessionManager {
     return this.authenticate(userCredentials, options.authenticationMethod)
       .map((token: string) => {
         SessionCache.cachedValues.token = token;
+        this.manageAuthToken( token );
 
         this._sessionStateObserver.next(true);
 
@@ -101,7 +109,18 @@ export class SessionManager {
 
   public invalidateSession() {
     this.sessionCache.clear();
+    this.manageAuthToken( null );
 
     this._sessionStateObserver.next(false);
+  }
+
+  private manageAuthToken(token?: null|string): any {
+    if ( this._willPersistAuthToken ) {
+      let action = token === undefined ? "get" : token === null ? "remove" : "set";
+      return this.localStorageService[ action ]( "auth-token", token );
+    }
+
+    // getter is "", otherwise false for actions
+    return token === undefined ? "" : false;
   }
 }
