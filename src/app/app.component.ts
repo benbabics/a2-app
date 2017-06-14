@@ -22,6 +22,7 @@ export class MyApp {
 
       statusBar.styleDefault();
       splashScreen.hide();
+      this.sessionManager.restore();
     });
   }
 
@@ -34,7 +35,6 @@ export class MyApp {
   }
 
   public get rootPage() {
-    this.sessionManager.restore();
     return SessionManager.hasSession ? WexNavBar : LoginPage;
   }
 }
