@@ -3,6 +3,7 @@ import { Platform } from "ionic-angular";
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 
+import { WexNavBar } from "../components";
 import { LoginPage } from "../pages/login/login";
 import { SessionManager } from "./../providers/session-manager";
 import { WexAppBannerController } from "../components";
@@ -14,13 +15,14 @@ import "chart.js";
 })
 export class MyApp {
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private wexAppBannerController: WexAppBannerController) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private sessionManager: SessionManager, private wexAppBannerController: WexAppBannerController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
 
       statusBar.styleDefault();
       splashScreen.hide();
+      this.sessionManager.restore();
     });
   }
 
@@ -33,6 +35,6 @@ export class MyApp {
   }
 
   public get rootPage() {
-    return LoginPage;
+    return SessionManager.hasSession ? WexNavBar : LoginPage;
   }
 }

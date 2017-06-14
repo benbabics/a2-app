@@ -11,7 +11,8 @@ export namespace ConstantsInfo {
     STORAGE: {
       ID: "FLEET_MANAGER-",
       KEYS: {
-        USERNAME: "USERNAME"
+        USERNAME: "USERNAME",
+        AUTH_TOKEN: "AUTH_TOKEN"
       }
     },
     //# OAuth
