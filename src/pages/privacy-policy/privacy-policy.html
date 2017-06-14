@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <div class="content padding">
+    <h5 align="center">{{CONSTANTS.appName}}</h5>
+    <h5 align="center">{{CONSTANTS.privacyNotice}}</h5>
+
+    <h5 align="center">{{ CONSTANTS.lastUpdated }} {{ CONSTANTS.lastUpdatedDate }}</h5>
+
+    <p [innerHtml]="CONSTANTS.introduction"></p>
+
+    <p>{{ CONSTANTS.sectionOne.content }}</p>
+    <ul>
+      <li *ngFor="let item of CONSTANTS.sectionOne.items">{{ item.content }}</li>
+    </ul>
+
+    <p [innerHtml]="CONSTANTS.sectionTwo.content"></p>
+
+    <p>{{ CONSTANTS.sectionThree.content }}</p>
+    <ul>
+      <li><a (click)="scrollTo(sectionFour)">{{ CONSTANTS.sectionThree.link1 }}</a></li>
+      <li><a (click)="scrollTo(sectionFive)">{{ CONSTANTS.sectionThree.link2 }}</a></li>
+      <li><a (click)="scrollTo(sectionSix)">{{ CONSTANTS.sectionThree.link3 }}</a></li>
+      <li><a (click)="scrollTo(sectionSeven)">{{ CONSTANTS.sectionThree.link4 }}</a></li>
+      <li><a (click)="scrollTo(sectionEight)">{{ CONSTANTS.sectionThree.link5 }}</a></li>
+      <li><a (click)="scrollTo(sectionNine)">{{ CONSTANTS.sectionThree.link6 }}</a></li>
+      <li><a (click)="scrollTo(sectionTen)">{{ CONSTANTS.sectionThree.link7 }}</a></li>
+      <li><a (click)="scrollTo(sectionEleven)">{{ CONSTANTS.sectionThree.link8 }}</a></li>
+      <li><a (click)="scrollTo(sectionTwelve)">{{ CONSTANTS.sectionThree.link9 }}</a></li>
+      <li><a (click)="scrollTo(sectionThirteen)">{{ CONSTANTS.sectionThree.link12 }}</a></li>
+      <li><a (click)="scrollTo(sectionFourteen)">{{ CONSTANTS.sectionThree.link13 }}</a></li>
+    </ul>
+
+    <section #sectionFour>
+      <p [innerHtml]="CONSTANTS.sectionFour.content"></p>
+
+      <ul>
+        <li *ngFor="let parent of CONSTANTS.sectionFour.items">
+          <span [innerHtml]="parent.content"></span>
+
+          <ul *ngFor="let child of parent.items">
+            <li [innerHtml]="child.content"></li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section #sectionFive>
+      <h5>{{ CONSTANTS.sectionFive.title }}</h5>
+
+      <ul>
+        <li *ngFor="let parent of CONSTANTS.sectionFive.items">
+          <span [innerHtml]="parent.content"></span>
+
+          <ul *ngFor="let child of parent.items">
+            <li [innerHtml]="child.content"></li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section #sectionSix>
+      <p [innerHtml]="CONSTANTS.sectionSix.content"></p>
+
+      <ul>
+        <li *ngFor="let item of CONSTANTS.sectionSix.items" [innerHtml]="item.content"></li>
+      </ul>
+    </section>
+
+    <section #sectionSeven>
+      <h5 [innerHtml]="CONSTANTS.sectionSeven.title"></h5>
+
+      <ul>
+        <li *ngFor="let item of CONSTANTS.sectionSeven.items" [innerHtml]="item.content"></li>
+      </ul>
+    </section>
+
+    <section #sectionEight>
+      <p>
+        <span [innerHtml]="CONSTANTS.sectionEight.content"></span>
+        <a (click)="openUrl('https://www.google.com/policies/privacy/partners/')">{{ CONSTANTS.sectionEight.hereText }}</a>.
+      </p>
+    </section>
+
+    <section #sectionNine>
+      <p>
+        <span [innerHtml]="CONSTANTS.sectionNine.content"></span>
+        <a (click)="openUrl('http://www.networkadvertising.org/choices/')">{{ CONSTANTS.sectionNine.websiteNetworkAdvertising }}</a>        {{ CONSTANTS.sectionNine.andThe }}
+        <a (click)="openUrl('http://www.aboutads.info/')">{{ CONSTANTS.sectionNine.websiteDigitalAdvertising }}</a>
+      </p>
+    </section>
+
+    <section #sectionTen>
+      <h5 [innerHtml]="CONSTANTS.sectionTen.title"></h5>
+      <p *ngFor="let item of CONSTANTS.sectionTen.contents" [innerHtml]="item.content"></p>
+    </section>
+
+    <section #sectionEleven>
+      <p>
+        <span [innerHtml]="CONSTANTS.sectionEleven.content"></span>
+        <span [innerHtml]="CONSTANTS.sectionEleven.effectiveDateOfNotice"></span> {{ CONSTANTS.lastUpdatedDate }}.
+        <span [innerHtml]="CONSTANTS.sectionEleven.content2"></span>
+      </p>
+    </section>
+
+    <section #sectionTwelve>
+      <p [innerHtml]="CONSTANTS.sectionTwelve.content"></p>
+    </section>
+
+    <section #sectionThirteen>
+      <p [innerHtml]="CONSTANTS.sectionThirteen.content"></p>
+    </section>
+
+    <section #sectionFourteen>
+      <p [innerHtml]="CONSTANTS.sectionFourteen.content"></p>
+
+      {{ CONSTANTS.sectionFourteen.byEmailLabel }}
+      <a [href]="CONSTANTS.sendEmailLink + versionNumber">{{ CONSTANTS.sectionFourteen.byEmailDisplay }}</a>
+      <br><br>
+
+      <div *ngFor="let item of CONSTANTS.sectionFourteen.contents" [innerHtml]="item.content"></div>
+    </section>
+
+    <section #sectionFifteen>
+      <div class="copyright" [innerHtml]="CONSTANTS.sectionFifteen.content"></div>
+    </section>
+
+  </div>
+</ion-content>
