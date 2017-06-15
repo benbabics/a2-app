@@ -1,29 +1,25 @@
 import { AppVersion } from "@ionic-native/app-version";
-import { Component, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
 import { Page } from "../page";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
-import { Content } from "ionic-angular";
 
 @Component({
   selector: "page-privacy-policy",
   templateUrl: "privacy-policy.html"
 })
 export class PrivacyPolicyPage extends Page {
-  @ViewChild(Content) content: Content;
+  private section: boolean[];
 
   private closing: string;
   private versionNumber: string;
 
   constructor(private appVersion: AppVersion, private inAppBrowser: InAppBrowser) {
     super("Privacy Policy");
+    this.section = new Array<boolean>(14);
   }
 
   openUrl(url: string) {
     this.inAppBrowser.create(url);
-  }
-
-  scrollTo(section: HTMLElement) {
-    this.content.scrollTo(0, section.offsetTop, 500);
   }
 
   ionViewDidLoad() {
