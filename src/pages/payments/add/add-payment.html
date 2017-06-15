@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons *wexIfPlatformAndroid left>
+      <button ion-button icon-only (click)="cancel()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+
+    <ion-buttons *wexIfPlatformIos right>
+      <button ion-button (click)="cancel()">{{ CONSTANTS.BUTTONS.CLOSE }}</button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card padding>IM MAKIN A PAYMENT HERE</ion-card>
+</ion-content>

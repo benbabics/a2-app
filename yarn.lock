@@ -12,10 +12,6 @@
   version "1.3.4"
   resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#424e6273c87"
 
-"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#edf45b841db":
-  version "1.3.1"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#edf45b841db"
-
 "@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64":
   version "1.0.1"
   resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64"

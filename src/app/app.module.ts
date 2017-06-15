@@ -67,6 +67,7 @@ import {
   WexIfPlatformIosDirective
 } from "../directives";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { AddPaymentPage } from "../pages/payments/add/add-payment";
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     TermsOfUsePage,
     PrivacyPolicyPage,
     TransactionsPage,
+    AddPaymentPage,
     ActionIndicator,
     WexCurrency,
     WexDate,
@@ -145,7 +147,8 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     TransactionsPage,
     ContactUsPage,
     PrivacyPolicyPage,
-    TransactionsPage
+    TransactionsPage,
+    AddPaymentPage
   ],
   providers: [
     //# ionic

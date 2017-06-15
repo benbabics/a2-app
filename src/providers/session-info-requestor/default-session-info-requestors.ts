@@ -67,6 +67,11 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
     requestor: (session: Session) => Observable.of(session.postedTransactionsInfo.items)
   };
 
+  private readonly makePaymentAvailabilityRequestor: SessionInfoRequestorDetails = {
+    requiredFields: [Session.Field.User],
+    requestor: (session: Session) => this.paymentProvider.getMakePaymentAvailability(session.user.company.details.accountId)
+  };
+
   constructor(
     private userProvider: UserProvider,
     private accountProvider: AccountProvider,
@@ -91,6 +96,7 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
     //this._requestors[Session.Field.PendingTransactionsInfo] = this.pendingTransactionsRequestor;
     this._requestors[Session.Field.PostedTransactionsInfo] = this.postedTransactionsInfoRequestor;
     this._requestors[Session.Field.PostedTransactions] = this.postedTransactionsRequestor;
+    this._requestors[Session.Field.MakePaymentAvailability] = this.makePaymentAvailabilityRequestor;
   }
 }
 
