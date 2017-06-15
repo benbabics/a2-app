@@ -59,6 +59,7 @@ import {
   WexIfPlatformAndroidDirective,
   WexIfPlatformIosDirective
 } from "../directives";
+import { AddPaymentPage } from "../pages/payments/add/add-payment";
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import {
     PaymentsPage,
     TermsOfUsePage,
     TransactionsPage,
+    AddPaymentPage,
     ActionIndicator,
     WexCurrency,
     WexDate,
@@ -124,7 +126,8 @@ import {
     WexNavBar,
     OptionsPopoverPage,
     TermsOfUsePage,
-    TransactionsPage
+    TransactionsPage,
+    AddPaymentPage
   ],
   providers: [
     //# ionic
