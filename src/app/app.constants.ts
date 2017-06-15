@@ -25,6 +25,7 @@ export namespace ConstantsInfo {
     BUTTONS: {
       OK: "Ok",
       CANCEL: "Cancel",
+      CLOSE: "Close",
       YES: "Yes",
       NO: "No"
     },
@@ -268,6 +269,13 @@ export namespace ConstantsInfo {
 
       //# Payments page
       PAYMENTS: {
+        UNAVAILABILITY_REASONS: {
+          default: "Cannot make payment at this time",
+          shouldDisplayCurrentBalanceDueMessage: "Current balance",
+          shouldDisplayBankAccountSetupMessage: "Bank account setup",
+          shouldDisplayDirectDebitEnabledMessage: "Direct debit enabled",
+          shouldDisplayOutstandingPaymentMessage: "Already scheduled payment",
+        },
         listLabels: ["Date", "Amount"],
         greekingData: [
           { left: 3, top: 10, right: 24, bottom: 35 },
@@ -276,7 +284,12 @@ export namespace ConstantsInfo {
           { left: 68, top: 55, right: 90, bottom: 80 },
         ],
         greekedElementCount: 15,
-        title: "Payments"
+        title: "Payments",
+
+        //# Add Payment page
+        ADD: {
+          title: "Make Payment"
+        }
       },
 
       //# Contact Us Page

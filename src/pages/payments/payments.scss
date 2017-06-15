@@ -12,4 +12,15 @@ page-payments {
       text-align: right;
     }
   }
+
+  #button-add-payment {
+
+    @at-root .md & {
+      @include action-indicator-color(color($colors, white));
+    }
+
+    @at-root .ios & {
+      @include action-indicator-color(color($colors, primary));
+    }
+  }
 }
