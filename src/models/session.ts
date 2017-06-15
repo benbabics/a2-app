@@ -1,4 +1,8 @@
+<<<<<<< 1be1d91a973523c39894835692b6ae26e95a9d83
 import { User, Company, Card, Payment, Driver, Transaction, MakePaymentAvailability, InvoiceSummary } from "@angular-wex/models";
+=======
+import { User, Company, Card, Payment, Driver, Transaction, MakePaymentAvailability } from "@angular-wex/models";
+>>>>>>> Initial make payment flow entry work
 import { DynamicList } from "./dynamic-list";
 
 export type TransactionList = DynamicList<Transaction, Transaction.Details>;
