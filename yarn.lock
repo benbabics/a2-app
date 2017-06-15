@@ -1246,9 +1246,9 @@ cordova-plugin-dialogs@~1.3.2:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-dialogs/-/cordova-plugin-dialogs-1.3.3.tgz#532ff2eb5c86133a5878550dae59c76ab397f8c9"
 
-cordova-plugin-inappbrowser@^1.7.1:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-inappbrowser/-/cordova-plugin-inappbrowser-1.7.1.tgz#435b43f591fe7bfa95ea98dbe0004841fe59ba51"
+"cordova-plugin-inappbrowser@http://bitbucket.int.wrightexpress.com/scm/mob/wex-cordova-inappbrowser.git#89734238c6d":
+  version "1.5.1-dev"
+  resolved "http://bitbucket.int.wrightexpress.com/scm/mob/wex-cordova-inappbrowser.git#89734238c6d"
 
 cordova-plugin-secure-storage@~2.6.5:
   version "2.6.6"
