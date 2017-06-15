@@ -13,6 +13,7 @@ export abstract class Page {
 
   private get defaultConstants(): any {
     return {
+      BUTTONS: Constants.BUTTONS,
       PLATFORM: Constants.PLATFORM
     };
   }

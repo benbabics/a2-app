@@ -7,7 +7,4 @@ import { Component, Input } from "@angular/core";
 export class ActionIndicator {
 
   @Input("when") public showIndicator: boolean;
-
-  constructor() { }
-
 }
