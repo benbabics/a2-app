@@ -4,14 +4,8 @@ page-privacy-policy {
   }
 }
 
-page-privacy-policy {
-  &.ion-page > ion-content {
-    background: color($colors, white);
-  }
-}
-
 .page-privacy {
-  ol, ul {
+  ul {
     margin: 0 30px 15px;
     list-style-type: disc;
   }
