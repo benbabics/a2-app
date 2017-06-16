@@ -1,0 +1,12 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>{{ CONSTANTS.options.scopeVars.CONFIG.TITLE }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="fingerprint-terms-modal">
+    <div class="terms" [innerHtml]="getTerms()"></div>
+
+    <button class="button-block" ion-button>{{ CONSTANTS.options.scopeVars.CONFIG.BUTTONS.ACCEPT }}</button>
+    <button class="button-block" ion-button outline>{{ CONSTANTS.options.scopeVars.CONFIG.BUTTONS.DECLINE }}</button>
+</ion-content>

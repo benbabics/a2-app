@@ -4,6 +4,7 @@ import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { NavParams, Platform, Content, NavController } from "ionic-angular";
 import { Page } from "../page";
+import { FingerprintAuthenticationTermsPage } from "./fingerprint-auth-terms/fingerprint-auth-terms";
 import {
   SessionManager,
   SessionAuthenticationMethod,
@@ -14,6 +15,7 @@ import { Value } from "../../decorators/value";
 import { Dialogs } from "@ionic-native/dialogs";
 import { Response } from "@angular/http";
 import { UserCredentials } from "@angular-wex/models";
+import { ModalController } from "ionic-angular";
 
 export type LoginPageNavParams = keyof {
   fromLogOut
@@ -52,7 +54,8 @@ export class LoginPage extends Page {
     private fingerprint: Fingerprint,
     private localStorageService: LocalStorageService,
     private dialogs: Dialogs,
-    private appBannerController: WexAppBannerController
+    private appBannerController: WexAppBannerController,
+    private modalController: ModalController
   ) {
     super("Login");
   }
@@ -136,6 +139,8 @@ export class LoginPage extends Page {
   }
 
   private login(setupFingerprintAuth?: boolean) {
+    let modal = this.modalController.create(FingerprintAuthenticationTermsPage);
+    modal.present();
     if (!this.isLoggingIn) {
       let authenticationMethod = setupFingerprintAuth ? SessionAuthenticationMethod.Fingerprint : SessionAuthenticationMethod.Secret;
 
