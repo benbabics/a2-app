@@ -1,0 +1,21 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{ CONSTANTS.title }}</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div padding>
+        <p>
+            {{ CONSTANTS.contentHeading }}
+        </p>
+        <p>
+            {{ CONSTANTS.content }}
+        </p>
+        <p class="align_center">
+            <a ion-button class="button button-block button-primary button-width" [href]="sendEmailLink">
+                    <span id="sendEmail">{{ CONSTANTS.sendEmailButton }}</span>
+            </a>
+        </p>
+    </div>
+</ion-content>
