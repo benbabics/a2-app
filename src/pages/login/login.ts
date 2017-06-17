@@ -2,7 +2,7 @@ import { WexNavBar, WexAppBannerController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
-import { NavParams, Platform, Content, NavController } from "ionic-angular";
+import { NavParams, Platform, Content, NavController, ModalController } from "ionic-angular";
 import { Page } from "../page";
 import { FingerprintAuthenticationTermsPage } from "./fingerprint-auth-terms/fingerprint-auth-terms";
 import {
@@ -15,7 +15,6 @@ import { Value } from "../../decorators/value";
 import { Dialogs } from "@ionic-native/dialogs";
 import { Response } from "@angular/http";
 import { UserCredentials } from "@angular-wex/models";
-import { ModalController } from "ionic-angular";
 
 export type LoginPageNavParams = keyof {
   fromLogOut
@@ -39,6 +38,7 @@ export class LoginPage extends Page {
 
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
+  public fingerprintAuthTermsAccepted: boolean = false;
   public isLoggingIn: boolean = false;
   public setupFingerprintAuth: boolean = false;
   public rememberMe: boolean = false;
@@ -139,8 +139,6 @@ export class LoginPage extends Page {
   }
 
   private login(setupFingerprintAuth?: boolean) {
-    let modal = this.modalController.create(FingerprintAuthenticationTermsPage);
-    modal.present();
     if (!this.isLoggingIn) {
       let authenticationMethod = setupFingerprintAuth ? SessionAuthenticationMethod.Fingerprint : SessionAuthenticationMethod.Secret;
 
@@ -231,8 +229,16 @@ export class LoginPage extends Page {
   }
 
   public onLogin(event: Event, setupFingerprintAuth?: boolean) {
-    this.login(setupFingerprintAuth);
-
+    if (setupFingerprintAuth && !this.fingerprintAuthTermsAccepted) {
+      let modal = this.modalController.create(FingerprintAuthenticationTermsPage);
+      modal.onDidDismiss(accepted => {
+        this.fingerprintAuthTermsAccepted = accepted
+        this.login(this.fingerprintAuthTermsAccepted)
+      });
+      modal.present();
+    } else {
+      this.login(false);
+    }
     event.preventDefault();
   }
 

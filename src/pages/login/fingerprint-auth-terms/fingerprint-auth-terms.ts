@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Page } from "../../page";
-import { Platform } from "ionic-angular";
+import { Platform, ViewController, NavParams } from "ionic-angular";
 
 @Component({
   selector: "modal-fingerprint-auth-terms",
@@ -8,7 +8,9 @@ import { Platform } from "ionic-angular";
 })
 export class FingerprintAuthenticationTermsPage extends Page {
   private terms: string;
-  constructor(private platform: Platform,) {
+  constructor(private platform: Platform,
+  private viewControl: ViewController,
+  private navParams: NavParams) {
     super("Fingerprint Auth Terms");
   }
 
@@ -20,7 +22,7 @@ export class FingerprintAuthenticationTermsPage extends Page {
     }
   }
 
-  getTerms(): string {
-      return this.terms;
+  response(accepted: boolean) {
+    this.viewControl.dismiss(accepted);
   }
 }
