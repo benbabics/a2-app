@@ -10,7 +10,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
 import { ChartsModule } from "ng2-charts/ng2-charts";
 import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
-import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms"
+import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
 import {
