@@ -12,6 +12,7 @@ import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
+import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";
 import {
   ActionIndicator,
   WexList,
@@ -69,6 +70,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     MyApp,
     LoginPage,
     LandingPage,
+    UserEnrollmentFlow,
     CardsPage,
     CardsDetailsPage,
     CardsReissuePage,
@@ -120,6 +122,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     MyApp,
     LoginPage,
     LandingPage,
+    UserEnrollmentFlow,
     CardsPage,
     CardsDetailsPage,
     CardsReissuePage,
