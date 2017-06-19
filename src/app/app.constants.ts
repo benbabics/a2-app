@@ -250,6 +250,21 @@ export namespace ConstantsInfo {
         }
       },
 
+      ONLINE_ENROLLMENT: {
+        MESSAGES: {
+          ERRORS: {
+            serviceUnavailable: "We are unable to complete your request at this time. Please try again later.",
+            applicationError:   "There was an error. Please try again later."
+          }
+        },
+        ANALYTICS: {
+          events: {
+            EnrollmentAvailable:    ["OnlineEnrollment", "EnrollNowLink", "EnrollmentAvailable"],
+            EnrollmentNotAvailable: ["OnlineEnrollment", "EnrollNowLink", "EnrollmentNotAvailable"]
+          }
+        }
+      },
+
       //# Payments page
       PAYMENTS: {
         listLabels: ["Date", "Amount"],
@@ -532,6 +547,9 @@ ConstantsInfo.Env.set("production-wex", {
     },
     KEYMASTER: {
       BASE_URL: "https://account.wexmobile.com/authAPI"
+    },
+    ONLINE_ENROLLMENT: {
+      BASE_URL: "https://www.myfleetcardlogin.com/enrollment/"
     }
   }
 });
