@@ -55,6 +55,7 @@ import { AppVersion } from "@ionic-native/app-version";
 import { TransactionsPage } from "../pages/transactions/transactions";
 import { ApiProviders } from "@angular-wex/api-providers";
 import { GetCurrentEnvironmentConstants } from "./app.constants";
+import { ContactUsPage } from "../pages/contact-us/contact-us";
 import {
   WexIfPlatformDirective,
   WexIfPlatformAndroidDirective,
@@ -97,7 +98,8 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     WexTrustedHtmlPipe,
     WexIfPlatformDirective,
     WexIfPlatformAndroidDirective,
-    WexIfPlatformIosDirective
+    WexIfPlatformIosDirective,
+    ContactUsPage
   ],
   imports: [
     //# Angular
@@ -127,6 +129,8 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     WexNavBar,
     OptionsPopoverPage,
     TermsOfUsePage,
+    TransactionsPage,
+    ContactUsPage,
     PrivacyPolicyPage,
     TransactionsPage
   ],
