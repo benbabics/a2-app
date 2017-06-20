@@ -3,6 +3,7 @@ import { SessionManager } from "../../../providers";
 import { App, ViewController } from "ionic-angular";
 import { LoginPage } from "../../login/login";
 import { TermsOfUsePage } from "../../terms-of-use/terms-of-use";
+import { PrivacyPolicyPage } from "../../privacy-policy/privacy-policy";
 
 @Component({
   selector: "popover-options",
@@ -20,6 +21,12 @@ export class OptionsPopoverPage {
     this.close();
 
     return this.app.getActiveNav().push(TermsOfUsePage);
+  }
+
+  public goToPrivacyPolicyPage() {
+    this.close();
+
+    return this.app.getActiveNav().push(PrivacyPolicyPage);
   }
 
   public onExit() {

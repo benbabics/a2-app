@@ -1,4 +1,13 @@
 <ion-header>
+  <ion-toolbar *wexIfPlatformIos>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only>
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+
   <wex-static-list-page-header [page]="this">
   </wex-static-list-page-header>
 </ion-header>
@@ -16,7 +25,7 @@
   </wex-static-list-page-content>
 </ion-content>
 
-<ion-footer>
+<ion-footer *wexIfPlatformAndroid>
   <ion-fab bottom right style="position: fixed">
     <button ion-fab color="wex-red">
       <ion-icon name="add"></ion-icon>

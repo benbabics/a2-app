@@ -184,8 +184,8 @@ export class LoginPage extends Page {
       ])
       .then((result: number) => {
         if (result === 1) {
-          switch (String("%%=PLATFORM%%")) {
-            case "android":
+          switch (this.CONSTANTS.PLATFORM.CURRENT) {
+            case this.CONSTANTS.PLATFORM.ANDROID:
               cordova.plugins.settings.openSetting("security");
               break;
             default:

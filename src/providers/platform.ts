@@ -1,36 +1,39 @@
 import { Platform }from "ionic-angular";
 import { Injectable } from "@angular/core";
+import { AppConstants } from "../app/app.constants";
+
+const Constants = AppConstants();
 
 @Injectable()
 export class WexPlatform {
 
-  public static readonly ANDROID = "android";
-  public static readonly IOS = "ios";
-  public static readonly BROWSER = "browser";
-
   constructor(private platform: Platform) { }
 
   public isAndroid(): boolean {
-    return this.os() === WexPlatform.ANDROID;
+    return this.os() === Constants.PLATFORM.ANDROID;
   }
 
-  public isBrowser(): boolean {
-    return this.os() === WexPlatform.BROWSER;
+  public isMock(): boolean {
+    return this.os() === Constants.PLATFORM.MOCK;
   }
 
   public isIos(): boolean {
-    return this.os() === WexPlatform.IOS;
+    return this.os() === Constants.PLATFORM.IOS;
+  }
+
+  public isOs(os: string): boolean {
+    return os.toLowerCase() === this.os();
   }
 
   public os(): string {
-    if (this.platform.platforms().indexOf(WexPlatform.ANDROID) !== -1) {
-      return WexPlatform.ANDROID;
+    if (this.platform.platforms().indexOf(Constants.PLATFORM.ANDROID) !== -1) {
+      return Constants.PLATFORM.ANDROID;
     }
 
-    if (this.platform.platforms().indexOf(WexPlatform.IOS) !== -1) {
-      return WexPlatform.IOS;
+    if (this.platform.platforms().indexOf(Constants.PLATFORM.IOS) !== -1) {
+      return Constants.PLATFORM.IOS;
     }
 
-    return WexPlatform.BROWSER;
+    return Constants.PLATFORM.MOCK;
   }
 }

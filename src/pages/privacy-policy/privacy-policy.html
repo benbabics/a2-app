@@ -1,0 +1,178 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="page-privacy">
+  <div>
+    <div padding>
+      <h5 align="center">{{CONSTANTS.appName}}</h5>
+      <h5 align="center">{{CONSTANTS.privacyNotice}}</h5>
+
+      <h5 align="center">{{ CONSTANTS.lastUpdated }} {{ CONSTANTS.lastUpdatedDate | wexDate:true }}</h5>
+
+      <p [innerHtml]="CONSTANTS.introduction"></p>
+
+      <p>{{ CONSTANTS.sectionOne.content }}</p>
+      <ul>
+        <li *ngFor="let item of CONSTANTS.sectionOne.items">{{ item.content }}</li>
+      </ul>
+
+      <p [innerHtml]="CONSTANTS.sectionTwo.content"></p>
+
+      <p>{{ CONSTANTS.sectionThree.content }}</p>
+    </div>
+
+    <ion-list>
+      <button ion-item (click)="toggleSectionVisibility(0)">
+        <ion-icon *ngIf="sectionIsHidden(0)" name="arrow-dropright"></ion-icon>
+        <ion-icon *ngIf="sectionIsVisible(0)" name="arrow-dropdown"></ion-icon>
+        {{ CONSTANTS.sectionThree.link1 }}
+      </button>
+      <section padding *ngIf="sectionIsVisible(0)">
+        <p [innerHtml]="CONSTANTS.sectionFour.content"></p>
+
+        <ul>
+          <li *ngFor="let parent of CONSTANTS.sectionFour.items">
+            <span [innerHtml]="parent.content"></span>
+
+            <ul *ngFor="let child of parent.items">
+              <li [innerHtml]="child.content"></li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <button ion-item (click)="toggleSectionVisibility(1)">
+        <ion-icon *ngIf="sectionIsHidden(1)" name="arrow-dropright"></ion-icon>
+        <ion-icon *ngIf="sectionIsVisible(1)" name="arrow-dropdown"></ion-icon>
+        {{ CONSTANTS.sectionThree.link2 }}
+      </button>
+      <section padding *ngIf="sectionIsVisible(1)">
+        <h5>{{ CONSTANTS.sectionFive.title }}</h5>
+
+        <ul>
+          <li *ngFor="let parent of CONSTANTS.sectionFive.items">
+            <span [innerHtml]="parent.content"></span>
+
+            <ul *ngFor="let child of parent.items">
+              <li [innerHtml]="child.content"></li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <button ion-item (click)="toggleSectionVisibility(2)">
+        <ion-icon *ngIf="sectionIsHidden(2)" name="arrow-dropright"></ion-icon>
+        <ion-icon *ngIf="sectionIsVisible(2)" name="arrow-dropdown"></ion-icon>
+        {{ CONSTANTS.sectionThree.link3 }}
+      </button>
+      <section padding *ngIf="sectionIsVisible(2)">
+        <p [innerHtml]="CONSTANTS.sectionSix.content"></p>
+
+        <ul>
+          <li *ngFor="let item of CONSTANTS.sectionSix.items" [innerHtml]="item.content"></li>
+        </ul>
+      </section>
+
+      <button ion-item (click)="toggleSectionVisibility(3)">
+        <ion-icon *ngIf="sectionIsHidden(3)" name="arrow-dropright"></ion-icon>
+        <ion-icon *ngIf="sectionIsVisible(3)" name="arrow-dropdown"></ion-icon>
+        {{ CONSTANTS.sectionThree.link4 }}
+      </button>
+      <section padding *ngIf="sectionIsVisible(3)">
+        <h5 [innerHtml]="CONSTANTS.sectionSeven.title"></h5>
+
+        <ul>
+          <li *ngFor="let item of CONSTANTS.sectionSeven.items" [innerHtml]="item.content"></li>
+        </ul>
+      </section>
+
+      <button ion-item (click)="toggleSectionVisibility(4)">
+        <ion-icon *ngIf="sectionIsHidden(4)" name="arrow-dropright"></ion-icon>
+        <ion-icon *ngIf="sectionIsVisible(4)" name="arrow-dropdown"></ion-icon>
+        {{ CONSTANTS.sectionThree.link5 }}
+      </button>
+      <section padding *ngIf="sectionIsVisible(4)">
+        <p>
+          <span [innerHtml]="CONSTANTS.sectionEight.content"></span>
+          <a (click)="openUrl('https://www.google.com/policies/privacy/partners/')">{{ CONSTANTS.sectionEight.hereText }}</a>.
+        </p>
+      </section>
+
+      <button ion-item (click)="toggleSectionVisibility(5)">
+        <ion-icon *ngIf="sectionIsHidden(5)" name="arrow-dropright"></ion-icon>
+        <ion-icon *ngIf="sectionIsVisible(5)" name="arrow-dropdown"></ion-icon>
+        {{ CONSTANTS.sectionThree.link6 }}
+      </button>
+      <section padding *ngIf="sectionIsVisible(5)">
+        <p>
+          <span [innerHtml]="CONSTANTS.sectionNine.content"></span>
+          <a (click)="openUrl('http://www.networkadvertising.org/choices/')">{{ CONSTANTS.sectionNine.websiteNetworkAdvertising }}</a>          {{ CONSTANTS.sectionNine.andThe }}
+          <a (click)="openUrl('http://www.aboutads.info/')">{{ CONSTANTS.sectionNine.websiteDigitalAdvertising }}</a>
+        </p>
+      </section>
+
+      <button ion-item (click)="toggleSectionVisibility(6)">
+        <ion-icon *ngIf="sectionIsHidden(6)" name="arrow-dropright"></ion-icon>
+        <ion-icon *ngIf="sectionIsVisible(6)" name="arrow-dropdown"></ion-icon>
+        {{ CONSTANTS.sectionThree.link7 }}
+      </button>
+      <section padding *ngIf="sectionIsVisible(6)">
+        <h5 [innerHtml]="CONSTANTS.sectionTen.title"></h5>
+        <p *ngFor="let item of CONSTANTS.sectionTen.contents" [innerHtml]="item.content"></p>
+      </section>
+
+      <button ion-item (click)="toggleSectionVisibility(7)">
+        <ion-icon *ngIf="sectionIsHidden(7)" name="arrow-dropright"></ion-icon>
+        <ion-icon *ngIf="sectionIsVisible(7)" name="arrow-dropdown"></ion-icon>
+        {{ CONSTANTS.sectionThree.link8 }}
+      </button>
+      <section padding *ngIf="sectionIsVisible(7)">
+        <p>
+          <span [innerHtml]="CONSTANTS.sectionEleven.content"></span>
+          <span [innerHtml]="CONSTANTS.sectionEleven.effectiveDateOfNotice"></span> {{ CONSTANTS.lastUpdatedDate | wexDate:true }}.
+          <span [innerHtml]="CONSTANTS.sectionEleven.content2"></span>
+        </p>
+      </section>
+
+      <button ion-item (click)="toggleSectionVisibility(8)">
+        <ion-icon *ngIf="sectionIsHidden(8)" name="arrow-dropright"></ion-icon>
+        <ion-icon *ngIf="sectionIsVisible(8)" name="arrow-dropdown"></ion-icon>
+        {{ CONSTANTS.sectionThree.link9 }}
+      </button>
+      <section padding *ngIf="sectionIsVisible(8)">
+        <p [innerHtml]="CONSTANTS.sectionTwelve.content"></p>
+      </section>
+
+      <button ion-item (click)="toggleSectionVisibility(9)">
+        <ion-icon *ngIf="sectionIsHidden(9)" name="arrow-dropright"></ion-icon>
+        <ion-icon *ngIf="sectionIsVisible(9)" name="arrow-dropdown"></ion-icon>
+        {{ CONSTANTS.sectionThree.link12 }}
+      </button>
+      <section padding *ngIf="sectionIsVisible(9)">
+        <p [innerHtml]="CONSTANTS.sectionThirteen.content"></p>
+      </section>
+
+      <button ion-item (click)="toggleSectionVisibility(10)">
+        <ion-icon *ngIf="sectionIsHidden(10)" name="arrow-dropright"></ion-icon>
+        <ion-icon *ngIf="sectionIsVisible(10)" name="arrow-dropdown"></ion-icon>
+        {{ CONSTANTS.sectionThree.link13 }}
+      </button>
+      <section padding *ngIf="sectionIsVisible(10)">
+        <p [innerHtml]="CONSTANTS.sectionFourteen.content"></p>
+
+        {{ CONSTANTS.sectionFourteen.byEmailLabel }}
+        <a [href]="CONSTANTS.sendEmailLink + versionNumber">{{ CONSTANTS.sectionFourteen.byEmailDisplay }}</a>
+        <br><br>
+
+        <div *ngFor="let item of CONSTANTS.sectionFourteen.contents" [innerHtml]="item.content"></div>
+      </section>
+
+      <section>
+        <div padding class="copyright" [innerHtml]="CONSTANTS.sectionFifteen.content"></div>
+      </section>
+    </ion-list>
+  </div>
+</ion-content>
