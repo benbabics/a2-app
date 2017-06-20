@@ -8,25 +8,37 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
   templateUrl: "privacy-policy.html"
 })
 export class PrivacyPolicyPage extends Page {
-  private section: boolean[];
+  private sectionVisibility: boolean[];
 
   private closing: string;
   private versionNumber: string;
 
   constructor(private appVersion: AppVersion, private inAppBrowser: InAppBrowser) {
     super("Privacy Policy");
-    this.section = new Array<boolean>(14);
+    this.sectionVisibility = new Array<boolean>(14);
   }
 
-  openUrl(url: string) {
+  openUrl(url: string): void {
     this.inAppBrowser.create(url);
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad(): void {
     this.appVersion.getVersionNumber()
       .then((versionNumber: string) => {
         this.versionNumber = versionNumber;
         this.closing = this.CONSTANTS.closing.replace("$VERSION_NUMBER$", versionNumber);
       });
+  }
+
+  private sectionIsVisible(sectionNumber: number): boolean {
+    return this.sectionVisibility[sectionNumber];
+  }
+
+  private sectionIsHidden(sectionNumber: number): boolean {
+    return !this.sectionVisibility[sectionNumber];
+  }
+
+  private toggleSectionVisibility(sectionNumber: number): void {
+    this.sectionVisibility[sectionNumber] = !this.sectionVisibility[sectionNumber];
   }
 }
