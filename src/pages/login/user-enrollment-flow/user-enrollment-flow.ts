@@ -42,22 +42,21 @@ export class UserEnrollmentFlow extends Page {
   }
 
   private displayServiceUnavailableAlert(browser: InAppBrowserObject) {
-    if (browser) {
-      browser.close();
-    }
-    this.alertController.create({
-        subTitle: this.CONSTANTS.MESSAGES.ERRORS.serviceUnavailable,
-        buttons: [ConstantsInfo.Common.BUTTONS.OK]
-    }).present();
+    this.displayErrorAlert(this.CONSTANTS.MESSAGES.ERRORS.serviceUnavailable, browser);
   }
 
   private closeOnlineEnrollmentAppWithErrorAlert(browser: InAppBrowserObject) {
+    this.displayErrorAlert(this.CONSTANTS.MESSAGES.ERRORS.applicationError, browser);
+  }
+
+  private displayErrorAlert(message: string, browser: InAppBrowserObject) {
     if (browser) {
       browser.close();
     }
     this.alertController.create({
-      subTitle: this.CONSTANTS.MESSAGES.ERRORS.applicationError,
+      subTitle: message,
       buttons: [ConstantsInfo.Common.BUTTONS.OK]
     }).present();
+    this.isLoading = false;
   }
 }
