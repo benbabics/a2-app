@@ -59,7 +59,7 @@ export namespace ConstantsInfo {
       defaultDialogMessage: "Scan your fingerprint below to enter your account"
     },
     INFINITE_LIST: {
-      DEFAULT_SEARCH_PERIOD: [2**32-1, "y"],
+      DEFAULT_SEARCH_PERIOD: [2 ** 32 - 1, "y"],
       DEFAULT_PAGE_SIZE: 100
     },
     //# App Navigation
@@ -87,11 +87,11 @@ export namespace ConstantsInfo {
         listLabels: ["Card Number", "Embossing"],
         searchLabel: "Search Card Number or Embossing",
         greekingData: [
-          {left: 3, top: 10, right: 15, bottom: 35},
-          {left: 3, top: 55, right: 15, bottom: 80},
-          {left: 20, top: 20, right: 86, bottom: 32},
-          {left: 20, top: 47, right: 86, bottom: 59},
-          {left: 20, top: 74, right: 86, bottom: 86}
+          { left: 3, top: 10, right: 15, bottom: 35 },
+          { left: 3, top: 55, right: 15, bottom: 80 },
+          { left: 20, top: 20, right: 86, bottom: 32 },
+          { left: 20, top: 47, right: 86, bottom: 59 },
+          { left: 20, top: 74, right: 86, bottom: 86 }
         ],
         greekedElementCount: 15,
 
@@ -153,7 +153,7 @@ export namespace ConstantsInfo {
         BACK_TO_EXIT: {
           "duration": 3000, //ms
           "position": "bottom",
-          "message" : "Press again to exit."
+          "message": "Press again to exit."
         },
         CHART: {
           OPTIONS: {
@@ -255,10 +255,10 @@ export namespace ConstantsInfo {
       PAYMENTS: {
         listLabels: ["Date", "Amount"],
         greekingData: [
-          {left: 3, top: 10, right: 24, bottom: 35},
-          {left: 3, top: 55, right: 24, bottom: 80},
-          {left: 68, top: 10, right: 90, bottom: 35},
-          {left: 68, top: 55, right: 90, bottom: 80},
+          { left: 3, top: 10, right: 24, bottom: 35 },
+          { left: 3, top: 55, right: 24, bottom: 80 },
+          { left: 68, top: 10, right: 90, bottom: 35 },
+          { left: 68, top: 55, right: 90, bottom: 80 },
         ],
         greekedElementCount: 15,
         title: "Payments"
@@ -293,34 +293,164 @@ export namespace ConstantsInfo {
         closing: "If you have any questions or concerns about WEX&reg; Fleet SmartHub&trade; mobile application or our Terms of Use, please e-mail: <a href=\"mailto:MobileApplications@wexinc.com?subject=Fleet SmartHub version $VERSION_NUMBER$\">MobileApplications@wexinc.com</a>."
       },
 
+      //# Privacy Policy page
+      PRIVACY_POLICY: {
+        title: "Privacy Policy",
+        appName: "WEX SmartHub Mobile Application",
+        privacyNotice: "Privacy Notice",
+        lastUpdated: "Last Updated",
+        lastUpdatedDate: "2016-11-29T11:05:00-0500",
+        sendEmailLink: "mailto:MobileApplications@wexinc.com?subject=Fleet SmartHub version ",
+        introduction: "This privacy notice (this <b>\"Privacy Notice\"</b>) governs your use of the WEX&reg; Fleet SmartHub&trade; mobile application (the <b>\"Application\"</b> or <b>\"App\"</b>). The App is owned by WEX, Inc. (collectively, \"WEX\" or \"we,\" \"us,\" or \"our\") for its commercial customers (each, a <b>\"Customer\"</b>) in connection with the Fleet SmartHub mobile application and services (the <b>\"SmartHub Services\"</b>). ",
+        sectionOne: {
+          content: "This Privacy Notice describes:",
+          items: [
+            { content: "The types of information we may collect from or about you or that you may provide when you install, register with, access or use the App, and" },
+            { content: "Our practices for collecting, using, maintaining, protecting and disclosing that information and your choices about the collection and use of your information." }
+          ]
+        },
+        sectionTwo: {
+          content: "Use of the App is governed by our SmartHub Application Terms of Use (the <b>\"Terms of Use\"</b>) for the App. <b>BY INSTALLING, USING OR OTHERWISE ACCESSING THE APP FROM ANY DEVICE, MOBILE OR OTHERWISE, YOU ARE AGREEING TO ABIDE BY THE TERMS AND CONDITIONS OF OUR TERMS OF USE AND THIS PRIVACY NOTICE. IF YOU DO NOT AGREE TO THESE TERMS AND CONDITIONS, DO NOT DOWNLOAD AND/OR ACCESS OUR APP.</b>"
+        },
+        sectionThree: {
+          content: "Here are some links to help you navigate our Privacy Notice:",
+          link1: "Information we collect",
+          link2: "How information is used and shared",
+          link3: "Information collection (and tracking) technologies",
+          link4: "Your choices and how to opt out",
+          link5: "Our analytics partners",
+          link6: "Our Do Not Track policy",
+          link7: "Account and Application security",
+          link8: "Effective date; changes to this Privacy Notice",
+          link9: "Children’s privacy",
+          link10: "Links to other sites",
+          link11: "Notice to California residents",
+          link12: "Governing law",
+          link13: "Contact us",
+        },
+        sectionFour: {
+          content: "<b>INFORMATION WE COLLECT.</b> In connection with your use of the App, we collect and store information that you voluntarily provide to us as well as data related to your use of the App. Consent to the collection and use of your information in the manner described in this Privacy Notice will be implied through the download and installation of the App.",
+          items: [
+            {
+              content: "<b>Information You Provide to Us Voluntarily.</b> We collect the following types of information that you provide to us voluntarily when you download the App: your existing WEX account username and password (collectively, your \"Individual Information\")."
+            },
+            {
+              content: "<b>Usage Data We Collect Automatically.</b> We or our Analytics Partners (as defined and described more fully below) may automatically collect the following types of information about your access and use of the App (collectively, <b>\"Usage Data\"</b>):",
+              items: [
+                { content: "WEX may partner with select analytics partners, including Google Analytics (<b>\"Analytics Partners\"</b>) to collect information about how our App is used. Our Analytics Partners may collect information about how often you use the App and what features you use. You can learn more about our Analytics Partners in the section titled \"OUR ANALYTICS PARTNERS\" below." },
+                { content: "When you access and use the App, we will also automatically collect real-time information about the location of your device (including identifiers unique to your device), logs and other communications data relating to your use of the App. We may collect information about your physical location only if (a) \"location services\" for the mobile application is enabled, or (b) the permissions in the mobile device allow communication of this information. If you do not want us to collect your location information, you can opt out of sharing this information by changing the relevant preferences and permissions in your mobile device; however, please note that opting out of the App’s collection of location information will cause its location-based features to be disabled." }
+              ]
+            },
+            {
+              content: "<b>Aggregate Information.</b> In addition, we automatically collect certain aggregate information and analytical data related to your use of the App. Aggregate information is non-personally identifiable or anonymous information about you, including the date and time of your visit, the phone network associated with your mobile device, your mobile device’s operating system or platform, the type of mobile device you use and the features of our App you accessed (collectively, <b>\"Aggregate Information\"</b>)."
+            }
+          ]
+        },
+        sectionFive: {
+          title: "HOW INFORMATION IS USED AND SHARED.",
+          items: [
+            {
+              content: "<b>Use of Information.</b> We use the information we collect to make available the Services, to manage the App and assess its usage, to resolve problems with the App, to respond to inquiries from you, to communicate with you about the Services and/or important changes to the App, this Privacy Notice or the Terms of Use, to review App operations and to improve the content and functionality of the App, to address problems with the App, to protect the security or integrity of the App, our Customers, and our business, and to tailor the App to your and other Customers’ needs."
+            },
+            {
+              content: "<b>Retention of Information.</b> We will retain Individual Information and Usage Data for as long as you use the App, unless we are required to retain it for a longer period to fulfill a legal requirement or law enforcement need. We will retain Aggregate Information indefinitely and may store it thereafter in the aggregate. If you’d like us to delete your Individual Information that you have provided to the App, please contact us at MobileApplications@wexinc.com and we will respond within a reasonable time."
+            },
+            {
+              content: "Disclosure of information. We disclose Individual Information and Usage Data as described below; however, we will not sell, rent or lease your Individual Information to any third party. We are not limited in our use of Aggregate Information that does not permit direct association with any specific individual or non-identifiable aggregate information about our users.",
+              items: [
+                { content: "<b><em>Service Providers/Affiliates.</em></b> We may share the information we collect with companies that provide support services to us. These companies may need the information to perform their functions." },
+                { content: "<b><em>Acquirors.</em></b> As with any other business, it is possible that in the future we could merge with or be purchased by another company. If we are acquired, the company that acquires us would have access to the information maintained by us but would continue to be bound by this Privacy Notice unless and until it is amended." },
+                { content: "<b><em>Court Orders and Legal Processes.</em></b> We disclose information, including Individual Information and Usage Data, in response to a subpoena, court order or other comparable legal process." },
+                { content: "<b><em>Other.</em></b> We may also disclose information in order to (i) protect and defend our rights or property, and/or the rights or property of our Customers, or third parties, as permitted by law, (ii) to detect, prevent or otherwise address fraud, security or technical issues, or (iii) to enforce our Terms of Service." }
+              ]
+            }
+          ]
+        },
+        sectionSix: {
+          content: "<b>INFORMATION COLLECTION (AND TRACKING) TECHNOLOGIES.</b> The technologies that we or our service providers use for automatic information collection may include:",
+          items: [
+            { content: "<em>Cookies (or mobile cookies)</em>. A cookie is a small file placed on your mobile device. It may be possible to refuse to accept mobile cookies by activating the appropriate setting on your device. However, if you select this setting you may be unable to access certain parts of our application." },
+            { content: "<em>Web Beacons.</em> Pages of the application and our e-mails may include small electronic files known as web beacons that permit us (or our Analytics Partners), for example, to count users who have visited certain pages and for other related App statistics. " }
+          ]
+        },
+        sectionSeven: {
+          title: "YOUR CHOICES AND HOW TO OPT-OUT.",
+          items: [
+            { "content": "<b>Geolocation and Push Notifications.</b> You may at any time opt out from further allowing SmartHub to access location data or send you push notifications by adjusting your permissions in your mobile device." },
+            { "content": "<b>Uninstall the App.</b> You can stop all collection of information by the App by uninstalling the App. You may use the standard uninstall processes as may be available as part of your mobile device or via the mobile application marketplace or network. " }
+          ]
+        },
+        sectionEight: {
+          content: "<b>OUR ANALYTICS PARTNERS.</b> WEX uses Analytics Partners who can analyze information regarding your use of the App and help us to improve the quality and relevance of our App and its features. Most Analytics Partners use a variety of techniques to collect de-identified, non-personal information about users of an App such as ours, such as cookies (or mobile cookies), web beacons, and other tracking technologies. These techniques are discussed in the \"INFORMATION COLLECTION (AND TRACKING) TECHNOLOGIES\" section above. For information about the privacy practices of Google Analytics, please go ",
+          hereText: "here"
+        },
+        sectionNine: {
+          content: "<b>OUR DO NOT TRACK POLICY.</b> You can opt out of being tracked during your use of the App using your mobile device settings. However, the App’s access to certain information about your use, including your mobile device’s unique device identifier, can only be limited by uninstalling the App. To learn more about internet-based advertising or to opt-out of internet based advertising, please visit the ",
+          websiteNetworkAdvertising: "Network Advertising Initiative website",
+          andThe: "and the",
+          websiteDigitalAdvertising: "Digital Advertising Alliance website"
+        },
+        sectionTen: {
+          title: "ACCOUNT AND APPLICATION SECURITY.",
+          contents: [
+            { content: "The security of your account relies on your protection of your mobile device and your password. You are responsible for maintaining the security of your password. You are solely responsible for any and all activities that occur under your account or on your mobile device. You may not share your password for the App with anyone. We will never ask you to send your password or other sensitive information to us in an email, though we may ask you to enter this type of information on the App interface. If you believe someone else has obtained access to your password, please change it immediately. If you believe that an unauthorized access has already occurred or may occur please report it immediately to MobileApplications@wexinc.com. You must promptly notify us if you become aware that any information provided by or submitted to the App is lost, stolen or used without permission." },
+            { content: "The App does not store your fleet payment card information, and we do not have direct control over or responsibility for your fleet payment card information." },
+            { content: "We have implemented reasonable technical and organizational measures designed to deter unauthorized access to and use, destruction of, modification of, or disclosure of other personally identifiable information we collect via the App. Regardless of the precautions taken by us, by you, or by our third party service providers, no data transmitted over the internet or any other public network can be guaranteed to be 100% secure. We cannot ensure or warrant the security of any information you transmit to us and you provide all personally identifiable information via the App at your own risk." }
+          ]
+        },
+        sectionEleven: {
+          content: "<b>EFFECTIVE DATE; CHANGES TO THIS PRIVACY NOTICE.</b>",
+          effectiveDateOfNotice: "The effective date of this notice is",
+          content2: "Each time you use the App, the current version of the Privacy Notice will apply. Accordingly, when you use the App, you should check the \"Last Updated\" date of this Privacy Notice (which appears at the top of the Privacy Notice) and review any changes since the last version. We will provide notice of material changes by describing where such changes have been made in the Privacy Notice. It may be necessary from time to time for us to modify this Privacy Notice to reflect changes in the way we collect and use information or changes in privacy-related laws, regulations and industry standards."
+        },
+        sectionTwelve: {
+          content: "<b>CHILDREN’S PRIVACY.</b> This App and the Services we offer are not directed to persons under the age of 13 and the App should not be downloaded by any person under the age of 13. We do not knowingly collect or solicit information from, market to or accept services from children. If we become aware that a child under 13 has provided us with personal information, we will take steps to remove such information and terminate the child’s account."
+        },
+        sectionThirteen: {
+          content: "<b>GOVERNING LAW.</b> This Privacy Notice is governed by the laws of the State of Maine without giving effect to any principles of conflict of law. Please note that the App is designed for compliance with United States data privacy and security regulations. The United States and other countries have not harmonized their privacy regulations. We have written this Privacy Notice to satisfy United States regulations and the users of the App agree to that level of privacy protection and downloading the App to any device is deemed consent to the Privacy Notice."
+        },
+        sectionFourteen: {
+          content: "<b>CONTACT US.</b> To contact us with your questions or comments regarding this Privacy Notice or the information collection and dissemination practices of the App, please contact us using one of the following options:",
+          byEmailLabel: "By e-mail:",
+          byEmailDisplay: "MobileApplications@wexinc.com",
+          contents: [
+            { content: "By phone: 1-866-544-5796<br><br>" },
+            { content: "By mail: WEXONLINE<br><br>PO BOX 639<br><br>PORTLAND, ME 04140" }
+          ]
+        },
+        sectionFifteen: {
+          content: "© COPYRIGHT 2016 | WEX, Inc. ALL RIGHTS RESERVED."
+        }
+      },
+
       //# Transactions page
       TRANSACTIONS: {
         DATE: {
           listLabels: ["Transactions"],
           greekingData: [
-            {left: 3, top: 10, right: 33, bottom: 22},
-            {left: 3, top: 32, right: 33, bottom: 44},
-            {left: 3, top: 54, right: 33, bottom: 66},
-            {left: 3, top: 76, right: 33, bottom: 88},
-            {left: 67, top: 32, right: 90, bottom: 68},
+            { left: 3, top: 10, right: 33, bottom: 22 },
+            { left: 3, top: 32, right: 33, bottom: 44 },
+            { left: 3, top: 54, right: 33, bottom: 66 },
+            { left: 3, top: 76, right: 33, bottom: 88 },
+            { left: 67, top: 32, right: 90, bottom: 68 },
           ],
           greekedElementCount: 15
         },
         DRIVER_NAME: {
           listLabels: ["Driver Name"],
           greekingData: [
-            {left: 3, top: 30, right: 25, bottom: 55},
+            { left: 3, top: 30, right: 25, bottom: 55 },
           ],
           greekedElementCount: 15
         },
         CARD_NUMBER: {
           listLabels: ["Card Number", "Embossing"],
           greekingData: [
-            {left: 3, top: 10, right: 15, bottom: 35},
-            {left: 3, top: 55, right: 15, bottom: 80},
-            {left: 20, top: 20, right: 86, bottom: 32},
-            {left: 20, top: 47, right: 86, bottom: 59},
-            {left: 20, top: 74, right: 86, bottom: 86}
+            { left: 3, top: 10, right: 15, bottom: 35 },
+            { left: 3, top: 55, right: 15, bottom: 80 },
+            { left: 20, top: 20, right: 86, bottom: 32 },
+            { left: 20, top: 47, right: 86, bottom: 59 },
+            { left: 20, top: 74, right: 86, bottom: 86 }
           ],
           greekedElementCount: 15
         },
@@ -330,7 +460,7 @@ export namespace ConstantsInfo {
   };
 
   export type CommonConstants = typeof Common;
-  export type PartialCommonConstants = { [K in keyof CommonConstants]?: Partial<CommonConstants[K]> };
+  export type PartialCommonConstants = {[K in keyof CommonConstants]?: Partial<CommonConstants[K]> };
   export type EnvironmentConstants = ConstantsConfig & PartialCommonConstants;
 
   export const Env: Map<string, EnvironmentConstants> = new Map<string, EnvironmentConstants>();

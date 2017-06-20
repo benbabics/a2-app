@@ -35,8 +35,17 @@ export class CardsDetailsPage extends DetailsPage {
     this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);
   }
 
+  public get canChangeStatus(): boolean {
+    // Rules in MOBACCTMGT-1135 AC #1
+    return this.session.user.isDistributor ? !this.card.isSuspended : !this.card.isTerminated;
+  }
+
   public get canReissue(): boolean {
-    return this.card.details.status !== CardStatus.TERMINATED;
+    let isClassic    = this.session.user.isClassic,
+        cardNo       = this.card.details.embossedCardNumber,
+        cardNoSuffix = parseInt( cardNo.substr(cardNo.length - 1) );
+
+    return !isClassic || ( isClassic && cardNoSuffix < 9 );
   }
 
   public get statusColor(): string {
@@ -48,6 +57,8 @@ export class CardsDetailsPage extends DetailsPage {
   }
 
   public goToReissuePage() {
-    this.app.getRootNav().push(CardsReissuePage, { card: this.card });
+    if ( this.canReissue ) {
+      this.app.getRootNav().push(CardsReissuePage, { card: this.card });
+    }
   }
 }

@@ -50,6 +50,7 @@ import { PaymentsPage } from "../pages/payments/payments";
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
 import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
+import { PrivacyPolicyPage } from "../pages/privacy-policy/privacy-policy";
 import { AppVersion } from "@ionic-native/app-version";
 import { TransactionsPage } from "../pages/transactions/transactions";
 import { ApiProviders } from "@angular-wex/api-providers";
@@ -60,6 +61,7 @@ import {
   WexIfPlatformAndroidDirective,
   WexIfPlatformIosDirective
 } from "../directives";
+import { InAppBrowser } from "@ionic-native/in-app-browser";
 
 @NgModule({
   declarations: [
@@ -73,6 +75,7 @@ import {
     CardsReissuePage,
     PaymentsPage,
     TermsOfUsePage,
+    PrivacyPolicyPage,
     TransactionsPage,
     ActionIndicator,
     WexCurrency,
@@ -127,7 +130,9 @@ import {
     OptionsPopoverPage,
     TermsOfUsePage,
     TransactionsPage,
-    ContactUsPage
+    ContactUsPage,
+    PrivacyPolicyPage,
+    TransactionsPage
   ],
   providers: [
     //# ionic
@@ -139,6 +144,7 @@ import {
     StatusBar,
     SplashScreen,
     AppVersion,
+    InAppBrowser,
     //# app providers
     //----------------------
     {
