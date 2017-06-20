@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import { Component } from '@angular/core';
 import { NavParams, App } from 'ionic-angular';
 import { Driver, OnlineApplication } from '@angular-wex/models';
@@ -35,9 +36,8 @@ export class DriversDetailsPage extends DetailsPage {
 
   public get areFieldsAccessible(): boolean {
     const userPlatform = this.session.user.details.onlineApplication;
-    const accessibleFields = `${OnlineApplication.DISTRIBUTOR} ${OnlineApplication.WOL_NP}`;
+    const accessibleFields = [OnlineApplication.DISTRIBUTOR, OnlineApplication.WOL_NP];
 
-    // "es2017" includes Array.prototype.includes()
-    return !!accessibleFields.match( userPlatform );
+    return _.includes( accessibleFields, userPlatform );
   }
 }
