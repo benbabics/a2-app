@@ -15,7 +15,7 @@ export class UserEnrollmentFlow extends Page {
 
   private isLoading: boolean = false;
 
-  private ENROLLMENT_URL = (GetCurrentEnvironmentConstants().APIS as any).ONLINE_ENROLLMENT.BASE_URL;
+  private ENROLLMENT_URL = GetCurrentEnvironmentConstants().APIS.ONLINE_ENROLLMENT.BASE_URL;
   private ENROLLMENT_PING = this.ENROLLMENT_URL + "ping";
 
   constructor(
