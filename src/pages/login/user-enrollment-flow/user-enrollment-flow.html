@@ -1,1 +1,1 @@
-<button ion-button block clear (click)="handleOpenEnrollmentWindow()">{{ text }}</button>
+<button ion-button block clear (click)="handleOpenEnrollmentWindow()"><action-indicator [when]="isLoading">{{ text }}</action-indicator></button>
