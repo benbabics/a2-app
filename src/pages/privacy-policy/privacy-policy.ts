@@ -18,7 +18,7 @@ export class PrivacyPolicyPage extends Page {
     this.sectionVisibility = new Array<boolean>(14);
   }
 
-  openUrl(url: string): void {
+  private openUrl(url: string): void {
     this.inAppBrowser.create(url);
   }
 
