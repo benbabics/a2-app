@@ -12,6 +12,7 @@ import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
+import { SettingsPage } from '../pages/settings/settings';
 import {
   ActionIndicator,
   WexList,
@@ -73,6 +74,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     CardsDetailsPage,
     CardsReissuePage,
     PaymentsPage,
+    SettingsPage,
     TermsOfUsePage,
     PrivacyPolicyPage,
     TransactionsPage,
@@ -124,6 +126,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     CardsDetailsPage,
     CardsReissuePage,
     PaymentsPage,
+    SettingsPage,
     WexNavBar,
     OptionsPopoverPage,
     TermsOfUsePage,

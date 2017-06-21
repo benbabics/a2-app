@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label text-wrap item-left>{{ platformFingerprintLabel }}</ion-label>
+      <ion-checkbox item-right name="enableFingerprintAuthToggle" [(ngModel)]="enableFingerprintAuthToggle"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-content>
