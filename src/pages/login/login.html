@@ -67,8 +67,7 @@
     </ion-card>
 
     <div id="enrollment-link" class="padding align_center">
-      <!-- <online-enrollment-flow>{{ ::vm.config.enrollment.label }}</online-enrollment-flow> -->
-      <button ion-button block clear>{{ CONSTANTS.enrollment.label }}</button>
+      <user-enrollment-flow [text]="CONSTANTS.enrollment.label"></user-enrollment-flow>
     </div>
   </div>
 

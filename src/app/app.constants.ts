@@ -251,6 +251,21 @@ export namespace ConstantsInfo {
         }
       },
 
+      ONLINE_ENROLLMENT: {
+        MESSAGES: {
+          ERRORS: {
+            serviceUnavailable: "We are unable to complete your request at this time. Please try again later.",
+            applicationError:   "There was an error. Please try again later."
+          }
+        },
+        ANALYTICS: {
+          events: {
+            EnrollmentAvailable:    ["OnlineEnrollment", "EnrollNowLink", "EnrollmentAvailable"],
+            EnrollmentNotAvailable: ["OnlineEnrollment", "EnrollNowLink", "EnrollmentNotAvailable"]
+          }
+        }
+      },
+
       //# Payments page
       PAYMENTS: {
         listLabels: ["Date", "Amount"],
@@ -482,6 +497,10 @@ ConstantsInfo.Env.set("local", {
     },
     KEYMASTER: {
       BASE_URL: "http://127.0.0.1:26080"
+    },
+    ONLINE_ENROLLMENT: {
+      // Assumes no "/enrollment/" because that appears to be a tomcat redirect
+      BASE_URL: "http://localhost:12080"
     }
   }
 });
@@ -502,6 +521,9 @@ ConstantsInfo.Env.set("dit", {
     },
     KEYMASTER: {
       BASE_URL: "http://pwm-wex-178.wrightexpress.com:26080"
+    },
+    ONLINE_ENROLLMENT: {
+      BASE_URL: "http://dit-wex.wexinc.com:12080/enrollment/"
     }
   }
 });
@@ -522,6 +544,9 @@ ConstantsInfo.Env.set("stage-wex", {
     },
     KEYMASTER: {
       BASE_URL: "https://uat.account.wexmobile.com/authAPI"
+    },
+    ONLINE_ENROLLMENT: {
+      BASE_URL: "https://uat-wex.wexinc.com/enrollment/"
     }
   }
 });
@@ -542,6 +567,9 @@ ConstantsInfo.Env.set("production-wex", {
     },
     KEYMASTER: {
       BASE_URL: "https://account.wexmobile.com/authAPI"
+    },
+    ONLINE_ENROLLMENT: {
+      BASE_URL: "https://www.myfleetcardlogin.com/enrollment/"
     }
   }
 });
