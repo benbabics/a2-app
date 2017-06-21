@@ -13,6 +13,7 @@ import { LoginPage } from "../pages/login/login";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
 import { SettingsPage } from '../pages/settings/settings';
+import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";
 import {
   ActionIndicator,
   WexList,
@@ -56,6 +57,7 @@ import { AppVersion } from "@ionic-native/app-version";
 import { TransactionsPage } from "../pages/transactions/transactions";
 import { ApiProviders } from "@angular-wex/api-providers";
 import { GetCurrentEnvironmentConstants } from "./app.constants";
+import { ContactUsPage } from "../pages/contact-us/contact-us";
 import {
   WexIfPlatformDirective,
   WexIfPlatformAndroidDirective,
@@ -70,6 +72,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     MyApp,
     LoginPage,
     LandingPage,
+    UserEnrollmentFlow,
     CardsPage,
     CardsDetailsPage,
     CardsReissuePage,
@@ -99,7 +102,8 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     WexTrustedHtmlPipe,
     WexIfPlatformDirective,
     WexIfPlatformAndroidDirective,
-    WexIfPlatformIosDirective
+    WexIfPlatformIosDirective,
+    ContactUsPage
   ],
   imports: [
     //# Angular
@@ -122,6 +126,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     MyApp,
     LoginPage,
     LandingPage,
+    UserEnrollmentFlow,
     CardsPage,
     CardsDetailsPage,
     CardsReissuePage,
@@ -130,6 +135,8 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     WexNavBar,
     OptionsPopoverPage,
     TermsOfUsePage,
+    TransactionsPage,
+    ContactUsPage,
     PrivacyPolicyPage,
     TransactionsPage
   ],

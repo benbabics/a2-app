@@ -54,7 +54,7 @@ export class IosFingerprintService extends NativeFingerprintService {
   constructor(secureStorage: SecureStorage, platform: Platform, wexPlatform: WexPlatform) {
     super(secureStorage);
 
-    if (wexPlatform.isIos() && window.plugins) {
+    if (wexPlatform.isIos()) {
       platform.ready().then(() => this.cordovaPlugin = window.plugins.touchid);
     }
   }

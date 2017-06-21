@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { SessionManager } from "../../../providers";
 import { App, ViewController } from "ionic-angular";
+import { ContactUsPage } from "../../contact-us/contact-us";
 import { LoginPage } from "../../login/login";
 import { SettingsPage } from '../../settings/settings';
 import { TermsOfUsePage } from "../../terms-of-use/terms-of-use";
@@ -28,6 +29,12 @@ export class OptionsPopoverPage {
     this.close();
 
     return this.app.getActiveNav().push(TermsOfUsePage);
+  }
+
+  public goToContactUsPage() {
+    this.close();
+
+    return this.app.getActiveNav().push(ContactUsPage);
   }
 
   public goToPrivacyPolicyPage() {
