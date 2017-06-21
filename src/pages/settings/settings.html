@@ -4,6 +4,12 @@
   </ion-navbar>
 </ion-header>
 
+<wex-snackbar *ngIf="displayFingerprintProfileCreatedMessage"
+              [text]="fingerprintProfileCreatedMessage"
+              (dismissed)="displayFingerprintProfileCreatedMessage = false"
+              [dismissAfter]="CONSTANTS.createFingerprintProfileDuration">
+</wex-snackbar>
+
 <ion-content padding>
   <ion-list>
     <ion-item>

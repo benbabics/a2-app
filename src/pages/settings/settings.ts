@@ -21,6 +21,8 @@ export class SettingsPage extends SecurePage {
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
   public platformFingerprintLabel: string = this.resolvePlatformConstant( this.CONSTANTS.fingerprintAuthName );
+  public fingerprintProfileCreatedMessage: string;
+  public displayFingerprintProfileCreatedMessage: boolean = false;
 
   constructor(
     sessionManager: SessionManager,
@@ -68,13 +70,13 @@ export class SettingsPage extends SecurePage {
     let id = this.session.user.details.username.toLowerCase(),
         secret = this.session.clientSecret;
 
-    let message = _.template( this.CONSTANTS.createFingerprintProfileMessage )({
+    this.fingerprintProfileCreatedMessage = _.template( this.CONSTANTS.createFingerprintProfileMessage )({
       username: id,
       fingerprintAuthName: this.platformFingerprintLabel
     });
 
     return this.fingerprint.verify({ id, secret })
-      .then( () => alert(message) );
+      .then( () => this.displayFingerprintProfileCreatedMessage = true );
   }
 
 

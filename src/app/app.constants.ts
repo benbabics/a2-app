@@ -440,14 +440,15 @@ export namespace ConstantsInfo {
 
       //# Settings page
       SETTINGS: {
-        "title": "Settings",
-        "fingerprintAuthName": {
-          "android": "fingerprint authentication",
-          "ios": "Touch ID®"
+        title: "Settings",
+        fingerprintAuthName: {
+          android: "fingerprint authentication",
+          ios: "Touch ID®"
         },
-        "fingerprintAuthTextLabel": "Use",
-        "destroyFingerprintProfileConfirmMessage": "Are you sure you want to turn off <%= fingerprintAuthName %> for your Username <%= username %>?",
-        "createFingerprintProfileMessage": "<%= _.capitalize(fingerprintAuthName) %> is now setup for your Username <%= username %>."
+        fingerprintAuthTextLabel: "Use",
+        destroyFingerprintProfileConfirmMessage: "Are you sure you want to turn off <%= fingerprintAuthName %> for your Username <%= username %>?",
+        createFingerprintProfileMessage: "<%= _.capitalize(fingerprintAuthName) %> is now setup for your Username <%= username %>.",
+        createFingerprintProfileDuration: 5000, // ms
       },
 
       //# Transactions page
