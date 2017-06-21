@@ -27,6 +27,10 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
     requestor: () => Observable.of(SessionCache.cachedValues.token) //Fetched independently
   };
 
+  private readonly clientSecretRequestor: SessionInfoRequestorDetails = {
+    requestor: () => Observable.of(SessionCache.cachedValues.clientSecret)
+  };
+
   private readonly userRequestor: SessionInfoRequestorDetails = {
     requestor: () => this.userProvider.current()
   };
@@ -82,6 +86,7 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
 
   private buildDictionary() {
     this._requestors[Session.Field.Token] = this.tokenRequestor;
+    this._requestors[Session.Field.ClientSecret] = this.clientSecretRequestor;
     this._requestors[Session.Field.User] = this.userRequestor;
     this._requestors[Session.Field.BillingCompany] = this.billingCompanyRequestor;
     this._requestors[Session.Field.UserCompany] = this.userCompanyRequestor;

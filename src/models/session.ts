@@ -6,6 +6,7 @@ export type TransactionList = DynamicList<Transaction, Transaction.Details>;
 export type Session = Partial<{
     user: User;
     token: string;
+    clientSecret: string;
     billingCompany: Company;
     userCompany: Company;
     cards: Card[];
@@ -30,11 +31,13 @@ export namespace Session {
       export const PendingTransactionsInfo: Field = "pendingTransactionsInfo";
       export const PostedTransactionsInfo: Field = "postedTransactionsInfo";
       export const Token: Field = "token";
+      export const ClientSecret: Field = "clientSecret";
       export const User: Field = "user";
       export const UserCompany: Field = "userCompany";
 
       export const All: Field[] = [
         Token,
+        ClientSecret,
         User,
         BillingCompany,
         Cards,

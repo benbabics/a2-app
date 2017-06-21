@@ -77,7 +77,9 @@ export class SessionManager {
     }
 
     // Request a token with the provided username and secret
-    return secret.flatMap((secret: string) => this.authProvider.requestToken({ username: userCredentials.username, password: secret }));
+    return secret
+    .map((secret: string) => SessionCache.cachedValues.clientSecret = secret)
+    .flatMap((secret: string) => this.authProvider.requestToken({ username: userCredentials.username, password: secret }));
   }
 
   public get cache(): SessionCache {
