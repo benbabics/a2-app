@@ -66,7 +66,7 @@ export class SettingsPage extends SecurePage {
   }
 
 
-  private createFingerprintProfile(): Promise<any|void> {
+  private createFingerprintProfile(): Promise<any> {
     let id = this.session.user.details.username.toLowerCase(),
         secret = this.session.clientSecret;
 
