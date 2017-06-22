@@ -31,6 +31,7 @@ import {
 
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
+import { Keyboard } from "@ionic-native/keyboard";
 import {
   AuthProvider,
   CardProvider,
@@ -136,6 +137,7 @@ import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
     StatusBar,
     SplashScreen,
     AppVersion,
+    Keyboard,
     //# app providers
     //----------------------
     {
