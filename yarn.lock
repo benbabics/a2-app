@@ -22,6 +22,10 @@
   version "1.0.1"
   resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64"
 
+"@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git":
+  version "1.0.1"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64c3e37c3a82dd38c8c5efb638094bf"
+
 "@angular/animations":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-4.1.0.tgz#97b642aee01b5406e03ec65e499342ba91e2dd38"
@@ -96,6 +100,14 @@
 "@ionic-native/in-app-browser@^3.12.1":
   version "3.12.1"
   resolved "https://registry.yarnpkg.com/@ionic-native/in-app-browser/-/in-app-browser-3.12.1.tgz#86832da421518b4f65ebf4a99670e4b6af5da1e5"
+
+"@ionic-native/keyboard@3.4.4":
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/@ionic-native/keyboard/-/keyboard-3.4.4.tgz#552dcf6f71a95dfa7fb5610e385397979593e5fb"
+
+"@ionic-native/splash-screen@3.4.2":
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-3.4.2.tgz#3ce378a3413bab8a0cd4cfd5029c3fadd9a6774c"
 
 "@ionic-native/splash-screen@3.6.1":
   version "3.6.1"
