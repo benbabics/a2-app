@@ -20,6 +20,8 @@ page-login {
     $max-banner-height-x: 1.65;
     $scroll-offset-md: $toolbar-md-height * $max-banner-height-x;
     $scroll-offset-ios: $toolbar-ios-height * $max-banner-height-x + $statusbar-height-ios;
+    overflow: hidden !important;
+    position: fixed;
 
     @include flexbox();
     @include flex-direction(column);

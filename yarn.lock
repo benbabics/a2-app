@@ -18,6 +18,10 @@
   version "1.0.1"
   resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64"
 
+"@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git":
+  version "1.0.1"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64c3e37c3a82dd38c8c5efb638094bf"
+
 "@angular/animations":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-4.1.0.tgz#97b642aee01b5406e03ec65e499342ba91e2dd38"
