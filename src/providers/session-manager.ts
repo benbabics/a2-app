@@ -72,7 +72,7 @@ export class SessionManager {
               return Observable.fromPromise(this.fingerprint.verify(options))
               .map((fingerprintProfile: FingerprintProfile): string => fingerprintProfile.secret);
             } else {
-              return Observable.from(userCredentials.password);
+              return Observable.from([userCredentials.password]);
           }});
 
         break;
@@ -80,7 +80,7 @@ export class SessionManager {
       // Secret
       case SessionAuthenticationMethod.Secret:
       default: {
-        secret = Observable.from(userCredentials.password);
+        secret = Observable.from([userCredentials.password]);
         break;
       }
     }
