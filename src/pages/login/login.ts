@@ -2,9 +2,8 @@ import { WexNavBar, WexAppBannerController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
-import { NavParams, Platform, Content, NavController, ModalController } from "ionic-angular";
+import { NavParams, Platform, Content, NavController } from "ionic-angular";
 import { Page } from "../page";
-import { FingerprintAuthenticationTermsPage } from "./fingerprint-auth-terms/fingerprint-auth-terms";
 import {
   SessionManager,
   SessionAuthenticationMethod,
@@ -38,7 +37,6 @@ export class LoginPage extends Page {
 
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
-  public fingerprintAuthTermsAccepted: boolean = false;
   public isLoggingIn: boolean = false;
   public setupFingerprintAuth: boolean = false;
   public rememberMe: boolean = false;
@@ -54,8 +52,7 @@ export class LoginPage extends Page {
     private fingerprint: Fingerprint,
     private localStorageService: LocalStorageService,
     private dialogs: Dialogs,
-    private appBannerController: WexAppBannerController,
-    private modalController: ModalController
+    private appBannerController: WexAppBannerController
   ) {
     super("Login");
   }
@@ -229,16 +226,8 @@ export class LoginPage extends Page {
   }
 
   public onLogin(event: Event, setupFingerprintAuth?: boolean) {
-    if (setupFingerprintAuth && !this.fingerprintAuthTermsAccepted) {
-      let modal = this.modalController.create(FingerprintAuthenticationTermsPage);
-      modal.onDidDismiss(accepted => {
-        this.fingerprintAuthTermsAccepted = accepted
-        this.login(this.fingerprintAuthTermsAccepted)
-      });
-      modal.present();
-    } else {
-      this.login(false);
-    }
+    this.login(setupFingerprintAuth);
+
     event.preventDefault();
   }
 

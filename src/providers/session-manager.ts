@@ -5,9 +5,12 @@ import { Injectable } from "@angular/core";
 import { UserCredentials } from "@angular-wex/models";
 import { AuthProvider, UserProvider } from "@angular-wex/api-providers";
 import { Observable } from "rxjs/Observable";
+import { Subscriber } from "rxjs/Subscriber";
 import { SessionCache } from "./session-cache";
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { Value } from "../decorators/value";
+import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
+import { ModalController } from "ionic-angular";
 
 export enum SessionAuthenticationMethod {
   Secret,
@@ -32,12 +35,15 @@ export class SessionManager {
   private _sessionStateObserver = new BehaviorSubject(null);
   private _willPersistAuthToken: boolean = /[?&]dev/.test( location.search );
 
+  private static fingerprintAuthenticationTermsAccepted = false;
+
   constructor(
     private authProvider: AuthProvider,
     private userProvider: UserProvider,
     private fingerprint: Fingerprint,
     private sessionCache: SessionCache,
     private localStorageService: LocalStorageService,
+    private modalController: ModalController
   ) { }
 
   public static get hasSession(): boolean {
@@ -50,7 +56,6 @@ export class SessionManager {
 
   private authenticate(userCredentials: UserCredentials, authenticationMethod: SessionAuthenticationMethod): Observable<string> {
     let secret: Observable<string>;
-
     switch(authenticationMethod) {
       // Fingerprint
       case SessionAuthenticationMethod.Fingerprint: {
@@ -60,24 +65,43 @@ export class SessionManager {
         if (isRegistering) {
           options.secret = userCredentials.password;
         }
-
-        //TODO Prompt fingerprint terms after auth for registering
-        secret = Observable.if(() => isRegistering, this.authenticate(userCredentials, SessionAuthenticationMethod.Secret), Observable.of(null))
-          .flatMap(() => this.fingerprint.verify(options))
-          .map((fingerprintProfile: FingerprintProfile): string => fingerprintProfile.secret);
+        // Prompt fingerprint terms after auth for registering
+        secret = Observable.if(() => isRegistering, this.registerFingerprintAuthentication(userCredentials), Observable.of(true))
+          .flatMap((shouldVerify: boolean) => {
+            if(shouldVerify) {
+              return Observable.fromPromise(this.fingerprint.verify(options))
+              .map((fingerprintProfile: FingerprintProfile): string => fingerprintProfile.secret);
+            } else {
+              return Observable.from(userCredentials.password);
+          }});
 
         break;
       }
       // Secret
       case SessionAuthenticationMethod.Secret:
       default: {
-        secret = Observable.from([userCredentials.password]);
+        secret = Observable.from(userCredentials.password);
         break;
       }
     }
-
     // Request a token with the provided username and secret
     return secret.flatMap((secret: string) => this.authProvider.requestToken({ username: userCredentials.username, password: secret }));
+  }
+
+  private registerFingerprintAuthentication(userCredentials: UserCredentials): Observable<any> {
+  return this.authenticate(userCredentials, SessionAuthenticationMethod.Secret)
+    .flatMap(() => this.promptFingerprintTerms());
+  }
+
+  private promptFingerprintTerms(): Observable<boolean> {
+    let modal = this.modalController.create(FingerprintAuthenticationTermsPage);
+    modal.present();
+    return new Observable<boolean>((observer: Subscriber<boolean>) => {
+      modal.onDidDismiss((accepted: boolean) => {
+        observer.next(accepted);
+        observer.complete();
+     });
+    });
   }
 
   public get cache(): SessionCache {
