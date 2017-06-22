@@ -60,6 +60,7 @@
         }
 
         function handleSelectShippingMethod() {
+            let actionsTitle = vm.config.actionStatusTitleShipping;
             let shippingMethods = _.map(vm.cardReissueDetails.shippingMethods, action => {
                 return {
                     text: vm.cardReissueDetails.getShippingMethodDisplayName( action ),
@@ -67,12 +68,13 @@
                 };
             });
 
-            displayActionsheetItems( shippingMethods ).then(shippingMethod => {
+            displayActionsheetItems( actionsTitle, shippingMethods ).then(shippingMethod => {
                 vm.cardReissueDetails.selectedShippingMethod = shippingMethod;
             });
         }
 
         function handleSelectReissueReason() {
+            let actionsTitle = vm.config.actionStatusTitleReason;
             let config = angular.extend({}, globals.CARD_REISSUE_INPUTS.REISSUE_REASON.CONFIG, globals.CARD);
             let reasons = _.map(config.REISSUE_REASON, action => {
                 return {
@@ -81,18 +83,18 @@
                 };
             });
 
-            displayActionsheetItems( reasons ).then(reason => {
+            displayActionsheetItems( actionsTitle, reasons ).then(reason => {
                 vm.cardReissueDetails.reissueReason = reason;
             });
         }
 
-        function displayActionsheetItems(actions) {
+        function displayActionsheetItems(actionsTitle, actions) {
             if ( !actions && _.isEmpty(actions) ) { return; }
 
             $ionicActionSheet.show({
                 buttons: actions,
-                titleText:  'titleText',
-                cancelText: 'cancelText',
+                titleText:  `<b>${actionsTitle}</b>`,
+                cancelText: vm.config.actionStatusCancel,
                 cancel() { deferred.reject(); },
                 buttonClicked(i, action) {
                     deferred.resolve( action.data );
