@@ -8,13 +8,14 @@ import { Platform, ViewController, NavParams } from "ionic-angular";
 })
 export class FingerprintAuthenticationTermsPage extends Page {
   private terms: string;
+
   constructor(private platform: Platform,
   private viewControl: ViewController,
   private navParams: NavParams) {
     super("Fingerprint Auth Terms");
   }
 
-  ionViewDidLoad() {
+  public ionViewDidLoad() {
     if (this.platform.is("ios")) {
       this.terms = this.CONSTANTS.options.scopeVars.CONFIG.termsIos;
     } else {
@@ -22,7 +23,7 @@ export class FingerprintAuthenticationTermsPage extends Page {
     }
   }
 
-  response(accepted: boolean) {
+  private response(accepted: boolean) {
     this.viewControl.dismiss(accepted);
   }
 }
