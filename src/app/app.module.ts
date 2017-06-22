@@ -13,6 +13,7 @@ import { LoginPage } from "../pages/login/login";
 import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
+import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";
 import {
   ActionIndicator,
   WexList,
@@ -51,15 +52,18 @@ import { PaymentsPage } from "../pages/payments/payments";
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
 import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
+import { PrivacyPolicyPage } from "../pages/privacy-policy/privacy-policy";
 import { AppVersion } from "@ionic-native/app-version";
 import { TransactionsPage } from "../pages/transactions/transactions";
 import { ApiProviders } from "@angular-wex/api-providers";
 import { GetCurrentEnvironmentConstants } from "./app.constants";
+import { ContactUsPage } from "../pages/contact-us/contact-us";
 import {
   WexIfPlatformDirective,
   WexIfPlatformAndroidDirective,
   WexIfPlatformIosDirective
 } from "../directives";
+import { InAppBrowser } from "@ionic-native/in-app-browser";
 
 @NgModule({
   declarations: [
@@ -69,11 +73,13 @@ import {
     LoginPage,
     FingerprintAuthenticationTermsPage,
     LandingPage,
+    UserEnrollmentFlow,
     CardsPage,
     CardsDetailsPage,
     CardsReissuePage,
     PaymentsPage,
     TermsOfUsePage,
+    PrivacyPolicyPage,
     TransactionsPage,
     ActionIndicator,
     WexCurrency,
@@ -96,7 +102,8 @@ import {
     WexTrustedHtmlPipe,
     WexIfPlatformDirective,
     WexIfPlatformAndroidDirective,
-    WexIfPlatformIosDirective
+    WexIfPlatformIosDirective,
+    ContactUsPage
   ],
   imports: [
     //# Angular
@@ -120,6 +127,7 @@ import {
     LoginPage,
     FingerprintAuthenticationTermsPage,
     LandingPage,
+    UserEnrollmentFlow,
     CardsPage,
     CardsDetailsPage,
     CardsReissuePage,
@@ -127,6 +135,9 @@ import {
     WexNavBar,
     OptionsPopoverPage,
     TermsOfUsePage,
+    TransactionsPage,
+    ContactUsPage,
+    PrivacyPolicyPage,
     TransactionsPage
   ],
   providers: [
@@ -139,6 +150,7 @@ import {
     StatusBar,
     SplashScreen,
     AppVersion,
+    InAppBrowser,
     //# app providers
     //----------------------
     {
