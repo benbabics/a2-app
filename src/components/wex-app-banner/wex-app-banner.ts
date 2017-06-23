@@ -1,12 +1,13 @@
 import { WexAppBannerController } from "../wex-app-banner-controller/wex-app-banner-controller";
-import { WexBanner } from "../wex-banner/wex-banner";
+import { WexSnackbar, WexSnackbarAction, WEX_SNACKBAR_ANIMATIONS } from "../wex-snackbar/wex-snackbar";
 import { Component } from "@angular/core";
 
 @Component({
   selector: "wex-app-banner",
-  templateUrl: "../wex-banner/wex-banner.html"
+  templateUrl: "../wex-snackbar/wex-snackbar.html",
+  animations: WEX_SNACKBAR_ANIMATIONS
 })
-export class WexAppBanner extends WexBanner {
+export class WexAppBanner extends WexSnackbar {
 
   constructor(private wexAppBannerController: WexAppBannerController) {
     super();
@@ -16,7 +17,11 @@ export class WexAppBanner extends WexBanner {
     return this.wexAppBannerController.text;
   }
 
-  public get bannerStyle(): WexBanner.Style {
-    return this.wexAppBannerController.bannerStyle;
+  public get buttonTextColor(): string {
+    return this.wexAppBannerController.buttonTextColor;
+  }
+
+  public get action(): WexSnackbarAction {
+    return this.wexAppBannerController.action;
   }
 }

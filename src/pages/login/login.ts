@@ -158,6 +158,7 @@ export class LoginPage extends Page {
           console.error(error instanceof Response ? error.json().error : error);
 
           this.appBannerController.error(this.getLoginErrorDisplayText(errorCode));
+          this.appBannerController.setActionToDismiss();
         });
     }
   }

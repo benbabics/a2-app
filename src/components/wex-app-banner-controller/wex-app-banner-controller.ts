@@ -1,33 +1,48 @@
 import { Injectable } from "@angular/core";
-import { WexBanner } from "../wex-banner/wex-banner";
+import { WexSnackbarAction } from "../wex-snackbar/wex-snackbar";
 
 @Injectable()
 export class WexAppBannerController {
 
   public text: string;
-  public bannerStyle: WexBanner.Style;
+  public buttonTextColor: string;
+
+  public action: WexSnackbarAction = {
+   label: "",
+   handler: () => { }
+  }
 
   public get hasContent(): boolean {
     return !!this.text;
   }
 
+  public setActionToDismiss() {
+    this.action.label = "Dismiss";
+    this.action.handler = () => true;
+  }
+
   public clear() {
     this.text = "";
-    this.bannerStyle = null;
+    this.buttonTextColor = "";
+  }
+
+  public general(text: string) {
+    this.text = text;
+    this.buttonTextColor = "";
   }
 
   public error(text: string) {
     this.text = text;
-    this.bannerStyle = WexBanner.Style.Error;
+    this.buttonTextColor = "red";
   }
 
   public success(text: string) {
     this.text = text;
-    this.bannerStyle = WexBanner.Style.Success;
+    this.buttonTextColor = "green";
   }
 
   public warning(text: string) {
     this.text = text;
-    this.bannerStyle = WexBanner.Style.Warning;
+    this.buttonTextColor = "orange";
   }
 }
