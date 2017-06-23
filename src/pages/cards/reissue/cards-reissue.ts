@@ -14,7 +14,7 @@ import { Session } from "../../../models";
 import { SecurePage } from "../../secure-page";
 import { SessionManager } from "../../../providers";
 import { Dialogs } from "@ionic-native/dialogs";
-import { WexAppBannerController } from "../../../components";
+import { WexAppSnackbarController } from "../../../components";
 import { Value } from "../../../decorators/value";
 import { AccountProvider, CardProvider, CardUpdateType } from "@angular-wex/api-providers";
 
@@ -42,7 +42,7 @@ export class CardsReissuePage extends SecurePage {
     private dialogs: Dialogs,
     private cardProvider: CardProvider,
     private app: App,
-    private appBannerController: WexAppBannerController
+    private appSnackbarController: WexAppSnackbarController
   ) {
     super("Cards.Reissue", sessionManager, [
       Session.Field.BillingCompany
@@ -126,7 +126,6 @@ export class CardsReissuePage extends SecurePage {
         //Close the reissue flow
         this.navCtrl.popToRoot({ animate: false });
       }, (errorResponse) => {
-        //this.appBannerController.error(this.CONSTANTS.reissueError);
 
         console.error("Failed to reissue card: " + errorResponse);
       });

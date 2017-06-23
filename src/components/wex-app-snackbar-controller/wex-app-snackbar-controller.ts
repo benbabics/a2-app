@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { WexSnackbarAction } from "../wex-snackbar/wex-snackbar";
 
 @Injectable()
-export class WexAppBannerController {
+export class WexAppSnackbarController {
 
   public text: string;
   public buttonTextColor: string;
