@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Platform } from "ionic-angular";
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
-import { Keyboard } from "@ionic-native/keyboard";
 
 import { WexNavBar } from "../components";
 import { LoginPage } from "../pages/login/login";
@@ -16,7 +15,7 @@ import "chart.js";
 })
 export class MyApp {
 
-  constructor(keyboard: Keyboard, platform: Platform, private statusBar: StatusBar, splashScreen: SplashScreen, private wexAppBannerController: WexAppBannerController, private sessionManager: SessionManager) {
+  constructor(platform: Platform, private statusBar: StatusBar, splashScreen: SplashScreen, private wexAppBannerController: WexAppBannerController, private sessionManager: SessionManager) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -24,7 +23,6 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
       this.sessionManager.restore();
-      keyboard.disableScroll(true);
     });
 
     sessionManager.sessionStateObserver.subscribe(session => this.onSessionChange(session));
