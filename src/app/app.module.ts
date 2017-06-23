@@ -3,7 +3,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Dialogs } from "@ionic-native/dialogs";
 import { OptionsPopoverPage } from "./../pages/landing/options-popover/options-popover";
 import { WexCardNumberPipe } from "./../pipes/wex-card-number";
-import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { Http, XHRBackend, RequestOptions, HttpModule } from "@angular/http";
 import { NgModule, ErrorHandler } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
@@ -13,6 +12,9 @@ import { LoginPage } from "../pages/login/login";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
 import { SettingsPage } from '../pages/settings/settings';
+import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
+import { DriversPage } from './../pages/drivers/drivers';
+import { DriversDetailsPage } from './../pages/drivers/details/drivers-details';
 import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";
 import {
   ActionIndicator,
@@ -76,6 +78,8 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     CardsPage,
     CardsDetailsPage,
     CardsReissuePage,
+    DriversPage,
+    DriversDetailsPage,
     PaymentsPage,
     SettingsPage,
     TermsOfUsePage,
@@ -130,6 +134,8 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     CardsPage,
     CardsDetailsPage,
     CardsReissuePage,
+    DriversPage,
+    DriversDetailsPage,
     PaymentsPage,
     SettingsPage,
     WexNavBar,
