@@ -1,19 +1,19 @@
-import { 
-  Component, 
-  Input, 
-  trigger, 
-  transition, 
-  style, 
-  animate, 
-  Output, 
-  EventEmitter 
+import {
+  Component,
+  Input,
+  trigger,
+  transition,
+  style,
+  animate,
+  Output,
+  EventEmitter
 } from "@angular/core";
 
 type milliseconds = number;
 
 interface WexSnackbarAction {
   label: string;
-  handler: () => void;
+  handler: () => boolean | void;
 }
 
 const ANIMATION_DELAY: milliseconds = 200;
@@ -46,12 +46,21 @@ export class WexSnackbar {
   public dismissed: boolean = false;
 
   ngAfterViewInit() {
-    if (Number(this.dismissAfter) > 0) {
-      setTimeout(() => {
-        this.dismissed = true;
-        // wait for the animation to finish before emitting
-        setTimeout(() => this.dismissedEmitter.emit(), ANIMATION_DELAY*2);
-      }, this.dismissAfter);
+    if (this.dismissAfter) {
+      if (Number(this.dismissAfter) > 0) {
+        setTimeout(() => {
+          this.dismissed = true;
+          // wait for the animation to finish before emitting
+          setTimeout(() => this.dismissedEmitter.emit(), ANIMATION_DELAY*2);
+        }, this.dismissAfter);
+      }
+    }
+  }
+
+  private performAction() {
+    if (this.action.handler()) {
+      this.dismissed = true;
+      setTimeout(() => this.dismissedEmitter.emit(), ANIMATION_DELAY*2);
     }
   }
 
