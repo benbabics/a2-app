@@ -2,7 +2,7 @@ import { WexNavBar, WexAppBannerController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
-import { NavParams, Platform, Content, NavController } from "ionic-angular";
+import { NavParams, Platform, Content, NavController, App } from "ionic-angular";
 import { Page } from "../page";
 import {
   SessionManager,
@@ -12,6 +12,7 @@ import {
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { Value } from "../../decorators/value";
 import { Dialogs } from "@ionic-native/dialogs";
+import { Keyboard } from "@ionic-native/keyboard";
 import { Response } from "@angular/http";
 import { UserCredentials } from "@angular-wex/models";
 
@@ -35,6 +36,9 @@ export class LoginPage extends Page {
 
   @Value("STORAGE.KEYS.USERNAME") private readonly USERNAME_KEY: string;
 
+  private _onKeyboardOpen = event => this.onKeyboardOpen(event);
+  private _onKeyboardClose = event => this.onKeyboardClose(event);
+
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
   public isLoggingIn: boolean = false;
@@ -52,7 +56,9 @@ export class LoginPage extends Page {
     private fingerprint: Fingerprint,
     private localStorageService: LocalStorageService,
     private dialogs: Dialogs,
-    private appBannerController: WexAppBannerController
+    private appBannerController: WexAppBannerController,
+    private keyboard: Keyboard,
+    private app: App
   ) {
     super("Login");
   }
@@ -196,12 +202,12 @@ export class LoginPage extends Page {
       });
   }
 
-  ionViewWillEnter() {
-    window.addEventListener("native.keyboardshow", (event) => this.onKeyboardOpen(event));
-    window.addEventListener("native.keyboardhide", (event) => this.onKeyboardClose(event));
-  }
-
   ionViewDidEnter() {
+    this.keyboard.disableScroll(true);
+    
+    window.addEventListener("native.keyboardshow", this._onKeyboardOpen);
+    window.addEventListener("native.keyboardhide", this._onKeyboardClose);
+
     // Check the status of remember me
     if (this.localStorageService.get(this.USERNAME_KEY)) {
       this.user.username = this.localStorageService.get<string>(this.USERNAME_KEY);
@@ -223,6 +229,13 @@ export class LoginPage extends Page {
           this.showUserSettingsPopup().finally(() => this.doFingerprintAuthCheck());
         }
       });
+  }
+
+  ionViewDidLeave() {
+    this.keyboard.disableScroll(false);
+
+    window.removeEventListener("native.keyboardshow", this._onKeyboardOpen);
+    window.removeEventListener("native.keyboardhide", this._onKeyboardClose);
   }
 
   public onLogin(event: Event, setupFingerprintAuth?: boolean) {
