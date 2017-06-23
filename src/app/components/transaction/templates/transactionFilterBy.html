@@ -1,4 +1,13 @@
-<ion-view view-title="{{ ::vm.config.title }}" wex-hide-back-button="false">
+<ion-view hide-nav-bar="true">
+    <!-- Header bar -->
+    <ion-header-bar class="bar bar-wex">
+        <div class="buttons">
+            <wex-back-button></wex-back-button>
+        </div>
+
+        <h1 class="title">{{::vm.config.title}}</h1>
+    </ion-header-bar>
+
     <div class="bar bar-subheader bar-positive" ng-switch="vm.params.filterBy">
         <h2 ng-switch-when="card"   class="title">***{{ ::vm.filterDetails.embossedCardNumber }}</h2>
         <h2 ng-switch-when="driver" class="title">{{ ::vm.filterDetails.firstName }} {{ ::vm.filterDetails.lastName }}</h2>
