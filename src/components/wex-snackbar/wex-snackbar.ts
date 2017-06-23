@@ -40,6 +40,7 @@ export class WexSnackbar {
   @Input() action?: WexSnackbarAction;
   @Input() dismissAfter?: milliseconds;
   @Input() pushContent?: boolean = false;
+  @Input() buttonTextColor?: string;
 
   @Output("dismissed") dismissedEmitter = new EventEmitter();
 
