@@ -2,7 +2,7 @@
     <div class="snackbar-text" padding-horizontal>{{ text }}</div>
 
     <div *ngIf="action" class="snackbar-actions" padding-horizontal>
-        <button ion-button clear class="snackbar-action" (click)="performAction()">
+        <button ion-button [ngStyle]="{'color' : buttonTextColor}" clear class="snackbar-action" (click)="performAction()">
             {{ action.label }}
         </button>
     </div>
