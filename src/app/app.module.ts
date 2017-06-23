@@ -22,9 +22,8 @@ import {
   WexGreeking,
   WexDetailsView,
   WexInfoCard,
-  WexBanner,
-  WexAppBannerController,
-  WexAppBanner,
+  WexAppSnackbarController,
+  WexAppSnackbar,
   WexSnackbar,
   WexStaticListPageHeader,
   WexStaticListPageContent
@@ -93,8 +92,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     WexCardNumberPipe,
     OptionsPopoverPage,
     WexInfoCard,
-    WexBanner,
-    WexAppBanner,
+    WexAppSnackbar,
     WexSnackbar,
     WexSvgPipe,
     WexTrustedHtmlPipe,
@@ -163,7 +161,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     AndroidFingerprintService,
     IosFingerprintService,
     MockFingerprintService,
-    WexAppBannerController,
+    WexAppSnackbarController,
     {
       provide: SessionInfoRequestors,
       useClass: DefaultSessionInfoRequestors

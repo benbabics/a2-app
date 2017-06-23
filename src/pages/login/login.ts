@@ -1,4 +1,4 @@
-import { WexNavBar, WexAppBannerController } from "../../components";
+import { WexNavBar, WexAppSnackbarController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
@@ -52,7 +52,7 @@ export class LoginPage extends Page {
     private fingerprint: Fingerprint,
     private localStorageService: LocalStorageService,
     private dialogs: Dialogs,
-    private appBannerController: WexAppBannerController
+    private appSnackbarController: WexAppSnackbarController
   ) {
     super("Login");
   }
@@ -142,7 +142,7 @@ export class LoginPage extends Page {
       this.isLoggingIn = true;
       this.user.username = this.user.username.toLowerCase();
 
-      this.appBannerController.clear();
+      this.appSnackbarController.clear();
 
       this.sessionManager.initSession(this.user, { authenticationMethod })
         .flatMap(() => this.sessionManager.cache.getSessionDetail(Session.Field.User)) //Pre-fetch the user object for the landing page
@@ -157,8 +157,8 @@ export class LoginPage extends Page {
 
           console.error(error instanceof Response ? error.json().error : error);
 
-          this.appBannerController.error(this.getLoginErrorDisplayText(errorCode));
-          this.appBannerController.setActionToDismiss();
+          this.appSnackbarController.error(this.getLoginErrorDisplayText(errorCode));
+          this.appSnackbarController.setActionToDismiss();
         });
     }
   }
