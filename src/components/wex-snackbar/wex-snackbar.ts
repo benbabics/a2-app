@@ -47,14 +47,12 @@ export class WexSnackbar {
   public dismissed: boolean = false;
 
   ngAfterViewInit() {
-    if (this.dismissAfter) {
-      if (Number(this.dismissAfter) > 0) {
-        setTimeout(() => {
-          this.dismissed = true;
-          // wait for the animation to finish before emitting
-          setTimeout(() => this.dismissedEmitter.emit(), ANIMATION_DELAY*2);
-        }, this.dismissAfter);
-      }
+    if (Number(this.dismissAfter) > 0) {
+      setTimeout(() => {
+        this.dismissed = true;
+        // wait for the animation to finish before emitting
+        setTimeout(() => this.dismissedEmitter.emit(), ANIMATION_DELAY*2);
+      }, this.dismissAfter);
     }
   }
 
