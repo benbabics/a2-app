@@ -1,0 +1,32 @@
+page-add-payment {
+
+  &.ion-page ion-content {
+    background: color($colors, white);
+  }
+
+  .payment-invoice-details {
+    background: color($colors, white);
+
+    .invoice-header {
+
+      ion-label > * {
+        font-weight: bold;
+      }
+    }
+
+    .details-list {
+
+      wex-list-item .item .item-inner ion-label {
+        padding: 0.5rem 0;
+
+        span:first-child {
+          text-align: left;
+        }
+
+        span:last-child {
+          text-align: right;
+        }
+      }
+    }
+  }
+}
