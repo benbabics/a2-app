@@ -27,8 +27,6 @@ import {
   WexDetailsView,
   WexInfoCard,
   WexAppSnackbarController,
-  WexAppSnackbar,
-  WexSnackbar,
   WexStaticListPageHeader,
   WexStaticListPageContent
 } from "../components";
@@ -48,7 +46,8 @@ import {
   MockFingerprintService,
   SessionInfoRequestors,
   DefaultSessionInfoRequestors,
-  SessionCache
+  SessionCache,
+  NetworkService
 } from "../providers";
 import { WexCurrency, WexDate, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -101,8 +100,6 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     WexCardNumberPipe,
     OptionsPopoverPage,
     WexInfoCard,
-    WexAppSnackbar,
-    WexSnackbar,
     WexSvgPipe,
     WexTrustedHtmlPipe,
     WexIfPlatformDirective,
@@ -180,7 +177,8 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
       provide: SessionInfoRequestors,
       useClass: DefaultSessionInfoRequestors
     },
-    SessionCache
+    SessionCache,
+    NetworkService
   ]
 })
 export class AppModule {}
