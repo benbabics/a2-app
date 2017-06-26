@@ -138,7 +138,7 @@ import { AddPaymentPage } from "../pages/payments/add/add-payment";
     TransactionsPage,
     ContactUsPage,
     PrivacyPolicyPage,
-    TransactionsPage
+    TransactionsPage,
     AddPaymentPage
   ],
   providers: [
