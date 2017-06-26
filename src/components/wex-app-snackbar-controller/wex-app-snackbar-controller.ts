@@ -1,48 +1,36 @@
 import { Injectable } from "@angular/core";
-import { WexSnackbarAction } from "../wex-snackbar/wex-snackbar";
+import { ToastController, ToastOptions } from "ionic-angular";
+import { Value } from "../../decorators/value";
 
 @Injectable()
-export class WexAppSnackbarController {
+export class WexAppSnackbarController extends ToastController {
+  @Value("BUTTONS.DISMISS") private dismiss: string;
 
-  public text: string;
-  public buttonTextColor: string;
-
-  public action: WexSnackbarAction = {
-   label: "",
-   handler: () => { }
+  public get standardOptions(): ToastOptions {
+    return {
+      position: "top",
+      showCloseButton: true,
+      closeButtonText: this.dismiss,
+    }
   }
 
-  public get hasContent(): boolean {
-    return !!this.text;
+  public uniqueToast(options: ToastOptions) {
+    super.create(options).present();
   }
 
-  public setActionToDismiss() {
-    this.action.label = "Dismiss";
-    this.action.handler = () => true;
-  }
+  public presentToast (text: string, color?: string, closeAction?: (data: any, role: string) => void) {
+    let options = this.standardOptions;
+    options.message = text;
 
-  public clear() {
-    this.text = "";
-    this.buttonTextColor = "";
-  }
+    // color classes found in app.scss
+    if (color) {
+      options.cssClass = color;
+    }
 
-  public general(text: string) {
-    this.text = text;
-    this.buttonTextColor = "";
-  }
-
-  public error(text: string) {
-    this.text = text;
-    this.buttonTextColor = "red";
-  }
-
-  public success(text: string) {
-    this.text = text;
-    this.buttonTextColor = "green";
-  }
-
-  public warning(text: string) {
-    this.text = text;
-    this.buttonTextColor = "orange";
+    let toast = super.create(options);
+    if (closeAction) {
+      toast.onDidDismiss(closeAction)
+    }
+    toast.present();
   }
 }

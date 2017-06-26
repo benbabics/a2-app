@@ -142,8 +142,6 @@ export class LoginPage extends Page {
       this.isLoggingIn = true;
       this.user.username = this.user.username.toLowerCase();
 
-      this.appSnackbarController.clear();
-
       this.sessionManager.initSession(this.user, { authenticationMethod })
         .flatMap(() => this.sessionManager.cache.getSessionDetail(Session.Field.User)) //Pre-fetch the user object for the landing page
         .finally(() => this.isLoggingIn = false)
@@ -157,8 +155,7 @@ export class LoginPage extends Page {
 
           console.error(error instanceof Response ? error.json().error : error);
 
-          this.appSnackbarController.error(this.getLoginErrorDisplayText(errorCode));
-          this.appSnackbarController.setActionToDismiss();
+          this.appSnackbarController.presentToast(this.getLoginErrorDisplayText(errorCode), "red");
         });
     }
   }

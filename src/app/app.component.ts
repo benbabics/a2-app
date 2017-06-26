@@ -6,7 +6,6 @@ import { SplashScreen } from "@ionic-native/splash-screen";
 import { WexNavBar } from "../components";
 import { LoginPage } from "../pages/login/login";
 import { SessionManager } from "./../providers/session-manager";
-import { WexAppSnackbarController } from "../components";
 
 import "chart.js";
 
@@ -15,7 +14,7 @@ import "chart.js";
 })
 export class MyApp {
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private sessionManager: SessionManager, private wexAppSnackbarController: WexAppSnackbarController) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private sessionManager: SessionManager) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -26,9 +25,6 @@ export class MyApp {
     });
   }
 
-  public get hasSnackbarContent(): boolean {
-    return this.wexAppSnackbarController.hasContent;
-  }
 
   public get isUserLoggedIn(): boolean {
     return SessionManager.hasSession;
