@@ -15,7 +15,7 @@ import "chart.js";
 })
 export class MyApp {
 
-  constructor(platform: Platform, private statusBar: StatusBar, splashScreen: SplashScreen, private wexAppBannerController: WexAppBannerController, private sessionManager: SessionManager) {
+  constructor(platform: Platform, splashScreen: SplashScreen, private statusBar: StatusBar, private sessionManager: SessionManager, private wexAppBannerController: WexAppBannerController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
