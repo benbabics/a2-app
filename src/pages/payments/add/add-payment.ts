@@ -4,6 +4,8 @@ import { NavParams, NavController, ViewController } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
 import { SessionManager } from "../../../providers";
 import { PaymentProvider } from "@angular-wex/api-providers";
+import { Session } from "../../../models";
+import { InvoiceSummary } from "@angular-wex/models";
 
 @Component({
   selector: "page-add-payment",
@@ -18,7 +20,13 @@ export class AddPaymentPage extends SecurePage {
     private paymentProvider: PaymentProvider,
     private viewController: ViewController
   ) {
-    super("Payments.Add", sessionManager);
+    super("Payments.Add", sessionManager, [
+      Session.Field.InvoiceSummary
+    ]);
+  }
+
+  public get invoiceSummary(): InvoiceSummary {
+    return this.session.invoiceSummary;
   }
 
   public cancel(data?: any) {

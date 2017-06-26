@@ -1,4 +1,4 @@
-import { User, Company, Card, Payment, Driver, Transaction, MakePaymentAvailability } from "@angular-wex/models";
+import { User, Company, Card, Payment, Driver, Transaction, MakePaymentAvailability, InvoiceSummary } from "@angular-wex/models";
 import { DynamicList } from "./dynamic-list";
 
 export type TransactionList = DynamicList<Transaction, Transaction.Details>;
@@ -16,6 +16,7 @@ export type Session = Partial<{
     pendingTransactionsInfo: TransactionList;
     postedTransactionsInfo: TransactionList;
     makePaymentAvailability: MakePaymentAvailability;
+    invoiceSummary: InvoiceSummary;
 }>;
 
 export namespace Session {
@@ -25,6 +26,7 @@ export namespace Session {
       export const BillingCompany: Field = "billingCompany";
       export const Cards: Field = "cards";
       export const Drivers: Field = "drivers";
+      export const InvoiceSummary: Field = "invoiceSummary";
       export const MakePaymentAvailability: Field = "makePaymentAvailability";
       export const Payments: Field = "payments";
       export const PendingTransactions: Field = "pendingTransactions";
@@ -41,6 +43,7 @@ export namespace Session {
         BillingCompany,
         Cards,
         Drivers,
+        InvoiceSummary,
         MakePaymentAvailability,
         Payments,
         //PendingTransactions,
