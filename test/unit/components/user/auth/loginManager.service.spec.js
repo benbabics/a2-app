@@ -121,8 +121,8 @@
                     expect(this.AnalyticsUtil.setUserId).toHaveBeenCalledWith(userDetails.id);
                 });
 
-                it("should call this.AnalyticsUtil.setUserBrand with the expected value", function () {
-                    expect( this.AnalyticsUtil.setUserBrand ).toHaveBeenCalledWith( userDetails.brand );
+                it("should call this.AnalyticsUtil.setCustomDimension with the expected values", function () {
+                    expect( this.AnalyticsUtil.setCustomDimension ).toHaveBeenCalledWith( 2, userDetails.brand );
                 });
 
                 it("should resolve the initialization promise", function () {

@@ -1,4 +1,13 @@
-<ion-view view-title="{{::vm.config.title}}">
+<ion-view hide-nav-bar="true">
+    <!-- Header bar -->
+    <ion-header-bar class="bar bar-wex">
+        <div class="buttons">
+            <wex-back-button></wex-back-button>
+        </div>
+
+        <h1 class="title">{{::vm.config.title}}</h1>
+    </ion-header-bar>
+
     <ion-content class="transactionDetails">
         <div class="padding item-wrap">
             <p class="padding divider">

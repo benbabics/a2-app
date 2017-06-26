@@ -295,6 +295,9 @@
             "submitButton"       : "Reissue Card",
             "instructionalText"  : "Orders received after 3:00 pm Eastern Time may be processed the next business day.",
             "poBoxText"          : "Please Note: You have a P.O. Box address listed. Your card will be delivered via regular mail.",
+            "actionStatusTitleShipping": "Select Shipping Method",
+            "actionStatusTitleReason":   "Select Reason",
+            "actionStatusCancel":  "Cancel",
             "alertPopupMessages" : {
                 "classicMultipleReissues": "This card has been reissued too many times."
             },

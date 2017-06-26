@@ -68,19 +68,6 @@
             });
         });
 
-        describe("has a setUserBrand function that", function () {
-            var userBrand;
-
-            beforeEach(function () {
-                userBrand = TestUtils.getRandomStringThatIsAlphaNumeric(7);
-                AnalyticsUtil.setUserBrand( userBrand );
-            });
-
-            it("should call analytics.customDimension with the expected brand", function () {
-                expect( analytics.customDimension ).toHaveBeenCalledWith( "BRAND", userBrand, jasmine.any(Function), jasmine.any(Function) );
-            });
-        });
-
         describe("has a startTracker function that", function () {
             var trackerId;
 
