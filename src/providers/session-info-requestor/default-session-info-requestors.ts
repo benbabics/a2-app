@@ -4,7 +4,8 @@ import {
   PaymentProvider,
   CardProvider,
   AccountProvider,
-  UserProvider
+  UserProvider,
+  InvoiceProvider
 } from "@angular-wex/api-providers";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
@@ -12,6 +13,7 @@ import { SessionCache } from "../session-cache";
 import {
   Transaction,
   ListResponse,
+  MakePaymentAvailability,
 } from "@angular-wex/models";
 import {
   TransactionList,
@@ -69,7 +71,21 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
 
   private readonly makePaymentAvailabilityRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session) => this.paymentProvider.getMakePaymentAvailability(session.user.company.details.accountId)
+    //requestor: (session: Session) => this.paymentProvider.getMakePaymentAvailability(session.user.company.details.accountId)
+    requestor: () => { //TODO Remove
+      return Observable.of<MakePaymentAvailability>(new MakePaymentAvailability({
+        makePaymentAllowed: true,
+        shouldDisplayBankAccountSetupMessage: false,
+        shouldDisplayCurrentBalanceDueMessage: false,
+        shouldDisplayDirectDebitEnabledMessage: false,
+        shouldDisplayOutstandingPaymentMessage: false
+      }));
+    }
+  };
+
+  private readonly invoiceSummaryRequestor: SessionInfoRequestorDetails = {
+    requiredFields: [Session.Field.User],
+    requestor: (session: Session) => this.invoiceProvider.current(session.user.billingCompany.details.accountId)
   };
 
   constructor(
@@ -78,7 +94,8 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
     private cardProvider: CardProvider,
     private paymentProvider: PaymentProvider,
     private driverProvider: DriverProvider,
-    private transactionProvider: TransactionProvider
+    private transactionProvider: TransactionProvider,
+    private invoiceProvider: InvoiceProvider
   ) {
     super();
 
@@ -97,6 +114,7 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
     this._requestors[Session.Field.PostedTransactionsInfo] = this.postedTransactionsInfoRequestor;
     this._requestors[Session.Field.PostedTransactions] = this.postedTransactionsRequestor;
     this._requestors[Session.Field.MakePaymentAvailability] = this.makePaymentAvailabilityRequestor;
+    this._requestors[Session.Field.InvoiceSummary] = this.invoiceSummaryRequestor;
   }
 }
 

@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import { SessionManager, NavBarController } from "../../providers";
 import { Component } from "@angular/core";
 import { NavController, NavParams, PopoverController } from "ionic-angular";
-import { Company, InvoiceSummary, Payment } from "@angular-wex/models";
+import { Company, InvoiceSummary, Payment, CompanyStub, User } from "@angular-wex/models";
 import { Session } from "../../models";
 import { SecurePage } from "../secure-page";
 import { OptionsPopoverPage } from "./options-popover/options-popover";
@@ -25,6 +25,11 @@ interface ChartConfig {
 })
 export class LandingPage extends SecurePage {
 
+  private readonly REQUIRED_SESSION_FIELDS: Session.Field[]  = [
+    Session.Field.User,
+    Session.Field.InvoiceSummary,
+    Session.Field.Payments
+  ];
   private readonly BACK_TO_EXIT_ACTION_PRIORITY = 102;
   private readonly DEFAULT_CACHE_TTL = 4320; //72 hours
   private removeBackButtonAction;
@@ -32,8 +37,6 @@ export class LandingPage extends SecurePage {
 
   public readonly chartColors = this.CONSTANTS.CHART.COLORS;
 
-  public invoiceSummary;
-  public billingCompany = new Company();
   public scheduledPaymentsCount = 0;
   public chartDisplay: ChartDisplayConfig;
   public chart: ChartConfig;
@@ -102,24 +105,30 @@ export class LandingPage extends SecurePage {
     };
   }
 
+  public get billingCompany(): CompanyStub {
+    return this.session.user.billingCompany;
+  }
+
+  public get invoiceSummary(): InvoiceSummary {
+    return this.session.invoiceSummary;
+  }
+
   ionViewWillEnter() {
-    this.invoiceProvider.current(this.session.user.billingCompany.details.accountId)
-      .subscribe((invoiceSummary: InvoiceSummary) => {
-        this.invoiceSummary = invoiceSummary;
+    //don't pre-fetch the data for this page to allow for dynamic in-page loading
+    this.sessionManager.cache.getSessionDetails(this.REQUIRED_SESSION_FIELDS)
+      .subscribe((session: Session) => {
+        this.session = session;
 
-        this.chartDisplay = this.createChartDisplayConfiguration();
-        this.chart = this.createChartConfiguration();
-      });
-
-    this.brandProvider.logo(this.session.user.details.brand)
-      .subscribe((brandLogoData: string) => this.brandLogoData = brandLogoData);
-
-    this.sessionManager.cache.requestSessionDetail(Session.Field.Payments)
-      .subscribe((payments: Payment[]) => {
-        let scheduledCount = payments.filter(payment => payment.isScheduled).length;
+        let scheduledCount = this.session.payments.filter(payment => payment.isScheduled).length;
 
         // Update the payment tab badge with the scheduled count
         this.navBarController.paymentsBadgeText = scheduledCount > 0 ? String(scheduledCount) : "";
+
+        this.chartDisplay = this.createChartDisplayConfiguration();
+        this.chart = this.createChartConfiguration();
+
+        this.brandProvider.logo(this.session.user.details.brand)
+          .subscribe((brandLogoData: string) => this.brandLogoData = brandLogoData);
       });
   }
 

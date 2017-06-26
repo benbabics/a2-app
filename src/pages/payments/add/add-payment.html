@@ -14,6 +14,26 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-card padding>IM MAKIN A PAYMENT HERE</ion-card>
+<ion-content>
+  <section class="payment-invoice-details">
+    <wex-list-item class="invoice-header">
+      <span>Invoice Number {{ invoiceSummary.details.invoiceNumber || "N/A" }}</span>
+      <span>Date {{ invoiceSummary.paymentDueDate | wexDate }}</span>
+    </wex-list-item>
+
+    <ion-list class="details-list">
+      <wex-list-item>
+        <span>Current Balance</span>
+        <span>{{ invoiceSummary.details.currentBalance | wexCurrency }}</span>
+      </wex-list-item>
+      <wex-list-item>
+        <span>Statement Balance</span>
+        <span>{{ invoiceSummary.details.statementBalance | wexCurrency }}</span>
+      </wex-list-item>
+    </ion-list>
+  </section>
+
+  <ion-card>
+    <ion-card-content>IM MAKIN A PAYMENT HERE </ion-card-content>
+  </ion-card>
 </ion-content>
