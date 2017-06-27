@@ -21,7 +21,9 @@
            tabIcon="fa-credit-card-alt"
            (ionSelect)="resetTab()">
   </ion-tab>
-  <ion-tab [tabTitle]="CONSTANTS.LABELS.drivers"
-           tabIcon="car">
+  <ion-tab [root]="DriversPage"
+           [tabTitle]="CONSTANTS.LABELS.drivers"
+           tabIcon="car"
+           (ionSelect)="resetTab()">
   </ion-tab>
 </ion-tabs>

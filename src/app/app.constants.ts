@@ -155,6 +155,47 @@ export namespace ConstantsInfo {
         }
       },
 
+      //# Drivers page
+      DRIVERS: {
+        listLabels: ["Name", "Driver ID"],
+        searchLabel: "Search Name or Driver ID",
+        greekingData: [
+          {left: 3, top: 10, right: 15, bottom: 35},
+          {left: 3, top: 55, right: 15, bottom: 80},
+          {left: 20, top: 20, right: 86, bottom: 32},
+          {left: 20, top: 47, right: 86, bottom: 59},
+          {left: 20, top: 74, right: 86, bottom: 86}
+        ],
+        greekedElementCount: 15,
+
+        //# Driver Details page
+        DETAILS: {
+          title:   "Driver Details",
+          details: "Details",
+          actions: "Actions",
+          viewTransactions: "View Transactions",
+
+          STATUS: {
+            COLOR: {
+              ACTIVE:     "success",
+              SUSPENDED:  "warning",
+              TERMINATED: "danger"
+            },
+            ICON: {
+              ACTIVE: "checkmark-circle",
+              SUSPENDED: "information-circle",
+              TERMINATED: "close-circle"
+            }
+          },
+
+          LABELS: {
+            promptId:        "Driver ID",
+            cellPhoneNumber: "Mobile Phone",
+            emailAddress:    "Email Address"
+          }
+        }
+      },
+
       //# Landing page
       LANDING: {
         BACK_TO_EXIT: {

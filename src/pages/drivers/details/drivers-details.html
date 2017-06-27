@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card id="card-details">
+    <ion-card-header>{{ CONSTANTS.details }}</ion-card-header>
+
+    <div id="controls">
+      <h1 id="driver-name">{{ driver.details.firstName | lowercase }} {{ driver.details.lastName | lowercase }}</h1>
+
+      <button ion-button icon-left round large id="driver-status" [color]="statusColor + '-dark'">
+        <ion-icon [name]="statusIcon" [color]="statusColor"></ion-icon>
+        {{ driver.statusDisplayName }}
+      </button>
+    </div>
+
+    <ion-list class="detail detail-list">
+      <ion-item>
+        <ion-label>
+          <span class="property-name">{{ CONSTANTS.LABELS.promptId }}</span>
+          <span text-wrap class="property-value">{{ driver.details.promptId }}</span>
+        </ion-label>
+      </ion-item>
+
+      <ion-item *ngIf="areFieldsAccessible">
+        <ion-label>
+          <span class="property-name">{{ CONSTANTS.LABELS.cellPhoneNumber }}</span>
+          <span text-wrap class="property-value">{{ driver.details.cellPhoneNumber }}</span>
+        </ion-label>
+      </ion-item>
+
+      <ion-item *ngIf="areFieldsAccessible">
+        <ion-label>
+          <span class="property-name">{{ CONSTANTS.LABELS.emailAddress }}</span>
+          <span text-wrap class="property-value">{{ driver.details.emailAddress }}</span>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+  </ion-card>
+
+  <ion-card id="card-actions">
+    <ion-card-header>{{ CONSTANTS.actions }}</ion-card-header>
+
+    <ion-list id="action-list" padding>
+      <button ion-button icon-left block>
+        <ion-icon class="fa fa-exchange"></ion-icon>
+        {{ CONSTANTS.viewTransactions }}
+      </button>
+    </ion-list>
+  </ion-card>
+</ion-content>
