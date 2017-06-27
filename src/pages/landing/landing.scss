@@ -23,7 +23,11 @@ page-landing {
 
       ion-label {
         width: 100%;
-        //margin-right: -8px;
+
+        @at-root .ios & {
+          //fix for Safari cutting off right-hand edge of image
+          margin-right: -8px;
+        }
       }
     }
 
