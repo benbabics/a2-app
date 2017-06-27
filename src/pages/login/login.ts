@@ -2,7 +2,7 @@ import { WexNavBar, WexAppBannerController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef } from "@angular/core";
-import { NavParams, Platform, Content, NavController, App } from "ionic-angular";
+import { NavParams, Platform, Content, NavController } from "ionic-angular";
 import { Page } from "../page";
 import {
   SessionManager,
@@ -57,8 +57,7 @@ export class LoginPage extends Page {
     private localStorageService: LocalStorageService,
     private dialogs: Dialogs,
     private appBannerController: WexAppBannerController,
-    private keyboard: Keyboard,
-    private app: App
+    private keyboard: Keyboard
   ) {
     super("Login");
   }
@@ -204,7 +203,7 @@ export class LoginPage extends Page {
 
   ionViewDidEnter() {
     this.keyboard.disableScroll(true);
-    
+
     window.addEventListener("native.keyboardshow", this._onKeyboardOpen);
     window.addEventListener("native.keyboardhide", this._onKeyboardClose);
 
