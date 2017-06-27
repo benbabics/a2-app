@@ -29,12 +29,7 @@ export class MyApp {
   }
 
   private onSessionChange(session) {
-    if (session) {
-      this.statusBar.overlaysWebView(false);
-    }
-    else {
-      this.statusBar.overlaysWebView(true);
-    }
+    this.statusBar.overlaysWebView(!!session);
   }
 
   public get hasBannerContent(): boolean {
