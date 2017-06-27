@@ -93,7 +93,8 @@
         }
 
         function canChangeStatus() {
-            return USER_APPLICATION.isDistributor ? !vm.card.isSuspended() : !vm.card.isTerminated();
+            if ( USER_APPLICATION.isDistributor ) { return vm.card.isActive(); }
+            return !vm.card.isTerminated();
         }
 
         /**
