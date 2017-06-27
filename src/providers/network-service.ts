@@ -14,18 +14,23 @@ export class NetworkService {
     @Value("GLOBAL_NOTIFICATIONS.networkError") private networkError: string;
 
     constructor(private wexAppSnackbarController: WexAppSnackbarController, private network: Network) {
-        let toastContainer: {toast: Toast};
+        let toast: Toast;
         this.network.onDisconnect().subscribe(() => {
-            toastContainer = {
-            toast: this.wexAppSnackbarController.create({
-                message: this.networkError,
-                position: "top",
-                cssClass: "red"
-            })};
-            toastContainer.toast.present();});
-        this.network.onConnect().subscribe(() => toastContainer.toast.dismiss());
-
-     }
+            if (!_.isNil(toast)) {
+                toast.dismiss();
+            }
+            toast = this.wexAppSnackbarController.create({
+                    message: this.networkError,
+                    position: "top",
+                    cssClass: "red"
+                });
+            toast.present();
+        });
+        this.network.onConnect().subscribe(() => {
+            toast.dismiss();
+            toast = null;
+        });
+    }
 
     private isServerConnectionError(response: Response): boolean {
         return _.includes(NetworkService.SERVER_ERROR_CODES, _.get(response, "status"));
