@@ -390,7 +390,7 @@
                 }
             },
             "title":                     "Driver Details",
-            "actionStatusTitle":         "Change Driver Status",
+            "actionStatusTitle":         "Select Driver Status",
             "actionStatusCancel":        "Cancel",
             "bannerStatusChangeSuccess": "Status change successful.",
             "bannerStatusChangeFailure": "Status change failed. Please try again.",
