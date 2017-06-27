@@ -66,6 +66,7 @@ import {
   WexIfPlatformIosDirective
 } from "../directives";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { Network } from "@ionic-native/network";
 
 @NgModule({
   declarations: [
@@ -178,7 +179,8 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
       useClass: DefaultSessionInfoRequestors
     },
     SessionCache,
-    NetworkService
+    NetworkService,
+    Network
   ]
 })
 export class AppModule {}
