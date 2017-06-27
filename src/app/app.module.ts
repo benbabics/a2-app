@@ -162,7 +162,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     {
       provide: Http,
       useClass: SecureHttp,
-      deps: [XHRBackend, RequestOptions]
+      deps: [XHRBackend, RequestOptions, NetworkService]
     },
     SessionManager,
     NavBarController,
