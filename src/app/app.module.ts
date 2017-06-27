@@ -9,6 +9,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
 import { ChartsModule } from "ng2-charts/ng2-charts";
 import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
+import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
@@ -72,6 +73,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     //----------------------
     MyApp,
     LoginPage,
+    FingerprintAuthenticationTermsPage,
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
@@ -127,6 +129,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
   entryComponents: [
     MyApp,
     LoginPage,
+    FingerprintAuthenticationTermsPage,
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
