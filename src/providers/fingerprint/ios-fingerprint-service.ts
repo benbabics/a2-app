@@ -34,6 +34,7 @@ interface InternalIosFingerprintService {
 }
 
 declare var window: {
+  cordova,
   plugins: {
     touchid: InternalIosFingerprintService
   }
@@ -54,7 +55,7 @@ export class IosFingerprintService extends NativeFingerprintService {
   constructor(secureStorage: SecureStorage, platform: Platform, wexPlatform: WexPlatform) {
     super(secureStorage);
 
-    if (wexPlatform.isIos()) {
+    if (wexPlatform.isIos() && window.cordova) {
       platform.ready().then(() => this.cordovaPlugin = window.plugins.touchid);
     }
   }

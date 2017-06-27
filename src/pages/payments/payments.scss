@@ -1,3 +1,5 @@
+@import "../../styles/payment";
+
 page-payments {
 
   wex-list-header {
@@ -8,8 +10,6 @@ page-payments {
   }
 
   wex-list-item {
-    .payment-amount {
-      text-align: right;
-    }
+    @extend %wex-list-item-payment;
   }
 }

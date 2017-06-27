@@ -1,3 +1,6 @@
+@import "../../styles/card";
+@import "../../styles/driver";
+
 page-transactions {
 
   wex-static-list-page-header:not(.active) {
@@ -9,6 +12,14 @@ page-transactions {
 
   .content {
     @extend %wex-list-item-content;
+
+    &.driver-content {
+      @extend %wex-list-item-driver;
+    }
+
+    &.card-content {
+      @extend %wex-list-item-card;
+    }
   }
 
   .transaction-amount {
