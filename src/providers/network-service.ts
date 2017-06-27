@@ -8,8 +8,7 @@ import { Value } from "../decorators/value";
 @Injectable()
 export class NetworkService {
     public static readonly SERVER_ERROR_CODES = [404, 500, 503];
-    @Value("GLOBAL_NOTIFICATIONS.networkError") private notification: string;
-    @Value("BUTTONS.DISMISS") private dismiss: string;
+    @Value("GLOBAL_NOTIFICATIONS.serverConnectionError") private notification: string;
 
     constructor(private wexAppSnackbarController: WexAppSnackbarController) {  }
 
