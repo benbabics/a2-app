@@ -14,10 +14,6 @@ export class WexAppSnackbarController extends ToastController {
     }
   }
 
-  public uniqueToast(options: ToastOptions) {
-    super.create(options).present();
-  }
-
   public presentToast (text: string, color?: string, closeAction?: (data: any, role: string) => void) {
     let options = this.standardOptions;
     options.message = text;

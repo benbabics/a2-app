@@ -27,11 +27,11 @@ export class CardsDetailsPage extends DetailsPage {
   public set reissued(reissued: boolean) {
     this._reissued = reissued;
     if (reissued) {
-      this.wexAppSnackbarController.uniqueToast({
+      this.wexAppSnackbarController.create({
         message: this.CONSTANTS.reissueMessage,
         duration: this.CONSTANTS.reissueMessageDuration,
         position: 'top'
-      });
+      }).present();
     }
   }
   public get reissued(): boolean {
