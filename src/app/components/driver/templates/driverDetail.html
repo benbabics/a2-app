@@ -11,7 +11,7 @@
             {{ vm.driver.firstName | lowercase }} {{ vm.driver.lastName | lowercase }}
         </div>
 
-        <div class="content-detail-status">{{ vm.driver.status }}</div>
+        <div class="content-detail-status">{{ vm.driver.getStatusDisplayName() }}</div>
 
         <div class="content-controls" ng-if="!vm.driver.shared">
             <button class="button-primary button-control"

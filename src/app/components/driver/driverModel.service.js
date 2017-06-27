@@ -4,7 +4,8 @@
     var DriverModel = function (_, moment, globals) {
 
         // Constants
-        const DRIVER_STATUS = globals.CARD.STATUS;
+        const DRIVER_STATUS = globals.CARD.STATUS,
+              DRIVER_STATUS_DISPLAY_MAPPINGS = globals.DRIVER.DISPLAY_MAPPINGS.STATUS;
 
         function DriverModel() {
             angular.extend(this, _.zipObject([
@@ -24,6 +25,17 @@
 
             if (!_.isNil(driverResource.statusDate)) {
                 this.statusDate = moment(driverResource.statusDate).toDate();
+            }
+        };
+
+        DriverModel.prototype.getStatusDisplayName = function () {
+            var status = this.status ? this.status.toUpperCase() : null;
+
+            if (status && _.has(DRIVER_STATUS_DISPLAY_MAPPINGS, status)) {
+                return DRIVER_STATUS_DISPLAY_MAPPINGS[status];
+            }
+            else {
+                return DRIVER_STATUS_DISPLAY_MAPPINGS.UNKNOWN;
             }
         };
 
