@@ -2,6 +2,7 @@ import * as _ from "lodash";
 import { Injectable } from "@angular/core";
 import { Response } from "@angular/http";
 import { Network } from "@ionic-native/network";
+import { Toast } from "ionic-angular";
 
 import { WexAppSnackbarController } from "../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
 import { Value } from "../decorators/value";
@@ -13,7 +14,17 @@ export class NetworkService {
     @Value("GLOBAL_NOTIFICATIONS.networkError") private networkError: string;
 
     constructor(private wexAppSnackbarController: WexAppSnackbarController, private network: Network) {
-        this.network.onDisconnect().subscribe(() => this.wexAppSnackbarController.presentToast(this.networkError, "red"));
+        let toastContainer: {toast: Toast};
+        this.network.onDisconnect().subscribe(() => {
+            toastContainer = {
+            toast: this.wexAppSnackbarController.create({
+                message: this.networkError,
+                position: "top",
+                cssClass: "red"
+            })};
+            toastContainer.toast.present();});
+        this.network.onConnect().subscribe(() => toastContainer.toast.dismiss());
+
      }
 
     private isServerConnectionError(response: Response): boolean {
