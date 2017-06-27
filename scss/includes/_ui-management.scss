@@ -196,7 +196,7 @@
         border-bottom-style: solid;
         font-family: 'open_sanssemibold';
         font-size: 14px;
-        text-transform: capitalize;
+        text-transform: capitalize !important;
 
         &.activated { border-color: transparent; }
 
