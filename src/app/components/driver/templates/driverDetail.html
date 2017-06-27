@@ -1,4 +1,13 @@
-<ion-view view-title="{{ ::vm.config.title }}" wex-hide-back-button="false" class="page-drivers-detail">
+<ion-view class="page-drivers-detail" hide-nav-bar="true">
+    <!-- Header bar -->
+    <ion-header-bar class="bar bar-wex">
+        <div class="buttons">
+            <wex-back-button back-state="driver.list"></wex-back-button>
+        </div>
+
+        <h1 class="title">{{ ::vm.config.title }}</h1>
+    </ion-header-bar>
+
     <wex-notification-bar class="bar-success"
                           ng-if="vm.displayStatusChangeBannerSuccess"
                           wex-toast-timer
