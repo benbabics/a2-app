@@ -26,13 +26,7 @@ export class CardsDetailsPage extends DetailsPage {
   private _reissued: boolean;
   public set reissued(reissued: boolean) {
     this._reissued = reissued;
-    if (reissued) {
-      this.wexAppSnackbarController.create({
-        message: this.CONSTANTS.reissueMessage,
-        duration: this.CONSTANTS.reissueMessageDuration,
-        position: 'top'
-      }).present();
-    }
+    this.reissuedSnackbar(reissued);
   }
   public get reissued(): boolean {
     return this._reissued;
@@ -48,6 +42,16 @@ export class CardsDetailsPage extends DetailsPage {
 
     this.card = this.navParams.get(CardsDetailsNavParams.Card);
     this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);
+  }
+
+  private reissuedSnackbar(reissued: Boolean) {
+    if (reissued) {
+      this.wexAppSnackbarController.create({
+        message: this.CONSTANTS.reissueMessage,
+        duration: this.CONSTANTS.reissueMessageDuration,
+        position: 'top',
+      }).present();
+    }
   }
 
   public get canChangeStatus(): boolean {
