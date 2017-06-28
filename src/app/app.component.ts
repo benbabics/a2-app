@@ -15,7 +15,7 @@ import "chart.js";
 })
 export class MyApp {
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private sessionManager: SessionManager, private wexAppBannerController: WexAppBannerController) {
+  constructor(platform: Platform, splashScreen: SplashScreen, private statusBar: StatusBar, private sessionManager: SessionManager, private wexAppBannerController: WexAppBannerController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -24,6 +24,12 @@ export class MyApp {
       splashScreen.hide();
       this.sessionManager.restore();
     });
+
+    sessionManager.sessionStateObserver.subscribe(session => this.onSessionChange(session));
+  }
+
+  private onSessionChange(session) {
+    this.statusBar.overlaysWebView(!session);
   }
 
   public get hasBannerContent(): boolean {

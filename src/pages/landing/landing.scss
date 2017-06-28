@@ -15,13 +15,24 @@ page-landing {
       @include flexbox();
       @include flex-direction(row);
       @include align-items(flex-start);
+      @include justify-content(center);
     }
 
     #brand-logo {
       width: 50%;
+
+      ion-label {
+        width: 100%;
+
+        @at-root .ios & {
+          //fix for Safari cutting off right-hand edge of image
+          margin-right: -8px;
+        }
+      }
     }
 
     #company-name {
+      @include flex-grow(1);
       font-weight: bold;
       font-size: $h6-font-size;
       color: color($colors, dark-gray);

@@ -1,3 +1,5 @@
+@import "../../styles/card";
+
 page-cards {
 
   #items-list {
@@ -17,6 +19,10 @@ page-cards {
         color: color($colors, danger-dark);
         background-color: color($colors, danger);
       }
+    }
+
+    wex-list-item {
+      @extend %wex-list-item-card;
     }
   }
 }

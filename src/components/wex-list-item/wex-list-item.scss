@@ -4,8 +4,13 @@
   @include justify-content(space-between);
   @include align-items(center);
 
-  & > * {
+  > * {
+    @include flex-basis(0);
     @include flex-grow(1);
+
+    &[content-expand] {
+      @include flex-grow(2);
+    }
   }
 }
 

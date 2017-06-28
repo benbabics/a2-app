@@ -1,0 +1,12 @@
+@import "../../styles/driver";
+
+page-drivers {
+
+  wex-list-header .field-driver.id {
+    text-align: right;
+  }
+
+  wex-list-item {
+    @extend %wex-list-item-driver;
+  }
+}
