@@ -191,7 +191,7 @@ wex-notification-bar {
  ----------------------------------------------------------**/
 .button {
 
-  :not(.button-bar) > & {
+  :not(.button-bar) > &:not(.action-sheet-option) {
     border: none;
   }
   &.activated {
