@@ -37,7 +37,8 @@ export class CardsDetailsPage extends DetailsPage {
 
   public get canChangeStatus(): boolean {
     // Rules in MOBACCTMGT-1135 AC #1
-    return this.session.user.isDistributor ? !this.card.isSuspended : !this.card.isTerminated;
+    if ( this.session.user.isDistributor ) { return this.card.isActive; }
+    return !this.card.isTerminated;
   }
 
   public get canReissue(): boolean {
