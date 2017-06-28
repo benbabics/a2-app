@@ -2,7 +2,7 @@ import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component } from "@angular/core";
 import { NavParams, App } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
-import { Card, CardStatus } from "@angular-wex/models";
+import { Card } from "@angular-wex/models";
 import { SessionManager } from "../../../providers";
 import { WexAppSnackbarController } from "../../../components";
 
@@ -46,7 +46,7 @@ export class CardsDetailsPage extends DetailsPage {
 
   private reissuedSnackbar(reissued: Boolean) {
     if (reissued) {
-      this.wexAppSnackbarController.create({
+      this.wexAppSnackbarController.createQueued({
         message: this.CONSTANTS.reissueMessage,
         duration: this.CONSTANTS.reissueMessageDuration,
         position: 'top',

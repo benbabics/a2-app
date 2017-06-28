@@ -1,32 +1,65 @@
+import * as _ from "lodash";
 import { Injectable } from "@angular/core";
-import { ToastController, ToastOptions } from "ionic-angular";
-import { Value } from "../../decorators/value";
+import { ToastController, ToastOptions, Toast, NavOptions } from "ionic-angular";
+import { AppConstants } from "../../app/app.constants";
+
+const Constants = AppConstants();
+
+export class QueuedToast {
+
+  constructor(private toast: Toast, private controller: WexAppSnackbarController) { }
+
+  public dismiss(data?: any, role?: string, navOptions?: NavOptions) {
+    return this.toast.dismiss(data, role, navOptions);
+  }
+
+  public onDidDismiss(callback: (data: any, role: string) => void) {
+    return this.toast.onDidDismiss(callback);
+  }
+
+  public onWillDismiss(callback: (data: any, role: string) => void) {
+    return this.toast.onWillDismiss(callback);
+  }
+
+  public present(navOptions?: NavOptions): Promise<any> {
+    return this.controller.presentQueued(this.toast, navOptions);
+  }
+}
 
 @Injectable()
 export class WexAppSnackbarController extends ToastController {
-  @Value("BUTTONS.DISMISS") private dismiss: string;
 
-  public get standardOptions(): ToastOptions {
-    return {
-      position: "top",
-      showCloseButton: true,
-      closeButtonText: this.dismiss,
-    }
+  private _toastDisplaySychronizer: Promise<any> | null;
+
+  public create(options: ToastOptions): Toast {
+    return super.create(_.merge({}, WexAppSnackbarController.DefaultOptions, options));
   }
 
-  public presentToast (text: string, color?: string, closeAction?: (data: any, role: string) => void) {
-    let options = this.standardOptions;
-    options.message = text;
-
-    // color classes found in app.scss
-    if (color) {
-      options.cssClass = color;
-    }
-
-    let toast = super.create(options);
-    if (closeAction) {
-      toast.onDidDismiss(closeAction)
-    }
-    toast.present();
+  public createQueued(options: ToastOptions): QueuedToast {
+    return new QueuedToast(this.create(options), this);
   }
+
+  public get toastDisplaySychronizer(): Promise<any> {
+    return this._toastDisplaySychronizer || Promise.resolve();
+  }
+
+  public presentQueued(toast: Toast, navOptions?: NavOptions): Promise<any> {
+    let presentPromise = this.toastDisplaySychronizer.then(() => toast.present(navOptions));
+
+    // Add a wait for this toast message to the queue
+    this._toastDisplaySychronizer = presentPromise
+      .then(() => new Promise((resolve, reject) => toast.onDidDismiss(resolve)))
+      .then(() => this._toastDisplaySychronizer = null);
+
+    return presentPromise;
+  }
+}
+
+export namespace WexAppSnackbarController {
+
+  export const DefaultOptions: ToastOptions = {
+    position: "top",
+    showCloseButton: true,
+    closeButtonText: Constants.BUTTONS.DISMISS,
+  };
 }

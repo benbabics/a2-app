@@ -6,4 +6,4 @@ export * from "./secure-storage";
 export * from "./session-cache";
 export * from "./session-manager";
 export * from "./nav-bar-controller";
-export * from "./network-service";
+export * from "./network-status";
