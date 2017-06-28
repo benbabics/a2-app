@@ -47,7 +47,7 @@ import {
   SessionInfoRequestors,
   DefaultSessionInfoRequestors,
   SessionCache,
-  NetworkService
+  NetworkStatus
 } from "../providers";
 import { WexCurrency, WexDate, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -158,12 +158,13 @@ import { Network } from "@ionic-native/network";
     AppVersion,
     InAppBrowser,
     Keyboard,
+    Network,
     //# app providers
     //----------------------
     {
       provide: Http,
       useClass: SecureHttp,
-      deps: [XHRBackend, RequestOptions, NetworkService]
+      deps: [XHRBackend, RequestOptions, NetworkStatus]
     },
     SessionManager,
     NavBarController,
@@ -179,8 +180,7 @@ import { Network } from "@ionic-native/network";
       useClass: DefaultSessionInfoRequestors
     },
     SessionCache,
-    NetworkService,
-    Network
+    NetworkStatus
   ]
 })
 export class AppModule {}

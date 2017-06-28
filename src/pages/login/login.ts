@@ -160,7 +160,10 @@ export class LoginPage extends Page {
 
           console.error(error instanceof Response ? error.json().error : error);
 
-          this.appSnackbarController.presentToast(this.getLoginErrorDisplayText(errorCode), "red");
+          this.appSnackbarController.createQueued({
+            message: this.getLoginErrorDisplayText(errorCode),
+            cssClass: "red"
+          }).present();
         });
     }
   }
