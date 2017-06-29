@@ -153,9 +153,10 @@
     @extend .bar-subheader;
 
     position: relative;
-    flex-direction:  column;
-    justify-content: flex-start;
-    align-items:     center;
+    @include flexbox();
+    @include flex-direction(column);
+    @include justify-content();
+    @include align-items(center);
     padding-top:    $button-height - 10px;
     padding-bottom: $button-height / 2;
     height: $subheader-height;
@@ -164,7 +165,8 @@
 
     .content-detail-title,
     .content-detail-status {
-      flex-grow: 1;
+      padding: 10px;
+      @include flex-grow(1);
       font-size: 27px;
       text-align: center;
     }
