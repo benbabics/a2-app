@@ -48,11 +48,11 @@
         }
 
         function goToContactUs() {
-            return Navigation.goToContactUs();
+            return Navigation.goToContactUs().then( closeMenu );
         }
 
         function goToHome() {
-            return Navigation.goToHome();
+            return Navigation.goToHome().then( closeMenu );
         }
 
         function goToLogOut() {
@@ -68,7 +68,7 @@
         }
 
         function goToSettings() {
-            return Navigation.goToSettings();
+            return Navigation.goToSettings().then( closeMenu );
         }
 
         function goToNotifications() {
@@ -76,11 +76,11 @@
         }
 
         function goToPrivacyPolicy() {
-            return Navigation.goToPrivacyPolicy();
+            return Navigation.goToPrivacyPolicy().then( closeMenu );
         }
 
         function goToTermsOfUse() {
-            return Navigation.goToTermsOfUse();
+            return Navigation.goToTermsOfUse().then( closeMenu );
         }
 
         function goToTransactionActivity() {
