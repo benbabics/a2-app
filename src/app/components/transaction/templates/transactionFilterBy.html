@@ -10,7 +10,7 @@
 
     <div class="bar bar-subheader bar-positive" ng-switch="vm.params.filterBy">
         <h2 ng-switch-when="card"   class="title">***{{ ::vm.filterDetails.embossedCardNumber }}</h2>
-        <h2 ng-switch-when="driver" class="title">{{ ::vm.filterDetails.firstName }} {{ ::vm.filterDetails.lastName }}</h2>
+        <h2 ng-switch-when="driver" class="title">{{ ::vm.filterDetails.firstName | lowercase }} {{ ::vm.filterDetails.lastName | lowercase }}</h2>
     </div>
 
     <ion-content class="has-subheader" ion-sticky overflow-scroll="false">

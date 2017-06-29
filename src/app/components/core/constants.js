@@ -208,6 +208,9 @@
             "labelReissueCard":          "Reissue Card",
             "labelTransactions":         "Transactions",
             "phoneAndEmailApplications": ["WOL_NP", "DISTRIBUTOR"],
+            "alertPopupMessages" : {
+                "classicMultipleReissues": "This card has been reissued too many times."
+            },
             "statuses": [
                 { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive" },
                 { "id": "SUSPENDED",  "label": "Suspended",  "trackingId": "statusOptionSuspended" },
@@ -298,9 +301,6 @@
             "actionStatusTitleShipping": "Select Shipping Method",
             "actionStatusTitleReason":   "Select Reason",
             "actionStatusCancel":  "Cancel",
-            "alertPopupMessages" : {
-                "classicMultipleReissues": "This card has been reissued too many times."
-            },
             "confirmationPopup"  : {
                 "message": "Are you sure you want to reissue this card?",
                 "buttons": [ "No", "Yes" ]

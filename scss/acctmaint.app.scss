@@ -884,3 +884,7 @@ $fingerprint-tc-footer-height: 60px;
         padding: 8px;
     }
 }
+
+.bar-subheader .title {
+  text-transform: capitalize;
+}
