@@ -12,9 +12,9 @@
   version "1.3.5"
   resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#822cbe20d69"
 
-"@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64":
-  version "1.0.1"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64"
+"@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#f6a75f8":
+  version "1.1.2"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#f6a75f8"
 
 "@angular/animations":
   version "4.1.0"
@@ -181,6 +181,10 @@
     localforage "~1.4.2"
     localforage-cordovasqlitedriver "~1.5.0"
 
+"@types/accounting":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@types/accounting/-/accounting-0.4.0.tgz#bde23cc5d89660d2930e71810dd9c7cad6acdcdc"
+
 "@types/localforage@0.0.30":
   version "0.0.30"
   resolved "https://registry.yarnpkg.com/@types/localforage/-/localforage-0.0.30.tgz#3d60a6bf6dda38e3f8a469611598379f1f649509"
@@ -213,6 +217,13 @@ accepts@~1.3.3:
   dependencies:
     mime-types "~2.1.11"
     negotiator "0.6.1"
+
+accounting-js:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/accounting-js/-/accounting-js-1.1.1.tgz#7fe4b3f70c01ebe0b85c02c5f107f1393b880c9e"
+  dependencies:
+    is-string "^1.0.4"
+    object-assign "^4.0.1"
 
 acorn-dynamic-import@^2.0.0:
   version "2.0.2"
@@ -1906,6 +1917,11 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
+"git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#ca40109":
+  name "@angular-wex/api-providers"
+  version "1.2.1"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#ca40109"
+
 glob-base@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/glob-base/-/glob-base-0.3.0.tgz#dbb164f6221b1c0b1ccf82aea328b497df0ea3c4"
@@ -2285,6 +2301,10 @@ is-regex@^1.0.3:
   resolved "https://registry.yarnpkg.com/is-regex/-/is-regex-1.0.4.tgz#5517489b547091b0930e095654ced25ee97e9491"
   dependencies:
     has "^1.0.1"
+
+is-string@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/is-string/-/is-string-1.0.4.tgz#cc3a9b69857d621e963725a24caeec873b826e64"
 
 is-symbol@^1.0.1:
   version "1.0.1"
