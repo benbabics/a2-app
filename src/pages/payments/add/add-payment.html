@@ -14,26 +14,41 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <section class="payment-invoice-details">
-    <wex-list-item class="invoice-header">
-      <span>Invoice Number {{ invoiceSummary.details.invoiceNumber || "N/A" }}</span>
-      <span>Date {{ invoiceSummary.paymentDueDate | wexDate }}</span>
-    </wex-list-item>
+<ion-content wexKeyboardAware>
+  <wex-invoice-display [invoiceSummary]="invoiceSummary" class="payment-invoice-details">
+  </wex-invoice-display >
 
-    <ion-list class="details-list">
-      <wex-list-item>
-        <span>Current Balance</span>
-        <span>{{ invoiceSummary.details.currentBalance | wexCurrency }}</span>
-      </wex-list-item>
-      <wex-list-item>
-        <span>Statement Balance</span>
-        <span>{{ invoiceSummary.details.statementBalance | wexCurrency }}</span>
-      </wex-list-item>
-    </ion-list>
-  </section>
+  <div id="input-wrapper">
+    <div padding-right class="nav-button" id="back-button-wrapper">
+      <button padding mini ion-fab id="back-button" color="light-gray">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </div>
 
-  <ion-card>
-    <ion-card-content>IM MAKIN A PAYMENT HERE </ion-card-content>
-  </ion-card>
+    <form #form="ngForm" id="flow-form" novalidate>
+      <ion-item>
+        <ion-label stacked>Payment Amount</ion-label>
+        <ion-input autofocus
+                   required
+                   wexValidateCurrency
+                   name="paymentAmount"
+                   type="tel"
+                   [wexValidateCurrencyOptions]="validateCurrencyOptions"
+                   [(ngModel)]="paymentAmount"
+                   (focus)="focused = true"
+                   (blur)="focused = false">
+        </ion-input>
+      </ion-item>
+    </form>
+
+    <div padding-left class="nav-button" id="forward-button-wrapper">
+      <button mini
+              ion-fab
+              id="forward-button"
+              [disabled]="!form.valid"
+              [color]="form.valid ? 'success-dark' : 'danger-dark'">
+        <ion-icon name="arrow-forward"></ion-icon>
+      </button>
+    </div>
+  </div>
 </ion-content>
