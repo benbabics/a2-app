@@ -29,7 +29,8 @@ import {
   WexAppBanner,
   WexSnackbar,
   WexStaticListPageHeader,
-  WexStaticListPageContent
+  WexStaticListPageContent,
+  WexInvoiceDisplay
 } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
@@ -63,10 +64,12 @@ import { ContactUsPage } from "../pages/contact-us/contact-us";
 import {
   WexIfPlatformDirective,
   WexIfPlatformAndroidDirective,
-  WexIfPlatformIosDirective
+  WexIfPlatformIosDirective,
+  WexKeyboardAware
 } from "../directives";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AddPaymentPage } from "../pages/payments/add/add-payment";
+import { AngularWexValidatorsModule } from "@angular-wex/validators";
 
 @NgModule({
   declarations: [
@@ -108,7 +111,9 @@ import { AddPaymentPage } from "../pages/payments/add/add-payment";
     WexIfPlatformDirective,
     WexIfPlatformAndroidDirective,
     WexIfPlatformIosDirective,
-    ContactUsPage
+    ContactUsPage,
+    WexInvoiceDisplay,
+    WexKeyboardAware
   ],
   imports: [
     //# Angular
@@ -121,6 +126,7 @@ import { AddPaymentPage } from "../pages/payments/add/add-payment";
     //# WEX
     //----------------------
     ApiProviders.withConstants(GetCurrentEnvironmentConstants),
+    AngularWexValidatorsModule,
     //# third party dependencies
     //----------------------
     ChartsModule,

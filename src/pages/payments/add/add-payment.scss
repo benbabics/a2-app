@@ -2,31 +2,36 @@ page-add-payment {
 
   &.ion-page ion-content {
     background: color($colors, white);
+
+    .scroll-content {
+      @include flexbox();
+      @include flex-dir(column);
+
+      padding-bottom: 0 !important;
+    }
   }
 
-  .payment-invoice-details {
-    background: color($colors, white);
+  .payment-invoice-details .invoice-display {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  }
 
-    .invoice-header {
+  #input-wrapper {
+    @include flex-shrink(0);
+    @include flex-grow(1);
+    @include flexbox();
+    @include flex-dir(row);
+    @include align-items(center);
+    @include justify-content(center);
 
-      ion-label > * {
-        font-weight: bold;
-      }
+    #flow-form {
+      @include flex-grow(1);
+
+      padding: 3rem;
     }
 
-    .details-list {
-
-      wex-list-item .item .item-inner ion-label {
-        padding: 0.5rem 0;
-
-        span:first-child {
-          text-align: left;
-        }
-
-        span:last-child {
-          text-align: right;
-        }
-      }
+    .nav-button {
+      @include flex-grow(0);
+      @include flex-shrink(0);
     }
   }
 }

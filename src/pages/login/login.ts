@@ -204,7 +204,7 @@ export class LoginPage extends Page {
 
   ionViewDidEnter() {
     this.keyboard.disableScroll(true);
-    
+
     window.addEventListener("native.keyboardshow", this._onKeyboardOpen);
     window.addEventListener("native.keyboardhide", this._onKeyboardClose);
 

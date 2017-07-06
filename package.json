@@ -32,10 +32,10 @@
         "postinstall": "yarn ionic:prepare"
     },
     "dependencies": {
-        "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#4903dea",
+        "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#ca40109",
         "@angular-wex/mocks": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#b30796baed3",
         "@angular-wex/models": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#822cbe20d69",
-        "@angular-wex/validators": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64",
+        "@angular-wex/validators": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#f6a75f8",
         "@angular/animations": "4.1.2",
         "@angular/common": "4.1.2",
         "@angular/compiler": "4.1.2",
@@ -54,6 +54,7 @@
         "@ionic-native/splash-screen": "3.6.1",
         "@ionic-native/status-bar": "3.6.1",
         "@ionic/storage": "2.0.1",
+        "accounting-js": "^1.1.1",
         "angular-2-local-storage": "^1.0.1",
         "com.phonegap.plugins.nativesettingsopener": "http://bitbucket.int.wrightexpress.com/scm/mob/cordova-open-native-settings.git#6ff9dec8de1",
         "cordova-ios": "^4.4.0",
@@ -87,6 +88,7 @@
         "@ionic/app-scripts": "1.3.7",
         "@ionic/cli-plugin-cordova": "1.2.0",
         "@ionic/cli-plugin-ionic-angular": "1.2.0",
+        "@types/accounting": "^0.4.0",
         "@types/lodash": "^4.14.61",
         "@types/promise.prototype.finally": "^2.0.0",
         "copyfiles": "^1.2.0",
