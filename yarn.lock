@@ -8,65 +8,57 @@
   version "1.0.1"
   resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#b30796baed3"
 
-"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#424e6273c87":
+"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#5830caf830f":
   version "1.3.4"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#424e6273c87"
-
-"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#edf45b841db":
-  version "1.3.1"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#edf45b841db"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#5830caf830f"
 
 "@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64":
   version "1.0.1"
   resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64"
 
-"@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git":
-  version "1.0.1"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#9e868986b64c3e37c3a82dd38c8c5efb638094bf"
-
 "@angular/animations":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-4.1.0.tgz#97b642aee01b5406e03ec65e499342ba91e2dd38"
 
-"@angular/common@4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-4.1.2.tgz#8f6d0496c204210bfe255feb437a72253f06984d"
+"@angular/common@4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-4.1.3.tgz#e7c4791e32131cf74c239428c2a67daab2eef017"
 
-"@angular/compiler-cli@4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-4.1.2.tgz#b65ba8980330c048702aed242a956daf0251f02a"
+"@angular/compiler-cli@4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-4.1.3.tgz#c2362ffdf65756471481f839fab675bcac213f96"
   dependencies:
-    "@angular/tsc-wrapped" "4.1.2"
+    "@angular/tsc-wrapped" "4.1.3"
     minimist "^1.2.0"
     reflect-metadata "^0.1.2"
 
-"@angular/compiler@4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-4.1.2.tgz#09542381162fd8dd962d84559498ce69a05071ea"
+"@angular/compiler@4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-4.1.3.tgz#d2dd30853b0cf4a54758b4a314632c231f9c94c3"
 
-"@angular/core@4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@angular/core/-/core-4.1.2.tgz#37b5c040b9dd37003499aea04319d699e3870596"
+"@angular/core@4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-4.1.3.tgz#285498eb86ab7d0b6f982f8f9f487ef610013b35"
 
-"@angular/forms@4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-4.1.2.tgz#82983e9ec5d0833e7ae14beb8e47dd357c88f490"
+"@angular/forms@4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-4.1.3.tgz#380ab4c3af84c5d1d748c2a7d04151c7dc8e4982"
 
-"@angular/http@4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@angular/http/-/http-4.1.2.tgz#fc378c3330c0410e1fb8aac2546329a6887776e4"
+"@angular/http@4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@angular/http/-/http-4.1.3.tgz#eb9d1c302a0172815f9a573310d9be0bdeb845ae"
 
-"@angular/platform-browser-dynamic@4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-4.1.2.tgz#d241c61792c794bec627ab64b31a66bea22abb9f"
+"@angular/platform-browser-dynamic@4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-4.1.3.tgz#3c13fdcf591d487f6efdc1d46913f280c6d8c2ec"
 
-"@angular/platform-browser@4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-4.1.2.tgz#16e50a8f75b4d675c9e2903e499e0fe4c6a125ac"
+"@angular/platform-browser@4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-4.1.3.tgz#4fa1db5119dd178b315ddae5b329bee1a932a5bd"
 
-"@angular/platform-server@4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-4.1.2.tgz#3ef2206a59fd2d138d267aad101a50d3d806e39c"
+"@angular/platform-server@4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-4.1.3.tgz#bbfae42b15730357751da0e145d686f925a94431"
   dependencies:
     parse5 "^3.0.1"
     xhr2 "^0.1.4"
@@ -77,9 +69,9 @@
   dependencies:
     tsickle "^0.21.0"
 
-"@angular/tsc-wrapped@4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@angular/tsc-wrapped/-/tsc-wrapped-4.1.2.tgz#26cb145a67b9b80f5dda7874c4f0b1f1e173927d"
+"@angular/tsc-wrapped@4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@angular/tsc-wrapped/-/tsc-wrapped-4.1.3.tgz#2d6372c9187bf1621eacd960b94b39c4f95293cd"
   dependencies:
     tsickle "^0.21.0"
 
@@ -87,29 +79,29 @@
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/app-version/-/app-version-3.5.0.tgz#62e01ca7c8178e27db981bf0bcf27533cd64e0b4"
 
-"@ionic-native/core@3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-3.6.1.tgz#fb0dd23f611dbb33ae9bf54c897c46343968aab6"
+"@ionic-native/core@3.12.1":
+  version "3.12.1"
+  resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-3.12.1.tgz#5b7c7a4f5adfc8da0b9197e1843e5893acf66021"
 
-"@ionic-native/dialogs@3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@ionic-native/dialogs/-/dialogs-3.6.1.tgz#952d4f0b0fe61f1742d7ab944ed8d447343fa718"
+"@ionic-native/dialogs@3.12.1":
+  version "3.12.1"
+  resolved "https://registry.yarnpkg.com/@ionic-native/dialogs/-/dialogs-3.12.1.tgz#94f8402273ef41161f7ec12e2f4dbf2ac1bf03e2"
 
-"@ionic-native/in-app-browser@^3.12.1":
+"@ionic-native/in-app-browser@3.12.1":
   version "3.12.1"
   resolved "https://registry.yarnpkg.com/@ionic-native/in-app-browser/-/in-app-browser-3.12.1.tgz#86832da421518b4f65ebf4a99670e4b6af5da1e5"
 
-"@ionic-native/keyboard@3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@ionic-native/keyboard/-/keyboard-3.6.1.tgz#636af1687ce4da16c4e34ca6af43e6e2da570c61"
+"@ionic-native/keyboard@3.12.1":
+  version "3.12.1"
+  resolved "https://registry.yarnpkg.com/@ionic-native/keyboard/-/keyboard-3.12.1.tgz#f748d2186b880adde056ab68486e1f0f33cb884e"
 
-"@ionic-native/splash-screen@3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-3.6.1.tgz#bfbd1debfab35872e224fc11a148113a0854148f"
+"@ionic-native/splash-screen@3.12.1":
+  version "3.12.1"
+  resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-3.12.1.tgz#1c2e468e225d5b90cad7b48fc05505d4c761ace6"
 
-"@ionic-native/status-bar@3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-3.6.1.tgz#7ad7e3c91eaa7ef1385514b14c5a07c0ca8d5785"
+"@ionic-native/status-bar@3.12.1":
+  version "3.12.1"
+  resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-3.12.1.tgz#5b2491b43a3d7e08d65ac0e9fdb1927493e32472"
 
 "@ionic/app-scripts@1.3.7":
   version "1.3.7"
@@ -146,24 +138,24 @@
     ws "1.1.1"
     xml2js "^0.4.17"
 
-"@ionic/cli-plugin-cordova@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-cordova/-/cli-plugin-cordova-1.2.0.tgz#5d0ab0057ac5a142bdd5d504176cae52c698ec30"
+"@ionic/cli-plugin-cordova@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-cordova/-/cli-plugin-cordova-1.4.0.tgz#2d3dd7bbd7321e0f1994b6f1a217176f55145296"
   dependencies:
-    "@ionic/cli-utils" "1.2.0"
+    "@ionic/cli-utils" "1.4.0"
     chalk "^1.1.3"
     xml2js "^0.4.17"
 
-"@ionic/cli-plugin-ionic-angular@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-ionic-angular/-/cli-plugin-ionic-angular-1.2.0.tgz#d77bbfdb32639c9d8d1279902aafa08637eb1dc6"
+"@ionic/cli-plugin-ionic-angular@1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-ionic-angular/-/cli-plugin-ionic-angular-1.3.1.tgz#8985f5a520db97ed6206615464e173d086ecd1ea"
   dependencies:
-    "@ionic/cli-utils" "1.2.0"
+    "@ionic/cli-utils" "1.4.0"
     chalk "^1.1.3"
 
-"@ionic/cli-utils@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-utils/-/cli-utils-1.2.0.tgz#3a8cd62cb636e1f4f2498806c2569cc103bcf077"
+"@ionic/cli-utils@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@ionic/cli-utils/-/cli-utils-1.4.0.tgz#78c70b69c3b98a463aa01ea507d7d01da3dfa675"
   dependencies:
     archiver "^1.3.0"
     chalk "^1.1.3"
@@ -171,6 +163,7 @@
     dargs "^5.1.0"
     inquirer "^3.0.6"
     leek "0.0.24"
+    lodash "^4.17.4"
     minimist "^1.2.0"
     ncp "^2.0.0"
     os-name "^2.0.1"
@@ -180,6 +173,7 @@
     string-width "^2.0.0"
     superagent "^3.5.2"
     uuid "^3.0.1"
+    wrap-ansi "^2.1.0"
 
 "@ionic/storage@2.0.1":
   version "2.0.1"
@@ -1914,6 +1908,11 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
+"git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#e55ba574058":
+  name "@angular-wex/api-providers"
+  version "1.2.0"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#e55ba574058"
+
 glob-base@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/glob-base/-/glob-base-0.3.0.tgz#dbb164f6221b1c0b1ccf82aea328b497df0ea3c4"
@@ -2165,9 +2164,9 @@ invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
 
-ionic-angular@3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/ionic-angular/-/ionic-angular-3.3.0.tgz#81cabbcb3bcc218ec9056cc4fdeaebc264db6f94"
+ionic-angular@3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/ionic-angular/-/ionic-angular-3.5.0.tgz#35bc13ea4f33d308c0c214276b51ae2ec4007bad"
 
 ionic-plugin-keyboard@~2.2.1:
   version "2.2.1"
@@ -3630,9 +3629,9 @@ rx@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/rx/-/rx-4.1.0.tgz#a5f13ff79ef3b740fe30aa803fb09f98805d4782"
 
-rxjs@5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.1.1.tgz#fc48922965bc6c5efbcc0fe46e90a3af64137a7b"
+rxjs@5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.4.0.tgz#a7db14ab157f9d7aac6a56e655e7a3860d39bf26"
   dependencies:
     symbol-observable "^1.0.1"
 
@@ -4355,7 +4354,7 @@ wordwrap@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-0.0.2.tgz#b79669bb42ecb409f83d583cad52ca17eaa1643f"
 
-wrap-ansi@^2.0.0:
+wrap-ansi@^2.0.0, wrap-ansi@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-2.1.0.tgz#d8fc3d284dd05794fe84973caecdd1cf824fdd85"
   dependencies:
@@ -4517,7 +4516,7 @@ zip-stream@^1.1.0:
     lodash "^4.8.0"
     readable-stream "^2.0.0"
 
-zone.js@0.8.10:
-  version "0.8.10"
-  resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.8.10.tgz#6d1b696492c029cdbe808e59e87bbd9491b98aa8"
+zone.js@0.8.12:
+  version "0.8.12"
+  resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.8.12.tgz#86ff5053c98aec291a0bf4bbac501d694a05cfbb"
 
