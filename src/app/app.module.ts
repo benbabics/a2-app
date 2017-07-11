@@ -12,6 +12,7 @@ import { LoginPage } from "../pages/login/login";
 import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
+import { SettingsPage } from '../pages/settings/settings';
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { DriversPage } from './../pages/drivers/drivers';
 import { DriversDetailsPage } from './../pages/drivers/details/drivers-details';
@@ -83,6 +84,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     DriversPage,
     DriversDetailsPage,
     PaymentsPage,
+    SettingsPage,
     TermsOfUsePage,
     PrivacyPolicyPage,
     TransactionsPage,
@@ -139,6 +141,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     DriversPage,
     DriversDetailsPage,
     PaymentsPage,
+    SettingsPage,
     WexNavBar,
     OptionsPopoverPage,
     TermsOfUsePage,
