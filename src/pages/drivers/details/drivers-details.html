@@ -8,7 +8,7 @@
   <ion-card id="card-details">
     <ion-card-header>{{ CONSTANTS.details }}</ion-card-header>
 
-    <div id="controls">
+    <div id="controls" *ngIf="!driver.details.shared">
       <h1 id="driver-name">{{ driver.details.firstName | lowercase }} {{ driver.details.lastName | lowercase }}</h1>
 
       <button ion-button icon-left round large id="driver-status" [color]="statusColor + '-dark'">
