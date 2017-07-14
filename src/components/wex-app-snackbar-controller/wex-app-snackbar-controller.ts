@@ -59,7 +59,7 @@ export namespace WexAppSnackbarController {
 
   export const DefaultOptions: ToastOptions = {
     position: "top",
-    showCloseButton: true,
+    showCloseButton: false,
     closeButtonText: Constants.BUTTONS.DISMISS,
   };
 }

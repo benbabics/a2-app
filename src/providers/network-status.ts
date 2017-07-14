@@ -17,18 +17,17 @@ export class NetworkStatus {
         this.watchConnectionErrors();
     }
 
-    private createErrorToast(message: string): QueuedToast {
-      return this.wexAppSnackbarController.createQueued({
-        message: message,
-        cssClass: "red"
-      });
+    private createErrorToast(message: string, showCloseButton: boolean): QueuedToast {
+      const cssClass = "red";
+
+      return this.wexAppSnackbarController.createQueued({ message, cssClass, showCloseButton });
     }
 
     private watchConnectionErrors() {
       let toast: QueuedToast;
 
       this.network.onDisconnect().subscribe(() => {
-        toast = this.createErrorToast(this.networkError);
+        toast = this.createErrorToast(this.networkError, false);
         toast.present();
       });
 
@@ -46,7 +45,7 @@ export class NetworkStatus {
 
     public displayError(response: Response) {
         if (this.isServerConnectionError(response)) {
-            this.createErrorToast(this.serverError).present();
+            this.createErrorToast(this.serverError, true).present();
         }
     }
 }

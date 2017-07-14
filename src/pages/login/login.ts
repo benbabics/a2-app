@@ -162,7 +162,8 @@ export class LoginPage extends Page {
 
           this.appSnackbarController.createQueued({
             message: this.getLoginErrorDisplayText(errorCode),
-            cssClass: "red"
+            cssClass: "red",
+            showCloseButton: true
           }).present();
         });
     }
