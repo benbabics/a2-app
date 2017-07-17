@@ -52,6 +52,7 @@ export namespace ConstantsInfo {
     //# Date/Time
     DATETIME: {
       DATE_FORMAT: "MM/DD/YYYY",
+      DATE_TIME_FORMAT: "MM/DD/YYYY hh:mm:ss A",
       LOCALE: "en-US"
     },
     //# Fingerprint Authentication

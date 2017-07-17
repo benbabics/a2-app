@@ -51,7 +51,7 @@ import {
   DefaultSessionInfoRequestors,
   SessionCache
 } from "../providers";
-import { WexCurrency, WexDate, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
+import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
@@ -93,6 +93,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     ActionIndicator,
     WexCurrency,
     WexDate,
+    WexDateTime,
     WexNavBar,
     WexList,
     WexListItem,
