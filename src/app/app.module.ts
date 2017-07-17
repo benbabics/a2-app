@@ -59,6 +59,7 @@ import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
 import { PrivacyPolicyPage } from "../pages/privacy-policy/privacy-policy";
 import { AppVersion } from "@ionic-native/app-version";
 import { TransactionsPage } from "../pages/transactions/transactions";
+import { TransactionDetailsPage } from '../pages/transactions/details/transaction-details';
 import { ApiProviders } from "@angular-wex/api-providers";
 import { GetCurrentEnvironmentConstants } from "./app.constants";
 import { ContactUsPage } from "../pages/contact-us/contact-us";
@@ -88,6 +89,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     TermsOfUsePage,
     PrivacyPolicyPage,
     TransactionsPage,
+    TransactionDetailsPage,
     ActionIndicator,
     WexCurrency,
     WexDate,
@@ -146,9 +148,9 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     OptionsPopoverPage,
     TermsOfUsePage,
     TransactionsPage,
+    TransactionDetailsPage,
     ContactUsPage,
-    PrivacyPolicyPage,
-    TransactionsPage
+    PrivacyPolicyPage
   ],
   providers: [
     //# ionic
