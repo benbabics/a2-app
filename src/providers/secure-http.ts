@@ -4,6 +4,7 @@ import { Headers, Http, ConnectionBackend, RequestOptions, RequestOptionsArgs, R
 import { Observable } from "rxjs";
 import { Value } from "../decorators/value";
 import { SessionCache } from "./session-cache";
+import { NetworkStatus } from "./network-status";
 
 @Injectable()
 export class SecureHttp extends Http {
@@ -12,7 +13,7 @@ export class SecureHttp extends Http {
   @Value("APIS.KEYMASTER.ENDPOINTS.TOKEN") private TOKEN: string;
   private TOKEN_URL: string = [this.BASE_URL, this.TOKEN].join("/");
 
-  constructor(backend: ConnectionBackend, defaultOptions: RequestOptions) {
+  constructor(backend: ConnectionBackend, defaultOptions: RequestOptions, private networkStatus: NetworkStatus) {
     super(backend, defaultOptions);
   }
 
@@ -50,6 +51,8 @@ export class SecureHttp extends Http {
       return fn(this.addBearerHeader(options))
         .catch((error: Response | any) => {
           console.log(error);
+          this.networkStatus.displayError(error);
+
           return Observable.throw(error);
         });
     }

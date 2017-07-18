@@ -9,6 +9,7 @@ import { Value } from "../../decorators/value";
 import { Component, ChangeDetectorRef } from "@angular/core";
 import { Dialogs } from "@ionic-native/dialogs";
 import { SecurePage } from "../secure-page";
+import { WexAppSnackbarController } from "../../components";
 
 @Component({
   selector:    "page-settings",
@@ -21,15 +22,14 @@ export class SettingsPage extends SecurePage {
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
   public platformFingerprintLabel: string = this.resolvePlatformConstant( this.CONSTANTS.fingerprintAuthName );
-  public fingerprintProfileCreatedMessage: string;
-  public displayFingerprintProfileCreatedMessage: boolean = false;
 
   constructor(
     sessionManager: SessionManager,
     private fingerprint: Fingerprint,
     private platform: Platform,
     private dialogs: Dialogs,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private wexAppSnackbarController: WexAppSnackbarController
   ) {
     super( "Settings", sessionManager, [ Session.Field.User, Session.Field.ClientSecret ] );
   }
@@ -70,13 +70,17 @@ export class SettingsPage extends SecurePage {
     let id = this.session.user.details.username.toLowerCase(),
         secret = this.session.clientSecret;
 
-    this.fingerprintProfileCreatedMessage = _.template( this.CONSTANTS.createFingerprintProfileMessage )({
+    let fingerprintProfileCreatedMessage = _.template(this.CONSTANTS.createFingerprintProfileMessage)({
       username: id,
       fingerprintAuthName: this.platformFingerprintLabel
     });
 
     return this.fingerprint.verify({ id, secret })
-      .then( () => this.displayFingerprintProfileCreatedMessage = true );
+      .then(() => this.wexAppSnackbarController.createQueued({
+        message: fingerprintProfileCreatedMessage,
+        duration: this.CONSTANTS.createFingerprintProfileDuration,
+        position: "top",
+      }).present());
   }
 
 

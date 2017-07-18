@@ -26,7 +26,8 @@ export namespace ConstantsInfo {
       OK: "Ok",
       CANCEL: "Cancel",
       YES: "Yes",
-      NO: "No"
+      NO: "No",
+      DISMISS: "Dismiss"
     },
     //# Card
     CARD: {
@@ -37,7 +38,13 @@ export namespace ConstantsInfo {
           "STOLEN": "Stolen",
           "UNKNOWN": "Unknown"
         }
-      }
+      },
+    },
+    //# Global error notifications
+    GLOBAL_NOTIFICATIONS: {
+      serverConnectionError: "Could not connect to server. Please try again later.",
+      networkError         : "Lost internet connection."
+
     },
     //# Components
     COMPONENTS: {

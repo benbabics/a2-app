@@ -26,10 +26,7 @@ import {
   WexGreeking,
   WexDetailsView,
   WexInfoCard,
-  WexBanner,
-  WexAppBannerController,
-  WexAppBanner,
-  WexSnackbar,
+  WexAppSnackbarController,
   WexStaticListPageHeader,
   WexStaticListPageContent
 } from "../components";
@@ -49,7 +46,8 @@ import {
   MockFingerprintService,
   SessionInfoRequestors,
   DefaultSessionInfoRequestors,
-  SessionCache
+  SessionCache,
+  NetworkStatus
 } from "../providers";
 import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -69,6 +67,7 @@ import {
   WexIfPlatformIosDirective
 } from "../directives";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { Network } from "@ionic-native/network";
 
 @NgModule({
   declarations: [
@@ -105,9 +104,6 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     WexCardNumberPipe,
     OptionsPopoverPage,
     WexInfoCard,
-    WexBanner,
-    WexAppBanner,
-    WexSnackbar,
     WexSvgPipe,
     WexTrustedHtmlPipe,
     WexIfPlatformDirective,
@@ -165,12 +161,13 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     AppVersion,
     InAppBrowser,
     Keyboard,
+    Network,
     //# app providers
     //----------------------
     {
       provide: Http,
       useClass: SecureHttp,
-      deps: [XHRBackend, RequestOptions]
+      deps: [XHRBackend, RequestOptions, NetworkStatus]
     },
     SessionManager,
     NavBarController,
@@ -180,12 +177,13 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     AndroidFingerprintService,
     IosFingerprintService,
     MockFingerprintService,
-    WexAppBannerController,
+    WexAppSnackbarController,
     {
       provide: SessionInfoRequestors,
       useClass: DefaultSessionInfoRequestors
     },
-    SessionCache
+    SessionCache,
+    NetworkStatus
   ]
 })
 export class AppModule {}

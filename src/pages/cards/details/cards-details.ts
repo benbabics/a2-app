@@ -4,6 +4,7 @@ import { NavParams, App } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
 import { Card } from "@angular-wex/models";
 import { SessionManager } from "../../../providers";
+import { WexAppSnackbarController } from "../../../components";
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -22,17 +23,35 @@ export namespace CardsDetailsNavParams {
 export class CardsDetailsPage extends DetailsPage {
 
   public card: Card;
-  public reissued: boolean;
+  private _reissued: boolean;
+  public set reissued(reissued: boolean) {
+    this._reissued = reissued;
+    this.reissuedSnackbar(reissued);
+  }
+  public get reissued(): boolean {
+    return this._reissued;
+  }
 
   constructor(
     sessionManager: SessionManager,
     public navParams: NavParams,
-    private app: App
+    private app: App,
+    private wexAppSnackbarController: WexAppSnackbarController
   ) {
     super("Cards.Details", sessionManager);
 
     this.card = this.navParams.get(CardsDetailsNavParams.Card);
     this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);
+  }
+
+  private reissuedSnackbar(reissued: Boolean) {
+    if (reissued) {
+      this.wexAppSnackbarController.createQueued({
+        message: this.CONSTANTS.reissueMessage,
+        duration: this.CONSTANTS.reissueMessageDuration,
+        position: 'top',
+      }).present();
+    }
   }
 
   public get canChangeStatus(): boolean {
