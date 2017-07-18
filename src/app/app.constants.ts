@@ -52,6 +52,7 @@ export namespace ConstantsInfo {
     //# Date/Time
     DATETIME: {
       DATE_FORMAT: "MM/DD/YYYY",
+      DATE_TIME_FORMAT: "MM/DD/YYYY hh:mm:ss A",
       LOCALE: "en-US"
     },
     //# Fingerprint Authentication
@@ -554,7 +555,28 @@ export namespace ConstantsInfo {
           ],
           greekedElementCount: 15
         },
-        title: "Transactions"
+        title: "Transactions",
+
+        //# Transaction Details page
+        DETAILS: {
+          title:   "Transaction Details",
+
+          LABELS: {
+            cardNumber: "Card Number",
+            postDate:   "Post Date",
+            transDateTime: "Trans Date/Time",
+            transId:       "Trans ID",
+            grossCost:     "Gross Cost",
+            netCost:       "Net Cost",
+            productDesc:   "Product Description",
+            driverFirstName: "Driver First Name",
+            driverLastName:  "Driver Last Name",
+            assetId:         "Asset ID",
+            odometer:        "Odometer",
+            merchantName:    "Merchant Name",
+            merchantLocation: "Merchant City, ST"
+          }
+        }
       }
     }
   };

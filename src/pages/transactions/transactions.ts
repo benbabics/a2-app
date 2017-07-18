@@ -7,6 +7,7 @@ import { StaticListPage } from "../static-list-page";
 import { Session } from "../../models";
 import { WexGreeking } from "../../components";
 import { SessionCache } from "../../providers";
+import { TransactionDetailsPage } from './details/transaction-details';
 import { Transaction, Driver, Card, Model } from "@angular-wex/models";
 import { Value } from "../../decorators/value";
 
@@ -156,7 +157,7 @@ class TransactionsPageDateView extends TransactionsPageListView<Transaction, Tra
   }
 
   public goToDetailPage(item: Transaction): Promise<any> {
-    throw new Error("TODO");
+    return this.transactionsPage.navCtrl.push( TransactionDetailsPage, { item } );
   }
 
   public hasMoreItems(): boolean {
