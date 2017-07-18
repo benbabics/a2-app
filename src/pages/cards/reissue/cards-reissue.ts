@@ -142,7 +142,7 @@ export class CardsReissuePage extends SecurePage {
           return Promise.reject(error);
         }
         else {
-          return Promise.resolve();
+          return Promise.resolve(true);
         }
       });
   }
