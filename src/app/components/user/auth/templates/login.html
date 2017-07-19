@@ -1,6 +1,7 @@
 <ion-view view-title="{{ ::vm.config.title }}" hide-nav-bar="true" class="page-login" wex-back-state="app.exit">
     <div class="alerts-wrapper">
-        <wex-notification-bar priority="0"
+        <wex-notification-bar class="message-session-timeout"
+                              priority="0"
                               ng-if="vm.timedOut"
                               text="{{::vm.config.sessionTimeOut}}">
         </wex-notification-bar>
