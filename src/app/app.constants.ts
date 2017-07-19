@@ -596,6 +596,9 @@ export namespace ConstantsInfo {
 }
 
 ConstantsInfo.Env.set("local", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -620,6 +623,9 @@ ConstantsInfo.Env.set("local", {
 });
 
 ConstantsInfo.Env.set("dit", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -643,6 +649,9 @@ ConstantsInfo.Env.set("dit", {
 });
 
 ConstantsInfo.Env.set("stage-wex", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: "UA-71223382-1"
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -666,6 +675,9 @@ ConstantsInfo.Env.set("stage-wex", {
 });
 
 ConstantsInfo.Env.set("production-wex", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",

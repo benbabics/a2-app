@@ -34,6 +34,7 @@ import {
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { Keyboard } from "@ionic-native/keyboard";
+import { GoogleAnalytics } from "@ionic-native/google-analytics";
 import {
   SecureHttp,
   SessionManager,
@@ -47,7 +48,8 @@ import {
   SessionInfoRequestors,
   DefaultSessionInfoRequestors,
   SessionCache,
-  NetworkStatus
+  NetworkStatus,
+  WexGoogleAnalyticsEvents
 } from "../providers";
 import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -183,7 +185,11 @@ import { Network } from "@ionic-native/network";
       useClass: DefaultSessionInfoRequestors
     },
     SessionCache,
-    NetworkStatus
+    NetworkStatus,
+    {
+      provide: GoogleAnalytics,
+      useClass: WexGoogleAnalyticsEvents
+    }
   ]
 })
 export class AppModule {}
