@@ -1,7 +1,6 @@
-import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import * as _ from "lodash";
 import { SessionManager, NavBarController } from "../../providers";
-import { Component, OnInit } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, PopoverController } from "ionic-angular";
 import { Company, InvoiceSummary, Payment } from "@angular-wex/models";
 import { Session } from "../../models";
@@ -24,7 +23,7 @@ interface ChartConfig {
   selector: "page-landing",
   templateUrl: "landing.html"
 })
-export class LandingPage extends SecurePage implements OnInit {
+export class LandingPage extends SecurePage {
 
   private readonly BACK_TO_EXIT_ACTION_PRIORITY = 102;
   private readonly DEFAULT_CACHE_TTL = 4320; //72 hours
@@ -48,13 +47,9 @@ export class LandingPage extends SecurePage implements OnInit {
     private popoverCtrl: PopoverController,
     private brandProvider: BrandProvider,
     private navBarController: NavBarController,
-    private googleAnalytics: GoogleAnalytics
+    public injector: Injector
   ) {
-    super("Landing", sessionManager);
-  }
-
-  ngOnInit() {
-    this.googleAnalytics.trackView("LandingPage");
+    super("Landing", injector);
   }
 
   private createChartDisplayConfiguration(): ChartDisplayConfig {

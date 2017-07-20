@@ -16,11 +16,7 @@ export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
     }
 
      trackView(view: string): Promise<any> {
-        if (this.TRACKING_ID !== "") {
-            return super.trackView(view);
-        } else {
-            return null;
-        }
+        return this.TRACKING_ID !== "" ? super.trackView(view) : null;
      }
 
     

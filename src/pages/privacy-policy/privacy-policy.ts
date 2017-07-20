@@ -1,5 +1,5 @@
 import { AppVersion } from "@ionic-native/app-version";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { Page } from "../page";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 
@@ -13,8 +13,8 @@ export class PrivacyPolicyPage extends Page {
   private closing: string;
   private versionNumber: string;
 
-  constructor(private appVersion: AppVersion, private inAppBrowser: InAppBrowser) {
-    super("Privacy Policy");
+  constructor(private appVersion: AppVersion, private inAppBrowser: InAppBrowser, injector: Injector) {
+    super("Privacy Policy", injector);
     this.sectionVisibility = new Array<boolean>(14);
   }
 

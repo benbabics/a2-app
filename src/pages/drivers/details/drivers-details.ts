@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { NavParams, App } from 'ionic-angular';
 import { Driver, OnlineApplication } from '@angular-wex/models';
 import { DetailsPage } from "../../details-page";
@@ -17,12 +17,11 @@ export class DriversDetailsPage extends DetailsPage {
   public driver: Driver;
 
   constructor(
-    sessionManager: SessionManager,
-
     private app:      App,
-    public navParams: NavParams
+    public navParams: NavParams,
+    injector: Injector
   ) {
-    super( "Drivers.Details", sessionManager );
+    super( "Drivers.Details", injector );
     this.driver = this.navParams.get( "driver" );
   }
 

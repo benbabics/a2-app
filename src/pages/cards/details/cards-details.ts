@@ -1,5 +1,5 @@
 import { CardsReissuePage } from "./../reissue/cards-reissue";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { NavParams, App } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
 import { Card } from "@angular-wex/models";
@@ -33,12 +33,12 @@ export class CardsDetailsPage extends DetailsPage {
   }
 
   constructor(
-    sessionManager: SessionManager,
     public navParams: NavParams,
     private app: App,
-    private wexAppSnackbarController: WexAppSnackbarController
+    private wexAppSnackbarController: WexAppSnackbarController,
+    injector: Injector
   ) {
-    super("Cards.Details", sessionManager);
+    super("Cards.Details", injector);
 
     this.card = this.navParams.get(CardsDetailsNavParams.Card);
     this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);
