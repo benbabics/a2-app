@@ -587,10 +587,15 @@ export namespace ConstantsInfo {
       }
     }
   };
-
+  
+  interface GoogleAnalyticsConstant {
+    GOOGLE_ANALYTICS: {
+      TRACKING_ID: string;
+    }
+  }
   export type CommonConstants = typeof Common;
   export type PartialCommonConstants = {[K in keyof CommonConstants]?: Partial<CommonConstants[K]> };
-  export type EnvironmentConstants = ConstantsConfig & PartialCommonConstants;
+  export type EnvironmentConstants = ConstantsConfig & PartialCommonConstants & GoogleAnalyticsConstant;
 
   export const Env: Map<string, EnvironmentConstants> = new Map<string, EnvironmentConstants>();
 }
