@@ -270,7 +270,7 @@ export class AddPaymentPage extends SecurePage {
 
   public get validateCurrencyOptions(): WexValidateCurrencyParams {
     return {
-      minimumAmount: 0.01,
+      minimumAmount: this.invoiceSummary.details.minimumPaymentDue,
       maximumAmount: this.invoiceSummary.details.currentBalance
     };
   }
