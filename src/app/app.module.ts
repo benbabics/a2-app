@@ -71,6 +71,8 @@ import {
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AddPaymentPage } from "../pages/payments/add/add-payment";
 import { AngularWexValidatorsModule } from "@angular-wex/validators";
+import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
+import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
 
 @NgModule({
   declarations: [
@@ -91,6 +93,8 @@ import { AngularWexValidatorsModule } from "@angular-wex/validators";
     PrivacyPolicyPage,
     TransactionsPage,
     AddPaymentPage,
+    AddPaymentConfirmationPage,
+    AddPaymentSummaryPage,
     ActionIndicator,
     WexCurrency,
     WexDate,
@@ -154,7 +158,9 @@ import { AngularWexValidatorsModule } from "@angular-wex/validators";
     ContactUsPage,
     PrivacyPolicyPage,
     TransactionsPage,
-    AddPaymentPage
+    AddPaymentPage,
+    AddPaymentConfirmationPage,
+    AddPaymentSummaryPage
   ],
   providers: [
     //# ionic

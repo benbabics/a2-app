@@ -329,7 +329,16 @@ export namespace ConstantsInfo {
 
         //# Add Payment page
         ADD: {
-          title: "Make Payment"
+          title: "Make Payment",
+
+          //# Add Payment Confirmation page
+          CONFIRMATION: {
+            title: "Payment Confirmation"
+          },
+          //# Add Payment Summary page
+          SUMMARY: {
+            title: "Review Payment"
+          }
         }
       },
 

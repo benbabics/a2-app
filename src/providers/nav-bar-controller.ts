@@ -1,4 +1,4 @@
-import { App, Tabs, NavOptions, Tab } from "ionic-angular";
+import { App, Tabs, NavOptions, Tab, NavControllerBase } from "ionic-angular";
 import { Injectable } from "@angular/core";
 import { SessionManager } from "./session-manager";
 
@@ -7,7 +7,6 @@ export class NavBarController {
 
   // Note: This must be defined in the same order as the navbar tab layout (see wex-nav-bar.html)
   public readonly pages: Object[] = [
-    "LoginPage",
     "LandingPage",
     "PaymentsPage",
     "TransactionsPage",
@@ -21,8 +20,32 @@ export class NavBarController {
     this.sessionManager.sessionStateObserver.subscribe(created => this.onSessionStateChanged(created));
   }
 
+  private _checkIonTabs(nav: NavControllerBase): Tabs {
+    if (nav instanceof Tabs) {
+      return nav;
+    }
+    else if (nav instanceof Tab) {
+      return nav.parent;
+    }
+
+    return undefined;
+  }
+
   public get ionTabs(): Tabs {
-    return this.app.getRootNav().getActiveChildNav() as Tabs;
+    let tabsCtrls = ([
+      this.app.getActiveNav(),
+      this.app.getRootNav(),
+      this.app.getRootNav().getActiveChildNav()
+    ] as NavControllerBase[])
+      .map((navCtrl) => this._checkIonTabs(navCtrl))
+      .filter((tabsCtrl) => !!tabsCtrl);
+
+    if (tabsCtrls.length > 0) {
+      return tabsCtrls[0];
+    }
+    else {
+      throw new Error("Tabs controller not found.");
+    }
   }
 
   private onSessionStateChanged(created: boolean) {

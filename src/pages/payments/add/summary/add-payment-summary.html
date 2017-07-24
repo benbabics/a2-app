@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <wex-invoice-display collapsed="true" [invoiceSummary]="invoiceSummary" class="payment-invoice-details">
+  </wex-invoice-display>
+
+  <wex-info-card color="#e8db2c" iconName="warning">
+    The payment date selected is past the due date.
+  </wex-info-card>
+
+  <wex-info-card>
+    Payments scheduled after 3:30PM Eastern Time, on a weekend, or on a holiday will be processed on the <strong>next</strong> business day.
+  </wex-info-card>
+
+  <ion-card id="card-payment-details">
+    <ion-card-header>Payment Details</ion-card-header>
+    <ion-card-content>
+      <ion-list id="list-payment-details">
+        <wex-list-item>
+          <span>Amount</span>
+          <span class="value" text-right>{{ userPayment.amount | wexCurrency }}</span>
+        </wex-list-item>
+
+        <wex-list-item>
+          <span>Scheduled Date</span>
+          <span class="value" text-right>{{ userPayment.date | wexDate }}</span>
+        </wex-list-item>
+
+        <wex-list-item>
+          <span>Bank Account</span>
+          <span class="value" text-right>{{ userPayment.bankAccount.details.name }}</span>
+        </wex-list-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <button ion-button full large id="button-reissue" (click)="confirm()">
+    <action-indicator large [when]="isLoading">Make Payment</action-indicator>
+  </button>
+</ion-footer>

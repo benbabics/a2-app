@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div>
+    <h1 id="success-header">Success!</h1>
+    <ion-icon padding-left large id="success-icon" name="checkmark-circle" color="success-dark"></ion-icon>
+  </div>
+
+  <p>Your payment of <strong>{{ payment.details.amount | wexCurrency }}</strong> from <strong>{{ payment.details.bankAccount.name }}</strong> is scheduled to be processed on <strong>{{ payment.details.scheduledDate | wexDate }}</strong>.</p>
+
+  <div padding-top id="button-container">
+    <button ion-button (click)="finish()">Complete</button>
+  </div>
+</ion-content>
