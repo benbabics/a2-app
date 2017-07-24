@@ -55,7 +55,12 @@
       <div *ngSwitchCase="'Date'">
         <ion-item [@flowTransition]>
           <ion-label stacked>{{ CONSTANTS.LABELS.paymentDate }}</ion-label>
-          <ion-datetime required #flowFormInput name="paymentDate" [(ngModel)]="paymentDate">
+          <ion-datetime required
+                        #flowFormInput
+                        name="paymentDate"
+                        [min]="minPaymentDate"
+                        [max]="maxPaymentDate"
+                        [(ngModel)]="paymentDate">
           </ion-datetime>
         </ion-item>
       </div>

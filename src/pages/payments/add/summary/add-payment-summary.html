@@ -8,7 +8,7 @@
   <wex-invoice-display collapsed="true" [invoiceSummary]="invoiceSummary" class="payment-invoice-details">
   </wex-invoice-display>
 
-  <wex-info-card color="#e8db2c" iconName="warning">
+  <wex-info-card *ngIf="isPaymentAfterDueDate" color="#e8db2c" iconName="warning">
     {{ CONSTANTS.MESSAGES.dueDateWarning }}
   </wex-info-card>
 

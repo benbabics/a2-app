@@ -185,6 +185,8 @@ export class AddPaymentFlowBankAccountSection extends AddPaymentFlowSection<Sele
 })
 export class AddPaymentPage extends SecurePage {
 
+  private static readonly MAX_FUTURE_DAYS = 180;
+
   @ViewChild("form") flowForm: NgForm;
   @ViewChild("flowFormInput") flowFormInput: FormInputTypes;
 
@@ -193,6 +195,8 @@ export class AddPaymentPage extends SecurePage {
   public activeFlowSection: AddPaymentFlowSectionBase = new AddPaymentFlowAmountSection(this);
   public paymentDate: string;
   public paymentBankAccount: BankAccount;
+  public readonly minPaymentDate = moment().toISOString();
+  public readonly maxPaymentDate = moment().add(AddPaymentPage.MAX_FUTURE_DAYS, "days").toISOString();
 
   constructor(
     sessionManager: SessionManager,

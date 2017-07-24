@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import * as moment from "moment";
 import { Component } from "@angular/core";
 import {
   NavParams,
@@ -40,6 +40,10 @@ export class AddPaymentSummaryPage extends SecurePage {
 
   public get invoiceSummary(): InvoiceSummary {
     return this.session.invoiceSummary;
+  }
+
+  public get isPaymentAfterDueDate(): boolean {
+    return moment(this.userPayment.date).isAfter(this.invoiceSummary.paymentDueDate);
   }
 
   public confirm() {
