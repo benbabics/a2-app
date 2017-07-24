@@ -12,8 +12,7 @@ import { Injectable } from "@angular/core";
 import { SessionCache } from "../session-cache";
 import {
   Transaction,
-  ListResponse,
-  MakePaymentAvailability,
+  ListResponse
 } from "@angular-wex/models";
 import {
   TransactionList,
@@ -71,16 +70,7 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
 
   private readonly makePaymentAvailabilityRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    //requestor: (session: Session) => this.paymentProvider.getMakePaymentAvailability(session.user.company.details.accountId)
-    requestor: () => { //TODO Remove
-      return Observable.of<MakePaymentAvailability>(new MakePaymentAvailability({
-        makePaymentAllowed: true,
-        shouldDisplayBankAccountSetupMessage: false,
-        shouldDisplayCurrentBalanceDueMessage: false,
-        shouldDisplayDirectDebitEnabledMessage: false,
-        shouldDisplayOutstandingPaymentMessage: false
-      }));
-    }
+    requestor: (session: Session) => this.paymentProvider.getMakePaymentAvailability(session.user.company.details.accountId)
   };
 
   private readonly invoiceSummaryRequestor: SessionInfoRequestorDetails = {
