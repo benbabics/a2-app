@@ -88,6 +88,11 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
     requestor: (session: Session) => this.invoiceProvider.current(session.user.billingCompany.details.accountId)
   };
 
+  private readonly bankAccountsRequestor: SessionInfoRequestorDetails = {
+    requiredFields: [Session.Field.User],
+    requestor: (session: Session) => this.paymentProvider.getActiveBanks(session.user.billingCompany.details.accountId)
+  };
+
   constructor(
     private userProvider: UserProvider,
     private accountProvider: AccountProvider,
@@ -115,6 +120,7 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
     this._requestors[Session.Field.PostedTransactions] = this.postedTransactionsRequestor;
     this._requestors[Session.Field.MakePaymentAvailability] = this.makePaymentAvailabilityRequestor;
     this._requestors[Session.Field.InvoiceSummary] = this.invoiceSummaryRequestor;
+    this._requestors[Session.Field.BankAccounts] = this.bankAccountsRequestor;
   }
 }
 
