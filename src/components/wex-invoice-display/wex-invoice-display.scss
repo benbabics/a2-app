@@ -1,21 +1,33 @@
 wex-invoice-display {
 
+  .invoice-display[collapsed="true"] > :not(.invoice-display-header) {
+    display: none;
+  }
+
   .invoice-display-header {
+
+    [item-left] + .item-inner {
+      margin-left: 0;
+    }
 
     .item-inner {
       border: none !important;
     }
 
-    ion-label > * {
-      font-weight: bold;
-      text-transform: uppercase;
+    ion-label {
+      @extend %wex-list-item-content;
 
-      &:first-child {
-        text-align: left;
-      }
+      & > * {
+        font-weight: bold;
+        text-transform: uppercase;
 
-      &:last-child {
-        text-align: right;
+        &:first-child {
+          text-align: left;
+        }
+
+        &:last-child {
+          text-align: right;
+        }
       }
     }
   }

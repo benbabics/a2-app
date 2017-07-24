@@ -1,8 +1,9 @@
-<div class="invoice-display">
-  <wex-list-item class="invoice-display-header">
+<div class="invoice-display" [attr.collapsed]="collapsed">
+  <button ion-item class="invoice-display-header" (click)="toggleCollapse()">
+    <ion-icon item-left [name]="collapsed ? 'arrow-dropright' : 'arrow-dropdown'"></ion-icon>
     <span>Invoice #{{ invoiceSummary.details.invoiceNumber || "N/A" }}</span>
-    <span>Due Date {{ invoiceSummary.paymentDueDate | wexDate }}</span>
-  </wex-list-item>
+    <span>{{ invoiceSummary.paymentDueDate | wexDate }}</span>
+  </button>
 
   <ion-list class="invoice-display-details-list">
     <wex-list-item>
