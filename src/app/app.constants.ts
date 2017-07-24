@@ -331,13 +331,40 @@ export namespace ConstantsInfo {
         ADD: {
           title: "Make Payment",
 
+          LABELS: {
+            paymentAmount: "Payment Amount",
+            paymentDate: "Payment Date",
+            bankAccount: "Bank Account"
+          },
+
           //# Add Payment Confirmation page
           CONFIRMATION: {
-            title: "Payment Confirmation"
+            title: "Payment Confirmation",
+
+            LABELS: {
+              success: "Success!",
+              complete: "Complete"
+            },
+
+            MESSAGES: {
+              confirmationMessage: "Your payment of <strong><%= paymentAmount %></strong> from <strong><%= bankAccount %></strong> is scheduled to be processed on <strong><%= paymentDate %></strong>."
+            }
           },
           //# Add Payment Summary page
           SUMMARY: {
-            title: "Review Payment"
+            title: "Review Payment",
+
+            LABELS: {
+              paymentDetails: "Payment Details",
+              paymentAmount: "Payment Amount",
+              paymentDate: "Scheduled Date",
+              bankAccount: "Bank Account",
+              makePayment: "Make Payment"
+            },
+            MESSAGES: {
+              dueDateWarning: "The payment date selected is past the due date.",
+              paymentInfo: "Payments scheduled after 3:30PM Eastern Time, on a weekend, or on a holiday will be processed on the <strong>next</strong> business day."
+            }
           }
         }
       },

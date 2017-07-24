@@ -18,6 +18,7 @@
   <wex-invoice-display [invoiceSummary]="invoiceSummary" class="payment-invoice-details">
   </wex-invoice-display >
 
+  <!-- Back nav button -->
   <div id="input-wrapper"
        [ngClass]="{ 'input-focused': activeFlowSection.isFlowInputFocused }"
        [attr.data-flow-type]="activeFlowSection.type">
@@ -38,7 +39,7 @@
       <!-- Amount Input -->
       <div *ngSwitchCase="'Amount'">
         <ion-item [@flowTransition]>
-          <ion-label stacked>Payment Amount</ion-label>
+          <ion-label stacked>{{ CONSTANTS.LABELS.paymentAmount }}</ion-label>
           <ion-input #flowFormInput
                     required
                     wexValidateCurrency
@@ -53,7 +54,7 @@
       <!-- Date Input -->
       <div *ngSwitchCase="'Date'">
         <ion-item [@flowTransition]>
-          <ion-label stacked>Payment Date</ion-label>
+          <ion-label stacked>{{ CONSTANTS.LABELS.paymentDate }}</ion-label>
           <ion-datetime required #flowFormInput name="paymentDate" [(ngModel)]="paymentDate">
           </ion-datetime>
         </ion-item>
@@ -62,7 +63,7 @@
     <!-- Bank Account Input -->
       <div *ngSwitchCase="'BankAccount'">
         <ion-item [@flowTransition]>
-          <ion-label stacked>Bank Account</ion-label>
+          <ion-label stacked>{{ CONSTANTS.LABELS.bankAccount }}</ion-label>
           <ion-select required
                       #flowFormInput
                       name="paymentBankAccount"
@@ -76,6 +77,7 @@
       </div>
     </form>
 
+    <!-- Forward nav button -->
     <div padding-left class="nav-button" id="forward-button-wrapper">
       <button mini
               ion-fab
