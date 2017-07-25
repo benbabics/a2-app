@@ -6,7 +6,7 @@
       </button>
     </ion-buttons>
 
-    <ion-title>{{ CONSTANTS.title }}</ion-title>
+    <ion-title>{{ isEditingPayment ? CONSTANTS.EDIT.title : CONSTANTS.CREATE.title }}</ion-title>
 
     <ion-buttons *wexIfPlatformIos right>
       <button ion-button (click)="cancel()">{{ CONSTANTS.BUTTONS.CLOSE }}</button>

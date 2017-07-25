@@ -5,4 +5,5 @@ export interface UserPayment {
   amount: number;
   date: string;
   bankAccount: BankAccount;
+  id?: string;
 }

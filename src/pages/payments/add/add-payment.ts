@@ -15,10 +15,19 @@ import { SecurePage } from "../../secure-page";
 import { SessionManager } from "../../../providers";
 import { PaymentProvider } from "@angular-wex/api-providers";
 import { Session, UserPayment } from "../../../models";
-import { InvoiceSummary, BankAccount } from "@angular-wex/models";
+import { InvoiceSummary, BankAccount, Payment } from "@angular-wex/models";
 import { WexValidateCurrencyParams } from "@angular-wex/validators";
 import { NgForm } from "@angular/forms";
 import { AddPaymentSummaryPage } from "./summary/add-payment-summary";
+
+export type AddPaymentNavParams = keyof {
+  payment?: Payment
+};
+
+export namespace AddPaymentNavParams {
+  export const Payment: AddPaymentNavParams = "payment";
+}
+
 
 export type AddPaymentFlowSectionType = keyof {
   Amount,
@@ -218,6 +227,11 @@ export class AddPaymentPage extends SecurePage {
       amount: this._paymentAmount,
       bankAccount: this.paymentBankAccount
     };
+    let existingPayment: Payment = this.navParams.get(AddPaymentNavParams.Payment);
+
+    if (existingPayment) {
+      userPayment.id = existingPayment.details.id;
+    }
 
     return this.activeFlowSection.onLeave()
       .then(() => this.navCtrl.push(AddPaymentSummaryPage, { userPayment }));
@@ -253,6 +267,10 @@ export class AddPaymentPage extends SecurePage {
 
   public get invoiceSummary(): InvoiceSummary {
     return this.session.invoiceSummary;
+  }
+
+  public get isEditingPayment(): boolean {
+    return !!this.navParams.get(AddPaymentNavParams.Payment);
   }
 
   public get paymentAmount(): string {
@@ -305,9 +323,18 @@ export class AddPaymentPage extends SecurePage {
   }
 
   ionViewDidEnter() {
-    this._paymentAmount = this.invoiceSummary.details.statementBalance;
-    this.paymentDate = moment().toISOString();
-    this.paymentBankAccount = _.first(this.bankAccounts);
+    let existingPayment: Payment = this.navParams.get(AddPaymentNavParams.Payment);
+
+    if (existingPayment) {
+      this._paymentAmount = existingPayment.details.amount;
+      this.paymentDate = existingPayment.details.scheduledDate;
+      this.paymentBankAccount = existingPayment.bankAccount;
+    }
+    else {
+      this._paymentAmount = this.invoiceSummary.details.statementBalance;
+      this.paymentDate = moment().toISOString();
+      this.paymentBankAccount = _.first(this.bankAccounts);
+    }
 
     this.activeFlowSection.onEnter();
   }

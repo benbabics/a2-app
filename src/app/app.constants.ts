@@ -329,8 +329,12 @@ export namespace ConstantsInfo {
 
         //# Add Payment page
         ADD: {
-          title: "Make Payment",
-
+          CREATE: {
+            title: "Make Payment"
+          },
+          EDIT: {
+            title: "Edit Payment"
+          },
           LABELS: {
             paymentAmount: "Payment Amount",
             paymentDate: "Payment Date",
