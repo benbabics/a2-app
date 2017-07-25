@@ -587,15 +587,23 @@ export namespace ConstantsInfo {
       }
     }
   };
-
+  
+  interface GoogleAnalyticsConstant {
+    GOOGLE_ANALYTICS: {
+      TRACKING_ID: string;
+    }
+  }
   export type CommonConstants = typeof Common;
   export type PartialCommonConstants = {[K in keyof CommonConstants]?: Partial<CommonConstants[K]> };
-  export type EnvironmentConstants = ConstantsConfig & PartialCommonConstants;
+  export type EnvironmentConstants = ConstantsConfig & PartialCommonConstants & GoogleAnalyticsConstant;
 
   export const Env: Map<string, EnvironmentConstants> = new Map<string, EnvironmentConstants>();
 }
 
 ConstantsInfo.Env.set("local", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -620,6 +628,9 @@ ConstantsInfo.Env.set("local", {
 });
 
 ConstantsInfo.Env.set("dit", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -643,6 +654,9 @@ ConstantsInfo.Env.set("dit", {
 });
 
 ConstantsInfo.Env.set("stage-wex", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: "UA-71223382-1"
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -666,6 +680,9 @@ ConstantsInfo.Env.set("stage-wex", {
 });
 
 ConstantsInfo.Env.set("production-wex", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",

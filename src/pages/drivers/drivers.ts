@@ -1,7 +1,7 @@
 import { NavController, NavParams } from 'ionic-angular';
 import { SessionManager } from './../../providers/session-manager';
 import { Observable } from 'rxjs/Observable';
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { Driver, DriverStatus } from "@angular-wex/models";
 import { DriversDetailsPage } from './details/drivers-details';
 import { StaticListPage, FetchOptions, GroupedList } from "../static-list-page";
@@ -26,9 +26,10 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
   constructor(
     sessionManager: SessionManager,
     public navCtrl: NavController,
-    public navParams: NavParams
+    public navParams: NavParams,
+    injector: Injector
   ) {
-    super("Drivers", sessionManager, DriversPage.SEARCH_FILTER_FIELDS);
+    super("Drivers", injector, DriversPage.SEARCH_FILTER_FIELDS);
   }
 
   protected fetch(options?: FetchOptions): Observable<Driver[]> {
