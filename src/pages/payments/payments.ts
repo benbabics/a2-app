@@ -4,6 +4,7 @@ import { NavParams, NavController } from "ionic-angular";
 import { SessionManager } from "../../providers";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Payment, PaymentStatus } from "@angular-wex/models";
+import { PaymentsDetailsPage } from './details/payments-details';
 import { Session } from "../../models";
 
 @Component({
@@ -35,5 +36,9 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
 
   protected sortItems(payments: Payment[]): Payment[] {
     return StaticListPage.defaultItemSort<Payment, Payment.Details>(payments, "id", "asc");
+  }
+
+  public goToDetailPage(payment: Payment) {
+    this.navCtrl.push(PaymentsDetailsPage, { payment });
   }
 }

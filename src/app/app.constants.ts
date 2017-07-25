@@ -325,7 +325,25 @@ export namespace ConstantsInfo {
           { left: 68, top: 55, right: 90, bottom: 80 },
         ],
         greekedElementCount: 15,
-        title: "Payments"
+        title: "Payments",
+
+        //# Payments Details page
+        DETAILS: {
+          title:         "Payment Details",
+          amount:        "Amount",
+          bankAccount:   "Bank Account",
+          postedDate:    "Date Posted",
+          scheduledDate: "Date Scheduled",
+          inProcess:     "In Process",
+          method:        "Method",
+          editButton:    "Edit Payment",
+          cancelButton:  "Cancel Payment",
+          cancelPaymentConfirmation: {
+              content:   "Are you sure you want to cancel this scheduled payment?",
+              yesButton: "Yes",
+              noButton:  "No"
+          }
+        }
       },
 
       //# Contact Us Page
