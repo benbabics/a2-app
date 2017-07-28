@@ -1,8 +1,9 @@
+import { ToastOptions } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { CardProvider } from '@angular-wex/api-providers';
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, App, ActionSheetController, Events, AlertController } from 'ionic-angular';
+import { NavParams, App, ActionSheetController, Events, AlertController, ToastOptions } from 'ionic-angular';
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
 import { Card } from "@angular-wex/models";
@@ -148,13 +149,16 @@ export class CardsDetailsPage extends DetailsPage {
     let accountId = this.session.user.billingCompany.details.accountId;
     let cardId = this.card.details.cardId;
 
+    let toastOptions: ToastOptions = {
+        message: null,
+        duration: this.CONSTANTS.bannerStatusChangeFailure,
+        position: 'top',
+      };
+
     let updateObservable = this.cardProvider.updateStatus(accountId, cardId, newStatus);
     updateObservable.catch((error) => {
-      this.wexAppSnackbarController.createQueued({
-        message: this.CONSTANTS.bannerStatusChangeFailure,
-        duration: this.CONSTANTS.reissueMessageDuration,
-        position: 'top',
-      }).present();
+      toastOptions.message = this.CONSTANTS.bannerStatusChangeFailure;
+      this.wexAppSnackbarController.createQueued(toastOptions).present();
       return new Observable(error);
     });
 
@@ -163,11 +167,8 @@ export class CardsDetailsPage extends DetailsPage {
       this.isChangingStatus = false;
       this.events.publish("cards:statusUpdate");
 
-      this.wexAppSnackbarController.createQueued({
-        message: this.CONSTANTS.bannerStatusChangeSuccess,
-        duration: this.CONSTANTS.reissueMessageDuration,
-        position: 'top',
-      }).present();
+      toastOptions.message = this.CONSTANTS.bannerStatusChangeSuccess;
+      this.wexAppSnackbarController.createQueued(toastOptions).present();
     });
 
   }
