@@ -47,7 +47,6 @@ export class CardsDetailsPage extends DetailsPage {
     private app: App,
     private wexAppSnackbarController: WexAppSnackbarController,
     injector: Injector,
-    private wexAppSnackbarController: WexAppSnackbarController,
     private actionSheetController: ActionSheetController,
     private cardProvider: CardProvider,
     private events: Events

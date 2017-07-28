@@ -1,9 +1,7 @@
 import { Observable } from "rxjs";
 import { CardsDetailsPage } from "./details/cards-details";
-import { Component } from "@angular/core";
-import { NavParams, NavController, Events } from 'ionic-angular';
 import { Component, Injector } from '@angular/core';
-import { NavParams, NavController } from "ionic-angular";
+import { NavParams, NavController, Events } from "ionic-angular";
 import { SessionManager } from "../../providers";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Card, CardStatus } from "@angular-wex/models";
@@ -27,7 +25,6 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams,
     injector: Injector,
     public navParams: NavParams,
     public events: Events
