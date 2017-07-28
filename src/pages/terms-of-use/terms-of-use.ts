@@ -1,5 +1,5 @@
 import { AppVersion } from "@ionic-native/app-version";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { Page } from "../page";
 
 @Component({
@@ -10,8 +10,8 @@ export class TermsOfUsePage extends Page {
 
   private closing: string;
 
-  constructor(private appVersion: AppVersion) {
-    super("Terms of Use");
+  constructor(private appVersion: AppVersion, injector: Injector) {
+    super("Terms of Use", injector);
   }
 
   ionViewDidLoad() {

@@ -1,6 +1,6 @@
 import { CardProvider } from '@angular-wex/api-providers';
 import { CardsReissuePage } from "./../reissue/cards-reissue";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { NavParams, App, ActionSheetController, Events } from 'ionic-angular';
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
@@ -43,15 +43,16 @@ export class CardsDetailsPage extends DetailsPage {
   public isChangingStatus: boolean = false;
 
   constructor(
-    sessionManager: SessionManager,
     public navParams: NavParams,
     private app: App,
+    private wexAppSnackbarController: WexAppSnackbarController,
+    injector: Injector,
     private wexAppSnackbarController: WexAppSnackbarController,
     private actionSheetController: ActionSheetController,
     private cardProvider: CardProvider,
     private events: Events
   ) {
-    super("Cards.Details", sessionManager);
+    super("Cards.Details", injector);
 
     this.card = this.navParams.get(CardsDetailsNavParams.Card);
     this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);

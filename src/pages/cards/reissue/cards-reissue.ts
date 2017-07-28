@@ -1,6 +1,6 @@
 import { CardsDetailsPage } from "../details/cards-details";
 import * as _ from "lodash";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { NavParams, NavController, ActionSheetController, App } from "ionic-angular";
 import {
   Address,
@@ -34,7 +34,6 @@ export class CardsReissuePage extends SecurePage {
   public isReissuing: boolean = false;
 
   constructor(
-    sessionManager: SessionManager,
     public navCtrl: NavController,
     public navParams: NavParams,
     private accountProvider: AccountProvider,
@@ -42,9 +41,10 @@ export class CardsReissuePage extends SecurePage {
     private dialogs: Dialogs,
     private cardProvider: CardProvider,
     private app: App,
-    private appSnackbarController: WexAppSnackbarController
+    private appSnackbarController: WexAppSnackbarController,
+    injector: Injector
   ) {
-    super("Cards.Reissue", sessionManager, [
+    super("Cards.Reissue", injector, [
       Session.Field.BillingCompany
     ]);
 

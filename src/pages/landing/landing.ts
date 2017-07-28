@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import { SessionManager, NavBarController } from "../../providers";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, PopoverController } from "ionic-angular";
 import { Company, InvoiceSummary, Payment } from "@angular-wex/models";
 import { Session } from "../../models";
@@ -46,9 +46,10 @@ export class LandingPage extends SecurePage {
     private invoiceProvider: InvoiceProvider,
     private popoverCtrl: PopoverController,
     private brandProvider: BrandProvider,
-    private navBarController: NavBarController
+    private navBarController: NavBarController,
+    public injector: Injector
   ) {
-    super("Landing", sessionManager);
+    super("Landing", injector);
   }
 
   private createChartDisplayConfiguration(): ChartDisplayConfig {

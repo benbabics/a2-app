@@ -1,7 +1,7 @@
 import { WexNavBar, WexAppSnackbarController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
-import { Component, ViewChild, ElementRef } from "@angular/core";
+import { Component, ViewChild, ElementRef, Injector } from "@angular/core";
 import { NavParams, Platform, Content, NavController } from "ionic-angular";
 import { Page } from "../page";
 import {
@@ -57,9 +57,10 @@ export class LoginPage extends Page {
     private localStorageService: LocalStorageService,
     private dialogs: Dialogs,
     private keyboard: Keyboard,
-    private appSnackbarController: WexAppSnackbarController
+    private appSnackbarController: WexAppSnackbarController,
+    injector: Injector
   ) {
-    super("Login");
+    super("Login", injector);
   }
 
   public get fingerprintDisabledLabel(): string {

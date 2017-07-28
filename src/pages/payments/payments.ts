@@ -1,7 +1,6 @@
 import { Observable } from "rxjs";
-import { Component } from "@angular/core";
+import { Component, Injector } from '@angular/core';
 import { NavParams, NavController } from "ionic-angular";
-import { SessionManager } from "../../providers";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Payment, PaymentStatus } from "@angular-wex/models";
 import { Session } from "../../models";
@@ -18,11 +17,11 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   public readonly dividerLabels: string[] = PaymentsPage.PAYMENT_STATUSES.map(PaymentStatus.displayName);
 
   constructor(
-    sessionManager: SessionManager,
     public navCtrl: NavController,
-    public navParams: NavParams
+    public navParams: NavParams,
+    injector: Injector
   ) {
-    super("Payments", sessionManager);
+    super("Payments", injector);
   }
 
   protected fetch(options?: FetchOptions): Observable<Payment[]> {

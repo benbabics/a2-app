@@ -2,6 +2,8 @@ import { Observable } from "rxjs";
 import { CardsDetailsPage } from "./details/cards-details";
 import { Component } from "@angular/core";
 import { NavParams, NavController, Events } from 'ionic-angular';
+import { Component, Injector } from '@angular/core';
+import { NavParams, NavController } from "ionic-angular";
 import { SessionManager } from "../../providers";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Card, CardStatus } from "@angular-wex/models";
@@ -24,12 +26,13 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
   public readonly dividerLabels: string[] = CardsPage.CARD_STATUSES.map(CardStatus.displayName);
 
   constructor(
-    sessionManager: SessionManager,
     public navCtrl: NavController,
+    public navParams: NavParams,
+    injector: Injector,
     public navParams: NavParams,
     public events: Events
   ) {
-    super("Cards", sessionManager, CardsPage.SEARCH_FILTER_FIELDS);
+    super("Cards", injector, CardsPage.SEARCH_FILTER_FIELDS);
 
     events.subscribe("cards:statusUpdate", () => this.updateList());
   }

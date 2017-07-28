@@ -6,7 +6,7 @@ import {
 } from "../../providers/";
 import { Session } from "../../models/";
 import { Value } from "../../decorators/value";
-import { Component, ChangeDetectorRef } from "@angular/core";
+import { Component, ChangeDetectorRef, Injector } from "@angular/core";
 import { Dialogs } from "@ionic-native/dialogs";
 import { SecurePage } from "../secure-page";
 import { WexAppSnackbarController } from "../../components";
@@ -29,9 +29,10 @@ export class SettingsPage extends SecurePage {
     private platform: Platform,
     private dialogs: Dialogs,
     private cdRef: ChangeDetectorRef,
-    private wexAppSnackbarController: WexAppSnackbarController
+    private wexAppSnackbarController: WexAppSnackbarController,
+    injector: Injector
   ) {
-    super( "Settings", sessionManager, [ Session.Field.User, Session.Field.ClientSecret ] );
+    super( "Settings", injector, [ Session.Field.User, Session.Field.ClientSecret ] );
   }
 
   public get enableFingerprintAuthToggle(): boolean {
