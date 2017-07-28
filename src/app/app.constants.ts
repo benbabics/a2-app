@@ -113,6 +113,8 @@ export namespace ConstantsInfo {
           reissueCard: "Reissue Card",
           reissueMessage: "Your card has been reissued.",
           reissueMessageDuration: 5000, //ms
+          actionStatusTitle: "Select Card Status",
+          actionStatusCancel: "Cancel",
 
           STATUS: {
             COLOR: {
@@ -136,7 +138,12 @@ export namespace ConstantsInfo {
               embossingValue2: "Standard Embossing",
               embossingValue1: "Optional Embossing",
             }
-          }
+          },
+          statuses: [
+            { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive" },
+            { "id": "SUSPENDED",  "label": "Suspended",  "trackingId": "statusOptionSuspended" },
+            { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated" }
+          ]
         },
 
         //# Card Reissue page
