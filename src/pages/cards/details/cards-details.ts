@@ -1,7 +1,8 @@
+import { Observable } from 'rxjs/Observable';
 import { CardProvider } from '@angular-wex/api-providers';
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, App, ActionSheetController, Events } from 'ionic-angular';
+import { NavParams, App, ActionSheetController, Events, AlertController } from 'ionic-angular';
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
 import { Card } from "@angular-wex/models";
@@ -9,6 +10,7 @@ import { SessionManager } from "../../../providers";
 import { WexAppSnackbarController } from "../../../components";
 import { CardStatus } from "@angular-wex/api-providers";
 import * as _ from "lodash";
+import { Value } from '../../../decorators/value';
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -30,6 +32,7 @@ export namespace CardsDetailsNavParams {
   templateUrl: "cards-details.html"
 })
 export class CardsDetailsPage extends DetailsPage {
+  @Value("BUTTONS") private BUTTONS;
 
   public card: Card;
   private _reissued: boolean;
@@ -49,7 +52,8 @@ export class CardsDetailsPage extends DetailsPage {
     injector: Injector,
     private actionSheetController: ActionSheetController,
     private cardProvider: CardProvider,
-    private events: Events
+    private events: Events,
+    private alertController: AlertController
   ) {
     super("Cards.Details", injector);
 
@@ -69,16 +73,16 @@ export class CardsDetailsPage extends DetailsPage {
 
   public get canChangeStatus(): boolean {
     // Rules in MOBACCTMGT-1135 AC #1
-    if ( this.session.user.isDistributor ) { return this.card.isActive; }
+    if (this.session.user.isDistributor) { return this.card.isActive; }
     return !this.card.isTerminated;
   }
 
   public get canReissue(): boolean {
-    let isClassic    = this.session.user.isClassic,
-        cardNo       = this.card.details.embossedCardNumber,
-        cardNoSuffix = parseInt( cardNo.substr(cardNo.length - 1) );
-        
-    return !isClassic || ( isClassic && cardNoSuffix < 9 );
+    let isClassic = this.session.user.isClassic,
+      cardNo = this.card.details.embossedCardNumber,
+      cardNoSuffix = parseInt(cardNo.substr(cardNo.length - 1));
+
+    return !isClassic || (isClassic && cardNoSuffix < 9);
   }
 
   public changeStatus() {
@@ -93,12 +97,16 @@ export class CardsDetailsPage extends DetailsPage {
   private buildActionSheet(actions: CardsDetailsNavParams.Status[]): ActionSheetOptions {
 
     let buttons: ActionSheetButton[] = actions.map((action) => ({
-        text: action.label,
-        handler: () => {
-          let statuses: CardsDetailsNavParams.Status[] = this.CONSTANTS.statuses;
-          this.updateCardStatus( action.id );
+      text: action.label,
+      handler: () => {
+        let statuses: CardsDetailsNavParams.Status[] = this.CONSTANTS.statuses;
+        if (action.id === "TERMINATED") {
+          this.confirmTermination();
+        } else {
+          this.updateCardStatus(action.id);
         }
-      })
+      }
+    })
     );
 
     return {
@@ -113,8 +121,25 @@ export class CardsDetailsPage extends DetailsPage {
     };
   }
 
+  private confirmTermination() {
+    this.alertController.create({
+      message: this.CONSTANTS.confirmMessageTerminate,
+      buttons: [
+        {
+          text: this.BUTTONS.YES,
+          handler: () => {
+            this.updateCardStatus("TERMINATED");
+          }
+        },
+        {
+          text: this.BUTTONS.NO
+        }
+      ]
+    }).present();
+  }
+
   private updateCardStatus(newStatus: CardStatus) {
-    if( newStatus === this.card.details.status ) {
+    if (newStatus === this.card.details.status) {
       return;
     }
 
@@ -123,12 +148,28 @@ export class CardsDetailsPage extends DetailsPage {
     let accountId = this.session.user.billingCompany.details.accountId;
     let cardId = this.card.details.cardId;
 
-    this.cardProvider.updateStatus(accountId, cardId, newStatus).subscribe((card: Card) => {
+    let updateObservable = this.cardProvider.updateStatus(accountId, cardId, newStatus);
+    updateObservable.catch((error) => {
+      this.wexAppSnackbarController.createQueued({
+        message: this.CONSTANTS.bannerStatusChangeFailure,
+        duration: this.CONSTANTS.reissueMessageDuration,
+        position: 'top',
+      }).present();
+      return new Observable(error);
+    });
+
+    updateObservable.subscribe((card: Card) => {
       this.card.details.status = card.details.status;
       this.isChangingStatus = false;
       this.events.publish("cards:statusUpdate");
+
+      this.wexAppSnackbarController.createQueued({
+        message: this.CONSTANTS.bannerStatusChangeSuccess,
+        duration: this.CONSTANTS.reissueMessageDuration,
+        position: 'top',
+      }).present();
     });
-    
+
   }
 
   private get availableCardStatuses(): Array<CardsDetailsNavParams.Status> {
@@ -153,7 +194,7 @@ export class CardsDetailsPage extends DetailsPage {
   }
 
   public goToReissuePage() {
-    if ( this.canReissue ) {
+    if (this.canReissue) {
       this.app.getRootNav().push(CardsReissuePage, { card: this.card });
     }
   }

@@ -143,7 +143,10 @@ export namespace ConstantsInfo {
             { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive" },
             { "id": "SUSPENDED",  "label": "Suspended",  "trackingId": "statusOptionSuspended" },
             { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated" }
-          ]
+          ],
+          bannerStatusChangeSuccess: "Status change successful.",
+          bannerStatusChangeFailure: "Status change failed. Please try again.",
+          confirmMessageTerminate:   "Are you sure you want to terminate this card?",
         },
 
         //# Card Reissue page
