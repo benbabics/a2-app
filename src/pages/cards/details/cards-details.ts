@@ -1,4 +1,3 @@
-import { ToastOptions } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { CardProvider } from '@angular-wex/api-providers';
 import { CardsReissuePage } from "./../reissue/cards-reissue";
