@@ -99,8 +99,7 @@ export class CardsDetailsPage extends DetailsPage {
     let buttons: ActionSheetButton[] = actions.map((action) => ({
       text: action.label,
       handler: () => {
-        let statuses: CardsDetailsNavParams.Status[] = this.CONSTANTS.statuses;
-        if (action.id === "TERMINATED") {
+        if (action.id === this.CONSTANTS.statuses.TERMINATED.id) {
           this.confirmTermination();
         } else {
           this.updateCardStatus(action.id);
@@ -128,7 +127,7 @@ export class CardsDetailsPage extends DetailsPage {
         {
           text: this.BUTTONS.YES,
           handler: () => {
-            this.updateCardStatus("TERMINATED");
+            this.updateCardStatus(this.CONSTANTS.statuses.TERMINATED.id);
           }
         },
         {
@@ -149,27 +148,24 @@ export class CardsDetailsPage extends DetailsPage {
     let cardId = this.card.details.cardId;
 
     let toastOptions: ToastOptions = {
-        message: null,
-        duration: this.CONSTANTS.reissueMessageDuration,
-        position: 'top',
-      };
+      message: null,
+      duration: this.CONSTANTS.reissueMessageDuration,
+      position: 'top',
+    };
 
-    let updateObservable = this.cardProvider.updateStatus(accountId, cardId, newStatus);
-    updateObservable.catch((error) => {
-      toastOptions.message = this.CONSTANTS.bannerStatusChangeFailure;
-      this.wexAppSnackbarController.createQueued(toastOptions).present();
-      return new Observable(error);
-    });
+    this.cardProvider.updateStatus(accountId, cardId, newStatus).subscribe(
+      (card: Card) => {
+        this.card.details.status = card.details.status;
+        this.isChangingStatus = false;
+        this.events.publish("cards:statusUpdate");
 
-    updateObservable.subscribe((card: Card) => {
-      this.card.details.status = card.details.status;
-      this.isChangingStatus = false;
-      this.events.publish("cards:statusUpdate");
-
-      toastOptions.message = this.CONSTANTS.bannerStatusChangeSuccess;
-      this.wexAppSnackbarController.createQueued(toastOptions).present();
-    });
-
+        toastOptions.message = this.CONSTANTS.bannerStatusChangeSuccess;
+        this.wexAppSnackbarController.createQueued(toastOptions).present();
+      }, () => {
+        this.isChangingStatus = false;
+        toastOptions.message = this.CONSTANTS.bannerStatusChangeFailure;
+        this.wexAppSnackbarController.createQueued(toastOptions).present();
+      });
   }
 
   private get availableCardStatuses(): Array<CardsDetailsNavParams.Status> {
