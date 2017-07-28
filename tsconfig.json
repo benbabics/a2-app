@@ -23,6 +23,7 @@
     "node_modules/@types"
   ],
   "types": [
+    "accounting-js",
     "lodash",
     "promise.prototype.finally"
   ],

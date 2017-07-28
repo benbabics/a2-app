@@ -1,0 +1,40 @@
+page-add-payment {
+
+  &.ion-page ion-content {
+    background: color($colors, white);
+
+    .scroll-content {
+      @include flexbox();
+      @include flex-dir(column);
+
+      padding-bottom: 0 !important;
+    }
+  }
+
+  .payment-invoice-details .invoice-display {
+    @include md-shadow();
+  }
+
+  #input-wrapper {
+    @include flex-shrink(0);
+    @include flex-grow(1);
+    @include flexbox();
+    @include flex-dir(row);
+    @include align-items(center);
+    @include justify-content(center);
+
+    &[data-flow-type="Date"].input-focused {
+      margin-bottom: 260px !important;
+    }
+
+    #flow-form {
+      @include flex-grow(1);
+      padding: 3rem;
+    }
+
+    .nav-button {
+      @include flex-grow(0);
+      @include flex-shrink(0);
+    }
+  }
+}

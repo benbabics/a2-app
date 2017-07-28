@@ -8,13 +8,13 @@ export abstract class SecurePage extends Page {
   private static readonly DEFAULT_REQUIRED_SESSION_DETAILS = [Session.Field.User];
   public sessionManager: SessionManager;
 
-  protected session: Session;
+  protected session: Session = {};
 
   constructor(pageName: string, injector: Injector, protected requiredSessionInfo?: Session.Field[]) {
     super(pageName, injector);
 
     this.sessionManager = this.injector.get(SessionManager);
-    this.requiredSessionInfo = requiredSessionInfo || SecurePage.DEFAULT_REQUIRED_SESSION_DETAILS;
+    this.requiredSessionInfo = SecurePage.DEFAULT_REQUIRED_SESSION_DETAILS.concat(requiredSessionInfo || []);
   }
 
   ionViewCanEnter(): Promise<any> {
