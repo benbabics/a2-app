@@ -311,11 +311,11 @@ export namespace ConstantsInfo {
       //# Payments page
       PAYMENTS: {
         UNAVAILABILITY_REASONS: {
-          default: "Cannot make payment at this time",
-          shouldDisplayCurrentBalanceDueMessage: "Current balance",
-          shouldDisplayBankAccountSetupMessage: "Bank account setup",
-          shouldDisplayDirectDebitEnabledMessage: "Direct debit enabled",
-          shouldDisplayOutstandingPaymentMessage: "Already scheduled payment",
+          default: "We are unable to process your changes at this time.",
+          shouldDisplayCurrentBalanceDueMessage: "Current Balance needs to be greater than $0.00.",
+          shouldDisplayBankAccountSetupMessage: "You must set up your financial institutions as your payment options online prior to scheduling a payment.",
+          shouldDisplayDirectDebitEnabledMessage: "Online payment is not currently available for this account. The account has set up an alternative method of payment, such as direct debit.",
+          shouldDisplayOutstandingPaymentMessage: "A payment has already been scheduled.",
         },
         listLabels: ["Date", "Amount"],
         greekingData: [

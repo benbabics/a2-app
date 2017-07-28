@@ -27,6 +27,7 @@ export namespace AddPaymentSummaryNavParams {
 export class AddPaymentSummaryPage extends SecurePage {
 
   public userPayment: UserPayment;
+  public isLoading: boolean = false;
 
   constructor(
     sessionManager: SessionManager,
@@ -60,6 +61,8 @@ export class AddPaymentSummaryPage extends SecurePage {
     };
     let paymentState: Observable<Payment>;
 
+    this.isLoading = true;
+
     if (this.isEditingPayment) {
       paymentState = this.paymentProvider.editPayment(accountId, this.userPayment.id, paymentRequest);
     }
@@ -67,11 +70,16 @@ export class AddPaymentSummaryPage extends SecurePage {
       paymentState = this.paymentProvider.addPayment(accountId, paymentRequest);
     }
 
-    paymentState.subscribe((payment) => {
-      // Update the cache
-      this.sessionManager.cache.requestSessionDetail(Session.Field.Payments);
+    paymentState
+      .finally(() => this.isLoading = false)
+      .subscribe((payment) => {
+        // Update the cache
+        this.sessionManager.cache.requestSessionDetail(Session.Field.Payments);
 
-      this.navCtrl.setRoot(AddPaymentConfirmationPage, { payment });
-    });
+        this.navCtrl.setRoot(AddPaymentConfirmationPage, { payment });
+      }, (error) => {
+        /* TODO - What do we do here? */
+        console.error(error);
+      });
   }
 }
