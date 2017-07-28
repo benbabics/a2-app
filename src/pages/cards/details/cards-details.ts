@@ -150,7 +150,7 @@ export class CardsDetailsPage extends DetailsPage {
 
     let toastOptions: ToastOptions = {
         message: null,
-        duration: this.CONSTANTS.bannerStatusChangeFailure,
+        duration: this.CONSTANTS.reissueMessageDuration,
         position: 'top',
       };
 
