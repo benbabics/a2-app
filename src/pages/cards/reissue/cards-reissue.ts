@@ -1,6 +1,6 @@
 import { CardsDetailsPage } from "../details/cards-details";
 import * as _ from "lodash";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { NavParams, NavController, ActionSheetController, App } from "ionic-angular";
 import {
   Address,
@@ -14,7 +14,7 @@ import { Session } from "../../../models";
 import { SecurePage } from "../../secure-page";
 import { SessionManager } from "../../../providers";
 import { Dialogs } from "@ionic-native/dialogs";
-import { WexAppBannerController } from "../../../components";
+import { WexAppSnackbarController } from "../../../components";
 import { Value } from "../../../decorators/value";
 import { AccountProvider, CardProvider, CardUpdateType } from "@angular-wex/api-providers";
 
@@ -34,7 +34,6 @@ export class CardsReissuePage extends SecurePage {
   public isReissuing: boolean = false;
 
   constructor(
-    sessionManager: SessionManager,
     public navCtrl: NavController,
     public navParams: NavParams,
     private accountProvider: AccountProvider,
@@ -42,9 +41,10 @@ export class CardsReissuePage extends SecurePage {
     private dialogs: Dialogs,
     private cardProvider: CardProvider,
     private app: App,
-    private appBannerController: WexAppBannerController
+    private appSnackbarController: WexAppSnackbarController,
+    injector: Injector
   ) {
-    super("Cards.Reissue", sessionManager, [
+    super("Cards.Reissue", injector, [
       Session.Field.BillingCompany
     ]);
 
@@ -126,7 +126,6 @@ export class CardsReissuePage extends SecurePage {
         //Close the reissue flow
         this.navCtrl.popToRoot({ animate: false });
       }, (errorResponse) => {
-        //this.appBannerController.error(this.CONSTANTS.reissueError);
 
         console.error("Failed to reissue card: " + errorResponse);
       });
@@ -142,7 +141,7 @@ export class CardsReissuePage extends SecurePage {
           return Promise.reject(error);
         }
         else {
-          return Promise.resolve();
+          return Promise.resolve(true);
         }
       });
   }

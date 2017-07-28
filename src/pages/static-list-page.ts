@@ -1,3 +1,4 @@
+import { Injector } from "@angular/core";
 import * as _ from "lodash";
 import { Observable } from "rxjs";
 import { ListPage, GroupedList } from "./list-page";
@@ -59,11 +60,11 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
 
   constructor(
     pageName: string,
-    sessionManager: SessionManager,
+    public injector: Injector,
     protected searchFilterFields?: (keyof DetailsT)[],
     requiredSessionInfo?: Session.Field[]
   ) {
-    super(pageName, sessionManager, requiredSessionInfo);
+    super(pageName, injector, requiredSessionInfo);
   }
 
   public static defaultItemSort<T extends Model<DetailsT>, DetailsT>(items: T[], sortBy: keyof DetailsT, order: "asc" | "desc" = "asc"): T[] {

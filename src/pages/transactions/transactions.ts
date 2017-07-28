@@ -1,12 +1,12 @@
 import { Observable } from 'rxjs';
 import * as _ from "lodash";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, SegmentButton } from "ionic-angular";
-import { SessionManager } from "../../providers/session-manager";
 import { StaticListPage } from "../static-list-page";
 import { Session } from "../../models";
 import { WexGreeking } from "../../components";
 import { SessionCache } from "../../providers";
+import { TransactionDetailsPage } from './details/transaction-details';
 import { Transaction, Driver, Card, Model } from "@angular-wex/models";
 import { Value } from "../../decorators/value";
 
@@ -156,7 +156,7 @@ class TransactionsPageDateView extends TransactionsPageListView<Transaction, Tra
   }
 
   public goToDetailPage(item: Transaction): Promise<any> {
-    throw new Error("TODO");
+    return this.transactionsPage.navCtrl.push( TransactionDetailsPage, { item } );
   }
 
   public hasMoreItems(): boolean {
@@ -258,9 +258,8 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
 
   public selectedListView: AbstractTransactionsPageListView;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public sessionManager: SessionManager) {
-    super("Transactions", sessionManager);
-
+  constructor(public navCtrl: NavController, public navParams: NavParams, public injector: Injector) {
+    super("Transactions", injector);
     this.selectList(navParams.get(TransactionsParams.SelectedList) || TransactionListType.CardNumber);
   }
 

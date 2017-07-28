@@ -34,8 +34,8 @@
     "dependencies": {
         "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#b1c2a94",
         "@angular-wex/mocks": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#b30796baed3",
-        "@angular-wex/models": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#822cbe20d69",
-        "@angular-wex/validators": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#3deaaa9",
+        "@angular-wex/models": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#870368cc633",
+        "@angular-wex/validators": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#a58c5ca579d",
         "@angular/animations": "4.1.3",
         "@angular/common": "4.1.3",
         "@angular/compiler": "4.1.3",
@@ -49,8 +49,10 @@
         "@ionic-native/app-version": "3.12.1",
         "@ionic-native/core": "3.12.1",
         "@ionic-native/dialogs": "3.12.1",
+        "@ionic-native/google-analytics": "^4.0.1",
         "@ionic-native/in-app-browser": "3.12.1",
         "@ionic-native/keyboard": "3.12.1",
+        "@ionic-native/network": "3.12.1",
         "@ionic-native/splash-screen": "3.12.1",
         "@ionic-native/status-bar": "3.12.1",
         "@ionic/storage": "2.0.1",
@@ -63,7 +65,9 @@
         "cordova-plugin-console": "1.0.5",
         "cordova-plugin-device": "1.1.4",
         "cordova-plugin-dialogs": "~1.3.2",
+        "cordova-plugin-google-analytics": "^1.8.3",
         "cordova-plugin-inappbrowser": "^1.7.1",
+        "cordova-plugin-network-information": "^1.3.3",
         "cordova-plugin-secure-storage": "~2.6.5",
         "cordova-plugin-splashscreen": "~4.0.1",
         "cordova-plugin-statusbar": "2.2.1",
@@ -71,7 +75,7 @@
         "cordova-plugin-whitelist": "1.3.1",
         "faker": "^4.1.0",
         "font-awesome": "^4.7.0",
-        "ionic-angular": "3.5.0",
+        "ionic-angular": "3.5.3",
         "ionic-plugin-keyboard": "~2.2.1",
         "ionicons": "3.0.0",
         "lodash": "^4.17.4",
@@ -85,7 +89,7 @@
     },
     "devDependencies": {
         "@angular/tsc-wrapped": "4.1.0",
-        "@ionic/app-scripts": "1.3.7",
+        "@ionic/app-scripts": "2.0.2",
         "@ionic/cli-plugin-cordova": "1.4.0",
         "@ionic/cli-plugin-ionic-angular": "1.3.1",
         "@types/accounting": "^0.4.0",
@@ -122,7 +126,9 @@
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
             "nativesettingsopener": {},
-            "cordova-plugin-inappbrowser": {}
+            "cordova-plugin-inappbrowser": {},
+            "cordova-plugin-network-information": {},
+            "cordova-plugin-google-analytics": {}
         }
     }
 }

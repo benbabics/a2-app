@@ -27,7 +27,8 @@ export namespace ConstantsInfo {
       CANCEL: "Cancel",
       CLOSE: "Close",
       YES: "Yes",
-      NO: "No"
+      NO: "No",
+      DISMISS: "Dismiss"
     },
     //# Card
     CARD: {
@@ -38,7 +39,13 @@ export namespace ConstantsInfo {
           "STOLEN": "Stolen",
           "UNKNOWN": "Unknown"
         }
-      }
+      },
+    },
+    //# Global error notifications
+    GLOBAL_NOTIFICATIONS: {
+      serverConnectionError: "Could not connect to server. Please try again later.",
+      networkError         : "Lost internet connection."
+
     },
     //# Components
     COMPONENTS: {
@@ -53,6 +60,7 @@ export namespace ConstantsInfo {
     //# Date/Time
     DATETIME: {
       DATE_FORMAT: "MM/DD/YYYY",
+      DATE_TIME_FORMAT: "MM/DD/YYYY hh:mm:ss A",
       LOCALE: "en-US"
     },
     //# Fingerprint Authentication
@@ -563,6 +571,19 @@ export namespace ConstantsInfo {
         }
       },
 
+      //# Settings page
+      SETTINGS: {
+        title: "Settings",
+        fingerprintAuthName: {
+          android: "fingerprint authentication",
+          ios: "Touch ID®"
+        },
+        fingerprintAuthTextLabel: "Use",
+        destroyFingerprintProfileConfirmMessage: "Are you sure you want to turn off <%= fingerprintAuthName %> for your Username <%= username %>?",
+        createFingerprintProfileMessage: "<%= _.capitalize(fingerprintAuthName) %> is now setup for your Username <%= username %>.",
+        createFingerprintProfileDuration: 5000, // ms
+      },
+
       //# Transactions page
       TRANSACTIONS: {
         DATE: {
@@ -594,19 +615,48 @@ export namespace ConstantsInfo {
           ],
           greekedElementCount: 15
         },
-        title: "Transactions"
+        title: "Transactions",
+
+        //# Transaction Details page
+        DETAILS: {
+          title:   "Transaction Details",
+
+          LABELS: {
+            cardNumber: "Card Number",
+            postDate:   "Post Date",
+            transDateTime: "Trans Date/Time",
+            transId:       "Trans ID",
+            grossCost:     "Gross Cost",
+            netCost:       "Net Cost",
+            productDesc:   "Product Description",
+            driverFirstName: "Driver First Name",
+            driverLastName:  "Driver Last Name",
+            assetId:         "Asset ID",
+            odometer:        "Odometer",
+            merchantName:    "Merchant Name",
+            merchantLocation: "Merchant City, ST"
+          }
+        }
       }
     }
   };
-
+  
+  interface GoogleAnalyticsConstant {
+    GOOGLE_ANALYTICS: {
+      TRACKING_ID: string;
+    }
+  }
   export type CommonConstants = typeof Common;
   export type PartialCommonConstants = {[K in keyof CommonConstants]?: Partial<CommonConstants[K]> };
-  export type EnvironmentConstants = ConstantsConfig & PartialCommonConstants;
+  export type EnvironmentConstants = ConstantsConfig & PartialCommonConstants & GoogleAnalyticsConstant;
 
   export const Env: Map<string, EnvironmentConstants> = new Map<string, EnvironmentConstants>();
 }
 
 ConstantsInfo.Env.set("local", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -631,6 +681,9 @@ ConstantsInfo.Env.set("local", {
 });
 
 ConstantsInfo.Env.set("dit", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -654,6 +707,9 @@ ConstantsInfo.Env.set("dit", {
 });
 
 ConstantsInfo.Env.set("stage-wex", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: "UA-71223382-1"
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -677,6 +733,9 @@ ConstantsInfo.Env.set("stage-wex", {
 });
 
 ConstantsInfo.Env.set("production-wex", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",

@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, Injector } from "@angular/core";
 import { InAppBrowser, InAppBrowserObject } from "@ionic-native/in-app-browser";
 import { Http } from "@angular/http";
 import { Page } from "../../page"
@@ -21,9 +21,10 @@ export class UserEnrollmentFlow extends Page {
   constructor(
               private inAppBrowser: InAppBrowser,
               private http: Http,
-              private alertController: AlertController
+              private alertController: AlertController,
+              injector: Injector
   ) {
-     super("Online Enrollment");
+     super("Online Enrollment", injector);
    }
 
   private handleOpenEnrollmentWindow(): void {

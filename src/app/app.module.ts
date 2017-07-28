@@ -12,6 +12,7 @@ import { LoginPage } from "../pages/login/login";
 import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
+import { SettingsPage } from '../pages/settings/settings';
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { DriversPage } from './../pages/drivers/drivers';
 import { DriversDetailsPage } from './../pages/drivers/details/drivers-details';
@@ -25,10 +26,7 @@ import {
   WexGreeking,
   WexDetailsView,
   WexInfoCard,
-  WexBanner,
-  WexAppBannerController,
-  WexAppBanner,
-  WexSnackbar,
+  WexAppSnackbarController,
   WexStaticListPageHeader,
   WexStaticListPageContent,
   WexInvoiceDisplay
@@ -37,6 +35,7 @@ import {
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { Keyboard } from "@ionic-native/keyboard";
+import { GoogleAnalytics } from "@ionic-native/google-analytics";
 import {
   SecureHttp,
   SessionManager,
@@ -49,9 +48,11 @@ import {
   MockFingerprintService,
   SessionInfoRequestors,
   DefaultSessionInfoRequestors,
-  SessionCache
+  SessionCache,
+  NetworkStatus,
+  WexGoogleAnalyticsEvents
 } from "../providers";
-import { WexCurrency, WexDate, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
+import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
@@ -59,6 +60,7 @@ import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
 import { PrivacyPolicyPage } from "../pages/privacy-policy/privacy-policy";
 import { AppVersion } from "@ionic-native/app-version";
 import { TransactionsPage } from "../pages/transactions/transactions";
+import { TransactionDetailsPage } from '../pages/transactions/details/transaction-details';
 import { ApiProviders } from "@angular-wex/api-providers";
 import { GetCurrentEnvironmentConstants } from "./app.constants";
 import { ContactUsPage } from "../pages/contact-us/contact-us";
@@ -73,6 +75,7 @@ import { AddPaymentPage } from "../pages/payments/add/add-payment";
 import { AngularWexValidatorsModule } from "@angular-wex/validators";
 import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
 import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
+import { Network } from "@ionic-native/network";
 
 @NgModule({
   declarations: [
@@ -89,15 +92,18 @@ import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment
     DriversPage,
     DriversDetailsPage,
     PaymentsPage,
+    SettingsPage,
     TermsOfUsePage,
     PrivacyPolicyPage,
     TransactionsPage,
     AddPaymentPage,
     AddPaymentConfirmationPage,
     AddPaymentSummaryPage,
+    TransactionDetailsPage,
     ActionIndicator,
     WexCurrency,
     WexDate,
+    WexDateTime,
     WexNavBar,
     WexList,
     WexListItem,
@@ -109,9 +115,6 @@ import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment
     WexCardNumberPipe,
     OptionsPopoverPage,
     WexInfoCard,
-    WexBanner,
-    WexAppBanner,
-    WexSnackbar,
     WexSvgPipe,
     WexTrustedHtmlPipe,
     WexIfPlatformDirective,
@@ -151,16 +154,19 @@ import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment
     DriversPage,
     DriversDetailsPage,
     PaymentsPage,
+    SettingsPage,
     WexNavBar,
     OptionsPopoverPage,
     TermsOfUsePage,
     TransactionsPage,
+    TransactionDetailsPage,
     ContactUsPage,
     PrivacyPolicyPage,
     TransactionsPage,
     AddPaymentPage,
     AddPaymentConfirmationPage,
-    AddPaymentSummaryPage
+    AddPaymentSummaryPage,
+    PrivacyPolicyPage
   ],
   providers: [
     //# ionic
@@ -174,12 +180,13 @@ import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment
     AppVersion,
     InAppBrowser,
     Keyboard,
+    Network,
     //# app providers
     //----------------------
     {
       provide: Http,
       useClass: SecureHttp,
-      deps: [XHRBackend, RequestOptions]
+      deps: [XHRBackend, RequestOptions, NetworkStatus]
     },
     SessionManager,
     NavBarController,
@@ -189,12 +196,17 @@ import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment
     AndroidFingerprintService,
     IosFingerprintService,
     MockFingerprintService,
-    WexAppBannerController,
+    WexAppSnackbarController,
     {
       provide: SessionInfoRequestors,
       useClass: DefaultSessionInfoRequestors
     },
-    SessionCache
+    SessionCache,
+    NetworkStatus,
+    {
+      provide: GoogleAnalytics,
+      useClass: WexGoogleAnalyticsEvents
+    }
   ]
 })
 export class AppModule {}

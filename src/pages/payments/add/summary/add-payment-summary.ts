@@ -1,12 +1,11 @@
 import { Observable } from 'rxjs';
 import * as moment from "moment";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import {
   NavParams,
   NavController
 } from "ionic-angular";
 import { SecurePage } from "../../../secure-page";
-import { SessionManager } from "../../../../providers";
 import { InvoiceSummary, Payment } from "@angular-wex/models";
 import { Session, UserPayment } from "../../../../models";
 import { AddPaymentConfirmationPage } from "../confirmation/add-payment-confirmation";
@@ -30,12 +29,12 @@ export class AddPaymentSummaryPage extends SecurePage {
   public isLoading: boolean = false;
 
   constructor(
-    sessionManager: SessionManager,
+    injector: Injector,
     public navCtrl: NavController,
     public navParams: NavParams,
     private paymentProvider: PaymentProvider
   ) {
-    super("Payments.Add.Summary", sessionManager, [Session.Field.InvoiceSummary]);
+    super("Payments.Add.Summary", injector, [Session.Field.InvoiceSummary]);
 
     this.userPayment = this.navParams.get(AddPaymentSummaryNavParams.UserPayment);
   }

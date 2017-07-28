@@ -1,9 +1,10 @@
 import { CardsReissuePage } from "./../reissue/cards-reissue";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { NavParams, App } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
-import { Card, CardStatus } from "@angular-wex/models";
+import { Card } from "@angular-wex/models";
 import { SessionManager } from "../../../providers";
+import { WexAppSnackbarController } from "../../../components";
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -22,22 +23,41 @@ export namespace CardsDetailsNavParams {
 export class CardsDetailsPage extends DetailsPage {
 
   public card: Card;
-  public reissued: boolean;
+  private _reissued: boolean;
+  public set reissued(reissued: boolean) {
+    this._reissued = reissued;
+    this.reissuedSnackbar(reissued);
+  }
+  public get reissued(): boolean {
+    return this._reissued;
+  }
 
   constructor(
-    sessionManager: SessionManager,
     public navParams: NavParams,
-    private app: App
+    private app: App,
+    private wexAppSnackbarController: WexAppSnackbarController,
+    injector: Injector
   ) {
-    super("Cards.Details", sessionManager);
+    super("Cards.Details", injector);
 
     this.card = this.navParams.get(CardsDetailsNavParams.Card);
     this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);
   }
 
+  private reissuedSnackbar(reissued: Boolean) {
+    if (reissued) {
+      this.wexAppSnackbarController.createQueued({
+        message: this.CONSTANTS.reissueMessage,
+        duration: this.CONSTANTS.reissueMessageDuration,
+        position: 'top',
+      }).present();
+    }
+  }
+
   public get canChangeStatus(): boolean {
     // Rules in MOBACCTMGT-1135 AC #1
-    return this.session.user.isDistributor ? !this.card.isSuspended : !this.card.isTerminated;
+    if ( this.session.user.isDistributor ) { return this.card.isActive; }
+    return !this.card.isTerminated;
   }
 
   public get canReissue(): boolean {

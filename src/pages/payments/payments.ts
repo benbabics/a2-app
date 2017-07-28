@@ -1,8 +1,7 @@
 import * as _ from "lodash";
 import { Observable } from "rxjs";
-import { Component } from "@angular/core";
+import { Component, Injector } from '@angular/core';
 import { NavParams, NavController, ModalController, Modal } from "ionic-angular";
-import { SessionManager } from "../../providers";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Payment, PaymentStatus, MakePaymentAvailability } from "@angular-wex/models";
 import { Session } from "../../models";
@@ -25,13 +24,13 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   public checkingMakePaymentAvailability: boolean = false;
 
   constructor(
-    sessionManager: SessionManager,
-    public navController: NavController,
+    public navCtrl: NavController,
     public navParams: NavParams,
     private modalController: ModalController,
-    private dialogs: Dialogs
+    private dialogs: Dialogs,
+    injector: Injector
   ) {
-    super("Payments", sessionManager);
+    super("Payments", injector);
   }
 
   ionViewDidLeave() {

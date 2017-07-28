@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as moment from "moment";
 import * as accounting from "accounting-js";
-import { Component, ViewChild, trigger, transition, style, animate } from "@angular/core";
+import { Component, ViewChild, trigger, transition, style, animate, Injector } from "@angular/core";
 import {
   NavParams,
   NavController,
@@ -12,7 +12,6 @@ import {
   Select
 } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
-import { SessionManager } from "../../../providers";
 import { PaymentProvider } from "@angular-wex/api-providers";
 import { Session, UserPayment } from "../../../models";
 import { InvoiceSummary, BankAccount, Payment } from "@angular-wex/models";
@@ -208,14 +207,14 @@ export class AddPaymentPage extends SecurePage {
   public readonly maxPaymentDate = moment().add(AddPaymentPage.MAX_FUTURE_DAYS, "days").toISOString();
 
   constructor(
-    sessionManager: SessionManager,
+    injector: Injector,
     public navCtrl: NavController,
     public navParams: NavParams,
     private paymentProvider: PaymentProvider,
     private viewController: ViewController,
     public keyboard: Keyboard
   ) {
-    super("Payments.Add", sessionManager, [
+    super("Payments.Add", injector, [
       Session.Field.InvoiceSummary,
       Session.Field.BankAccounts
     ]);

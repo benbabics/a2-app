@@ -1,5 +1,5 @@
 import { AppVersion } from "@ionic-native/app-version";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { Page } from "../page";
 
 @Component({
@@ -9,8 +9,8 @@ import { Page } from "../page";
 export class ContactUsPage extends Page {
   private sendEmailLink: string;
 
-  constructor(private appVersion: AppVersion) {
-    super("Contact Us");
+  constructor(private appVersion: AppVersion, injector: Injector) {
+    super("Contact Us", injector);
   }
 
   ionViewDidLoad() {

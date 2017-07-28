@@ -1,9 +1,0 @@
-<ion-toolbar *ngIf="isVisible" class="snackbar-toolbar" [ngClass]="{ 'push-content': pushContent }" [@fadeInOut]>
-    <div class="snackbar-text" padding-horizontal>{{ text }}</div>
-    
-    <div *ngIf="action" class="snackbar-actions" padding-horizontal>
-        <button ion-button clear class="snackbar-action" (click)="action.handler()">
-            {{ action.label }}
-        </button>
-    </div>
-</ion-toolbar>

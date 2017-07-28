@@ -1,12 +1,12 @@
 import * as _ from "lodash";
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import {
   NavParams,
   NavController,
   App
 } from "ionic-angular";
 import { SecurePage } from "../../../secure-page";
-import { SessionManager, NavBarController } from "../../../../providers";
+import { NavBarController } from "../../../../providers";
 import { Payment } from "@angular-wex/models";
 import { PaymentsPage } from "../../payments";
 import { WexNavBar } from "../../../../components";
@@ -32,13 +32,13 @@ export class AddPaymentConfirmationPage extends SecurePage {
   public payment: Payment;
 
   constructor(
-    sessionManager: SessionManager,
+    injector: Injector,
     public navCtrl: NavController,
     public navParams: NavParams,
     public navBarCtrl: NavBarController,
     private app: App
   ) {
-    super("Payments.Add.Confirmation", sessionManager);
+    super("Payments.Add.Confirmation", injector);
 
     this.payment = this.navParams.get(AddPaymentConfirmationNavParams.Payment);
   }
