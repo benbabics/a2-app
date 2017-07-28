@@ -2,7 +2,8 @@ import * as _ from "lodash";
 import { Component } from "@angular/core";
 import {
   NavParams,
-  NavController
+  NavController,
+  App
 } from "ionic-angular";
 import { SecurePage } from "../../../secure-page";
 import { SessionManager, NavBarController } from "../../../../providers";
@@ -34,7 +35,8 @@ export class AddPaymentConfirmationPage extends SecurePage {
     sessionManager: SessionManager,
     public navCtrl: NavController,
     public navParams: NavParams,
-    public navBarCtrl: NavBarController
+    public navBarCtrl: NavBarController,
+    private app: App
   ) {
     super("Payments.Add.Confirmation", sessionManager);
 
@@ -50,7 +52,11 @@ export class AddPaymentConfirmationPage extends SecurePage {
   }
 
   public finish(data?: any) {
-    this.navCtrl.setRoot(WexNavBar)
-      .then(() => setTimeout(() => this.navBarCtrl.select(PaymentsPage)));
+    let firstViewCtrl = this.navCtrl.first();
+
+    this.app.getRootNav().setRoot(WexNavBar)
+      .then(() => this.navBarCtrl.select(PaymentsPage))
+      .then(() => this.navCtrl.remove(firstViewCtrl.index, this.navCtrl.length()))
+      .then(() => firstViewCtrl.dismiss());
   }
 }

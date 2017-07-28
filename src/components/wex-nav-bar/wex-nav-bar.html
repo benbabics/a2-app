@@ -2,28 +2,28 @@
   <ion-tab [root]="LandingPage"
            [tabTitle]="CONSTANTS.LABELS.landing"
            tabIcon="home"
-           (ionSelect)="resetTab()">
+           (ionSelect)="resetTab($event)">
   </ion-tab>
   <ion-tab [root]="PaymentsPage"
            [tabTitle]="CONSTANTS.LABELS.payments"
            [tabBadge]="paymentsBadgeText"
            tabBadgeStyle="wex-red"
            tabIcon="fa-bank"
-           (ionSelect)="resetTab()">
+           (ionSelect)="resetTab($event)">
   </ion-tab>
   <ion-tab [root]="TransactionsPage"
            [tabTitle]="CONSTANTS.LABELS.transactions"
            tabIcon="fa-exchange"
-           (ionSelect)="resetTab()">
+           (ionSelect)="resetTab($event)">
   </ion-tab>
   <ion-tab [root]="CardsPage"
            [tabTitle]="CONSTANTS.LABELS.cards"
            tabIcon="fa-credit-card-alt"
-           (ionSelect)="resetTab()">
+           (ionSelect)="resetTab($event)">
   </ion-tab>
   <ion-tab [root]="DriversPage"
            [tabTitle]="CONSTANTS.LABELS.drivers"
            tabIcon="car"
-           (ionSelect)="resetTab()">
+           (ionSelect)="resetTab($event)">
   </ion-tab>
 </ion-tabs>

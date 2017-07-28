@@ -20,28 +20,43 @@ export class NavBarController {
     this.sessionManager.sessionStateObserver.subscribe(created => this.onSessionStateChanged(created));
   }
 
-  private _checkIonTabs(nav: NavControllerBase): Tabs {
+  private searchForIonTabsController(navCtrls: NavControllerBase[]): Tabs {
+    let tabsCtrls = navCtrls
+      .map((navCtrl) => this.getIonTabsController(navCtrl))
+      .filter((tabsCtrl) => !!tabsCtrl);
+
+    if (tabsCtrls.length > 0) {
+      return tabsCtrls[0];
+    }
+
+    return undefined;
+  }
+
+  private getIonTabsController(nav: NavControllerBase): Tabs {
     if (nav instanceof Tabs) {
       return nav;
     }
     else if (nav instanceof Tab) {
       return nav.parent;
     }
+    else if (nav instanceof NavControllerBase) {
+      let views = nav.getViews() || [];
+
+      return this.searchForIonTabsController(views.map((viewCtrl) => viewCtrl.getContent()));
+    }
 
     return undefined;
   }
 
   public get ionTabs(): Tabs {
-    let tabsCtrls = ([
+    let tabsCtrl = this.searchForIonTabsController([
       this.app.getActiveNav(),
       this.app.getRootNav(),
       this.app.getRootNav().getActiveChildNav()
-    ] as NavControllerBase[])
-      .map((navCtrl) => this._checkIonTabs(navCtrl))
-      .filter((tabsCtrl) => !!tabsCtrl);
+    ] as NavControllerBase[]);
 
-    if (tabsCtrls.length > 0) {
-      return tabsCtrls[0];
+    if (tabsCtrl) {
+      return tabsCtrl;
     }
     else {
       throw new Error("Tabs controller not found.");
