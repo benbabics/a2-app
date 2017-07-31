@@ -4,3 +4,4 @@ export * from "./wex-date";
 export * from "./wex-date-time";
 export * from "./wex-svg";
 export * from "./wex-trusted-html";
+export * from "./capitalize";

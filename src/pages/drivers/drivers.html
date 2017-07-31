@@ -10,7 +10,7 @@
 
   <wex-static-list-page-content [page]="this">
     <ng-template #itemTemplate let-item>
-      <span  content-expand class="driver-name">{{ item.details.lastName }} {{ item.details.firstName}}</span>
+      <span  content-expand class="driver-name">{{ item.details.lastName | capitalize }} {{ item.details.firstName | capitalize }}</span>
       <span class="driver-id">{{ item.details.promptId }}</span>
     </ng-template>
   </wex-static-list-page-content>
