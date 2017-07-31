@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons *wexIfPlatformAndroid left>
+      <button ion-button icon-only (click)="cancel()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title>{{ isEditingPayment ? CONSTANTS.EDIT.title : CONSTANTS.CREATE.title }}</ion-title>
+
+    <ion-buttons *wexIfPlatformIos right>
+      <button ion-button (click)="cancel()">{{ CONSTANTS.BUTTONS.CLOSE }}</button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content wexKeyboardAware>
+  <wex-invoice-display [invoiceSummary]="invoiceSummary" class="payment-invoice-details">
+  </wex-invoice-display >
+
+  <!-- Back nav button -->
+  <div id="input-wrapper"
+       [ngClass]="{ 'input-focused': activeFlowSection.isFlowInputFocused }"
+       [attr.data-flow-type]="activeFlowSection.type">
+    <div padding-right class="nav-button" id="back-button-wrapper">
+      <button mini
+              ion-fab
+              id="back-button"
+              color="light-gray"
+              [disabled]="!canFlowBack"
+              (click)="onFlowBack()">
+        <ion-icon name="arrow-back">
+        </ion-icon>
+      </button>
+    </div>
+
+    <form novalidate #form="ngForm" id="flow-form" [ngSwitch]="activeFlowSection.type">
+
+      <!-- Amount Input -->
+      <div *ngSwitchCase="'Amount'">
+        <ion-item [@flowTransition]>
+          <ion-label stacked>{{ CONSTANTS.LABELS.paymentAmount }}</ion-label>
+          <ion-input #flowFormInput
+                    required
+                    wexValidateCurrency
+                    name="paymentAmount"
+                    type="tel"
+                    [wexValidateCurrencyOptions]="validateCurrencyOptions"
+                    [(ngModel)]="paymentAmount">
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <!-- Date Input -->
+      <div *ngSwitchCase="'Date'">
+        <ion-item [@flowTransition]>
+          <ion-label stacked>{{ CONSTANTS.LABELS.paymentDate }}</ion-label>
+          <ion-datetime required
+                        #flowFormInput
+                        name="paymentDate"
+                        [min]="minPaymentDate"
+                        [max]="maxPaymentDate"
+                        [(ngModel)]="paymentDate">
+          </ion-datetime>
+        </ion-item>
+      </div>
+
+    <!-- Bank Account Input -->
+      <div *ngSwitchCase="'BankAccount'">
+        <ion-item [@flowTransition]>
+          <ion-label stacked>{{ CONSTANTS.LABELS.bankAccount }}</ion-label>
+          <ion-select required
+                      #flowFormInput
+                      name="paymentBankAccount"
+                      [compareWith]="compareBankAccounts"
+                      [(ngModel)]="paymentBankAccount">
+            <ion-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount">
+              {{ bankAccount.details.name }}
+            </ion-option>
+          </ion-select>
+        </ion-item>
+      </div>
+    </form>
+
+    <!-- Forward nav button -->
+    <div padding-left class="nav-button" id="forward-button-wrapper">
+      <button mini
+              ion-fab
+              id="forward-button"
+              [color]="canFlowForward ? 'success-dark' : 'danger-dark'"
+              [disabled]="!canFlowForward"
+              (click)="onFlowForward()">
+        <ion-icon [name]="activeFlowSection.hasNextSection() ? 'arrow-forward' : 'checkmark'"></ion-icon>
+      </button>
+    </div>
+  </div>
+</ion-content>
