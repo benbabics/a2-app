@@ -6,6 +6,20 @@ page-drivers {
     text-align: right;
   }
 
+  #items-list { 
+    ion-item-divider {
+      &.active {
+        color: color($colors, success-dark);
+        background-color: color($colors, success);
+      }
+
+      &.terminated {
+        color: color($colors, danger-dark);
+        background-color: color($colors, danger);
+      }
+    }
+  }
+
   wex-list-item {
     @extend %wex-list-item-driver;
   }
