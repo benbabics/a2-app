@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#b074377792c":
-  version "1.2.6"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#b074377792c"
+"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#e7e0adc77f6":
+  version "1.2.13"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#e7e0adc77f6"
 
 "@angular-wex/mocks@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#b30796baed3":
   version "1.0.1"

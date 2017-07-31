@@ -1,4 +1,4 @@
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 import { SessionManager } from './../../providers/session-manager';
 import { Observable } from 'rxjs/Observable';
 import { Component, Injector } from '@angular/core';
@@ -27,9 +27,12 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
     sessionManager: SessionManager,
     public navCtrl: NavController,
     public navParams: NavParams,
+    private events: Events,
     injector: Injector
   ) {
     super("Drivers", injector, DriversPage.SEARCH_FILTER_FIELDS);
+
+    events.subscribe("drivers:statusUpdate", () => this.updateList());
   }
 
   protected fetch(options?: FetchOptions): Observable<Driver[]> {
