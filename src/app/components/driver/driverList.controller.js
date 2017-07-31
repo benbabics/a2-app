@@ -57,7 +57,7 @@
 
         function handleMakeRequest(requestConfig) {
             var billingAccountId = UserManager.getUser().billingCompany.accountId;
-            return DriverManager.fetchDrivers( billingAccountId );
+            return DriverManager.fetchDrivers( billingAccountId, { pageNumber: 0, pageSize: 9999 } );
         }
 
         function handleOnRequestItems() {
