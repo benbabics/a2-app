@@ -1,3 +1,4 @@
+import { WexAlertController } from './../../../components/wex-alert-controller/wex-alert-controller';
 import { Observable } from 'rxjs/Observable';
 import { CardProvider } from '@angular-wex/api-providers';
 import { CardsReissuePage } from "./../reissue/cards-reissue";
@@ -32,7 +33,6 @@ export namespace CardsDetailsNavParams {
   templateUrl: "cards-details.html"
 })
 export class CardsDetailsPage extends DetailsPage {
-  @Value("BUTTONS") private BUTTONS;
 
   public card: Card;
   private _reissued: boolean;
@@ -53,7 +53,7 @@ export class CardsDetailsPage extends DetailsPage {
     private actionSheetController: ActionSheetController,
     private cardProvider: CardProvider,
     private events: Events,
-    private alertController: AlertController
+    private wexAlertController: WexAlertController
   ) {
     super("Cards.Details", injector);
 
@@ -121,20 +121,9 @@ export class CardsDetailsPage extends DetailsPage {
   }
 
   private confirmTermination() {
-    this.alertController.create({
-      message: this.CONSTANTS.confirmMessageTerminate,
-      buttons: [
-        {
-          text: this.BUTTONS.YES,
-          handler: () => {
-            this.updateCardStatus(this.CONSTANTS.statuses.TERMINATED.id);
-          }
-        },
-        {
-          text: this.BUTTONS.NO
-        }
-      ]
-    }).present();
+    let message = this.CONSTANTS.confirmMessageTerminate;
+    let yesHandler = () => this.updateCardStatus(this.CONSTANTS.statuses.TERMINATED.id);
+    this.wexAlertController.confirmation(message, yesHandler);
   }
 
   private updateCardStatus(newStatus: CardStatus) {
