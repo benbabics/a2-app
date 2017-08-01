@@ -100,7 +100,7 @@ export class CardsDetailsPage extends DetailsPage {
 
     let buttons: ActionSheetButton[] = actions.map((action) => ({
       text: action.label,
-      icon: action.icon,
+      icon: !this.platform.is("ios") ? action.icon : null,
       handler: () => {
         if (action.id === this.CONSTANTS.statuses.TERMINATED.id) {
           this.confirmTermination();
@@ -118,7 +118,7 @@ export class CardsDetailsPage extends DetailsPage {
         {
           text: this.CONSTANTS.actionStatusCancel,
           role: "cancel",
-          icon: !this.platform.is('ios') ? 'close' : null,
+          icon: !this.platform.is("ios") ? "close" : null,
         }
       ]
     };
