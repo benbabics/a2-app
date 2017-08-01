@@ -53,7 +53,7 @@ import {
   NetworkStatus,
   WexGoogleAnalyticsEvents
 } from "../providers";
-import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe, Capitalize } from "../pipes";
+import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
@@ -105,7 +105,6 @@ import { Network } from "@ionic-native/network";
     WexCurrency,
     WexDate,
     WexDateTime,
-    Capitalize,
     WexNavBar,
     WexList,
     WexListItem,
