@@ -141,9 +141,9 @@ export namespace ConstantsInfo {
             }
           },
           statuses: {
-            ACTIVE: { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive" },
-            SUSPENDED: { "id": "SUSPENDED",  "label": "Suspended",  "trackingId": "statusOptionSuspended" },
-            TERMINATED: { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated" }
+            ACTIVE: { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive", "icon": "checkmark-circle" },
+            SUSPENDED: { "id": "SUSPENDED",  "label": "Suspended",  "trackingId": "statusOptionSuspended", "icon": "information-circle" },
+            TERMINATED: { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated", "icon": "close-circle" }
           },
           bannerStatusChangeSuccess: "Status change successful.",
           bannerStatusChangeFailure: "Status change failed. Please try again.",
@@ -206,8 +206,8 @@ export namespace ConstantsInfo {
             emailAddress:    "Email Address"
           },
           statusOptions: [
-            { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive" },
-            { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated" }
+            { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive", "icon": "checkmark-circle" },
+            { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated", "icon": "close-circle" }
           ],
           statuses: {
             ACTIVE: "ACTIVE",

@@ -1,6 +1,6 @@
 import { WexAppSnackbarController } from './../../../components/wex-app-snackbar-controller/wex-app-snackbar-controller';
 import { ActionSheetButton } from 'ionic-angular/components/action-sheet/action-sheet-options';
-import { ActionSheetController, Events, ToastOptions } from 'ionic-angular';
+import { ActionSheetController, Events, ToastOptions, Platform } from 'ionic-angular';
 import * as _ from "lodash";
 import { Component, Injector } from '@angular/core';
 import { NavParams, App } from 'ionic-angular';
@@ -18,6 +18,7 @@ interface Status {
   id: DriverStatus;
   label: string;
   trackingId: string;
+  icon: string;
 };
 @Component({
   selector: "page-drivers-details",
@@ -35,6 +36,7 @@ export class DriversDetailsPage extends DetailsPage {
     private driverProvider: DriverProvider,
     private wexAppSnackbarController: WexAppSnackbarController,
     private events: Events,
+    private platform: Platform,
     injector: Injector
   ) {
     super( "Drivers.Details", injector );
@@ -64,6 +66,7 @@ export class DriversDetailsPage extends DetailsPage {
   private buildActionSheet(actions: Status[]): ActionSheetOptions {
     let buttons: ActionSheetButton[] = actions.map(action => ({
       text: action.label,
+      icon: action.icon,
       handler: () => {
         if (action.id === this.CONSTANTS.statuses.TERMINATED) {
           this.confirmTermination();
@@ -78,7 +81,8 @@ export class DriversDetailsPage extends DetailsPage {
         ...buttons,
         {
           text: this.CONSTANTS.actionStatusCancel,
-          role: "cancel"
+          role: "cancel",
+          icon: !this.platform.is('ios') ? 'close' : null
         }
       ]
     }

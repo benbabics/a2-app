@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { CardProvider } from '@angular-wex/api-providers';
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, App, ActionSheetController, Events, AlertController, ToastOptions } from 'ionic-angular';
+import { NavParams, App, ActionSheetController, Events, AlertController, ToastOptions, Platform } from 'ionic-angular';
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
 import { Card } from "@angular-wex/models";
@@ -25,6 +25,7 @@ export namespace CardsDetailsNavParams {
     id: CardStatus;
     label: string;
     trackingId: string;
+    icon: string;
   };
 }
 
@@ -53,7 +54,8 @@ export class CardsDetailsPage extends DetailsPage {
     private actionSheetController: ActionSheetController,
     private cardProvider: CardProvider,
     private events: Events,
-    private wexAlertController: WexAlertController
+    private wexAlertController: WexAlertController,
+    private platform: Platform
   ) {
     super("Cards.Details", injector);
 
@@ -98,6 +100,7 @@ export class CardsDetailsPage extends DetailsPage {
 
     let buttons: ActionSheetButton[] = actions.map((action) => ({
       text: action.label,
+      icon: action.icon,
       handler: () => {
         if (action.id === this.CONSTANTS.statuses.TERMINATED.id) {
           this.confirmTermination();
@@ -114,7 +117,8 @@ export class CardsDetailsPage extends DetailsPage {
         ...buttons,
         {
           text: this.CONSTANTS.actionStatusCancel,
-          role: "cancel"
+          role: "cancel",
+          icon: !this.platform.is('ios') ? 'close' : null,
         }
       ]
     };
