@@ -14,7 +14,7 @@ import { WexAlertController } from '../../../components/wex-alert-controller/wex
 type DriverDetailsOnlineApplicationFilter = {
   [P in keyof Driver.Details]?: OnlineApplication[];
 };
-interface Status {
+interface DriverStatusDetails {
   id: DriverStatus;
   label: string;
   trackingId: string;
@@ -59,11 +59,11 @@ export class DriversDetailsPage extends DetailsPage {
   }
 
   public changeStatus() {
-    let actions = this.CONSTANTS.statusOptions as Status[];
+    let actions = this.CONSTANTS.statusOptions as DriverStatusDetails[];
     this.actionSheetController.create(this.buildActionSheet(actions)).present();
   }
 
-  private buildActionSheet(actions: Status[]): ActionSheetOptions {
+  private buildActionSheet(actions: DriverStatusDetails[]): ActionSheetOptions {
     let buttons: ActionSheetButton[] = actions.map(action => ({
       text: action.label,
       icon: !this.platform.is("ios") ? action.icon : null,

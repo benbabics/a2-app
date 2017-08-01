@@ -17,16 +17,16 @@ export type CardsDetailsNavParams = keyof {
   card,
   reissued
 };
+interface CardStatusDetails {
+  id: CardStatus;
+  label: string;
+  trackingId: string;
+  icon: string;
+};
 
 export namespace CardsDetailsNavParams {
   export const Card: CardsDetailsNavParams = "card";
   export const Reissued: CardsDetailsNavParams = "reissued";
-  export interface Status {
-    id: CardStatus;
-    label: string;
-    trackingId: string;
-    icon: string;
-  };
 }
 
 @Component({
@@ -96,7 +96,7 @@ export class CardsDetailsPage extends DetailsPage {
     }
   }
 
-  private buildActionSheet(actions: CardsDetailsNavParams.Status[]): ActionSheetOptions {
+  private buildActionSheet(actions: CardStatusDetails[]): ActionSheetOptions {
 
     let buttons: ActionSheetButton[] = actions.map((action) => ({
       text: action.label,
@@ -161,8 +161,8 @@ export class CardsDetailsPage extends DetailsPage {
       });
   }
 
-  private get availableCardStatuses(): Array<CardsDetailsNavParams.Status> {
-    let statuses: CardsDetailsNavParams.Status[] = this.CONSTANTS.statusOptions;
+  private get availableCardStatuses(): Array<CardStatusDetails> {
+    let statuses: CardStatusDetails[] = this.CONSTANTS.statusOptions;
     let isWOLNP = this.session.user.isWolNp;
     let rejectionAttrs;
     // Only WOL_NP with "Active" status can "Suspended" Cards
