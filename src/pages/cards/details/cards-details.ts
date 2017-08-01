@@ -102,7 +102,7 @@ export class CardsDetailsPage extends DetailsPage {
       text: action.label,
       icon: !this.platform.is("ios") ? action.icon : null,
       handler: () => {
-        if (action.id === this.CONSTANTS.statuses.TERMINATED.id) {
+        if (action.id === this.CONSTANTS.statuses.TERMINATED) {
           this.confirmTermination();
         } else {
           this.updateCardStatus(action.id);
@@ -126,7 +126,7 @@ export class CardsDetailsPage extends DetailsPage {
 
   private confirmTermination() {
     let message = this.CONSTANTS.confirmMessageTerminate;
-    let yesHandler = () => this.updateCardStatus(this.CONSTANTS.statuses.TERMINATED.id);
+    let yesHandler = () => this.updateCardStatus(this.CONSTANTS.statuses.TERMINATED);
     this.wexAlertController.confirmation(message, yesHandler);
   }
 
@@ -162,7 +162,7 @@ export class CardsDetailsPage extends DetailsPage {
   }
 
   private get availableCardStatuses(): Array<CardsDetailsNavParams.Status> {
-    let statuses: CardsDetailsNavParams.Status[] = this.CONSTANTS.statuses;
+    let statuses: CardsDetailsNavParams.Status[] = this.CONSTANTS.statusOptions;
     let isWOLNP = this.session.user.isWolNp;
     let rejectionAttrs;
     // Only WOL_NP with "Active" status can "Suspended" Cards

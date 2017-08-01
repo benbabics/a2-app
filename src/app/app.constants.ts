@@ -140,10 +140,15 @@ export namespace ConstantsInfo {
               embossingValue1: "Optional Embossing",
             }
           },
+          statusOptions: [
+            { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive", "icon": "checkmark-circle" },
+            { "id": "SUSPENDED",  "label": "Suspended",  "trackingId": "statusOptionSuspended", "icon": "information-circle" },
+            { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated", "icon": "close-circle" }
+          ],
           statuses: {
-            ACTIVE: { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive", "icon": "checkmark-circle" },
-            SUSPENDED: { "id": "SUSPENDED",  "label": "Suspended",  "trackingId": "statusOptionSuspended", "icon": "information-circle" },
-            TERMINATED: { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated", "icon": "close-circle" }
+            ACTIVE: "ACTIVE",
+            SUSPENDED: "SUSPENDED",
+            TERMINATED: "TERMINATED"
           },
           bannerStatusChangeSuccess: "Status change successful.",
           bannerStatusChangeFailure: "Status change failed. Please try again.",
