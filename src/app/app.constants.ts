@@ -25,6 +25,7 @@ export namespace ConstantsInfo {
     BUTTONS: {
       OK: "Ok",
       CANCEL: "Cancel",
+      CLOSE: "Close",
       YES: "Yes",
       NO: "No",
       DISMISS: "Dismiss"
@@ -317,6 +318,13 @@ export namespace ConstantsInfo {
 
       //# Payments page
       PAYMENTS: {
+        UNAVAILABILITY_REASONS: {
+          default: "We are unable to process your changes at this time.",
+          shouldDisplayCurrentBalanceDueMessage: "Current Balance needs to be greater than $0.00.",
+          shouldDisplayBankAccountSetupMessage: "You must set up your financial institutions as your payment options online prior to scheduling a payment.",
+          shouldDisplayDirectDebitEnabledMessage: "Online payment is not currently available for this account. The account has set up an alternative method of payment, such as direct debit.",
+          shouldDisplayOutstandingPaymentMessage: "A payment has already been scheduled.",
+        },
         listLabels: ["Date", "Amount"],
         greekingData: [
           { left: 3, top: 10, right: 24, bottom: 35 },
@@ -342,6 +350,51 @@ export namespace ConstantsInfo {
               content:   "Are you sure you want to cancel this scheduled payment?",
               yesButton: "Yes",
               noButton:  "No"
+          }
+        },
+
+        //# Add Payment page
+        ADD: {
+          CREATE: {
+            title: "Make Payment"
+          },
+          EDIT: {
+            title: "Edit Payment"
+          },
+          LABELS: {
+            paymentAmount: "Payment Amount",
+            paymentDate: "Payment Date",
+            bankAccount: "Bank Account"
+          },
+
+          //# Add Payment Confirmation page
+          CONFIRMATION: {
+            title: "Payment Confirmation",
+
+            LABELS: {
+              success: "Success!",
+              complete: "Complete"
+            },
+
+            MESSAGES: {
+              confirmationMessage: "Your payment of <strong><%= paymentAmount %></strong> from <strong><%= bankAccount %></strong> is scheduled to be processed on <strong><%= paymentDate %></strong>."
+            }
+          },
+          //# Add Payment Summary page
+          SUMMARY: {
+            title: "Review Payment",
+
+            LABELS: {
+              paymentDetails: "Payment Details",
+              paymentAmount: "Payment Amount",
+              paymentDate: "Scheduled Date",
+              bankAccount: "Bank Account",
+              makePayment: "Make Payment"
+            },
+            MESSAGES: {
+              dueDateWarning: "The payment date selected is past the due date.",
+              paymentInfo: "Payments scheduled after 3:30PM Eastern Time, on a weekend, or on a holiday will be processed on the <strong>next</strong> business day."
+            }
           }
         }
       },
@@ -606,14 +659,22 @@ export namespace ConstantsInfo {
     }
   };
 
+  interface GoogleAnalyticsConstant {
+    GOOGLE_ANALYTICS: {
+      TRACKING_ID: string;
+    }
+  }
   export type CommonConstants = typeof Common;
   export type PartialCommonConstants = {[K in keyof CommonConstants]?: Partial<CommonConstants[K]> };
-  export type EnvironmentConstants = ConstantsConfig & PartialCommonConstants;
+  export type EnvironmentConstants = ConstantsConfig & PartialCommonConstants & GoogleAnalyticsConstant;
 
   export const Env: Map<string, EnvironmentConstants> = new Map<string, EnvironmentConstants>();
 }
 
 ConstantsInfo.Env.set("local", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -638,6 +699,9 @@ ConstantsInfo.Env.set("local", {
 });
 
 ConstantsInfo.Env.set("dit", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -661,6 +725,9 @@ ConstantsInfo.Env.set("dit", {
 });
 
 ConstantsInfo.Env.set("stage-wex", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: "UA-71223382-1"
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",
@@ -684,6 +751,9 @@ ConstantsInfo.Env.set("stage-wex", {
 });
 
 ConstantsInfo.Env.set("production-wex", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: ""
+  },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
     client_id: "mobileAccountManagement",

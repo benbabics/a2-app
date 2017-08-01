@@ -6,7 +6,7 @@ import { LandingPage } from "../../pages/landing/landing";
 import { PaymentsPage } from "../../pages/payments/payments";
 import { TransactionsPage } from "../../pages/transactions/transactions";
 import { Value } from "../../decorators/value";
-import { App, Tab } from "ionic-angular";
+import { Tab } from "ionic-angular";
 
 @Component({
   selector: "wex-nav-bar",
@@ -16,7 +16,7 @@ export class WexNavBar {
 
   @Value("NAVIGATION") public CONSTANTS: any;
 
-  constructor(private app: App, private navBarController: NavBarController) { }
+  constructor(private navBarController: NavBarController) { }
 
   public get CardsPage() {
     return CardsPage;
@@ -42,12 +42,10 @@ export class WexNavBar {
     return this.navBarController.paymentsBadgeText;
   }
 
-  public resetTab() {
-    let activeNav = this.app.getActiveNav();
-
+  public resetTab(tab: Tab) {
     // Go back to the root page of the tab's nav stack when switching to tab
-    if (activeNav instanceof Tab && activeNav.length() > 1) {
-      activeNav.popToRoot();
+    if (tab.length() > 1) {
+      tab.popToRoot();
     }
   }
 }

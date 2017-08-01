@@ -1,11 +1,13 @@
+import * as _ from "lodash";
 import { Observable } from "rxjs";
-import { Component } from "@angular/core";
-import { NavParams, NavController } from "ionic-angular";
-import { SessionManager } from "../../providers";
+import { Component, Injector } from '@angular/core';
+import { NavParams, NavController, ModalController, Modal } from "ionic-angular";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
-import { Payment, PaymentStatus } from "@angular-wex/models";
+import { Payment, PaymentStatus, MakePaymentAvailability } from "@angular-wex/models";
 import { PaymentsDetailsPage } from './details/payments-details';
 import { Session } from "../../models";
+import { AddPaymentPage } from "./add/add-payment";
+import { Dialogs } from "@ionic-native/dialogs";
 
 @Component({
   selector: "page-payments",
@@ -18,12 +20,37 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   protected readonly listGroupDisplayOrder: string[] = PaymentsPage.PAYMENT_STATUSES;
   public readonly dividerLabels: string[] = PaymentsPage.PAYMENT_STATUSES.map(PaymentStatus.displayName);
 
+  private makePaymentModal: Modal;
+
+  public checkingMakePaymentAvailability: boolean = false;
+
   constructor(
-    sessionManager: SessionManager,
     public navCtrl: NavController,
-    public navParams: NavParams
+    public navParams: NavParams,
+    private modalController: ModalController,
+    private dialogs: Dialogs,
+    injector: Injector
   ) {
-    super("Payments", sessionManager);
+    super("Payments", injector);
+  }
+
+  ionViewDidLeave() {
+    if (this.makePaymentModal) {
+      this.makePaymentModal.dismiss();
+    }
+  }
+
+  private canMakePayment(): Promise<MakePaymentAvailability | undefined> {
+    this.checkingMakePaymentAvailability = true;
+
+    return this.sessionManager.cache.getSessionDetail(Session.Field.MakePaymentAvailability, { forceRequest: true })
+      .toPromise()
+      .then((availability: MakePaymentAvailability) => {
+        if (!availability.details.makePaymentAllowed) {
+          return Promise.reject(availability);
+        }
+      })
+      .finally(() => this.checkingMakePaymentAvailability = false);
   }
 
   protected fetch(options?: FetchOptions): Observable<Payment[]> {
@@ -40,5 +67,24 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
 
   public goToDetailPage(payment: Payment) {
     this.navCtrl.push(PaymentsDetailsPage, { payment });
+  }
+
+  public addPayment() {
+    if (!this.makePaymentModal) {
+      this.canMakePayment()
+        .then(() => {
+          this.makePaymentModal = this.modalController.create(AddPaymentPage);
+
+          this.makePaymentModal.onDidDismiss(() => this.makePaymentModal = null);
+          this.makePaymentModal.present();
+        })
+        .catch((availability: MakePaymentAvailability) => {
+          // get the reason that the user can't make a payment
+          let unavailabilityReason = _.reduce<any, string>(availability.details, (acc, isReason, reason) => isReason ? reason : acc, "");
+          let unavailabilityReasonMessage = _.get<string>(this.CONSTANTS.UNAVAILABILITY_REASONS, unavailabilityReason, this.CONSTANTS.UNAVAILABILITY_REASONS.default);
+
+          this.dialogs.alert(unavailabilityReasonMessage);
+        });
+    }
   }
 }

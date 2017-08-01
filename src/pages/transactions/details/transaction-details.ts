@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { NavParams, App } from 'ionic-angular';
 import { DetailsPage } from "../../details-page";
 import { SessionManager } from './../../../providers/session-manager';
@@ -13,11 +13,11 @@ export class TransactionDetailsPage extends DetailsPage {
   public transaction: Transaction;
 
   constructor(
-    sessionManager: SessionManager,
+    injector: Injector,
     private app: App,
     public navParams: NavParams
   ) {
-    super( "Transactions.Details", sessionManager );
+    super( "Transactions.Details", injector );
     this.transaction = this.navParams.get( "item" );
   }
 }

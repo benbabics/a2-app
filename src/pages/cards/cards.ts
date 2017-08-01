@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 import { CardsDetailsPage } from "./details/cards-details";
-import { Component } from "@angular/core";
+import { Component, Injector } from '@angular/core';
 import { NavParams, NavController } from "ionic-angular";
 import { SessionManager } from "../../providers";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
@@ -24,11 +24,11 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
   public readonly dividerLabels: string[] = CardsPage.CARD_STATUSES.map(CardStatus.displayName);
 
   constructor(
-    sessionManager: SessionManager,
     public navCtrl: NavController,
-    public navParams: NavParams
+    public navParams: NavParams,
+    injector: Injector
   ) {
-    super("Cards", sessionManager, CardsPage.SEARCH_FILTER_FIELDS);
+    super("Cards", injector, CardsPage.SEARCH_FILTER_FIELDS);
   }
 
   protected fetch(options?: FetchOptions): Observable<Card[]> {

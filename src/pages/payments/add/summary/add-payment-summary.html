@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <wex-invoice-display collapsed="true" [invoiceSummary]="invoiceSummary" class="payment-invoice-details">
+  </wex-invoice-display>
+
+  <wex-info-card *ngIf="isPaymentAfterDueDate" color="#e8db2c" iconName="warning">
+    {{ CONSTANTS.MESSAGES.dueDateWarning }}
+  </wex-info-card>
+
+  <wex-info-card>
+    <span [innerHTML]="CONSTANTS.MESSAGES.paymentInfo"></span>
+  </wex-info-card>
+
+  <ion-card id="card-payment-details">
+    <ion-card-header>{{ CONSTANTS.LABELS.paymentDetails }}</ion-card-header>
+    <ion-card-content>
+      <ion-list id="list-payment-details">
+        <wex-list-item>
+          <span>{{ CONSTANTS.LABELS.paymentAmount }}</span>
+          <span class="value" text-right>{{ userPayment.amount | wexCurrency }}</span>
+        </wex-list-item>
+
+        <wex-list-item>
+          <span>{{ CONSTANTS.LABELS.paymentDate }}</span>
+          <span class="value" text-right>{{ userPayment.date | wexDate }}</span>
+        </wex-list-item>
+
+        <wex-list-item>
+          <span>{{ CONSTANTS.LABELS.bankAccount }}</span>
+          <span class="value" text-right>{{ userPayment.bankAccount.details.name }}</span>
+        </wex-list-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <button ion-button full large id="button-make-payment" (click)="confirm()">
+    <action-indicator large [when]="isLoading">{{ CONSTANTS.LABELS.makePayment }}</action-indicator>
+  </button>
+</ion-footer>

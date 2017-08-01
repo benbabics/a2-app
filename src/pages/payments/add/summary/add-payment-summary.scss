@@ -1,0 +1,24 @@
+page-add-payment-summary {
+
+  .payment-invoice-details .invoice-display {
+    @include md-shadow();
+  }
+
+  #card-payment-details {
+
+    #list-payment-details .value, .card-header {
+      font-weight: bold;
+    }
+
+    #list-payment-details {
+
+      wex-list-item ion-label {
+        padding: 0.2rem 0;
+      }
+    }
+  }
+
+  #button-make-payment {
+    @include action-indicator-color(white);
+  }
+}

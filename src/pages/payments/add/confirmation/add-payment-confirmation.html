@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div>
+    <h1 id="success-header">{{ CONSTANTS.LABELS.success }}</h1>
+    <ion-icon padding-left large id="success-icon" name="checkmark-circle" color="success-dark"></ion-icon>
+  </div>
+
+  <p [innerHTML]="confirmationMessage"></p>
+
+  <div padding-top id="button-container">
+    <button ion-button (click)="finish()">{{ CONSTANTS.LABELS.complete }}</button>
+  </div>
+</ion-content>

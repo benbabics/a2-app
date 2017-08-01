@@ -1,0 +1,20 @@
+page-add-payment-confirmation {
+
+  &.ion-page ion-content {
+    background: color($colors, white);
+  }
+
+  #success-header {
+    display: inline;
+  }
+
+  #success-icon {
+    font-size: 4rem;
+  }
+
+  #button-container {
+    @include flexbox();
+    @include flex-dir(row);
+    @include justify-content(center);
+  }
+}

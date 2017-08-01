@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { Page } from "../../page";
 import { Platform, ViewController, NavParams } from "ionic-angular";
 
@@ -11,8 +11,9 @@ export class FingerprintAuthenticationTermsPage extends Page {
 
   constructor(private platform: Platform,
   private viewControl: ViewController,
-  private navParams: NavParams) {
-    super("Fingerprint Auth Terms");
+  private navParams: NavParams,
+  injector: Injector) {
+    super("Fingerprint Auth Terms", injector);
   }
 
   public ionViewDidLoad() {
