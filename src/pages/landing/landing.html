@@ -34,7 +34,7 @@
       </ion-item-divider>
       <ion-card-content id="company-details-content">
         <ion-item id="company-details" text-wrap>
-          <p id="company-name">{{ session.user.billingCompany.details.name }}</p>
+          <p id="company-name">{{ billingCompany.details.name }}</p>
           <p id="account-number">{{ session.user.displayAccountNumber }}</p>
         </ion-item>
         <ion-item id="brand-logo" *ngIf="brandLogoData">

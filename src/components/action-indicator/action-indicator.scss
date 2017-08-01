@@ -7,6 +7,14 @@
 }
 
 action-indicator {
+
+  @at-root
+    button[ion-only] &,
+    button[ion-fab] &  {
+
+    @extend ion-icon;
+  }
+
   &[large] ion-spinner {
     width: 36px;
     height: 36px;

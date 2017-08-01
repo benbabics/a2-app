@@ -2,8 +2,10 @@
   <ion-toolbar *wexIfPlatformIos>
     <ion-title>{{ CONSTANTS.title }}</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only>
-        <ion-icon name="add"></ion-icon>
+      <button id="button-add-payment" ion-button icon-only [disabled]="checkingMakePaymentAvailability" (click)="addPayment()">
+        <action-indicator [when]="checkingMakePaymentAvailability">
+          <ion-icon name="add"></ion-icon>
+        </action-indicator>
       </button>
     </ion-buttons>
   </ion-toolbar>
@@ -27,8 +29,10 @@
 
 <ion-footer *wexIfPlatformAndroid>
   <ion-fab bottom right style="position: fixed">
-    <button ion-fab color="wex-red">
-      <ion-icon name="add"></ion-icon>
+    <button id="button-add-payment" ion-fab color="wex-red" [disabled]="checkingMakePaymentAvailability" (click)="addPayment()">
+      <action-indicator [when]="checkingMakePaymentAvailability">
+        <ion-icon name="add"></ion-icon>
+      </action-indicator>
     </button>
   </ion-fab>
 </ion-footer>

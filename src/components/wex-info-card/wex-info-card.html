@@ -1,6 +1,7 @@
 <ion-card>
-  <ion-item>
-    <ion-icon item-left small name="information-circle" color="dark-gray"></ion-icon>
+  <ion-item class="wex-info-card-item" [ngClass]="{ colored: !!color }" [style.color]="color">
+    <ion-icon item-left [color]="dark-gray" [style.color]="color" [name]="iconName">
+    </ion-icon>
     <span text-wrap>
       <ng-content></ng-content>
     </span>

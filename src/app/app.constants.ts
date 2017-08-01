@@ -25,6 +25,7 @@ export namespace ConstantsInfo {
     BUTTONS: {
       OK: "Ok",
       CANCEL: "Cancel",
+      CLOSE: "Close",
       YES: "Yes",
       NO: "No",
       DISMISS: "Dismiss"
@@ -341,6 +342,13 @@ export namespace ConstantsInfo {
 
       //# Payments page
       PAYMENTS: {
+        UNAVAILABILITY_REASONS: {
+          default: "We are unable to process your changes at this time.",
+          shouldDisplayCurrentBalanceDueMessage: "Current Balance needs to be greater than $0.00.",
+          shouldDisplayBankAccountSetupMessage: "You must set up your financial institutions as your payment options online prior to scheduling a payment.",
+          shouldDisplayDirectDebitEnabledMessage: "Online payment is not currently available for this account. The account has set up an alternative method of payment, such as direct debit.",
+          shouldDisplayOutstandingPaymentMessage: "A payment has already been scheduled.",
+        },
         listLabels: ["Date", "Amount"],
         greekingData: [
           { left: 3, top: 10, right: 24, bottom: 35 },
@@ -349,7 +357,52 @@ export namespace ConstantsInfo {
           { left: 68, top: 55, right: 90, bottom: 80 },
         ],
         greekedElementCount: 15,
-        title: "Payments"
+        title: "Payments",
+
+        //# Add Payment page
+        ADD: {
+          CREATE: {
+            title: "Make Payment"
+          },
+          EDIT: {
+            title: "Edit Payment"
+          },
+          LABELS: {
+            paymentAmount: "Payment Amount",
+            paymentDate: "Payment Date",
+            bankAccount: "Bank Account"
+          },
+
+          //# Add Payment Confirmation page
+          CONFIRMATION: {
+            title: "Payment Confirmation",
+
+            LABELS: {
+              success: "Success!",
+              complete: "Complete"
+            },
+
+            MESSAGES: {
+              confirmationMessage: "Your payment of <strong><%= paymentAmount %></strong> from <strong><%= bankAccount %></strong> is scheduled to be processed on <strong><%= paymentDate %></strong>."
+            }
+          },
+          //# Add Payment Summary page
+          SUMMARY: {
+            title: "Review Payment",
+
+            LABELS: {
+              paymentDetails: "Payment Details",
+              paymentAmount: "Payment Amount",
+              paymentDate: "Scheduled Date",
+              bankAccount: "Bank Account",
+              makePayment: "Make Payment"
+            },
+            MESSAGES: {
+              dueDateWarning: "The payment date selected is past the due date.",
+              paymentInfo: "Payments scheduled after 3:30PM Eastern Time, on a weekend, or on a holiday will be processed on the <strong>next</strong> business day."
+            }
+          }
+        }
       },
 
       //# Contact Us Page

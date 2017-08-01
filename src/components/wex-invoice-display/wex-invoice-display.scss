@@ -1,0 +1,63 @@
+wex-invoice-display {
+
+  .invoice-display[collapsed="true"] > :not(.invoice-display-header) {
+    display: none;
+  }
+
+  .invoice-display-header {
+
+    [item-left] + .item-inner {
+      margin-left: 0;
+    }
+
+    .item-inner {
+      border: none !important;
+    }
+
+    ion-label {
+      @extend %wex-list-item-content;
+
+      & > * {
+        font-weight: bold;
+        text-transform: uppercase;
+
+        &:first-child {
+          text-align: left;
+        }
+
+        &:last-child {
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  .invoice-display-details-list {
+    margin: 0;
+    border-top: 1px solid #dedede;
+
+    wex-list-item {
+
+      &:nth-child(odd) .item .item-inner {
+        background: #f3f3f3;
+      }
+
+      .item .item-inner {
+        border: none !important;
+
+        ion-label {
+          padding: 0.2rem 0;
+
+          span:first-child {
+            text-align: left;
+          }
+
+          span:last-child {
+            font-weight: bold;
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+}

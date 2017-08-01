@@ -1,0 +1,22 @@
+<div class="invoice-display" [attr.collapsed]="collapsed">
+  <button ion-item class="invoice-display-header" (click)="toggleCollapse()">
+    <ion-icon item-left [name]="collapsed ? 'arrow-dropright' : 'arrow-dropdown'"></ion-icon>
+    <span>Invoice #{{ invoiceSummary.details.invoiceNumber || "N/A" }}</span>
+    <span>{{ invoiceSummary.paymentDueDate | wexDate }}</span>
+  </button>
+
+  <ion-list class="invoice-display-details-list">
+    <wex-list-item>
+      <span>Current Balance</span>
+      <span>{{ invoiceSummary.details.currentBalance | wexCurrency }}</span>
+    </wex-list-item>
+    <wex-list-item>
+      <span>Statement Balance</span>
+      <span>{{ invoiceSummary.details.statementBalance | wexCurrency }}</span>
+    </wex-list-item>
+    <wex-list-item>
+      <span>Minimum Amount Due</span>
+      <span>{{ invoiceSummary.details.minimumPaymentDue | wexCurrency }}</span>
+    </wex-list-item>
+  </ion-list>
+</div>
