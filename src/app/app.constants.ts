@@ -140,10 +140,15 @@ export namespace ConstantsInfo {
               embossingValue1: "Optional Embossing",
             }
           },
+          statusOptions: [
+            { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive", "icon": "checkmark-circle" },
+            { "id": "SUSPENDED",  "label": "Suspended",  "trackingId": "statusOptionSuspended", "icon": "information-circle" },
+            { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated", "icon": "close-circle" }
+          ],
           statuses: {
-            ACTIVE: { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive" },
-            SUSPENDED: { "id": "SUSPENDED",  "label": "Suspended",  "trackingId": "statusOptionSuspended" },
-            TERMINATED: { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated" }
+            ACTIVE: "ACTIVE",
+            SUSPENDED: "SUSPENDED",
+            TERMINATED: "TERMINATED"
           },
           bannerStatusChangeSuccess: "Status change successful.",
           bannerStatusChangeFailure: "Status change failed. Please try again.",
@@ -204,7 +209,21 @@ export namespace ConstantsInfo {
             promptId:        "Driver ID",
             cellPhoneNumber: "Mobile Phone",
             emailAddress:    "Email Address"
-          }
+          },
+          statusOptions: [
+            { "id": "ACTIVE",     "label": "Active",     "trackingId": "statusOptionActive", "icon": "checkmark-circle" },
+            { "id": "TERMINATED", "label": "Terminated", "trackingId": "statusOptionTerminated", "icon": "close-circle" }
+          ],
+          statuses: {
+            ACTIVE: "ACTIVE",
+            TERMINATED: "TERMINATED"
+          },
+          actionStatusTitle:         "Select Driver Status",
+          actionStatusCancel:        "Cancel",
+          bannerStatusChangeSuccess: "Status change successful.",
+          bannerStatusChangeFailure: "Status change failed. Please try again.",
+          confirmMessageTerminate:   "Are you sure you want to terminate this driver?",
+          statusUpdateMessageDuration: 5000
         }
       },
 

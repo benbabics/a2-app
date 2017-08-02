@@ -1,3 +1,4 @@
+import { WexAlertController } from './../components/wex-alert-controller/wex-alert-controller';
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Dialogs } from "@ionic-native/dialogs";
@@ -206,7 +207,8 @@ import { Network } from "@ionic-native/network";
     {
       provide: GoogleAnalytics,
       useClass: WexGoogleAnalyticsEvents
-    }
+    },
+    WexAlertController
   ]
 })
 export class AppModule {}

@@ -32,7 +32,7 @@
     "postinstall": "yarn ionic:prepare"
   },
   "dependencies": {
-    "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#6b3c83fd8c5",
+    "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#865a29d641d",
     "@angular-wex/mocks": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#b30796baed3",
     "@angular-wex/models": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#870368cc633",
     "@angular-wex/validators": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#5cae222933a",
