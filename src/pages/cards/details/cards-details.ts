@@ -1,14 +1,14 @@
+import { WexAlertController } from './../../../components/wex-alert-controller/wex-alert-controller';
 import { Observable } from 'rxjs/Observable';
 import { CardProvider } from '@angular-wex/api-providers';
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, App, ActionSheetController, Events, AlertController, ToastOptions } from 'ionic-angular';
+import { NavParams, App, ActionSheetController, Events, AlertController, ToastOptions, Platform } from 'ionic-angular';
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
-import { Card } from "@angular-wex/models";
+import { Card, CardStatus } from "@angular-wex/models";
 import { SessionManager } from "../../../providers";
 import { WexAppSnackbarController } from "../../../components";
-import { CardStatus } from "@angular-wex/api-providers";
 import * as _ from "lodash";
 import { Value } from '../../../decorators/value';
 
@@ -16,15 +16,16 @@ export type CardsDetailsNavParams = keyof {
   card,
   reissued
 };
+interface CardStatusDetails {
+  id: CardStatus;
+  label: string;
+  trackingId: string;
+  icon: string;
+};
 
 export namespace CardsDetailsNavParams {
   export const Card: CardsDetailsNavParams = "card";
   export const Reissued: CardsDetailsNavParams = "reissued";
-  export interface Status {
-    id: CardStatus;
-    label: string;
-    trackingId: string;
-  };
 }
 
 @Component({
@@ -32,7 +33,6 @@ export namespace CardsDetailsNavParams {
   templateUrl: "cards-details.html"
 })
 export class CardsDetailsPage extends DetailsPage {
-  @Value("BUTTONS") private BUTTONS;
 
   public card: Card;
   private _reissued: boolean;
@@ -53,7 +53,8 @@ export class CardsDetailsPage extends DetailsPage {
     private actionSheetController: ActionSheetController,
     private cardProvider: CardProvider,
     private events: Events,
-    private alertController: AlertController
+    private wexAlertController: WexAlertController,
+    private platform: Platform
   ) {
     super("Cards.Details", injector);
 
@@ -94,12 +95,13 @@ export class CardsDetailsPage extends DetailsPage {
     }
   }
 
-  private buildActionSheet(actions: CardsDetailsNavParams.Status[]): ActionSheetOptions {
+  private buildActionSheet(actions: CardStatusDetails[]): ActionSheetOptions {
 
     let buttons: ActionSheetButton[] = actions.map((action) => ({
       text: action.label,
+      icon: !this.platform.is("ios") ? action.icon : null,
       handler: () => {
-        if (action.id === this.CONSTANTS.statuses.TERMINATED.id) {
+        if (action.id === this.CONSTANTS.statuses.TERMINATED) {
           this.confirmTermination();
         } else {
           this.updateCardStatus(action.id);
@@ -114,27 +116,17 @@ export class CardsDetailsPage extends DetailsPage {
         ...buttons,
         {
           text: this.CONSTANTS.actionStatusCancel,
-          role: "cancel"
+          role: "cancel",
+          icon: !this.platform.is("ios") ? "close" : null,
         }
       ]
     };
   }
 
   private confirmTermination() {
-    this.alertController.create({
-      message: this.CONSTANTS.confirmMessageTerminate,
-      buttons: [
-        {
-          text: this.BUTTONS.YES,
-          handler: () => {
-            this.updateCardStatus(this.CONSTANTS.statuses.TERMINATED.id);
-          }
-        },
-        {
-          text: this.BUTTONS.NO
-        }
-      ]
-    }).present();
+    let message = this.CONSTANTS.confirmMessageTerminate;
+    let yesHandler = () => this.updateCardStatus(this.CONSTANTS.statuses.TERMINATED);
+    this.wexAlertController.confirmation(message, yesHandler);
   }
 
   private updateCardStatus(newStatus: CardStatus) {
@@ -168,8 +160,8 @@ export class CardsDetailsPage extends DetailsPage {
       });
   }
 
-  private get availableCardStatuses(): Array<CardsDetailsNavParams.Status> {
-    let statuses: CardsDetailsNavParams.Status[] = this.CONSTANTS.statuses;
+  private get availableCardStatuses(): Array<CardStatusDetails> {
+    let statuses: CardStatusDetails[] = this.CONSTANTS.statusOptions;
     let isWOLNP = this.session.user.isWolNp;
     let rejectionAttrs;
     // Only WOL_NP with "Active" status can "Suspended" Cards
