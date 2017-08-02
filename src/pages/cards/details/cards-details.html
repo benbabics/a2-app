@@ -11,9 +11,11 @@
     <div id="controls">
       <h1 id="card-number">{{ CONSTANTS.cardNumber }} {{ card.details.embossedCardNumber | wexCardNumber }}</h1>
 
-      <button ion-button icon-left round large id="card-status" *ngIf="canChangeStatus" (click)="handleChangeStatus" [color]="statusColor + '-dark'">
-        <ion-icon [name]="statusIcon" [color]="statusColor"></ion-icon>
-        {{ card.statusDisplayName }}
+      <button ion-button icon-left round large id="card-status" (click)="changeStatus()" *ngIf="canChangeStatus" [color]="statusColor + '-dark'">
+        <action-indicator [when]="isChangingStatus">
+          <ion-icon [name]="statusIcon" [color]="statusColor"></ion-icon>
+          {{ card.statusDisplayName }}
+        </action-indicator>
       </button>
     </div>
 
