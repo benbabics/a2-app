@@ -4,8 +4,8 @@ import { ActionSheetController, Events, ToastOptions, Platform } from 'ionic-ang
 import * as _ from "lodash";
 import { Component, Injector } from '@angular/core';
 import { NavParams, App } from 'ionic-angular';
-import { Driver, OnlineApplication } from '@angular-wex/models';
-import { DriverProvider, DriverStatus } from "@angular-wex/api-providers"
+import { Driver, DriverStatus, OnlineApplication } from '@angular-wex/models';
+import { DriverProvider } from "@angular-wex/api-providers"
 import { DetailsPage } from "../../details-page";
 import { SessionManager } from './../../../providers/session-manager';
 import { ActionSheetOptions } from 'ionic-angular/components/action-sheet/action-sheet-options';

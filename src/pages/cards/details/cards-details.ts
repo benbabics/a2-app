@@ -6,10 +6,9 @@ import { Component, Injector } from "@angular/core";
 import { NavParams, App, ActionSheetController, Events, AlertController, ToastOptions, Platform } from 'ionic-angular';
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
-import { Card } from "@angular-wex/models";
+import { Card, CardStatus } from "@angular-wex/models";
 import { SessionManager } from "../../../providers";
 import { WexAppSnackbarController } from "../../../components";
-import { CardStatus } from "@angular-wex/api-providers";
 import * as _ from "lodash";
 import { Value } from '../../../decorators/value';
 
