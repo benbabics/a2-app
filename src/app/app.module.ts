@@ -55,6 +55,7 @@ import {
 } from "../providers";
 import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
+import { PaymentsDetailsPage } from '../pages/payments/details/payments-details';
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
 import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
@@ -93,6 +94,7 @@ import { Network } from "@ionic-native/network";
     DriversPage,
     DriversDetailsPage,
     PaymentsPage,
+    PaymentsDetailsPage,
     SettingsPage,
     TermsOfUsePage,
     PrivacyPolicyPage,
@@ -155,6 +157,7 @@ import { Network } from "@ionic-native/network";
     DriversPage,
     DriversDetailsPage,
     PaymentsPage,
+    PaymentsDetailsPage,
     SettingsPage,
     WexNavBar,
     OptionsPopoverPage,

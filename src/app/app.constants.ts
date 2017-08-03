@@ -364,6 +364,24 @@ export namespace ConstantsInfo {
         greekedElementCount: 15,
         title: "Payments",
 
+        //# Payments Details page
+        DETAILS: {
+          title:         "Payment Details",
+          amount:        "Amount",
+          bankAccount:   "Bank Account",
+          postedDate:    "Date Posted",
+          scheduledDate: "Date Scheduled",
+          inProcess:     "In Process",
+          method:        "Method",
+          editButton:    "Edit Payment",
+          cancelButton:  "Cancel Payment",
+          cancelPaymentConfirmation: {
+              content:   "Are you sure you want to cancel this scheduled payment?",
+              yesButton: "Yes",
+              noButton:  "No"
+          }
+        },
+
         //# Add Payment page
         ADD: {
           CREATE: {
@@ -669,7 +687,7 @@ export namespace ConstantsInfo {
       }
     }
   };
-  
+
   interface GoogleAnalyticsConstant {
     GOOGLE_ANALYTICS: {
       TRACKING_ID: string;
