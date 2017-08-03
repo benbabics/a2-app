@@ -42,6 +42,10 @@ export class LandingPage extends SecurePage {
   public chart: ChartConfig;
   public brandLogoData: string;
 
+  public get userCardGreeting(): string {
+    return this.CONSTANTS.welcome + _.capitalize(this.session.user.details.firstName.toLocaleLowerCase());
+  }
+
   constructor(
     sessionManager: SessionManager,
     public navCtrl: NavController,
