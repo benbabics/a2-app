@@ -7,7 +7,9 @@ import { Payment, PaymentStatus, MakePaymentAvailability } from "@angular-wex/mo
 import { Session } from "../../models";
 import { AddPaymentPage } from "./add/add-payment";
 import { Dialogs } from "@ionic-native/dialogs";
+import { TabPage } from '../../decorators/tab-page';
 
+@TabPage()
 @Component({
   selector: "page-payments",
   templateUrl: "payments.html"
