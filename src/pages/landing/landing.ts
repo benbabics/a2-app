@@ -157,7 +157,7 @@ export class LandingPage extends SecurePage {
   }
 
   private hardwareBackSnackbar = () => {
-      this.wexAppBackButtonController.registerAction(() => this.platform.exitApp());
+      this.wexAppBackButtonController.registerAction(this.platform.exitApp);
       let queued = this.wexAppSnackbarController.createQueued(this.CONSTANTS.BACK_TO_EXIT as ToastOptions);
       queued.onDidDismiss(this.registerBackButton);
       queued.present();

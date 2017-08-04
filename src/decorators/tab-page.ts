@@ -15,7 +15,6 @@ export function TabPage<T extends GenericConstructor>(): Function {
     
       public ionViewDidEnter() {
         this.wexAppBackButtonController.registerAction(() => this.navBarController.select(LandingPage));
-        console.log("ENTER");
 
         if (super[ionViewDidEnter]) {
           super[ionViewDidEnter]();
@@ -24,7 +23,6 @@ export function TabPage<T extends GenericConstructor>(): Function {
 
       public ionViewWillLeave() {
         this.wexAppBackButtonController.deregisterAction();
-        console.log("LEAVE");
 
         if (super[ionViewWillLeave]) {
           super[ionViewWillLeave]();
