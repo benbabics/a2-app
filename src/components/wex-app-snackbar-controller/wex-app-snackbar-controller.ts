@@ -4,25 +4,31 @@ import { ToastController, ToastOptions, Toast, NavOptions } from "ionic-angular"
 import { AppConstants } from "../../app/app.constants";
 
 const Constants = AppConstants();
+type ToastCallback =  (data: any, role: string) => void;
 
 export class QueuedToast {
 
-  constructor(private toast: Toast, private controller: WexAppSnackbarController) { }
+  constructor(public readonly toast: Toast, private controller: WexAppSnackbarController) { }
+
+  private didDismissCallbacks: Array<ToastCallback> = [];
+  private willDismissCallbacks: Array<ToastCallback> = [];
 
   public dismiss(data?: any, role?: string, navOptions?: NavOptions) {
     return this.toast.dismiss(data, role, navOptions);
   }
 
   public onDidDismiss(callback: (data: any, role: string) => void) {
-    return this.toast.onDidDismiss(callback);
+    this.didDismissCallbacks.push(callback);
+    return this.toast.onDidDismiss(_.flowRight<ToastCallback>(this.didDismissCallbacks));  
   }
 
   public onWillDismiss(callback: (data: any, role: string) => void) {
-    return this.toast.onWillDismiss(callback);
+    this.willDismissCallbacks.push(callback);
+    return this.toast.onWillDismiss(_.flowRight<ToastCallback>(this.willDismissCallbacks));  
   }
 
   public present(navOptions?: NavOptions): Promise<any> {
-    return this.controller.presentQueued(this.toast, navOptions);
+    return this.controller.presentQueued(this, navOptions);
   }
 }
 
@@ -43,12 +49,12 @@ export class WexAppSnackbarController extends ToastController {
     return this._toastDisplaySychronizer || Promise.resolve();
   }
 
-  public presentQueued(toast: Toast, navOptions?: NavOptions): Promise<any> {
-    let presentPromise = this.toastDisplaySychronizer.then(() => toast.present(navOptions));
+  public presentQueued(queuedToast: QueuedToast, navOptions?: NavOptions): Promise<any> {
+    let presentPromise = this.toastDisplaySychronizer.then(() => queuedToast.toast.present(navOptions));
 
     // Add a wait for this toast message to the queue
     this._toastDisplaySychronizer = presentPromise
-      .then(() => new Promise((resolve, reject) => toast.onDidDismiss(resolve)))
+      .then(() => new Promise((resolve, reject) => queuedToast.onDidDismiss(resolve)))
       .then(() => this._toastDisplaySychronizer = null);
 
     return presentPromise;

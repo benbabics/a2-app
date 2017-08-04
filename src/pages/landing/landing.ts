@@ -1,7 +1,8 @@
+import { WexAppSnackbarController } from './../../components/wex-app-snackbar-controller/wex-app-snackbar-controller';
 import * as _ from "lodash";
 import { SessionManager, NavBarController } from "../../providers";
 import { Component, Injector } from "@angular/core";
-import { NavController, NavParams, PopoverController } from "ionic-angular";
+import { NavController, NavParams, PopoverController, Platform, ToastOptions } from 'ionic-angular';
 import { Company, InvoiceSummary, Payment, CompanyStub, User } from "@angular-wex/models";
 import { Session } from "../../models";
 import { SecurePage } from "../secure-page";
@@ -50,6 +51,8 @@ export class LandingPage extends SecurePage {
     private popoverCtrl: PopoverController,
     private brandProvider: BrandProvider,
     private navBarController: NavBarController,
+    private platform: Platform,
+    private wexAppSnackbarController: WexAppSnackbarController,
     public injector: Injector
   ) {
     super("Landing", injector);
@@ -131,6 +134,31 @@ export class LandingPage extends SecurePage {
         this.brandProvider.logo(this.session.user.details.brand)
           .subscribe((brandLogoData: string) => this.brandLogoData = brandLogoData);
       });
+  }
+
+  ionViewDidEnter() {
+    this.registerBackButton();
+  }
+
+  ionViewDidLeave() {
+    this.unregisterBackButton();
+  }
+
+  private unregisterBackButton: Function;
+
+  private registerBackButton = () => {
+    if (this.unregisterBackButton) {
+      this.unregisterBackButton();
+    }
+    this.unregisterBackButton = this.platform.registerBackButtonAction(this.hardwareBackSnackbar, 101);
+  }
+
+  private hardwareBackSnackbar = () => {
+      this.unregisterBackButton();
+      this.unregisterBackButton = this.platform.registerBackButtonAction(() => this.platform.exitApp(), 101);
+      let queued = this.wexAppSnackbarController.createQueued(this.CONSTANTS.BACK_TO_EXIT as ToastOptions);
+      queued.onDidDismiss(this.registerBackButton);
+      queued.present();
   }
 
   public onShowOptions($event) {

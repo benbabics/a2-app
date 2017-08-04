@@ -230,8 +230,7 @@ export namespace ConstantsInfo {
       //# Landing page
       LANDING: {
         BACK_TO_EXIT: {
-          "duration": 3000, //ms
-          "position": "bottom",
+          "duration": 3000,
           "message": "Press again to exit."
         },
         CHART: {
