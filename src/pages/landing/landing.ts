@@ -2,12 +2,13 @@ import { WexAppSnackbarController } from './../../components/wex-app-snackbar-co
 import * as _ from "lodash";
 import { SessionManager, NavBarController } from "../../providers";
 import { Component, Injector } from "@angular/core";
-import { NavController, NavParams, PopoverController, Platform, ToastOptions } from 'ionic-angular';
+import { NavController, NavParams, PopoverController, Platform, ToastOptions, App } from 'ionic-angular';
 import { Company, InvoiceSummary, Payment, CompanyStub, User } from "@angular-wex/models";
 import { Session } from "../../models";
 import { SecurePage } from "../secure-page";
 import { OptionsPopoverPage } from "./options-popover/options-popover";
 import { InvoiceProvider, BrandProvider } from "@angular-wex/api-providers";
+import { WexAppBackButtonController } from '../../providers/wex-app-back-button-controller';
 
 interface ChartDisplayConfig {
   [list: string]: any[];
@@ -53,7 +54,8 @@ export class LandingPage extends SecurePage {
     private navBarController: NavBarController,
     private platform: Platform,
     private wexAppSnackbarController: WexAppSnackbarController,
-    public injector: Injector
+    public injector: Injector,
+    private wexAppBackButtonController: WexAppBackButtonController
   ) {
     super("Landing", injector);
   }
@@ -140,22 +142,16 @@ export class LandingPage extends SecurePage {
     this.registerBackButton();
   }
 
-  ionViewDidLeave() {
-    this.unregisterBackButton();
+  ionViewWillLeave() {
+    this.wexAppBackButtonController.deregisterAction();
   }
 
-  private unregisterBackButton: Function;
-
   private registerBackButton = () => {
-    if (this.unregisterBackButton) {
-      this.unregisterBackButton();
-    }
-    this.unregisterBackButton = this.platform.registerBackButtonAction(this.hardwareBackSnackbar, 101);
+    this.wexAppBackButtonController.registerAction(this.hardwareBackSnackbar);
   }
 
   private hardwareBackSnackbar = () => {
-      this.unregisterBackButton();
-      this.unregisterBackButton = this.platform.registerBackButtonAction(() => this.platform.exitApp(), 101);
+      this.wexAppBackButtonController.registerAction(() => this.platform.exitApp());
       let queued = this.wexAppSnackbarController.createQueued(this.CONSTANTS.BACK_TO_EXIT as ToastOptions);
       queued.onDidDismiss(this.registerBackButton);
       queued.present();

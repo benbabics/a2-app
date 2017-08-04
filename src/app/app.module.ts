@@ -51,7 +51,8 @@ import {
   DefaultSessionInfoRequestors,
   SessionCache,
   NetworkStatus,
-  WexGoogleAnalyticsEvents
+  WexGoogleAnalyticsEvents,
+  WexAppBackButtonController
 } from "../providers";
 import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -208,7 +209,8 @@ import { Network } from "@ionic-native/network";
       provide: GoogleAnalytics,
       useClass: WexGoogleAnalyticsEvents
     },
-    WexAlertController
+    WexAlertController,
+    WexAppBackButtonController
   ]
 })
 export class AppModule {}
