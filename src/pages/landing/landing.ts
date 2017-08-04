@@ -2,7 +2,7 @@ import { WexAppSnackbarController } from './../../components/wex-app-snackbar-co
 import * as _ from "lodash";
 import { SessionManager, NavBarController } from "../../providers";
 import { Component, Injector } from "@angular/core";
-import { NavController, NavParams, PopoverController, Platform, ToastOptions, App } from 'ionic-angular';
+import { NavController, NavParams, PopoverController, Platform, ToastOptions } from 'ionic-angular';
 import { Company, InvoiceSummary, Payment, CompanyStub, User } from "@angular-wex/models";
 import { Session } from "../../models";
 import { SecurePage } from "../secure-page";
@@ -138,16 +138,22 @@ export class LandingPage extends SecurePage {
       });
   }
 
+  private isCurrentView: boolean;
+
   ionViewDidEnter() {
+    this.isCurrentView = true;
     this.registerBackButton();
   }
 
   ionViewWillLeave() {
+    this.isCurrentView = false;
     this.wexAppBackButtonController.deregisterAction();
   }
 
   private registerBackButton = () => {
-    this.wexAppBackButtonController.registerAction(this.hardwareBackSnackbar);
+    if (this.isCurrentView) {
+      this.wexAppBackButtonController.registerAction(this.hardwareBackSnackbar);
+    }
   }
 
   private hardwareBackSnackbar = () => {
