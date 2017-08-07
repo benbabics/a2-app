@@ -101,7 +101,7 @@ export class SettingsPage extends SecurePage {
       fingerprintAuthName: this.platformFingerprintLabel
     });
 
-    return this.dialogs.confirm( "", message, [ this.BUTTONS.YES, this.BUTTONS.NO ] )
+    return this.dialogs.confirm( message, "", [ this.BUTTONS.YES, this.BUTTONS.NO ] )
       .then( (result: number) => Promise.resolve(result === 1) );
   }
 }
