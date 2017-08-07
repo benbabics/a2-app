@@ -79,6 +79,7 @@ import { AngularWexValidatorsModule } from "@angular-wex/validators";
 import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
 import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
 import { Network } from "@ionic-native/network";
+import { AppSymbols } from "./app.symbols";
 
 @NgModule({
   declarations: [
@@ -213,7 +214,11 @@ import { Network } from "@ionic-native/network";
       useClass: WexGoogleAnalyticsEvents
     },
     WexAlertController,
-    UserIdle
+    UserIdle,
+    {
+      provide: AppSymbols.RootPage,
+      useValue: LoginPage
+    }
   ]
 })
 export class AppModule {}

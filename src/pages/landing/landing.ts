@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { SessionManager, NavBarController } from "../../providers";
+import { NavBarController } from "../../providers";
 import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, PopoverController } from "ionic-angular";
 import { Company, InvoiceSummary, Payment, CompanyStub, User } from "@angular-wex/models";
@@ -47,7 +47,6 @@ export class LandingPage extends SecurePage {
   }
 
   constructor(
-    sessionManager: SessionManager,
     public navCtrl: NavController,
     public navParams: NavParams,
     private invoiceProvider: InvoiceProvider,
