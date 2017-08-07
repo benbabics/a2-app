@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { SessionManager } from "../../../providers";
+import { SessionManager, WexPlatform } from "../../../providers";
 import { App, ViewController } from "ionic-angular";
 import { ContactUsPage } from "../../contact-us/contact-us";
 import { LoginPage } from "../../login/login";
@@ -13,7 +13,7 @@ import { PrivacyPolicyPage } from "../../privacy-policy/privacy-policy";
 })
 export class OptionsPopoverPage {
 
-  constructor(private viewCtrl: ViewController, private app: App, private sessionManager: SessionManager) { }
+  constructor(private viewCtrl: ViewController, private app: App, private platform: WexPlatform) { }
 
   public close(): Promise<any> {
     return this.viewCtrl.dismiss();
@@ -46,7 +46,6 @@ export class OptionsPopoverPage {
   public onExit() {
     this.close();
 
-    this.app.getRootNav().setRoot(LoginPage, { "fromLogOut": true })
-      .then(() => this.sessionManager.invalidateSession());
+    this.platform.logout({ "fromLogOut": true });
   }
 }

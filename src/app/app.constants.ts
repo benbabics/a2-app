@@ -89,6 +89,10 @@ export namespace ConstantsInfo {
       IOS: "ios",
       MOCK: "mock"
     },
+    //# User Idle
+    USER_IDLE: {
+      TIMEOUT_DURATION: 20 //seconds
+    },
     //# App Pages
     PAGES: {
       //# Cards page
