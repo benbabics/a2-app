@@ -91,7 +91,7 @@ export namespace ConstantsInfo {
     },
     //# User Idle
     USER_IDLE: {
-      TIMEOUT_DURATION: 20 //seconds
+      TIMEOUT_DURATION: 900 //seconds
     },
     //# App Pages
     PAGES: {
