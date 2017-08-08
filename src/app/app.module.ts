@@ -82,6 +82,10 @@ import { Network } from "@ionic-native/network";
 import { AppSymbols } from "./app.symbols";
 import { NgIdleModule } from "@ng-idle/core";
 
+export function APP_INITIALIZER_FACTORY() {
+  return function () { };
+}
+
 @NgModule({
   declarations: [
     //# app delcarations
@@ -193,7 +197,7 @@ import { NgIdleModule } from "@ng-idle/core";
     //----------------------
     { // Force service instatiation
       provide: APP_INITIALIZER,
-      useFactory: () => () => { },
+      useFactory: APP_INITIALIZER_FACTORY,
       deps: [UserIdle],
       multi: true
     },
