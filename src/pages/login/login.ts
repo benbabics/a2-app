@@ -17,11 +17,13 @@ import { Response } from "@angular/http";
 import { UserCredentials } from "@angular-wex/models";
 
 export type LoginPageNavParams = keyof {
-  fromLogOut
+  fromLogOut,
+  fromTimeout
 };
 
 export namespace LoginPageNavParams {
   export const fromLogOut: LoginPageNavParams = "fromLogOut";
+  export const fromTimeout: LoginPageNavParams = "fromTimeout";
 }
 
 declare const cordova: any;
@@ -209,6 +211,11 @@ export class LoginPage extends Page {
 
     window.addEventListener("native.keyboardshow", this._onKeyboardOpen);
     window.addEventListener("native.keyboardhide", this._onKeyboardClose);
+
+    // Check to see if the user timed out
+    if (this.navParams.get(LoginPageNavParams.fromTimeout)) {
+      this.appSnackbarController.createQueued({ message: this.CONSTANTS.sessionTimeOut }).present();
+    }
 
     // Check the status of remember me
     if (this.localStorageService.get(this.USERNAME_KEY)) {

@@ -46,7 +46,6 @@ export class OptionsPopoverPage {
   public onExit() {
     this.close();
 
-    this.app.getRootNav().setRoot(LoginPage, { "fromLogOut": true })
-      .then(() => this.sessionManager.invalidateSession());
+    this.sessionManager.logout({ "fromLogOut": true });
   }
 }

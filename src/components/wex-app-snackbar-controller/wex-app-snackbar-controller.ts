@@ -1,14 +1,19 @@
 import * as _ from "lodash";
 import { Injectable } from "@angular/core";
-import { ToastController, ToastOptions, Toast, NavOptions } from "ionic-angular";
+import { ToastController, ToastOptions, Toast, NavOptions, App, Config } from "ionic-angular";
 import { AppConstants } from "../../app/app.constants";
 
 const Constants = AppConstants();
 type ToastCallback =  (data: any, role: string) => void;
 
+export interface QueuedToastOptions extends ToastOptions {
+  important?: boolean;
+}
+
 export class QueuedToast {
 
-  constructor(public readonly toast: Toast, private controller: WexAppSnackbarController) { }
+
+  constructor(public readonly toast: Toast, private controller: WexAppSnackbarController, public readonly options: QueuedToastOptions) { }
 
   private didDismissCallbacks: Array<ToastCallback> = [];
   private willDismissCallbacks: Array<ToastCallback> = [];
@@ -35,29 +40,50 @@ export class QueuedToast {
 @Injectable()
 export class WexAppSnackbarController extends ToastController {
 
-  private _toastDisplaySychronizer: Promise<any> | null;
+  private _queue: Promise<any> = Promise.resolve();
+  private activeToast: QueuedToast;
+
+  private updateQueueChain(): Promise<any> {
+    if (this.activeToast && !this.activeToast.options.important) {
+      let toast = this.activeToast;
+      this.activeToast = undefined;
+
+      return toast.dismiss().then(() => this.updateQueueChain());
+    }
+    else {
+      return Promise.resolve();
+    }
+  }
+
+  constructor(app: App, config: Config) {
+    super(app, config);
+
+    // Update the queue chain after each page change
+    app.viewWillLeave.subscribe(() => this.updateQueueChain());
+  }
 
   public create(options: ToastOptions): Toast {
     return super.create(_.merge({}, WexAppSnackbarController.DefaultOptions, options));
   }
 
-  public createQueued(options: ToastOptions): QueuedToast {
-    return new QueuedToast(this.create(options), this);
+  public createQueued(options: QueuedToastOptions): QueuedToast {
+    return new QueuedToast(this.create(options), this, options);
   }
 
-  public get toastDisplaySychronizer(): Promise<any> {
-    return this._toastDisplaySychronizer || Promise.resolve();
+  public get queue(): Promise<any> {
+    return this._queue;
   }
 
-  public presentQueued(queuedToast: QueuedToast, navOptions?: NavOptions): Promise<any> {
-    let presentPromise = this.toastDisplaySychronizer.then(() => queuedToast.toast.present(navOptions));
+  public presentQueued(toast: QueuedToast, navOptions?: NavOptions): Promise<any> {
+    let queueHead = this.queue;
 
-    // Add a wait for this toast message to the queue
-    this._toastDisplaySychronizer = presentPromise
-      .then(() => new Promise((resolve, reject) => queuedToast.onDidDismiss(resolve)))
-      .then(() => this._toastDisplaySychronizer = null);
-
-    return presentPromise;
+    return this._queue = this.updateQueueChain() // Update the queue
+      .then(() => queueHead) // Wait until the queue is empty
+      .then(() => {
+        this.activeToast = toast;
+        return this.activeToast.toast.present(navOptions); // Present the toast
+      })
+      .then(() => new Promise(resolve => toast.onWillDismiss(resolve))); // Add this toast to the queue
   }
 }
 

@@ -1,6 +1,6 @@
 import { MockFingerprintService } from "./mock-fingerprint-service";
 import { WexPlatform } from "../platform";
-import { Injectable } from "@angular/core";
+import { Injectable, Injector } from "@angular/core";
 import {
   FingerprintAvailabilityDetails,
   FingerprintProfile,
@@ -14,18 +14,31 @@ import { IosFingerprintService } from "./ios-fingerprint-service";
 @Injectable()
 export class Fingerprint {
 
-  private readonly _nativeService: INativeFingerprintService;
+  private _nativeService: INativeFingerprintService;
 
-  constructor(platform: WexPlatform, androidFingerprint: AndroidFingerprintService, iosFingerprint: IosFingerprintService, mockFingerprint: MockFingerprintService) {
-    if (platform.isAndroid()) {
-      this._nativeService = androidFingerprint;
-    }
-    else if (platform.isIos()) {
-      this._nativeService = iosFingerprint;
-    }
-    else {
-      this._nativeService = mockFingerprint;
-    }
+  constructor(platform: WexPlatform, injector: Injector) {
+    platform.ready().then(() => {
+      let nativeServiceType;
+
+      if (platform.isAndroid) {
+        nativeServiceType = AndroidFingerprintService;
+      }
+      else if (platform.isIos) {
+        nativeServiceType = IosFingerprintService;
+      }
+      else {
+        nativeServiceType = MockFingerprintService;
+      }
+
+      try {
+        this._nativeService = injector.get<INativeFingerprintService>(nativeServiceType);
+      }
+      catch (error) {
+        console.info("Native fingerprint service is not available. Falling back to mock fingerprint service implementation.");
+
+        this._nativeService = injector.get<MockFingerprintService>(MockFingerprintService);
+      }
+    });
   }
 
   public get nativeService(): INativeFingerprintService {

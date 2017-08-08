@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card id="card-details">
+
+    <ion-list class="detail detail-list">
+      <ion-item>
+        <ion-label>
+          <span class="property-name">{{ CONSTANTS.amount }}</span>
+          <span text-wrap class="property-value">{{ payment.details.amount | wexCurrency }}</span>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <span class="property-name"*ngIf="payment.isScheduled">{{ CONSTANTS.scheduledDate }}</span>
+          <span class="property-name"*ngIf="!payment.isScheduled">{{ CONSTANTS.postedDate }}</span>
+
+          <span text-wrap class="property-value" *ngIf="payment.isComplete">{{ payment.details.scheduledDate | wexDate }}</span>
+          <span text-wrap class="property-value" *ngIf="!payment.isComplete">{{ CONSTANTS.inProcess }}</span>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <span class="property-name">{{ CONSTANTS.method }}</span>
+          <span text-wrap class="property-value">{{ payment.methodDisplayName }}</span>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <span class="property-name">{{ CONSTANTS.bankAccount }}</span>
+          <span text-wrap class="property-value">{{ payment.bankAccountDisplayName }}</span>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+  </ion-card>
+</ion-content>
