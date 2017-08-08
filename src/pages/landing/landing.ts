@@ -27,7 +27,7 @@ interface ChartConfig {
 })
 export class LandingPage extends SecurePage {
 
-  private readonly REQUIRED_SESSION_FIELDS: Session.Field[]  = [
+  private readonly REQUIRED_SESSION_FIELDS: Session.Field[] = [
     Session.Field.User,
     Session.Field.InvoiceSummary,
     Session.Field.Payments
@@ -36,6 +36,7 @@ export class LandingPage extends SecurePage {
   private readonly DEFAULT_CACHE_TTL = 4320; //72 hours
   private removeBackButtonAction;
   private exitTimerPromise;
+  private isCurrentView: boolean;
 
   public readonly chartColors = this.CONSTANTS.CHART.COLORS;
 
@@ -63,10 +64,23 @@ export class LandingPage extends SecurePage {
     super("Landing", injector);
   }
 
+  private registerBackButton = () => {
+    if (this.isCurrentView) {
+      this.wexAppBackButtonController.registerAction(this.hardwareBackSnackbar);
+    }
+  }
+
+  private hardwareBackSnackbar = () => {
+    this.wexAppBackButtonController.registerAction(this.platform.exitApp);
+    let queued = this.wexAppSnackbarController.createQueued(this.CONSTANTS.BACK_TO_EXIT as ToastOptions);
+    queued.onDidDismiss(this.registerBackButton);
+    queued.present();
+  }
+
   private createChartDisplayConfiguration(): ChartDisplayConfig {
     let datasets: ChartDisplayConfig = { collection: [], left: [], right: [] },
-        dataIds: InvoiceSummary.Field[] = ["pendingAmount", "unbilledAmount", "availableCredit", "billedAmount"],
-        requiredDataIds: InvoiceSummary.Field[] = ["availableCredit"];
+      dataIds: InvoiceSummary.Field[] = ["pendingAmount", "unbilledAmount", "availableCredit", "billedAmount"],
+      requiredDataIds: InvoiceSummary.Field[] = ["availableCredit"];
 
     dataIds.forEach((id: string) => {
       if (this.invoiceSummary.details[id] > 0 || _.includes(requiredDataIds, id)) {
@@ -141,8 +155,6 @@ export class LandingPage extends SecurePage {
       });
   }
 
-  private isCurrentView: boolean;
-
   ionViewDidEnter() {
     this.isCurrentView = true;
     this.registerBackButton();
@@ -151,19 +163,6 @@ export class LandingPage extends SecurePage {
   ionViewWillLeave() {
     this.isCurrentView = false;
     this.wexAppBackButtonController.deregisterAction();
-  }
-
-  private registerBackButton = () => {
-    if (this.isCurrentView) {
-      this.wexAppBackButtonController.registerAction(this.hardwareBackSnackbar);
-    }
-  }
-
-  private hardwareBackSnackbar = () => {
-      this.wexAppBackButtonController.registerAction(this.platform.exitApp);
-      let queued = this.wexAppSnackbarController.createQueued(this.CONSTANTS.BACK_TO_EXIT as ToastOptions);
-      queued.onDidDismiss(this.registerBackButton);
-      queued.present();
   }
 
   public onShowOptions($event) {
