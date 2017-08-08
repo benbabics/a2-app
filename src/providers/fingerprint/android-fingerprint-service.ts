@@ -2,7 +2,6 @@ import * as _ from "lodash";
 import { AppConstants } from "./../../app/app.constants";
 import { SecureStorage } from "./../secure-storage";
 import { Injectable } from "@angular/core";
-import { Platform } from "ionic-angular";
 import { Value } from "../../decorators/value";
 import {
   IFingerprintVerificationOptions,
@@ -12,7 +11,6 @@ import {
   FingerprintVerificationError,
   NativeFingerprintService
 } from "./native-fingerprint-service";
-import { WexPlatform } from "../platform";
 
 const Constants = AppConstants();
 
@@ -47,7 +45,7 @@ interface InternalAndroidFingerprintService {
   ERRORS: any;
 
   isAvailable(successCallback: (InternalAndroidFingerprintServiceAvailabilityResponse) => void, errorCallback: (any) => void);
-  encrypt(options: InternalAndroidFingerprintServiceAuthConfig, successCallback: (InternalAndroidFingerprintServiceAuthResponse) => void, errorCallback: (any) => void);
+  encrypt(options: InternalAndroidFingerprintServiceAuthConfig, successCallback: (response: InternalAndroidFingerprintServiceAuthResponse) => void, errorCallback: (any) => void);
 }
 
 declare var window: {
@@ -62,11 +60,14 @@ export class AndroidFingerprintService extends NativeFingerprintService {
 
   private cordovaPlugin: InternalAndroidFingerprintService;
 
-  constructor(secureStorage: SecureStorage, platform: Platform, wexPlatform: WexPlatform) {
+  constructor(secureStorage: SecureStorage) {
     super(secureStorage);
 
-    if (wexPlatform.isAndroid()) {
-      platform.ready().then(() => this.cordovaPlugin = window.FingerprintAuth);
+    if (window.FingerprintAuth) {
+      this.cordovaPlugin = window.FingerprintAuth;
+    }
+    else {
+      throw new Error("Android FingperintAuth is not available.");
     }
   }
 

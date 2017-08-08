@@ -1,6 +1,7 @@
 import { Component, Injector } from "@angular/core";
 import { Page } from "../../page";
-import { Platform, ViewController, NavParams } from "ionic-angular";
+import { ViewController } from "ionic-angular";
+import { WexPlatform } from "../../../providers";
 
 @Component({
   selector: "modal-fingerprint-auth-terms",
@@ -9,22 +10,23 @@ import { Platform, ViewController, NavParams } from "ionic-angular";
 export class FingerprintAuthenticationTermsPage extends Page {
   private terms: string;
 
-  constructor(private platform: Platform,
-  private viewControl: ViewController,
-  private navParams: NavParams,
-  injector: Injector) {
+  constructor(
+    private platform: WexPlatform,
+    private viewControl: ViewController,
+    injector: Injector
+  ) {
     super("Fingerprint Auth Terms", injector);
   }
 
   public ionViewDidLoad() {
-    if (this.platform.is("ios")) {
+    if (this.platform.isIos) {
       this.terms = this.CONSTANTS.options.scopeVars.CONFIG.termsIos;
     } else {
       this.terms = this.CONSTANTS.options.scopeVars.CONFIG.termsAndroid;
     }
   }
 
-  private response(accepted: boolean) {
+  public response(accepted: boolean) {
     this.viewControl.dismiss(accepted);
   }
 }
