@@ -233,13 +233,8 @@ export function APP_INITIALIZER_FACTORY() {
     WexAppSnackbarController,
     SessionCache,
     NetworkStatus,
-    {
-      provide: GoogleAnalytics,
-      useClass: WexGoogleAnalyticsEvents
-    },
     WexAlertController,
     WexAppVerionCheck,
-    WexAlertController,
     UserIdle
   ]
 })
