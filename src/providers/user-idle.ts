@@ -16,6 +16,7 @@ export class UserIdle {
   }
 
   private configureTimeout() {
+    this.idle.setIdle(1);
     this.idle.setTimeout(this.CONSTANTS.TIMEOUT_DURATION);
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
     this.idle.onTimeout.subscribe(() => this.sessionManager.logout({ "fromLogOut": true }));

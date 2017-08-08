@@ -5,7 +5,7 @@ import { Dialogs } from "@ionic-native/dialogs";
 import { OptionsPopoverPage } from "./../pages/landing/options-popover/options-popover";
 import { WexCardNumberPipe } from "./../pipes/wex-card-number";
 import { Http, XHRBackend, RequestOptions, HttpModule } from "@angular/http";
-import { NgModule, ErrorHandler } from "@angular/core";
+import { NgModule, ErrorHandler, APP_INITIALIZER } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
 import { ChartsModule } from "ng2-charts/ng2-charts";
 import { MyApp } from "./app.component";
@@ -80,6 +80,7 @@ import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/a
 import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
 import { Network } from "@ionic-native/network";
 import { AppSymbols } from "./app.symbols";
+import { NgIdleModule } from "@ng-idle/core";
 
 @NgModule({
   declarations: [
@@ -144,7 +145,8 @@ import { AppSymbols } from "./app.symbols";
     //# third party dependencies
     //----------------------
     ChartsModule,
-    LocalStorageModule.withConfig({ storageType: "localStorage" })
+    LocalStorageModule.withConfig({ storageType: "localStorage" }),
+    NgIdleModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -189,6 +191,12 @@ import { AppSymbols } from "./app.symbols";
     Network,
     //# app providers
     //----------------------
+    { // Force service instatiation
+      provide: APP_INITIALIZER,
+      useFactory: () => () => { },
+      deps: [UserIdle],
+      multi: true
+    },
     {
       provide: Http,
       useClass: SecureHttp,
