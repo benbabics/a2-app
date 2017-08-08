@@ -16,11 +16,10 @@ import "chart.js";
 export class MyApp {
 
   constructor(
-    platform: Platform,
     splashScreen: SplashScreen,
     sessionManager: SessionManager,
     @Inject(AppSymbols.RootPage) public rootPage: any,
-    private wexPlatform: WexPlatform,
+    private platform: WexPlatform,
     private statusBar: StatusBar
   ) {
     platform.ready().then(() => {
@@ -30,7 +29,7 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
 
-      if (this.wexPlatform.isDevMode) {
+      if (this.platform.isDevMode) {
         sessionManager.restore();
       }
     });
@@ -41,7 +40,7 @@ export class MyApp {
   private onSessionChange(session) {
     this.statusBar.overlaysWebView(!session);
 
-    if (session && this.wexPlatform.isDevMode) {
+    if (session && this.platform.isDevMode) {
       this.rootPage = WexNavBar;
     }
   }
