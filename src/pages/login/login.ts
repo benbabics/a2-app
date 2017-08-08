@@ -2,7 +2,7 @@ import { WexNavBar, WexAppSnackbarController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef, Injector } from "@angular/core";
-import { NavParams, Platform, Content, NavController } from "ionic-angular";
+import { NavParams, Platform, Content, NavController, ModalController } from 'ionic-angular';
 import { Page } from "../page";
 import {
   SessionManager,
@@ -15,6 +15,8 @@ import { Dialogs } from "@ionic-native/dialogs";
 import { Keyboard } from "@ionic-native/keyboard";
 import { Response } from "@angular/http";
 import { UserCredentials } from "@angular-wex/models";
+import { WexAppVerionCheck } from '../../providers/wex-app-version-check';
+import { VersionCheck } from './version-check/version-check';
 
 export type LoginPageNavParams = keyof {
   fromLogOut
@@ -46,6 +48,7 @@ export class LoginPage extends Page {
   public rememberMe: boolean = false;
   public timedOut: boolean = false;
   public usernameIsFocused: boolean = false;
+  public versionCheckComplete: boolean = false;
   public user: UserCredentials = { username: "", password: "" };
 
   constructor(
@@ -58,6 +61,8 @@ export class LoginPage extends Page {
     private dialogs: Dialogs,
     private keyboard: Keyboard,
     private appSnackbarController: WexAppSnackbarController,
+    private wexAppVersionCheck: WexAppVerionCheck,
+    private modalController: ModalController,
     injector: Injector
   ) {
     super("Login", injector);
@@ -204,7 +209,23 @@ export class LoginPage extends Page {
       });
   }
 
-  ionViewDidEnter() {
+  private unlockForm() {
+    this.versionCheckComplete = true;
+  }
+
+  private presentVersionModal() {
+    this.wexAppVersionCheck.status
+      .subscribe(status => {
+        let versionCheckModal = this.modalController.create(VersionCheck, { status });
+        versionCheckModal.onDidDismiss(() => this.completeLoading());
+        versionCheckModal.present();
+      });
+  }
+
+  private completeLoading() {
+
+    this.unlockForm();
+
     this.keyboard.disableScroll(true);
 
     window.addEventListener("native.keyboardshow", this._onKeyboardOpen);
@@ -233,6 +254,17 @@ export class LoginPage extends Page {
       });
   }
 
+  ionViewDidEnter() {
+    this.wexAppVersionCheck.isSupported
+      .subscribe(isSupported => {
+        if (isSupported) {
+          this.completeLoading();
+        } else {
+          this.presentVersionModal();
+        }
+      });
+  }
+
   ionViewDidLeave() {
     this.keyboard.disableScroll(false);
 
@@ -249,16 +281,16 @@ export class LoginPage extends Page {
   public verifyFingerprintRemoval(): Promise<void> {
     if (this.fingerprintProfileAvailable) {
       return this.dialogs.confirm(
-          this.resolvePlatformConstant(this.CONSTANTS.touchId.warningPrompt.message),
-          this.CONSTANTS.touchId.warningPrompt.title, [
-            this.CONSTANTS.touchId.warningPrompt.buttons.ok,
-            this.CONSTANTS.touchId.warningPrompt.buttons.cancel
-          ]).then((result: number) => {
-            if (result === 1) {
-              this.clearFingerprintProfile(this.user.username);
-              this.clearForm();
-            }
-          });
+        this.resolvePlatformConstant(this.CONSTANTS.touchId.warningPrompt.message),
+        this.CONSTANTS.touchId.warningPrompt.title, [
+          this.CONSTANTS.touchId.warningPrompt.buttons.ok,
+          this.CONSTANTS.touchId.warningPrompt.buttons.cancel
+        ]).then((result: number) => {
+          if (result === 1) {
+            this.clearFingerprintProfile(this.user.username);
+            this.clearForm();
+          }
+        });
     }
     else {
       return Promise.resolve();

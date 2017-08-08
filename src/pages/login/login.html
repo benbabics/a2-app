@@ -3,7 +3,7 @@
 
   <div id="login-content">
     <ion-card id="card-form">
-      <form novalidate #form="ngForm" (ngSubmit)="onLogin($event, setupFingerprintAuth)">
+      <form novalidate *ngIf="versionCheckComplete" #form="ngForm" (ngSubmit)="onLogin($event, setupFingerprintAuth)">
         <ion-list id="input-list">
           <ion-item (click)="verifyFingerprintRemoval()">
             <ion-input [(ngModel)]="maskableUsername"
@@ -59,9 +59,12 @@
           </button>
         </div>
       </form>
+      <div *ngIf="!versionCheckComplete">
+        <span id="loading-indicator"><ion-spinner class="action-spinner"></ion-spinner></span>
+      </div>
     </ion-card>
 
-    <div id="enrollment-link" class="padding align_center">
+    <div *ngIf="versionCheckComplete" id="enrollment-link" class="padding align_center">
       <user-enrollment-flow [text]="CONSTANTS.enrollment.label"></user-enrollment-flow>
     </div>
   </div>

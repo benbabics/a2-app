@@ -77,6 +77,8 @@ import { AngularWexValidatorsModule } from "@angular-wex/validators";
 import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
 import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
 import { Network } from "@ionic-native/network";
+import { WexAppVerionCheck } from '../providers/wex-app-version-check';
+import { VersionCheck } from '../pages/login/version-check/version-check';
 
 @NgModule({
   declarations: [
@@ -85,6 +87,7 @@ import { Network } from "@ionic-native/network";
     MyApp,
     LoginPage,
     FingerprintAuthenticationTermsPage,
+    VersionCheck,
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
@@ -147,6 +150,7 @@ import { Network } from "@ionic-native/network";
     MyApp,
     LoginPage,
     FingerprintAuthenticationTermsPage,
+    VersionCheck,
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
@@ -208,7 +212,8 @@ import { Network } from "@ionic-native/network";
       provide: GoogleAnalytics,
       useClass: WexGoogleAnalyticsEvents
     },
-    WexAlertController
+    WexAlertController,
+    WexAppVerionCheck
   ]
 })
 export class AppModule {}

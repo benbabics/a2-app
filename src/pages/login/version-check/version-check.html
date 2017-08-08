@@ -1,0 +1,21 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>{{ CONSTANTS.TITLE }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="fingerprint-terms-modal">
+    <div>
+        {{ CONSTANTS[status].instructionalText2 }}
+    </div>
+    <br><br>
+    <div>
+        {{ CONSTANTS[status].instructionalText1 }}
+    </div>
+
+
+    <ion-footer>
+        <button block (click)="update()" ion-button>{{ CONSTANTS.BUTTONS.update }}</button>
+        <button block *ngIf="canSkipUpdate" (click)="skipUpdate()" ion-button outline>{{ CONSTANTS.BUTTONS.notNow }}</button>
+    </ion-footer>
+</ion-content>
