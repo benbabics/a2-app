@@ -34,8 +34,7 @@ export class LandingPage extends SecurePage {
   ];
   private readonly BACK_TO_EXIT_ACTION_PRIORITY = 102;
   private readonly DEFAULT_CACHE_TTL = 4320; //72 hours
-  private removeBackButtonAction;
-  private exitTimerPromise;
+  private exitTimerPromise: Promise<any>;
   private isCurrentView: boolean;
 
   public readonly chartColors = this.CONSTANTS.CHART.COLORS;
