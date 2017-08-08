@@ -5,7 +5,7 @@ import { Dialogs } from "@ionic-native/dialogs";
 import { OptionsPopoverPage } from "./../pages/landing/options-popover/options-popover";
 import { WexCardNumberPipe } from "./../pipes/wex-card-number";
 import { Http, XHRBackend, RequestOptions, HttpModule } from "@angular/http";
-import { NgModule, ErrorHandler } from "@angular/core";
+import { NgModule, ErrorHandler, APP_INITIALIZER } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
 import { ChartsModule } from "ng2-charts/ng2-charts";
 import { MyApp } from "./app.component";
@@ -51,10 +51,12 @@ import {
   DefaultSessionInfoRequestors,
   SessionCache,
   NetworkStatus,
-  WexGoogleAnalyticsEvents
+  WexGoogleAnalyticsEvents,
+  UserIdle
 } from "../providers";
 import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
+import { PaymentsDetailsPage } from '../pages/payments/details/payments-details';
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
 import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
@@ -79,6 +81,12 @@ import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment
 import { Network } from "@ionic-native/network";
 import { WexAppVerionCheck } from '../providers/wex-app-version-check';
 import { VersionCheck } from '../pages/login/version-check/version-check';
+import { AppSymbols } from "./app.symbols";
+import { NgIdleModule } from "@ng-idle/core";
+
+export function APP_INITIALIZER_FACTORY() {
+  return function () { };
+}
 
 @NgModule({
   declarations: [
@@ -96,6 +104,7 @@ import { VersionCheck } from '../pages/login/version-check/version-check';
     DriversPage,
     DriversDetailsPage,
     PaymentsPage,
+    PaymentsDetailsPage,
     SettingsPage,
     TermsOfUsePage,
     PrivacyPolicyPage,
@@ -143,7 +152,8 @@ import { VersionCheck } from '../pages/login/version-check/version-check';
     //# third party dependencies
     //----------------------
     ChartsModule,
-    LocalStorageModule.withConfig({ storageType: "localStorage" })
+    LocalStorageModule.withConfig({ storageType: "localStorage" }),
+    NgIdleModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -159,6 +169,7 @@ import { VersionCheck } from '../pages/login/version-check/version-check';
     DriversPage,
     DriversDetailsPage,
     PaymentsPage,
+    PaymentsDetailsPage,
     SettingsPage,
     WexNavBar,
     OptionsPopoverPage,
@@ -188,10 +199,28 @@ import { VersionCheck } from '../pages/login/version-check/version-check';
     Network,
     //# app providers
     //----------------------
+    { // Force service instatiation
+      provide: APP_INITIALIZER,
+      useFactory: APP_INITIALIZER_FACTORY,
+      deps: [UserIdle],
+      multi: true
+    },
+    {
+      provide: AppSymbols.RootPage,
+      useValue: LoginPage
+    },
     {
       provide: Http,
       useClass: SecureHttp,
       deps: [XHRBackend, RequestOptions, NetworkStatus]
+    },
+    {
+      provide: SessionInfoRequestors,
+      useClass: DefaultSessionInfoRequestors
+    },
+    {
+      provide: GoogleAnalytics,
+      useClass: WexGoogleAnalyticsEvents
     },
     SessionManager,
     NavBarController,
@@ -202,10 +231,6 @@ import { VersionCheck } from '../pages/login/version-check/version-check';
     IosFingerprintService,
     MockFingerprintService,
     WexAppSnackbarController,
-    {
-      provide: SessionInfoRequestors,
-      useClass: DefaultSessionInfoRequestors
-    },
     SessionCache,
     NetworkStatus,
     {
@@ -213,7 +238,9 @@ import { VersionCheck } from '../pages/login/version-check/version-check';
       useClass: WexGoogleAnalyticsEvents
     },
     WexAlertController,
-    WexAppVerionCheck
+    WexAppVerionCheck,
+    WexAlertController,
+    UserIdle
   ]
 })
 export class AppModule {}

@@ -29,7 +29,7 @@ export class WexAppVerionCheck {
     private get platformName(): string {
         if (this.wexPlatform.isAndroid()) {
             return RequestPlatform.Android;
-        } else if (this.wexPlatform.isIos()) {
+        } else if (this.wexPlatform.isIos) {
             return RequestPlatform.iOS;
         } else {
             return RequestPlatform.Mock;
@@ -46,7 +46,7 @@ export class WexAppVerionCheck {
     }
 
     private checkVersionStatus(): Observable<VersionStatus> {
-        if (this.wexPlatform.isMock()) {
+        if (this.wexPlatform.isMock) {
             return Observable.of(VersionStatus.Supported);
         } else {
             return Observable.fromPromise(this.appVersion.getVersionNumber())

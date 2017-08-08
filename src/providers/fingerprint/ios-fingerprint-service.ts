@@ -2,7 +2,6 @@ import * as _ from "lodash";
 import { AppConstants } from "./../../app/app.constants";
 import { SecureStorage } from "./../secure-storage";
 import { Injectable } from "@angular/core";
-import { Platform } from "ionic-angular";
 import {
   IFingerprintVerificationOptions,
   FingerprintPassowrdFallbackMode,
@@ -11,7 +10,6 @@ import {
   FingerprintVerificationError,
   NativeFingerprintService
 } from "./native-fingerprint-service";
-import { WexPlatform } from "../platform";
 
 const Constants = AppConstants();
 
@@ -52,11 +50,14 @@ export class IosFingerprintService extends NativeFingerprintService {
 
   private cordovaPlugin: InternalIosFingerprintService;
 
-  constructor(secureStorage: SecureStorage, platform: Platform, wexPlatform: WexPlatform) {
+  constructor(secureStorage: SecureStorage) {
     super(secureStorage);
 
-    if (wexPlatform.isIos() && window.cordova) {
-      platform.ready().then(() => this.cordovaPlugin = window.plugins.touchid);
+    if (_.has(window, "plugins.touchid")) {
+      this.cordovaPlugin = window.plugins.touchid;
+    }
+    else {
+      throw new Error("iOS touchid plugin is not available.");
     }
   }
 

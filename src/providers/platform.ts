@@ -1,39 +1,50 @@
-import { Platform }from "ionic-angular";
+import { Platform } from "ionic-angular";
 import { Injectable } from "@angular/core";
 import { AppConstants } from "../app/app.constants";
 
 const Constants = AppConstants();
 
 @Injectable()
-export class WexPlatform {
+export class WexPlatform extends Platform {
 
-  constructor(private platform: Platform) { }
+  private static readonly DEV_MODE_REGEX: RegExp = /[?&]dev/;
+  private static readonly MOCK_REGEX: RegExp = /^http(s?):\/\//;
+
+  constructor(platform: Platform) {
+    super();
+
+    Object.assign(this, platform);
+  }
 
   public isAndroid(): boolean {
-    return this.os() === Constants.PLATFORM.ANDROID;
+    return this.os === Constants.PLATFORM.ANDROID;
   }
 
-  public isMock(): boolean {
-    return this.os() === Constants.PLATFORM.MOCK;
+  public get isDevMode(): boolean {
+    return WexPlatform.DEV_MODE_REGEX.test(location.search);
   }
 
-  public isIos(): boolean {
-    return this.os() === Constants.PLATFORM.IOS;
+  public get isMock(): boolean {
+    return this.os === Constants.PLATFORM.MOCK || WexPlatform.MOCK_REGEX.test(document.URL);
   }
 
-  public isOs(os: string): boolean {
-    return os.toLowerCase() === this.os();
+  public get isIos(): boolean {
+    return this.os === Constants.PLATFORM.IOS;
   }
 
-  public os(): string {
-    if (this.platform.platforms().indexOf(Constants.PLATFORM.ANDROID) !== -1) {
+  public get os(): string {
+    if (this.platforms().indexOf(Constants.PLATFORM.ANDROID) !== -1) {
       return Constants.PLATFORM.ANDROID;
     }
 
-    if (this.platform.platforms().indexOf(Constants.PLATFORM.IOS) !== -1) {
+    if (this.platforms().indexOf(Constants.PLATFORM.IOS) !== -1) {
       return Constants.PLATFORM.IOS;
     }
 
     return Constants.PLATFORM.MOCK;
+  }
+
+  public isOs(os: string): boolean {
+    return os.toLowerCase() === this.os;
   }
 }

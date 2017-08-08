@@ -89,6 +89,10 @@ export namespace ConstantsInfo {
       IOS: "ios",
       MOCK: "mock"
     },
+    //# User Idle
+    USER_IDLE: {
+      TIMEOUT_DURATION: 900 //seconds
+    },
     //# App Pages
     PAGES: {
       //# Cards page
@@ -256,6 +260,7 @@ export namespace ConstantsInfo {
             "negativeCreditData": 1 //forces chart to render negative/zero credit data as a solid/filled graph
           }
         },
+        "welcome": "Welcome, ",
         "title": "Fleet SmartHub",
         "availableCredit": "Available",
         "billedAmount": "Billed",
@@ -363,6 +368,24 @@ export namespace ConstantsInfo {
         ],
         greekedElementCount: 15,
         title: "Payments",
+
+        //# Payments Details page
+        DETAILS: {
+          title:         "Payment Details",
+          amount:        "Amount",
+          bankAccount:   "Bank Account",
+          postedDate:    "Date Posted",
+          scheduledDate: "Date Scheduled",
+          inProcess:     "In Process",
+          method:        "Method",
+          editButton:    "Edit Payment",
+          cancelButton:  "Cancel Payment",
+          cancelPaymentConfirmation: {
+              content:   "Are you sure you want to cancel this scheduled payment?",
+              yesButton: "Yes",
+              noButton:  "No"
+          }
+        },
 
         //# Add Payment page
         ADD: {
@@ -775,6 +798,32 @@ ConstantsInfo.Env.set("stage-wex", {
     },
     KEYMASTER: {
       BASE_URL: "https://uat.account.wexmobile.com/authAPI"
+    },
+    ONLINE_ENROLLMENT: {
+      BASE_URL: "https://uat-wex.wexinc.com/enrollment/"
+    }
+  }
+});
+
+ConstantsInfo.Env.set("stage-aws", {
+  GOOGLE_ANALYTICS: {
+    TRACKING_ID: "UA-71223382-1"
+  },
+  AUTH: {
+    client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
+    client_id: "mobileAccountManagement",
+    grant_type: "password",
+    scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id"
+  },
+  APIS: {
+    AMREST: {
+      BASE_URL: "https://uat.account.wexmobile.com/maintenance"
+    },
+    GATEKEEPER: {
+      BASE_URL: "http://gatekeeper-stage.us-east-1.elasticbeanstalk.com"
+    },
+    KEYMASTER: {
+      BASE_URL: "http://keymaster-stage.us-east-1.elasticbeanstalk.com"
     },
     ONLINE_ENROLLMENT: {
       BASE_URL: "https://uat-wex.wexinc.com/enrollment/"
