@@ -198,9 +198,21 @@ import { NgIdleModule } from "@ng-idle/core";
       multi: true
     },
     {
+      provide: AppSymbols.RootPage,
+      useValue: LoginPage
+    },
+    {
       provide: Http,
       useClass: SecureHttp,
       deps: [XHRBackend, RequestOptions, NetworkStatus]
+    },
+    {
+      provide: SessionInfoRequestors,
+      useClass: DefaultSessionInfoRequestors
+    },
+    {
+      provide: GoogleAnalytics,
+      useClass: WexGoogleAnalyticsEvents
     },
     SessionManager,
     NavBarController,
@@ -211,22 +223,10 @@ import { NgIdleModule } from "@ng-idle/core";
     IosFingerprintService,
     MockFingerprintService,
     WexAppSnackbarController,
-    {
-      provide: SessionInfoRequestors,
-      useClass: DefaultSessionInfoRequestors
-    },
     SessionCache,
     NetworkStatus,
-    {
-      provide: GoogleAnalytics,
-      useClass: WexGoogleAnalyticsEvents
-    },
     WexAlertController,
-    UserIdle,
-    {
-      provide: AppSymbols.RootPage,
-      useValue: LoginPage
-    }
+    UserIdle
   ]
 })
 export class AppModule {}
