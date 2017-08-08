@@ -19,7 +19,7 @@ export class UserIdle {
     this.idle.setIdle(1);
     this.idle.setTimeout(this.CONSTANTS.TIMEOUT_DURATION);
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
-    this.idle.onTimeout.subscribe(() => this.sessionManager.logout({ "fromLogOut": true }));
+    this.idle.onTimeout.subscribe(() => this.sessionManager.logout({ "fromTimeout": true }));
   }
 
   private onSessionChange(session: boolean) {
