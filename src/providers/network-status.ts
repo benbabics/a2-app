@@ -17,17 +17,17 @@ export class NetworkStatus {
         this.watchConnectionErrors();
     }
 
-    private createErrorToast(message: string, showCloseButton: boolean): QueuedToast {
+    private createErrorToast(message: string, showCloseButton: boolean, important?: boolean): QueuedToast {
       const cssClass = "red";
 
-      return this.wexAppSnackbarController.createQueued({ message, cssClass, showCloseButton });
+      return this.wexAppSnackbarController.createQueued({ message, cssClass, showCloseButton, important });
     }
 
     private watchConnectionErrors() {
       let toast: QueuedToast;
 
       this.network.onDisconnect().subscribe(() => {
-        toast = this.createErrorToast(this.networkError, false);
+        toast = this.createErrorToast(this.networkError, false, true);
         toast.present();
       });
 
