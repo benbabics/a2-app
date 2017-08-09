@@ -71,17 +71,20 @@ export class SettingsPage extends SecurePage {
     let id = this.session.user.details.username.toLowerCase(),
         secret = this.session.clientSecret;
 
-    let fingerprintProfileCreatedMessage = _.template(this.CONSTANTS.createFingerprintProfileMessage)({
-      username: id,
-      fingerprintAuthName: this.platformFingerprintLabel
-    });
+    return new Promise((resolve, reject) => {
+      this.sessionManager.promptFingerprintTerms().subscribe(hasAccepted => {
+        if ( hasAccepted ) {
+          this.fingerprint.verify({ id, secret })
+            .then(() => {
+              resolve();
+              this.displayProfileCreatedMessage( id );
+            })
+            .catch(() => reject());
+        }
 
-    return this.fingerprint.verify({ id, secret })
-      .then(() => this.wexAppSnackbarController.createQueued({
-        message: fingerprintProfileCreatedMessage,
-        duration: this.CONSTANTS.createFingerprintProfileDuration,
-        position: "top",
-      }).present());
+        else reject();
+      });
+    });
   }
 
 
@@ -92,6 +95,20 @@ export class SettingsPage extends SecurePage {
       if ( shouldClear ) { this.fingerprint.clearProfile( id ); }
       return !shouldClear; // inverse value as "Yes" removes profile, "No" keeps profile
     });
+  }
+
+
+  private displayProfileCreatedMessage(username: string): void {
+    let fingerprintProfileCreatedMessage = _.template(this.CONSTANTS.createFingerprintProfileMessage)({
+      username,
+      fingerprintAuthName: this.platformFingerprintLabel
+    });
+
+    this.wexAppSnackbarController.createQueued({
+      message:  fingerprintProfileCreatedMessage,
+      duration: this.CONSTANTS.createFingerprintProfileDuration,
+      position: "top",
+    }).present();
   }
 
 
