@@ -37,6 +37,7 @@ import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { Keyboard } from "@ionic-native/keyboard";
 import { GoogleAnalytics } from "@ionic-native/google-analytics";
+import { Market } from "@ionic-native/market";
 import {
   SecureHttp,
   SessionManager,
@@ -197,6 +198,7 @@ export function APP_INITIALIZER_FACTORY() {
     InAppBrowser,
     Keyboard,
     Network,
+    Market,
     //# app providers
     //----------------------
     { // Force service instatiation
