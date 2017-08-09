@@ -18,7 +18,7 @@ import { Market } from '@ionic-native/market';
     injector: Injector
   ) {
     super("Version Check", injector);
-    this.status = navParams.get('status') as VersionStatus;
+    this.status = navParams.get("status") as VersionStatus;
   }
 
   public get canSkipUpdate() {
