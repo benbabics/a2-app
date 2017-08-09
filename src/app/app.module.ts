@@ -53,6 +53,7 @@ import {
   SessionCache,
   NetworkStatus,
   WexGoogleAnalyticsEvents,
+  WexAppBackButtonController,
   UserIdle
 } from "../providers";
 import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
@@ -235,8 +236,13 @@ export function APP_INITIALIZER_FACTORY() {
     WexAppSnackbarController,
     SessionCache,
     NetworkStatus,
+    {
+      provide: GoogleAnalytics,
+      useClass: WexGoogleAnalyticsEvents
+    },
     WexAlertController,
     WexAppVerionCheck,
+    WexAppBackButtonController,
     UserIdle
   ]
 })
