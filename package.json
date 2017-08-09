@@ -140,7 +140,8 @@
             "nativesettingsopener": {},
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-network-information": {},
-            "cordova-plugin-google-analytics": {}
+            "cordova-plugin-google-analytics": {},
+            "cordova-plugin-market": {}
         }
     }
 }
