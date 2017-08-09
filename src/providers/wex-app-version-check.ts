@@ -27,7 +27,7 @@ export class WexAppVerionCheck {
         return this._versionNumber;
     }
     private get platformName(): string {
-        if (this.wexPlatform.isAndroid()) {
+        if (this.wexPlatform.isAndroid) {
             return RequestPlatform.Android;
         } else if (this.wexPlatform.isIos) {
             return RequestPlatform.iOS;

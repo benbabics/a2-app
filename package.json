@@ -37,7 +37,7 @@
         "serve:www": "http-server www"
     },
     "dependencies": {
-        "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#c1809c46f1d",
+        "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#da841768c95",
         "@angular-wex/mocks": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#b30796baed3",
         "@angular-wex/models": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#bea9c631eff",
         "@angular-wex/validators": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#5cae222933a",
@@ -94,8 +94,7 @@
         "promise.prototype.finally": "^2.0.1",
         "rxjs": "5.4.0",
         "sw-toolbox": "3.6.0",
-        "zone.js": "0.8.12",
-        "com.xmartlabs.cordova.market": "~1.1"
+        "zone.js": "0.8.12"
     },
     "devDependencies": {
         "@angular/tsc-wrapped": "4.1.0",
@@ -141,8 +140,7 @@
             "nativesettingsopener": {},
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-network-information": {},
-            "cordova-plugin-google-analytics": {},
-            "com.xmartlabs.cordova.market": {}
+            "cordova-plugin-google-analytics": {}
         }
     }
 }
