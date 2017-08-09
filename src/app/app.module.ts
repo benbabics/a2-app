@@ -81,7 +81,7 @@ import { AngularWexValidatorsModule } from "@angular-wex/validators";
 import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
 import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
 import { Network } from "@ionic-native/network";
-import { WexAppVerionCheck } from '../providers/wex-app-version-check';
+import { WexAppVersionCheck } from '../providers/wex-app-version-check';
 import { VersionCheck } from '../pages/login/version-check/version-check';
 import { AppSymbols } from "./app.symbols";
 import { NgIdleModule } from "@ng-idle/core";
@@ -241,7 +241,7 @@ export function APP_INITIALIZER_FACTORY() {
       useClass: WexGoogleAnalyticsEvents
     },
     WexAlertController,
-    WexAppVerionCheck,
+    WexAppVersionCheck,
     WexAppBackButtonController,
     UserIdle
   ]

@@ -16,7 +16,7 @@ export namespace RequestPlatform {
 }
 
 @Injectable()
-export class WexAppVerionCheck {
+export class WexAppVersionCheck {
     @Value("AUTH.client_id") clientId: string;
     private _status: Observable<VersionStatus>;
     public get status() {
