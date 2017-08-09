@@ -1,12 +1,14 @@
+import { WexAppSnackbarController } from './../../components/wex-app-snackbar-controller/wex-app-snackbar-controller';
 import * as _ from "lodash";
 import { NavBarController } from "../../providers";
 import { Component, Injector } from "@angular/core";
-import { NavController, NavParams, PopoverController } from "ionic-angular";
+import { NavController, NavParams, PopoverController, Platform, ToastOptions } from 'ionic-angular';
 import { Company, InvoiceSummary, Payment, CompanyStub, User } from "@angular-wex/models";
 import { Session } from "../../models";
 import { SecurePage } from "../secure-page";
 import { OptionsPopoverPage } from "./options-popover/options-popover";
 import { InvoiceProvider, BrandProvider } from "@angular-wex/api-providers";
+import { WexAppBackButtonController } from '../../providers/wex-app-back-button-controller';
 
 interface ChartDisplayConfig {
   [list: string]: any[];
@@ -25,15 +27,15 @@ interface ChartConfig {
 })
 export class LandingPage extends SecurePage {
 
-  private readonly REQUIRED_SESSION_FIELDS: Session.Field[]  = [
+  private readonly REQUIRED_SESSION_FIELDS: Session.Field[] = [
     Session.Field.User,
     Session.Field.InvoiceSummary,
     Session.Field.Payments
   ];
   private readonly BACK_TO_EXIT_ACTION_PRIORITY = 102;
   private readonly DEFAULT_CACHE_TTL = 4320; //72 hours
-  private removeBackButtonAction;
-  private exitTimerPromise;
+  private exitTimerPromise: Promise<any>;
+  private isCurrentView: boolean;
 
   public readonly chartColors = this.CONSTANTS.CHART.COLORS;
 
@@ -53,15 +55,31 @@ export class LandingPage extends SecurePage {
     private popoverCtrl: PopoverController,
     private brandProvider: BrandProvider,
     private navBarController: NavBarController,
-    public injector: Injector
+    private platform: Platform,
+    private wexAppSnackbarController: WexAppSnackbarController,
+    public injector: Injector,
+    private wexAppBackButtonController: WexAppBackButtonController
   ) {
     super("Landing", injector);
   }
 
+  private registerBackButton = () => {
+    if (this.isCurrentView) {
+      this.wexAppBackButtonController.registerAction(this.hardwareBackSnackbar);
+    }
+  }
+
+  private hardwareBackSnackbar = () => {
+    this.wexAppBackButtonController.registerAction(this.platform.exitApp);
+    let queued = this.wexAppSnackbarController.createQueued(this.CONSTANTS.BACK_TO_EXIT as ToastOptions);
+    queued.onDidDismiss(this.registerBackButton);
+    queued.present();
+  }
+
   private createChartDisplayConfiguration(): ChartDisplayConfig {
     let datasets: ChartDisplayConfig = { collection: [], left: [], right: [] },
-        dataIds: InvoiceSummary.Field[] = ["pendingAmount", "unbilledAmount", "availableCredit", "billedAmount"],
-        requiredDataIds: InvoiceSummary.Field[] = ["availableCredit"];
+      dataIds: InvoiceSummary.Field[] = ["pendingAmount", "unbilledAmount", "availableCredit", "billedAmount"],
+      requiredDataIds: InvoiceSummary.Field[] = ["availableCredit"];
 
     dataIds.forEach((id: string) => {
       if (this.invoiceSummary.details[id] > 0 || _.includes(requiredDataIds, id)) {
@@ -134,6 +152,16 @@ export class LandingPage extends SecurePage {
         this.brandProvider.logo(this.session.user.details.brand)
           .subscribe((brandLogoData: string) => this.brandLogoData = brandLogoData);
       });
+  }
+
+  ionViewDidEnter() {
+    this.isCurrentView = true;
+    this.registerBackButton();
+  }
+
+  ionViewWillLeave() {
+    this.isCurrentView = false;
+    this.wexAppBackButtonController.deregisterAction();
   }
 
   public onShowOptions($event) {

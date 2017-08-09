@@ -1,5 +1,5 @@
-import { Component, Inject } from "@angular/core";
-import { Platform } from "ionic-angular";
+import { Component, Inject, Injector } from "@angular/core";
+import { Platform, NavController, IonicApp } from "ionic-angular";
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 
@@ -15,13 +15,20 @@ import "chart.js";
 })
 export class MyApp {
 
+  private static _injector: Injector;
+  public static get injector(): Injector {
+    return MyApp._injector;
+  }
+
   constructor(
     splashScreen: SplashScreen,
-    sessionManager: SessionManager,
-    @Inject(AppSymbols.RootPage) public rootPage: any,
+    private statusBar: StatusBar,
+    private sessionManager: SessionManager,
     private platform: WexPlatform,
-    private statusBar: StatusBar
-  ) {
+    @Inject(AppSymbols.RootPage) public rootPage: any,
+    private injector: Injector) {
+    MyApp._injector = injector;
+
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
