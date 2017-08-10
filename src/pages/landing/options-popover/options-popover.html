@@ -1,5 +1,5 @@
 <ion-list>
-  <button ion-item (click)="goToSettingsPage()">
+  <button ion-item (click)="goToSettingsPage()" *ngIf="fingerprintAuthAvailable">
     <ion-icon name="settings"></ion-icon>
     Settings
   </button>
