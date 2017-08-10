@@ -25,10 +25,10 @@ export namespace IosFingerprintVerificationOptions {
 }
 
 interface InternalIosFingerprintService {
-  isAvailable(successCallback: (InternalAndroidFingerprintServiceAvailabilityResponse) => void, errorCallback: (any) => void);
-  verifyFingerprint(message: string, successCallback: (InternalAndroidFingerprintServiceAuthResponse) => void, errorCallback: (any) => void);
-  verifyFingerprintWithCustomPasswordFallback(message: string, successCallback: (InternalAndroidFingerprintServiceAuthResponse) => void, errorCallback: (any) => void);
-  verifyFingerprintWithCustomPasswordFallbackAndEnterPasswordLabel(message: string, passwordLabel: string, successCallback: (InternalAndroidFingerprintServiceAuthResponse) => void, errorCallback: (any) => void);
+  isAvailable(successCallback: (InternalAndroidFingerprintServiceAvailabilityResponse) => void, errorCallback: (x: any) => void);
+  verifyFingerprint(message: string, successCallback: (InternalAndroidFingerprintServiceAuthResponse) => void, errorCallback: (x: any) => void);
+  verifyFingerprintWithCustomPasswordFallback(message: string, successCallback: (InternalAndroidFingerprintServiceAuthResponse) => void, errorCallback: (x: any) => void);
+  verifyFingerprintWithCustomPasswordFallbackAndEnterPasswordLabel(message: string, passwordLabel: string, successCallback: (InternalAndroidFingerprintServiceAuthResponse) => void, errorCallback: (x: any) => void);
 }
 
 declare var window: {

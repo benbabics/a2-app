@@ -5,7 +5,7 @@ import { AppConstants } from "../app/app.constants";
 
 const Constants = AppConstants();
 
-export abstract class Page implements OnInit{
+export abstract class Page implements OnInit {
 
   public readonly CONSTANTS: any;
   public googleAnalytics: GoogleAnalytics;

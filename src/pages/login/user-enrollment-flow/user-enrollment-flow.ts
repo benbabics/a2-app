@@ -1,8 +1,8 @@
 import { Component, Input, Injector } from "@angular/core";
 import { InAppBrowser, InAppBrowserObject } from "@ionic-native/in-app-browser";
 import { Http } from "@angular/http";
-import { Page } from "../../page"
-import { GetCurrentEnvironmentConstants, ConstantsInfo } from "../../../app/app.constants";
+import { Page } from "../../page";
+import { ConstantsInfo } from "../../../app/app.constants";
 import { AlertController } from "ionic-angular";
 import { Value } from "../../../decorators/value";
 
@@ -27,13 +27,13 @@ export class UserEnrollmentFlow extends Page {
      super("Online Enrollment", injector);
    }
 
-  private handleOpenEnrollmentWindow(): void {
+  public handleOpenEnrollmentWindow(): void {
     this.isLoading = true;
     this.http.get( this.ENROLLMENT_PING )
         .subscribe(
-            success => this.loadOnlineEnrollmentApp(),
-            failure => this.displayServiceUnavailableAlert()
-        )
+            () => this.loadOnlineEnrollmentApp(),
+            () => this.displayServiceUnavailableAlert()
+        );
   }
 
   private loadOnlineEnrollmentApp() {

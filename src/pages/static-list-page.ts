@@ -6,7 +6,6 @@ import { Model } from "@angular-wex/models";
 import { Session } from "../models";
 
 export { GroupedList } from "./list-page";
-import { SessionManager } from "../providers/session-manager";
 import { WexGreeking } from "../components";
 import { SessionInfoOptions } from "../providers";
 
@@ -21,7 +20,7 @@ export namespace FetchOptions {
     forceRequest: false,
     clearItems: true,
     checkListSize: true
-  }
+  };
 }
 
 export const _FetchOptions = FetchOptions;
@@ -149,7 +148,8 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   }
 
   protected groupItems(items: T[]): GroupedList<T> {
-    throw new Error("StaticListPage.groupItems must be defined when using a grouped list.");
+    console.error("StaticListPage.groupItems must be defined when using a grouped list.");
+    return { items };
   }
 
   protected sortItemGroups(groupedItems: GroupedList<T>): GroupedList<T> {

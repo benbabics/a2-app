@@ -13,7 +13,7 @@ export class WexCurrency {
 
   private currencyPipe: CurrencyPipe = new CurrencyPipe(WexCurrency.LOCALE);
 
-  public transform(value, superDecimal?: boolean) {
+  public transform(value) {
     return this.currencyPipe.transform(value, WexCurrency.CONSTANTS.FORMAT, true);
   }
 }

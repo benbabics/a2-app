@@ -2,7 +2,6 @@ import { Observable } from "rxjs";
 import { CardsDetailsPage } from "./details/cards-details";
 import { Component, Injector } from '@angular/core';
 import { NavParams, NavController, Events } from "ionic-angular";
-import { SessionManager } from "../../providers";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { Session } from "../../models";

@@ -8,7 +8,6 @@ import { Value } from "../decorators/value";
 @Injectable()
 export class WexDateTime {
 
-  @Value("LOCALE") private static readonly LOCALE: string;
   @Value("DATETIME") private static readonly CONSTANTS: any;
 
   public transform(value: string) {

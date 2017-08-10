@@ -41,7 +41,7 @@ export class LoginPage extends Page {
   @Value("STORAGE.KEYS.USERNAME") private readonly USERNAME_KEY: string;
 
   private _onKeyboardOpen = event => this.onKeyboardOpen(event);
-  private _onKeyboardClose = event => this.onKeyboardClose(event);
+  private _onKeyboardClose = () => this.onKeyboardClose();
 
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
@@ -143,7 +143,7 @@ export class LoginPage extends Page {
     this.keyboardSpacer.nativeElement.style.height = `${event.keyboardHeight}px`;
   }
 
-  private onKeyboardClose(event: any) {
+  private onKeyboardClose() {
     this.content.getNativeElement().classList.remove("keyboard-open");
     this.keyboardSpacer.nativeElement.style.height = "0px";
   }
