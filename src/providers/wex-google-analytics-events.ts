@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
     @Value("GOOGLE_ANALYTICS.TRACKING_ID") TRACKING_ID: string;
 
-    constructor() { 
+    constructor() {
         super();
         if (this.TRACKING_ID === "") {
             console.warn("No TRACKING_ID found for Google Analytics for this session.");
@@ -19,5 +19,5 @@ export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
         return this.TRACKING_ID !== "" ? super.trackView(view) : null;
      }
 
-    
+
 }

@@ -695,7 +695,7 @@ export namespace ConstantsInfo {
   interface GoogleAnalyticsConstant {
     GOOGLE_ANALYTICS: {
       TRACKING_ID: string;
-    }
+    };
   }
   export type CommonConstants = typeof Common;
   export type PartialCommonConstants = {[K in keyof CommonConstants]?: Partial<CommonConstants[K]> };

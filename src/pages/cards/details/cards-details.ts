@@ -1,16 +1,13 @@
 import { WexAlertController } from './../../../components/wex-alert-controller/wex-alert-controller';
-import { Observable } from 'rxjs/Observable';
 import { CardProvider } from '@angular-wex/api-providers';
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, App, ActionSheetController, Events, AlertController, ToastOptions, Platform } from 'ionic-angular';
+import { NavParams, App, ActionSheetController, Events, ToastOptions, Platform } from 'ionic-angular';
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
 import { Card, CardStatus } from "@angular-wex/models";
-import { SessionManager } from "../../../providers";
 import { WexAppSnackbarController } from "../../../components";
 import * as _ from "lodash";
-import { Value } from '../../../decorators/value';
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -21,7 +18,7 @@ interface CardStatusDetails {
   label: string;
   trackingId: string;
   icon: string;
-};
+}
 
 export namespace CardsDetailsNavParams {
   export const Card: CardsDetailsNavParams = "card";

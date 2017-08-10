@@ -51,7 +51,7 @@ export class AddPaymentConfirmationPage extends SecurePage {
     });
   }
 
-  public finish(data?: any) {
+  public finish() {
     let firstViewCtrl = this.navCtrl.first();
 
     this.app.getRootNav().setRoot(WexNavBar)

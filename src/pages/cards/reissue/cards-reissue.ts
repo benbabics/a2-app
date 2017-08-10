@@ -12,11 +12,9 @@ import {
 } from "@angular-wex/models";
 import { Session } from "../../../models";
 import { SecurePage } from "../../secure-page";
-import { SessionManager } from "../../../providers";
 import { Dialogs } from "@ionic-native/dialogs";
-import { WexAppSnackbarController } from "../../../components";
 import { Value } from "../../../decorators/value";
-import { AccountProvider, CardProvider, CardUpdateType } from "@angular-wex/api-providers";
+import { CardProvider, CardUpdateType } from '@angular-wex/api-providers';
 
 @Component({
   selector: "page-cards-reissue",
@@ -36,12 +34,10 @@ export class CardsReissuePage extends SecurePage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private accountProvider: AccountProvider,
     private actionSheetCtrl: ActionSheetController,
     private dialogs: Dialogs,
     private cardProvider: CardProvider,
     private app: App,
-    private appSnackbarController: WexAppSnackbarController,
     injector: Injector
   ) {
     super("Cards.Reissue", injector, [

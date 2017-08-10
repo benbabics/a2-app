@@ -44,8 +44,8 @@ interface InternalAndroidFingerprintServiceAuthResponse {
 interface InternalAndroidFingerprintService {
   ERRORS: any;
 
-  isAvailable(successCallback: (InternalAndroidFingerprintServiceAvailabilityResponse) => void, errorCallback: (any) => void);
-  encrypt(options: InternalAndroidFingerprintServiceAuthConfig, successCallback: (response: InternalAndroidFingerprintServiceAuthResponse) => void, errorCallback: (any) => void);
+  isAvailable(successCallback: (InternalAndroidFingerprintServiceAvailabilityResponse) => void, errorCallback: (x: any) => void);
+  encrypt(options: InternalAndroidFingerprintServiceAuthConfig, successCallback: (response: InternalAndroidFingerprintServiceAuthResponse) => void, errorCallback: (x: any) => void);
 }
 
 declare var window: {

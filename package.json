@@ -4,6 +4,7 @@
     "homepage": "http://wexinc.com/",
     "private": true,
     "scripts": {
+        "lint": "tslint --project .",
         "clean": "ionic-app-scripts clean --no-interactive",
         "build": "ionic-app-scripts build --no-interactive",
         "ionic:prepare": "ionic cordova prepare --no-interactive --verbose",

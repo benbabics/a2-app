@@ -48,17 +48,17 @@ export class SecureStorage {
 
   private browserMock(): ISecureStorage {
     return {
-      get: (successCallback: SuccessCallback, errorCallback: ErrorCallback, key: string) => {
+      get: (successCallback: SuccessCallback, /*errorCallback: ErrorCallback, key: string*/) => {
         console.error("TODO");
         successCallback(null); //TODO
       },
 
-      remove: (successCallback: SuccessCallback, errorCallback: ErrorCallback, key: string) => {
+      remove: (successCallback: SuccessCallback, /*errorCallback: ErrorCallback, key: string*/) => {
         console.error("TODO");
         successCallback(null); //TODO
       },
 
-      set: (successCallback: SuccessCallback, errorCallback: ErrorCallback, key: string, value: any) => {
+      set: (successCallback: SuccessCallback, /*errorCallback: ErrorCallback, key: string, value: any*/) => {
         console.error("TODO");
         successCallback(null); //TODO
       }

@@ -11,7 +11,7 @@ export class WexKeyboardAware implements OnInit, OnDestroy {
   };
 
   private _onKeyboardOpen = event => this.onKeyboardOpen(event);
-  private _onKeyboardClose = event => this.onKeyboardClose(event);
+  private _onKeyboardClose = () => this.onKeyboardClose();
 
   constructor(
     private elementRef: ElementRef,
@@ -36,7 +36,7 @@ export class WexKeyboardAware implements OnInit, OnDestroy {
     this.targetElement.style.marginBottom = `${event.keyboardHeight}px`;
   }
 
-  private onKeyboardClose(event: any) {
+  private onKeyboardClose() {
     this.targetElement.style.marginBottom = "0px";
   }
 

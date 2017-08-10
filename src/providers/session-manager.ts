@@ -26,7 +26,7 @@ export interface SessionOptions {
 export namespace SessionOptions {
   export const Defaults: SessionOptions = {
     authenticationMethod: SessionAuthenticationMethod.Secret
-  }
+  };
 }
 
 @Injectable()
@@ -35,8 +35,6 @@ export class SessionManager {
   @Value("STORAGE.KEYS.AUTH_TOKEN") private readonly AUTH_TOKEN_KEY: string;
 
   private _sessionStateObserver = new BehaviorSubject(null);
-
-  private static fingerprintAuthenticationTermsAccepted = false;
 
   constructor(
     @Inject(AppSymbols.RootPage) private rootPage: any,
@@ -59,7 +57,7 @@ export class SessionManager {
 
   private authenticate(userCredentials: UserCredentials, authenticationMethod: SessionAuthenticationMethod): Observable<string> {
     let secret: Observable<string>;
-    switch(authenticationMethod) {
+    switch (authenticationMethod) {
       // Fingerprint
       case SessionAuthenticationMethod.Fingerprint: {
         let options: any = { id: userCredentials.username };
@@ -71,7 +69,7 @@ export class SessionManager {
         // Prompt fingerprint terms after auth for registering
         secret = Observable.if(() => isRegistering, this.registerFingerprintAuthentication(userCredentials), Observable.of(true))
           .flatMap((shouldVerify: boolean) => {
-            if(shouldVerify) {
+            if (shouldVerify) {
               return Observable.fromPromise(this.fingerprint.verify(options))
               .map((fingerprintProfile: FingerprintProfile): string => fingerprintProfile.secret);
             } else {

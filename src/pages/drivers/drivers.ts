@@ -1,5 +1,4 @@
 import { NavController, NavParams, Events } from 'ionic-angular';
-import { SessionManager } from './../../providers/session-manager';
 import { Observable } from 'rxjs/Observable';
 import { Component, Injector } from '@angular/core';
 import { Driver, DriverStatus } from "@angular-wex/models";
@@ -26,10 +25,9 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
   public readonly dividerLabels: string[] = DriversPage.DRIVER_STATUSES.map(DriverStatus.displayName);
 
   constructor(
-    sessionManager: SessionManager,
     public navCtrl: NavController,
     public navParams: NavParams,
-    private events: Events,
+    events: Events,
     injector: Injector
   ) {
     super("Drivers", injector, DriversPage.SEARCH_FILTER_FIELDS);

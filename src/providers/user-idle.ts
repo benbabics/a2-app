@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { Idle, DEFAULT_INTERRUPTSOURCES } from "@ng-idle/core";
 import { Value } from "../decorators/value";
 import { SessionManager } from "./session-manager";
-import { Session } from "../models";
 
 @Injectable()
 export class UserIdle {
