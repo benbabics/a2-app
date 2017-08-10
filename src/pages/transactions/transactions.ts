@@ -7,8 +7,7 @@ import { Session, TransactionList, DynamicList } from "../../models";
 import { WexGreeking } from "../../components";
 import { SessionCache, PostedTransactionRequestor, DynamicSessionListInfoRequestor } from "../../providers";
 import { TransactionDetailsPage } from './details/transaction-details';
-import { Transaction, Driver, Card, Model, ListResponse } from "@angular-wex/models";
-import { Value } from "../../decorators/value";
+import { Transaction, Driver, Card, Model } from "@angular-wex/models";
 import { TransactionProvider, PostedTransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { TabPage } from '../../decorators/tab-page';
 
@@ -30,15 +29,9 @@ export namespace TransactionListType {
 export type TransactionListFilter = [PostedTransactionSearchFilterBy, any];
 
 export interface TransactionsParams {
-<<<<<<< HEAD
   selectedList?: TransactionListType;
-  filterOn?: ListFilter;
-}
-=======
-  selectedList?: TransactionListType,
   filter?: TransactionListFilter;
-};
->>>>>>> master
+}
 
 export type TransactionsParam = keyof TransactionsParams;
 
