@@ -4,6 +4,7 @@ import { ToastController, ToastOptions, Toast, NavOptions, App, Config } from "i
 import { AppConstants } from "../../app/app.constants";
 
 const Constants = AppConstants();
+type ToastCallback =  (data: any, role: string) => void;
 
 export interface QueuedToastOptions extends ToastOptions {
   important?: boolean;
@@ -11,18 +12,24 @@ export interface QueuedToastOptions extends ToastOptions {
 
 export class QueuedToast {
 
+
   constructor(public readonly toast: Toast, private controller: WexAppSnackbarController, public readonly options: QueuedToastOptions) { }
+
+  private didDismissCallbacks: Array<ToastCallback> = [];
+  private willDismissCallbacks: Array<ToastCallback> = [];
 
   public dismiss(data?: any, role?: string, navOptions?: NavOptions) {
     return this.toast.dismiss(data, role, navOptions);
   }
 
   public onDidDismiss(callback: (data: any, role: string) => void) {
-    return this.toast.onDidDismiss(callback);
+    this.didDismissCallbacks.push(callback);
+    return this.toast.onDidDismiss(_.flowRight<ToastCallback>(this.didDismissCallbacks));  
   }
 
   public onWillDismiss(callback: (data: any, role: string) => void) {
-    return this.toast.onWillDismiss(callback);
+    this.willDismissCallbacks.push(callback);
+    return this.toast.onWillDismiss(_.flowRight<ToastCallback>(this.willDismissCallbacks));  
   }
 
   public present(navOptions?: NavOptions): Promise<any> {

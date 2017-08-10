@@ -10,6 +10,7 @@ import { TransactionDetailsPage } from './details/transaction-details';
 import { Transaction, Driver, Card, Model, ListResponse } from "@angular-wex/models";
 import { Value } from "../../decorators/value";
 import { TransactionProvider, PostedTransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { TabPage } from '../../decorators/tab-page';
 
 export type TransactionListModelType = Card | Driver | Transaction;
 export type TransactionListModelTypeDetails = Card.Details | Driver.Details | Transaction.Details;
@@ -220,6 +221,7 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
 
 //# TransactionsPage
 // --------------------------------------------------
+@TabPage()
 @Component({
   selector: "page-transactions",
   templateUrl: "transactions.html"
