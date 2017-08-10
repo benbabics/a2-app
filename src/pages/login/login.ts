@@ -15,7 +15,7 @@ import { Dialogs } from "@ionic-native/dialogs";
 import { Keyboard } from "@ionic-native/keyboard";
 import { Response } from "@angular/http";
 import { UserCredentials } from "@angular-wex/models";
-import { WexAppVerionCheck } from '../../providers/wex-app-version-check';
+import { WexAppVersionCheck } from '../../providers/wex-app-version-check';
 import { VersionCheck } from './version-check/version-check';
 
 export type LoginPageNavParams = keyof {
@@ -63,7 +63,7 @@ export class LoginPage extends Page {
     private dialogs: Dialogs,
     private keyboard: Keyboard,
     private appSnackbarController: WexAppSnackbarController,
-    private wexAppVersionCheck: WexAppVerionCheck,
+    private wexAppVersionCheck: WexAppVersionCheck,
     private modalController: ModalController,
     injector: Injector
   ) {
