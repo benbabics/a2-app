@@ -10,7 +10,7 @@ import { WexPlatform } from "../providers";
 import "chart.js";
 
 @Component({
-  templateUrl: "app.html",
+  templateUrl: "app.html"
 })
 export class MyApp {
 
