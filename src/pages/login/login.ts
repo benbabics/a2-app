@@ -148,7 +148,7 @@ export class LoginPage extends Page {
       let authenticationMethod = setupFingerprintAuth ? SessionAuthenticationMethod.Fingerprint : SessionAuthenticationMethod.Secret;
 
       this.isLoggingIn = true;
-      this.user.username = this.user.username.toLowerCase();
+      this.user.username = this.user.username.toLowerCase().trim();
 
       this.sessionManager.initSession(this.user, { authenticationMethod })
         .flatMap(() => this.sessionManager.cache.getSessionDetail(Session.Field.User)) //Pre-fetch the user object for the landing page

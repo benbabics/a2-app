@@ -16,7 +16,7 @@ export class WexPlatform extends Platform {
     Object.assign(this, platform);
   }
 
-  public isAndroid(): boolean {
+  public get isAndroid(): boolean {
     return this.os === Constants.PLATFORM.ANDROID;
   }
 
