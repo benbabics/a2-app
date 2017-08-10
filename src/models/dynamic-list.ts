@@ -15,8 +15,7 @@ export class DynamicList<T extends Model<DetailsT>, DetailsT> extends Model<Dyna
   private constructor(private $class: ModelT<T, DetailsT>) {
     super();
 
-    this.details.currentPage = 0;
-    this.details.totalResults = 0;
+    this.clear();
   }
 
   public static create<T extends Model<DetailsT>, DetailsT>($class: ModelT<T, DetailsT>): DynamicList<T, DetailsT> {
@@ -37,6 +36,12 @@ export class DynamicList<T extends Model<DetailsT>, DetailsT> extends Model<Dyna
 
   public set items(items: T[]) {
     this.details.items = items.map(item => item.details);
+  }
+
+  public clear() {
+    this.details.items = undefined;
+    this.details.currentPage = 0;
+    this.details.totalResults = 0;
   }
 }
 
