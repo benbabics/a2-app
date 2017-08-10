@@ -15,7 +15,6 @@
     "no-arg": true,
     "no-conditional-assignment": true,
     "no-construct": true,
-    "no-empty": true,
     "no-empty-interface": true,
     "no-eval": true,
     "no-internal-module": true,
@@ -34,10 +33,6 @@
       true,
       "check-open-brace",
       "check-whitespace"
-    ],
-    "only-arrow-functions": [
-      true,
-      "allow-named-functions"
     ],
     "quotemark": [
       false,

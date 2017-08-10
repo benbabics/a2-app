@@ -28,15 +28,11 @@ export namespace LoginPageNavParams {
 
 declare const cordova: any;
 
-interface X {
-
-}
-
 @Component({
   selector: "page-login",
   templateUrl: "login.html"
 })
-export class LoginPage extends Page implements X {
+export class LoginPage extends Page {
   @ViewChild("content") content: Content;
   @ViewChild("keyboardSpacer") keyboardSpacer: ElementRef;
 

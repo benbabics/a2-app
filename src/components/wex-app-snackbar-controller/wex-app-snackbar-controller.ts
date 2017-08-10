@@ -24,12 +24,12 @@ export class QueuedToast {
 
   public onDidDismiss(callback: (data: any, role: string) => void) {
     this.didDismissCallbacks.push(callback);
-    return this.toast.onDidDismiss(_.flowRight<ToastCallback>(this.didDismissCallbacks));  
+    return this.toast.onDidDismiss(_.flowRight<ToastCallback>(this.didDismissCallbacks));
   }
 
   public onWillDismiss(callback: (data: any, role: string) => void) {
     this.willDismissCallbacks.push(callback);
-    return this.toast.onWillDismiss(_.flowRight<ToastCallback>(this.willDismissCallbacks));  
+    return this.toast.onWillDismiss(_.flowRight<ToastCallback>(this.willDismissCallbacks));
   }
 
   public present(navOptions?: NavOptions): Promise<any> {

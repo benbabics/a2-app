@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 
-interface _Rect {
+interface Rectangle {
   left: number;
   top: number;
   right: number;
@@ -26,5 +26,5 @@ export class WexGreeking {
 }
 
 export namespace WexGreeking {
-  export type Rect = _Rect;
+  export type Rect = Rectangle;
 }

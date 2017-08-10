@@ -31,7 +31,7 @@ export type AddPaymentFlowSectionType = keyof {
   Amount,
   Date,
   BankAccount
-}
+};
 
 export namespace AddPaymentFlowSectionType {
 

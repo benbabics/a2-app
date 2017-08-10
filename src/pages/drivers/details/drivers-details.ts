@@ -5,7 +5,7 @@ import * as _ from "lodash";
 import { Component, Injector } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Driver, DriverStatus, OnlineApplication } from '@angular-wex/models';
-import { DriverProvider } from "@angular-wex/api-providers"
+import { DriverProvider } from "@angular-wex/api-providers";
 import { DetailsPage } from "../../details-page";
 import { ActionSheetOptions } from 'ionic-angular/components/action-sheet/action-sheet-options';
 import { WexAlertController } from '../../../components/wex-alert-controller/wex-alert-controller';
@@ -15,7 +15,8 @@ interface DriverStatusDetails {
   label: string;
   trackingId: string;
   icon: string;
-};
+}
+
 @Component({
   selector: "page-drivers-details",
   templateUrl: "drivers-details.html"
@@ -80,7 +81,7 @@ export class DriversDetailsPage extends DetailsPage {
           icon: !this.platform.is("ios") ? "close" : null
         }
       ]
-    }
+    };
   }
 
   private confirmTermination() {

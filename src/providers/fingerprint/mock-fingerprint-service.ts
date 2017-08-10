@@ -10,7 +10,7 @@ import {
 export class MockFingerprintService implements INativeFingerprintService {
 
   public clearProfile(): Promise<any> {
-    return Promise.reject("Mock fingerprint service has no profiles.")
+    return Promise.reject("Mock fingerprint service has no profiles.");
   }
 
   public hasProfile(): Promise<any> {

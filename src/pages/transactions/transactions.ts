@@ -29,9 +29,9 @@ export namespace TransactionListType {
 export type ListFilter = { [filterProperty: string]: any };
 
 export interface TransactionsParams {
-  selectedList?: TransactionListType,
+  selectedList?: TransactionListType;
   filterOn?: ListFilter;
-};
+}
 
 export type TransactionsParam = keyof TransactionsParams;
 

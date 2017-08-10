@@ -1,7 +1,7 @@
 import { Component, Input, Injector } from "@angular/core";
 import { InAppBrowser, InAppBrowserObject } from "@ionic-native/in-app-browser";
 import { Http } from "@angular/http";
-import { Page } from "../../page"
+import { Page } from "../../page";
 import { ConstantsInfo } from "../../../app/app.constants";
 import { AlertController } from "ionic-angular";
 import { Value } from "../../../decorators/value";
@@ -33,7 +33,7 @@ export class UserEnrollmentFlow extends Page {
         .subscribe(
             () => this.loadOnlineEnrollmentApp(),
             () => this.displayServiceUnavailableAlert()
-        )
+        );
   }
 
   private loadOnlineEnrollmentApp() {

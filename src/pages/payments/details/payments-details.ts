@@ -5,7 +5,7 @@ import { Payment } from '@angular-wex/models';
 
 export type PaymentsDetailsNavParams = keyof {
   payment
-}
+};
 
 export namespace PaymentsDetailsNavParams {
   export const Payment: PaymentsDetailsNavParams = "payment";

@@ -9,13 +9,13 @@ export class WexAppBackButtonController {
         this.registerDefault();
         this.platform.registerBackButtonAction(() => this.action(), Number.MAX_SAFE_INTEGER);
     }
-    
+
     private registerDefault() {
         this.action = () => {
             try {
                 this.app.goBack();
-            } catch(e) { }
-        }
+            } catch (e) { }
+        };
     }
 
     public registerAction(action: Function) {

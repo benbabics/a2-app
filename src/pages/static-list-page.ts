@@ -20,7 +20,7 @@ export namespace FetchOptions {
     forceRequest: false,
     clearItems: true,
     checkListSize: true
-  }
+  };
 }
 
 export const _FetchOptions = FetchOptions;

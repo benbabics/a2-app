@@ -18,7 +18,7 @@ interface CardStatusDetails {
   label: string;
   trackingId: string;
   icon: string;
-};
+}
 
 export namespace CardsDetailsNavParams {
   export const Card: CardsDetailsNavParams = "card";

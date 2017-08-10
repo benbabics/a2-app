@@ -63,7 +63,7 @@ export class WexList {
   }
 
   public get itemListsRendered(): any[][] {
-    if(!this.forceGreeking) {
+    if (!this.forceGreeking) {
       return this.itemLists;
     }
 
@@ -71,7 +71,7 @@ export class WexList {
   }
 
   public getListForDivider(dividerIndex: number): any[] {
-    if(this.isGrouped && _.isNumber(dividerIndex) && dividerIndex < this.itemListsRendered.length) {
+    if (this.isGrouped && _.isNumber(dividerIndex) && dividerIndex < this.itemListsRendered.length) {
       return this.itemListsRendered[dividerIndex];
     }
     else {
