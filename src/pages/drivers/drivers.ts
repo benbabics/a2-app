@@ -6,7 +6,9 @@ import { Driver, DriverStatus } from "@angular-wex/models";
 import { DriversDetailsPage } from './details/drivers-details';
 import { StaticListPage, FetchOptions, GroupedList } from "../static-list-page";
 import { Session } from "../../models";
+import { TabPage } from '../../decorators/tab-page';
 
+@TabPage()
 @Component({
   selector: "page-drivers",
   templateUrl: "drivers.html"

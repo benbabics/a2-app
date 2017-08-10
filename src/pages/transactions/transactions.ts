@@ -9,6 +9,7 @@ import { SessionCache } from "../../providers";
 import { TransactionDetailsPage } from './details/transaction-details';
 import { Transaction, Driver, Card, Model } from "@angular-wex/models";
 import { Value } from "../../decorators/value";
+import { TabPage } from '../../decorators/tab-page';
 
 export type TransactionListModelType = Card | Driver | Transaction;
 export type TransactionListModelTypeDetails = Card.Details | Driver.Details | Transaction.Details;
@@ -240,6 +241,7 @@ class TransactionsPageCardView extends TransactionsPageListView<Card, Card.Detai
 
 //# TransactionsPage
 // --------------------------------------------------
+@TabPage()
 @Component({
   selector: "page-transactions",
   templateUrl: "transactions.html"

@@ -17,11 +17,13 @@ import { Response } from "@angular/http";
 import { UserCredentials } from "@angular-wex/models";
 
 export type LoginPageNavParams = keyof {
-  fromLogOut
+  fromLogOut,
+  fromTimeout
 };
 
 export namespace LoginPageNavParams {
   export const fromLogOut: LoginPageNavParams = "fromLogOut";
+  export const fromTimeout: LoginPageNavParams = "fromTimeout";
 }
 
 declare const cordova: any;
@@ -146,7 +148,7 @@ export class LoginPage extends Page {
       let authenticationMethod = setupFingerprintAuth ? SessionAuthenticationMethod.Fingerprint : SessionAuthenticationMethod.Secret;
 
       this.isLoggingIn = true;
-      this.user.username = this.user.username.toLowerCase();
+      this.user.username = this.user.username.toLowerCase().trim();
 
       this.sessionManager.initSession(this.user, { authenticationMethod })
         .flatMap(() => this.sessionManager.cache.getSessionDetail(Session.Field.User)) //Pre-fetch the user object for the landing page
@@ -209,6 +211,11 @@ export class LoginPage extends Page {
 
     window.addEventListener("native.keyboardshow", this._onKeyboardOpen);
     window.addEventListener("native.keyboardhide", this._onKeyboardClose);
+
+    // Check to see if the user timed out
+    if (this.navParams.get(LoginPageNavParams.fromTimeout)) {
+      this.appSnackbarController.createQueued({ message: this.CONSTANTS.sessionTimeOut }).present();
+    }
 
     // Check the status of remember me
     if (this.localStorageService.get(this.USERNAME_KEY)) {

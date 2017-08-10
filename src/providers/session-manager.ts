@@ -1,16 +1,18 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Fingerprint, FingerprintProfile } from "./fingerprint";
 import * as _ from "lodash";
-import { Injectable } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 import { UserCredentials } from "@angular-wex/models";
-import { AuthProvider, UserProvider } from "@angular-wex/api-providers";
+import { AuthProvider } from "@angular-wex/api-providers";
 import { Observable } from "rxjs/Observable";
 import { Subscriber } from "rxjs/Subscriber";
 import { SessionCache } from "./session-cache";
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { Value } from "../decorators/value";
 import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
-import { ModalController } from "ionic-angular";
+import { ModalController, App } from "ionic-angular";
+import { AppSymbols } from "../app/app.symbols";
+import { WexPlatform } from "./platform";
 
 export enum SessionAuthenticationMethod {
   Secret,
@@ -33,17 +35,18 @@ export class SessionManager {
   @Value("STORAGE.KEYS.AUTH_TOKEN") private readonly AUTH_TOKEN_KEY: string;
 
   private _sessionStateObserver = new BehaviorSubject(null);
-  private _willPersistAuthToken: boolean = /[?&]dev/.test( location.search );
 
   private static fingerprintAuthenticationTermsAccepted = false;
 
   constructor(
+    @Inject(AppSymbols.RootPage) private rootPage: any,
     private authProvider: AuthProvider,
-    private userProvider: UserProvider,
     private fingerprint: Fingerprint,
     private sessionCache: SessionCache,
     private localStorageService: LocalStorageService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private app: App,
+    private platform: WexPlatform
   ) { }
 
   public static get hasSession(): boolean {
@@ -143,21 +146,29 @@ export class SessionManager {
     this._sessionStateObserver.next(false);
   }
 
+  public logout(params?: any) {
+    this.app.getRootNav().setRoot(this.rootPage, params)
+      .then(() => this.invalidateSession());
+  }
+
+
   private set authToken(token: string) {
-      if (this._willPersistAuthToken) {
-          this.localStorageService.set(this.AUTH_TOKEN_KEY, token);
-      }
+    if (this.platform.isDevMode) {
+      this.localStorageService.set(this.AUTH_TOKEN_KEY, token);
+    }
   }
 
   private get authToken(): string {
-      if (this._willPersistAuthToken) {
-          return this.localStorageService.get(this.AUTH_TOKEN_KEY) as string;
-      }
+    if (this.platform.isDevMode) {
+      return this.localStorageService.get(this.AUTH_TOKEN_KEY) as string;
+    }
 
-      return "";
+    return "";
   }
 
   private clearAuthToken(): void {
+    if (this.platform.isDevMode) {
       this.localStorageService.remove(this.AUTH_TOKEN_KEY);
+    }
   }
 }

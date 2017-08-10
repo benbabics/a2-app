@@ -6,7 +6,9 @@ import { SessionManager } from "../../providers";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { Session } from "../../models";
+import { TabPage } from '../../decorators/tab-page';
 
+@TabPage()
 @Component({
   selector: "page-cards",
   templateUrl: "cards.html"

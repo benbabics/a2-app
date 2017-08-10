@@ -1,6 +1,5 @@
 import { WexPlatform } from "./platform";
 import * as _ from "lodash";
-import { Platform } from "ionic-angular";
 import { Injectable } from "@angular/core";
 import { Value } from "../decorators/value";
 
@@ -27,14 +26,14 @@ export class SecureStorage {
   private secureStorage: ISecureStorage;
   private available: Promise<any>;
 
-  constructor(platform: Platform, wexPlatform: WexPlatform) {
+  constructor(platform: WexPlatform) {
     this.available = new Promise((resolve, reject) => {
         platform.ready().then(() => {
           if (_.has(window, "cordova.plugins.SecureStorage")) {
             this.secureStorage = new cordova.plugins.SecureStorage(resolve, reject, SecureStorage.STORAGE_ID);
           }
           else {
-            if (wexPlatform.isMock) {
+            if (platform.isMock) {
               console.info("Secure storage is not available on this platform. Using mock implementation");
               this.secureStorage = this.browserMock();
               resolve();
