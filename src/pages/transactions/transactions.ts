@@ -215,7 +215,7 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
   }
 
   public hasMoreItems(): boolean {
-    return !this.totalResults || (this.fetchedItems.length < this.totalResults);
+    return _.isNil(this.totalResults) || _.isNil(this.fetchedItems) || (this.fetchedItems.length < this.totalResults);
   }
 }
 
@@ -238,12 +238,14 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return listView;
   })();
 
+  public readonly filter: TransactionListFilter;
   public selectedListView: AbstractTransactionsPageListView;
   public session: Session;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public injector: Injector) {
     super("Transactions", injector);
 
+    this.filter = this.navParams.get(TransactionsParams.Filter);
     this.selectList(navParams.get(TransactionsParams.SelectedList) || TransactionListType.CardNumber);
   }
 
@@ -275,18 +277,12 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return this.selectedListView.sortItems(items);
   }
 
-  public get filter(): TransactionListFilter {
-    return this.navParams.get(TransactionsParams.Filter);
-  }
-
   public get filterBy(): PostedTransactionSearchFilterBy {
-    let filter = this.filter;
-    return filter ? filter[0] : undefined;
+    return this.filter ? this.filter[0] : undefined;
   }
 
   public get filterValue(): any {
-    let filter = this.filter;
-    return filter ? filter[1] : undefined;
+    return this.filter ? this.filter[1] : undefined;
   }
 
   public get greekingData(): WexGreeking.Rect[] {
