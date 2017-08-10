@@ -121,20 +121,12 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
 
 //# Dynamic List Info Requestors
 
-class PostedTransactionRequestor extends DynamicSessionListInfoRequestor<Transaction, Transaction.Details> {
+export class PostedTransactionRequestor extends DynamicSessionListInfoRequestor<Transaction, Transaction.Details> {
 
   protected readonly listMergeId: keyof Transaction.Details = "transactionId";
 
-  constructor(private transactionProvider: TransactionProvider) {
+  constructor(private transactionProvider: TransactionProvider, public dynamicList: TransactionList = SessionCache.cachedValues.postedTransactionsInfo) {
     super(Transaction, [Session.Field.User]);
-  }
-
-  protected get dynamicList(): TransactionList {
-    return SessionCache.cachedValues.postedTransactionsInfo;
-  }
-
-  protected set dynamicList(dynamicList: TransactionList) {
-    SessionCache.cachedValues.postedTransactionsInfo = dynamicList;
   }
 
   protected search(session: Session, params: any): Observable<ListResponse<Transaction>> {

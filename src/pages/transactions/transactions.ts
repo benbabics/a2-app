@@ -3,12 +3,13 @@ import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, SegmentButton } from "ionic-angular";
 import { StaticListPage } from "../static-list-page";
-import { Session } from "../../models";
+import { Session, TransactionList, DynamicList } from "../../models";
 import { WexGreeking } from "../../components";
-import { SessionCache } from "../../providers";
+import { SessionCache, PostedTransactionRequestor, DynamicSessionListInfoRequestor } from "../../providers";
 import { TransactionDetailsPage } from './details/transaction-details';
-import { Transaction, Driver, Card, Model } from "@angular-wex/models";
+import { Transaction, Driver, Card, Model, ListResponse } from "@angular-wex/models";
 import { Value } from "../../decorators/value";
+import { TransactionProvider, PostedTransactionSearchFilterBy } from "@angular-wex/api-providers";
 
 export type TransactionListModelType = Card | Driver | Transaction;
 export type TransactionListModelTypeDetails = Card.Details | Driver.Details | Transaction.Details;
@@ -25,18 +26,18 @@ export namespace TransactionListType {
   export const CardNumber: TransactionListType = "CardNumber";
 }
 
-export type ListFilter = { [filterProperty: string]: any };
+export type TransactionListFilter = [PostedTransactionSearchFilterBy, any];
 
 export interface TransactionsParams {
   selectedList?: TransactionListType,
-  filterOn?: ListFilter;
+  filter?: TransactionListFilter;
 };
 
 export type TransactionsParam = keyof TransactionsParams;
 
 export namespace TransactionsParams {
   export const SelectedList: TransactionsParam = "selectedList";
-  export const FilterOn: TransactionsParam = "filterOn";
+  export const Filter: TransactionsParam = "filter";
 }
 
 export type AbstractTransactionsPageListView = TransactionsPageListView<TransactionListModelType, TransactionListModelTypeDetails>;
@@ -69,68 +70,6 @@ abstract class TransactionsPageListView<T extends Model<DetailsT>, DetailsT> {
   }
 }
 
-//# TransactionsPageFilteredListView
-// --------------------------------------------------
-class TransactionsPageFilteredListView<T extends Model<DetailsT>, DetailsT> extends TransactionsPageListView<T, DetailsT> {
-
-  @Value("INFINITE_LIST.DEFAULT_PAGE_SIZE")
-  private static readonly DEFAULT_PAGE_SIZE: number;
-
-  constructor(private listView: TransactionsPageListView<T, DetailsT>, private filterOn: ListFilter) {
-    super(listView.type);
-  }
-
-  public get greekingData() {
-    return this.listView.greekingData;
-  }
-
-  public get listLabels() {
-    return this.listView.listLabels;
-  }
-
-  public fetch(options?: StaticListPage.FetchOptions): Observable<T[]> {
-    let fetchedItems: T[] = [];
-
-    const fetch = (options?: StaticListPage.FetchOptions) => new Observable<T[]>((observer) => {
-      this.listView.fetch(options)
-        .map((items) => {
-          // Accumulate the items fetched during this page load
-          fetchedItems.push(...items);
-          return items;
-        })
-        .subscribe(observer);
-    });
-
-    return Observable.create((observer) => {
-      // Fetch the initial results
-      fetch(options)
-        // Keep requesting new pages of results until there are enough to show a full page of filtered results
-        // (or until we reach the end of the list).
-        .expand(() => _.every([
-          this.listView.hasMoreItems(),
-          this.filterItems(fetchedItems).length < TransactionsPageFilteredListView.DEFAULT_PAGE_SIZE
-        ]) ? fetch(FetchOptions.NextPage) : Observable.empty())
-        .subscribe(observer);
-    });
-  }
-
-  public filterItems(items: T[]): T[] {
-    return StaticListPage.filterOnDetails(items, this.filterOn);
-  }
-
-  public goToDetailPage(item: T) {
-    return this.listView.goToDetailPage(item);
-  }
-
-  public hasMoreItems() {
-    return this.listView.hasMoreItems();
-  }
-
-  public sortItems(items: T[]) {
-    return this.listView.sortItems(items);
-  }
-}
-
 //# TransactionsPageDateView
 // --------------------------------------------------
 class TransactionsPageDateView extends TransactionsPageListView<Transaction, Transaction.Details> {
@@ -156,7 +95,7 @@ class TransactionsPageDateView extends TransactionsPageListView<Transaction, Tra
   }
 
   public goToDetailPage(item: Transaction): Promise<any> {
-    return this.transactionsPage.navCtrl.push( TransactionDetailsPage, { item } );
+    return this.transactionsPage.navCtrl.push(TransactionDetailsPage, { item });
   }
 
   public hasMoreItems(): boolean {
@@ -191,11 +130,7 @@ class TransactionsPageDriverView extends TransactionsPageListView<Driver, Driver
   public goToDetailPage(item: Driver): Promise<any> {
     return this.transactionsPage.navCtrl.push(TransactionsPage, {
       selectedList: TransactionListType.Date,
-      filterOn: {
-        driverFirstName: item.details.firstName,
-        driverMiddleName: item.details.middleName,
-        driverLastName: item.details.lastName,
-      }
+      filter: [PostedTransactionSearchFilterBy.Driver, item.details.promptId]
     });
   }
 
@@ -227,14 +162,59 @@ class TransactionsPageCardView extends TransactionsPageListView<Card, Card.Detai
   public goToDetailPage(item: Card): Promise<any> {
     return this.transactionsPage.navCtrl.push(TransactionsPage, {
       selectedList: TransactionListType.Date,
-      filterOn: {
-        embossedCardNumber: item.details.embossedCardNumber,
-      }
+      filter: [PostedTransactionSearchFilterBy.Card, item.details.cardId]
     });
   }
 
   public sortItems(objects: Card[]): Card[] {
     return StaticListPage.defaultItemSort<Card, Card.Details>(objects, "cardId", "asc");
+  }
+}
+
+//# TransactionsPageFilteredListView
+// --------------------------------------------------
+class TransactionsPageFilteredListView extends TransactionsPageDateView {
+
+  private readonly transactionProvider: TransactionProvider;
+  private transactions: TransactionList;
+  private requestor: DynamicSessionListInfoRequestor<Transaction, Transaction.Details>;
+
+  constructor(protected transactionsPage: TransactionsPage, private filterType: PostedTransactionSearchFilterBy, private filterValue: string) {
+    super(transactionsPage);
+
+    this.transactionProvider = this.transactionsPage.injector.get(TransactionProvider);
+    this.transactions = DynamicList.create(Transaction);
+    this.requestor = new PostedTransactionRequestor(this.transactionProvider, this.transactions);
+  }
+
+  public get fetchedItems(): Transaction[] {
+    return this.transactions.items;
+  }
+
+  public get totalResults(): number {
+    return this.transactions.details.totalResults;
+  }
+
+  public fetch(options?: StaticListPage.FetchOptions): Observable<Transaction[]> {
+    let doRequest = options.clearCache || options.forceRequest || !this.transactions.items;
+
+    if (options.clearCache) {
+      this.transactions.clear();
+    }
+
+    if (doRequest) {
+      return this.requestor.request(this.transactionsPage.session, {
+        filterType: this.filterType,
+        filterValue: this.filterValue
+      }).map(response => response.items);
+    }
+    else {
+      return Observable.of(this.transactions.items);
+    }
+  }
+
+  public hasMoreItems(): boolean {
+    return !this.totalResults || (this.fetchedItems.length < this.totalResults);
   }
 }
 
@@ -257,9 +237,11 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   })();
 
   public selectedListView: AbstractTransactionsPageListView;
+  public session: Session;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public injector: Injector) {
     super("Transactions", injector);
+
     this.selectList(navParams.get(TransactionsParams.SelectedList) || TransactionListType.CardNumber);
   }
 
@@ -269,16 +251,17 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     }
 
     // Choose the correct list view implementation
-    const listViewType = TransactionsPage.ListViews.get(listType);
-
-    if (!listViewType) {
-      return console.error("Can't select list; Unrecognized TransactionListType");
+    if (this.filter) {
+      this.selectedListView = new TransactionsPageFilteredListView(this, this.filterBy, this.filterValue);
     }
+    else {
+      const listViewType = TransactionsPage.ListViews.get(listType);
 
-    this.selectedListView = new listViewType(this);
+      if (!listViewType) {
+        return console.error("Can't select list; Unrecognized TransactionListType");
+      }
 
-    if (this.filterOn) {
-      this.selectedListView = new TransactionsPageFilteredListView(this.selectedListView, this.filterOn);
+      this.selectedListView = new listViewType(this);
     }
   }
 
@@ -286,22 +269,22 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return this.selectedListView.fetch(options);
   }
 
-  protected filterItems(items: TransactionListModelType[]): TransactionListModelType[] {
-    let filteredItems = super.filterItems(items);
-
-    if (this.selectedListView instanceof TransactionsPageFilteredListView) {
-      filteredItems = this.selectedListView.filterItems(filteredItems);
-    }
-
-    return filteredItems;
-  }
-
   protected sortItems(items: TransactionListModelType[]): TransactionListModelType[] {
     return this.selectedListView.sortItems(items);
   }
 
-  public get filterOn(): ListFilter {
-    return this.navParams.get(TransactionsParams.FilterOn);
+  public get filter(): TransactionListFilter {
+    return this.navParams.get(TransactionsParams.Filter);
+  }
+
+  public get filterBy(): PostedTransactionSearchFilterBy {
+    let filter = this.filter;
+    return filter ? filter[0] : undefined;
+  }
+
+  public get filterValue(): any {
+    let filter = this.filter;
+    return filter ? filter[1] : undefined;
   }
 
   public get greekingData(): WexGreeking.Rect[] {

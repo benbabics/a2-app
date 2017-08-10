@@ -58,7 +58,7 @@ export abstract class DynamicSessionListInfoRequestor<T extends Model<DetailsT>,
     return object;
   }
 
-  protected request(session: Session, params: any): Observable<DynamicList<T, DetailsT>> {
+  public request(session: Session, params: any): Observable<DynamicList<T, DetailsT>> {
     let searchParams: any = {};
     let requestDate = _.get<Date>(this.dynamicList, "requestDate", new Date());
     let currentPage = _.get<number>(this.dynamicList, "details.currentPage", 0);
