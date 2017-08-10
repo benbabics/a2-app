@@ -98,7 +98,7 @@ export class SessionManager {
     .flatMap(() => this.promptFingerprintTerms());
   }
 
-  private promptFingerprintTerms(): Observable<boolean> {
+  public promptFingerprintTerms(): Observable<boolean> {
     let modal = this.modalController.create(FingerprintAuthenticationTermsPage);
     modal.present();
     return new Observable<boolean>((observer: Subscriber<boolean>) => {

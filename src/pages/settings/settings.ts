@@ -71,17 +71,20 @@ export class SettingsPage extends SecurePage {
     let id = this.session.user.details.username.toLowerCase(),
         secret = this.session.clientSecret;
 
-    let fingerprintProfileCreatedMessage = _.template(this.CONSTANTS.createFingerprintProfileMessage)({
-      username: id,
-      fingerprintAuthName: this.platformFingerprintLabel
-    });
+    return new Promise((resolve, reject) => {
+      this.sessionManager.promptFingerprintTerms().subscribe(hasAccepted => {
+        if ( hasAccepted ) {
+          this.fingerprint.verify({ id, secret })
+            .then(() => {
+              resolve();
+              this.displayProfileCreatedMessage( id );
+            })
+            .catch(() => reject());
+        }
 
-    return this.fingerprint.verify({ id, secret })
-      .then(() => this.wexAppSnackbarController.createQueued({
-        message: fingerprintProfileCreatedMessage,
-        duration: this.CONSTANTS.createFingerprintProfileDuration,
-        position: "top",
-      }).present());
+        else reject();
+      });
+    });
   }
 
 
@@ -95,13 +98,27 @@ export class SettingsPage extends SecurePage {
   }
 
 
+  private displayProfileCreatedMessage(username: string): void {
+    let fingerprintProfileCreatedMessage = _.template(this.CONSTANTS.createFingerprintProfileMessage)({
+      username,
+      fingerprintAuthName: this.platformFingerprintLabel
+    });
+
+    this.wexAppSnackbarController.createQueued({
+      message:  fingerprintProfileCreatedMessage,
+      duration: this.CONSTANTS.createFingerprintProfileDuration,
+      position: "top",
+    }).present();
+  }
+
+
   private displayDestroyProfileDialog(username: string): Promise<boolean> {
     let message = _.template( this.CONSTANTS.destroyFingerprintProfileConfirmMessage )({
       username,
       fingerprintAuthName: this.platformFingerprintLabel
     });
 
-    return this.dialogs.confirm( "", message, [ this.BUTTONS.YES, this.BUTTONS.NO ] )
+    return this.dialogs.confirm( message, "", [ this.BUTTONS.YES, this.BUTTONS.NO ] )
       .then( (result: number) => Promise.resolve(result === 1) );
   }
 }
